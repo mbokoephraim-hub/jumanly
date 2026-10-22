@@ -4036,3 +4036,24 @@ l'ordinateur restent. Les anciennes adresses téléphone (`/app/hire/viviers`, `
 
 **Données.** Rien n'est effacé ; les migrations éventuelles (publication au nom de l'entreprise,
 réseau du recruteur, profil talent discret) sont additives.
+
+## Modèle B recruteur mobile · M1, coque (22 octobre 2026)
+
+Au téléphone, l'espace recruteur passe dans la coque du Modèle B, la même que le talent
+(`PhoneShell`, avec `set="recruteur"`) : fond sombre, barre du bas Fil · Offres · Candidatures ·
+Talents · Messages en icônes seules (compteur lime des nouvelles candidatures, point sur Messages),
+Orbi flottant menthe avec une question par onglet, avatar en haut à droite (logo de l'entreprise
+en badge, « ? » tant que le rattachement n'est pas accepté) qui ouvre le compte, recherche en deux
+temps (options « Rechercher dans » et recherches récentes d'abord, résultats dès la première
+lettre, groupés Offres · Candidats · Entreprises · Personnes, tous filtrés par l'organisation),
+transitions et préchargement du talent (listes Hire préchargées, fiches journalisées jamais).
+
+- `src/lib/phone-tabs.ts` : deux jeux d'onglets (talent, recruteur).
+- `src/components/phone/recruteur/` : tête d'onglet (`RhTab`), recherche, avatar, cloche, « + ».
+- `src/server/services/hire-phone.ts` et `/api/hire/recherche/telephone` : compteurs de la barre et
+  recherche.
+- Les écrans pas encore redessinés (M2 à M8) gardent leur contenu sous la nouvelle tête, rendu
+  lisible dans le cadre sombre (contrastes AA vérifiés avec axe).
+- `mobile-recruteur.spec.ts` (ancienne barre) ne tourne plus sur le projet mobile ; remplacé par
+  `modele-b-recruteur-coque.spec.ts`. Test en base : `tests/db/modele-b-recruteur.test.ts`.
+- Ordinateur et tablette inchangés. Une fenêtre d'ordinateur rétrécie garde pour l'instant l'interface web (bascule à revoir en M8, avec le nettoyage).

@@ -33,6 +33,7 @@ import { introData } from "@/components/app/app-intro-data";
 import { introProfile } from "@/lib/app-intro";
 import { unreadCount } from "@/server/services/connect";
 import { followUpActions } from "@/server/services/follow-up";
+import { recruiterBarCounts } from "@/server/services/hire-phone";
 
 /** Signed-in space: every page below needs a session (checked on the server). */
 export default function SignedInLayout({ children }: LayoutProps<"/app">) {
@@ -150,7 +151,33 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
 
   const t = await getTranslations("org.roles");
 
-  // Recruiter space: the shell of the mobile redesign (docs/refonte-mobile, brief recruteur).
+  // Recruiter space on a phone: Modèle B (docs/modele-b-recruteur), dark, five tabs.
+  if (space && !partnerSpace && (await isPhone())) {
+    const counts = await recruiterBarCounts(db, {
+      userId: user.id,
+      organizationId: space.organizationId,
+      role: space.role,
+    });
+    return (
+      <PhoneShell
+        set="recruteur"
+        account={{
+          id: user.id,
+          name: user.name,
+          firstName: user.firstName,
+          image: user.image ?? null,
+        }}
+        reduceMotion={user.reduceMotion}
+        badges={{ candidatures: counts.newApplications, messages: counts.unreadMessages }}
+        tabs={{}}
+      >
+        <ContentBanners audience="recruiters" />
+        {children}
+      </PhoneShell>
+    );
+  }
+
+  // Recruiter space on a tablet or a computer (docs/refonte-web, recruteur lots 1 to 4).
   if (space && !partnerSpace) {
     const tShell = await getTranslations("hireShell.org");
     const ctx = { userId: user.id, organizationId: space.organizationId, role: space.role };

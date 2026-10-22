@@ -1,0 +1,349 @@
+/* Modèle B · appli recruteur au téléphone (docs/modele-b-recruteur, mobile/, brief § 2 à § 5).
+   Les fondations (couleurs, couches, transitions, feuilles, recherche) sont celles du talent
+   (phone.css) ; ce fichier ajoute ce qui est propre au recruteur. */
+
+/* ─── Barre du bas : compteur lime (Candidatures) et point lime (Messages) ─── */
+.nb-nav .nb-nav-compte {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  margin-left: 6px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+  font-size: 9.5px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nb-nav .nb-nav-point {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  margin-left: 7px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--nb-lime);
+}
+
+/* ─── En-tête d'un onglet (planches Recruteur-fil, -offres, -candidatures) ─── */
+.nb-rh-tete {
+  padding: var(--nb-haut) 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: calc(var(--nb-haut) + 44px);
+}
+.nb-rh-tete h1,
+.nb-rh-tete .nb-rh-titre {
+  flex: 1;
+  min-width: 0;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.nb-rh-tete .nb-rond,
+.nb-rh-tete .nb-recherche-rond {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #1a2629;
+  color: var(--nb-creme);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex: none;
+}
+.nb-rh-tete .nb-recherche-rond {
+  color: #9fb3ae;
+}
+.nb-rh-tete .nb-rh-plus {
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+}
+.nb-rh-tete .nb-compteur {
+  top: 7px;
+  right: 7px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 800;
+}
+.nb-rh-sous {
+  padding: 6px 20px 0;
+  font-size: 13px;
+  color: var(--nb-brume);
+}
+
+/* L'avatar du recruteur et, dans son coin, le logo de l'entreprise (après acceptation du
+   rattachement) ou une pastille « ? » (brief § 2, Logos). */
+.nb-rh-moi {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  display: block;
+}
+.nb-rh-moi > span:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--nb-haute);
+  color: var(--nb-creme);
+  font-size: 12px;
+  font-weight: 700;
+}
+.nb-rh-moi img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.nb-rh-logo {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 5px;
+  background: #14745f;
+  border: 2px solid var(--nb-nuit);
+  color: #ffffff;
+  font-size: 6.5px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.nb-rh-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.nb-rh-logo[data-attente] {
+  background: var(--nb-haute);
+  color: var(--nb-creme);
+  font-size: 8px;
+}
+
+/* Écrans recruteur pas encore refaits sur le Modèle B (lots M3 à M8) : leur contenu, sous l'en-tête
+   de l'onglet, dans les couleurs du Modèle B. */
+.nb-rh-ancien {
+  padding: 12px 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ─── Recherche en deux temps, sous l'en-tête (planches Recruteur-*-recherche) ─── */
+.nb-rh-recherche-l {
+  padding: 14px 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nb-rh-champ {
+  flex: 1;
+  min-width: 0;
+  height: 50px;
+  border-radius: 25px;
+  background: #1a2629;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  border: 1px solid rgba(166, 242, 107, 0.35);
+  color: #9fb3ae;
+}
+.nb-rh-champ input {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  font: inherit;
+  font-size: 16px;
+  color: var(--nb-creme);
+}
+.nb-rh-champ input::placeholder {
+  color: #6f8580;
+}
+.nb-rh-champ input::-webkit-search-cancel-button {
+  display: none;
+}
+.nb-rh-effacer {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9fb3ae;
+}
+.nb-rh-annuler {
+  height: 44px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nb-lime);
+  flex: none;
+}
+.nb-rh-dans {
+  padding: 18px 20px 10px;
+}
+.nb-rh-pilules {
+  padding: 0 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.nb-rh-pilules .nb-pilule {
+  margin: 0;
+  height: 38px;
+  padding: 0 15px;
+  border-radius: 19px;
+  font-size: 13.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: var(--nb-creme);
+}
+.nb-rh-pilules .nb-pilule[aria-checked="true"] {
+  background: var(--nb-creme);
+  border-color: var(--nb-creme);
+  color: var(--nb-nuit);
+}
+.nb-rh-recent {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  font-size: 15px;
+  color: var(--nb-creme);
+}
+.nb-rh-recent svg {
+  color: var(--nb-brume);
+  flex: none;
+}
+.nb-rh-recent > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+.nb-rh-note {
+  line-height: 1.5;
+  padding: 22px 20px;
+}
+.nb-rh-groupe {
+  padding: 22px 20px 6px;
+}
+.nb-rh-res {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--nb-filet);
+  color: var(--nb-creme);
+}
+.nb-rh-mini {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--nb-haute);
+  color: var(--nb-creme);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  overflow: hidden;
+}
+.nb-rh-mini[data-org] {
+  border-radius: 14px;
+  background: #14745f;
+  color: #ffffff;
+}
+.nb-rh-mini[data-icone] {
+  border-radius: 14px;
+  background: #0f3f37;
+  color: var(--nb-lime);
+}
+.nb-rh-mini img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.nb-rh-res-t {
+  flex: 1;
+  min-width: 0;
+}
+.nb-rh-res-t b {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+}
+.nb-rh-res-t .nb-meta {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Écrans du recruteur pas encore redessinés (lots M2 à M8) : leur contenu clair reste lisible dans
+   le cadre sombre du Modèle B (contrastes WCAG AA), en attendant leur planche. */
+.t-rh.nb-cadre {
+  --corail: var(--nb-corail);
+}
+.t-rh.nb-cadre .text-ardoise {
+  color: var(--nb-brume);
+}
+.t-rh.nb-cadre .bg-blanc {
+  background-color: var(--nb-carte);
+  color: var(--nb-creme);
+}
+.t-rh.nb-cadre .bg-blanc.text-sapin {
+  color: var(--nb-creme);
+}
+.t-rh.nb-cadre .ring-brume {
+  --tw-ring-color: var(--nb-filet-fort);
+}
+.t-rh.nb-cadre .t-ri-inv .t-cal-t i {
+  background: #b93a2b;
+}
+.t-rh.nb-cadre .t-ri-inv .t-dts li.t-on {
+  background: rgba(166, 242, 107, 0.12);
+}
+.t-rh.nb-cadre .t-ri-inv .t-dts li.t-on .t-t {
+  color: var(--nb-creme);
+}
+.t-rh.nb-cadre .t-ri-grille .t-hors {
+  color: #7b918c;
+  opacity: 1;
+}
+.t-rh.nb-cadre .text-sapin:not([class*="bg-"]:not(.bg-blanc), [class*="bg-"]:not(.bg-blanc) *) {
+  color: var(--nb-creme);
+}
+.t-rh.nb-cadre .text-corail-fonce,
+.t-rh.nb-cadre .text-down-texte {
+  color: var(--nb-corail);
+}
+/* Rattachement pas encore accepté : un point d'interrogation à la place du logo. */
+.nb-rh-logo[data-attente]::after {
+  content: "?";
+}

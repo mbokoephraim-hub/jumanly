@@ -17008,6 +17008,122 @@
       "done": "Organisation supprimée."
     }
   },
+  "phoneRh": {
+    "nav": {
+      "fil": "Fil",
+      "offres": "Offres",
+      "candidatures": "Candidatures",
+      "talents": "Talents",
+      "messages": "Messages",
+      "candidaturesNew": "Candidatures, {count, plural, one {# nouvelle} other {# nouvelles}}",
+      "messagesUnread": "Messages, {count, plural, one {# conversation non lue} other {# conversations non lues}}"
+    },
+    "head": {
+      "account": "Mon compte",
+      "notifications": "{count, plural, =0 {Notifications} one {Notifications, # nouvelle} other {Notifications, # nouvelles}}",
+      "newOffer": "Publier une offre"
+    },
+    "search": {
+      "open": "Rechercher",
+      "cancel": "Annuler",
+      "clear": "Effacer",
+      "searchIn": "Rechercher dans",
+      "recent": "Recherches récentes",
+      "empty": "Aucun résultat pour « {query} ».",
+      "scopes": {
+        "tout": "Tout",
+        "offres": "Mes offres",
+        "candidats": "Candidats",
+        "entreprises": "Entreprises",
+        "personnes": "Personnes"
+      },
+      "groups": {
+        "offers": "Mes offres · {count}",
+        "candidates": "Candidats · {count}",
+        "companies": "Entreprises · {count}",
+        "people": "Personnes · {count}"
+      },
+      "offerLine": "{city} · {status} · {count, plural, =0 {0 candidature} one {# candidature} other {# candidatures}}",
+      "status": {
+        "draft": "Brouillon",
+        "pending_review": "En vérification",
+        "published": "En cours",
+        "paused": "En pause",
+        "closed": "Terminée",
+        "archived": "Archivée",
+        "rejected": "Refusée",
+        "changes_requested": "À corriger"
+      },
+      "fil": {
+        "label": "Rechercher dans le Fil",
+        "placeholder": "Publications, personnes, entreprises",
+        "note": "Personnes et entreprises : tout Jumanly."
+      },
+      "offres": {
+        "label": "Rechercher une offre, une entreprise ou une personne",
+        "placeholder": "Offres, entreprises, personnes",
+        "note": "Mes offres : seulement les vôtres. Entreprises et personnes : tout Jumanly."
+      },
+      "candidatures": {
+        "label": "Rechercher un candidat ou une offre",
+        "placeholder": "Nom, compétence, offre",
+        "note": "Seulement les candidatures de vos offres."
+      },
+      "talents": {
+        "label": "Rechercher un talent ou une entreprise",
+        "placeholder": "Métier, compétence, ville",
+        "note": "Seulement les talents qui ont rendu leur profil visible."
+      },
+      "messages": {
+        "label": "Rechercher dans les messages",
+        "placeholder": "Nom, offre",
+        "note": "Candidats de vos offres, et personnes de tout Jumanly."
+      }
+    },
+    "orbi": {
+      "plan": "Voir la formule",
+      "fil": {
+        "bubble": "Que publier pour attirer des candidats ?",
+        "from": "Orbi · depuis le Fil",
+        "q1": "Que publier pour attirer des candidats ?",
+        "q2": "Comment marche ma dernière publication ?",
+        "q3": "Quels événements suivre ce mois-ci ?",
+        "q4": "Écrire une publication sur une offre"
+      },
+      "offres": {
+        "bubble": "Comment attirer plus de candidats ?",
+        "from": "Orbi · depuis Offres",
+        "q1": "Comment attirer plus de candidats ?",
+        "q2": "Quelle offre marche le mieux ?",
+        "q3": "Rédiger une nouvelle offre",
+        "q4": "Faut-il relancer une offre ?"
+      },
+      "candidatures": {
+        "bubble": "Qui recevoir en premier ?",
+        "from": "Orbi · depuis Candidatures",
+        "q1": "Qui recevoir en premier ?",
+        "q2": "Faire le diagnostic de tous les CV",
+        "q3": "Préparer mon prochain entretien",
+        "q4": "Répondre aux candidats sans réponse"
+      },
+      "talents": {
+        "bubble": "Qui proposer pour mes offres ?",
+        "from": "Orbi · depuis Talents",
+        "q1": "Qui proposer pour mes offres ?",
+        "q2": "Relancer les propositions sans réponse",
+        "q3": "Pourquoi je ne vois pas tous les talents ?",
+        "q4": "Qui ajouter à mon vivier ?"
+      },
+      "messages": {
+        "bubble": "Qui attend une réponse ?",
+        "from": "Orbi · depuis Messages",
+        "q1": "Qui attend une réponse de ma part ?",
+        "q2": "Résumer mes non-lus",
+        "q3": "Proposer une réponse à un candidat",
+        "q4": "Relire un message avant de l'envoyer"
+      }
+    }
+  },
   "pricing": {
     "seo": {
       "title": "Tarifs et forfaits · Jumanly",

@@ -274,7 +274,7 @@ test("une organisation ne voit jamais les offres ni les candidats d'une autre", 
   await logIn(page, "entreprise@jumanly.test");
   await page.goto("/app/hire/offres");
   const href = await page
-    .locator('main a[href^="/app/hire/offres/"]')
+    .locator('main a[href^="/app/hire/offres/"]:not([href$="/nouvelle"])')
     .filter({ visible: true })
     .filter({ hasNotText: /Nouvelle|Créer|Publier/ })
     .first()
