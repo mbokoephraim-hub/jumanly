@@ -10,6 +10,7 @@ import { orbiActions } from "@/lib/orbi";
 import { PHONE_TABS, type PhoneTab } from "@/lib/phone-tabs";
 import { phoneThemeScript } from "@/lib/phone-theme";
 import { PhoneArrivals } from "./arrivals";
+import { PhoneThemeColor } from "./theme-color";
 import { PhoneNav } from "./nav";
 import { Opening } from "./opening";
 import { openingScript } from "./opening-script";
@@ -90,6 +91,7 @@ export async function PhoneShell({
       <AppMotionRoot reduce={reduceMotion} />
       <Toaster label={t("toasts")} closeLabel={t("close")} placement="top" />
       <PhoneArrivals />
+      <PhoneThemeColor />
       <OfflineDrafts
         scope={account.id}
         labels={{

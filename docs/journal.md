@@ -50,6 +50,15 @@ Modèle B.
 **Plan.** B1 fondations (coque sombre à 5 onglets montés, Orbi flottant, ouverture et préchargement,
 transitions, recherche en deux temps, feuilles), puis B2 à B9 dans l'ordre du brief, une PR par lot.
 
+## Plein écran au téléphone, suite (22 octobre 2026)
+
+Les captures d'Ephraïm (Android, appli installée) montraient deux défauts.
+
+- **Barre d'état restée verte.** L'appli s'ouvre sur `/demarrage`, puis va à `/app` sans recharger la page. À ce moment, Next réécrit le `theme-color` du layout racine, et le script de premier affichage ne repasse pas. Le nouveau composant `PhoneThemeColor` (`src/components/phone/theme-color.tsx`) remet la nuit chaque fois que la tête de page change. Le test `modele-b-plein-ecran` couvre ce passage ; il échouait avant la correction (#0F3F37 reçu).
+- **Cadre vert dans les champs Message et Recherche.** Le halo du site (`globals.css`, `box-shadow` Lime) s'ajoutait à la pilule. Dans le Modèle B, les champs de texte n'ont plus ce halo : le focus est montré par la pilule (`:focus-within`), ou par le contour Lime quand le champ n'a pas de pilule.
+
+La bande crème en bas venait de l'ancien manifeste gardé par l'appli installée. Elle disparaît une fois l'appli réinstallée.
+
 ## Plein écran au téléphone (22 octobre 2026)
 
 Sur la demande d'Ephraïm, le fond sombre du Modèle B couvre maintenant tout l'écran du téléphone, sous la barre d'état et sous la barre d'accueil :
