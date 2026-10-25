@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { PhoneIcon, type PhoneIconName } from "../icon";
+import { levelOf } from "./level";
 
 type ResultItem = {
   href: string;
@@ -14,6 +15,10 @@ type ResultItem = {
   icon?: PhoneIconName;
   /** A post of the Fil: its text, then who wrote it, without a picture. */
   post?: boolean;
+  /** A candidate (Candidatures): the offer and when, the score, « nouvelle ». */
+  sub2?: string;
+  score?: number | null;
+  unseen?: boolean;
 };
 type ResultGroup = { title: string; items: ResultItem[] };
 type Recent = { q: string; kind: string };
@@ -28,6 +33,10 @@ export type RhSearchSetup = {
   note?: string;
   /** Kept apart per tab in this browser (a convenience only). */
   tab: string;
+  /** « Chercher par » instead of « Rechercher dans » (Candidatures). */
+  searchIn?: string;
+  /** The score of a result, « {score} % » (Candidatures). */
+  percent?: string;
 };
 
 export type RhSearchTexts = {
@@ -195,8 +204,12 @@ export function RhTabPage({
               {texts.cancel}
             </button>
           </div>
-          <p className="nb-meta nb-rh-dans">{texts.searchIn}</p>
-          <div className="nb-rh-pilules" role="radiogroup" aria-label={texts.searchIn}>
+          <p className="nb-meta nb-rh-dans">{search.searchIn ?? texts.searchIn}</p>
+          <div
+            className="nb-rh-pilules"
+            role="radiogroup"
+            aria-label={search.searchIn ?? texts.searchIn}
+          >
             {search.scopes.map((item) => (
               <button
                 key={item.key}
@@ -246,7 +259,12 @@ export function RhTabPage({
                     onClick={() =>
                       keepRecent(search.tab, {
                         q: query.trim(),
-                        kind: group.title.replace(/\s*·.*$/, "").toLowerCase(),
+                        kind:
+                          search.searchIn && scope !== search.scopes[0]?.key
+                            ? (
+                                search.scopes.find((item) => item.key === scope)?.label ?? ""
+                              ).toLowerCase()
+                            : group.title.replace(/\s*·.*$/, "").toLowerCase(),
                       })
                     }
                   >
@@ -267,9 +285,22 @@ export function RhTabPage({
                       </span>
                     )}
                     <span className="nb-rh-res-t">
-                      {item.post ? <span>{item.title}</span> : <b>{item.title}</b>}
+                      {item.post ? (
+                        <span>{item.title}</span>
+                      ) : (
+                        <b>
+                          {item.title}
+                          {item.unseen ? <i className="nb-rh-point" aria-hidden /> : null}
+                        </b>
+                      )}
                       {item.sub ? <span className="nb-meta">{item.sub}</span> : null}
+                      {item.sub2 ? <span className="nb-meta">{item.sub2}</span> : null}
                     </span>
+                    {typeof item.score === "number" && search.percent ? (
+                      <span className="nb-rh-pct" data-niveau={levelOf(item.score)}>
+                        {search.percent.replace("{score}", String(item.score))}
+                      </span>
+                    ) : null}
                   </Link>
                 ))}
               </section>

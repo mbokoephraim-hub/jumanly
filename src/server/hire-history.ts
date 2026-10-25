@@ -62,6 +62,10 @@ export function describeEvent(
         memberName: name,
         date: new Date(text(event.payload, "date") || event.createdAt),
       });
+    case "assigned":
+      return t("history.event.assigned", { memberName: name, to: text(event.payload, "toName") });
+    case "job_proposal":
+      return t("history.event.proposal", { memberName: name });
     default:
       return null;
   }

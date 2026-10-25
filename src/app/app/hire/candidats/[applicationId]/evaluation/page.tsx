@@ -24,6 +24,8 @@ import {
 } from "@/server/services/evaluation";
 import { getOrgApplication, HireError, hirePermissions } from "@/server/services/hire";
 import { cheapestPlanWhere, listPublicPlans } from "@/server/services/plans";
+import { isPhone } from "@/server/view";
+import { RhEvaluation } from "@/components/phone/recruteur/candidat-forms";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hireInterviews.evaluation");
@@ -145,6 +147,66 @@ export default async function EvaluationPage({
   };
   const yes = view.others.filter((item) => nextStepOf(item.recommendation) === "yes").length;
   const error = one(query.erreur);
+
+  // « Entretien de … » on the recruiter's phone (Modèle B recruteur M5, planche Recruteur-evaluation).
+  if (await isPhone()) {
+    const tp = await getTranslations("phoneRhCandidatures.evaluation");
+    const full = await db.interview.findFirst({
+      where: {
+        applicationId: application.id,
+        organizationId: ctx.organizationId,
+        startsAt: { not: null },
+        status: { in: ["confirmed", "done"] },
+      },
+      orderBy: { startsAt: "desc" },
+      select: { mode: true, organizerId: true, participantIds: true },
+    });
+    const others = full
+      ? await db.user.findMany({
+          where: {
+            id: {
+              in: [full.organizerId, ...full.participantIds].filter((id) => id !== ctx.userId),
+            },
+          },
+          select: { name: true },
+        })
+      : [];
+    const firstName = (person.firstName || person.name).split(/\s+/)[0]!;
+    return (
+      <NextIntlClientProvider messages={pickMessages(messages, ["phoneRhCandidatures", "phone"])}>
+        <RhEvaluation
+          data={{
+            applicationId: application.id,
+            back: fileHref,
+            title: tp("title", { name: firstName }),
+            line: [
+              interview?.startsAt
+                ? format.dateTime(interview.startsAt, {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "short",
+                    timeZone: interview.timezone,
+                  })
+                : null,
+              full ? tp(`mode.${full.mode}`) : null,
+              others.length
+                ? tp("with", { names: others.map((item) => item.name).join(", ") })
+                : null,
+            ]
+              .filter(Boolean)
+              .join(" · "),
+            criteria: criteria.map((item) => item.name),
+            max: RATING_MAX,
+            initial: {
+              ratings: criteria.map((item) => Number(ratings[item.name] ?? 0)),
+              comment: initial.comment,
+              next: (initial.suite || "yes") as "yes" | "maybe" | "no",
+            },
+          }}
+        />
+      </NextIntlClientProvider>
+    );
+  }
 
   return (
     <div className="t-flux t-ri-evalp t-rw-evp">

@@ -4134,3 +4134,44 @@ carte par offre (statut, nouvelles, vues, jours en ligne, candidatures).
   `tests/e2e/modele-b-recruteur-offres.spec.ts` ; `tests/e2e/offer-flow.ts` publie aussi par les
   étapes du téléphone.
 - Choix notés dans `docs/decisions/2026-10-22-modele-b-recruteur-offres.md`. Aucune migration.
+
+## Modèle B recruteur mobile · M5, Candidatures (22 octobre 2026)
+
+Sections 04 et 05 des captures (057 à 100). Au téléphone, l'onglet Candidatures
+(`/app/hire/candidats`) montre « N nouvelles · X candidatures · Y à fort potentiel », une puce par
+offre, puis quatre vues :
+
+- **Fort potentiel** : la carte d'Orbi vers le diagnostic des CV, puis les profils à 80 % et plus,
+  classés par score, avec ce qu'Orbi a relevé, ce qui intéresse la personne et sa disponibilité.
+  Personne n'est écarté : tout le monde reste dans « Toutes ».
+- **Toutes** : six étapes (Reçue, Présélection, Entretien, Proposition, Recruté·e, Non retenu·e),
+  tri par score ou par date, « Sélectionner » puis « Écrire à N candidats » (quatre modèles, aperçu
+  avec le prénom, envoi à chacun).
+- **Entretiens** : aujourd'hui, à venir, à documenter (Rejoindre, Voir, Documenter, Fiche).
+- **Décisions** : propositions, recrutés, non retenus, et « Répondre aux N sans réponse ».
+- Recherche en deux temps par nom, compétence ou ville, limitée aux candidats de l'entreprise.
+- Diagnostic des CV (`/app/hire/candidats/diagnostic`) lu dans les scores expliqués.
+- Fiche d'un candidat : score avec « Pourquoi ? », étape modifiable, onglets Résumé, CV, Réponses,
+  Notes, Historique ; « ··· » : changer d'étape, répartir à un collègue, planifier, demander un
+  document, télécharger le PDF, ne pas retenir (motif interne et message bienveillant) ; en bas,
+  « Écrire » et l'étape suivante (planifier, documenter, proposer, recruter).
+- Planifier un entretien (jour, créneau libre pour l'équipe choisie, visio, sur place ou appel,
+  durée), « Invitation envoyée » avec le fichier d'agenda ; documenter l'entretien (étoiles par
+  critère, points forts, suite proposée) ; faire une proposition (salaire, date, message).
+- Code : `src/components/phone/recruteur/candidatures.tsx`, `candidatures-client.tsx`,
+  `candidat.tsx`, `candidat-client.tsx`, `candidat-forms.tsx`, `proposition.tsx`, `entretien.tsx` ;
+  `src/server/services/hire-phone-candidatures.ts`, `src/server/actions/phone-rh-candidatures.ts` ;
+  routes `/app/hire/candidats/[id]/dossier` (PDF, journalisé `candidate.pdf`) et
+  `/app/hire/entretiens/[id]/agenda` (.ics). Ordinateur et tablette inchangés.
+- Migration additive `20261022191139_application_assignee` (dossier suivi par un membre).
+- Textes : partie « Modèle B recruteur · Candidatures au téléphone » (`phoneRhCandidatures`).
+- Tests : `tests/db/modele-b-recruteur-candidatures.test.ts` (isolation des candidatures, de la
+  recherche et des entretiens, consultation journalisée, dossier confié à un membre de l'entreprise
+  seulement, proposition sans décision automatique), `tests/e2e/modele-b-recruteur-candidatures.spec.ts`.
+- La fiche garde aussi le résumé par Orbi sur demande, l'annulation d'une décision pendant son
+  délai et la préparation de l'entretien de l'ordinateur ; « Écrire » ouvre la conversation.
+- Les anciens tests téléphone des candidats et du planificateur (`mobile-recruteur-candidats`,
+  test « entretien » de `mobile-recruteur-entretiens`) ne tournent plus que sur ordinateur ; leurs
+  gestes sont repris dans la nouvelle spec. `hire.spec.ts` a une branche téléphone.
+- Choix notés dans `docs/decisions/2026-10-22-modele-b-recruteur-candidatures.md`. La feuille Orbi
+  de l'onglet (planche 083) vient avec Orbi en M7.

@@ -20,6 +20,8 @@ import {
 import { db } from "@/server/db";
 import { can, level } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
+import { isPhone } from "@/server/view";
+import { RhProposal } from "@/components/phone/recruteur/proposition";
 import { applicationMatches } from "@/server/matching/service";
 import { RATING_MAX, scorecardView } from "@/server/services/evaluation";
 import { getOrgApplication, HireError, rejectReasons } from "@/server/services/hire";
@@ -90,6 +92,19 @@ export default async function DecisionPage({
     application.status === "withdrawn";
   const subject = { type: "organization" as const, id: ctx.organizationId };
   const messages = await getMessages();
+
+  // On the recruiter's phone (Modèle B recruteur M5): « Faire une proposition »; the outcomes are
+  // decided from the file (its sheets « Ne pas retenir » and « Recruter »).
+  if (await isPhone()) {
+    if (decided || one(query.issue) !== "proposition") redirect(fileHref);
+    return (
+      <RhProposal
+        application={{ id: application.id, firstName, job: job.title }}
+        company={space.organization.name}
+        error={Boolean(one(query.erreur))}
+      />
+    );
+  }
 
   // ─── « Décision enregistrée » ─────────────────────────────────────────────────────
   if (one(query.enregistree) === "1" || decided) {

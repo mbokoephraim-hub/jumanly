@@ -10,6 +10,10 @@ import { openCandidateFile } from "./hire-wide";
 // « Pourquoi ? », « Changer d'étape », Orbi's analysis, and the final decision read before it
 // leaves, undone within 10 minutes.
 
+// On the phone these screens became Modèle B (lot M5): their gestures are tested in
+// modele-b-recruteur-candidatures.spec.ts. The computer keeps this design.
+test.skip(({ isMobile }) => isMobile, "Téléphone : voir modele-b-recruteur-candidatures.spec.ts.");
+
 const suffix = () =>
   Math.random()
     .toString(36)

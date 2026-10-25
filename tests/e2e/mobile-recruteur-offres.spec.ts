@@ -220,8 +220,8 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
   await context.close();
 
   if (isMobile) {
-    // On a phone, the applications wait in Candidatures (Modèle B recruteur, M3).
-    await page.goto("/app/hire/candidats");
+    // On a phone, the applications wait in Candidatures, view « Toutes » (Modèle B recruteur, M5).
+    await page.goto("/app/hire/candidats?vue=toutes");
     await main(page)
       .getByRole("link", { name: /Amani Fictif/ })
       .first()
@@ -235,6 +235,14 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
       .click();
   }
   await expect(page).toHaveURL(/\/app\/hire\/candidats\//);
+  if (isMobile) {
+    // The phone's file (Modèle B recruteur, M5) shows the answers in its tab « Réponses ».
+    const file = page.locator(".nb-rh-fiche").filter({ visible: true });
+    await file.getByRole("tab", { name: /^Réponses/ }).click();
+    await expect(file).toContainText(question);
+    await expect(file).toContainText("Oui");
+    return;
+  }
   await expect(page.locator("#reponses")).toContainText(question);
   await expect(page.locator("#reponses")).toContainText("Oui");
 });

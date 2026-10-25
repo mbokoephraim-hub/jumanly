@@ -197,6 +197,8 @@ export async function decideAction(formData: FormData) {
     callSlots.length ? `${page}?issue=hired&appel=1&erreur=appel` : `${page}?erreur=1`,
   );
   flushMails();
+  // From the file on the phone (Modèle B recruteur M5): back to the file, the decision told.
+  if (formData.get("retour") === "fiche") redirect(`${fileOf(applicationId)}?ok=decision`);
   redirect(`${page}?enregistree=1`);
 }
 

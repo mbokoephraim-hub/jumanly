@@ -13359,6 +13359,8 @@ Conventions :
 | `hire.history.event.rated` | {memberName} a rempli la grille d'évaluation |
 | `hire.history.event.noted` | {memberName} a ajouté une note |
 | `hire.history.event.interviewScheduled` | Entretien planifié le {date, date, medium} par {memberName} |
+| `hire.history.event.assigned` | Dossier confié à {to} par {memberName} |
+| `hire.history.event.proposal` | Proposition envoyée par {memberName} |
 | `hire.history.event.documentRequested` | {memberName} a demandé : {documentName} |
 | `hire.history.event.rejected` | {memberName} a décidé de ne pas retenir la candidature · Motif : {reason} |
 | `hire.history.event.rejectionSent` | Message de refus envoyé |
@@ -13993,6 +13995,11 @@ Conventions :
 | `phoneRh.search.scopes.entreprises` | Entreprises |
 | `phoneRh.search.scopes.personnes` | Personnes |
 | `phoneRh.search.scopes.publications` | Publications |
+| `phoneRh.search.scopes.nom` | Nom |
+| `phoneRh.search.scopes.competence` | Compétence |
+| `phoneRh.search.scopes.ville` | Ville |
+| `phoneRh.search.searchBy` | Chercher par |
+| `phoneRh.search.percent` | {score} % |
 | `phoneRh.search.groups.offers` | Mes offres · {count} |
 | `phoneRh.search.groups.candidates` | Candidats · {count} |
 | `phoneRh.search.groups.companies` | Entreprises · {count} |
@@ -14014,9 +14021,9 @@ Conventions :
 | `phoneRh.search.offres.label` | Rechercher une offre, une entreprise ou une personne |
 | `phoneRh.search.offres.placeholder` | Offres, entreprises, personnes |
 | `phoneRh.search.offres.note` | Mes offres : seulement les vôtres. Entreprises et personnes : tout Jumanly. |
-| `phoneRh.search.candidatures.label` | Rechercher un candidat ou une offre |
-| `phoneRh.search.candidatures.placeholder` | Nom, compétence, offre |
-| `phoneRh.search.candidatures.note` | Seulement les candidatures de vos offres. |
+| `phoneRh.search.candidatures.label` | Rechercher un candidat |
+| `phoneRh.search.candidatures.placeholder` | Nom, compétence, ville |
+| `phoneRh.search.candidatures.note` | Seulement les personnes qui ont candidaté à vos offres. |
 | `phoneRh.search.talents.label` | Rechercher un talent ou une entreprise |
 | `phoneRh.search.talents.placeholder` | Métier, compétence, ville |
 | `phoneRh.search.talents.note` | Seulement les talents qui ont rendu leur profil visible. |
@@ -14555,6 +14562,327 @@ Conventions :
 - Le rappel « candidater reste gratuit » figure sur chaque écran de ce fichier.
 
 ---
+
+### Modèle B recruteur · Candidatures au téléphone
+
+*Lot M5 (docs/modele-b-recruteur, mobile/captures sections 04 et 05) : les candidatures par étape, le fort potentiel, les entretiens, les décisions, le diagnostic des CV, la fiche de chaque candidat, planifier, évaluer, proposer. Le score classe et s'explique ; il n'écarte personne. Candidater reste gratuit.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhCandidatures.line` | {unseen, plural, =0 {Aucune nouvelle} one {# nouvelle} other {# nouvelles}} · {total, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} · {high} à fort potentiel |
+| `phoneRhCandidatures.results` | {count, plural, one {# résultat} other {# résultats}} |
+| `phoneRhCandidatures.percent` | {score} % |
+| `phoneRhCandidatures.offers` | Offres |
+| `phoneRhCandidatures.allOffers` | Toutes les offres · {count} |
+| `phoneRhCandidatures.offerChip` | {title} · {count} |
+| `phoneRhCandidatures.row.line` | {hasHeadline, select, yes {{headline} · } other {}}{years, plural, =0 {moins d'un an d'expérience} one {# an d'expérience} other {# ans d'expérience}} |
+| `phoneRhCandidatures.row.when` | {job} · {when} |
+| `phoneRhCandidatures.row.new` | Nouvelle candidature |
+| `phoneRhCandidatures.views.label` | Vues des candidatures |
+| `phoneRhCandidatures.views.potentiel` | Fort potentiel |
+| `phoneRhCandidatures.views.toutes` | Toutes |
+| `phoneRhCandidatures.views.entretiens` | Entretiens |
+| `phoneRhCandidatures.views.decisions` | Décisions |
+| `phoneRhCandidatures.diagnostic.card` | Orbi a lu {count, plural, one {# CV} other {# CV}} |
+| `phoneRhCandidatures.diagnostic.cardHint` | Diagnostic de tous les CV, critère par critère |
+| `phoneRhCandidatures.diagnostic.back` | Candidatures |
+| `phoneRhCandidatures.diagnostic.empty` | Aucune offre avec des candidatures pour l'instant. |
+| `phoneRhCandidatures.diagnostic.title` | Diagnostic des CV |
+| `phoneRhCandidatures.diagnostic.line` | {count, plural, one {# CV lu} other {# CV lus}} · {job} |
+| `phoneRhCandidatures.diagnostic.all` | couvrent tous les critères |
+| `phoneRhCandidatures.diagnostic.partial` | en partie |
+| `phoneRhCandidatures.diagnostic.little` | peu |
+| `phoneRhCandidatures.diagnostic.skills` | Compétences présentes dans les CV |
+| `phoneRhCandidatures.diagnostic.of` | {count} sur {total} |
+| `phoneRhCandidatures.diagnostic.missing` | {skill} manque à {count, plural, one {# candidat} other {# candidats}} : un cours Jumanly peut les aider à progresser. |
+| `phoneRhCandidatures.diagnostic.closest` | Les plus proches de l'offre |
+| `phoneRhCandidatures.diagnostic.shortlist` | Présélectionner {name}, encore en « Reçue » |
+| `phoneRhCandidatures.high.rule` | {count, plural, =0 {Aucun profil à 80 % et plus} one {# profil à 80 % et plus} other {# profils à 80 % et plus}} · classés par score, jamais écartés |
+| `phoneRhCandidatures.high.noScore` | Le score de compatibilité n'est pas compris dans votre formule : toutes les candidatures sont dans « Toutes ». |
+| `phoneRhCandidatures.high.empty` | Aucune candidature à 80 % et plus pour l'instant. Les autres sont dans « Toutes », jamais écartées. |
+| `phoneRhCandidatures.high.sub` | {job} · {stage} |
+| `phoneRhCandidatures.notes.skills` | Couvre les compétences requises ({skills} vérifiées) |
+| `phoneRhCandidatures.notes.skillsCount` | Couvre {met} compétences requises sur {total} |
+| `phoneRhCandidatures.notes.experience` | {title} · {company} |
+| `phoneRhCandidatures.notes.city` | À {city}, comme le poste |
+| `phoneRhCandidatures.checks.declared` | Niveau réel sur {skill} (déclaré, non vérifié) |
+| `phoneRhCandidatures.checks.knockout` | {label} |
+| `phoneRhCandidatures.interests` | Ce qui l'intéresse |
+| `phoneRhCandidatures.availability.now` | Immédiate |
+| `phoneRhCandidatures.availability.from` | À partir du {date, date, long} |
+| `phoneRhCandidatures.availability.listening` | À l'écoute |
+| `phoneRhCandidatures.availability.not` | Pas disponible pour l'instant |
+| `phoneRhCandidatures.followedBy` | Suivi par {name} |
+| `phoneRhCandidatures.open` | Ouvrir |
+| `phoneRhCandidatures.phases.label` | Étapes |
+| `phoneRhCandidatures.phases.recue` | Reçue |
+| `phoneRhCandidatures.phases.preselection` | Présélection |
+| `phoneRhCandidatures.phases.entretien` | Entretien |
+| `phoneRhCandidatures.phases.proposition` | Proposition |
+| `phoneRhCandidatures.phases.recrute` | Recruté·e |
+| `phoneRhCandidatures.phases.nonretenu` | Non retenu·e |
+| `phoneRhCandidatures.phases.empty` | Personne à cette étape pour l'instant. |
+| `phoneRhCandidatures.sort.score` | Par score |
+| `phoneRhCandidatures.sort.date` | Par date |
+| `phoneRhCandidatures.select.start` | Sélectionner |
+| `phoneRhCandidatures.select.cancel` | Annuler |
+| `phoneRhCandidatures.select.write` | {count, plural, =0 {Choisissez des candidats} one {Écrire à # candidat} other {Écrire à # candidats}} |
+| `phoneRhCandidatures.interviews.label` | Entretiens |
+| `phoneRhCandidatures.interviews.aujourdhui` | Aujourd'hui · {count} |
+| `phoneRhCandidatures.interviews.avenir` | À venir · {count} |
+| `phoneRhCandidatures.interviews.documenter` | À documenter · {count} |
+| `phoneRhCandidatures.interviews.empty.aujourdhui` | Aucun entretien aujourd'hui. |
+| `phoneRhCandidatures.interviews.empty.avenir` | Aucun entretien à venir. |
+| `phoneRhCandidatures.interviews.empty.documenter` | Tous vos entretiens sont documentés. |
+| `phoneRhCandidatures.interviews.toFix` | À fixer |
+| `phoneRhCandidatures.interviews.mode.video` | Visio |
+| `phoneRhCandidatures.interviews.mode.onsite` | Sur place |
+| `phoneRhCandidatures.interviews.mode.audio` | Appel |
+| `phoneRhCandidatures.interviews.date` | {date} · {job} |
+| `phoneRhCandidatures.interviews.with` | Avec {names} |
+| `phoneRhCandidatures.interviews.document` | Documenter l'entretien |
+| `phoneRhCandidatures.interviews.join` | Rejoindre |
+| `phoneRhCandidatures.interviews.see` | Voir l'entretien |
+| `phoneRhCandidatures.interviews.file` | Fiche |
+| `phoneRhCandidatures.decisions.label` | Décisions |
+| `phoneRhCandidatures.decisions.propositions` | Propositions · {count} |
+| `phoneRhCandidatures.decisions.recrutes` | Recrutés · {count} |
+| `phoneRhCandidatures.decisions.nonretenus` | Non retenus · {count} |
+| `phoneRhCandidatures.decisions.answerAll` | Répondre {count, plural, one {à la personne sans réponse} other {aux # sans réponse}} |
+| `phoneRhCandidatures.decisions.answerAllHint` | Chaque candidat reçoit une réponse, même courte |
+| `phoneRhCandidatures.decisions.empty.propositions` | Aucune proposition en cours. |
+| `phoneRhCandidatures.decisions.empty.recrutes` | Personne n'est encore recruté. |
+| `phoneRhCandidatures.decisions.empty.nonretenus` | Aucun candidat non retenu. |
+| `phoneRhCandidatures.decisions.sent` | Envoyée {date}, en attente de réponse |
+| `phoneRhCandidatures.decisions.hired` | Recruté·e |
+| `phoneRhCandidatures.decisions.waiting` | Sans réponse pour l'instant |
+| `phoneRhCandidatures.decisions.answered` | Réponse envoyée |
+| `phoneRhCandidatures.decisions.rejected` | Non retenu·e |
+| `phoneRhCandidatures.group.sent` | {count, plural, one {Message envoyé à # candidat.} other {Message envoyé à # candidats.}} |
+| `phoneRhCandidatures.group.error` | Le message n'est pas parti. Réessayez. |
+| `phoneRhCandidatures.group.title` | Message à {count, plural, =0 {0 candidat} one {# candidat} other {# candidats}} |
+| `phoneRhCandidatures.group.template` | Modèle |
+| `phoneRhCandidatures.group.templates.entretien` | Invitation à un entretien |
+| `phoneRhCandidatures.group.templates.document` | Demande de document |
+| `phoneRhCandidatures.group.templates.recue` | Candidature bien reçue |
+| `phoneRhCandidatures.group.templates.nonretenu` | Réponse non retenue |
+| `phoneRhCandidatures.group.preview` | Aperçu pour la première personne |
+| `phoneRhCandidatures.group.send` | Envoyer à chacun |
+| `phoneRhCandidatures.group.body.entretien` | Bonjour {prenom}, votre profil nous intéresse pour le poste « {poste} ». Répondez à ce message avec vos disponibilités pour un entretien. {signer}, {entreprise} |
+| `phoneRhCandidatures.group.body.document` | Bonjour {prenom}, pour avancer sur votre candidature au poste « {poste} », pouvez-vous nous envoyer votre diplôme ou une attestation en réponse à ce message ? {signer}, {entreprise} |
+| `phoneRhCandidatures.group.body.recue` | Bonjour {prenom}, nous avons bien reçu votre candidature au poste « {poste} ». Nous la lisons avec attention et revenons vers vous. {signer}, {entreprise} |
+| `phoneRhCandidatures.group.body.nonretenu` | Bonjour {prenom}, merci pour votre candidature au poste « {poste} ». Nous avons choisi un autre profil cette fois. Votre profil reste visible pour nos prochaines offres. {signer}, {entreprise} |
+| `phoneRhCandidatures.file.back` | Candidatures |
+| `phoneRhCandidatures.file.cap` | Cap : {job} |
+| `phoneRhCandidatures.file.years` | {count, plural, =0 {Moins d'un an d'expérience} one {# an d'expérience} other {# ans d'expérience}} |
+| `phoneRhCandidatures.file.source.direct` | reçue {when} via Explorer |
+| `phoneRhCandidatures.file.source.invitation` | reçue {when} sur invitation |
+| `phoneRhCandidatures.file.source.talent_search` | reçue {when} après une proposition |
+| `phoneRhCandidatures.file.slot` | {date}, {time} |
+| `phoneRhCandidatures.file.primary.document` | Documenter l'entretien |
+| `phoneRhCandidatures.file.primary.plan` | Planifier un entretien |
+| `phoneRhCandidatures.file.primary.propose` | Faire une proposition |
+| `phoneRhCandidatures.file.primary.recruit` | Recruter {name} |
+| `phoneRhCandidatures.file.orbi` | Ce qu'Orbi a relevé |
+| `phoneRhCandidatures.file.check` | À vérifier en entretien |
+| `phoneRhCandidatures.file.availability` | Disponibilité : {value} |
+| `phoneRhCandidatures.file.interview` | Entretien |
+| `phoneRhCandidatures.file.write` | Écrire au candidat |
+| `phoneRhCandidatures.file.error` | L'action n'a pas abouti. Réessayez. |
+| `phoneRhCandidatures.file.ok.deplacee` | Étape changée. |
+| `phoneRhCandidatures.file.ok.note` | Note ajoutée. |
+| `phoneRhCandidatures.file.ok.confie` | Dossier confié. |
+| `phoneRhCandidatures.file.ok.decision` | Décision envoyée avec son message. |
+| `phoneRhCandidatures.file.ok.proposition` | Proposition envoyée. |
+| `phoneRhCandidatures.file.ok.document` | Demande de document envoyée. |
+| `phoneRhCandidatures.file.ok.evaluation` | Évaluation enregistrée. |
+| `phoneRhCandidatures.file.ok.entretien` | Invitation envoyée. |
+| `phoneRhCandidatures.cv.months` | {count} mois |
+| `phoneRhCandidatures.cv.years` | {count, plural, one {# an} other {# ans}} |
+| `phoneRhCandidatures.cv.experience` | Expérience |
+| `phoneRhCandidatures.cv.education` | Formation |
+| `phoneRhCandidatures.cv.skills` | Compétences |
+| `phoneRhCandidatures.cv.none` | Rien d'indiqué. |
+| `phoneRhCandidatures.cv.degree` | {degree}, {school} |
+| `phoneRhCandidatures.cv.year` | ({year}) |
+| `phoneRhCandidatures.cv.certificate` | {title} · attestation Jumanly |
+| `phoneRhCandidatures.cv.verified` | vérifiée |
+| `phoneRhCandidatures.cv.declared` | déclarée |
+| `phoneRhCandidatures.answers.none` | Pas de question ni de lettre pour cette offre. |
+| `phoneRhCandidatures.answers.yes` | Oui |
+| `phoneRhCandidatures.answers.no` | Non |
+| `phoneRhCandidatures.answers.empty` | Pas de réponse |
+| `phoneRhCandidatures.answers.letter` | Lettre de motivation |
+| `phoneRhCandidatures.answers.documents` | Documents |
+| `phoneRhCandidatures.answers.pdf` | PDF |
+| `phoneRhCandidatures.answers.cv` | CV.pdf |
+| `phoneRhCandidatures.answers.cvHint` | Le CV tel qu'envoyé |
+| `phoneRhCandidatures.answers.certificateHint` | Vérifiable en ligne |
+| `phoneRhCandidatures.answers.noDocument` | Aucun document joint. |
+| `phoneRhCandidatures.notes_.label` | Note pour l'équipe |
+| `phoneRhCandidatures.notes_.placeholder` | Ajouter une note pour l'équipe |
+| `phoneRhCandidatures.notes_.add` | Ajouter |
+| `phoneRhCandidatures.notes_.rule` | Les notes sont visibles par l'équipe de recrutement, jamais par le candidat. |
+| `phoneRhCandidatures.why.open` | Pourquoi ? |
+| `phoneRhCandidatures.why.none` | Score non calculé |
+| `phoneRhCandidatures.why.title` | Pourquoi {score} % ? |
+| `phoneRhCandidatures.why.band.veryHigh` | Très compatible · calcul fixe, pas une décision |
+| `phoneRhCandidatures.why.band.high` | Compatible · calcul fixe, pas une décision |
+| `phoneRhCandidatures.why.band.partial` | Partiellement compatible · calcul fixe, pas une décision |
+| `phoneRhCandidatures.why.band.low` | Peu compatible · calcul fixe, pas une décision |
+| `phoneRhCandidatures.why.bandShort.veryHigh` | Très compatible |
+| `phoneRhCandidatures.why.bandShort.high` | Compatible |
+| `phoneRhCandidatures.why.bandShort.partial` | Partiellement compatible |
+| `phoneRhCandidatures.why.bandShort.low` | Peu compatible |
+| `phoneRhCandidatures.why.criteria.skills_required` | Compétences requises |
+| `phoneRhCandidatures.why.criteria.skills_preferred` | Compétences souhaitées |
+| `phoneRhCandidatures.why.criteria.experience` | Expérience |
+| `phoneRhCandidatures.why.criteria.education` | Formation |
+| `phoneRhCandidatures.why.criteria.languages` | Langues |
+| `phoneRhCandidatures.why.criteria.location` | Lieu et mode de travail |
+| `phoneRhCandidatures.why.criteria.contract` | Contrat et disponibilité |
+| `phoneRhCandidatures.why.criteria.semantic` | Proximité du profil |
+| `phoneRhCandidatures.why.points` | {points} / {weight} |
+| `phoneRhCandidatures.why.locked` | Le détail critère par critère s'ouvre avec une formule qui comprend le score expliqué. |
+| `phoneRhCandidatures.why.notUsed` | Jamais utilisés : nom, genre, âge, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise. |
+| `phoneRhCandidatures.stage.label` | Étape |
+| `phoneRhCandidatures.stage.change` | Changer d'étape, actuellement {stage} |
+| `phoneRhCandidatures.tabs.label` | Rubriques du dossier |
+| `phoneRhCandidatures.tabs.resume` | Résumé |
+| `phoneRhCandidatures.tabs.cv` | CV |
+| `phoneRhCandidatures.tabs.reponses` | Réponses |
+| `phoneRhCandidatures.tabs.notes` | Notes |
+| `phoneRhCandidatures.tabs.historique` | Historique |
+| `phoneRhCandidatures.menu.open` | Plus d'actions pour {name} |
+| `phoneRhCandidatures.menu.stage` | Changer d'étape |
+| `phoneRhCandidatures.menu.stageHint` | Actuellement : {stage} |
+| `phoneRhCandidatures.menu.assign` | Répartir à un collègue |
+| `phoneRhCandidatures.menu.assignHint` | Suivi par {name} |
+| `phoneRhCandidatures.menu.assignNobody` | Personne ne suit encore ce dossier |
+| `phoneRhCandidatures.menu.plan` | Planifier un entretien |
+| `phoneRhCandidatures.menu.planned` | Déjà prévu : {date} |
+| `phoneRhCandidatures.menu.planHint` | Visio, sur place ou appel |
+| `phoneRhCandidatures.menu.document` | Demander un document |
+| `phoneRhCandidatures.menu.documentHint` | Diplôme, attestation, références |
+| `phoneRhCandidatures.menu.pdf` | Télécharger le PDF |
+| `phoneRhCandidatures.menu.pdfHint` | Fiche, CV, réponses, notes |
+| `phoneRhCandidatures.menu.reject` | Ne pas retenir |
+| `phoneRhCandidatures.menu.rejectHint` | Avec un message bienveillant |
+| `phoneRhCandidatures.assign.title` | Confier {name} à |
+| `phoneRhCandidatures.assign.hint` | La personne choisie suit le dossier et reçoit une notification. |
+| `phoneRhCandidatures.assign.me` | {name} (moi) |
+| `phoneRhCandidatures.assign.follows` | {count, plural, =0 {0 candidat suivi} one {# candidat suivi} other {# candidats suivis}} |
+| `phoneRhCandidatures.pdf.title` | Télécharger en PDF |
+| `phoneRhCandidatures.pdf.content` | Contenu |
+| `phoneRhCandidatures.pdf.parts.fiche` | Fiche et score expliqué |
+| `phoneRhCandidatures.pdf.parts.cv` | CV |
+| `phoneRhCandidatures.pdf.parts.reponses` | Réponses et documents |
+| `phoneRhCandidatures.pdf.parts.notes` | Notes et évaluations |
+| `phoneRhCandidatures.pdf.parts.historique` | Historique des décisions |
+| `phoneRhCandidatures.pdf.rule` | Le téléchargement est enregistré dans le journal de l'entreprise. |
+| `phoneRhCandidatures.pdf.download` | Télécharger |
+| `phoneRhCandidatures.pdf.sections.fiche` | Fiche et score expliqué |
+| `phoneRhCandidatures.pdf.sections.cv` | CV |
+| `phoneRhCandidatures.pdf.sections.reponses` | Réponses et documents |
+| `phoneRhCandidatures.pdf.sections.notes` | Notes et évaluations |
+| `phoneRhCandidatures.pdf.sections.historique` | Historique des décisions |
+| `phoneRhCandidatures.pdf.job` | Candidature : {job} |
+| `phoneRhCandidatures.pdf.score` | Compatibilité : {score} % (calcul fixe, pas une décision) |
+| `phoneRhCandidatures.pdf.criterion` | {name} : {points} / {weight} |
+| `phoneRhCandidatures.pdf.notUsed` | Jamais utilisés : nom, genre, âge, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise. |
+| `phoneRhCandidatures.pdf.criteria.skills_required` | Compétences requises |
+| `phoneRhCandidatures.pdf.criteria.skills_preferred` | Compétences souhaitées |
+| `phoneRhCandidatures.pdf.criteria.experience` | Expérience |
+| `phoneRhCandidatures.pdf.criteria.education` | Formation |
+| `phoneRhCandidatures.pdf.criteria.languages` | Langues |
+| `phoneRhCandidatures.pdf.criteria.location` | Lieu et mode de travail |
+| `phoneRhCandidatures.pdf.criteria.contract` | Contrat et disponibilité |
+| `phoneRhCandidatures.pdf.criteria.semantic` | Proximité du profil |
+| `phoneRhCandidatures.pdf.experience` | {title}, {company} ({from} – {to}) |
+| `phoneRhCandidatures.pdf.now` | aujourd'hui |
+| `phoneRhCandidatures.pdf.education` | {degree}, {school} |
+| `phoneRhCandidatures.pdf.skills` | Compétences : {list} |
+| `phoneRhCandidatures.pdf.verified` | {name} (vérifiée) |
+| `phoneRhCandidatures.pdf.empty` | Rien à signaler. |
+| `phoneRhCandidatures.pdf.letter` | Lettre de motivation |
+| `phoneRhCandidatures.pdf.documents` | Documents joints : {list} |
+| `phoneRhCandidatures.pdf.evaluation` | Évaluation de {name} : {comment} |
+| `phoneRhCandidatures.pdf.documentTitle` | Dossier de candidature · {name} |
+| `phoneRhCandidatures.pdf.footer` | Document confidentiel de {company}, généré par Jumanly. Réservé à l'équipe de recrutement. |
+| `phoneRhCandidatures.reject.title` | Ne pas retenir {name} |
+| `phoneRhCandidatures.reject.reason` | Motif · pour vous seulement |
+| `phoneRhCandidatures.reject.reasons.skills` | Compétences éloignées du poste |
+| `phoneRhCandidatures.reject.reasons.otherCandidate` | Autre candidat plus proche |
+| `phoneRhCandidatures.reject.reasons.other` | Disponibilité incompatible |
+| `phoneRhCandidatures.reject.reasons.positionClosed` | Poste pourvu |
+| `phoneRhCandidatures.reject.messageLabel` | Message envoyé |
+| `phoneRhCandidatures.reject.message` | Bonjour {name}, merci pour votre candidature au poste « {job} ». Nous avons choisi un autre profil cette fois. Votre profil reste visible pour nos prochaines offres. {company} |
+| `phoneRhCandidatures.reject.send` | Envoyer et ne pas retenir |
+| `phoneRhCandidatures.recruit.title` | Recruter {name} |
+| `phoneRhCandidatures.recruit.message` | Bonjour {name}, bonne nouvelle : nous vous retenons pour le poste « {job} ». Nous revenons vers vous très vite pour la suite. {company} |
+| `phoneRhCandidatures.recruit.send` | Envoyer et recruter |
+| `phoneRhCandidatures.document.kinds.diploma` | Diplôme |
+| `phoneRhCandidatures.document.kinds.certificate` | Attestation |
+| `phoneRhCandidatures.document.kinds.references` | Références |
+| `phoneRhCandidatures.document.name` | Document demandé |
+| `phoneRhCandidatures.document.due` | À envoyer avant le |
+| `phoneRhCandidatures.document.note` | Un mot (facultatif) |
+| `phoneRhCandidatures.document.send` | Envoyer la demande |
+| `phoneRhCandidatures.plan.back` | Retour |
+| `phoneRhCandidatures.plan.title` | Entretien avec {name} |
+| `phoneRhCandidatures.plan.day` | Jour |
+| `phoneRhCandidatures.plan.slots` | Créneau · libre pour vous |
+| `phoneRhCandidatures.plan.slotsWith` | Créneau · libres pour {names} et vous |
+| `phoneRhCandidatures.plan.time` | {hours} h {minutes} |
+| `phoneRhCandidatures.plan.full` | Plus de créneau libre ce jour-là : choisissez un autre jour. |
+| `phoneRhCandidatures.plan.how` | Comment |
+| `phoneRhCandidatures.plan.modes.video` | Visio |
+| `phoneRhCandidatures.plan.modes.onsite` | Sur place |
+| `phoneRhCandidatures.plan.modes.audio` | Appel |
+| `phoneRhCandidatures.plan.modesHint.video` | Lien envoyé avec l'invitation |
+| `phoneRhCandidatures.plan.modesHint.onsite` | À l'adresse de l'entreprise |
+| `phoneRhCandidatures.plan.modesHint.audio` | Appel dans l'app |
+| `phoneRhCandidatures.plan.link` | Lien de la visio (facultatif) |
+| `phoneRhCandidatures.plan.address` | Adresse |
+| `phoneRhCandidatures.plan.duration` | Durée |
+| `phoneRhCandidatures.plan.minutes` | {count, plural, =60 {1 h} other {# min}} |
+| `phoneRhCandidatures.plan.with` | Avec |
+| `phoneRhCandidatures.plan.send` | Envoyer l'invitation |
+| `phoneRhCandidatures.evaluation.back` | Retour |
+| `phoneRhCandidatures.evaluation.title` | Entretien de {name} |
+| `phoneRhCandidatures.evaluation.mode.video` | Visio |
+| `phoneRhCandidatures.evaluation.mode.onsite` | Sur place |
+| `phoneRhCandidatures.evaluation.mode.audio` | Appel |
+| `phoneRhCandidatures.evaluation.with` | avec {names} |
+| `phoneRhCandidatures.evaluation.score` | {value} / {max} |
+| `phoneRhCandidatures.evaluation.star` | {value} sur {max} |
+| `phoneRhCandidatures.evaluation.strengths` | Points forts |
+| `phoneRhCandidatures.evaluation.next` | Suite proposée |
+| `phoneRhCandidatures.evaluation.nextSteps.yes` | Poursuivre |
+| `phoneRhCandidatures.evaluation.nextSteps.maybe` | À revoir |
+| `phoneRhCandidatures.evaluation.nextSteps.no` | Ne pas poursuivre |
+| `phoneRhCandidatures.evaluation.save` | Enregistrer l'évaluation |
+| `phoneRhCandidatures.proposal.back` | Retour |
+| `phoneRhCandidatures.proposal.title` | Proposition à {name} |
+| `phoneRhCandidatures.proposal.salary` | Salaire mensuel (USD) |
+| `phoneRhCandidatures.proposal.start` | Date de début |
+| `phoneRhCandidatures.proposal.message` | Message |
+| `phoneRhCandidatures.proposal.default` | Bonjour {name}, toute l'équipe a apprécié nos échanges. Nous avons le plaisir de vous proposer le poste de {job}. Vous trouverez les détails ci-dessous. {company} |
+| `phoneRhCandidatures.proposal.rule` | La personne accepte, refuse ou pose une question depuis Messages. Vous êtes prévenu·e. |
+| `phoneRhCandidatures.proposal.send` | Envoyer la proposition |
+| `phoneRhCandidatures.proposal.error` | Vérifiez le salaire, la date et le message (10 caractères au moins). |
+| `phoneRhCandidatures.proposal.salaryLine` | Salaire mensuel : {amount} |
+| `phoneRhCandidatures.proposal.startLine` | Date de début : {date} |
+| `phoneRhCandidatures.sent.title` | Invitation envoyée |
+| `phoneRhCandidatures.sent.line` | {name} reçoit l'invitation dans Messages et par e-mail. |
+| `phoneRhCandidatures.sent.titleWith` | Entretien avec {name} |
+| `phoneRhCandidatures.sent.confirmed` | Le créneau est confirmé. |
+| `phoneRhCandidatures.sent.pending` | En attente de la réponse du candidat. |
+| `phoneRhCandidatures.sent.when` | {date} · {time} |
+| `phoneRhCandidatures.sent.calendar` | Ajouter à mon agenda |
+| `phoneRhCandidatures.sent.file` | Revenir à la fiche |
+| `phoneRhCandidatures.sent.all` | Voir tous les entretiens |
+| `phoneRhCandidatures.calendar.summary` | Entretien avec {name} · {job} |
 
 ### `/tarifs` · Forfaits
 
@@ -16202,6 +16530,7 @@ Conventions :
 | `notifications.item.orgJoinAccepted` | Votre demande pour rejoindre {org} est acceptée. Bienvenue dans l'équipe ! |
 | `notifications.item.orgJoinDeclined` | Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation. |
 | `notifications.item.jobEnding` | {days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}} |
+| `notifications.item.candidateAssigned` | Un collègue vous confie le dossier de {candidate} pour « {jobTitle} ». |
 | `notifications.item.feedReply` | {name} a répondu à votre publication. |
 | `notifications.item.feedMention` | {name} vous a mentionné dans une réponse. |
 | `notifications.item.feedLike` | {name} a aimé votre publication. |

@@ -75,6 +75,7 @@ const categoryOf: Record<NotificationType, Category> = {
   orgJoinAccepted: "account",
   orgJoinDeclined: "account",
   jobEnding: "applications",
+  candidateAssigned: "applications",
 };
 
 const categoryStyle: Record<Category, { icon: IconName; tile: string }> = {

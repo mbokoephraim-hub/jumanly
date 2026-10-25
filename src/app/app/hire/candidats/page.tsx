@@ -26,6 +26,8 @@ import { HireError, hirePermissions } from "@/server/services/hire";
 import { candidateList, type CandidateRow } from "@/server/services/hire-candidates";
 import { isPhone } from "@/server/view";
 import { RhTab } from "@/components/phone/recruteur/head";
+import { RhCandidatures, rhCandidaturesLine } from "@/components/phone/recruteur/candidatures";
+import { rhApplications } from "@/server/services/hire-phone-candidatures";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hireCandidates");
@@ -461,11 +463,29 @@ async function CandidatesPageContent({ searchParams }: PageProps<"/app/hire/cand
   );
 }
 
-/** On a phone, the first screen of the Candidatures tab of Modèle B (docs/modele-b-recruteur, lot M1). */
+/**
+ * On a phone, the tab Candidatures of Modèle B (docs/modele-b-recruteur, lot M5): the offers, then
+ * « Fort potentiel · Toutes · Entretiens · Décisions ».
+ */
 export default async function CandidatesPage(props: PageProps<"/app/hire/candidats">) {
-  const content = <CandidatesPageContent {...props} />;
-  if (!(await isPhone())) return content;
+  if (!(await isPhone())) return <CandidatesPageContent {...props} />;
+  const query = await props.searchParams;
   // The talent search (`?vue=talents`) is the Talents tab on a phone.
-  const talents = (await props.searchParams).vue === "talents";
-  return <RhTab tab={talents ? "talents" : "candidatures"}>{content}</RhTab>;
+  if (query.vue === "talents" || query.vue === "propositions")
+    return (
+      <RhTab tab="talents">
+        <CandidatesPageContent {...props} />
+      </RhTab>
+    );
+  const { ctx } = await requireHire("/app/hire/candidats", "readApplications");
+  const offre = typeof query.offre === "string" ? query.offre : null;
+  const data = await rhApplications(db, ctx, offre).catch((error) => {
+    if (error instanceof HireError) notFound();
+    throw error;
+  });
+  return (
+    <RhTab tab="candidatures" legacy={false} subtitle={await rhCandidaturesLine(data)}>
+      <RhCandidatures ctx={ctx} query={query} data={data} />
+    </RhTab>
+  );
 }

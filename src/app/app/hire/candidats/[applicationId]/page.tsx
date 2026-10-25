@@ -58,6 +58,8 @@ import {
 } from "@/server/services/plans";
 import { screeningAnswersOf, screeningQuestionsOf } from "@/server/services/screening";
 import { poolChoices } from "@/server/services/talent-search";
+import { isPhone } from "@/server/view";
+import { RhCandidate } from "@/components/phone/recruteur/candidat";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hireCandidates.file");
@@ -87,6 +89,19 @@ export default async function CandidateFilePage({
     redirect(
       `/app/hire/candidats/${applicationId}/decision?issue=${query.decision === "refus" ? "rejected" : "hired"}`,
     );
+  // The file on the recruiter's phone (Modèle B recruteur M5).
+  if (await isPhone()) {
+    const { ctx: phoneCtx } = await requireHire(
+      `/app/hire/candidats/${applicationId}`,
+      "readApplications",
+    );
+    try {
+      return await RhCandidate({ ctx: phoneCtx, applicationId, query });
+    } catch (error) {
+      if (error instanceof HireError) notFound();
+      throw error;
+    }
+  }
   const { user, ctx } = await requireHire(
     `/app/hire/candidats/${applicationId}`,
     "readApplications",
