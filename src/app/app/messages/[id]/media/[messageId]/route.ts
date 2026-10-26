@@ -22,7 +22,12 @@ export async function GET(
     ? { userId: user.id, organizationId: space.organizationId, role: space.role }
     : null;
   try {
-    const conversation = await getConversation(db, { userId: user.id, hire }, id);
+    // A member of an organization also reads their own relations (Modèle B recruteur M7).
+    const conversation = await getConversation(db, { userId: user.id, hire }, id).catch((error) => {
+      if (hire && error instanceof ConnectError)
+        return getConversation(db, { userId: user.id }, id);
+      throw error;
+    });
     const message = conversation.messages.find((item) => item.id === messageId && !item.hiddenAt);
     if (!message) return new NextResponse(null, { status: 404 });
     const index = Math.max(0, Number(request.nextUrl.searchParams.get("i") ?? 0) || 0);

@@ -19,6 +19,8 @@ import { hireToday } from "@/server/services/hire-today";
 import { isPhone } from "@/server/view";
 import { PhoneNotifications } from "@/components/phone/fil/notifications";
 import { FilTexts, notificationRows } from "@/components/phone/fil/server";
+import { RhMessagesTexts } from "@/components/phone/recruteur/messages";
+import { RhNotificationsScreen } from "@/components/phone/recruteur/notifications";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("notifications");
@@ -39,6 +41,13 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
   // (planche r3plus `NOTIF_R`, recruteur lot 5).
   if (partner && !space) return <TeamNotifications params={params} user={user} />;
   // On a phone, the talent's notifications of Modèle B (lot B3), from the bell of the Fil.
+  // On a phone, the recruiter's notifications of Modèle B (recruteur M7).
+  if (space && (await isPhone()))
+    return (
+      <RhMessagesTexts>
+        <RhNotificationsScreen userId={user.id} />
+      </RhMessagesTexts>
+    );
   if (!space && !partner && (await isPhone()))
     return (
       <FilTexts>

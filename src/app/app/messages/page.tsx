@@ -11,6 +11,11 @@ import { connectViewer } from "@/server/hire-context";
 import { talentContactRequests } from "@/server/services/talent-search";
 import { isPhone } from "@/server/view";
 import { RhTab } from "@/components/phone/recruteur/head";
+import {
+  RhMessages,
+  RhMessagesTexts,
+  RhNewMessageButton,
+} from "@/components/phone/recruteur/messages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("inbox");
@@ -29,9 +34,24 @@ export default async function MessagesPage({ searchParams }: PageProps<"/app/mes
   const { viewer } = await connectViewer("/app/messages");
   // A recruiting team: the Messages tab of the recruiter space (recruteur lot 5, planche MSG_R).
   if (viewer.hire) {
-    const inbox = <RecruiterInbox ctx={viewer.hire} params={params} />;
-    // On a phone, the first screen of the recruiter's Messages tab (Modèle B, lot M1).
-    return (await isPhone()) ? <RhTab tab="messages">{inbox}</RhTab> : inbox;
+    // On a phone, the recruiter's Messages tab of Modèle B (lot M7).
+    if (await isPhone())
+      return (
+        <RhMessagesTexts>
+          <RhTab
+            tab="messages"
+            legacy={false}
+            noSearch
+            actions={<RhNewMessageButton ctx={viewer.hire} />}
+          >
+            <RhMessages
+              ctx={viewer.hire}
+              tab={typeof params.onglet === "string" ? params.onglet : undefined}
+            />
+          </RhTab>
+        </RhMessagesTexts>
+      );
+    return <RecruiterInbox ctx={viewer.hire} params={params} />;
   }
   // On a phone, the Messages tab of Modèle B is kept mounted under the pages (lot B8).
   if (await isPhone()) return null;

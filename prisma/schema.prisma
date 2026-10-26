@@ -154,6 +154,7 @@ model Organization {
   createdAt               DateTime                 @default(now())
   updatedAt               DateTime                 @updatedAt
   hiddenTalentSuggestions HiddenTalentSuggestion[]
+  teamThreads             TeamThread[]
 }
 
 /// A supporting document (PDF or image) sent with a verification request. The bytes live in the
@@ -877,6 +878,9 @@ model User {
   updatedAt            DateTime                  @updatedAt
 
   hiddenTalentSuggestions HiddenTalentSuggestion[]
+  teamThreadsA            TeamThread[]             @relation("TeamThreadA")
+  teamThreadsB            TeamThread[]             @relation("TeamThreadB")
+  teamMessages            TeamMessage[]            @relation("TeamMessageAuthor")
 
   @@map("user")
 }
@@ -2597,4 +2601,37 @@ model HiddenTalentSuggestion {
   createdAt      DateTime      @default(now())
 
   @@unique([userId, organizationId, profileId])
+}
+
+/// « Équipe » of the recruiter's Messages (Modèle B recruteur M7): a conversation between two
+/// members of the same organization. Apart from the talents' conversations: a talent never sees it,
+/// another member of the organization neither. `memberAId` is the smaller of the two ids.
+model TeamThread {
+  id             String        @id @default(cuid(2))
+  organizationId String
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  memberAId      String
+  memberA        User          @relation("TeamThreadA", fields: [memberAId], references: [id], onDelete: Cascade)
+  memberBId      String
+  memberB        User          @relation("TeamThreadB", fields: [memberBId], references: [id], onDelete: Cascade)
+  aReadAt        DateTime?
+  bReadAt        DateTime?
+  lastMessageAt  DateTime      @default(now())
+  createdAt      DateTime      @default(now())
+  messages       TeamMessage[]
+
+  @@unique([organizationId, memberAId, memberBId])
+  @@index([organizationId, lastMessageAt])
+}
+
+model TeamMessage {
+  id        String     @id @default(cuid(2))
+  threadId  String
+  thread    TeamThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  authorId  String?
+  author    User?      @relation("TeamMessageAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  body      String
+  createdAt DateTime   @default(now())
+
+  @@index([threadId, createdAt])
 }

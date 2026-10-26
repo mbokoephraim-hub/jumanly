@@ -107,9 +107,12 @@ export async function RhTab({
   actions,
   className,
   legacy = true,
+  noSearch = false,
   children,
 }: {
   tab: RecruiterTab;
+  /** The page carries its own search field (Messages, planche 120). */
+  noSearch?: boolean;
   subtitle?: ReactNode;
   actions?: ReactNode;
   className?: string;
@@ -139,7 +142,7 @@ export async function RhTab({
       subtitle={subtitle}
       actions={actions}
       avatar={<RhAvatar />}
-      search={search}
+      search={noSearch ? null : search}
       className={className}
       ownHeading={!legacy}
       texts={{

@@ -29,3 +29,7 @@ export const ORBI_ASK_EVENT = "nb:orbi-question";
 export function askOrbi(question: string) {
   window.dispatchEvent(new CustomEvent<string>(ORBI_ASK_EVENT, { detail: question }));
 }
+
+/** The recruiter's answers from the facts of the organization, without a credit (lot M7). */
+export const RH_ORBI_FACTS = ["today", "first", "propose", "waiting", "unread"] as const;
+export type RhOrbiFact = (typeof RH_ORBI_FACTS)[number];
