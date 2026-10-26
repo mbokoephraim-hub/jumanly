@@ -3,6 +3,7 @@ import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import type { Page } from "@playwright/test";
 import { expect, test } from "./fixtures";
+import { holdBaobab } from "./baobab-lock";
 import { expectAccessible } from "./a11y";
 import { demo, logIn, testEmail } from "./session";
 
@@ -34,6 +35,13 @@ const suffix = () =>
 test.describe("Étape 3 · nettoyage, sur ordinateur", () => {
   test.skip(({ isMobile }) => isMobile, "L'espace de l'entreprise se gère sur ordinateur.");
   test.use({ viewport: { width: WIDTH, height: 900 } });
+  // Baobab Fintech is shared by the other files of the company space: one at a time.
+  let release = () => {};
+  test.beforeAll(async () => {
+    test.setTimeout(600_000);
+    release = await holdBaobab();
+  });
+  test.afterAll(() => release());
 
   test("l'administrateur ouvre la structure et la vérification ; les anciennes adresses suivent", async ({
     page,
