@@ -40,6 +40,12 @@ export async function openCandidateFile(page: Page, name: RegExp) {
     await expect(pane).toHaveCount(0);
   }
   await expect(page).toHaveURL(/\/app\/hire\/candidats\/[^/?]+$/);
+  // On a phone the candidate opens on their profile (docs/profil-personne): go on to the file.
+  if (await page.evaluate(() => /Mobi|iPhone|iPod/.test(navigator.userAgent))) {
+    await expect(page.locator(".nb-rh-fiche-p").filter({ visible: true })).toBeVisible();
+    await page.goto(`${page.url()}?onglet=resume`);
+    await expect(page.locator(".nb-rh-fiche").filter({ visible: true })).toBeVisible();
+  }
 }
 
 /** In the planner, once a day is chosen: on a phone « Heures » leads to the times of that day. */

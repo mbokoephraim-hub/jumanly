@@ -5,22 +5,12 @@ import { languageName } from "@/lib/dates";
 import { profileLanguageCodes } from "@/server/services/profile-view";
 import { siteUrl } from "@/lib/seo";
 import type { CareerHome } from "@/server/services/career-phone";
+import { handleFromName } from "@/lib/social-links";
 import { companyTone } from "../explorer/data";
 import { initialsOf, shortName, toneOf } from "../fil/data";
 
 /** « @grace.mbuyi »: the name in small letters, without accents, joined by dots. */
-export function handleOf(name: string) {
-  return (
-    name
-      .normalize("NFD")
-      .replace(/\p{M}/gu, "")
-      .toLowerCase()
-      .replace(/\(.*?\)/g, "")
-      .trim()
-      .replace(/[^a-z0-9]+/g, ".")
-      .replace(/^\.|\.$/g, "") || "jumanly"
-  );
-}
+export const handleOf = handleFromName;
 
 export type CareerEntry = {
   id: string;
@@ -140,7 +130,7 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
   const name = home.user.name;
   const city = home.user.city;
   const title = home.profile.headline;
-  const handleText = [t("handle", { handle: handleOf(name) }), title, city]
+  const handleText = [t("handle", { handle: home.profile.handle ?? handleOf(name) }), title, city]
     .filter(Boolean)
     .join(" · ");
 

@@ -160,10 +160,23 @@ test.describe("Modèle B · Explorer au téléphone", () => {
       "aria-selected",
       "true",
     );
-    await tabs.getByRole("tab", { name: /^Réalisations · / }).click();
-    await expect(pile.getByRole("tabpanel")).toBeVisible();
-    await tabs.getByRole("tab", { name: "Publications" }).click();
-    await expect(pile.getByRole("tabpanel")).toBeVisible();
+    // docs/profil-personne: compact head, then Publications · À propos · Réalisations · Portfolio.
+    await expect(pile.getByRole("heading", { name: "Compétences" })).toBeVisible();
+    for (const name of ["Réalisations", "Portfolio", "Publications"]) {
+      await tabs.getByRole("tab", { name, exact: true }).click();
+      await expect(tabs.getByRole("tab", { name, exact: true })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      await expect(pile.getByRole("tabpanel")).toBeVisible();
+    }
+    // « Se connecter » → « Demande envoyée »; « Chat » only once connected.
+    const connect = pile.getByRole("button", { name: "Se connecter", exact: true });
+    if (await connect.count()) {
+      await expect(pile.getByRole("link", { name: "Chat", exact: true })).toHaveCount(0);
+      await connect.click();
+      await expect(pile.getByText("Demande envoyée", { exact: true })).toBeVisible();
+    }
     await pile.getByRole("button", { name: /^Plus d.options$/ }).click();
     await expect(
       page.getByRole("dialog").getByRole("button", { name: "Partager le profil" }),

@@ -18,6 +18,24 @@ const tab = (page: Page) => page.locator(".nb-rh-vue").filter({ visible: true })
 const file = (page: Page) => page.locator(".nb-rh-fiche").filter({ visible: true });
 const screen = (page: Page) => page.locator(".nb-rh-detail").filter({ visible: true });
 const sheet = (page: Page, name: string | RegExp) => page.getByRole("dialog", { name });
+const profile = (page: Page) => page.locator(".nb-rh-fiche-p").filter({ visible: true });
+
+/**
+ * The candidate opens on their profile (docs/profil-personne, vue recruteur); the file (Résumé, CV,
+ * Réponses, Notes, Historique) opens with « ··· » › « Dossier de candidature ».
+ */
+async function openDossier(page: Page) {
+  await profile(page)
+    .getByRole("button", { name: /^Plus d'actions pour/ })
+    .click();
+  await page
+    .getByRole("dialog")
+    .filter({ visible: true })
+    .getByRole("button", { name: /^Dossier de candidature/ })
+    .click();
+  await expect(file(page).getByRole("tab", { name: "Résumé" })).toBeVisible();
+}
+
 const views = (page: Page) =>
   main(page).getByRole("navigation", { name: "Vues des candidatures" }).filter({ visible: true });
 
@@ -230,21 +248,29 @@ test.describe("Modèle B recruteur · Candidatures au téléphone", () => {
     await views(page).getByRole("link", { name: "Toutes" }).click();
     await tab(page).locator("a.nb-rh-cl").first().click();
     await expect(page).toHaveURL(/\/app\/hire\/candidats\/[^/?]+$/);
-    await expect(file(page).getByRole("tab", { name: "Résumé" })).toHaveAttribute(
+    // The profile first: the card of the application, « Pourquoi ? », the four tabs.
+    await expect(profile(page).getByText(/^A candidaté : /)).toBeVisible();
+    await expect(profile(page).getByRole("tab", { name: "À propos", exact: true })).toHaveAttribute(
       "aria-selected",
       "true",
     );
     await capture(page, "067-candidat");
     await fits(page);
     await expectAccessible(page);
-    const why = file(page).getByRole("button", { name: /Pourquoi \?/ });
+    const why = profile(page).getByRole("button", { name: /^Pourquoi \d+ % \?$/ });
     if (await why.count()) {
       await why.click();
       const explained = sheet(page, /^Pourquoi \d+ % \?/);
-      await expect(explained).toContainText("Jamais utilisés");
+      await expect(explained).toContainText("Calculé sans le nom, la photo");
+      await expect(explained).toContainText("aucune candidature n’est écartée automatiquement");
       await capture(page, "068-candidat-pourquoi");
-      await explained.getByRole("button", { name: "Fermer" }).last().click();
+      await explained.getByRole("button", { name: "Compris" }).click();
     }
+    await openDossier(page);
+    await expect(file(page).getByRole("tab", { name: "Résumé" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
     for (const [name, shot] of [
       ["CV", "069-candidat-cv"],
       ["Réponses", "070-candidat-reponses"],
@@ -398,8 +424,11 @@ test.describe("Modèle B recruteur · Candidatures au téléphone", () => {
     await tab(page)
       .getByRole("link", { name: /Jean-Pierre/ })
       .click();
-    await expect(file(page).getByRole("heading", { name: /Jean-Pierre/ })).toBeVisible();
-    const fileUrl = page.url();
+    await expect(profile(page).getByRole("heading", { name: /Jean-Pierre/ })).toBeVisible();
+    const base = page.url();
+    // The file itself (Résumé, CV…), opened directly.
+    const fileUrl = `${base}?onglet=resume`;
+    await openDossier(page);
 
     // A note for the team.
     await file(page)
@@ -462,7 +491,7 @@ test.describe("Modèle B recruteur · Candidatures au téléphone", () => {
     expect(ics.headers()["content-type"]).toContain("text/calendar");
     expect(await ics.text()).toContain("BEGIN:VEVENT");
     await page.getByRole("link", { name: "Revenir à la fiche" }).click();
-    await expect(page).toHaveURL(fileUrl);
+    await expect(page).toHaveURL(base);
 
     // The talent confirms the slot from Suivi; the preparation refuses a private question and
     // keeps a question about the job until its author removes it.
@@ -473,7 +502,7 @@ test.describe("Modèle B recruteur · Candidatures au téléphone", () => {
     });
     const confirmer = await confirming.newPage();
     await logIn(confirmer, TALENT);
-    await confirmer.goto(`/app/suivi/${fileUrl.split("?")[0]!.split("/").pop()}`);
+    await confirmer.goto(`/app/suivi/${base.split("?")[0]!.split("/").pop()}`);
     await confirmer
       .locator("#entretien")
       .getByRole("button", { name: "Confirmer" })
@@ -516,7 +545,7 @@ test.describe("Modèle B recruteur · Candidatures au téléphone", () => {
     await expect(page.getByText("Message envoyé à 1 candidat.")).toBeVisible();
 
     // A proposal: in the conversation, then the decision stays with the recruiter.
-    await page.goto(`${fileUrl}/decision?issue=proposition`);
+    await page.goto(`${base}/decision?issue=proposition`);
     const proposal = page.locator(".nb-rh-prop").filter({ visible: true });
     await expect(proposal.getByRole("heading", { name: /^Proposition à / })).toBeVisible();
     await proposal.getByLabel("Salaire mensuel (USD)").fill("900");
@@ -556,8 +585,9 @@ test.describe("Modèle B recruteur · Candidatures au téléphone", () => {
     await tab(page)
       .getByRole("link", { name: /Jean-Pierre/ })
       .click();
-    await expect(file(page).getByRole("heading", { name: /Jean-Pierre/ })).toBeVisible();
+    await expect(profile(page).getByRole("heading", { name: /Jean-Pierre/ })).toBeVisible();
     const fileUrl = page.url().split("?")[0]!;
+    await openDossier(page);
 
     // Orbi reads the file on demand: strengths, points to check, never a decision.
     const orbi = file(page).locator("#orbi");
@@ -614,6 +644,7 @@ test.describe("Modèle B recruteur · Candidatures au téléphone", () => {
     await tab(other)
       .getByRole("link", { name: /Jean-Pierre/ })
       .click();
+    await openDossier(other);
     const locked = file(other).locator("#orbi");
     await expect(locked).toContainText("Disponibles avec une formule plus complète.");
     await expect(locked.getByRole("button", { name: "Résumer avec Orbi" })).toHaveCount(0);
