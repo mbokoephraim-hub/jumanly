@@ -4568,3 +4568,56 @@ recruteur n'ont pas changé. Aucune donnée n'a été effacée ; les migrations 
   échelle de notation existants plutôt que ceux de la maquette, entre autres).
 - **À valider par Ephraïm** : l'ensemble de l'étape 3. Ensuite, comme convenu le 26/10 : les écrans
   du recruteur sur ordinateur au Modèle B (section 05, `Web-N-*`), en PR séparées.
+
+## Recruteur sur ordinateur (Modèle B) · N0, diagnostic (26 octobre 2026)
+
+Ephraïm a validé l'étape 3 le 26/10 (« Oui c'est bon »). Comme convenu le même jour, les écrans du
+recruteur sur ordinateur passent au Modèle B : section 05 de `docs/modele-b-recruteur/web/captures/INDEX.md`
+(captures 030 à 073, planches `Web-N-*`, prototype `Web-App.dc.html` avec `qui="nadia"`). Les écrans
+de Joseph qui sont ceux du recruteur vus par l'administrateur (074, 075, 079, 080, 088 à 091),
+laissés de côté à l'étape 3, sont repris ici avec eux.
+
+**Le cadre existant.** Sur ordinateur, le recruteur a l'appli de la refonte web (`RecruiterShell`,
+`src/components/recruiter/side-nav.tsx` et `header.tsx`) : barre latérale À traiter · Offres · Orbi
+(carte `Ctrl K`) · Candidats · Messages, puis Agenda · Talents · Rapports, l'organisation active en
+haut, la partie ENTREPRISE de l'étape 3 pour les administrateurs ; en-tête avec recherche, cloche,
+messages et avatar. Le Modèle B demande : Accueil · Fil · Offres · Candidatures · Agenda · Talents ·
+Messages avec leurs pastilles, une partie PILOTAGE (Tableau de bord, Mon espace), Compte et la carte
+« Changer de profil » en bas ; en-tête avec le titre de la page, la recherche, la cloche et « Publier
+une offre » ; Orbi en disque menthe flottant en bas à droite. Tous les écrans sont donc à refaire.
+
+**Écrans des planches → route → lot :**
+
+| Captures | Écran | Route | Lot |
+|---|---|---|---|
+| 030 | Cadre : barre latérale, en-tête, Orbi | toutes les pages recruteur | N1 |
+| 031, 032, 074, 075 | Bienvenue (premier passage), Accueil du jour (rendez-vous, tâches, à traiter, offres) | `/app/hire` | N1 |
+| 033 | Fil, publication de 220 caractères | `/app/fil` (recruteur) | N2 |
+| 034 à 037, 090 | Offres : liste et indicateurs ; offre en onglets aperçu, annonce, équipe et réglages | `/app/hire/offres`, `/app/hire/offres/[id]` | N2 |
+| 038 à 042 | Publier une offre en 5 étapes | `/app/hire/offres/nouvelle` | N2 |
+| 043, 044, 088 | Candidatures en colonnes ou en liste | `/app/hire/candidats` | N3 |
+| 045 à 051 | Fiche candidat en 7 onglets | `/app/hire/candidats/[applicationId]` | N3 |
+| 052 | Évaluer un entretien (5 critères, recommandation) | `/app/hire/candidats/[applicationId]/evaluation` | N3 |
+| 053 à 055, 089 | Agenda semaine, jour, mois, disponibilités | `/app/hire/entretiens` | N4 |
+| 063, 064, 079, 080 | Tableau de bord ; Mon espace (rôle, tâches, rapport PDF) | `/app/hire/rapports`, `/app/hire/taches` | N4 |
+| 056 à 059 | Talents : découvrir, vivier, propositions, réseau | `/app/hire/talents` (les viviers y deviennent un onglet) | N5 |
+| 072, 073 | Page d'une autre entreprise, page de Baobab | `/app/entreprises/[slug]` | N5 |
+| 060 à 062 | Messages, notifications, Orbi en page | `/app/messages`, `/app/notifications`, `/app/orbi` | N6 |
+| 065 à 071, 091 | Compte : profil, changer de profil, formule en lecture, sécurité, notifications, aide, déconnexion | `/app/hire/compte/*` (aujourd'hui au téléphone seulement) | N7 |
+
+**Données.** Les règles et les tables existent déjà (étapes 2 et 3) : tâches `OrgTask`, journal des
+consultations, réglages de l'organisation, profil recruteur, conversations d'équipe, notifications
+`rh.*`. Aucune migration n'est prévue ; s'il en faut une, elle sera additive.
+
+**Ancien design à supprimer en N7** : les composants de la refonte web propres à l'ordinateur dans
+`src/components/recruiter/` qui ne servent plus, les feuilles `recruiter-web*.css` et les parties de
+`recruiter*.css` devenues mortes, les textes orphelins, et les specs `web-recruteur-1` à `4` et
+`hire-wide` réécrites lot par lot. La tablette (768 à 1199 px) garde son rail d'icônes, habillé comme
+l'ordinateur.
+
+**Plan des PR** (une branche `claude/modele-b-web-nN` et une PR par lot, enchaînées et fusionnées
+dès que la CI est verte) : N0 diagnostic, N1 cadre et accueil, N2 Fil et Offres, N3 Candidatures,
+fiche et évaluation, N4 Agenda et pilotage, N5 Talents et pages entreprise, N6 Messages,
+notifications et Orbi, N7 Compte, nettoyage et rapport final, puis arrêt pour la validation
+d'Ephraïm. Chaque lot : captures à 1440 et 1024 dans `captures/etape-2-web/`, un e2e qui touche
+chaque bouton, les tests en base touchés, et le journal.
