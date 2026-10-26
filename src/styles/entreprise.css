@@ -1408,3 +1408,205 @@
 .ae-pe-personne .ae-nom {
   font-weight: 700;
 }
+
+/* Étape 3 · A4 : Formule et facturation (capture 083). */
+.ae-fb-haut {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 18px;
+}
+.ae-fb-actuelle {
+  border-color: rgba(166, 242, 107, 0.45);
+  padding: 20px 20px 22px;
+}
+.ae-fb-titre {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-top: 12px !important;
+}
+.ae-fb-ligne {
+  margin-top: 6px !important;
+}
+.ae-fb-texte {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ae-doux);
+  margin-top: 14px !important;
+  max-width: 560px;
+}
+.ae-fb-texte + .ae-fb-texte {
+  margin-top: 6px !important;
+}
+.ae-fb-action {
+  margin-top: 18px;
+}
+.ae-fb-usage {
+  padding: 18px 18px 16px;
+}
+.ae-fb-usage ul {
+  margin-top: 6px;
+}
+.ae-fb-usage li {
+  padding: 9px 0 5px;
+}
+.ae-fb-jauge-ligne {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+}
+.ae-fb-jauge-ligne b {
+  white-space: nowrap;
+}
+.ae-fb-h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 30px 0 12px !important;
+}
+.ae-fb-formule {
+  display: flex;
+  flex-direction: column;
+  padding: 18px 18px 18px;
+}
+.ae-fb-on {
+  border-color: var(--ae-lime);
+}
+.ae-fb-nom {
+  font-size: 17px;
+  font-weight: 700;
+}
+.ae-fb-prix {
+  display: block;
+  font-size: 22px;
+  color: var(--ae-lime);
+  margin-top: 4px;
+}
+.ae-fb-details {
+  line-height: 1.5;
+  margin: 8px 0 16px !important;
+  flex: 1;
+}
+.ae-fb-votre {
+  align-self: flex-start;
+}
+.ae-fb-bouton {
+  width: 100%;
+  justify-content: center;
+}
+.ae-fb-prevue {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ae-fb-prevue .ae-tag {
+  align-self: flex-start;
+}
+.ae-fb-note {
+  margin-top: 12px !important;
+}
+.ae-fb-factures {
+  margin-top: 22px;
+  padding: 18px 18px 6px;
+}
+.ae-fb-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 14px;
+  font-size: 14.5px;
+}
+.ae-fb-table th,
+.ae-fb-table td {
+  text-align: left;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.ae-fb-table thead th {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ae-brume);
+  padding: 6px 0 8px;
+}
+.ae-fb-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.ae-fb-table tbody th {
+  font-weight: 700;
+}
+.ae-fb-table td:last-child,
+.ae-fb-table th:last-child {
+  width: 44px;
+  text-align: right;
+}
+.ae-fb-payee {
+  color: var(--ae-lime);
+  font-weight: 700;
+}
+.ae-fb-pdf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--ae-brume);
+}
+.ae-fb-pdf:hover,
+.ae-fb-pdf:focus-visible {
+  color: var(--ae-creme);
+  background: rgba(255, 255, 255, 0.08);
+}
+.ae-fb-montant {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+.ae-fb-montant .ae-grandit {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.ae-fb-somme {
+  font-size: 20px;
+  color: var(--ae-lime);
+  white-space: nowrap;
+}
+.ae-fb-carte {
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: 16px !important;
+}
+.ae-fb-attente {
+  text-align: center;
+  padding-top: 24px;
+}
+.ae-fb-attente b {
+  display: block;
+  font-size: 17px;
+  margin-top: 14px;
+}
+.ae-fb-attente p {
+  margin-top: 6px !important;
+  line-height: 1.5;
+}
+.ae-fb-ok {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(166, 242, 107, 0.1);
+  color: var(--ae-lime);
+}
+.ae-fb-ok span {
+  display: flex;
+  flex-direction: column;
+  color: var(--ae-creme);
+}
+@media (max-width: 959px) {
+  .ae-fb-haut {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -220,7 +220,7 @@ const hireMatrix: { plans: string[]; rows: Row[] } = {
     lv("org.permissions.level", "basic", "basic", "basic", "standard", "advanced", "advanced"),
     b("org.talent_pools.shared", false, false, false, false, true, true),
     lv("reports.level", "basic", "stats", "advanced", "advanced", "consolidated", "custom"),
-    b("reports.export", false, false, false, false, true, true),
+    b("reports.export", false, false, false, true, true, true),
     b("hire.workflows.custom", false, false, false, false, false, true),
     b("integrations", false, false, false, false, false, true),
     lim("ai.credits.monthly", 0, 100, 300, 300, 1000, "contract"),

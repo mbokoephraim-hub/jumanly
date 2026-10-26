@@ -18997,9 +18997,9 @@
       "usersMore": "{count} utilisateurs et plus",
       "jobs": "{count, plural, one {# offre en ligne} other {# offres}}",
       "extra": {
-        "company": "ATS avancé · grilles d'évaluation · statistiques",
-        "company_plus": "plusieurs équipes · viviers partagés · export des rapports",
-        "company_premium": "filiales · intégrations"
+        "company": "ATS avancé · grilles d'évaluation · statistiques · export des rapports",
+        "company_plus": "plusieurs équipes · viviers partagés · rapports consolidés",
+        "company_premium": "filiales · intégrations · accompagnement"
       },
       "recommended": "Pour recruter en équipe",
       "applyFree": "Candidater reste gratuit pour tous les talents, quelle que soit votre formule.",
@@ -19513,6 +19513,94 @@
       "noMembers": "Aucun membre n'est encore affiché.",
       "noOffers": "Aucune offre ouverte pour le moment.",
       "site": "Site : {site}"
+    }
+  },
+  "orgFormula": {
+    "title": "Formule et facturation",
+    "error": "L'action n'a pas abouti : rechargez la page et réessayez",
+    "close": "Fermer",
+    "cancel": "Annuler",
+    "current": {
+      "tag": "Formule actuelle",
+      "price": "{plan} · {price} par mois",
+      "free": "{plan} · Gratuit",
+      "quote": "{plan} · Sur devis",
+      "paid": "Prépayée jusqu'au {date} · payée avec {method}",
+      "paidNoMethod": "Prépayée jusqu'au {date}",
+      "active": "Active jusqu'au {date}",
+      "grace": "Échéance passée le {date} : payez avant le {grace} pour garder la formule.",
+      "canceled": "La formule s'arrête le {date}, puis retour à {free}.",
+      "reminders": "Rappels 7, 3 et 0 jours avant l'échéance. Sans paiement, 3 jours de grâce, puis retour à {free} : aucune donnée n'est perdue.",
+      "freeText": "Choisissez une formule ci-dessous pour recruter en équipe. Candidater reste gratuit pour tous les talents, quelle que soit votre formule.",
+      "pending": "{plan} prendra le relais le {date}.",
+      "renew": "Renouveler maintenant"
+    },
+    "usage": {
+      "title": "Usage ce mois",
+      "seats": "Utilisateurs",
+      "jobs": "Offres en ligne",
+      "search": "Recherches de talents ce mois",
+      "contact": "Demandes de mise en relation",
+      "credits": "Crédits Orbi ce mois",
+      "value": "{used} sur {max}",
+      "unlimited": "{used} · illimité"
+    },
+    "change": {
+      "title": "Changer de formule",
+      "monthly": "{price} par mois",
+      "quote": "Sur devis",
+      "users": "{count, plural, one {# utilisateur} other {# utilisateurs}}",
+      "usersMore": "{count} utilisateurs et plus",
+      "usersUnlimited": "utilisateurs illimités",
+      "jobs": "{count, plural, one {# offre en ligne} other {# offres en ligne}}",
+      "jobsUnlimited": "offres illimitées",
+      "current": "Votre formule",
+      "upgrade": "Passer à {plan}",
+      "downgrade": "Passer à {plan}",
+      "scheduled": "Prévue le {date}",
+      "keep": "Garder {plan}",
+      "quoteCta": "Demander un devis",
+      "note": "Monter en gamme prend effet tout de suite ; réduire prend effet à la fin de la période payée."
+    },
+    "downgrade": {
+      "title": "Passer à {plan}",
+      "text": "{current} reste active jusqu'au {date}. Ensuite, {plan} prend le relais : vous la payez à l'échéance, avec le rappel habituel.",
+      "seats": "{plan} compte {count, plural, one {# utilisateur} other {# utilisateurs}} : votre équipe en compte {used}. Personne n'est retiré, mais les invitations s'arrêtent tant que l'équipe dépasse ce nombre.",
+      "confirm": "Passer à {plan} à l'échéance",
+      "done": "{plan} prendra le relais le {date}",
+      "canceled": "Votre formule reste la même"
+    },
+    "pay": {
+      "renewTitle": "Renouveler {plan}",
+      "upgradeTitle": "Passer à {plan}",
+      "amount": "À payer aujourd'hui",
+      "renewText": "Un mois de plus, jusqu'au {date}.",
+      "upgradeText": "Prend effet tout de suite, pour un mois.",
+      "credit": "Les jours non utilisés de {plan} sont déduits : {credit}.",
+      "error": {
+        "unavailable": "Le paiement en ligne n'est pas encore ouvert : écrivez à assistant@jumanly.io"
+      },
+      "okText": "Formule active jusqu'au {date} · facture envoyée par e-mail",
+      "okNoDate": "Facture envoyée par e-mail"
+    },
+    "invoices": {
+      "title": "Factures",
+      "number": "Numéro",
+      "date": "Date",
+      "amount": "Montant",
+      "status": "Statut",
+      "paid": "Payée · {method}",
+      "download": "Télécharger la facture {number}",
+      "empty": "Aucune facture pour l'instant : la première arrive avec le premier paiement."
+    },
+    "method": {
+      "mpesa": "M-Pesa",
+      "orange": "Orange Money",
+      "airtel": "Airtel Money",
+      "mobile_money": "Mobile Money",
+      "card": "carte",
+      "bank_transfer": "virement",
+      "cash": "espèces"
     }
   },
   "pricing": {

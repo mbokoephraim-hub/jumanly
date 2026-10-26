@@ -665,7 +665,7 @@ Le diagnostic simplifié et les conseils généraux du plan Free sont fournis **
 | `org.permissions.level` | `basic` | `basic` | `basic` | `standard` | `advanced` | `advanced` |
 | `org.talent_pools.shared` | — | — | — | — | ✓ | ✓ |
 | `reports.level` | `basic` | `stats` | `advanced` | `advanced` | `consolidated` | `custom` |
-| `reports.export` | — | — | — | — | ✓ | ✓ |
+| `reports.export` | — | — | — | ✓ | ✓ | ✓ |
 | `hire.workflows.custom` | — | — | — | — | — | ✓ |
 | `integrations` | — | — | — | — | — | ✓ |
 | `ai.credits.monthly` | 0 | 100 P | 300 P | 300 P | 1000 P | contrat |
