@@ -282,10 +282,15 @@ test.describe("Étape 3 · inscription de l'administrateur d'entreprise", () => 
 
   test("un recruteur ou un lecteur n'atteint pas les étapes de l'entreprise", async ({ page }) => {
     await logIn(page, "manager@jumanly.test");
-    await page.goto("/inscription/entreprise?etape=equipe");
-    await expect(page).toHaveURL(/\/app/);
-    await page.goto("/inscription/entreprise?etape=role");
-    await expect(page).not.toHaveURL(/inscription\/entreprise/);
+    for (const step of ["equipe", "role"]) {
+      await page.goto(`/inscription/entreprise?etape=${step}`);
+      // The recruiter's home, loaded to its title before the next address (the browser would
+      // otherwise drop that one while this page finishes arriving).
+      await expect(page).toHaveURL(/\/app\/hire/);
+      await expect(
+        page.locator("main").filter({ visible: true }).getByRole("heading", { level: 1 }),
+      ).toBeVisible();
+    }
   });
 
   test("/inscription?profil=company mène à l'inscription de l'administrateur", async ({ page }) => {
