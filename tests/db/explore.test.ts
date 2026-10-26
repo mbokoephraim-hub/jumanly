@@ -1,11 +1,15 @@
+import { randomUUID } from "node:crypto";
 import { afterAll, describe, expect, it } from "vitest";
 import {
   companyPage,
+  explorerCount,
+  explorerHome,
   exploreSearch,
   peopleToKnow,
   personPage,
   toggleFollowCompany,
 } from "@/server/services/explore";
+import { NO_FILTERS, residenceWhere } from "@/server/services/explore-filters";
 import { cleanup, db, newOrganization, newUser } from "./helpers";
 
 // Modèle B, lot B4: who Explorer shows, and what a person's page reveals (docs/modele-b, rangées
@@ -14,6 +18,7 @@ const users: string[] = [];
 const orgs: string[] = [];
 
 afterAll(async () => {
+  await db.job.deleteMany({ where: { organizationId: { in: orgs } } });
   await cleanup(users, orgs);
   await db.$disconnect();
 });
@@ -99,5 +104,93 @@ describe("Explorer", () => {
     const page = await companyPage(db, me, org.slug);
     expect(page?.followers).toBe(0);
     expect(page?.following).toBe(false);
+  });
+
+  it("les filtres choisissent les offres, les entreprises et les personnes sur le serveur", async () => {
+    const me = await person("recruiters");
+    const mines = await newOrganization("company");
+    const transport = await newOrganization("company");
+    orgs.push(mines.id, transport.id);
+    await db.organization.update({ where: { id: mines.id }, data: { sector: "Mines (fictif)" } });
+    await db.organization.update({
+      where: { id: transport.id },
+      data: { sector: "Transport (fictif)" },
+    });
+    const offer = (
+      organizationId: string,
+      contractType: "cdi" | "cdd" | "stage",
+      salary: [number, number] | null,
+    ) =>
+      db.job.create({
+        data: {
+          organizationId,
+          title: "Poste fictif",
+          slug: `test-${randomUUID()}`,
+          description: "Offre de test.",
+          contractType,
+          city: "Kinshasa",
+          country: "CD",
+          remote: "onsite",
+          status: "published",
+          publishedAt: new Date(),
+          salaryMin: salary ? salary[0] * 100 : null,
+          salaryMax: salary ? salary[1] * 100 : null,
+        },
+      });
+    const cdi = await offer(mines.id, "cdi", [900, 1100]);
+    const stage = await offer(mines.id, "stage", [200, 250]);
+    const cdd = await offer(transport.id, "cdd", null);
+    const ids = async (filters: Partial<typeof NO_FILTERS>) =>
+      (await explorerHome(db, me, new Date(), { ...NO_FILTERS, ...filters })).offers.map(
+        (row) => row.id,
+      );
+
+    const byContract = await ids({ contracts: ["cdi"] });
+    expect(byContract).toContain(cdi.id);
+    expect(byContract).not.toContain(stage.id);
+    expect(byContract).not.toContain(cdd.id);
+
+    const bySalary = await ids({ salary: "lt300" });
+    expect(bySalary).toContain(stage.id);
+    expect(bySalary).not.toContain(cdi.id);
+    // No salary given: never in a range.
+    expect(bySalary).not.toContain(cdd.id);
+
+    const bySector = await explorerHome(db, me, new Date(), { ...NO_FILTERS, sectors: ["mines"] });
+    expect(bySector.offers.map((row) => row.id)).toEqual(
+      expect.arrayContaining([cdi.id, stage.id]),
+    );
+    expect(bySector.offers.map((row) => row.id)).not.toContain(cdd.id);
+    expect(bySector.companies.map((row) => row.id)).toContain(mines.id);
+    expect(bySector.companies.map((row) => row.id)).not.toContain(transport.id);
+
+    // « Voir N résultats » counts only the scope chosen.
+    const count = await explorerCount(db, me, {
+      ...NO_FILTERS,
+      scope: "offres",
+      sectors: ["mines"],
+    });
+    expect(count.offers).toBeGreaterThanOrEqual(2);
+    expect(count.companies).toBe(0);
+    expect(count.people).toBe(0);
+    expect(count.total).toBe(count.offers);
+  });
+
+  it("le filtre de résidence lit le pays du profil, jamais la nationalité", async () => {
+    const me = await person("recruiters");
+    const kinshasa = await person("recruiters");
+    const dakar = await person("recruiters");
+    await db.user.update({ where: { id: kinshasa }, data: { country: "CD" } });
+    await db.user.update({ where: { id: dakar }, data: { country: "SN" } });
+    const rdc = (await peopleToKnow(db, me, 500, residenceWhere("rdc"))).map((row) => row.id);
+    expect(rdc).toContain(kinshasa);
+    expect(rdc).not.toContain(dakar);
+    const other = (await peopleToKnow(db, me, 500, residenceWhere("autre"))).map((row) => row.id);
+    expect(other).toContain(dakar);
+    expect(other).not.toContain(kinshasa);
+    const everywhere = (await peopleToKnow(db, me, 500, residenceWhere("partout"))).map(
+      (row) => row.id,
+    );
+    expect(everywhere).toEqual(expect.arrayContaining([kinshasa, dakar]));
   });
 });

@@ -4661,3 +4661,28 @@ Référence : brief `docs/fil-menu-publication/`, § 2.
 - Démo : les six publications du seed ont un titre.
 - Le Fil n'existe aujourd'hui que sur le téléphone : la carte servira telle quelle au Fil web du
   recruteur (lot N2 de `docs/decisions/2026-10-26-modele-b-web-recruteur.md`).
+
+## Fil, menu, publication · 3/3 : Explorer, recherche compacte et filtres (26 octobre 2026)
+
+Référence : brief `docs/fil-menu-publication/`, § 3, maquette `Explorer.dc.html`.
+
+- Recherche compacte (44 px, Sapin, liseré et loupe Lime, « Rechercher ») et bouton **Filtres** Lime
+  sur la même ligne, avec la pastille du nombre de filtres actifs ; « Annuler » le remplace pendant une
+  recherche. La rangée Tout · Offres · Entreprises · Personnes sous la recherche est supprimée : la
+  portée se choisit dans la feuille de filtres (« Chercher dans »).
+- Pastilles d'Explorer (domaines, secteurs, types de la recherche) : 32 px, 12,5 px, Lime et texte
+  Sapin quand actives, transparentes sinon ; plus de pastille blanche.
+- Feuille de filtres (`src/components/phone/explorer/filters.tsx`) : monte en 0,42 s sur un voile
+  sombre, poignée, « Effacer », groupes Contrat (CDI · CDD · Stage), Salaire mensuel (4 tranches et
+  barre), Secteur (8), Résidence (RDC · Autre pays · Partout). Les groupes hors portée se replient
+  (hauteur, opacité, glissement), sans animation si l'utilisateur réduit les animations.
+- Filtres côté serveur (`src/server/services/explore-filters.ts`, `explorerHome(…, filters)`,
+  `explorerCount`, action `exploreFilterAction`) : « Voir N résultats » compte les offres, entreprises
+  et personnes de la portée ; « Voir » lit les listes filtrées. Une offre sans salaire n'entre dans
+  aucune tranche. Le secteur des entreprises est un texte libre : il rejoint un secteur du filtre par
+  mots (« Banque et microfinance » → Banque). La résidence est le pays du profil (`User.country`),
+  jamais la nationalité.
+- Aucun filtre par genre, âge ou nationalité (règle d'or 4) ; les filtres ne changent que l'affichage,
+  jamais une candidature (règle d'or 1).
+- Tests : `tests/unit/explore-filters.test.ts`, `tests/db/explore.test.ts` (filtres en base),
+  e2e `modele-b-explorer` (ouvrir, choisir la portée, appliquer CDI, effacer).

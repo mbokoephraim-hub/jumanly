@@ -3,13 +3,17 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import {
+  type ExploreFilters,
+  NO_FILTERS,
+  activeFilters,
+  showsSection,
+} from "@/server/services/explore-filters";
 import { FilAvatar } from "../fil/avatar";
 import { CompanyCard, OfferCard, PersonRow, SavedLink } from "./cards";
-import type { CompanyView, OfferView, PersonView } from "./data";
+import type { ExplorerHomeView } from "./data";
+import { FiltersButton, FiltersSheet } from "./filters";
 import { ExplorerSearch } from "./search";
-
-const CATEGORIES = ["tout", "offres", "entreprises", "personnes"] as const;
-type Category = (typeof CATEGORIES)[number];
 
 export type ExplorerMe = {
   name: string;
@@ -22,41 +26,36 @@ export type ExplorerMe = {
  * Explorer (Modèle B, planche Offres, rangée 07): the head (me, the bookmark), the search in two
  * steps, then « Offres pour vous », « Entreprises qui recrutent », « Nouvelles cette semaine » and
  * « Personnes à connaître ». The chips filter in place, everything arrived with the page.
+ * « Filtres » (docs/fil-menu-publication § 3) reads the lists that meet them on the server.
  */
 export function PhoneExplorer({
   me,
   saved,
-  offers,
-  fresh,
-  domains,
-  companies,
-  sectors,
-  people,
+  lists,
   cities,
   popular,
 }: {
   me: ExplorerMe;
   saved: number;
-  offers: OfferView[];
-  fresh: OfferView[];
-  /** The chips of « Offres pour vous »: key of the field and its name. */
-  domains: { key: string; label: string }[];
-  companies: CompanyView[];
-  sectors: string[];
-  people: PersonView[];
+  lists: ExplorerHomeView;
   cities: { city: string; offers: number }[];
   popular: string[];
 }) {
   const t = useTranslations("phoneExplorer");
-  const [category, setCategory] = useState<Category>("tout");
   const [domain, setDomain] = useState<string | null>(null);
   const [sector, setSector] = useState<string | null>(null);
   const [searching, setSearching] = useState(false);
+  const [filtering, setFiltering] = useState(false);
+  const [filters, setFilters] = useState<ExploreFilters>(NO_FILTERS);
+  // The lists that meet the filters; none while no filter is on (the page's own lists).
+  const [filtered, setFiltered] = useState<ExplorerHomeView | null>(null);
+  const { offers, fresh, domains, companies, sectors, people } = filtered ?? lists;
 
   const forYou = offers.filter((offer) => !domain || offer.domain === domain).slice(0, 8);
   const hiring = companies.filter((company) => !sector || company.sector === sector).slice(0, 8);
   const newOnes = fresh.filter((offer) => !sector || offer.sector === sector).slice(0, 8);
-  const show = (section: Category) => category === "tout" || category === section;
+  const show = (section: "offres" | "entreprises" | "personnes") =>
+    showsSection(filters.scope, section);
 
   return (
     <div className="nb-page nb-ex">
@@ -75,25 +74,23 @@ export function PhoneExplorer({
         cities={cities}
         popular={popular}
         city={me.city}
+        aside={<FiltersButton count={activeFilters(filters)} onOpen={() => setFiltering(true)} />}
+      />
+      <FiltersSheet
+        open={filtering}
+        applied={filters}
+        onClose={() => setFiltering(false)}
+        onApply={(next, found) => {
+          setFilters(next);
+          setFiltered(found);
+          setDomain(null);
+          setSector(null);
+          setFiltering(false);
+        }}
       />
 
       {searching ? null : (
         <>
-          <div className="nb-ex-rangee nb-ex-cat" role="group" aria-label={t("cat.aria")}>
-            {CATEGORIES.map((key) => (
-              <button
-                key={key}
-                type="button"
-                className="nb-ex-chip"
-                data-fort=""
-                aria-pressed={category === key}
-                onClick={() => setCategory(key)}
-              >
-                {t(`cat.${key}`)}
-              </button>
-            ))}
-          </div>
-
           {show("offres") ? (
             <section aria-labelledby="ex-pour-vous">
               <Section id="ex-pour-vous" title={t("forYou")} href="/app/explorer/offres" />
