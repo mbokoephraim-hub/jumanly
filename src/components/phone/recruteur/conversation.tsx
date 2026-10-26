@@ -11,7 +11,7 @@ import { fillTemplate, listTemplates, templateKinds } from "@/server/services/me
 import { initialsOf, tintOf } from "./candidatures";
 import { RhThread, type RhBubble, type RhThreadData } from "./conversation-client";
 
-const OK = ["document", "file", "mute", "unmute"] as const;
+const OK = ["document", "file", "mute", "unmute", "pin", "unpin"] as const;
 const ERRORS = ["invalid", "blocked", "trop", "file", "document", "other"] as const;
 type Query = Record<string, string | string[] | undefined>;
 const one = (value: string | string[] | undefined) =>
@@ -232,7 +232,9 @@ export async function RhConversation({
     canWrite: writable,
     notice: writable ? null : conversation.blockedAt ? t("thread.blocked") : t("thread.readOnly"),
     muted: Boolean(participant?.mutedAt),
+    pinned: Boolean(conversation.orgPinnedAt),
     error,
+    start: one(query.modeles) === "1" && !peer ? "templates" : null,
   };
   return (
     <>
@@ -283,6 +285,7 @@ export async function RhTeamConversation({
     canWrite: !thread.other.left,
     notice: thread.other.left ? t("thread.left") : null,
     muted: false,
+    pinned: false,
     error,
   };
   return <RhThread data={data} />;

@@ -9,6 +9,7 @@ import { reportError } from "@/server/observability";
 import { allowAttempt } from "@/server/rate-limit";
 import { ConnectError, sendMessage, type Viewer } from "@/server/services/connect";
 import { HireError } from "@/server/services/hire";
+import { conversationAction } from "@/server/services/hire-messaging";
 import { openTeamThread, sendTeamMessage } from "@/server/services/hire-phone-messages";
 import { MediaError, storeUpload } from "@/server/services/message-media";
 
@@ -105,6 +106,23 @@ export async function rhMuteAction(formData: FormData) {
   });
   refresh();
   redirect(`${PAGE}/${conversationId}?ok=${on ? "mute" : "unmute"}`);
+}
+
+/** « Épingler pour l'équipe » and « Retirer de ma messagerie » (nothing is deleted). */
+export async function rhConversationAction(formData: FormData) {
+  const conversationId = id(formData.get("conversation"));
+  const raw = String(formData.get("action") ?? "");
+  const action = raw === "pin" || raw === "unpin" || raw === "hide" ? raw : null;
+  const { ctx } = await requireHire(`${PAGE}/${conversationId}`);
+  if (!action) redirect(`${PAGE}/${conversationId}`);
+  try {
+    await conversationAction(db, ctx, conversationId, action);
+  } catch (error) {
+    if (!(error instanceof HireError)) throw error;
+    redirect(`${PAGE}/${conversationId}?erreur=other`);
+  }
+  refresh();
+  redirect(action === "hide" ? `${PAGE}?ok=hide` : `${PAGE}/${conversationId}?ok=${action}`);
 }
 
 /** « Nouveau message » to a colleague (planche 124): the team's conversation opens. */

@@ -47,6 +47,7 @@ export default async function MessagesPage({ searchParams }: PageProps<"/app/mes
             <RhMessages
               ctx={viewer.hire}
               tab={typeof params.onglet === "string" ? params.onglet : undefined}
+              hidden={params.ok === "hide"}
             />
           </RhTab>
         </RhMessagesTexts>

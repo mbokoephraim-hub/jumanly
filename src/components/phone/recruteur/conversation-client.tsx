@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { requestDocumentAction } from "@/server/actions/hire";
 import { draftMessageAction } from "@/server/actions/hire-conversation";
 import {
+  rhConversationAction,
   rhMuteAction,
   rhSendAction,
   rhSendTeamAction,
@@ -40,7 +41,10 @@ export type RhThreadData = {
   canWrite: boolean;
   notice: string | null;
   muted: boolean;
+  pinned: boolean;
   error: string | null;
+  /** `?modeles=1` (« Modèles de message » of the file): the templates open at once. */
+  start?: "templates" | null;
 };
 
 type Sheet = "templates" | "attach" | "document" | "menu" | null;
@@ -59,7 +63,7 @@ function inThreeWeeks() {
 export function RhThread({ data }: { data: RhThreadData }) {
   const t = useTranslations("phoneRhMessages");
   const tc = useTranslations("phone");
-  const [sheet, setSheet] = useState<Sheet>(null);
+  const [sheet, setSheet] = useState<Sheet>(data.start ?? null);
   const [text, setText] = useState("");
   const [orbi, setOrbi] = useState<string | null>(null);
   const [pending, start] = useTransition();
@@ -408,6 +412,30 @@ export function RhThread({ data }: { data: RhThreadData }) {
                   </button>
                 </form>
               </li>
+            ) : null}
+            {organization ? (
+              <>
+                <li>
+                  <form action={rhConversationAction}>
+                    <input type="hidden" name="conversation" value={data.conversationId} />
+                    <input type="hidden" name="action" value={data.pinned ? "unpin" : "pin"} />
+                    <button type="submit" className="nb-rm-choix">
+                      <b>{data.pinned ? t("menu.unpin") : t("menu.pin")}</b>
+                      <small>{t("menu.pinLine")}</small>
+                    </button>
+                  </form>
+                </li>
+                <li>
+                  <form action={rhConversationAction}>
+                    <input type="hidden" name="conversation" value={data.conversationId} />
+                    <input type="hidden" name="action" value="hide" />
+                    <button type="submit" className="nb-rm-choix">
+                      <b>{t("menu.hide")}</b>
+                      <small>{t("menu.hideLine")}</small>
+                    </button>
+                  </form>
+                </li>
+              </>
             ) : null}
           </ul>
           <button type="button" className="nb-annuler" onClick={close}>

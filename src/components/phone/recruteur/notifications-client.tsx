@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useState, useTransition } from "react";
+import { useState, useTransition, type ReactNode } from "react";
 import { showToast } from "@/components/motion/toaster";
 import {
   markAllNotificationsReadInPlace,
@@ -33,9 +33,10 @@ export type RhNotifRow = {
 /**
  * Notifications of the recruiter (planches 180 to 183): « Retour », « Tout marquer comme lu » and
  * the settings; « Tout · Candidatures · Entretiens · Réseau » with how many are unread; the lines
- * by day. A touch marks the line read and opens its page.
+ * by day. A touch marks the line read and opens its page. `top`: what awaits an answer of the
+ * administrator (requests to join, offers closing soon), answered on the spot.
  */
-export function RhNotifications({ rows }: { rows: RhNotifRow[] }) {
+export function RhNotifications({ rows, top }: { rows: RhNotifRow[]; top?: ReactNode }) {
   const t = useTranslations("phoneRhNotifs");
   const router = useRouter();
   const [tab, setTab] = useState<Tab>("tout");
@@ -92,6 +93,7 @@ export function RhNotifications({ rows }: { rows: RhNotifRow[] }) {
           </button>
         ))}
       </div>
+      {top ? <div className="nb-rn-haut">{top}</div> : null}
       <div role="tabpanel" aria-label={t(`tabs.${tab}`)}>
         {groups.length === 0 ? <p className="nb-vide nb-rh-marge">{t("empty")}</p> : null}
         {groups.map((group) => (

@@ -222,15 +222,19 @@ test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, me
   await main(page).locator('a[href^="/app/messages/"]').first().click();
   await expect(page).toHaveURL(/\/app\/messages\/[^/?]+/);
   const thread = page.url().split("?")[0]!;
-  await page.getByRole("button", { name: "Options de la conversation" }).click();
-  const menu = page.getByRole("dialog", { name: "Options" });
+  // On a phone, « ··· » of Modèle B recruteur (M7) holds the same choices.
+  const phone = test.info().project.name === "mobile";
+  const options = phone ? "Plus d'actions sur la conversation" : "Options de la conversation";
+  const optionsSheet = phone ? "Conversation" : "Options";
+  await page.getByRole("button", { name: options }).click();
+  const menu = page.getByRole("dialog", { name: optionsSheet });
   await expect(menu).toContainText("Couper les notifications");
   await menu.getByRole("button", { name: /^Épingler/ }).click();
   await expect(page.getByText("Conversation épinglée en haut de la liste").first()).toBeVisible();
   await page.goto(thread);
-  await page.getByRole("button", { name: "Options de la conversation" }).click();
+  await page.getByRole("button", { name: options }).click();
   await page
-    .getByRole("dialog", { name: "Options" })
+    .getByRole("dialog", { name: optionsSheet })
     .getByRole("button", { name: /^Désépingler/ })
     .click();
   await expect(page.getByText("Conversation désépinglée").first()).toBeVisible();

@@ -1,7 +1,10 @@
 import "server-only";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { dynamic } from "@/i18n/dynamic";
+import { EndingOffers } from "@/components/recruiter/ending";
+import { JoinRequestsCard } from "@/components/recruiter/org-join";
 import { db } from "@/server/db";
+import type { HireContext } from "@/server/services/hire";
 import {
   listNotifications,
   notificationTypes,
@@ -55,7 +58,14 @@ export async function rhNotificationRows(userId: string, now = new Date()): Prom
   return all.map((item) => {
     const values = notificationValues(item.payload);
     const text = d(`notifications.item.${item.type}`, values);
-    const who = [values.name, values.senderName, values.inviterName, values.company, values.org]
+    const who = [
+      values.name,
+      values.candidateName,
+      values.senderName,
+      values.inviterName,
+      values.company,
+      values.org,
+    ]
       .filter(Boolean)
       .find((name) => text.startsWith(name));
     const spent = now.getTime() - item.createdAt.getTime();
@@ -94,7 +104,27 @@ export async function rhNotificationRows(userId: string, now = new Date()): Prom
   });
 }
 
-/** Notifications of the recruiter on the phone (planches 180 to 183). */
-export async function RhNotificationsScreen({ userId }: { userId: string }) {
-  return <RhNotifications rows={await rhNotificationRows(userId)} />;
+/**
+ * Notifications of the recruiter on the phone (planches 180 to 183). Above the list, the requests
+ * to join the organization (planche 183) and the offers closing soon, answered on the spot.
+ */
+export async function RhNotificationsScreen({
+  ctx,
+  query,
+}: {
+  ctx: HireContext;
+  query: Record<string, string | string[] | undefined>;
+}) {
+  const answer = (key: string) => (typeof query[key] === "string" ? query[key] : undefined);
+  return (
+    <RhNotifications
+      rows={await rhNotificationRows(ctx.userId)}
+      top={
+        <>
+          <JoinRequestsCard ctx={ctx} answer={answer("demande")} />
+          <EndingOffers ctx={ctx} answer={answer("fin")} />
+        </>
+      }
+    />
+  );
 }

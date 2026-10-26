@@ -18507,7 +18507,10 @@
       "profile": "Voir le profil",
       "mute": "Couper les notifications",
       "unmute": "Réactiver les notifications",
-      "hide": "Retirer de ma messagerie",
+      "pin": "Épingler pour l'équipe",
+      "unpin": "Désépingler",
+      "pinLine": "En haut de la liste, pour toute l'équipe.",
+      "hide": "Retirer de la messagerie de l'équipe",
       "hideLine": "La personne garde tous les messages ; rien n'est effacé."
     },
     "ok": {
@@ -18515,7 +18518,9 @@
       "file": "Fichier envoyé.",
       "mute": "Notifications coupées pour cette conversation.",
       "unmute": "Notifications réactivées.",
-      "hide": "Conversation retirée de votre messagerie."
+      "pin": "Conversation épinglée en haut de la liste.",
+      "unpin": "Conversation désépinglée.",
+      "hide": "Conversation retirée de la messagerie de l'équipe."
     },
     "error": {
       "invalid": "Ce message ne peut pas être envoyé. Vérifiez-le et réessayez.",

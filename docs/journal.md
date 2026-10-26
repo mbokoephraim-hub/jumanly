@@ -4209,3 +4209,38 @@ rubriques :
   `hire-advanced.spec.ts` suit le nouveau parcours au téléphone, la partie téléphone de l'ancien
   test « talents » de `mobile-recruteur-entretiens.spec.ts` est réservée à l'ordinateur.
 - Choix notés dans `docs/decisions/2026-10-25-modele-b-recruteur-talents.md`.
+
+## Modèle B recruteur mobile · M7, Messages, notifications et Orbi (26 octobre 2026)
+
+Sections 07 et 10 des captures (120 à 134, 180 à 184). Au téléphone :
+
+- **Messages** (`/app/messages`) : recherche (« Annuler », « Chercher dans » Tout, Candidats,
+  Réseau, Équipe, sans tenir compte des accents), onglets Candidats, Réseau, Équipe avec le nombre
+  de non-lus, lignes avec initiales, heure, offre et étape en vert, aperçu et pastille ; « + »
+  ouvre « Nouveau message » (un candidat ou un collègue).
+- **Conversation** (`/app/messages/[id]`) : la personne et la ligne verte, la carte « Ouvrir »
+  (fiche de la candidature, profil du talent ou de la relation), les bulles, la carte d'un
+  entretien, puis « Orbi propose · Modèles · Joindre » (entretien, document, fichier) et le champ.
+  « ··· » : fiche, couper les notifications, épingler, retirer de la messagerie de l'équipe.
+- **Équipe** (`/app/messages/equipe/[id]`) : conversation entre deux membres, nouvelle table
+  `TeamThread` / `TeamMessage` (migration additive `20261026004024_team_threads`), notification
+  « … vous a écrit dans Équipe. ».
+- **Notifications** (`/app/notifications`) : Retour, « Tout marquer comme lu », réglages ; Tout,
+  Candidatures, Entretiens, Réseau ; Aujourd'hui, Hier, Cette semaine, Plus tôt ; les demandes
+  pour rejoindre l'entreprise et les offres qui se terminent au-dessus.
+- **Orbi** : la feuille de chaque onglet répond aux questions factuelles sans crédit (« Qui attend
+  une réponse de ma part ? », « Résumer mes non-lus », « Qui recevoir en premier ? », « Qui
+  proposer pour mes offres ? ») et mène à « Ouvrir la conversation complète » ; la page `/app/orbi`
+  (planche 184) : crédits, « Effacer », réponses avec leurs boutons, « Vous pouvez aussi
+  demander », champ.
+- Code : `src/components/phone/recruteur/messages*.tsx`, `conversation*.tsx`,
+  `notifications*.tsx`, `orbi*.tsx` ; `src/server/services/hire-phone-messages.ts` ;
+  `src/server/actions/phone-rh-messages.ts`, `phone-rh-orbi.ts`. Ordinateur et tablette inchangés.
+- Textes : partie « Modèle B recruteur · Messages, notifications et Orbi au téléphone »
+  (`phoneRhMessages`, `phoneRhNotifs`, `phoneRhOrbi`).
+- Tests : `tests/db/modele-b-recruteur-messages.test.ts` (listes filtrées par entreprise,
+  conversation d'équipe lue et écrite par ses deux membres seulement, jamais par un talent, un
+  autre collègue ou une autre entreprise, collègue parti), `tests/e2e/modele-b-recruteur-messages.spec.ts`
+  (chaque bouton, captures dans `captures/etape-2-mobile/m7/`) ; branches téléphone ajoutées dans
+  `mobile-recruteur-gerer.spec.ts` et `mobile-recruteur-ats.spec.ts`.
+- Choix notés dans `docs/decisions/2026-10-26-modele-b-recruteur-messages.md`.

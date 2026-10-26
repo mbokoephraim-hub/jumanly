@@ -2,6 +2,7 @@ import "server-only";
 import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
+import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { pickMessages } from "@/i18n/client-messages";
 import { db } from "@/server/db";
 import type { HireContext } from "@/server/services/hire";
@@ -76,7 +77,16 @@ export async function contextLine(context: RhMessageRow["context"]) {
  * The tab Messages of the recruiter's phone (planches 120 to 124): the search field, three
  * lists (Candidats, Réseau, Équipe) with what is unread, and « + » for a new message.
  */
-export async function RhMessages({ ctx, tab }: { ctx: HireContext; tab: string | undefined }) {
+export async function RhMessages({
+  ctx,
+  tab,
+  hidden = false,
+}: {
+  ctx: HireContext;
+  tab: string | undefined;
+  /** Back from « Retirer de la messagerie de l'équipe »: its confirmation. */
+  hidden?: boolean;
+}) {
   const now = new Date();
   const [rows, organization] = await Promise.all([
     rhMessages(db, ctx),
@@ -98,7 +108,13 @@ export async function RhMessages({ ctx, tab }: { ctx: HireContext; tab: string |
     })),
   );
   const chosen: RhMessageTab = RH_MESSAGE_TABS.find((key) => key === tab) ?? "candidats";
-  return <RhMessagesList rows={list} tab={chosen} org={organization?.name ?? ""} />;
+  const t = await getTranslations("phoneRhMessages");
+  return (
+    <>
+      {hidden ? <ToastOnLoad message={t("ok.hide")} tone="success" /> : null}
+      <RhMessagesList rows={list} tab={chosen} org={organization?.name ?? ""} />
+    </>
+  );
 }
 
 /** « + » of the head (planche 124): a candidate already in conversation, or a colleague. */

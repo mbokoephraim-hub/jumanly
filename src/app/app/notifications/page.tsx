@@ -45,7 +45,10 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
   if (space && (await isPhone()))
     return (
       <RhMessagesTexts>
-        <RhNotificationsScreen userId={user.id} />
+        <RhNotificationsScreen
+          ctx={{ userId: user.id, organizationId: space.organizationId, role: space.role }}
+          query={params}
+        />
       </RhMessagesTexts>
     );
   if (!space && !partner && (await isPhone()))

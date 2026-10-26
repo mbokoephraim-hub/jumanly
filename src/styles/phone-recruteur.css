@@ -4141,3 +4141,8 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
   color: var(--nb-nuit);
   font-weight: 800;
 }
+.nb-rn-haut:not(:empty) {
+  display: grid;
+  gap: 14px;
+  margin: 16px 20px 0;
+}

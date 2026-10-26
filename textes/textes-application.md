@@ -15176,13 +15176,18 @@ Conventions :
 | `phoneRhMessages.menu.profile` | Voir le profil |
 | `phoneRhMessages.menu.mute` | Couper les notifications |
 | `phoneRhMessages.menu.unmute` | Réactiver les notifications |
-| `phoneRhMessages.menu.hide` | Retirer de ma messagerie |
+| `phoneRhMessages.menu.pin` | Épingler pour l'équipe |
+| `phoneRhMessages.menu.unpin` | Désépingler |
+| `phoneRhMessages.menu.pinLine` | En haut de la liste, pour toute l'équipe. |
+| `phoneRhMessages.menu.hide` | Retirer de la messagerie de l'équipe |
 | `phoneRhMessages.menu.hideLine` | La personne garde tous les messages ; rien n'est effacé. |
 | `phoneRhMessages.ok.document` | Demande de document envoyée. |
 | `phoneRhMessages.ok.file` | Fichier envoyé. |
 | `phoneRhMessages.ok.mute` | Notifications coupées pour cette conversation. |
 | `phoneRhMessages.ok.unmute` | Notifications réactivées. |
-| `phoneRhMessages.ok.hide` | Conversation retirée de votre messagerie. |
+| `phoneRhMessages.ok.pin` | Conversation épinglée en haut de la liste. |
+| `phoneRhMessages.ok.unpin` | Conversation désépinglée. |
+| `phoneRhMessages.ok.hide` | Conversation retirée de la messagerie de l'équipe. |
 | `phoneRhMessages.error.invalid` | Ce message ne peut pas être envoyé. Vérifiez-le et réessayez. |
 | `phoneRhMessages.error.blocked` | Cette personne ne reçoit plus de messages de votre entreprise. |
 | `phoneRhMessages.error.trop` | Trop de messages d'un coup. Attendez un instant. |

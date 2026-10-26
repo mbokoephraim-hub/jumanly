@@ -35,6 +35,8 @@ export type RhMessageRow = {
   /** The last message comes from the other side: an answer is awaited. */
   waiting: boolean;
   unread: number;
+  /** Pinned for the whole team (« Épingler »): first in its list. */
+  pinned?: boolean;
   at: Date;
 };
 
@@ -141,6 +143,7 @@ export async function rhMessages(db: PrismaClient, ctx: HireContext): Promise<Rh
     mine: row.lastMine,
     waiting: row.waiting,
     unread: row.unread,
+    pinned: row.pinned,
     at: row.at,
   }));
   for (const peer of peers) {
@@ -191,7 +194,10 @@ export async function rhMessages(db: PrismaClient, ctx: HireContext): Promise<Rh
       at: last?.createdAt ?? thread.lastMessageAt,
     });
   }
-  return rows.sort((a, b) => b.at.getTime() - a.at.getTime());
+  return rows.sort(
+    (a, b) =>
+      Number(b.pinned ?? false) - Number(a.pinned ?? false) || b.at.getTime() - a.at.getTime(),
+  );
 }
 
 /**
