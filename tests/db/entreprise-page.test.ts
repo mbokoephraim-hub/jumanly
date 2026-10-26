@@ -1,4 +1,5 @@
 import { afterAll, describe, expect, it } from "vitest";
+import { companyPage } from "@/server/services/explore";
 import { respondDeclaredMember } from "@/server/services/org-team";
 import {
   companyPagePreview,
@@ -172,5 +173,40 @@ describe("Page entreprise", () => {
     );
     expect(declared).toHaveLength(2);
     expect(preview.offers.map((offer) => offer.id)).toEqual([open.id]);
+  });
+});
+
+describe("Page entreprise côté talent (étape 3, A6)", () => {
+  it("montre l'équipe puis les personnes qui disent y travailler, jamais un profil anonyme", async () => {
+    const { ctx, org, name } = await company();
+    const people: { id: string; userId: string }[] = [];
+    for (const visibility of ["recruiters", "recruiters", "recruiters", "anonymous"] as const) {
+      const person = await user();
+      const profile = await db.talentProfile.create({ data: { userId: person.id, visibility } });
+      const experience = await db.experience.create({
+        data: {
+          profileId: profile.id,
+          title: "Poste fictif",
+          company: name,
+          startDate: new Date(Date.now() - 200 * DAY),
+        },
+      });
+      people.push({ id: experience.id, userId: person.id });
+    }
+    await respondDeclaredMember(db, ctx, people[0]!.id, true);
+    await respondDeclaredMember(db, ctx, people[1]!.id, false);
+    const reader = await user();
+    const page = await companyPage(db, reader.id, org.slug);
+    expect(page).not.toBeNull();
+    const shown = new Map(page!.members.map((member) => [member.id, member.declared]));
+    // Confirmé (sans mention), puis « Indiqué par la personne » ; ni refusé, ni anonyme.
+    expect(shown.get(people[0]!.userId)).toBe(false);
+    expect(shown.get(people[2]!.userId)).toBe(true);
+    expect(shown.has(people[1]!.userId)).toBe(false);
+    expect(shown.has(people[3]!.userId)).toBe(false);
+    expect(page!.members.filter((member) => !member.declared && member.role)).toHaveLength(2);
+    // L'administrateur ne voit pas non plus le nom d'un profil anonyme à confirmer.
+    const pending = (await companyPageScreen(db, ctx)).pending;
+    expect(pending.map((item) => item.experienceId)).toEqual([people[2]!.id]);
   });
 });

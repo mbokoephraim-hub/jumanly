@@ -5,7 +5,7 @@ import { TalentAvatar } from "@/components/talent/avatar";
 import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
 import { signOut } from "@/server/actions/auth";
 import { switchSpace } from "@/server/actions/hire";
-import type { HireContext } from "@/server/services/hire";
+import { hirePermissions, type HireContext } from "@/server/services/hire";
 import { recruiterAccountSummary } from "./account-data";
 
 /** The only contact of Jumanly (CLAUDE.md § 8): by e-mail, never by phone. */
@@ -76,22 +76,27 @@ export async function RecruiterAvatarMenu({
       </Link>
       <div aria-hidden className="t-am-sp" />
       <ul>
-        <Item
-          href="/app/organisation"
-          icon="entreprise"
-          label={t("org.title")}
-          note={t(`org.${summary.verification}`)}
-        />
-        <Item
-          href="/app/organisation/equipe"
-          icon="candidats"
-          label={t("team.title")}
-          note={
-            summary.seats.max < 0
-              ? summary.seats.used
-              : tw("seats", { used: summary.seats.used, limit: summary.seats.max })
-          }
-        />
+        {/* Page entreprise and Équipe belong to the owner and the administrators (étape 3). */}
+        {hirePermissions(ctx.role).administer && (
+          <>
+            <Item
+              href="/app/organisation"
+              icon="entreprise"
+              label={t("org.title")}
+              note={t(`org.${summary.verification}`)}
+            />
+            <Item
+              href="/app/organisation/equipe"
+              icon="candidats"
+              label={t("team.title")}
+              note={
+                summary.seats.max < 0
+                  ? summary.seats.used
+                  : tw("seats", { used: summary.seats.used, limit: summary.seats.max })
+              }
+            />
+          </>
+        )}
         {summary.readsPools && (
           <Item
             href="/app/hire/viviers"

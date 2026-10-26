@@ -10525,6 +10525,7 @@
       "membersSearch": "Rechercher un membre",
       "membersCount": "{count, plural, =0 {Aucun membre visible} one {# membre sur Jumanly} other {# membres sur Jumanly}}",
       "memberConnected": "Connecté avec vous",
+      "memberDeclared": "Indiqué par la personne",
       "noMember": "Aucun membre ne correspond à « {query} ».",
       "menu": "Page de {name}",
       "menuShare": "Partager la page",
@@ -13438,41 +13439,13 @@
     "seenName": "{name} · {org}"
   },
   "rhOrg": {
-    "back": "Compte",
-    "edit": "Modifier la page de l'organisation",
-    "size": "{size} personnes",
-    "figures": "L'organisation en chiffres",
-    "figure": {
-      "jobs": "{count, plural, one {offre active} other {offres actives}}",
-      "applications": "{count, plural, one {candidature reçue} other {candidatures reçues}}",
-      "hired": "{count, plural, one {recruté} other {recrutés}}",
-      "members": "{count, plural, one {membre} other {membres}}"
-    },
-    "presentation": "Présentation",
-    "noDescription": "Pas encore de présentation. Les talents lisent ce texte sur chaque offre.",
-    "hint": {
-      "banner": {
-        "text": "Ajoutez une bannière, une photo de vos bureaux par exemple : vos offres et votre page sont plus faciles à reconnaître.",
-        "cta": "Ajouter"
-      },
-      "description": {
-        "text": "Présentez votre organisation en quelques lignes : les talents la découvrent sur chaque offre.",
-        "cta": "Écrire"
-      },
-      "verify": {
-        "text": "Une organisation vérifiée publie sans attente et affiche un badge sur ses offres.",
-        "cta": "Vérifier"
-      }
-    },
-    "manage": "Gérer l'organisation",
-    "team": "Équipe",
-    "seats": "{used, plural, one {# siège utilisé} other {# sièges utilisés}} sur {max}",
-    "seatsUnlimited": "{used, plural, one {# siège utilisé} other {# sièges utilisés}}",
-    "verification": "Vérification",
-    "structure": "Équipes, départements, entités",
-    "structureLine": "L'organisation de vos recrutements",
-    "asTalent": "Voir la page comme un talent",
-    "editBack": "Organisation"
+    "structure": "Équipes, départements, entités"
+  },
+  "orgStructure": {
+    "intro": "Rangez les membres et les offres par équipe, par département et, pour un groupe, par entité.",
+    "tabs": "Structure de l'entreprise",
+    "back": "Équipe",
+    "lockedLink": "Voir les formules"
   },
   "rhVerification": {
     "back": "Organisation",
@@ -13505,60 +13478,6 @@
     "meanwhile": "En attendant, vos offres passent en validation avant publication.",
     "question": "Une question : assistant@jumanly.io",
     "checked": "Contrôlé par Jumanly"
-  },
-  "rhTeam": {
-    "title": "Équipe",
-    "back": "Organisation",
-    "invite": "Inviter dans l'équipe",
-    "inviteTitle": "Inviter dans l'équipe",
-    "close": "Fermer",
-    "invalid": "Vérifiez les informations et réessayez.",
-    "seats": "Sièges utilisés : {used} sur {max}",
-    "seatsUnlimited": "{used, plural, one {# siège utilisé} other {# sièges utilisés}}, sans limite",
-    "members": "Membres de l'équipe",
-    "you": "{name}, vous",
-    "invited": "Invitation envoyée par e-mail · {ago}",
-    "pending": "En attente",
-    "today": "aujourd'hui",
-    "days": "{count, plural, one {il y a # jour} other {il y a # jours}}",
-    "invitationLine": "Rôle proposé : {role}. L'invitation expire le {date, date, long}.",
-    "rights": {
-      "title": "Qui peut faire quoi",
-      "short": {
-        "org_admin": "Admin",
-        "recruiter": "Recr.",
-        "hiring_manager": "Resp.",
-        "viewer": "Lect."
-      },
-      "manage": "Publier, décider, écrire",
-      "evaluate": "Noter, évaluer",
-      "readApplications": "Lire les candidatures",
-      "administer": "Équipe, abonnement",
-      "yes": "Oui",
-      "no": "Non",
-      "owner": "Le propriétaire a tous les droits, dont la facturation. Un responsable du recrutement ne voit que les offres qui lui sont confiées."
-    },
-    "activity": {
-      "title": "Activité récente",
-      "you": "Vous",
-      "former": "Ancien membre",
-      "stage_changed": "{actor} {self, select, oui {avez fait} other {a fait}} avancer {name}",
-      "note": "{actor} {self, select, oui {avez noté} other {a noté}} {name}",
-      "decision": "{actor} {self, select, oui {avez annoncé} other {a annoncé}} sa décision à {name}",
-      "document_requested": "{actor} {self, select, oui {avez demandé} other {a demandé}} un document à {name}",
-      "message": "{actor} {self, select, oui {avez écrit} other {a écrit}} à {name}"
-    },
-    "emails": "E-mail",
-    "emailsHint": "Plusieurs adresses possibles, séparées par une virgule. Chaque personne reçoit un lien valable {days, plural, one {# jour} other {# jours}}.",
-    "saveRole": "Changer le rôle",
-    "full": {
-      "plan": "<b>Plus de siège libre.</b> Retirez un membre ou une invitation, ou passez à {plan} ({seats}).",
-      "seatsUnlimited": "sièges illimités",
-      "seatsCount": "{count, plural, one {# siège} other {# sièges}}",
-      "noPlan": "<b>Plus de siège libre.</b> Retirez un membre ou une invitation pour en libérer un.",
-      "see": "Voir {plan}",
-      "plans": "Voir les formules"
-    }
   },
   "rhReports": {
     "back": "Compte",
@@ -16814,6 +16733,7 @@
       "documents": {
         "title": "Justificatifs envoyés",
         "remove": "Retirer {name}",
+        "removeShort": "Retirer",
         "removed": "Justificatif retiré.",
         "meta": "{size} · envoyé le {date, date, medium}"
       },
@@ -19223,6 +19143,7 @@
     "onlyYou": "Vous seul·e attribuez les rôles et les tâches.",
     "admins": "Les administrateurs attribuent les rôles et les tâches.",
     "invite": "Inviter un membre",
+    "structure": "Équipes et départements",
     "assign": "Attribuer une tâche",
     "close": "Fermer",
     "cancel": "Annuler",

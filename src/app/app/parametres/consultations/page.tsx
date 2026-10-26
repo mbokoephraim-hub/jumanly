@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { SettingsNav } from "@/components/talent/settings-nav";
 import { FlowHead } from "@/components/talent/flow-head";
@@ -7,6 +8,7 @@ import { shortName } from "@/lib/short-name";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
 import { hirePermissions, type HireContext } from "@/server/services/hire";
+import { isPhone } from "@/server/view";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("rhJournal");
@@ -56,6 +58,9 @@ export default async function ConsultationsPage() {
   const tp = await getTranslations("parametres");
   const format = await getFormatter();
   const team = hirePermissions(space.role).administer;
+  // On a computer, the owner and the administrators read the team's journal in the company's
+  // space (étape 3, A5 and A6); a phone keeps this page.
+  if (team && !(await isPhone())) redirect("/app/organisation/journal");
   const { views, actors, profiles } = await journal(ctx, team);
   const actorName = new Map(actors.map((actor) => [actor.id, shortName(actor.name)]));
   const profileName = new Map(profiles.map((profile) => [profile.id, profile.user.name]));

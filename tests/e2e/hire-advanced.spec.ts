@@ -266,10 +266,10 @@ test("vérification de l'entreprise et page publique", async ({
   // A name of its own: a database replayed without a reset keeps the documents of earlier runs.
   const documentName = `registre-fictif-${Date.now().toString(36)}`;
   if (sent) {
-    await page.locator("#r5-ver-registration").fill("RCCM-FICTIF-E2E");
-    await page.locator("#r5-ver-mandate").fill("Directrice des ressources humaines (fictive)");
+    await page.locator("#vf-registration").fill("RCCM-FICTIF-E2E");
+    await page.locator("#vf-mandate").fill("Directrice des ressources humaines (fictive)");
     // A supporting document (Admin v2, étape 4): a tiny fictional PDF.
-    await page.locator("#r5-ver-documents").setInputFiles({
+    await page.locator("#vf-documents").setInputFiles({
       name: `${documentName}.pdf`,
       mimeType: "application/pdf",
       buffer: Buffer.from("%PDF-1.4\n% Justificatif fictif\n%%EOF\n"),

@@ -4503,3 +4503,68 @@ Captures 1440 et 1024 : `captures/etape-3/a2/` des fichiers du projet. Tests : `
 | 085 | Réglages, étapes | `/mnt/project-files/captures/etape-3/a5/085-reglages-etapes-{1440,1024}.png` |
 | 086 | Réglages, modèles de messages | `/mnt/project-files/captures/etape-3/a5/086-reglages-modeles-{1440,1024}.png` |
 | 087 | Réglages, grille d'entretien | `/mnt/project-files/captures/etape-3/a5/087-reglages-grille-{1440,1024}.png` |
+
+## Étape 3 · A6, nettoyage (26 octobre 2026)
+
+- Vérification (`/app/organisation/verification`) et structure (`/app/organisation/structure`,
+  équipes, départements, entités) passées au Modèle B, réservées au propriétaire et aux
+  administrateurs ; « Équipes et départements » s'ouvre depuis Équipe, qui reste allumée dans la
+  barre latérale. `src/components/org/structure-tabs.tsx` supprimé.
+- Anciennes pages : l'abonnement d'une entreprise et le journal de l'équipe mènent, sur ordinateur,
+  à « Formule et facturation » et au Journal des consultations.
+- Aucun lien mort pour un membre qui n'administre pas (menu du compte, tuiles de Compte, anciennes
+  adresses du téléphone ouvertes sur ordinateur).
+- Page entreprise du talent au téléphone : les personnes qui disent y travailler, avec « Indiqué par
+  la personne » ; jamais un profil anonyme, ni chez l'administrateur.
+- Textes orphelins retirés (`rhTeam.*`, `rhOrg.*` sauf `structure`).
+- Tests : `tests/e2e/web-admin-nettoyage.spec.ts` (structure verrouillée puis créée et supprimée par
+  le groupe, vérification, anciennes adresses, manager refusé et sans lien mort, page entreprise du
+  talent au téléphone) avec l'aide `tests/e2e/make-declared.ts` ; test en base ajouté à
+  `tests/db/entreprise-page.test.ts`. Tests ajustés : `hire-advanced`, `mobile-recruteur-gerer`,
+  `web-recruteur-3`.
+- Choix : `docs/decisions/2026-10-26-etape-3-a6-nettoyage.md`.
+
+| Capture | Écran | Fichiers |
+|---|---|---|
+| — | Structure, formule sans le droit | `/mnt/project-files/captures/etape-3/a6/a6-structure-verrou-{1440,1024}.png` |
+| — | Structure, équipes du groupe | `/mnt/project-files/captures/etape-3/a6/a6-structure-equipes-{1440,1024}.png` |
+| — | Vérification | `/mnt/project-files/captures/etape-3/a6/a6-verification-{1440,1024}.png` |
+
+## Rapport final · étape 3, espace administrateur d'entreprise (Modèle B, ordinateur, A0 à A6) (26 octobre 2026)
+
+L'espace de l'entreprise suit maintenant le Modèle B (`docs/modele-b-recruteur/`, sections 04 et 06
+de `web/captures/INDEX.md`), sur ordinateur et tablette ; sous 768 px, « À ouvrir sur un
+ordinateur ». La section ENTREPRISE de la barre latérale (Équipe, Page entreprise, Formule et
+facturation, Journal, Réglages) n'apparaît qu'au propriétaire et aux administrateurs. Les écrans du
+recruteur n'ont pas changé. Aucune donnée n'a été effacée ; les migrations sont additives.
+
+| Lot | Contenu | Captures | PR |
+|---|---|---|---|
+| A0 | Diagnostic | — | #157 |
+| A1 | Inscription de l'administrateur, aperçu en direct de la page | 020 à 029 | #158 |
+| A2 | Équipe : rôles, droits par membre, tâches, invitations, membres déclarés | 076 à 078 | #159 |
+| A3 | Page entreprise : modifier, vue publique, badge « Recrute en ce moment » | 081, 082 | #160 |
+| A4 | Formule et facturation : jauges, changement de formule, paiement, factures | 083 | #161 |
+| A5 | Journal des consultations ; Réglages (étapes, modèles, grille) | 084 à 087 | #162 |
+| A6 | Nettoyage : vérification et structure, anciennes adresses, page entreprise du talent | — | PR du lot A6 |
+
+- **Captures** à 1440 et 1024 px, prises par les e2e : dossier partagé `captures/etape-3/`, un
+  sous-dossier par lot (`a1` à `a6`). Les numéros sont ceux de l'INDEX des planches.
+- **Migrations additives** : `organization_banner_theme` (A1), `team_rights_tasks_declared` (A2),
+  `company_page_hiring_now` (A3), `company_reports_export` (A4, données), `org_recruiting_settings`
+  (A5).
+- **Règles vérifiées par les tests en base** : chaque lecture est filtrée par l'organisation ;
+  recruteur, manager et lecteur sont refusés ; les sièges sont comptés ; chaque consultation de
+  profil est journalisée et lisible par les seuls administrateurs ; un profil anonyme reste anonyme ;
+  les droits sont testés par clés ; `reports.export` est ouvert à toutes les formules Company ;
+  paiement prépayé (M-Pesa, Orange Money, Airtel Money, carte), montée immédiate, baisse à
+  l'échéance ; aucun numéro de téléphone.
+- **Ancien design supprimé** : anciennes pages de `/app/organisation` (accueil, équipe, modifier,
+  remplacées en A2 et A3), `structure-tabs.tsx`, textes orphelins. Les anciennes adresses mènent aux
+  nouveaux écrans.
+- **Captures du Joseph de la maquette non reprises** (écrans du recruteur vus par l'administrateur,
+  qui gardent leurs écrans actuels) : 074, 075, 079, 080, 088 à 091.
+- **Choix notés** dans `docs/decisions/2026-10-26-etape-3-*.md` (noms d'étapes, champs des modèles et
+  échelle de notation existants plutôt que ceux de la maquette, entre autres).
+- **À valider par Ephraïm** : l'ensemble de l'étape 3. Ensuite, comme convenu le 26/10 : les écrans
+  du recruteur sur ordinateur au Modèle B (section 05, `Web-N-*`), en PR séparées.

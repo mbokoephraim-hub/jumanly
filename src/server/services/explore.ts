@@ -12,6 +12,7 @@
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { matchesForUser } from "@/server/matching/service";
 import { openJobWhere } from "./jobs";
+import { declaredMembers } from "./org-team";
 
 /** The offers read for the home of Explorer: enough for every chip, ranked afterwards. */
 const HOME_OFFERS = 60;
@@ -490,7 +491,7 @@ export async function companyPage(
     },
   });
   if (!org) return null;
-  const [rows, following, mine] = await Promise.all([
+  const [rows, following, mine, declared] = await Promise.all([
     db.job.findMany({
       where: { ...openJobWhere(now), organizationId: org.id },
       orderBy: { publishedAt: "desc" },
@@ -501,6 +502,7 @@ export async function companyPage(
       select: { id: true },
     }),
     links(db, userId),
+    declaredMembers(db, org.id),
   ]);
   const offers = await ranked(db, userId, rows, now);
   // Members: never someone who blocked me or whom I blocked.
@@ -511,13 +513,29 @@ export async function companyPage(
       name: member.user.name,
       image: member.user.image,
       title: member.jobTitle?.trim() || null,
-      role: member.role,
+      role: member.role as typeof member.role | null,
       link: linkOf(mine.get(member.user.id)),
       /** Their page opens only when their profile is visible, or for a connection. */
       visible:
         member.user.talentProfile?.visibility === "recruiters" ||
         mine.get(member.user.id) === "connected",
+      declared: false,
     }));
+  // Then the people who say they work there (étape 3, A6, as on the company's own page): until
+  // the company answers, « Indiqué par la personne »; never one it said does not work there.
+  for (const person of declared) {
+    if (person.userId === userId || mine.get(person.userId) === "blocked") continue;
+    members.push({
+      id: person.userId,
+      name: person.name,
+      image: person.image,
+      title: person.title,
+      role: null,
+      link: linkOf(mine.get(person.userId)),
+      visible: true,
+      declared: person.status !== "confirmed",
+    });
+  }
   return {
     id: org.id,
     slug: org.slug,

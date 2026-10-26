@@ -115,6 +115,7 @@ export default async function OrganizationPage({ params }: PageProps<"/app/entre
             image: member.image,
             title: member.title,
             link: member.link,
+            declared: member.declared,
           })),
         }}
         posts={posts.map(fil.post)}

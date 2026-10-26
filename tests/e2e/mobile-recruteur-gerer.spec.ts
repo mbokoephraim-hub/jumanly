@@ -311,8 +311,16 @@ test("abonnement, formules RH, rapports en PDF, paramètres et journal des consu
   await expectAccessible(page);
   await noOverflow(page, "paramètres");
   await settings.getByRole("link", { name: /Journal des consultations/ }).click();
-  await expect(page).toHaveURL(/\/app\/parametres\/consultations$/);
-  await expect(main(page).getByText("Aucun profil ouvert pour l'instant.")).toBeVisible();
+  if (isMobile) {
+    await expect(page).toHaveURL(/\/app\/parametres\/consultations$/);
+    await expect(main(page).getByText("Aucun profil ouvert pour l'instant.")).toBeVisible();
+  } else {
+    // On a computer, the owner reads the team's journal in the company's space (étape 3, A6).
+    await expect(page).toHaveURL(/\/app\/organisation\/journal$/);
+    await expect(
+      main(page).getByText("Aucune consultation sur les 90 derniers jours."),
+    ).toBeVisible();
+  }
   await expectAccessible(page);
 
   // Former addresses.

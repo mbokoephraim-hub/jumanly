@@ -1780,3 +1780,151 @@
     padding-right: 8px;
   }
 }
+
+/* Étape 3 · A6 : équipes, départements et entités ; vérification de l'entreprise. */
+.ae-st-retour {
+  display: inline-block;
+  margin: 0 0 6px !important;
+}
+.ae-st-avis {
+  margin: 14px 0 0;
+  font-size: 14px;
+}
+.ae-st-erreur {
+  border: 1px solid rgba(244, 163, 138, 0.45);
+  color: #f4b8a6;
+}
+.ae-st-grille {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  margin-top: 16px;
+}
+@media (max-width: 1099px) {
+  .ae-st-grille {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.ae-st-ligne {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.ae-st-ligne:last-child {
+  border-bottom: 0;
+}
+.ae-st-meta {
+  display: block;
+  margin-top: 4px;
+}
+.ae-st-suppr summary {
+  list-style: none;
+  cursor: pointer;
+}
+.ae-st-suppr summary::-webkit-details-marker {
+  display: none;
+}
+.ae-st-suppr[open] {
+  flex-basis: 100%;
+}
+.ae-st-suppr[open] summary {
+  display: none;
+}
+.ae-st-confirmer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--ae-nuit);
+  font-size: 14px;
+}
+.ae-st-confirmer p {
+  flex: 1;
+  min-width: 200px;
+}
+.ae-st-danger {
+  border-color: rgba(244, 163, 138, 0.5) !important;
+  color: #f4b8a6 !important;
+}
+.ae-st-creer {
+  margin-top: 20px;
+}
+.ae-vf-tete {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 16px;
+}
+.ae-vf-anneau {
+  --p: 0;
+  width: 64px;
+  height: 64px;
+  flex: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(closest-side, var(--ae-surface) 78%, transparent 80%),
+    conic-gradient(#dff7c6 calc(var(--p) * 1%), rgba(255, 255, 255, 0.1) 0);
+  font-size: 15px;
+  font-weight: 700;
+}
+.ae-vf-etape {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.ae-vf-etape:last-child {
+  border-bottom: 0;
+}
+.ae-vf-puce {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 13px;
+  font-weight: 700;
+}
+/* Lime is for actions: a step done takes the light tint of the tags. */
+.ae-vf-puce-ok {
+  background: rgba(166, 242, 107, 0.14);
+  color: #dff7c6;
+}
+.ae-vf-fichier {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--ae-creme);
+}
+.ae-vf-fichier::file-selector-button {
+  margin-right: 12px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: var(--ae-creme);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ae-vf-bloc {
+  margin-top: 16px;
+}
+.ae-vf-texte {
+  margin-top: 10px !important;
+  line-height: 1.5;
+}

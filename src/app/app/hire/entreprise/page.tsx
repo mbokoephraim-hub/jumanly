@@ -16,9 +16,10 @@ export async function generateMetadata(): Promise<Metadata> {
 /** Compte of the recruiter's phone (Modèle B recruteur M8). A computer keeps its own page. */
 export default async function Page({ searchParams }: PageProps<"/app/hire/entreprise">) {
   const { ctx } = await requireHire(PAGE);
-  if (!(await isPhone())) redirect("/app/organisation");
-  // « Agir au nom de l'entreprise » belongs to the page's administrators (planche 186).
+  // « Agir au nom de l'entreprise » belongs to the page's administrators (planche 186); on a
+  // computer, they edit the page in the company's space.
   if (!isOrgAdmin(ctx.role)) redirect("/app/hire/compte");
+  if (!(await isPhone())) redirect("/app/organisation");
   return (
     <RhCompteTexts>
       <RhCompanyModeScreen ctx={ctx} query={await searchParams} />

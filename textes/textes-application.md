@@ -8653,6 +8653,7 @@ Conventions :
 | `phoneExplorer.company.membersSearch` | Rechercher un membre |
 | `phoneExplorer.company.membersCount` | {count, plural, =0 {Aucun membre visible} one {# membre sur Jumanly} other {# membres sur Jumanly}} |
 | `phoneExplorer.company.memberConnected` | Connecté avec vous |
+| `phoneExplorer.company.memberDeclared` | Indiqué par la personne |
 | `phoneExplorer.company.noMember` | Aucun membre ne correspond à « {query} ». |
 | `phoneExplorer.company.menu` | Page de {name} |
 | `phoneExplorer.company.menuShare` | Partager la page |
@@ -11067,31 +11068,11 @@ Conventions :
 | `rhNotifications.brief.cta.messages` | Lire |
 | `rhProfile.seen` | Ce que voient les candidats |
 | `rhProfile.seenName` | {name} · {org} |
-| `rhOrg.back` | Compte |
-| `rhOrg.edit` | Modifier la page de l'organisation |
-| `rhOrg.size` | {size} personnes |
-| `rhOrg.figures` | L'organisation en chiffres |
-| `rhOrg.figure.jobs` | {count, plural, one {offre active} other {offres actives}} |
-| `rhOrg.figure.applications` | {count, plural, one {candidature reçue} other {candidatures reçues}} |
-| `rhOrg.figure.hired` | {count, plural, one {recruté} other {recrutés}} |
-| `rhOrg.figure.members` | {count, plural, one {membre} other {membres}} |
-| `rhOrg.presentation` | Présentation |
-| `rhOrg.noDescription` | Pas encore de présentation. Les talents lisent ce texte sur chaque offre. |
-| `rhOrg.hint.banner.text` | Ajoutez une bannière, une photo de vos bureaux par exemple : vos offres et votre page sont plus faciles à reconnaître. |
-| `rhOrg.hint.banner.cta` | Ajouter |
-| `rhOrg.hint.description.text` | Présentez votre organisation en quelques lignes : les talents la découvrent sur chaque offre. |
-| `rhOrg.hint.description.cta` | Écrire |
-| `rhOrg.hint.verify.text` | Une organisation vérifiée publie sans attente et affiche un badge sur ses offres. |
-| `rhOrg.hint.verify.cta` | Vérifier |
-| `rhOrg.manage` | Gérer l'organisation |
-| `rhOrg.team` | Équipe |
-| `rhOrg.seats` | {used, plural, one {# siège utilisé} other {# sièges utilisés}} sur {max} |
-| `rhOrg.seatsUnlimited` | {used, plural, one {# siège utilisé} other {# sièges utilisés}} |
-| `rhOrg.verification` | Vérification |
 | `rhOrg.structure` | Équipes, départements, entités |
-| `rhOrg.structureLine` | L'organisation de vos recrutements |
-| `rhOrg.asTalent` | Voir la page comme un talent |
-| `rhOrg.editBack` | Organisation |
+| `orgStructure.intro` | Rangez les membres et les offres par équipe, par département et, pour un groupe, par entité. |
+| `orgStructure.tabs` | Structure de l'entreprise |
+| `orgStructure.back` | Équipe |
+| `orgStructure.lockedLink` | Voir les formules |
 | `rhVerification.back` | Organisation |
 | `rhVerification.title` | Vérifier l'organisation |
 | `rhVerification.progress` | {done}/{total} |
@@ -11113,50 +11094,6 @@ Conventions :
 | `rhVerification.plans` | Voir les formules |
 | `rhVerification.meanwhile` | En attendant, vos offres passent en validation avant publication. |
 | `rhVerification.question` | Une question : assistant@jumanly.io |
-| `rhTeam.title` | Équipe |
-| `rhTeam.back` | Organisation |
-| `rhTeam.invite` | Inviter dans l'équipe |
-| `rhTeam.inviteTitle` | Inviter dans l'équipe |
-| `rhTeam.close` | Fermer |
-| `rhTeam.invalid` | Vérifiez les informations et réessayez. |
-| `rhTeam.seats` | Sièges utilisés : {used} sur {max} |
-| `rhTeam.seatsUnlimited` | {used, plural, one {# siège utilisé} other {# sièges utilisés}}, sans limite |
-| `rhTeam.members` | Membres de l'équipe |
-| `rhTeam.you` | {name}, vous |
-| `rhTeam.invited` | Invitation envoyée par e-mail · {ago} |
-| `rhTeam.pending` | En attente |
-| `rhTeam.today` | aujourd'hui |
-| `rhTeam.days` | {count, plural, one {il y a # jour} other {il y a # jours}} |
-| `rhTeam.invitationLine` | Rôle proposé : {role}. L'invitation expire le {date, date, long}. |
-| `rhTeam.rights.title` | Qui peut faire quoi |
-| `rhTeam.rights.short.org_admin` | Admin |
-| `rhTeam.rights.short.recruiter` | Recr. |
-| `rhTeam.rights.short.hiring_manager` | Resp. |
-| `rhTeam.rights.short.viewer` | Lect. |
-| `rhTeam.rights.manage` | Publier, décider, écrire |
-| `rhTeam.rights.evaluate` | Noter, évaluer |
-| `rhTeam.rights.readApplications` | Lire les candidatures |
-| `rhTeam.rights.administer` | Équipe, abonnement |
-| `rhTeam.rights.yes` | Oui |
-| `rhTeam.rights.no` | Non |
-| `rhTeam.rights.owner` | Le propriétaire a tous les droits, dont la facturation. Un responsable du recrutement ne voit que les offres qui lui sont confiées. |
-| `rhTeam.activity.title` | Activité récente |
-| `rhTeam.activity.you` | Vous |
-| `rhTeam.activity.former` | Ancien membre |
-| `rhTeam.activity.stage_changed` | {actor} {self, select, oui {avez fait} other {a fait}} avancer {name} |
-| `rhTeam.activity.note` | {actor} {self, select, oui {avez noté} other {a noté}} {name} |
-| `rhTeam.activity.decision` | {actor} {self, select, oui {avez annoncé} other {a annoncé}} sa décision à {name} |
-| `rhTeam.activity.document_requested` | {actor} {self, select, oui {avez demandé} other {a demandé}} un document à {name} |
-| `rhTeam.activity.message` | {actor} {self, select, oui {avez écrit} other {a écrit}} à {name} |
-| `rhTeam.emails` | E-mail |
-| `rhTeam.emailsHint` | Plusieurs adresses possibles, séparées par une virgule. Chaque personne reçoit un lien valable {days, plural, one {# jour} other {# jours}}. |
-| `rhTeam.saveRole` | Changer le rôle |
-| `rhTeam.full.plan` | <b>Plus de siège libre.</b> Retirez un membre ou une invitation, ou passez à {plan} ({seats}). |
-| `rhTeam.full.seatsUnlimited` | sièges illimités |
-| `rhTeam.full.seatsCount` | {count, plural, one {# siège} other {# sièges}} |
-| `rhTeam.full.noPlan` | <b>Plus de siège libre.</b> Retirez un membre ou une invitation pour en libérer un. |
-| `rhTeam.full.see` | Voir {plan} |
-| `rhTeam.full.plans` | Voir les formules |
 | `rhVerification.checked` | Contrôlé par Jumanly |
 | `rhReports.back` | Compte |
 | `rhReports.period.30d` | 30 jours |
@@ -13821,6 +13758,7 @@ Conventions :
 | `org.verification.form.documentsHint` | Registre du commerce, pièce attestant votre fonction… 4 Mo au total par envoi, 6 documents au plus. |
 | `org.verification.documents.title` | Justificatifs envoyés |
 | `org.verification.documents.remove` | Retirer {name} |
+| `org.verification.documents.removeShort` | Retirer |
 | `org.verification.documents.removed` | Justificatif retiré. |
 | `org.verification.documents.meta` | {size} · envoyé le {date, date, medium} |
 | `org.verification.fileError.fileType` | Seuls les PDF et les images (PNG, JPEG, WEBP) sont acceptés. |
@@ -15742,6 +15680,7 @@ Conventions :
 | `orgTeam.onlyYou` | Vous seul·e attribuez les rôles et les tâches. |
 | `orgTeam.admins` | Les administrateurs attribuent les rôles et les tâches. |
 | `orgTeam.invite` | Inviter un membre |
+| `orgTeam.structure` | Équipes et départements |
 | `orgTeam.assign` | Attribuer une tâche |
 | `orgTeam.close` | Fermer |
 | `orgTeam.cancel` | Annuler |

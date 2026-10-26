@@ -38,7 +38,14 @@ export const companyItems = [
   { key: "settings", href: "/app/organisation/reglages", icon: "reglages" },
 ] as const;
 
+/** Pages reached from an item rather than from the sidebar: the item stays lit (étape 3, A6). */
+const companyChildren: Record<string, string> = {
+  "/app/organisation/structure": "/app/organisation/equipe",
+};
+
 function companyOn(pathname: string, href: string) {
+  const parent = Object.entries(companyChildren).find(([path]) => inside(pathname, path))?.[1];
+  if (parent) return parent === href;
   // « Page entreprise » covers /app/organisation and its pages, except those of the other items.
   if (href === "/app/organisation")
     return (

@@ -175,21 +175,26 @@ export default async function RecruiterAccountPage() {
       </div>
 
       <List label={t("group.org")} className="t-w4-tuiles t-rw3-tuiles t-w4-web">
-        <Row
-          href="/app/organisation"
-          icon="entreprise"
-          tile="t-w4-k3"
-          title={t("org.title")}
-          text={tw("org")}
-          badge={verificationTag}
-        />
-        <Row
-          href="/app/organisation/equipe"
-          icon="candidats"
-          tile="t-w4-k2"
-          title={t("team.title")}
-          text={teamText}
-        />
+        {/* Page entreprise and Équipe belong to the owner and the administrators (étape 3). */}
+        {permissions.administer && (
+          <Row
+            href="/app/organisation"
+            icon="entreprise"
+            tile="t-w4-k3"
+            title={t("org.title")}
+            text={tw("org")}
+            badge={verificationTag}
+          />
+        )}
+        {permissions.administer && (
+          <Row
+            href="/app/organisation/equipe"
+            icon="candidats"
+            tile="t-w4-k2"
+            title={t("team.title")}
+            text={teamText}
+          />
+        )}
         {permissions.readApplications && (
           <Row
             href="/app/hire/viviers"
