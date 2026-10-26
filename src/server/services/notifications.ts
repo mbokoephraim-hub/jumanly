@@ -58,6 +58,8 @@ export const notificationTypes = [
   "orgJoinAccepted",
   "orgJoinDeclined",
   "jobEnding",
+  // Modèle B recruteur M5: a colleague entrusted a file to the member (« Répartir »).
+  "candidateAssigned",
   // Le Fil (Modèle B, lot B3): answers, names, J'aime, republications and quotes.
   "feedReply",
   "feedMention",

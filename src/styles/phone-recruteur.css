@@ -1943,3 +1943,1093 @@
   width: 48px;
   height: 48px;
 }
+
+/* ── M5 · Candidatures (planches Recruteur-candidatures, -cand-*, -candidat-*, -planifier,
+   -evaluation, -proposition) ─────────────────────────────────────────────────────────────── */
+.nb-rh-vues {
+  display: flex;
+  gap: 4px;
+  margin: 2px 16px 8px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--nb-carte);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nb-rh-vues a {
+  flex: 1 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--nb-brume);
+  white-space: nowrap;
+}
+.nb-rh-vues a[aria-current="page"] {
+  background: var(--nb-creme);
+  color: var(--nb-nuit);
+}
+.nb-rh-vues i,
+.nb-rh-f-onglets i {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--nb-lime);
+  font-size: 11.5px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 20px;
+  text-align: center;
+  color: var(--nb-nuit);
+}
+.nb-rh-vue {
+  padding-bottom: 24px;
+}
+.nb-rh-cl {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--nb-filet);
+  color: var(--nb-creme);
+}
+.nb-rh-cl > svg {
+  flex: none;
+  color: var(--nb-brume);
+}
+.nb-rh-cl .nb-rh-res-t b {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nb-rh-ini {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--nb-nuit);
+  background: #b9d8cf;
+}
+.nb-rh-ini[data-teinte="1"] {
+  background: #e8cfa6;
+}
+.nb-rh-ini[data-teinte="2"] {
+  background: #c9c4ec;
+}
+.nb-rh-ini[data-teinte="3"] {
+  background: #f0b9a8;
+}
+.nb-rh-ini[data-teinte="4"] {
+  background: #a9d3ea;
+}
+.nb-rh-ini[data-teinte="5"] {
+  background: #d9e6a2;
+}
+.nb-rh-ini[data-teinte="n"] {
+  background: var(--nb-haute);
+  color: var(--nb-creme);
+}
+.nb-rh-ini-l {
+  width: 64px;
+  height: 64px;
+  font-size: 22px;
+}
+.nb-rh-pct {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  height: 30px;
+  padding: 0 9px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 800;
+  background: var(--nb-haute);
+  color: var(--nb-creme);
+}
+.nb-rh-pct[data-niveau="haut"] {
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+}
+.nb-rh-pct[data-niveau="bon"] {
+  background: #1d3a2b;
+  color: var(--nb-lime);
+}
+.nb-rh-pct-l {
+  min-width: 72px;
+  height: 44px;
+  font-size: 18px;
+}
+.nb-rh-point {
+  flex: none;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--nb-lime);
+}
+.nb-rh-orbi-l {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: calc(100% - 32px);
+  margin: 6px 16px 10px;
+  padding: 12px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+  text-align: left;
+  color: var(--nb-creme);
+}
+.nb-rh-orbi-l > span {
+  flex: 1;
+  display: grid;
+  gap: 2px;
+}
+.nb-rh-orbi-l b {
+  font-size: 15px;
+}
+.nb-rh-orbi-l > span > span {
+  font-size: 13px;
+  color: var(--nb-menthe-claire);
+}
+.nb-rh-orbi-l[data-ambre] > span > span {
+  color: var(--nb-ambre);
+}
+.nb-rh-fp {
+  display: grid;
+  gap: 12px;
+  padding: 0 16px;
+}
+.nb-rh-fp-carte {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 20px;
+  background: var(--nb-carte);
+}
+.nb-rh-fp-h {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nb-rh-fp-s {
+  margin-bottom: -4px;
+}
+.nb-rh-fp-b {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.nb-rh-fp-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.nb-rh-fp-actions > * {
+  min-height: 44px;
+}
+.nb-rh-ouvrir {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: var(--nb-creme);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--nb-nuit);
+}
+.nb-rh-fp-carte .nb-rh-puces,
+.nb-rh-f-s .nb-rh-puces {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+.nb-rh-fp-carte .nb-rh-puces li,
+.nb-rh-f-s .nb-rh-puces li {
+  display: block;
+  height: auto;
+  padding: 0 0 0 18px;
+  border-radius: 0;
+  background: none;
+  position: relative;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--nb-creme);
+}
+.nb-rh-fp-carte .nb-rh-puces li::before,
+.nb-rh-f-s .nb-rh-puces li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--nb-lime);
+}
+.nb-rh-puces[data-ambre] li::before {
+  background: var(--nb-ambre);
+}
+.nb-rh-etiq {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.nb-rh-etiq span {
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--nb-filet-fort);
+  font-size: 13px;
+  color: var(--nb-creme);
+}
+
+/* Toutes : les étapes, le tri, la sélection */
+.nb-rh-phases {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 4px 16px 10px;
+}
+.nb-rh-phases a {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: var(--nb-carte);
+  color: var(--nb-creme);
+}
+.nb-rh-phases b {
+  font-size: 20px;
+  font-weight: 800;
+}
+.nb-rh-phases span {
+  font-size: 12.5px;
+  color: var(--nb-brume);
+}
+.nb-rh-phases a[aria-current="page"] {
+  background: var(--nb-creme);
+  color: var(--nb-nuit);
+}
+.nb-rh-phases a[aria-current="page"] span {
+  color: var(--nb-nuit);
+}
+.nb-rh-outils {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 4px 12px 4px 16px;
+}
+.nb-rh-tri,
+.nb-rh-choisir {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--nb-brume);
+}
+.nb-rh-choisir {
+  color: var(--nb-lime);
+}
+input.nb-rh-case {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  background: transparent;
+}
+input.nb-rh-case:checked {
+  border: 0;
+  background: var(--nb-lime)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%230b1a1f' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    center / 18px no-repeat;
+}
+input.nb-rh-case:focus-visible {
+  outline: 2px solid var(--nb-lime);
+  outline-offset: 2px;
+}
+.nb-rh-choix {
+  padding-bottom: 90px;
+}
+.nb-rh-selection {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: var(--nb-nav);
+  z-index: 7;
+  padding: 12px 20px;
+  background: linear-gradient(180deg, rgba(11, 26, 31, 0) 0, var(--nb-nuit) 18px);
+}
+.nb-rh-heure {
+  flex: none;
+  display: grid;
+  justify-items: center;
+  min-width: 62px;
+  padding: 8px 6px;
+  border-radius: 14px;
+  background: var(--nb-haute);
+}
+.nb-rh-heure b {
+  font-size: 16px;
+}
+.nb-rh-heure span {
+  font-size: 11.5px;
+  color: var(--nb-brume);
+}
+.nb-rh-res-t .nb-rh-2l {
+  white-space: normal;
+}
+.nb-meta[data-ambre] {
+  color: var(--nb-ambre);
+}
+.nb-rh-ok-l {
+  margin: 8px 16px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #1d3a2b;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nb-lime);
+}
+
+/* « Message à N candidats » */
+.nb-rh-groupe-f,
+.nb-rh-decision,
+.nb-rh-pdf {
+  display: grid;
+  gap: 10px;
+}
+.nb-rh-modeles {
+  display: grid;
+  gap: 8px;
+}
+.nb-rh-modele {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--nb-carte);
+  font-size: 15px;
+}
+.nb-rh-modele input,
+.nb-rh-cocher input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  accent-color: var(--nb-lime);
+}
+.nb-rh-apercu-m {
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--nb-filet-fort);
+  font-size: 14.5px;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+/* Diagnostic des CV par Orbi */
+.nb-rh-diag-h {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px 10px;
+}
+.nb-rh-diag-h h1 {
+  font-size: 23px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.nb-rh-diag-c {
+  display: grid;
+  gap: 12px;
+  margin: 6px 16px 14px;
+  padding: 16px;
+  border-radius: 20px;
+  background: var(--nb-carte);
+}
+.nb-rh-pile {
+  display: flex;
+  height: 14px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--nb-haute);
+}
+.nb-rh-pile span {
+  background: #4d6762;
+}
+.nb-rh-pile span[data-t="tout"] {
+  background: var(--nb-lime);
+}
+.nb-rh-pile span[data-t="partie"] {
+  background: var(--nb-menthe-claire);
+}
+.nb-rh-diag-tuiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.nb-rh-diag-tuiles p {
+  display: grid;
+  gap: 2px;
+  font-size: 12.5px;
+  line-height: 1.3;
+  color: var(--nb-brume);
+}
+.nb-rh-diag-tuiles b {
+  font-size: 22px;
+  color: var(--nb-creme);
+}
+.nb-rh-diag-tuiles b[data-t="tout"] {
+  color: var(--nb-lime);
+}
+.nb-rh-diag-tuiles b[data-t="partie"] {
+  color: var(--nb-menthe-claire);
+}
+.nb-rh-diag-s,
+.nb-rh-diag-p {
+  display: grid;
+  gap: 10px;
+  padding: 6px 20px 14px;
+}
+.nb-rh-diag-p {
+  padding: 6px 0 14px;
+}
+.nb-rh-diag-p h2 {
+  padding: 0 20px;
+}
+.nb-rh-diag-s h2,
+.nb-rh-diag-p h2,
+.nb-rh-f-s h2 {
+  font-size: 16px;
+  font-weight: 800;
+}
+.nb-rh-diag-l {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr auto;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+.nb-rh-jauge {
+  display: block;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--nb-haute);
+}
+.nb-rh-jauge i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--nb-menthe-claire);
+}
+.nb-rh-diag-l .nb-rh-jauge i,
+.nb-rh-jauge i[data-plein] {
+  background: var(--nb-lime);
+}
+
+/* La fiche d'un candidat */
+.nb-rh-fiche {
+  padding-bottom: 130px;
+}
+.nb-rh-f-id {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px 12px;
+}
+.nb-rh-f-id h1 {
+  font-size: 23px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.nb-rh-f-cartes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 16px;
+}
+.nb-rh-f-carte {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 70px;
+  padding: 12px;
+  border-radius: 18px;
+  background: var(--nb-carte);
+  text-align: left;
+  color: var(--nb-creme);
+}
+.nb-rh-f-carte > span:last-child {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.nb-rh-f-carte b {
+  font-size: 14.5px;
+}
+.nb-rh-pourquoi {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nb-lime);
+}
+.nb-rh-f-etape {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.nb-rh-f-offre {
+  padding: 10px 20px 0;
+}
+.nb-rh-f-onglets {
+  position: sticky;
+  top: calc(var(--nb-haut) + 52px);
+  z-index: 3;
+  display: flex;
+  gap: 2px;
+  margin-top: 10px;
+  padding: 0 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--nb-filet);
+  background: var(--nb-nuit);
+}
+.nb-rh-f-onglets button {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 46px;
+  padding: 0 10px;
+  border-bottom: 3px solid transparent;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--nb-brume);
+}
+.nb-rh-f-onglets button[aria-selected="true"] {
+  border-bottom-color: var(--nb-lime);
+  color: var(--nb-creme);
+}
+.nb-rh-f-panneau {
+  padding: 4px 0 0;
+}
+.nb-rh-f-s {
+  display: grid;
+  gap: 10px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--nb-filet);
+}
+.nb-rh-f-panneau > .nb-rh-f-s:last-child {
+  border-bottom: 0;
+}
+.nb-rh-f-orbi {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nb-rh-etoile {
+  width: 14px;
+  height: 14px;
+  background: var(--nb-lime);
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+}
+.nb-rh-f-verif {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nb-ambre);
+}
+.nb-rh-f-rdv,
+.nb-rh-doc {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--nb-carte);
+  color: var(--nb-creme);
+}
+.nb-rh-rond-i,
+.nb-rh-doc-i {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--nb-haute);
+  color: var(--nb-lime);
+}
+.nb-rh-doc-i[data-pdf] {
+  background: #3a2320;
+  color: var(--nb-corail);
+}
+.nb-rh-doc-i[data-ok] {
+  background: #1d3a2b;
+}
+.nb-rh-doc-i[data-ok]::after {
+  content: "";
+  width: 18px;
+  height: 18px;
+  background: var(--nb-lime);
+  clip-path: polygon(14% 52%, 0 66%, 38% 100%, 100% 20%, 86% 6%, 38% 72%);
+}
+.nb-rh-f-xp {
+  display: grid;
+  gap: 2px;
+}
+.nb-rh-f-xp b {
+  font-size: 15px;
+}
+.nb-rh-f-p {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--nb-creme);
+}
+.nb-rh-f-lettre {
+  white-space: pre-line;
+}
+.nb-rh-attest {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nb-lime);
+}
+.nb-rh-f-comp {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 14.5px;
+}
+.nb-meta[data-lime] {
+  color: var(--nb-lime);
+}
+.nb-rh-f-q {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--nb-brume);
+}
+.nb-rh-note-f {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+}
+.nb-rh-note-f input {
+  flex: 1;
+  min-width: 0;
+  height: 46px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+  font-size: 15px;
+  color: var(--nb-creme);
+}
+.nb-rh-note-f button {
+  flex: none;
+  height: 46px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: var(--nb-lime);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--nb-nuit);
+}
+.nb-rh-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--nb-filet);
+}
+.nb-rh-note .nb-rh-ini {
+  width: 36px;
+  height: 36px;
+  font-size: 13px;
+}
+.nb-rh-note-h {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+.nb-rh-note .nb-rh-f-p {
+  display: block;
+}
+.nb-rh-histo {
+  padding: 8px 20px;
+}
+.nb-rh-histo li {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding: 10px 0 10px 22px;
+  font-size: 14.5px;
+  border-left: 2px solid var(--nb-filet-fort);
+  margin-left: 5px;
+}
+.nb-rh-histo li::before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 14px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--nb-lime);
+}
+.nb-rh-detail > .nb-bas {
+  position: fixed;
+}
+.nb-rh-f-bas {
+  display: flex;
+  gap: 10px;
+}
+.nb-rh-f-bas .nb-bp {
+  flex: 1;
+}
+.nb-rh-f-ecrire {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+  color: var(--nb-creme);
+}
+
+/* Les feuilles de la fiche */
+.nb-rh-why-h,
+.nb-rh-pdf-h {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 6px;
+}
+.nb-rh-why-h h2,
+.nb-rh-pdf-h h2 {
+  font-size: 19px;
+  font-weight: 800;
+}
+.nb-rh-why-l {
+  display: grid;
+  gap: 6px;
+  padding: 8px 0;
+}
+.nb-rh-why-l p {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 14.5px;
+}
+.nb-rh-why-n {
+  margin: 8px 0 4px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--nb-carte);
+}
+.nb-rh-etape-l,
+.nb-rh-membre {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--nb-carte);
+  font-size: 15.5px;
+  font-weight: 600;
+  text-align: left;
+  color: var(--nb-creme);
+}
+.nb-rh-etape-l[aria-current],
+.nb-rh-membre[aria-current] {
+  outline: 2px solid var(--nb-lime);
+  outline-offset: -2px;
+}
+.nb-rh-etape-l:disabled {
+  opacity: 1;
+}
+.nb-rh-etape-l svg,
+.nb-rh-membre svg {
+  color: var(--nb-lime);
+}
+.nb-rh-cocher {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  font-size: 15px;
+}
+.nb-rh-pdf fieldset {
+  display: grid;
+  gap: 2px;
+}
+.nb-rh-puces-c {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.nb-rh-puces-c .nb-pilule[aria-pressed="true"],
+.nb-rh-puces-c .nb-pilule[aria-checked="true"] {
+  background: var(--nb-creme);
+  color: var(--nb-nuit);
+}
+.nb-rh-zone,
+.nb-rh-champ-l,
+.nb-rh-plan-champ input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--nb-creme);
+}
+.nb-rh-champ-l,
+.nb-rh-plan-champ input {
+  height: 50px;
+}
+.nb-rh-zone {
+  resize: vertical;
+}
+.nb-rh-zone:focus,
+.nb-rh-champ-l:focus,
+.nb-rh-plan-champ input:focus,
+.nb-rh-note-f input:focus {
+  outline: 2px solid var(--nb-lime);
+  outline-offset: 1px;
+}
+
+/* Planifier, documenter, proposer */
+.nb-rh-barre-t {
+  font-size: 16px;
+  font-weight: 700;
+}
+.nb-rh-barre-vide {
+  width: 44px;
+}
+.nb-rh-plan {
+  padding-bottom: 130px;
+}
+.nb-rh-plan-s {
+  display: grid;
+  gap: 10px;
+  padding: 14px 20px 6px;
+}
+.nb-rh-plan-s legend {
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+.nb-rh-jours {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+.nb-rh-jours button {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 10px 0;
+  border-radius: 14px;
+  background: var(--nb-carte);
+  color: var(--nb-creme);
+}
+.nb-rh-jours span {
+  font-size: 12px;
+  color: var(--nb-brume);
+}
+.nb-rh-jours b {
+  font-size: 17px;
+}
+.nb-rh-jours button[aria-pressed="true"] {
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+}
+.nb-rh-jours button[aria-pressed="true"] span {
+  color: var(--nb-nuit);
+}
+.nb-rh-creneaux {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.nb-rh-creneaux button {
+  min-height: 46px;
+  border-radius: 14px;
+  border: 1px solid var(--nb-filet-fort);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--nb-creme);
+}
+.nb-rh-creneaux button[aria-pressed="true"] {
+  border-color: var(--nb-lime);
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+}
+.nb-rh-creneaux button:disabled {
+  border-style: dashed;
+  color: #6f8783;
+  text-decoration: line-through;
+}
+.nb-rh-modes {
+  display: grid;
+  gap: 8px;
+}
+.nb-rh-modes button {
+  display: grid;
+  gap: 2px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--nb-carte);
+  text-align: left;
+  color: var(--nb-creme);
+}
+.nb-rh-modes button span {
+  font-size: 13px;
+  color: var(--nb-brume);
+}
+.nb-rh-modes button[aria-pressed="true"] {
+  outline: 2px solid var(--nb-lime);
+  outline-offset: -2px;
+}
+.nb-rh-plan-champ {
+  display: grid;
+  gap: 6px;
+}
+.nb-rh-avec {
+  padding: 4px 0;
+}
+.nb-rh-eval,
+.nb-rh-prop {
+  padding-bottom: 130px;
+}
+.nb-rh-eval-c {
+  display: grid;
+  gap: 14px;
+  padding: 16px 20px;
+}
+.nb-rh-eval-k {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: var(--nb-carte);
+}
+.nb-rh-eval-k legend {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 8px;
+  font-size: 15px;
+  float: left;
+}
+.nb-rh-etoiles {
+  clear: both;
+  display: flex;
+  gap: 6px;
+}
+.nb-rh-etoiles button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: #4d6762;
+}
+.nb-rh-etoiles button[data-plein] {
+  color: var(--nb-lime);
+}
+
+/* « Invitation envoyée » */
+.nb-rh-envoye .nb-bp,
+.nb-rh-envoye .nb-bs {
+  width: 100%;
+}
+.nb-rh-rdv {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 18px;
+  background: var(--nb-carte);
+  text-align: left;
+}
+.nb-rh-rdv-m {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nb-lime);
+}
+.nb-rh-rdv b {
+  font-size: 17px;
+}
+.nb-rh-rdv span:last-child {
+  font-size: 14px;
+  color: var(--nb-brume);
+}
+.nb-rh-lien-l {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--nb-lime);
+}
+.nb-rh-fp-carte,
+.nb-rh-fp-carte > *,
+.nb-rh-fp-h .nb-rh-res-t {
+  min-width: 0;
+}
+/* While choosing candidates, the bar « Écrire à N » takes the place of Orbi's button. */
+body:has(.nb-rh-selection) .nb-orbi-fab {
+  display: none;
+}
+.nb-rh-annuler {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 12px 16px 0;
+  padding: 10px 10px 10px 14px;
+  border-radius: 14px;
+  background: var(--nb-carte);
+  font-size: 14px;
+}
+.nb-rh-annuler button {
+  flex: none;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--nb-creme);
+  font-weight: 700;
+  color: var(--nb-nuit);
+}

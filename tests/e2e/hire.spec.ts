@@ -124,28 +124,48 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await page.goto(pipelineUrl);
   await openCandidateFile(page, /Amani Fictif/);
   const candidateUrl = page.url().split("?")[0]!;
-  await page.getByRole("button", { name: "Changer d'étape" }).click();
-  const move = page.locator("#rc-etape");
-  await move.locator("label").filter({ hasText: "Entretien" }).click();
-  await move.getByRole("button", { name: "Déplacer", exact: true }).click();
-  await expect(page).toHaveURL(/ok=deplacee/);
-  await expect(page.locator("#historique")).toContainText("vers « Entretien »");
+  if (isMobile) {
+    // Modèle B recruteur (M5): the same steps through the phone file's sheets.
+    const file = page.locator(".nb-rh-fiche").filter({ visible: true });
+    await file.getByRole("button", { name: /^Changer d'étape, actuellement/ }).click();
+    await page
+      .getByRole("dialog", { name: "Changer d'étape" })
+      .getByRole("button", { name: "Entretien", exact: true })
+      .click();
+    await expect(page).toHaveURL(/ok=deplacee/);
+    await file.getByRole("tab", { name: /^Historique/ }).click();
+    await expect(file).toContainText("vers « Entretien »");
+    await file.getByRole("tab", { name: /^Notes/ }).click();
+    await file
+      .getByLabel("Note pour l'équipe")
+      .fill("Bonne maîtrise des tableaux croisés, à confirmer en entretien.");
+    await file.getByRole("button", { name: "Ajouter" }).click();
+    await expect(file).toContainText("Bonne maîtrise des tableaux croisés");
+    await page.getByRole("link", { name: "Écrire au candidat" }).filter({ visible: true }).click();
+  } else {
+    await page.getByRole("button", { name: "Changer d'étape" }).click();
+    const move = page.locator("#rc-etape");
+    await move.locator("label").filter({ hasText: "Entretien" }).click();
+    await move.getByRole("button", { name: "Déplacer", exact: true }).click();
+    await expect(page).toHaveURL(/ok=deplacee/);
+    await expect(page.locator("#historique")).toContainText("vers « Entretien »");
 
-  // A note stays inside the team.
-  // On a computer the file's sections are open from the start (web recruteur 2).
-  await expect(async () => {
-    if (!(await page.locator("#rc-note").isVisible()))
-      await page.locator("#notes > summary").click();
-    await expect(page.locator("#rc-note")).toBeVisible({ timeout: 1_000 });
-  }).toPass({ timeout: 15_000 });
-  await page
-    .locator("#rc-note")
-    .fill("Bonne maîtrise des tableaux croisés, à confirmer en entretien.");
-  await page.getByRole("button", { name: "Ajouter la note" }).click();
-  await expect(page.locator("#notes")).toContainText("Bonne maîtrise des tableaux croisés");
+    // A note stays inside the team.
+    // On a computer the file's sections are open from the start (web recruteur 2).
+    await expect(async () => {
+      if (!(await page.locator("#rc-note").isVisible()))
+        await page.locator("#notes > summary").click();
+      await expect(page.locator("#rc-note")).toBeVisible({ timeout: 1_000 });
+    }).toPass({ timeout: 15_000 });
+    await page
+      .locator("#rc-note")
+      .fill("Bonne maîtrise des tableaux croisés, à confirmer en entretien.");
+    await page.getByRole("button", { name: "Ajouter la note" }).click();
+    await expect(page.locator("#notes")).toContainText("Bonne maîtrise des tableaux croisés");
 
-  // Message from the recruiter, answer from the talent.
-  await page.getByRole("link", { name: "Envoyer un message" }).click();
+    // Message from the recruiter, answer from the talent.
+    await page.getByRole("link", { name: "Envoyer un message" }).click();
+  }
   await expect(page).toHaveURL(/\/app\/messages\//);
   const threadUrl = page.url().split("#")[0]!;
   await page.locator("#r5-corps").fill("Bonjour, êtes-vous disponible mardi pour un entretien ?");
@@ -176,17 +196,39 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await page.goto(threadUrl);
   await expect(page.getByRole("main")).toContainText("mardi me convient");
   // Lot 3: « Décision finale », the message read before it leaves, then 10 minutes to undo.
-  await page.goto(`${candidateUrl}?decision=refus`);
-  await expect(page).toHaveURL(/\/decision\?issue=rejected/);
-  const message = page.locator(".t-rc-msg");
-  await expect(message.locator("mark").filter({ hasText: "Amani" })).toBeVisible();
-  await expect(message).toContainText(title);
-  await page.getByRole("link", { name: "Court", exact: true }).click();
-  await expect(message).toContainText("Nous avons retenu un autre profil.");
-  await page.locator("#rc-motif").selectOption("otherCandidate");
-  await page.getByRole("button", { name: "Confirmer et envoyer" }).click();
-  await expect(page.getByRole("heading", { name: "Décision enregistrée" })).toBeVisible();
-  await expect(page.getByRole("main")).toContainText("Annulable encore");
+  if (isMobile) {
+    // On the phone the outcome is decided from the file's sheet « Ne pas retenir ».
+    await page.goto(candidateUrl);
+    const file = page.locator(".nb-rh-fiche").filter({ visible: true });
+    await file.getByRole("button", { name: /^Plus d'actions pour/ }).click();
+    await page
+      .getByRole("dialog")
+      .filter({ visible: true })
+      .getByRole("button", { name: /^Ne pas retenir/ })
+      .click();
+    const reject = page.getByRole("dialog", { name: /^Ne pas retenir / });
+    await reject.getByRole("radio", { name: "Autre candidat plus proche" }).click();
+    await expect(reject.getByLabel("Message envoyé")).toContainText("Amani");
+    await reject
+      .getByLabel("Message envoyé")
+      .fill(
+        `Bonjour Amani,\n\nMerci pour votre candidature au poste de ${title}. Nous avons retenu un autre profil.`,
+      );
+    await reject.getByRole("button", { name: "Envoyer et ne pas retenir" }).click();
+    await expect(page.getByText("Décision envoyée avec son message.")).toBeVisible();
+  } else {
+    await page.goto(`${candidateUrl}?decision=refus`);
+    await expect(page).toHaveURL(/\/decision\?issue=rejected/);
+    const message = page.locator(".t-rc-msg");
+    await expect(message.locator("mark").filter({ hasText: "Amani" })).toBeVisible();
+    await expect(message).toContainText(title);
+    await page.getByRole("link", { name: "Court", exact: true }).click();
+    await expect(message).toContainText("Nous avons retenu un autre profil.");
+    await page.locator("#rc-motif").selectOption("otherCandidate");
+    await page.getByRole("button", { name: "Confirmer et envoyer" }).click();
+    await expect(page.getByRole("heading", { name: "Décision enregistrée" })).toBeVisible();
+    await expect(page.getByRole("main")).toContainText("Annulable encore");
+  }
 
   // The talent receives a decision card, never a bubble, with real ways to bounce back.
   await talent.goto(threadUrl);
@@ -234,6 +276,33 @@ test("le recruteur accepte un candidat avec un modèle au ton choisi", async ({
   await page.goto(pipelineUrl);
   await openCandidateFile(page, /Amani Fictif/);
   const candidateUrl = page.url().split("?")[0]!;
+  if (isMobile) {
+    // Modèle B recruteur (M5): « Retenue » opens the sheet « Recruter » with its message.
+    await page.getByRole("link", { name: "Écrire au candidat" }).filter({ visible: true }).click();
+    await expect(page).toHaveURL(/\/app\/messages\//);
+    const threadUrl = page.url().split("#")[0]!;
+    await page.goto(candidateUrl);
+    const file = page.locator(".nb-rh-fiche").filter({ visible: true });
+    await file.getByRole("button", { name: /^Changer d'étape, actuellement/ }).click();
+    await page
+      .getByRole("dialog", { name: "Changer d'étape" })
+      .getByRole("button", { name: "Retenue", exact: true })
+      .click();
+    const recruit = page.getByRole("dialog", { name: /^Recruter / });
+    const field = recruit.getByLabel("Message envoyé");
+    await expect(field).toContainText("Amani");
+    await field.fill(
+      `${await field.inputValue()}\n\nNous revenons vers vous pour fixer votre arrivée.\n\nÀ très vite dans l'équipe.`,
+    );
+    await recruit.getByRole("button", { name: "Envoyer et recruter" }).click();
+    await expect(page.getByText("Décision envoyée avec son message.")).toBeVisible();
+    await talent.goto(threadUrl);
+    const decision = talent.locator("li").filter({ hasText: "Candidature retenue" });
+    await expect(decision).toContainText("Nous revenons vers vous pour fixer votre arrivée.");
+    await expect(decision).toContainText("À très vite dans l'équipe.");
+    await talent.context().close();
+    return;
+  }
   await page.getByRole("link", { name: "Envoyer un message" }).click();
   await expect(page).toHaveURL(/\/app\/messages\//);
   const threadUrl = page.url().split("#")[0]!;

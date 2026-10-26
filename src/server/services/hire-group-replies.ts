@@ -123,6 +123,8 @@ export type GroupSendInput = {
   reviewed: boolean;
   /** Turns a person's strength into the sentence of their message. */
   strengthText: (strength: Strength) => string;
+  /** A selection told « non retenue » (phone, « Réponse non retenue »): the decision with it. */
+  reject?: boolean;
   company: string;
   signer: string;
 };
@@ -149,7 +151,7 @@ export async function sendGroupReply(
   const { job, people } = await replyRecipients(db, ctx, jobId, input.group, input.ids);
   if (people.length === 0) return { ok: false, error: "nobody" };
   const batchId = randomUUID();
-  const rejecting = input.group === "non-retenus";
+  const rejecting = input.group === "non-retenus" || input.reject === true;
   for (const person of people) {
     const message = personalize(body, {
       firstName: person.firstName,

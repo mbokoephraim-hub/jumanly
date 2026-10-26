@@ -16277,6 +16277,8 @@
         "rated": "{memberName} a rempli la grille d'évaluation",
         "noted": "{memberName} a ajouté une note",
         "interviewScheduled": "Entretien planifié le {date, date, medium} par {memberName}",
+        "assigned": "Dossier confié à {to} par {memberName}",
+        "proposal": "Proposition envoyée par {memberName}",
         "documentRequested": "{memberName} a demandé : {documentName}",
         "rejected": "{memberName} a décidé de ne pas retenir la candidature · Motif : {reason}",
         "rejectionSent": "Message de refus envoyé",
@@ -17036,8 +17038,13 @@
         "candidats": "Candidats",
         "entreprises": "Entreprises",
         "personnes": "Personnes",
-        "publications": "Publications"
+        "publications": "Publications",
+        "nom": "Nom",
+        "competence": "Compétence",
+        "ville": "Ville"
       },
+      "searchBy": "Chercher par",
+      "percent": "{score} %",
       "groups": {
         "offers": "Mes offres · {count}",
         "candidates": "Candidats · {count}",
@@ -17068,9 +17075,9 @@
         "note": "Mes offres : seulement les vôtres. Entreprises et personnes : tout Jumanly."
       },
       "candidatures": {
-        "label": "Rechercher un candidat ou une offre",
-        "placeholder": "Nom, compétence, offre",
-        "note": "Seulement les candidatures de vos offres."
+        "label": "Rechercher un candidat",
+        "placeholder": "Nom, compétence, ville",
+        "note": "Seulement les personnes qui ont candidaté à vos offres."
       },
       "talents": {
         "label": "Rechercher un talent ou une entreprise",
@@ -17717,6 +17724,424 @@
         "move": "Êtes-vous prêt·e à venir sur le lieu du poste ?",
         "salary": "Quel salaire attendez-vous ?"
       }
+    }
+  },
+  "phoneRhCandidatures": {
+    "line": "{unseen, plural, =0 {Aucune nouvelle} one {# nouvelle} other {# nouvelles}} · {total, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} · {high} à fort potentiel",
+    "results": "{count, plural, one {# résultat} other {# résultats}}",
+    "percent": "{score} %",
+    "offers": "Offres",
+    "allOffers": "Toutes les offres · {count}",
+    "offerChip": "{title} · {count}",
+    "row": {
+      "line": "{hasHeadline, select, yes {{headline} · } other {}}{years, plural, =0 {moins d'un an d'expérience} one {# an d'expérience} other {# ans d'expérience}}",
+      "when": "{job} · {when}",
+      "new": "Nouvelle candidature"
+    },
+    "views": {
+      "label": "Vues des candidatures",
+      "potentiel": "Fort potentiel",
+      "toutes": "Toutes",
+      "entretiens": "Entretiens",
+      "decisions": "Décisions"
+    },
+    "diagnostic": {
+      "card": "Orbi a lu {count, plural, one {# CV} other {# CV}}",
+      "cardHint": "Diagnostic de tous les CV, critère par critère",
+      "back": "Candidatures",
+      "empty": "Aucune offre avec des candidatures pour l'instant.",
+      "title": "Diagnostic des CV",
+      "line": "{count, plural, one {# CV lu} other {# CV lus}} · {job}",
+      "all": "couvrent tous les critères",
+      "partial": "en partie",
+      "little": "peu",
+      "skills": "Compétences présentes dans les CV",
+      "of": "{count} sur {total}",
+      "missing": "{skill} manque à {count, plural, one {# candidat} other {# candidats}} : un cours Jumanly peut les aider à progresser.",
+      "closest": "Les plus proches de l'offre",
+      "shortlist": "Présélectionner {name}, encore en « Reçue »"
+    },
+    "high": {
+      "rule": "{count, plural, =0 {Aucun profil à 80 % et plus} one {# profil à 80 % et plus} other {# profils à 80 % et plus}} · classés par score, jamais écartés",
+      "noScore": "Le score de compatibilité n'est pas compris dans votre formule : toutes les candidatures sont dans « Toutes ».",
+      "empty": "Aucune candidature à 80 % et plus pour l'instant. Les autres sont dans « Toutes », jamais écartées.",
+      "sub": "{job} · {stage}"
+    },
+    "notes": {
+      "skills": "Couvre les compétences requises ({skills} vérifiées)",
+      "skillsCount": "Couvre {met} compétences requises sur {total}",
+      "experience": "{title} · {company}",
+      "city": "À {city}, comme le poste"
+    },
+    "checks": {
+      "declared": "Niveau réel sur {skill} (déclaré, non vérifié)",
+      "knockout": "{label}"
+    },
+    "interests": "Ce qui l'intéresse",
+    "availability": {
+      "now": "Immédiate",
+      "from": "À partir du {date, date, long}",
+      "listening": "À l'écoute",
+      "not": "Pas disponible pour l'instant"
+    },
+    "followedBy": "Suivi par {name}",
+    "open": "Ouvrir",
+    "phases": {
+      "label": "Étapes",
+      "recue": "Reçue",
+      "preselection": "Présélection",
+      "entretien": "Entretien",
+      "proposition": "Proposition",
+      "recrute": "Recruté·e",
+      "nonretenu": "Non retenu·e",
+      "empty": "Personne à cette étape pour l'instant."
+    },
+    "sort": {
+      "score": "Par score",
+      "date": "Par date"
+    },
+    "select": {
+      "start": "Sélectionner",
+      "cancel": "Annuler",
+      "write": "{count, plural, =0 {Choisissez des candidats} one {Écrire à # candidat} other {Écrire à # candidats}}"
+    },
+    "interviews": {
+      "label": "Entretiens",
+      "aujourdhui": "Aujourd'hui · {count}",
+      "avenir": "À venir · {count}",
+      "documenter": "À documenter · {count}",
+      "empty": {
+        "aujourdhui": "Aucun entretien aujourd'hui.",
+        "avenir": "Aucun entretien à venir.",
+        "documenter": "Tous vos entretiens sont documentés."
+      },
+      "toFix": "À fixer",
+      "mode": {
+        "video": "Visio",
+        "onsite": "Sur place",
+        "audio": "Appel"
+      },
+      "date": "{date} · {job}",
+      "with": "Avec {names}",
+      "document": "Documenter l'entretien",
+      "join": "Rejoindre",
+      "see": "Voir l'entretien",
+      "file": "Fiche"
+    },
+    "decisions": {
+      "label": "Décisions",
+      "propositions": "Propositions · {count}",
+      "recrutes": "Recrutés · {count}",
+      "nonretenus": "Non retenus · {count}",
+      "answerAll": "Répondre {count, plural, one {à la personne sans réponse} other {aux # sans réponse}}",
+      "answerAllHint": "Chaque candidat reçoit une réponse, même courte",
+      "empty": {
+        "propositions": "Aucune proposition en cours.",
+        "recrutes": "Personne n'est encore recruté.",
+        "nonretenus": "Aucun candidat non retenu."
+      },
+      "sent": "Envoyée {date}, en attente de réponse",
+      "hired": "Recruté·e",
+      "waiting": "Sans réponse pour l'instant",
+      "answered": "Réponse envoyée",
+      "rejected": "Non retenu·e"
+    },
+    "group": {
+      "sent": "{count, plural, one {Message envoyé à # candidat.} other {Message envoyé à # candidats.}}",
+      "error": "Le message n'est pas parti. Réessayez.",
+      "title": "Message à {count, plural, =0 {0 candidat} one {# candidat} other {# candidats}}",
+      "template": "Modèle",
+      "templates": {
+        "entretien": "Invitation à un entretien",
+        "document": "Demande de document",
+        "recue": "Candidature bien reçue",
+        "nonretenu": "Réponse non retenue"
+      },
+      "preview": "Aperçu pour la première personne",
+      "send": "Envoyer à chacun",
+      "body": {
+        "entretien": "Bonjour {prenom}, votre profil nous intéresse pour le poste « {poste} ». Répondez à ce message avec vos disponibilités pour un entretien. {signer}, {entreprise}",
+        "document": "Bonjour {prenom}, pour avancer sur votre candidature au poste « {poste} », pouvez-vous nous envoyer votre diplôme ou une attestation en réponse à ce message ? {signer}, {entreprise}",
+        "recue": "Bonjour {prenom}, nous avons bien reçu votre candidature au poste « {poste} ». Nous la lisons avec attention et revenons vers vous. {signer}, {entreprise}",
+        "nonretenu": "Bonjour {prenom}, merci pour votre candidature au poste « {poste} ». Nous avons choisi un autre profil cette fois. Votre profil reste visible pour nos prochaines offres. {signer}, {entreprise}"
+      }
+    },
+    "file": {
+      "back": "Candidatures",
+      "cap": "Cap : {job}",
+      "years": "{count, plural, =0 {Moins d'un an d'expérience} one {# an d'expérience} other {# ans d'expérience}}",
+      "source": {
+        "direct": "reçue {when} via Explorer",
+        "invitation": "reçue {when} sur invitation",
+        "talent_search": "reçue {when} après une proposition"
+      },
+      "slot": "{date}, {time}",
+      "primary": {
+        "document": "Documenter l'entretien",
+        "plan": "Planifier un entretien",
+        "propose": "Faire une proposition",
+        "recruit": "Recruter {name}"
+      },
+      "orbi": "Ce qu'Orbi a relevé",
+      "check": "À vérifier en entretien",
+      "availability": "Disponibilité : {value}",
+      "interview": "Entretien",
+      "write": "Écrire au candidat",
+      "error": "L'action n'a pas abouti. Réessayez.",
+      "ok": {
+        "deplacee": "Étape changée.",
+        "note": "Note ajoutée.",
+        "confie": "Dossier confié.",
+        "decision": "Décision envoyée avec son message.",
+        "proposition": "Proposition envoyée.",
+        "document": "Demande de document envoyée.",
+        "evaluation": "Évaluation enregistrée.",
+        "entretien": "Invitation envoyée."
+      }
+    },
+    "cv": {
+      "months": "{count} mois",
+      "years": "{count, plural, one {# an} other {# ans}}",
+      "experience": "Expérience",
+      "education": "Formation",
+      "skills": "Compétences",
+      "none": "Rien d'indiqué.",
+      "degree": "{degree}, {school}",
+      "year": "({year})",
+      "certificate": "{title} · attestation Jumanly",
+      "verified": "vérifiée",
+      "declared": "déclarée"
+    },
+    "answers": {
+      "none": "Pas de question ni de lettre pour cette offre.",
+      "yes": "Oui",
+      "no": "Non",
+      "empty": "Pas de réponse",
+      "letter": "Lettre de motivation",
+      "documents": "Documents",
+      "pdf": "PDF",
+      "cv": "CV.pdf",
+      "cvHint": "Le CV tel qu'envoyé",
+      "certificateHint": "Vérifiable en ligne",
+      "noDocument": "Aucun document joint."
+    },
+    "notes_": {
+      "label": "Note pour l'équipe",
+      "placeholder": "Ajouter une note pour l'équipe",
+      "add": "Ajouter",
+      "rule": "Les notes sont visibles par l'équipe de recrutement, jamais par le candidat."
+    },
+    "why": {
+      "open": "Pourquoi ?",
+      "none": "Score non calculé",
+      "title": "Pourquoi {score} % ?",
+      "band": {
+        "veryHigh": "Très compatible · calcul fixe, pas une décision",
+        "high": "Compatible · calcul fixe, pas une décision",
+        "partial": "Partiellement compatible · calcul fixe, pas une décision",
+        "low": "Peu compatible · calcul fixe, pas une décision"
+      },
+      "bandShort": {
+        "veryHigh": "Très compatible",
+        "high": "Compatible",
+        "partial": "Partiellement compatible",
+        "low": "Peu compatible"
+      },
+      "criteria": {
+        "skills_required": "Compétences requises",
+        "skills_preferred": "Compétences souhaitées",
+        "experience": "Expérience",
+        "education": "Formation",
+        "languages": "Langues",
+        "location": "Lieu et mode de travail",
+        "contract": "Contrat et disponibilité",
+        "semantic": "Proximité du profil"
+      },
+      "points": "{points} / {weight}",
+      "locked": "Le détail critère par critère s'ouvre avec une formule qui comprend le score expliqué.",
+      "notUsed": "Jamais utilisés : nom, genre, âge, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise."
+    },
+    "stage": {
+      "label": "Étape",
+      "change": "Changer d'étape, actuellement {stage}"
+    },
+    "tabs": {
+      "label": "Rubriques du dossier",
+      "resume": "Résumé",
+      "cv": "CV",
+      "reponses": "Réponses",
+      "notes": "Notes",
+      "historique": "Historique"
+    },
+    "menu": {
+      "open": "Plus d'actions pour {name}",
+      "stage": "Changer d'étape",
+      "stageHint": "Actuellement : {stage}",
+      "assign": "Répartir à un collègue",
+      "assignHint": "Suivi par {name}",
+      "assignNobody": "Personne ne suit encore ce dossier",
+      "plan": "Planifier un entretien",
+      "planned": "Déjà prévu : {date}",
+      "planHint": "Visio, sur place ou appel",
+      "document": "Demander un document",
+      "documentHint": "Diplôme, attestation, références",
+      "pdf": "Télécharger le PDF",
+      "pdfHint": "Fiche, CV, réponses, notes",
+      "reject": "Ne pas retenir",
+      "rejectHint": "Avec un message bienveillant"
+    },
+    "assign": {
+      "title": "Confier {name} à",
+      "hint": "La personne choisie suit le dossier et reçoit une notification.",
+      "me": "{name} (moi)",
+      "follows": "{count, plural, =0 {0 candidat suivi} one {# candidat suivi} other {# candidats suivis}}"
+    },
+    "pdf": {
+      "title": "Télécharger en PDF",
+      "content": "Contenu",
+      "parts": {
+        "fiche": "Fiche et score expliqué",
+        "cv": "CV",
+        "reponses": "Réponses et documents",
+        "notes": "Notes et évaluations",
+        "historique": "Historique des décisions"
+      },
+      "rule": "Le téléchargement est enregistré dans le journal de l'entreprise.",
+      "download": "Télécharger",
+      "sections": {
+        "fiche": "Fiche et score expliqué",
+        "cv": "CV",
+        "reponses": "Réponses et documents",
+        "notes": "Notes et évaluations",
+        "historique": "Historique des décisions"
+      },
+      "job": "Candidature : {job}",
+      "score": "Compatibilité : {score} % (calcul fixe, pas une décision)",
+      "criterion": "{name} : {points} / {weight}",
+      "notUsed": "Jamais utilisés : nom, genre, âge, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise.",
+      "criteria": {
+        "skills_required": "Compétences requises",
+        "skills_preferred": "Compétences souhaitées",
+        "experience": "Expérience",
+        "education": "Formation",
+        "languages": "Langues",
+        "location": "Lieu et mode de travail",
+        "contract": "Contrat et disponibilité",
+        "semantic": "Proximité du profil"
+      },
+      "experience": "{title}, {company} ({from} – {to})",
+      "now": "aujourd'hui",
+      "education": "{degree}, {school}",
+      "skills": "Compétences : {list}",
+      "verified": "{name} (vérifiée)",
+      "empty": "Rien à signaler.",
+      "letter": "Lettre de motivation",
+      "documents": "Documents joints : {list}",
+      "evaluation": "Évaluation de {name} : {comment}",
+      "documentTitle": "Dossier de candidature · {name}",
+      "footer": "Document confidentiel de {company}, généré par Jumanly. Réservé à l'équipe de recrutement."
+    },
+    "reject": {
+      "title": "Ne pas retenir {name}",
+      "reason": "Motif · pour vous seulement",
+      "reasons": {
+        "skills": "Compétences éloignées du poste",
+        "otherCandidate": "Autre candidat plus proche",
+        "other": "Disponibilité incompatible",
+        "positionClosed": "Poste pourvu"
+      },
+      "messageLabel": "Message envoyé",
+      "message": "Bonjour {name}, merci pour votre candidature au poste « {job} ». Nous avons choisi un autre profil cette fois. Votre profil reste visible pour nos prochaines offres. {company}",
+      "send": "Envoyer et ne pas retenir"
+    },
+    "recruit": {
+      "title": "Recruter {name}",
+      "message": "Bonjour {name}, bonne nouvelle : nous vous retenons pour le poste « {job} ». Nous revenons vers vous très vite pour la suite. {company}",
+      "send": "Envoyer et recruter"
+    },
+    "document": {
+      "kinds": {
+        "diploma": "Diplôme",
+        "certificate": "Attestation",
+        "references": "Références"
+      },
+      "name": "Document demandé",
+      "due": "À envoyer avant le",
+      "note": "Un mot (facultatif)",
+      "send": "Envoyer la demande"
+    },
+    "plan": {
+      "back": "Retour",
+      "title": "Entretien avec {name}",
+      "day": "Jour",
+      "slots": "Créneau · libre pour vous",
+      "slotsWith": "Créneau · libres pour {names} et vous",
+      "time": "{hours} h {minutes}",
+      "full": "Plus de créneau libre ce jour-là : choisissez un autre jour.",
+      "how": "Comment",
+      "modes": {
+        "video": "Visio",
+        "onsite": "Sur place",
+        "audio": "Appel"
+      },
+      "modesHint": {
+        "video": "Lien envoyé avec l'invitation",
+        "onsite": "À l'adresse de l'entreprise",
+        "audio": "Appel dans l'app"
+      },
+      "link": "Lien de la visio (facultatif)",
+      "address": "Adresse",
+      "duration": "Durée",
+      "minutes": "{count, plural, =60 {1 h} other {# min}}",
+      "with": "Avec",
+      "send": "Envoyer l'invitation"
+    },
+    "evaluation": {
+      "back": "Retour",
+      "title": "Entretien de {name}",
+      "mode": {
+        "video": "Visio",
+        "onsite": "Sur place",
+        "audio": "Appel"
+      },
+      "with": "avec {names}",
+      "score": "{value} / {max}",
+      "star": "{value} sur {max}",
+      "strengths": "Points forts",
+      "next": "Suite proposée",
+      "nextSteps": {
+        "yes": "Poursuivre",
+        "maybe": "À revoir",
+        "no": "Ne pas poursuivre"
+      },
+      "save": "Enregistrer l'évaluation"
+    },
+    "proposal": {
+      "back": "Retour",
+      "title": "Proposition à {name}",
+      "salary": "Salaire mensuel (USD)",
+      "start": "Date de début",
+      "message": "Message",
+      "default": "Bonjour {name}, toute l'équipe a apprécié nos échanges. Nous avons le plaisir de vous proposer le poste de {job}. Vous trouverez les détails ci-dessous. {company}",
+      "rule": "La personne accepte, refuse ou pose une question depuis Messages. Vous êtes prévenu·e.",
+      "send": "Envoyer la proposition",
+      "error": "Vérifiez le salaire, la date et le message (10 caractères au moins).",
+      "salaryLine": "Salaire mensuel : {amount}",
+      "startLine": "Date de début : {date}"
+    },
+    "sent": {
+      "title": "Invitation envoyée",
+      "line": "{name} reçoit l'invitation dans Messages et par e-mail.",
+      "titleWith": "Entretien avec {name}",
+      "confirmed": "Le créneau est confirmé.",
+      "pending": "En attente de la réponse du candidat.",
+      "when": "{date} · {time}",
+      "calendar": "Ajouter à mon agenda",
+      "file": "Revenir à la fiche",
+      "all": "Voir tous les entretiens"
+    },
+    "calendar": {
+      "summary": "Entretien avec {name} · {job}"
     }
   },
   "pricing": {
@@ -19615,6 +20040,7 @@
       "orgJoinAccepted": "Votre demande pour rejoindre {org} est acceptée. Bienvenue dans l'équipe !",
       "orgJoinDeclined": "Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation.",
       "jobEnding": "{days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}}",
+      "candidateAssigned": "Un collègue vous confie le dossier de {candidate} pour « {jobTitle} ».",
       "feedReply": "{name} a répondu à votre publication.",
       "feedMention": "{name} vous a mentionné dans une réponse.",
       "feedLike": "{name} a aimé votre publication.",

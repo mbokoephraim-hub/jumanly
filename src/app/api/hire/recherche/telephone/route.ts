@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getTranslations } from "next-intl/server";
+import { getFormatter, getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { getCurrentUser } from "@/server/auth/session";
 import { db } from "@/server/db";
@@ -7,6 +7,10 @@ import { getActiveSpace } from "@/server/hire-context";
 import { exploreSearch } from "@/server/services/explore";
 import { searchPosts } from "@/server/services/feed";
 import { RH_SEARCH_SCOPES, recruiterPhoneSearch } from "@/server/services/hire-phone";
+import {
+  RH_APPLICATION_SEARCH,
+  rhSearchApplications,
+} from "@/server/services/hire-phone-candidatures";
 
 const querySchema = z.object({
   q: z.string().trim().min(1).max(100),
@@ -32,13 +36,58 @@ export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
   const parsed = querySchema.safeParse({ q: params.get("q") ?? "", dans: params.get("dans") });
   const fil = params.get("onglet") === "fil";
-  if (!parsed.success) return NextResponse.json({ groups: [] });
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ groups: [] }, { status: 401 });
   const space = await getActiveSpace(user.id);
   if (!space) return NextResponse.json({ groups: [] }, { status: 403 });
-  const { q, dans } = parsed.data;
   const t = await getTranslations("phoneRh.search");
+  // Candidatures (Modèle B recruteur M5, planche 065): the people who applied, by name, skill or
+  // city, with their score; never anyone who did not apply to the organization's offers.
+  if (params.get("onglet") === "candidatures") {
+    const q = (params.get("q") ?? "").trim().slice(0, 100);
+    if (!q) return NextResponse.json({ groups: [] });
+    const by = RH_APPLICATION_SEARCH.find((value) => value === params.get("dans")) ?? "tout";
+    const [rows, format] = await Promise.all([
+      rhSearchApplications(
+        db,
+        { userId: user.id, organizationId: space.organizationId, role: space.role },
+        q,
+        by,
+      ),
+      getFormatter(),
+    ]);
+    const tc = await getTranslations("phoneRhCandidatures");
+    return NextResponse.json(
+      {
+        groups: rows.length
+          ? [
+              {
+                title: tc("results", { count: rows.length }),
+                items: rows.map((row) => ({
+                  href: `/app/hire/candidats/${row.id}`,
+                  title: row.name,
+                  sub: tc("row.line", {
+                    headline: row.headline ?? row.firstSkill ?? "",
+                    hasHeadline: row.headline || row.firstSkill ? "yes" : "no",
+                    years: row.years,
+                  }),
+                  sub2: tc("row.when", {
+                    job: row.jobTitle,
+                    when: format.relativeTime(row.createdAt),
+                  }),
+                  initials: initials(row.name),
+                  score: row.score,
+                  unseen: row.unseen,
+                })),
+              },
+            ]
+          : [],
+      },
+      { headers: { "Cache-Control": "private, no-store" } },
+    );
+  }
+  if (!parsed.success) return NextResponse.json({ groups: [] });
+  const { q, dans } = parsed.data;
   // The Fil searches posts, people and companies, never the organization's offers or candidates.
   const want = (scope: (typeof RH_SEARCH_SCOPES)[number]) =>
     (dans === "tout" && !(fil && (scope === "offres" || scope === "candidats"))) || dans === scope;

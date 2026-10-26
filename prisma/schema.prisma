@@ -780,98 +780,100 @@ enum UserStatus {
 }
 
 model User {
-  id                  String                    @id @default(cuid(2))
-  name                String
-  email               String                    @unique
-  emailVerified       Boolean                   @default(false)
-  image               String?
-  firstName           String?
-  lastName            String?
-  country             String?
-  city                String?
-  locale              String                    @default("fr")
-  platformRole        PlatformRole              @default(user)
-  status              UserStatus                @default(active)
+  id                   String                    @id @default(cuid(2))
+  name                 String
+  email                String                    @unique
+  emailVerified        Boolean                   @default(false)
+  image                String?
+  firstName            String?
+  lastName             String?
+  country              String?
+  city                 String?
+  locale               String                    @default("fr")
+  platformRole         PlatformRole              @default(user)
+  status               UserStatus                @default(active)
   /// Consent to AI suggestions (CLAUDE.md § 12): date of consent, null when withdrawn.
-  aiConsentAt         DateTime?
-  newsletter          Boolean                   @default(false)
+  aiConsentAt          DateTime?
+  newsletter           Boolean                   @default(false)
   /// « Réduire les animations » (docs/experience-animee § 0.4): no motion in the signed-in space.
-  reduceMotion        Boolean                   @default(false)
+  reduceMotion         Boolean                   @default(false)
   /// Clair, Sombre or Auto (follows the phone), docs/refonte-mobile brief § 2.10.
-  appearance          UserAppearance            @default(auto)
+  appearance           UserAppearance            @default(auto)
   /// Full welcome intro seen (docs/refonte-connexion § 7): played once per account, on any device.
-  introSeenAt         DateTime?
-  termsAcceptedAt     DateTime?
+  introSeenAt          DateTime?
+  termsAcceptedAt      DateTime?
   /// Account deletion requested: effective at this date unless the user signs in again.
-  deletionScheduledAt DateTime?
-  twoFactorEnabled    Boolean                   @default(false)
+  deletionScheduledAt  DateTime?
+  twoFactorEnabled     Boolean                   @default(false)
   /// Notification categories turned off in Paramètres › Notifications (applications, messages,
   /// learning, billing): no in-app notification of that category is created for the person.
-  notificationsMuted  String[]                  @default([])
+  notificationsMuted   String[]                  @default([])
   /// « Recevoir aussi par e-mail » (Paramètres › Notifications): reminders also sent by e-mail.
   /// Receipts and security e-mails are always sent.
-  notificationEmails  Boolean                   @default(true)
+  notificationEmails   Boolean                   @default(true)
   /// Last page seen in the signed-in space, for « En ligne » (recruteur lot 6). Never shown when
   /// `showPresence` is off.
-  lastSeenAt          DateTime?
+  lastSeenAt           DateTime?
   /// « Montrer quand je suis en ligne » (Paramètres): off, nobody sees it, and the person does not
   /// see the others either.
-  showPresence        Boolean                   @default(true)
+  showPresence         Boolean                   @default(true)
   /// « Accusés de lecture » (Paramètres): off, « Lu » is neither sent nor shown, both ways.
-  readReceipts        Boolean                   @default(true)
+  readReceipts         Boolean                   @default(true)
   /// End-of-offer reminders (Paramètres › Messagerie et rappels): any of ["d7", "d3", "d1", "d0"],
   /// J-3 only by default (brief recruteur § 2.16 bis).
-  endingReminders     String[]                  @default(["d3"])
-  joinRequests        OrgJoinRequest[]
-  recruiterProfile    RecruiterProfile?
-  sessions            Session[]
-  accounts            Account[]
-  twoFactors          TwoFactor[]
-  memberships         Membership[]
-  talentProfile       TalentProfile?
-  diagnostics         CareerDiagnostic[]
-  diagnosticDraft     CareerDiagnosticDraft?
-  profilePhoto        ProfilePhoto?
-  profileBanner       ProfileBanner?
-  savedJobs           SavedJob[]
-  applicationDrafts   ApplicationDraft[]
-  jobsCreated         Job[]                     @relation("JobCreator")
-  jobsAssigned        Job[]                     @relation("JobAssignee")
-  jobAssignments      JobAssignment[]
-  scorecards          Scorecard[]
-  talentPools         TalentPool[]
-  contactRequestsSent ContactRequest[]
-  interviewsOrganized Interview[]
-  notifications       Notification[]
-  participations      ConversationParticipant[]
-  connectionsSent     Connection[]              @relation("ConnectionRequester")
-  connectionsReceived Connection[]              @relation("ConnectionAddressee")
-  enrollments         Enrollment[]
-  learningPaths       LearningPathFollow[]
+  endingReminders      String[]                  @default(["d3"])
+  joinRequests         OrgJoinRequest[]
+  recruiterProfile     RecruiterProfile?
+  sessions             Session[]
+  accounts             Account[]
+  twoFactors           TwoFactor[]
+  memberships          Membership[]
+  talentProfile        TalentProfile?
+  diagnostics          CareerDiagnostic[]
+  diagnosticDraft      CareerDiagnosticDraft?
+  profilePhoto         ProfilePhoto?
+  profileBanner        ProfileBanner?
+  savedJobs            SavedJob[]
+  applicationDrafts    ApplicationDraft[]
+  jobsCreated          Job[]                     @relation("JobCreator")
+  jobsAssigned         Job[]                     @relation("JobAssignee")
+  /// Applications a colleague entrusted to this member (Modèle B recruteur M5, « Répartir »).
+  applicationsAssigned Application[]             @relation("ApplicationAssignee")
+  jobAssignments       JobAssignment[]
+  scorecards           Scorecard[]
+  talentPools          TalentPool[]
+  contactRequestsSent  ContactRequest[]
+  interviewsOrganized  Interview[]
+  notifications        Notification[]
+  participations       ConversationParticipant[]
+  connectionsSent      Connection[]              @relation("ConnectionRequester")
+  connectionsReceived  Connection[]              @relation("ConnectionAddressee")
+  enrollments          Enrollment[]
+  learningPaths        LearningPathFollow[]
   /// Le Fil (Modèle B, lot B3).
-  feedPosts           FeedPost[]                @relation("FeedPostAuthor")
-  feedLikes           FeedLike[]
-  feedReposts         FeedRepost[]
-  feedSaves           FeedSave[]
-  feedFollows         FeedFollow[]              @relation("FeedFollower")
-  feedFollowers       FeedFollow[]              @relation("FeedFollowedUser")
-  feedHiddenTypes     FeedHiddenType[]
-  feedEvents          FeedEventParticipant[]
-  feedImages          FeedImage[]
-  quizAttempts        QuizAttempt[]
-  lessonNotes         LessonNote[]
-  exerciseSubmissions ExerciseSubmission[]
-  lessonProgress      LessonProgress[]
-  savedCourses        SavedCourse[]
-  aiUsages            AiUsage[]
-  orbiConversations   OrbiConversation[]
-  aiSuggestions       AiSuggestion[]
-  matchDisputes       MatchDispute[]            @relation("DisputeAuthor")
-  progressPlan        ProgressPlan?
-  licenses            License[]
-  interviewSessions   InterviewSession[]
-  createdAt           DateTime                  @default(now())
-  updatedAt           DateTime                  @updatedAt
+  feedPosts            FeedPost[]                @relation("FeedPostAuthor")
+  feedLikes            FeedLike[]
+  feedReposts          FeedRepost[]
+  feedSaves            FeedSave[]
+  feedFollows          FeedFollow[]              @relation("FeedFollower")
+  feedFollowers        FeedFollow[]              @relation("FeedFollowedUser")
+  feedHiddenTypes      FeedHiddenType[]
+  feedEvents           FeedEventParticipant[]
+  feedImages           FeedImage[]
+  quizAttempts         QuizAttempt[]
+  lessonNotes          LessonNote[]
+  exerciseSubmissions  ExerciseSubmission[]
+  lessonProgress       LessonProgress[]
+  savedCourses         SavedCourse[]
+  aiUsages             AiUsage[]
+  orbiConversations    OrbiConversation[]
+  aiSuggestions        AiSuggestion[]
+  matchDisputes        MatchDispute[]            @relation("DisputeAuthor")
+  progressPlan         ProgressPlan?
+  licenses             License[]
+  interviewSessions    InterviewSession[]
+  createdAt            DateTime                  @default(now())
+  updatedAt            DateTime                  @updatedAt
 
   @@map("user")
 }
@@ -1365,6 +1367,9 @@ model Application {
   /// « Liste des retenus » (recruteur lot 6): kept for the next stage by a member, never by Orbi.
   shortlistedAt    DateTime?
   shortlistedById  String?
+  /// « Répartir à un collègue » (Modèle B recruteur M5): the member who follows the file.
+  assignedToId     String?
+  assignedTo       User?              @relation("ApplicationAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
   events           ApplicationEvent[]
   conversation     Conversation?
   scorecards       Scorecard[]
@@ -1374,6 +1379,7 @@ model Application {
 
   @@unique([jobId, profileId])
   @@index([profileId, status])
+  @@index([assignedToId])
 }
 
 model ApplicationEvent {

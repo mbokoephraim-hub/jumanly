@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, getTranslations } from "next-intl/server";
+import { getFormatter, getMessages, getTranslations } from "next-intl/server";
 import { InterviewPlanner, type PlannerMode } from "@/components/recruiter/interview-planner";
 import { FlowHead } from "@/components/talent/flow-head";
 import { OrbiMark } from "@/components/talent/orbi-mark";
@@ -24,6 +24,8 @@ import {
   tidyText,
 } from "@/server/services/message-templates";
 import { cheapestPlanWhere, listPublicPlans } from "@/server/services/plans";
+import { isPhone } from "@/server/view";
+import { RhPlanner } from "@/components/phone/recruteur/candidat-forms";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hireInterviews.plan");
@@ -32,6 +34,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const one = (value: string | string[] | undefined) =>
   typeof value === "string" ? value : undefined;
+
+const capitalize = (text: string) => text.charAt(0).toLocaleUpperCase("fr") + text.slice(1);
 
 const invitationTones = ["chaleureux", "court", "formel"] as const;
 
@@ -137,6 +141,63 @@ export default async function PlanInterviewPage({
           ? t("plan.error.other")
           : null;
   const messages = await getMessages();
+  // The planner of the recruiter's phone (Modèle B recruteur M5, planche Recruteur-planifier).
+  if (!existing && (await isPhone())) {
+    const days: { key: string; weekday: string; day: string }[] = [];
+    for (let index = 0; days.length < 6 && index < PLANNER_DAYS; index += 1) {
+      const key = addDays(data.today, index);
+      const date = new Date(`${key}T12:00:00Z`);
+      const weekday = date.getUTCDay();
+      if (weekday === 0 || weekday === 6) continue;
+      // Today only while a time of the planche is still ahead.
+      if (index === 0 && data.nowMinutes >= 16 * 60 + 30) continue;
+      days.push({
+        key,
+        weekday: capitalize(
+          (await getFormatter()).dateTime(date, { weekday: "short", timeZone: "UTC" }),
+        ),
+        day: String(date.getUTCDate()),
+      });
+    }
+    const [titles, org] = await Promise.all([
+      db.recruiterProfile.findMany({
+        where: { userId: { in: data.members.map((member) => member.id) } },
+        select: { userId: true, jobTitle: true },
+      }),
+      db.organization.findUnique({
+        where: { id: ctx.organizationId },
+        select: { name: true, city: true },
+      }),
+    ]);
+    return (
+      <NextIntlClientProvider messages={pickMessages(messages, ["phoneRhCandidatures", "phone"])}>
+        <RhPlanner
+          data={{
+            applicationId: application.id,
+            back: fileHref,
+            firstName,
+            days,
+            today: data.today,
+            nowMinutes: data.nowMinutes,
+            busy: data.busy,
+            me: ctx.userId,
+            members: data.members
+              .filter((member) => member.id !== ctx.userId)
+              .map((member) => ({
+                id: member.id,
+                name: member.name,
+                initials: initials(member.name),
+                title: titles.find((item) => item.userId === member.id)?.jobTitle ?? null,
+              })),
+            timezone: timeZone,
+            address: [org?.name, org?.city].filter(Boolean).join(", "),
+            message: tones.chaleureux.body,
+            error,
+          }}
+        />
+      </NextIntlClientProvider>
+    );
+  }
   const duration = existing
     ? existing.durationMinutes
     : (INTERVIEW_DURATIONS as readonly number[]).includes(45)
