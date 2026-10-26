@@ -51,7 +51,7 @@ export default async function PlanInterviewPage({
 }: PageProps<"/app/hire/candidats/[applicationId]/entretien">) {
   const [{ applicationId }, query] = await Promise.all([params, searchParams]);
   const fileHref = `/app/hire/candidats/${applicationId}`;
-  const { user, space, ctx } = await requireHire(`${fileHref}/entretien`, "manage");
+  const { user, space, ctx } = await requireHire(`${fileHref}/entretien`, "manage", "interviews");
   const t = await getTranslations("hireInterviews");
   const ui = await getTranslations("ui");
   const now = new Date();

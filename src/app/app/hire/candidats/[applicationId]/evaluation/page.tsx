@@ -45,7 +45,7 @@ export default async function EvaluationPage({
 }: PageProps<"/app/hire/candidats/[applicationId]/evaluation">) {
   const [{ applicationId }, query] = await Promise.all([params, searchParams]);
   const fileHref = `/app/hire/candidats/${applicationId}`;
-  const { ctx } = await requireHire(`${fileHref}/evaluation`, "readApplications");
+  const { ctx } = await requireHire(`${fileHref}/evaluation`, "readApplications", "evaluate");
   const t = await getTranslations("hireInterviews.evaluation");
   const format = await getFormatter();
   const application = await getOrgApplication(db, ctx, applicationId).catch((error) => {

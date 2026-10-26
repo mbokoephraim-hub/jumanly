@@ -34,7 +34,7 @@ const sourceColor = { direct: "#2fd3a6", invitation: "#a6f26b", talent_search: "
  */
 export default async function ReportsPage({ searchParams }: PageProps<"/app/hire/rapports">) {
   const query = await searchParams;
-  const { ctx, space } = await requireHire("/app/hire/rapports");
+  const { ctx, space } = await requireHire("/app/hire/rapports", undefined, "stats");
   // On a phone, « Mes statistiques » of Compte (planche Recruteur-compte-stats) (Modèle B recruteur M8).
   if (await isPhone()) redirect("/app/hire/compte/statistiques");
   if (ctx.role === "hiring_manager") notFound();

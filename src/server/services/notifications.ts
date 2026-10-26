@@ -67,6 +67,10 @@ export const notificationTypes = [
   // Modèle B recruteur M8: a member asks the administrators to add a colleague or a plan.
   "colleagueProposed",
   "planRequested",
+  // Étape 3, A2: the tasks an administrator entrusts to a member (Équipe).
+  "orgTaskAssigned",
+  "orgTaskReminder",
+  "orgTaskDone",
   // Le Fil (Modèle B, lot B3): answers, names, J'aime, republications and quotes.
   "feedReply",
   "feedMention",
@@ -156,6 +160,9 @@ export const recruiterNotificationCategories = {
     "colleagueProposed",
     "planRequested",
     "orgJoinRequest",
+    "orgTaskAssigned",
+    "orgTaskReminder",
+    "orgTaskDone",
   ],
 } as const satisfies Record<string, readonly NotificationType[]>;
 export type RecruiterNotificationCategory = keyof typeof recruiterNotificationCategories;

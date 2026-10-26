@@ -52,7 +52,7 @@ const flushMails = () =>
  * finale », which opens the decision screen (the decision is never made by a move alone).
  */
 export async function moveCandidateAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire", "manage");
+  const { ctx } = await requireHire("/app/hire", "manage", "sort");
   const applicationId = id(formData.get("application"));
   const stageId = id(formData.get("stage"));
   if (stageId === "decision") redirect(`${fileOf(applicationId)}/decision`);
@@ -108,7 +108,7 @@ async function analysisText(points: { strengths: AnalysisPoint[]; toVerify: Anal
 
 /** « Ajouter aux notes »: the member's own private note, which they can edit or delete. */
 export async function analysisToNoteAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire", "evaluate");
+  const { ctx } = await requireHire("/app/hire", "evaluate", "evaluate");
   const applicationId = id(formData.get("application"));
   const application = await guarded(
     () => getOrgApplication(db, ctx, applicationId),
@@ -159,7 +159,7 @@ const decisionSchema = z.object({
 
 /** « Confirmer et envoyer » (planche `DECIS`): the message was read; it leaves now. */
 export async function decideAction(formData: FormData) {
-  const { user, space, ctx } = await requireHire("/app/hire", "manage");
+  const { user, space, ctx } = await requireHire("/app/hire", "manage", "sort");
   const applicationId = id(formData.get("application"));
   const page = `${fileOf(applicationId)}/decision`;
   const parsed = decisionSchema.safeParse(Object.fromEntries(formData));
@@ -204,7 +204,7 @@ export async function decideAction(formData: FormData) {
 
 /** « Annuler » within 10 minutes of the decision. */
 export async function undoDecisionAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire", "manage");
+  const { ctx } = await requireHire("/app/hire", "manage", "sort");
   const applicationId = id(formData.get("application"));
   const result = await guarded(
     () => undoDecision(db, ctx, applicationId),
@@ -217,7 +217,7 @@ export async function undoDecisionAction(formData: FormData) {
 
 /** « Plus tard »: the candidate waits in « Décision finale » when the offer has that stage. */
 export async function laterDecisionAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire", "manage");
+  const { ctx } = await requireHire("/app/hire", "manage", "sort");
   const applicationId = id(formData.get("application"));
   const application = await guarded(
     () => getOrgApplication(db, ctx, applicationId),

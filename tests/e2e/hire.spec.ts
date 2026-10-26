@@ -414,7 +414,10 @@ test("l'admin consulte la modération des offres et les signalements", async ({ 
 
 // Prompt 4 bis (screens 63 to 66): an administrator frames the company's banner and logo; every
 // offer shows them, and removing the banner brings the Jumanly pattern back.
-test("l'administrateur pose la bannière et le logo de l'entreprise", async ({ page }) => {
+test("l'administrateur pose la bannière et le logo de l'entreprise", async ({ page, isMobile }) => {
+  // The company's pages are on a computer only (étape 3): a phone shows « À ouvrir sur un
+  // ordinateur » there (tests/e2e/web-admin-equipe.spec.ts).
+  test.skip(isMobile, "La page entreprise se modifie sur ordinateur.");
   test.setTimeout(120_000);
   await signUpRecruiter(page, testEmail("marque"), "Marque fictive e2e");
   await page.goto("/app/organisation/modifier");

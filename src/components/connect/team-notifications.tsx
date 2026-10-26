@@ -80,6 +80,9 @@ const categoryOf: Record<NotificationType, Category> = {
   teamMessage: "messages",
   colleagueProposed: "account",
   planRequested: "account",
+  orgTaskAssigned: "applications",
+  orgTaskReminder: "applications",
+  orgTaskDone: "applications",
 };
 
 const categoryStyle: Record<Category, { icon: IconName; tile: string }> = {

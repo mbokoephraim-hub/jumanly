@@ -22,7 +22,28 @@ export type RecruiterSideNavLabels = Record<(typeof recruiterTabs)[number]["key"
     shortcut: string;
     /** « Organisation active : … Changer ». */
     org: string;
+    /** ENTREPRISE (étape 3): the owner's and the administrators' part, web only. */
+    entreprise: Record<(typeof companyItems)[number]["key"] | "aria" | "title", string>;
   };
+
+/**
+ * ENTREPRISE (étape 3, brief § 2): Équipe, Page entreprise, Formule et facturation, Journal and
+ * Réglages, shown to `org_owner` and `org_admin` only.
+ */
+export const companyItems = [
+  { key: "team", href: "/app/organisation/equipe", icon: "candidats" },
+  { key: "page", href: "/app/organisation", icon: "entreprise" },
+  { key: "billing", href: "/app/abonnement", icon: "portefeuille" },
+  { key: "journal", href: "/app/parametres/consultations", icon: "confidentialite" },
+  { key: "settings", href: "/app/hire/modeles", icon: "reglages" },
+] as const;
+
+function companyOn(pathname: string, href: string) {
+  // « Page entreprise » covers /app/organisation and its pages, except Équipe.
+  if (href === "/app/organisation")
+    return inside(pathname, href) && !inside(pathname, "/app/organisation/equipe");
+  return inside(pathname, href);
+}
 
 /** Full-screen pages of the recruiter (first steps): no frame around them. */
 export function recruiterFullScreen(pathname: string) {
@@ -54,8 +75,11 @@ export function RecruiterSideNav({
   name,
   line,
   org,
+  company = false,
 }: {
   labels: RecruiterSideNavLabels;
+  /** The member administers the organization: ENTREPRISE is shown. */
+  company?: boolean;
   unreadMessages: number;
   /** Photo or initials, already drawn. */
   avatar: ReactNode;
@@ -161,6 +185,33 @@ export function RecruiterSideNav({
             })}
           </ul>
         </nav>
+        {company && (
+          <>
+            <div aria-hidden className="t-sb-sep" />
+            <p aria-hidden className="t-sb-titre">
+              {labels.entreprise.title}
+            </p>
+            <nav aria-label={labels.entreprise.aria}>
+              <ul>
+                {companyItems.map((item) => {
+                  const on = companyOn(pathname, item.href);
+                  return (
+                    <li key={item.key}>
+                      <Link
+                        href={item.href}
+                        aria-current={on ? "page" : undefined}
+                        className={cx("t-sb-it t-press", on && "t-on")}
+                      >
+                        <TalentIcon name={item.icon} on={on} size="s" />
+                        <span>{labels.entreprise[item.key]}</span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+          </>
+        )}
         <div className="t-sb-bas">
           <Link
             href="/app/parametres"
@@ -197,6 +248,27 @@ export function RecruiterSideNav({
         <nav aria-label={labels.aria}>
           <ul>{primary(true)}</ul>
         </nav>
+        {company && (
+          <nav aria-label={labels.entreprise.aria}>
+            <ul>
+              {companyItems.map((item) => {
+                const on = companyOn(pathname, item.href);
+                return (
+                  <li key={item.key}>
+                    <Link
+                      href={item.href}
+                      aria-label={labels.entreprise[item.key]}
+                      aria-current={on ? "page" : undefined}
+                      className={cx("t-sb-it t-press", on && "t-on")}
+                    >
+                      <TalentIcon name={item.icon} on={on} />
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        )}
         <Link href="/app/hire/compte" aria-label={labels.account} className="t-av t-rl-av t-press">
           {avatar}
         </Link>

@@ -30,7 +30,7 @@ export default async function EditOfferPage({
 }: PageProps<"/app/hire/offres/[id]/modifier">) {
   const [{ id }, raw] = await Promise.all([params, searchParams]);
   const query = flat(raw);
-  const { ctx, user } = await requireHire(`/app/hire/offres/${id}/modifier`, "manage");
+  const { ctx, user } = await requireHire(`/app/hire/offres/${id}/modifier`, "manage", "publish");
   const job = await getOrgJob(db, ctx, id).catch((error) => {
     if (error instanceof HireError) notFound();
     throw error;

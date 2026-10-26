@@ -1705,7 +1705,7 @@ function Ready({
             <PhoneIcon name="chevron" size={18} />
           </Link>
           {owner ? (
-            <Link href="/app/organisation/equipe" className="nb-ligne-lien">
+            <Link href="/app/hire/compte/equipe" className="nb-ligne-lien">
               <span>
                 <b>{t("ready.invite")}</b>
                 <span className="nb-meta">{t("ready.inviteHint")}</span>

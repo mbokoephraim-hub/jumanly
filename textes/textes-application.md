@@ -12390,6 +12390,13 @@ Conventions :
 | `hireShell.web.agenda` | Agenda |
 | `hireShell.web.talents` | Talents |
 | `hireShell.web.reports` | Rapports |
+| `hireShell.web.entreprise.aria` | Entreprise |
+| `hireShell.web.entreprise.title` | ENTREPRISE |
+| `hireShell.web.entreprise.team` | Équipe |
+| `hireShell.web.entreprise.page` | Page entreprise |
+| `hireShell.web.entreprise.billing` | Formule et facturation |
+| `hireShell.web.entreprise.journal` | Journal |
+| `hireShell.web.entreprise.settings` | Réglages |
 | `hireShell.web.settings` | Paramètres |
 | `hireShell.web.shortcut` | Ctrl K |
 | `hireShell.web.search` | Candidat, offre, ou demander à Orbi |
@@ -15722,6 +15729,158 @@ Conventions :
 | `desktopOnly.home` | Retour à l'accueil |
 | `desktopOnly.app` | Retour à mon espace |
 
+### Modèle B · Équipe de l'entreprise sur ordinateur
+
+*Étape 3, lot A2 (docs/modele-b-recruteur/web, captures 076 à 078, Web-App.dc.html `qui="joseph"`, vue Équipe) : membres et rôles, droits par membre, tâches (Attribuée → Acceptée → En cours → Terminée), invitations, demandes de rattachement et personnes qui indiquent travailler dans l'entreprise. Réservé aux administrateurs, sur ordinateur et tablette. « Mes tâches » est l'écran du membre à qui une tâche est confiée.*
+
+| Clé | Texte |
+|---|---|
+| `orgTeam.title` | Équipe |
+| `orgTeam.seats` | {plan} · {used, plural, one {# utilisateur} other {# utilisateurs}} sur {max}. |
+| `orgTeam.seatsUnlimited` | {plan} · {used, plural, one {# utilisateur} other {# utilisateurs}}. |
+| `orgTeam.onlyYou` | Vous seul·e attribuez les rôles et les tâches. |
+| `orgTeam.admins` | Les administrateurs attribuent les rôles et les tâches. |
+| `orgTeam.invite` | Inviter un membre |
+| `orgTeam.assign` | Attribuer une tâche |
+| `orgTeam.close` | Fermer |
+| `orgTeam.cancel` | Annuler |
+| `orgTeam.error` | Cette action n'a pas abouti. Réessayez. |
+| `orgTeam.tabs.aria` | Parties de l'équipe |
+| `orgTeam.tabs.members` | Membres et rôles |
+| `orgTeam.tabs.tasks` | Tâches |
+| `orgTeam.tabs.invitations` | Invitations et demandes |
+| `orgTeam.member.rights` | {count, plural, one {# droit} other {# droits}} sur {total} |
+| `orgTeam.member.tasks` | Tâches |
+| `orgTeam.member.done` | {done} sur {total} {done, plural, =0 {terminée} one {terminée} other {terminées}} |
+| `orgTeam.member.alone` | Vous êtes seul·e dans l'équipe pour l'instant. Invitez un premier membre : il apparaîtra ici avec son rôle et ses tâches. |
+| `orgTeam.roles.org_owner.name` | Propriétaire |
+| `orgTeam.roles.org_owner.text` | Créateur de l'espace : tous les droits |
+| `orgTeam.roles.org_admin.name` | Administrateur |
+| `orgTeam.roles.org_admin.text` | Membres, rôles, offres, rapports et formule |
+| `orgTeam.roles.recruiter.name` | Recruteur |
+| `orgTeam.roles.recruiter.text` | Offres attribuées, ATS, messages, rendez-vous |
+| `orgTeam.roles.hiring_manager.name` | Manager |
+| `orgTeam.roles.hiring_manager.text` | Voit les candidats de ses offres, évalue et commente ; ne publie pas |
+| `orgTeam.roles.viewer.name` | Lecteur |
+| `orgTeam.roles.viewer.text` | Lit les tableaux de bord et les rapports |
+| `orgTeam.role.title` | Rôle de {name} |
+| `orgTeam.role.subtitle` | {line} · ce que {name} peut faire |
+| `orgTeam.role.current` | Rôle : {role} |
+| `orgTeam.role.done` | {name} devient {role} : ses droits sont mis à jour |
+| `orgTeam.role.error` | Ce rôle n'est pas proposé par votre formule. |
+| `orgTeam.role.fixed` | Un administrateur a tous les droits. Seul le propriétaire change son rôle. |
+| `orgTeam.rights.title` | Droits de {name} |
+| `orgTeam.rights.publish` | Publier et modifier les offres |
+| `orgTeam.rights.sort` | Trier les candidatures (ATS) |
+| `orgTeam.rights.interviews` | Planifier et mener les entretiens |
+| `orgTeam.rights.evaluate` | Évaluer les candidats et le diagnostic |
+| `orgTeam.rights.stats` | Voir l'évolution et les statistiques |
+| `orgTeam.rights.page` | Publier au nom de {org} |
+| `orgTeam.rights.note` | « Voir l'évolution » donne accès au tableau de bord et aux statistiques de l'équipe. |
+| `orgTeam.rights.basic` | Votre formule garde les droits de chaque rôle. Ajuster les droits membre par membre demande une formule plus complète, à voir dans Formule et facturation. |
+| `orgTeam.rights.beyond` | Pas avec le rôle {role} |
+| `orgTeam.rights.granted` | Droit accordé à {name} : {right} |
+| `orgTeam.rights.removed` | Droit retiré à {name} : {right} |
+| `orgTeam.remove.button` | Retirer de l'équipe |
+| `orgTeam.remove.title` | Retirer {name} de l'équipe ? |
+| `orgTeam.remove.text` | Sa place se libère. Rien de ce que {name} a écrit n'est effacé : notes, messages et évaluations restent dans les dossiers. |
+| `orgTeam.remove.confirm` | Retirer |
+| `orgTeam.remove.done` | {name} ne fait plus partie de l'équipe |
+| `orgTeam.memberTasks.title` | Tâches de {name} |
+| `orgTeam.memberTasks.empty` | Aucune tâche pour l'instant. |
+| `orgTeam.task.kind.follow` | Suivre un candidat |
+| `orgTeam.task.kind.diagnostic` | Évaluer le diagnostic |
+| `orgTeam.task.kind.interview` | Faire un entretien |
+| `orgTeam.task.status.assigned` | Attribuée |
+| `orgTeam.task.status.accepted` | Acceptée |
+| `orgTeam.task.status.in_progress` | En cours |
+| `orgTeam.task.status.done` | Terminée |
+| `orgTeam.task.line` | {kind} · {candidate} |
+| `orgTeam.task.due` | Échéance {date} |
+| `orgTeam.task.late` | En retard |
+| `orgTeam.task.file` | Fiche |
+| `orgTeam.task.fileAria` | Fiche de {candidate} |
+| `orgTeam.task.remind` | Relancer |
+| `orgTeam.task.remindAria` | Relancer {name} |
+| `orgTeam.task.reminded` | Rappel envoyé à {name} |
+| `orgTeam.task.progress` | Avancement : {status} |
+| `orgTeam.tasks.filters` | Filtrer les tâches |
+| `orgTeam.tasks.all` | Toutes |
+| `orgTeam.tasks.open` | En cours |
+| `orgTeam.tasks.late` | En retard |
+| `orgTeam.tasks.done` | Terminées |
+| `orgTeam.tasks.caption` | Toutes les tâches de l'équipe |
+| `orgTeam.tasks.col.task` | Tâche |
+| `orgTeam.tasks.col.candidate` | Candidat·e |
+| `orgTeam.tasks.col.member` | Membre |
+| `orgTeam.tasks.col.due` | Échéance |
+| `orgTeam.tasks.col.progress` | Avancement |
+| `orgTeam.tasks.col.actions` | Actions |
+| `orgTeam.tasks.empty` | Aucune tâche avec ce filtre. |
+| `orgTeam.tasks.none` | Aucune tâche pour l'instant. Attribuez la première à un membre : il la voit dans « Mes tâches », l'accepte, puis vous suivez chaque étape. |
+| `orgTeam.requests.title` | Demandes à valider |
+| `orgTeam.requests.subtitle` | Rattachement à l'équipe, ou personnes qui indiquent travailler chez {org} |
+| `orgTeam.requests.join` | Demande à rejoindre l'équipe de recrutement · adresse {domain} |
+| `orgTeam.requests.declared` | Indique travailler chez {org} · {title} |
+| `orgTeam.requests.accept` | Accepter |
+| `orgTeam.requests.refuse` | Refuser |
+| `orgTeam.requests.confirm` | Confirmer |
+| `orgTeam.requests.notHere` | Ne travaille pas ici |
+| `orgTeam.requests.acceptAria` | Accepter la demande de {name} |
+| `orgTeam.requests.refuseAria` | Refuser la demande de {name} |
+| `orgTeam.requests.confirmAria` | Confirmer que {name} travaille chez {org} |
+| `orgTeam.requests.notHereAria` | {name} ne travaille pas chez {org} |
+| `orgTeam.requests.empty` | Rien à valider. |
+| `orgTeam.requests.accepted` | {name} rejoint l'équipe comme recruteur. Vous pouvez changer son rôle dans Membres et rôles. |
+| `orgTeam.requests.declined` | Demande refusée : {name} est prévenu·e |
+| `orgTeam.requests.confirmed` | {name} apparaît comme membre confirmé·e sur la page de l'entreprise |
+| `orgTeam.requests.rejected` | {name} est retiré·e des membres de la page |
+| `orgTeam.requests.seats` | Plus de place dans votre formule : libérez une place ou changez de formule pour accepter cette demande. |
+| `orgTeam.invitations.title` | Invitations envoyées |
+| `orgTeam.invitations.invite` | Inviter |
+| `orgTeam.invitations.line` | {role} · envoyée le {date} |
+| `orgTeam.invitations.resend` | Relancer |
+| `orgTeam.invitations.resendAria` | Renvoyer l'invitation à {email} |
+| `orgTeam.invitations.cancel` | Annuler |
+| `orgTeam.invitations.cancelAria` | Annuler l'invitation de {email} |
+| `orgTeam.invitations.resent` | Invitation renvoyée à {email} |
+| `orgTeam.invitations.cancelled` | Invitation annulée : la place se libère |
+| `orgTeam.invitations.empty` | Aucune invitation en attente. |
+| `orgTeam.places.left` | {count, plural, one {Il reste # place} other {Il reste # places}} dans la formule {plan} ({max} utilisateurs) |
+| `orgTeam.places.full` | {max, plural, one {La seule place de la formule {plan} est prise} other {Les # places de la formule {plan} sont prises}} |
+| `orgTeam.places.unlimited` | Utilisateurs illimités dans la formule {plan} |
+| `orgTeam.inviteDialog.title` | Inviter un membre |
+| `orgTeam.inviteDialog.email` | Adresse e-mail |
+| `orgTeam.inviteDialog.placeholder` | prenom.nom@entreprise.cd |
+| `orgTeam.inviteDialog.role` | Rôle |
+| `orgTeam.inviteDialog.send` | Envoyer l'invitation |
+| `orgTeam.inviteDialog.sending` | Envoi… |
+| `orgTeam.inviteDialog.sent` | Invitation envoyée par e-mail à {email} |
+| `orgTeam.inviteDialog.error.invalid` | Écrivez une adresse e-mail valide |
+| `orgTeam.inviteDialog.error.seats` | Plus de place : changez de formule dans Formule et facturation pour inviter davantage de membres |
+| `orgTeam.inviteDialog.error.alreadyMember` | {email} fait déjà partie de l'équipe |
+| `orgTeam.inviteDialog.error.role` | Ce rôle n'est pas proposé par votre formule |
+| `orgTeam.assignDialog.title` | Attribuer une tâche |
+| `orgTeam.assignDialog.who` | À qui |
+| `orgTeam.assignDialog.what` | Quoi |
+| `orgTeam.assignDialog.candidate` | Pour quel candidat |
+| `orgTeam.assignDialog.candidateLine` | {name} · {job} |
+| `orgTeam.assignDialog.due` | Échéance |
+| `orgTeam.assignDialog.note` | La personne la voit dans « Mes tâches », l'accepte, puis vous suivez chaque étape. |
+| `orgTeam.assignDialog.confirm` | Attribuer |
+| `orgTeam.assignDialog.done` | Tâche attribuée à {name} : elle apparaît dans ses « Mes tâches » |
+| `orgTeam.assignDialog.noMember` | Invitez d'abord un membre : une tâche va à un recruteur ou à un manager de l'équipe. |
+| `orgTeam.assignDialog.noCandidate` | Aucune candidature en cours : une tâche porte toujours sur un candidat. |
+| `orgTeam.assignDialog.error.due` | Choisissez une échéance à venir |
+| `myTasks.title` | Mes tâches |
+| `myTasks.intro` | Les tâches que l'administrateur de {org} vous confie. Acceptez-les, puis faites avancer chaque étape : il suit votre avancement. |
+| `myTasks.empty` | Aucune tâche pour l'instant. Quand l'administrateur vous en confie une, elle apparaît ici. |
+| `myTasks.accept` | Accepter |
+| `myTasks.start` | Commencer |
+| `myTasks.finish` | Marquer comme terminée |
+| `myTasks.moved` | Tâche passée à « {status} » |
+| `myTasks.finished` | Tâche terminée : l'administrateur est prévenu |
+
 ### `/tarifs` · Forfaits
 
 *Présenter toutes les formules de façon claire et honnête, par famille, et mener à l'inscription ou au devis.*
@@ -17373,6 +17532,9 @@ Conventions :
 | `notifications.item.teamMessage` | {name} vous a écrit dans Équipe. |
 | `notifications.item.colleagueProposed` | {name} propose d'ajouter {email} à l'équipe de {org}. |
 | `notifications.item.planRequested` | {name} demande la formule {plan} pour l'équipe. |
+| `notifications.item.orgTaskAssigned` | Nouvelle tâche : {kind, select, follow {suivre} diagnostic {évaluer le diagnostic de} interview {faire un entretien avec} other {suivre}} {candidate}. Retrouvez-la dans « Mes tâches ». |
+| `notifications.item.orgTaskReminder` | Rappel : votre tâche « {kind, select, follow {suivre} diagnostic {évaluer le diagnostic de} interview {faire un entretien avec} other {suivre}} {candidate} » attend. |
+| `notifications.item.orgTaskDone` | {name} a terminé sa tâche : {kind, select, follow {suivre} diagnostic {évaluer le diagnostic de} interview {faire un entretien avec} other {suivre}} {candidate}. |
 | `notifications.item.feedReply` | {name} a répondu à votre publication. |
 | `notifications.item.feedMention` | {name} vous a mentionné dans une réponse. |
 | `notifications.item.feedLike` | {name} a aimé votre publication. |

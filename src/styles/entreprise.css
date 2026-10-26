@@ -3,7 +3,9 @@
  * A1: inscription en neuf étapes (docs/modele-b-recruteur/web/maquette/Web-Acces.dc.html, a-*),
  * toujours sombre ; le Lime est réservé aux actions.
  */
-.ae {
+.ae,
+.ae-app,
+.ae-dialog {
   --ae-nuit: #0b1a1f;
   --ae-fond-g: #09161a;
   --ae-surface: #13282c;
@@ -17,6 +19,8 @@
   --ae-sapin: #14745f;
   --ae-menthe: #5fe0b8;
   --ae-ligne: rgba(255, 255, 255, 0.12);
+}
+.ae {
   min-height: 100dvh;
   display: flex;
   background: var(--ae-nuit);
@@ -27,17 +31,21 @@
 }
 .ae *,
 .ae *::before,
-.ae *::after {
+.ae *::after,
+.ae-app *,
+.ae-app *::before,
+.ae-app *::after {
   box-sizing: border-box;
 }
-.ae :focus-visible {
+.ae :focus-visible,
+.ae-app :focus-visible {
   outline: 2px solid var(--ae-lime);
   outline-offset: 2px;
 }
-:where(.ae) :where(h1, h2, p) {
+:where(.ae, .ae-app) :where(h1, h2, p, ul, ol) {
   margin: 0;
 }
-:where(.ae) :where(button) {
+:where(.ae, .ae-app) :where(button) {
   font: inherit;
   color: inherit;
   background: none;
@@ -47,7 +55,7 @@
   cursor: pointer;
   text-align: left;
 }
-:where(.ae) :where(a) {
+:where(.ae, .ae-app) :where(a) {
   color: var(--ae-lime);
   text-decoration: none;
 }
@@ -695,4 +703,450 @@
   .ae-attente {
     animation: none;
   }
+}
+
+/*
+ * A2 et suivants : les écrans de l'entreprise dans l'appli du recruteur sur ordinateur
+ * (Web-App.dc.html, qui="joseph"). Toujours sombres ; le Lime est réservé aux actions.
+ */
+:where(.ae-app) :where(ul, ol) {
+  padding: 0;
+  list-style: none;
+}
+.ae-app {
+  color: var(--ae-creme);
+  color-scheme: dark;
+  line-height: 1.4;
+}
+.ae-page {
+  padding: 4px 0 48px;
+}
+.ae-h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px !important;
+}
+.ae-h2 {
+  font-size: 16px;
+  font-weight: 700;
+}
+.ae-grandit {
+  flex: 1;
+  min-width: 0;
+}
+.ae-grandit-13 {
+  flex: 1.3;
+  min-width: 0;
+}
+.ae-entete {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.ae-btn.ae-btn-m,
+.ae-btn2.ae-btn-m {
+  height: 44px;
+  padding: 0 20px;
+  font-size: 14px;
+  border-radius: 22px;
+}
+.ae-btn.ae-btn-s,
+.ae-btn2.ae-btn-s {
+  height: 34px;
+  padding: 0 13px;
+  font-size: 12.5px;
+  border-radius: 17px;
+}
+.ae-btn2.ae-doux {
+  color: var(--ae-gris) !important;
+}
+.ae-seg {
+  display: flex;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 4px;
+}
+.ae-seg button {
+  height: 46px;
+  padding: 0 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ae-gris);
+  white-space: nowrap;
+  position: relative;
+  flex: none;
+}
+.ae-seg button.ae-seg-on {
+  font-weight: 700;
+  color: var(--ae-creme);
+}
+.ae-seg button i {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: -1px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--ae-lime);
+}
+.ae-seg-n {
+  margin-left: 6px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--ae-lime);
+}
+.ae-panneau {
+  padding-top: 16px;
+}
+.ae-carte {
+  display: block;
+  width: 100%;
+  border-radius: 20px;
+  border: 1px solid var(--ae-ligne);
+  background: var(--ae-surface);
+  padding: 16px 18px;
+  color: var(--ae-creme);
+}
+.ae-g3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.ae-membre {
+  border: 2px solid transparent;
+}
+.ae-membre-on {
+  border-color: var(--ae-lime);
+}
+.ae-ligne {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ae-ligne-s {
+  gap: 8px;
+}
+.ae-nom {
+  display: block;
+  font-size: 15px;
+}
+.ae-ligne .ae-meta,
+.ae-rangee .ae-meta {
+  font-size: 12.5px;
+}
+.ae-ligne-taches {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  margin-top: 14px;
+}
+.ae-jauge {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  margin-top: 8px;
+  overflow: hidden;
+}
+.ae-jauge i {
+  display: block;
+  height: 100%;
+  background: var(--ae-lime);
+  border-radius: 2px;
+}
+.ae-av {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.ae-av-s {
+  width: 28px;
+  height: 28px;
+  font-size: 10px;
+}
+.ae-deux {
+  display: flex;
+  gap: 20px;
+  margin-top: 22px;
+  align-items: flex-start;
+}
+.ae-deux-haut {
+  margin-top: 0;
+  gap: 16px;
+}
+.ae-role {
+  width: 380px;
+  flex: none;
+}
+.ae-sous-titre {
+  font-size: 12.5px;
+  margin: 4px 0 8px !important;
+}
+.ae-roles {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.ae-role-opt {
+  padding: 10px 12px !important;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+.ae-role-opt b {
+  display: block;
+  font-size: 13.5px;
+}
+.ae-role-opt .ae-meta {
+  font-size: 11.5px;
+}
+.ae-role-on {
+  border-color: var(--ae-lime) !important;
+  background: rgba(166, 242, 107, 0.08) !important;
+}
+.ae-droit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 13.5px;
+}
+.ae-sw {
+  width: 50px;
+  height: 30px;
+  border-radius: 15px;
+  padding: 3px !important;
+  flex: none;
+  background: #2a3b3e !important;
+}
+.ae-sw span {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--ae-nuit);
+  transition: transform 0.2s;
+}
+.ae-sw-on {
+  background: var(--ae-lime) !important;
+}
+.ae-sw-on span {
+  transform: translateX(20px);
+}
+.ae-sw[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.ae-note {
+  font-size: 12px !important;
+  margin-top: 10px !important;
+  line-height: 1.45;
+}
+.ae-lien-doux {
+  margin-top: 14px !important;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ae-gris) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
+}
+.ae-liste-taches {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px !important;
+}
+.ae-tache {
+  padding: 14px 16px;
+}
+.ae-taches-membre .ae-h2 + .ae-meta {
+  margin-top: 10px;
+}
+.ae-statut {
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.ae-st-fait {
+  color: var(--ae-lime);
+}
+.ae-st-cours {
+  color: #2fd3a6;
+}
+.ae-st-attente {
+  color: #f4d59a;
+}
+.ae-retard {
+  display: block;
+  font-size: 11.5px;
+  color: #f4d59a;
+}
+.ae-bloc {
+  display: block;
+}
+.ae-actions-ligne {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  flex: none;
+}
+.ae-etapes {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px !important;
+}
+.ae-etapes li {
+  flex: 1;
+}
+.ae-etapes li > span:first-child {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: #2a3b3e;
+}
+.ae-etapes li.ae-etape-on > span:first-child {
+  background: #2fd3a6;
+}
+.ae-etapes li > span:last-child {
+  display: block;
+  font-size: 11px;
+  margin-top: 5px;
+  color: var(--ae-gris);
+  font-weight: 500;
+}
+.ae-etapes li > span.ae-etape-ici {
+  font-weight: 700;
+  color: var(--ae-creme);
+}
+.ae-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 14px;
+  font-size: 14px;
+}
+.ae-table th,
+.ae-table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  vertical-align: middle;
+}
+.ae-table thead th {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ae-brume);
+  padding: 10px 14px;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+.ae-table tbody th {
+  font-weight: 700;
+}
+.ae-table td:nth-child(5) {
+  width: 22%;
+}
+.ae-vide {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  max-width: 620px;
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+.ae-vide-ligne {
+  padding: 16px 0;
+}
+.ae-rangee {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.ae-rangee .ae-nom {
+  font-size: 14px;
+}
+.ae-pills-wrap {
+  flex-wrap: wrap;
+}
+.ae-dialog {
+  margin: auto;
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  max-width: calc(100% - 48px);
+  background: var(--ae-surface);
+  border-radius: 26px;
+  padding: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--ae-creme);
+}
+.ae-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+}
+.ae-dialog-titre {
+  display: block;
+  font-size: 19px;
+  font-weight: 700;
+}
+.ae-dialog-texte {
+  margin-top: 10px !important;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.ae-dialog-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 22px;
+}
+.ae-toast-x {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+/* ENTREPRISE dans la barre latérale du recruteur. */
+.t-sb-titre {
+  margin: 4px 10px 2px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #8fa39e;
+}
+@media (max-width: 1199px) {
+  .ae-g3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ae-deux {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ae-role {
+    width: auto;
+  }
+  .ae-table thead th:nth-child(2),
+  .ae-table td:nth-child(2) {
+    display: none;
+  }
+}
+.ae-intro {
+  max-width: 640px;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 16px !important;
 }
