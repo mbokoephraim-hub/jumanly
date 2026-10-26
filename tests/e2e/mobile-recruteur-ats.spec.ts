@@ -157,6 +157,7 @@ test("ATS : analyse par Orbi, profil pour l'offre, retenus, réponse groupée re
 
 test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, messagerie, rapport PDF", async ({
   page,
+  isMobile,
 }) => {
   test.setTimeout(240_000);
   await logIn(page, baobab, undefined, "/app/hire");
@@ -240,6 +241,21 @@ test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, me
   await expect(page.getByText("Conversation désépinglée").first()).toBeVisible();
   await noOverflow(page, "conversation");
 
+  if (isMobile) {
+    // Phone (Modèle B recruteur M6): « Mes propositions » is a tab of Talents. A pending proposal
+    // shows « Relancer » until someone reminds it (the other project of the run may be first).
+    await page.goto("/app/hire/talents?onglet=propositions");
+    await expect(
+      main(page).getByText("Les offres que vous avez proposées à des talents"),
+    ).toBeVisible();
+    const again = main(page).getByRole("button", { name: "Relancer", exact: true });
+    if (await again.count()) {
+      await again.first().click();
+      await expect(page).toHaveURL(/onglet=propositions&(ok=relance|erreur=other)/);
+    }
+    await noOverflow(page, "propositions");
+    return;
+  }
   // « Mes propositions »: a pending proposal can be reminded once (the other project of the run
   // may already have done it: then « Relancé » shows).
   await page.goto("/app/hire/candidats?vue=propositions");

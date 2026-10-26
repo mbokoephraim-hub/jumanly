@@ -20112,6 +20112,10 @@ Conventions :
 | `admin.reports.detail.title.message` | Message signalé |
 | `admin.reports.detail.title.conversation` | Conversation signalée |
 | `admin.reports.detail.title.post` | Publication signalée |
+| `admin.reports.detail.title.question` | Question signalée |
+| `admin.reports.detail.title.profile` | Profil signalé |
+| `admin.reports.detail.title.organization` | Organisation signalée |
+| `admin.reports.detail.title.aiSuggestion` | Suggestion IA signalée |
 | `admin.reports.detail.post` | Publication du Fil |
 | `admin.reports.detail.postReply` | Réponse dans le Fil |
 | `admin.reports.detail.postImage` | Avec une photo |
