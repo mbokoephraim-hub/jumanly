@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import type { Page } from "@playwright/test";
@@ -43,7 +44,11 @@ test.describe("Étape 3 · Formule et facturation", () => {
     test.setTimeout(600_000);
     release = await holdBaobab();
   });
-  test.afterAll(() => release());
+  // Back on Company for the next file, before letting go of Baobab Fintech.
+  test.afterAll(() => {
+    execFileSync("pnpm", ["exec", "tsx", "tests/e2e/reset-baobab.ts"]);
+    release();
+  });
 
   test("l'administrateur lit sa formule, paie, monte en gamme et programme une baisse", async ({
     page,
