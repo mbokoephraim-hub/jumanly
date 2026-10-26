@@ -34,8 +34,8 @@ export const companyItems = [
   { key: "team", href: "/app/organisation/equipe", icon: "candidats" },
   { key: "page", href: "/app/organisation", icon: "entreprise" },
   { key: "billing", href: "/app/organisation/facturation", icon: "portefeuille" },
-  { key: "journal", href: "/app/parametres/consultations", icon: "confidentialite" },
-  { key: "settings", href: "/app/hire/modeles", icon: "reglages" },
+  { key: "journal", href: "/app/organisation/journal", icon: "confidentialite" },
+  { key: "settings", href: "/app/organisation/reglages", icon: "reglages" },
 ] as const;
 
 function companyOn(pathname: string, href: string) {

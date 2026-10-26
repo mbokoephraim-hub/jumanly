@@ -4478,3 +4478,28 @@ Captures 1440 et 1024 : `captures/etape-3/a2/` des fichiers du projet. Tests : `
 | Capture | Écran | Fichiers |
 |---|---|---|
 | 083 | Formule et facturation | `/mnt/project-files/captures/etape-3/a4/083-formule-facturation-{1440,1024}.png` |
+
+## Étape 3 · A5, Journal des consultations et Réglages (26 octobre 2026)
+
+- Nouvel écran `/app/organisation/journal` (capture 084), réservé au propriétaire et aux
+  administrateurs : qui a consulté quoi (profil, CV, PDF, évaluation, rapport), filtre par membre,
+  chaque ligne mène à la candidature, au talent ou aux rapports. Les profils anonymes restent anonymes.
+- Nouvel écran `/app/organisation/reglages` (captures 085 à 087) : étapes des nouvelles offres
+  (ajouter, retirer, étapes fixes), cinq modèles de messages de l'entreprise, grille d'entretien
+  commune (10 critères au plus).
+- Migration additive `org_recruiting_settings` (`Organization.pipelineTemplate`,
+  `Organization.scorecardCriteria`). Les nouvelles offres prennent les étapes choisies ; l'évaluation
+  prend la grille de l'offre, sinon celle de l'entreprise, sinon les compétences requises.
+- Chaque évaluation enregistrée est notée au journal d'audit (`scorecard.save`).
+- Démo : huit consultations fictives chez Baobab Fintech et une grille de cinq critères.
+- Tests : `tests/db/entreprise-reglages.test.ts` (journal, isolation, anonymat, étapes, modèles,
+  grille, recruteur et lecteur refusés) ; `tests/e2e/web-admin-reglages.spec.ts` (chaque bouton,
+  manager refusé, téléphone).
+- Choix : `docs/decisions/2026-10-26-etape-3-a5-journal-reglages.md`.
+
+| Capture | Écran | Fichiers |
+|---|---|---|
+| 084 | Journal des consultations | `/mnt/project-files/captures/etape-3/a5/084-journal-{1440,1024}.png` |
+| 085 | Réglages, étapes | `/mnt/project-files/captures/etape-3/a5/085-reglages-etapes-{1440,1024}.png` |
+| 086 | Réglages, modèles de messages | `/mnt/project-files/captures/etape-3/a5/086-reglages-modeles-{1440,1024}.png` |
+| 087 | Réglages, grille d'entretien | `/mnt/project-files/captures/etape-3/a5/087-reglages-grille-{1440,1024}.png` |

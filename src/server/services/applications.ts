@@ -13,31 +13,83 @@ import { isJobOpen } from "./jobs";
 import { reportError } from "@/server/observability";
 
 /**
- * Stages every new job starts with (brief recruteur § 2.6): Reçue, En examen, Présélectionnée,
- * Entretien, Décision finale, then the two outcomes of the decision. The kinds keep what the talent
- * sees honest: « En examen » reads as « Consultée », « Décision finale » still as « Entretien »
- * (never « Offre reçue »). The recruiter renames them per job; existing jobs keep theirs.
+ * The stages an organization may follow (Réglages du recrutement, étape 3, A5), in their order.
+ * « Reçue » opens and « Décision finale » closes every pipeline (`fixed`); the others are chosen by
+ * the company's administrators. The kinds keep what the talent sees honest: « En examen » reads as
+ * « Consultée », « Décision finale » still as « Entretien » (never « Offre reçue »).
  */
-export const defaultStages: { kind: StageKind; name: string }[] = [
-  { kind: "new", name: "Reçue" },
-  { kind: "new", name: "En examen" },
-  { kind: "screening", name: "Présélectionnée" },
-  { kind: "interview", name: "Entretien" },
-  { kind: "interview", name: "Décision finale" },
+export const stageCatalog = [
+  { key: "recue", kind: "new", name: "Reçue", fixed: true },
+  { key: "examen", kind: "new", name: "En examen", fixed: false },
+  { key: "preselection", kind: "screening", name: "Présélectionnée", fixed: false },
+  { key: "test", kind: "test", name: "Test pratique", fixed: false },
+  { key: "entretien", kind: "interview", name: "Entretien", fixed: false },
+  { key: "proposition", kind: "offer", name: "Proposition", fixed: false },
+  { key: "decision", kind: "interview", name: "Décision finale", fixed: true },
+] as const satisfies readonly { key: string; kind: StageKind; name: string; fixed: boolean }[];
+
+export type StageKey = (typeof stageCatalog)[number]["key"];
+
+/** The stages followed by default (brief recruteur § 2.6). */
+export const defaultStageKeys: StageKey[] = [
+  "recue",
+  "examen",
+  "preselection",
+  "entretien",
+  "decision",
+];
+
+const outcomes: { kind: StageKind; name: string }[] = [
   { kind: "hired", name: "Retenue" },
   { kind: "rejected", name: "Non retenue" },
 ];
+
+/** The stages of an organization's template (unknown keys dropped, the fixed ones always in). */
+export function templateStageKeys(template: unknown): StageKey[] {
+  if (!Array.isArray(template)) return defaultStageKeys;
+  const chosen = new Set(template.filter((key): key is string => typeof key === "string"));
+  return stageCatalog
+    .filter((stage) => stage.fixed || chosen.has(stage.key))
+    .map((stage) => stage.key);
+}
+
+/** The stages a new job starts with, for a template, then the two outcomes of the decision. */
+export function stagesOf(template: unknown): { kind: StageKind; name: string }[] {
+  const keys = new Set(templateStageKeys(template));
+  return [
+    ...stageCatalog
+      .filter((stage) => keys.has(stage.key))
+      .map((stage) => ({ kind: stage.kind as StageKind, name: stage.name })),
+    ...outcomes,
+  ];
+}
+
+/**
+ * Stages every new job starts with (brief recruteur § 2.6): Reçue, En examen, Présélectionnée,
+ * Entretien, Décision finale, then the two outcomes of the decision. The recruiter renames them per
+ * job; existing jobs keep theirs.
+ */
+export const defaultStages = stagesOf(null);
 
 /** The steps a recruiter follows (without the two outcomes): five with the default model. */
 export const followedStageCount = defaultStages.filter(
   (stage) => stage.kind !== "hired" && stage.kind !== "rejected",
 ).length;
 
+/** A job's stages, created on first use from its organization's template (Réglages, A5). */
 export async function ensureStages(db: PrismaClient | Prisma.TransactionClient, jobId: string) {
   const count = await db.pipelineStage.count({ where: { jobId } });
   if (count === 0) {
+    const job = await db.job.findUnique({
+      where: { id: jobId },
+      select: { organization: { select: { pipelineTemplate: true } } },
+    });
     await db.pipelineStage.createMany({
-      data: defaultStages.map((stage, order) => ({ jobId, order, ...stage })),
+      data: stagesOf(job?.organization.pipelineTemplate ?? null).map((stage, order) => ({
+        jobId,
+        order,
+        ...stage,
+      })),
       skipDuplicates: true,
     });
   }

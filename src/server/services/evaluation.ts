@@ -35,15 +35,29 @@ export const RATING_MAX = 4;
 
 export type ScorecardCriterion = { name: string; description: string };
 
-/** Default criteria when a job has no template yet: its required skills, then the essentials. */
-export function scorecardCriteria(job: {
-  scorecardTemplate: Prisma.JsonValue;
-  skills: { importance: string; skill: { name: string } }[];
-}): ScorecardCriterion[] {
-  const parsed = z
-    .array(z.object({ name: z.string(), description: z.string().default("") }))
-    .safeParse(job.scorecardTemplate);
-  if (parsed.success && parsed.data.length > 0) return parsed.data;
+const criteriaSchema = z.array(z.object({ name: z.string(), description: z.string().default("") }));
+
+/** A list of criteria as stored (job or organization), or an empty list. */
+export function storedCriteria(value: Prisma.JsonValue | undefined): ScorecardCriterion[] {
+  const parsed = criteriaSchema.safeParse(value ?? null);
+  return parsed.success ? parsed.data : [];
+}
+
+/**
+ * The criteria of a job's scorecard: its own grid; else the organization's interview grid
+ * (Réglages du recrutement, étape 3, A5); else its required skills.
+ */
+export function scorecardCriteria(
+  job: {
+    scorecardTemplate: Prisma.JsonValue;
+    skills: { importance: string; skill: { name: string } }[];
+  },
+  organizationCriteria?: Prisma.JsonValue,
+): ScorecardCriterion[] {
+  const own = storedCriteria(job.scorecardTemplate);
+  if (own.length > 0) return own;
+  const organization = storedCriteria(organizationCriteria);
+  if (organization.length > 0) return organization;
   return job.skills
     .filter((skill) => skill.importance === "required")
     .slice(0, 5)
@@ -121,6 +135,17 @@ export async function submitScorecard(
   });
   await db.applicationEvent.create({
     data: { applicationId: application.id, actorId: ctx.userId, type: "rated" },
+  });
+  // « Évaluation enregistrée » in the administrator's consultation log (étape 3, A5).
+  await db.auditLog.create({
+    data: {
+      actorId: ctx.userId,
+      action: "scorecard.save",
+      targetType: "talentProfile",
+      targetId: application.profileId,
+      organizationId: ctx.organizationId,
+      metadata: { applicationId: application.id },
+    },
   });
 }
 

@@ -5,6 +5,7 @@
  * only (CLAUDE.md § 11); everything is rebuilt on each run, so a run of the e2e can be replayed.
  */
 import { hashPassword } from "better-auth/crypto";
+import { Prisma } from "../../src/generated/prisma/client";
 import { addMonths, periodAround } from "../../src/server/entitlements/periods";
 import { rolePreset } from "../../src/server/services/org-team";
 import type { SeedClient } from "./client";
@@ -273,4 +274,111 @@ export async function seedEntrepriseBilling(db: SeedClient) {
       data: { ...subject, key, periodStart: period.start, periodEnd: period.end, used },
     });
   }
+}
+
+/**
+ * Journal des consultations and Réglages du recrutement (A5): what the team of Baobab Fintech
+ * opened these last days, and the company's interview grid. Fictional; the journal lines of the
+ * organization are rebuilt on each run, so the capture stays the same.
+ */
+export async function seedEntrepriseJournal(db: SeedClient) {
+  const org = await db.organization.findUnique({ where: { slug: ORG }, select: { id: true } });
+  if (!org) return;
+  const people = await db.user.findMany({
+    where: {
+      email: {
+        in: [
+          "recruteur6.ux@jumanly.test",
+          "aline.equipe@jumanly.test",
+          "patrice.equipe@jumanly.test",
+        ],
+      },
+    },
+    select: { id: true, email: true },
+  });
+  const id = (email: string) => people.find((item) => item.email === email)?.id ?? null;
+  const [clarisse, aline, patrice] = [
+    id("recruteur6.ux@jumanly.test"),
+    id("aline.equipe@jumanly.test"),
+    id("patrice.equipe@jumanly.test"),
+  ];
+  const applications = await db.application.findMany({
+    where: { job: { organizationId: org.id } },
+    orderBy: { createdAt: "asc" },
+    take: 4,
+    select: { id: true, profileId: true },
+  });
+  const visible = await db.talentProfile.findFirst({
+    where: { user: { email: "talent.visible@jumanly.test" } },
+    select: { id: true },
+  });
+  await db.auditLog.deleteMany({
+    where: {
+      organizationId: org.id,
+      action: {
+        in: [
+          "profile.view",
+          "cv.download",
+          "candidate.pdf",
+          "talent.pdf",
+          "history.export",
+          "scorecard.save",
+          "report.export",
+        ],
+      },
+    },
+  });
+  const hoursAgo = (hours: number) => new Date(Date.now() - hours * 3_600_000);
+  const lines: {
+    actorId: string | null;
+    action: string;
+    hours: number;
+    application?: number;
+    profile?: string;
+    report?: boolean;
+  }[] = [
+    { actorId: aline, action: "profile.view", hours: 1, application: 0 },
+    { actorId: aline, action: "cv.download", hours: 2, application: 1 },
+    { actorId: patrice, action: "profile.view", hours: 20, application: 2 },
+    { actorId: aline, action: "profile.view", hours: 26, profile: visible?.id },
+    { actorId: clarisse, action: "report.export", hours: 28, report: true },
+    { actorId: patrice, action: "scorecard.save", hours: 70, application: 2 },
+    { actorId: aline, action: "profile.view", hours: 75, application: 3 },
+    { actorId: clarisse, action: "profile.view", hours: 100, application: 0 },
+  ];
+  for (const line of lines) {
+    const application = line.application === undefined ? null : applications[line.application];
+    if (line.application !== undefined && !application) continue;
+    if (!line.report && !application && !line.profile) continue;
+    await db.auditLog.create({
+      data: {
+        actorId: line.actorId,
+        action: line.action,
+        targetType: line.report ? "organization" : "talentProfile",
+        targetId: line.report ? org.id : (application?.profileId ?? line.profile!),
+        organizationId: org.id,
+        metadata: line.report
+          ? { format: "pdf", period: "month" }
+          : application
+            ? { applicationId: application.id }
+            : { source: "talent_search" },
+        createdAt: hoursAgo(line.hours),
+      },
+    });
+  }
+
+  // The interview grid of the capture; the stages stay those of every new company.
+  await db.organization.update({
+    where: { id: org.id },
+    data: {
+      pipelineTemplate: Prisma.DbNull,
+      scorecardCriteria: [
+        "Compétences techniques",
+        "Résolution de problèmes",
+        "Communication",
+        "Motivation pour le poste",
+        "Travail en équipe",
+      ].map((name) => ({ name, description: "" })),
+    },
+  });
 }

@@ -1610,3 +1610,173 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Étape 3 · A5 : Journal des consultations (084) et Réglages du recrutement (085 à 087). */
+.ae-pill[aria-current="page"] {
+  background: var(--ae-creme) !important;
+  border-color: var(--ae-creme) !important;
+  color: var(--ae-nuit) !important;
+}
+.ae-jr-intro {
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 760px;
+}
+.ae-jr-filtres {
+  margin: 16px 0 18px;
+}
+.ae-jr-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14.5px;
+}
+.ae-jr-table th,
+.ae-jr-table td {
+  text-align: left;
+  padding: 14px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  vertical-align: middle;
+}
+.ae-jr-table thead th {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ae-brume);
+  padding-top: 6px;
+  padding-bottom: 8px;
+}
+.ae-jr-table tbody th {
+  font-weight: 700;
+}
+.ae-jr-table td:last-child,
+.ae-jr-table th:last-child {
+  width: 44px;
+  padding-right: 0;
+  text-align: right;
+}
+.ae-jr-vide {
+  padding: 22px 20px;
+  font-size: 14px;
+}
+.ae-jr-note {
+  margin-top: 14px !important;
+  font-size: 12.5px;
+}
+.ae-rg-carte {
+  max-width: 760px;
+  padding: 18px 18px 18px;
+}
+.ae-rg-liste {
+  list-style: none;
+}
+.ae-rg-ligne {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 15px;
+}
+.ae-rg-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12.5px;
+  font-weight: 700;
+  flex: none;
+}
+.ae-rg-ajouts {
+  margin-top: 16px;
+}
+.ae-rg-ajouts .ae-btn2 {
+  gap: 8px;
+}
+.ae-rg-note {
+  margin-top: 14px !important;
+  line-height: 1.5;
+}
+.ae-rg-vide {
+  font-size: 14px;
+  line-height: 1.5;
+  padding-bottom: 6px;
+}
+.ae-rg-ajout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+.ae-rg-lien {
+  margin-top: 14px;
+}
+.ae-rg-modeles {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+.ae-rg-types {
+  width: 260px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ae-rg-type {
+  width: 100%;
+  text-align: left;
+  padding: 11px 14px;
+  border-radius: 12px;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--ae-creme);
+}
+.ae-rg-type:hover,
+.ae-rg-type:focus-visible {
+  background: rgba(255, 255, 255, 0.05);
+}
+.ae-rg-type-on {
+  background: var(--ae-surface);
+  font-weight: 700;
+}
+.ae-rg-modele {
+  flex: 1;
+  min-width: 0;
+  padding: 18px 18px 20px;
+}
+.ae-rg-texte {
+  display: block;
+  width: 100%;
+  min-height: 160px;
+  height: auto;
+  margin-top: 12px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  line-height: 1.5;
+  resize: vertical;
+}
+.ae-rg-aide {
+  font-size: 12.5px;
+  margin: 10px 0 16px !important;
+}
+@media (max-width: 1199px) {
+  .ae-rg-types {
+    width: 200px;
+  }
+}
+.ae-jr-table td:nth-child(1),
+.ae-jr-table td:nth-child(2) {
+  white-space: nowrap;
+}
+@media (max-width: 1199px) {
+  .ae-jr-table {
+    font-size: 13.5px;
+  }
+  .ae-jr-table th,
+  .ae-jr-table td {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}

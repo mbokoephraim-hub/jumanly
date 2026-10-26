@@ -21,7 +21,7 @@ import { seedPlans } from "./plans";
 import { seedSkills } from "./skills";
 import { seedSuiviScenario } from "./suivi";
 import { seedUxScenario } from "./ux";
-import { seedEntrepriseBilling, seedEntrepriseTeam } from "./entreprise";
+import { seedEntrepriseBilling, seedEntrepriseJournal, seedEntrepriseTeam } from "./entreprise";
 
 async function main() {
   const db = createSeedClient();
@@ -39,6 +39,7 @@ async function main() {
       await seedUxScenario(db);
       await seedEntrepriseTeam(db);
       await seedEntrepriseBilling(db);
+      await seedEntrepriseJournal(db);
       await seedSuiviScenario(db);
       await seedLearnDomains(db);
       await seedLearnPaths(db);
