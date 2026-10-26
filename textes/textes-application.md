@@ -8499,7 +8499,7 @@ Conventions :
 | `phoneExplorer.savedBadge` | {count, plural, =0 {Offres enregistrées} one {Offres enregistrées, # offre} other {Offres enregistrées, # offres}} |
 | `phoneExplorer.savedBadgeMany` | 99+ |
 | `phoneExplorer.search.label` | Rechercher une offre, une entreprise ou une personne |
-| `phoneExplorer.search.placeholder` | Offres, entreprises, personnes |
+| `phoneExplorer.search.placeholder` | Rechercher |
 | `phoneExplorer.search.clear` | Effacer |
 | `phoneExplorer.search.cancel` | Annuler |
 | `phoneExplorer.search.in` | Rechercher dans |
@@ -8524,11 +8524,44 @@ Conventions :
 | `phoneExplorer.search.see` | Voir › |
 | `phoneExplorer.search.today` | aujourd’hui |
 | `phoneExplorer.search.yesterday` | hier |
-| `phoneExplorer.cat.aria` | Afficher |
-| `phoneExplorer.cat.tout` | Tout |
-| `phoneExplorer.cat.offres` | Offres |
-| `phoneExplorer.cat.entreprises` | Entreprises |
-| `phoneExplorer.cat.personnes` | Personnes |
+| `phoneExplorer.filters.button` | Filtres |
+| `phoneExplorer.filters.buttonCount` | {count, plural, =0 {Filtres} one {Filtres, # filtre actif} other {Filtres, # filtres actifs}} |
+| `phoneExplorer.filters.title` | Filtres |
+| `phoneExplorer.filters.close` | Fermer les filtres |
+| `phoneExplorer.filters.clear` | Effacer |
+| `phoneExplorer.filters.scope` | Chercher dans |
+| `phoneExplorer.filters.scopes.tout` | Tout |
+| `phoneExplorer.filters.scopes.offres` | Offres |
+| `phoneExplorer.filters.scopes.entreprises` | Entreprises |
+| `phoneExplorer.filters.scopes.personnes` | Personnes |
+| `phoneExplorer.filters.contract` | Type de contrat · offres |
+| `phoneExplorer.filters.contracts.cdi` | CDI |
+| `phoneExplorer.filters.contracts.cdd` | CDD |
+| `phoneExplorer.filters.contracts.stage` | Stage |
+| `phoneExplorer.filters.salary` | Salaire mensuel · offres |
+| `phoneExplorer.filters.salaries.lt300` | Moins de 300 $ |
+| `phoneExplorer.filters.salaries.from300` | 300 à 800 $ |
+| `phoneExplorer.filters.salaries.from800` | 800 à 1 500 $ |
+| `phoneExplorer.filters.salaries.gt1500` | Plus de 1 500 $ |
+| `phoneExplorer.filters.scaleLow` | 0 $ |
+| `phoneExplorer.filters.scaleMid` | 800 $ |
+| `phoneExplorer.filters.scaleHigh` | 1 500 $ et plus |
+| `phoneExplorer.filters.sector` | Secteur · entreprises |
+| `phoneExplorer.filters.sectors.tech` | Tech |
+| `phoneExplorer.filters.sectors.telecom` | Télécom |
+| `phoneExplorer.filters.sectors.banque` | Banque |
+| `phoneExplorer.filters.sectors.energie` | Énergie |
+| `phoneExplorer.filters.sectors.mines` | Mines |
+| `phoneExplorer.filters.sectors.sante` | Santé |
+| `phoneExplorer.filters.sectors.cabinet` | Cabinet |
+| `phoneExplorer.filters.sectors.rh` | RH |
+| `phoneExplorer.filters.residence` | Résidence · personnes |
+| `phoneExplorer.filters.residences.rdc` | RDC |
+| `phoneExplorer.filters.residences.autre` | Autre pays |
+| `phoneExplorer.filters.residences.partout` | Partout |
+| `phoneExplorer.filters.see` | {count, plural, =0 {Aucun résultat} one {Voir # résultat} other {Voir # résultats}} |
+| `phoneExplorer.filters.counting` | Calcul des résultats… |
+| `phoneExplorer.filters.failed` | Les filtres n’ont pas pu s’appliquer. Réessayez. |
 | `phoneExplorer.chips.domains` | Domaines |
 | `phoneExplorer.chips.sectors` | Secteurs |
 | `phoneExplorer.chips.all` | Tout |

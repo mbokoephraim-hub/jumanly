@@ -11,6 +11,14 @@
  */
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { matchesForUser } from "@/server/matching/service";
+import {
+  type ExploreFilters,
+  NO_FILTERS,
+  residenceWhere,
+  salaryWhere,
+  sectorMatches,
+  showsSection,
+} from "./explore-filters";
 import { openJobWhere } from "./jobs";
 import { declaredMembers } from "./org-team";
 
@@ -132,10 +140,19 @@ function mostFrequent(values: (string | null)[], take: number) {
     .map(([value]) => value);
 }
 
-/** Companies with at least one open offer, the most offers first. */
-export async function hiringCompanies(db: PrismaClient, now = new Date(), take = 20) {
+/** Companies with at least one open offer, the most offers first; only `sectors` when given. */
+export async function hiringCompanies(
+  db: PrismaClient,
+  now = new Date(),
+  take = 20,
+  sectors: string[] | null = null,
+) {
   const rows = await db.organization.findMany({
-    where: { suspendedAt: null, jobs: { some: openJobWhere(now) } },
+    where: {
+      suspendedAt: null,
+      jobs: { some: openJobWhere(now) },
+      ...(sectors ? { sector: { in: sectors } } : {}),
+    },
     select: {
       id: true,
       slug: true,
@@ -208,7 +225,12 @@ function titleOf(row: PersonRow) {
  * Those with connections in common come first, then the same field of study, then the same city,
  * then the newest members.
  */
-export async function peopleToKnow(db: PrismaClient, userId: string, take = 10) {
+export async function peopleToKnow(
+  db: PrismaClient,
+  userId: string,
+  take = 10,
+  where: Prisma.UserWhereInput = {},
+) {
   const [mine, me] = await Promise.all([
     links(db, userId),
     db.talentProfile.findUnique({
@@ -220,6 +242,7 @@ export async function peopleToKnow(db: PrismaClient, userId: string, take = 10) 
     where: {
       id: { notIn: [userId, ...mine.keys()] },
       talentProfile: { visibility: "recruiters" },
+      ...where,
     },
     orderBy: { createdAt: "desc" },
     take: 200,
@@ -282,18 +305,57 @@ export async function peopleToKnow(db: PrismaClient, userId: string, take = 10) 
     .map(({ rank: _rank, ...person }) => person);
 }
 
-/** Everything the home of Explorer shows, read at once while the logo plays. */
-export async function explorerHome(db: PrismaClient, userId: string, now = new Date()) {
+/**
+ * The sectors written on companies that belong to the sectors of the filter (« Banque et
+ * microfinance » for « Banque »), or null when no sector is chosen.
+ */
+async function sectorNames(db: PrismaClient, filters: ExploreFilters) {
+  if (filters.sectors.length === 0) return null;
+  const rows = await db.organization.findMany({
+    where: { sector: { not: null } },
+    distinct: ["sector"],
+    select: { sector: true },
+  });
+  return rows
+    .map((row) => row.sector)
+    .filter((sector): sector is string => sectorMatches(sector, filters.sectors));
+}
+
+/** The open offers that meet the filters (contract, salary, sector of the company). */
+function offerWhere(
+  filters: ExploreFilters,
+  sectors: string[] | null,
+  now: Date,
+): Prisma.JobWhereInput {
+  return {
+    ...openJobWhere(now),
+    organization: { suspendedAt: null, ...(sectors ? { sector: { in: sectors } } : {}) },
+    ...(filters.contracts.length > 0 ? { contractType: { in: filters.contracts } } : {}),
+    ...(filters.salary ? { AND: [salaryWhere(filters.salary)] } : {}),
+  };
+}
+
+/**
+ * Everything the home of Explorer shows, read at once while the logo plays; with `filters`, only
+ * what meets them (docs/fil-menu-publication § 3). The filters never touch an application.
+ */
+export async function explorerHome(
+  db: PrismaClient,
+  userId: string,
+  now = new Date(),
+  filters: ExploreFilters = NO_FILTERS,
+) {
+  const sectors = await sectorNames(db, filters);
   const rows = await db.job.findMany({
-    where: { ...openJobWhere(now), organization: { suspendedAt: null } },
+    where: offerWhere(filters, sectors, now),
     orderBy: { publishedAt: "desc" },
     take: HOME_OFFERS,
     select: offerSelect,
   });
   const [offers, companies, people, saved] = await Promise.all([
     ranked(db, userId, rows, now),
-    hiringCompanies(db, now),
-    peopleToKnow(db, userId),
+    hiringCompanies(db, now, 20, sectors),
+    peopleToKnow(db, userId, 10, residenceWhere(filters.residence)),
     db.savedJob.count({ where: { userId, job: openJobWhere(now) } }),
   ]);
   const fresh = offers
@@ -318,6 +380,45 @@ export async function explorerHome(db: PrismaClient, userId: string, now = new D
     people,
     saved,
   };
+}
+
+/**
+ * How many results the filters give, for « Voir N résultats »: the open offers, the companies
+ * that recruit and the people to know that meet them, within the scope chosen.
+ */
+export async function explorerCount(
+  db: PrismaClient,
+  userId: string,
+  filters: ExploreFilters,
+  now = new Date(),
+) {
+  const sectors = await sectorNames(db, filters);
+  const [offers, companies, people] = await Promise.all([
+    showsSection(filters.scope, "offres")
+      ? db.job.count({ where: offerWhere(filters, sectors, now) })
+      : 0,
+    showsSection(filters.scope, "entreprises")
+      ? db.organization.count({
+          where: {
+            suspendedAt: null,
+            jobs: { some: openJobWhere(now) },
+            ...(sectors ? { sector: { in: sectors } } : {}),
+          },
+        })
+      : 0,
+    showsSection(filters.scope, "personnes")
+      ? links(db, userId).then((mine) =>
+          db.user.count({
+            where: {
+              id: { notIn: [userId, ...mine.keys()] },
+              talentProfile: { visibility: "recruiters" },
+              ...residenceWhere(filters.residence),
+            },
+          }),
+        )
+      : 0,
+  ]);
+  return { offers, companies, people, total: offers + companies + people };
 }
 
 export type ExplorerHome = Awaited<ReturnType<typeof explorerHome>>;

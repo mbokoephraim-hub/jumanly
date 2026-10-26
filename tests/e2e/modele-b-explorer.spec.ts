@@ -13,15 +13,51 @@ test.describe("Modèle B · Explorer au téléphone", () => {
     const explorer = page.locator(".nb-ex").first();
     await expect(explorer.getByRole("heading", { name: "Explorer", exact: true })).toBeVisible();
 
-    // The chips show one kind of result in place.
-    const kinds = explorer.getByRole("group", { name: "Afficher" });
-    await kinds.getByRole("button", { name: "Entreprises", exact: true }).click();
+    // « Filtres » (docs/fil-menu-publication § 3): the sheet rises, the scope folds the groups
+    // that do not concern it, « Voir N résultats » shows only that kind of result.
+    await explorer.getByRole("button", { name: "Filtres", exact: true }).click();
+    const sheet = page.getByRole("dialog", { name: "Filtres" });
+    await expect(sheet.getByRole("heading", { name: "Filtres" })).toBeVisible();
+    await expect(
+      sheet.getByRole("button", { name: /^Voir \d+ résultat|Aucun résultat/ }),
+    ).toBeVisible();
+    // Never a filter by gender, age or nationality (règle d'or 4).
+    await expect(sheet.getByText(/genre|âge|nationalité/i)).toHaveCount(0);
+    const scope = sheet.getByRole("group", { name: "Chercher dans" });
+    await scope.getByRole("button", { name: "Entreprises", exact: true }).click();
+    await expect(sheet.getByRole("group", { name: "Type de contrat · offres" })).toBeHidden();
+    await expect(sheet.getByRole("group", { name: "Secteur · entreprises" })).toBeVisible();
+    await sheet.getByRole("button", { name: /^Voir \d+ résultat|Aucun résultat/ }).click();
+    await expect(sheet).toBeHidden();
     await expect(
       explorer.getByRole("heading", { name: "Entreprises qui recrutent" }),
     ).toBeVisible();
     await expect(explorer.getByRole("heading", { name: "Offres pour vous" })).toHaveCount(0);
-    await kinds.getByRole("button", { name: "Tout", exact: true }).click();
+
+    // A contract filter, read on the server; the button shows how many filters are on.
+    await explorer.getByRole("button", { name: "Filtres", exact: true }).click();
+    await scope.getByRole("button", { name: "Tout", exact: true }).click();
+    const contracts = sheet.getByRole("group", { name: "Type de contrat · offres" });
+    await contracts.getByRole("button", { name: "CDI", exact: true }).click();
+    await expect(contracts.getByRole("button", { name: "CDI", exact: true })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    await sheet.getByRole("button", { name: /^Voir \d+ résultat|Aucun résultat/ }).click();
+    await expect(sheet).toBeHidden();
+    await expect(explorer.getByRole("button", { name: "Filtres, 1 filtre actif" })).toBeVisible();
     await expect(explorer.getByRole("heading", { name: "Offres pour vous" })).toBeVisible();
+    const kinds = await explorer
+      .locator('section[aria-labelledby="ex-pour-vous"] .nb-ex-puces > span:first-child')
+      .allTextContents();
+    expect(kinds.length).toBeGreaterThan(0);
+    for (const kind of kinds) expect(kind).toMatch(/^CDI/);
+
+    // « Effacer » then « Voir » comes back to Explorer as it was.
+    await explorer.getByRole("button", { name: "Filtres, 1 filtre actif" }).click();
+    await sheet.getByRole("button", { name: "Effacer" }).click();
+    await sheet.getByRole("button", { name: /^Voir \d+ résultat/ }).click();
+    await expect(explorer.getByRole("button", { name: "Filtres", exact: true })).toBeVisible();
 
     // Search, step 1: where to search; step 2: from the letters, the results.
     const field = explorer.getByRole("searchbox", { name: /Rechercher une offre/ });
