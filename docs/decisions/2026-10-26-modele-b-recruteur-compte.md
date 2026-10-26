@@ -50,8 +50,10 @@ Choix faits sans attendre, au plus simple dans les règles d'or.
     toucher) ; créés et modifiés sur ordinateur.
 12. **Nettoyage.** Supprimés : la barre du bas de l'ancienne coque (`bottom-bar.tsx`),
     `hidesRecruiterTabBar` et ses tests, la partie téléphone de l'ancien Compte RH et sa règle CSS,
-    quatre textes orphelins de `hireAccount`. Une fenêtre d'ordinateur rétrécie sous 768 px passe
-    au Modèle B (`ViewSync` dans `RecruiterShell`). Les anciennes adresses du téléphone mènent aux
+    quatre textes orphelins de `hireAccount`. Un téléphone est reconnu à son navigateur et
+    reçoit le Modèle B ; une fenêtre d'ordinateur rétrécie à la main garde l'interface de
+    l'ordinateur et son en-tête (organisation, cloche, avatar), comme depuis M1 : la faire basculer
+    au Modèle B cassait les tests de l'ordinateur qui mesurent les débordements à 390 px. Les anciennes adresses du téléphone mènent aux
     écrans Modèle B : `/app/hire/entretiens` → Candidatures › Entretiens, `/app/hire/rapports` →
     Mes statistiques, `/app/organisation/equipe` → Équipe de recrutement. Gardés : l'en-tête
     `header.tsx` et `org-sheet.tsx` (servent à la tablette et à l'ordinateur), les règles

@@ -4278,7 +4278,7 @@ Sections 08, 09 et 11 des captures (135 à 179, 185 à 192). Au téléphone, l'a
   rejoindre, chiffres, messages, offres, « Publier au nom de … »).
 - **Nettoyage** : barre du bas de l'ancienne coque supprimée (`bottom-bar.tsx`,
   `hidesRecruiterTabBar` et ses tests), partie téléphone de l'ancien Compte RH supprimée, textes
-  orphelins retirés ; une fenêtre d'ordinateur rétrécie passe au Modèle B ; `/app/hire/entretiens`,
+  orphelins retirés ; une fenêtre d'ordinateur rétrécie garde l'interface de l'ordinateur ; `/app/hire/entretiens`,
   `/app/hire/rapports` et `/app/organisation/equipe` mènent au téléphone vers leurs écrans
   Modèle B.
 - Code : `src/components/phone/recruteur/compte.tsx`, `compte-client.tsx` ;
