@@ -177,7 +177,9 @@ test.describe("Étape 3 · Équipe de l'entreprise", () => {
     await toast(page, /Sandra Démo apparaît comme membre confirmé·e/);
     await closeToast(page);
     for (const name of ["Merveille Démo", "Fabrice Démo", "Sandra Démo"])
-      await expect(main(page).getByText(name, { exact: true })).toHaveCount(0);
+      await expect(
+        main(page).getByText(name, { exact: true }).filter({ visible: true }),
+      ).toHaveCount(0);
 
     // Retirer Merveille (acceptée plus haut) : la place se libère.
     await tab(page, /^Membres et rôles/);

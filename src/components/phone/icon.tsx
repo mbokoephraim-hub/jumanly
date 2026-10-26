@@ -65,6 +65,16 @@ export const phoneIcons = {
   minuteur: "M12 4.5a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM12 8.5v4l2.5 2.5",
   envoyer: "M5 12h13M13 6l6 6-6 6",
   plusOptions: "M5 12h.01M12 12h.01M19 12h.01",
+  // Recruiter on a computer (Modèle B, lot N1): the sidebar of Web-App.dc.html.
+  accueil: "M4 11 12 4l8 7v9h-5v-6H9v6H4z",
+  tableau: "M7 4v16M3.5 16.5 7 20l3.5-3.5M17 20V4M13.5 7.5 17 4l3.5 3.5",
+  monEspace: "M3.5 6.5h17v11h-17zM3.5 10h17M7 14.5h4",
+  equipe:
+    "M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2.5 19a5.5 5.5 0 0 1 11 0M10.5 19a5.5 5.5 0 0 1 11 0",
+  pageEnt: "M4 20V8l8-4 8 4v12M9 20v-5h6v5M8 10h.01M12 10h.01M16 10h.01",
+  facture: "M6 3.5h8l4 4v13H6zM14 3.5v4h4M9 13h6M9 16.5h4",
+  oeil: "M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z",
+  curseurs: "M4 7h10M18 7h2M4 17h4M12 17h8M14 4.5v5M8 14.5v5",
 } as const;
 
 export type PhoneIconName = keyof typeof phoneIcons;

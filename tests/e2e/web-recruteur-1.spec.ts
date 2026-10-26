@@ -33,31 +33,27 @@ test("web recruteur 1 : cadre, À traiter, offres en grille, création avec aper
   await logIn(page, email, undefined, "/app/hire");
   await page.goto("/app/hire");
 
-  // La barre latérale remplace la barre du bas : entrées principales, puis Agenda · Talents ·
-  // Rapports.
-  const nav = page.getByRole("navigation", { name: "Navigation de l'espace recruteur" });
-  for (const tab of ["À traiter", "Offres", "Orbi", "Candidats", "Messages"])
+  // La barre latérale du Modèle B (lot N1) remplace la barre du bas.
+  const nav = page.getByRole("navigation", { name: "Navigation du recrutement" }).first();
+  for (const tab of ["Accueil", "Fil", "Offres", "Candidatures", "Agenda", "Talents", "Messages"])
     await expect(nav.getByRole("link", { name: new RegExp(`^${tab}`) })).toBeVisible();
-  await expect(nav.getByRole("link", { name: /^À traiter/ })).toHaveAttribute(
-    "aria-current",
-    "page",
-  );
-  const more = page.getByRole("navigation", { name: "Organiser" });
-  for (const item of ["Agenda", "Talents", "Rapports"])
+  await expect(nav.getByRole("link", { name: /^Accueil/ })).toHaveAttribute("aria-current", "page");
+  const more = page.getByRole("navigation", { name: "Pilotage" }).first();
+  for (const item of ["Tableau de bord", "Mon espace"])
     await expect(more.getByRole("link", { name: item })).toBeVisible();
   await expect(page.locator(".t-barre-bas")).toBeHidden();
 
-  // À traiter, rien encore : le bonjour en titre, « Publier une offre » à droite, la semaine.
+  // L'accueil, rien encore : le bonjour en titre, « Publier une offre » en haut.
   const main = page.locator("main").filter({ visible: true });
   await expect(main.getByText("Bonjour Recruteuse", { exact: true })).toBeVisible();
-  await expect(main.getByText("Rien à traiter pour l'instant")).toBeVisible();
-  await expect(main.getByRole("link", { name: "Publier une offre", exact: true })).toBeVisible();
+  await expect(main.getByText(/^Rien à (traiter|valider) pour l'instant/).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: "Publier une offre", exact: true })).toBeVisible();
   await noOverflow(page);
   await expectAccessible(page);
 
-  // L'organisation active s'ouvre sous son nom, avec la règle d'isolation.
+  // « Changer de profil » ouvre l'organisation active, avec la règle d'isolation.
   await page
-    .getByRole("button", { name: /Organisation active : .* Changer/ })
+    .getByRole("button", { name: /: changer de profil$/ })
     .filter({ visible: true })
     .click();
   const orgSheet = page.getByRole("dialog", { name: "Organisation active" });

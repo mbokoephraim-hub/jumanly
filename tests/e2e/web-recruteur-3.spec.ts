@@ -26,7 +26,7 @@ const main = (page: Page) => page.locator("main").filter({ visible: true });
 /** The seeded company of the planches: Baobab Fintech (prisma/seed/ux.ts, all fictional). */
 const baobab = "recruteur6.ux@jumanly.test";
 
-test("web recruteur 3 : menu du compte, compte, organisation, équipe, abonnement, rapports, paramètres", async ({
+test("web recruteur 3 : barre latérale, compte, organisation, équipe, abonnement, rapports, paramètres", async ({
   page,
   isMobile,
 }) => {
@@ -40,18 +40,16 @@ test("web recruteur 3 : menu du compte, compte, organisation, équipe, abonnemen
   await logIn(page, email, undefined, "/app/hire");
   await page.goto("/app/hire");
 
-  // 1. The avatar opens the menu of the account (the phone keeps its link to Compte RH).
-  await page.getByRole("button", { name: /^Compte de / }).click();
-  const menu = page.getByRole("dialog", { name: /^Menu du compte de / });
-  await expect(menu).toBeVisible();
-  for (const name of ["Organisation", "Équipe", "Rapports", "Abonnement", "Paramètres"])
-    await expect(menu.getByRole("link", { name: new RegExp(`^${name}`) })).toBeVisible();
-  await expect(menu.getByRole("button", { name: "Passer à mon espace talent" })).toBeVisible();
-  await expect(menu.getByRole("button", { name: "Se déconnecter" })).toBeVisible();
+  // 1. The sidebar (Modèle B, lot N1): Compte below, ENTREPRISE for the owner. The menu of the
+  // avatar is gone: « Espace talent » and « Se déconnecter » live in Compte.
+  const side = page.locator(".rb-side");
+  await expect(side.getByRole("link", { name: "Compte" })).toBeVisible();
+  const company = side.getByRole("navigation", { name: "Entreprise" });
+  for (const name of ["Équipe", "Page entreprise", "Formule et facturation", "Journal", "Réglages"])
+    await expect(company.getByRole("link", { name })).toBeVisible();
   await expectAccessible(page);
-  await menu.getByRole("link", { name: /^Organisation/ }).click();
+  await company.getByRole("link", { name: "Page entreprise" }).click();
   await expect(page).toHaveURL(/\/app\/organisation$/);
-  await expect(menu).toBeHidden();
 
   // 2. Page entreprise (étape 3, A3): the page with its fields and its public view.
   await expect(

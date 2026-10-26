@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { RhBell, RhTab } from "@/components/phone/recruteur/head";
@@ -17,9 +16,8 @@ const TOASTS = [
 ] as const;
 
 /**
- * The talent search lives in Candidats › Rechercher des talents since the recruiter redesign
- * (lot 4). Old addresses (bookmarks, e-mails) keep working: their filters are carried over. On a
- * phone (Modèle B) it is the first screen of the Talents tab.
+ * Talents (Modèle B): on a phone the first screen of the Talents tab (lots M1 and M6); on a
+ * computer and a tablet, the entry « Talents » of the sidebar (lot N1).
  */
 export default async function TalentsRedirect({ searchParams }: PageProps<"/app/hire/talents">) {
   const query = await searchParams;
@@ -42,18 +40,14 @@ export default async function TalentsRedirect({ searchParams }: PageProps<"/app/
       </RhTab>
     );
   }
-  const next = new URLSearchParams({ vue: "talents" });
-  const carry: Record<string, string> = {
-    q: "q",
-    location: "lieu",
-    lieu: "lieu",
-    job: "offre",
-    offre: "offre",
-    competences: "competences",
-  };
-  for (const [from, to] of Object.entries(carry)) {
-    const value = query[from];
-    if (typeof value === "string" && value) next.set(to, value.slice(0, 320));
-  }
-  redirect(`/app/hire/candidats?${next}`);
+  // On a computer and a tablet, the same search in the frame of the recruiter (lot N1); its
+  // columns come with lot N5.
+  const { ctx } = await requireHire("/app/hire/talents", "readApplications");
+  return (
+    <div className="rb-fil">
+      <RhTalentsTexts>
+        <RhTalents ctx={ctx} query={query} />
+      </RhTalentsTexts>
+    </div>
+  );
 }

@@ -16060,6 +16060,168 @@ Conventions :
 | `orgSettings.grid.locked` | Les grilles d'entretien viennent avec une formule qui les inclut. |
 | `orgSettings.grid.lockedLink` | Voir Formule et facturation |
 
+### Modèle B · Cadre du recruteur sur ordinateur
+
+*Recruteur sur ordinateur, lot N1 (docs/modele-b-recruteur/web, capture 030, Web-App.dc.html) : barre latérale (Accueil, Fil, Offres, Candidatures, Agenda, Talents, Messages, PILOTAGE, Compte, carte « Changer de profil »), en-tête avec le titre de la page, la recherche en deux temps, la cloche et « Publier une offre », Orbi en disque menthe flottant.*
+
+| Clé | Texte |
+|---|---|
+| `rhWeb.nav.aria` | Navigation du recrutement |
+| `rhWeb.nav.brand` | jumanly |
+| `rhWeb.nav.brandAria` | Jumanly, aller à l'accueil |
+| `rhWeb.nav.home` | Accueil |
+| `rhWeb.nav.fil` | Fil |
+| `rhWeb.nav.offers` | Offres |
+| `rhWeb.nav.applications` | Candidatures |
+| `rhWeb.nav.agenda` | Agenda |
+| `rhWeb.nav.talents` | Talents |
+| `rhWeb.nav.messages` | Messages |
+| `rhWeb.nav.pilotage` | PILOTAGE |
+| `rhWeb.nav.pilotageAria` | Pilotage |
+| `rhWeb.nav.dashboard` | Tableau de bord |
+| `rhWeb.nav.mine` | Mon espace |
+| `rhWeb.nav.account` | Compte |
+| `rhWeb.nav.switch` | Changer de profil |
+| `rhWeb.nav.switchAria` | {name} : changer de profil |
+| `rhWeb.nav.badge` | {label}, {count, plural, one {# nouveau} other {# nouveaux}} |
+| `rhWeb.top.title.home` | Accueil |
+| `rhWeb.top.title.fil` | Fil |
+| `rhWeb.top.title.offers` | Offres |
+| `rhWeb.top.title.publish` | Publier une offre |
+| `rhWeb.top.title.applications` | Candidatures |
+| `rhWeb.top.title.evaluation` | Évaluation d'entretien |
+| `rhWeb.top.title.agenda` | Agenda |
+| `rhWeb.top.title.talents` | Talents |
+| `rhWeb.top.title.messages` | Messages |
+| `rhWeb.top.title.notifications` | Notifications |
+| `rhWeb.top.title.orbi` | Orbi |
+| `rhWeb.top.title.dashboard` | Tableau de bord |
+| `rhWeb.top.title.mine` | Mon espace |
+| `rhWeb.top.title.account` | Compte |
+| `rhWeb.top.title.settings` | Paramètres |
+| `rhWeb.top.title.companies` | Entreprises |
+| `rhWeb.top.title.team` | Équipe |
+| `rhWeb.top.title.page` | Page entreprise |
+| `rhWeb.top.title.billing` | Formule et facturation |
+| `rhWeb.top.title.journal` | Journal des consultations |
+| `rhWeb.top.title.recruiting` | Réglages du recrutement |
+| `rhWeb.top.title.models` | Modèles de messages |
+| `rhWeb.top.publish` | Publier une offre |
+| `rhWeb.top.search.candidates` | Rechercher des candidats |
+| `rhWeb.top.search.offers` | Rechercher des offres |
+| `rhWeb.top.search.talents` | Rechercher des talents |
+| `rhWeb.top.search.conversations` | Rechercher des conversations |
+| `rhWeb.top.search.fil` | Rechercher des publications et des personnes |
+| `rhWeb.top.search.searchIn` | Rechercher dans |
+| `rhWeb.top.search.try` | Essayez de chercher un prénom, un métier ou une offre. |
+| `rhWeb.top.search.searching` | Recherche en cours… |
+| `rhWeb.top.search.none` | Aucun résultat. Essayez un prénom, un métier ou une offre. |
+| `rhWeb.top.search.close` | Fermer |
+| `rhWeb.top.search.clear` | Effacer la recherche |
+| `rhWeb.top.search.results` | Résultats de la recherche |
+| `rhWeb.top.orbi` | Ouvrir Orbi |
+
+### Modèle B · Accueil du recruteur sur ordinateur
+
+*Recruteur sur ordinateur, lot N1 (captures 031, 032, 074, 075) : l'accueil du jour (rendez-vous, à traiter, mes tâches, offres, Orbi résume) et, pour l'administrateur, l'équipe et les demandes à valider. Premier passage : la fenêtre « Bienvenue ». Les chiffres sont toujours les vrais.*
+
+| Clé | Texte |
+|---|---|
+| `rhWeb.home.seo` | Accueil |
+| `rhWeb.home.hello` | Bonjour {name} |
+| `rhWeb.home.helloNoName` | Bonjour |
+| `rhWeb.home.line` | {date} · {org} |
+| `rhWeb.home.agenda` | Ouvrir l'agenda |
+| `rhWeb.home.invite` | Inviter un membre |
+| `rhWeb.home.assign` | Attribuer une tâche |
+| `rhWeb.home.tiles.aria` | Les chiffres du jour |
+| `rhWeb.home.tiles.applications` | {count, plural, =0 {nouvelle candidature} one {nouvelle candidature} other {nouvelles candidatures}} |
+| `rhWeb.home.tiles.interviews` | {count, plural, =0 {rendez-vous aujourd'hui} one {rendez-vous aujourd'hui} other {rendez-vous aujourd'hui}} |
+| `rhWeb.home.tiles.tasks` | {count, plural, =0 {tâche à faire} one {tâche à faire} other {tâches à faire}} |
+| `rhWeb.home.tiles.unread` | {count, plural, =0 {message non lu} one {message non lu} other {messages non lus}} |
+| `rhWeb.home.tiles.seats` | {used} sur {max} |
+| `rhWeb.home.tiles.seatsUnlimited` | {used} |
+| `rhWeb.home.tiles.seatsLine` | utilisateurs dans l'équipe |
+| `rhWeb.home.tiles.late` | {count, plural, =0 {tâche en retard à relancer} one {tâche en retard à relancer} other {tâches en retard à relancer}} |
+| `rhWeb.home.tiles.requests` | {count, plural, =0 {demande à valider} one {demande à valider} other {demandes à valider}} |
+| `rhWeb.home.tiles.renewal` | renouvellement de la formule |
+| `rhWeb.home.tiles.free` | Gratuite |
+| `rhWeb.home.tiles.freeLine` | formule de l'entreprise |
+| `rhWeb.home.today.title` | Aujourd'hui |
+| `rhWeb.home.today.empty` | Aucun rendez-vous aujourd'hui. L'agenda montre les prochains. |
+| `rhWeb.home.today.interview` | Entretien · {name} |
+| `rhWeb.home.today.line` | {job} · {mode} |
+| `rhWeb.home.today.mode.video` | visio |
+| `rhWeb.home.today.mode.audio` | appel |
+| `rhWeb.home.today.mode.onsite` | sur place |
+| `rhWeb.home.todo.title` | À traiter |
+| `rhWeb.home.todo.applied` | {name} a candidaté |
+| `rhWeb.home.todo.appliedLine` | {job} · {when} |
+| `rhWeb.home.todo.more` | {count, plural, one {# autre nouvelle candidature} other {# autres nouvelles candidatures}} |
+| `rhWeb.home.todo.moreLine` | Toutes les candidatures, triées par compatibilité |
+| `rhWeb.home.todo.invitations` | {count, plural, one {# invitation à un entretien sans réponse} other {# invitations à un entretien sans réponse}} |
+| `rhWeb.home.todo.invitationsLine` | La personne accepte ou propose un autre créneau |
+| `rhWeb.home.todo.scorecards` | {count, plural, one {# évaluation d'entretien à compléter} other {# évaluations d'entretien à compléter}} |
+| `rhWeb.home.todo.scorecardsLine` | Cinq critères, notés de 1 à 5 |
+| `rhWeb.home.todo.unread` | {count, plural, one {# message non lu} other {# messages non lus}} |
+| `rhWeb.home.todo.unreadLine` | Candidats, talents et équipe |
+| `rhWeb.home.todo.empty` | Rien à traiter pour l'instant. Les nouvelles candidatures et les réponses arriveront ici. |
+| `rhWeb.home.tasks.title` | Mes tâches |
+| `rhWeb.home.tasks.line` | Échéance {date} · {status} |
+| `rhWeb.home.tasks.empty` | Aucune tâche pour l'instant. Quand l'administrateur vous en confie une, elle apparaît ici. |
+| `rhWeb.home.tasks.all` | Mon espace |
+| `rhWeb.home.offers.title` | Offres |
+| `rhWeb.home.offers.line` | {count, plural, =0 {0 candidature} one {# candidature} other {# candidatures}} · {fresh, plural, =0 {aucune nouvelle} one {# nouvelle} other {# nouvelles}} |
+| `rhWeb.home.offers.all` | Toutes les offres |
+| `rhWeb.home.offers.empty` | Aucune offre pour l'instant. |
+| `rhWeb.home.offers.status.draft` | Brouillon |
+| `rhWeb.home.offers.status.pending_review` | En vérification |
+| `rhWeb.home.offers.status.published` | En ligne |
+| `rhWeb.home.offers.status.paused` | En pause |
+| `rhWeb.home.offers.status.closed` | Clôturée |
+| `rhWeb.home.offers.status.archived` | Archivée |
+| `rhWeb.home.offers.status.rejected` | Refusée |
+| `rhWeb.home.offers.status.changes_requested` | À corriger |
+| `rhWeb.home.orbi.title` | Orbi résume |
+| `rhWeb.home.orbi.open` | Ouvrir la conversation complète |
+| `rhWeb.home.orbi.interviews` | {count, plural, =0 {Aucun rendez-vous aujourd'hui.} one {Un rendez-vous aujourd'hui.} other {# rendez-vous aujourd'hui.}} |
+| `rhWeb.home.orbi.best` | {name} ({score} %) attend une première réponse. |
+| `rhWeb.home.orbi.calm` | Aucune candidature n'attend de réponse. |
+| `rhWeb.home.orbi.late` | {count, plural, one {Une tâche de l'équipe a dépassé son échéance : une relance suffit souvent.} other {# tâches de l'équipe ont dépassé leur échéance : une relance suffit souvent.}} |
+| `rhWeb.home.orbi.team` | {done, plural, =0 {Aucune tâche terminée ce mois-ci.} one {Une tâche terminée ce mois-ci.} other {# tâches terminées ce mois-ci.}} |
+| `rhWeb.home.orbi.decide` | Vous décidez. |
+| `rhWeb.home.validate.title` | À valider |
+| `rhWeb.home.validate.empty` | Rien à valider pour l'instant. |
+| `rhWeb.home.teamTasks.title` | Tâches de l'équipe en cours |
+| `rhWeb.home.teamTasks.all` | Toutes les tâches |
+| `rhWeb.home.teamTasks.line` | {who} · échéance {date} |
+| `rhWeb.home.teamTasks.empty` | Aucune tâche en cours. Attribuez-en une à un membre de l'équipe. |
+| `rhWeb.home.month.title` | {month} en chiffres |
+| `rhWeb.home.month.pdf` | PDF |
+| `rhWeb.home.month.pdfAria` | Rapport de recrutement du mois, en PDF |
+| `rhWeb.home.month.applications` | {count, plural, =0 {candidature ce mois-ci} one {candidature ce mois-ci} other {candidatures ce mois-ci}} |
+| `rhWeb.home.month.interviews` | {count, plural, =0 {entretien} one {entretien} other {entretiens}} |
+| `rhWeb.home.month.hires` | {count, plural, =0 {embauche} one {embauche} other {embauches}} |
+| `rhWeb.home.month.delay` | délai de première réponse |
+| `rhWeb.home.month.delayValue` | {days} j |
+| `rhWeb.home.month.delayNone` | — |
+| `rhWeb.home.welcome.title` | Bienvenue, {name} |
+| `rhWeb.home.welcome.titleNoName` | Bienvenue |
+| `rhWeb.home.welcome.line` | Votre espace {org} est prêt. |
+| `rhWeb.home.welcome.start` | Commencer |
+| `rhWeb.home.welcome.recruiter.applications` | Vos candidatures |
+| `rhWeb.home.welcome.recruiter.applicationsText` | Toutes les étapes de l'ATS, triées par compatibilité. Personne n'est écarté. |
+| `rhWeb.home.welcome.recruiter.agenda` | Votre agenda |
+| `rhWeb.home.welcome.recruiter.agendaText` | Entretiens, appels et réunions, avec des créneaux proposés. |
+| `rhWeb.home.welcome.recruiter.mine` | Votre espace |
+| `rhWeb.home.welcome.recruiter.mineText` | Le rôle que votre administrateur vous a donné, vos tâches et votre rapport PDF. |
+| `rhWeb.home.welcome.admin.invite` | Invitez votre équipe |
+| `rhWeb.home.welcome.admin.inviteText` | Donnez un rôle à chacun : recruteur, manager ou lecteur. |
+| `rhWeb.home.welcome.admin.assign` | Attribuez des tâches |
+| `rhWeb.home.welcome.admin.assignText` | Suivre un candidat, évaluer un diagnostic, mener un entretien. |
+| `rhWeb.home.welcome.admin.follow` | Suivez l'évolution |
+| `rhWeb.home.welcome.admin.followText` | Le tableau de bord et le rapport PDF du mois. |
+
 ### `/tarifs` · Forfaits
 
 *Présenter toutes les formules de façon claire et honnête, par famille, et mener à l'inscription ou au devis.*

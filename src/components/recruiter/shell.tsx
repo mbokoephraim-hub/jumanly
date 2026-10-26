@@ -10,14 +10,17 @@ import { AppearanceRoot } from "@/components/talent/appearance";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
 import { appearanceScript, type Appearance } from "@/lib/appearance";
 import { TalentCommand } from "@/components/talent/web/command";
-import { TalentTopBar } from "@/components/talent/web/top-bar";
 import { OrbiPanel } from "@/components/talent/web/orbi-panel";
 import type { AbstractIntlMessages } from "next-intl";
 import { recruiterOrbiActions, recruiterOrbiAides } from "@/server/services/recruiter-orbi";
 import { RecruiterHeader } from "./header";
 import { OrgMark } from "./org-mark";
 import { OrgSheet, type OrgChoice } from "./org-sheet";
+import { OrbiDisc } from "@/components/phone/icon";
+import type { RecruiterWebCounts } from "@/server/services/hire-web-home";
 import { RecruiterSideNav } from "./side-nav";
+import { RB_TITLES } from "./titles";
+import { RecruiterOrbiButton, RecruiterTop } from "./top";
 
 /**
  * Recruiter space, one code for three widths (docs/refonte-mobile, brief recruteur lot 1;
@@ -28,16 +31,29 @@ import { RecruiterSideNav } from "./side-nav";
  * sidebar with the organization and its menu under the name, and the top bar. The frame is the
  * talent's (`t-cadre`, lot W0): same surfaces, icons, `Ctrl K` and light or dark mode.
  */
+const SCOPES = [
+  "tout",
+  "offres",
+  "candidats",
+  "entreprises",
+  "personnes",
+  "publications",
+  "nom",
+  "competence",
+  "ville",
+  "metier",
+] as const;
+
 export function RecruiterShell({
   account,
   org,
   orgs,
   unread,
-  unreadMessages,
+  counts,
+  canPublish,
   appearance,
   reduceMotion,
   intro,
-  menu,
   orbiTexts,
   brief,
   company = false,
@@ -47,12 +63,13 @@ export function RecruiterShell({
   org: { id: string; name: string; logo: string | null };
   orgs: OrgChoice[];
   unread: number;
-  unreadMessages: number;
+  /** The counts of the sidebar (Modèle B, lot N1). */
+  counts: RecruiterWebCounts;
+  /** « Publier une offre » in the head: the member publishes. */
+  canPublish: boolean;
   appearance: Appearance;
   reduceMotion: boolean;
   intro: IntroData;
-  /** The menu of the avatar on a computer (web recruteur lot 3), streamed. */
-  menu: ReactNode;
   /** The texts of Orbi's conversation in the recruiter space, for the panel. */
   orbiTexts: AbstractIntlMessages;
   /** « Votre journée en bref » at the top of the notifications under the bell, streamed. */
@@ -68,6 +85,9 @@ export function RecruiterShell({
   const tNotifications = useTranslations("notifications");
   const tOrbi = useTranslations("rhOrbi");
   const tPanel = useTranslations("talentShell.orbiPanel");
+  const tn = useTranslations("rhWeb.nav");
+  const tTop = useTranslations("rhWeb.top");
+  const tScopes = useTranslations("phoneRh.search.scopes");
   const notifications = {
     zero: t("header.notifications", { count: 0 }),
     one: t("header.notifications", { count: 1 }),
@@ -97,9 +117,13 @@ export function RecruiterShell({
       </a>
       <RecruiterSideNav
         name={account.name}
-        line={account.line}
         avatar={avatar}
-        unreadMessages={unreadMessages}
+        counts={{
+          applications: counts.applications,
+          agenda: counts.interviews,
+          talents: counts.talents,
+          messages: counts.messages,
+        }}
         company={company}
         org={{ name: org.name, mark: <OrgMark name={org.name} logo={org.logo} /> }}
         labels={{
@@ -112,43 +136,43 @@ export function RecruiterShell({
             journal: t("web.entreprise.journal"),
             settings: t("web.entreprise.settings"),
           },
-          aria: t("nav.aria"),
-          more: t("web.more"),
-          home: t("web.home"),
-          brand: t("web.brand"),
-          today: t("nav.today"),
-          offers: t("nav.offers"),
-          orbi: t("nav.orbi"),
-          candidates: t("nav.candidates"),
-          messages: t("nav.messages"),
-          messagesAria: t("web.messages", { count: unreadMessages }),
-          agenda: t("web.agenda"),
-          talents: t("web.talents"),
-          reports: t("web.reports"),
-          settings: t("web.settings"),
-          account: t("header.account", { name: account.name }),
-          shortcut: t("web.shortcut"),
-          org: t("org.open", { org: org.name }),
+          aria: tn("aria"),
+          brand: tn("brand"),
+          brandAria: tn("brandAria"),
+          home: tn("home"),
+          fil: tn("fil"),
+          offers: tn("offers"),
+          applications: tn("applications"),
+          agenda: tn("agenda"),
+          talents: tn("talents"),
+          messages: tn("messages"),
+          pilotage: tn("pilotage"),
+          pilotageAria: tn("pilotageAria"),
+          dashboard: tn("dashboard"),
+          mine: tn("mine"),
+          account: tn("account"),
+          switch: tn("switch"),
+          switchAria: tn("switchAria", { name: account.name }),
+          badges: {
+            applications: tn("badge", { label: tn("applications"), count: counts.applications }),
+            agenda: tn("badge", { label: tn("agenda"), count: counts.interviews }),
+            talents: tn("badge", { label: tn("talents"), count: counts.talents }),
+            messages: tn("badge", { label: tn("messages"), count: counts.messages }),
+          },
         }}
       />
       <div className="t-main">
-        <TalentTopBar
+        <RecruiterTop
           unread={unread}
-          unreadMessages={unreadMessages}
-          avatar={avatar}
-          menu={menu}
+          canPublish={canPublish}
           brief={brief}
           labels={{
-            search: t("web.search"),
-            shortcut: t("web.shortcut"),
-            notifications: notifications,
-            messages: {
-              zero: t("web.messages", { count: 0 }),
-              one: t("web.messages", { count: 1 }),
-              other: t("web.messages", { count: 2 }).replace("2", "#"),
-            },
-            account: t("header.account", { name: account.name }),
-            menu: t("web3.menu", { name: account.name }),
+            titles: Object.fromEntries(
+              RB_TITLES.map((key) => [key, tTop(`title.${key}`)]),
+            ) as Record<(typeof RB_TITLES)[number], string>,
+            publish: tTop("publish"),
+            orbi: tTop("orbi"),
+            notifications,
             panel: {
               title: tNotifs("web.title"),
               markAll: tNotifications("markAllRead"),
@@ -157,6 +181,20 @@ export function RecruiterShell({
               error: tNotifs("web.error"),
               empty: tNotifs("empty.title"),
               unread: tNotifications("item.unread"),
+            },
+            search: {
+              candidates: tTop("search.candidates"),
+              offers: tTop("search.offers"),
+              talents: tTop("search.talents"),
+              fil: tTop("search.fil"),
+              searchIn: tTop("search.searchIn"),
+              try: tTop("search.try"),
+              searching: tTop("search.searching"),
+              none: tTop("search.none"),
+              close: tTop("search.close"),
+              clear: tTop("search.clear"),
+              results: tTop("search.results"),
+              scopes: Object.fromEntries(SCOPES.map((scope) => [scope, tScopes(scope)])),
             },
           }}
         />
@@ -205,6 +243,9 @@ export function RecruiterShell({
           }))}
         />
       </Suspense>
+      <RecruiterOrbiButton label={tTop("orbi")}>
+        <OrbiDisc size={60} />
+      </RecruiterOrbiButton>
       <TalentCommand
         preview="/api/hire/recherche/apercu?q="
         results={null}

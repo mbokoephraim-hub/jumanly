@@ -223,11 +223,14 @@ export function TeamScreen({
   data,
   initialTab,
   inviting = false,
+  assigning = false,
 }: {
   data: TeamData;
   initialTab: Tab;
   /** `?inviter=1`: the page opens on « Inviter un membre ». */
   inviting?: boolean;
+  /** `?attribuer=1` (« Attribuer une tâche » of the home, lot N1): opens on that dialog. */
+  assigning?: boolean;
 }) {
   const t = useTranslations("orgTeam");
   const [tab, setTab] = useState<Tab>(initialTab);
@@ -236,7 +239,7 @@ export function TeamScreen({
   const selected = data.members.find((member) => member.id === selectedId) ?? others[0];
   const [filter, setFilter] = useState<Filter>("toutes");
   const [dialog, setDialog] = useState<null | "invite" | "assign" | "remove">(
-    inviting ? "invite" : null,
+    inviting ? "invite" : assigning ? "assign" : null,
   );
   const [toast, setToast] = useState<string | null>(null);
   const [pending, start] = useTransition();
