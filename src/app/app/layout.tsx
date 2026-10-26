@@ -19,11 +19,10 @@ import { ADMIN_ROLES } from "@/server/auth/session";
 import type { AbstractIntlMessages } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { AvatarMenuContent } from "@/components/talent/web/avatar-menu";
-import { RecruiterAvatarMenu } from "@/components/recruiter/avatar-menu";
 import { RecruiterBrief } from "@/components/recruiter/brief";
 import { recruiterChatTexts } from "@/components/recruiter/orbi";
 import { hireToday } from "@/server/services/hire-today";
-import type { HireContext } from "@/server/services/hire";
+import { hirePermissions, type HireContext } from "@/server/services/hire";
 import { ContentBanners } from "@/components/site/content-banners";
 import { getActiveSpace } from "@/server/hire-context";
 import { getPartnerSpace } from "@/server/partner-context";
@@ -34,6 +33,7 @@ import { introProfile } from "@/lib/app-intro";
 import { unreadCount } from "@/server/services/connect";
 import { followUpActions } from "@/server/services/follow-up";
 import { recruiterBarCounts } from "@/server/services/hire-phone";
+import { recruiterWebCounts } from "@/server/services/hire-web-home";
 
 /** Signed-in space: every page below needs a session (checked on the server). */
 export default function SignedInLayout({ children }: LayoutProps<"/app">) {
@@ -181,11 +181,8 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
   if (space && !partnerSpace) {
     const tShell = await getTranslations("hireShell.org");
     const ctx = { userId: user.id, organizationId: space.organizationId, role: space.role };
-    const [unreadMessages, logos, plans, messages] = await Promise.all([
-      unreadCount(db, {
-        userId: user.id,
-        hire: { userId: user.id, organizationId: space.organizationId, role: space.role },
-      }),
+    const [counts, logos, plans, messages] = await Promise.all([
+      recruiterWebCounts(db, ctx),
       db.organization.findMany({
         where: { id: { in: hire.map((membership) => membership.organizationId) } },
         select: { id: true, logo: true },
@@ -223,7 +220,8 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
           };
         })}
         unread={unread}
-        unreadMessages={unreadMessages}
+        counts={counts}
+        canPublish={hirePermissions(space.role).manage}
         // Étape 3 (docs/decisions/2026-10-26-etape-3-cadre.md): the recruiter's space on a
         // computer is always dark, like the Modèle B.
         appearance="dark"
@@ -231,15 +229,6 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
         reduceMotion={user.reduceMotion}
         intro={intro}
         orbiTexts={recruiterChatTexts(messages) as AbstractIntlMessages}
-        menu={
-          <Suspense fallback={null}>
-            <RecruiterAvatarMenu
-              ctx={ctx}
-              user={{ name: user.name, image: user.image ?? null }}
-              roleLabel={t(`${space.role}.text`)}
-            />
-          </Suspense>
-        }
         brief={
           <Suspense fallback={null}>
             <BellBrief ctx={ctx} firstName={user.firstName || user.name} />

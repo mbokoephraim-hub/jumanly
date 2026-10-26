@@ -511,5 +511,6 @@ export async function adminEnterAction() {
   const { ctx } = await requireSignup();
   await setActiveSpace(ctx.organizationId);
   await writeSignupFlow({ plan: undefined });
-  redirect(withArrival("/app"));
+  // The home opens on « Bienvenue » (Modèle B, lot N1, capture 074).
+  redirect(withArrival("/app/hire?bienvenue=1"));
 }

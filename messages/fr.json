@@ -19623,6 +19623,194 @@
       "lockedLink": "Voir Formule et facturation"
     }
   },
+  "rhWeb": {
+    "nav": {
+      "aria": "Navigation du recrutement",
+      "brand": "jumanly",
+      "brandAria": "Jumanly, aller à l'accueil",
+      "home": "Accueil",
+      "fil": "Fil",
+      "offers": "Offres",
+      "applications": "Candidatures",
+      "agenda": "Agenda",
+      "talents": "Talents",
+      "messages": "Messages",
+      "pilotage": "PILOTAGE",
+      "pilotageAria": "Pilotage",
+      "dashboard": "Tableau de bord",
+      "mine": "Mon espace",
+      "account": "Compte",
+      "switch": "Changer de profil",
+      "switchAria": "{name} : changer de profil",
+      "badge": "{label}, {count, plural, one {# nouveau} other {# nouveaux}}"
+    },
+    "top": {
+      "title": {
+        "home": "Accueil",
+        "fil": "Fil",
+        "offers": "Offres",
+        "publish": "Publier une offre",
+        "applications": "Candidatures",
+        "evaluation": "Évaluation d'entretien",
+        "agenda": "Agenda",
+        "talents": "Talents",
+        "messages": "Messages",
+        "notifications": "Notifications",
+        "orbi": "Orbi",
+        "dashboard": "Tableau de bord",
+        "mine": "Mon espace",
+        "account": "Compte",
+        "settings": "Paramètres",
+        "companies": "Entreprises",
+        "team": "Équipe",
+        "page": "Page entreprise",
+        "billing": "Formule et facturation",
+        "journal": "Journal des consultations",
+        "recruiting": "Réglages du recrutement",
+        "models": "Modèles de messages"
+      },
+      "publish": "Publier une offre",
+      "search": {
+        "candidates": "Rechercher des candidats",
+        "offers": "Rechercher des offres",
+        "talents": "Rechercher des talents",
+        "conversations": "Rechercher des conversations",
+        "fil": "Rechercher des publications et des personnes",
+        "searchIn": "Rechercher dans",
+        "try": "Essayez de chercher un prénom, un métier ou une offre.",
+        "searching": "Recherche en cours…",
+        "none": "Aucun résultat. Essayez un prénom, un métier ou une offre.",
+        "close": "Fermer",
+        "clear": "Effacer la recherche",
+        "results": "Résultats de la recherche"
+      },
+      "orbi": "Ouvrir Orbi"
+    },
+    "home": {
+      "seo": "Accueil",
+      "hello": "Bonjour {name}",
+      "helloNoName": "Bonjour",
+      "line": "{date} · {org}",
+      "agenda": "Ouvrir l'agenda",
+      "invite": "Inviter un membre",
+      "assign": "Attribuer une tâche",
+      "tiles": {
+        "aria": "Les chiffres du jour",
+        "applications": "{count, plural, =0 {nouvelle candidature} one {nouvelle candidature} other {nouvelles candidatures}}",
+        "interviews": "{count, plural, =0 {rendez-vous aujourd'hui} one {rendez-vous aujourd'hui} other {rendez-vous aujourd'hui}}",
+        "tasks": "{count, plural, =0 {tâche à faire} one {tâche à faire} other {tâches à faire}}",
+        "unread": "{count, plural, =0 {message non lu} one {message non lu} other {messages non lus}}",
+        "seats": "{used} sur {max}",
+        "seatsUnlimited": "{used}",
+        "seatsLine": "utilisateurs dans l'équipe",
+        "late": "{count, plural, =0 {tâche en retard à relancer} one {tâche en retard à relancer} other {tâches en retard à relancer}}",
+        "requests": "{count, plural, =0 {demande à valider} one {demande à valider} other {demandes à valider}}",
+        "renewal": "renouvellement de la formule",
+        "free": "Gratuite",
+        "freeLine": "formule de l'entreprise"
+      },
+      "today": {
+        "title": "Aujourd'hui",
+        "empty": "Aucun rendez-vous aujourd'hui. L'agenda montre les prochains.",
+        "interview": "Entretien · {name}",
+        "line": "{job} · {mode}",
+        "mode": {
+          "video": "visio",
+          "audio": "appel",
+          "onsite": "sur place"
+        }
+      },
+      "todo": {
+        "title": "À traiter",
+        "applied": "{name} a candidaté",
+        "appliedLine": "{job} · {when}",
+        "more": "{count, plural, one {# autre nouvelle candidature} other {# autres nouvelles candidatures}}",
+        "moreLine": "Toutes les candidatures, triées par compatibilité",
+        "invitations": "{count, plural, one {# invitation à un entretien sans réponse} other {# invitations à un entretien sans réponse}}",
+        "invitationsLine": "La personne accepte ou propose un autre créneau",
+        "scorecards": "{count, plural, one {# évaluation d'entretien à compléter} other {# évaluations d'entretien à compléter}}",
+        "scorecardsLine": "Cinq critères, notés de 1 à 5",
+        "unread": "{count, plural, one {# message non lu} other {# messages non lus}}",
+        "unreadLine": "Candidats, talents et équipe",
+        "empty": "Rien à traiter pour l'instant. Les nouvelles candidatures et les réponses arriveront ici."
+      },
+      "tasks": {
+        "title": "Mes tâches",
+        "line": "Échéance {date} · {status}",
+        "empty": "Aucune tâche pour l'instant. Quand l'administrateur vous en confie une, elle apparaît ici.",
+        "all": "Mon espace"
+      },
+      "offers": {
+        "title": "Offres",
+        "line": "{count, plural, =0 {0 candidature} one {# candidature} other {# candidatures}} · {fresh, plural, =0 {aucune nouvelle} one {# nouvelle} other {# nouvelles}}",
+        "all": "Toutes les offres",
+        "empty": "Aucune offre pour l'instant.",
+        "status": {
+          "draft": "Brouillon",
+          "pending_review": "En vérification",
+          "published": "En ligne",
+          "paused": "En pause",
+          "closed": "Clôturée",
+          "archived": "Archivée",
+          "rejected": "Refusée",
+          "changes_requested": "À corriger"
+        }
+      },
+      "orbi": {
+        "title": "Orbi résume",
+        "open": "Ouvrir la conversation complète",
+        "interviews": "{count, plural, =0 {Aucun rendez-vous aujourd'hui.} one {Un rendez-vous aujourd'hui.} other {# rendez-vous aujourd'hui.}}",
+        "best": "{name} ({score} %) attend une première réponse.",
+        "calm": "Aucune candidature n'attend de réponse.",
+        "late": "{count, plural, one {Une tâche de l'équipe a dépassé son échéance : une relance suffit souvent.} other {# tâches de l'équipe ont dépassé leur échéance : une relance suffit souvent.}}",
+        "team": "{done, plural, =0 {Aucune tâche terminée ce mois-ci.} one {Une tâche terminée ce mois-ci.} other {# tâches terminées ce mois-ci.}}",
+        "decide": "Vous décidez."
+      },
+      "validate": {
+        "title": "À valider",
+        "empty": "Rien à valider pour l'instant."
+      },
+      "teamTasks": {
+        "title": "Tâches de l'équipe en cours",
+        "all": "Toutes les tâches",
+        "line": "{who} · échéance {date}",
+        "empty": "Aucune tâche en cours. Attribuez-en une à un membre de l'équipe."
+      },
+      "month": {
+        "title": "{month} en chiffres",
+        "pdf": "PDF",
+        "pdfAria": "Rapport de recrutement du mois, en PDF",
+        "applications": "{count, plural, =0 {candidature ce mois-ci} one {candidature ce mois-ci} other {candidatures ce mois-ci}}",
+        "interviews": "{count, plural, =0 {entretien} one {entretien} other {entretiens}}",
+        "hires": "{count, plural, =0 {embauche} one {embauche} other {embauches}}",
+        "delay": "délai de première réponse",
+        "delayValue": "{days} j",
+        "delayNone": "—"
+      },
+      "welcome": {
+        "title": "Bienvenue, {name}",
+        "titleNoName": "Bienvenue",
+        "line": "Votre espace {org} est prêt.",
+        "start": "Commencer",
+        "recruiter": {
+          "applications": "Vos candidatures",
+          "applicationsText": "Toutes les étapes de l'ATS, triées par compatibilité. Personne n'est écarté.",
+          "agenda": "Votre agenda",
+          "agendaText": "Entretiens, appels et réunions, avec des créneaux proposés.",
+          "mine": "Votre espace",
+          "mineText": "Le rôle que votre administrateur vous a donné, vos tâches et votre rapport PDF."
+        },
+        "admin": {
+          "invite": "Invitez votre équipe",
+          "inviteText": "Donnez un rôle à chacun : recruteur, manager ou lecteur.",
+          "assign": "Attribuez des tâches",
+          "assignText": "Suivre un candidat, évaluer un diagnostic, mener un entretien.",
+          "follow": "Suivez l'évolution",
+          "followText": "Le tableau de bord et le rapport PDF du mois."
+        }
+      }
+    }
+  },
   "pricing": {
     "seo": {
       "title": "Tarifs et forfaits · Jumanly",

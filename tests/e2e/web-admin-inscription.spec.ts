@@ -249,7 +249,13 @@ test.describe("Étape 3 · inscription de l'administrateur d'entreprise", () => 
     await expect(page.getByText("3 invitations envoyées")).toBeVisible();
     await shot(page, "029-pret");
     await page.getByRole("button", { name: "Entrer dans l'espace administrateur" }).click();
-    await expect(page).toHaveURL(/\/app/, { timeout: 20_000 });
+    await expect(page).toHaveURL(/\/app\/hire\?.*bienvenue=1/, { timeout: 20_000 });
+    // « Bienvenue » (capture 074): « Commencer » closes it and leaves the home.
+    const welcome = page.getByRole("dialog", { name: /^Bienvenue/ });
+    await expect(welcome.getByText("Invitez votre équipe")).toBeVisible();
+    await welcome.getByRole("button", { name: "Commencer" }).click();
+    await expect(welcome).toBeHidden();
+    await expect(page).toHaveURL(/\/app\/hire$/);
   });
 
   test("RH Free : un paiement en attente, puis « payer plus tard », sans invitation", async ({

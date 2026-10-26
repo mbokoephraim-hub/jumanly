@@ -116,7 +116,12 @@ export default async function TeamPage({ searchParams }: PageProps<"/app/organis
     : "membres";
   return (
     <NextIntlClientProvider messages={pickMessages(messages, ["orgTeam"])}>
-      <TeamScreen data={data} initialTab={initialTab} inviting={query.inviter === "1"} />
+      <TeamScreen
+        data={data}
+        initialTab={initialTab}
+        inviting={query.inviter === "1"}
+        assigning={query.attribuer === "1"}
+      />
     </NextIntlClientProvider>
   );
 }

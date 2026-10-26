@@ -160,12 +160,11 @@ test.describe("Étape 3 · nettoyage, sur ordinateur", () => {
     await page.goto("/app/hire/compte");
     const visibleMain = page.locator("main").filter({ visible: true });
     await expect(visibleMain.getByRole("link", { name: /^Organisation/ })).toHaveCount(0);
+    // The sidebar (Modèle B, lot N1): Compte, never ENTREPRISE for a manager.
     await page.goto("/app/hire");
-    await page.getByRole("button", { name: /^Compte de / }).click();
-    const menu = page.getByRole("dialog", { name: /^Menu du compte de / });
-    await expect(menu.getByRole("link", { name: /^Paramètres/ })).toBeVisible();
-    await expect(menu.getByRole("link", { name: /^Organisation/ })).toHaveCount(0);
-    await expect(menu.getByRole("link", { name: /^Équipe/ })).toHaveCount(0);
+    const side = page.locator(".rb-side");
+    await expect(side.getByRole("link", { name: "Compte" })).toBeVisible();
+    await expect(side.getByRole("navigation", { name: "Entreprise" })).toHaveCount(0);
   });
 });
 

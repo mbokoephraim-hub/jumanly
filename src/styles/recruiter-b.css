@@ -1,0 +1,841 @@
+/* Recruteur sur ordinateur au Modèle B (docs/modele-b-recruteur/web, lots N1 à N7).
+ * Valeurs de web/maquette/Web-App.dc.html : fond Nuit, barre latérale #09161A de 248 px, en-tête
+ * de 76 px, lime réservé aux actions (un seul bouton plein par zone), Orbi en disque menthe.
+ * Préfixe rb-. Sous 768 px, l'appli du téléphone (Modèle B) prend le relais. */
+
+.t-rh {
+  --rb-nuit: #0b1a1f;
+  --rb-cote: #09161a;
+  --rb-surface: #13282c;
+  --rb-haute: #1b3338;
+  --rb-creme: #f2ede5;
+  --rb-brume: #8fa39e;
+  --rb-sourd: #6f8580;
+  --rb-lime: #a6f26b;
+  --rb-menthe: #2fd3a6;
+  --rb-ambre: #f4d59a;
+  --rb-trait: rgba(255, 255, 255, 0.07);
+}
+
+.rb-side,
+.rb-rail,
+.rb-top,
+.rb-orbi {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .t-rh.t-cadre {
+    background: var(--rb-nuit);
+    color: var(--rb-creme);
+    font-family: "Sora", var(--font-sans, system-ui), sans-serif;
+  }
+  .t-rh.t-cadre::before {
+    display: none;
+  }
+
+  /* ─── Rail (tablette) ─────────────────────────────────────────────── */
+  .t-rh .t-rl.rb-rail {
+    display: flex;
+    background: var(--rb-cote);
+    border-right: 1px solid var(--rb-trait);
+    gap: 4px;
+    padding: 18px 10px 14px;
+  }
+  .rb-rail ul {
+    gap: 4px;
+  }
+  .rb-logo-r {
+    display: flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .rb-logo-r i {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--rb-lime);
+  }
+  .rb-rail .rb-nv {
+    width: 52px;
+    height: 46px;
+    justify-content: center;
+    padding: 0;
+    position: relative;
+  }
+  .rb-rail .rb-pt {
+    position: absolute;
+    top: 9px;
+    right: 12px;
+  }
+  .rb-rail .rb-bas {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .rb-moi-r {
+    border: 0;
+    background: none;
+    padding: 4px;
+    border-radius: 14px;
+    cursor: pointer;
+  }
+
+  /* ─── En-tête ─────────────────────────────────────────────────────── */
+  .t-rh .rb-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 76px;
+    padding: 0 28px;
+    border-bottom: 1px solid var(--rb-trait);
+    position: sticky;
+    top: 0;
+    z-index: 15;
+    background: var(--rb-nuit);
+  }
+  .rb-top-h {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+  }
+  .rb-sp {
+    flex: 1;
+  }
+  .rb-rch {
+    flex: 1;
+    min-width: 0;
+    max-width: 520px;
+    margin-left: 24px;
+    position: relative;
+  }
+  .rb-rch label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 46px;
+    border-radius: 23px;
+    background: var(--rb-surface);
+    padding: 0 8px 0 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--rb-brume);
+  }
+  .rb-rch label:focus-within {
+    border-color: rgba(47, 211, 166, 0.55);
+  }
+  .rb-rch input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: none;
+    font: inherit;
+    font-size: 14px;
+    color: var(--rb-creme);
+  }
+  .rb-rch input::placeholder {
+    color: var(--rb-sourd);
+  }
+  .rb-rch input::-webkit-search-cancel-button {
+    display: none;
+  }
+  .rb-rch-x {
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--rb-haute);
+    color: var(--rb-brume);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .rb-pop {
+    position: absolute;
+    top: 54px;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    background: var(--rb-surface);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 14px;
+    box-shadow: 0 24px 50px -16px rgba(0, 0, 0, 0.8);
+    max-height: min(70dvh, 560px);
+    overflow-y: auto;
+  }
+  .rb-pop > .rb-meta:first-child {
+    margin: 0 0 8px;
+  }
+  .rb-pop-p {
+    margin: 12px 4px 4px;
+  }
+  .rb-pop-g {
+    margin-top: 12px;
+  }
+  .rb-pop-g > .rb-meta {
+    margin: 0 12px 4px;
+  }
+  .rb-r {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 12px;
+    color: var(--rb-creme);
+    text-decoration: none;
+  }
+  .rb-r b {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .rb-r:hover,
+  .rb-r:focus-visible {
+    background: var(--rb-haute);
+  }
+  .rb-pop-close {
+    display: block;
+    margin: 10px 0 0 auto;
+    height: 36px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 18px;
+    background: var(--rb-haute);
+    color: var(--rb-creme);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .rb-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .rb-pill {
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: none;
+    color: var(--rb-creme);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .rb-pill.rb-on {
+    background: var(--rb-haute);
+    border-color: rgba(166, 242, 107, 0.6);
+  }
+  .rb-rond {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 0;
+    background: var(--rb-surface);
+    color: var(--rb-creme);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    flex: none;
+  }
+  .rb-rond .rb-pt {
+    position: absolute;
+    top: 9px;
+    right: 10px;
+  }
+  .rb-pt {
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--rb-lime);
+  }
+
+  /* ─── Boutons ─────────────────────────────────────────────────────── */
+  .rb-btn,
+  .rb-btn2 {
+    height: 44px;
+    padding: 0 20px;
+    border-radius: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: nowrap;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    flex: none;
+  }
+  .rb-btn {
+    background: var(--rb-lime);
+    color: var(--rb-nuit);
+    border: 0;
+  }
+  .rb-btn2 {
+    padding: 0 18px;
+    background: none;
+    color: var(--rb-creme);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+  }
+  .rb-btn.rb-s,
+  .rb-btn2.rb-s {
+    height: 36px;
+    padding: 0 14px;
+    font-size: 13px;
+  }
+  .rb-btn:disabled,
+  .rb-btn2:disabled {
+    opacity: 0.55;
+    cursor: default;
+  }
+  .rb-meta {
+    font-size: 13px;
+    color: var(--rb-brume);
+  }
+
+  /* ─── Orbi flottant ───────────────────────────────────────────────── */
+  .t-rh .rb-orbi {
+    display: block;
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 30;
+    width: 60px;
+    height: 60px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    box-shadow: 0 14px 30px -8px rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+  }
+  .rb-orbi svg {
+    display: block;
+  }
+
+  /* ─── Contenu ─────────────────────────────────────────────────────── */
+  .t-rh .t-zone {
+    padding: 24px 28px 60px;
+  }
+  .t-rh .rb-page {
+    max-width: none;
+    color: var(--rb-creme);
+  }
+  .rb-carte {
+    background: var(--rb-surface);
+    border-radius: 22px;
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  .rb-carte > h2,
+  .rb-carte-h h2 {
+    margin: 0 0 6px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .rb-carte-h {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .rb-carte-h h2 {
+    margin: 0;
+  }
+  .rb-g4 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .rb-g2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .rb-tuile {
+    display: block;
+    padding: 16px;
+    border-radius: 18px;
+    background: var(--rb-surface);
+    font-size: 12.5px;
+    line-height: 1.4;
+    color: var(--rb-brume);
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+  a.rb-tuile:hover,
+  a.rb-tuile:focus-visible {
+    border-color: rgba(166, 242, 107, 0.45);
+  }
+  .rb-tuile b {
+    display: block;
+    font-size: 24px;
+    color: var(--rb-creme);
+    margin-bottom: 4px;
+    letter-spacing: -0.02em;
+  }
+  .rb-rowl {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    color: var(--rb-creme);
+    text-decoration: none;
+    text-align: left;
+  }
+  .rb-rowl:last-child {
+    border-bottom: 0;
+  }
+  a.rb-rowl:hover b,
+  a.rb-rowl:focus-visible b {
+    color: var(--rb-lime);
+  }
+  .rb-rowl-t {
+    flex: 1;
+    min-width: 0;
+  }
+  .rb-rowl-t b {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 700;
+  }
+  .rb-rowl-t .rb-meta {
+    display: block;
+    margin-top: 2px;
+  }
+  .rb-rowl > svg:last-child {
+    color: var(--rb-brume);
+    flex: none;
+  }
+  .rb-vide {
+    margin: 8px 0 4px;
+    font-size: 13.5px;
+    color: var(--rb-brume);
+  }
+  .rb-av-s {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--rb-haute);
+    color: var(--rb-creme);
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+  .rb-etat {
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .rb-lime-t {
+    color: var(--rb-lime);
+  }
+  .rb-ambre-t {
+    color: var(--rb-ambre);
+  }
+  .rb-menthe-t {
+    color: var(--rb-menthe);
+  }
+
+  /* ─── Accueil (N1) ────────────────────────────────────────────────── */
+  .rb-acc-h {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 4px 0 22px;
+  }
+  .rb-acc-h h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .rb-acc-h p {
+    margin: 4px 0 0;
+  }
+  .rb-acc-act {
+    display: flex;
+    gap: 10px;
+  }
+  .rb-acc {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
+    gap: 16px;
+    margin-top: 16px;
+    align-items: start;
+  }
+  .rb-acc > div {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+  .rb-heure {
+    width: 52px;
+    font-size: 14px;
+    font-weight: 700;
+    flex: none;
+  }
+  .rb-barre-v {
+    width: 4px;
+    align-self: stretch;
+    border-radius: 2px;
+    background: var(--rb-lime);
+    flex: none;
+  }
+  .rb-barre-v.rb-ambre {
+    background: var(--rb-ambre);
+  }
+  .rb-puce {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--rb-lime);
+    flex: none;
+  }
+  .rb-orbi-txt {
+    margin: 8px 0 12px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .rb-lien {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--rb-lime);
+    text-decoration: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .rb-lien:hover,
+  .rb-lien:focus-visible {
+    text-decoration: underline;
+  }
+
+  /* Bienvenue : fenêtre centrée sur un voile. */
+  .rb-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    border: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .rb-modal::backdrop {
+    background: transparent;
+  }
+  .rb-boite {
+    width: 620px;
+    max-width: calc(100% - 48px);
+    background: var(--rb-surface);
+    border-radius: 26px;
+    padding: 26px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--rb-creme);
+    text-align: center;
+  }
+  .rb-boite h2 {
+    margin: 14px 0 6px;
+    font-size: 26px;
+    font-weight: 700;
+  }
+  .rb-boite .rb-g3 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 20px 0 24px;
+    text-align: left;
+  }
+  .rb-boite .rb-g3 > div {
+    background: var(--rb-nuit);
+    border-radius: 18px;
+    padding: 14px 16px;
+  }
+  .rb-boite .rb-g3 b {
+    display: block;
+    font-size: 14.5px;
+    margin-bottom: 4px;
+  }
+  .rb-mini {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto;
+    border-radius: 18px;
+    background: #14745f;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .rb-mini img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+@media (min-width: 1200px) {
+  .t-rh.t-cadre {
+    --t-nav-w: 248px;
+    --t-pad: 28px;
+  }
+  .t-rh .t-rl.rb-rail {
+    display: none;
+  }
+  .t-rh .t-sb.rb-side {
+    display: flex;
+    width: 248px;
+    gap: 0;
+    padding: 18px 12px 14px;
+    background: var(--rb-cote);
+    border-right: 1px solid var(--rb-trait);
+    scrollbar-width: none;
+  }
+  .rb-side::-webkit-scrollbar {
+    display: none;
+  }
+  .rb-side ul {
+    gap: 2px;
+  }
+  .rb-logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 10px 16px;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--rb-creme);
+    text-decoration: none;
+  }
+  .rb-logo i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--rb-lime);
+    display: block;
+    margin-top: 10px;
+  }
+  .rb-nv {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    height: 38px;
+    padding: 0 12px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--rb-brume);
+    text-decoration: none;
+  }
+  .rb-nv:hover {
+    color: var(--rb-creme);
+  }
+  .rb-nv.rb-on {
+    background: var(--rb-surface);
+    color: var(--rb-creme);
+  }
+  .rb-nv b {
+    margin-left: auto;
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--rb-nuit);
+    background: var(--rb-lime);
+    border-radius: 9px;
+    padding: 2px 7px;
+  }
+  .rb-slab {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--rb-sourd);
+    padding: 14px 12px 5px;
+    letter-spacing: 0.4px;
+  }
+  .rb-side .rb-bas {
+    margin-top: auto;
+    padding-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .rb-moi {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px;
+    border: 0;
+    border-radius: 16px;
+    background: var(--rb-surface);
+    color: var(--rb-creme);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .rb-moi-t {
+    min-width: 0;
+  }
+  .rb-moi-t b {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .rb-moi-t span {
+    display: block;
+    font-size: 12px;
+    color: var(--rb-brume);
+  }
+}
+
+/* Avatar avec la pastille de l'entreprise (barre latérale et rail). */
+.rb-av {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--rb-haute, #1b3338);
+  color: var(--rb-creme, #f2ede5);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.rb-av > img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.rb-av-org {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  overflow: hidden;
+  font-size: 8px;
+  display: flex;
+}
+.rb-av-org > * {
+  width: 100% !important;
+  height: 100% !important;
+  font-size: 8px !important;
+  border-radius: 6px !important;
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .rb-g4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .rb-acc {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Fil on a computer until lot N2 lays it out in columns: the phone's column, centred. */
+@media (min-width: 768px) {
+  .rb-fil {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+}
+
+/* Pages not yet redone (lots N2 to N7): their light content stays readable on the Nuit background
+ * (WCAG AA), with the values of the phone (phone-recruteur.css) until their planche. */
+@media (min-width: 768px) {
+  .t-rh.t-cadre {
+    --corail: #ff8f80;
+  }
+  .t-rh.t-cadre .text-ardoise {
+    color: var(--rb-brume);
+  }
+  .t-rh.t-cadre .bg-blanc {
+    background-color: var(--rb-surface);
+    color: var(--rb-creme);
+  }
+  .t-rh.t-cadre .bg-blanc.text-sapin {
+    color: var(--rb-creme);
+  }
+  .t-rh.t-cadre .ring-brume {
+    --tw-ring-color: rgba(255, 255, 255, 0.16);
+  }
+  .t-rh.t-cadre .t-ri-inv .t-cal-t i {
+    background: #b93a2b;
+  }
+  .t-rh.t-cadre .t-ri-inv .t-dts li.t-on {
+    background: rgba(166, 242, 107, 0.12);
+  }
+  .t-rh.t-cadre .t-ri-inv .t-dts li.t-on .t-t {
+    color: var(--rb-creme);
+  }
+  .t-rh.t-cadre .t-ri-grille .t-hors {
+    color: var(--rb-brume);
+    opacity: 1;
+  }
+  .t-rh.t-cadre .text-sapin:not([class*="bg-"]:not(.bg-blanc), [class*="bg-"]:not(.bg-blanc) *) {
+    color: var(--rb-creme);
+  }
+  .t-rh.t-cadre .text-corail-fonce,
+  .t-rh.t-cadre .text-down-texte {
+    color: #ff8f80;
+  }
+}
+
+/* Tablet: the top bar gives room to the search. */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .t-rh .rb-top {
+    gap: 10px;
+    padding: 0 20px;
+  }
+  .rb-rch {
+    margin-left: 8px;
+  }
+  .rb-top-h {
+    font-size: 20px;
+  }
+}

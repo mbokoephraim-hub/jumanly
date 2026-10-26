@@ -3,45 +3,76 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { recruiterSecondary, recruiterTabOf, recruiterTabs } from "@/config/navigation";
-import { cx } from "@/lib/cx";
-import { TalentIcon } from "@/components/talent/icon";
-import { OrbiMark } from "@/components/talent/orbi-mark";
+import { PhoneIcon, type PhoneIconName } from "@/components/phone/icon";
 import { SheetButton } from "@/components/talent/sheet";
+import { cx } from "@/lib/cx";
 import { ORG_SHEET_ID } from "./header";
 
-export type RecruiterSideNavLabels = Record<(typeof recruiterTabs)[number]["key"], string> &
-  Record<(typeof recruiterSecondary)[number]["key"], string> & {
-    aria: string;
-    more: string;
-    home: string;
-    brand: string;
-    messagesAria: string;
-    settings: string;
-    account: string;
-    shortcut: string;
-    /** « Organisation active : … Changer ». */
-    org: string;
-    /** ENTREPRISE (étape 3): the owner's and the administrators' part, web only. */
-    entreprise: Record<(typeof companyItems)[number]["key"] | "aria" | "title", string>;
-  };
+/**
+ * The recruiter's sidebar on a computer (Modèle B, lot N1, capture 030, Web-App.dc.html `aside`):
+ * Accueil · Fil · Offres · Candidatures · Agenda · Talents · Messages with their counts, PILOTAGE
+ * (Tableau de bord, Mon espace), ENTREPRISE for the owner and the administrators (étape 3), then
+ * Compte and the card « Changer de profil ». Tablet (768 to 1199 px): the same entries as a rail
+ * of icons. Hidden on a phone, where the Modèle B bar takes over.
+ */
+export const recruiterWebNav = [
+  { key: "home", href: "/app/hire", icon: "accueil", match: ["/app/notifications", "/app/orbi"] },
+  { key: "fil", href: "/app/hire/fil", icon: "fil", match: ["/app/fil"] },
+  { key: "offers", href: "/app/hire/offres", icon: "offres", match: [] },
+  { key: "applications", href: "/app/hire/candidats", icon: "candidatures", match: [] },
+  { key: "agenda", href: "/app/hire/entretiens", icon: "agenda", match: [] },
+  { key: "talents", href: "/app/hire/talents", icon: "talents", match: ["/app/hire/viviers"] },
+  { key: "messages", href: "/app/messages", icon: "messages", match: [] },
+] as const satisfies readonly {
+  key: string;
+  href: string;
+  icon: PhoneIconName;
+  match: readonly string[];
+}[];
+
+export const recruiterPilotage = [
+  { key: "dashboard", href: "/app/hire/rapports", icon: "tableau" },
+  { key: "mine", href: "/app/hire/taches", icon: "monEspace" },
+] as const satisfies readonly { key: string; href: string; icon: PhoneIconName }[];
 
 /**
  * ENTREPRISE (étape 3, brief § 2): Équipe, Page entreprise, Formule et facturation, Journal and
  * Réglages, shown to `org_owner` and `org_admin` only.
  */
 export const companyItems = [
-  { key: "team", href: "/app/organisation/equipe", icon: "candidats" },
-  { key: "page", href: "/app/organisation", icon: "entreprise" },
-  { key: "billing", href: "/app/organisation/facturation", icon: "portefeuille" },
-  { key: "journal", href: "/app/organisation/journal", icon: "confidentialite" },
-  { key: "settings", href: "/app/organisation/reglages", icon: "reglages" },
-] as const;
+  { key: "team", href: "/app/organisation/equipe", icon: "equipe" },
+  { key: "page", href: "/app/organisation", icon: "pageEnt" },
+  { key: "billing", href: "/app/organisation/facturation", icon: "facture" },
+  { key: "journal", href: "/app/organisation/journal", icon: "oeil" },
+  { key: "settings", href: "/app/organisation/reglages", icon: "curseurs" },
+] as const satisfies readonly { key: string; href: string; icon: PhoneIconName }[];
+
+type NavKey = (typeof recruiterWebNav)[number]["key"];
+type PilotageKey = (typeof recruiterPilotage)[number]["key"];
+
+export type RecruiterSideNavLabels = Record<NavKey | PilotageKey, string> & {
+  aria: string;
+  brand: string;
+  brandAria: string;
+  pilotage: string;
+  pilotageAria: string;
+  account: string;
+  switch: string;
+  /** « {name} : changer de profil ». */
+  switchAria: string;
+  /** The label of an entry with its count, by entry. */
+  badges: Partial<Record<NavKey, string>>;
+  /** ENTREPRISE (étape 3): the owner's and the administrators' part, web only. */
+  entreprise: Record<(typeof companyItems)[number]["key"] | "aria" | "title", string>;
+};
 
 /** Pages reached from an item rather than from the sidebar: the item stays lit (étape 3, A6). */
 const companyChildren: Record<string, string> = {
   "/app/organisation/structure": "/app/organisation/equipe",
 };
+
+const inside = (pathname: string, path: string) =>
+  pathname === path || pathname.startsWith(`${path}/`);
 
 function companyOn(pathname: string, href: string) {
   const parent = Object.entries(companyChildren).find(([path]) => inside(pathname, path))?.[1];
@@ -55,233 +86,177 @@ function companyOn(pathname: string, href: string) {
   return inside(pathname, href);
 }
 
+/** The entry of the sidebar a page belongs to (Web-App `GRP`: notifications and Orbi → Accueil). */
+export function recruiterNavOf(pathname: string): NavKey | PilotageKey | "account" | null {
+  if (pathname === "/app/hire") return "home";
+  const entry = recruiterWebNav.find(
+    (item) =>
+      item.href !== "/app/hire" &&
+      [item.href, ...item.match].some((path) => inside(pathname, path)),
+  );
+  if (entry) return entry.key;
+  if (recruiterWebNav[0].match.some((path) => inside(pathname, path))) return "home";
+  const pilotage = recruiterPilotage.find((item) => inside(pathname, item.href));
+  if (pilotage) return pilotage.key;
+  if (inside(pathname, "/app/hire/compte") || inside(pathname, "/app/parametres")) return "account";
+  return null;
+}
+
 /** Full-screen pages of the recruiter (first steps): no frame around them. */
 export function recruiterFullScreen(pathname: string) {
   return /^\/app(\/hire)?\/bienvenue(\/.*)?$/.test(pathname);
 }
 
-/** Lime tile with the Sapin « j » (ressources/logos, served by `pnpm brand`). */
-const TILE = "/marque/jumanly-symbole-lime.svg";
+const Count = ({ count }: { count: number }) =>
+  count > 0 ? <b aria-hidden>{count > 99 ? "99+" : count}</b> : null;
 
-const inside = (pathname: string, path: string) =>
-  pathname === path || pathname.startsWith(`${path}/`);
-
-const Badge = ({ count }: { count: number }) =>
-  count > 0 ? <b aria-hidden>{count > 9 ? "9+" : count}</b> : null;
-
-/**
- * Navigation of the recruiter's web frame (docs/refonte-web, brief § 2.1 to 2.3, planche web.py
- * `_sb` and `_rl` with `rh`, planche web recruteur-1). Computer (≥ 1200 px): the 232 px sidebar,
- * the logo, the active organization (its menu opens under the name), À traiter · Offres · Orbi (a
- * card with `Ctrl K`) · Candidats · Messages, a separator, Agenda · Talents · Rapports, then
- * Paramètres and the card of the account. Tablet (768 to 1199 px): the 84 px rail of icons, the
- * organization under the logo. Hidden on a phone, where the bottom bar and the head take over.
- * Same classes as the talent's frame (`TalentSideNav`): one look for both spaces.
- */
 export function RecruiterSideNav({
   labels,
-  unreadMessages,
+  counts,
   avatar,
   name,
-  line,
   org,
   company = false,
 }: {
   labels: RecruiterSideNavLabels;
+  /** The counts of the entries (new applications, today's appointments, …). */
+  counts: Partial<Record<NavKey, number>>;
   /** The member administers the organization: ENTREPRISE is shown. */
   company?: boolean;
-  unreadMessages: number;
   /** Photo or initials, already drawn. */
   avatar: ReactNode;
   name: string;
-  /** Job title, or the role in the organization. */
-  line: string;
   org: { name: string; mark: ReactNode };
 }) {
   const pathname = usePathname();
   if (recruiterFullScreen(pathname)) return null;
-  const current = recruiterTabOf(pathname)?.href ?? null;
-  // Agenda, Talents and Rapports light up on their own pages (Candidats keeps its lists).
-  const secondaryOn = recruiterSecondary.find((item) => inside(pathname, item.match))?.key;
-  const primaryOn = secondaryOn ? null : current;
+  const on = recruiterNavOf(pathname);
 
-  const primary = (rail: boolean) =>
-    recruiterTabs.map((tab) => {
-      const on = primaryOn === tab.href;
-      if (tab.key === "orbi")
-        return (
-          <li key={tab.key}>
-            <Link
-              href={tab.href}
-              aria-current={on ? "page" : undefined}
-              className={cx("t-sb-orb t-press", on && "t-on")}
-            >
-              {rail ? (
-                <span className="t-rond">
-                  <OrbiMark size={40} state={on ? "reflechit" : "repos"} />
-                </span>
-              ) : (
-                <OrbiMark size={34} state={on ? "reflechit" : "repos"} />
-              )}
-              <span>{labels.orbi}</span>
-              {!rail && (
-                <kbd aria-hidden className="t-kbd">
-                  {labels.shortcut}
-                </kbd>
-              )}
-            </Link>
-          </li>
-        );
-      const count = tab.key === "messages" ? unreadMessages : 0;
-      return (
-        <li key={tab.key}>
-          <Link
-            href={tab.href}
-            aria-current={on ? "page" : undefined}
-            aria-label={count > 0 ? labels.messagesAria : undefined}
-            className={cx("t-sb-it t-press", on && "t-on")}
-          >
-            <TalentIcon name={tab.icon} on={on} size={rail ? undefined : "s"} />
-            <span>{labels[tab.key]}</span>
-            {!rail && <Badge count={count} />}
-          </Link>
-        </li>
-      );
-    });
-
-  const orgButton = (rail: boolean) => (
-    <SheetButton
-      target={ORG_SHEET_ID}
-      label={labels.org}
-      className={cx("t-press", rail ? "t-rl-org" : "t-sb-org")}
-    >
-      {org.mark}
-      {!rail && <span>{org.name}</span>}
-      {!rail && <TalentIcon name="suivant" size="xs" />}
-    </SheetButton>
-  );
-
-  return (
-    <>
-      <aside className="t-sb t-rh-sb">
-        <Link href="/app/hire" className="t-sb-lg" aria-label={labels.home}>
-          {/* eslint-disable-next-line @next/next/no-img-element -- a 30 px brand tile */}
-          <img src={TILE} alt="" className="t-j" />
-          <span aria-hidden className="t-mot">
-            {labels.brand}
-          </span>
+  const entry = (
+    item: { key: NavKey | PilotageKey; href: string; icon: PhoneIconName },
+    rail: boolean,
+  ) => {
+    const active = on === item.key;
+    const count = counts[item.key as NavKey] ?? 0;
+    const badge = labels.badges[item.key as NavKey];
+    return (
+      <li key={item.key}>
+        <Link
+          href={item.href}
+          aria-current={active ? "page" : undefined}
+          aria-label={
+            rail || (count > 0 && badge) ? (count > 0 && badge) || labels[item.key] : undefined
+          }
+          className={cx("rb-nv t-press", active && "rb-on")}
+        >
+          <PhoneIcon name={item.icon} size={rail ? 24 : 22} stroke={1.8} />
+          {!rail && <span>{labels[item.key]}</span>}
+          {rail ? count > 0 && <i aria-hidden className="rb-pt" /> : <Count count={count} />}
         </Link>
-        {orgButton(false)}
-        <nav aria-label={labels.aria}>
-          <ul>{primary(false)}</ul>
-        </nav>
-        <div aria-hidden className="t-sb-sep" />
-        <nav aria-label={labels.more}>
+      </li>
+    );
+  };
+
+  const company$ = (rail: boolean) =>
+    company && (
+      <>
+        {!rail && (
+          <p aria-hidden className="rb-slab">
+            {labels.entreprise.title}
+          </p>
+        )}
+        <nav aria-label={labels.entreprise.aria}>
           <ul>
-            {recruiterSecondary.map((item) => {
-              const on = secondaryOn === item.key;
+            {companyItems.map((item) => {
+              const active = companyOn(pathname, item.href);
               return (
                 <li key={item.key}>
                   <Link
                     href={item.href}
-                    aria-current={on ? "page" : undefined}
-                    className={cx("t-sb-it t-press", on && "t-on")}
+                    aria-current={active ? "page" : undefined}
+                    aria-label={rail ? labels.entreprise[item.key] : undefined}
+                    className={cx("rb-nv t-press", active && "rb-on")}
                   >
-                    <TalentIcon name={item.icon} on={on} size="s" />
-                    <span>{labels[item.key]}</span>
+                    <PhoneIcon name={item.icon} size={rail ? 24 : 22} stroke={1.8} />
+                    {!rail && <span>{labels.entreprise[item.key]}</span>}
                   </Link>
                 </li>
               );
             })}
           </ul>
         </nav>
-        {company && (
-          <>
-            <div aria-hidden className="t-sb-sep" />
-            <p aria-hidden className="t-sb-titre">
-              {labels.entreprise.title}
-            </p>
-            <nav aria-label={labels.entreprise.aria}>
-              <ul>
-                {companyItems.map((item) => {
-                  const on = companyOn(pathname, item.href);
-                  return (
-                    <li key={item.key}>
-                      <Link
-                        href={item.href}
-                        aria-current={on ? "page" : undefined}
-                        className={cx("t-sb-it t-press", on && "t-on")}
-                      >
-                        <TalentIcon name={item.icon} on={on} size="s" />
-                        <span>{labels.entreprise[item.key]}</span>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </nav>
-          </>
-        )}
-        <div className="t-sb-bas">
-          <Link
-            href="/app/parametres"
-            aria-current={inside(pathname, "/app/parametres") ? "page" : undefined}
-            className={cx("t-sb-it t-press", inside(pathname, "/app/parametres") && "t-on")}
-          >
-            <TalentIcon name="reglages" size="s" on={inside(pathname, "/app/parametres")} />
-            <span>{labels.settings}</span>
-          </Link>
-          <Link
-            href="/app/hire/compte"
-            aria-label={labels.account}
-            aria-current={pathname === "/app/hire/compte" ? "page" : undefined}
-            className="t-sb-moi t-press"
-          >
-            <span aria-hidden className="t-av">
-              {avatar}
-            </span>
-            <span className="t-t">
-              <b>{name}</b>
-              <span>{line}</span>
-            </span>
-            <TalentIcon name="suivant" size="xs" />
-          </Link>
+      </>
+    );
+
+  const switchCard = (rail: boolean) => (
+    <SheetButton
+      target={ORG_SHEET_ID}
+      label={labels.switchAria}
+      className={cx("t-press", rail ? "rb-moi-r" : "rb-moi")}
+    >
+      <span aria-hidden className="rb-av">
+        {avatar}
+        <span className="rb-av-org">{org.mark}</span>
+      </span>
+      {!rail && (
+        <span className="rb-moi-t">
+          <b>{name}</b>
+          <span>{labels.switch}</span>
+        </span>
+      )}
+    </SheetButton>
+  );
+
+  const account = (rail: boolean) => (
+    <Link
+      href="/app/hire/compte"
+      aria-current={on === "account" ? "page" : undefined}
+      aria-label={rail ? labels.account : undefined}
+      className={cx("rb-nv t-press", on === "account" && "rb-on")}
+    >
+      <PhoneIcon name="profil" size={rail ? 24 : 22} stroke={1.8} />
+      {!rail && <span>{labels.account}</span>}
+    </Link>
+  );
+
+  return (
+    <>
+      <aside className="t-sb t-rh-sb rb-side">
+        <Link href="/app/hire" className="rb-logo" aria-label={labels.brandAria}>
+          <span aria-hidden>{labels.brand}</span>
+          <i aria-hidden />
+        </Link>
+        <nav aria-label={labels.aria}>
+          <ul>{recruiterWebNav.map((item) => entry(item, false))}</ul>
+        </nav>
+        <p aria-hidden className="rb-slab">
+          {labels.pilotage}
+        </p>
+        <nav aria-label={labels.pilotageAria}>
+          <ul>{recruiterPilotage.map((item) => entry(item, false))}</ul>
+        </nav>
+        {company$(false)}
+        <div className="rb-bas">
+          {account(false)}
+          {switchCard(false)}
         </div>
       </aside>
 
-      <aside className="t-rl t-rh-rl">
-        <Link href="/app/hire" className="t-rl-lg" aria-label={labels.home}>
-          {/* eslint-disable-next-line @next/next/no-img-element -- a 40 px brand tile */}
-          <img src={TILE} alt="" className="t-j" />
+      <aside className="t-rl t-rh-rl rb-rail">
+        <Link href="/app/hire" className="rb-logo-r" aria-label={labels.brandAria}>
+          <i aria-hidden />
         </Link>
-        {orgButton(true)}
         <nav aria-label={labels.aria}>
-          <ul>{primary(true)}</ul>
+          <ul>
+            {recruiterWebNav.map((item) => entry(item, true))}
+            {recruiterPilotage.map((item) => entry(item, true))}
+          </ul>
         </nav>
-        {company && (
-          <nav aria-label={labels.entreprise.aria}>
-            <ul>
-              {companyItems.map((item) => {
-                const on = companyOn(pathname, item.href);
-                return (
-                  <li key={item.key}>
-                    <Link
-                      href={item.href}
-                      aria-label={labels.entreprise[item.key]}
-                      aria-current={on ? "page" : undefined}
-                      className={cx("t-sb-it t-press", on && "t-on")}
-                    >
-                      <TalentIcon name={item.icon} on={on} />
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
-        )}
-        <Link href="/app/hire/compte" aria-label={labels.account} className="t-av t-rl-av t-press">
-          {avatar}
-        </Link>
+        {company$(true)}
+        <div className="rb-bas">
+          {account(true)}
+          {switchCard(true)}
+        </div>
       </aside>
     </>
   );

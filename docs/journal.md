@@ -4621,3 +4621,31 @@ fiche et évaluation, N4 Agenda et pilotage, N5 Talents et pages entreprise, N6 
 notifications et Orbi, N7 Compte, nettoyage et rapport final, puis arrêt pour la validation
 d'Ephraïm. Chaque lot : captures à 1440 et 1024 dans `captures/etape-2-web/`, un e2e qui touche
 chaque bouton, les tests en base touchés, et le journal.
+
+## Recruteur sur ordinateur (Modèle B) · N1, cadre et accueil
+
+**Fait.** Le cadre du recruteur sur ordinateur suit la capture 030 : barre latérale de 248 px
+(Accueil · Fil · Offres · Candidatures · Agenda · Talents · Messages avec leurs pastilles, PILOTAGE
+avec Tableau de bord et Mon espace, ENTREPRISE pour le propriétaire et les administrateurs, Compte,
+carte « Changer de profil »), rail d'icônes sur tablette (768 à 1199 px), barre du haut avec le titre
+de la page, la recherche en deux temps (« Rechercher dans » puis les résultats, par la même API que
+le téléphone), la cloche et « Publier une offre » (seulement si le rôle peut publier), et Orbi en
+disque menthe flottant qui ouvre le panneau. L'accueil `/app/hire` suit les captures 031, 032, 074
+et 075 : vue recruteur (chiffres du jour, Aujourd'hui, À traiter, Mes tâches, Offres, Orbi résume)
+et vue administrateur (places, tâches en retard, demandes à valider, renouvellement, À valider,
+tâches de l'équipe avec « Relancer », le mois en chiffres et son PDF). « Bienvenue » s'ouvre une
+fois après les premiers pas (`?bienvenue=1`). « Inviter un membre » et « Attribuer une tâche »
+ouvrent les fenêtres d'Équipe (`?inviter=1`, `?attribuer=1`).
+
+**Service.** `src/server/services/hire-web-home.ts` (`recruiterWebCounts`, `webHome`,
+`webHomeAdmin`), filtré par `organizationId` et `jobScope` ; test en base
+`tests/db/web-recruteur-accueil.test.ts` (isolation de deux entreprises).
+
+**En attendant les lots suivants.** « Fil » mène à `/app/hire/fil` et « Talents » affiche la
+recherche de talents dans le cadre (au lieu de renvoyer vers Candidatures) : ces deux écrans gardent
+la colonne du téléphone, centrée, jusqu'à N2 et N5. Les autres entrées ouvrent les pages actuelles,
+refaites aux lots N2 à N7.
+
+**Tests.** `tests/e2e/web-recruteur-n1.spec.ts` (Patrice, manager, et Clarisse, propriétaire de
+Baobab Fintech, entreprise fictive : chaque entrée, la recherche, la cloche, Orbi, chaque bouton de
+l'accueil, la tablette). Captures à 1440 et 1024 dans `captures/etape-2-web/n1/`.
