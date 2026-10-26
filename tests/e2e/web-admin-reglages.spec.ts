@@ -2,6 +2,7 @@ import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import type { Page } from "@playwright/test";
 import { expect, test } from "./fixtures";
+import { holdBaobab } from "./baobab-lock";
 import { expectAccessible } from "./a11y";
 import { logIn } from "./session";
 
@@ -34,6 +35,13 @@ test.describe("Étape 3 · Journal et réglages", () => {
   test.skip(({ isMobile }) => isMobile, "Le journal et les réglages se gèrent sur ordinateur.");
   test.use({ viewport: { width: WIDTH, height: 900 } });
   test.describe.configure({ mode: "serial" });
+  // Baobab Fintech is shared by the other files of the company space: one at a time.
+  let release = () => {};
+  test.beforeAll(async () => {
+    test.setTimeout(600_000);
+    release = await holdBaobab();
+  });
+  test.afterAll(() => release());
 
   test("l'administrateur lit le journal de l'équipe et le filtre par membre", async ({ page }) => {
     await logIn(page, OWNER);
