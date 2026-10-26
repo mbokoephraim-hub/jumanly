@@ -10,6 +10,7 @@ import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { connectViewer } from "@/server/hire-context";
 import { reportError } from "@/server/observability";
+import { cleanSocialLinks, handleInput, socialLinksInput } from "@/lib/social-links";
 import { allowAttempt } from "@/server/rate-limit";
 import { withdrawApplication } from "@/server/services/applications";
 import { ConnectError, sendMessage } from "@/server/services/connect";
@@ -106,6 +107,10 @@ const headSchema = z.object({
   city: z.string().trim().min(1).max(120),
   summary: z.string().trim().max(PROFILE_SUMMARY_MAX),
   availability: z.enum(["open", "listening", "not_looking"]),
+  /** docs/profil-personne: the handle (empty = drawn from the name), the networks, the e-mail. */
+  handle: z.union([z.literal(""), handleInput]).optional(),
+  socials: socialLinksInput.optional(),
+  showEmail: z.boolean().optional(),
 });
 
 /**
@@ -114,30 +119,54 @@ const headSchema = z.object({
  */
 export async function saveCareerHeadAction(raw: z.input<typeof headSchema>): Promise<Result> {
   const parsed = headSchema.safeParse(raw);
-  if (!parsed.success) return fail(parsed.error.issues[0]?.path[0] === "name" ? "name" : "invalid");
+  if (!parsed.success) {
+    const field = parsed.error.issues[0]?.path[0];
+    return fail(
+      field === "name"
+        ? "name"
+        : field === "handle"
+          ? "handle"
+          : field === "socials"
+            ? "socials"
+            : "invalid",
+    );
+  }
   const { user, profile } = await mine();
   const input = parsed.data;
   const [firstName, ...rest] = input.name.split(/\s+/);
-  await db.$transaction([
-    db.user.update({
-      where: { id: user.id },
-      data: {
-        name: input.name,
-        firstName,
-        lastName: rest.join(" ") || null,
-        city: input.city,
-      },
-    }),
-    db.talentProfile.update({
-      where: { id: profile.id },
-      data: {
-        headline: input.headline || null,
-        summary: input.summary || null,
-        availability: input.availability,
-        availableFrom: input.availability === "open" ? null : profile.availableFrom,
-      },
-    }),
-  ]);
+  const done = await db
+    .$transaction([
+      db.user.update({
+        where: { id: user.id },
+        data: {
+          name: input.name,
+          firstName,
+          lastName: rest.join(" ") || null,
+          city: input.city,
+        },
+      }),
+      db.talentProfile.update({
+        where: { id: profile.id },
+        data: {
+          headline: input.headline || null,
+          summary: input.summary || null,
+          availability: input.availability,
+          availableFrom: input.availability === "open" ? null : profile.availableFrom,
+          ...(input.handle === undefined ? {} : { handle: input.handle || null }),
+          ...(input.socials === undefined
+            ? {}
+            : { socialLinks: cleanSocialLinks(input.socials) as Prisma.InputJsonValue }),
+          ...(input.showEmail === undefined ? {} : { showEmail: input.showEmail }),
+        },
+      }),
+    ])
+    .catch((error: unknown) => {
+      // Somebody else already has this handle.
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002")
+        return "taken" as const;
+      throw error;
+    });
+  if (done === "taken") return fail("handleTaken");
   return saved(profile.id);
 }
 

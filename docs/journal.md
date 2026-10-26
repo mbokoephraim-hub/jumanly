@@ -4686,3 +4686,34 @@ Référence : brief `docs/fil-menu-publication/`, § 3, maquette `Explorer.dc.ht
   jamais une candidature (règle d'or 1).
 - Tests : `tests/unit/explore-filters.test.ts`, `tests/db/explore.test.ts` (filtres en base),
   e2e `modele-b-explorer` (ouvrir, choisir la portée, appliquer CDI, effacer).
+
+## Profil d'une personne : connexion et vue recruteur (26 octobre 2026)
+
+Référence : brief `docs/profil-personne/`, maquette `Profil.dc.html` (réglages `qui`, `vue`, `onglet`,
+`pourquoi`), captures 01 à 07. Remplace la page Personne du Modèle B (l'ancien composant
+`explorer/person.tsx` est supprimé).
+
+- En-tête compact (`src/components/phone/profil/profile.tsx`) : barre Retour · « Profil » ou
+  « Candidat » · Partager · « ··· », bannière 4:1 (image choisie ou motif dans la couleur du domaine,
+  étiquette du domaine), photo 76 px avec l'anneau des 5 premières compétences et le point menthe
+  « Actif maintenant », réseaux 32 px (seulement ceux remplis), nom + badge vérifié ou « Non vérifié »,
+  alias, drapeau (code ISO de `User.country`, sans image externe) + ville + heure locale, bio,
+  pastilles (connexions, domaine, contrat cherché, activité), connexions en commun.
+- Vue connexion : « Se connecter » → « Demande envoyée » → « Connectés » ; « Chat » seulement une fois
+  connectés.
+- Onglets Publications · À propos · Réalisations · Portfolio : pilule Lime qui glisse (0,38 s), collés
+  en haut, contenu qui glisse. Compétences en couleur (couleur stable tirée du nom,
+  `src/lib/profile-colors.ts`), barre des familles (catégorie des compétences), frise des expériences
+  (un point par ligne de `Experience.description`, deux visibles puis « Voir N de plus »),
+  formation, langues (5 traits). Réalisations = projets visibles + attestations montrées sur le
+  profil ; Portfolio = PDF et liens des projets, CV de la candidature (vue recruteur), page publique.
+- Vue recruteur : le candidat s'ouvre sur son profil avec la carte (anneau du score, offre, date,
+  étape, « Pourquoi N % ? », « Avancer », Chat). « Avancer » passe à l'étape suivante (geste du
+  recruteur ; vers « Retenue », la feuille « Recruter » s'ouvre). La feuille « Pourquoi ? » reprend les
+  critères du calcul fixe et la mention « Calculé sans le nom, la photo, l'âge, le genre ni la
+  nationalité… aucune candidature n'est écartée automatiquement ». La consultation reste journalisée
+  (`recordView`).
+- Données : `TalentProfile.handle` (unique), `socialLinks` (validés par Zod, `src/lib/social-links.ts`),
+  `showEmail` (désactivé par défaut) ; « Modifier le profil » permet de les remplir.
+- Tests : `tests/unit/profil-personne.test.ts`, `tests/db/explore.test.ts`, e2e `modele-b-explorer`
+  et `modele-b-recruteur-candidatures`. Décision : `docs/decisions/2026-10-26-profil-personne.md`.

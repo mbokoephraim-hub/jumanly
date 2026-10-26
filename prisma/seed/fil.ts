@@ -114,6 +114,96 @@ export async function seedFeed(db: SeedClient) {
     ids[person.key] = user.id;
   }
 
+  // Patrick's profile as the mockup shows it (docs/profil-personne): handle, networks, field,
+  // contract sought, languages, experiences with their points and skills. All invented.
+  const patrick = await db.talentProfile.findUnique({
+    where: { userId: ids.patrick! },
+    select: { id: true },
+  });
+  if (patrick) {
+    await db.talentProfile.update({
+      where: { id: patrick.id },
+      data: {
+        handle: "patrick.ilunga",
+        socialLinks: {
+          linkedin: "https://www.linkedin.com/in/patrick-ilunga-fictif",
+          instagram: "https://www.instagram.com/patrick.ilunga.fictif",
+          x: "https://x.com/patrick_fictif",
+          facebook: "https://www.facebook.com/patrick.ilunga.fictif",
+        },
+        showEmail: true,
+        summary:
+          "Analyste crédit chez Fleuve Banque (fictive). J’aide les PME de Kinshasa à obtenir leur premier prêt, chiffres à l’appui.",
+        sectors: ["Finance et banque"],
+        desiredContracts: ["cdi"],
+        languages: [
+          { code: "fr", level: "fluent" },
+          { code: "ln", level: "native" },
+          { code: "en", level: "intermediate" },
+        ],
+      },
+    });
+    await db.experience.deleteMany({ where: { profileId: patrick.id } });
+    const month = (year: number, index: number) => new Date(Date.UTC(year, index, 1));
+    await db.experience.createMany({
+      data: [
+        {
+          profileId: patrick.id,
+          title: "Analyste crédit",
+          company: "Fleuve Banque (fictive)",
+          location: "Kinshasa",
+          startDate: month(2024, 0),
+          description: [
+            "Étudie environ 25 dossiers de crédit PME par mois",
+            "A construit le tableau de bord des impayés sous Power BI",
+            "Présente les dossiers au comité de crédit chaque semaine",
+            "Forme deux stagiaires à la lecture des bilans",
+          ].join("\n"),
+        },
+        {
+          profileId: patrick.id,
+          title: "Chargé de clientèle junior",
+          company: "Baobab Fintech (fictive)",
+          location: "Kinshasa",
+          startDate: month(2022, 8),
+          endDate: month(2023, 11),
+          description: [
+            "Suivait un portefeuille de 180 clients particuliers",
+            "Ouvrait les comptes mobiles et conseillait sur l’épargne",
+            "A réduit les retards de paiement grâce à des relances ciblées",
+          ].join("\n"),
+        },
+        {
+          profileId: patrick.id,
+          title: "Stagiaire en audit",
+          company: "Cabinet Lukusa & Associés (fictif)",
+          type: "internship",
+          location: "Kinshasa",
+          startDate: month(2022, 1),
+          endDate: month(2022, 6),
+          description: [
+            "Préparait les feuilles de travail des missions d’audit",
+            "Vérifiait les rapprochements bancaires de trois clients",
+          ].join("\n"),
+        },
+      ],
+    });
+    const skills = await db.skill.findMany({
+      where: { name: { in: ["Analyse financière", "Excel", "Power BI", "SQL", "Négociation"] } },
+      select: { id: true, name: true },
+    });
+    for (const skill of skills)
+      await db.profileSkill.upsert({
+        where: { profileId_skillId: { profileId: patrick.id, skillId: skill.id } },
+        update: {},
+        create: {
+          profileId: patrick.id,
+          skillId: skill.id,
+          verified: skill.name === "Analyse financière" || skill.name === "Excel",
+        },
+      });
+  }
+
   // Start again from a clean state: these posts only exist for the demo.
   const authors = Object.values(ids);
   await db.feedPost.deleteMany({

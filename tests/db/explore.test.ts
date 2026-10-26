@@ -6,10 +6,10 @@ import {
   explorerHome,
   exploreSearch,
   peopleToKnow,
-  personPage,
   toggleFollowCompany,
 } from "@/server/services/explore";
 import { NO_FILTERS, residenceWhere } from "@/server/services/explore-filters";
+import { personProfile } from "@/server/services/person-profile";
 import { cleanup, db, newOrganization, newUser } from "./helpers";
 
 // Modèle B, lot B4: who Explorer shows, and what a person's page reveals (docs/modele-b, rangées
@@ -75,13 +75,47 @@ describe("Explorer", () => {
   it("une page de personne privée ne s'ouvre qu'à ses connexions", async () => {
     const me = await person("recruiters");
     const secret = await person("private");
-    expect(await personPage(db, me, secret)).toBeNull();
+    expect(await personProfile(db, me, secret, "connection")).toBeNull();
     await db.connection.create({
       data: { requesterId: me, addresseeId: secret, status: "accepted", respondedAt: new Date() },
     });
-    const page = await personPage(db, me, secret);
+    const page = await personProfile(db, me, secret, "connection");
     expect(page?.about).toBe("Présentation fictive");
     expect(page?.link).toBe("connected");
+  });
+
+  it("le profil d'une personne : réseaux remplis, e-mail seulement si elle le montre", async () => {
+    const me = await person("recruiters");
+    const other = await person("recruiters");
+    await db.talentProfile.update({
+      where: { userId: other },
+      data: {
+        handle: `fictif.${Date.now()}`,
+        socialLinks: {
+          linkedin: "https://www.linkedin.com/in/fictif",
+          x: "https://evil.example/x",
+        },
+      },
+    });
+    const first = await personProfile(db, me, other, "connection");
+    expect(first?.socials).toEqual({ linkedin: "https://www.linkedin.com/in/fictif" });
+    expect(first?.email).toBeNull();
+    await db.talentProfile.update({ where: { userId: other }, data: { showEmail: true } });
+    const second = await personProfile(db, me, other, "connection");
+    expect(second?.email).toMatch(/@/);
+  });
+
+  it("un profil bloqué ne s'ouvre pas ; un recruteur voit le profil privé d'un candidat", async () => {
+    const me = await person("recruiters");
+    const blocker = await person("recruiters");
+    const secret = await person("private");
+    await db.connection.create({
+      data: { requesterId: blocker, addresseeId: me, status: "blocked", blockedById: blocker },
+    });
+    expect(await personProfile(db, me, blocker, "connection")).toBeNull();
+    expect(await personProfile(db, me, secret, "connection")).toBeNull();
+    // The application was checked by the caller (recordView): the profile opens.
+    expect((await personProfile(db, me, secret, "candidate"))?.id).toBe(secret);
   });
 
   it("la recherche trouve une personne visible par son nom, pas une privée", async () => {

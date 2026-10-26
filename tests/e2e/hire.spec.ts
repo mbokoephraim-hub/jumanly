@@ -201,7 +201,7 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   // Lot 3: « Décision finale », the message read before it leaves, then 10 minutes to undo.
   if (isMobile) {
     // On the phone the outcome is decided from the file's sheet « Ne pas retenir ».
-    await page.goto(candidateUrl);
+    await page.goto(`${candidateUrl}?onglet=resume`);
     const file = page.locator(".nb-rh-fiche").filter({ visible: true });
     await file.getByRole("button", { name: /^Plus d'actions pour/ }).click();
     await page
@@ -284,7 +284,7 @@ test("le recruteur accepte un candidat avec un modèle au ton choisi", async ({
     await page.getByRole("link", { name: "Écrire au candidat" }).filter({ visible: true }).click();
     await expect(page).toHaveURL(/\/app\/messages\//);
     const threadUrl = page.url().split("#")[0]!;
-    await page.goto(candidateUrl);
+    await page.goto(`${candidateUrl}?onglet=resume`);
     const file = page.locator(".nb-rh-fiche").filter({ visible: true });
     await file.getByRole("button", { name: /^Changer d'étape, actuellement/ }).click();
     await page

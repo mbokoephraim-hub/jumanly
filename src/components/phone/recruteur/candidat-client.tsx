@@ -10,7 +10,11 @@ import {
   undoDecisionAction,
 } from "@/server/actions/hire-candidates";
 import { rhAssignAction } from "@/server/actions/phone-rh-candidatures";
+import type { PostView } from "../fil/data";
+import type { SendTarget } from "../fil/sheets";
 import { PhoneIcon } from "../icon";
+import type { ProfileView } from "../profil/data";
+import { PersonProfile } from "../profil/profile";
 import { PhoneSheet } from "../sheet";
 import { levelOf } from "./level";
 
@@ -22,6 +26,8 @@ type Sheet = "why" | "menu" | "stage" | "assign" | "pdf" | "reject" | "recruit" 
 const REASONS = ["skills", "otherCandidate", "other", "positionClosed"] as const;
 const DOCUMENTS = ["diploma", "certificate", "references"] as const;
 const PARTS = ["fiche", "cv", "reponses", "notes", "historique"] as const;
+/** The bars of « Pourquoi ? », one colour per criterion (capture 06). */
+const WHY_COLORS = ["#A6F26B", "#2FD3A6", "#7CC4FF", "#C3A6FF", "#F4C463", "#FF9EC7"];
 
 export type RhFileData = {
   id: string;
@@ -39,7 +45,9 @@ export type RhFileData = {
     line: string;
     rows: { label: string; value: string; share: number }[];
     locked: string | null;
-    notUsed: string;
+    /** « Calculé sans le nom, la photo… aucune candidature n'est écartée automatiquement. » */
+    rule: string;
+    ok: string;
   } | null;
   stage: { id: string; name: string };
   stages: { id: string; name: string; kind: string }[];
@@ -64,6 +72,28 @@ export type RhFileData = {
   dueDefault: string;
   /** A decision taken less than 10 minutes ago: « Annulable encore … » and « Annuler ». */
   undo: { line: string; button: string } | null;
+  /** The candidate's profile (docs/profil-personne, vue recruteur), shown first. */
+  profile: {
+    view: ProfileView;
+    posts: PostView[];
+    targets: SendTarget[];
+    card: {
+      title: string;
+      applied: string;
+      line: string;
+      scoreLabel: string;
+      why: string;
+      advanceText: string;
+      /** The next stage; « Recruté » opens the recruit sheet. Null when nothing can move. */
+      advance: { stageId: string; label: string; hired: boolean } | null;
+    };
+    dossier: string;
+    dossierHint: string;
+    back: string;
+    backHint: string;
+  } | null;
+  /** « profil » (the profile, first) or « dossier » (Résumé, CV, Réponses, Notes, Historique). */
+  mode: "profil" | "dossier";
 };
 
 /**
@@ -75,6 +105,14 @@ export function RhFile({ data, panels }: { data: RhFileData; panels: Record<Tab,
   const t = useTranslations("phoneRhCandidatures");
   const tc = useTranslations("phone");
   const [tab, setTab] = useState<Tab>(data.tab);
+  // Kept across the gestures (the page comes back with the same component): a note added in the
+  // file stays in the file.
+  const [mode, setMode] = useState(data.mode);
+  const switchTo = (next: "profil" | "dossier") => {
+    setSheet(null);
+    setMode(next);
+    window.scrollTo({ top: 0 });
+  };
   const [sheet, setSheet] = useState<Sheet>(null);
   const [reason, setReason] = useState<(typeof REASONS)[number]>("skills");
   const [parts, setParts] = useState<string[]>(PARTS.filter((part) => part !== "historique"));
@@ -93,166 +131,41 @@ export function RhFile({ data, panels }: { data: RhFileData; panels: Record<Tab,
     else if (kind === "rejected") setSheet("reject");
   };
 
-  return (
-    <div className="nb-page nb-rh-detail nb-rh-fiche">
-      <header className="nb-rh-barre">
-        <Link href={data.back} className="nb-rh-retour">
-          <PhoneIcon name="retour" size={20} />
-          {t("file.back")}
-        </Link>
-        <button
-          type="button"
-          className="nb-rond nb-rh-plus-menu"
-          aria-label={t("menu.open", { name: data.name })}
-          onClick={() => setSheet("menu")}
-        >
-          <PhoneIcon name="plusOptions" size={24} stroke={3} />
-        </button>
-      </header>
-      {data.error ? (
-        <p className="nb-erreur nb-rh-marge" role="alert">
-          {data.error}
-        </p>
-      ) : null}
-      {data.undo ? (
-        <form action={undoDecisionAction} className="nb-rh-annuler" role="status">
-          <input type="hidden" name="application" value={data.id} />
-          <span>{data.undo.line}</span>
-          <button type="submit">{data.undo.button}</button>
-        </form>
-      ) : null}
-      <section className="nb-rh-f-id" aria-labelledby="rh-f-nom">
-        <span className="nb-rh-ini nb-rh-ini-l" data-teinte={data.tint} aria-hidden>
-          {data.initials}
-        </span>
-        <span>
-          <h1 id="rh-f-nom">{data.name}</h1>
-          {data.line1 ? <p className="nb-meta">{data.line1}</p> : null}
-          <p className="nb-meta">{data.line2}</p>
-        </span>
-      </section>
-      <div className="nb-rh-f-cartes">
-        {data.score ? (
-          <button type="button" className="nb-rh-f-carte" onClick={() => setSheet("why")}>
-            <span className="nb-rh-pct" data-niveau={levelOf(data.score.value)}>
-              {data.score.label}
-            </span>
-            <span>
-              <b>{data.score.band}</b>
-              <span className="nb-rh-pourquoi">{t("why.open")}</span>
-            </span>
-          </button>
-        ) : (
-          <div className="nb-rh-f-carte">
-            <span className="nb-meta">{t("why.none")}</span>
-          </div>
-        )}
-        {data.live ? (
-          <button
-            type="button"
-            className="nb-rh-f-carte"
-            aria-label={t("stage.change", { stage: data.stage.name })}
-            onClick={() => setSheet("stage")}
-          >
-            <span>
-              <span className="nb-meta">{t("stage.label")}</span>
-              <b className="nb-rh-f-etape">
-                {data.stage.name}
-                <PhoneIcon name="bas" size={16} />
-              </b>
-            </span>
-          </button>
-        ) : (
-          <div className="nb-rh-f-carte">
-            <span>
-              <span className="nb-meta">{t("stage.label")}</span>
-              <b className="nb-rh-f-etape">{data.stage.name}</b>
-            </span>
-          </div>
-        )}
-      </div>
-      <p className="nb-meta nb-rh-f-offre">{data.jobTitle}</p>
-      <div className="nb-rh-f-onglets" role="tablist" aria-label={t("tabs.label")}>
-        {TABS.map((key) => (
-          <button
-            key={key}
-            type="button"
-            role="tab"
-            id={`rh-f-${key}`}
-            aria-selected={tab === key}
-            aria-controls={`rh-f-p-${key}`}
-            onClick={() => setTab(key)}
-          >
-            {t(`tabs.${key}`)}
-            {key === "notes" && data.notesCount > 0 ? <i>{data.notesCount}</i> : null}
-          </button>
-        ))}
-      </div>
-      {TABS.map((key) => (
-        <div
-          key={key}
-          role="tabpanel"
-          id={`rh-f-p-${key}`}
-          aria-labelledby={`rh-f-${key}`}
-          hidden={tab !== key}
-          className="nb-rh-f-panneau"
-        >
-          {panels[key]}
-        </div>
-      ))}
-
-      <div className="nb-bas nb-rh-f-bas">
-        {data.manage ? (
-          <Link href={data.messageHref} className="nb-rh-f-ecrire" aria-label={t("file.write")}>
-            <PhoneIcon name="messages" size={22} />
-          </Link>
-        ) : null}
-        {data.primary?.kind === "link" ? (
-          <Link href={data.primary.href} className="nb-bp">
-            {data.primary.label}
-          </Link>
-        ) : data.primary?.kind === "recruit" ? (
-          <button type="button" className="nb-bp" onClick={() => setSheet("recruit")}>
-            {data.primary.label}
-          </button>
-        ) : null}
-      </div>
-
-      {/* Pourquoi ce score (planche Recruteur-candidat-pourquoi) */}
+  const sheets = (
+    <>
+      {/* Pourquoi ce score (docs/profil-personne, capture 06) */}
       {data.why && data.score ? (
         <PhoneSheet
           open={sheet === "why"}
           onClose={close}
           label={data.why.title}
           closeLabel={tc("close")}
+          className="nb-pf-why"
         >
-          <div className="nb-rh-why-h">
-            <span className="nb-rh-pct nb-rh-pct-l" data-niveau={levelOf(data.score.value)}>
-              {data.score.label}
-            </span>
-            <span>
-              <h2>{data.why.title}</h2>
-              <p className="nb-meta">{data.why.line}</p>
-            </span>
+          <h2>{data.why.title}</h2>
+          <p className="nb-meta">{data.why.line}</p>
+          <div className="nb-pf-why-l">
+            {data.why.rows.map((row, index) => (
+              <div key={row.label} className="nb-pf-why-r">
+                <div>
+                  <b>{row.label}</b>
+                  <span style={{ color: WHY_COLORS[index % WHY_COLORS.length] }}>{row.value}</span>
+                </div>
+                <div className="nb-pf-why-bar" aria-hidden>
+                  <span
+                    style={{
+                      width: `${Math.round(row.share * 100)}%`,
+                      background: WHY_COLORS[index % WHY_COLORS.length],
+                    }}
+                  />
+                </div>
+              </div>
+            ))}
           </div>
-          {data.why.rows.map((row) => (
-            <div key={row.label} className="nb-rh-why-l">
-              <p>
-                <span>{row.label}</span>
-                <span className="nb-meta">{row.value}</span>
-              </p>
-              <span className="nb-rh-jauge" aria-hidden>
-                <i
-                  style={{ width: `${row.share * 100}%` }}
-                  data-plein={row.share >= 0.9 ? "" : undefined}
-                />
-              </span>
-            </div>
-          ))}
           {data.why.locked ? <p className="nb-meta">{data.why.locked}</p> : null}
-          <p className="nb-meta nb-rh-why-n">{data.why.notUsed}</p>
-          <button type="button" className="nb-annuler" onClick={close}>
-            {tc("close")}
+          <p className="nb-pf-why-note">{data.why.rule}</p>
+          <button type="button" className="nb-pf-why-ok" onClick={close}>
+            {data.why.ok}
           </button>
         </PhoneSheet>
       ) : null}
@@ -266,6 +179,18 @@ export function RhFile({ data, panels }: { data: RhFileData; panels: Record<Tab,
       >
         <p className="nb-meta nb-rh-feuille-sur">{data.name}</p>
         <div className="nb-rh-menu">
+          {data.profile ? (
+            <button
+              type="button"
+              className="nb-rh-menu-l"
+              onClick={() => switchTo(mode === "profil" ? "dossier" : "profil")}
+            >
+              <b>{mode === "profil" ? data.profile.dossier : data.profile.back}</b>
+              <span className="nb-meta">
+                {mode === "profil" ? data.profile.dossierHint : data.profile.backHint}
+              </span>
+            </button>
+          ) : null}
           {data.live ? (
             <button type="button" className="nb-rh-menu-l" onClick={() => setSheet("stage")}>
               <b>{t("menu.stage")}</b>
@@ -604,6 +529,221 @@ export function RhFile({ data, panels }: { data: RhFileData; panels: Record<Tab,
           </form>
         </PhoneSheet>
       ) : null}
+    </>
+  );
+
+  if (mode === "profil" && data.profile) {
+    const { view, card } = data.profile;
+    return (
+      <div className="nb-rh-fiche-p">
+        <PersonProfile
+          person={view}
+          posts={data.profile.posts}
+          targets={data.profile.targets}
+          title={card.title}
+          back={data.back}
+          more={{ label: t("menu.open", { name: data.name }), onOpen: () => setSheet("menu") }}
+          actions={
+            <>
+              {data.error ? (
+                <p className="nb-erreur nb-rh-marge" role="alert">
+                  {data.error}
+                </p>
+              ) : null}
+              {data.undo ? (
+                <form action={undoDecisionAction} className="nb-rh-annuler" role="status">
+                  <input type="hidden" name="application" value={data.id} />
+                  <span>{data.undo.line}</span>
+                  <button type="submit">{data.undo.button}</button>
+                </form>
+              ) : null}
+              <section className="nb-pf-cand" aria-label={card.applied}>
+                <div className="nb-pf-cand-h">
+                  {data.score ? (
+                    <span
+                      className="nb-pf-anneau"
+                      role="img"
+                      aria-label={card.scoreLabel}
+                      style={{
+                        background: `conic-gradient(var(--nb-lime) 0 ${data.score.value}%, rgba(255,255,255,.12) ${data.score.value}% 100%)`,
+                      }}
+                    >
+                      <span aria-hidden>{data.score.label}</span>
+                    </span>
+                  ) : null}
+                  <span className="nb-pf-cand-t">
+                    <b>{card.applied}</b>
+                    <span>{card.line}</span>
+                  </span>
+                </div>
+                <div className="nb-pf-cand-b">
+                  {data.why && data.score ? (
+                    <button type="button" className="nb-pf-pq" onClick={() => setSheet("why")}>
+                      {card.why}
+                    </button>
+                  ) : null}
+                  {card.advance ? (
+                    card.advance.hired ? (
+                      <button
+                        type="button"
+                        className="nb-pf-av"
+                        aria-label={card.advance.label}
+                        onClick={() => setSheet("recruit")}
+                      >
+                        {card.advanceText}
+                      </button>
+                    ) : (
+                      <form action={moveCandidateAction}>
+                        <input type="hidden" name="application" value={data.id} />
+                        <input type="hidden" name="stage" value={card.advance.stageId} />
+                        <input type="hidden" name="retour" value="profil" />
+                        <button type="submit" className="nb-pf-av" aria-label={card.advance.label}>
+                          {card.advanceText}
+                        </button>
+                      </form>
+                    )
+                  ) : null}
+                  {data.manage ? (
+                    <Link href={data.messageHref} className="nb-pf-ec" aria-label={t("file.write")}>
+                      <PhoneIcon name="messages" size={16} />
+                    </Link>
+                  ) : null}
+                </div>
+              </section>
+            </>
+          }
+        />
+        {sheets}
+      </div>
+    );
+  }
+
+  return (
+    <div className="nb-page nb-rh-detail nb-rh-fiche">
+      <header className="nb-rh-barre">
+        <Link href={data.back} className="nb-rh-retour">
+          <PhoneIcon name="retour" size={20} />
+          {t("file.back")}
+        </Link>
+        <button
+          type="button"
+          className="nb-rond nb-rh-plus-menu"
+          aria-label={t("menu.open", { name: data.name })}
+          onClick={() => setSheet("menu")}
+        >
+          <PhoneIcon name="plusOptions" size={24} stroke={3} />
+        </button>
+      </header>
+      {data.error ? (
+        <p className="nb-erreur nb-rh-marge" role="alert">
+          {data.error}
+        </p>
+      ) : null}
+      {data.undo ? (
+        <form action={undoDecisionAction} className="nb-rh-annuler" role="status">
+          <input type="hidden" name="application" value={data.id} />
+          <span>{data.undo.line}</span>
+          <button type="submit">{data.undo.button}</button>
+        </form>
+      ) : null}
+      <section className="nb-rh-f-id" aria-labelledby="rh-f-nom">
+        <span className="nb-rh-ini nb-rh-ini-l" data-teinte={data.tint} aria-hidden>
+          {data.initials}
+        </span>
+        <span>
+          <h1 id="rh-f-nom">{data.name}</h1>
+          {data.line1 ? <p className="nb-meta">{data.line1}</p> : null}
+          <p className="nb-meta">{data.line2}</p>
+        </span>
+      </section>
+      <div className="nb-rh-f-cartes">
+        {data.score ? (
+          <button type="button" className="nb-rh-f-carte" onClick={() => setSheet("why")}>
+            <span className="nb-rh-pct" data-niveau={levelOf(data.score.value)}>
+              {data.score.label}
+            </span>
+            <span>
+              <b>{data.score.band}</b>
+              <span className="nb-rh-pourquoi">{t("why.open")}</span>
+            </span>
+          </button>
+        ) : (
+          <div className="nb-rh-f-carte">
+            <span className="nb-meta">{t("why.none")}</span>
+          </div>
+        )}
+        {data.live ? (
+          <button
+            type="button"
+            className="nb-rh-f-carte"
+            aria-label={t("stage.change", { stage: data.stage.name })}
+            onClick={() => setSheet("stage")}
+          >
+            <span>
+              <span className="nb-meta">{t("stage.label")}</span>
+              <b className="nb-rh-f-etape">
+                {data.stage.name}
+                <PhoneIcon name="bas" size={16} />
+              </b>
+            </span>
+          </button>
+        ) : (
+          <div className="nb-rh-f-carte">
+            <span>
+              <span className="nb-meta">{t("stage.label")}</span>
+              <b className="nb-rh-f-etape">{data.stage.name}</b>
+            </span>
+          </div>
+        )}
+      </div>
+      <p className="nb-meta nb-rh-f-offre">{data.jobTitle}</p>
+      <div className="nb-rh-f-onglets" role="tablist" aria-label={t("tabs.label")}>
+        {TABS.map((key) => (
+          <button
+            key={key}
+            type="button"
+            role="tab"
+            id={`rh-f-${key}`}
+            aria-selected={tab === key}
+            aria-controls={`rh-f-p-${key}`}
+            onClick={() => setTab(key)}
+          >
+            {t(`tabs.${key}`)}
+            {key === "notes" && data.notesCount > 0 ? <i>{data.notesCount}</i> : null}
+          </button>
+        ))}
+      </div>
+      {TABS.map((key) => (
+        <div
+          key={key}
+          role="tabpanel"
+          id={`rh-f-p-${key}`}
+          aria-labelledby={`rh-f-${key}`}
+          hidden={tab !== key}
+          className="nb-rh-f-panneau"
+        >
+          {panels[key]}
+        </div>
+      ))}
+
+      <div className="nb-bas nb-rh-f-bas">
+        {data.manage ? (
+          <Link href={data.messageHref} className="nb-rh-f-ecrire" aria-label={t("file.write")}>
+            <PhoneIcon name="messages" size={22} />
+          </Link>
+        ) : null}
+        {data.primary?.kind === "link" ? (
+          <Link href={data.primary.href} className="nb-bp">
+            {data.primary.label}
+          </Link>
+        ) : data.primary?.kind === "recruit" ? (
+          <button type="button" className="nb-bp" onClick={() => setSheet("recruit")}>
+            {data.primary.label}
+          </button>
+        ) : null}
+      </div>
+
+      {sheets}
     </div>
   );
 }

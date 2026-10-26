@@ -26,9 +26,14 @@ import {
   PROPOSAL_EVENT,
   rhAssignees,
 } from "@/server/services/hire-phone-candidatures";
+import { authorFeed } from "@/server/services/feed";
+import { personProfile } from "@/server/services/person-profile";
 import { screeningAnswersOf } from "@/server/services/screening";
 import { PhoneIcon } from "../icon";
-import { RhCandidaturesTexts, initialsOf, tintOf } from "./candidatures";
+import { feedWords } from "../fil/data";
+import { sendTargetViews } from "../fil/server";
+import { profileView, ProfileTexts } from "../profil/server";
+import { initialsOf, tintOf } from "./candidatures";
 import { RhFile, type RhFileData } from "./candidat-client";
 
 const DAY = 86_400_000;
@@ -56,6 +61,7 @@ export async function RhCandidate({
   query: Record<string, string | string[] | undefined>;
 }) {
   const t = await getTranslations("phoneRhCandidatures");
+  const tp = await getTranslations("phoneProfile");
   const th = await getTranslations("hire");
   const tc = await getTranslations("hireCandidates");
   const format = await getFormatter();
@@ -543,8 +549,8 @@ export async function RhCandidate({
   const explainable = matchingLevel === "explainable";
   const why: RhFileData["why"] = explanation
     ? {
-        title: t("why.title", { score: explanation.score }),
-        line: t(`why.band.${explanation.band}`),
+        title: tp("why.title", { score: explanation.score }),
+        line: tp("why.line", { job: job.title, company: org?.name ?? "" }),
         rows: explainable
           ? explanation.criteria
               .filter((item) => item.status !== "not_applicable" && item.weight > 0)
@@ -558,13 +564,15 @@ export async function RhCandidate({
               }))
           : [],
         locked: explainable ? null : t("why.locked"),
-        notUsed: t("why.notUsed"),
+        rule: tp("why.rule"),
+        ok: tp("why.ok"),
       }
     : null;
 
   const ok = one(query.ok);
   const toastKey = [
     "deplacee",
+    "avance",
     "note",
     "note-orbi",
     "annulee",
@@ -579,6 +587,59 @@ export async function RhCandidate({
     TABS.find((value) => value === one(query.onglet)) ??
     (ok === "note" || ok === "note-orbi" ? "notes" : "resume");
   const company = org?.name ?? "";
+
+  // ─── The profile, first (docs/profil-personne, vue recruteur) ───────────────────────
+  // The file (Résumé, CV, Réponses, Notes, Historique) opens with « ··· » › « Dossier de
+  // candidature », or directly after a gesture made in it.
+  const mode: RhFileData["mode"] =
+    one(query.onglet) || (ok && ok !== "avance") || one(query.orbi) || one(query.analyse)
+      ? "dossier"
+      : "profil";
+  const [personRow, posts, fil, targets] = await Promise.all([
+    personProfile(db, ctx.userId, profile.userId, "candidate"),
+    authorFeed(db, ctx.userId, { userId: profile.userId }),
+    feedWords(ctx.userId, now),
+    sendTargetViews(ctx.userId),
+  ]);
+  const order = job.stages.findIndex((stage) => stage.id === application.stage.id);
+  const next = live
+    ? job.stages.slice(order + 1).find((stage) => stage.kind !== "rejected")
+    : undefined;
+  const profileData: RhFileData["profile"] = personRow
+    ? {
+        view: await profileView(personRow, {
+          now,
+          cv: application.cvSnapshot !== null ? { href: `${base}/cv` } : null,
+        }),
+        posts: posts.map(fil.post),
+        targets,
+        card: {
+          title: tp("titleCandidate"),
+          applied: tp("candidate.applied", { job: job.title }),
+          line: tp("candidate.line", {
+            company,
+            when: when(application.createdAt),
+            stage: application.stage.name,
+          }),
+          scoreLabel: explanation
+            ? tp("candidate.score", { score: explanation.score })
+            : tp("candidate.noScore"),
+          why: explanation ? tp("candidate.why", { score: explanation.score }) : "",
+          advanceText: tp("candidate.advance"),
+          advance: next
+            ? {
+                stageId: next.id,
+                label: tp("candidate.advanceTo", { stage: next.name }),
+                hired: next.kind === "hired",
+              }
+            : null,
+        },
+        dossier: tp("candidate.dossier"),
+        dossierHint: tp("candidate.dossierHint"),
+        back: tp("candidate.profile"),
+        backHint: tp("candidate.backHint", { name: firstName }),
+      }
+    : null;
 
   const data: RhFileData = {
     id: application.id,
@@ -635,16 +696,20 @@ export async function RhCandidate({
             button: tc("done.undo"),
           }
         : null,
+    profile: profileData,
+    mode,
   };
 
   return (
-    <RhCandidaturesTexts>
+    <ProfileTexts extra={["phoneRhCandidatures"]}>
       {toastKey ? (
         <ToastOnLoad
           message={
             toastKey === "annulee"
               ? tc("ok.annulee")
-              : t(`file.ok.${(toastKey === "note-orbi" ? "note" : toastKey) as "deplacee"}`)
+              : t(
+                  `file.ok.${(toastKey === "note-orbi" ? "note" : toastKey === "avance" ? "deplacee" : toastKey) as "deplacee"}`,
+                )
           }
           tone="success"
         />
@@ -653,6 +718,6 @@ export async function RhCandidate({
         data={data}
         panels={{ resume, cv, reponses, notes: notesPanel, historique: history }}
       />
-    </RhCandidaturesTexts>
+    </ProfileTexts>
   );
 }

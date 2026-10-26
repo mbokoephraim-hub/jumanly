@@ -190,6 +190,7 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
     user: profile.user,
     profile: {
       banner: profile.banner,
+      handle: profile.handle,
       headline: profile.headline,
       summary: profile.summary,
       targetJob: profile.targetJob,

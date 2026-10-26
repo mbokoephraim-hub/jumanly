@@ -75,6 +75,8 @@ export async function moveCandidateAction(formData: FormData) {
     redirect(
       `/app/hire/candidats?${new URLSearchParams({ offre: application.jobId, id: applicationId, ok: "deplacee" })}`,
     );
+  // « Avancer » on the candidate's profile (docs/profil-personne): back to the profile.
+  if (formData.get("retour") === "profil") redirect(`${fileOf(applicationId)}?ok=avance`);
   redirect(`${fileOf(applicationId)}?ok=deplacee`);
 }
 

@@ -1162,6 +1162,13 @@ model TalentProfile {
   situation              String?
   /// Banner chosen by the person (an /api/banniere/… address); null shows the drawn one.
   banner                 String?
+  /// « @patrick.ilunga » (docs/profil-personne): letters, digits and dots, 3 to 30, unique. Null
+  /// shows the one drawn from the name.
+  handle                 String?                  @unique
+  /// { linkedin?, instagram?, x?, facebook?, website? }: https addresses (src/lib/social-links.ts).
+  socialLinks            Json                     @default("{}")
+  /// « Afficher mon e-mail sur mon profil »: off by default.
+  showEmail              Boolean                  @default(false)
   targetJob              String?
   visibility             ProfileVisibility        @default(private)
   availability           Availability             @default(open)

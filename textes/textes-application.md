@@ -8760,6 +8760,108 @@ Conventions :
 | `phoneExplorer.person.cancel` | Annuler |
 | `phoneExplorer.person.photo` | Photo de {name} |
 
+### Profil d'une personne · connexion et candidat
+
+*docs/profil-personne (validé le 26/10/2026) : en-tête compact (bannière 4:1, photo et anneau des compétences, réseaux, drapeau et heure locale), « Se connecter » puis « Chat », ou la carte du candidat côté recruteur ; onglets Publications · À propos · Réalisations · Portfolio ; feuille « Pourquoi ? ».*
+
+| Clé | Texte |
+|---|---|
+| `phoneProfile.back` | Retour |
+| `phoneProfile.titleProfile` | Profil |
+| `phoneProfile.titleCandidate` | Candidat |
+| `phoneProfile.share` | Partager le profil |
+| `phoneProfile.shared` | Lien du profil copié. |
+| `phoneProfile.more` | Plus d’options |
+| `phoneProfile.close` | Fermer |
+| `phoneProfile.photo` | Photo de {name} |
+| `phoneProfile.socials` | Réseaux |
+| `phoneProfile.social.linkedin` | LinkedIn |
+| `phoneProfile.social.instagram` | Instagram |
+| `phoneProfile.social.email` | E-mail |
+| `phoneProfile.social.x` | X (Twitter) |
+| `phoneProfile.social.facebook` | Facebook |
+| `phoneProfile.social.website` | Site web |
+| `phoneProfile.verified` | Profil vérifié |
+| `phoneProfile.notVerified` | Non vérifié |
+| `phoneProfile.handle` | @{handle} |
+| `phoneProfile.flag` | Drapeau : {country} |
+| `phoneProfile.place` | {city}, {country} |
+| `phoneProfile.time` | {hour} h {minute} |
+| `phoneProfile.timeLine` | · {time} |
+| `phoneProfile.connections` | {count, plural, one {<b>#</b> connexion} other {<b>#</b> connexions}} |
+| `phoneProfile.seeks` | Cherche : <b>{contract}</b> |
+| `phoneProfile.activity.now` | Actif maintenant |
+| `phoneProfile.activity.minutes` | Actif il y a {count} min |
+| `phoneProfile.activity.hours` | Actif il y a {count} h |
+| `phoneProfile.activity.days` | Actif il y a {count} j |
+| `phoneProfile.common.one` | {a} est une connexion en commun |
+| `phoneProfile.common.two` | {a} et {b} sont des connexions en commun |
+| `phoneProfile.common.many` | {a}, {b} et {count, plural, one {# autre connexion} other {# autres connexions}} en commun |
+| `phoneProfile.connect` | Se connecter |
+| `phoneProfile.accept` | Accepter |
+| `phoneProfile.sent` | Demande envoyée |
+| `phoneProfile.connected` | Connectés |
+| `phoneProfile.chat` | Chat |
+| `phoneProfile.connectSent` | Demande envoyée à {name}. |
+| `phoneProfile.connectAccepted` | Vous êtes connectés avec {name}. |
+| `phoneProfile.connectError` | La demande n’est pas partie. Réessayez. |
+| `phoneProfile.tabs` | Sections du profil |
+| `phoneProfile.tab.publications` | Publications |
+| `phoneProfile.tab.apropos` | À propos |
+| `phoneProfile.tab.realisations` | Réalisations |
+| `phoneProfile.tab.portfolio` | Portfolio |
+| `phoneProfile.skills` | Compétences |
+| `phoneProfile.skillsCount` | {count, plural, =0 {Aucune compétence} one {# compétence} other {# compétences}} |
+| `phoneProfile.skillVerified` | vérifiée |
+| `phoneProfile.family` | {label} {share} % |
+| `phoneProfile.noSkills` | {name} n’a pas encore ajouté de compétence. |
+| `phoneProfile.experiences` | Expériences |
+| `phoneProfile.experiencesCount` | {count, plural, =0 {Aucun poste} one {# poste} other {# postes}} |
+| `phoneProfile.noExperience` | Aucune expérience indiquée pour l’instant. |
+| `phoneProfile.current` | Actuel |
+| `phoneProfile.span` | {start} – {end} |
+| `phoneProfile.today` | aujourd’hui |
+| `phoneProfile.years` | {count, plural, one {# an} other {# ans}} |
+| `phoneProfile.months` | {count} mois |
+| `phoneProfile.moreLines` | Voir {count} de plus |
+| `phoneProfile.less` | Voir moins |
+| `phoneProfile.education` | Formation |
+| `phoneProfile.languages` | Langues |
+| `phoneProfile.level` | Niveau {level} sur 5 |
+| `phoneProfile.noPosts` | {name} n’a encore rien publié. |
+| `phoneProfile.noWorks` | {name} n’a pas encore montré de réalisation. |
+| `phoneProfile.noFiles` | {name} n’a pas encore ajouté de fichier ni de lien. |
+| `phoneProfile.work.project` | Projet |
+| `phoneProfile.work.event` | Événement |
+| `phoneProfile.work.certificate` | Certificat |
+| `phoneProfile.file.pdfBadge` | PDF |
+| `phoneProfile.file.linkBadge` | LIEN |
+| `phoneProfile.file.cvBadge` | CV |
+| `phoneProfile.file.webBadge` | WEB |
+| `phoneProfile.file.size` | {size} Mo |
+| `phoneProfile.file.pdf` | PDF · {size} |
+| `phoneProfile.file.link` | Lien · {host} |
+| `phoneProfile.file.cv` | CV de {name} |
+| `phoneProfile.file.cvLine` | PDF envoyé avec la candidature |
+| `phoneProfile.file.portfolioTitle` | jumanly.io/portfolio/{slug} |
+| `phoneProfile.file.portfolio` | Page publique Jumanly |
+| `phoneProfile.candidate.applied` | A candidaté : {job} |
+| `phoneProfile.candidate.line` | {company} · {when} · étape {stage} |
+| `phoneProfile.candidate.score` | Score de compatibilité : {score} % |
+| `phoneProfile.candidate.noScore` | Sans score |
+| `phoneProfile.candidate.why` | Pourquoi {score} % ? |
+| `phoneProfile.candidate.advance` | Avancer |
+| `phoneProfile.candidate.advanceTo` | Avancer à l’étape {stage} |
+| `phoneProfile.candidate.write` | Écrire à {name} |
+| `phoneProfile.candidate.dossier` | Dossier de candidature |
+| `phoneProfile.candidate.dossierHint` | Résumé, CV, réponses, notes et historique |
+| `phoneProfile.candidate.profile` | Profil |
+| `phoneProfile.candidate.backHint` | Revenir au profil de {name} |
+| `phoneProfile.why.title` | Pourquoi {score} % ? |
+| `phoneProfile.why.line` | {job} · {company} |
+| `phoneProfile.why.rule` | Calculé sans le nom, la photo, l’âge, le genre ni la nationalité. Orbi recommande, vous décidez : aucune candidature n’est écartée automatiquement. |
+| `phoneProfile.why.ok` | Compris |
+
 ### Modèle B · Carrière au téléphone
 
 *Lot B5 (docs/modele-b, rangées 11 à 15, planche `Carriere.dc.html`) : l'onglet Carrière (profil, CV, portfolio, progression, candidatures), sa recherche, partager le profil, modifier le profil, paramètres, formule et paiement, CV, réalisations et candidatures.*
@@ -8945,6 +9047,9 @@ Conventions :
 | `phoneCareer.form.errors.invalid` | Vérifiez les champs en rouge. |
 | `phoneCareer.form.errors.required` | Ce champ est obligatoire. |
 | `phoneCareer.form.errors.name` | Écrivez votre nom avec des lettres seulement. |
+| `phoneCareer.form.errors.handle` | Lettres, chiffres et points seulement, de 3 à 30 caractères. |
+| `phoneCareer.form.errors.handleTaken` | Ce nom d’utilisateur est déjà pris. Essayez-en un autre. |
+| `phoneCareer.form.errors.socials` | Cette adresse ne correspond pas au réseau. |
 | `phoneCareer.form.errors.endBeforeStart` | La fin doit venir après le début. |
 | `phoneCareer.form.errors.title` | Indiquez le poste. |
 | `phoneCareer.form.errors.company` | Indiquez l’entreprise. |
@@ -8976,6 +9081,20 @@ Conventions :
 | `phoneCareer.form.bannerError` | Cette image n’a pas pu être enregistrée. Essayez une image JPEG ou PNG. |
 | `phoneCareer.form.name` | Nom affiché |
 | `phoneCareer.form.handle` | Nom d’utilisateur |
+| `phoneCareer.form.handleHint` | Lettres, chiffres et points, de 3 à 30 caractères. Il s’affiche sous votre nom : @prenom.nom. |
+| `phoneCareer.form.socials` | Réseaux |
+| `phoneCareer.form.socialsHint` | Seuls les réseaux remplis s’affichent sur votre profil. |
+| `phoneCareer.form.social.linkedin` | LinkedIn |
+| `phoneCareer.form.social.instagram` | Instagram |
+| `phoneCareer.form.social.x` | X (Twitter) |
+| `phoneCareer.form.social.facebook` | Facebook |
+| `phoneCareer.form.social.website` | Site web |
+| `phoneCareer.form.socialPlaceholder.linkedin` | linkedin.com/in/votre-nom |
+| `phoneCareer.form.socialPlaceholder.instagram` | instagram.com/votre-nom |
+| `phoneCareer.form.socialPlaceholder.x` | x.com/votre-nom |
+| `phoneCareer.form.socialPlaceholder.facebook` | facebook.com/votre-nom |
+| `phoneCareer.form.socialPlaceholder.website` | votre-site.com |
+| `phoneCareer.form.showEmail` | Afficher mon e-mail sur mon profil |
 | `phoneCareer.form.headline` | Titre |
 | `phoneCareer.form.headlinePlaceholder` | Ex. : Analyste de données junior |
 | `phoneCareer.form.city` | Ville |

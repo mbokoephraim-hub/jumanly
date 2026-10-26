@@ -236,7 +236,10 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
   }
   await expect(page).toHaveURL(/\/app\/hire\/candidats\//);
   if (isMobile) {
-    // The phone's file (Modèle B recruteur, M5) shows the answers in its tab « Réponses ».
+    // The phone's file (Modèle B recruteur, M5) shows the answers in its tab « Réponses »; the
+    // candidate opens on their profile (docs/profil-personne), the file comes next.
+    await expect(page.locator(".nb-rh-fiche-p").filter({ visible: true })).toBeVisible();
+    await page.goto(`${page.url().split("?")[0]}?onglet=reponses`);
     const file = page.locator(".nb-rh-fiche").filter({ visible: true });
     await file.getByRole("tab", { name: /^Réponses/ }).click();
     await expect(file).toContainText(question);

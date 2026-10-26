@@ -22,6 +22,7 @@ import { FilAvatar } from "../fil/avatar";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { pagesSeen } from "../pages-seen";
 import { PhoneSheet } from "../sheet";
+import { SOCIAL_KINDS, type SocialKind } from "@/lib/social-links";
 
 /** Where a form of the profile goes back to when it was opened directly. */
 const CAREER = "/app/career/cv";
@@ -324,7 +325,12 @@ async function square(file: File): Promise<Blob> {
 
 export type HeadValues = {
   name: string;
+  /** Without « @ »; the one drawn from the name when the person has not chosen one. */
   handle: string;
+  /** False while the handle is the one drawn from the name (it is not saved unless changed). */
+  handleChosen: boolean;
+  socials: Record<SocialKind, string>;
+  showEmail: boolean;
   headline: string;
   city: string;
   summary: string;
@@ -383,6 +389,11 @@ export function HeadForm({ values }: { values: HeadValues }) {
               city: form.city,
               summary: form.summary,
               availability: form.availability,
+              // The handle drawn from the name is shared by namesakes: kept only once chosen.
+              handle:
+                !values.handleChosen && form.handle === values.handle ? undefined : form.handle,
+              socials: form.socials,
+              showEmail: form.showEmail,
             }),
           t("headSaved"),
         )
@@ -419,9 +430,33 @@ export function HeadForm({ values }: { values: HeadValues }) {
           />
         )}
       </Field>
-      <Field label={t("handle")}>
-        {(id) => <input id={id} className="nb-ca-in" value={values.handle} readOnly />}
+      <Field
+        label={t("handle")}
+        error={
+          error === "handle"
+            ? t("errors.handle")
+            : error === "handleTaken"
+              ? t("errors.handleTaken")
+              : null
+        }
+      >
+        {(id) => (
+          <input
+            id={id}
+            className="nb-ca-in"
+            value={form.handle}
+            onChange={(event) => set({ handle: event.target.value.replace(/^@/, "") })}
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
+            maxLength={30}
+            aria-describedby="ca-alias-aide"
+          />
+        )}
       </Field>
+      <p id="ca-alias-aide" className="nb-meta nb-ca-aide">
+        {t("handleHint")}
+      </p>
       <Field label={t("headline")}>
         {(id) => (
           <input
@@ -477,6 +512,44 @@ export function HeadForm({ values }: { values: HeadValues }) {
           text: t(`availabilityOption.${value}`),
         }))}
       />
+      <h2 className="nb-ca-sous">{t("socials")}</h2>
+      <p className="nb-meta nb-ca-aide">{t("socialsHint")}</p>
+      {SOCIAL_KINDS.map((kind) => (
+        <Field
+          key={kind}
+          label={t(`social.${kind}`)}
+          error={error === "socials" && form.socials[kind] ? t("errors.socials") : null}
+        >
+          {(id) => (
+            <input
+              id={id}
+              type="url"
+              inputMode="url"
+              className="nb-ca-in"
+              value={form.socials[kind]}
+              onChange={(event) =>
+                set({ socials: { ...form.socials, [kind]: event.target.value } })
+              }
+              placeholder={t(`socialPlaceholder.${kind}`)}
+              autoCapitalize="none"
+              maxLength={300}
+            />
+          )}
+        </Field>
+      ))}
+      <div className="nb-ca-bascule">
+        <span id="ca-courriel">{t("showEmail")}</span>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={form.showEmail}
+          aria-labelledby="ca-courriel"
+          className="nb-switch"
+          onClick={() => set({ showEmail: !form.showEmail })}
+        >
+          <span />
+        </button>
+      </div>
       <Link href="/app/parametres" className="nb-ca-it">
         {t("accountSettings")}
         <PhoneIcon name="chevron" size={18} />
