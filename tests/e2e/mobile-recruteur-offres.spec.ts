@@ -61,7 +61,8 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
   // is the recruiter's Fil (Modèle B recruteur, M3).
   if (isMobile)
     await expect(main(page).getByRole("heading", { name: "Fil", exact: true })).toBeVisible();
-  else await expect(main(page)).toContainText("Rien à traiter pour l'instant");
+  // On a computer, the home of Modèle B (lot N1): « Rien à valider » for the administrator.
+  else await expect(main(page)).toContainText(/Rien à (traiter|valider) pour l'instant/);
 
   const first = `Analyste crédit fictif ${suffix()}`;
   const question = "Êtes-vous disponible avant le 1er décembre ?";
