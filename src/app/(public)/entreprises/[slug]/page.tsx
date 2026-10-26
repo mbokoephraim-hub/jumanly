@@ -108,6 +108,11 @@ export default async function CompanyPage({ params }: PageProps<"/entreprises/[s
                     {t("companyPage.verified")}
                   </span>
                 )}
+                {company.hiringNow && (
+                  <span className="inline-flex h-[30px] items-center rounded-pill bg-lime px-3 text-xs font-semibold text-sapin">
+                    {t("companyPage.hiringNow")}
+                  </span>
+                )}
               </div>
               {facts.length > 0 && (
                 <ul className="flex flex-col gap-2 text-sm sm:flex-row sm:flex-wrap sm:gap-x-5">

@@ -1150,3 +1150,261 @@
   line-height: 1.5;
   margin-bottom: 16px !important;
 }
+
+/* Étape 3 · A3 : Page entreprise (081) et vue publique (082). */
+.ae-pe .ae-grandit > .ae-carte + .ae-carte {
+  margin-top: 16px;
+}
+.ae-pe-identite {
+  padding: 0;
+  overflow: hidden;
+}
+.ae-pe-ban {
+  position: relative;
+  height: 140px;
+  background-size: cover;
+  background-position: center;
+}
+.ae-pe-sur {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 19px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ae-creme);
+  background: rgba(11, 26, 31, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+.ae-pe-tete {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 22px 16px;
+}
+.ae-pe-logo,
+.ae-pv-logo {
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  margin-top: -26px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  background: var(--ae-sapin);
+  border: 4px solid var(--ae-surface);
+}
+.ae-pe-logo img,
+.ae-pv-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ae-pe-nom {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 6px !important;
+}
+.ae-pe-form {
+  padding: 4px 18px 18px;
+}
+.ae-pe-champs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 16px;
+}
+.ae-pe-select {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #8fa39e 50%),
+    linear-gradient(135deg, #8fa39e 50%, transparent 50%);
+  background-position:
+    calc(100% - 22px) 23px,
+    calc(100% - 16px) 23px;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+}
+.ae-pe-select option {
+  background: var(--ae-nuit);
+  color: var(--ae-creme);
+}
+.ae-pe-badge {
+  margin-top: 18px;
+}
+.ae-pe-pied {
+  margin-top: 18px;
+}
+.ae-pe-cote {
+  width: 380px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ae-pe-intro {
+  margin: 6px 0 12px !important;
+  line-height: 1.45;
+}
+.ae-pe-personne {
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.ae-pe-reponse {
+  justify-content: flex-end;
+  margin-top: 10px;
+  gap: 8px;
+}
+.ae-pe-ok {
+  display: inline-flex;
+  color: var(--ae-lime);
+  vertical-align: middle;
+}
+.ae-pe-avs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px !important;
+}
+.ae-pe-av {
+  width: 40px;
+  height: 40px;
+  font-size: 12.5px;
+  background: #1b3338;
+  color: var(--ae-creme);
+}
+.ae-pe-av-1 {
+  background: var(--ae-sapin);
+  color: #fff;
+}
+.ae-pe-cadre {
+  height: 150px;
+  border-radius: 18px;
+  background: var(--ae-nuit);
+  border: 1px dashed rgba(255, 255, 255, 0.24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin: 14px 0 !important;
+  text-align: center;
+  padding: 0 16px;
+}
+.ae-pe-cadre-logo {
+  width: 150px;
+}
+.ae-pe-cadre img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ae-pe-choisir {
+  cursor: pointer;
+}
+.ae-pv-retour {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ae-creme);
+  margin-bottom: 18px;
+}
+.ae-pv-ban {
+  height: 150px;
+  border-radius: 24px;
+  background-size: cover;
+  background-position: center;
+}
+.ae-pv-tete {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  padding: 0 24px;
+  margin-top: -44px;
+}
+.ae-pv-logo {
+  width: 88px;
+  height: 88px;
+  border-radius: 20px;
+  margin-top: 0;
+  border-color: var(--ae-nuit);
+  font-size: 24px;
+}
+.ae-pv-nom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.ae-pv-seg {
+  margin-top: 22px;
+}
+.ae-g4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+.ae-pv-membre {
+  text-align: center;
+  padding: 18px 12px;
+}
+.ae-pv-av {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 10px;
+  background: #1b3338;
+  color: var(--ae-creme);
+}
+.ae-pv-conf {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ae-lime);
+  margin-top: 4px !important;
+}
+.ae-pv-decl {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ae-brume);
+  margin-top: 4px !important;
+}
+.ae-pv-apropos p + p {
+  margin-top: 10px;
+}
+.ae-pv-apropos {
+  line-height: 1.55;
+  max-width: 820px;
+}
+.ae-pv-offres {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ae-pv-offre {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+@media (max-width: 1199px) {
+  .ae-pe-cote {
+    width: auto;
+  }
+  .ae-g4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.ae-pv-membre .ae-nom,
+.ae-pe-personne .ae-nom {
+  font-weight: 700;
+}

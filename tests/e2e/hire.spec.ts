@@ -420,7 +420,8 @@ test("l'administrateur pose la bannière et le logo de l'entreprise", async ({ p
   test.skip(isMobile, "La page entreprise se modifie sur ordinateur.");
   test.setTimeout(120_000);
   await signUpRecruiter(page, testEmail("marque"), "Marque fictive e2e");
-  await page.goto("/app/organisation/modifier");
+  // Page entreprise (étape 3, A3): the image is cropped to its format on the server.
+  await page.goto("/app/organisation");
   const main = page.locator("main").filter({ visible: true });
   const picture = await sharp({
     create: { width: 1200, height: 600, channels: 3, background: "#1FA98A" },
@@ -428,28 +429,27 @@ test("l'administrateur pose la bannière et le logo de l'entreprise", async ({ p
     .png()
     .toBuffer();
 
-  await main.getByRole("button", { name: "Bannière" }).click();
+  await main.getByRole("button", { name: "Changer la bannière" }).click();
   const dialog = page.getByRole("dialog", { name: "Bannière de l'entreprise" });
   await expect(dialog).toBeVisible();
   await expectAccessible(page);
   await dialog
     .locator('input[type="file"]')
     .setInputFiles({ name: "banniere.png", mimeType: "image/png", buffer: picture });
-  await dialog.getByRole("group", { name: /Cadrage de l'image/ }).press("ArrowLeft");
   await dialog.getByRole("button", { name: "Enregistrer" }).click();
-  await expect(dialog).toHaveCount(0);
-  const banner = main.locator('img[src^="/medias/orgs/"][src*="/banner-"]');
-  await expect(banner).toBeVisible();
-  const src = await banner.getAttribute("src");
+  await expect(dialog).toBeHidden();
+  const banner = main.locator(".ae-pe-ban");
+  await expect(banner).toHaveAttribute("style", /\/medias\/orgs\/.*banner-/);
+  const src = /url\("?([^")]+)"?\)/.exec((await banner.getAttribute("style")) ?? "")?.[1];
   expect((await page.request.get(src!)).headers()["content-type"]).toBe("image/webp");
 
-  await main.getByRole("button", { name: "Logo" }).click();
+  await main.getByRole("button", { name: "Changer le logo" }).click();
   const logo = page.getByRole("dialog", { name: "Logo de l'entreprise" });
   await logo
     .locator('input[type="file"]')
     .setInputFiles({ name: "logo.png", mimeType: "image/png", buffer: picture });
   await logo.getByRole("button", { name: "Enregistrer" }).click();
-  await expect(main.getByRole("img", { name: "Logo de Marque fictive e2e" })).toBeVisible();
+  await expect(main.locator('.ae-pe-logo img[src^="/medias/orgs/"]')).toBeVisible();
 
   // The job editor shows the same identity and the card as talents will see it.
   // « Vérifier et publier » previews the offer with the banner (brief recruteur § 2.10).
@@ -460,16 +460,10 @@ test("l'administrateur pose la bannière et le logo de l'entreprise", async ({ p
     skill: "Bureautique",
   });
   const editor = page.locator("main").filter({ visible: true });
-  // On a phone the card of step 4 shows the logo (Modèle B recruteur, M4), on a computer the
-  // « Aperçu de l'annonce » beside the form shows the banner.
-  const shown =
-    test.info().project.name === "mobile"
-      ? editor.locator('.nb-rh-apercu-offre img[src^="/medias/orgs/"]')
-      : editor.locator(`img[src="${src}"]`);
-  await expect(shown.filter({ visible: true }).first()).toBeVisible();
+  await expect(editor.locator(`img[src="${src}"]`).filter({ visible: true }).first()).toBeVisible();
 
-  await page.goto("/app/organisation/modifier");
-  await main.getByRole("button", { name: "Bannière" }).click();
+  await page.goto("/app/organisation");
+  await main.getByRole("button", { name: "Changer la bannière" }).click();
   await page.getByRole("button", { name: "Retirer la bannière" }).click();
-  await expect(main.locator('img[src^="/medias/orgs/"][src*="/banner-"]')).toHaveCount(0);
+  await expect(banner).not.toHaveAttribute("style", /\/medias\/orgs\//);
 });
