@@ -233,7 +233,8 @@ test("organisation : page, modification, vérification, équipe et invitation", 
     "aria-selected",
     "true",
   );
-  await expect(main(page).getByText(invited)).toBeVisible();
+  // The toast also names the address: the line of the list is the exact text.
+  await expect(main(page).getByText(invited, { exact: true })).toBeVisible();
   await noOverflow(page, "invitation");
 
   // Reports of this plan: the PDF export (the CSV is gone, its address gives the PDF).
