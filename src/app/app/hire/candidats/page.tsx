@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { after } from "next/server";
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
@@ -470,13 +470,9 @@ async function CandidatesPageContent({ searchParams }: PageProps<"/app/hire/cand
 export default async function CandidatesPage(props: PageProps<"/app/hire/candidats">) {
   if (!(await isPhone())) return <CandidatesPageContent {...props} />;
   const query = await props.searchParams;
-  // The talent search (`?vue=talents`) is the Talents tab on a phone.
-  if (query.vue === "talents" || query.vue === "propositions")
-    return (
-      <RhTab tab="talents">
-        <CandidatesPageContent {...props} />
-      </RhTab>
-    );
+  // The talent search (`?vue=talents`) and the proposals are the Talents tab on a phone (M6).
+  if (query.vue === "talents") redirect("/app/hire/talents");
+  if (query.vue === "propositions") redirect("/app/hire/talents?onglet=propositions");
   const { ctx } = await requireHire("/app/hire/candidats", "readApplications");
   const offre = typeof query.offre === "string" ? query.offre : null;
   const data = await rhApplications(db, ctx, offre).catch((error) => {

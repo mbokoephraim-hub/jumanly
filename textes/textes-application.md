@@ -13998,6 +13998,7 @@ Conventions :
 | `phoneRh.search.scopes.nom` | Nom |
 | `phoneRh.search.scopes.competence` | Compétence |
 | `phoneRh.search.scopes.ville` | Ville |
+| `phoneRh.search.scopes.metier` | Métier |
 | `phoneRh.search.searchBy` | Chercher par |
 | `phoneRh.search.percent` | {score} % |
 | `phoneRh.search.groups.offers` | Mes offres · {count} |
@@ -14024,8 +14025,8 @@ Conventions :
 | `phoneRh.search.candidatures.label` | Rechercher un candidat |
 | `phoneRh.search.candidatures.placeholder` | Nom, compétence, ville |
 | `phoneRh.search.candidatures.note` | Seulement les personnes qui ont candidaté à vos offres. |
-| `phoneRh.search.talents.label` | Rechercher un talent ou une entreprise |
-| `phoneRh.search.talents.placeholder` | Métier, compétence, ville |
+| `phoneRh.search.talents.label` | Rechercher un talent |
+| `phoneRh.search.talents.placeholder` | Compétence, métier, ville |
 | `phoneRh.search.talents.note` | Seulement les talents qui ont rendu leur profil visible. |
 | `phoneRh.search.messages.label` | Rechercher dans les messages |
 | `phoneRh.search.messages.placeholder` | Nom, offre |
@@ -14883,6 +14884,188 @@ Conventions :
 | `phoneRhCandidatures.sent.file` | Revenir à la fiche |
 | `phoneRhCandidatures.sent.all` | Voir tous les entretiens |
 | `phoneRhCandidatures.calendar.summary` | Entretien avec {name} · {job} |
+
+---
+
+### Modèle B recruteur · Talents au téléphone
+
+*Lot M6 (docs/modele-b-recruteur, mobile/captures section 06) : découvrir des talents visibles pour ses offres, le vivier, les propositions envoyées, le réseau, et le profil d'un talent vu par le recruteur. Orbi recommande, le recruteur décide. Seuls les talents qui ont rendu leur profil visible apparaissent ; chaque consultation est enregistrée.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhTalents.tabs.label` | Rubriques des talents |
+| `phoneRhTalents.tabs.decouvrir` | Découvrir |
+| `phoneRhTalents.tabs.vivier` | Vivier |
+| `phoneRhTalents.tabs.propositions` | Propositions |
+| `phoneRhTalents.tabs.reseau` | Réseau |
+| `phoneRhTalents.offers.label` | Offres comparées |
+| `phoneRhTalents.search.results` | {count, plural, one {# talent} other {# talents}} |
+| `phoneRhTalents.offers.all` | Toutes mes offres |
+| `phoneRhTalents.discover.line` | {count, plural, =0 {Aucun talent visible} one {# talent visible} other {# talents visibles}} · mis à jour aujourd'hui |
+| `phoneRhTalents.discover.empty` | Aucun talent visible pour ces offres pour l'instant. Cherchez par compétence, métier ou ville, ou publiez une offre avec ses compétences. |
+| `phoneRhTalents.discover.locked` | La recherche de talents n'est pas comprise dans votre formule. Vos candidatures restent complètes. |
+| `phoneRhTalents.discover.lockedPlan` | Disponible dès {plan}. |
+| `phoneRhTalents.discover.seePlans` | Voir les formules |
+| `phoneRhTalents.discover.note` | Classés par le score de compatibilité avec vos offres, calculé de la même façon pour tous. Jamais l'âge, la photo, la nationalité ni la situation familiale. |
+| `phoneRhTalents.card.years` | {years, plural, =0 {débutant·e} one {# an} other {# ans}} |
+| `phoneRhTalents.card.anonymous` | Profil anonyme |
+| `phoneRhTalents.card.inPool` | Dans votre vivier |
+| `phoneRhTalents.card.pending` | Proposition envoyée |
+| `phoneRhTalents.card.seen` | Proposition vue, sans réponse |
+| `phoneRhTalents.card.accepted` | Proposition acceptée |
+| `phoneRhTalents.card.percent` | {score} % |
+| `phoneRhTalents.pools.count` | {count, plural, =0 {Aucun talent} one {# talent} other {# talents}} |
+| `phoneRhTalents.pools.new` | Nouvelle liste |
+| `phoneRhTalents.pools.nameLabel` | Nom de la liste |
+| `phoneRhTalents.pools.namePlaceholder` | Ex. : Finance 2027 |
+| `phoneRhTalents.pools.create` | Créer la liste |
+| `phoneRhTalents.pools.empty` | Aucune liste pour l'instant. Créez-en une, puis ajoutez des talents depuis leur profil. |
+| `phoneRhTalents.pools.notePrivate` | Votre vivier personnel : les talents ne savent pas dans quelle liste ils sont. Le vivier partagé avec l'équipe vient avec {plan}. |
+| `phoneRhTalents.pools.notePrivateNoPlan` | Votre vivier personnel : les talents ne savent pas dans quelle liste ils sont. |
+| `phoneRhTalents.pools.noteShared` | Vos listes et celles partagées avec l'équipe. Les talents ne savent pas dans quelle liste ils sont. |
+| `phoneRhTalents.pools.locked` | Le vivier n'est pas compris dans votre formule. |
+| `phoneRhTalents.pool.back` | Vivier |
+| `phoneRhTalents.pool.private` | visible par vous seul·e |
+| `phoneRhTalents.pool.team` | visible par votre équipe |
+| `phoneRhTalents.pool.org` | visible par toute l'entreprise |
+| `phoneRhTalents.pool.empty` | Cette liste est vide. Ajoutez un talent depuis son profil. |
+| `phoneRhTalents.pool.remove` | Retirer {name} de la liste |
+| `phoneRhTalents.pool.origin.applied` | A candidaté à « {job} » |
+| `phoneRhTalents.pool.origin.contact` | A accepté une proposition |
+| `phoneRhTalents.pool.origin.search` | Trouvé·e par recherche |
+| `phoneRhTalents.pool.options` | Options de la liste |
+| `phoneRhTalents.pool.rename` | Nom de la liste |
+| `phoneRhTalents.pool.renameSave` | Enregistrer le nom |
+| `phoneRhTalents.pool.delete` | Supprimer la liste |
+| `phoneRhTalents.pool.deleteNote` | Les talents ne sont pas prévenus. Leur profil reste dans vos autres listes. |
+| `phoneRhTalents.proposals.intro` | Les offres que vous avez proposées à des talents |
+| `phoneRhTalents.proposals.note` | Quand un talent accepte, vous pouvez échanger avec lui et sa candidature arrive dans Candidatures, comme les autres. Candidater reste gratuit pour lui. |
+| `phoneRhTalents.proposals.empty` | Aucune proposition envoyée pour l'instant. Proposez une offre depuis le profil d'un talent. |
+| `phoneRhTalents.proposals.when` | {job} · {when} |
+| `phoneRhTalents.proposals.noJob` | Sans offre précise |
+| `phoneRhTalents.proposals.state.waiting` | Envoyée, pas encore vue |
+| `phoneRhTalents.proposals.state.seen` | Vue, sans réponse |
+| `phoneRhTalents.proposals.state.accepted` | Acceptée : la conversation est ouverte |
+| `phoneRhTalents.proposals.state.declined` | Déclinée |
+| `phoneRhTalents.proposals.state.expired` | Expirée sans réponse |
+| `phoneRhTalents.proposals.remind` | Relancer |
+| `phoneRhTalents.network.received` | Invitations reçues |
+| `phoneRhTalents.network.accept` | Accepter |
+| `phoneRhTalents.network.ignore` | Ignorer l'invitation de {name} |
+| `phoneRhTalents.network.know` | À connaître |
+| `phoneRhTalents.network.connect` | Se connecter |
+| `phoneRhTalents.network.relations` | Mes relations |
+| `phoneRhTalents.network.filters` | Filtrer mes relations |
+| `phoneRhTalents.network.filter.toutes` | Toutes |
+| `phoneRhTalents.network.filter.talents` | Talents |
+| `phoneRhTalents.network.filter.rh` | Recruteurs et RH |
+| `phoneRhTalents.network.kind.talent` | Talent |
+| `phoneRhTalents.network.kind.rh` | RH |
+| `phoneRhTalents.network.mutual` | {count, plural, one {# relation en commun} other {# relations en commun}} |
+| `phoneRhTalents.network.empty` | Aucune relation pour l'instant. Connectez-vous aux talents et aux recruteurs que vous croisez. |
+| `phoneRhTalents.network.none` | Personne à suggérer pour l'instant. |
+| `phoneRhTalents.network.write` | Écrire à {name} |
+| `phoneRhTalents.profile.back` | Retour |
+| `phoneRhTalents.profile.more` | Plus d'actions pour {name} |
+| `phoneRhTalents.profile.active` | actif·ve {when} |
+| `phoneRhTalents.profile.mobility` | Prêt·e à venir à {city} |
+| `phoneRhTalents.profile.connect` | Se connecter |
+| `phoneRhTalents.profile.connectSent` | Invitation envoyée |
+| `phoneRhTalents.profile.connected` | En relation |
+| `phoneRhTalents.profile.match.haut` | Très compatible |
+| `phoneRhTalents.profile.match.bon` | Compatible |
+| `phoneRhTalents.profile.match.moyen` | À regarder de plus près |
+| `phoneRhTalents.profile.match.with` | avec {job} |
+| `phoneRhTalents.profile.match.none` | Aucune offre en ligne à comparer. |
+| `phoneRhTalents.profile.why` | Pourquoi ? |
+| `phoneRhTalents.profile.proposal` | Proposition {job} · {state} |
+| `phoneRhTalents.profile.tabs.label` | Rubriques du profil |
+| `phoneRhTalents.profile.tabs.profil` | Profil |
+| `phoneRhTalents.profile.tabs.parcours` | Parcours |
+| `phoneRhTalents.profile.tabs.realisations` | Réalisations |
+| `phoneRhTalents.profile.skills` | Compétences |
+| `phoneRhTalents.profile.verified` | Vérifiée |
+| `phoneRhTalents.profile.declared` | Déclarée |
+| `phoneRhTalents.profile.noSkills` | Aucune compétence indiquée. |
+| `phoneRhTalents.profile.interests` | Ce qui l'intéresse |
+| `phoneRhTalents.profile.languages` | Langues |
+| `phoneRhTalents.profile.experience` | Expérience |
+| `phoneRhTalents.profile.expLine` | {company} · {duration} |
+| `phoneRhTalents.profile.expNoCompany` | {duration} |
+| `phoneRhTalents.profile.duration` | {months, plural, =0 {moins d'un mois} one {# mois} other {{years, plural, =0 {# mois} one {# an} other {# ans}}}} |
+| `phoneRhTalents.profile.noExperience` | Aucune expérience indiquée. |
+| `phoneRhTalents.profile.education` | Formation |
+| `phoneRhTalents.profile.eduLine` | {degree}, {school} |
+| `phoneRhTalents.profile.eduYear` | {degree}, {school} ({year}) |
+| `phoneRhTalents.profile.noEducation` | Aucune formation indiquée. |
+| `phoneRhTalents.profile.projects` | Projets |
+| `phoneRhTalents.profile.certificates` | Attestations Jumanly |
+| `phoneRhTalents.profile.certificate` | {course} · {date} |
+| `phoneRhTalents.profile.noWorks` | Aucune réalisation rendue visible. |
+| `phoneRhTalents.profile.summaryOnly` | Résumé du profil : le détail s'ouvre quand la personne candidate ou accepte une proposition. |
+| `phoneRhTalents.profile.logged` | Consultation enregistrée. Jumanly ne montre ni l'âge, ni la photo, ni la nationalité, ni la situation familiale. |
+| `phoneRhTalents.profile.pool` | Ajouter {name} au vivier |
+| `phoneRhTalents.profile.propose` | Proposer une offre |
+| `phoneRhTalents.profile.write` | Écrire à {name} |
+| `phoneRhTalents.profile.seeApplication` | Voir sa candidature |
+| `phoneRhTalents.profile.pending` | Proposition en attente |
+| `phoneRhTalents.profile.blocked` | Trop de profils ouverts en peu de temps : la consultation reprend dans un moment. |
+| `phoneRhTalents.propose.title` | Proposer une offre à {name} |
+| `phoneRhTalents.propose.sub` | La personne choisit de candidater ou non. |
+| `phoneRhTalents.propose.offer` | Offre |
+| `phoneRhTalents.propose.compatible` | {score} % compatible |
+| `phoneRhTalents.propose.later` | Score calculé à l'envoi |
+| `phoneRhTalents.propose.message` | Message |
+| `phoneRhTalents.propose.default` | Bonjour {firstName}, votre profil correspond à notre offre « {job} ». Si elle vous intéresse, vous pouvez candidater en un geste, gratuitement. {sender}, {company} |
+| `phoneRhTalents.propose.send` | Envoyer la proposition |
+| `phoneRhTalents.propose.noOffer` | Publiez une offre pour pouvoir la proposer. |
+| `phoneRhTalents.pool.sheet` | Ajouter {name} au vivier |
+| `phoneRhTalents.pool.people` | {count, plural, =0 {Personne} one {# personne} other {# personnes}} |
+| `phoneRhTalents.pool.newList` | Ou une nouvelle liste |
+| `phoneRhTalents.pool.save` | Enregistrer |
+| `phoneRhTalents.menu.share` | Partager le profil à un collègue |
+| `phoneRhTalents.menu.shareSub` | Votre collègue le reçoit dans ses notifications |
+| `phoneRhTalents.menu.pdf` | Télécharger le profil en PDF |
+| `phoneRhTalents.menu.pdfSub` | Le téléchargement est enregistré |
+| `phoneRhTalents.menu.hide` | Masquer ce profil de mes suggestions |
+| `phoneRhTalents.menu.hideSub` | Il reste visible par recherche |
+| `phoneRhTalents.menu.report` | Signaler ce profil |
+| `phoneRhTalents.menu.reportSub` | L'équipe Jumanly vérifie sous 24 h |
+| `phoneRhTalents.share.title` | Partager le profil |
+| `phoneRhTalents.share.who` | À qui ? |
+| `phoneRhTalents.share.send` | Partager |
+| `phoneRhTalents.share.none` | Aucun collègue dans l'équipe pour l'instant. |
+| `phoneRhTalents.report.title` | Signaler ce profil |
+| `phoneRhTalents.report.note` | La personne ne saura pas qui l'a signalée. L'équipe de modération regarde chaque signalement. |
+| `phoneRhTalents.report.reason.impersonation` | Se fait passer pour quelqu'un d'autre |
+| `phoneRhTalents.report.reason.inappropriate` | Contenu inapproprié |
+| `phoneRhTalents.report.reason.spam` | Indésirable ou publicité |
+| `phoneRhTalents.report.reason.harassment` | Harcèlement ou propos blessants |
+| `phoneRhTalents.report.reason.other` | Autre raison |
+| `phoneRhTalents.report.send` | Envoyer le signalement |
+| `phoneRhTalents.ok.proposee` | Proposition envoyée. La personne a {days} jours pour répondre. |
+| `phoneRhTalents.ok.vivier` | Vivier enregistré. |
+| `phoneRhTalents.ok.masque` | Profil masqué de vos suggestions. |
+| `phoneRhTalents.ok.partage` | Profil partagé. |
+| `phoneRhTalents.ok.signale` | Merci, l'équipe Jumanly vérifie sous 24 h. |
+| `phoneRhTalents.ok.invitation` | Invitation envoyée. |
+| `phoneRhTalents.ok.relation` | Vous êtes maintenant en relation. |
+| `phoneRhTalents.ok.ignoree` | Invitation ignorée. |
+| `phoneRhTalents.ok.liste` | Liste créée. |
+| `phoneRhTalents.ok.retire` | Retiré de la liste. |
+| `phoneRhTalents.ok.renomme` | Liste renommée. |
+| `phoneRhTalents.ok.supprime` | Liste supprimée. |
+| `phoneRhTalents.ok.relance` | Relance envoyée. |
+| `phoneRhTalents.error.quota` | Votre organisation a utilisé ses demandes de mise en relation ce mois-ci. |
+| `phoneRhTalents.error.locked` | Les propositions aux talents ne sont pas comprises dans votre formule. |
+| `phoneRhTalents.error.pending` | Une proposition attend déjà sa réponse. |
+| `phoneRhTalents.error.cooldown` | La personne a décliné récemment : vous pourrez proposer à nouveau plus tard. |
+| `phoneRhTalents.error.blocked` | Cette personne ne reçoit pas de propositions. |
+| `phoneRhTalents.error.connected` | Cette personne a déjà candidaté ou accepté une proposition : écrivez-lui. |
+| `phoneRhTalents.error.invalid` | Le message doit faire au moins {min} caractères. |
+| `phoneRhTalents.error.other` | Ça n'a pas marché. Réessayez dans un instant. |
+| `phoneRhTalents.pdf.title` | Profil de talent |
+| `phoneRhTalents.pdf.footer` | Profil consulté sur Jumanly par {company}. Téléchargement enregistré. |
 
 ### `/tarifs` · Forfaits
 
@@ -16531,6 +16714,7 @@ Conventions :
 | `notifications.item.orgJoinDeclined` | Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation. |
 | `notifications.item.jobEnding` | {days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}} |
 | `notifications.item.candidateAssigned` | Un collègue vous confie le dossier de {candidate} pour « {jobTitle} ». |
+| `notifications.item.talentShared` | {colleague} vous partage le profil d'un talent. |
 | `notifications.item.feedReply` | {name} a répondu à votre publication. |
 | `notifications.item.feedMention` | {name} vous a mentionné dans une réponse. |
 | `notifications.item.feedLike` | {name} a aimé votre publication. |

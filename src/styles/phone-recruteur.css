@@ -1699,7 +1699,8 @@
 .nb-rh-confirme .nb-annuler {
   width: 100%;
 }
-.nb-rh-confirme .nb-bp[data-danger] {
+.nb-rh-confirme .nb-bp[data-danger],
+.nb-rh-decision .nb-bp[data-danger] {
   background: var(--nb-corail);
   color: var(--nb-nuit);
 }
@@ -3032,4 +3033,424 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
   background: var(--nb-creme);
   font-weight: 700;
   color: var(--nb-nuit);
+}
+
+/* ── M6 · Talents (planches Recruteur-talents, -talents-*, -talent, -talent-*) ───────────── */
+.nb-rh-talents .nb-rh-vues {
+  margin-bottom: 4px;
+}
+.nb-rh-verrou {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 20px;
+  background: var(--nb-carte);
+  margin-top: 12px;
+}
+.nb-rh-tg {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 4px 20px 12px;
+}
+.nb-rh-tc {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  height: 100%;
+  padding: 44px 14px 14px;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+  color: var(--nb-creme);
+}
+.nb-rh-tc > * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.nb-rh-tc-fond {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 60px;
+  background: linear-gradient(160deg, #6d8a86, #20403f 70%);
+  opacity: 0.8;
+}
+.nb-rh-tc .nb-rh-ini {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  font-size: 17px;
+  margin-bottom: 6px;
+  box-shadow: 0 0 0 3px var(--nb-carte);
+}
+.nb-rh-tc b {
+  font-size: 15px;
+}
+.nb-rh-tc-score {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  min-width: 0;
+}
+.nb-rh-tc-score .nb-meta {
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.25;
+}
+.nb-rh-tc-etat,
+.nb-rh-prop-etat {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nb-menthe-claire);
+}
+.nb-rh-tc-etat[data-etat="seen"],
+.nb-rh-tc-etat[data-etat="pending"],
+.nb-rh-prop-etat[data-etat="seen"],
+.nb-rh-prop-etat[data-etat="waiting"] {
+  color: var(--nb-ambre);
+}
+.nb-rh-tc-etat[data-etat="accepted"],
+.nb-rh-prop-etat[data-etat="accepted"] {
+  color: var(--nb-lime);
+}
+.nb-rh-prop-etat[data-etat="declined"],
+.nb-rh-prop-etat[data-etat="expired"] {
+  color: var(--nb-brume);
+}
+.nb-rh-listes {
+  display: grid;
+  gap: 12px;
+  margin: 12px 0;
+}
+.nb-rh-liste {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+  color: var(--nb-creme);
+}
+.nb-rh-liste > svg {
+  flex: none;
+  color: var(--nb-brume);
+}
+.nb-rh-liste .nb-rh-res-t {
+  min-width: 0;
+  flex: 1;
+}
+.nb-rh-pile-ini {
+  flex: none;
+  display: flex;
+  width: 96px;
+}
+.nb-rh-pile-ini .nb-rh-ini {
+  width: 40px;
+  height: 40px;
+  font-size: 13px;
+  box-shadow: 0 0 0 2px var(--nb-carte);
+}
+.nb-rh-pile-ini .nb-rh-ini + .nb-rh-ini {
+  margin-left: -12px;
+}
+.nb-rh-nouvelle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 56px;
+  margin-bottom: 14px;
+  border-radius: 20px;
+  border: 1.5px dashed var(--nb-filet-fort);
+  background: transparent;
+  color: var(--nb-lime);
+  font-weight: 800;
+  font-size: 16px;
+}
+.nb-rh-liste-l {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.nb-rh-rang {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--nb-filet);
+}
+.nb-rh-rang .nb-rh-cl {
+  flex: 1;
+  min-width: 0;
+  border-bottom: 0;
+}
+.nb-rh-rang form {
+  flex: none;
+  padding-right: 20px;
+}
+.nb-rh-res-t {
+  min-width: 0;
+}
+.nb-rh-invit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--nb-filet);
+}
+.nb-rh-invit .nb-rh-res-t {
+  flex: 1;
+}
+.nb-rh-invit .nb-rh-res-t > * {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-rh-invit-b {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nb-rh-invit-b .nb-rond {
+  border: 1px solid var(--nb-filet-fort);
+}
+.nb-bp.nb-bp-s {
+  min-height: 44px;
+  padding: 0 18px;
+  font-size: 15px;
+}
+.nb-rh-reseau h2.nb-meta {
+  margin: 18px 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.nb-rh-connaitre {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 0 20px 6px;
+  scroll-snap-type: x mandatory;
+}
+.nb-rh-connaitre > li {
+  flex: 0 0 min(200px, 60%);
+  display: grid;
+  gap: 10px;
+  padding: 16px 12px;
+  border-radius: 22px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+  scroll-snap-align: start;
+  text-align: center;
+}
+.nb-rh-connaitre-c {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  min-width: 0;
+  color: var(--nb-creme);
+}
+.nb-rh-connaitre-c > * {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.nb-rh-connaitre-c .nb-rh-ini {
+  width: 64px;
+  height: 64px;
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+.nb-rh-connaitre form .nb-bp {
+  width: 100%;
+}
+.nb-rh-genre {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nb-menthe-claire);
+}
+.nb-rh-rel-t {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 22px 0 10px;
+}
+.nb-rh-rel-t h2 {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+/* The profile of a talent (planches 108 to 118) */
+.nb-rh-talent {
+  padding-bottom: calc(120px + var(--nb-bas));
+}
+.nb-rh-t-ban {
+  height: 150px;
+  border-radius: 0 0 0 0;
+  background: linear-gradient(160deg, #b9d8cf 0%, #3f6b66 45%, #10302f 100%);
+}
+.nb-rh-t-barre {
+  position: absolute;
+  inset: var(--nb-haut) 18px auto;
+  display: flex;
+  justify-content: space-between;
+  z-index: 4;
+}
+.nb-rh-t-barre .nb-rond {
+  background: rgba(7, 15, 18, 0.55);
+  color: var(--nb-creme);
+}
+.nb-rh-t-id {
+  display: grid;
+  gap: 4px;
+  padding: 0 20px;
+  margin-top: -56px;
+}
+.nb-rh-t-id h1 {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-top: 10px;
+  overflow-wrap: anywhere;
+}
+.nb-rh-t-id p {
+  overflow-wrap: anywhere;
+}
+.nb-rh-ini.nb-rh-ini-xl {
+  width: 112px;
+  height: 112px;
+  font-size: 34px;
+  box-shadow: 0 0 0 6px var(--nb-nuit);
+}
+.nb-rh-t-mob {
+  color: var(--nb-menthe-claire);
+  font-weight: 700;
+}
+.nb-rh-t-connect {
+  width: 100%;
+  margin-top: 14px;
+}
+.nb-rh-t-connect:disabled {
+  background: var(--nb-carte);
+  color: var(--nb-creme);
+  border: 1px solid var(--nb-filet-fort);
+}
+.nb-rh-t-score {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: calc(100% - 40px);
+  margin: 12px 20px 0;
+  text-align: left;
+}
+.nb-rh-t-score .nb-rh-res-t {
+  flex: 1;
+}
+.nb-rh-t-prop {
+  margin: 12px 20px 0;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: rgba(244, 196, 99, 0.12);
+  color: var(--nb-ambre);
+  font-weight: 700;
+}
+.nb-rh-talent .nb-rh-f-onglets {
+  margin-top: 18px;
+}
+.nb-rh-t-comp {
+  display: grid;
+  gap: 12px;
+}
+.nb-rh-t-comp li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 17px;
+}
+.nb-rh-t-comp li > span:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.nb-rh-t-preuve {
+  flex: none;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--nb-brume);
+}
+.nb-rh-t-preuve[data-verifiee] {
+  color: var(--nb-lime);
+}
+.nb-rh-t-parcours {
+  display: grid;
+  gap: 14px;
+}
+.nb-rh-t-parcours li {
+  display: grid;
+  gap: 2px;
+  overflow-wrap: anywhere;
+}
+.nb-rh-t-parcours a {
+  color: var(--nb-menthe-claire);
+}
+.nb-rh-talent .nb-rh-f-bas {
+  position: fixed;
+}
+.nb-rh-talent .nb-rh-f-ecrire[aria-pressed="true"] {
+  color: var(--nb-lime);
+}
+.nb-rh-choix-l,
+.nb-rh-cases {
+  display: grid;
+  gap: 10px;
+}
+.nb-rh-choix-o,
+.nb-rh-coche {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+}
+.nb-rh-choix-o > span:last-child,
+.nb-rh-coche > span:last-child {
+  display: grid;
+  min-width: 0;
+}
+.nb-rh-choix-o:has(input:checked) {
+  border-color: var(--nb-lime);
+  background: rgba(166, 242, 107, 0.08);
+}
+.nb-rh-choix-o input,
+.nb-rh-coche input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  accent-color: var(--nb-lime);
+}
+.nb-rh-coche {
+  border-width: 0 0 1px;
+  border-radius: 0;
+  background: transparent;
+  padding: 12px 4px;
+}
+
+/* One list of the vivier (planche 105) */
+.nb-rh-titre-l {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 18px 0 4px;
+  overflow-wrap: anywhere;
+}
+.nb-rh-vivier .nb-rh-liste-l {
+  margin-top: 12px;
+}
+.nb-rh-retirer {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--nb-filet-fort);
 }

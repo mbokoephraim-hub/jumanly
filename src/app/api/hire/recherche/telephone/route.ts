@@ -7,6 +7,7 @@ import { getActiveSpace } from "@/server/hire-context";
 import { exploreSearch } from "@/server/services/explore";
 import { searchPosts } from "@/server/services/feed";
 import { RH_SEARCH_SCOPES, recruiterPhoneSearch } from "@/server/services/hire-phone";
+import { RH_TALENT_SEARCH, rhSearchTalents } from "@/server/services/hire-phone-talents";
 import {
   RH_APPLICATION_SEARCH,
   rhSearchApplications,
@@ -78,6 +79,40 @@ export async function GET(request: Request) {
                   initials: initials(row.name),
                   score: row.score,
                   unseen: row.unseen,
+                })),
+              },
+            ]
+          : [],
+      },
+      { headers: { "Cache-Control": "private, no-store" } },
+    );
+  }
+  // Talents (Modèle B recruteur M6, planches 102 and 103): visible talents by skill, job or city.
+  if (params.get("onglet") === "talents") {
+    const q = (params.get("q") ?? "").trim().slice(0, 100);
+    if (!q) return NextResponse.json({ groups: [] });
+    const by = RH_TALENT_SEARCH.find((value) => value === params.get("dans")) ?? "tout";
+    const rows = await rhSearchTalents(
+      db,
+      { userId: user.id, organizationId: space.organizationId, role: space.role },
+      q,
+      by,
+    ).catch(() => []);
+    const tt = await getTranslations("phoneRhTalents");
+    return NextResponse.json(
+      {
+        groups: rows.length
+          ? [
+              {
+                title: tt("search.results", { count: rows.length }),
+                items: rows.map((row) => ({
+                  href: `/app/hire/talents/${row.profileId}`,
+                  title: row.name,
+                  sub: [row.headline, tt("card.years", { years: row.years })]
+                    .filter(Boolean)
+                    .join(" · "),
+                  sub2: row.city ?? undefined,
+                  initials: initials(row.name),
                 })),
               },
             ]

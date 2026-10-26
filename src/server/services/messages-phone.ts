@@ -245,11 +245,19 @@ export async function phoneRequests(db: PrismaClient, userId: string, now = new 
       select: {
         id: true,
         message: true,
+        seenAt: true,
         organization: { select: orgSelect },
         job: { select: { title: true } },
       },
     }),
   ]);
+  // The company's proposal now reads « Vue » on its side (Modèle B recruteur, M6).
+  const unseen = contacts.filter((row) => !row.seenAt).map((row) => row.id);
+  if (unseen.length > 0)
+    await db.contactRequest.updateMany({
+      where: { id: { in: unseen }, seenAt: null },
+      data: { seenAt: now },
+    });
   return { connections, contacts };
 }
 

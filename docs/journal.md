@@ -4175,3 +4175,37 @@ offre, puis quatre vues :
   gestes sont repris dans la nouvelle spec. `hire.spec.ts` a une branche téléphone.
 - Choix notés dans `docs/decisions/2026-10-22-modele-b-recruteur-candidatures.md`. La feuille Orbi
   de l'onglet (planche 083) vient avec Orbi en M7.
+
+## Modèle B recruteur mobile · M6, Talents (25 octobre 2026)
+
+Section 06 des captures (101 à 119). Au téléphone, l'onglet Talents (`/app/hire/talents`) a quatre
+rubriques :
+
+- **Découvrir** : une puce par offre, « N talents visibles », des cartes classées par le score de
+  compatibilité (nom, métier, années, ville, score et offre, « Dans votre vivier » ou l'état de la
+  proposition). Seuls les talents visibles ; jamais les membres de l'entreprise.
+- **Vivier** : les listes, « Nouvelle liste », la note sur le vivier personnel ; une liste
+  (`/app/hire/viviers/[id]`) montre ses talents avec leur score et « Retirer » ; ses options
+  permettent de la renommer ou de la supprimer, comme à l'ordinateur.
+- **Propositions** : chaque offre proposée avec son état (« Envoyée, pas encore vue », « Vue, sans
+  réponse », acceptée…) et « Relancer ».
+- **Réseau** : invitations reçues (Accepter, ×), « À connaître » (Se connecter), mes relations
+  filtrées (Toutes, Talents, Recruteurs et RH).
+- Recherche en deux temps par compétence, métier ou ville.
+- Profil d'un talent (`/app/hire/talents/[id]`) : bannière, nom, métier, ville et dernière
+  activité, mobilité, « Se connecter », score avec « Pourquoi ? », proposition en cours, onglets
+  Profil, Parcours, Réalisations ; en bas, vivier et « Proposer une offre » ; « ··· » : partager à
+  un collègue, PDF (journalisé), masquer de mes suggestions, signaler. Chaque ouverture est
+  journalisée.
+- Code : `src/components/phone/recruteur/talents.tsx`, `talents-client.tsx`, `talent.tsx`,
+  `vivier.tsx` ; `src/server/services/hire-phone-talents.ts`, `src/server/actions/phone-rh-talents.ts` ;
+  route `/app/hire/talents/[id]/pdf`. Ordinateur et tablette inchangés ; au téléphone,
+  `/app/hire/candidats?vue=talents|propositions` et `/app/hire/viviers` mènent à Talents.
+- Migration additive `20261025233814_talent_suggestions_and_proposal_seen`.
+- Textes : partie « Modèle B recruteur · Talents au téléphone » (`phoneRhTalents`).
+- Tests : `tests/db/modele-b-recruteur-talents.test.ts` (talents visibles seulement, jamais les
+  membres de l'entreprise, suggestion masquée par membre, partage dans l'entreprise seulement,
+  « Vue », consultation journalisée, signalement), `tests/e2e/modele-b-recruteur-talents.spec.ts` ;
+  `hire-advanced.spec.ts` suit le nouveau parcours au téléphone, la partie téléphone de l'ancien
+  test « talents » de `mobile-recruteur-entretiens.spec.ts` est réservée à l'ordinateur.
+- Choix notés dans `docs/decisions/2026-10-25-modele-b-recruteur-talents.md`.

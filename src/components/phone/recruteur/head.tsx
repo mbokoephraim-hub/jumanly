@@ -16,7 +16,7 @@ const SCOPES: Record<RecruiterTab, string[]> = {
   fil: ["tout", "publications", "personnes", "entreprises"],
   offres: ["tout", "offres", "entreprises", "personnes"],
   candidatures: ["tout", "nom", "competence", "ville"],
-  talents: ["tout", "personnes", "entreprises"],
+  talents: ["tout", "competence", "metier", "ville"],
   messages: ["tout", "candidats", "personnes"],
 };
 
@@ -129,7 +129,9 @@ export async function RhTab({
     })),
     ...(tab === "candidatures"
       ? { searchIn: t("search.searchBy"), percent: t("search.percent", { score: "{score}" }) }
-      : {}),
+      : tab === "talents"
+        ? { searchIn: t("search.searchBy") }
+        : {}),
   };
   return (
     <RhTabPage

@@ -162,6 +162,13 @@ test("entretien : calendrier, aperçu, confirmation du talent, préparation, év
   // The agenda: the week shows the confirmed interview, the month view too.
   await page.goto("/app/hire/entretiens");
   await expect(main(page)).toContainText("Préparez l'entretien de");
+  // Late on a Sunday the first open day is already next week: the agenda goes there.
+  if (
+    (await main(page)
+      .getByRole("link", { name: /Jean-Pierre Démo/ })
+      .count()) === 0
+  )
+    await main(page).getByRole("link", { name: "Semaine suivante" }).click();
   await expect(
     main(page)
       .getByRole("link", { name: /Jean-Pierre Démo/ })
@@ -264,6 +271,9 @@ test("talents : recherche, profil, vivier, proposition de l'offre, dossier et ap
   baseURL,
   isMobile,
 }) => {
+  // On the phone Talents is Modèle B (lot M6), tested in modele-b-recruteur-talents.spec.ts; the
+  // computer keeps this design.
+  test.skip(isMobile, "Téléphone : voir modele-b-recruteur-talents.spec.ts.");
   test.setTimeout(300_000);
   await freshRecruiter(page, "rx-talents");
   const { jobId, talent, file } = await offerWithApplicant(page, browser, baseURL, isMobile);
@@ -349,10 +359,6 @@ test("talents : recherche, profil, vivier, proposition de l'offre, dossier et ap
   await expect(main(page)).toContainText(visibleTalent);
   await expectAccessible(page);
   await noOverflow(page, "vivier");
-
-  // On the phone the file is Modèle B (M5): the pool from the file comes with Talents (M6), and
-  // the arrival call stays with the decision screen of the computer (planches 04-05 have none).
-  if (isMobile) return;
 
   // From the candidate's file: « Ajouter à un vivier » in the menu.
   await page.goto(file);

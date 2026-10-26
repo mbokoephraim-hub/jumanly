@@ -17041,7 +17041,8 @@
         "publications": "Publications",
         "nom": "Nom",
         "competence": "Compétence",
-        "ville": "Ville"
+        "ville": "Ville",
+        "metier": "Métier"
       },
       "searchBy": "Chercher par",
       "percent": "{score} %",
@@ -17080,8 +17081,8 @@
         "note": "Seulement les personnes qui ont candidaté à vos offres."
       },
       "talents": {
-        "label": "Rechercher un talent ou une entreprise",
-        "placeholder": "Métier, compétence, ville",
+        "label": "Rechercher un talent",
+        "placeholder": "Compétence, métier, ville",
         "note": "Seulement les talents qui ont rendu leur profil visible."
       },
       "messages": {
@@ -18142,6 +18143,229 @@
     },
     "calendar": {
       "summary": "Entretien avec {name} · {job}"
+    }
+  },
+  "phoneRhTalents": {
+    "tabs": {
+      "label": "Rubriques des talents",
+      "decouvrir": "Découvrir",
+      "vivier": "Vivier",
+      "propositions": "Propositions",
+      "reseau": "Réseau"
+    },
+    "offers": {
+      "label": "Offres comparées",
+      "all": "Toutes mes offres"
+    },
+    "search": {
+      "results": "{count, plural, one {# talent} other {# talents}}"
+    },
+    "discover": {
+      "line": "{count, plural, =0 {Aucun talent visible} one {# talent visible} other {# talents visibles}} · mis à jour aujourd'hui",
+      "empty": "Aucun talent visible pour ces offres pour l'instant. Cherchez par compétence, métier ou ville, ou publiez une offre avec ses compétences.",
+      "locked": "La recherche de talents n'est pas comprise dans votre formule. Vos candidatures restent complètes.",
+      "lockedPlan": "Disponible dès {plan}.",
+      "seePlans": "Voir les formules",
+      "note": "Classés par le score de compatibilité avec vos offres, calculé de la même façon pour tous. Jamais l'âge, la photo, la nationalité ni la situation familiale."
+    },
+    "card": {
+      "years": "{years, plural, =0 {débutant·e} one {# an} other {# ans}}",
+      "anonymous": "Profil anonyme",
+      "inPool": "Dans votre vivier",
+      "pending": "Proposition envoyée",
+      "seen": "Proposition vue, sans réponse",
+      "accepted": "Proposition acceptée",
+      "percent": "{score} %"
+    },
+    "pools": {
+      "count": "{count, plural, =0 {Aucun talent} one {# talent} other {# talents}}",
+      "new": "Nouvelle liste",
+      "nameLabel": "Nom de la liste",
+      "namePlaceholder": "Ex. : Finance 2027",
+      "create": "Créer la liste",
+      "empty": "Aucune liste pour l'instant. Créez-en une, puis ajoutez des talents depuis leur profil.",
+      "notePrivate": "Votre vivier personnel : les talents ne savent pas dans quelle liste ils sont. Le vivier partagé avec l'équipe vient avec {plan}.",
+      "notePrivateNoPlan": "Votre vivier personnel : les talents ne savent pas dans quelle liste ils sont.",
+      "noteShared": "Vos listes et celles partagées avec l'équipe. Les talents ne savent pas dans quelle liste ils sont.",
+      "locked": "Le vivier n'est pas compris dans votre formule."
+    },
+    "pool": {
+      "back": "Vivier",
+      "private": "visible par vous seul·e",
+      "team": "visible par votre équipe",
+      "org": "visible par toute l'entreprise",
+      "empty": "Cette liste est vide. Ajoutez un talent depuis son profil.",
+      "remove": "Retirer {name} de la liste",
+      "origin": {
+        "applied": "A candidaté à « {job} »",
+        "contact": "A accepté une proposition",
+        "search": "Trouvé·e par recherche"
+      },
+      "options": "Options de la liste",
+      "rename": "Nom de la liste",
+      "renameSave": "Enregistrer le nom",
+      "delete": "Supprimer la liste",
+      "deleteNote": "Les talents ne sont pas prévenus. Leur profil reste dans vos autres listes.",
+      "sheet": "Ajouter {name} au vivier",
+      "people": "{count, plural, =0 {Personne} one {# personne} other {# personnes}}",
+      "newList": "Ou une nouvelle liste",
+      "save": "Enregistrer"
+    },
+    "proposals": {
+      "intro": "Les offres que vous avez proposées à des talents",
+      "note": "Quand un talent accepte, vous pouvez échanger avec lui et sa candidature arrive dans Candidatures, comme les autres. Candidater reste gratuit pour lui.",
+      "empty": "Aucune proposition envoyée pour l'instant. Proposez une offre depuis le profil d'un talent.",
+      "when": "{job} · {when}",
+      "noJob": "Sans offre précise",
+      "state": {
+        "waiting": "Envoyée, pas encore vue",
+        "seen": "Vue, sans réponse",
+        "accepted": "Acceptée : la conversation est ouverte",
+        "declined": "Déclinée",
+        "expired": "Expirée sans réponse"
+      },
+      "remind": "Relancer"
+    },
+    "network": {
+      "received": "Invitations reçues",
+      "accept": "Accepter",
+      "ignore": "Ignorer l'invitation de {name}",
+      "know": "À connaître",
+      "connect": "Se connecter",
+      "relations": "Mes relations",
+      "filters": "Filtrer mes relations",
+      "filter": {
+        "toutes": "Toutes",
+        "talents": "Talents",
+        "rh": "Recruteurs et RH"
+      },
+      "kind": {
+        "talent": "Talent",
+        "rh": "RH"
+      },
+      "mutual": "{count, plural, one {# relation en commun} other {# relations en commun}}",
+      "empty": "Aucune relation pour l'instant. Connectez-vous aux talents et aux recruteurs que vous croisez.",
+      "none": "Personne à suggérer pour l'instant.",
+      "write": "Écrire à {name}"
+    },
+    "profile": {
+      "back": "Retour",
+      "more": "Plus d'actions pour {name}",
+      "active": "actif·ve {when}",
+      "mobility": "Prêt·e à venir à {city}",
+      "connect": "Se connecter",
+      "connectSent": "Invitation envoyée",
+      "connected": "En relation",
+      "match": {
+        "haut": "Très compatible",
+        "bon": "Compatible",
+        "moyen": "À regarder de plus près",
+        "with": "avec {job}",
+        "none": "Aucune offre en ligne à comparer."
+      },
+      "why": "Pourquoi ?",
+      "proposal": "Proposition {job} · {state}",
+      "tabs": {
+        "label": "Rubriques du profil",
+        "profil": "Profil",
+        "parcours": "Parcours",
+        "realisations": "Réalisations"
+      },
+      "skills": "Compétences",
+      "verified": "Vérifiée",
+      "declared": "Déclarée",
+      "noSkills": "Aucune compétence indiquée.",
+      "interests": "Ce qui l'intéresse",
+      "languages": "Langues",
+      "experience": "Expérience",
+      "expLine": "{company} · {duration}",
+      "expNoCompany": "{duration}",
+      "duration": "{months, plural, =0 {moins d'un mois} one {# mois} other {{years, plural, =0 {# mois} one {# an} other {# ans}}}}",
+      "noExperience": "Aucune expérience indiquée.",
+      "education": "Formation",
+      "eduLine": "{degree}, {school}",
+      "eduYear": "{degree}, {school} ({year})",
+      "noEducation": "Aucune formation indiquée.",
+      "projects": "Projets",
+      "certificates": "Attestations Jumanly",
+      "certificate": "{course} · {date}",
+      "noWorks": "Aucune réalisation rendue visible.",
+      "summaryOnly": "Résumé du profil : le détail s'ouvre quand la personne candidate ou accepte une proposition.",
+      "logged": "Consultation enregistrée. Jumanly ne montre ni l'âge, ni la photo, ni la nationalité, ni la situation familiale.",
+      "pool": "Ajouter {name} au vivier",
+      "propose": "Proposer une offre",
+      "write": "Écrire à {name}",
+      "seeApplication": "Voir sa candidature",
+      "pending": "Proposition en attente",
+      "blocked": "Trop de profils ouverts en peu de temps : la consultation reprend dans un moment."
+    },
+    "propose": {
+      "title": "Proposer une offre à {name}",
+      "sub": "La personne choisit de candidater ou non.",
+      "offer": "Offre",
+      "compatible": "{score} % compatible",
+      "later": "Score calculé à l'envoi",
+      "message": "Message",
+      "default": "Bonjour {firstName}, votre profil correspond à notre offre « {job} ». Si elle vous intéresse, vous pouvez candidater en un geste, gratuitement. {sender}, {company}",
+      "send": "Envoyer la proposition",
+      "noOffer": "Publiez une offre pour pouvoir la proposer."
+    },
+    "menu": {
+      "share": "Partager le profil à un collègue",
+      "shareSub": "Votre collègue le reçoit dans ses notifications",
+      "pdf": "Télécharger le profil en PDF",
+      "pdfSub": "Le téléchargement est enregistré",
+      "hide": "Masquer ce profil de mes suggestions",
+      "hideSub": "Il reste visible par recherche",
+      "report": "Signaler ce profil",
+      "reportSub": "L'équipe Jumanly vérifie sous 24 h"
+    },
+    "share": {
+      "title": "Partager le profil",
+      "who": "À qui ?",
+      "send": "Partager",
+      "none": "Aucun collègue dans l'équipe pour l'instant."
+    },
+    "report": {
+      "title": "Signaler ce profil",
+      "note": "La personne ne saura pas qui l'a signalée. L'équipe de modération regarde chaque signalement.",
+      "reason": {
+        "impersonation": "Se fait passer pour quelqu'un d'autre",
+        "inappropriate": "Contenu inapproprié",
+        "spam": "Indésirable ou publicité",
+        "harassment": "Harcèlement ou propos blessants",
+        "other": "Autre raison"
+      },
+      "send": "Envoyer le signalement"
+    },
+    "ok": {
+      "proposee": "Proposition envoyée. La personne a {days} jours pour répondre.",
+      "vivier": "Vivier enregistré.",
+      "masque": "Profil masqué de vos suggestions.",
+      "partage": "Profil partagé.",
+      "signale": "Merci, l'équipe Jumanly vérifie sous 24 h.",
+      "invitation": "Invitation envoyée.",
+      "relation": "Vous êtes maintenant en relation.",
+      "ignoree": "Invitation ignorée.",
+      "liste": "Liste créée.",
+      "retire": "Retiré de la liste.",
+      "renomme": "Liste renommée.",
+      "supprime": "Liste supprimée.",
+      "relance": "Relance envoyée."
+    },
+    "error": {
+      "quota": "Votre organisation a utilisé ses demandes de mise en relation ce mois-ci.",
+      "locked": "Les propositions aux talents ne sont pas comprises dans votre formule.",
+      "pending": "Une proposition attend déjà sa réponse.",
+      "cooldown": "La personne a décliné récemment : vous pourrez proposer à nouveau plus tard.",
+      "blocked": "Cette personne ne reçoit pas de propositions.",
+      "connected": "Cette personne a déjà candidaté ou accepté une proposition : écrivez-lui.",
+      "invalid": "Le message doit faire au moins {min} caractères.",
+      "other": "Ça n'a pas marché. Réessayez dans un instant."
+    },
+    "pdf": {
+      "title": "Profil de talent",
+      "footer": "Profil consulté sur Jumanly par {company}. Téléchargement enregistré."
     }
   },
   "pricing": {
@@ -20041,6 +20265,7 @@
       "orgJoinDeclined": "Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation.",
       "jobEnding": "{days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}}",
       "candidateAssigned": "Un collègue vous confie le dossier de {candidate} pour « {jobTitle} ».",
+      "talentShared": "{colleague} vous partage le profil d'un talent.",
       "feedReply": "{name} a répondu à votre publication.",
       "feedMention": "{name} vous a mentionné dans une réponse.",
       "feedLike": "{name} a aimé votre publication.",
