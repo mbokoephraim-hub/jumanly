@@ -135,7 +135,11 @@ export default async function EvaluationPage({
   }
 
   const view = await scorecardView(db, ctx, application);
-  const fromJob = scorecardCriteria(application.job);
+  const organization = await db.organization.findUnique({
+    where: { id: ctx.organizationId },
+    select: { scorecardCriteria: true },
+  });
+  const fromJob = scorecardCriteria(application.job, organization?.scorecardCriteria);
   const criteria = fromJob.length ? fromJob : [{ name: t("general"), description: "" }];
   const ratings = Object.fromEntries(
     (view.mine?.ratings ?? []).map((item) => [item.name, String(item.rating)]),

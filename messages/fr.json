@@ -19603,6 +19603,105 @@
       "cash": "espèces"
     }
   },
+  "orgJournal": {
+    "title": "Journal des consultations",
+    "intro": "Chaque consultation de profil, ouverture de CV, évaluation ou export est enregistrée automatiquement. Seuls le propriétaire et les administrateurs voient ce journal.",
+    "filters": "Filtrer par membre",
+    "all": "Toute l'équipe",
+    "col": {
+      "date": "Date",
+      "member": "Membre",
+      "action": "Action",
+      "person": "Personne",
+      "object": "Offre ou objet",
+      "open": "Ouvrir"
+    },
+    "today": "Aujourd'hui · {time}",
+    "yesterday": "Hier · {time}",
+    "other": "{date} · {time}",
+    "kind": {
+      "profile": "Profil consulté",
+      "profileVisible": "Profil consulté (talent visible)",
+      "cv": "CV ouvert",
+      "dossier": "Dossier exporté en PDF",
+      "talentPdf": "Profil exporté en PDF",
+      "history": "Historique exporté",
+      "scorecard": "Évaluation enregistrée",
+      "report": "Rapport exporté en PDF"
+    },
+    "noPerson": "Aucune personne",
+    "anonymous": "Profil anonyme",
+    "object": {
+      "search": "Recherche de talents",
+      "report": "Rapport de recrutement"
+    },
+    "formerMember": "Ancien membre",
+    "open": "Ouvrir : {action}, {person}",
+    "empty": "Aucune consultation sur les 90 derniers jours.",
+    "emptyMember": "{name} n'a rien consulté sur les 90 derniers jours.",
+    "note": "Les 90 derniers jours, 100 lignes au plus."
+  },
+  "orgSettings": {
+    "title": "Réglages du recrutement",
+    "tabs": {
+      "aria": "Réglages",
+      "etapes": "Étapes de l'ATS",
+      "modeles": "Modèles de messages",
+      "grille": "Grille d'entretien"
+    },
+    "error": "L'action n'a pas abouti : rechargez la page et réessayez",
+    "close": "Fermer",
+    "stages": {
+      "list": "Étapes des nouvelles offres",
+      "fixed": "Toujours présente",
+      "remove": "Retirer",
+      "removeAria": "Retirer l'étape {name}",
+      "add": "Ajouter « {name} »",
+      "note": "S'applique aux nouvelles offres. La décision (retenu·e ou non) est toujours prise par une personne : Orbi n'écarte personne.",
+      "removed": "« {name} » est retirée des nouvelles offres",
+      "added": "« {name} » est ajoutée aux nouvelles offres"
+    },
+    "templates": {
+      "aria": "Modèles de messages",
+      "kind": {
+        "convocation": "Inviter à un entretien",
+        "document": "Demander un document",
+        "relance": "Relancer",
+        "refus": "Non retenu, avec conseil",
+        "acceptation": "Proposition d'embauche"
+      },
+      "default": {
+        "convocation": "Bonjour '{prenom}', merci pour votre candidature au poste '{poste}'. Nous aimerions vous rencontrer : choisissez le créneau qui vous convient dans l'invitation. '{signataire}'",
+        "document": "Bonjour '{prenom}', pour avancer sur votre candidature au poste '{poste}', pourriez-vous nous envoyer le document demandé ? '{signataire}'",
+        "relance": "Bonjour '{prenom}', nous revenons vers vous au sujet du poste '{poste}' chez '{entreprise}'. Votre réponse nous aidera à avancer. '{signataire}'",
+        "refus": "Bonjour '{prenom}', merci pour votre candidature au poste '{poste}'. Nous avons retenu des profils plus avancés pour ce poste. Votre profil reste dans notre vivier. '{signataire}'",
+        "acceptation": "Bonjour '{prenom}', nous avons le plaisir de vous proposer le poste '{poste}' chez '{entreprise}'. Nous revenons vers vous avec tous les détails. '{signataire}'"
+      },
+      "label": "Texte du modèle {name}",
+      "help": "Remplacés à l'envoi : '{prenom}', '{poste}', '{entreprise}', '{signataire}'",
+      "save": "Enregistrer",
+      "saved": "Modèle « {name} » enregistré",
+      "error": "Écrivez le texte du modèle, deux caractères au moins"
+    },
+    "grid": {
+      "list": "Critères de la grille",
+      "remove": "Retirer",
+      "removeAria": "Retirer le critère {name}",
+      "add": "Ajouter",
+      "addLabel": "Ajouter un critère",
+      "note": "Chaque critère est noté de 1 à 4 par l'évaluateur, après l'entretien.",
+      "empty": "Pas encore de grille : chaque offre propose ses compétences requises. Ajoutez vos critères pour toutes les nouvelles évaluations.",
+      "added": "« {name} » est ajouté à la grille",
+      "removed": "« {name} » est retiré de la grille",
+      "error": {
+        "length": "Écrivez un critère de 2 à 80 caractères",
+        "full": "La grille compte déjà 10 critères : retirez-en un d'abord",
+        "duplicate": "Ce critère est déjà dans la grille"
+      },
+      "locked": "Les grilles d'entretien viennent avec une formule qui les inclut.",
+      "lockedLink": "Voir Formule et facturation"
+    }
+  },
   "pricing": {
     "seo": {
       "title": "Tarifs et forfaits · Jumanly",

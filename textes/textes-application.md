@@ -16032,6 +16032,95 @@ Conventions :
 | `orgFormula.method.bank_transfer` | virement |
 | `orgFormula.method.cash` | espèces |
 
+### Modèle B · Journal des consultations sur ordinateur
+
+*Étape 3, lot A5 (docs/modele-b-recruteur/web, capture 084, Web-App.dc.html `qui="joseph"`, vue Journal) : chaque profil consulté, CV ouvert, évaluation ou export de l'équipe. Réservé au propriétaire et aux administrateurs.*
+
+| Clé | Texte |
+|---|---|
+| `orgJournal.title` | Journal des consultations |
+| `orgJournal.intro` | Chaque consultation de profil, ouverture de CV, évaluation ou export est enregistrée automatiquement. Seuls le propriétaire et les administrateurs voient ce journal. |
+| `orgJournal.filters` | Filtrer par membre |
+| `orgJournal.all` | Toute l'équipe |
+| `orgJournal.col.date` | Date |
+| `orgJournal.col.member` | Membre |
+| `orgJournal.col.action` | Action |
+| `orgJournal.col.person` | Personne |
+| `orgJournal.col.object` | Offre ou objet |
+| `orgJournal.col.open` | Ouvrir |
+| `orgJournal.today` | Aujourd'hui · {time} |
+| `orgJournal.yesterday` | Hier · {time} |
+| `orgJournal.other` | {date} · {time} |
+| `orgJournal.kind.profile` | Profil consulté |
+| `orgJournal.kind.profileVisible` | Profil consulté (talent visible) |
+| `orgJournal.kind.cv` | CV ouvert |
+| `orgJournal.kind.dossier` | Dossier exporté en PDF |
+| `orgJournal.kind.talentPdf` | Profil exporté en PDF |
+| `orgJournal.kind.history` | Historique exporté |
+| `orgJournal.kind.scorecard` | Évaluation enregistrée |
+| `orgJournal.kind.report` | Rapport exporté en PDF |
+| `orgJournal.noPerson` | Aucune personne |
+| `orgJournal.anonymous` | Profil anonyme |
+| `orgJournal.object.search` | Recherche de talents |
+| `orgJournal.object.report` | Rapport de recrutement |
+| `orgJournal.formerMember` | Ancien membre |
+| `orgJournal.open` | Ouvrir : {action}, {person} |
+| `orgJournal.empty` | Aucune consultation sur les 90 derniers jours. |
+| `orgJournal.emptyMember` | {name} n'a rien consulté sur les 90 derniers jours. |
+| `orgJournal.note` | Les 90 derniers jours, 100 lignes au plus. |
+
+### Modèle B · Réglages du recrutement sur ordinateur
+
+*Étape 3, lot A5 (docs/modele-b-recruteur/web, captures 085 à 087, Web-App.dc.html `qui="joseph"`, vue Réglages) : étapes de l'ATS des nouvelles offres, modèles de messages et grille d'entretien de l'entreprise. Réservé au propriétaire et aux administrateurs.*
+
+| Clé | Texte |
+|---|---|
+| `orgSettings.title` | Réglages du recrutement |
+| `orgSettings.tabs.aria` | Réglages |
+| `orgSettings.tabs.etapes` | Étapes de l'ATS |
+| `orgSettings.tabs.modeles` | Modèles de messages |
+| `orgSettings.tabs.grille` | Grille d'entretien |
+| `orgSettings.error` | L'action n'a pas abouti : rechargez la page et réessayez |
+| `orgSettings.close` | Fermer |
+| `orgSettings.stages.list` | Étapes des nouvelles offres |
+| `orgSettings.stages.fixed` | Toujours présente |
+| `orgSettings.stages.remove` | Retirer |
+| `orgSettings.stages.removeAria` | Retirer l'étape {name} |
+| `orgSettings.stages.add` | Ajouter « {name} » |
+| `orgSettings.stages.note` | S'applique aux nouvelles offres. La décision (retenu·e ou non) est toujours prise par une personne : Orbi n'écarte personne. |
+| `orgSettings.stages.removed` | « {name} » est retirée des nouvelles offres |
+| `orgSettings.stages.added` | « {name} » est ajoutée aux nouvelles offres |
+| `orgSettings.templates.aria` | Modèles de messages |
+| `orgSettings.templates.kind.convocation` | Inviter à un entretien |
+| `orgSettings.templates.kind.document` | Demander un document |
+| `orgSettings.templates.kind.relance` | Relancer |
+| `orgSettings.templates.kind.refus` | Non retenu, avec conseil |
+| `orgSettings.templates.kind.acceptation` | Proposition d'embauche |
+| `orgSettings.templates.default.convocation` | Bonjour '{prenom}', merci pour votre candidature au poste '{poste}'. Nous aimerions vous rencontrer : choisissez le créneau qui vous convient dans l'invitation. '{signataire}' |
+| `orgSettings.templates.default.document` | Bonjour '{prenom}', pour avancer sur votre candidature au poste '{poste}', pourriez-vous nous envoyer le document demandé ? '{signataire}' |
+| `orgSettings.templates.default.relance` | Bonjour '{prenom}', nous revenons vers vous au sujet du poste '{poste}' chez '{entreprise}'. Votre réponse nous aidera à avancer. '{signataire}' |
+| `orgSettings.templates.default.refus` | Bonjour '{prenom}', merci pour votre candidature au poste '{poste}'. Nous avons retenu des profils plus avancés pour ce poste. Votre profil reste dans notre vivier. '{signataire}' |
+| `orgSettings.templates.default.acceptation` | Bonjour '{prenom}', nous avons le plaisir de vous proposer le poste '{poste}' chez '{entreprise}'. Nous revenons vers vous avec tous les détails. '{signataire}' |
+| `orgSettings.templates.label` | Texte du modèle {name} |
+| `orgSettings.templates.help` | Remplacés à l'envoi : '{prenom}', '{poste}', '{entreprise}', '{signataire}' |
+| `orgSettings.templates.save` | Enregistrer |
+| `orgSettings.templates.saved` | Modèle « {name} » enregistré |
+| `orgSettings.templates.error` | Écrivez le texte du modèle, deux caractères au moins |
+| `orgSettings.grid.list` | Critères de la grille |
+| `orgSettings.grid.remove` | Retirer |
+| `orgSettings.grid.removeAria` | Retirer le critère {name} |
+| `orgSettings.grid.add` | Ajouter |
+| `orgSettings.grid.addLabel` | Ajouter un critère |
+| `orgSettings.grid.note` | Chaque critère est noté de 1 à 4 par l'évaluateur, après l'entretien. |
+| `orgSettings.grid.empty` | Pas encore de grille : chaque offre propose ses compétences requises. Ajoutez vos critères pour toutes les nouvelles évaluations. |
+| `orgSettings.grid.added` | « {name} » est ajouté à la grille |
+| `orgSettings.grid.removed` | « {name} » est retiré de la grille |
+| `orgSettings.grid.error.length` | Écrivez un critère de 2 à 80 caractères |
+| `orgSettings.grid.error.full` | La grille compte déjà 10 critères : retirez-en un d'abord |
+| `orgSettings.grid.error.duplicate` | Ce critère est déjà dans la grille |
+| `orgSettings.grid.locked` | Les grilles d'entretien viennent avec une formule qui les inclut. |
+| `orgSettings.grid.lockedLink` | Voir Formule et facturation |
+
 ### `/tarifs` · Forfaits
 
 *Présenter toutes les formules de façon claire et honnête, par famille, et mener à l'inscription ou au devis.*
