@@ -4244,3 +4244,90 @@ Sections 07 et 10 des captures (120 à 134, 180 à 184). Au téléphone :
   (chaque bouton, captures dans `captures/etape-2-mobile/m7/`) ; branches téléphone ajoutées dans
   `mobile-recruteur-gerer.spec.ts` et `mobile-recruteur-ats.spec.ts`.
 - Choix notés dans `docs/decisions/2026-10-26-modele-b-recruteur-messages.md`.
+
+## Modèle B recruteur mobile · M8, compte, entreprise et changer de profil (26 octobre 2026)
+
+Sections 08, 09 et 11 des captures (135 à 179, 185 à 192). Au téléphone, l'avatar ouvre Compte :
+
+- **Compte** (`/app/hire/compte`) : retour au Fil, cloche, carte de la personne (poste,
+  « Rattaché·e à … » avec le logo, seulement après l'accord), « Changer de profil », Mon activité
+  (profil recruteur, statistiques, publications enregistrées), l'entreprise (page, équipe, formule
+  et usage), Réglages (notifications, modèles, confidentialité, langue, aide), « Se déconnecter »
+  après confirmation.
+- **Mon profil recruteur** (`/compte/profil`) : l'aperçu que voient les talents (accroche, « Recrute
+  en ce moment », domaines, offres en cours, contacts) ; **Modifier** (`/compte/profil/modifier`) :
+  accroche (Orbi en propose une, relue avant d'enregistrer), badge, qui voit le téléphone,
+  l'entreprise.
+- **Mes statistiques** (`/compte/statistiques`) : 30 jours sur les offres que l'on voit : reçues,
+  délai moyen de première réponse, part ayant reçu une réponse, entretiens, du dépôt à l'embauche,
+  « Les N % sans réponse » vers Décisions.
+- **Publications enregistrées** (`/compte/enregistrees`), le signet les retire.
+- **Équipe** (`/compte/equipe`) : membres, rôles, dossiers suivis, « Qui peut faire quoi » ;
+  « Proposer un collègue » (demande aux administrateurs) ou, pour un administrateur, « Inviter un
+  collègue ».
+- **Formule et usage** (`/compte/formule`) : lecture seule, usage du mois (utilisateurs, offres
+  actives, recherches de talents, crédits Orbi), comparaison, « Demander … à l'administrateur ».
+- **Modèles de messages** (`/app/hire/modeles` au téléphone), **Notifications**
+  (`/compte/notifications`), **Confidentialité et données** (`/compte/confidentialite` : journal
+  des consultations du mois, ce que l'on partage, copie des données, quitter l'entreprise),
+  **Langue** (`/compte/langue`), **Aide et contact** (`/compte/aide`, par e-mail seulement).
+- **Page de l'entreprise** : celle du talent (`/app/entreprises/[slug]`), avec, sur sa propre
+  entreprise, « Votre entreprise · page administrée par … » et « Publier au nom de … ».
+- **Changer de profil** : recruteur, talent (l'espace talent du Modèle B), entreprise ; un
+  administrateur ouvre « Agir au nom de l'entreprise » (`/app/hire/entreprise` : demandes pour
+  rejoindre, chiffres, messages, offres, « Publier au nom de … »).
+- **Nettoyage** : barre du bas de l'ancienne coque supprimée (`bottom-bar.tsx`,
+  `hidesRecruiterTabBar` et ses tests), partie téléphone de l'ancien Compte RH supprimée, textes
+  orphelins retirés ; une fenêtre d'ordinateur rétrécie garde l'interface de l'ordinateur ; `/app/hire/entretiens`,
+  `/app/hire/rapports` et `/app/organisation/equipe` mènent au téléphone vers leurs écrans
+  Modèle B.
+- Code : `src/components/phone/recruteur/compte.tsx`, `compte-client.tsx` ;
+  `src/server/services/hire-phone-account.ts` ; `src/server/actions/phone-rh-compte.ts`. Deux
+  notifications ajoutées (`colleagueProposed`, `planRequested`) et les interrupteurs du recruteur
+  (`rh.*`). Pas de migration.
+- Textes : partie « Modèle B recruteur · Compte, entreprise et changer de profil au téléphone »
+  (`phoneRhCompte`).
+- Tests : `tests/db/modele-b-recruteur-compte.test.ts` (statistiques, équipe et journal des
+  consultations dans la seule organisation, demandes aux seuls administrateurs avec limite,
+  formule jamais changée, quitter sans rien effacer, mode entreprise réservé, interrupteurs
+  séparés), `tests/e2e/modele-b-recruteur-compte.spec.ts` (chaque bouton, captures dans
+  `captures/etape-2-mobile/m8/`) ; `mobile-recruteur-gerer.spec.ts` suit les nouvelles adresses.
+- Choix notés dans `docs/decisions/2026-10-26-modele-b-recruteur-compte.md`.
+
+## Rapport final · étape 2, recruteur au téléphone (Modèle B, M0 à M8) (26 octobre 2026)
+
+L'espace recruteur du téléphone suit maintenant le Modèle B (`docs/modele-b-recruteur/`, sections
+01 à 11 de `mobile/captures/INDEX.md`). La tablette, l'ordinateur et l'administration d'entreprise
+n'ont pas changé. Aucune donnée n'a été effacée et aucune migration n'a été ajoutée.
+
+| Lot | Contenu | PR |
+|---|---|---|
+| M0 | Diagnostic des écrans recruteur au téléphone | #146 |
+| M1 | Coque : barre à cinq, Orbi, avatar, recherche | #147 |
+| M2 | Ouverture, inscription et profil recruteur | #148 |
+| M3 | Fil du recruteur | #149 |
+| M4 | Offres | #150 |
+| M5 | Candidatures (pipeline, fiche, décisions, entretiens) | #152 |
+| M6 | Talents (découverte, recherche, viviers) | #154 |
+| M7 | Messages, notifications et Orbi | PR du lot M7 |
+| M8 | Compte, entreprise, changer de profil, nettoyage | PR du lot M8 |
+
+- **Captures** (390 × 844, prises par les e2e) : dossier partagé `captures/etape-2-mobile/`, un
+  sous-dossier par lot (`m1` à `m8`). Les numéros des fichiers sont ceux de l'INDEX des planches.
+- **Règles d'or vérifiées par les tests en base** : chaque lecture Hire est filtrée par
+  l'organisation active ; chaque consultation de profil est journalisée ; candidater reste gratuit ;
+  les droits sont testés par clés ; le profil discret n'est jamais montré à sa propre entreprise ;
+  le logo de l'entreprise n'apparaît qu'après l'accord du rattachement ; la formule est en lecture
+  seule pour le recruteur ; aucun numéro de téléphone de Jumanly.
+- **Ancien design téléphone supprimé** : barre du bas de l'ancienne coque, `hidesRecruiterTabBar`,
+  partie téléphone de l'ancien Compte RH et textes orphelins (M8). Les anciennes adresses mènent
+  aux écrans Modèle B.
+- **Sécurité** : Next.js est passé en 16.4.2 pendant l'étape (M3), pour corriger des failles
+  signalées par `pnpm audit`.
+- **Non construit**, faute de modèle de données ou d'événement (détails dans `docs/decisions/`) :
+  - la confirmation des « nouveaux membres qui indiquent travailler chez … » (planche 191), où les
+    demandes de rattachement s'affichent à la place ;
+  - la notification « Profil à fort potentiel » ;
+  - la création et la modification des modèles de messages, qui restent sur ordinateur.
+- **À valider par Ephraïm** : l'ensemble de l'étape 2 au téléphone, avant l'étape 3 (entreprise et
+  administration recruteur, web seulement).

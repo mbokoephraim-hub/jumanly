@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { OrbiLine } from "@/components/recruiter/offers";
 import {
@@ -14,6 +14,7 @@ import { cx } from "@/lib/cx";
 import { db } from "@/server/db";
 import { can } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
+import { isPhone } from "@/server/view";
 import { buildReport, periodRange, reportRank } from "@/server/services/hire-reports";
 import { listPublicPlans, orgPlanFor } from "@/server/services/plans";
 
@@ -34,6 +35,8 @@ const sourceColor = { direct: "#2fd3a6", invitation: "#a6f26b", talent_search: "
 export default async function ReportsPage({ searchParams }: PageProps<"/app/hire/rapports">) {
   const query = await searchParams;
   const { ctx, space } = await requireHire("/app/hire/rapports");
+  // On a phone, « Mes statistiques » of Compte (planche Recruteur-compte-stats) (Modèle B recruteur M8).
+  if (await isPhone()) redirect("/app/hire/compte/statistiques");
   if (ctx.role === "hiring_manager") notFound();
   const t = await getTranslations("hire.reports");
   const tr = await getTranslations("rhReports");

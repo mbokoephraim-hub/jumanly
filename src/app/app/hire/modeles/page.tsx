@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { RhCompteTexts, RhTemplatesScreen } from "@/components/phone/recruteur/compte";
+import { isPhone } from "@/server/view";
 import { getTranslations } from "next-intl/server";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
@@ -41,6 +43,13 @@ const look: Record<
 export default async function TemplatesPage({ searchParams }: PageProps<"/app/hire/modeles">) {
   const query = await searchParams;
   const { ctx } = await requireHire("/app/hire/modeles", "readApplications");
+  // On a phone, the templates of Modèle B (recruteur M8, planche Recruteur-parametres).
+  if (await isPhone())
+    return (
+      <RhCompteTexts>
+        <RhTemplatesScreen ctx={ctx} />
+      </RhCompteTexts>
+    );
   const t = await getTranslations("hire.templates");
   const tr = await getTranslations("rhTemplates");
   const templates = await listTemplates(db, ctx);

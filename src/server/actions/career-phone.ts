@@ -29,7 +29,7 @@ import {
   PROFILE_SUMMARY_MAX,
   refreshCompleteness,
 } from "@/server/services/profile";
-import { NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
+import { mutedAfter, NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
 import {
   deleteProject,
   parseProject,
@@ -421,7 +421,7 @@ export async function saveCareerNotificationsAction(
   await db.user.update({
     where: { id: user.id },
     data: {
-      notificationsMuted: NOTIFICATION_CATEGORIES.filter((category) => !kept.has(category)),
+      notificationsMuted: mutedAfter(user.notificationsMuted, NOTIFICATION_CATEGORIES, kept),
       notificationEmails: parsed.data.emails,
     },
   });

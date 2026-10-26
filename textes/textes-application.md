@@ -10084,9 +10084,7 @@ Conventions :
 | `hireAccount.line` | {jobTitle} · {org} |
 | `hireAccount.lineNoTitle` | {org} |
 | `hireAccount.group.org` | Organisation et équipe |
-| `hireAccount.group.settings` | Abonnement et réglages |
 | `hireAccount.org.title` | Organisation |
-| `hireAccount.org.text` | Page, vérification |
 | `hireAccount.org.toVerify` | À vérifier |
 | `hireAccount.org.pending` | En cours |
 | `hireAccount.org.verified` | Vérifiée |
@@ -10096,12 +10094,10 @@ Conventions :
 | `hireAccount.pools.title` | Viviers |
 | `hireAccount.pools.text` | {pools, plural, =0 {Aucun vivier} one {# vivier} other {# viviers}}, {talents, plural, =0 {aucun talent} one {# talent} other {# talents}} |
 | `hireAccount.reports.title` | Rapports |
-| `hireAccount.reports.text` | Offres et candidatures |
 | `hireAccount.plan.title` | Abonnement |
 | `hireAccount.plan.text` | {plan} · {count, plural, =0 {aucun crédit Orbi} one {# crédit Orbi} other {# crédits Orbi}} |
 | `hireAccount.plan.textUnlimited` | {plan} · crédits Orbi illimités |
 | `hireAccount.settings.title` | Paramètres |
-| `hireAccount.settings.text` | Notifications, sécurité, confidentialité |
 | `hireAccount.help.title` | Aide |
 | `hireAccount.talent.title` | Passer à mon espace talent |
 | `hireAccount.signOut` | Se déconnecter |
@@ -15258,6 +15254,264 @@ Conventions :
 | `phoneRhOrbi.fact.today.fresh` | {count, plural, one {# nouvelle candidature} other {# nouvelles candidatures}} |
 | `phoneRhOrbi.fact.today.action` | Ouvrir les candidatures |
 
+### Modèle B recruteur · Compte, entreprise et changer de profil au téléphone
+
+*Lot M8 (docs/modele-b-recruteur, mobile/captures sections 08, 09 et 11) : le compte ouvert par l'avatar, le profil recruteur, les statistiques, l'équipe, la formule en lecture seule, les réglages, l'aide par e-mail, les pages entreprise et le changement de profil. Aucun numéro de téléphone de Jumanly : l'aide passe par e-mail.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhCompte.title` | Compte |
+| `phoneRhCompte.back` | Fil |
+| `phoneRhCompte.backCompte` | Compte |
+| `phoneRhCompte.notifications` | {count, plural, =0 {Notifications} one {Notifications, # non lue} other {Notifications, # non lues}} |
+| `phoneRhCompte.card.label` | Voir mon profil recruteur |
+| `phoneRhCompte.card.attached` | Rattaché·e à {org} |
+| `phoneRhCompte.card.pending` | Rattachement à {org} en attente |
+| `phoneRhCompte.card.independent` | Recrute en indépendant·e |
+| `phoneRhCompte.switch.title` | Changer de profil |
+| `phoneRhCompte.switch.line` | Recruteur, talent ou entreprise |
+| `phoneRhCompte.switch.note` | Un seul compte, trois façons de se présenter. Chaque profil garde ses messages. |
+| `phoneRhCompte.switch.recruiter` | Profil recruteur · {org} |
+| `phoneRhCompte.switch.current` | Profil actuel |
+| `phoneRhCompte.switch.talentName` | {name} · talent |
+| `phoneRhCompte.switch.talent` | Votre profil de candidat, invisible pour {org} |
+| `phoneRhCompte.switch.companyAdmin` | Agir au nom de l'entreprise : publier, répondre |
+| `phoneRhCompte.switch.companyOther` | Réservé à l'administrateur, {admin} · voir la page |
+| `phoneRhCompte.switch.companyOtherNoAdmin` | Réservé à l'administrateur · voir la page |
+| `phoneRhCompte.switch.otherOrg` | Profil recruteur · {org} |
+| `phoneRhCompte.switch.cancel` | Annuler |
+| `phoneRhCompte.section.activity` | Mon activité |
+| `phoneRhCompte.section.settings` | Réglages |
+| `phoneRhCompte.row.profile` | Mon profil recruteur |
+| `phoneRhCompte.row.profileLine` | Ce que voient les talents |
+| `phoneRhCompte.row.stats` | Mes statistiques |
+| `phoneRhCompte.row.statsLine` | Réponses, délais, entretiens |
+| `phoneRhCompte.row.saved` | Publications enregistrées |
+| `phoneRhCompte.row.savedLine` | {count, plural, =0 {Aucune pour l'instant} one {# publication} other {# publications}} |
+| `phoneRhCompte.row.page` | Page de l'entreprise |
+| `phoneRhCompte.row.pageVerified` | Vérifiée · administrée par {admin} |
+| `phoneRhCompte.row.pageVerifiedNoAdmin` | Vérifiée |
+| `phoneRhCompte.row.pageToVerify` | Vérification en cours · administrée par {admin} |
+| `phoneRhCompte.row.pageToVerifyNoAdmin` | Vérification en cours |
+| `phoneRhCompte.row.team` | Équipe de recrutement |
+| `phoneRhCompte.row.teamLine` | {count, plural, one {# personne} other {# personnes}} |
+| `phoneRhCompte.row.plan` | Formule et usage |
+| `phoneRhCompte.row.planLine` | {plan} · gérée par l'administrateur |
+| `phoneRhCompte.row.planLineAdmin` | {plan} · gérée sur ordinateur |
+| `phoneRhCompte.row.notifications` | Notifications |
+| `phoneRhCompte.row.notificationsLine` | Candidatures, entretiens, messages |
+| `phoneRhCompte.row.templates` | Modèles de messages |
+| `phoneRhCompte.row.templatesLine` | Réponses prêtes à relire |
+| `phoneRhCompte.row.privacy` | Confidentialité et données |
+| `phoneRhCompte.row.privacyLine` | Journal des consultations, vos données |
+| `phoneRhCompte.row.language` | Langue |
+| `phoneRhCompte.row.languageLine` | Français |
+| `phoneRhCompte.row.help` | Aide et contact |
+| `phoneRhCompte.row.helpLine` | Par e-mail uniquement |
+| `phoneRhCompte.row.logout` | Se déconnecter |
+| `phoneRhCompte.logout.title` | Se déconnecter ? |
+| `phoneRhCompte.logout.text` | Vos candidatures et messages vous attendent à la prochaine connexion. |
+| `phoneRhCompte.logout.confirm` | Se déconnecter |
+| `phoneRhCompte.logout.cancel` | Annuler |
+| `phoneRhCompte.profile.preview` | Aperçu : ce que voient les talents |
+| `phoneRhCompte.profile.back` | Compte |
+| `phoneRhCompte.profile.at` | {jobTitle} · |
+| `phoneRhCompte.profile.alsoIn` | {city} · recrute aussi à {others} |
+| `phoneRhCompte.profile.hiringNow` | Recrute en ce moment |
+| `phoneRhCompte.profile.noHeadline` | Ajoutez une accroche : les talents savent à qui ils écrivent. |
+| `phoneRhCompte.profile.recruitsFor` | Recrute pour |
+| `phoneRhCompte.profile.offers` | Offres en cours |
+| `phoneRhCompte.profile.offerLine` | {city} · {count, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} |
+| `phoneRhCompte.profile.noOffer` | Aucune offre en cours. |
+| `phoneRhCompte.profile.contacts` | Contacts |
+| `phoneRhCompte.profile.contactsFor.nobody` | Votre téléphone n'est visible que par votre équipe. |
+| `phoneRhCompte.profile.contactsFor.interview` | Votre téléphone n'est visible que par les candidats invités en entretien. |
+| `phoneRhCompte.profile.contactsFor.connections` | Votre téléphone est visible par vos relations. |
+| `phoneRhCompte.profile.edit` | Modifier mon profil |
+| `phoneRhCompte.edit.title` | Modifier mon profil |
+| `phoneRhCompte.edit.back` | Profil |
+| `phoneRhCompte.edit.headline` | Accroche |
+| `phoneRhCompte.edit.headlinePlaceholder` | Par exemple : je recrute les talents data de l'entreprise et je réponds à chaque candidature. |
+| `phoneRhCompte.edit.orbi` | Orbi propose une accroche |
+| `phoneRhCompte.edit.orbiText` | Je recrute les talents {domains} de {org}. Je réponds à chaque candidature. |
+| `phoneRhCompte.edit.orbiTextNoDomain` | Je recrute pour {org}. Je réponds à chaque candidature. |
+| `phoneRhCompte.edit.orbiNote` | Orbi propose, vous relisez avant d'enregistrer. |
+| `phoneRhCompte.edit.hiringNow` | Badge « Recrute en ce moment » |
+| `phoneRhCompte.edit.hiringNowLine` | Les talents vous trouvent plus vite |
+| `phoneRhCompte.edit.contactsFor` | Qui voit votre téléphone |
+| `phoneRhCompte.edit.contacts.interview` | Candidats en entretien |
+| `phoneRhCompte.edit.contacts.nobody` | Équipe seulement |
+| `phoneRhCompte.edit.company` | Entreprise |
+| `phoneRhCompte.edit.companyAccepted` | Rattachement accepté |
+| `phoneRhCompte.edit.companyAcceptedBy` | Rattachement accepté par {admin} |
+| `phoneRhCompte.edit.companyNote` | Pour changer d'entreprise, quittez {org} depuis Confidentialité et données : votre profil et vos messages restent à vous. |
+| `phoneRhCompte.edit.save` | Enregistrer |
+| `phoneRhCompte.edit.saved` | Profil enregistré. |
+| `phoneRhCompte.edit.error` | Vérifiez l'accroche : 280 caractères au plus. |
+| `phoneRhCompte.stats.title` | Mes statistiques |
+| `phoneRhCompte.stats.line` | 30 derniers jours · toutes vos offres |
+| `phoneRhCompte.stats.received` | candidatures reçues · 30 jours |
+| `phoneRhCompte.stats.delay` | délai moyen de première réponse |
+| `phoneRhCompte.stats.delayValue` | {days} j |
+| `phoneRhCompte.stats.delayNone` | – |
+| `phoneRhCompte.stats.percent` | {percent} % |
+| `phoneRhCompte.stats.answered` | candidats ayant reçu une réponse |
+| `phoneRhCompte.stats.interviews` | entretiens menés |
+| `phoneRhCompte.stats.funnel` | Du dépôt à l'embauche |
+| `phoneRhCompte.stats.phase.recue` | Reçues |
+| `phoneRhCompte.stats.phase.preselection` | Présélection |
+| `phoneRhCompte.stats.phase.entretien` | Entretien |
+| `phoneRhCompte.stats.phase.proposition` | Proposition |
+| `phoneRhCompte.stats.phase.recrute` | Recrutées |
+| `phoneRhCompte.stats.waiting` | Les {percent} % sans réponse |
+| `phoneRhCompte.stats.waitingLine` | Répondre depuis Décisions |
+| `phoneRhCompte.stats.note` | Calculé sur les offres que vous voyez, de la même façon pour tous les candidats. |
+| `phoneRhCompte.saved.title` | Publications enregistrées |
+| `phoneRhCompte.saved.empty` | Aucune publication enregistrée. Touchez le signet d'une publication du Fil pour la retrouver ici. |
+| `phoneRhCompte.saved.remove` | Retirer « {title} » des publications enregistrées |
+| `phoneRhCompte.saved.removed` | Publication retirée. |
+| `phoneRhCompte.team.title` | Équipe de recrutement |
+| `phoneRhCompte.team.line` | {org} · {count, plural, one {# personne} other {# personnes}} sur {max} places |
+| `phoneRhCompte.team.lineUnlimited` | {org} · {count, plural, one {# personne} other {# personnes}} |
+| `phoneRhCompte.team.you` | {name} (vous) |
+| `phoneRhCompte.team.follows` | Suit {count, plural, one {# candidature} other {# candidatures}} |
+| `phoneRhCompte.team.files` | {count, plural, =0 {aucun dossier} one {# dossier} other {# dossiers}} |
+| `phoneRhCompte.team.adminLine` | Gère la page, l'équipe et la formule |
+| `phoneRhCompte.team.role.admin` | Administrateur |
+| `phoneRhCompte.team.role.recruiter` | Recruteur |
+| `phoneRhCompte.team.role.manager` | Manager |
+| `phoneRhCompte.team.role.viewer` | Lecture seule |
+| `phoneRhCompte.team.who` | Qui peut faire quoi |
+| `phoneRhCompte.team.whoAdmin` | Page, équipe, formule, toutes les offres |
+| `phoneRhCompte.team.whoRecruiter` | Publie, trie, planifie, répond, publie au nom de l'entreprise |
+| `phoneRhCompte.team.whoManager` | Voit les dossiers répartis, note et évalue |
+| `phoneRhCompte.team.whoViewer` | Lit sans rien modifier |
+| `phoneRhCompte.team.note` | {admin} ajoute ou retire des personnes depuis l'administration, sur ordinateur. |
+| `phoneRhCompte.team.noteNoAdmin` | L'administrateur ajoute ou retire des personnes depuis l'administration, sur ordinateur. |
+| `phoneRhCompte.team.noteAdmin` | Vous ajoutez ou retirez des personnes depuis l'administration, sur ordinateur. |
+| `phoneRhCompte.team.propose` | Proposer un collègue |
+| `phoneRhCompte.team.invite` | Inviter un collègue |
+| `phoneRhCompte.team.sheetText` | {admin} reçoit la demande et l'ajoute depuis l'administration. {seats, plural, =-1 {} =0 {Plus de place dans la formule {plan}.} one {Il reste # place dans la formule {plan}.} other {Il reste # places dans la formule {plan}.}} |
+| `phoneRhCompte.team.sheetTextNoAdmin` | L'administrateur reçoit la demande et l'ajoute depuis l'administration. |
+| `phoneRhCompte.team.sheetTextAdmin` | La personne reçoit une invitation par e-mail. {seats, plural, =-1 {} =0 {Plus de place dans la formule {plan}.} one {Il reste # place dans la formule {plan}.} other {Il reste # places dans la formule {plan}.}} |
+| `phoneRhCompte.team.email` | E-mail professionnel |
+| `phoneRhCompte.team.emailPlaceholder` | prenom.nom@entreprise.com |
+| `phoneRhCompte.team.send` | Envoyer la demande |
+| `phoneRhCompte.team.sendInvite` | Envoyer l'invitation |
+| `phoneRhCompte.team.cancel` | Annuler |
+| `phoneRhCompte.team.ok.proposed` | Demande envoyée à l'administrateur. |
+| `phoneRhCompte.team.ok.invited` | Invitation envoyée. |
+| `phoneRhCompte.team.error.email` | Indiquez une adresse e-mail valide. |
+| `phoneRhCompte.team.error.seats` | Plus de place dans la formule : l'administrateur peut en changer sur ordinateur. |
+| `phoneRhCompte.team.error.member` | Cette personne fait déjà partie de l'équipe. |
+| `phoneRhCompte.team.error.trop` | Trop de demandes d'un coup. Réessayez dans un moment. |
+| `phoneRhCompte.plan.title` | Formule et usage |
+| `phoneRhCompte.plan.of` | Formule de {org} |
+| `phoneRhCompte.plan.price` | {price} USD par mois |
+| `phoneRhCompte.plan.priceFree` | Gratuite |
+| `phoneRhCompte.plan.priceQuote` | Sur devis |
+| `phoneRhCompte.plan.paidUntil` | payée jusqu'au {date} |
+| `phoneRhCompte.plan.managedBy` | Gérée par {admin}, administrateur, sur ordinateur. |
+| `phoneRhCompte.plan.managedByNoAdmin` | Gérée par l'administrateur, sur ordinateur. |
+| `phoneRhCompte.plan.managedByYou` | Vous la gérez depuis l'administration, sur ordinateur. |
+| `phoneRhCompte.plan.usage` | Utilisation ce mois |
+| `phoneRhCompte.plan.seats` | Utilisateurs |
+| `phoneRhCompte.plan.offers` | Offres actives |
+| `phoneRhCompte.plan.searches` | Recherches de talents ce mois |
+| `phoneRhCompte.plan.credits` | Crédits Orbi ce mois |
+| `phoneRhCompte.plan.value` | {used} / {limit} |
+| `phoneRhCompte.plan.valueUnlimited` | {used} · sans limite |
+| `phoneRhCompte.plan.compare` | Comparer |
+| `phoneRhCompte.plan.perMonth` | {price} USD/mois |
+| `phoneRhCompte.plan.current` | Formule actuelle |
+| `phoneRhCompte.plan.lineSeats` | {count, plural, =-1 {Utilisateurs sans limite} one {# utilisateur} other {# utilisateurs}} |
+| `phoneRhCompte.plan.lineOffers` | {count, plural, =-1 {offres sans limite} one {# offre active} other {# offres actives}} |
+| `phoneRhCompte.plan.ask` | Demander {plan} à {admin} |
+| `phoneRhCompte.plan.askNoAdmin` | Demander {plan} à l'administrateur |
+| `phoneRhCompte.plan.asked` | Demande envoyée à l'administrateur. |
+| `phoneRhCompte.plan.adminNote` | Changer de formule se fait sur ordinateur, depuis l'administration de l'entreprise. |
+| `phoneRhCompte.templates.title` | Modèles de messages |
+| `phoneRhCompte.templates.sub` | Utilisés dans Messages et dans les réponses groupées. |
+| `phoneRhCompte.templates.own` | Modèle de {org} |
+| `phoneRhCompte.templates.jumanly` | Texte de Jumanly, à adapter |
+| `phoneRhCompte.templates.decision` | S'envoie depuis l'écran de décision |
+| `phoneRhCompte.templates.note` | Les modèles se créent et se modifient sur ordinateur. Un modèle s'insère dans votre message : rien ne part sans que vous l'envoyiez. |
+| `phoneRhCompte.notifs.title` | Notifications |
+| `phoneRhCompte.notifs.rh.applications` | Nouvelle candidature |
+| `phoneRhCompte.notifs.rh.applicationsLine` | Et les offres qui se terminent |
+| `phoneRhCompte.notifs.rh.interviews` | Entretiens |
+| `phoneRhCompte.notifs.rh.interviewsLine` | Confirmations, reports, annulations |
+| `phoneRhCompte.notifs.messages` | Nouveau message |
+| `phoneRhCompte.notifs.messagesLine` | Candidats et équipe |
+| `phoneRhCompte.notifs.rh.team` | Activité de l'équipe |
+| `phoneRhCompte.notifs.rh.teamLine` | Dossiers confiés, profils partagés, demandes |
+| `phoneRhCompte.notifs.emails` | Par e-mail aussi |
+| `phoneRhCompte.notifs.emailsLine` | Une copie des notifications importantes |
+| `phoneRhCompte.notifs.note` | La sécurité du compte et la modération arrivent toujours. |
+| `phoneRhCompte.notifs.saved` | Réglage enregistré. |
+| `phoneRhCompte.privacy.title` | Confidentialité et données |
+| `phoneRhCompte.privacy.log` | Journal des consultations |
+| `phoneRhCompte.privacy.logText` | Chaque profil que vous ouvrez est enregistré. Les talents savent que {org} a consulté leur profil. |
+| `phoneRhCompte.privacy.logCount` | {count, plural, =0 {Aucun profil consulté ce mois} one {# profil consulté ce mois} other {# profils consultés ce mois}} |
+| `phoneRhCompte.privacy.logOpen` | Voir le journal |
+| `phoneRhCompte.privacy.share` | Ce que vous partagez |
+| `phoneRhCompte.privacy.shareText` | Votre e-mail professionnel est visible des candidats. Votre téléphone se règle dans votre profil. |
+| `phoneRhCompte.privacy.shareLink` | Régler la visibilité |
+| `phoneRhCompte.privacy.data` | Vos données |
+| `phoneRhCompte.privacy.dataLink` | Télécharger mes données |
+| `phoneRhCompte.privacy.leave` | Quitter {org} |
+| `phoneRhCompte.privacy.leaveText` | Le logo disparaît de votre profil. Les candidatures restent à l'entreprise, vos messages personnels restent à vous. |
+| `phoneRhCompte.privacy.leaveLink` | Quitter l'entreprise |
+| `phoneRhCompte.privacy.leaveOwner` | Vous êtes propriétaire de la page : transférez-la à un autre administrateur sur ordinateur avant de partir. |
+| `phoneRhCompte.privacy.leaveConfirmTitle` | Quitter {org} ? |
+| `phoneRhCompte.privacy.leaveConfirmText` | Vous perdez l'accès aux offres et aux candidatures de l'entreprise. Rien n'est effacé ; l'administrateur peut vous inviter à nouveau. |
+| `phoneRhCompte.privacy.leaveConfirm` | Quitter l'entreprise |
+| `phoneRhCompte.privacy.leaveCancel` | Annuler |
+| `phoneRhCompte.privacy.leaveError` | Impossible de quitter l'entreprise pour l'instant. |
+| `phoneRhCompte.language.title` | Langue |
+| `phoneRhCompte.language.fr` | Français |
+| `phoneRhCompte.language.frLine` | Langue actuelle |
+| `phoneRhCompte.language.en` | English |
+| `phoneRhCompte.language.enLine` | Bientôt disponible |
+| `phoneRhCompte.help.title` | Aide et contact |
+| `phoneRhCompte.help.q1` | Comment répondre à tous les candidats non retenus ? |
+| `phoneRhCompte.help.a1` | Dans Candidatures › Décisions, touchez « Répondre aux candidats sans réponse ». Vous relisez le message avant l'envoi ; chacun le reçoit avec son prénom. |
+| `phoneRhCompte.help.q2` | Pourquoi ce score ? |
+| `phoneRhCompte.help.a2` | Le score compare les compétences, l'expérience, la formation, les langues et la localisation demandées dans l'offre. Il est calculé de la même façon pour tous et n'utilise jamais le nom, l'âge, la photo, le genre ou la nationalité. « Pourquoi ? » détaille chaque critère. |
+| `phoneRhCompte.help.q3` | Qui peut voir mes contacts ? |
+| `phoneRhCompte.help.a3` | Votre e-mail professionnel est visible des candidats. Votre téléphone n'est montré qu'aux personnes que vous choisissez dans votre profil. |
+| `phoneRhCompte.help.q4` | Comment changer de formule ? |
+| `phoneRhCompte.help.a4` | L'administrateur de l'entreprise change la formule sur ordinateur. Depuis Formule et usage, vous pouvez lui demander une formule plus grande. |
+| `phoneRhCompte.help.write` | Écrire à l'équipe Jumanly |
+| `phoneRhCompte.help.writeText` | Réponse par e-mail à {email}, sous 24 h ouvrées. |
+| `phoneRhCompte.help.mail` | Écrire à {email} |
+| `phoneRhCompte.help.direct` | Ou directement : {email} |
+| `phoneRhCompte.company.own` | Votre entreprise · page administrée par {admin}, modifiable sur ordinateur |
+| `phoneRhCompte.company.ownNoAdmin` | Votre entreprise · page modifiable sur ordinateur par l'administrateur |
+| `phoneRhCompte.company.ownAdmin` | Votre entreprise · vous administrez cette page, modifiable sur ordinateur |
+| `phoneRhCompte.company.publish` | Publier au nom de {org} |
+| `phoneRhCompte.mode.title` | {org} |
+| `phoneRhCompte.mode.line` | Vous agissez au nom de l'entreprise |
+| `phoneRhCompte.mode.back` | Retour au compte |
+| `phoneRhCompte.mode.tabs.label` | Espace de l'entreprise |
+| `phoneRhCompte.mode.tabs.accueil` | Accueil |
+| `phoneRhCompte.mode.tabs.publications` | Publications |
+| `phoneRhCompte.mode.tabs.messages` | Messages |
+| `phoneRhCompte.mode.tabs.offres` | Offres |
+| `phoneRhCompte.mode.joins` | Demandes pour rejoindre l'équipe |
+| `phoneRhCompte.mode.joinsNone` | Aucune demande pour rejoindre l'équipe. |
+| `phoneRhCompte.mode.followers` | {count, plural, one {abonné} other {abonnés}} |
+| `phoneRhCompte.mode.activeOffers` | {count, plural, one {offre active} other {offres actives}} |
+| `phoneRhCompte.mode.applications` | candidatures · 30 jours |
+| `phoneRhCompte.mode.members` | {count, plural, one {membre de l'équipe} other {membres de l'équipe}} |
+| `phoneRhCompte.mode.noPosts` | L'entreprise n'a encore rien publié. |
+| `phoneRhCompte.mode.messagesText` | Les conversations de l'entreprise avec les candidats et les talents. |
+| `phoneRhCompte.mode.messagesOpen` | Ouvrir les messages |
+| `phoneRhCompte.mode.offersText` | Les offres de l'entreprise, leurs candidatures et leurs statistiques. |
+| `phoneRhCompte.mode.offersOpen` | Ouvrir les offres |
+| `phoneRhCompte.mode.adminNote` | La page, l'équipe et la formule se modifient sur ordinateur. |
+| `phoneRhCompte.mode.notAdmin` | Réservé à l'administrateur de la page. |
+
 ### `/tarifs` · Forfaits
 
 *Présenter toutes les formules de façon claire et honnête, par famille, et mener à l'inscription ou au devis.*
@@ -16907,6 +17161,8 @@ Conventions :
 | `notifications.item.candidateAssigned` | Un collègue vous confie le dossier de {candidate} pour « {jobTitle} ». |
 | `notifications.item.talentShared` | {colleague} vous partage le profil d'un talent. |
 | `notifications.item.teamMessage` | {name} vous a écrit dans Équipe. |
+| `notifications.item.colleagueProposed` | {name} propose d'ajouter {email} à l'équipe de {org}. |
+| `notifications.item.planRequested` | {name} demande la formule {plan} pour l'équipe. |
 | `notifications.item.feedReply` | {name} a répondu à votre publication. |
 | `notifications.item.feedMention` | {name} vous a mentionné dans une réponse. |
 | `notifications.item.feedLike` | {name} a aimé votre publication. |

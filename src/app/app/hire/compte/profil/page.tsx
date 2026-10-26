@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { RhCompteTexts, RhProfileScreen } from "@/components/phone/recruteur/compte";
+import { isPhone } from "@/server/view";
 import { getTranslations } from "next-intl/server";
 import { TalentAvatar } from "@/components/talent/avatar";
 import Link from "next/link";
@@ -27,6 +29,13 @@ export default async function RecruiterProfilePage({
   searchParams,
 }: PageProps<"/app/hire/compte/profil">) {
   const { user, ctx } = await requireHire("/app/hire/compte/profil");
+  // On a phone, « Mon profil recruteur » of Modèle B (recruteur M8): what talents see.
+  if (await isPhone())
+    return (
+      <RhCompteTexts>
+        <RhProfileScreen ctx={ctx} query={await searchParams} />
+      </RhCompteTexts>
+    );
   const t = await getTranslations("hireProfile");
   const tr = await getTranslations("rhProfile");
   const tw = await getTranslations("hireWeb3.profile");

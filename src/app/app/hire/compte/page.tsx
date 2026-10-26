@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { RhCompteScreen, RhCompteTexts } from "@/components/phone/recruteur/compte";
+import { isPhone } from "@/server/view";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
@@ -94,6 +96,13 @@ const List = ({
  */
 export default async function RecruiterAccountPage() {
   const { user, space, ctx } = await requireHire("/app/hire/compte");
+  // On a phone, Compte of Modèle B (recruteur M8, planche Recruteur-compte).
+  if (await isPhone())
+    return (
+      <RhCompteTexts>
+        <RhCompteScreen ctx={ctx} />
+      </RhCompteTexts>
+    );
   const t = await getTranslations("hireAccount");
   const tw = await getTranslations("hireWeb3.account");
   const tRoles = await getTranslations("org.roles");
@@ -238,107 +247,6 @@ export default async function RecruiterAccountPage() {
             />
           )}
         </ul>
-        <form action={signOut} className="t-verre t-liste">
-          <button type="submit" className="t-li t-danger t-press w-full text-left">
-            <span className="t-cases" aria-hidden>
-              <TalentIcon name="deconnexion" size="s" />
-            </span>
-            <span className="t-t">
-              <b>{t("signOut")}</b>
-            </span>
-          </button>
-        </form>
-      </div>
-
-      <div className="t-rw3-cptm t-w4-tel">
-        <Link href="/app/hire/compte/profil" className="t-verre t-hub-id t-press">
-          <TalentAvatar name={user.name} image={user.image} />
-          <span className="t-t">
-            <b>{user.name}</b>
-            <span>{line}</span>
-          </span>
-          <TalentIcon name="suivant" size="s" />
-        </Link>
-
-        <List label={t("group.org")}>
-          <Row
-            href="/app/organisation"
-            icon="entreprise"
-            tone="t-c2"
-            title={t("org.title")}
-            text={t("org.text")}
-            badge={verificationTag}
-          />
-          <Row
-            href="/app/organisation/equipe"
-            icon="candidats"
-            tone="t-c1"
-            title={t("team.title")}
-            text={teamText}
-          />
-          {permissions.readApplications && (
-            <Row
-              href="/app/hire/viviers"
-              icon="favori"
-              tone="t-c3"
-              title={t("pools.title")}
-              text={t("pools.text", { pools: pools.length, talents })}
-            />
-          )}
-          <Row
-            href="/app/hire/rapports"
-            icon="progression"
-            tone="t-c1"
-            title={t("reports.title")}
-            text={t("reports.text")}
-          />
-        </List>
-
-        <List label={t("group.settings")}>
-          <Row href="/app/abonnement" icon="portefeuille" title={t("plan.title")} text={planText} />
-          <Row
-            href="/app/parametres"
-            icon="reglages"
-            title={t("settings.title")}
-            text={t("settings.text")}
-          />
-          <Row
-            href={`mailto:${CONTACT_EMAIL}`}
-            icon="aide"
-            title={t("help.title")}
-            text={CONTACT_EMAIL}
-          />
-          {isTester(user) && (
-            <Row
-              href="/app/testeur"
-              icon="portefeuille"
-              title={tTalent("tester.title")}
-              text={tTalent("tester.text")}
-            />
-          )}
-          {admin && (
-            <Row
-              href="/admin"
-              icon="cadenas"
-              title={tTalent("admin.title")}
-              text={tTalent("admin.text")}
-            />
-          )}
-        </List>
-
-        <form action={switchSpace} className="t-verre t-liste">
-          <input type="hidden" name="space" value="personal" />
-          <button type="submit" className="t-li t-press w-full text-left">
-            <span className="t-cases t-c3" aria-hidden>
-              <TalentIcon name="profil" size="s" />
-            </span>
-            <span className="t-t">
-              <b>{t("talent.title")}</b>
-            </span>
-            <TalentIcon name="suivant" />
-          </button>
-        </form>
-
         <form action={signOut} className="t-verre t-liste">
           <button type="submit" className="t-li t-danger t-press w-full text-left">
             <span className="t-cases" aria-hidden>

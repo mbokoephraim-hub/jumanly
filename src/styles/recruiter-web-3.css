@@ -314,11 +314,6 @@
 }
 
 /* ── Compte (planche § 3 « Compte ») : l'identité, six tuiles, l'aide et la sortie ── */
-@media (max-width: 767.98px) {
-  .t-rw3-cptm {
-    display: contents;
-  }
-}
 @media (min-width: 768px) {
   .t-rw3-cpt .t-w4-id form {
     margin: 0;
