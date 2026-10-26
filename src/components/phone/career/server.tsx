@@ -13,7 +13,14 @@ export async function CareerTexts({ children }: { children: ReactNode }) {
   const messages = await getMessages();
   return (
     <NextIntlClientProvider
-      messages={pickMessages(messages, ["phoneCareer", "phoneExplorer", "phoneFil", "phone"])}
+      messages={pickMessages(messages, [
+        "phoneCareer",
+        "phoneProfile",
+        "phoneCv",
+        "phoneExplorer",
+        "phoneFil",
+        "phone",
+      ])}
     >
       {children}
     </NextIntlClientProvider>

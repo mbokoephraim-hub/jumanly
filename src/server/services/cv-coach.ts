@@ -62,6 +62,54 @@ export function cvScore(content: CvContent, targetSkills: string[]): CvScore {
   return { total, ats, impact, keywords, level };
 }
 
+export const cvCheckKeys = [
+  "headline",
+  "summary",
+  "figure",
+  "dates",
+  "skills",
+  "keywords",
+  "languages",
+  "readable",
+] as const;
+export type CvCheckKey = (typeof cvCheckKeys)[number];
+export type CvCheck = { key: CvCheckKey; ok: boolean; missing?: string[] };
+
+/**
+ * « Ce qu’Orbi a vérifié » (docs/carriere-v3, Aperçu): the rules behind the score, one line
+ * each, in the order a recruiter reads. Fixed rules, no model; `missing` names the skills of
+ * the target jobs absent from the CV.
+ */
+export function cvChecks(
+  content: CvContent,
+  targetSkills: string[],
+  template: { ats: "excellent" | "veryGood" | "good" },
+): CvCheck[] {
+  const text = cvText(content);
+  const targets = [...new Map(targetSkills.map((skill) => [fold(skill), skill])).entries()];
+  const missing = targets.filter(([folded]) => !text.includes(folded)).map(([, skill]) => skill);
+  return [
+    { key: "headline", ok: content.info.headline.trim().length > 0 },
+    { key: "summary", ok: content.summary.trim().length >= 80 },
+    {
+      key: "figure",
+      ok:
+        hasDigit(content.summary) ||
+        content.experiences.some((item) => item.bullets.some(hasDigit)),
+    },
+    { key: "dates", ok: content.experiences.every((item) => /^\d{4}-\d{2}$/.test(item.start)) },
+    { key: "skills", ok: content.skills.length >= 3 },
+    {
+      key: "keywords",
+      // Most of the skills the target jobs ask for: 60 % or more of them on the CV.
+      ok: missing.length <= targets.length * 0.4,
+      missing: missing.slice(0, 5),
+    },
+    { key: "languages", ok: content.languages.length > 0 },
+    { key: "readable", ok: template.ats !== "good" },
+  ];
+}
+
 /** Skills most asked for in published jobs close to the talent's target (top 10). */
 export async function targetSkillsFor(db: PrismaClient, userId: string) {
   const profile = await db.talentProfile.findUnique({

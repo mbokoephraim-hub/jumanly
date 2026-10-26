@@ -19,14 +19,20 @@ export const metadata: Metadata = { robots: { index: false } };
  * · Portfolio ». Only a profile visible under its name, or a connection, opens; a private or
  * anonymous one is not found. On a computer, the space's home.
  */
-export default async function PersonPage({ params }: PageProps<"/app/personnes/[id]">) {
+export default async function PersonPage({
+  params,
+  searchParams,
+}: PageProps<"/app/personnes/[id]">) {
   const { id } = await params;
   const user = await requireUser(`/app/personnes/${id}`);
   if (!(await isPhone())) redirect("/app");
-  if (id === user.id) redirect("/app/career/cv");
+  // « Voir comme les autres » from Carrière (docs/carriere-v3): one's own profile as a
+  // connection sees it; otherwise one's own space.
+  const self = id === user.id;
+  if (self && (await searchParams).apercu !== "1") redirect("/app/career/cv");
   const now = new Date();
   const [person, posts, fil, targets, t] = await Promise.all([
-    personProfile(db, user.id, id, "connection"),
+    personProfile(db, user.id, id, self ? "candidate" : "connection"),
     authorFeed(db, user.id, { userId: id }),
     feedWords(user.id, now),
     sendTargetViews(user.id),
@@ -41,8 +47,8 @@ export default async function PersonPage({ params }: PageProps<"/app/personnes/[
         posts={posts.map(fil.post)}
         targets={targets}
         title={t("titleProfile")}
-        back="/app/jobs"
-        actions={<ConnectionActions person={view} />}
+        back={self ? "/app/career/cv" : "/app/jobs"}
+        actions={self ? null : <ConnectionActions person={view} />}
       />
     </ProfileTexts>
   );

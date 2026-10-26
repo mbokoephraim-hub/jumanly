@@ -84,7 +84,7 @@ test.describe("Modèle B · Carrière au téléphone", () => {
 
     // Without the portfolio in the plan, « Ajouter » shows the plans.
     await tabs.getByRole("tab", { name: "Portfolio", exact: true }).click();
-    await career.getByRole("link", { name: /^Ajouter/ }).click();
+    await career.locator(".nb-cr-ajout").click();
     await page.waitForURL("**/app/abonnement");
   });
 
@@ -99,7 +99,7 @@ test.describe("Modèle B · Carrière au téléphone", () => {
     );
 
     // A project opens its page: the switch answers at once, and again to undo.
-    await career.locator(".nb-ca-real:not(.nb-ca-real-ajout)").first().click();
+    await career.locator(".nb-cr-real a").first().click();
     await page.waitForURL(/\/app\/career\/portfolio\/(?!nouvelle)/);
     const detail = page.locator(".nb-ca-projet");
     const feature = detail.getByRole("switch", { name: "Mettre en avant sur mon profil" });

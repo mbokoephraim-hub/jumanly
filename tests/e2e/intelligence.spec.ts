@@ -34,29 +34,29 @@ test("score expliqué, import de CV et révision humaine", async ({
     await expect(page.getByRole("link", { name: "Ajouter mes compétences" }).first()).toBeVisible();
 
   // A Word CV → « Lu dans votre fichier · à vérifier » → profile (lot 6c: the file is read, never kept).
-  await page.goto("/app/profil/import");
+  // On a phone, « Créer un CV · Importer » (docs/carriere-v3, captures 13 to 15).
+  await page.goto(isMobile ? "/app/career/cv/nouveau?etape=import" : "/app/profil/import");
   await expect(page.getByRole("heading", { name: "Importer un CV", level: 1 })).toBeVisible();
   // The field sends its form once hydrated: try again if the file was chosen too early.
   await expect(async () => {
     await page
-      .locator("#import-fichier")
+      .locator(isMobile ? "#cv-nouveau-fichier" : "#import-fichier")
       .setInputFiles(
         fictiveDocx([
           "Assistante administrative.",
           "Maîtrise de Microsoft Excel et de l'archivage.",
         ]),
       );
-    // Modèle B (lot B5): on a phone, « Voici ce que nous avons trouvé ».
     await expect(
       page.getByText(
-        isMobile ? "Voici ce que nous avons trouvé" : "Lu dans « cv-fictif.docx » · à vérifier",
+        isMobile ? "Voici ce qu’Orbi a trouvé" : "Lu dans « cv-fictif.docx » · à vérifier",
       ),
     ).toBeVisible({ timeout: 5_000 });
   }).toPass({ timeout: 30_000 });
   if (isMobile) {
-    await expect(page.getByRole("checkbox", { name: /compétences/ })).toBeChecked();
+    await expect(page.getByRole("checkbox", { name: /compétence/ })).toBeChecked();
     await page.getByRole("button", { name: "Ajouter à mon profil et créer le CV" }).click();
-    await page.waitForURL((url) => !url.pathname.startsWith("/app/profil/import"));
+    await page.waitForURL(/etape=contenu/);
     await page.goto("/app/career/cv");
     await expect(page.locator(".nb-ca").first()).toContainText("Excel");
   } else {

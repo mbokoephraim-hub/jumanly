@@ -4717,3 +4717,37 @@ Référence : brief `docs/profil-personne/`, maquette `Profil.dc.html` (réglage
   `showEmail` (désactivé par défaut) ; « Modifier le profil » permet de les remplir.
 - Tests : `tests/unit/profil-personne.test.ts`, `tests/db/explore.test.ts`, e2e `modele-b-explorer`
   et `modele-b-recruteur-candidatures`. Décision : `docs/decisions/2026-10-26-profil-personne.md`.
+
+## Carrière v3 : page Carrière et création d'un CV au téléphone (26 octobre 2026)
+
+Référence : brief `docs/carriere-v3/BRIEF-CARRIERE-CLAUDE-CODE.md`, captures 01 à 15 et maquettes
+(validées par Ephraïm le 26/10/2026). Remplace la page Carrière et les écrans CV du Modèle B au téléphone ;
+l'ordinateur garde « CV et documents » et le studio.
+
+- Page Carrière (`src/components/phone/career/home.tsx`, feuille `src/styles/phone-carriere.css`,
+  classes `nb-cr-`) : en-tête Carrière avec recherche et réglages, bannière et photo avec crayons,
+  réseaux, disponibilité (« À l'écoute des offres » / « Pas disponible », changée d'un geste),
+  complétion avec la prochaine action, suggestion de compétence, Modifier · Partager · Voir comme les
+  autres (`/app/personnes/[moi]?apercu=1`), identité repliée au-dessus des onglets, pilule Lime qui
+  glisse sous Profil · CV · Portfolio · Progression · Candidatures. CV avec score, date et menu ;
+  portfolio en grille ; progression en frise ; candidatures avec score, frise d'étapes et entretien.
+- Créer un CV (`/app/career/cv/nouveau?etape=`, `src/components/phone/cv/`, feuille
+  `src/styles/phone-cv.css`, classes `nb-cv-`) : départ (Orbi le prépare, un modèle, un import), choix
+  du modèle (filtres, verrou avec le forfait lu en base, vue en grand), Orbi qui prépare (modèle
+  Moderne, résumé proposé en attente de validation), import d'un PDF, d'un Word ou d'une photo (lue
+  par l'IA seulement si l'IA est prête, consentement, droit et quota vérifiés, journalisée), « Voici
+  ce qu'Orbi a trouvé » (rien n'entre dans le profil sans être coché).
+- Les quatre étapes d'un CV (`/app/career/cv/[id]?etape=modele|contenu|style|apercu`) : contenu
+  (sections glissées ou déplacées au clavier, affichées ou non, résumé écrit ou réécrit par Orbi,
+  gardé ou refusé), mise en forme (le CV change en direct : couleur, police, densité, photo, langue
+  des titres), aperçu (score à règles fixes avec « Pourquoi ? », huit vérifications dont
+  « Corriger » qui reprend seulement ce qui est dans le profil, nom, CV principal, PDF, Word, adapter à
+  une offre).
+- Services : `cvChecks` (`cv-coach.ts`), langues et coordonnées lues à l'import (`cv-import.ts`),
+  `importCvPhoto`, image dans le fournisseur d'IA. Actions : `src/server/actions/cv-flow.ts`.
+- Anciennes adresses au téléphone : `/app/career/cv/modeles` et `/app/profil/import` mènent au nouveau
+  parcours.
+- Tests : `tests/unit/intelligence.test.ts` (vérifications), e2e `carriere-v3`, `mobile-profil-cv`,
+  `intelligence`, `cv-documents`, `modele-b-carriere` mis à jour.
+- Restent à faire : les éditeurs de section (`?partie=`) gardent l'ancien écran ; projets, bénévolat
+  et certificats ne sont pas des sections du CV. Décision : `docs/decisions/2026-10-26-carriere-v3.md`.

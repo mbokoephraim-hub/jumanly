@@ -136,7 +136,7 @@ test("projets : verrou en Free, page publique sans compte", async ({ page, brows
     // Modèle B (lots B5, B9): the former portfolio page leads to the Portfolio tab of Carrière.
     await expect(page).toHaveURL(/\/app\/career\/cv\?onglet=portfolio$/);
     await expect(
-      page.locator(".nb-ca-onglets").getByRole("tab", { name: "Portfolio" }),
+      page.locator(".nb-cr-onglets").getByRole("tab", { name: "Portfolio" }),
     ).toHaveAttribute("aria-selected", "true");
   } else {
     // The former portfolio page leads to the « Projets » of Mon profil.

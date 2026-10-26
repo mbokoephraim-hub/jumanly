@@ -226,28 +226,35 @@ test("importer un CV : fichier refusé, puis Word lu et vérifié", async ({ pag
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("cv-import"));
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 
-  await page.goto("/app/profil/import");
+  // On a phone, « Créer un CV · Importer » (docs/carriere-v3, captures 13 to 15).
+  await page.goto(isMobile ? "/app/career/cv/nouveau?etape=import" : "/app/profil/import");
   await expect(page.getByRole("heading", { name: "Importer un CV", level: 1 })).toBeVisible();
   await expect(page.getByText("PDF ou Word, 4 Mo au plus")).toBeVisible();
+  const field = page.locator(isMobile ? "#cv-nouveau-fichier" : "#import-fichier");
 
   // Not a PDF nor a Word file: refused, with what to do.
-  await page.locator("#import-fichier").setInputFiles({
+  await field.setInputFiles({
     name: "cv.txt",
     mimeType: "text/plain",
     buffer: Buffer.from("Ceci n'est pas un CV."),
   });
   await expect(page).toHaveURL(/erreur=format/);
-  await expect(page.getByText("Ce fichier n'est pas accepté.", { exact: false })).toBeVisible();
+  await expect(
+    page.getByText(
+      isMobile ? "Ce fichier n’est ni un PDF ni un document Word" : "Ce fichier n'est pas accepté.",
+      { exact: false },
+    ),
+  ).toBeVisible();
 
-  await page
-    .locator("#import-fichier")
-    .setInputFiles(fictiveDocx(["Comptable (fictif).", "Excel, comptabilité, archivage."]));
+  await field.setInputFiles(
+    fictiveDocx(["Comptable (fictif).", "Excel, comptabilité, archivage."]),
+  );
   if (isMobile) {
-    // The phone (Modèle B, lot B5): what was found, ticked, then the profile and a CV.
-    await expect(page.getByText("Voici ce que nous avons trouvé")).toBeVisible();
+    // The phone: what was found, ticked, then the profile and a CV opened on Contenu.
+    await expect(page.getByText("Voici ce qu’Orbi a trouvé")).toBeVisible();
     await expectAccessible(page);
     await page.getByRole("button", { name: "Ajouter à mon profil et créer le CV" }).click();
-    await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+/);
+    await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+\?etape=contenu/);
     return;
   }
   await expect(page.getByText("Lu dans « cv-fictif.docx » · à vérifier")).toBeVisible();
