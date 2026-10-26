@@ -146,6 +146,8 @@ model Organization {
   /// Supporting documents of the verification request (Admin v2, étape 4).
   documents               OrganizationDocument[]
   joinRequests            OrgJoinRequest[]
+  tasks                   OrgTask[]
+  declaredMembers         OrgDeclaredMember[]
   /// Suspended by a Jumanly administrator: jobs hidden, Hire closed to its members.
   suspendedAt             DateTime?
   suspensionReason        String?
@@ -844,6 +846,8 @@ model User {
   jobsAssigned         Job[]                     @relation("JobAssignee")
   /// Applications a colleague entrusted to this member (Modèle B recruteur M5, « Répartir »).
   applicationsAssigned Application[]             @relation("ApplicationAssignee")
+  orgTasks             OrgTask[]                 @relation("OrgTaskAssignee")
+  orgTasksGiven        OrgTask[]                 @relation("OrgTaskAssigner")
   jobAssignments       JobAssignment[]
   scorecards           Scorecard[]
   talentPools          TalentPool[]
@@ -988,6 +992,9 @@ model Membership {
   status         MembershipStatus @default(active)
   /// Job title given at sign-up (« Votre fonction »).
   jobTitle       String?
+  /// « Droits de … » (étape 3, A2): the switches set by an administrator, as { publish, sort,
+  /// interviews, evaluate, stats, page } → boolean. null = every right the role allows.
+  rights         Json?
   /// Team scope (`org.permissions.level` advanced): a recruiter then sees their team's jobs.
   teamId         String?
   team           Team?            @relation(fields: [teamId], references: [id], onDelete: SetNull)
@@ -1211,19 +1218,20 @@ enum ExperienceType {
 }
 
 model Experience {
-  id          String         @id @default(cuid(2))
+  id          String              @id @default(cuid(2))
   profileId   String
-  profile     TalentProfile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile     TalentProfile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
   title       String
   company     String
-  type        ExperienceType @default(job)
+  type        ExperienceType      @default(job)
   location    String?
   startDate   DateTime
   /// null = current position.
   endDate     DateTime?
   /// One achievement per line.
-  description String         @default("")
-  createdAt   DateTime       @default(now())
+  description String              @default("")
+  createdAt   DateTime            @default(now())
+  declaredAt  OrgDeclaredMember[]
 
   @@index([profileId])
 }
@@ -1381,6 +1389,7 @@ model Application {
   /// « Répartir à un collègue » (Modèle B recruteur M5): the member who follows the file.
   assignedToId     String?
   assignedTo       User?              @relation("ApplicationAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+  orgTasks         OrgTask[]
   events           ApplicationEvent[]
   conversation     Conversation?
   scorecards       Scorecard[]
@@ -2637,4 +2646,65 @@ model TeamMessage {
   createdAt DateTime   @default(now())
 
   @@index([threadId, createdAt])
+}
+
+// ─── Équipe de l'entreprise (étape 3, A2) ───────────────────────
+
+enum OrgTaskKind {
+  follow
+  diagnostic
+  interview
+}
+
+enum OrgTaskStatus {
+  assigned
+  accepted
+  in_progress
+  done
+}
+
+/// « Attribuer une tâche » (étape 3, A2, captures 076 et 077): an administrator entrusts a member
+/// with a candidate (follow, evaluate the diagnostic, hold the interview). The member accepts,
+/// starts, then marks it done; the administrator follows each step and may send a reminder.
+model OrgTask {
+  id             String        @id @default(cuid(2))
+  organizationId String
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assigneeId     String
+  assignee       User          @relation("OrgTaskAssignee", fields: [assigneeId], references: [id], onDelete: Cascade)
+  assignedById   String?
+  assignedBy     User?         @relation("OrgTaskAssigner", fields: [assignedById], references: [id], onDelete: SetNull)
+  kind           OrgTaskKind
+  applicationId  String
+  application    Application   @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  dueAt          DateTime
+  status         OrgTaskStatus @default(assigned)
+  remindedAt     DateTime?
+  doneAt         DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([organizationId, status])
+  @@index([assigneeId, status])
+}
+
+enum DeclaredMemberStatus {
+  confirmed
+  rejected
+}
+
+/// « Indique travailler chez … » (étape 3, A2, capture 078): a talent's current experience names
+/// the organization. An administrator confirms it or answers « Ne travaille pas ici »; without an
+/// answer the page shows « Indiqué par la personne ». Never a seat, never an access.
+model OrgDeclaredMember {
+  id             String               @id @default(cuid(2))
+  organizationId String
+  organization   Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  experienceId   String
+  experience     Experience           @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+  status         DeclaredMemberStatus
+  respondedById  String?
+  respondedAt    DateTime             @default(now())
+
+  @@unique([organizationId, experienceId])
 }

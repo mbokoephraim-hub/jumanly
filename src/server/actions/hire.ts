@@ -80,7 +80,7 @@ export async function becomeRecruiterAction() {
 // ─── Jobs ─────────────────────────────────────────────────────────────────────
 
 export async function closeJobAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  const { ctx } = await requireHire("/app/hire/offres", "manage", "publish");
   const jobId = id(formData.get("id"));
   await guarded(() => closeJob(db, ctx, jobId), "/app/hire/offres");
   const job = await db.job.findUniqueOrThrow({ where: { id: jobId }, select: { slug: true } });
@@ -93,7 +93,7 @@ export async function closeJobAction(formData: FormData) {
 
 /** « Rouvrir » a closed job: published again within the active-job limit. */
 export async function reopenJobAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  const { ctx } = await requireHire("/app/hire/offres", "manage", "publish");
   const jobId = id(formData.get("id"));
   const result = await guarded(() => publishJob(db, ctx, jobId), "/app/hire/offres");
   if (result.status === "limit") redirect("/app/hire/offres?onglet=cloturees&erreur=limite");
@@ -106,7 +106,7 @@ export async function reopenJobAction(formData: FormData) {
 }
 
 export async function duplicateJobAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  const { ctx } = await requireHire("/app/hire/offres", "manage", "publish");
   const copy = await guarded(
     () => duplicateJob(db, ctx, id(formData.get("id"))),
     "/app/hire/offres",
@@ -115,7 +115,7 @@ export async function duplicateJobAction(formData: FormData) {
 }
 
 export async function deleteDraftAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  const { ctx } = await requireHire("/app/hire/offres", "manage", "publish");
   await guarded(() => deleteDraft(db, ctx, id(formData.get("id"))), "/app/hire/offres");
   redirect("/app/hire/offres?onglet=brouillons&ok=supprimee");
 }
@@ -123,7 +123,7 @@ export async function deleteDraftAction(formData: FormData) {
 // ─── Candidate file ───────────────────────────────────────────────────────────
 
 export async function addNoteAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire", "evaluate");
+  const { ctx } = await requireHire("/app/hire", "evaluate", "evaluate");
   const applicationId = id(formData.get("application"));
   const mentions = await guarded(
     () => addTeamNote(db, ctx, applicationId, String(formData.get("body") ?? "")),
@@ -176,6 +176,6 @@ export async function requestDocumentAction(formData: FormData) {
 
 /** « Rédiger une première version » and « Améliorer la clarté avec l'IA » on the job form. */
 export async function jobWriterAction(input: JobWriterInput): Promise<JobWriterResult> {
-  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  const { ctx } = await requireHire("/app/hire/offres", "manage", "publish");
   return writeJob(db, ctx, input);
 }

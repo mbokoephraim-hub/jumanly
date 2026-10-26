@@ -88,7 +88,7 @@ export async function cancelAtsAction(formData: FormData) {
 
 /** « Retenir » (planche `ATS_SEL`) and « Ajouter aux retenus » (planche `ATS4`). */
 export async function shortlistAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  const { ctx } = await requireHire("/app/hire/offres", "manage", "sort");
   const jobId = id(formData.get("job"));
   const ids = formData.getAll("ids").map(id).filter(Boolean);
   const back = String(formData.get("back") ?? "");
@@ -99,7 +99,7 @@ export async function shortlistAction(formData: FormData) {
 
 /** « Retirer de la liste » in the list of the retained. */
 export async function unshortlistAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  const { ctx } = await requireHire("/app/hire/offres", "manage", "sort");
   const jobId = id(formData.get("job"));
   const applicationId = id(formData.get("application"));
   await guarded(() => unshortlist(db, ctx, jobId, applicationId), "/app/hire/offres");
@@ -124,7 +124,7 @@ const replyGroupOf = (value: FormDataEntryValue | null): ReplyGroup =>
  * confirmed. The retained get the invitation, the others the member's decision with its message.
  */
 export async function sendGroupReplyAction(formData: FormData) {
-  const { ctx, space, user } = await requireHire("/app/hire/offres", "manage");
+  const { ctx, space, user } = await requireHire("/app/hire/offres", "manage", "sort");
   const jobId = id(formData.get("job"));
   const group = replyGroupOf(formData.get("groupe"));
   const ids = String(formData.get("ids") ?? "")
@@ -155,7 +155,7 @@ export async function sendGroupReplyAction(formData: FormData) {
 
 /** « Annuler » under « Réponses envoyées », within 10 minutes. */
 export async function undoGroupReplyAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  const { ctx } = await requireHire("/app/hire/offres", "manage", "sort");
   const jobId = id(formData.get("job"));
   const batchId = id(formData.get("batch"));
   const group = replyGroupOf(formData.get("groupe"));

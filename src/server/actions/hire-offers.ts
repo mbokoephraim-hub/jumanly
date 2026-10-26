@@ -42,7 +42,7 @@ async function guarded<T>(work: () => Promise<T>, fallback = OFFERS): Promise<T>
  * the job sheet in PDF is checked before it is kept.
  */
 export async function saveJobStepAction(formData: FormData) {
-  const { ctx } = await requireHire(OFFERS, "manage");
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
   const jobId = id(formData.get("id")) || undefined;
   const step = String(formData.get("step") ?? "") as JobStep;
   const index = jobSteps.indexOf(step);
@@ -106,7 +106,7 @@ export async function saveJobStepAction(formData: FormData) {
 
 /** Step 4 · « Publier » or « Brouillon » (planche CR4); the limit opens its sheet (QUOTA). */
 export async function publishOfferAction(formData: FormData) {
-  const { ctx } = await requireHire(OFFERS, "manage");
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
   const jobId = id(formData.get("id"));
   if (formData.get("intent") === "draft") redirect(`${OFFERS}?onglet=brouillons&ok=brouillon`);
   const result = await guarded(() => publishJob(db, ctx, jobId));
@@ -129,7 +129,7 @@ const withParam = (href: string, param: string) =>
 
 /** « Mettre en pause » (brief recruteur § 2.4): hidden from results, applications kept. */
 export async function pauseJobAction(formData: FormData) {
-  const { ctx } = await requireHire(OFFERS, "manage");
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
   const job = await guarded(() => pauseJob(db, ctx, id(formData.get("id"))));
   refresh(job.slug);
   redirect(withParam(backTo(formData, `${OFFERS}?onglet=pause`), "ok=pause"));
@@ -137,7 +137,7 @@ export async function pauseJobAction(formData: FormData) {
 
 /** « Reprendre » a paused offer, within `jobs.active.max`. */
 export async function resumeJobAction(formData: FormData) {
-  const { ctx } = await requireHire(OFFERS, "manage");
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
   const jobId = id(formData.get("id"));
   const result = await guarded(() => resumeJob(db, ctx, jobId));
   const back = backTo(formData, `${OFFERS}?onglet=pause`);
@@ -152,7 +152,7 @@ export async function resumeJobAction(formData: FormData) {
  * Proposed only; the recruiter applies them with `addResponsibilitiesAction`.
  */
 export async function sheetProposalAction(jobId: string): Promise<SheetProposal> {
-  const { ctx } = await requireHire(OFFERS, "manage");
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
   const job = await getOrgJob(db, ctx, String(jobId).slice(0, 60)).catch(() => null);
   if (!job) return { ok: false, error: "invalid" };
   return proposeFromSheet(db, ctx, {
@@ -167,7 +167,7 @@ export async function sheetProposalAction(jobId: string): Promise<SheetProposal>
 
 /** « Appliquer » a proposal of Orbi on step 3: the missions the recruiter kept, added at the end. */
 export async function addResponsibilitiesAction(formData: FormData) {
-  const { ctx } = await requireHire(OFFERS, "manage");
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
   const jobId = id(formData.get("id"));
   const job = await guarded(() => getOrgJob(db, ctx, jobId));
   const items = formData

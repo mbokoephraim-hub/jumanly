@@ -25,7 +25,7 @@ export default async function NewOfferPage({
   searchParams,
 }: PageProps<"/app/hire/offres/nouvelle">) {
   const query = flat(await searchParams);
-  const { ctx, user } = await requireHire("/app/hire/offres/nouvelle", "manage");
+  const { ctx, user } = await requireHire("/app/hire/offres/nouvelle", "manage", "publish");
   // On a phone, the four steps of Modèle B recruteur (lot M4, planches Recruteur-publier-1 to -4).
   if (await isPhone())
     return (

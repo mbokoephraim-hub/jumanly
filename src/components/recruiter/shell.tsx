@@ -40,6 +40,7 @@ export function RecruiterShell({
   menu,
   orbiTexts,
   brief,
+  company = false,
   children,
 }: {
   account: { name: string; image: string | null; line: string };
@@ -56,6 +57,8 @@ export function RecruiterShell({
   orbiTexts: AbstractIntlMessages;
   /** « Votre journée en bref » at the top of the notifications under the bell, streamed. */
   brief?: ReactNode;
+  /** The member administers the organization: ENTREPRISE in the sidebar (étape 3). */
+  company?: boolean;
   children: ReactNode;
 }) {
   const t = useTranslations("hireShell");
@@ -97,8 +100,18 @@ export function RecruiterShell({
         line={account.line}
         avatar={avatar}
         unreadMessages={unreadMessages}
+        company={company}
         org={{ name: org.name, mark: <OrgMark name={org.name} logo={org.logo} /> }}
         labels={{
+          entreprise: {
+            aria: t("web.entreprise.aria"),
+            title: t("web.entreprise.title"),
+            team: t("web.entreprise.team"),
+            page: t("web.entreprise.page"),
+            billing: t("web.entreprise.billing"),
+            journal: t("web.entreprise.journal"),
+            settings: t("web.entreprise.settings"),
+          },
           aria: t("nav.aria"),
           more: t("web.more"),
           home: t("web.home"),

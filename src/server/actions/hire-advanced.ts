@@ -97,7 +97,7 @@ export async function saveScorecardTemplateAction(formData: FormData) {
  * offer's grid, the opinion, and the next step the member suggests. Nothing moves the candidate.
  */
 export async function submitScorecardAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire", "evaluate");
+  const { ctx } = await requireHire("/app/hire", "evaluate", "evaluate");
   const applicationId = id(formData.get("application"));
   const page = `/app/hire/candidats/${applicationId}/evaluation`;
   const back = local(formData.get("back"), `/app/hire/candidats/${applicationId}`);
@@ -119,7 +119,7 @@ export async function submitScorecardAction(formData: FormData) {
 }
 
 export async function editNoteAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire", "evaluate");
+  const { ctx } = await requireHire("/app/hire", "evaluate", "evaluate");
   const applicationId = id(formData.get("application"));
   const page = `/app/hire/candidats/${applicationId}#notes`;
   await guarded(
@@ -130,7 +130,7 @@ export async function editNoteAction(formData: FormData) {
 }
 
 export async function deleteNoteAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire", "evaluate");
+  const { ctx } = await requireHire("/app/hire", "evaluate", "evaluate");
   const applicationId = id(formData.get("application"));
   const page = `/app/hire/candidats/${applicationId}#notes`;
   await guarded(() => deleteNote(db, ctx, id(formData.get("note"))), page);
@@ -240,7 +240,7 @@ export async function deletePoolAction(formData: FormData) {
 // ─── Interviews ────────────────────────────────────────────────────────────────
 
 export async function scheduleInterviewAction(formData: FormData) {
-  const { ctx, space } = await requireHire("/app/hire/entretiens", "manage");
+  const { ctx, space } = await requireHire("/app/hire/entretiens", "manage", "interviews");
   const applicationId = id(formData.get("application"));
   // A refusal goes back to the planner, which says why.
   const planner = `/app/hire/candidats/${applicationId}/entretien`;
@@ -286,7 +286,7 @@ export async function scheduleInterviewAction(formData: FormData) {
 }
 
 export async function cancelInterviewAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire/entretiens", "manage");
+  const { ctx } = await requireHire("/app/hire/entretiens", "manage", "interviews");
   const interviewId = id(formData.get("interview"));
   await guarded(
     () => cancelInterview(db, ctx, interviewId, text(formData.get("reason"), 1000)),
@@ -296,7 +296,7 @@ export async function cancelInterviewAction(formData: FormData) {
 }
 
 export async function closeInterviewAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire/entretiens", "manage");
+  const { ctx } = await requireHire("/app/hire/entretiens", "manage", "interviews");
   const interviewId = id(formData.get("interview"));
   const outcome = formData.get("outcome") === "no_show" ? "no_show" : "done";
   await guarded(
@@ -308,7 +308,7 @@ export async function closeInterviewAction(formData: FormData) {
 
 /** New times for an interview already proposed (the planner with `?entretien=`). */
 export async function rescheduleInterviewAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire/entretiens", "manage");
+  const { ctx } = await requireHire("/app/hire/entretiens", "manage", "interviews");
   const interviewId = id(formData.get("interview"));
   const planner = `/app/hire/candidats/${id(formData.get("application"))}/entretien?entretien=${interviewId}`;
   await guarded(
@@ -326,7 +326,7 @@ export async function rescheduleInterviewAction(formData: FormData) {
 
 /** « Accepter » the time the candidate proposed instead. */
 export async function acceptProposedSlotAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire/entretiens", "manage");
+  const { ctx } = await requireHire("/app/hire/entretiens", "manage", "interviews");
   const interviewId = id(formData.get("interview"));
   await guarded(
     () => acceptProposedSlot(db, ctx, interviewId, text(formData.get("slot"), 40)),

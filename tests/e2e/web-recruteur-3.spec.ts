@@ -82,14 +82,15 @@ test("web recruteur 3 : menu du compte, compte, organisation, équipe, abonnemen
   await noOverflow(page);
   await expectAccessible(page);
 
-  // 4. Équipe: the members in a table, « Inviter » in the head opens the dialog.
+  // 4. Équipe (étape 3, A2): the three tabs, « Inviter un membre » opens the dialog.
   await page.goto("/app/organisation/equipe");
-  const table = main(page).getByRole("table", { name: "Membres de l'équipe" });
-  await expect(table.getByRole("columnheader", { name: "Rôle" })).toBeVisible();
-  await expect(table.getByRole("columnheader", { name: "Offres" })).toBeVisible();
-  await expect(table.getByRole("rowheader", { name: /, vous/ })).toBeVisible();
-  await main(page).getByRole("button", { name: "Inviter", exact: true }).click();
-  const invite = page.getByRole("dialog", { name: "Inviter dans l'équipe" });
+  await expect(main(page).getByRole("heading", { level: 1 })).toHaveText("Équipe");
+  await expect(main(page).getByRole("tab", { name: "Membres et rôles" })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  await main(page).getByRole("button", { name: "Inviter un membre" }).first().click();
+  const invite = page.getByRole("dialog", { name: "Inviter un membre" });
   await expect(invite).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(invite).toBeHidden();

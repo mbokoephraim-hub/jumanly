@@ -224,7 +224,10 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
         })}
         unread={unread}
         unreadMessages={unreadMessages}
-        appearance={user.appearance}
+        // Étape 3 (docs/decisions/2026-10-26-etape-3-cadre.md): the recruiter's space on a
+        // computer is always dark, like the Modèle B.
+        appearance="dark"
+        company={space.role === "org_owner" || space.role === "org_admin"}
         reduceMotion={user.reduceMotion}
         intro={intro}
         orbiTexts={recruiterChatTexts(messages) as AbstractIntlMessages}

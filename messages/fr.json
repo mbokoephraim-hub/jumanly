@@ -12159,6 +12159,15 @@
       "agenda": "Agenda",
       "talents": "Talents",
       "reports": "Rapports",
+      "entreprise": {
+        "aria": "Entreprise",
+        "title": "ENTREPRISE",
+        "team": "Équipe",
+        "page": "Page entreprise",
+        "billing": "Formule et facturation",
+        "journal": "Journal",
+        "settings": "Réglages"
+      },
       "settings": "Paramètres",
       "shortcut": "Ctrl K",
       "search": "Candidat, offre, ou demander à Orbi",
@@ -19206,6 +19215,203 @@
     "home": "Retour à l'accueil",
     "app": "Retour à mon espace"
   },
+  "orgTeam": {
+    "title": "Équipe",
+    "seats": "{plan} · {used, plural, one {# utilisateur} other {# utilisateurs}} sur {max}.",
+    "seatsUnlimited": "{plan} · {used, plural, one {# utilisateur} other {# utilisateurs}}.",
+    "onlyYou": "Vous seul·e attribuez les rôles et les tâches.",
+    "admins": "Les administrateurs attribuent les rôles et les tâches.",
+    "invite": "Inviter un membre",
+    "assign": "Attribuer une tâche",
+    "close": "Fermer",
+    "cancel": "Annuler",
+    "error": "Cette action n'a pas abouti. Réessayez.",
+    "tabs": {
+      "aria": "Parties de l'équipe",
+      "members": "Membres et rôles",
+      "tasks": "Tâches",
+      "invitations": "Invitations et demandes"
+    },
+    "member": {
+      "rights": "{count, plural, one {# droit} other {# droits}} sur {total}",
+      "tasks": "Tâches",
+      "done": "{done} sur {total} {done, plural, =0 {terminée} one {terminée} other {terminées}}",
+      "alone": "Vous êtes seul·e dans l'équipe pour l'instant. Invitez un premier membre : il apparaîtra ici avec son rôle et ses tâches."
+    },
+    "roles": {
+      "org_owner": {
+        "name": "Propriétaire",
+        "text": "Créateur de l'espace : tous les droits"
+      },
+      "org_admin": {
+        "name": "Administrateur",
+        "text": "Membres, rôles, offres, rapports et formule"
+      },
+      "recruiter": {
+        "name": "Recruteur",
+        "text": "Offres attribuées, ATS, messages, rendez-vous"
+      },
+      "hiring_manager": {
+        "name": "Manager",
+        "text": "Voit les candidats de ses offres, évalue et commente ; ne publie pas"
+      },
+      "viewer": {
+        "name": "Lecteur",
+        "text": "Lit les tableaux de bord et les rapports"
+      }
+    },
+    "role": {
+      "title": "Rôle de {name}",
+      "subtitle": "{line} · ce que {name} peut faire",
+      "current": "Rôle : {role}",
+      "done": "{name} devient {role} : ses droits sont mis à jour",
+      "error": "Ce rôle n'est pas proposé par votre formule.",
+      "fixed": "Un administrateur a tous les droits. Seul le propriétaire change son rôle."
+    },
+    "rights": {
+      "title": "Droits de {name}",
+      "publish": "Publier et modifier les offres",
+      "sort": "Trier les candidatures (ATS)",
+      "interviews": "Planifier et mener les entretiens",
+      "evaluate": "Évaluer les candidats et le diagnostic",
+      "stats": "Voir l'évolution et les statistiques",
+      "page": "Publier au nom de {org}",
+      "note": "« Voir l'évolution » donne accès au tableau de bord et aux statistiques de l'équipe.",
+      "basic": "Votre formule garde les droits de chaque rôle. Ajuster les droits membre par membre demande une formule plus complète, à voir dans Formule et facturation.",
+      "beyond": "Pas avec le rôle {role}",
+      "granted": "Droit accordé à {name} : {right}",
+      "removed": "Droit retiré à {name} : {right}"
+    },
+    "remove": {
+      "button": "Retirer de l'équipe",
+      "title": "Retirer {name} de l'équipe ?",
+      "text": "Sa place se libère. Rien de ce que {name} a écrit n'est effacé : notes, messages et évaluations restent dans les dossiers.",
+      "confirm": "Retirer",
+      "done": "{name} ne fait plus partie de l'équipe"
+    },
+    "memberTasks": {
+      "title": "Tâches de {name}",
+      "empty": "Aucune tâche pour l'instant."
+    },
+    "task": {
+      "kind": {
+        "follow": "Suivre un candidat",
+        "diagnostic": "Évaluer le diagnostic",
+        "interview": "Faire un entretien"
+      },
+      "status": {
+        "assigned": "Attribuée",
+        "accepted": "Acceptée",
+        "in_progress": "En cours",
+        "done": "Terminée"
+      },
+      "line": "{kind} · {candidate}",
+      "due": "Échéance {date}",
+      "late": "En retard",
+      "file": "Fiche",
+      "fileAria": "Fiche de {candidate}",
+      "remind": "Relancer",
+      "remindAria": "Relancer {name}",
+      "reminded": "Rappel envoyé à {name}",
+      "progress": "Avancement : {status}"
+    },
+    "tasks": {
+      "filters": "Filtrer les tâches",
+      "all": "Toutes",
+      "open": "En cours",
+      "late": "En retard",
+      "done": "Terminées",
+      "caption": "Toutes les tâches de l'équipe",
+      "col": {
+        "task": "Tâche",
+        "candidate": "Candidat·e",
+        "member": "Membre",
+        "due": "Échéance",
+        "progress": "Avancement",
+        "actions": "Actions"
+      },
+      "empty": "Aucune tâche avec ce filtre.",
+      "none": "Aucune tâche pour l'instant. Attribuez la première à un membre : il la voit dans « Mes tâches », l'accepte, puis vous suivez chaque étape."
+    },
+    "requests": {
+      "title": "Demandes à valider",
+      "subtitle": "Rattachement à l'équipe, ou personnes qui indiquent travailler chez {org}",
+      "join": "Demande à rejoindre l'équipe de recrutement · adresse {domain}",
+      "declared": "Indique travailler chez {org} · {title}",
+      "accept": "Accepter",
+      "refuse": "Refuser",
+      "confirm": "Confirmer",
+      "notHere": "Ne travaille pas ici",
+      "acceptAria": "Accepter la demande de {name}",
+      "refuseAria": "Refuser la demande de {name}",
+      "confirmAria": "Confirmer que {name} travaille chez {org}",
+      "notHereAria": "{name} ne travaille pas chez {org}",
+      "empty": "Rien à valider.",
+      "accepted": "{name} rejoint l'équipe comme recruteur. Vous pouvez changer son rôle dans Membres et rôles.",
+      "declined": "Demande refusée : {name} est prévenu·e",
+      "confirmed": "{name} apparaît comme membre confirmé·e sur la page de l'entreprise",
+      "rejected": "{name} est retiré·e des membres de la page",
+      "seats": "Plus de place dans votre formule : libérez une place ou changez de formule pour accepter cette demande."
+    },
+    "invitations": {
+      "title": "Invitations envoyées",
+      "invite": "Inviter",
+      "line": "{role} · envoyée le {date}",
+      "resend": "Relancer",
+      "resendAria": "Renvoyer l'invitation à {email}",
+      "cancel": "Annuler",
+      "cancelAria": "Annuler l'invitation de {email}",
+      "resent": "Invitation renvoyée à {email}",
+      "cancelled": "Invitation annulée : la place se libère",
+      "empty": "Aucune invitation en attente."
+    },
+    "places": {
+      "left": "{count, plural, one {Il reste # place} other {Il reste # places}} dans la formule {plan} ({max} utilisateurs)",
+      "full": "{max, plural, one {La seule place de la formule {plan} est prise} other {Les # places de la formule {plan} sont prises}}",
+      "unlimited": "Utilisateurs illimités dans la formule {plan}"
+    },
+    "inviteDialog": {
+      "title": "Inviter un membre",
+      "email": "Adresse e-mail",
+      "placeholder": "prenom.nom@entreprise.cd",
+      "role": "Rôle",
+      "send": "Envoyer l'invitation",
+      "sending": "Envoi…",
+      "sent": "Invitation envoyée par e-mail à {email}",
+      "error": {
+        "invalid": "Écrivez une adresse e-mail valide",
+        "seats": "Plus de place : changez de formule dans Formule et facturation pour inviter davantage de membres",
+        "alreadyMember": "{email} fait déjà partie de l'équipe",
+        "role": "Ce rôle n'est pas proposé par votre formule"
+      }
+    },
+    "assignDialog": {
+      "title": "Attribuer une tâche",
+      "who": "À qui",
+      "what": "Quoi",
+      "candidate": "Pour quel candidat",
+      "candidateLine": "{name} · {job}",
+      "due": "Échéance",
+      "note": "La personne la voit dans « Mes tâches », l'accepte, puis vous suivez chaque étape.",
+      "confirm": "Attribuer",
+      "done": "Tâche attribuée à {name} : elle apparaît dans ses « Mes tâches »",
+      "noMember": "Invitez d'abord un membre : une tâche va à un recruteur ou à un manager de l'équipe.",
+      "noCandidate": "Aucune candidature en cours : une tâche porte toujours sur un candidat.",
+      "error": {
+        "due": "Choisissez une échéance à venir"
+      }
+    }
+  },
+  "myTasks": {
+    "title": "Mes tâches",
+    "intro": "Les tâches que l'administrateur de {org} vous confie. Acceptez-les, puis faites avancer chaque étape : il suit votre avancement.",
+    "empty": "Aucune tâche pour l'instant. Quand l'administrateur vous en confie une, elle apparaît ici.",
+    "accept": "Accepter",
+    "start": "Commencer",
+    "finish": "Marquer comme terminée",
+    "moved": "Tâche passée à « {status} »",
+    "finished": "Tâche terminée : l'administrateur est prévenu"
+  },
   "pricing": {
     "seo": {
       "title": "Tarifs et forfaits · Jumanly",
@@ -21107,6 +21313,9 @@
       "teamMessage": "{name} vous a écrit dans Équipe.",
       "colleagueProposed": "{name} propose d'ajouter {email} à l'équipe de {org}.",
       "planRequested": "{name} demande la formule {plan} pour l'équipe.",
+      "orgTaskAssigned": "Nouvelle tâche : {kind, select, follow {suivre} diagnostic {évaluer le diagnostic de} interview {faire un entretien avec} other {suivre}} {candidate}. Retrouvez-la dans « Mes tâches ».",
+      "orgTaskReminder": "Rappel : votre tâche « {kind, select, follow {suivre} diagnostic {évaluer le diagnostic de} interview {faire un entretien avec} other {suivre}} {candidate} » attend.",
+      "orgTaskDone": "{name} a terminé sa tâche : {kind, select, follow {suivre} diagnostic {évaluer le diagnostic de} interview {faire un entretien avec} other {suivre}} {candidate}.",
       "feedReply": "{name} a répondu à votre publication.",
       "feedMention": "{name} vous a mentionné dans une réponse.",
       "feedLike": "{name} a aimé votre publication.",

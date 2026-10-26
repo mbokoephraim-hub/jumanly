@@ -40,7 +40,7 @@ export async function rhSaveOfferAction(raw: z.input<typeof posteInput>): Promis
   const parsed = posteInput.safeParse(raw);
   if (!parsed.success) return { ok: false, error: "invalid" };
   const input = parsed.data;
-  const { ctx } = await requireHire(OFFERS, "manage");
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
   try {
     const job = input.jobId ? await getOrgJob(db, ctx, input.jobId) : null;
     const poste = await saveJobStep(
@@ -100,7 +100,7 @@ export async function rhSaveScreeningAction(
   const parsed = candidatureInput.safeParse(raw);
   if (!parsed.success) return { ok: false, error: "invalid" };
   const input = parsed.data;
-  const { ctx } = await requireHire(OFFERS, "manage");
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
   try {
     const job = await getOrgJob(db, ctx, input.jobId);
     const before = screeningQuestionsOf(job.screeningQuestions);
@@ -139,7 +139,7 @@ export async function rhPublishOfferAction(
 ): Promise<{ ok: true; review: boolean } | { ok: false; error: string }> {
   const id = z.string().trim().min(1).max(60).safeParse(jobId);
   if (!id.success) return { ok: false, error: "invalid" };
-  const { ctx } = await requireHire(OFFERS, "manage");
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
   try {
     const result = await publishJob(db, ctx, id.data);
     if (result.status === "limit") return { ok: false, error: "limit" };

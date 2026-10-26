@@ -181,6 +181,19 @@ test("organisation : page, modification, vérification, équipe et invitation", 
   test.setTimeout(180_000);
   const { organization } = await freshRecruiter(page, "lot5-org", "reports.export");
   await page.goto("/app/organisation");
+  // On a phone the company's space shows « À ouvrir sur un ordinateur » (étape 3); the phone keeps
+  // its own pages under Compte (Modèle B recruteur M8, their own e2e).
+  if (isMobile) {
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("À ouvrir sur un ordinateur");
+    await page.goto("/app/organisation/equipe");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("À ouvrir sur un ordinateur");
+    await page.goto("/app/hire/rapports");
+    await expect(page).toHaveURL(/\/app\/hire\/compte\/statistiques$/);
+    expect(
+      (await page.request.get("/app/hire/rapports/export?format=csv")).headers()["content-type"],
+    ).toContain("application/pdf");
+    return;
+  }
   const screen = main(page);
   await expect(screen.getByText(organization).first()).toBeVisible();
   await expect(screen.getByRole("link", { name: /Voir la page comme un talent/ })).toHaveAttribute(
@@ -199,31 +212,23 @@ test("organisation : page, modification, vérification, équipe et invitation", 
   await expectAccessible(page);
   await noOverflow(page, "vérification");
 
+  // Équipe (étape 3, A2): « Inviter un membre », then the seat is counted.
   await page.goto("/app/organisation/equipe");
-  // On a phone, « Équipe de recrutement » of Compte (Modèle B recruteur M8, its own e2e).
-  if (isMobile) {
-    await expect(page).toHaveURL(/\/app\/hire\/compte\/equipe$/);
-    await page.goto("/app/hire/rapports");
-    await expect(page).toHaveURL(/\/app\/hire\/compte\/statistiques$/);
-    expect(
-      (await page.request.get("/app/hire/rapports/export?format=csv")).headers()["content-type"],
-    ).toContain("application/pdf");
-    return;
-  }
   await expectAccessible(page);
   await noOverflow(page, "équipe");
-  await main(page).getByRole("button", { name: "Inviter dans l'équipe" }).click();
-  const sheet = page.getByRole("dialog", { name: "Inviter dans l'équipe" });
-  await sheet.getByLabel("E-mail").fill(`invite-${suffix()}@jumanly.test`);
-  await sheet.getByRole("button", { name: "Envoyer les invitations" }).click();
-  await expect(
-    main(page)
-      .getByText(/Invitation envoyée par e-mail/)
-      // The table of the computer and the list of the phone: the one on screen.
-      .filter({ visible: true })
-      .first(),
-  ).toBeVisible();
-  await expect(main(page).getByText(/Sièges utilisés : 2 sur|2 sièges utilisés/)).toBeVisible();
+  await main(page).getByRole("button", { name: "Inviter un membre" }).first().click();
+  const sheet = page.getByRole("dialog", { name: "Inviter un membre" });
+  const invited = `invite-${suffix()}@jumanly.test`;
+  await sheet.getByLabel("Adresse e-mail").fill(invited);
+  await sheet.getByRole("button", { name: "Envoyer l'invitation" }).click();
+  await expect(page.locator(".ae-toast")).toContainText(
+    `Invitation envoyée par e-mail à ${invited}`,
+  );
+  await expect(main(page).getByRole("tab", { name: /Invitations et demandes/ })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  await expect(main(page).getByText(invited)).toBeVisible();
   await noOverflow(page, "invitation");
 
   // Reports of this plan: the PDF export (the CSV is gone, its address gives the PDF).
@@ -275,9 +280,9 @@ test("abonnement, formules RH, rapports en PDF, paramètres et journal des consu
   await noOverflow(page, "notifications");
 
   // One seat on the free plan, taken by the owner: the invitation sheet points to a bigger plan.
-  await page.goto("/app/organisation/equipe?inviter=1");
   if (isMobile) {
     // On a phone, the team of Compte (Modèle B recruteur M8): the sheet says no place is left.
+    await page.goto("/app/hire/compte/equipe");
     await page
       .getByRole("button", { name: "Inviter un collègue" })
       .filter({ visible: true })
@@ -287,8 +292,12 @@ test("abonnement, formules RH, rapports en PDF, paramètres et journal des consu
     ).toBeVisible();
     await page.keyboard.press("Escape");
   } else {
+    // Équipe (étape 3, A2): the invitation dialog says the only seat is taken.
+    await page.goto("/app/organisation/equipe?inviter=1");
     await expect(
-      page.getByRole("dialog", { name: "Inviter dans l'équipe" }).getByText("Plus de siège libre."),
+      page
+        .getByRole("dialog", { name: "Inviter un membre" })
+        .getByText(/La seule place .* est prise/),
     ).toBeVisible();
   }
   await noOverflow(page, "équipe pleine");

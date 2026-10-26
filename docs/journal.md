@@ -4410,3 +4410,21 @@ présentation, bannière, logo, état de la vérification, formule et invitation
   un manager renvoyé, le téléphone) et `tests/db/admin-entreprise-inscription.test.ts`
   (organisation seule, places de la formule, vérification).
 - Captures à 1440 × 900 et 1024 × 900 : `/mnt/project-files/captures/etape-3/a1/`.
+
+### Étape 3 · A2, Équipe (26 octobre 2026)
+
+Écran Équipe de l'administrateur (`/app/organisation/equipe`), captures 076 à 078 du Modèle B :
+- **Membres et rôles** : une carte par membre (rôle, droits, tâches terminées), le rôle à changer, six droits par membre dans la limite du rôle et de `org.permissions.level`, les tâches du membre, « Retirer de l'équipe » ;
+- **Tâches** : tableau filtrable (Toutes, En cours, En retard, Terminées), « Fiche » et « Relancer » ;
+- **Invitations et demandes** : demandes de rattachement, personnes qui indiquent travailler dans l'entreprise (« Confirmer » ou « Ne travaille pas ici »), invitations envoyées (« Relancer », « Annuler ») et places restantes ;
+- « Inviter un membre » et « Attribuer une tâche » en fenêtres ; « Mes tâches » (`/app/hire/taches`) pour le membre.
+
+Plomberie : partie ENTREPRISE de la barre latérale (propriétaire et administrateurs), espace recruteur sur ordinateur toujours sombre, « À ouvrir sur un ordinateur » pour `/app/organisation/*` sur téléphone, droits appliqués aux gestes du recruteur (`requireHire(…, droit)`). Migration additive `team_rights_tasks_declared` (`Membership.rights`, `OrgTask`, `OrgDeclaredMember`). Données de démonstration : `prisma/seed/entreprise.ts` (Baobab Fintech, entreprise fictive). Choix : `docs/decisions/2026-10-26-etape-3-a2-equipe.md`.
+
+| Capture | Écran |
+|---|---|
+| 076 | Membres et rôles (`076-equipe`), fenêtre « Attribuer une tâche » (`076b-attribuer`) |
+| 077 | Tâches (`077-equipe-taches`), « Mes tâches » du membre (`077b-mes-taches`) |
+| 078 | Invitations et demandes (`078-equipe-invitations`) |
+
+Captures 1440 et 1024 : `captures/etape-3/a2/` des fichiers du projet. Tests : `tests/db/entreprise-equipe.test.ts` (droits, isolation, tâches, places, membres déclarés), `tests/e2e/web-admin-equipe.spec.ts` (chaque bouton, droit retiré, manager refusé, téléphone). Mis à jour : `web-recruteur-3`, `mobile-recruteur-gerer`, `hire` (la page entreprise ne se modifie plus sur téléphone).
