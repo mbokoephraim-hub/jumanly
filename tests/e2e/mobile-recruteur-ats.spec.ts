@@ -244,6 +244,22 @@ test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, me
   // may already have done it: then « Relancé » shows).
   await page.goto("/app/hire/candidats?vue=propositions");
   const proposals = main(page);
+  if (phone) {
+    // Modèle B recruteur (M6): Talents › Propositions; « Relancer » goes once reminded.
+    await expect(page).toHaveURL(/onglet=propositions/);
+    const again = proposals.getByRole("button", { name: "Relancer", exact: true });
+    await expect(proposals.getByRole("link", { name: /^Propositions/ })).toBeVisible();
+    if (await again.count()) {
+      await again.first().click();
+      await expect(page).toHaveURL(/onglet=propositions&(ok=relance|erreur=other)/);
+    }
+    await expect(async () => {
+      await page.reload();
+      await expect(again).toHaveCount(0, { timeout: 3_000 });
+    }).toPass({ timeout: 30_000 });
+    await noOverflow(page, "propositions");
+    return;
+  }
   const remind = proposals.getByRole("button", { name: /^Relancer / });
   // The list first (« Relancer » or « Relancé »): counting before it shows would skip the reminder.
   await expect(remind.or(proposals.getByText("Relancé", { exact: true })).first()).toBeVisible();

@@ -96,7 +96,9 @@ test("conversation : brouillon d'Orbi relu puis envoyé, modèles, liste des mes
   });
   await expect(templates).toBeVisible();
   await expectAccessible(page);
-  await templates.getByRole("button", { name: "Fermer" }).click();
+  // The phone sheet closes from its veil or « Échap »; the computer's dialog has « Fermer ».
+  if (isMobile) await page.keyboard.press("Escape");
+  else await templates.getByRole("button", { name: "Fermer" }).click();
   await expect(templates).toBeHidden();
   const conversation = new URL(page.url()).pathname;
 
