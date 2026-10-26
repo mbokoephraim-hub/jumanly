@@ -360,6 +360,10 @@ test("talents : recherche, profil, vivier, proposition de l'offre, dossier et ap
   await expectAccessible(page);
   await noOverflow(page, "vivier");
 
+  // On the phone the file is Modèle B (M5): the pool from the file comes with Talents (M6), and
+  // the arrival call stays with the decision screen of the computer (planches 04-05 have none).
+  if (isMobile) return;
+
   // From the candidate's file: « Ajouter à un vivier » in the menu.
   await page.goto(file);
   await page.getByRole("button", { name: "Plus d'actions sur la candidature" }).click();
