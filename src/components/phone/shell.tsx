@@ -29,7 +29,7 @@ import { ViewSync } from "./view-sync";
 
 /**
  * The talent space on a phone (Modèle B, docs/modele-b): dark only, the five tabs kept mounted
- * under the pages, the bottom bar of icons, Orbi floating on each tab, the logo alone for 1.2 s
+ * under the pages, the pill menu (docs/fil-menu-publication), Orbi floating on each tab, the logo alone for 1.2 s
  * while everything loads behind it (brief § 3).
  */
 export async function PhoneShell({
@@ -44,8 +44,8 @@ export async function PhoneShell({
   reduceMotion: boolean;
   /** The talent's interface, or the recruiter's (docs/modele-b-recruteur, lot M1). */
   set?: TabSetName;
-  /** The recruiter's bar: new applications on Candidatures, unread conversations on Messages. */
-  badges?: { candidatures: number; messages: number };
+  /** Counts on the menu: unread conversations on Chat, new applications on Candidatures. */
+  badges?: { candidatures?: number; messages: number };
   /** The tabs already drawn for the phone, kept mounted (each lot adds its own). */
   tabs: Partial<Record<PhoneTab, ReactNode>>;
   children: ReactNode;
@@ -73,13 +73,21 @@ export async function PhoneShell({
       questions: [1, 2, 3, 4].map((n) => t(`orbi.${tab}.q${n}` as "orbi.fil.q1")),
     };
   };
-  const navLabel = (tab: PhoneTab) => {
+  // The menu's names (docs/fil-menu-publication § 1): Hub and Chat in the pill; the pages keep
+  // their own titles.
+  const navName = (tab: PhoneTab) => {
     if (!recruiter) return t(`nav.${tab}` as "nav.fil");
+    if (tab === "messages") return tRh("nav.chat");
+    return tRh(`nav.${tab as RecruiterTab}`);
+  };
+  const navLabel = (tab: PhoneTab) => {
     if (tab === "candidatures" && badges?.candidatures)
       return tRh("nav.candidaturesNew", { count: badges.candidatures });
     if (tab === "messages" && badges?.messages)
-      return tRh("nav.messagesUnread", { count: badges.messages });
-    return tRh(`nav.${tab as RecruiterTab}`);
+      return recruiter
+        ? tRh("nav.messagesUnread", { count: badges.messages })
+        : t("nav.messagesUnread", { count: badges.messages });
+    return navName(tab);
   };
   const orbi: OrbiTexts = {
     open: t("orbi.open"),
@@ -158,13 +166,9 @@ export async function PhoneShell({
         aria={t("nav.aria")}
         set={set}
         labels={Object.fromEntries(tabsOf(set).map((tab) => [tab, navLabel(tab)]))}
+        names={Object.fromEntries(tabsOf(set).map((tab) => [tab, navName(tab)]))}
         badges={
-          badges
-            ? {
-                candidatures: { count: badges.candidatures },
-                messages: { dot: badges.messages > 0 },
-              }
-            : undefined
+          badges ? { candidatures: badges.candidatures, messages: badges.messages } : undefined
         }
       />
       <Suspense fallback={null}>

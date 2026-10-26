@@ -33,25 +33,34 @@ test.describe("Modèle B · fondations au téléphone", () => {
     await expect(page.locator("#nb-ouverture")).toBeVisible();
     await expect(page.locator("#nb-ouverture")).toHaveCount(0, { timeout: 5000 });
 
-    // Five tabs, icons only (their names are for screen readers), the active one marked.
+    // The pill menu (docs/fil-menu-publication § 1): five tabs, the active one a Lime pill with
+    // its name, the others round icons.
     const nav = page.getByRole("navigation", { name: "Navigation principale" });
     const tabs = nav.getByRole("link");
     await expect(tabs).toHaveCount(5);
-    for (const name of ["Fil", "Explorer", "Carrière", "Formation", "Messages"]) {
+    for (const name of ["Fil", "Explorer", "Carrière", "Hub", /^Chat/]) {
       await expect(nav.getByRole("link", { name, exact: true })).toBeVisible();
     }
-    expect((await nav.innerText()).trim()).toBe("");
     await expect(nav.getByRole("link", { name: "Fil", exact: true })).toHaveAttribute(
       "aria-current",
       "page",
+    );
+    await expect(nav.locator('[aria-current="page"] .nb-nav-nom')).toHaveText("Fil");
+    await expect(nav.locator('[aria-current="page"]')).toHaveCSS(
+      "background-color",
+      "rgb(166, 242, 107)",
+    );
+    await expect(nav.getByRole("link", { name: "Explorer", exact: true })).toHaveCSS(
+      "background-color",
+      "rgb(32, 63, 66)",
     );
 
     // No empty click: each tab opens its screen.
     for (const [name, path] of [
       ["Explorer", "/app/jobs"],
       ["Carrière", "/app/career/cv"],
-      ["Formation", "/app/learn"],
-      ["Messages", "/app/messages"],
+      ["Hub", "/app/learn"],
+      [/^Chat/, "/app/messages"],
       ["Fil", "/app"],
     ] as const) {
       await nav.getByRole("link", { name, exact: true }).click();

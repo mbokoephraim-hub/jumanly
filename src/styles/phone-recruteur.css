@@ -2,35 +2,6 @@
    Les fondations (couleurs, couches, transitions, feuilles, recherche) sont celles du talent
    (phone.css) ; ce fichier ajoute ce qui est propre au recruteur. */
 
-/* ─── Barre du bas : compteur lime (Candidatures) et point lime (Messages) ─── */
-.nb-nav .nb-nav-compte {
-  position: absolute;
-  top: 4px;
-  left: 50%;
-  margin-left: 6px;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  border-radius: 8px;
-  background: var(--nb-lime);
-  color: var(--nb-nuit);
-  font-size: 9.5px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.nb-nav .nb-nav-point {
-  position: absolute;
-  top: 6px;
-  left: 50%;
-  margin-left: 7px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--nb-lime);
-}
-
 /* ─── En-tête d'un onglet (planches Recruteur-fil, -offres, -candidatures) ─── */
 .nb-rh-tete {
   padding: var(--nb-haut) 20px 0;

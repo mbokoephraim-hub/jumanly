@@ -7938,7 +7938,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 
 ### Modèle B · Fondations de l'espace talent au téléphone
 
-*Coque du Modèle B (docs/modele-b, lot B1) : barre du bas en icônes seules, Orbi flottant et sa feuille, recherche en deux temps, retours.*
+*Coque du Modèle B (docs/modele-b, lot B1) : menu en pilule (docs/fil-menu-publication, § 1 : Hub et Chat remplacent Formation et Messages dans le menu), Orbi flottant et sa feuille, recherche en deux temps, retours.*
 
 | Clé | Texte |
 |---|---|
@@ -7946,8 +7946,9 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phone.nav.fil` | Fil |
 | `phone.nav.explorer` | Explorer |
 | `phone.nav.carriere` | Carrière |
-| `phone.nav.formation` | Formation |
-| `phone.nav.messages` | Messages |
+| `phone.nav.formation` | Hub |
+| `phone.nav.messages` | Chat |
+| `phone.nav.messagesUnread` | Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}} |
 | `phone.back` | Retour |
 | `phone.close` | Fermer |
 | `phone.cancel` | Annuler |
@@ -13921,7 +13922,8 @@ Conventions :
 | `phoneRh.nav.talents` | Talents |
 | `phoneRh.nav.messages` | Messages |
 | `phoneRh.nav.candidaturesNew` | Candidatures, {count, plural, one {# nouvelle} other {# nouvelles}} |
-| `phoneRh.nav.messagesUnread` | Messages, {count, plural, one {# conversation non lue} other {# conversations non lues}} |
+| `phoneRh.nav.chat` | Chat |
+| `phoneRh.nav.messagesUnread` | Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}} |
 | `phoneRh.head.account` | Mon compte |
 | `phoneRh.head.notifications` | {count, plural, =0 {Notifications} one {Notifications, # nouvelle} other {Notifications, # nouvelles}} |
 | `phoneRh.head.newOffer` | Publier une offre |

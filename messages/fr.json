@@ -9633,8 +9633,9 @@
       "fil": "Fil",
       "explorer": "Explorer",
       "carriere": "Carrière",
-      "formation": "Formation",
-      "messages": "Messages"
+      "formation": "Hub",
+      "messages": "Chat",
+      "messagesUnread": "Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}}"
     },
     "back": "Retour",
     "close": "Fermer",
@@ -16944,7 +16945,8 @@
       "talents": "Talents",
       "messages": "Messages",
       "candidaturesNew": "Candidatures, {count, plural, one {# nouvelle} other {# nouvelles}}",
-      "messagesUnread": "Messages, {count, plural, one {# conversation non lue} other {# conversations non lues}}"
+      "chat": "Chat",
+      "messagesUnread": "Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}}"
     },
     "head": {
       "account": "Mon compte",
