@@ -4113,3 +4113,24 @@ Entreprises » comme pour un talent. La fin de liste mène à Talents.
   les offres, offre d'une autre organisation ou non publiée refusée, événement passé refusé,
   recherche sans personne bloquée), `tests/e2e/modele-b-recruteur-fil.spec.ts`.
 - Choix notés dans `docs/decisions/2026-10-22-modele-b-recruteur-fil.md`. Aucune migration.
+
+## Modèle B recruteur mobile · M4, Offres (22 octobre 2026)
+
+Section 03 des captures (041 à 056). Au téléphone, l'onglet Offres (`/app/hire/offres`) montre la
+ligne « N offres en cours · X candidatures · Y nouvelles », « Toutes · En cours · Terminées » et une
+carte par offre (statut, nouvelles, vues, jours en ligne, candidatures).
+
+- Détail d'une offre : statut, dates, quatre chiffres, la ligne d'Orbi avec « Pourquoi ? », les
+  candidatures par jour sur 7 ou 30 jours, les sources, « Voir les N candidats ».
+- « ··· » : Modifier, Mettre en pause ou Remettre en ligne, Partager (lien, Fil, WhatsApp),
+  Dupliquer, Rouvrir, Clôturer (confirmation) puis « Offre clôturée, rapport prêt » (PDF).
+- « Nouvelle offre » en quatre étapes, puis « Votre offre est en ligne » (ou en vérification).
+- Code : `src/components/phone/recruteur/offres.tsx`, `offre-actions.tsx`, `publier.tsx`,
+  `src/server/actions/phone-rh-offres.ts` ; branches téléphone des pages `/app/hire/offres`,
+  `/app/hire/offres/[id]`, `/nouvelle` et `/[id]/modifier`. Ordinateur et tablette inchangés.
+- Textes : partie « Modèle B recruteur · Offres au téléphone » (`phoneRhOffres`).
+- Tests : `tests/db/modele-b-recruteur-offres.test.ts` (offres d'une autre organisation jamais
+  listées, ouvertes, modifiées, publiées, clôturées ni classées ; brouillon dans l'organisation),
+  `tests/e2e/modele-b-recruteur-offres.spec.ts` ; `tests/e2e/offer-flow.ts` publie aussi par les
+  étapes du téléphone.
+- Choix notés dans `docs/decisions/2026-10-22-modele-b-recruteur-offres.md`. Aucune migration.

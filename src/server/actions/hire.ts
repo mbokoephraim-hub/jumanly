@@ -85,6 +85,9 @@ export async function closeJobAction(formData: FormData) {
   await guarded(() => closeJob(db, ctx, jobId), "/app/hire/offres");
   const job = await db.job.findUniqueOrThrow({ where: { id: jobId }, select: { slug: true } });
   refreshPublicJobs(job.slug);
+  // The recruiter's phone comes back to the offer, with its report (Modèle B recruteur, M4).
+  const back = String(formData.get("back") ?? "");
+  if (back === `/app/hire/offres/${jobId}?rapport=1`) redirect(back);
   redirect("/app/hire/offres?onglet=cloturees&ok=fermee");
 }
 

@@ -17481,6 +17481,244 @@
       "submit": "Publier"
     }
   },
+  "phoneRhOffres": {
+    "list": {
+      "line": "{live, plural, =0 {Aucune offre en cours} one {# offre en cours} other {# offres en cours}} · {applications, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} · {unseen, plural, =0 {aucune nouvelle} one {# nouvelle} other {# nouvelles}}",
+      "filters": "Filtrer les offres",
+      "filter": {
+        "toutes": "Toutes",
+        "encours": "En cours",
+        "terminees": "Terminées"
+      },
+      "empty": {
+        "toutes": "Aucune offre pour l'instant. Le « + » en haut en crée une en quatre étapes.",
+        "encours": "Aucune offre en ligne en ce moment.",
+        "terminees": "Aucune offre terminée."
+      },
+      "new": "{count, plural, one {# nouvelle} other {# nouvelles}}",
+      "online": "{count, plural, =0 {En ligne depuis aujourd'hui} one {En ligne depuis # jour} other {En ligne depuis # jours}}",
+      "ended": "Candidatures fermées",
+      "notPublished": "Pas encore publiée"
+    },
+    "status": {
+      "published": "En cours",
+      "pending_review": "En vérification",
+      "draft": "Brouillon",
+      "rejected": "Refusée",
+      "changes_requested": "À corriger",
+      "paused": "En pause",
+      "closed": "Terminée",
+      "archived": "Archivée",
+      "expired": "Terminée"
+    },
+    "contract": {
+      "cdi": "CDI",
+      "cdd": "CDD",
+      "stage": "Stage",
+      "mission": "Mission",
+      "freelance": "Freelance",
+      "alternance": "Alternance",
+      "volontariat": "Volontariat"
+    },
+    "remote": {
+      "onsite": "Sur place",
+      "hybrid": "Hybride",
+      "remote": "Télétravail"
+    },
+    "figures": {
+      "views": "{count, plural, one {vue} other {vues}}",
+      "days": "{count, plural, one {jour en ligne} other {jours en ligne}}",
+      "applications": "{count, plural, one {candidature} other {candidatures}}",
+      "rate": "des vues deviennent candidatures",
+      "unseen": "{count, plural, one {nouvelle à traiter} other {nouvelles à traiter}}"
+    },
+    "detail": {
+      "back": "Offres",
+      "published": "Publiée le {date}",
+      "draft": "Brouillon, pas encore publiée",
+      "online": "{count, plural, =0 {en ligne depuis aujourd'hui} one {en ligne depuis # jour} other {en ligne depuis # jours}}",
+      "left": "{count, plural, one {# jour restant} other {# jours restants}}",
+      "ended": "terminée le {date}",
+      "orbiWaiting": "{count, plural, one {# candidature attend une réponse.} other {# candidatures attendent une réponse.}}",
+      "orbiNone": "Pas encore de candidature. Partager l'offre dans le Fil l'aide à se faire voir.",
+      "orbiDone": "Toutes les candidatures ont été ouvertes.",
+      "why": "Pourquoi ?",
+      "whyText": "Orbi compte les candidatures que personne de l'équipe n'a encore ouvertes. Il ne classe pas les personnes à votre place : c'est vous qui décidez.",
+      "chart": "Candidatures reçues",
+      "period": "Période",
+      "days": "{count} jours",
+      "chartLabel": "{count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} sur les {days} derniers jours",
+      "added": "+{count}",
+      "sources": "D'où viennent les candidats",
+      "see": "{count, plural, one {Voir le candidat} other {Voir les # candidats}}"
+    },
+    "source": {
+      "direct": "L'offre sur Jumanly",
+      "invitation": "Vos invitations",
+      "talent_search": "Recherche de talents"
+    },
+    "candidates": {
+      "back": "L'offre",
+      "line": "{count, plural, =0 {Aucun candidat} one {# candidat} other {# candidats}} · {unseen, plural, =0 {aucun nouveau} one {# nouveau} other {# nouveaux}}",
+      "rule": "Classés par correspondance avec l'offre. Le score ne tient compte ni du nom, ni de l'âge, ni de la photo. Vous décidez.",
+      "ruleNoScore": "Classés du plus récent au plus ancien. Vous décidez.",
+      "sort": "Trier dans Candidatures"
+    },
+    "published": {
+      "title": "Votre offre est en ligne",
+      "text": "« {title} » apparaît dans Explorer. Orbi la propose aux talents qui correspondent.",
+      "reviewTitle": "Votre offre part en vérification",
+      "reviewText": "« {title} » sera en ligne dès que Jumanly aura vérifié votre entreprise. Vous recevrez une notification.",
+      "copy": "Copier le lien",
+      "copied": "Lien copié",
+      "offers": "Voir mes offres",
+      "see": "Voir l'offre",
+      "toFil": "Partager dans le Fil"
+    },
+    "menu": {
+      "open": "Actions de l'offre",
+      "edit": "Modifier l'offre",
+      "editHint": "Reprend les étapes, déjà remplies",
+      "pause": "Mettre en pause",
+      "pauseHint": "Elle disparaît d'Explorer, rien n'est perdu",
+      "resume": "Remettre en ligne",
+      "resumeHint": "Elle revient dans Explorer",
+      "share": "Partager",
+      "shareHint": "Lien, Fil, WhatsApp",
+      "duplicate": "Dupliquer",
+      "duplicateHint": "Une nouvelle offre à partir de celle-ci",
+      "reopen": "Rouvrir l'offre",
+      "reopenHint": "Elle accepte de nouveau les candidatures",
+      "report": "Rapport de l'offre",
+      "reportHint": "Statistiques et sources, en PDF",
+      "close": "Clôturer l'offre",
+      "closeHint": "Fin des candidatures, rapport PDF",
+      "shareTitle": "Partager l'offre",
+      "copy": "Copier le lien",
+      "copied": "Lien copié",
+      "toFil": "Publier dans le Fil",
+      "toFilHint": "Au nom de {org}",
+      "whatsapp": "WhatsApp",
+      "whatsappHint": "Envoyer à un contact",
+      "closeTitle": "Clôturer « {title} » ?",
+      "closeText": "{count, plural, =0 {L'offre ne reçoit plus de candidatures, et le rapport PDF se prépare.} one {Le candidat reçoit un message. Sa candidature reste consultable, et le rapport PDF se prépare.} other {Les # candidats reçoivent un message. Les candidatures restent consultables, et le rapport PDF se prépare.}}",
+      "closeConfirm": "Clôturer l'offre",
+      "closeKeep": "Garder en ligne",
+      "reportTitle": "Offre clôturée, rapport prêt",
+      "reportText": "{views, plural, one {# vue} other {# vues}} · {applications, plural, one {# candidature} other {# candidatures}} · {hired, plural, one {# retenu} other {# retenus}}. Le PDF reprend les statistiques et les sources de la période de l'offre.",
+      "reportDownload": "Télécharger le PDF",
+      "reportLocked": "Le rapport PDF fait partie des outils de recrutement avancés. L'administrateur de l'entreprise peut les activer.",
+      "reportLater": "Plus tard"
+    },
+    "publish": {
+      "title": "Nouvelle offre",
+      "editTitle": "Modifier l'offre",
+      "back": "Retour",
+      "draft": "Brouillon",
+      "progress": "Étape {step} sur 4",
+      "continue": "Continuer",
+      "publish": "Publier l'offre",
+      "review": "Envoyer en vérification",
+      "steps": {
+        "1": {
+          "kicker": "Étape 1 sur 4 · Le poste",
+          "title": "Quel poste recrutez-vous ?"
+        },
+        "2": {
+          "kicker": "Étape 2 sur 4 · Les détails",
+          "title": "Les détails"
+        },
+        "3": {
+          "kicker": "Étape 3 sur 4 · La présélection",
+          "title": "La présélection"
+        },
+        "4": {
+          "kicker": "Étape 4 sur 4 · L'aperçu",
+          "title": "Ce que verront les talents"
+        }
+      },
+      "fields": {
+        "title": "Intitulé du poste",
+        "titlePlaceholder": "Par exemple : Analyste crédit junior",
+        "description": "Description du poste",
+        "descriptionPlaceholder": "En quelques phrases : l'équipe, les missions, ce que la personne apprendra.",
+        "skills": "Compétences attendues",
+        "skillPlaceholder": "Par exemple : Excel",
+        "addSkill": "Ajouter une compétence",
+        "removeSkill": "Retirer {skill}",
+        "add": "Ajouter",
+        "city": "Ville",
+        "otherCity": "Autre ville",
+        "country": "Pays du poste",
+        "remote": "Mode de travail",
+        "contract": "Contrat",
+        "salary": "Salaire",
+        "salaryShow": "Afficher le salaire",
+        "salaryHidden": "Le salaire ne s'affiche pas",
+        "salaryMin": "Minimum (USD par mois)",
+        "salaryMax": "Maximum (USD par mois)",
+        "salaryHint": "Les offres avec salaire reçoivent plus de candidatures.",
+        "questions": "{count, plural, =0 {Questions aux candidats} one {Questions aux candidats · # choisie} other {Questions aux candidats · # choisies}}",
+        "question": "Votre question",
+        "questionPlaceholder": "Ajouter votre question",
+        "documents": "Documents demandés",
+        "screeningNote": "Aucune réponse n'écarte un candidat : elles vous aident à trier, vous décidez."
+      },
+      "errors": {
+        "title": "Indiquez l'intitulé du poste (3 caractères au moins).",
+        "description": "Décrivez le poste en quelques phrases.",
+        "skills": "Ajoutez au moins une compétence attendue.",
+        "unknownSkills": "Ces compétences ne sont pas dans le référentiel : {skills}. Choisissez un nom proche.",
+        "forbidden": "Ce texte ne peut pas être publié. Reformulez-le.",
+        "city": "Choisissez la ville du poste.",
+        "country": "Indiquez le pays du poste.",
+        "salary": "Indiquez un minimum et un maximum, le maximum au moins égal au minimum.",
+        "failed": "L'offre n'a pas pu être enregistrée. Réessayez.",
+        "limit": "Vous avez atteint le nombre d'offres en ligne de votre formule. Mettez une offre en pause ou clôturez-en une.",
+        "question": "Écrivez une question de 5 caractères au moins.",
+        "questionsMax": "5 questions au plus."
+      },
+      "orbi": {
+        "label": "Orbi peut proposer un texte",
+        "proposed": "Proposé par Orbi · à relire",
+        "propose": "Proposer un texte",
+        "again": "Proposer un autre texte",
+        "writing": "Orbi écrit…",
+        "failed": "Orbi n'a pas pu écrire le texte. Écrivez-le vous-même.",
+        "consent": "Activez l'aide d'Orbi dans les réglages pour qu'il propose un texte.",
+        "quota": "Les crédits d'Orbi de ce mois sont utilisés. Écrivez le texte vous-même.",
+        "nothing": "Orbi n'a pas de proposition pour ce poste. Écrivez le texte vous-même."
+      },
+      "contracts": {
+        "cdi": "CDI",
+        "cdd": "CDD",
+        "stage": "Stage",
+        "freelance": "Freelance"
+      },
+      "remotes": {
+        "onsite": "Sur place",
+        "hybrid": "Hybride",
+        "remote": "Télétravail"
+      },
+      "documents": {
+        "cv": "CV",
+        "letter": "Lettre",
+        "diploma": "Diplôme",
+        "portfolio": "Portfolio"
+      },
+      "salaryLine": "{min} à {max} USD par mois",
+      "previewLabel": "Aperçu de l'offre",
+      "previewLine": "{count, plural, =0 {Aucune question de présélection} one {# question de présélection} other {# questions de présélection}} · candidater reste gratuit",
+      "applyFree": "Candidater gratuitement",
+      "suggestions": {
+        "skills": "Avez-vous déjà occupé un poste semblable ?",
+        "start": "Quand pouvez-vous commencer ?",
+        "city": "Êtes-vous à {city} ou prêt·e à y venir ?",
+        "move": "Êtes-vous prêt·e à venir sur le lieu du poste ?",
+        "salary": "Quel salaire attendez-vous ?"
+      }
+    }
+  },
   "pricing": {
     "seo": {
       "title": "Tarifs et forfaits · Jumanly",

@@ -163,10 +163,20 @@ test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, me
 
   // The ranking already read by Orbi (seed), with its rule.
   await page.goto("/app/hire/offres");
-  const card = main(page).getByRole("link", {
-    name: /Analyser les candidatures de « Analyste de données junior \(démo\) »/,
-  });
-  await card.first().click();
+  if (test.info().project.name === "mobile") {
+    // On a phone, the offer's card opens its page (Modèle B recruteur, M4); the ATS keeps its
+    // address until Candidatures is redone (M5).
+    const href = await main(page)
+      .getByRole("link", { name: /Analyste de données junior \(démo\)/ })
+      .first()
+      .getAttribute("href");
+    await page.goto(`${href}/ats`);
+  } else {
+    const card = main(page).getByRole("link", {
+      name: /Analyser les candidatures de « Analyste de données junior \(démo\) »/,
+    });
+    await card.first().click();
+  }
   await expect(page).toHaveURL(/\/ats$/);
   const ats = main(page);
   await expect(ats).toContainText("Recommandation d'Orbi");

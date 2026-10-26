@@ -285,7 +285,7 @@ test("vérification de l'entreprise et page publique", async ({
 });
 
 // The other E8 screens, accessible and reachable for the group owner.
-test("les écrans Hire avancés sont accessibles", async ({ page }) => {
+test("les écrans Hire avancés sont accessibles", async ({ page, isMobile }) => {
   test.setTimeout(180_000);
   await logIn(page, group.owner);
   for (const path of [
@@ -311,10 +311,20 @@ test("les écrans Hire avancés sont accessibles", async ({ page }) => {
   await expect(page).toHaveURL(/\/app\/hire\/offres\/[^/?]+$/);
   await expectAccessible(page);
   // Lot 3: the assignment and the grid live on the offer, the candidates have their own screen.
-  await expect(page.locator("#attribution")).toBeVisible();
-  await expect(page.locator("#grille")).toBeVisible();
-  await page.getByRole("link", { name: /^Voir (les|la) .*candidature/ }).click();
-  await expect(page).toHaveURL(/\/app\/hire\/candidats\?offre=/);
+  // On a phone (Modèle B recruteur, M4), the offer shows its figures and « Voir les N candidats ».
+  if (!isMobile) {
+    await expect(page.locator("#attribution")).toBeVisible();
+    await expect(page.locator("#grille")).toBeVisible();
+  }
+  await page
+    .getByRole("link", { name: /^Voir (les|la|le) .*candidat/ })
+    .filter({ visible: true })
+    .first()
+    .click();
+  // On a phone the candidates of the offer open on the offer itself (planche 040).
+  await expect(page).toHaveURL(
+    isMobile ? /\/app\/hire\/offres\/[^/?]+\?vue=candidats/ : /\/app\/hire\/candidats\?offre=/,
+  );
   await expectAccessible(page);
 });
 
