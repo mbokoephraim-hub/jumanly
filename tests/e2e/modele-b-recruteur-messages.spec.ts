@@ -185,8 +185,18 @@ test.describe("Modèle B recruteur · Messages, notifications et Orbi au télép
       attach.getByRole("link", { name: /Une invitation à un entretien/ }),
     ).toHaveAttribute("href", /\/entretien/);
     await capture(page, "128-conversation-joindre");
-    await attach.getByRole("button", { name: /Une demande de document/ }).click();
     const documentSheet = sheet(page, "Demander un document");
+    // The sheet slides in and the conversation refreshes under it: on a slow machine the button
+    // can move or be redrawn while Playwright clicks, so the click is tried again until the next
+    // sheet opens.
+    await expect(async () => {
+      if (!(await documentSheet.isVisible())) {
+        await attach
+          .getByRole("button", { name: /Une demande de document/ })
+          .click({ timeout: 5_000 });
+      }
+      await expect(documentSheet).toBeVisible({ timeout: 2_000 });
+    }).toPass({ timeout: 30_000 });
     await documentSheet.getByLabel("Document demandé").fill("Attestation fictive");
     const due = new Date(Date.now() + 7 * 86_400_000).toISOString().slice(0, 10);
     await documentSheet.getByLabel("À envoyer avant le").fill(due);
@@ -324,9 +334,14 @@ test.describe("Modèle B recruteur · Messages, notifications et Orbi au télép
     await expect(page.getByText(/Personne n'est écarté|ordre d'arrivée/).first()).toBeVisible();
     await page.getByRole("button", { name: "Des talents à proposer pour mes offres ?" }).click();
     await expect(page.getByText(/talents?|recherche de talents/).last()).toBeVisible();
-    await page.getByRole("textbox", { name: "Écrire à Orbi" }).fill("Comment rédiger une offre ?");
-    await page.getByRole("button", { name: "Envoyer" }).click();
-    await expect(seen(page, "Comment rédiger une offre ?")).toBeVisible();
+    // The last answer settles first (the field and « Envoyer » wait for it on a slow machine).
+    const send = page.getByRole("button", { name: "Envoyer", exact: true });
+    await expect(send).toBeEnabled({ timeout: 20_000 });
+    const orbiField = page.getByRole("textbox", { name: "Écrire à Orbi" });
+    await orbiField.fill("Comment rédiger une offre ?");
+    await expect(orbiField).toHaveValue("Comment rédiger une offre ?");
+    await send.click();
+    await expect(seen(page, "Comment rédiger une offre ?")).toBeVisible({ timeout: 10_000 });
     await expect(page.getByText("Orbi recommande, vous décidez.").last()).toBeVisible({
       timeout: 20_000,
     });
