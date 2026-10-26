@@ -176,6 +176,9 @@ test.describe("Modèle B recruteur · Messages, notifications et Orbi au télép
     await capture(page, "126-conversation-orbi");
     await input.fill("Merci Grâce, je vous propose un échange jeudi. (message fictif)");
     await page.getByRole("button", { name: "Envoyer", exact: true }).click();
+    // « Envoyer » leads to the conversation's own address (« #dernier »): when it differs from the
+    // one opened, a new page takes the place of this one, so the sheets wait for it.
+    await expect(page).toHaveURL(new RegExp(`/app/messages/${conversationId}#dernier$`));
     await expect(seen(page, /je vous propose un échange jeudi/)).toBeVisible();
 
     // Joindre: an interview, a document, a file.
@@ -186,17 +189,8 @@ test.describe("Modèle B recruteur · Messages, notifications et Orbi au télép
     ).toHaveAttribute("href", /\/entretien/);
     await capture(page, "128-conversation-joindre");
     const documentSheet = sheet(page, "Demander un document");
-    // The sheet slides in and the conversation refreshes under it: on a slow machine the button
-    // can move or be redrawn while Playwright clicks, so the click is tried again until the next
-    // sheet opens.
-    await expect(async () => {
-      if (!(await documentSheet.isVisible())) {
-        await attach
-          .getByRole("button", { name: /Une demande de document/ })
-          .click({ timeout: 5_000 });
-      }
-      await expect(documentSheet).toBeVisible({ timeout: 2_000 });
-    }).toPass({ timeout: 30_000 });
+    await attach.getByRole("button", { name: /Une demande de document/ }).click();
+    await expect(documentSheet).toBeVisible();
     await documentSheet.getByLabel("Document demandé").fill("Attestation fictive");
     const due = new Date(Date.now() + 7 * 86_400_000).toISOString().slice(0, 10);
     await documentSheet.getByLabel("À envoyer avant le").fill(due);
