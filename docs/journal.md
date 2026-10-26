@@ -4293,3 +4293,41 @@ Sections 08, 09 et 11 des captures (135 à 179, 185 à 192). Au téléphone, l'a
   séparés), `tests/e2e/modele-b-recruteur-compte.spec.ts` (chaque bouton, captures dans
   `captures/etape-2-mobile/m8/`) ; `mobile-recruteur-gerer.spec.ts` suit les nouvelles adresses.
 - Choix notés dans `docs/decisions/2026-10-26-modele-b-recruteur-compte.md`.
+
+## Rapport final · étape 2, recruteur au téléphone (Modèle B, M0 à M8) (26 octobre 2026)
+
+L'espace recruteur du téléphone suit maintenant le Modèle B (`docs/modele-b-recruteur/`, sections
+01 à 11 de `mobile/captures/INDEX.md`). La tablette, l'ordinateur et l'administration d'entreprise
+n'ont pas changé. Aucune donnée n'a été effacée et aucune migration n'a été ajoutée.
+
+| Lot | Contenu | PR |
+|---|---|---|
+| M0 | Diagnostic des écrans recruteur au téléphone | #146 |
+| M1 | Coque : barre à cinq, Orbi, avatar, recherche | #147 |
+| M2 | Ouverture, inscription et profil recruteur | #148 |
+| M3 | Fil du recruteur | #149 |
+| M4 | Offres | #150 |
+| M5 | Candidatures (pipeline, fiche, décisions, entretiens) | #152 |
+| M6 | Talents (découverte, recherche, viviers) | #154 |
+| M7 | Messages, notifications et Orbi | PR du lot M7 |
+| M8 | Compte, entreprise, changer de profil, nettoyage | PR du lot M8 |
+
+- **Captures** (390 × 844, prises par les e2e) : dossier partagé `captures/etape-2-mobile/`, un
+  sous-dossier par lot (`m1` à `m8`). Les numéros des fichiers sont ceux de l'INDEX des planches.
+- **Règles d'or vérifiées par les tests en base** : chaque lecture Hire est filtrée par
+  l'organisation active ; chaque consultation de profil est journalisée ; candidater reste gratuit ;
+  les droits sont testés par clés ; le profil discret n'est jamais montré à sa propre entreprise ;
+  le logo de l'entreprise n'apparaît qu'après l'accord du rattachement ; la formule est en lecture
+  seule pour le recruteur ; aucun numéro de téléphone de Jumanly.
+- **Ancien design téléphone supprimé** : barre du bas de l'ancienne coque, `hidesRecruiterTabBar`,
+  partie téléphone de l'ancien Compte RH et textes orphelins (M8). Les anciennes adresses mènent
+  aux écrans Modèle B.
+- **Sécurité** : Next.js est passé en 16.4.2 pendant l'étape (M3), pour corriger des failles
+  signalées par `pnpm audit`.
+- **Non construit**, faute de modèle de données ou d'événement (détails dans `docs/decisions/`) :
+  - la confirmation des « nouveaux membres qui indiquent travailler chez … » (planche 191), où les
+    demandes de rattachement s'affichent à la place ;
+  - la notification « Profil à fort potentiel » ;
+  - la création et la modification des modèles de messages, qui restent sur ordinateur.
+- **À valider par Ephraïm** : l'ensemble de l'étape 2 au téléphone, avant l'étape 3 (entreprise et
+  administration recruteur, web seulement).
