@@ -16,7 +16,9 @@ test("espace recruteur : barre latérale, organisation active, Compte RH et prof
   await page.goto("/app/hire");
 
   // On a computer, the sidebar of Modèle B (docs/modele-b-recruteur/web, lot N1).
-  const bar = page.locator(".rb-side").getByRole("navigation", { name: "Navigation du recrutement" });
+  const bar = page
+    .locator(".rb-side")
+    .getByRole("navigation", { name: "Navigation du recrutement" });
   for (const tab of ["Accueil", "Offres", "Candidatures", "Messages"])
     await expect(bar.getByRole("link", { name: new RegExp(`^${tab}`) })).toBeVisible();
   await expect(bar.getByRole("link", { name: /^Accueil/ })).toHaveAttribute("aria-current", "page");
