@@ -321,7 +321,10 @@ test("les écrans Hire avancés sont accessibles", async ({ page, isMobile }) =>
     .filter({ visible: true })
     .first()
     .click();
-  await expect(page).toHaveURL(/\/app\/hire\/candidats\?offre=/);
+  // On a phone the candidates of the offer open on the offer itself (planche 040).
+  await expect(page).toHaveURL(
+    isMobile ? /\/app\/hire\/offres\/[^/?]+\?vue=candidats/ : /\/app\/hire\/candidats\?offre=/,
+  );
   await expectAccessible(page);
 });
 
