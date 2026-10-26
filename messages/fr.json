@@ -24004,7 +24004,11 @@
           "job": "Offre signalée",
           "message": "Message signalé",
           "conversation": "Conversation signalée",
-          "post": "Publication signalée"
+          "post": "Publication signalée",
+          "question": "Question signalée",
+          "profile": "Profil signalé",
+          "organization": "Organisation signalée",
+          "aiSuggestion": "Suggestion IA signalée"
         },
         "post": "Publication du Fil",
         "postReply": "Réponse dans le Fil",
