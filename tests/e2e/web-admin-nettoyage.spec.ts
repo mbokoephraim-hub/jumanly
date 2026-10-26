@@ -15,7 +15,6 @@ import { demo, logIn, testEmail } from "./session";
 
 const WIDTH = Number(process.env.CAPTURE_WIDTH ?? 1440);
 const CAPTURE_DIR = process.env.CAPTURE_DIR;
-const OWNER = "recruteur6.ux@jumanly.test";
 const GROUP = "groupe@jumanly.test";
 
 async function shot(page: Page, name: string) {
@@ -47,7 +46,19 @@ test.describe("Étape 3 · nettoyage, sur ordinateur", () => {
     page,
   }) => {
     test.setTimeout(120_000);
-    await logIn(page, OWNER);
+    // A company of its own on Company (the cheapest plan with `reports.export`, which leaves the
+    // teams closed): Baobab Fintech moves to Company Plus in the billing test.
+    const owner = testEmail("a6-structure");
+    execFileSync("pnpm", [
+      "exec",
+      "tsx",
+      "tests/e2e/make-recruiter.ts",
+      owner,
+      `Entreprise fictive A6 ${suffix()}`,
+      "verified",
+      "reports.export",
+    ]);
+    await logIn(page, owner, undefined, "/app/hire");
     await page.goto("/app/organisation/equipe");
     await main(page).getByRole("link", { name: "Équipes et départements" }).click();
     await expect(page).toHaveURL(/\/app\/organisation\/structure$/);
