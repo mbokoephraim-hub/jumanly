@@ -271,6 +271,9 @@ test("talents : recherche, profil, vivier, proposition de l'offre, dossier et ap
   baseURL,
   isMobile,
 }) => {
+  // On the phone Talents is Modèle B (lot M6), tested in modele-b-recruteur-talents.spec.ts; the
+  // computer keeps this design.
+  test.skip(isMobile, "Téléphone : voir modele-b-recruteur-talents.spec.ts.");
   test.setTimeout(300_000);
   await freshRecruiter(page, "rx-talents");
   const { jobId, talent, file } = await offerWithApplicant(page, browser, baseURL, isMobile);

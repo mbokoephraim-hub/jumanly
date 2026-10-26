@@ -52,18 +52,40 @@ test("recherche de talents et mise en relation acceptée", async ({
 
   const recruiter = await newPage(browser, baseURL, isMobile);
   await logIn(recruiter, group.owner);
-  // Lot 4 (planches r2plus TAL, TPROF, CONTACT): the search lives in « Candidats › Talents ».
-  await recruiter.goto(`/app/hire/candidats?vue=talents&lieu=${city}&offre=aucune`);
-  const results = recruiter.locator("main").filter({ visible: true });
-  await expect(results).toContainText("1 profil visible");
-  await expectAccessible(recruiter);
-  await results.getByRole("link", { name: /Consulter le profil de Neema/ }).click();
-  await expect(recruiter.getByRole("heading", { level: 1 })).toContainText("Neema");
-  await recruiter.getByRole("link", { name: "Proposer l'offre" }).click();
-  await expect(recruiter).toHaveURL(/\/proposer/);
-  await expectAccessible(recruiter);
-  await recruiter.getByRole("button", { name: "Envoyer à Neema" }).click();
-  await expect(recruiter.getByText("Proposition envoyée. Le talent a")).toBeVisible();
+  if (isMobile) {
+    // Modèle B recruteur (M6): the search of the tab Talents, by city, then « Proposer une offre ».
+    await recruiter.goto("/app/hire/talents");
+    await recruiter.getByRole("button", { name: "Rechercher" }).first().click();
+    const search = recruiter.getByRole("search");
+    await search.getByRole("radio", { name: "Ville" }).click();
+    await search.getByRole("searchbox").fill(city);
+    await search
+      .getByRole("link", { name: /Neema Fictive/ })
+      .first()
+      .click();
+    const profile = recruiter.locator(".nb-rh-talent").filter({ visible: true });
+    await expect(profile.getByRole("heading", { level: 1 })).toContainText("Neema");
+    await expectAccessible(recruiter);
+    await profile.getByRole("button", { name: "Proposer une offre" }).click();
+    await recruiter
+      .getByRole("dialog", { name: /^Proposer une offre à Neema/ })
+      .getByRole("button", { name: "Envoyer la proposition" })
+      .click();
+    await expect(recruiter.getByText(/Proposition envoyée/).first()).toBeVisible();
+  } else {
+    // Lot 4 (planches r2plus TAL, TPROF, CONTACT): the search lives in « Candidats › Talents ».
+    await recruiter.goto(`/app/hire/candidats?vue=talents&lieu=${city}&offre=aucune`);
+    const results = recruiter.locator("main").filter({ visible: true });
+    await expect(results).toContainText("1 profil visible");
+    await expectAccessible(recruiter);
+    await results.getByRole("link", { name: /Consulter le profil de Neema/ }).click();
+    await expect(recruiter.getByRole("heading", { level: 1 })).toContainText("Neema");
+    await recruiter.getByRole("link", { name: "Proposer l'offre" }).click();
+    await expect(recruiter).toHaveURL(/\/proposer/);
+    await expectAccessible(recruiter);
+    await recruiter.getByRole("button", { name: "Envoyer à Neema" }).click();
+    await expect(recruiter.getByText("Proposition envoyée. Le talent a")).toBeVisible();
+  }
 
   // Messages (planche talent-2 § 5): the request sits above the conversations, opened in a sheet.
   await page.goto("/app/messages");
@@ -330,11 +352,37 @@ test("les écrans Hire avancés sont accessibles", async ({ page, isMobile }) =>
 
 // Lot 4 (planche r2plus VIVIERS): a pool is created from « Mes viviers », then renamed and
 // deleted from its menu.
-test("créer, renommer et supprimer un vivier", async ({ page }) => {
+test("créer, renommer et supprimer un vivier", async ({ page, isMobile }) => {
   test.setTimeout(120_000);
   const name = `Vivier e2e ${Math.random().toString(36).slice(2, 7)}`;
   await logIn(page, group.owner);
   await page.goto("/app/hire/viviers");
+  if (isMobile) {
+    // Modèle B recruteur (M6): the vivier is a tab of Talents, its lists have their options.
+    await expect(page).toHaveURL(/\/app\/hire\/talents\?onglet=vivier/);
+    const tab = page.locator("main").filter({ visible: true });
+    await tab.getByRole("button", { name: "Nouvelle liste" }).click();
+    const create = page.getByRole("dialog", { name: "Nouvelle liste" });
+    await create.getByLabel("Nom de la liste").fill(name);
+    await create.getByRole("button", { name: "Créer la liste" }).click();
+    await expect(page.getByText("Liste créée.").first()).toBeVisible();
+    await tab.getByRole("link", { name: new RegExp(name) }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(name);
+    await page.getByRole("button", { name: "Options de la liste" }).click();
+    const options = page.getByRole("dialog", { name: "Options de la liste" });
+    await options.getByLabel("Nom de la liste").fill(`${name} bis`);
+    await options.getByRole("button", { name: "Enregistrer le nom" }).click();
+    await expect(page.getByText("Liste renommée.").first()).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(`${name} bis`);
+    await page.getByRole("button", { name: "Options de la liste" }).click();
+    await page
+      .getByRole("dialog", { name: "Options de la liste" })
+      .getByRole("button", { name: "Supprimer la liste" })
+      .click();
+    await expect(page.getByText("Liste supprimée.").first()).toBeVisible();
+    await expect(tab.getByRole("link", { name: new RegExp(`${name} bis`) })).toHaveCount(0);
+    return;
+  }
   await page.getByRole("button", { name: "Créer un vivier" }).first().click();
   const create = page.getByRole("dialog", { name: "Créer un vivier" });
   await create.locator("#ri-v-nom").fill(name);

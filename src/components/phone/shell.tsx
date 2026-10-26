@@ -117,6 +117,7 @@ export async function PhoneShell({
     tabs: recruiter
       ? Object.fromEntries(RECRUITER_TABS.map((tab) => [tab, recruiterTabTexts(tab)]))
       : Object.fromEntries(tabsOf("talent").map((tab) => [tab, tabTexts(tab as TalentTab)])),
+    full: recruiter ? tRh("orbi.full") : undefined,
   };
   return (
     <div

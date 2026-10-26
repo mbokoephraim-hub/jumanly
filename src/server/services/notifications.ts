@@ -60,6 +60,10 @@ export const notificationTypes = [
   "jobEnding",
   // Modèle B recruteur M5: a colleague entrusted a file to the member (« Répartir »).
   "candidateAssigned",
+  // Modèle B recruteur M6: a colleague shared a talent's profile (« Partager le profil »).
+  "talentShared",
+  // Modèle B recruteur M7: a colleague wrote in « Équipe » of Messages.
+  "teamMessage",
   // Le Fil (Modèle B, lot B3): answers, names, J'aime, republications and quotes.
   "feedReply",
   "feedMention",
@@ -101,6 +105,7 @@ export const notificationCategories = {
   ],
   messages: [
     "newMessage",
+    "teamMessage",
     "mention",
     "contactRequest",
     "contactAccepted",

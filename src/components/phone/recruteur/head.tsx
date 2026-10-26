@@ -16,7 +16,7 @@ const SCOPES: Record<RecruiterTab, string[]> = {
   fil: ["tout", "publications", "personnes", "entreprises"],
   offres: ["tout", "offres", "entreprises", "personnes"],
   candidatures: ["tout", "nom", "competence", "ville"],
-  talents: ["tout", "personnes", "entreprises"],
+  talents: ["tout", "competence", "metier", "ville"],
   messages: ["tout", "candidats", "personnes"],
 };
 
@@ -107,9 +107,12 @@ export async function RhTab({
   actions,
   className,
   legacy = true,
+  noSearch = false,
   children,
 }: {
   tab: RecruiterTab;
+  /** The page carries its own search field (Messages, planche 120). */
+  noSearch?: boolean;
   subtitle?: ReactNode;
   actions?: ReactNode;
   className?: string;
@@ -129,7 +132,9 @@ export async function RhTab({
     })),
     ...(tab === "candidatures"
       ? { searchIn: t("search.searchBy"), percent: t("search.percent", { score: "{score}" }) }
-      : {}),
+      : tab === "talents"
+        ? { searchIn: t("search.searchBy") }
+        : {}),
   };
   return (
     <RhTabPage
@@ -137,7 +142,7 @@ export async function RhTab({
       subtitle={subtitle}
       actions={actions}
       avatar={<RhAvatar />}
-      search={search}
+      search={noSearch ? null : search}
       className={className}
       ownHeading={!legacy}
       texts={{

@@ -85,10 +85,11 @@ export async function createReport(
     // One's own post is deleted, not reported.
     if (!post || (post.authorId === reporterId && !post.organizationId)) return "notFound";
   } else if (input.targetType === "profile") {
-    // Only someone the reporter is (or was) in touch with through Connexions.
+    // Only someone the reporter is (or was) in touch with through Connexions, or, for a member of
+    // a recruiting team, a profile its talent made visible to recruiters (Modèle B recruteur M6).
     const profile = await db.talentProfile.findUnique({
       where: { id: input.targetId },
-      select: { userId: true },
+      select: { userId: true, visibility: true },
     });
     const link = profile
       ? await db.connection.findFirst({
@@ -100,7 +101,11 @@ export async function createReport(
           },
         })
       : null;
-    if (!link) return "notFound";
+    const recruiterView =
+      profile && (profile.visibility === "recruiters" || profile.visibility === "anonymous")
+        ? await db.membership.findFirst({ where: { userId: reporterId }, select: { userId: true } })
+        : null;
+    if (!link && !recruiterView) return "notFound";
   } else {
     const conversationId =
       input.targetType === "conversation"

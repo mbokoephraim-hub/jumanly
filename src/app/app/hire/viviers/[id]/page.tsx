@@ -16,6 +16,9 @@ import {
 } from "@/server/actions/hire-advanced";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
+import { isPhone } from "@/server/view";
+import { RhTalentsTexts } from "@/components/phone/recruteur/talents";
+import { RhPool } from "@/components/phone/recruteur/vivier";
 import { HireError, hirePermissions } from "@/server/services/hire";
 import { getPool } from "@/server/services/talent-search";
 
@@ -37,6 +40,13 @@ export default async function PoolPage({
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const page = `/app/hire/viviers/${id}`;
   const { ctx } = await requireHire(page, "readApplications");
+  // On the recruiter's phone, one list of the vivier (Modèle B recruteur M6, planche 105).
+  if (await isPhone())
+    return (
+      <RhTalentsTexts>
+        <RhPool ctx={ctx} poolId={id} ok={typeof query.ok === "string" ? query.ok : undefined} />
+      </RhTalentsTexts>
+    );
   const t = await getTranslations("hirePools");
   const pool = await getPool(db, ctx, id).catch((error) => {
     if (error instanceof HireError) notFound();

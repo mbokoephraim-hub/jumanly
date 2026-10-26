@@ -96,10 +96,10 @@ enum OrgVerificationStatus {
 }
 
 model Organization {
-  id                      String                 @id @default(cuid(2))
+  id                      String                   @id @default(cuid(2))
   type                    OrganizationType
   name                    String
-  slug                    String                 @unique
+  slug                    String                   @unique
   /// Square logo, address of its 256 px WebP (`/medias/orgs/…`, prompt 4 bis).
   logo                    String?
   /// Wide 3:1 banner shown on job cards and pages, address of its 1000 px WebP (prompt 4 bis).
@@ -117,15 +117,15 @@ model Organization {
   category                String?
   contactEmail            String?
   /// Verification by Jumanly (admin, E8). `verifiedAt` stays the badge's source.
-  verificationStatus      OrgVerificationStatus  @default(none)
+  verificationStatus      OrgVerificationStatus    @default(none)
   /// { registration, taxId, domainEmail, mandate } as typed by the organization.
   verificationRequest     Json?
   verificationRequestedAt DateTime?
   verificationReason      String?
   verifiedById            String?
   parentId                String?
-  parent                  Organization?          @relation("OrganizationEntities", fields: [parentId], references: [id])
-  entities                Organization[]         @relation("OrganizationEntities")
+  parent                  Organization?            @relation("OrganizationEntities", fields: [parentId], references: [id])
+  entities                Organization[]           @relation("OrganizationEntities")
   jobs                    Job[]
   memberships             Membership[]
   invitations             Invitation[]
@@ -147,12 +147,14 @@ model Organization {
   suspendedAt             DateTime?
   suspensionReason        String?
   /// Jobs that were live when the organization was suspended, published again on reactivation.
-  suspendedJobIds         String[]               @default([])
+  suspendedJobIds         String[]                 @default([])
   /// Le Fil (Modèle B, lot B3): the organization's posts and who follows it.
   feedPosts               FeedPost[]
   feedFollowers           FeedFollow[]
-  createdAt               DateTime               @default(now())
-  updatedAt               DateTime               @updatedAt
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+  hiddenTalentSuggestions HiddenTalentSuggestion[]
+  teamThreads             TeamThread[]
 }
 
 /// A supporting document (PDF or image) sent with a verification request. The bytes live in the
@@ -875,6 +877,11 @@ model User {
   createdAt            DateTime                  @default(now())
   updatedAt            DateTime                  @updatedAt
 
+  hiddenTalentSuggestions HiddenTalentSuggestion[]
+  teamThreadsA            TeamThread[]             @relation("TeamThreadA")
+  teamThreadsB            TeamThread[]             @relation("TeamThreadB")
+  teamMessages            TeamMessage[]            @relation("TeamMessageAuthor")
+
   @@map("user")
 }
 
@@ -1123,9 +1130,9 @@ enum ProfileVisibility {
 }
 
 model TalentProfile {
-  id                     String            @id @default(cuid(2))
-  userId                 String            @unique
-  user                   User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                     String                   @id @default(cuid(2))
+  userId                 String                   @unique
+  user                   User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
   headline               String?
   summary                String?
   /// Main goal chosen on the welcome screen (firstJob, newJob, reconversion…).
@@ -1140,8 +1147,8 @@ model TalentProfile {
   /// Banner chosen by the person (an /api/banniere/… address); null shows the drawn one.
   banner                 String?
   targetJob              String?
-  visibility             ProfileVisibility @default(private)
-  availability           Availability      @default(open)
+  visibility             ProfileVisibility        @default(private)
+  availability           Availability             @default(open)
   availableFrom          DateTime?
   notice                 String?
   desiredJobTitles       String[]
@@ -1150,22 +1157,22 @@ model TalentProfile {
   desiredLocations       String[]
   /// ISO 3166-1 codes of the countries where the person wants to work (screen 82). A country
   /// without any of its places in `desiredLocations` means « Tout le pays ».
-  desiredCountries       String[]          @default([])
+  desiredCountries       String[]                 @default([])
   remotePreferences      RemoteMode[]
-  relocation             Boolean           @default(false)
+  relocation             Boolean                  @default(false)
   /// Never shown to recruiters. Whole USD (or `salaryCurrency`) per `salaryPeriod`.
   salaryMin              Int?
-  salaryCurrency         String            @default("USD")
-  salaryPeriod           String            @default("month")
+  salaryCurrency         String                   @default("USD")
+  salaryPeriod           String                   @default("month")
   sectors                String[]
   /// [{ code: "fr", level: "native" | "fluent" | …, cefr?: "B2" }]
-  languages              Json              @default("[]")
+  languages              Json                     @default("[]")
   /// 0 to 100, recomputed on every profile change.
-  completeness           Int               @default(0)
+  completeness           Int                      @default(0)
   /// « Calcul de compatibilité » (Paramètres > Confidentialité). Off: no score anywhere.
-  matchingEnabled        Boolean           @default(true)
+  matchingEnabled        Boolean                  @default(true)
   /// « Recevoir des demandes de mise en relation » (Paramètres > Confidentialité).
-  acceptsContactRequests Boolean           @default(true)
+  acceptsContactRequests Boolean                  @default(true)
   matchResults           MatchResult[]
   poolEntries            TalentPoolEntry[]
   contactRequests        ContactRequest[]
@@ -1175,14 +1182,15 @@ model TalentProfile {
   documents              Document[]
   applications           Application[]
   /// Public portfolio (`career.portfolio.level`), at /portfolio/[slug] when published.
-  portfolioSlug          String?           @unique
-  portfolioPublic        Boolean           @default(false)
+  portfolioSlug          String?                  @unique
+  portfolioPublic        Boolean                  @default(false)
   portfolioIntro         String?
   /// classic | grid (the enriched level unlocks grid and the cover colour)
-  portfolioLayout        String            @default("classic")
+  portfolioLayout        String                   @default("classic")
   portfolioAccent        String?
-  createdAt              DateTime          @default(now())
-  updatedAt              DateTime          @updatedAt
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  hiddenSuggestions      HiddenTalentSuggestion[]
 }
 
 enum Availability {
@@ -2128,6 +2136,9 @@ model ContactRequest {
   respondedAt    DateTime?
   /// « Relancer » in « Mes propositions » (recruteur lot 6): once, while it waits.
   remindedAt     DateTime?
+  /// When the talent first saw the proposal in Messages (Modèle B recruteur M6: « Vue, sans
+  /// réponse »). Nothing else is learned about the talent.
+  seenAt         DateTime?
   conversationId String?              @unique
   conversation   Conversation?        @relation(fields: [conversationId], references: [id], onDelete: SetNull)
   createdAt      DateTime             @default(now())
@@ -2575,4 +2586,52 @@ model RecruiterProfile {
   completedAt            DateTime?
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
+}
+
+/// « Masquer ce profil de mes suggestions » (Modèle B recruteur M6): a talent left out of one
+/// member's « Découvrir », still found by search. The talent is never told.
+model HiddenTalentSuggestion {
+  id             String        @id @default(cuid(2))
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  profileId      String
+  profile        TalentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt      DateTime      @default(now())
+
+  @@unique([userId, organizationId, profileId])
+}
+
+/// « Équipe » of the recruiter's Messages (Modèle B recruteur M7): a conversation between two
+/// members of the same organization. Apart from the talents' conversations: a talent never sees it,
+/// another member of the organization neither. `memberAId` is the smaller of the two ids.
+model TeamThread {
+  id             String        @id @default(cuid(2))
+  organizationId String
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  memberAId      String
+  memberA        User          @relation("TeamThreadA", fields: [memberAId], references: [id], onDelete: Cascade)
+  memberBId      String
+  memberB        User          @relation("TeamThreadB", fields: [memberBId], references: [id], onDelete: Cascade)
+  aReadAt        DateTime?
+  bReadAt        DateTime?
+  lastMessageAt  DateTime      @default(now())
+  createdAt      DateTime      @default(now())
+  messages       TeamMessage[]
+
+  @@unique([organizationId, memberAId, memberBId])
+  @@index([organizationId, lastMessageAt])
+}
+
+model TeamMessage {
+  id        String     @id @default(cuid(2))
+  threadId  String
+  thread    TeamThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  authorId  String?
+  author    User?      @relation("TeamMessageAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  body      String
+  createdAt DateTime   @default(now())
+
+  @@index([threadId, createdAt])
 }

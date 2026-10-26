@@ -17041,7 +17041,8 @@
         "publications": "Publications",
         "nom": "Nom",
         "competence": "Compétence",
-        "ville": "Ville"
+        "ville": "Ville",
+        "metier": "Métier"
       },
       "searchBy": "Chercher par",
       "percent": "{score} %",
@@ -17080,8 +17081,8 @@
         "note": "Seulement les personnes qui ont candidaté à vos offres."
       },
       "talents": {
-        "label": "Rechercher un talent ou une entreprise",
-        "placeholder": "Métier, compétence, ville",
+        "label": "Rechercher un talent",
+        "placeholder": "Compétence, métier, ville",
         "note": "Seulement les talents qui ont rendu leur profil visible."
       },
       "messages": {
@@ -17092,6 +17093,7 @@
     },
     "orbi": {
       "plan": "Voir la formule",
+      "full": "Ouvrir la conversation complète",
       "fil": {
         "bubble": "Que publier pour attirer des candidats ?",
         "from": "Orbi · depuis le Fil",
@@ -18142,6 +18144,476 @@
     },
     "calendar": {
       "summary": "Entretien avec {name} · {job}"
+    }
+  },
+  "phoneRhTalents": {
+    "tabs": {
+      "label": "Rubriques des talents",
+      "decouvrir": "Découvrir",
+      "vivier": "Vivier",
+      "propositions": "Propositions",
+      "reseau": "Réseau"
+    },
+    "offers": {
+      "label": "Offres comparées",
+      "all": "Toutes mes offres"
+    },
+    "search": {
+      "results": "{count, plural, one {# talent} other {# talents}}"
+    },
+    "discover": {
+      "line": "{count, plural, =0 {Aucun talent visible} one {# talent visible} other {# talents visibles}} · mis à jour aujourd'hui",
+      "empty": "Aucun talent visible pour ces offres pour l'instant. Cherchez par compétence, métier ou ville, ou publiez une offre avec ses compétences.",
+      "locked": "La recherche de talents n'est pas comprise dans votre formule. Vos candidatures restent complètes.",
+      "lockedPlan": "Disponible dès {plan}.",
+      "seePlans": "Voir les formules",
+      "note": "Classés par le score de compatibilité avec vos offres, calculé de la même façon pour tous. Jamais l'âge, la photo, la nationalité ni la situation familiale."
+    },
+    "card": {
+      "years": "{years, plural, =0 {débutant·e} one {# an} other {# ans}}",
+      "anonymous": "Profil anonyme",
+      "inPool": "Dans votre vivier",
+      "pending": "Proposition envoyée",
+      "seen": "Proposition vue, sans réponse",
+      "accepted": "Proposition acceptée",
+      "percent": "{score} %"
+    },
+    "pools": {
+      "count": "{count, plural, =0 {Aucun talent} one {# talent} other {# talents}}",
+      "new": "Nouvelle liste",
+      "nameLabel": "Nom de la liste",
+      "namePlaceholder": "Ex. : Finance 2027",
+      "create": "Créer la liste",
+      "empty": "Aucune liste pour l'instant. Créez-en une, puis ajoutez des talents depuis leur profil.",
+      "notePrivate": "Votre vivier personnel : les talents ne savent pas dans quelle liste ils sont. Le vivier partagé avec l'équipe vient avec {plan}.",
+      "notePrivateNoPlan": "Votre vivier personnel : les talents ne savent pas dans quelle liste ils sont.",
+      "noteShared": "Vos listes et celles partagées avec l'équipe. Les talents ne savent pas dans quelle liste ils sont.",
+      "locked": "Le vivier n'est pas compris dans votre formule."
+    },
+    "pool": {
+      "back": "Vivier",
+      "private": "visible par vous seul·e",
+      "team": "visible par votre équipe",
+      "org": "visible par toute l'entreprise",
+      "empty": "Cette liste est vide. Ajoutez un talent depuis son profil.",
+      "remove": "Retirer {name} de la liste",
+      "origin": {
+        "applied": "A candidaté à « {job} »",
+        "contact": "A accepté une proposition",
+        "search": "Trouvé·e par recherche"
+      },
+      "options": "Options de la liste",
+      "rename": "Nom de la liste",
+      "renameSave": "Enregistrer le nom",
+      "delete": "Supprimer la liste",
+      "deleteNote": "Les talents ne sont pas prévenus. Leur profil reste dans vos autres listes.",
+      "sheet": "Ajouter {name} au vivier",
+      "people": "{count, plural, =0 {Personne} one {# personne} other {# personnes}}",
+      "newList": "Ou une nouvelle liste",
+      "save": "Enregistrer"
+    },
+    "proposals": {
+      "intro": "Les offres que vous avez proposées à des talents",
+      "note": "Quand un talent accepte, vous pouvez échanger avec lui et sa candidature arrive dans Candidatures, comme les autres. Candidater reste gratuit pour lui.",
+      "empty": "Aucune proposition envoyée pour l'instant. Proposez une offre depuis le profil d'un talent.",
+      "when": "{job} · {when}",
+      "noJob": "Sans offre précise",
+      "state": {
+        "waiting": "Envoyée, pas encore vue",
+        "seen": "Vue, sans réponse",
+        "accepted": "Acceptée : la conversation est ouverte",
+        "declined": "Déclinée",
+        "expired": "Expirée sans réponse"
+      },
+      "remind": "Relancer"
+    },
+    "network": {
+      "received": "Invitations reçues",
+      "accept": "Accepter",
+      "ignore": "Ignorer l'invitation de {name}",
+      "know": "À connaître",
+      "connect": "Se connecter",
+      "relations": "Mes relations",
+      "filters": "Filtrer mes relations",
+      "filter": {
+        "toutes": "Toutes",
+        "talents": "Talents",
+        "rh": "Recruteurs et RH"
+      },
+      "kind": {
+        "talent": "Talent",
+        "rh": "RH"
+      },
+      "mutual": "{count, plural, one {# relation en commun} other {# relations en commun}}",
+      "empty": "Aucune relation pour l'instant. Connectez-vous aux talents et aux recruteurs que vous croisez.",
+      "none": "Personne à suggérer pour l'instant.",
+      "write": "Écrire à {name}"
+    },
+    "profile": {
+      "back": "Retour",
+      "more": "Plus d'actions pour {name}",
+      "active": "actif·ve {when}",
+      "mobility": "Prêt·e à venir à {city}",
+      "connect": "Se connecter",
+      "connectSent": "Invitation envoyée",
+      "connected": "En relation",
+      "match": {
+        "haut": "Très compatible",
+        "bon": "Compatible",
+        "moyen": "À regarder de plus près",
+        "with": "avec {job}",
+        "none": "Aucune offre en ligne à comparer."
+      },
+      "why": "Pourquoi ?",
+      "proposal": "Proposition {job} · {state}",
+      "tabs": {
+        "label": "Rubriques du profil",
+        "profil": "Profil",
+        "parcours": "Parcours",
+        "realisations": "Réalisations"
+      },
+      "skills": "Compétences",
+      "verified": "Vérifiée",
+      "declared": "Déclarée",
+      "noSkills": "Aucune compétence indiquée.",
+      "interests": "Ce qui l'intéresse",
+      "languages": "Langues",
+      "experience": "Expérience",
+      "expLine": "{company} · {duration}",
+      "expNoCompany": "{duration}",
+      "duration": "{months, plural, =0 {moins d'un mois} one {# mois} other {{years, plural, =0 {# mois} one {# an} other {# ans}}}}",
+      "noExperience": "Aucune expérience indiquée.",
+      "education": "Formation",
+      "eduLine": "{degree}, {school}",
+      "eduYear": "{degree}, {school} ({year})",
+      "noEducation": "Aucune formation indiquée.",
+      "projects": "Projets",
+      "certificates": "Attestations Jumanly",
+      "certificate": "{course} · {date}",
+      "noWorks": "Aucune réalisation rendue visible.",
+      "summaryOnly": "Résumé du profil : le détail s'ouvre quand la personne candidate ou accepte une proposition.",
+      "logged": "Consultation enregistrée. Jumanly ne montre ni l'âge, ni la photo, ni la nationalité, ni la situation familiale.",
+      "pool": "Ajouter {name} au vivier",
+      "propose": "Proposer une offre",
+      "write": "Écrire à {name}",
+      "seeApplication": "Voir sa candidature",
+      "pending": "Proposition en attente",
+      "blocked": "Trop de profils ouverts en peu de temps : la consultation reprend dans un moment."
+    },
+    "propose": {
+      "title": "Proposer une offre à {name}",
+      "sub": "La personne choisit de candidater ou non.",
+      "offer": "Offre",
+      "compatible": "{score} % compatible",
+      "later": "Score calculé à l'envoi",
+      "message": "Message",
+      "default": "Bonjour {firstName}, votre profil correspond à notre offre « {job} ». Si elle vous intéresse, vous pouvez candidater en un geste, gratuitement. {sender}, {company}",
+      "send": "Envoyer la proposition",
+      "noOffer": "Publiez une offre pour pouvoir la proposer."
+    },
+    "menu": {
+      "share": "Partager le profil à un collègue",
+      "shareSub": "Votre collègue le reçoit dans ses notifications",
+      "pdf": "Télécharger le profil en PDF",
+      "pdfSub": "Le téléchargement est enregistré",
+      "hide": "Masquer ce profil de mes suggestions",
+      "hideSub": "Il reste visible par recherche",
+      "report": "Signaler ce profil",
+      "reportSub": "L'équipe Jumanly vérifie sous 24 h"
+    },
+    "share": {
+      "title": "Partager le profil",
+      "who": "À qui ?",
+      "send": "Partager",
+      "none": "Aucun collègue dans l'équipe pour l'instant."
+    },
+    "report": {
+      "title": "Signaler ce profil",
+      "note": "La personne ne saura pas qui l'a signalée. L'équipe de modération regarde chaque signalement.",
+      "reason": {
+        "impersonation": "Se fait passer pour quelqu'un d'autre",
+        "inappropriate": "Contenu inapproprié",
+        "spam": "Indésirable ou publicité",
+        "harassment": "Harcèlement ou propos blessants",
+        "other": "Autre raison"
+      },
+      "send": "Envoyer le signalement"
+    },
+    "ok": {
+      "proposee": "Proposition envoyée. La personne a {days} jours pour répondre.",
+      "vivier": "Vivier enregistré.",
+      "masque": "Profil masqué de vos suggestions.",
+      "partage": "Profil partagé.",
+      "signale": "Merci, l'équipe Jumanly vérifie sous 24 h.",
+      "invitation": "Invitation envoyée.",
+      "relation": "Vous êtes maintenant en relation.",
+      "ignoree": "Invitation ignorée.",
+      "liste": "Liste créée.",
+      "retire": "Retiré de la liste.",
+      "renomme": "Liste renommée.",
+      "supprime": "Liste supprimée.",
+      "relance": "Relance envoyée."
+    },
+    "error": {
+      "quota": "Votre organisation a utilisé ses demandes de mise en relation ce mois-ci.",
+      "locked": "Les propositions aux talents ne sont pas comprises dans votre formule.",
+      "pending": "Une proposition attend déjà sa réponse.",
+      "cooldown": "La personne a décliné récemment : vous pourrez proposer à nouveau plus tard.",
+      "blocked": "Cette personne ne reçoit pas de propositions.",
+      "connected": "Cette personne a déjà candidaté ou accepté une proposition : écrivez-lui.",
+      "invalid": "Le message doit faire au moins {min} caractères.",
+      "other": "Ça n'a pas marché. Réessayez dans un instant."
+    },
+    "pdf": {
+      "title": "Profil de talent",
+      "footer": "Profil consulté sur Jumanly par {company}. Téléchargement enregistré."
+    }
+  },
+  "phoneRhMessages": {
+    "title": "Messages",
+    "new": "Nouveau message",
+    "search": {
+      "label": "Chercher dans les messages",
+      "placeholder": "Nom, offre, mot du message",
+      "cancel": "Annuler",
+      "clear": "Effacer la recherche",
+      "in": "Chercher dans",
+      "scope": {
+        "tout": "Tout",
+        "candidats": "Candidats",
+        "reseau": "Réseau",
+        "equipe": "Équipe"
+      },
+      "none": "Aucune conversation ne correspond à « {q} »."
+    },
+    "tabs": {
+      "label": "Conversations",
+      "candidats": "Candidats",
+      "reseau": "Réseau",
+      "equipe": "Équipe",
+      "unread": "{count, plural, one {# conversation non lue} other {# conversations non lues}}"
+    },
+    "intro": {
+      "candidats": "Chaque conversation reste liée à la candidature.",
+      "reseau": "Vos relations et les talents qui ont accepté une de vos offres.",
+      "equipe": "Votre équipe de recrutement chez {org}."
+    },
+    "empty": {
+      "candidats": "Aucune conversation avec un candidat pour l'instant. Écrivez depuis la fiche d'une candidature.",
+      "reseau": "Aucune conversation avec votre réseau pour l'instant.",
+      "equipe": "Aucune conversation avec votre équipe. Appuyez sur + pour écrire à un collègue."
+    },
+    "row": {
+      "you": "Vous : {text}",
+      "unread": "{count, plural, one {# message non lu} other {# messages non lus}}",
+      "noMessage": "Pas encore de message",
+      "attachment": "Pièce jointe"
+    },
+    "context": {
+      "application": "{job} · {stage}",
+      "proposal": "Proposition acceptée · {job}",
+      "proposalNoJob": "Proposition acceptée",
+      "relation": "Relation · {headline}",
+      "relationOnly": "Relation"
+    },
+    "role": {
+      "org_owner": "Administrateur de la page",
+      "org_admin": "Administrateur de la page",
+      "recruiter": "Recruteur",
+      "hiring_manager": "Manager",
+      "viewer": "Lecture seule",
+      "partner_manager": "Partenaire"
+    },
+    "compose": {
+      "title": "Nouveau message",
+      "note": "À un candidat ou à votre équipe. Pour un talent, passez par « Proposer une offre ».",
+      "candidate": "Candidat·e · {job}",
+      "team": "Équipe · {role}",
+      "empty": "Aucun candidat ni collègue à qui écrire pour l'instant.",
+      "cancel": "Annuler"
+    },
+    "thread": {
+      "back": "Retour aux messages",
+      "more": "Plus d'actions sur la conversation",
+      "open": "Ouvrir",
+      "openLabel": "Ouvrir : {what}",
+      "input": "Votre message",
+      "send": "Envoyer",
+      "empty": "Aucun message pour l'instant. Écrivez le premier.",
+      "readOnly": "Vous pouvez lire cette conversation ; seuls les recruteurs de l'équipe y répondent.",
+      "blocked": "Cette personne ne reçoit plus de messages de votre entreprise.",
+      "left": "Cette personne ne fait plus partie de l'équipe.",
+      "withdrawn": "Message retiré.",
+      "document": "Document demandé : {name}",
+      "file": "Fichier : {name}",
+      "interview": "Entretien · {when}",
+      "interviewPending": "Entretien proposé · en attente du choix du créneau",
+      "interviewState": {
+        "confirmed": "invitation acceptée",
+        "pending": "en attente de réponse",
+        "reschedule": "d'autres moments demandés",
+        "declined": "invitation déclinée",
+        "canceled": "entretien annulé",
+        "done": "entretien passé",
+        "no_show": "absence à l'entretien"
+      },
+      "mode": {
+        "video": "Visio",
+        "onsite": "Sur place",
+        "audio": "Par appel"
+      }
+    },
+    "chips": {
+      "label": "Aides à l'écriture",
+      "orbi": "Orbi propose",
+      "templates": "Modèles",
+      "attach": "Joindre"
+    },
+    "orbi": {
+      "thinking": "Orbi prépare une réponse…",
+      "ready": "Orbi a préparé une réponse : relisez-la avant de l'envoyer.",
+      "failed": "Orbi n'a pas pu proposer de réponse. Écrivez la vôtre.",
+      "noCredits": "Les crédits Orbi de l'entreprise sont utilisés ce mois-ci.",
+      "locked": "La formule de l'entreprise ne comprend pas les réponses d'Orbi."
+    },
+    "templates": {
+      "title": "Modèles de messages",
+      "empty": "Aucun modèle pour l'instant.",
+      "manage": "Gérer mes modèles",
+      "where": "Dans Compte · Paramètres"
+    },
+    "attach": {
+      "title": "Joindre",
+      "interview": "Une invitation à un entretien",
+      "interviewLine": "Jour, heure, visio ou sur place",
+      "document": "Une demande de document",
+      "documentLine": "Attestation, diplôme, projets",
+      "file": "Un fichier",
+      "fileLine": "PDF ou image, 4 Mo au plus",
+      "cancel": "Annuler",
+      "sending": "Envoi du fichier…"
+    },
+    "document": {
+      "title": "Demander un document",
+      "name": "Document demandé",
+      "namePlaceholder": "Par exemple : attestation de travail",
+      "due": "À envoyer avant le",
+      "note": "Message (facultatif)",
+      "send": "Envoyer la demande"
+    },
+    "menu": {
+      "title": "Conversation",
+      "file": "Ouvrir la fiche de la candidature",
+      "profile": "Voir le profil",
+      "mute": "Couper les notifications",
+      "unmute": "Réactiver les notifications",
+      "pin": "Épingler pour l'équipe",
+      "unpin": "Désépingler",
+      "pinLine": "En haut de la liste, pour toute l'équipe.",
+      "hide": "Retirer de la messagerie de l'équipe",
+      "hideLine": "La personne garde tous les messages ; rien n'est effacé."
+    },
+    "ok": {
+      "document": "Demande de document envoyée.",
+      "file": "Fichier envoyé.",
+      "mute": "Notifications coupées pour cette conversation.",
+      "unmute": "Notifications réactivées.",
+      "pin": "Conversation épinglée en haut de la liste.",
+      "unpin": "Conversation désépinglée.",
+      "hide": "Conversation retirée de la messagerie de l'équipe."
+    },
+    "error": {
+      "invalid": "Ce message ne peut pas être envoyé. Vérifiez-le et réessayez.",
+      "blocked": "Cette personne ne reçoit plus de messages de votre entreprise.",
+      "trop": "Trop de messages d'un coup. Attendez un instant.",
+      "file": "Ce fichier ne peut pas être envoyé : un PDF ou une image de 4 Mo au plus.",
+      "document": "Indiquez le document demandé et une date à venir.",
+      "other": "Cela n'a pas fonctionné. Réessayez dans un instant."
+    }
+  },
+  "phoneRhNotifs": {
+    "back": "Retour",
+    "title": "Notifications",
+    "readAll": "Tout marquer comme lu",
+    "settings": "Réglage des notifications",
+    "tabs": {
+      "label": "Catégories de notifications",
+      "tout": "Tout",
+      "candidatures": "Candidatures",
+      "entretiens": "Entretiens",
+      "reseau": "Réseau"
+    },
+    "unreadCount": "{count, plural, one {# non lue} other {# non lues}}",
+    "group": {
+      "today": "Aujourd'hui",
+      "yesterday": "Hier",
+      "thisWeek": "Cette semaine",
+      "earlier": "Plus tôt"
+    },
+    "unread": "Non lue",
+    "empty": "Rien de nouveau ici.",
+    "allRead": "Toutes les notifications sont lues.",
+    "ago": {
+      "now": "à l'instant",
+      "minutes": "il y a {count} min",
+      "hours": "il y a {count} h",
+      "yesterday": "hier"
+    }
+  },
+  "phoneRhOrbi": {
+    "back": "Retour",
+    "title": "Orbi",
+    "line": "Assistant de recrutement · {count, plural, one {# crédit} other {# crédits}}",
+    "lineNoCredits": "Assistant de recrutement",
+    "clear": "Effacer",
+    "clearLabel": "Commencer une nouvelle conversation avec Orbi",
+    "hello": "Bonjour, je suis Orbi. Je vous aide à lire vos candidatures dans un bon ordre, préparer un entretien ou écrire un message. Je propose, vous décidez : je ne rejette personne et je n'envoie rien.",
+    "alsoAsk": "Vous pouvez aussi demander",
+    "q1": "Que dois-je faire aujourd'hui ?",
+    "q2": "Qui recevoir en premier ?",
+    "q3": "Qui attend une réponse de ma part ?",
+    "q4": "Des talents à proposer pour mes offres ?",
+    "input": "Écrire à Orbi",
+    "placeholder": "Écrire à Orbi…",
+    "send": "Envoyer",
+    "thinking": "Orbi réfléchit",
+    "failed": "Orbi n'a pas pu répondre. Réessayez dans un instant.",
+    "invalid": "Écrivez au moins deux lettres.",
+    "decide": "Orbi recommande, vous décidez.",
+    "full": "Ouvrir la conversation complète",
+    "fact": {
+      "waiting": {
+        "none": "Personne n'attend de réponse de votre part. Bravo.",
+        "some": "{count, plural, one {Une personne attend} other {# personnes attendent}} une réponse de votre part : {names}.",
+        "action": "Voir les conversations"
+      },
+      "unread": {
+        "none": "Vous avez tout lu.",
+        "some": "{count, plural, one {Une conversation non lue} other {# conversations non lues}} : {names}."
+      },
+      "first": {
+        "none": "Aucune candidature à recevoir pour l'instant.",
+        "some": "Selon le score de compatibilité, calculé de la même façon pour tous, {count, plural, one {la candidature à regarder en premier est celle-ci} other {voici les # candidatures à regarder en premier}}. Personne n'est écarté.",
+        "locked": "Votre formule ne comprend pas les scores de compatibilité : les candidatures sont dans l'ordre d'arrivée.",
+        "action": "Voir les candidatures"
+      },
+      "firstCard": "{score} % · {job}",
+      "firstCardNoScore": "{job}",
+      "propose": {
+        "none": "Aucun talent visible ne correspond à vos offres pour l'instant.",
+        "some": "{count, plural, one {Un talent visible pourrait} other {# talents visibles pourraient}} convenir à vos offres. Vous décidez à qui proposer une offre.",
+        "locked": "Votre formule ne comprend pas la recherche de talents.",
+        "action": "Ouvrir Talents"
+      },
+      "proposeCard": "{score} % · {job}",
+      "today": {
+        "none": "Rien d'urgent aujourd'hui.",
+        "some": "Aujourd'hui : {items}.",
+        "interviews": "{count, plural, one {# entretien} other {# entretiens}}",
+        "waiting": "{count, plural, one {# personne attend} other {# personnes attendent}} une réponse",
+        "fresh": "{count, plural, one {# nouvelle candidature} other {# nouvelles candidatures}}",
+        "action": "Ouvrir les candidatures"
+      }
     }
   },
   "pricing": {
@@ -20041,6 +20513,8 @@
       "orgJoinDeclined": "Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation.",
       "jobEnding": "{days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}}",
       "candidateAssigned": "Un collègue vous confie le dossier de {candidate} pour « {jobTitle} ».",
+      "talentShared": "{colleague} vous partage le profil d'un talent.",
+      "teamMessage": "{name} vous a écrit dans Équipe.",
       "feedReply": "{name} a répondu à votre publication.",
       "feedMention": "{name} vous a mentionné dans une réponse.",
       "feedLike": "{name} a aimé votre publication.",
@@ -23779,7 +24253,11 @@
           "job": "Offre signalée",
           "message": "Message signalé",
           "conversation": "Conversation signalée",
-          "post": "Publication signalée"
+          "post": "Publication signalée",
+          "question": "Question signalée",
+          "profile": "Profil signalé",
+          "organization": "Organisation signalée",
+          "aiSuggestion": "Suggestion IA signalée"
         },
         "post": "Publication du Fil",
         "postReply": "Réponse dans le Fil",

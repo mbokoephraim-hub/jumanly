@@ -168,7 +168,10 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   }
   await expect(page).toHaveURL(/\/app\/messages\//);
   const threadUrl = page.url().split("#")[0]!;
-  await page.locator("#r5-corps").fill("Bonjour, êtes-vous disponible mardi pour un entretien ?");
+  // On a phone (Modèle B recruteur, M7) the composer is the field « Votre message ».
+  await (
+    isMobile ? page.getByRole("textbox", { name: "Votre message" }) : page.locator("#r5-corps")
+  ).fill("Bonjour, êtes-vous disponible mardi pour un entretien ?");
   await page.getByRole("button", { name: "Envoyer", exact: true }).click();
   await expect(page.getByRole("main")).toContainText("êtes-vous disponible mardi");
 

@@ -13998,6 +13998,7 @@ Conventions :
 | `phoneRh.search.scopes.nom` | Nom |
 | `phoneRh.search.scopes.competence` | Compétence |
 | `phoneRh.search.scopes.ville` | Ville |
+| `phoneRh.search.scopes.metier` | Métier |
 | `phoneRh.search.searchBy` | Chercher par |
 | `phoneRh.search.percent` | {score} % |
 | `phoneRh.search.groups.offers` | Mes offres · {count} |
@@ -14024,13 +14025,14 @@ Conventions :
 | `phoneRh.search.candidatures.label` | Rechercher un candidat |
 | `phoneRh.search.candidatures.placeholder` | Nom, compétence, ville |
 | `phoneRh.search.candidatures.note` | Seulement les personnes qui ont candidaté à vos offres. |
-| `phoneRh.search.talents.label` | Rechercher un talent ou une entreprise |
-| `phoneRh.search.talents.placeholder` | Métier, compétence, ville |
+| `phoneRh.search.talents.label` | Rechercher un talent |
+| `phoneRh.search.talents.placeholder` | Compétence, métier, ville |
 | `phoneRh.search.talents.note` | Seulement les talents qui ont rendu leur profil visible. |
 | `phoneRh.search.messages.label` | Rechercher dans les messages |
 | `phoneRh.search.messages.placeholder` | Nom, offre |
 | `phoneRh.search.messages.note` | Candidats de vos offres, et personnes de tout Jumanly. |
 | `phoneRh.orbi.plan` | Voir la formule |
+| `phoneRh.orbi.full` | Ouvrir la conversation complète |
 | `phoneRh.orbi.fil.bubble` | Que publier pour attirer des candidats ? |
 | `phoneRh.orbi.fil.from` | Orbi · depuis le Fil |
 | `phoneRh.orbi.fil.q1` | Que publier pour attirer des candidats ? |
@@ -14883,6 +14885,378 @@ Conventions :
 | `phoneRhCandidatures.sent.file` | Revenir à la fiche |
 | `phoneRhCandidatures.sent.all` | Voir tous les entretiens |
 | `phoneRhCandidatures.calendar.summary` | Entretien avec {name} · {job} |
+
+---
+
+### Modèle B recruteur · Talents au téléphone
+
+*Lot M6 (docs/modele-b-recruteur, mobile/captures section 06) : découvrir des talents visibles pour ses offres, le vivier, les propositions envoyées, le réseau, et le profil d'un talent vu par le recruteur. Orbi recommande, le recruteur décide. Seuls les talents qui ont rendu leur profil visible apparaissent ; chaque consultation est enregistrée.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhTalents.tabs.label` | Rubriques des talents |
+| `phoneRhTalents.tabs.decouvrir` | Découvrir |
+| `phoneRhTalents.tabs.vivier` | Vivier |
+| `phoneRhTalents.tabs.propositions` | Propositions |
+| `phoneRhTalents.tabs.reseau` | Réseau |
+| `phoneRhTalents.offers.label` | Offres comparées |
+| `phoneRhTalents.search.results` | {count, plural, one {# talent} other {# talents}} |
+| `phoneRhTalents.offers.all` | Toutes mes offres |
+| `phoneRhTalents.discover.line` | {count, plural, =0 {Aucun talent visible} one {# talent visible} other {# talents visibles}} · mis à jour aujourd'hui |
+| `phoneRhTalents.discover.empty` | Aucun talent visible pour ces offres pour l'instant. Cherchez par compétence, métier ou ville, ou publiez une offre avec ses compétences. |
+| `phoneRhTalents.discover.locked` | La recherche de talents n'est pas comprise dans votre formule. Vos candidatures restent complètes. |
+| `phoneRhTalents.discover.lockedPlan` | Disponible dès {plan}. |
+| `phoneRhTalents.discover.seePlans` | Voir les formules |
+| `phoneRhTalents.discover.note` | Classés par le score de compatibilité avec vos offres, calculé de la même façon pour tous. Jamais l'âge, la photo, la nationalité ni la situation familiale. |
+| `phoneRhTalents.card.years` | {years, plural, =0 {débutant·e} one {# an} other {# ans}} |
+| `phoneRhTalents.card.anonymous` | Profil anonyme |
+| `phoneRhTalents.card.inPool` | Dans votre vivier |
+| `phoneRhTalents.card.pending` | Proposition envoyée |
+| `phoneRhTalents.card.seen` | Proposition vue, sans réponse |
+| `phoneRhTalents.card.accepted` | Proposition acceptée |
+| `phoneRhTalents.card.percent` | {score} % |
+| `phoneRhTalents.pools.count` | {count, plural, =0 {Aucun talent} one {# talent} other {# talents}} |
+| `phoneRhTalents.pools.new` | Nouvelle liste |
+| `phoneRhTalents.pools.nameLabel` | Nom de la liste |
+| `phoneRhTalents.pools.namePlaceholder` | Ex. : Finance 2027 |
+| `phoneRhTalents.pools.create` | Créer la liste |
+| `phoneRhTalents.pools.empty` | Aucune liste pour l'instant. Créez-en une, puis ajoutez des talents depuis leur profil. |
+| `phoneRhTalents.pools.notePrivate` | Votre vivier personnel : les talents ne savent pas dans quelle liste ils sont. Le vivier partagé avec l'équipe vient avec {plan}. |
+| `phoneRhTalents.pools.notePrivateNoPlan` | Votre vivier personnel : les talents ne savent pas dans quelle liste ils sont. |
+| `phoneRhTalents.pools.noteShared` | Vos listes et celles partagées avec l'équipe. Les talents ne savent pas dans quelle liste ils sont. |
+| `phoneRhTalents.pools.locked` | Le vivier n'est pas compris dans votre formule. |
+| `phoneRhTalents.pool.back` | Vivier |
+| `phoneRhTalents.pool.private` | visible par vous seul·e |
+| `phoneRhTalents.pool.team` | visible par votre équipe |
+| `phoneRhTalents.pool.org` | visible par toute l'entreprise |
+| `phoneRhTalents.pool.empty` | Cette liste est vide. Ajoutez un talent depuis son profil. |
+| `phoneRhTalents.pool.remove` | Retirer {name} de la liste |
+| `phoneRhTalents.pool.origin.applied` | A candidaté à « {job} » |
+| `phoneRhTalents.pool.origin.contact` | A accepté une proposition |
+| `phoneRhTalents.pool.origin.search` | Trouvé·e par recherche |
+| `phoneRhTalents.pool.options` | Options de la liste |
+| `phoneRhTalents.pool.rename` | Nom de la liste |
+| `phoneRhTalents.pool.renameSave` | Enregistrer le nom |
+| `phoneRhTalents.pool.delete` | Supprimer la liste |
+| `phoneRhTalents.pool.deleteNote` | Les talents ne sont pas prévenus. Leur profil reste dans vos autres listes. |
+| `phoneRhTalents.proposals.intro` | Les offres que vous avez proposées à des talents |
+| `phoneRhTalents.proposals.note` | Quand un talent accepte, vous pouvez échanger avec lui et sa candidature arrive dans Candidatures, comme les autres. Candidater reste gratuit pour lui. |
+| `phoneRhTalents.proposals.empty` | Aucune proposition envoyée pour l'instant. Proposez une offre depuis le profil d'un talent. |
+| `phoneRhTalents.proposals.when` | {job} · {when} |
+| `phoneRhTalents.proposals.noJob` | Sans offre précise |
+| `phoneRhTalents.proposals.state.waiting` | Envoyée, pas encore vue |
+| `phoneRhTalents.proposals.state.seen` | Vue, sans réponse |
+| `phoneRhTalents.proposals.state.accepted` | Acceptée : la conversation est ouverte |
+| `phoneRhTalents.proposals.state.declined` | Déclinée |
+| `phoneRhTalents.proposals.state.expired` | Expirée sans réponse |
+| `phoneRhTalents.proposals.remind` | Relancer |
+| `phoneRhTalents.network.received` | Invitations reçues |
+| `phoneRhTalents.network.accept` | Accepter |
+| `phoneRhTalents.network.ignore` | Ignorer l'invitation de {name} |
+| `phoneRhTalents.network.know` | À connaître |
+| `phoneRhTalents.network.connect` | Se connecter |
+| `phoneRhTalents.network.relations` | Mes relations |
+| `phoneRhTalents.network.filters` | Filtrer mes relations |
+| `phoneRhTalents.network.filter.toutes` | Toutes |
+| `phoneRhTalents.network.filter.talents` | Talents |
+| `phoneRhTalents.network.filter.rh` | Recruteurs et RH |
+| `phoneRhTalents.network.kind.talent` | Talent |
+| `phoneRhTalents.network.kind.rh` | RH |
+| `phoneRhTalents.network.mutual` | {count, plural, one {# relation en commun} other {# relations en commun}} |
+| `phoneRhTalents.network.empty` | Aucune relation pour l'instant. Connectez-vous aux talents et aux recruteurs que vous croisez. |
+| `phoneRhTalents.network.none` | Personne à suggérer pour l'instant. |
+| `phoneRhTalents.network.write` | Écrire à {name} |
+| `phoneRhTalents.profile.back` | Retour |
+| `phoneRhTalents.profile.more` | Plus d'actions pour {name} |
+| `phoneRhTalents.profile.active` | actif·ve {when} |
+| `phoneRhTalents.profile.mobility` | Prêt·e à venir à {city} |
+| `phoneRhTalents.profile.connect` | Se connecter |
+| `phoneRhTalents.profile.connectSent` | Invitation envoyée |
+| `phoneRhTalents.profile.connected` | En relation |
+| `phoneRhTalents.profile.match.haut` | Très compatible |
+| `phoneRhTalents.profile.match.bon` | Compatible |
+| `phoneRhTalents.profile.match.moyen` | À regarder de plus près |
+| `phoneRhTalents.profile.match.with` | avec {job} |
+| `phoneRhTalents.profile.match.none` | Aucune offre en ligne à comparer. |
+| `phoneRhTalents.profile.why` | Pourquoi ? |
+| `phoneRhTalents.profile.proposal` | Proposition {job} · {state} |
+| `phoneRhTalents.profile.tabs.label` | Rubriques du profil |
+| `phoneRhTalents.profile.tabs.profil` | Profil |
+| `phoneRhTalents.profile.tabs.parcours` | Parcours |
+| `phoneRhTalents.profile.tabs.realisations` | Réalisations |
+| `phoneRhTalents.profile.skills` | Compétences |
+| `phoneRhTalents.profile.verified` | Vérifiée |
+| `phoneRhTalents.profile.declared` | Déclarée |
+| `phoneRhTalents.profile.noSkills` | Aucune compétence indiquée. |
+| `phoneRhTalents.profile.interests` | Ce qui l'intéresse |
+| `phoneRhTalents.profile.languages` | Langues |
+| `phoneRhTalents.profile.experience` | Expérience |
+| `phoneRhTalents.profile.expLine` | {company} · {duration} |
+| `phoneRhTalents.profile.expNoCompany` | {duration} |
+| `phoneRhTalents.profile.duration` | {months, plural, =0 {moins d'un mois} one {# mois} other {{years, plural, =0 {# mois} one {# an} other {# ans}}}} |
+| `phoneRhTalents.profile.noExperience` | Aucune expérience indiquée. |
+| `phoneRhTalents.profile.education` | Formation |
+| `phoneRhTalents.profile.eduLine` | {degree}, {school} |
+| `phoneRhTalents.profile.eduYear` | {degree}, {school} ({year}) |
+| `phoneRhTalents.profile.noEducation` | Aucune formation indiquée. |
+| `phoneRhTalents.profile.projects` | Projets |
+| `phoneRhTalents.profile.certificates` | Attestations Jumanly |
+| `phoneRhTalents.profile.certificate` | {course} · {date} |
+| `phoneRhTalents.profile.noWorks` | Aucune réalisation rendue visible. |
+| `phoneRhTalents.profile.summaryOnly` | Résumé du profil : le détail s'ouvre quand la personne candidate ou accepte une proposition. |
+| `phoneRhTalents.profile.logged` | Consultation enregistrée. Jumanly ne montre ni l'âge, ni la photo, ni la nationalité, ni la situation familiale. |
+| `phoneRhTalents.profile.pool` | Ajouter {name} au vivier |
+| `phoneRhTalents.profile.propose` | Proposer une offre |
+| `phoneRhTalents.profile.write` | Écrire à {name} |
+| `phoneRhTalents.profile.seeApplication` | Voir sa candidature |
+| `phoneRhTalents.profile.pending` | Proposition en attente |
+| `phoneRhTalents.profile.blocked` | Trop de profils ouverts en peu de temps : la consultation reprend dans un moment. |
+| `phoneRhTalents.propose.title` | Proposer une offre à {name} |
+| `phoneRhTalents.propose.sub` | La personne choisit de candidater ou non. |
+| `phoneRhTalents.propose.offer` | Offre |
+| `phoneRhTalents.propose.compatible` | {score} % compatible |
+| `phoneRhTalents.propose.later` | Score calculé à l'envoi |
+| `phoneRhTalents.propose.message` | Message |
+| `phoneRhTalents.propose.default` | Bonjour {firstName}, votre profil correspond à notre offre « {job} ». Si elle vous intéresse, vous pouvez candidater en un geste, gratuitement. {sender}, {company} |
+| `phoneRhTalents.propose.send` | Envoyer la proposition |
+| `phoneRhTalents.propose.noOffer` | Publiez une offre pour pouvoir la proposer. |
+| `phoneRhTalents.pool.sheet` | Ajouter {name} au vivier |
+| `phoneRhTalents.pool.people` | {count, plural, =0 {Personne} one {# personne} other {# personnes}} |
+| `phoneRhTalents.pool.newList` | Ou une nouvelle liste |
+| `phoneRhTalents.pool.save` | Enregistrer |
+| `phoneRhTalents.menu.share` | Partager le profil à un collègue |
+| `phoneRhTalents.menu.shareSub` | Votre collègue le reçoit dans ses notifications |
+| `phoneRhTalents.menu.pdf` | Télécharger le profil en PDF |
+| `phoneRhTalents.menu.pdfSub` | Le téléchargement est enregistré |
+| `phoneRhTalents.menu.hide` | Masquer ce profil de mes suggestions |
+| `phoneRhTalents.menu.hideSub` | Il reste visible par recherche |
+| `phoneRhTalents.menu.report` | Signaler ce profil |
+| `phoneRhTalents.menu.reportSub` | L'équipe Jumanly vérifie sous 24 h |
+| `phoneRhTalents.share.title` | Partager le profil |
+| `phoneRhTalents.share.who` | À qui ? |
+| `phoneRhTalents.share.send` | Partager |
+| `phoneRhTalents.share.none` | Aucun collègue dans l'équipe pour l'instant. |
+| `phoneRhTalents.report.title` | Signaler ce profil |
+| `phoneRhTalents.report.note` | La personne ne saura pas qui l'a signalée. L'équipe de modération regarde chaque signalement. |
+| `phoneRhTalents.report.reason.impersonation` | Se fait passer pour quelqu'un d'autre |
+| `phoneRhTalents.report.reason.inappropriate` | Contenu inapproprié |
+| `phoneRhTalents.report.reason.spam` | Indésirable ou publicité |
+| `phoneRhTalents.report.reason.harassment` | Harcèlement ou propos blessants |
+| `phoneRhTalents.report.reason.other` | Autre raison |
+| `phoneRhTalents.report.send` | Envoyer le signalement |
+| `phoneRhTalents.ok.proposee` | Proposition envoyée. La personne a {days} jours pour répondre. |
+| `phoneRhTalents.ok.vivier` | Vivier enregistré. |
+| `phoneRhTalents.ok.masque` | Profil masqué de vos suggestions. |
+| `phoneRhTalents.ok.partage` | Profil partagé. |
+| `phoneRhTalents.ok.signale` | Merci, l'équipe Jumanly vérifie sous 24 h. |
+| `phoneRhTalents.ok.invitation` | Invitation envoyée. |
+| `phoneRhTalents.ok.relation` | Vous êtes maintenant en relation. |
+| `phoneRhTalents.ok.ignoree` | Invitation ignorée. |
+| `phoneRhTalents.ok.liste` | Liste créée. |
+| `phoneRhTalents.ok.retire` | Retiré de la liste. |
+| `phoneRhTalents.ok.renomme` | Liste renommée. |
+| `phoneRhTalents.ok.supprime` | Liste supprimée. |
+| `phoneRhTalents.ok.relance` | Relance envoyée. |
+| `phoneRhTalents.error.quota` | Votre organisation a utilisé ses demandes de mise en relation ce mois-ci. |
+| `phoneRhTalents.error.locked` | Les propositions aux talents ne sont pas comprises dans votre formule. |
+| `phoneRhTalents.error.pending` | Une proposition attend déjà sa réponse. |
+| `phoneRhTalents.error.cooldown` | La personne a décliné récemment : vous pourrez proposer à nouveau plus tard. |
+| `phoneRhTalents.error.blocked` | Cette personne ne reçoit pas de propositions. |
+| `phoneRhTalents.error.connected` | Cette personne a déjà candidaté ou accepté une proposition : écrivez-lui. |
+| `phoneRhTalents.error.invalid` | Le message doit faire au moins {min} caractères. |
+| `phoneRhTalents.error.other` | Ça n'a pas marché. Réessayez dans un instant. |
+| `phoneRhTalents.pdf.title` | Profil de talent |
+| `phoneRhTalents.pdf.footer` | Profil consulté sur Jumanly par {company}. Téléchargement enregistré. |
+
+### Modèle B recruteur · Messages, notifications et Orbi au téléphone
+
+*Lot M7 (docs/modele-b-recruteur, mobile/captures sections 07 et 10) : les conversations avec les candidats, le réseau et l'équipe, les notifications du recruteur et Orbi. Chaque conversation avec un candidat reste liée à sa candidature. Orbi recommande, le recruteur décide : il n'envoie rien tout seul.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhMessages.title` | Messages |
+| `phoneRhMessages.new` | Nouveau message |
+| `phoneRhMessages.search.label` | Chercher dans les messages |
+| `phoneRhMessages.search.placeholder` | Nom, offre, mot du message |
+| `phoneRhMessages.search.cancel` | Annuler |
+| `phoneRhMessages.search.clear` | Effacer la recherche |
+| `phoneRhMessages.search.in` | Chercher dans |
+| `phoneRhMessages.search.scope.tout` | Tout |
+| `phoneRhMessages.search.scope.candidats` | Candidats |
+| `phoneRhMessages.search.scope.reseau` | Réseau |
+| `phoneRhMessages.search.scope.equipe` | Équipe |
+| `phoneRhMessages.search.none` | Aucune conversation ne correspond à « {q} ». |
+| `phoneRhMessages.tabs.label` | Conversations |
+| `phoneRhMessages.tabs.candidats` | Candidats |
+| `phoneRhMessages.tabs.reseau` | Réseau |
+| `phoneRhMessages.tabs.equipe` | Équipe |
+| `phoneRhMessages.tabs.unread` | {count, plural, one {# conversation non lue} other {# conversations non lues}} |
+| `phoneRhMessages.intro.candidats` | Chaque conversation reste liée à la candidature. |
+| `phoneRhMessages.intro.reseau` | Vos relations et les talents qui ont accepté une de vos offres. |
+| `phoneRhMessages.intro.equipe` | Votre équipe de recrutement chez {org}. |
+| `phoneRhMessages.empty.candidats` | Aucune conversation avec un candidat pour l'instant. Écrivez depuis la fiche d'une candidature. |
+| `phoneRhMessages.empty.reseau` | Aucune conversation avec votre réseau pour l'instant. |
+| `phoneRhMessages.empty.equipe` | Aucune conversation avec votre équipe. Appuyez sur + pour écrire à un collègue. |
+| `phoneRhMessages.row.you` | Vous : {text} |
+| `phoneRhMessages.row.unread` | {count, plural, one {# message non lu} other {# messages non lus}} |
+| `phoneRhMessages.row.noMessage` | Pas encore de message |
+| `phoneRhMessages.row.attachment` | Pièce jointe |
+| `phoneRhMessages.context.application` | {job} · {stage} |
+| `phoneRhMessages.context.proposal` | Proposition acceptée · {job} |
+| `phoneRhMessages.context.proposalNoJob` | Proposition acceptée |
+| `phoneRhMessages.context.relation` | Relation · {headline} |
+| `phoneRhMessages.context.relationOnly` | Relation |
+| `phoneRhMessages.role.org_owner` | Administrateur de la page |
+| `phoneRhMessages.role.org_admin` | Administrateur de la page |
+| `phoneRhMessages.role.recruiter` | Recruteur |
+| `phoneRhMessages.role.hiring_manager` | Manager |
+| `phoneRhMessages.role.viewer` | Lecture seule |
+| `phoneRhMessages.role.partner_manager` | Partenaire |
+| `phoneRhMessages.compose.title` | Nouveau message |
+| `phoneRhMessages.compose.note` | À un candidat ou à votre équipe. Pour un talent, passez par « Proposer une offre ». |
+| `phoneRhMessages.compose.candidate` | Candidat·e · {job} |
+| `phoneRhMessages.compose.team` | Équipe · {role} |
+| `phoneRhMessages.compose.empty` | Aucun candidat ni collègue à qui écrire pour l'instant. |
+| `phoneRhMessages.compose.cancel` | Annuler |
+| `phoneRhMessages.thread.back` | Retour aux messages |
+| `phoneRhMessages.thread.more` | Plus d'actions sur la conversation |
+| `phoneRhMessages.thread.open` | Ouvrir |
+| `phoneRhMessages.thread.openLabel` | Ouvrir : {what} |
+| `phoneRhMessages.thread.input` | Votre message |
+| `phoneRhMessages.thread.send` | Envoyer |
+| `phoneRhMessages.thread.empty` | Aucun message pour l'instant. Écrivez le premier. |
+| `phoneRhMessages.thread.readOnly` | Vous pouvez lire cette conversation ; seuls les recruteurs de l'équipe y répondent. |
+| `phoneRhMessages.thread.blocked` | Cette personne ne reçoit plus de messages de votre entreprise. |
+| `phoneRhMessages.thread.left` | Cette personne ne fait plus partie de l'équipe. |
+| `phoneRhMessages.thread.withdrawn` | Message retiré. |
+| `phoneRhMessages.thread.document` | Document demandé : {name} |
+| `phoneRhMessages.thread.file` | Fichier : {name} |
+| `phoneRhMessages.thread.interview` | Entretien · {when} |
+| `phoneRhMessages.thread.interviewPending` | Entretien proposé · en attente du choix du créneau |
+| `phoneRhMessages.thread.interviewState.confirmed` | invitation acceptée |
+| `phoneRhMessages.thread.interviewState.pending` | en attente de réponse |
+| `phoneRhMessages.thread.interviewState.reschedule` | d'autres moments demandés |
+| `phoneRhMessages.thread.interviewState.declined` | invitation déclinée |
+| `phoneRhMessages.thread.interviewState.canceled` | entretien annulé |
+| `phoneRhMessages.thread.interviewState.done` | entretien passé |
+| `phoneRhMessages.thread.interviewState.no_show` | absence à l'entretien |
+| `phoneRhMessages.thread.mode.video` | Visio |
+| `phoneRhMessages.thread.mode.onsite` | Sur place |
+| `phoneRhMessages.thread.mode.audio` | Par appel |
+| `phoneRhMessages.chips.label` | Aides à l'écriture |
+| `phoneRhMessages.chips.orbi` | Orbi propose |
+| `phoneRhMessages.chips.templates` | Modèles |
+| `phoneRhMessages.chips.attach` | Joindre |
+| `phoneRhMessages.orbi.thinking` | Orbi prépare une réponse… |
+| `phoneRhMessages.orbi.ready` | Orbi a préparé une réponse : relisez-la avant de l'envoyer. |
+| `phoneRhMessages.orbi.failed` | Orbi n'a pas pu proposer de réponse. Écrivez la vôtre. |
+| `phoneRhMessages.orbi.noCredits` | Les crédits Orbi de l'entreprise sont utilisés ce mois-ci. |
+| `phoneRhMessages.orbi.locked` | La formule de l'entreprise ne comprend pas les réponses d'Orbi. |
+| `phoneRhMessages.templates.title` | Modèles de messages |
+| `phoneRhMessages.templates.empty` | Aucun modèle pour l'instant. |
+| `phoneRhMessages.templates.manage` | Gérer mes modèles |
+| `phoneRhMessages.templates.where` | Dans Compte · Paramètres |
+| `phoneRhMessages.attach.title` | Joindre |
+| `phoneRhMessages.attach.interview` | Une invitation à un entretien |
+| `phoneRhMessages.attach.interviewLine` | Jour, heure, visio ou sur place |
+| `phoneRhMessages.attach.document` | Une demande de document |
+| `phoneRhMessages.attach.documentLine` | Attestation, diplôme, projets |
+| `phoneRhMessages.attach.file` | Un fichier |
+| `phoneRhMessages.attach.fileLine` | PDF ou image, 4 Mo au plus |
+| `phoneRhMessages.attach.cancel` | Annuler |
+| `phoneRhMessages.attach.sending` | Envoi du fichier… |
+| `phoneRhMessages.document.title` | Demander un document |
+| `phoneRhMessages.document.name` | Document demandé |
+| `phoneRhMessages.document.namePlaceholder` | Par exemple : attestation de travail |
+| `phoneRhMessages.document.due` | À envoyer avant le |
+| `phoneRhMessages.document.note` | Message (facultatif) |
+| `phoneRhMessages.document.send` | Envoyer la demande |
+| `phoneRhMessages.menu.title` | Conversation |
+| `phoneRhMessages.menu.file` | Ouvrir la fiche de la candidature |
+| `phoneRhMessages.menu.profile` | Voir le profil |
+| `phoneRhMessages.menu.mute` | Couper les notifications |
+| `phoneRhMessages.menu.unmute` | Réactiver les notifications |
+| `phoneRhMessages.menu.pin` | Épingler pour l'équipe |
+| `phoneRhMessages.menu.unpin` | Désépingler |
+| `phoneRhMessages.menu.pinLine` | En haut de la liste, pour toute l'équipe. |
+| `phoneRhMessages.menu.hide` | Retirer de la messagerie de l'équipe |
+| `phoneRhMessages.menu.hideLine` | La personne garde tous les messages ; rien n'est effacé. |
+| `phoneRhMessages.ok.document` | Demande de document envoyée. |
+| `phoneRhMessages.ok.file` | Fichier envoyé. |
+| `phoneRhMessages.ok.mute` | Notifications coupées pour cette conversation. |
+| `phoneRhMessages.ok.unmute` | Notifications réactivées. |
+| `phoneRhMessages.ok.pin` | Conversation épinglée en haut de la liste. |
+| `phoneRhMessages.ok.unpin` | Conversation désépinglée. |
+| `phoneRhMessages.ok.hide` | Conversation retirée de la messagerie de l'équipe. |
+| `phoneRhMessages.error.invalid` | Ce message ne peut pas être envoyé. Vérifiez-le et réessayez. |
+| `phoneRhMessages.error.blocked` | Cette personne ne reçoit plus de messages de votre entreprise. |
+| `phoneRhMessages.error.trop` | Trop de messages d'un coup. Attendez un instant. |
+| `phoneRhMessages.error.file` | Ce fichier ne peut pas être envoyé : un PDF ou une image de 4 Mo au plus. |
+| `phoneRhMessages.error.document` | Indiquez le document demandé et une date à venir. |
+| `phoneRhMessages.error.other` | Cela n'a pas fonctionné. Réessayez dans un instant. |
+| `phoneRhNotifs.back` | Retour |
+| `phoneRhNotifs.title` | Notifications |
+| `phoneRhNotifs.readAll` | Tout marquer comme lu |
+| `phoneRhNotifs.settings` | Réglage des notifications |
+| `phoneRhNotifs.tabs.label` | Catégories de notifications |
+| `phoneRhNotifs.tabs.tout` | Tout |
+| `phoneRhNotifs.tabs.candidatures` | Candidatures |
+| `phoneRhNotifs.tabs.entretiens` | Entretiens |
+| `phoneRhNotifs.tabs.reseau` | Réseau |
+| `phoneRhNotifs.unreadCount` | {count, plural, one {# non lue} other {# non lues}} |
+| `phoneRhNotifs.group.today` | Aujourd'hui |
+| `phoneRhNotifs.group.yesterday` | Hier |
+| `phoneRhNotifs.group.thisWeek` | Cette semaine |
+| `phoneRhNotifs.group.earlier` | Plus tôt |
+| `phoneRhNotifs.unread` | Non lue |
+| `phoneRhNotifs.empty` | Rien de nouveau ici. |
+| `phoneRhNotifs.allRead` | Toutes les notifications sont lues. |
+| `phoneRhNotifs.ago.now` | à l'instant |
+| `phoneRhNotifs.ago.minutes` | il y a {count} min |
+| `phoneRhNotifs.ago.hours` | il y a {count} h |
+| `phoneRhNotifs.ago.yesterday` | hier |
+| `phoneRhOrbi.back` | Retour |
+| `phoneRhOrbi.title` | Orbi |
+| `phoneRhOrbi.line` | Assistant de recrutement · {count, plural, one {# crédit} other {# crédits}} |
+| `phoneRhOrbi.lineNoCredits` | Assistant de recrutement |
+| `phoneRhOrbi.clear` | Effacer |
+| `phoneRhOrbi.clearLabel` | Commencer une nouvelle conversation avec Orbi |
+| `phoneRhOrbi.hello` | Bonjour, je suis Orbi. Je vous aide à lire vos candidatures dans un bon ordre, préparer un entretien ou écrire un message. Je propose, vous décidez : je ne rejette personne et je n'envoie rien. |
+| `phoneRhOrbi.alsoAsk` | Vous pouvez aussi demander |
+| `phoneRhOrbi.q1` | Que dois-je faire aujourd'hui ? |
+| `phoneRhOrbi.q2` | Qui recevoir en premier ? |
+| `phoneRhOrbi.q3` | Qui attend une réponse de ma part ? |
+| `phoneRhOrbi.q4` | Des talents à proposer pour mes offres ? |
+| `phoneRhOrbi.input` | Écrire à Orbi |
+| `phoneRhOrbi.placeholder` | Écrire à Orbi… |
+| `phoneRhOrbi.send` | Envoyer |
+| `phoneRhOrbi.thinking` | Orbi réfléchit |
+| `phoneRhOrbi.failed` | Orbi n'a pas pu répondre. Réessayez dans un instant. |
+| `phoneRhOrbi.invalid` | Écrivez au moins deux lettres. |
+| `phoneRhOrbi.decide` | Orbi recommande, vous décidez. |
+| `phoneRhOrbi.full` | Ouvrir la conversation complète |
+| `phoneRhOrbi.fact.waiting.none` | Personne n'attend de réponse de votre part. Bravo. |
+| `phoneRhOrbi.fact.waiting.some` | {count, plural, one {Une personne attend} other {# personnes attendent}} une réponse de votre part : {names}. |
+| `phoneRhOrbi.fact.waiting.action` | Voir les conversations |
+| `phoneRhOrbi.fact.unread.none` | Vous avez tout lu. |
+| `phoneRhOrbi.fact.unread.some` | {count, plural, one {Une conversation non lue} other {# conversations non lues}} : {names}. |
+| `phoneRhOrbi.fact.first.none` | Aucune candidature à recevoir pour l'instant. |
+| `phoneRhOrbi.fact.first.some` | Selon le score de compatibilité, calculé de la même façon pour tous, {count, plural, one {la candidature à regarder en premier est celle-ci} other {voici les # candidatures à regarder en premier}}. Personne n'est écarté. |
+| `phoneRhOrbi.fact.first.locked` | Votre formule ne comprend pas les scores de compatibilité : les candidatures sont dans l'ordre d'arrivée. |
+| `phoneRhOrbi.fact.first.action` | Voir les candidatures |
+| `phoneRhOrbi.fact.firstCard` | {score} % · {job} |
+| `phoneRhOrbi.fact.firstCardNoScore` | {job} |
+| `phoneRhOrbi.fact.propose.none` | Aucun talent visible ne correspond à vos offres pour l'instant. |
+| `phoneRhOrbi.fact.propose.some` | {count, plural, one {Un talent visible pourrait} other {# talents visibles pourraient}} convenir à vos offres. Vous décidez à qui proposer une offre. |
+| `phoneRhOrbi.fact.propose.locked` | Votre formule ne comprend pas la recherche de talents. |
+| `phoneRhOrbi.fact.propose.action` | Ouvrir Talents |
+| `phoneRhOrbi.fact.proposeCard` | {score} % · {job} |
+| `phoneRhOrbi.fact.today.none` | Rien d'urgent aujourd'hui. |
+| `phoneRhOrbi.fact.today.some` | Aujourd'hui : {items}. |
+| `phoneRhOrbi.fact.today.interviews` | {count, plural, one {# entretien} other {# entretiens}} |
+| `phoneRhOrbi.fact.today.waiting` | {count, plural, one {# personne attend} other {# personnes attendent}} une réponse |
+| `phoneRhOrbi.fact.today.fresh` | {count, plural, one {# nouvelle candidature} other {# nouvelles candidatures}} |
+| `phoneRhOrbi.fact.today.action` | Ouvrir les candidatures |
 
 ### `/tarifs` · Forfaits
 
@@ -16531,6 +16905,8 @@ Conventions :
 | `notifications.item.orgJoinDeclined` | Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation. |
 | `notifications.item.jobEnding` | {days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}} |
 | `notifications.item.candidateAssigned` | Un collègue vous confie le dossier de {candidate} pour « {jobTitle} ». |
+| `notifications.item.talentShared` | {colleague} vous partage le profil d'un talent. |
+| `notifications.item.teamMessage` | {name} vous a écrit dans Équipe. |
 | `notifications.item.feedReply` | {name} a répondu à votre publication. |
 | `notifications.item.feedMention` | {name} vous a mentionné dans une réponse. |
 | `notifications.item.feedLike` | {name} a aimé votre publication. |
@@ -19736,6 +20112,10 @@ Conventions :
 | `admin.reports.detail.title.message` | Message signalé |
 | `admin.reports.detail.title.conversation` | Conversation signalée |
 | `admin.reports.detail.title.post` | Publication signalée |
+| `admin.reports.detail.title.question` | Question signalée |
+| `admin.reports.detail.title.profile` | Profil signalé |
+| `admin.reports.detail.title.organization` | Organisation signalée |
+| `admin.reports.detail.title.aiSuggestion` | Suggestion IA signalée |
 | `admin.reports.detail.post` | Publication du Fil |
 | `admin.reports.detail.postReply` | Réponse dans le Fil |
 | `admin.reports.detail.postImage` | Avec une photo |

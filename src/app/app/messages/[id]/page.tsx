@@ -5,6 +5,8 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { RecruiterThread } from "@/components/recruiter/thread";
 import { PhoneThreadPage } from "@/components/phone/messages/server";
 import { isPhone } from "@/server/view";
+import { RhConversation } from "@/components/phone/recruteur/conversation";
+import { RhMessagesTexts } from "@/components/phone/recruteur/messages";
 import { Logo, toneOf } from "@/components/talent/art";
 import { FlowHead } from "@/components/talent/flow-head";
 import { InboxList } from "@/components/talent/messages/inbox-list";
@@ -84,7 +86,22 @@ export default async function ThreadPage({
 }: PageProps<"/app/messages/[id]">) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const context = await connectViewer(`/app/messages/${id}`);
-  if (context.viewer.hire) return <RecruiterThread id={id} query={query} context={context} />;
+  if (context.viewer.hire) {
+    // On a phone, the recruiter's conversation of Modèle B (lot M7).
+    if (await isPhone())
+      return (
+        <RhMessagesTexts>
+          <RhConversation
+            ctx={context.viewer.hire}
+            userId={context.user.id}
+            userName={context.user.name}
+            id={id}
+            query={query}
+          />
+        </RhMessagesTexts>
+      );
+    return <RecruiterThread id={id} query={query} context={context} />;
+  }
   const { user, space, viewer } = context;
   // On a phone, the conversation of Modèle B (lot B8).
   if (await isPhone()) return <PhoneThreadPage user={user} id={id} />;

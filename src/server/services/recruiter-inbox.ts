@@ -144,6 +144,9 @@ export async function listRecruiterInbox(
       name: person?.name ?? "",
       firstName: (person?.firstName || person?.name || "").split(/\s+/)[0] ?? "",
       job: conversation.application?.job.title ?? conversation.contactRequest?.job?.title ?? null,
+      /** Modèle B recruteur M7: the stage's own name, and who the talent is (initials' tint). */
+      stage: conversation.application?.stage.name ?? null,
+      talentUserId: conversation.talentUserId,
       proposal: !conversation.application,
       badge: badgeOf(conversation.application),
       last,

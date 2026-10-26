@@ -37,7 +37,7 @@ export const ABNORMAL_VIEWS_PER_HOUR = 60;
 
 const DAY = 86_400_000;
 
-const visibleWhere: Prisma.TalentProfileWhereInput = {
+export const visibleWhere: Prisma.TalentProfileWhereInput = {
   visibility: { in: ["recruiters", "anonymous"] },
   user: { status: "active", deletionScheduledAt: null },
 };
@@ -170,7 +170,7 @@ const searchSelect = {
   languages: true,
 } satisfies Prisma.TalentProfileSelect;
 
-function yearsOf(experiences: { startDate: Date; endDate: Date | null }[], now: Date) {
+export function yearsOf(experiences: { startDate: Date; endDate: Date | null }[], now: Date) {
   const months = experiences.reduce(
     (sum, item) =>
       sum +
@@ -411,6 +411,8 @@ const fullProfileSelect = {
   availability: true,
   desiredJobTitles: true,
   desiredContracts: true,
+  desiredLocations: true,
+  sectors: true,
   remotePreferences: true,
   languages: true,
   userId: true,
@@ -619,6 +621,14 @@ export async function talentContactRequests(db: PrismaClient, userId: string, no
       profile: { select: { visibility: true } },
     },
   });
+  // The organization reads « Vue, sans réponse » (Modèle B recruteur M6): only the moment the
+  // talent first saw the proposal in Messages, nothing more.
+  const unseen = rows.filter((row) => row.status === "pending" && !row.seenAt).map((row) => row.id);
+  if (unseen.length > 0)
+    await db.contactRequest.updateMany({
+      where: { id: { in: unseen }, seenAt: null },
+      data: { seenAt: now },
+    });
   return rows.map((row) => ({
     ...row,
     status: row.status === "pending" && row.expiresAt <= now ? ("expired" as const) : row.status,
@@ -978,6 +988,7 @@ export async function orgProposals(db: PrismaClient, ctx: HireContext, now = new
       createdAt: true,
       respondedAt: true,
       remindedAt: true,
+      seenAt: true,
       conversationId: true,
       job: { select: { title: true } },
       profile: {
@@ -1002,6 +1013,7 @@ export async function orgProposals(db: PrismaClient, ctx: HireContext, now = new
       /** Lot 6: « Relancer » once, while the proposal waits. */
       canRemind: status === "pending" && row.remindedAt === null,
       remindedAt: row.remindedAt,
+      seenAt: row.seenAt,
     };
   });
 }

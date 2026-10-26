@@ -157,6 +157,7 @@ test("ATS : analyse par Orbi, profil pour l'offre, retenus, réponse groupée re
 
 test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, messagerie, rapport PDF", async ({
   page,
+  isMobile,
 }) => {
   test.setTimeout(240_000);
   await logIn(page, baobab, undefined, "/app/hire");
@@ -222,24 +223,59 @@ test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, me
   await main(page).locator('a[href^="/app/messages/"]').first().click();
   await expect(page).toHaveURL(/\/app\/messages\/[^/?]+/);
   const thread = page.url().split("?")[0]!;
-  await page.getByRole("button", { name: "Options de la conversation" }).click();
-  const menu = page.getByRole("dialog", { name: "Options" });
+  // On a phone, « ··· » of Modèle B recruteur (M7) holds the same choices.
+  const phone = test.info().project.name === "mobile";
+  const options = phone ? "Plus d'actions sur la conversation" : "Options de la conversation";
+  const optionsSheet = phone ? "Conversation" : "Options";
+  await page.getByRole("button", { name: options }).click();
+  const menu = page.getByRole("dialog", { name: optionsSheet });
   await expect(menu).toContainText("Couper les notifications");
   await menu.getByRole("button", { name: /^Épingler/ }).click();
   await expect(page.getByText("Conversation épinglée en haut de la liste").first()).toBeVisible();
   await page.goto(thread);
-  await page.getByRole("button", { name: "Options de la conversation" }).click();
+  await page.getByRole("button", { name: options }).click();
   await page
-    .getByRole("dialog", { name: "Options" })
+    .getByRole("dialog", { name: optionsSheet })
     .getByRole("button", { name: /^Désépingler/ })
     .click();
   await expect(page.getByText("Conversation désépinglée").first()).toBeVisible();
   await noOverflow(page, "conversation");
 
+  if (isMobile) {
+    // Phone (Modèle B recruteur M6): « Mes propositions » is a tab of Talents. A pending proposal
+    // shows « Relancer » until someone reminds it (the other project of the run may be first).
+    await page.goto("/app/hire/talents?onglet=propositions");
+    await expect(
+      main(page).getByText("Les offres que vous avez proposées à des talents"),
+    ).toBeVisible();
+    const again = main(page).getByRole("button", { name: "Relancer", exact: true });
+    if (await again.count()) {
+      await again.first().click();
+      await expect(page).toHaveURL(/onglet=propositions&(ok=relance|erreur=other)/);
+    }
+    await noOverflow(page, "propositions");
+    return;
+  }
   // « Mes propositions »: a pending proposal can be reminded once (the other project of the run
   // may already have done it: then « Relancé » shows).
   await page.goto("/app/hire/candidats?vue=propositions");
   const proposals = main(page);
+  if (phone) {
+    // Modèle B recruteur (M6): Talents › Propositions; « Relancer » goes once reminded.
+    await expect(page).toHaveURL(/onglet=propositions/);
+    const again = proposals.getByRole("button", { name: "Relancer", exact: true });
+    await expect(proposals.getByRole("link", { name: /^Propositions/ })).toBeVisible();
+    if (await again.count()) {
+      await again.first().click();
+      await expect(page).toHaveURL(/onglet=propositions&(ok=relance|erreur=other)/);
+    }
+    await expect(async () => {
+      await page.reload();
+      await expect(again).toHaveCount(0, { timeout: 3_000 });
+    }).toPass({ timeout: 30_000 });
+    await noOverflow(page, "propositions");
+    return;
+  }
   const remind = proposals.getByRole("button", { name: /^Relancer / });
   // The list first (« Relancer » or « Relancé »): counting before it shows would skip the reminder.
   await expect(remind.or(proposals.getByText("Relancé", { exact: true })).first()).toBeVisible();
