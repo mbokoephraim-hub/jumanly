@@ -33,15 +33,18 @@ export type RecruiterSideNavLabels = Record<(typeof recruiterTabs)[number]["key"
 export const companyItems = [
   { key: "team", href: "/app/organisation/equipe", icon: "candidats" },
   { key: "page", href: "/app/organisation", icon: "entreprise" },
-  { key: "billing", href: "/app/abonnement", icon: "portefeuille" },
+  { key: "billing", href: "/app/organisation/facturation", icon: "portefeuille" },
   { key: "journal", href: "/app/parametres/consultations", icon: "confidentialite" },
   { key: "settings", href: "/app/hire/modeles", icon: "reglages" },
 ] as const;
 
 function companyOn(pathname: string, href: string) {
-  // « Page entreprise » covers /app/organisation and its pages, except Équipe.
+  // « Page entreprise » covers /app/organisation and its pages, except those of the other items.
   if (href === "/app/organisation")
-    return inside(pathname, href) && !inside(pathname, "/app/organisation/equipe");
+    return (
+      inside(pathname, href) &&
+      !companyItems.some((item) => item.href !== href && inside(pathname, item.href))
+    );
   return inside(pathname, href);
 }
 

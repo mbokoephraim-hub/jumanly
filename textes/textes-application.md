@@ -15569,9 +15569,9 @@ Conventions :
 | `adminSignup.plan.users` | {count, plural, one {# utilisateur} other {# utilisateurs}} |
 | `adminSignup.plan.usersMore` | {count} utilisateurs et plus |
 | `adminSignup.plan.jobs` | {count, plural, one {# offre en ligne} other {# offres}} |
-| `adminSignup.plan.extra.company` | ATS avancé · grilles d'évaluation · statistiques |
-| `adminSignup.plan.extra.company_plus` | plusieurs équipes · viviers partagés · export des rapports |
-| `adminSignup.plan.extra.company_premium` | filiales · intégrations |
+| `adminSignup.plan.extra.company` | ATS avancé · grilles d'évaluation · statistiques · export des rapports |
+| `adminSignup.plan.extra.company_plus` | plusieurs équipes · viviers partagés · rapports consolidés |
+| `adminSignup.plan.extra.company_premium` | filiales · intégrations · accompagnement |
 | `adminSignup.plan.recommended` | Pour recruter en équipe |
 | `adminSignup.plan.applyFree` | Candidater reste gratuit pour tous les talents, quelle que soit votre formule. |
 | `adminSignup.plan.quoteNote` | Company Premium se fait sur devis : écrivez-nous depuis le formulaire, la réponse vient de assistant@jumanly.io. |
@@ -15954,6 +15954,83 @@ Conventions :
 | `orgPage.view.noMembers` | Aucun membre n'est encore affiché. |
 | `orgPage.view.noOffers` | Aucune offre ouverte pour le moment. |
 | `orgPage.view.site` | Site : {site} |
+
+### Modèle B · Formule et facturation sur ordinateur
+
+*Étape 3, lot A4 (docs/modele-b-recruteur/web, capture 083, Web-App.dc.html `qui="joseph"`, vue Formule et facturation) : la formule de l'entreprise, l'usage du mois, le changement de formule et les factures. Réservé aux administrateurs, sur ordinateur et tablette. Prépayé : rien n'est prélevé automatiquement.*
+
+| Clé | Texte |
+|---|---|
+| `orgFormula.title` | Formule et facturation |
+| `orgFormula.error` | L'action n'a pas abouti : rechargez la page et réessayez |
+| `orgFormula.close` | Fermer |
+| `orgFormula.cancel` | Annuler |
+| `orgFormula.current.tag` | Formule actuelle |
+| `orgFormula.current.price` | {plan} · {price} par mois |
+| `orgFormula.current.free` | {plan} · Gratuit |
+| `orgFormula.current.quote` | {plan} · Sur devis |
+| `orgFormula.current.paid` | Prépayée jusqu'au {date} · payée avec {method} |
+| `orgFormula.current.paidNoMethod` | Prépayée jusqu'au {date} |
+| `orgFormula.current.active` | Active jusqu'au {date} |
+| `orgFormula.current.grace` | Échéance passée le {date} : payez avant le {grace} pour garder la formule. |
+| `orgFormula.current.canceled` | La formule s'arrête le {date}, puis retour à {free}. |
+| `orgFormula.current.reminders` | Rappels 7, 3 et 0 jours avant l'échéance. Sans paiement, 3 jours de grâce, puis retour à {free} : aucune donnée n'est perdue. |
+| `orgFormula.current.freeText` | Choisissez une formule ci-dessous pour recruter en équipe. Candidater reste gratuit pour tous les talents, quelle que soit votre formule. |
+| `orgFormula.current.pending` | {plan} prendra le relais le {date}. |
+| `orgFormula.current.renew` | Renouveler maintenant |
+| `orgFormula.usage.title` | Usage ce mois |
+| `orgFormula.usage.seats` | Utilisateurs |
+| `orgFormula.usage.jobs` | Offres en ligne |
+| `orgFormula.usage.search` | Recherches de talents ce mois |
+| `orgFormula.usage.contact` | Demandes de mise en relation |
+| `orgFormula.usage.credits` | Crédits Orbi ce mois |
+| `orgFormula.usage.value` | {used} sur {max} |
+| `orgFormula.usage.unlimited` | {used} · illimité |
+| `orgFormula.change.title` | Changer de formule |
+| `orgFormula.change.monthly` | {price} par mois |
+| `orgFormula.change.quote` | Sur devis |
+| `orgFormula.change.users` | {count, plural, one {# utilisateur} other {# utilisateurs}} |
+| `orgFormula.change.usersMore` | {count} utilisateurs et plus |
+| `orgFormula.change.usersUnlimited` | utilisateurs illimités |
+| `orgFormula.change.jobs` | {count, plural, one {# offre en ligne} other {# offres en ligne}} |
+| `orgFormula.change.jobsUnlimited` | offres illimitées |
+| `orgFormula.change.current` | Votre formule |
+| `orgFormula.change.upgrade` | Passer à {plan} |
+| `orgFormula.change.downgrade` | Passer à {plan} |
+| `orgFormula.change.scheduled` | Prévue le {date} |
+| `orgFormula.change.keep` | Garder {plan} |
+| `orgFormula.change.quoteCta` | Demander un devis |
+| `orgFormula.change.note` | Monter en gamme prend effet tout de suite ; réduire prend effet à la fin de la période payée. |
+| `orgFormula.downgrade.title` | Passer à {plan} |
+| `orgFormula.downgrade.text` | {current} reste active jusqu'au {date}. Ensuite, {plan} prend le relais : vous la payez à l'échéance, avec le rappel habituel. |
+| `orgFormula.downgrade.seats` | {plan} compte {count, plural, one {# utilisateur} other {# utilisateurs}} : votre équipe en compte {used}. Personne n'est retiré, mais les invitations s'arrêtent tant que l'équipe dépasse ce nombre. |
+| `orgFormula.downgrade.confirm` | Passer à {plan} à l'échéance |
+| `orgFormula.downgrade.done` | {plan} prendra le relais le {date} |
+| `orgFormula.downgrade.canceled` | Votre formule reste la même |
+| `orgFormula.pay.renewTitle` | Renouveler {plan} |
+| `orgFormula.pay.upgradeTitle` | Passer à {plan} |
+| `orgFormula.pay.amount` | À payer aujourd'hui |
+| `orgFormula.pay.renewText` | Un mois de plus, jusqu'au {date}. |
+| `orgFormula.pay.upgradeText` | Prend effet tout de suite, pour un mois. |
+| `orgFormula.pay.credit` | Les jours non utilisés de {plan} sont déduits : {credit}. |
+| `orgFormula.pay.error.unavailable` | Le paiement en ligne n'est pas encore ouvert : écrivez à assistant@jumanly.io |
+| `orgFormula.pay.okText` | Formule active jusqu'au {date} · facture envoyée par e-mail |
+| `orgFormula.pay.okNoDate` | Facture envoyée par e-mail |
+| `orgFormula.invoices.title` | Factures |
+| `orgFormula.invoices.number` | Numéro |
+| `orgFormula.invoices.date` | Date |
+| `orgFormula.invoices.amount` | Montant |
+| `orgFormula.invoices.status` | Statut |
+| `orgFormula.invoices.paid` | Payée · {method} |
+| `orgFormula.invoices.download` | Télécharger la facture {number} |
+| `orgFormula.invoices.empty` | Aucune facture pour l'instant : la première arrive avec le premier paiement. |
+| `orgFormula.method.mpesa` | M-Pesa |
+| `orgFormula.method.orange` | Orange Money |
+| `orgFormula.method.airtel` | Airtel Money |
+| `orgFormula.method.mobile_money` | Mobile Money |
+| `orgFormula.method.card` | carte |
+| `orgFormula.method.bank_transfer` | virement |
+| `orgFormula.method.cash` | espèces |
 
 ### `/tarifs` · Forfaits
 

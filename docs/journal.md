@@ -4452,3 +4452,29 @@ Captures 1440 et 1024 : `captures/etape-3/a2/` des fichiers du projet. Tests : `
 |---|---|---|
 | 081 | Page entreprise · modifier | `/mnt/project-files/captures/etape-3/a3/081-page-entreprise-{1440,1024}.png` |
 | 082 | Page entreprise · vue publique | `/mnt/project-files/captures/etape-3/a3/082-vue-publique-{1440,1024}.png` |
+
+## Étape 3 · A4, Formule et facturation (26 octobre 2026)
+
+- Nouvel écran `/app/organisation/facturation` (capture 083), réservé au propriétaire et aux
+  administrateurs : formule actuelle (prix, période prépayée, moyen de paiement, rappels 7, 3 et
+  0 jours puis 3 jours de grâce et retour à la formule gratuite), « Renouveler maintenant », jauges
+  « Usage ce mois », « Changer de formule » (monter en gamme payé tout de suite avec le crédit des
+  jours non utilisés, réduire programmé à l'échéance et annulable, devis pour la formule sans prix)
+  et le tableau des factures avec leur PDF.
+- Fenêtre de paiement sombre : M-Pesa, Orange Money, Airtel Money ou carte, attente de la
+  confirmation (lue toutes les 3 secondes), « J'ai confirmé », « Réessayer », paiement reçu.
+- Section ENTREPRISE : « Formule et facturation » mène au nouvel écran ; « Page entreprise » n'est
+  plus allumée sur les pages des autres entrées.
+- `reports.export` ouvert à toutes les formules Company (décision du 22/10/2026) : partie 05, seed et
+  migration de données `company_reports_export`.
+- Démo : Baobab Fintech prépaie Company depuis trois mois, avec ses factures et l'usage du mois.
+- Tests : `tests/db/entreprise-facturation.test.ts` (écran et formules, recruteur et lecteur refusés,
+  montée en gamme payée par un administrateur, baisse programmée et journal, isolation des paiements
+  et factures) ; `tests/e2e/web-admin-facturation.spec.ts` (chaque bouton, paiement refusé puis par
+  carte, attente sans réponse, baisse annulée puis programmée puis gardée, téléchargement du PDF,
+  manager refusé y compris sur le PDF, téléphone).
+- Choix : `docs/decisions/2026-10-26-etape-3-a4-formule-facturation.md`.
+
+| Capture | Écran | Fichiers |
+|---|---|---|
+| 083 | Formule et facturation | `/mnt/project-files/captures/etape-3/a4/083-formule-facturation-{1440,1024}.png` |

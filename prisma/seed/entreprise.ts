@@ -5,6 +5,7 @@
  * only (CLAUDE.md § 11); everything is rebuilt on each run, so a run of the e2e can be replayed.
  */
 import { hashPassword } from "better-auth/crypto";
+import { addMonths, periodAround } from "../../src/server/entitlements/periods";
 import { rolePreset } from "../../src/server/services/org-team";
 import type { SeedClient } from "./client";
 import { DEMO_PASSWORD } from "./accounts";
@@ -178,4 +179,98 @@ export async function seedEntrepriseTeam(db: SeedClient) {
       hiringNow: true,
     },
   });
+}
+
+/**
+ * Formule et facturation (A4): Baobab Fintech prepays Company, three months already paid (twice
+ * by M-Pesa, once by card) with their invoices, and the month's usage of the capture. Fictional
+ * numbers, local and preview only; rebuilt on each run.
+ */
+export async function seedEntrepriseBilling(db: SeedClient) {
+  const [org, owner, plan] = await Promise.all([
+    db.organization.findUnique({ where: { slug: ORG }, select: { id: true } }),
+    db.user.findUnique({
+      where: { email: "recruteur6.ux@jumanly.test" },
+      select: { id: true, email: true },
+    }),
+    db.plan.findUnique({ where: { code: "company" } }),
+  ]);
+  if (!org || !owner || !plan?.priceCents) return;
+  const subject = { subjectType: "organization" as const, subjectId: org.id };
+  await db.invoice.deleteMany({ where: subject });
+  await db.payment.deleteMany({ where: subject });
+  await db.subscription.deleteMany({ where: subject });
+  await db.usageCounter.deleteMany({ where: subject });
+
+  const end = at(19);
+  const start = addMonths(end, -1);
+  const subscription = await db.subscription.create({
+    data: {
+      ...subject,
+      planId: plan.id,
+      status: "active",
+      source: "self",
+      currentPeriodStart: start,
+      currentPeriodEnd: end,
+    },
+  });
+  const paid = [
+    { months: -2, method: "card" as const, operator: null },
+    { months: -1, method: "mobile_money" as const, operator: "mpesa" },
+    { months: 0, method: "mobile_money" as const, operator: "mpesa" },
+  ];
+  for (const item of paid) {
+    const periodStart = addMonths(start, item.months);
+    const periodEnd = addMonths(periodStart, 1);
+    const payment = await db.payment.create({
+      data: {
+        ...subject,
+        subscriptionId: subscription.id,
+        planId: plan.id,
+        provider: "fake",
+        method: item.method,
+        operator: item.operator,
+        msisdnMasked: item.operator ? "+243 81 ••• 42" : null,
+        amountCents: plan.priceCents,
+        status: "succeeded",
+        providerRef: `seed-baobab-${item.months}`,
+        idempotencyKey: `seed-baobab-${item.months}`,
+        kind: item.months === -2 ? "new" : "renewal",
+        payerId: owner.id,
+        periodStart,
+        periodEnd,
+        paidAt: periodStart,
+        createdAt: periodStart,
+      },
+    });
+    const last = await db.invoice.aggregate({ _max: { sequence: true } });
+    const sequence = (last._max.sequence ?? 0) + 1;
+    await db.invoice.create({
+      data: {
+        number: `JMN-${periodStart.getUTCFullYear()}-${String(sequence).padStart(6, "0")}`,
+        sequence,
+        paymentId: payment.id,
+        ...subject,
+        billedName: ORG_NAME,
+        billedEmail: owner.email,
+        planName: plan.name,
+        amountCents: plan.priceCents,
+        periodStart,
+        periodEnd,
+        issuedAt: periodStart,
+      },
+    });
+  }
+
+  // The month's usage of the capture: talent searches, contact requests, Orbi credits.
+  const period = periodAround(start, new Date());
+  for (const [key, used] of [
+    ["hire.talent_search.monthly", 112],
+    ["hire.contact_requests.monthly", 23],
+    ["ai.credits.monthly", 190],
+  ] as const) {
+    await db.usageCounter.create({
+      data: { ...subject, key, periodStart: period.start, periodEnd: period.end, used },
+    });
+  }
 }
