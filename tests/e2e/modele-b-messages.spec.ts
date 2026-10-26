@@ -224,7 +224,7 @@ test.describe("Modèle B · Messages au téléphone", () => {
     });
     await nav.getByRole("link", { name: "Fil", exact: true }).click();
     await page.waitForURL((url) => url.pathname === "/app");
-    await nav.getByRole("link", { name: "Messages", exact: true }).click();
+    await nav.getByRole("link", { name: /^Chat/ }).click();
     await page.waitForURL((url) => url.pathname === "/app/messages");
     await expect(page.locator('.nb-ms-accueil[data-test="same"]')).toBeVisible();
 

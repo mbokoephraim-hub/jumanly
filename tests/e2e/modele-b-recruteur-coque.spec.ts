@@ -21,8 +21,8 @@ test.describe("Modèle B recruteur · coque au téléphone", () => {
 
     const nav = page.getByRole("navigation", { name: "Navigation principale" });
     await expect(nav.getByRole("link")).toHaveCount(5);
-    // Icons only: the names are for screen readers.
-    expect((await nav.innerText()).replace(/\d+/g, "").trim()).toBe("");
+    // The pill menu: the active tab shows its name in Lime.
+    await expect(nav.locator('[aria-current="page"] .nb-nav-nom')).toHaveText("Fil");
     await expect(nav.getByRole("link", { name: "Fil", exact: true })).toHaveAttribute(
       "aria-current",
       "page",
@@ -33,7 +33,7 @@ test.describe("Modèle B recruteur · coque au téléphone", () => {
       [/^Offres$/, /\/app\/hire\/offres$/, "Offres"],
       [/^Candidatures/, /\/app\/hire\/candidats$/, "Candidatures"],
       [/^Talents$/, /\/app\/hire\/talents$/, "Talents"],
-      [/^Messages/, /\/app\/messages$/, "Messages"],
+      [/^Chat/, /\/app\/messages$/, "Messages"],
       [/^Fil$/, /\/app\/hire$/, "Fil"],
     ] as const) {
       await nav.getByRole("link", { name }).click();

@@ -74,8 +74,11 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
   if (!partnerSpace && !space) {
     // On a phone: Modèle B (docs/modele-b), dark, five tabs kept mounted.
     if (await isPhone()) {
+      // The pill menu's count on Chat (docs/fil-menu-publication § 1).
+      const unreadMessages = await unreadCount(db, { userId: user.id });
       return (
         <PhoneShell
+          badges={{ messages: unreadMessages }}
           account={{
             id: user.id,
             name: user.name,

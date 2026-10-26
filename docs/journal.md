@@ -4621,3 +4621,19 @@ fiche et évaluation, N4 Agenda et pilotage, N5 Talents et pages entreprise, N6 
 notifications et Orbi, N7 Compte, nettoyage et rapport final, puis arrêt pour la validation
 d'Ephraïm. Chaque lot : captures à 1440 et 1024 dans `captures/etape-2-web/`, un e2e qui touche
 chaque bouton, les tests en base touchés, et le journal.
+
+## Fil, menu, publication · 1/3 : menu en pilule (26 octobre 2026)
+
+Référence : `docs/fil-menu-publication/BRIEF-FIL-MENU-PUBLICATION-CLAUDE-CODE.md` § 1 (validé par Ephraïm le 26/10/2026).
+
+- La barre du bas du téléphone (`src/components/phone/nav.tsx`, styles `src/styles/phone.css`) devient une
+  pilule flottante (64 px, à 12 px des bords et 22 px du bas, fond flouté). Onglets inactifs : ronds 48 px
+  `#203F42`, icône crème. Onglet actif : pilule Lime avec l'icône et le nom en Sapin. La pilule glisse d'un
+  onglet à l'autre (largeur, marges et fond animés, 0,32 à 0,34 s) ; elle bouge dès le toucher, avant
+  l'arrivée de la page. Aucune animation si le téléphone ou le réglage « Réduire les animations » le demande.
+- Libellés du menu : talent Fil · Explorer · Carrière · **Hub** · **Chat** ; recruteur Fil · Offres ·
+  Candidatures · Talents · **Chat**. Les titres des pages et les adresses ne changent pas (la page Messages
+  garde son titre).
+- Compteurs : Chat montre le nombre de conversations non lues (talent et recruteur ; le recruteur avait un
+  simple point), Candidatures le nombre de nouvelles candidatures. Le compteur s'efface sur l'onglet actif.
+- Orbi reste flottant au-dessus du menu, à droite (104 px du bas).

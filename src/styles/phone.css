@@ -21,7 +21,7 @@
   --nb-courbe: cubic-bezier(0.2, 0.8, 0.2, 1);
   --nb-haut: calc(14px + env(safe-area-inset-top));
   --nb-bas: max(22px, env(safe-area-inset-bottom));
-  --nb-nav: calc(62px + var(--nb-bas));
+  --nb-nav: calc(64px + var(--nb-bas));
   font-family: var(--font-sora), "Sora", system-ui, sans-serif;
   color: var(--nb-creme);
   background: var(--nb-nuit);
@@ -303,21 +303,26 @@ html[data-nb-reduit]::view-transition-old(nb-pile) {
   }
 }
 
-/* ─── Barre du bas : icônes seules, point lime sous l'onglet actif ─── */
+/* ─── Menu en pilule (docs/fil-menu-publication § 1) : barre flottante, ronds pour les onglets
+   inactifs, pilule Lime avec le nom pour l'onglet actif. ─── */
 .nb-nav {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 12px;
+  right: 12px;
+  bottom: var(--nb-bas);
   z-index: 6;
-  height: var(--nb-nav);
-  padding: 8px 6px var(--nb-bas);
-  background: rgba(11, 26, 31, 0.86);
+  height: 64px;
+  padding: 0 8px;
+  border-radius: 32px;
+  background: rgba(19, 40, 44, 0.9);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border-top: 1px solid var(--nb-filet);
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
 }
 .nb-nav[hidden] {
   display: none;
@@ -328,61 +333,101 @@ html[data-nb-reduit]::view-transition-old(nb-pile) {
   z-index: 12;
 }
 .nb-nav a {
+  --nb-pilule: cubic-bezier(0.3, 0.7, 0.2, 1);
+  position: relative;
+  flex: 0 1 auto;
+  min-width: 48px;
+  height: 48px;
+  padding: 0 13px;
+  border-radius: 24px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  color: var(--nb-brume);
-  position: relative;
+  background: #203f42;
+  color: var(--nb-creme);
   -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color 0.32s var(--nb-pilule),
+    color 0.32s,
+    padding 0.32s var(--nb-pilule);
 }
 .nb-nav a[aria-current="page"] {
-  color: var(--nb-lime);
+  min-width: 0;
+  padding: 0 16px;
+  background: var(--nb-lime);
+  color: #0f3f37;
+}
+.nb-nav a:focus-visible {
+  outline: 2px solid var(--nb-lime);
+  outline-offset: 3px;
 }
 .nb-nav svg {
+  flex: none;
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .nb-nav a:active svg {
   transform: scale(0.88);
 }
-.nb-nav .nb-pt {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--nb-lime);
+.nb-nav .nb-nav-nom {
+  display: inline-block;
+  max-width: 0;
+  margin-left: 0;
   opacity: 0;
-  transform: scale(0);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  font-weight: 700;
   transition:
-    opacity 0.2s,
-    transform 0.25s;
+    max-width 0.34s var(--nb-pilule),
+    opacity 0.22s,
+    margin 0.34s var(--nb-pilule);
 }
-.nb-nav a[aria-current="page"] .nb-pt {
+.nb-nav a[aria-current="page"] .nb-nav-nom {
+  max-width: 120px;
+  margin-left: 8px;
   opacity: 1;
-  transform: none;
 }
-.nb-nav .nb-pastille {
+/* Compteur (Chat, Candidatures) : sur l'icône, effacé sur l'onglet actif. */
+.nb-nav .nb-nav-compte {
   position: absolute;
-  top: 4px;
-  left: calc(50% + 6px);
-  min-width: 17px;
-  height: 17px;
-  padding: 0 5px;
-  border-radius: 9px;
+  top: 3px;
+  left: 50%;
+  margin-left: 6px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
   background: var(--nb-lime);
   color: var(--nb-nuit);
-  font-size: 10.5px;
-  font-weight: 700;
+  font-size: 9.5px;
+  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: opacity 0.22s;
+}
+.nb-nav a[aria-current="page"] .nb-nav-compte {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-nav a,
+  .nb-nav .nb-nav-nom,
+  .nb-nav .nb-nav-compte {
+    transition: none;
+  }
+}
+.nb-app[data-reduit] .nb-nav a,
+.nb-app[data-reduit] .nb-nav .nb-nav-nom,
+.nb-app[data-reduit] .nb-nav .nb-nav-compte {
+  transition: none;
 }
 
 /* ─── Orbi flottant : disque menthe, bulle de question ─── */
 .nb-orbi-fab {
   position: fixed;
   right: 20px;
-  bottom: calc(var(--nb-nav) + 16px);
+  bottom: calc(var(--nb-nav) + 18px);
   z-index: 5;
   display: flex;
   align-items: center;
