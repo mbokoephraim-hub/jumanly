@@ -15512,6 +15512,216 @@ Conventions :
 | `phoneRhCompte.mode.adminNote` | La page, l'équipe et la formule se modifient sur ordinateur. |
 | `phoneRhCompte.mode.notAdmin` | Réservé à l'administrateur de la page. |
 
+### Modèle B · inscription de l'administrateur d'entreprise sur ordinateur
+
+*Étape 3, lot A1 (docs/modele-b-recruteur/web, captures 020 à 029, Web-Acces.dc.html étapes a-*) : formule, compte de l'entreprise, code, rôle, entreprise, logo et bannière, vérification, paiement, invitation de l'équipe, puis « prêt ». À gauche, la scène (étapes 1 à 3) puis l'aperçu en direct de la page entreprise. La fiche « Grâce Mbuyi » de la scène est une illustration manifestement fictive. Sous 768 px, l'écran « À ouvrir sur un ordinateur » remplace le parcours.*
+
+| Clé | Texte |
+|---|---|
+| `adminSignup.seo.title` | Créer l'espace de votre entreprise |
+| `adminSignup.seo.description` | Formule, compte, page entreprise et équipe : l'espace de recrutement de votre entreprise en quelques minutes. |
+| `adminSignup.brand` | jumanly |
+| `adminSignup.home` | Retour à l'accueil de Jumanly |
+| `adminSignup.tagline` | Learn. Grow. Connect. |
+| `adminSignup.accroche` | Prêt à bâtir l'équipe qui fera grandir votre entreprise ? |
+| `adminSignup.scene.label` | Illustration fictive : une candidature expliquée, un entretien, une réponse |
+| `adminSignup.scene.mark` | GM |
+| `adminSignup.scene.name` | Grâce Mbuyi |
+| `adminSignup.scene.job` | Analyste de données |
+| `adminSignup.scene.score` | 93 % |
+| `adminSignup.scene.why` | Pourquoi ? 8 critères, rien de personnel |
+| `adminSignup.scene.interview` | Entretien · vendredi 10 h |
+| `adminSignup.scene.answer` | Chaque candidat reçoit une réponse |
+| `adminSignup.step` | Étape {n} sur {total} |
+| `adminSignup.back` | Étape précédente |
+| `adminSignup.continue` | Continuer |
+| `adminSignup.saving` | Enregistrement… |
+| `adminSignup.close` | Fermer le message |
+| `adminSignup.steps.forfait.title` | Choisissez une formule |
+| `adminSignup.steps.forfait.subtitle` | Commencez gratuitement ou recrutez à plusieurs |
+| `adminSignup.steps.compte.title` | Créer le compte de l'entreprise |
+| `adminSignup.steps.compte.subtitle` | Vous en serez l'administrateur |
+| `adminSignup.steps.code.title` | Vérifiez votre e-mail |
+| `adminSignup.steps.code.subtitle` | Un code à 6 chiffres vient de partir |
+| `adminSignup.steps.role.title` | Votre rôle |
+| `adminSignup.steps.role.subtitle` | Administrateur : équipe, rôles, offres et formule |
+| `adminSignup.steps.entreprise.title` | L'entreprise |
+| `adminSignup.steps.entreprise.subtitle` | Ce que verront les talents sur sa page |
+| `adminSignup.steps.logo.title` | Logo et bannière |
+| `adminSignup.steps.logo.subtitle` | Ils apparaissent sur la page, les offres et les rapports PDF |
+| `adminSignup.steps.verification.title` | Vérification |
+| `adminSignup.steps.verification.subtitle` | Le badge « vérifiée » rassure les talents |
+| `adminSignup.steps.paiement.title` | Paiement |
+| `adminSignup.steps.paiement.subtitle` | Prépayé chaque mois, par Mobile Money ou carte |
+| `adminSignup.steps.equipe.title` | Invitez votre équipe |
+| `adminSignup.steps.equipe.subtitle` | Chacun reçoit un e-mail et choisit son mot de passe |
+| `adminSignup.plan.free` | Gratuit |
+| `adminSignup.plan.monthly` | {price} par mois |
+| `adminSignup.plan.quote` | Sur devis |
+| `adminSignup.plan.users` | {count, plural, one {# utilisateur} other {# utilisateurs}} |
+| `adminSignup.plan.usersMore` | {count} utilisateurs et plus |
+| `adminSignup.plan.jobs` | {count, plural, one {# offre en ligne} other {# offres}} |
+| `adminSignup.plan.extra.company` | ATS avancé · grilles d'évaluation · statistiques |
+| `adminSignup.plan.extra.company_plus` | plusieurs équipes · viviers partagés · export des rapports |
+| `adminSignup.plan.extra.company_premium` | filiales · intégrations |
+| `adminSignup.plan.recommended` | Pour recruter en équipe |
+| `adminSignup.plan.applyFree` | Candidater reste gratuit pour tous les talents, quelle que soit votre formule. |
+| `adminSignup.plan.quoteNote` | Company Premium se fait sur devis : écrivez-nous depuis le formulaire, la réponse vient de assistant@jumanly.io. |
+| `adminSignup.plan.quoteLink` | Demander un devis |
+| `adminSignup.account.or` | ou avec votre e-mail |
+| `adminSignup.account.name` | Prénom et nom |
+| `adminSignup.account.org` | Nom de l'entreprise |
+| `adminSignup.account.email` | E-mail professionnel |
+| `adminSignup.account.password` | Mot de passe |
+| `adminSignup.account.passwordPlaceholder` | 10 caractères au moins |
+| `adminSignup.account.terms` | J'accepte les {terms} et la {privacy}, dont l'engagement de répondre à chaque candidature. |
+| `adminSignup.account.termsLink` | conditions d'utilisation |
+| `adminSignup.account.privacyLink` | politique de confidentialité |
+| `adminSignup.account.social` | Votre compte {email} est créé : il reste à nommer l'entreprise. |
+| `adminSignup.account.error.required` | Écrivez votre nom et votre e-mail professionnel |
+| `adminSignup.account.error.org` | Écrivez le nom de l'entreprise |
+| `adminSignup.account.error.terms` | Acceptez les conditions pour continuer |
+| `adminSignup.code.sentTo` | Envoyé à {email} |
+| `adminSignup.code.label` | Code reçu |
+| `adminSignup.code.aria` | Code à 6 chiffres |
+| `adminSignup.code.resend` | Renvoyer le code |
+| `adminSignup.code.resent` | Nouveau code envoyé à {email} |
+| `adminSignup.code.error` | Le code compte 6 chiffres |
+| `adminSignup.role.label` | Intitulé de votre poste |
+| `adminSignup.role.placeholder` | Intitulé du poste |
+| `adminSignup.role.card.title` | Vous êtes administrateur |
+| `adminSignup.role.card.l1` | Vous invitez l'équipe et donnez un rôle à chacun |
+| `adminSignup.role.card.l2` | Vous attribuez les tâches et suivez leur avancement |
+| `adminSignup.role.card.l3` | Vous gérez la page, la formule et les factures |
+| `adminSignup.role.card.l4` | Vous seul·e voyez le journal des consultations |
+| `adminSignup.role.note` | Vous recrutez aussi : les offres, l'ATS et l'agenda vous sont ouverts. |
+| `adminSignup.role.error` | Écrivez l'intitulé de votre poste |
+| `adminSignup.company.sector` | Secteur |
+| `adminSignup.company.sectors.fintech` | Fintech |
+| `adminSignup.company.sectors.banque` | Banque |
+| `adminSignup.company.sectors.telecom` | Télécoms |
+| `adminSignup.company.sectors.energie` | Énergie |
+| `adminSignup.company.sectors.ong` | ONG |
+| `adminSignup.company.size` | Taille |
+| `adminSignup.company.sizes.s` | 1 à 50 |
+| `adminSignup.company.sizes.m` | 51 à 200 |
+| `adminSignup.company.sizes.l` | 201 à 1 000 |
+| `adminSignup.company.sizes.xl` | Plus de 1 000 |
+| `adminSignup.company.sizesLong.s` | 1 à 50 personnes |
+| `adminSignup.company.sizesLong.m` | 51 à 200 personnes |
+| `adminSignup.company.sizesLong.l` | 201 à 1 000 personnes |
+| `adminSignup.company.sizesLong.xl` | plus de 1 000 personnes |
+| `adminSignup.company.city` | Ville du siège |
+| `adminSignup.company.cityPlaceholder` | Ville |
+| `adminSignup.company.website` | Site |
+| `adminSignup.company.websitePlaceholder` | Site |
+| `adminSignup.company.about` | À propos |
+| `adminSignup.company.aboutPlaceholder` | Ce que fait l'entreprise, en deux phrases |
+| `adminSignup.company.error.required` | Choisissez le secteur et la taille, puis écrivez la ville du siège |
+| `adminSignup.company.error.website` | Écrivez l'adresse du site, par exemple baobabfintech.cd |
+| `adminSignup.logo.title` | Logo |
+| `adminSignup.logo.hint` | Carré, 400 × 400 px conseillé |
+| `adminSignup.logo.import` | Importer le logo |
+| `adminSignup.logo.change` | Changer le logo |
+| `adminSignup.logo.added` | Logo ajouté |
+| `adminSignup.logo.error.fileType` | Choisissez une image JPEG, PNG ou WebP |
+| `adminSignup.logo.error.fileSize` | L'image dépasse 4 Mo : choisissez-en une plus légère |
+| `adminSignup.logo.error.image` | L'image n'a pas pu être lue : essayez-en une autre |
+| `adminSignup.banner.title` | Bannière |
+| `adminSignup.banner.aria` | Bannière {name} |
+| `adminSignup.banner.themes.sapin` | Sapin |
+| `adminSignup.banner.themes.nuit` | Nuit |
+| `adminSignup.banner.themes.lime` | Lime |
+| `adminSignup.banner.themes.creme` | Crème |
+| `adminSignup.banner.hint` | Ou importez une image de 1 600 × 400 px depuis la page entreprise. |
+| `adminSignup.verif.domain` | E-mail sur le domaine {domain} |
+| `adminSignup.verif.domainHint` | Confirmé par le code reçu |
+| `adminSignup.verif.personal` | Adresse {email} confirmée |
+| `adminSignup.verif.personalHint` | Une adresse sur le domaine de l'entreprise accélère la vérification |
+| `adminSignup.verif.registry` | Registre du commerce ou équivalent |
+| `adminSignup.verif.registryHint` | Facultatif, accélère la vérification |
+| `adminSignup.verif.import` | Importer |
+| `adminSignup.verif.importAria` | Importer le registre du commerce ou un document équivalent |
+| `adminSignup.verif.added` | Ajouté |
+| `adminSignup.verif.addedToast` | Document ajouté : Jumanly le vérifie |
+| `adminSignup.verif.note` | Jumanly vérifie la page ; le badge « vérifiée » apparaît ensuite sur la page et sur chaque offre. Vous pouvez publier dès maintenant. |
+| `adminSignup.verif.error.fileType` | Importez un PDF, ou une photo nette du document en JPEG ou PNG |
+| `adminSignup.verif.error.fileSize` | Le document dépasse 4 Mo : choisissez-en un plus léger |
+| `adminSignup.verif.error.fileCount` | Six documents au plus : retirez-en un depuis la page entreprise |
+| `adminSignup.verif.error.status` | La vérification est déjà décidée : rien à ajouter |
+| `adminSignup.verif.mandate` | Administrateur de la page, inscrit le {date} ({role}) |
+| `adminSignup.verif.registration` | Document joint à l'inscription |
+| `adminSignup.pay.plan` | Formule {plan} |
+| `adminSignup.pay.monthly` | 1 mois prépayé · rappel avant chaque échéance |
+| `adminSignup.pay.method` | Moyen de paiement |
+| `adminSignup.pay.operators.mpesa` | M-Pesa |
+| `adminSignup.pay.operators.orange` | Orange Money |
+| `adminSignup.pay.operators.airtel` | Airtel Money |
+| `adminSignup.pay.operators.carte` | Carte bancaire |
+| `adminSignup.pay.number` | Numéro du compte {operator} qui paie |
+| `adminSignup.pay.numberPlaceholder` | Indicatif puis numéro, par exemple +243… |
+| `adminSignup.pay.cardNote` | Vous saisissez la carte sur la page sécurisée du prestataire : Jumanly ne voit jamais son numéro. |
+| `adminSignup.pay.pay` | Payer {amount} |
+| `adminSignup.pay.later` | Commencer en RH Free et payer plus tard |
+| `adminSignup.pay.freeToast` | Vous commencez en RH Free : passez à Company quand vous voulez |
+| `adminSignup.pay.wait.title` | Confirmez sur votre téléphone |
+| `adminSignup.pay.wait.text` | {operator} vous demande votre code secret. Sans réponse dans 15 minutes, le paiement expire. |
+| `adminSignup.pay.wait.cardTitle` | Terminez le paiement par carte |
+| `adminSignup.pay.wait.cardText` | La page du prestataire s'est ouverte. Cette page se met à jour dès que le paiement est reçu. |
+| `adminSignup.pay.retry` | Réessayer |
+| `adminSignup.pay.confirmed` | J'ai confirmé |
+| `adminSignup.pay.stillPending` | Paiement pas encore reçu : confirmez sur votre téléphone, il apparaît ici tout seul. |
+| `adminSignup.pay.ok.title` | Paiement reçu |
+| `adminSignup.pay.ok.text` | Formule active jusqu'au {date} · facture envoyée par e-mail |
+| `adminSignup.pay.okToast` | Paiement reçu : facture envoyée par e-mail |
+| `adminSignup.pay.free.title` | RH Free : rien à payer |
+| `adminSignup.pay.free.text` | Passez à Company quand votre équipe grandit. |
+| `adminSignup.pay.error.unpaid` | Terminez le paiement, ou commencez en RH Free |
+| `adminSignup.pay.error.number` | Écrivez le numéro Mobile Money qui paie, en commençant par l'indicatif du pays (+243 pour la RD Congo) |
+| `adminSignup.pay.error.failed` | Le paiement n'a pas abouti : vérifiez le solde et le numéro, puis réessayez |
+| `adminSignup.pay.error.expired` | Le paiement a expiré : recommencez |
+| `adminSignup.pay.error.duplicate` | Un paiement attend déjà votre confirmation : validez-le sur votre téléphone ou attendez 15 minutes |
+| `adminSignup.pay.error.unavailable` | Le paiement en ligne n'est pas encore ouvert : commencez en RH Free et payez plus tard |
+| `adminSignup.team.roles.recruiter` | Recruteur |
+| `adminSignup.team.roles.hiring_manager` | Manager |
+| `adminSignup.team.roles.viewer` | Lecteur |
+| `adminSignup.team.remove` | Retirer {email} |
+| `adminSignup.team.emailAria` | E-mail à inviter |
+| `adminSignup.team.placeholder` | prenom.nom@entreprise.cd |
+| `adminSignup.team.add` | Ajouter |
+| `adminSignup.team.seats` | {max, plural, one {# utilisateur} other {# utilisateurs}} au plus dans la formule {plan} · {count} avec vous |
+| `adminSignup.team.send` | Envoyer les invitations |
+| `adminSignup.team.none` | Continuer sans inviter |
+| `adminSignup.team.error.email` | Écrivez une adresse e-mail |
+| `adminSignup.team.error.free` | RH Free compte 1 utilisateur : passez à Company pour inviter votre équipe |
+| `adminSignup.team.error.full` | Plus de place dans la formule {plan} |
+| `adminSignup.team.error.duplicate` | Cette adresse est déjà dans la liste |
+| `adminSignup.team.error.alreadyMember` | {email} fait déjà partie de l'équipe |
+| `adminSignup.team.error.role` | Ce rôle n'est pas ouvert dans votre formule : choisissez Recruteur |
+| `adminSignup.team.error.invalid` | Vérifiez les adresses e-mail de la liste |
+| `adminSignup.ready.title` | L'espace {org} est prêt |
+| `adminSignup.ready.page` | Page entreprise créée |
+| `adminSignup.ready.pagePending` | Page entreprise créée, vérification en cours |
+| `adminSignup.ready.plan` | Formule {plan} active |
+| `adminSignup.ready.invites` | {count, plural, =0 {Aucune invitation envoyée pour l'instant} one {# invitation envoyée} other {# invitations envoyées}} |
+| `adminSignup.ready.enter` | Entrer dans l'espace administrateur |
+| `adminSignup.preview.title` | Aperçu de la page entreprise |
+| `adminSignup.preview.name` | Votre entreprise |
+| `adminSignup.preview.about` | La présentation de l'entreprise apparaîtra ici. |
+| `adminSignup.preview.unverified` | Non vérifiée |
+| `adminSignup.preview.pending` | Vérification en cours |
+| `adminSignup.preview.verified` | Vérifiée |
+| `adminSignup.preview.plan` | Formule {plan} |
+| `adminSignup.preview.invites` | {count, plural, =0 {Aucune invitation} one {# invitation} other {# invitations}} |
+| `desktopOnly.title` | À ouvrir sur un ordinateur |
+| `desktopOnly.text` | L'espace de l'entreprise (équipe, page, formule et factures) se gère sur un ordinateur ou une tablette. |
+| `desktopOnly.signupText` | L'espace d'une entreprise se crée sur un ordinateur. Sur ce téléphone, vous pouvez créer votre compte recruteur et rejoindre votre équipe. |
+| `desktopOnly.copy` | Copier le lien |
+| `desktopOnly.copied` | Lien copié : ouvrez-le sur votre ordinateur |
+| `desktopOnly.recruiter` | Créer un compte recruteur |
+| `desktopOnly.home` | Retour à l'accueil |
+| `desktopOnly.app` | Retour à mon espace |
+
 ### `/tarifs` · Forfaits
 
 *Présenter toutes les formules de façon claire et honnête, par famille, et mener à l'inscription ou au devis.*

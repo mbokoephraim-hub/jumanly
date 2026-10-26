@@ -104,6 +104,9 @@ model Organization {
   logo                    String?
   /// Wide 3:1 banner shown on job cards and pages, address of its 1000 px WebP (prompt 4 bis).
   banner                  String?
+  /// Banner chosen among the four Modèle B colours (sapin, nuit, lime, creme) when no image is
+  /// uploaded (sign-up of the administrator, étape 3 A1).
+  bannerTheme             String?
   description             String?
   website                 String?
   country                 String?

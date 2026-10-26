@@ -4379,3 +4379,34 @@ vus par l'administrateur, qui gardent leurs écrans actuels :
 - « agir au nom de l'entreprise » (091).
 
 L'accueil de l'administrateur pourra montrer les demandes en attente, reprises en A2.
+
+### Étape 3 · A1, inscription de l'administrateur d'entreprise (26 octobre 2026)
+
+L'administrateur crée l'espace de son entreprise sur ordinateur, en neuf étapes puis « prêt »,
+sur `/inscription/entreprise?etape=…`. À gauche, la scène des maquettes pour la formule, le compte
+et le code, puis l'aperçu en direct de la page entreprise : nom, secteur, ville, taille,
+présentation, bannière, logo, état de la vérification, formule et invitations.
+
+| Capture | Écran |
+|---|---|
+| 020 | Étape 1 · formule (RH Free, Company, Company Plus, Company Premium sur devis) |
+| 021 | Étape 2 · compte de l'entreprise (Google, Apple, LinkedIn si configurés, ou e-mail) |
+| 022 | Étape 3 · code à 6 chiffres, « Renvoyer le code » |
+| 023 | Étape 4 · rôle de l'administrateur |
+| 024 | Étape 5 · l'entreprise (secteur, taille, ville du siège, site, à propos) |
+| 025 | Étape 6 · logo et bannière |
+| 026 | Étape 7 · vérification (domaine de l'e-mail, registre du commerce) |
+| 027 | Étape 8 · paiement prépayé (M-Pesa, Orange Money, Airtel Money, carte), attente, reçu, ou « RH Free et payer plus tard » |
+| 028 | Étape 9 · invitation de l'équipe (Recruteur, Manager, Lecteur), dans les places de la formule |
+| 029 | Prêt · « Entrer dans l'espace administrateur » |
+
+- Données : migration additive `organization_banner_theme` (couleur de bannière).
+- Sous 768 px ou sur un téléphone : « À ouvrir sur un ordinateur ».
+- `/inscription?profil=company` et `/inscription/forfait?profil=company` mènent au nouveau parcours.
+  L'ancien parcours d'organisation (`/inscription/forfait`, `/app/bienvenue`) ne sert plus qu'au
+  recruteur seul ; ce qui en devient inutile part en A6.
+- Choix simples notés dans `docs/decisions/2026-10-26-etape-3-a1-inscription.md`.
+- Tests : `tests/e2e/web-admin-inscription.spec.ts` (chaque bouton, RH Free, paiement en attente,
+  un manager renvoyé, le téléphone) et `tests/db/admin-entreprise-inscription.test.ts`
+  (organisation seule, places de la formule, vérification).
+- Captures à 1440 × 900 et 1024 × 900 : `/mnt/project-files/captures/etape-3/a1/`.

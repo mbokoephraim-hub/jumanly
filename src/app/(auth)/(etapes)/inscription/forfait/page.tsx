@@ -50,6 +50,9 @@ async function PlanStep({ searchParams }: Pick<PageProps<"/inscription/forfait">
   const query = await searchParams;
   const params = readSignupParams(query);
   if (!params.profil || params.profil === "partner") redirect(stepHref("/inscription", params));
+  // A company's administrator signs up in nine steps (Modèle B, étape 3 A1).
+  if (params.profil === "company")
+    redirect(stepHref("/inscription/entreprise", { forfait: params.forfait }));
   // An account just created with Google, Apple or LinkedIn finishes its sign-up here; any other
   // signed-in person has nothing to sign up for.
   const session = await getSession();

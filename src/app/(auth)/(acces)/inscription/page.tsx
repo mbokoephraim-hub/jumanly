@@ -47,7 +47,10 @@ async function SignupEntry({ searchParams }: Pick<PageProps<"/inscription">, "se
         defaultEmail={(await readSignupFlow()).email}
       />
     );
-  if (params.profil === "rh" || params.profil === "company") {
+  // A company is created on a computer (Modèle B, étape 3 A1); the page itself answers a phone.
+  if (params.profil === "company")
+    redirect(stepHref("/inscription/entreprise", { forfait: params.forfait }));
+  if (params.profil === "rh") {
     redirect(stepHref("/inscription/forfait", params));
   }
   const t = await getTranslations("access");

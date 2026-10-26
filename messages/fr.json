@@ -18917,6 +18917,295 @@
       "notAdmin": "Réservé à l'administrateur de la page."
     }
   },
+  "adminSignup": {
+    "seo": {
+      "title": "Créer l'espace de votre entreprise",
+      "description": "Formule, compte, page entreprise et équipe : l'espace de recrutement de votre entreprise en quelques minutes."
+    },
+    "brand": "jumanly",
+    "home": "Retour à l'accueil de Jumanly",
+    "tagline": "Learn. Grow. Connect.",
+    "accroche": "Prêt à bâtir l'équipe qui fera grandir votre entreprise ?",
+    "scene": {
+      "label": "Illustration fictive : une candidature expliquée, un entretien, une réponse",
+      "mark": "GM",
+      "name": "Grâce Mbuyi",
+      "job": "Analyste de données",
+      "score": "93 %",
+      "why": "Pourquoi ? 8 critères, rien de personnel",
+      "interview": "Entretien · vendredi 10 h",
+      "answer": "Chaque candidat reçoit une réponse"
+    },
+    "step": "Étape {n} sur {total}",
+    "back": "Étape précédente",
+    "continue": "Continuer",
+    "saving": "Enregistrement…",
+    "close": "Fermer le message",
+    "steps": {
+      "forfait": {
+        "title": "Choisissez une formule",
+        "subtitle": "Commencez gratuitement ou recrutez à plusieurs"
+      },
+      "compte": {
+        "title": "Créer le compte de l'entreprise",
+        "subtitle": "Vous en serez l'administrateur"
+      },
+      "code": {
+        "title": "Vérifiez votre e-mail",
+        "subtitle": "Un code à 6 chiffres vient de partir"
+      },
+      "role": {
+        "title": "Votre rôle",
+        "subtitle": "Administrateur : équipe, rôles, offres et formule"
+      },
+      "entreprise": {
+        "title": "L'entreprise",
+        "subtitle": "Ce que verront les talents sur sa page"
+      },
+      "logo": {
+        "title": "Logo et bannière",
+        "subtitle": "Ils apparaissent sur la page, les offres et les rapports PDF"
+      },
+      "verification": {
+        "title": "Vérification",
+        "subtitle": "Le badge « vérifiée » rassure les talents"
+      },
+      "paiement": {
+        "title": "Paiement",
+        "subtitle": "Prépayé chaque mois, par Mobile Money ou carte"
+      },
+      "equipe": {
+        "title": "Invitez votre équipe",
+        "subtitle": "Chacun reçoit un e-mail et choisit son mot de passe"
+      }
+    },
+    "plan": {
+      "free": "Gratuit",
+      "monthly": "{price} par mois",
+      "quote": "Sur devis",
+      "users": "{count, plural, one {# utilisateur} other {# utilisateurs}}",
+      "usersMore": "{count} utilisateurs et plus",
+      "jobs": "{count, plural, one {# offre en ligne} other {# offres}}",
+      "extra": {
+        "company": "ATS avancé · grilles d'évaluation · statistiques",
+        "company_plus": "plusieurs équipes · viviers partagés · export des rapports",
+        "company_premium": "filiales · intégrations"
+      },
+      "recommended": "Pour recruter en équipe",
+      "applyFree": "Candidater reste gratuit pour tous les talents, quelle que soit votre formule.",
+      "quoteNote": "Company Premium se fait sur devis : écrivez-nous depuis le formulaire, la réponse vient de assistant@jumanly.io.",
+      "quoteLink": "Demander un devis"
+    },
+    "account": {
+      "or": "ou avec votre e-mail",
+      "name": "Prénom et nom",
+      "org": "Nom de l'entreprise",
+      "email": "E-mail professionnel",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "10 caractères au moins",
+      "terms": "J'accepte les {terms} et la {privacy}, dont l'engagement de répondre à chaque candidature.",
+      "termsLink": "conditions d'utilisation",
+      "privacyLink": "politique de confidentialité",
+      "social": "Votre compte {email} est créé : il reste à nommer l'entreprise.",
+      "error": {
+        "required": "Écrivez votre nom et votre e-mail professionnel",
+        "org": "Écrivez le nom de l'entreprise",
+        "terms": "Acceptez les conditions pour continuer"
+      }
+    },
+    "code": {
+      "sentTo": "Envoyé à {email}",
+      "label": "Code reçu",
+      "aria": "Code à 6 chiffres",
+      "resend": "Renvoyer le code",
+      "resent": "Nouveau code envoyé à {email}",
+      "error": "Le code compte 6 chiffres"
+    },
+    "role": {
+      "label": "Intitulé de votre poste",
+      "placeholder": "Intitulé du poste",
+      "card": {
+        "title": "Vous êtes administrateur",
+        "l1": "Vous invitez l'équipe et donnez un rôle à chacun",
+        "l2": "Vous attribuez les tâches et suivez leur avancement",
+        "l3": "Vous gérez la page, la formule et les factures",
+        "l4": "Vous seul·e voyez le journal des consultations"
+      },
+      "note": "Vous recrutez aussi : les offres, l'ATS et l'agenda vous sont ouverts.",
+      "error": "Écrivez l'intitulé de votre poste"
+    },
+    "company": {
+      "sector": "Secteur",
+      "sectors": {
+        "fintech": "Fintech",
+        "banque": "Banque",
+        "telecom": "Télécoms",
+        "energie": "Énergie",
+        "ong": "ONG"
+      },
+      "size": "Taille",
+      "sizes": {
+        "s": "1 à 50",
+        "m": "51 à 200",
+        "l": "201 à 1 000",
+        "xl": "Plus de 1 000"
+      },
+      "sizesLong": {
+        "s": "1 à 50 personnes",
+        "m": "51 à 200 personnes",
+        "l": "201 à 1 000 personnes",
+        "xl": "plus de 1 000 personnes"
+      },
+      "city": "Ville du siège",
+      "cityPlaceholder": "Ville",
+      "website": "Site",
+      "websitePlaceholder": "Site",
+      "about": "À propos",
+      "aboutPlaceholder": "Ce que fait l'entreprise, en deux phrases",
+      "error": {
+        "required": "Choisissez le secteur et la taille, puis écrivez la ville du siège",
+        "website": "Écrivez l'adresse du site, par exemple baobabfintech.cd"
+      }
+    },
+    "logo": {
+      "title": "Logo",
+      "hint": "Carré, 400 × 400 px conseillé",
+      "import": "Importer le logo",
+      "change": "Changer le logo",
+      "added": "Logo ajouté",
+      "error": {
+        "fileType": "Choisissez une image JPEG, PNG ou WebP",
+        "fileSize": "L'image dépasse 4 Mo : choisissez-en une plus légère",
+        "image": "L'image n'a pas pu être lue : essayez-en une autre"
+      }
+    },
+    "banner": {
+      "title": "Bannière",
+      "aria": "Bannière {name}",
+      "themes": {
+        "sapin": "Sapin",
+        "nuit": "Nuit",
+        "lime": "Lime",
+        "creme": "Crème"
+      },
+      "hint": "Ou importez une image de 1 600 × 400 px depuis la page entreprise."
+    },
+    "verif": {
+      "domain": "E-mail sur le domaine {domain}",
+      "domainHint": "Confirmé par le code reçu",
+      "personal": "Adresse {email} confirmée",
+      "personalHint": "Une adresse sur le domaine de l'entreprise accélère la vérification",
+      "registry": "Registre du commerce ou équivalent",
+      "registryHint": "Facultatif, accélère la vérification",
+      "import": "Importer",
+      "importAria": "Importer le registre du commerce ou un document équivalent",
+      "added": "Ajouté",
+      "addedToast": "Document ajouté : Jumanly le vérifie",
+      "note": "Jumanly vérifie la page ; le badge « vérifiée » apparaît ensuite sur la page et sur chaque offre. Vous pouvez publier dès maintenant.",
+      "error": {
+        "fileType": "Importez un PDF, ou une photo nette du document en JPEG ou PNG",
+        "fileSize": "Le document dépasse 4 Mo : choisissez-en un plus léger",
+        "fileCount": "Six documents au plus : retirez-en un depuis la page entreprise",
+        "status": "La vérification est déjà décidée : rien à ajouter"
+      },
+      "mandate": "Administrateur de la page, inscrit le {date} ({role})",
+      "registration": "Document joint à l'inscription"
+    },
+    "pay": {
+      "plan": "Formule {plan}",
+      "monthly": "1 mois prépayé · rappel avant chaque échéance",
+      "method": "Moyen de paiement",
+      "operators": {
+        "mpesa": "M-Pesa",
+        "orange": "Orange Money",
+        "airtel": "Airtel Money",
+        "carte": "Carte bancaire"
+      },
+      "number": "Numéro du compte {operator} qui paie",
+      "numberPlaceholder": "Indicatif puis numéro, par exemple +243…",
+      "cardNote": "Vous saisissez la carte sur la page sécurisée du prestataire : Jumanly ne voit jamais son numéro.",
+      "pay": "Payer {amount}",
+      "later": "Commencer en RH Free et payer plus tard",
+      "freeToast": "Vous commencez en RH Free : passez à Company quand vous voulez",
+      "wait": {
+        "title": "Confirmez sur votre téléphone",
+        "text": "{operator} vous demande votre code secret. Sans réponse dans 15 minutes, le paiement expire.",
+        "cardTitle": "Terminez le paiement par carte",
+        "cardText": "La page du prestataire s'est ouverte. Cette page se met à jour dès que le paiement est reçu."
+      },
+      "retry": "Réessayer",
+      "confirmed": "J'ai confirmé",
+      "stillPending": "Paiement pas encore reçu : confirmez sur votre téléphone, il apparaît ici tout seul.",
+      "ok": {
+        "title": "Paiement reçu",
+        "text": "Formule active jusqu'au {date} · facture envoyée par e-mail"
+      },
+      "okToast": "Paiement reçu : facture envoyée par e-mail",
+      "free": {
+        "title": "RH Free : rien à payer",
+        "text": "Passez à Company quand votre équipe grandit."
+      },
+      "error": {
+        "unpaid": "Terminez le paiement, ou commencez en RH Free",
+        "number": "Écrivez le numéro Mobile Money qui paie, en commençant par l'indicatif du pays (+243 pour la RD Congo)",
+        "failed": "Le paiement n'a pas abouti : vérifiez le solde et le numéro, puis réessayez",
+        "expired": "Le paiement a expiré : recommencez",
+        "duplicate": "Un paiement attend déjà votre confirmation : validez-le sur votre téléphone ou attendez 15 minutes",
+        "unavailable": "Le paiement en ligne n'est pas encore ouvert : commencez en RH Free et payez plus tard"
+      }
+    },
+    "team": {
+      "roles": {
+        "recruiter": "Recruteur",
+        "hiring_manager": "Manager",
+        "viewer": "Lecteur"
+      },
+      "remove": "Retirer {email}",
+      "emailAria": "E-mail à inviter",
+      "placeholder": "prenom.nom@entreprise.cd",
+      "add": "Ajouter",
+      "seats": "{max, plural, one {# utilisateur} other {# utilisateurs}} au plus dans la formule {plan} · {count} avec vous",
+      "send": "Envoyer les invitations",
+      "none": "Continuer sans inviter",
+      "error": {
+        "email": "Écrivez une adresse e-mail",
+        "free": "RH Free compte 1 utilisateur : passez à Company pour inviter votre équipe",
+        "full": "Plus de place dans la formule {plan}",
+        "duplicate": "Cette adresse est déjà dans la liste",
+        "alreadyMember": "{email} fait déjà partie de l'équipe",
+        "role": "Ce rôle n'est pas ouvert dans votre formule : choisissez Recruteur",
+        "invalid": "Vérifiez les adresses e-mail de la liste"
+      }
+    },
+    "ready": {
+      "title": "L'espace {org} est prêt",
+      "page": "Page entreprise créée",
+      "pagePending": "Page entreprise créée, vérification en cours",
+      "plan": "Formule {plan} active",
+      "invites": "{count, plural, =0 {Aucune invitation envoyée pour l'instant} one {# invitation envoyée} other {# invitations envoyées}}",
+      "enter": "Entrer dans l'espace administrateur"
+    },
+    "preview": {
+      "title": "Aperçu de la page entreprise",
+      "name": "Votre entreprise",
+      "about": "La présentation de l'entreprise apparaîtra ici.",
+      "unverified": "Non vérifiée",
+      "pending": "Vérification en cours",
+      "verified": "Vérifiée",
+      "plan": "Formule {plan}",
+      "invites": "{count, plural, =0 {Aucune invitation} one {# invitation} other {# invitations}}"
+    }
+  },
+  "desktopOnly": {
+    "title": "À ouvrir sur un ordinateur",
+    "text": "L'espace de l'entreprise (équipe, page, formule et factures) se gère sur un ordinateur ou une tablette.",
+    "signupText": "L'espace d'une entreprise se crée sur un ordinateur. Sur ce téléphone, vous pouvez créer votre compte recruteur et rejoindre votre équipe.",
+    "copy": "Copier le lien",
+    "copied": "Lien copié : ouvrez-le sur votre ordinateur",
+    "recruiter": "Créer un compte recruteur",
+    "home": "Retour à l'accueil",
+    "app": "Retour à mon espace"
+  },
   "pricing": {
     "seo": {
       "title": "Tarifs et forfaits · Jumanly",
