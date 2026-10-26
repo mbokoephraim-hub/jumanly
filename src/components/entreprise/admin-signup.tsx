@@ -4,7 +4,13 @@ import { useActionState, useEffect, useRef, useState, useTransition, type ReactN
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useFormatter, useTranslations } from "next-intl";
-import { SIGNUP_SECTORS, SIGNUP_SIZES } from "@/lib/entreprise";
+import {
+  BANNER_GRADIENTS,
+  BANNER_THEMES,
+  SIGNUP_SECTORS,
+  SIGNUP_SIZES,
+  type BannerThemeName,
+} from "@/lib/entreprise";
 import { interpolate, slot } from "@/lib/interpolate";
 import {
   adminBannerAction,
@@ -60,14 +66,9 @@ const SCENE: SignupStep[] = ["forfait", "compte", "code"];
 
 const SECTORS = SIGNUP_SECTORS;
 const SIZES = SIGNUP_SIZES;
-const THEMES = ["sapin", "nuit", "lime", "creme"] as const;
-type Theme = (typeof THEMES)[number];
-const BANNERS: Record<Theme, string> = {
-  sapin: "linear-gradient(120deg, #14745F 0%, #0B1A1F 100%)",
-  nuit: "linear-gradient(120deg, #1E4E79 0%, #0B1A1F 100%)",
-  lime: "linear-gradient(120deg, #A6F26B 0%, #14745F 100%)",
-  creme: "linear-gradient(120deg, #F2EDE5 0%, #9FE8D2 100%)",
-};
+const THEMES = BANNER_THEMES;
+type Theme = BannerThemeName;
+const BANNERS = BANNER_GRADIENTS;
 const OPERATORS = ["mpesa", "orange", "airtel", "carte"] as const;
 type Operator = (typeof OPERATORS)[number];
 const ROLES = ["recruiter", "hiring_manager", "viewer"] as const;

@@ -1010,6 +1010,7 @@ Note d'intégration : le tableau de bord du héros (`partners.hero.visual.*`, «
 | `companyPage.seo.title` | {company} · Offres et présentation · Jumanly |
 | `companyPage.seo.description` | Découvrez {company} et ses offres ouvertes. Postulez gratuitement sur Jumanly. |
 | `companyPage.verified` | Entreprise vérifiée |
+| `companyPage.hiringNow` | Recrute en ce moment |
 | `companyPage.logoAlt` | Logo de {company} |
 | `companyPage.coverAlt` | Image de présentation de {company} |
 | `companyPage.sector` | Secteur : {sector} |
@@ -15880,6 +15881,79 @@ Conventions :
 | `myTasks.finish` | Marquer comme terminée |
 | `myTasks.moved` | Tâche passée à « {status} » |
 | `myTasks.finished` | Tâche terminée : l'administrateur est prévenu |
+
+### Modèle B · Page entreprise sur ordinateur
+
+*Étape 3, lot A3 (docs/modele-b-recruteur/web, captures 081 et 082, Web-App.dc.html `qui="joseph"`, vues Page entreprise et Baobab) : modifier la page, puis la voir comme un talent. Réservé aux administrateurs, sur ordinateur et tablette.*
+
+| Clé | Texte |
+|---|---|
+| `orgPage.title` | Page entreprise |
+| `orgPage.banner.change` | Changer la bannière |
+| `orgPage.logo.change` | Changer le logo |
+| `orgPage.form.aria` | Informations de la page |
+| `orgPage.field.name` | Nom |
+| `orgPage.field.sector` | Secteur |
+| `orgPage.field.size` | Taille |
+| `orgPage.field.sizeNone` | Non indiquée |
+| `orgPage.field.city` | Ville |
+| `orgPage.field.website` | Site |
+| `orgPage.field.description` | À propos |
+| `orgPage.field.descriptionPlaceholder` | Ce que fait l'entreprise, pour qui, et où. |
+| `orgPage.hiring.label` | Badge « Recrute en ce moment » |
+| `orgPage.hiring.hint` | Affiché sur la page et dans Explorer |
+| `orgPage.preview` | Voir la page publique |
+| `orgPage.publish` | Publier les changements |
+| `orgPage.saved` | Les changements sont en ligne |
+| `orgPage.error.name` | Le nom doit compter au moins 2 caractères |
+| `orgPage.error.website` | Cette adresse de site n'est pas valide |
+| `orgPage.error.other` | Une information n'est pas valide : vérifiez le formulaire |
+| `orgPage.declared.title` | Membres déclarés |
+| `orgPage.declared.text` | Ces personnes indiquent travailler chez vous. Confirmer est facultatif : sans réponse, « Indiqué par la personne » reste affiché. |
+| `orgPage.declared.line` | Indique travailler chez {org} · {title} |
+| `orgPage.declared.no` | Ne travaille pas ici |
+| `orgPage.declared.yes` | Confirmer |
+| `orgPage.declared.noAria` | {name} ne travaille pas ici |
+| `orgPage.declared.yesAria` | Confirmer {name} |
+| `orgPage.declared.empty` | Personne n'attend de réponse pour le moment. |
+| `orgPage.verification.verified.title` | Entreprise vérifiée |
+| `orgPage.verification.verified.text` | Vérifiée par Jumanly : le badge apparaît sur la page et sur chaque offre. |
+| `orgPage.verification.pending.title` | Vérification en cours |
+| `orgPage.verification.pending.text` | Jumanly étudie votre demande. Le badge apparaîtra sur la page et sur chaque offre. |
+| `orgPage.verification.none.title` | Entreprise non vérifiée |
+| `orgPage.verification.none.text` | Le badge de vérification rassure les candidats : il apparaît sur la page et sur chaque offre. |
+| `orgPage.verification.rejected.title` | Vérification à reprendre |
+| `orgPage.verification.rejected.text` | Jumanly n'a pas pu vérifier l'entreprise. Complétez la demande pour obtenir le badge. |
+| `orgPage.verification.info_requested.title` | Informations demandées |
+| `orgPage.verification.info_requested.text` | Jumanly a besoin d'un complément pour vérifier l'entreprise. Répondez à la demande pour obtenir le badge. |
+| `orgPage.verification.action` | Demander la vérification |
+| `orgPage.verification.follow` | Voir la demande |
+| `orgPage.confirmed.title` | Membres confirmés |
+| `orgPage.confirmed.aria` | {count, plural, one {# membre confirmé} other {# membres confirmés}} |
+| `orgPage.owner.title` | Propriété de la page |
+| `orgPage.owner.text` | Vous êtes propriétaire de la page. Vous pouvez la transmettre à un autre membre : vous restez dans l'équipe. |
+| `orgPage.owner.action` | Transférer la propriété |
+| `orgPage.owner.dialog` | Transférer la propriété |
+| `orgPage.owner.to` | À qui |
+| `orgPage.owner.confirm` | Transférer |
+| `orgPage.owner.cancel` | Annuler |
+| `orgPage.owner.done` | {name} est maintenant propriétaire de la page |
+| `orgPage.owner.alone` | Invitez d'abord un membre pour pouvoir lui transmettre la page. |
+| `orgPage.close` | Fermer |
+| `orgPage.error.generic` | Ce geste n'a pas abouti. Réessayez. |
+| `orgPage.view.back` | Modifier la page |
+| `orgPage.view.hiring` | Recrute en ce moment |
+| `orgPage.view.verified` | Entreprise vérifiée |
+| `orgPage.view.tabs.aria` | Sections de la page |
+| `orgPage.view.tabs.about` | À propos |
+| `orgPage.view.tabs.members` | Membres |
+| `orgPage.view.tabs.offers` | Offres |
+| `orgPage.view.confirmedBy` | Confirmé par {org} |
+| `orgPage.view.declared` | Indiqué par la personne |
+| `orgPage.view.noAbout` | La présentation n'est pas encore écrite. |
+| `orgPage.view.noMembers` | Aucun membre n'est encore affiché. |
+| `orgPage.view.noOffers` | Aucune offre ouverte pour le moment. |
+| `orgPage.view.site` | Site : {site} |
 
 ### `/tarifs` · Forfaits
 

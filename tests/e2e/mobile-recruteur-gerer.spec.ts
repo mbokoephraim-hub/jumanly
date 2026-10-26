@@ -194,19 +194,21 @@ test("organisation : page, modification, vérification, équipe et invitation", 
     ).toContain("application/pdf");
     return;
   }
+  // Page entreprise (étape 3, A3): the page, its public view, a change published.
   const screen = main(page);
-  await expect(screen.getByText(organization).first()).toBeVisible();
-  await expect(screen.getByRole("link", { name: /Voir la page comme un talent/ })).toHaveAttribute(
+  await expect(screen.getByLabel("Nom", { exact: true })).toHaveValue(organization);
+  await expect(screen.getByRole("link", { name: "Voir la page publique" })).toHaveAttribute(
     "href",
-    /^\/entreprises\//,
+    "/app/organisation/apercu",
   );
   await expectAccessible(page);
   await noOverflow(page, "organisation");
 
   await page.goto("/app/organisation/modifier");
-  await page.getByLabel("Ville", { exact: true }).fill("Lubumbashi");
-  await page.getByRole("button", { name: "Enregistrer" }).click();
-  await expect(page).toHaveURL(/\/app\/organisation\?ok=1/);
+  await expect(page).toHaveURL(/\/app\/organisation$/);
+  await screen.getByLabel("Ville", { exact: true }).fill("Lubumbashi");
+  await screen.getByRole("button", { name: "Publier les changements" }).click();
+  await expect(page.locator(".ae-toast")).toContainText("Les changements sont en ligne");
 
   await page.goto("/app/organisation/verification");
   await expectAccessible(page);

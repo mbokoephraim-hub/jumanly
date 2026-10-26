@@ -1276,6 +1276,7 @@
       "description": "Découvrez {company} et ses offres ouvertes. Postulez gratuitement sur Jumanly."
     },
     "verified": "Entreprise vérifiée",
+    "hiringNow": "Recrute en ce moment",
     "logoAlt": "Logo de {company}",
     "coverAlt": "Image de présentation de {company}",
     "sector": "Secteur : {sector}",
@@ -19411,6 +19412,108 @@
     "finish": "Marquer comme terminée",
     "moved": "Tâche passée à « {status} »",
     "finished": "Tâche terminée : l'administrateur est prévenu"
+  },
+  "orgPage": {
+    "title": "Page entreprise",
+    "banner": {
+      "change": "Changer la bannière"
+    },
+    "logo": {
+      "change": "Changer le logo"
+    },
+    "form": {
+      "aria": "Informations de la page"
+    },
+    "field": {
+      "name": "Nom",
+      "sector": "Secteur",
+      "size": "Taille",
+      "sizeNone": "Non indiquée",
+      "city": "Ville",
+      "website": "Site",
+      "description": "À propos",
+      "descriptionPlaceholder": "Ce que fait l'entreprise, pour qui, et où."
+    },
+    "hiring": {
+      "label": "Badge « Recrute en ce moment »",
+      "hint": "Affiché sur la page et dans Explorer"
+    },
+    "preview": "Voir la page publique",
+    "publish": "Publier les changements",
+    "saved": "Les changements sont en ligne",
+    "error": {
+      "name": "Le nom doit compter au moins 2 caractères",
+      "website": "Cette adresse de site n'est pas valide",
+      "other": "Une information n'est pas valide : vérifiez le formulaire",
+      "generic": "Ce geste n'a pas abouti. Réessayez."
+    },
+    "declared": {
+      "title": "Membres déclarés",
+      "text": "Ces personnes indiquent travailler chez vous. Confirmer est facultatif : sans réponse, « Indiqué par la personne » reste affiché.",
+      "line": "Indique travailler chez {org} · {title}",
+      "no": "Ne travaille pas ici",
+      "yes": "Confirmer",
+      "noAria": "{name} ne travaille pas ici",
+      "yesAria": "Confirmer {name}",
+      "empty": "Personne n'attend de réponse pour le moment."
+    },
+    "verification": {
+      "verified": {
+        "title": "Entreprise vérifiée",
+        "text": "Vérifiée par Jumanly : le badge apparaît sur la page et sur chaque offre."
+      },
+      "pending": {
+        "title": "Vérification en cours",
+        "text": "Jumanly étudie votre demande. Le badge apparaîtra sur la page et sur chaque offre."
+      },
+      "none": {
+        "title": "Entreprise non vérifiée",
+        "text": "Le badge de vérification rassure les candidats : il apparaît sur la page et sur chaque offre."
+      },
+      "rejected": {
+        "title": "Vérification à reprendre",
+        "text": "Jumanly n'a pas pu vérifier l'entreprise. Complétez la demande pour obtenir le badge."
+      },
+      "info_requested": {
+        "title": "Informations demandées",
+        "text": "Jumanly a besoin d'un complément pour vérifier l'entreprise. Répondez à la demande pour obtenir le badge."
+      },
+      "action": "Demander la vérification",
+      "follow": "Voir la demande"
+    },
+    "confirmed": {
+      "title": "Membres confirmés",
+      "aria": "{count, plural, one {# membre confirmé} other {# membres confirmés}}"
+    },
+    "owner": {
+      "title": "Propriété de la page",
+      "text": "Vous êtes propriétaire de la page. Vous pouvez la transmettre à un autre membre : vous restez dans l'équipe.",
+      "action": "Transférer la propriété",
+      "dialog": "Transférer la propriété",
+      "to": "À qui",
+      "confirm": "Transférer",
+      "cancel": "Annuler",
+      "done": "{name} est maintenant propriétaire de la page",
+      "alone": "Invitez d'abord un membre pour pouvoir lui transmettre la page."
+    },
+    "close": "Fermer",
+    "view": {
+      "back": "Modifier la page",
+      "hiring": "Recrute en ce moment",
+      "verified": "Entreprise vérifiée",
+      "tabs": {
+        "aria": "Sections de la page",
+        "about": "À propos",
+        "members": "Membres",
+        "offers": "Offres"
+      },
+      "confirmedBy": "Confirmé par {org}",
+      "declared": "Indiqué par la personne",
+      "noAbout": "La présentation n'est pas encore écrite.",
+      "noMembers": "Aucun membre n'est encore affiché.",
+      "noOffers": "Aucune offre ouverte pour le moment.",
+      "site": "Site : {site}"
+    }
   },
   "pricing": {
     "seo": {

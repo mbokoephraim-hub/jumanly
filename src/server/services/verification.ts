@@ -154,6 +154,7 @@ export async function publicCompany(db: PrismaClient, slug: string) {
       sector: true,
       size: true,
       verifiedAt: true,
+      hiringNow: true,
       jobs: {
         where: { status: "published" },
         orderBy: { publishedAt: "desc" },

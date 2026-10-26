@@ -107,6 +107,8 @@ model Organization {
   /// Banner chosen among the four Modèle B colours (sapin, nuit, lime, creme) when no image is
   /// uploaded (sign-up of the administrator, étape 3 A1).
   bannerTheme             String?
+  /// « Recrute en ce moment » on the company page, chosen by its administrators (étape 3, A3).
+  hiringNow               Boolean                  @default(false)
   description             String?
   website                 String?
   country                 String?

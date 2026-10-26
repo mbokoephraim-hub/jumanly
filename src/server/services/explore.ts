@@ -144,9 +144,12 @@ export async function hiringCompanies(db: PrismaClient, now = new Date(), take =
       sector: true,
       city: true,
       verifiedAt: true,
+      hiringNow: true,
       _count: { select: { jobs: { where: openJobWhere(now) } } },
     },
   });
+  // « Recrute en ce moment » (étape 3, A3) comes first.
+  const hiring = new Set(rows.filter((row) => row.hiringNow).map((row) => row.id));
   return rows
     .map((row): ExploreCompany => ({
       id: row.id,
@@ -161,6 +164,7 @@ export async function hiringCompanies(db: PrismaClient, now = new Date(), take =
     }))
     .sort(
       (a, b) =>
+        Number(hiring.has(b.id)) - Number(hiring.has(a.id)) ||
         Number(b.verified) - Number(a.verified) ||
         b.offers - a.offers ||
         a.name.localeCompare(b.name, "fr"),

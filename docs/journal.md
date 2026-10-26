@@ -4428,3 +4428,27 @@ Plomberie : partie ENTREPRISE de la barre latérale (propriétaire et administra
 | 078 | Invitations et demandes (`078-equipe-invitations`) |
 
 Captures 1440 et 1024 : `captures/etape-3/a2/` des fichiers du projet. Tests : `tests/db/entreprise-equipe.test.ts` (droits, isolation, tâches, places, membres déclarés), `tests/e2e/web-admin-equipe.spec.ts` (chaque bouton, droit retiré, manager refusé, téléphone). Mis à jour : `web-recruteur-3`, `mobile-recruteur-gerer`, `hire` (la page entreprise ne se modifie plus sur téléphone).
+
+## Étape 3 · A3, Page entreprise (26 octobre 2026)
+
+- `/app/organisation` devient la Page entreprise du Modèle B (capture 081) : bannière et logo
+  (fenêtre sombre, image recadrée au centre par le serveur), nom, secteur, taille, ville, site,
+  à propos, badge « Recrute en ce moment », « Voir la page publique » et « Publier les changements ».
+  À droite : membres déclarés (Confirmer, Ne travaille pas ici), état de la vérification, membres
+  confirmés, et pour le propriétaire seul le transfert de propriété.
+- `/app/organisation/apercu` : la page vue par un talent (capture 082), onglets À propos, Membres
+  (« Confirmé par … » ou « Indiqué par la personne ») et Offres ouvertes.
+- `/app/organisation/modifier` mène à `/app/organisation`.
+- Migration additive `company_page_hiring_now` (`Organization.hiringNow`) ; le badge s'affiche aussi
+  sur `/entreprises/[slug]` et fait passer l'entreprise en tête dans Explorer.
+- Tests : `tests/db/entreprise-page.test.ts` (enregistrement et journal, recruteur et lecteur refusés,
+  isolation, transfert réservé au propriétaire, membres et offres de l'aperçu) ;
+  `tests/e2e/web-admin-page.spec.ts` (chaque bouton, transfert aller-retour, manager refusé,
+  téléphone). Parcours mis à jour : `hire.spec.ts` (bannière et logo), `mobile-recruteur-gerer`,
+  `web-recruteur-3`.
+- Choix : `docs/decisions/2026-10-26-etape-3-a3-page-entreprise.md`.
+
+| Capture | Écran | Fichiers |
+|---|---|---|
+| 081 | Page entreprise · modifier | `/mnt/project-files/captures/etape-3/a3/081-page-entreprise-{1440,1024}.png` |
+| 082 | Page entreprise · vue publique | `/mnt/project-files/captures/etape-3/a3/082-vue-publique-{1440,1024}.png` |

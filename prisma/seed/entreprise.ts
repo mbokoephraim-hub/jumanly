@@ -163,4 +163,19 @@ export async function seedEntrepriseTeam(db: SeedClient) {
       },
     });
   }
+
+  // Page entreprise (A3): what the page shows, all fictional; the e2e changes it, the seed puts it back.
+  await db.organization.update({
+    where: { id: org.id },
+    data: {
+      name: ORG_NAME,
+      sector: "Data et finance",
+      city: "Kinshasa",
+      size: "51-200",
+      website: "https://baobab-fintech.example",
+      description:
+        "Entreprise fictive de démonstration : paiement mobile simple pour les commerçants et les familles, de Kinshasa à Lubumbashi.",
+      hiringNow: true,
+    },
+  });
 }

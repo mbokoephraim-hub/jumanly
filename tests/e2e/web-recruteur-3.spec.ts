@@ -53,12 +53,12 @@ test("web recruteur 3 : menu du compte, compte, organisation, équipe, abonnemen
   await expect(page).toHaveURL(/\/app\/organisation$/);
   await expect(menu).toBeHidden();
 
-  // 2. Organisation: the card with its two actions, four figures, the presentation.
+  // 2. Page entreprise (étape 3, A3): the page with its fields and its public view.
   await expect(
-    main(page).getByRole("heading", { level: 1, name: "Organisation", exact: true }),
+    main(page).getByRole("heading", { level: 1, name: "Page entreprise", exact: true }),
   ).toBeVisible();
-  await expect(main(page).getByRole("link", { name: "Modifier", exact: true })).toBeVisible();
-  await expect(main(page).getByRole("heading", { name: org, exact: true })).toBeVisible();
+  await expect(main(page).getByRole("link", { name: "Voir la page publique" })).toBeVisible();
+  await expect(main(page).getByLabel("Nom", { exact: true })).toHaveValue(org);
   await noOverflow(page);
   await expectAccessible(page);
 
