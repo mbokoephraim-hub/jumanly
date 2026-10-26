@@ -10,3 +10,12 @@ export function OrbiOpenLink({ label }: { label: string }) {
     </button>
   );
 }
+
+/** A question to Orbi (« Une idée de publication ? »): sent in Orbi's panel, the page stays. */
+export function OrbiAskButton({ question }: { question: string }) {
+  return (
+    <button type="button" className="rb-orbi-q t-press" onClick={() => openOrbiPanel(question)}>
+      {question}
+    </button>
+  );
+}

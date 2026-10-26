@@ -19809,6 +19809,287 @@
           "followText": "Le tableau de bord et le rapport PDF du mois."
         }
       }
+    },
+    "aside": {
+      "aria": "Orbi et suggestions",
+      "orbi": "Orbi",
+      "orbiLine": "Recommande, vous décidez",
+      "open": "Ouvrir la conversation complète"
+    },
+    "fil": {
+      "compose": {
+        "aria": "Publier dans le Fil",
+        "placeholder": "Partagez une offre, une recrue, un conseil…",
+        "me": "En votre nom",
+        "org": "Au nom de {org}",
+        "count": "{count} / {max}",
+        "publish": "Publier",
+        "done": "Publication en ligne.",
+        "failed": "La publication n'est pas partie. Réessayez dans un instant."
+      },
+      "orbi": {
+        "question": "Une idée de publication ?",
+        "fact": "Montrez une recrue, une offre ouverte ou un conseil d'entretien. Restez sous 220 caractères : une idée par publication."
+      },
+      "know": {
+        "title": "À connaître",
+        "talent": "Talent sur Jumanly",
+        "connect": "Se connecter",
+        "connectAria": "Se connecter avec {name}",
+        "sent": "Demande envoyée",
+        "failed": "La demande n'est pas partie. Réessayez dans un instant."
+      },
+      "company": {
+        "offers": "{count, plural, one {# offre ouverte} other {# offres ouvertes}}"
+      }
+    },
+    "offers": {
+      "title": "Offres",
+      "tiles": {
+        "aria": "Vos offres en chiffres",
+        "applications": "candidatures · 30 jours",
+        "week": "{count, plural, =0 {nouvelle cette semaine} one {nouvelle cette semaine} other {nouvelles cette semaine}}",
+        "delay": "délai moyen de réponse",
+        "daysValue": "{days} j",
+        "answered": "des candidats ont reçu une réponse"
+      },
+      "yours": "Vos offres",
+      "active": "{count, plural, =0 {Aucune offre en ligne} one {# offre sur {max}} other {# offres sur {max}}}",
+      "activeUnlimited": "{count, plural, =0 {Aucune offre en ligne} one {# offre en ligne} other {# offres en ligne}}",
+      "plan": "{line} · formule {plan}",
+      "none": "—",
+      "plus": "+{count}",
+      "empty": "Aucune offre pour l'instant. Publiez la première : la candidature est gratuite pour les talents.",
+      "create": "Publier une offre",
+      "col": {
+        "offer": "Offre",
+        "applications": "Candidatures",
+        "week": "Nouvelles",
+        "views": "Vues",
+        "status": "Statut",
+        "published": "Publiée",
+        "open": "Ouvrir"
+      },
+      "openAria": "Ouvrir l'offre {title}",
+      "orbi": {
+        "question": "Pourquoi l'offre {title} reçoit peu de candidatures ?",
+        "questionNone": "Comment écrire une offre qui attire de bons profils ?",
+        "fact": "{title} : {applications, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} pour {views, plural, =0 {aucune vue} one {# vue} other {# vues}}. Un salaire affiché et des compétences claires élargissent souvent le vivier.",
+        "factNone": "Une offre claire dit ce que la personne fera, avec qui, et affiche le salaire. Orbi peut proposer une description."
+      }
+    },
+    "offer": {
+      "back": "Offres",
+      "published": "publiée le {date}",
+      "applications": "{count, plural, =0 {Voir les candidatures} one {Voir la candidature} other {Voir les # candidatures}}",
+      "share": {
+        "label": "Partager",
+        "title": "Partager l'offre",
+        "copy": "Copier le lien",
+        "copied": "Lien copié.",
+        "whatsapp": "Envoyer sur WhatsApp",
+        "fil": "Publier dans le Fil",
+        "filHint": "220 caractères, en votre nom ou au nom de l'entreprise"
+      },
+      "cancel": "Annuler",
+      "pause": "Mettre en pause",
+      "resume": "Reprendre",
+      "continue": "Continuer la rédaction",
+      "edit": "Modifier",
+      "reopen": "Rouvrir",
+      "rejected": "Cette offre n'a pas été acceptée par la modération. Le motif vous a été envoyé par e-mail.",
+      "close": {
+        "label": "Clôturer",
+        "title": "Clôturer « {title} » ?",
+        "text": "L'offre quitte la recherche. {count, plural, =0 {Elle n'a reçu aucune candidature.} one {La candidature reçue reste lisible et la personne reçoit une réponse.} other {Les # candidatures restent lisibles et chaque personne reçoit une réponse.}}",
+        "confirm": "Clôturer l'offre"
+      },
+      "tabs": {
+        "aria": "Parties de l'offre",
+        "apercu": "Aperçu",
+        "annonce": "Annonce",
+        "equipe": "Équipe et réglages"
+      },
+      "tiles": {
+        "aria": "L'offre en chiffres",
+        "views": "vues de l'annonce",
+        "applications": "{count, plural, =0 {candidature} one {candidature} other {candidatures}}",
+        "week": "nouvelles cette semaine",
+        "answered": "ont reçu une réponse"
+      },
+      "plus": "+{count}",
+      "none": "—",
+      "stages": {
+        "title": "Où en sont les candidatures",
+        "empty": "Pas encore de candidature. Elles apparaîtront ici, étape par étape.",
+        "ats": "Ouvrir l'ATS de cette offre"
+      },
+      "sources": {
+        "title": "D'où viennent-elles",
+        "direct": "Candidature directe",
+        "invitation": "Invitée par l'équipe",
+        "talent_search": "Recherche de talents",
+        "free": "Candidater est gratuit pour tous : chaque personne reçoit une réponse."
+      },
+      "noText": "La description n'est pas encore écrite.",
+      "ad": {
+        "missions": "Missions",
+        "required": "Compétences requises",
+        "preferred": "Compétences souhaitées",
+        "questions": "Questions de présélection",
+        "conditions": "Conditions",
+        "contract": "Contrat",
+        "place": "Lieu",
+        "salary": "Salaire",
+        "deadline": "Date limite",
+        "noDeadline": "Aucune",
+        "sheet": "Fiche de poste",
+        "seen": "Ce que voient les talents",
+        "seenText": "L'annonce, l'entreprise, la compatibilité et son « Pourquoi ? ». Aucune donnée personnelle n'entre dans le score."
+      },
+      "salary": "{min} à {max} USD par mois",
+      "salaryHidden": "Non affiché",
+      "team": {
+        "owner": "Responsable de l'offre",
+        "evaluators": "Évaluateurs",
+        "documents": "Documents demandés",
+        "nobody": "Personne pour l'instant",
+        "noDocuments": "Aucun",
+        "free": "Candidature",
+        "freeValue": "Gratuite, sans rejet automatique",
+        "edit": "Modifier l'offre"
+      }
+    },
+    "publish": {
+      "title": "Publier une offre",
+      "stepsAria": "Étapes de la publication",
+      "steps": {
+        "poste": "Le poste",
+        "skills": "Compétences",
+        "conditions": "Conditions",
+        "questions": "Questions",
+        "team": "Aperçu et équipe"
+      },
+      "stepLine": "Étape {step} sur {count} · {name}",
+      "places": "Après publication : {count} offres sur {max}",
+      "placesUnlimited": "{count, plural, one {Après publication : # offre en ligne} other {Après publication : # offres en ligne}}",
+      "poste": {
+        "title": "Intitulé du poste",
+        "titlePlaceholder": "Par exemple : Analyste risque crédit",
+        "domain": "Domaine",
+        "openings": "Nombre de postes",
+        "description": "Description",
+        "descriptionPlaceholder": "Ce que la personne fera, avec qui, et pourquoi c'est important",
+        "orbi": "Orbi propose une description"
+      },
+      "domains": {
+        "data": "Data",
+        "finance": "Finance et risques",
+        "marketing": "Marketing",
+        "it": "Technique",
+        "energy": "Énergie",
+        "health": "Santé"
+      },
+      "orbi": {
+        "done": "Orbi a proposé une description. Relisez-la et changez ce que vous voulez.",
+        "nothing": "Orbi n'a rien à proposer avec ces informations. Ajoutez quelques mots sur le poste.",
+        "consent": "Pour qu'Orbi vous aide, activez l'assistance de l'IA dans les réglages de l'entreprise.",
+        "quota": "L'aide d'Orbi n'est plus disponible ce mois-ci avec votre formule.",
+        "failed": "Orbi n'a pas pu répondre. Réessayez dans un instant."
+      },
+      "skills": {
+        "required": "Compétences requises · {points} points du score",
+        "preferred": "Compétences souhaitées · {points} points",
+        "none": "Aucune pour l'instant.",
+        "remove": "Retirer {name}",
+        "add": "Ajouter une compétence",
+        "asRequired": "Requise",
+        "asPreferred": "Souhaitée",
+        "orbi": "Orbi suggère",
+        "plus": "+ {name}",
+        "addSuggested": "Ajouter {name} aux compétences requises",
+        "fair": "Aucun rejet automatique : une compétence manquante baisse le score, la personne reste visible et reçoit une réponse."
+      },
+      "conditions": {
+        "contract": "Contrat",
+        "remote": "Mode de travail",
+        "city": "Ville",
+        "otherCity": "Autre ville",
+        "country": "Pays du poste",
+        "salary": "Afficher le salaire",
+        "salaryHint": "Les offres avec un salaire reçoivent plus de candidatures",
+        "salaryMin": "Minimum (USD par mois)",
+        "salaryMax": "Maximum (USD par mois)",
+        "to": "à",
+        "perMonth": "USD par mois",
+        "deadline": "Date limite",
+        "noDeadline": "Sans date limite"
+      },
+      "contracts": {
+        "cdi": "CDI",
+        "cdd": "CDD",
+        "stage": "Stage",
+        "mission": "Mission"
+      },
+      "remote": {
+        "onsite": "Sur site",
+        "hybrid": "Hybride",
+        "remote": "À distance"
+      },
+      "questions": {
+        "title": "Questions de présélection",
+        "remove": "Retirer",
+        "removeAria": "Retirer la question {text}",
+        "add": "Ajouter une question",
+        "addButton": "Ajouter",
+        "documents": "Documents demandés",
+        "fair": "Les réponses aident à préparer l'entretien ; elles n'éliminent personne."
+      },
+      "documents": {
+        "cv": "CV",
+        "letter": "Lettre de motivation",
+        "diploma": "Diplôme",
+        "portfolio": "Portfolio"
+      },
+      "team": {
+        "owner": "Responsable de l'offre",
+        "ownerPlan": "Vous suivez cette offre. Confier une offre à un collègue vient avec une formule qui inclut les équipes.",
+        "evaluators": "Évaluateurs (managers)",
+        "evaluatorsPlan": "Inviter des managers à évaluer vient avec une formule qui inclut le travail en équipe.",
+        "noManagers": "Aucun manager dans l'équipe pour l'instant.",
+        "manager": "{name} · Manager",
+        "deadline": "date limite {date}",
+        "notice": "À la publication, les talents compatibles qui ont rendu leur profil visible sont prévenus.",
+        "review": "Votre entreprise n'est pas encore vérifiée : l'offre passe d'abord en vérification, puis les talents compatibles sont prévenus."
+      },
+      "preview": {
+        "title": "Aperçu pour les talents",
+        "verified": "vérifiée",
+        "noTitle": "Intitulé du poste",
+        "noText": "La description apparaîtra ici.",
+        "free": "Candidature gratuite"
+      },
+      "salaryLine": "{min} à {max} USD par mois",
+      "cancel": "Annuler",
+      "back": "Retour",
+      "draft": "Enregistrer le brouillon",
+      "continue": "Continuer",
+      "publish": "Publier l'offre",
+      "publishReview": "Envoyer en vérification",
+      "errors": {
+        "title": "Donnez un intitulé d'au moins 3 caractères.",
+        "city": "Choisissez la ville du poste.",
+        "country": "Indiquez le pays du poste.",
+        "salary": "Le maximum doit être supérieur ou égal au minimum.",
+        "description": "Écrivez la description avant de publier.",
+        "skills": "Ajoutez au moins une compétence requise avant de publier.",
+        "unknownSkills": "Ces compétences ne sont pas dans le référentiel : {skills}. Choisissez un nom proche.",
+        "tooMany": "Vingt compétences au plus.",
+        "forbidden": "Une question ou un critère porte sur une donnée interdite (âge, genre, origine, santé…). Retirez-le.",
+        "question": "Une question fait au moins 5 caractères.",
+        "limit": "Vous avez atteint le nombre d'offres en ligne de votre formule. Mettez une offre en pause ou changez de formule.",
+        "invalid": "L'offre n'a pas pu être enregistrée. Vérifiez les champs et réessayez."
+      }
     }
   },
   "pricing": {

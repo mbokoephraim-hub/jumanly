@@ -75,6 +75,7 @@ export const phoneIcons = {
   facture: "M6 3.5h8l4 4v13H6zM14 3.5v4h4M9 13h6M9 16.5h4",
   oeil: "M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z",
   curseurs: "M4 7h10M18 7h2M4 17h4M12 17h8M14 4.5v5M8 14.5v5",
+  partager: "M12 15V4M8 8l4-4 4 4M5 13v6.5h14V13",
 } as const;
 
 export type PhoneIconName = keyof typeof phoneIcons;

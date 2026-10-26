@@ -16222,6 +16222,228 @@ Conventions :
 | `rhWeb.home.welcome.admin.follow` | Suivez l'évolution |
 | `rhWeb.home.welcome.admin.followText` | Le tableau de bord et le rapport PDF du mois. |
 
+### Modèle B · Fil et offres du recruteur sur ordinateur
+
+*Recruteur sur ordinateur, lot N2 (docs/modele-b-recruteur/web, captures 033 à 042 et 090) : le Fil avec sa zone de publication (220 caractères), la liste des offres en tableau, la page d'une offre (Aperçu, Annonce, Équipe et réglages) et « Publier une offre » en cinq étapes avec l'aperçu pour les talents. Orbi à droite : il recommande, vous décidez.*
+
+| Clé | Texte |
+|---|---|
+| `rhWeb.aside.aria` | Orbi et suggestions |
+| `rhWeb.aside.orbi` | Orbi |
+| `rhWeb.aside.orbiLine` | Recommande, vous décidez |
+| `rhWeb.aside.open` | Ouvrir la conversation complète |
+| `rhWeb.fil.compose.aria` | Publier dans le Fil |
+| `rhWeb.fil.compose.placeholder` | Partagez une offre, une recrue, un conseil… |
+| `rhWeb.fil.compose.me` | En votre nom |
+| `rhWeb.fil.compose.org` | Au nom de {org} |
+| `rhWeb.fil.compose.count` | {count} / {max} |
+| `rhWeb.fil.compose.publish` | Publier |
+| `rhWeb.fil.compose.done` | Publication en ligne. |
+| `rhWeb.fil.compose.failed` | La publication n'est pas partie. Réessayez dans un instant. |
+| `rhWeb.fil.orbi.question` | Une idée de publication ? |
+| `rhWeb.fil.orbi.fact` | Montrez une recrue, une offre ouverte ou un conseil d'entretien. Restez sous 220 caractères : une idée par publication. |
+| `rhWeb.fil.know.title` | À connaître |
+| `rhWeb.fil.know.talent` | Talent sur Jumanly |
+| `rhWeb.fil.know.connect` | Se connecter |
+| `rhWeb.fil.know.connectAria` | Se connecter avec {name} |
+| `rhWeb.fil.know.sent` | Demande envoyée |
+| `rhWeb.fil.know.failed` | La demande n'est pas partie. Réessayez dans un instant. |
+| `rhWeb.fil.company.offers` | {count, plural, one {# offre ouverte} other {# offres ouvertes}} |
+| `rhWeb.offers.title` | Offres |
+| `rhWeb.offers.tiles.aria` | Vos offres en chiffres |
+| `rhWeb.offers.tiles.applications` | candidatures · 30 jours |
+| `rhWeb.offers.tiles.week` | {count, plural, =0 {nouvelle cette semaine} one {nouvelle cette semaine} other {nouvelles cette semaine}} |
+| `rhWeb.offers.tiles.delay` | délai moyen de réponse |
+| `rhWeb.offers.tiles.daysValue` | {days} j |
+| `rhWeb.offers.tiles.answered` | des candidats ont reçu une réponse |
+| `rhWeb.offers.yours` | Vos offres |
+| `rhWeb.offers.active` | {count, plural, =0 {Aucune offre en ligne} one {# offre sur {max}} other {# offres sur {max}}} |
+| `rhWeb.offers.activeUnlimited` | {count, plural, =0 {Aucune offre en ligne} one {# offre en ligne} other {# offres en ligne}} |
+| `rhWeb.offers.plan` | {line} · formule {plan} |
+| `rhWeb.offers.none` | — |
+| `rhWeb.offers.plus` | +{count} |
+| `rhWeb.offers.empty` | Aucune offre pour l'instant. Publiez la première : la candidature est gratuite pour les talents. |
+| `rhWeb.offers.create` | Publier une offre |
+| `rhWeb.offers.col.offer` | Offre |
+| `rhWeb.offers.col.applications` | Candidatures |
+| `rhWeb.offers.col.week` | Nouvelles |
+| `rhWeb.offers.col.views` | Vues |
+| `rhWeb.offers.col.status` | Statut |
+| `rhWeb.offers.col.published` | Publiée |
+| `rhWeb.offers.col.open` | Ouvrir |
+| `rhWeb.offers.openAria` | Ouvrir l'offre {title} |
+| `rhWeb.offers.orbi.question` | Pourquoi l'offre {title} reçoit peu de candidatures ? |
+| `rhWeb.offers.orbi.questionNone` | Comment écrire une offre qui attire de bons profils ? |
+| `rhWeb.offers.orbi.fact` | {title} : {applications, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} pour {views, plural, =0 {aucune vue} one {# vue} other {# vues}}. Un salaire affiché et des compétences claires élargissent souvent le vivier. |
+| `rhWeb.offers.orbi.factNone` | Une offre claire dit ce que la personne fera, avec qui, et affiche le salaire. Orbi peut proposer une description. |
+| `rhWeb.offer.back` | Offres |
+| `rhWeb.offer.published` | publiée le {date} |
+| `rhWeb.offer.applications` | {count, plural, =0 {Voir les candidatures} one {Voir la candidature} other {Voir les # candidatures}} |
+| `rhWeb.offer.share.label` | Partager |
+| `rhWeb.offer.share.title` | Partager l'offre |
+| `rhWeb.offer.share.copy` | Copier le lien |
+| `rhWeb.offer.share.copied` | Lien copié. |
+| `rhWeb.offer.share.whatsapp` | Envoyer sur WhatsApp |
+| `rhWeb.offer.share.fil` | Publier dans le Fil |
+| `rhWeb.offer.share.filHint` | 220 caractères, en votre nom ou au nom de l'entreprise |
+| `rhWeb.offer.cancel` | Annuler |
+| `rhWeb.offer.pause` | Mettre en pause |
+| `rhWeb.offer.resume` | Reprendre |
+| `rhWeb.offer.continue` | Continuer la rédaction |
+| `rhWeb.offer.edit` | Modifier |
+| `rhWeb.offer.reopen` | Rouvrir |
+| `rhWeb.offer.rejected` | Cette offre n'a pas été acceptée par la modération. Le motif vous a été envoyé par e-mail. |
+| `rhWeb.offer.close.label` | Clôturer |
+| `rhWeb.offer.close.title` | Clôturer « {title} » ? |
+| `rhWeb.offer.close.text` | L'offre quitte la recherche. {count, plural, =0 {Elle n'a reçu aucune candidature.} one {La candidature reçue reste lisible et la personne reçoit une réponse.} other {Les # candidatures restent lisibles et chaque personne reçoit une réponse.}} |
+| `rhWeb.offer.close.confirm` | Clôturer l'offre |
+| `rhWeb.offer.tabs.aria` | Parties de l'offre |
+| `rhWeb.offer.tabs.apercu` | Aperçu |
+| `rhWeb.offer.tabs.annonce` | Annonce |
+| `rhWeb.offer.tabs.equipe` | Équipe et réglages |
+| `rhWeb.offer.tiles.aria` | L'offre en chiffres |
+| `rhWeb.offer.tiles.views` | vues de l'annonce |
+| `rhWeb.offer.tiles.applications` | {count, plural, =0 {candidature} one {candidature} other {candidatures}} |
+| `rhWeb.offer.tiles.week` | nouvelles cette semaine |
+| `rhWeb.offer.tiles.answered` | ont reçu une réponse |
+| `rhWeb.offer.plus` | +{count} |
+| `rhWeb.offer.none` | — |
+| `rhWeb.offer.stages.title` | Où en sont les candidatures |
+| `rhWeb.offer.stages.empty` | Pas encore de candidature. Elles apparaîtront ici, étape par étape. |
+| `rhWeb.offer.stages.ats` | Ouvrir l'ATS de cette offre |
+| `rhWeb.offer.sources.title` | D'où viennent-elles |
+| `rhWeb.offer.sources.direct` | Candidature directe |
+| `rhWeb.offer.sources.invitation` | Invitée par l'équipe |
+| `rhWeb.offer.sources.talent_search` | Recherche de talents |
+| `rhWeb.offer.sources.free` | Candidater est gratuit pour tous : chaque personne reçoit une réponse. |
+| `rhWeb.offer.noText` | La description n'est pas encore écrite. |
+| `rhWeb.offer.ad.missions` | Missions |
+| `rhWeb.offer.ad.required` | Compétences requises |
+| `rhWeb.offer.ad.preferred` | Compétences souhaitées |
+| `rhWeb.offer.ad.questions` | Questions de présélection |
+| `rhWeb.offer.ad.conditions` | Conditions |
+| `rhWeb.offer.ad.contract` | Contrat |
+| `rhWeb.offer.ad.place` | Lieu |
+| `rhWeb.offer.ad.salary` | Salaire |
+| `rhWeb.offer.ad.deadline` | Date limite |
+| `rhWeb.offer.ad.noDeadline` | Aucune |
+| `rhWeb.offer.ad.sheet` | Fiche de poste |
+| `rhWeb.offer.ad.seen` | Ce que voient les talents |
+| `rhWeb.offer.ad.seenText` | L'annonce, l'entreprise, la compatibilité et son « Pourquoi ? ». Aucune donnée personnelle n'entre dans le score. |
+| `rhWeb.offer.salary` | {min} à {max} USD par mois |
+| `rhWeb.offer.salaryHidden` | Non affiché |
+| `rhWeb.offer.team.owner` | Responsable de l'offre |
+| `rhWeb.offer.team.evaluators` | Évaluateurs |
+| `rhWeb.offer.team.documents` | Documents demandés |
+| `rhWeb.offer.team.nobody` | Personne pour l'instant |
+| `rhWeb.offer.team.noDocuments` | Aucun |
+| `rhWeb.offer.team.free` | Candidature |
+| `rhWeb.offer.team.freeValue` | Gratuite, sans rejet automatique |
+| `rhWeb.offer.team.edit` | Modifier l'offre |
+| `rhWeb.publish.title` | Publier une offre |
+| `rhWeb.publish.stepsAria` | Étapes de la publication |
+| `rhWeb.publish.steps.poste` | Le poste |
+| `rhWeb.publish.steps.skills` | Compétences |
+| `rhWeb.publish.steps.conditions` | Conditions |
+| `rhWeb.publish.steps.questions` | Questions |
+| `rhWeb.publish.steps.team` | Aperçu et équipe |
+| `rhWeb.publish.stepLine` | Étape {step} sur {count} · {name} |
+| `rhWeb.publish.places` | Après publication : {count} offres sur {max} |
+| `rhWeb.publish.placesUnlimited` | {count, plural, one {Après publication : # offre en ligne} other {Après publication : # offres en ligne}} |
+| `rhWeb.publish.poste.title` | Intitulé du poste |
+| `rhWeb.publish.poste.titlePlaceholder` | Par exemple : Analyste risque crédit |
+| `rhWeb.publish.poste.domain` | Domaine |
+| `rhWeb.publish.poste.openings` | Nombre de postes |
+| `rhWeb.publish.poste.description` | Description |
+| `rhWeb.publish.poste.descriptionPlaceholder` | Ce que la personne fera, avec qui, et pourquoi c'est important |
+| `rhWeb.publish.poste.orbi` | Orbi propose une description |
+| `rhWeb.publish.domains.data` | Data |
+| `rhWeb.publish.domains.finance` | Finance et risques |
+| `rhWeb.publish.domains.marketing` | Marketing |
+| `rhWeb.publish.domains.it` | Technique |
+| `rhWeb.publish.domains.energy` | Énergie |
+| `rhWeb.publish.domains.health` | Santé |
+| `rhWeb.publish.orbi.done` | Orbi a proposé une description. Relisez-la et changez ce que vous voulez. |
+| `rhWeb.publish.orbi.nothing` | Orbi n'a rien à proposer avec ces informations. Ajoutez quelques mots sur le poste. |
+| `rhWeb.publish.orbi.consent` | Pour qu'Orbi vous aide, activez l'assistance de l'IA dans les réglages de l'entreprise. |
+| `rhWeb.publish.orbi.quota` | L'aide d'Orbi n'est plus disponible ce mois-ci avec votre formule. |
+| `rhWeb.publish.orbi.failed` | Orbi n'a pas pu répondre. Réessayez dans un instant. |
+| `rhWeb.publish.skills.required` | Compétences requises · {points} points du score |
+| `rhWeb.publish.skills.preferred` | Compétences souhaitées · {points} points |
+| `rhWeb.publish.skills.none` | Aucune pour l'instant. |
+| `rhWeb.publish.skills.remove` | Retirer {name} |
+| `rhWeb.publish.skills.add` | Ajouter une compétence |
+| `rhWeb.publish.skills.asRequired` | Requise |
+| `rhWeb.publish.skills.asPreferred` | Souhaitée |
+| `rhWeb.publish.skills.orbi` | Orbi suggère |
+| `rhWeb.publish.skills.plus` | + {name} |
+| `rhWeb.publish.skills.addSuggested` | Ajouter {name} aux compétences requises |
+| `rhWeb.publish.skills.fair` | Aucun rejet automatique : une compétence manquante baisse le score, la personne reste visible et reçoit une réponse. |
+| `rhWeb.publish.conditions.contract` | Contrat |
+| `rhWeb.publish.conditions.remote` | Mode de travail |
+| `rhWeb.publish.conditions.city` | Ville |
+| `rhWeb.publish.conditions.otherCity` | Autre ville |
+| `rhWeb.publish.conditions.country` | Pays du poste |
+| `rhWeb.publish.conditions.salary` | Afficher le salaire |
+| `rhWeb.publish.conditions.salaryHint` | Les offres avec un salaire reçoivent plus de candidatures |
+| `rhWeb.publish.conditions.salaryMin` | Minimum (USD par mois) |
+| `rhWeb.publish.conditions.salaryMax` | Maximum (USD par mois) |
+| `rhWeb.publish.conditions.to` | à |
+| `rhWeb.publish.conditions.perMonth` | USD par mois |
+| `rhWeb.publish.conditions.deadline` | Date limite |
+| `rhWeb.publish.conditions.noDeadline` | Sans date limite |
+| `rhWeb.publish.contracts.cdi` | CDI |
+| `rhWeb.publish.contracts.cdd` | CDD |
+| `rhWeb.publish.contracts.stage` | Stage |
+| `rhWeb.publish.contracts.mission` | Mission |
+| `rhWeb.publish.remote.onsite` | Sur site |
+| `rhWeb.publish.remote.hybrid` | Hybride |
+| `rhWeb.publish.remote.remote` | À distance |
+| `rhWeb.publish.questions.title` | Questions de présélection |
+| `rhWeb.publish.questions.remove` | Retirer |
+| `rhWeb.publish.questions.removeAria` | Retirer la question {text} |
+| `rhWeb.publish.questions.add` | Ajouter une question |
+| `rhWeb.publish.questions.addButton` | Ajouter |
+| `rhWeb.publish.questions.documents` | Documents demandés |
+| `rhWeb.publish.questions.fair` | Les réponses aident à préparer l'entretien ; elles n'éliminent personne. |
+| `rhWeb.publish.documents.cv` | CV |
+| `rhWeb.publish.documents.letter` | Lettre de motivation |
+| `rhWeb.publish.documents.diploma` | Diplôme |
+| `rhWeb.publish.documents.portfolio` | Portfolio |
+| `rhWeb.publish.team.owner` | Responsable de l'offre |
+| `rhWeb.publish.team.ownerPlan` | Vous suivez cette offre. Confier une offre à un collègue vient avec une formule qui inclut les équipes. |
+| `rhWeb.publish.team.evaluators` | Évaluateurs (managers) |
+| `rhWeb.publish.team.evaluatorsPlan` | Inviter des managers à évaluer vient avec une formule qui inclut le travail en équipe. |
+| `rhWeb.publish.team.noManagers` | Aucun manager dans l'équipe pour l'instant. |
+| `rhWeb.publish.team.manager` | {name} · Manager |
+| `rhWeb.publish.team.deadline` | date limite {date} |
+| `rhWeb.publish.team.notice` | À la publication, les talents compatibles qui ont rendu leur profil visible sont prévenus. |
+| `rhWeb.publish.team.review` | Votre entreprise n'est pas encore vérifiée : l'offre passe d'abord en vérification, puis les talents compatibles sont prévenus. |
+| `rhWeb.publish.preview.title` | Aperçu pour les talents |
+| `rhWeb.publish.preview.verified` | vérifiée |
+| `rhWeb.publish.preview.noTitle` | Intitulé du poste |
+| `rhWeb.publish.preview.noText` | La description apparaîtra ici. |
+| `rhWeb.publish.preview.free` | Candidature gratuite |
+| `rhWeb.publish.salaryLine` | {min} à {max} USD par mois |
+| `rhWeb.publish.cancel` | Annuler |
+| `rhWeb.publish.back` | Retour |
+| `rhWeb.publish.draft` | Enregistrer le brouillon |
+| `rhWeb.publish.continue` | Continuer |
+| `rhWeb.publish.publish` | Publier l'offre |
+| `rhWeb.publish.publishReview` | Envoyer en vérification |
+| `rhWeb.publish.errors.title` | Donnez un intitulé d'au moins 3 caractères. |
+| `rhWeb.publish.errors.city` | Choisissez la ville du poste. |
+| `rhWeb.publish.errors.country` | Indiquez le pays du poste. |
+| `rhWeb.publish.errors.salary` | Le maximum doit être supérieur ou égal au minimum. |
+| `rhWeb.publish.errors.description` | Écrivez la description avant de publier. |
+| `rhWeb.publish.errors.skills` | Ajoutez au moins une compétence requise avant de publier. |
+| `rhWeb.publish.errors.unknownSkills` | Ces compétences ne sont pas dans le référentiel : {skills}. Choisissez un nom proche. |
+| `rhWeb.publish.errors.tooMany` | Vingt compétences au plus. |
+| `rhWeb.publish.errors.forbidden` | Une question ou un critère porte sur une donnée interdite (âge, genre, origine, santé…). Retirez-le. |
+| `rhWeb.publish.errors.question` | Une question fait au moins 5 caractères. |
+| `rhWeb.publish.errors.limit` | Vous avez atteint le nombre d'offres en ligne de votre formule. Mettez une offre en pause ou changez de formule. |
+| `rhWeb.publish.errors.invalid` | L'offre n'a pas pu être enregistrée. Vérifiez les champs et réessayez. |
+
 ### `/tarifs` · Forfaits
 
 *Présenter toutes les formules de façon claire et honnête, par famille, et mener à l'inscription ou au devis.*

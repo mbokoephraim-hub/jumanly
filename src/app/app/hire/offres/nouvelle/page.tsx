@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
-import { JobFlow, type FlowQuery } from "@/components/recruiter/job-flow";
-import { db } from "@/server/db";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
+import { RecruiterWebPublish } from "@/components/recruiter/web-publish";
+import { webPublishData } from "@/components/recruiter/web-publish-data";
 import { requireHire } from "@/server/hire-context";
 import { isPhone } from "@/server/view";
 import { PhoneRecruiterPublish } from "@/components/phone/recruteur/publier";
@@ -12,19 +13,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("seoNew"), robots: { index: false } };
 }
 
-const flat = (params: Record<string, string | string[] | undefined>): FlowQuery =>
-  Object.fromEntries(
-    Object.entries(params).map(([key, value]) => [
-      key,
-      typeof value === "string" ? value : undefined,
-    ]),
-  );
-
-/** « Nouvelle offre », step 1 (planche recruteur-1 CR1): saved as a draft on « Continuer ». */
-export default async function NewOfferPage({
-  searchParams,
-}: PageProps<"/app/hire/offres/nouvelle">) {
-  const query = flat(await searchParams);
+/** « Publier une offre »: saved as a draft on the first « Continuer » that knows the place. */
+export default async function NewOfferPage() {
   const { ctx, user } = await requireHire("/app/hire/offres/nouvelle", "manage", "publish");
   // On a phone, the four steps of Modèle B recruteur (lot M4, planches Recruteur-publier-1 to -4).
   if (await isPhone())
@@ -33,9 +23,11 @@ export default async function NewOfferPage({
         <PhoneRecruiterPublish data={await rhPublishData(ctx, user.id, null, 1)} />
       </RhOffresTexts>
     );
-  const org = await db.organization.findUniqueOrThrow({
-    where: { id: ctx.organizationId },
-    select: { name: true, banner: true, logo: true },
-  });
-  return <JobFlow ctx={ctx} org={org} job={null} step="poste" query={query} />;
+  // On a computer or a tablet, the five steps of Modèle B (lot N2, captures 038 to 042).
+  const messages = await getMessages();
+  return (
+    <NextIntlClientProvider messages={{ rhWeb: { publish: messages.rhWeb.publish } }}>
+      <RecruiterWebPublish data={await webPublishData(ctx, user.id, null, 1)} />
+    </NextIntlClientProvider>
+  );
 }

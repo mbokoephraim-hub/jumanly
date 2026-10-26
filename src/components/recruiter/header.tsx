@@ -34,6 +34,8 @@ function ownRecruiterHead(pathname: string) {
     /^\/app\/organisation(\/.*)?$/.test(pathname) ||
     /^\/app\/hire\/(modeles|rapports)$/.test(pathname) ||
     pathname === "/app/bienvenue" ||
+    // Modèle B on a computer, lot N2: the Fil has the frame's top bar only.
+    pathname === "/app/hire/fil" ||
     // Lot 2: the offer, its four steps and its job sheet (planches recruteur-1 CR, OD_R, PDF_V).
     /^\/app\/hire\/offres\/[^/]+(\/modifier|\/fiche)?$/.test(pathname) ||
     // Lot 3: a candidate's file and its final decision (planches recruteur-2 DOS, DECIS).

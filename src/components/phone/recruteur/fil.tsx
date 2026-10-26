@@ -1,5 +1,6 @@
 import "server-only";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { db } from "@/server/db";
 import { publishingSpace } from "@/server/hire-context";
@@ -17,8 +18,11 @@ import { FilTexts, meOf, sendTargetViews } from "../fil/server";
  */
 export async function RhFil({
   user,
+  compose: composeOn,
 }: {
   user: { id: string; name: string; image: string | null };
+  /** On a computer (lot N2), the composer written in place instead of the line to publish. */
+  compose?: ReactNode;
 }) {
   const now = new Date();
   const t = await getTranslations("phoneRhFil");
@@ -32,7 +36,7 @@ export async function RhFil({
     publishingSpace(user.id),
   ]);
   const me = meOf(user);
-  const compose = (
+  const compose = composeOn ?? (
     <div className="nb-rh-fil-haut">
       <div className="nb-rh-fil-publier">
         <Link href="/app/fil/publier" className="nb-rh-fil-publier-l">
