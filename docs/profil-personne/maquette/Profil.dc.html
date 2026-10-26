@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Profil d’une personne</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050D10}
+a{color:#A6F26B;text-decoration:none}a:hover{color:#C8F99E}
+.pf,.pf *{box-sizing:border-box}
+.pf{font-family:"Sora",system-ui,sans-serif;color:#F2EDE5;-webkit-font-smoothing:antialiased}
+.pf h1,.pf h2,.pf h3,.pf p{margin:0}
+.pf button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
+.pf .scroll{position:absolute;inset:0;overflow-y:auto;scrollbar-width:none;padding-bottom:130px}
+.pf .scroll::-webkit-scrollbar{display:none}
+.pf .rb{width:36px;height:36px;border-radius:50%;background:#13282C;border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:#F2EDE5;flex:none}
+.pf .so{width:32px;height:32px;border-radius:50%;background:#13282C;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#DCE6E3;transition:transform .2s,background-color .2s,color .2s}
+.pf .so:hover{transform:translateY(-2px);background:#A6F26B;color:#0F3F37}
+.pf .st{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:14px;background:#13282C;font-size:11.5px;color:#C9D6D2;white-space:nowrap}
+.pf .st b{color:#F2EDE5;font-weight:700}
+.pf .tabs{position:sticky;top:0;z-index:3;background:#0B1A1F;padding:12px 20px 10px}
+.pf .seg{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));height:36px;padding:3px;border-radius:18px;background:#13282C;border:1px solid rgba(255,255,255,.06)}
+.pf .ind{position:absolute;top:3px;bottom:3px;left:3px;width:calc((100% - 6px)/4);border-radius:15px;background:#A6F26B;transition:transform .38s cubic-bezier(.3,.8,.2,1)}
+.pf .tb{position:relative;z-index:1;font-size:11.5px;font-weight:600;text-align:center;display:flex;align-items:center;justify-content:center;transition:color .3s;white-space:nowrap}
+.pf .pane{animation:paneIn .38s cubic-bezier(.2,.8,.2,1) both}
+@keyframes paneIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.pf .h{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:#8FA39E;margin:20px 20px 10px;display:flex;align-items:center;justify-content:space-between}
+.pf .h span{letter-spacing:0;font-weight:500}
+.pf .sk{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 12px 0 10px;border-radius:16px;font-size:12.5px;font-weight:600;border:1px solid;animation:skIn .45s cubic-bezier(.2,.9,.25,1.2) both}
+.pf .sk i{width:8px;height:8px;border-radius:50%;flex:none}
+@keyframes skIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+.pf .bar{display:flex;height:8px;border-radius:4px;overflow:hidden;gap:2px;margin:0 20px}
+.pf .bar span{display:block;height:100%;animation:barIn .7s cubic-bezier(.2,.8,.2,1) both;transform-origin:left}
+@keyframes barIn{from{transform:scaleX(0)}to{transform:none}}
+.pf .xp{position:relative;display:grid;grid-template-columns:40px minmax(0,1fr);gap:12px;padding:0 20px 18px}
+.pf .xp .lg{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;position:relative;z-index:1}
+.pf .xp .fil{position:absolute;left:39px;top:44px;bottom:2px;width:2px;border-radius:1px}
+.pf .pt{display:flex;gap:9px;font-size:12.5px;line-height:1.45;color:#DCE6E3;padding:3px 0}
+.pf .pt i{width:6px;height:6px;border-radius:2px;flex:none;margin-top:6px;transform:rotate(45deg)}
+.pf .tag{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:10px;font-size:10.5px;font-weight:700}
+.pf .menu{position:absolute;left:12px;right:12px;bottom:22px;height:64px;border-radius:32px;background:rgba(19,40,44,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.08);box-shadow:0 14px 34px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:space-between;padding:0 8px;z-index:10}
+.pf .it{position:relative;height:48px;min-width:48px;border-radius:24px;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 12px;font-size:13px;font-weight:700}
+.pf .voile{position:absolute;inset:0;background:rgba(3,8,10,.62);z-index:20;transition:opacity .3s}
+.pf .sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;background:#13282C;border-radius:28px 28px 0 0;padding:10px 20px 28px;transition:transform .42s cubic-bezier(.2,.85,.25,1)}
+.pf .post .im{position:relative;height:200px;border-radius:26px;overflow:hidden;margin-top:10px}
+.pf .post .no{position:absolute;left:0;bottom:0;width:150px;height:50px;background:#0B1A1F;border-top-right-radius:22px;display:flex;align-items:center;gap:14px;padding:8px 0 0 4px;color:#F2EDE5}
+@media (prefers-reduced-motion:reduce){.pf .pane,.pf .sk,.pf .bar span{animation:none}.pf .ind,.pf .sheet,.pf .voile{transition:none}}
+</style>
+</helmet>
+<div class="pf" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #0B1A1F; border-radius: 44px;">
+<div class="scroll">
+
+<!-- En-tête -->
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 48px 20px 10px;">
+<a class="rb" href="#" aria-label="Retour"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg></a>
+<span style="font-size: 13px; font-weight: 600; color: #8FA39E;">{{titreHaut}}</span>
+<div style="display: flex; gap: 8px;">
+<button class="rb" onClick="{{partager}}" aria-label="Partager le profil"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"></path></svg></button>
+<button class="rb" aria-label="Plus d’options"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg></button>
+</div>
+</div>
+
+<!-- Bannière 4:1 (format LinkedIn) -->
+<div style="margin: 0 20px; height: 88px; border-radius: 20px; position: relative; overflow: hidden; background: {{p.ban}};">
+<svg viewBox="0 0 350 88" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><g fill="none" stroke="{{p.motif}}" stroke-width="14" stroke-opacity=".5"><circle cx="300" cy="10" r="46"></circle><circle cx="300" cy="10" r="86"></circle><circle cx="300" cy="10" r="126"></circle></g><circle cx="44" cy="70" r="5" fill="#A6F26B"></circle></svg>
+<span style="position: absolute; right: 12px; bottom: 10px; font-size: 11px; font-weight: 600; color: #F2EDE5; background: rgba(11,26,31,.55); padding: 4px 9px; border-radius: 10px;">{{p.banT}}</span>
+</div>
+
+<!-- Photo réduite + réseaux -->
+<div style="display: flex; align-items: flex-end; justify-content: space-between; padding: 0 20px; margin-top: -34px; position: relative;">
+<span style="width: 76px; height: 76px; border-radius: 50%; padding: 3px; background: {{p.anneau}}; flex: none; position: relative;">
+<img src="{{p.photo}}" alt="Photo de {{p.n}}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; object-position: 50% 22%; border: 3px solid #0B1A1F; display: block;">
+<sc-if value="{{p.enLigne}}" hint-placeholder-val="{{ true }}"><span aria-label="Actif maintenant" style="position: absolute; right: 4px; bottom: 4px; width: 14px; height: 14px; border-radius: 50%; background: #2FD3A6; border: 3px solid #0B1A1F;"></span></sc-if>
+</span>
+<div style="display: flex; gap: 6px; padding-bottom: 2px;">
+<sc-for list="{{p.reseaux}}" as="r" hint-placeholder-count="5">
+<a class="so" href="#" aria-label="{{r.t}}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{r.d}}"></path></svg></a>
+</sc-for>
+</div>
+</div>
+
+<!-- Identité -->
+<div style="padding: 10px 20px 0;">
+<h1 style="font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 7px; letter-spacing: -.01em;">{{p.n}}<sc-if value="{{p.verif}}" hint-placeholder-val="{{ true }}"><svg width="18" height="18" viewBox="0 0 24 24" role="img" aria-label="Profil vérifié"><path d="M12 2.5l2.4 1.8 3-.1.9 2.9 2.4 1.8-1 2.8 1 2.8-2.4 1.8-.9 2.9-3-.1L12 21.5l-2.4-1.8-3 .1-.9-2.9-2.4-1.8 1-2.8-1-2.8 2.4-1.8.9-2.9 3 .1z" fill="#A6F26B"></path><path d="m8.2 12.2 2.6 2.6 5-5.2" fill="none" stroke="#0F3F37" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"></path></svg></sc-if><sc-if value="{{p.nonVerif}}" hint-placeholder-val="{{ false }}"><span class="tag" style="background: #13282C; color: #9FB3AE; font-weight: 600;">Non vérifié</span></sc-if></h1>
+<p style="font-size: 12.5px; color: #8FA39E; margin-top: 2px;">@{{p.alias}}</p>
+<p style="font-size: 12.5px; color: #C9D6D2; margin-top: 6px; display: flex; align-items: center; gap: 7px;">
+<sc-if value="{{p.fRdc}}" hint-placeholder-val="{{ true }}"><svg width="20" height="14" viewBox="0 0 40 28" role="img" aria-label="Drapeau de la RD Congo" style="border-radius: 3px; flex: none;"><rect width="40" height="28" fill="#007FFF"></rect><path d="M0 22 33 0h7v6L7 28H0z" fill="#F7D618"></path><path d="M0 25 37.5 0H40v3L4.5 28H0z" fill="#CE1021"></path><path d="m7 3 1.2 3.6H12l-3 2.2 1.1 3.6L7 10.2l-3.1 2.2L5 8.8 2 6.6h3.8z" fill="#F7D618"></path></svg></sc-if>
+<sc-if value="{{p.fGhana}}" hint-placeholder-val="{{ false }}"><svg width="20" height="14" viewBox="0 0 30 21" role="img" aria-label="Drapeau du Ghana" style="border-radius: 3px; flex: none;"><rect width="30" height="7" fill="#CE1126"></rect><rect y="7" width="30" height="7" fill="#FCD116"></rect><rect y="14" width="30" height="7" fill="#006B3F"></rect><path d="m15 7.3 1.6 4.9h5.1l-4.1 3 1.6 4.8-4.2-3-4.2 3 1.6-4.8-4.1-3h5.1z" fill="#000" transform="scale(.62) translate(9.2 4.4)"></path></svg></sc-if>
+<span>{{p.ville}}, {{p.pays}}</span><span style="color: #8FA39E;">· {{p.heure}}</span>
+</p>
+<p style="font-size: 13px; line-height: 1.55; color: #DCE6E3; margin-top: 10px;">{{p.bio}}</p>
+
+<div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;">
+<span class="st"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#A6F26B" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 19.5c.8-3.3 3.4-5 6.5-5s5.7 1.7 6.5 5M16 4.8a3.4 3.4 0 0 1 0 6.4M18.5 14.6c1.6.8 2.6 2.4 3 4.9"></path></svg><b>{{p.conn}}</b> connexions</span>
+<span class="st"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#F4C463" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5h17v11h-17zM8.5 8.5V5.5h7v3"></path></svg>{{p.domaine}}</span>
+<span class="st"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7CC4FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="m15.5 8.5-2 5-5 2 2-5z"></path></svg>Cherche : <b>{{p.contrat}}</b></span>
+<span class="st"><i style="width: 7px; height: 7px; border-radius: 50%; background: #2FD3A6;"></i>{{p.actif}}</span>
+</div>
+
+<div style="display: flex; align-items: center; gap: 8px; margin-top: 12px;">
+<span style="display: flex;"><span style="width: 22px; height: 22px; border-radius: 50%; background: #F4C463; color: #0B1A1F; font-size: 9px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid #0B1A1F;">AK</span><span style="width: 22px; height: 22px; border-radius: 50%; background: #2FD3A6; color: #0B1A1F; font-size: 9px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid #0B1A1F; margin-left: -7px;">NK</span><span style="width: 22px; height: 22px; border-radius: 50%; background: #C3A6FF; color: #0B1A1F; font-size: 9px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid #0B1A1F; margin-left: -7px;">RN</span></span>
+<span style="font-size: 12px; color: #9FB3AE;">{{p.commun}}</span>
+</div>
+</div>
+
+<!-- Actions : connexion -->
+<sc-if value="{{vueConn}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; gap: 8px; padding: 14px 20px 0;">
+<button onClick="{{connecter}}" style="flex: 1; height: 44px; border-radius: 22px; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; background: {{bt.bg}}; color: {{bt.fg}}; border: 1px solid {{bt.bd}}; transition: background-color .3s, color .3s;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{bt.ic}}"></path></svg>{{bt.t}}</button>
+<sc-if value="{{peutEcrire}}" hint-placeholder-val="{{ true }}"><a href="#" style="flex: 1; height: 44px; border-radius: 22px; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; color: #F2EDE5; border: 1px solid rgba(255,255,255,.28);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg>Chat</a></sc-if>
+</div>
+</sc-if>
+
+<!-- Actions : recruteur (candidat) -->
+<sc-if value="{{vueRec}}" hint-placeholder-val="{{ false }}">
+<div style="margin: 14px 20px 0; padding: 12px; border-radius: 20px; background: linear-gradient(135deg, #0F3F37, #13282C); border: 1px solid rgba(166,242,107,.22);">
+<div style="display: flex; align-items: center; gap: 12px;">
+<span style="width: 54px; height: 54px; border-radius: 50%; flex: none; background: conic-gradient(#A6F26B 0 86%, rgba(255,255,255,.12) 86% 100%); display: flex; align-items: center; justify-content: center;"><span style="width: 44px; height: 44px; border-radius: 50%; background: #0F3F37; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800;">86 %</span></span>
+<span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 13.5px; font-weight: 700;">A candidaté : Analyste de données junior</b><span style="display: block; font-size: 11.5px; color: #B9D3C8; margin-top: 2px;">Baobab Fintech · il y a 2 jours · étape Nouveau</span></span>
+</div>
+<div style="display: flex; gap: 8px; margin-top: 12px;">
+<button onClick="{{ouvrirPq}}" style="height: 36px; padding: 0 14px; border-radius: 18px; font-size: 12.5px; font-weight: 700; color: #A6F26B; border: 1px solid rgba(166,242,107,.45);">Pourquoi 86 % ?</button>
+<button onClick="{{avancer}}" style="flex: 1; height: 36px; border-radius: 18px; font-size: 12.5px; font-weight: 800; background: #A6F26B; color: #0F3F37; text-align: center;">{{avT}}</button>
+<a href="#" aria-label="Écrire au candidat" style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.28); display: flex; align-items: center; justify-content: center; color: #F2EDE5; flex: none;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg></a>
+</div>
+</div>
+</sc-if>
+
+<!-- Onglets -->
+<div class="tabs">
+<div class="seg" role="tablist" aria-label="Rubriques du profil">
+<span class="ind" style="transform: translateX({{indX}});"></span>
+<sc-for list="{{onglets}}" as="o" hint-placeholder-count="4">
+<button class="tb" role="tab" aria-selected="{{o.sel}}" onClick="{{o.pick}}" style="color: {{o.col}};">{{o.t}}</button>
+</sc-for>
+</div>
+</div>
+
+<!-- À propos -->
+<sc-if value="{{oAbout}}" hint-placeholder-val="{{ true }}">
+<div class="pane">
+<div class="h">COMPÉTENCES <span>{{p.nComp}}</span></div>
+<div class="bar" aria-hidden="true"><sc-for list="{{p.familles}}" as="f" hint-placeholder-count="3"><span style="flex: {{f.w}}; background: {{f.c}}; animation-delay: {{f.d}};"></span></sc-for></div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin: 8px 20px 12px; font-size: 11px; color: #9FB3AE;"><sc-for list="{{p.familles}}" as="f" hint-placeholder-count="3"><span style="display: inline-flex; align-items: center; gap: 5px;"><i style="width: 7px; height: 7px; border-radius: 2px; background: {{f.c}};"></i>{{f.t}}</span></sc-for></div>
+<div style="display: flex; flex-wrap: wrap; gap: 7px; padding: 0 20px;">
+<sc-for list="{{p.comp}}" as="c" hint-placeholder-count="7">
+<span class="sk" style="background: {{c.bg}}; border-color: {{c.bd}}; color: {{c.c}}; animation-delay: {{c.d}};"><i style="background: {{c.c}};"></i>{{c.t}}<sc-if value="{{c.v}}" hint-placeholder-val="{{ false }}"><svg width="13" height="13" viewBox="0 0 24 24" role="img" aria-label="vérifiée"><circle cx="12" cy="12" r="10" fill="{{c.c}}"></circle><path d="m7.5 12.5 3 3 6-6.5" fill="none" stroke="#0B1A1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></sc-if></span>
+</sc-for>
+</div>
+
+<div class="h" style="margin-top: 26px;">EXPÉRIENCES <span>{{p.nExp}}</span></div>
+<sc-for list="{{p.exp}}" as="e" hint-placeholder-count="3">
+<div class="xp">
+<sc-if value="{{e.fil}}" hint-placeholder-val="{{ true }}"><span class="fil" style="background: linear-gradient({{e.c}}, rgba(255,255,255,.08));"></span></sc-if>
+<span class="lg" style="background: {{e.c}}; color: {{e.lc}};">{{e.lg}}</span>
+<div style="min-width: 0;">
+<div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;"><b style="font-size: 14px; font-weight: 700;">{{e.t}}</b><sc-if value="{{e.actuel}}" hint-placeholder-val="{{ false }}"><span class="tag" style="background: #A6F26B; color: #0F3F37;">Actuel</span></sc-if></div>
+<p style="font-size: 12px; color: #C9D6D2; margin-top: 2px;">{{e.ent}} · <span style="color: {{e.c2}}; font-weight: 700;">{{e.type}}</span></p>
+<p style="font-size: 11.5px; color: #8FA39E; margin-top: 2px;">{{e.dates}} · {{e.lieu}}</p>
+<div style="margin-top: 8px;">
+<sc-for list="{{e.pts}}" as="x" hint-placeholder-count="3"><p class="pt"><i style="background: {{e.c2}};"></i><span>{{x}}</span></p></sc-for>
+</div>
+<sc-if value="{{e.plus}}" hint-placeholder-val="{{ false }}"><button onClick="{{e.basc}}" style="font-size: 12px; font-weight: 700; color: {{e.c2}}; min-height: 32px; margin-top: 2px;">{{e.plusT}}</button></sc-if>
+</div>
+</div>
+</sc-for>
+
+<div class="h" style="margin-top: 8px;">FORMATION</div>
+<sc-for list="{{p.form}}" as="f" hint-placeholder-count="2">
+<div style="display: flex; align-items: center; gap: 12px; padding: 6px 20px;"><span style="width: 36px; height: 36px; border-radius: 11px; background: #13282C; display: flex; align-items: center; justify-content: center; color: #C3A6FF; flex: none;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 9 12 4.5 21.5 9 12 13.5zM6.5 11.2v4.6c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.6"></path></svg></span><span><b style="display: block; font-size: 13px; font-weight: 600;">{{f.t}}</b><span style="font-size: 11.5px; color: #8FA39E;">{{f.d}}</span></span></div>
+</sc-for>
+
+<div class="h" style="margin-top: 22px;">LANGUES</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 0 20px;">
+<sc-for list="{{p.langues}}" as="l" hint-placeholder-count="3">
+<div style="padding: 10px; border-radius: 14px; background: #13282C;"><b style="display: block; font-size: 12.5px; font-weight: 700;">{{l.t}}</b><span style="display: flex; gap: 3px; margin-top: 7px;"><sc-for list="{{l.n}}" as="d" hint-placeholder-count="5"><i style="flex: 1; height: 4px; border-radius: 2px; background: {{d}};"></i></sc-for></span><span style="display: block; font-size: 10.5px; color: #8FA39E; margin-top: 5px;">{{l.niv}}</span></div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- Publications -->
+<sc-if value="{{oPub}}" hint-placeholder-val="{{ false }}">
+<div class="pane">
+<sc-for list="{{p.pubs}}" as="q" hint-placeholder-count="2">
+<article class="post" style="padding: 14px 20px 18px; border-bottom: 1px solid rgba(255,255,255,.07);">
+<div style="display: flex; align-items: center; gap: 10px;"><img src="{{p.photo}}" alt="" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; object-position: 50% 22%;"><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 13px;">{{p.n}}</b><span style="font-size: 11px; color: #8FA39E;">{{q.h}}</span></span></div>
+<div style="padding-left: 46px; margin-top: 6px;">
+<h3 style="font-size: 16px; font-weight: 700; line-height: 1.3;">{{q.t}}</h3>
+<p style="font-size: 13px; line-height: 1.5; color: #DCE6E3; margin-top: 4px;">{{q.x}}</p>
+<sc-if value="{{q.aImg}}" hint-placeholder-val="{{ true }}"><div class="im" style="background: {{q.fond}};"><img src="{{q.img}}" alt="{{q.alt}}" style="width: 100%; height: 100%; object-fit: cover; display: block;"><div class="no"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-label="J’aime" role="img"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.2a4.3 4.3 0 0 1 7.5 2.6C19.5 15.4 12 20 12 20z"></path></svg><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-label="Commenter" role="img"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-label="Envoyer" role="img"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"></path></svg></div><span style="position: absolute; right: 10px; bottom: 10px; height: 26px; padding: 0 9px; border-radius: 13px; background: rgba(11,26,31,.7); font-size: 11.5px; font-weight: 700; display: flex; align-items: center;">{{q.r}}</span></div></sc-if>
+</div>
+</article>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- Réalisations -->
+<sc-if value="{{oReal}}" hint-placeholder-val="{{ false }}">
+<div class="pane" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 8px 20px 0;">
+<sc-for list="{{p.real}}" as="r" hint-placeholder-count="4">
+<div style="border-radius: 20px; overflow: hidden; background: #13282C; animation: skIn .45s both; animation-delay: {{r.d}};">
+<div style="height: 112px; background: {{r.fond}}; position: relative; overflow: hidden;"><sc-if value="{{r.aImg}}" hint-placeholder-val="{{ true }}"><img src="{{r.img}}" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block;"></sc-if><sc-if value="{{r.sansImg}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 160 112" style="width: 100%; height: 100%;" aria-hidden="true"><g fill="none" stroke="#FFFFFF" stroke-opacity=".25" stroke-width="12"><circle cx="140" cy="0" r="40"></circle><circle cx="140" cy="0" r="72"></circle></g></svg></sc-if><span class="tag" style="position: absolute; left: 8px; top: 8px; background: rgba(11,26,31,.7); color: #F2EDE5;">{{r.k}}</span></div>
+<div style="padding: 10px 11px 12px;"><b style="display: block; font-size: 12.5px; font-weight: 700; line-height: 1.3;">{{r.t}}</b><span style="display: flex; gap: 4px; margin-top: 7px; flex-wrap: wrap;"><sc-for list="{{r.c}}" as="c" hint-placeholder-count="2"><span style="font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 8px; background: {{c.bg}}; color: {{c.c}};">{{c.t}}</span></sc-for></span></div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- Portfolio -->
+<sc-if value="{{oPort}}" hint-placeholder-val="{{ false }}">
+<div class="pane" style="padding: 8px 20px 0; display: flex; flex-direction: column; gap: 8px;">
+<sc-for list="{{p.port}}" as="f" hint-placeholder-count="4">
+<a href="#" style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 18px; background: #13282C; color: #F2EDE5; animation: paneIn .4s both; animation-delay: {{f.d}};">
+<span style="width: 44px; height: 44px; border-radius: 13px; background: {{f.bg}}; color: {{f.c}}; display: flex; align-items: center; justify-content: center; flex: none; font-size: 10.5px; font-weight: 800;">{{f.k}}</span>
+<span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{f.t}}</b><span style="font-size: 11.5px; color: #8FA39E;">{{f.d2}}</span></span>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"></path></svg>
+</a>
+</sc-for>
+</div>
+</sc-if>
+
+</div>
+
+<!-- Orbi -->
+<button aria-label="Ouvrir Orbi, l’assistant" style="position: absolute; right: 20px; bottom: 100px; width: 52px; height: 52px; border-radius: 50%; z-index: 9; box-shadow: 0 0 0 6px rgba(47,211,166,.2), 0 14px 30px -8px rgba(47,211,166,.55);"><svg width="52" height="52" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg></button>
+
+<!-- Menu en pilule -->
+<nav class="menu" aria-label="Navigation principale">
+<sc-for list="{{menu}}" as="m" hint-placeholder-count="5">
+<a class="it" href="#" aria-label="{{m.t}}" style="background: {{m.bg}}; color: {{m.fg}};"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{m.d}}"></path></svg><sc-if value="{{m.on}}" hint-placeholder-val="{{ false }}"><span>{{m.t}}</span></sc-if></a>
+</sc-for>
+</nav>
+
+<!-- Pourquoi ? (vue recruteur) -->
+<div class="voile" onClick="{{fermerPq}}" style="opacity: {{pqOp}}; pointer-events: {{pqPe}};"></div>
+<section class="sheet" role="dialog" aria-label="Pourquoi ce score" aria-hidden="{{pqHid}}" style="transform: translateY({{pqY}});">
+<span style="display: block; width: 40px; height: 5px; border-radius: 3px; background: rgba(255,255,255,.22); margin: 0 auto 14px;"></span>
+<h2 style="font-size: 18px; font-weight: 700;">Pourquoi 86 % ?</h2>
+<p style="font-size: 12.5px; color: #9FB3AE; margin-top: 4px;">Analyste de données junior · Baobab Fintech</p>
+<div style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;">
+<sc-for list="{{criteres}}" as="c" hint-placeholder-count="4">
+<div><div style="display: flex; justify-content: space-between; font-size: 12.5px;"><b style="font-weight: 600;">{{c.t}}</b><span style="color: {{c.c}}; font-weight: 700;">{{c.v}}</span></div><div style="height: 6px; border-radius: 3px; background: #1B3338; margin-top: 6px; overflow: hidden;"><span style="display: block; height: 100%; width: {{c.w}}; background: {{c.c}}; border-radius: 3px; transition: width .6s;"></span></div><p style="font-size: 11.5px; color: #9FB3AE; margin-top: 4px;">{{c.x}}</p></div>
+</sc-for>
+</div>
+<p style="font-size: 11.5px; line-height: 1.5; color: #C9D6D2; margin-top: 16px; padding: 10px 12px; border-radius: 12px; background: #0F3F37;">Calculé sans le nom, la photo, l’âge, le genre ni la nationalité. Orbi recommande, vous décidez : aucune candidature n’est écartée automatiquement.</p>
+<button onClick="{{fermerPq}}" style="width: 100%; height: 48px; border-radius: 24px; background: #A6F26B; color: #0F3F37; font-weight: 800; font-size: 14px; text-align: center; margin-top: 14px;">Compris</button>
+</section>
+
+<sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><div role="status" style="position: absolute; left: 20px; right: 20px; top: 52px; z-index: 30; padding: 12px 14px; border-radius: 14px; background: #F2EDE5; color: #0B1A1F; font-size: 13px; font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,.4);">{{toast}}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"qui":{"editor":"enum","options":["patrick","kofi"],"default":"patrick"},"vue":{"editor":"enum","options":["connexion","recruteur"],"default":"connexion"},"onglet":{"editor":"enum","options":["pub","about","real","port"],"default":"about"},"pourquoi":{"editor":"boolean","default":false},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const pr = this.props || {};
+    const S = (o) => this.setState(o);
+    const qui = pr.qui || 'patrick';
+    const vue = pr.vue || 'connexion';
+    const og = st.og || pr.onglet || 'about';
+    const ICS = {
+      linkedin: ['LinkedIn', 'M4.5 3.5h15a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1v-15a1 1 0 0 1 1-1zM8 10.5v6M8 7.5v.01M12 16.5v-3.5a2 2 0 0 1 4 0v3.5M12 10.5v6'],
+      instagram: ['Instagram', 'M8 3.5h8A4.5 4.5 0 0 1 20.5 8v8a4.5 4.5 0 0 1-4.5 4.5H8A4.5 4.5 0 0 1 3.5 16V8A4.5 4.5 0 0 1 8 3.5zM12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6zM17.2 6.8v.01'],
+      mail: ['E-mail', 'M4 5.5h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-11a1 1 0 0 1 1-1zM3.5 7l8.5 6 8.5-6'],
+      x: ['X (Twitter)', 'M4.5 4h4l11 16h-4zM19.5 4l-6.3 7M10.8 13 4.5 20'],
+      facebook: ['Facebook', 'M14.5 8H17V4.5h-2.5A4 4 0 0 0 10.5 8.5V11H8v3.5h2.5V21H14v-6.5h2.6l.4-3.5h-3V9a1 1 0 0 1 1-1z'],
+      site: ['Site web', 'M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM3.5 12h17M12 3.5c2.4 2.4 3.4 5.2 3.4 8.5s-1 6.1-3.4 8.5c-2.4-2.4-3.4-5.2-3.4-8.5s1-6.1 3.4-8.5z']
+    };
+    const COL = { lime: '#A6F26B', menthe: '#2FD3A6', ambre: '#F4C463', ciel: '#7CC4FF', corail: '#FF8A7A', lilas: '#C3A6FF', sable: '#E8D3A6', rose: '#FF9EC7' };
+    const sk = (t, k, v, i) => ({ t, c: COL[k], bg: COL[k] + '1F', bd: COL[k] + '55', v: !!v, d: (0.05 * i).toFixed(2) + 's' });
+    const P = {
+      patrick: {
+        n: 'Patrick Ilunga', alias: 'patrick.ilunga', verif: true, photo: 'img/patrick.jpg',
+        ban: '#1E4E79', motif: '#7CC4FF', banT: 'Analyse crédit PME', fRdc: true, ville: 'Kinshasa', pays: 'RD Congo', heure: '21 h 20',
+        bio: 'Analyste crédit chez Fleuve Banque. J’aide les PME de Kinshasa à obtenir leur premier prêt, chiffres à l’appui.',
+        conn: '312', domaine: 'Finance et banque', contrat: 'CDI', actif: 'Actif aujourd’hui', enLigne: true, commun: 'Annie, Nadia et 4 autres connexions en commun',
+        reseaux: ['linkedin', 'instagram', 'mail', 'x', 'facebook'],
+        comp: [['Analyse financière', 'lime', 1], ['Scoring crédit', 'corail', 1], ['Excel', 'menthe', 1], ['Power BI', 'ambre'], ['SQL', 'ciel'], ['Relation client', 'lilas'], ['Négociation', 'sable']],
+        familles: [['Finance', 'lime', 45], ['Data', 'ciel', 35], ['Relation', 'lilas', 20]],
+        exp: [
+          { t: 'Analyste crédit', ent: 'Fleuve Banque', lg: 'FB', c: '#CFE4F7', lc: '#1E4E79', c2: '#7CC4FF', type: 'CDI', dates: 'janv. 2024 – aujourd’hui · 1 an 10 mois', lieu: 'Kinshasa', actuel: true,
+            pts: ['Étudie environ 25 dossiers de crédit PME par mois', 'A construit le tableau de bord des impayés sous Power BI', 'Présente les dossiers au comité de crédit chaque semaine', 'Forme deux stagiaires à la lecture des bilans'] },
+          { t: 'Chargé de clientèle junior', ent: 'Baobab Fintech', lg: 'BF', c: '#0F3F37', lc: '#A6F26B', c2: '#A6F26B', type: 'CDD 12 mois', dates: 'sept. 2022 – déc. 2023 · 1 an 4 mois', lieu: 'Kinshasa',
+            pts: ['Suivait un portefeuille de 180 clients particuliers', 'Ouvrait les comptes mobiles et conseillait sur l’épargne', 'A réduit les retards de paiement grâce à des relances ciblées'] },
+          { t: 'Stagiaire en audit', ent: 'Cabinet Lukusa & Associés', lg: 'CL', c: '#FFE1A1', lc: '#8A5A00', c2: '#F4C463', type: 'Stage 6 mois', dates: 'févr. – juil. 2022', lieu: 'Kinshasa',
+            pts: ['Préparait les feuilles de travail des missions d’audit', 'Vérifiait les rapprochements bancaires de trois clients'] }
+        ],
+        form: [{ t: 'Master en finance', d: 'Université de Kinshasa · 2022' }, { t: 'Licence en économie', d: 'Université de Kinshasa · 2020' }],
+        langues: [['Français', 5, 'Courant'], ['Lingala', 5, 'Langue maternelle'], ['Anglais', 3, 'Intermédiaire']],
+        pubs: [
+          { h: 'Analyste crédit · il y a 2 j', t: 'Notre tableau des impayés est enfin en ligne', x: 'Trois mois de travail sur Power BI : chaque agence voit ses retards du jour. Merci à l’équipe crédit.', aImg: true, img: 'img/dash.png', alt: 'Tableau de bord des impayés', fond: '#F2EDE5', r: '48' },
+          { h: 'Analyste crédit · il y a 1 sem.', t: 'Trois questions avant de prêter à une PME', x: 'Vend-elle chaque mois ? Qui paie à temps ? Que fera-t-elle du prêt ? Le reste vient après.', aImg: false, r: '' }
+        ],
+        real: [
+          { t: 'Tableau de bord des impayés', k: 'Projet', fond: '#F2EDE5', aImg: true, img: 'img/dash.png', c: [['Power BI', 'ambre'], ['SQL', 'ciel']] },
+          { t: 'Grille de scoring PME', k: 'Projet', fond: '#1E4E79', aImg: false, c: [['Scoring crédit', 'corail']] },
+          { t: 'Atelier épargne mobile', k: 'Événement', fond: '#0F3F37', aImg: true, img: 'img/illus-baobab.jpg', c: [['Relation client', 'lilas']] },
+          { t: 'Certificat Excel avancé', k: 'Certificat', fond: '#14745F', aImg: false, c: [['Excel', 'menthe']] }
+        ],
+        port: [
+          { k: 'PDF', t: 'Étude : le crédit aux PME à Kinshasa', d2: 'PDF · 14 pages', bg: '#FFE1A1', c: '#8A5A00' },
+          { k: 'BI', t: 'Démo du tableau des impayés', d2: 'Lien Power BI public', bg: '#FDF1D8', c: '#8A5A00' },
+          { k: 'CV', t: 'CV de Patrick Ilunga', d2: 'PDF · 2 pages · mis à jour en octobre', bg: '#CFE4F7', c: '#1E4E79' },
+          { k: 'WEB', t: 'jumanly.io/@patrick.ilunga', d2: 'Page publique Jumanly', bg: '#0F3F37', c: '#A6F26B' }
+        ]
+      },
+      kofi: {
+        n: 'Kofi Mensah', alias: 'kofi.data', verif: true, photo: 'img/photo-kofi.jpg',
+        ban: '#0F3F37', motif: '#A6F26B', banT: 'Data et numérique', fGhana: true, ville: 'Accra', pays: 'Ghana', heure: '19 h 20',
+        bio: 'Data analyst junior. Je transforme des tableurs en décisions. Prêt à m’installer à Kinshasa.',
+        conn: '148', domaine: 'Data et numérique', contrat: 'CDI', actif: 'Actif il y a 1 h', enLigne: false, commun: 'Ruth et 2 autres connexions en commun',
+        reseaux: ['linkedin', 'mail', 'site'],
+        comp: [['SQL', 'ciel', 1], ['Excel', 'menthe', 1], ['Power BI', 'ambre', 1], ['Python', 'lime'], ['Statistiques', 'lilas'], ['Anglais professionnel', 'rose']],
+        familles: [['Data', 'ciel', 60], ['Analyse', 'lilas', 25], ['Langues', 'rose', 15]],
+        exp: [
+          { t: 'Data analyst stagiaire', ent: 'Kasa Market', lg: 'KM', c: '#C9F1E3', lc: '#14745F', c2: '#2FD3A6', type: 'Stage 6 mois', dates: 'janv. – juin 2025', lieu: 'Accra',
+            pts: ['Nettoyait les ventes de 40 boutiques chaque semaine avec SQL', 'A créé le rapport Power BI des ruptures de stock', 'Présentait les chiffres au directeur commercial'] },
+          { t: 'Assistant de recherche', ent: 'Laboratoire de statistiques', lg: 'LS', c: '#E9DDFF', lc: '#5B3FA0', c2: '#C3A6FF', type: 'CDD 8 mois', dates: 'mars – oct. 2024', lieu: 'Accra',
+            pts: ['Saisissait et vérifiait les données d’une enquête de 1 200 ménages', 'Produisait les tableaux croisés pour le rapport final'] }
+        ],
+        form: [{ t: 'Licence en statistiques', d: 'Accra · 2024' }],
+        langues: [['Anglais', 5, 'Courant'], ['Français', 4, 'Avancé'], ['Twi', 5, 'Langue maternelle']],
+        pubs: [], real: [], port: []
+      }
+    };
+    const x = P[qui];
+    const ouv = st.ouv || { 0: true };
+    const p = {
+      ...x, nonVerif: !x.verif, fGhana: !!x.fGhana, fRdc: !!x.fRdc,
+      anneau: 'conic-gradient(' + x.comp.slice(0, 5).map((c, i, a) => COL[c[1]] + ' ' + Math.round(i * 100 / a.length) + '% ' + Math.round((i + 1) * 100 / a.length) + '%').join(', ') + ')',
+      reseaux: x.reseaux.map((k) => ({ t: ICS[k][0], d: ICS[k][1] })),
+      comp: x.comp.map((c, i) => sk(c[0], c[1], c[2], i)), nComp: x.comp.length + ' compétences',
+      familles: x.familles.map(([t, k, w], i) => ({ t: t + ' ' + w + ' %', c: COL[k], w: String(w), d: (0.1 * i).toFixed(1) + 's' })),
+      nExp: x.exp.length + ' postes',
+      exp: x.exp.map((e, i) => { const o = !!ouv[i]; const plus = e.pts.length > 2; return { ...e, actuel: !!e.actuel, fil: i < x.exp.length - 1, pts: o ? e.pts : e.pts.slice(0, 2), plus, plusT: o ? 'Voir moins' : 'Voir ' + (e.pts.length - 2) + ' de plus', basc: () => S({ ouv: { ...ouv, [i]: !o } }) }; }),
+      langues: x.langues.map(([t, n, niv]) => ({ t, niv, n: [1, 2, 3, 4, 5].map((k) => (k <= n ? '#A6F26B' : '#1B3338')) })),
+      real: x.real.map((r, i) => ({ ...r, sansImg: !r.aImg, d: (0.06 * i).toFixed(2) + 's', c: r.c.map(([t, k]) => ({ t, c: COL[k], bg: COL[k] + '22' })) })),
+      port: x.port.map((f, i) => ({ ...f, d: (0.06 * i).toFixed(2) + 's' }))
+    };
+    const T = [['pub', 'Publications'], ['about', 'À propos'], ['real', 'Réalisations'], ['port', 'Portfolio']];
+    const idx = T.findIndex((t) => t[0] === og);
+    const onglets = T.map(([k, t]) => ({ t, sel: k === og ? 'true' : 'false', col: k === og ? '#0F3F37' : '#9FB3AE', pick: () => S({ og: k }) }));
+    const conn = st.conn ?? 'connecte';
+    const BT = {
+      aucune: { t: 'Se connecter', bg: '#A6F26B', fg: '#0F3F37', bd: '#A6F26B', ic: 'M12 5v14M5 12h14' },
+      envoyee: { t: 'Demande envoyée', bg: 'transparent', fg: '#9FB3AE', bd: 'rgba(255,255,255,.2)', ic: 'M12 7v5l3 2M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17z' },
+      connecte: { t: 'Connectés', bg: '#13282C', fg: '#A6F26B', bd: 'rgba(166,242,107,.4)', ic: 'm5 12.5 4.5 4.5L19 7.5' }
+    };
+    const nextC = { aucune: 'envoyee', envoyee: 'aucune', connecte: 'aucune' };
+    const ICO = {
+      fil: 'M4 6h16M4 12h16M4 18h10', explorer: 'M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM15.5 8.5l-2 5-5 2 2-5z',
+      carriere: 'M3.5 8.5h17v11h-17zM8.5 8.5V5.5h7v3M3.5 12.5h17', hub: 'M2.5 9 12 4.5 21.5 9 12 13.5zM6.5 11.2v4.6c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.6',
+      chat: 'M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z', offres: 'M3.5 8.5h17v11h-17zM8.5 8.5V5.5h7v3',
+      cand: 'M9 8a3.5 3.5 0 1 0 0 .01M2.5 19.5c.8-3.3 3.4-5 6.5-5s5.7 1.7 6.5 5M16 4.8a3.4 3.4 0 0 1 0 6.4M18.5 14.6c1.6.8 2.6 2.4 3 4.9',
+      talents: 'm12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z'
+    };
+    const MT = vue === 'recruteur' ? [['fil', 'Fil'], ['offres', 'Offres'], ['cand', 'Candidatures'], ['talents', 'Talents'], ['chat', 'Chat']] : [['fil', 'Fil'], ['explorer', 'Explorer'], ['carriere', 'Carrière'], ['hub', 'Hub'], ['chat', 'Chat']];
+    const act = vue === 'recruteur' ? 'cand' : 'explorer';
+    const menu = MT.map(([k, t]) => ({ t, d: ICO[k], on: k === act, bg: k === act ? '#A6F26B' : '#203F42', fg: k === act ? '#0F3F37' : '#F2EDE5' }));
+    const pq = st.pq ?? !!pr.pourquoi;
+    const criteres = [
+      { t: 'Compétences demandées', v: '3 sur 3', w: '100%', c: '#A6F26B', x: 'SQL, Excel et Power BI figurent dans son profil, dont 3 vérifiées.' },
+      { t: 'Expérience', v: '1 an et 2 mois', w: '80%', c: '#2FD3A6', x: 'L’offre demande de 0 à 2 ans en analyse de données.' },
+      { t: 'Lieu de travail', v: 'Kinshasa accepté', w: '75%', c: '#7CC4FF', x: 'Il a indiqué être prêt à travailler à Kinshasa.' },
+      { t: 'Langues', v: 'Français avancé', w: '85%', c: '#C3A6FF', x: 'Le poste se fait en français.' }
+    ];
+    return {
+      p, onglets, indX: (idx * 100) + '%', menu, criteres,
+      titreHaut: vue === 'recruteur' ? 'Candidat' : 'Profil',
+      oPub: og === 'pub', oAbout: og === 'about', oReal: og === 'real', oPort: og === 'port',
+      vueConn: vue !== 'recruteur', vueRec: vue === 'recruteur',
+      bt: BT[conn], connecter: () => S({ conn: nextC[conn] }), peutEcrire: conn === 'connecte',
+      avT: st.av ? 'En entretien' : 'Avancer', avancer: () => S({ av: !st.av }),
+      ouvrirPq: () => S({ pq: true }), fermerPq: () => S({ pq: false }),
+      pqY: pq ? '0%' : '105%', pqOp: pq ? '1' : '0', pqPe: pq ? 'auto' : 'none', pqHid: pq ? 'false' : 'true',
+      partager: () => { S({ toast: 'Lien du profil copié' }); setTimeout(() => this.setState({ toast: '' }), 1800); },
+      toast: st.toast || ''
+    };
+  }
+}
+</script>
+</body>
+</html>
