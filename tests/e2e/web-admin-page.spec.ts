@@ -1,15 +1,19 @@
+import { execFileSync } from "node:child_process";
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import type { Page } from "@playwright/test";
 import sharp from "sharp";
 import { expect, test } from "./fixtures";
+import { holdBaobab } from "./baobab-lock";
 import { expectAccessible } from "./a11y";
-import { logIn } from "./session";
+import { logIn, testEmail } from "./session";
 
 // Étape 3 · A3 (docs/modele-b-recruteur/web, captures 081 et 082) : la Page entreprise de Baobab
 // Fintech (entreprise fictive, seed `prisma/seed/entreprise.ts`), chaque bouton répond. Avec
 // CAPTURE_DIR, les écrans sont photographiés à la largeur CAPTURE_WIDTH (1440 par défaut). Le seed
-// remet la page en place : relancer `pnpm db:seed` avant de rejouer ce fichier.
+// remet la page en place : relancer `pnpm db:seed` avant de rejouer ce fichier. Les deux personnes
+// qui disent travailler chez Baobab sont créées par le test : celles du seed servent au test de
+// l'équipe (web-admin-equipe), qui peut tourner en même temps.
 
 const WIDTH = Number(process.env.CAPTURE_WIDTH ?? 1440);
 const CAPTURE_DIR = process.env.CAPTURE_DIR;
@@ -38,11 +42,36 @@ test.describe("Étape 3 · Page entreprise", () => {
   test.skip(({ isMobile }) => isMobile, "La page entreprise se modifie sur ordinateur.");
   test.use({ viewport: { width: WIDTH, height: 900 } });
   test.describe.configure({ mode: "serial" });
+  // Baobab Fintech is shared by the other files of the company space: one at a time.
+  let release = () => {};
+  test.beforeAll(async () => {
+    test.setTimeout(600_000);
+    release = await holdBaobab();
+  });
+  test.afterAll(() => release());
 
   test("l'administrateur modifie la page, la voit comme un talent et répond aux déclarations", async ({
     page,
   }) => {
     test.setTimeout(180_000);
+    const tag = Math.random()
+      .toString(36)
+      .replace(/[^a-z]/g, "")
+      .slice(0, 6);
+    const [leaving, staying] = [`Fabrice ${tag}`, `Sandra ${tag}`];
+    for (const [slot, name] of [
+      ["a3-leaving", leaving],
+      ["a3-staying", staying],
+    ] as const)
+      execFileSync("pnpm", [
+        "exec",
+        "tsx",
+        "tests/e2e/make-declared.ts",
+        testEmail(slot),
+        name,
+        ORG,
+        "recruiters",
+      ]);
     await logIn(page, OWNER);
     await page.goto("/app/hire");
     const company = page.getByRole("navigation", { name: "Entreprise" }).first();
@@ -68,8 +97,8 @@ test.describe("Étape 3 · Page entreprise", () => {
     await main(page)
       .getByRole("tab", { name: /Membres/ })
       .click();
-    const fabrice = main(page).getByRole("listitem").filter({ hasText: "Fabrice Démo" });
-    await expect(fabrice).toContainText("Indiqué par la personne");
+    const declared = main(page).getByRole("listitem").filter({ hasText: leaving });
+    await expect(declared).toContainText("Indiqué par la personne");
     await expect(
       main(page).getByRole("listitem").filter({ hasText: "Clarisse" }).first(),
     ).toContainText(`Confirmé par ${ORG}`);
@@ -144,23 +173,24 @@ test.describe("Étape 3 · Page entreprise", () => {
     await toast(page, "Les changements sont en ligne");
     await closeToast(page);
 
-    // Membres déclarés : Fabrice ne travaille pas ici, Sandra est confirmée.
-    await main(page).getByRole("button", { name: "Fabrice Démo ne travaille pas ici" }).click();
-    await toast(page, /Fabrice Démo/);
+    // Membres déclarés : l'une ne travaille pas ici, l'autre est confirmée.
+    await main(page)
+      .getByRole("button", { name: `${leaving} ne travaille pas ici` })
+      .click();
+    await toast(page, new RegExp(leaving));
     await closeToast(page);
-    await main(page).getByRole("button", { name: "Confirmer Sandra Démo" }).click();
-    await toast(page, /Sandra Démo/);
+    await main(page)
+      .getByRole("button", { name: `Confirmer ${staying}` })
+      .click();
+    await toast(page, new RegExp(staying));
     await closeToast(page);
-    await expect(
-      main(page).getByText("Personne n'attend de réponse pour le moment."),
-    ).toBeVisible();
+    for (const name of [leaving, staying])
+      await expect(main(page).getByRole("button", { name: new RegExp(name) })).toHaveCount(0);
     await page.goto(`${PAGE}/apercu?onglet=membres`);
-    await expect(main(page).getByRole("listitem").filter({ hasText: "Sandra Démo" })).toContainText(
+    await expect(main(page).getByRole("listitem").filter({ hasText: staying })).toContainText(
       `Confirmé par ${ORG}`,
     );
-    await expect(main(page).getByRole("listitem").filter({ hasText: "Fabrice Démo" })).toHaveCount(
-      0,
-    );
+    await expect(main(page).getByRole("listitem").filter({ hasText: leaving })).toHaveCount(0);
     await expect(main(page).getByText("201 à 1 000 personnes", { exact: false })).toBeVisible();
 
     // La propriété : la fenêtre s'annule, puis la page passe à Aline.

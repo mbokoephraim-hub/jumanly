@@ -2,6 +2,7 @@ import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import type { Page } from "@playwright/test";
 import { expect, test } from "./fixtures";
+import { holdBaobab } from "./baobab-lock";
 import { expectAccessible } from "./a11y";
 import { logIn } from "./session";
 
@@ -36,6 +37,13 @@ test.describe("Étape 3 · Formule et facturation", () => {
   test.skip(({ isMobile }) => isMobile, "La facturation de l'entreprise se gère sur ordinateur.");
   test.use({ viewport: { width: WIDTH, height: 900 } });
   test.describe.configure({ mode: "serial" });
+  // Baobab Fintech is shared by the other files of the company space: one at a time.
+  let release = () => {};
+  test.beforeAll(async () => {
+    test.setTimeout(600_000);
+    release = await holdBaobab();
+  });
+  test.afterAll(() => release());
 
   test("l'administrateur lit sa formule, paie, monte en gamme et programme une baisse", async ({
     page,
