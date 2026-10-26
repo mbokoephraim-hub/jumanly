@@ -159,6 +159,13 @@ test("entretien : calendrier, aperçu, confirmation du talent, préparation, év
   // The agenda: the week shows the confirmed interview, the month view too.
   await page.goto("/app/hire/entretiens");
   await expect(main(page)).toContainText("Préparez l'entretien de");
+  // Late on a Sunday the first open day is already next week: the agenda goes there.
+  if (
+    (await main(page)
+      .getByRole("link", { name: /Jean-Pierre Démo/ })
+      .count()) === 0
+  )
+    await main(page).getByRole("link", { name: "Semaine suivante" }).click();
   await expect(
     main(page)
       .getByRole("link", { name: /Jean-Pierre Démo/ })
