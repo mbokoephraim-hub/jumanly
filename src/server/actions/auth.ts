@@ -351,7 +351,10 @@ export async function signInWithProvider(provider: string, formData: FormData) {
       newUserCallbackURL:
         profile === "talent" || (profile === "rh" && (await isPhone()))
           ? `/inscription/continuer?${signupStep}`
-          : `/inscription/forfait?${signupStep}`,
+          : profile === "company"
+            ? // The administrator names the company at step 2 (Modèle B, étape 3 A1).
+              `/inscription/entreprise?${new URLSearchParams({ etape: "compte", ...(plan ? { forfait: plan.slice(0, 60) } : {}) })}`
+            : `/inscription/forfait?${signupStep}`,
       errorCallbackURL: `/connexion?erreur=${id}`,
     },
   });
