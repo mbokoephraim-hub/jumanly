@@ -117,6 +117,9 @@ test("conversation : brouillon d'Orbi relu puis envoyé, modèles, liste des mes
     await expect(input).not.toHaveValue("", { timeout: 20_000 });
     await input.fill("Bonjour Jean-Pierre, merci pour votre candidature fictive.");
     await page.getByRole("button", { name: "Envoyer", exact: true }).click();
+    // « Envoyer » leads back to the conversation without « ?modeles=1 »: a new page that takes
+    // the place of this one, so the sheets are opened once it has arrived.
+    await expect(page).toHaveURL(/\/app\/messages\/[^/?#]+#dernier$/);
     await expect(page.getByText("merci pour votre candidature fictive")).toBeVisible();
     await page.getByRole("button", { name: "Joindre" }).click();
     const attach = page.getByRole("dialog", { name: "Joindre" });
