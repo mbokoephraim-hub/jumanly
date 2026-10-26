@@ -10,7 +10,7 @@ import { z } from "zod";
 import { Prisma } from "@/generated/prisma/client";
 import type { FeedPostKind, PrismaClient } from "@/generated/prisma/client";
 import { matchesForUser } from "@/server/matching/service";
-import { FEED_POST_MAX } from "./feed-limits";
+import { FEED_POST_MAX, postTextSchema } from "./feed-limits";
 import { rankFeed, type AuthorSignals } from "./feed-rank";
 import { photoType } from "./profile-photo";
 import { notify } from "./notifications";
@@ -19,7 +19,7 @@ export const FEED_TABS = ["pourvous", "abonnements", "entreprises"] as const;
 export type FeedTab = (typeof FEED_TABS)[number];
 
 /** An answer: at most this many characters. */
-export const FEED_BODY_MAX = 2000;
+export const FEED_REPLY_MAX = 2000;
 export { FEED_POST_MAX };
 /** A photo reduced on the phone stays far below this. */
 export const FEED_IMAGE_MAX = 1_000_000;
@@ -65,12 +65,14 @@ const orgSelect = {
   logo: true,
   sector: true,
   city: true,
+  verifiedAt: true,
   _count: { select: { jobs: { where: { status: "published" } } } },
 } satisfies Prisma.OrganizationSelect;
 
 const postSelect = {
   id: true,
   kind: true,
+  title: true,
   body: true,
   imageUrl: true,
   imageAlt: true,
@@ -120,6 +122,8 @@ export type FeedAuthor = {
   sector: string | null;
   city: string | null;
   offers: number;
+  /** A company verified by Jumanly: a Lime ring around its logo in the Fil. */
+  verified?: boolean;
 };
 
 export type FeedAttachment = {
@@ -134,6 +138,8 @@ export type FeedItem = {
   kind: FeedPostKind;
   type: string;
   author: FeedAuthor;
+  /** Null for the posts published before titles (26/10/2026). */
+  title: string | null;
   body: string;
   imageUrl: string | null;
   imageAlt: string | null;
@@ -151,6 +157,8 @@ export type FeedItem = {
   createdAt: Date;
   likes: number;
   liked: boolean;
+  /** The last two people who liked it: their faces beside the count, on the photo. */
+  likers: { name: string; image: string | null }[];
   replies: number;
   reposts: number;
   reposted: boolean;
@@ -174,6 +182,7 @@ function authorOf(row: PostRow): FeedAuthor {
       sector: row.organization.sector,
       city: row.organization.city,
       offers: row.organization._count.jobs,
+      verified: Boolean(row.organization.verifiedAt),
     };
   }
   const profile = row.author?.talentProfile;
@@ -241,10 +250,16 @@ async function toItems(
   const jobIds = [
     ...new Set(rows.flatMap((row) => (row.job?.status === "published" ? [row.job.id] : []))),
   ];
-  const [likes, reposts, saves, going, firsts, matches] = await Promise.all([
+  const [likes, recentLikes, reposts, saves, going, firsts, matches] = await Promise.all([
     db.feedLike.findMany({
       where: { userId: viewerId, postId: { in: ids } },
       select: { postId: true },
+    }),
+    db.feedLike.findMany({
+      where: { postId: { in: ids } },
+      orderBy: { createdAt: "desc" },
+      take: ids.length * 6,
+      select: { postId: true, user: { select: { name: true, image: true } } },
     }),
     db.feedRepost.findMany({
       where: { userId: viewerId, postId: { in: ids } },
@@ -281,6 +296,7 @@ async function toItems(
       kind: row.kind,
       type: feedTypeOf(row),
       author: authorOf(row),
+      title: row.title,
       body: row.body,
       imageUrl: row.imageUrl,
       imageAlt: row.imageAlt,
@@ -309,6 +325,10 @@ async function toItems(
       createdAt: row.createdAt,
       likes: row._count.likes,
       liked: has(likes, row.id),
+      likers: recentLikes
+        .filter((like) => like.postId === row.id)
+        .slice(0, 2)
+        .map((like) => ({ name: like.user.name, image: like.user.image })),
       replies: row._count.replies,
       reposts: row._count.reposts,
       reposted: has(reposts, row.id),
@@ -538,26 +558,23 @@ async function visiblePost(db: PrismaClient, viewerId: string, id: string) {
   return row;
 }
 
-export const newPostSchema = z
-  .object({
-    body: z.string().trim().max(FEED_POST_MAX).default(""),
-    attachment: z.enum(["work", "certificate"]).optional(),
-    attachmentId: z.string().trim().max(60).optional(),
-    quotedId: z.string().trim().max(60).optional(),
-    replyPolicy: z.enum(["everyone", "connections", "nobody"]).default("everyone"),
-    image: z.string().trim().max(60).optional(),
-    /** A recruiter publishes in their own name or in the name of their company (M3). */
-    as: z.enum(["me", "org"]).default("me"),
-    /** « Une offre »: a published offer of the recruiter's organization. */
-    jobId: z.string().trim().max(60).optional(),
-    /** « Un événement »: when it takes place. */
-    eventAt: z.coerce.date().optional(),
-  })
-  .refine(
-    (input) =>
-      input.body.length > 0 || input.attachment || input.quotedId || input.image || input.jobId,
-    { message: "empty" },
-  );
+/**
+ * A new post: a title (60 characters) and a text (160), docs/fil-menu-publication § 2; then a
+ * photo, an offer, an attachment, a quoted post or an event.
+ */
+export const newPostSchema = postTextSchema.extend({
+  attachment: z.enum(["work", "certificate"]).optional(),
+  attachmentId: z.string().trim().max(60).optional(),
+  quotedId: z.string().trim().max(60).optional(),
+  replyPolicy: z.enum(["everyone", "connections", "nobody"]).default("everyone"),
+  image: z.string().trim().max(60).optional(),
+  /** A recruiter publishes in their own name or in the name of their company (M3). */
+  as: z.enum(["me", "org"]).default("me"),
+  /** « Une offre »: a published offer of the recruiter's organization. */
+  jobId: z.string().trim().max(60).optional(),
+  /** « Un événement »: when it takes place. */
+  eventAt: z.coerce.date().optional(),
+});
 export type NewPost = z.input<typeof newPostSchema>;
 
 /** The career pieces a person may join to a post: their projects and their attestations. */
@@ -656,6 +673,7 @@ export async function createPost(
       kind: input.eventAt ? "event" : kind,
       eventAt: input.eventAt ?? null,
       jobId: input.jobId ?? null,
+      title: input.title,
       body: input.body,
       attachment: attachment ?? undefined,
       quotedId: input.quotedId,
@@ -712,7 +730,7 @@ export async function feedImageByToken(db: PrismaClient, token: string) {
 
 export const replySchema = z.object({
   post: z.string().trim().min(1).max(60),
-  body: z.string().trim().min(1).max(FEED_BODY_MAX),
+  body: z.string().trim().min(1).max(FEED_REPLY_MAX),
 });
 
 /**
@@ -1134,6 +1152,7 @@ export async function organizationAuthor(db: PrismaClient, slug: string, now = n
     sector: org.sector,
     city: org.city,
     offers: org._count.jobs,
+    verified: Boolean(org.verifiedAt),
   };
   return { id: org.id, author, jobs: org.jobs };
 }
@@ -1150,13 +1169,17 @@ export async function searchPosts(db: PrismaClient, viewerId: string, query: str
     where: {
       parentId: null,
       hiddenAt: null,
-      body: { contains: words, mode: "insensitive" },
+      OR: [
+        { title: { contains: words, mode: "insensitive" } },
+        { body: { contains: words, mode: "insensitive" } },
+      ],
       NOT: blocked.length > 0 ? [{ authorId: { in: blocked }, organizationId: null }] : [],
     },
     orderBy: { createdAt: "desc" },
     take,
     select: {
       id: true,
+      title: true,
       body: true,
       author: { select: { name: true } },
       organization: { select: { name: true } },
@@ -1164,7 +1187,7 @@ export async function searchPosts(db: PrismaClient, viewerId: string, query: str
   });
   return rows.map((row) => ({
     id: row.id,
-    body: row.body,
+    body: row.title ? `${row.title} · ${row.body}`.replace(/ · $/, "") : row.body,
     by: row.organization?.name ?? row.author?.name ?? "",
   }));
 }

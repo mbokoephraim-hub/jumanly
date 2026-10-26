@@ -32,7 +32,12 @@ describe("Fil", () => {
   it("publie, montre dans « Pour vous » et seulement aux abonnés dans « Abonnements »", async () => {
     const author = await person();
     const reader = await person();
-    const id = await createPost(db, author, { body: "Une nouvelle fictive" }, labels);
+    const id = await createPost(
+      db,
+      author,
+      { title: "Titre fictif", body: "Une nouvelle fictive" },
+      labels,
+    );
     const forYou = await listFeed(db, reader, "pourvous");
     expect(forYou.some((item) => item.id === id)).toBe(true);
     expect((await listFeed(db, reader, "abonnements")).some((item) => item.id === id)).toBe(false);
@@ -42,19 +47,34 @@ describe("Fil", () => {
     expect((await listFeed(db, reader, "entreprises")).some((item) => item.id === id)).toBe(false);
   });
 
-  it("limite une publication à 220 caractères, pas une réponse", async () => {
+  it("limite le titre à 60 caractères et le texte à 160, pas une réponse", async () => {
     const author = await person();
-    await expect(createPost(db, author, { body: "a".repeat(221) }, labels)).rejects.toBeInstanceOf(
-      FeedError,
+    await expect(
+      createPost(db, author, { title: "t".repeat(61), body: "a" }, labels),
+    ).rejects.toBeInstanceOf(FeedError);
+    await expect(
+      createPost(db, author, { title: "Titre fictif", body: "a".repeat(161) }, labels),
+    ).rejects.toBeInstanceOf(FeedError);
+    const id = await createPost(
+      db,
+      author,
+      { title: "t".repeat(60), body: "a".repeat(160) },
+      labels,
     );
-    const id = await createPost(db, author, { body: "a".repeat(220) }, labels);
-    await expect(replyTo(db, author, { post: id, body: "b".repeat(500) })).resolves.toBeTruthy();
+    expect((await db.feedPost.findUnique({ where: { id } }))?.title).toBe("t".repeat(60));
+    const reply = await replyTo(db, author, { post: id, body: "b".repeat(500) });
+    expect(reply).toBeTruthy();
   });
 
   it("compte ce que fait un auteur pour « Pour vous » : réponses, jours actifs, connexions", async () => {
     const author = await person();
     const friend = await person();
-    const post = await createPost(db, friend, { body: "Une nouvelle fictive" }, labels);
+    const post = await createPost(
+      db,
+      friend,
+      { title: "Titre fictif", body: "Une nouvelle fictive" },
+      labels,
+    );
     await replyTo(db, author, { post, body: "Bravo" });
     await db.connection.create({
       data: { requesterId: friend, addresseeId: author, status: "accepted" },
@@ -63,9 +83,11 @@ describe("Fil", () => {
     expect(signals).toEqual({ replies: 1, activeDays: 1, connections: 1, hiredHere: false });
   });
 
-  it("refuse une publication vide", async () => {
+  it("refuse une publication sans titre", async () => {
     const author = await person();
-    await expect(createPost(db, author, { body: "  " }, labels)).rejects.toBeInstanceOf(FeedError);
+    await expect(
+      createPost(db, author, { title: "  ", body: "Un texte fictif" }, labels),
+    ).rejects.toBeInstanceOf(FeedError);
   });
 
   it("respecte « Qui peut répondre »", async () => {
@@ -74,7 +96,7 @@ describe("Fil", () => {
     const closed = await createPost(
       db,
       author,
-      { body: "Réponses fermées", replyPolicy: "nobody" },
+      { title: "Titre fictif", body: "Réponses fermées", replyPolicy: "nobody" },
       labels,
     );
     await expect(replyTo(db, reader, { post: closed, body: "Bonjour" })).rejects.toMatchObject({
@@ -83,7 +105,7 @@ describe("Fil", () => {
     const circle = await createPost(
       db,
       author,
-      { body: "Connexions seulement", replyPolicy: "connections" },
+      { title: "Titre fictif", body: "Connexions seulement", replyPolicy: "connections" },
       labels,
     );
     await expect(replyTo(db, reader, { post: circle, body: "Bonjour" })).rejects.toMatchObject({
@@ -106,7 +128,7 @@ describe("Fil", () => {
   it("J'aime se retire au deuxième appui et ne prévient qu'une fois", async () => {
     const author = await person();
     const reader = await person();
-    const id = await createPost(db, author, { body: "À aimer" }, labels);
+    const id = await createPost(db, author, { title: "Titre fictif", body: "À aimer" }, labels);
     expect(await toggleLike(db, reader, id)).toBe(true);
     expect(await toggleLike(db, reader, id)).toBe(false);
     expect(await toggleLike(db, reader, id)).toBe(true);
@@ -135,7 +157,7 @@ describe("Fil", () => {
   it("seul l'auteur supprime sa publication", async () => {
     const author = await person();
     const other = await person();
-    const id = await createPost(db, author, { body: "À supprimer" }, labels);
+    const id = await createPost(db, author, { title: "Titre fictif", body: "À supprimer" }, labels);
     await expect(deletePost(db, other, id)).rejects.toMatchObject({ code: "notFound" });
     await deletePost(db, author, id);
     expect(await db.feedPost.findUnique({ where: { id } })).toBeNull();
@@ -144,7 +166,12 @@ describe("Fil", () => {
   it("un signalement vise une publication d'un autre, jamais la sienne", async () => {
     const author = await person();
     const reader = await person();
-    const id = await createPost(db, author, { body: "Offre douteuse fictive" }, labels);
+    const id = await createPost(
+      db,
+      author,
+      { title: "Titre fictif", body: "Offre douteuse fictive" },
+      labels,
+    );
     const result = await createReport(db, reader, {
       targetType: "post",
       targetId: id,

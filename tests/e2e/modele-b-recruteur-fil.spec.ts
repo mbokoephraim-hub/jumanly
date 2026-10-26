@@ -26,7 +26,7 @@ test.describe("Modèle B recruteur · Fil au téléphone", () => {
     await page.goto("/app/hire");
     await expect(main(page).getByRole("heading", { name: "Fil", exact: true })).toBeVisible();
     await expect(
-      fil(page).getByRole("link", { name: "Partager une nouvelle, une offre…" }),
+      fil(page).getByRole("link", { name: "Un titre, un texte, une image" }),
     ).toBeVisible();
     await expect(fil(page).getByRole("link", { name: /^Publier au nom de Baobab/ })).toBeVisible();
 
@@ -120,11 +120,16 @@ test.describe("Modèle B recruteur · Fil au téléphone", () => {
     await expect(main(page).getByText(/Visible par votre réseau/)).toBeVisible();
     await main(page).getByRole("button", { name: "Publier", exact: true }).click();
     await expect(main(page).locator(".nb-bas .nb-erreur")).toHaveText(
-      "Écrivez quelques mots avant de publier.",
+      "Ajoutez un titre avant de publier.",
     );
+    await main(page)
+      .getByRole("textbox", { name: /^Titre/ })
+      .fill(`Un poste fictif ${stamp}`);
     const text = `Nous ouvrons un poste fictif ${stamp}. Parlons-en.`;
-    await main(page).getByLabel("Texte", { exact: true }).fill(text);
-    await expect(main(page).getByText(`${text.length} / 220`)).toBeVisible();
+    await main(page)
+      .getByRole("textbox", { name: /^Texte/ })
+      .fill(text);
+    await expect(main(page).getByText(`${text.length}/160`)).toBeVisible();
     await capture(page, "038-fil-publier");
     await expectAccessible(page);
     await main(page).getByRole("button", { name: "Publier", exact: true }).click();
@@ -141,14 +146,24 @@ test.describe("Modèle B recruteur · Fil au téléphone", () => {
       "true",
     );
     await expect(main(page).getByText(/Visible sur la page de Baobab/)).toBeVisible();
-    const types = main(page).getByRole("radiogroup", { name: "Type" });
+    const types = main(page).getByRole("radiogroup", { name: "Joindre" });
     await types.getByRole("radio", { name: "Une offre" }).click();
+    await main(page).getByRole("button", { name: "Publier", exact: true }).click();
+    await expect(main(page).locator(".nb-bas .nb-erreur")).toHaveText(
+      "Ajoutez un titre avant de publier.",
+    );
+    await main(page)
+      .getByRole("textbox", { name: /^Titre/ })
+      .fill(`Baobab recrute ${stamp}`);
     await main(page).getByRole("button", { name: "Publier", exact: true }).click();
     await expect(main(page).locator(".nb-bas .nb-erreur")).toHaveText(
       "Choisissez l'offre à joindre.",
     );
+    await expect(main(page).getByText("au nom de Baobab Fintech", { exact: true })).toBeVisible();
     const offer = `Rejoignez Baobab, offre fictive ${stamp}.`;
-    await main(page).getByLabel("Texte", { exact: true }).fill(offer);
+    await main(page)
+      .getByRole("textbox", { name: /^Texte/ })
+      .fill(offer);
     await main(page)
       .getByRole("radiogroup", { name: "Offre jointe" })
       .getByRole("radio", { name: /Analyste de données junior/ })
@@ -165,7 +180,9 @@ test.describe("Modèle B recruteur · Fil au téléphone", () => {
     // An event: a date is asked.
     await page.goto("/app/fil/publier");
     await types.getByRole("radio", { name: "Un événement" }).click();
-    await main(page).getByLabel("Texte", { exact: true }).fill(`Portes ouvertes fictives ${stamp}`);
+    await main(page)
+      .getByRole("textbox", { name: /^Titre/ })
+      .fill(`Portes ouvertes fictives ${stamp}`);
     await main(page).getByRole("button", { name: "Publier", exact: true }).click();
     await expect(main(page).locator(".nb-bas .nb-erreur")).toHaveText(
       "Indiquez la date de l'événement.",
@@ -178,9 +195,9 @@ test.describe("Modèle B recruteur · Fil au téléphone", () => {
     await expect(page).toHaveURL(/\/app\/hire$/);
     await expect(fil(page).getByText(`Portes ouvertes fictives ${stamp}`)).toBeVisible();
 
-    // « Fermer » leaves without publishing.
+    // « Annuler » leaves without publishing.
     await page.goto("/app/fil/publier");
-    await main(page).getByRole("link", { name: "Fermer" }).click();
+    await main(page).getByRole("link", { name: "Annuler" }).click();
     await expect(page).toHaveURL(/\/app\/hire$/);
   });
 

@@ -14,16 +14,21 @@ test.describe("Compte talent : recruteur, suppression, publications", () => {
     await finishOnboarding(page);
 
     await page.goto("/app/fil/publier");
-    const box = page.getByRole("textbox", { name: /publication/i });
-    // Typed once the page answers; the last letters are refused past 220.
+    // docs/fil-menu-publication § 2: a title of 60 characters at most, and a text of 160.
+    const box = page.getByRole("textbox", { name: /^Titre/ });
+    // Typed once the page answers; the last letters are refused past 60.
     await expect(async () => {
       await box.fill("");
-      await box.fill("a".repeat(218));
-      await expect(page.getByText("218 / 220 caractères")).toBeVisible({ timeout: 1000 });
+      await box.fill("a".repeat(58));
+      await expect(page.getByText("58/60")).toBeVisible({ timeout: 1000 });
     }).toPass();
     await box.pressSequentially("bcdef");
-    await expect(page.getByText("220 / 220 caractères")).toBeVisible();
-    await expect(box).toHaveValue(`${"a".repeat(218)}bc`);
+    await expect(page.getByText("60/60")).toBeVisible();
+    await expect(box).toHaveValue(`${"a".repeat(58)}bc`);
+    const text = page.getByRole("textbox", { name: /^Texte/ });
+    await text.fill("b".repeat(160));
+    await expect(page.getByText("160/160")).toBeVisible();
+    await expect(page.getByText("Presque au maximum.")).toBeVisible();
 
     await page.goto("/app/parametres");
     await page.getByRole("button", { name: /Passer en compte recruteur/ }).click();

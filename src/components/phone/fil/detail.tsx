@@ -139,6 +139,7 @@ export function PostDetail({
             </Link>
           )}
         </div>
+        {post.title ? <h2 className="nb-fil-grand-titre">{post.title}</h2> : null}
         {post.body ? <p className="nb-fil-grand-texte">{post.body}</p> : null}
         <PostMedia post={post} big />
         <p className="nb-meta nb-fil-date">{post.stamp}</p>

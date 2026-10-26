@@ -99,6 +99,7 @@ export default async function FilComposePage({ searchParams }: PageProps<"/app/f
         draft={
           shared
             ? {
+                title: t("draftTitle", { course: shared.courseTitle }),
                 text: t("draft", { course: shared.courseTitle }),
                 course: shared.courseTitle,
                 certificate: {

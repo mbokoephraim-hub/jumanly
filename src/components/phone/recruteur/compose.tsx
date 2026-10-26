@@ -1,29 +1,30 @@
 "use client";
 
-/* eslint-disable @next/next/no-img-element -- the photo just chosen, shown before sending */
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useRef, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { showToast } from "@/components/motion/toaster";
 import { publishAction, uploadFeedImageAction } from "@/server/actions/feed";
-import { FEED_POST_MAX } from "@/server/services/feed-limits";
+import { postTextSchema } from "@/server/services/feed-limits";
 import { FilAvatar } from "../fil/avatar";
 import { shrink } from "../fil/compose";
 import type { FilMe } from "../fil/feed";
-import { OrbiDisc, PhoneIcon } from "../icon";
+import { PostImagePicker, PostPreview, PostTextFields } from "../fil/post-fields";
+import { OrbiDisc } from "../icon";
 import { askOrbi } from "../orbi-bus";
 
-const TYPES = ["texte", "photo", "offre", "evenement"] as const;
+const TYPES = ["texte", "offre", "evenement"] as const;
 type PostType = (typeof TYPES)[number];
 
 export type RhComposeOrg = { name: string; initials: string; logo: string | null };
 export type RhComposeJob = { id: string; title: string; detail: string };
 
 /**
- * « Nouvelle publication » of a recruiter (Modèle B recruteur, M3, planches Recruteur-fil-publier
- * and -publier-baobab): publish as oneself or, for a member who manages the offers, as the company;
- * a text, a photo, one of the company's published offers or an event; Orbi may complete the text.
+ * « Nouvelle publication » of a recruiter (Modèle B recruteur, M3; docs/fil-menu-publication § 2,
+ * planche Publier-recruteur): publish as oneself or, for a member who manages the offers, as the
+ * company; a title and a text with their counters, an image in the Fil's shape, one of the
+ * company's published offers or an event, and the preview in the Fil. Orbi may complete the text.
  */
 export function PhoneRecruiterCompose({
   me,
@@ -41,24 +42,21 @@ export function PhoneRecruiterCompose({
   const router = useRouter();
   const [as, setAs] = useState<"me" | "org">(startAsOrg && org ? "org" : "me");
   const [type, setType] = useState<PostType>("texte");
+  const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [photo, setPhoto] = useState<{ token: string; preview: string } | null>(null);
   const [jobId, setJobId] = useState<string | null>(null);
   const [eventAt, setEventAt] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
-  const input = useRef<HTMLInputElement>(null);
 
-  const missing =
-    type === "photo" && !photo
-      ? t("errorPhoto")
-      : type === "offre" && !jobId
-        ? t("errorJob")
-        : type === "evenement" && !eventAt
-          ? t("errorEvent")
-          : !text.trim() && type !== "photo" && type !== "offre"
-            ? t("errorText")
-            : null;
+  const missing = !postTextSchema.safeParse({ title, body: text }).success
+    ? t("errorTitle")
+    : type === "offre" && !jobId
+      ? t("errorJob")
+      : type === "evenement" && !eventAt
+        ? t("errorEvent")
+        : null;
 
   const choosePhoto = (file: File | undefined) => {
     if (!file) return;
@@ -85,9 +83,10 @@ export function PhoneRecruiterCompose({
     }
     start(async () => {
       const result = await publishAction({
+        title,
         body: text,
         as,
-        image: type === "photo" ? photo?.token : undefined,
+        image: photo?.token,
         jobId: type === "offre" ? (jobId ?? undefined) : undefined,
         eventAt: type === "evenement" ? new Date(eventAt).toISOString() : undefined,
       });
@@ -115,15 +114,23 @@ export function PhoneRecruiterCompose({
       : []),
   ];
 
+  const shown = as === "org" && org ? who[1] : who[0];
   return (
     <div className="nb-page nb-rh-pub">
-      <header className="nb-rh-pub-barre">
-        <Link href="/app/hire" className="nb-rond" aria-label={t("close")}>
-          <PhoneIcon name="fermer" size={22} />
+      <header className="nb-barre nb-fil-pub-barre">
+        <Link href="/app/hire" className="nb-fil-annuler">
+          {t("cancel")}
         </Link>
         <h1>{t("title")}</h1>
       </header>
       <div className="nb-rh-pub-corps">
+        <p className="nb-rh-pub-auteur">
+          <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={36} />
+          <b>{me.name}</b>
+          {as === "org" && org ? (
+            <span className="nb-meta">{t("onBehalf", { org: org.name })}</span>
+          ) : null}
+        </p>
         {org ? (
           <>
             <p className="nb-rh-pub-label" id="rh-pub-qui">
@@ -160,6 +167,40 @@ export function PhoneRecruiterCompose({
             </p>
           </>
         ) : null}
+        <PostTextFields
+          id="rh-pub"
+          title={title}
+          body={text}
+          onTitle={(value) => {
+            setTitle(value);
+            setError(null);
+          }}
+          onBody={(value) => {
+            setText(value);
+            setError(null);
+          }}
+        />
+        <button
+          type="button"
+          className="nb-rh-orbi-ligne"
+          data-orbi=""
+          onClick={() =>
+            askOrbi(
+              title.trim() || text.trim()
+                ? t("orbiAsk", { text: [title.trim(), text.trim()].filter(Boolean).join(" · ") })
+                : t("orbiAskEmpty"),
+            )
+          }
+        >
+          <OrbiDisc size={24} />
+          {t("orbi")}
+        </button>
+        <PostImagePicker
+          photo={photo}
+          onFile={choosePhoto}
+          onRemove={() => setPhoto(null)}
+          busy={pending}
+        />
         <p className="nb-rh-pub-label" id="rh-pub-type">
           {t("type")}
         </p>
@@ -174,80 +215,12 @@ export function PhoneRecruiterCompose({
               onClick={() => {
                 setType(key);
                 setError(null);
-                if (key === "photo" && !photo) input.current?.click();
               }}
             >
               {t(`types.${key}`)}
             </button>
           ))}
-          <input
-            ref={input}
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            hidden
-            onChange={(event) => {
-              choosePhoto(event.target.files?.[0]);
-              event.target.value = "";
-            }}
-          />
         </div>
-        <div className="nb-rh-pub-label nb-rh-pub-ligne">
-          <label htmlFor="rh-pub-texte">{t("text")}</label>
-          <span
-            className="nb-meta"
-            data-plein={text.length >= FEED_POST_MAX ? "" : undefined}
-            aria-live="polite"
-          >
-            {t("count", { count: text.length, max: FEED_POST_MAX })}
-          </span>
-        </div>
-        <div className="nb-champ nb-rh-pub-texte">
-          <textarea
-            id="rh-pub-texte"
-            value={text}
-            onChange={(event) => {
-              setText(event.target.value);
-              setError(null);
-            }}
-            placeholder={t("placeholder")}
-            maxLength={FEED_POST_MAX}
-            rows={4}
-          />
-        </div>
-        <button
-          type="button"
-          className="nb-rh-orbi-ligne"
-          data-orbi=""
-          onClick={() =>
-            askOrbi(text.trim() ? t("orbiAsk", { text: text.trim() }) : t("orbiAskEmpty"))
-          }
-        >
-          <OrbiDisc size={24} />
-          {t("orbi")}
-        </button>
-        {type === "photo" ? (
-          photo ? (
-            <span className="nb-fil-pj-photo nb-rh-pub-photo">
-              <img src={photo.preview} alt={t("photoAlt")} />
-              <button
-                type="button"
-                className="nb-rond"
-                aria-label={t("photoRemove")}
-                onClick={() => setPhoto(null)}
-              >
-                <PhoneIcon name="fermer" size={18} />
-              </button>
-            </span>
-          ) : (
-            <button
-              type="button"
-              className="nb-bouton nb-rh-pub-ajout"
-              onClick={() => input.current?.click()}
-            >
-              {t("photoPick")}
-            </button>
-          )
-        ) : null}
         {type === "offre" ? (
           <>
             <p className="nb-rh-pub-label" id="rh-pub-offre">
@@ -304,6 +277,17 @@ export function PhoneRecruiterCompose({
           </>
         ) : null}
       </div>
+      <PostPreview
+        author={{
+          name: shown.name,
+          initials: shown.initials,
+          image: shown.image,
+          org: shown.key === "org",
+        }}
+        title={title}
+        body={text}
+        image={photo?.preview ?? null}
+      />
       <div className="nb-bas">
         {error ? (
           <p className="nb-erreur" role="alert">

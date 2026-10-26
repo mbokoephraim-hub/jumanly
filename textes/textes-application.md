@@ -8268,7 +8268,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.tab.pourvous` | Pour vous |
 | `phoneFil.tab.abonnements` | Abonnements |
 | `phoneFil.tab.entreprises` | Entreprises |
-| `phoneFil.compose.prompt` | Quoi de neuf ? |
+| `phoneFil.compose.prompt` | Un titre, un texte, une image |
 | `phoneFil.compose.button` | Publier |
 | `phoneFil.tag.company` | Entreprise |
 | `phoneFil.tag.newRole` | Nouveau poste |
@@ -8285,6 +8285,13 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.repost` | Republier |
 | `phoneFil.repostCount` | {count, plural, =0 {Republier} one {Republier, # republication} other {Republier, # republications}} |
 | `phoneFil.seeReplies` | {count, plural, one {Voir la réponse} other {Voir les # réponses}} |
+| `phoneFil.commentCount` | {count, plural, =0 {Commenter} one {Commenter, # commentaire} other {Commenter, # commentaires}} |
+| `phoneFil.comments` | {count, plural, one {# commentaire} other {# commentaires}} |
+| `phoneFil.share` | Envoyer |
+| `phoneFil.shareSheet` | Partager |
+| `phoneFil.save` | Enregistrer |
+| `phoneFil.reactions` | {count, plural, one {# personne aime} other {# personnes aiment}} |
+| `phoneFil.verified` | Entreprise vérifiée |
 | `phoneFil.score` | {score} % pour vous |
 | `phoneFil.offerLine` | {city} · {contract} · {remote} |
 | `phoneFil.contract.cdi` | CDI |
@@ -8385,9 +8392,25 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.send.message` | Je te partage cette publication de {name} : {link} |
 | `phoneFil.publish.title` | Nouvelle publication |
 | `phoneFil.publish.cancel` | Annuler |
-| `phoneFil.publish.placeholder` | Quoi de neuf ? |
+| `phoneFil.publish.placeholder` | Quelques mots pour en dire plus |
 | `phoneFil.publish.label` | Votre publication |
-| `phoneFil.publish.photo` | Photo |
+| `phoneFil.publish.titleLabel` | Titre · une phrase d'accroche |
+| `phoneFil.publish.titlePlaceholder` | Une phrase qui donne envie de lire |
+| `phoneFil.publish.bodyLabel` | Texte · environ 120 caractères |
+| `phoneFil.publish.counter` | {count}/{max} |
+| `phoneFil.publish.counterLong` | {count} caractères sur {max}. |
+| `phoneFil.publish.bodyHint.short` | Encore un peu : visez environ 120 caractères. |
+| `phoneFil.publish.bodyHint.good` | Bonne longueur. |
+| `phoneFil.publish.bodyHint.long` | Presque au maximum. |
+| `phoneFil.publish.imageLabel` | Image · elle prend la forme arrondie du Fil |
+| `phoneFil.publish.imageAdd` | Ajouter une image |
+| `phoneFil.publish.imageChange` | Choisir une autre image |
+| `phoneFil.publish.imageChosen` | Image choisie |
+| `phoneFil.publish.preview` | Aperçu dans le Fil |
+| `phoneFil.publish.previewTitle` | Votre titre |
+| `phoneFil.publish.previewBody` | Votre texte |
+| `phoneFil.publish.missingTitle` | Ajoutez un titre |
+| `phoneFil.publish.draftTitle` | Attestation obtenue : {course} |
 | `phoneFil.publish.work` | Réalisation |
 | `phoneFil.publish.certificate` | Attestation |
 | `phoneFil.publish.remove` | Retirer la pièce jointe |
@@ -8407,8 +8430,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.publish.audience.nobody` | Personne ne peut répondre |
 | `phoneFil.publish.audience.label` | Qui peut répondre : {audience}. Changer |
 | `phoneFil.publish.submit` | Publier |
-| `phoneFil.publish.empty` | Écrivez quelque chose ou ajoutez une pièce jointe. |
-| `phoneFil.publish.count` | {count} / {max} caractères |
+| `phoneFil.publish.empty` | Ajoutez un titre avant de publier. |
 | `phoneFil.publish.done` | Publication partagée |
 | `phoneFil.publish.photoError` | Cette photo ne peut pas être ajoutée. Choisissez une image JPEG, PNG ou WebP. |
 | `phoneFil.publish.photoAlt` | Photo jointe par {name} |
@@ -14257,39 +14279,33 @@ Conventions :
 
 | Clé | Texte |
 |---|---|
-| `phoneRhFil.prompt` | Partager une nouvelle, une offre… |
+| `phoneRhFil.prompt` | Un titre, un texte, une image |
 | `phoneRhFil.publish` | Publier |
 | `phoneRhFil.asOrg` | Publier au nom de {org} |
 | `phoneRhFil.end` | Vous êtes à jour. Pendant ce temps, |
 | `phoneRhFil.endLink` | cherchez des talents |
 | `phoneRhFil.compose.title` | Nouvelle publication |
 | `phoneRhFil.compose.close` | Fermer |
+| `phoneRhFil.compose.cancel` | Annuler |
+| `phoneRhFil.compose.onBehalf` | au nom de {org} |
+| `phoneRhFil.compose.errorTitle` | Ajoutez un titre avant de publier. |
 | `phoneRhFil.compose.as` | Publier en tant que |
 | `phoneRhFil.compose.asMe` | Votre profil |
 | `phoneRhFil.compose.asOrg` | Page de l'entreprise |
 | `phoneRhFil.compose.seenMe` | Visible par votre réseau et les talents qui suivent {org}. |
 | `phoneRhFil.compose.seenOrg` | Visible sur la page de {org} et dans le Fil de ses abonnés. |
-| `phoneRhFil.compose.type` | Type |
-| `phoneRhFil.compose.types.texte` | Texte |
-| `phoneRhFil.compose.types.photo` | Photo |
+| `phoneRhFil.compose.type` | Joindre |
+| `phoneRhFil.compose.types.texte` | Rien de plus |
 | `phoneRhFil.compose.types.offre` | Une offre |
 | `phoneRhFil.compose.types.evenement` | Un événement |
-| `phoneRhFil.compose.text` | Texte |
-| `phoneRhFil.compose.count` | {count} / {max} |
-| `phoneRhFil.compose.placeholder` | Partager une nouvelle, une offre… |
 | `phoneRhFil.compose.orbi` | Orbi complète le texte |
-| `phoneRhFil.compose.orbiAsk` | Complète ce début de publication pour le Fil, en 220 caractères au plus : « {text} » |
+| `phoneRhFil.compose.orbiAsk` | Complète ce début de publication pour le Fil : un titre de 60 caractères au plus, puis un texte d'environ 120 caractères (160 au plus) : « {text} » |
 | `phoneRhFil.compose.orbiAskEmpty` | Que publier dans le Fil pour attirer de bons profils ? |
-| `phoneRhFil.compose.photoPick` | Choisir une photo |
-| `phoneRhFil.compose.photoAlt` | Photo jointe à la publication |
-| `phoneRhFil.compose.photoRemove` | Retirer la photo |
 | `phoneRhFil.compose.photoError` | Cette photo ne peut pas être ajoutée. Choisissez une image JPEG, PNG ou WebP. |
 | `phoneRhFil.compose.job` | Offre jointe |
 | `phoneRhFil.compose.noJob` | Aucune offre en ligne pour l'instant. |
 | `phoneRhFil.compose.noJobLink` | Publier une offre |
 | `phoneRhFil.compose.eventAt` | Date et heure de l'événement |
-| `phoneRhFil.compose.errorText` | Écrivez quelques mots avant de publier. |
-| `phoneRhFil.compose.errorPhoto` | Choisissez une photo. |
 | `phoneRhFil.compose.errorJob` | Choisissez l'offre à joindre. |
 | `phoneRhFil.compose.errorEvent` | Indiquez la date de l'événement. |
 | `phoneRhFil.compose.failed` | La publication n'a pas pu être envoyée. Réessayez. |

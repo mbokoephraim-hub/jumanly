@@ -4637,3 +4637,27 @@ Référence : `docs/fil-menu-publication/BRIEF-FIL-MENU-PUBLICATION-CLAUDE-CODE.
 - Compteurs : Chat montre le nombre de conversations non lues (talent et recruteur ; le recruteur avait un
   simple point), Candidatures le nombre de nouvelles candidatures. Le compteur s'efface sur l'onglet actif.
 - Orbi reste flottant au-dessus du menu, à droite (104 px du bas).
+
+## Fil, menu, publication · 2/3 : publication titre + texte + image à encoche (26 octobre 2026)
+
+Référence : brief `docs/fil-menu-publication/`, § 2.
+
+- Base : `FeedPost.title` (migration `20261026180000_feed_post_title`), obligatoire pour une nouvelle
+  publication, absent pour une réponse ; les anciennes publications s'affichent sans titre.
+- Limites (`src/server/services/feed-limits.ts`) : `FEED_TITLE_MAX = 60`, `FEED_BODY_MAX = 160`
+  (60 + 160 = 220, `FEED_POST_MAX`), schéma Zod `postTextSchema` partagé par le téléphone et le serveur.
+  L'ancienne constante des réponses (2 000) s'appelle maintenant `FEED_REPLY_MAX`.
+- Carte du Fil (`PostCard`) : auteur en haut (avatar 44 px, anneau Lime pour une entreprise vérifiée,
+  ligne métier ou entreprise · ville · heure, « … »), puis titre (2 lignes), texte et image (280 px,
+  coins 30 px) alignés sur le nom. Encoche en bas à gauche : J'aime · Commenter · Envoyer · Enregistrer ;
+  réactions (deux visages + nombre) en bas à droite. Sans image, les actions passent sous le texte.
+  « Envoyer » ouvre la feuille « Partager » (Republier · Citer · Envoyer à une connexion) : republier
+  reste possible sans bouton dédié sur la carte. Le nombre de commentaires remplace l'aperçu de la
+  première réponse.
+- Écran Publier (talent et recruteur) : Titre avec compteur `n/60`, Texte avec compteur `n/160`, jauge et
+  aide (« Encore un peu » sous 90, « Bonne longueur » jusqu'à 150, « Presque au maximum » au-delà),
+  image en tuile (« + » pour en choisir une), aperçu dans le Fil, bouton Publier. Le recruteur garde
+  « Publier en tant que » et « Joindre » une offre ou un événement ; la photo n'est plus un type à part.
+- Démo : les six publications du seed ont un titre.
+- Le Fil n'existe aujourd'hui que sur le téléphone : la carte servira telle quelle au Fil web du
+  recruteur (lot N2 de `docs/decisions/2026-10-26-modele-b-web-recruteur.md`).

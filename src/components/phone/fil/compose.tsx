@@ -1,19 +1,19 @@
 "use client";
 
-/* eslint-disable @next/next/no-img-element -- the photo just chosen, shown before sending */
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useRef, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { showToast } from "@/components/motion/toaster";
 import { publishAction, uploadFeedImageAction } from "@/server/actions/feed";
-import { FEED_POST_MAX } from "@/server/services/feed-limits";
+import { FEED_BODY_MAX, FEED_TITLE_MAX, postTextSchema } from "@/server/services/feed-limits";
 import { PhoneBack } from "../back";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
 import { FilAvatar } from "./avatar";
 import type { FilMe } from "./feed";
 import { Attachment } from "./post";
+import { PostImagePicker, PostPreview, PostTextFields } from "./post-fields";
 
 type Piece = { id: string; title: string; detail: string };
 type Audience = "everyone" | "connections" | "nobody";
@@ -55,7 +55,7 @@ export function PhoneCompose({
   certificates: Piece[];
   quoted: { id: string; name: string; body: string } | null;
   /** Orbi's draft about the latest attestation (none without one). */
-  draft: { text: string; course: string; certificate: Piece } | null;
+  draft: { title: string; text: string; course: string; certificate: Piece } | null;
   /** Where « Annuler » goes when the page was opened directly. */
   back: string;
   /** The draft is asked from the start (« Ouvrir le brouillon » of Orbi). */
@@ -67,7 +67,8 @@ export function PhoneCompose({
   const tc = useTranslations("phone");
   const router = useRouter();
   const withDraft = startWithDraft && draft !== null && quoted === null;
-  const [text, setText] = useState(withDraft ? draft.text : "");
+  const [title, setTitle] = useState(withDraft ? draft.title.slice(0, FEED_TITLE_MAX) : "");
+  const [text, setText] = useState(withDraft ? draft.text.slice(0, FEED_BODY_MAX) : "");
   const work = works.find((item) => item.id === startWork);
   const [piece, setPiece] = useState<{ type: "work" | "certificate"; item: Piece } | null>(
     withDraft
@@ -80,9 +81,9 @@ export function PhoneCompose({
   const [pick, setPick] = useState<"work" | "certificate" | null>(null);
   const [audience, setAudience] = useState(0);
   const [pending, start] = useTransition();
-  const input = useRef<HTMLInputElement>(null);
 
-  const ready = text.trim().length > 0 || piece !== null || photo !== null || quoted !== null;
+  // A title, always (docs/fil-menu-publication § 2); the text, the photo and the rest are free.
+  const ready = postTextSchema.safeParse({ title, body: text }).success;
 
   const choosePhoto = (file: File | undefined) => {
     if (!file) return;
@@ -93,7 +94,6 @@ export function PhoneCompose({
         form.append("photo", new File([blob], "photo.jpg", { type: "image/jpeg" }));
         const result = await uploadFeedImageAction(form);
         if (!result.ok) throw new Error(result.error);
-        setPiece(null);
         setPhoto({ token: result.value, preview: URL.createObjectURL(blob) });
       } catch {
         showToast({ message: t("publish.photoError"), tone: "error" });
@@ -108,6 +108,7 @@ export function PhoneCompose({
     }
     start(async () => {
       const result = await publishAction({
+        title,
         body: text,
         attachment: piece?.type,
         attachmentId: piece?.item.id,
@@ -125,7 +126,6 @@ export function PhoneCompose({
   };
 
   const chips = [
-    { key: "photo" as const, on: photo !== null },
     { key: "work" as const, on: piece?.type === "work" },
     { key: "certificate" as const, on: piece?.type === "certificate" },
   ];
@@ -137,101 +137,62 @@ export function PhoneCompose({
         <PhoneBack fallback={back} label={t("publish.cancel")} text={t("publish.cancel")} />
         <h1>{t("publish.title")}</h1>
       </header>
-      <div className="nb-fil-pub">
-        <div className="nb-fil-pub-gauche">
-          <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={40} />
-          <span className="nb-fil-fil" aria-hidden />
-        </div>
-        <div className="nb-fil-pub-droite">
-          <b>{me.name}</b>
-          <textarea
-            value={text}
-            onChange={(event) => setText(event.target.value)}
-            aria-label={t("publish.label")}
-            placeholder={t("publish.placeholder")}
-            maxLength={FEED_POST_MAX}
-            rows={4}
-            aria-describedby="fil-pub-compte"
-          />
-          <span
-            id="fil-pub-compte"
-            className="nb-meta nb-fil-pub-compte"
-            data-plein={text.length >= FEED_POST_MAX ? "" : undefined}
-            aria-live="polite"
-          >
-            {t("publish.count", { count: text.length, max: FEED_POST_MAX })}
-          </span>
-          {photo ? (
-            <span className="nb-fil-pj-photo">
-              <img src={photo.preview} alt={t("publish.photoAlt", { name: me.name })} />
-              <button
-                type="button"
-                className="nb-rond"
-                aria-label={t("publish.remove")}
-                onClick={() => setPhoto(null)}
-              >
-                <PhoneIcon name="fermer" size={18} />
-              </button>
-            </span>
-          ) : null}
-          {piece ? (
-            <span className="nb-fil-pj-ligne">
-              <Attachment
-                value={{
-                  mark: piece.type === "work" ? "PF" : piece.item.title.slice(0, 3).toUpperCase(),
-                  title: piece.item.title,
-                  detail: piece.item.detail,
-                  tone: piece.type,
-                }}
-              />
-              <button
-                type="button"
-                className="nb-rond"
-                aria-label={t("publish.remove")}
-                onClick={() => setPiece(null)}
-              >
-                <PhoneIcon name="fermer" size={18} />
-              </button>
-            </span>
-          ) : null}
-          {quoted ? (
-            <span className="nb-fil-cite" aria-label={t("publish.quoting")}>
-              <b>{quoted.name}</b>
-              <span>{quoted.body}</span>
-            </span>
-          ) : null}
-          <div className="nb-fil-pub-chips">
-            {chips.map((chip) => (
-              <button
-                key={chip.key}
-                type="button"
-                className="nb-chip nb-fil-chip"
-                aria-pressed={chip.on}
-                onClick={() => {
-                  if (chip.key === "photo") {
-                    if (photo) setPhoto(null);
-                    else input.current?.click();
-                  } else if (chip.on) setPiece(null);
-                  else setPick(chip.key);
-                }}
-              >
-                {t(`publish.${chip.key}`)}
-              </button>
-            ))}
-            <input
-              ref={input}
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              hidden
-              onChange={(event) => {
-                choosePhoto(event.target.files?.[0]);
-                event.target.value = "";
+      <p className="nb-fil-pub-auteur">
+        <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={36} />
+        <b>{me.name}</b>
+      </p>
+      <div className="nb-fil-pub-corps">
+        <PostTextFields title={title} body={text} onTitle={setTitle} onBody={setText} />
+        <PostImagePicker
+          photo={photo}
+          onFile={choosePhoto}
+          onRemove={() => setPhoto(null)}
+          busy={pending}
+        />
+        {piece ? (
+          <span className="nb-fil-pj-ligne">
+            <Attachment
+              value={{
+                mark: piece.type === "work" ? "PF" : piece.item.title.slice(0, 3).toUpperCase(),
+                title: piece.item.title,
+                detail: piece.item.detail,
+                tone: piece.type,
               }}
             />
-          </div>
+            <button
+              type="button"
+              className="nb-rond"
+              aria-label={t("publish.remove")}
+              onClick={() => setPiece(null)}
+            >
+              <PhoneIcon name="fermer" size={18} />
+            </button>
+          </span>
+        ) : null}
+        {quoted ? (
+          <span className="nb-fil-cite" aria-label={t("publish.quoting")}>
+            <b>{quoted.name}</b>
+            <span>{quoted.body}</span>
+          </span>
+        ) : null}
+        <div className="nb-fil-pub-chips">
+          {chips.map((chip) => (
+            <button
+              key={chip.key}
+              type="button"
+              className="nb-chip nb-fil-chip"
+              aria-pressed={chip.on}
+              onClick={() => {
+                if (chip.on) setPiece(null);
+                else setPick(chip.key);
+              }}
+            >
+              {t(`publish.${chip.key}`)}
+            </button>
+          ))}
         </div>
       </div>
-      {draft && !text && !quoted ? (
+      {draft && !text && !title && !quoted ? (
         <div className="nb-fil-pub-orbi">
           <OrbiDisc size={40} />
           <span>{t("publish.orbi", { course: draft.course })}</span>
@@ -239,7 +200,8 @@ export function PhoneCompose({
             type="button"
             data-orbi=""
             onClick={() => {
-              setText(draft.text);
+              setTitle(draft.title.slice(0, FEED_TITLE_MAX));
+              setText(draft.text.slice(0, FEED_BODY_MAX));
               setPhoto(null);
               setPiece({ type: "certificate", item: draft.certificate });
             }}
@@ -248,6 +210,12 @@ export function PhoneCompose({
           </button>
         </div>
       ) : null}
+      <PostPreview
+        author={{ name: me.name, initials: me.initials, image: me.image, org: false }}
+        title={title}
+        body={text}
+        image={photo?.preview ?? null}
+      />
       <div className="nb-fil-pub-bas">
         <button
           type="button"
@@ -268,7 +236,7 @@ export function PhoneCompose({
           aria-disabled={!ready || pending}
           onClick={publish}
         >
-          {t("publish.submit")}
+          {ready ? t("publish.submit") : t("publish.missingTitle")}
         </button>
       </div>
       <PhoneSheet
@@ -300,7 +268,6 @@ export function PhoneCompose({
               type="button"
               className="nb-opt"
               onClick={() => {
-                setPhoto(null);
                 setPiece({ type: pick!, item });
                 setPick(null);
               }}
