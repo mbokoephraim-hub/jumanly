@@ -64,6 +64,9 @@ export const notificationTypes = [
   "talentShared",
   // Modèle B recruteur M7: a colleague wrote in « Équipe » of Messages.
   "teamMessage",
+  // Modèle B recruteur M8: a member asks the administrators to add a colleague or a plan.
+  "colleagueProposed",
+  "planRequested",
   // Le Fil (Modèle B, lot B3): answers, names, J'aime, republications and quotes.
   "feedReply",
   "feedMention",
@@ -132,6 +135,65 @@ export const NOTIFICATION_CATEGORIES = Object.keys(
   notificationCategories,
 ) as NotificationCategory[];
 
+/**
+ * The recruiter's own switches (Modèle B recruteur M8, planche Recruteur-compte-notifications),
+ * stored beside the talent's in `notificationsMuted` with the prefix « rh. ». « Nouveau message »
+ * is the talent's category `messages`: one person, one inbox.
+ */
+export const recruiterNotificationCategories = {
+  "rh.applications": ["newApplication", "atsReady", "jobEnding"],
+  "rh.interviews": [
+    "interviewTeam",
+    "interviewConfirmed",
+    "interviewReschedule",
+    "interviewDeclined",
+    "interviewCanceled",
+    "interviewAccepted",
+  ],
+  "rh.team": [
+    "candidateAssigned",
+    "talentShared",
+    "colleagueProposed",
+    "planRequested",
+    "orgJoinRequest",
+  ],
+} as const satisfies Record<string, readonly NotificationType[]>;
+export type RecruiterNotificationCategory = keyof typeof recruiterNotificationCategories;
+export const RECRUITER_NOTIFICATION_CATEGORIES = Object.keys(
+  recruiterNotificationCategories,
+) as RecruiterNotificationCategory[];
+/** The switches of the recruiter's screen, in its order. */
+export const RECRUITER_SWITCHES = [
+  "rh.applications",
+  "rh.interviews",
+  "messages",
+  "rh.team",
+] as const;
+export type RecruiterSwitch = (typeof RECRUITER_SWITCHES)[number];
+
+export function recruiterCategoryOf(type: NotificationType): RecruiterNotificationCategory | null {
+  return (
+    RECRUITER_NOTIFICATION_CATEGORIES.find((category) =>
+      (recruiterNotificationCategories[category] as readonly string[]).includes(type),
+    ) ?? null
+  );
+}
+
+/**
+ * The muted list after one screen saved its switches: the switches it shows follow `kept`, every
+ * other choice (the other screen's) stays as it was.
+ */
+export function mutedAfter(
+  current: readonly string[],
+  shown: readonly string[],
+  kept: ReadonlySet<string>,
+): string[] {
+  return [
+    ...current.filter((category) => !shown.includes(category)),
+    ...shown.filter((category) => !kept.has(category)),
+  ];
+}
+
 export function categoryOf(type: NotificationType): NotificationCategory | null {
   return (
     NOTIFICATION_CATEGORIES.find((category) =>
@@ -162,10 +224,12 @@ export async function notify(
   if (input.userIds.length === 0) return;
   let userIds = [...new Set(input.userIds)];
   // A category the person turned off (Paramètres › Notifications) creates nothing for them.
-  const category = categoryOf(input.type);
-  if (category) {
+  const categories = [categoryOf(input.type), recruiterCategoryOf(input.type)].filter(
+    (category): category is NonNullable<typeof category> => category !== null,
+  );
+  if (categories.length > 0) {
     const muted = await db.user.findMany({
-      where: { id: { in: userIds }, notificationsMuted: { has: category } },
+      where: { id: { in: userIds }, notificationsMuted: { hasSome: categories } },
       select: { id: true },
     });
     const off = new Set(muted.map((user) => user.id));

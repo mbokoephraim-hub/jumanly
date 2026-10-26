@@ -24,6 +24,7 @@ import {
 import { db } from "@/server/db";
 import { can } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
+import { isPhone } from "@/server/view";
 import { hirePermissions } from "@/server/services/hire";
 import { interviewsToEvaluate, invitableApplications } from "@/server/services/hire-interviews";
 import { listInterviews } from "@/server/services/interviews";
@@ -61,6 +62,8 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
   if (candidature && candidature !== "nouveau")
     redirect(`/app/hire/candidats/${encodeURIComponent(candidature)}/entretien`);
   const { ctx } = await requireHire("/app/hire/entretiens", "readApplications");
+  // On a phone, the interviews of the day are a view of Candidatures (planche Recruteur-cand-entretiens) (Modèle B recruteur M8).
+  if (await isPhone()) redirect("/app/hire/candidats?vue=entretiens");
   const t = await getTranslations("hireInterviews");
   const tw = await getTranslations("hireWeb.agenda");
   const format = await getFormatter();

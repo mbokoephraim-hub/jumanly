@@ -12183,12 +12183,10 @@
     "line": "{jobTitle} · {org}",
     "lineNoTitle": "{org}",
     "group": {
-      "org": "Organisation et équipe",
-      "settings": "Abonnement et réglages"
+      "org": "Organisation et équipe"
     },
     "org": {
       "title": "Organisation",
-      "text": "Page, vérification",
       "toVerify": "À vérifier",
       "pending": "En cours",
       "verified": "Vérifiée"
@@ -12203,8 +12201,7 @@
       "text": "{pools, plural, =0 {Aucun vivier} one {# vivier} other {# viviers}}, {talents, plural, =0 {aucun talent} one {# talent} other {# talents}}"
     },
     "reports": {
-      "title": "Rapports",
-      "text": "Offres et candidatures"
+      "title": "Rapports"
     },
     "plan": {
       "title": "Abonnement",
@@ -12212,8 +12209,7 @@
       "textUnlimited": "{plan} · crédits Orbi illimités"
     },
     "settings": {
-      "title": "Paramètres",
-      "text": "Notifications, sécurité, confidentialité"
+      "title": "Paramètres"
     },
     "help": {
       "title": "Aide"
@@ -18616,6 +18612,311 @@
       }
     }
   },
+  "phoneRhCompte": {
+    "title": "Compte",
+    "back": "Fil",
+    "backCompte": "Compte",
+    "notifications": "{count, plural, =0 {Notifications} one {Notifications, # non lue} other {Notifications, # non lues}}",
+    "card": {
+      "label": "Voir mon profil recruteur",
+      "attached": "Rattaché·e à {org}",
+      "pending": "Rattachement à {org} en attente",
+      "independent": "Recrute en indépendant·e"
+    },
+    "switch": {
+      "title": "Changer de profil",
+      "line": "Recruteur, talent ou entreprise",
+      "note": "Un seul compte, trois façons de se présenter. Chaque profil garde ses messages.",
+      "recruiter": "Profil recruteur · {org}",
+      "current": "Profil actuel",
+      "talentName": "{name} · talent",
+      "talent": "Votre profil de candidat, invisible pour {org}",
+      "companyAdmin": "Agir au nom de l'entreprise : publier, répondre",
+      "companyOther": "Réservé à l'administrateur, {admin} · voir la page",
+      "companyOtherNoAdmin": "Réservé à l'administrateur · voir la page",
+      "otherOrg": "Profil recruteur · {org}",
+      "cancel": "Annuler"
+    },
+    "section": {
+      "activity": "Mon activité",
+      "settings": "Réglages"
+    },
+    "row": {
+      "profile": "Mon profil recruteur",
+      "profileLine": "Ce que voient les talents",
+      "stats": "Mes statistiques",
+      "statsLine": "Réponses, délais, entretiens",
+      "saved": "Publications enregistrées",
+      "savedLine": "{count, plural, =0 {Aucune pour l'instant} one {# publication} other {# publications}}",
+      "page": "Page de l'entreprise",
+      "pageVerified": "Vérifiée · administrée par {admin}",
+      "pageVerifiedNoAdmin": "Vérifiée",
+      "pageToVerify": "Vérification en cours · administrée par {admin}",
+      "pageToVerifyNoAdmin": "Vérification en cours",
+      "team": "Équipe de recrutement",
+      "teamLine": "{count, plural, one {# personne} other {# personnes}}",
+      "plan": "Formule et usage",
+      "planLine": "{plan} · gérée par l'administrateur",
+      "planLineAdmin": "{plan} · gérée sur ordinateur",
+      "notifications": "Notifications",
+      "notificationsLine": "Candidatures, entretiens, messages",
+      "templates": "Modèles de messages",
+      "templatesLine": "Réponses prêtes à relire",
+      "privacy": "Confidentialité et données",
+      "privacyLine": "Journal des consultations, vos données",
+      "language": "Langue",
+      "languageLine": "Français",
+      "help": "Aide et contact",
+      "helpLine": "Par e-mail uniquement",
+      "logout": "Se déconnecter"
+    },
+    "logout": {
+      "title": "Se déconnecter ?",
+      "text": "Vos candidatures et messages vous attendent à la prochaine connexion.",
+      "confirm": "Se déconnecter",
+      "cancel": "Annuler"
+    },
+    "profile": {
+      "preview": "Aperçu : ce que voient les talents",
+      "back": "Compte",
+      "at": "{jobTitle} ·",
+      "alsoIn": "{city} · recrute aussi à {others}",
+      "hiringNow": "Recrute en ce moment",
+      "noHeadline": "Ajoutez une accroche : les talents savent à qui ils écrivent.",
+      "recruitsFor": "Recrute pour",
+      "offers": "Offres en cours",
+      "offerLine": "{city} · {count, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}}",
+      "noOffer": "Aucune offre en cours.",
+      "contacts": "Contacts",
+      "contactsFor": {
+        "nobody": "Votre téléphone n'est visible que par votre équipe.",
+        "interview": "Votre téléphone n'est visible que par les candidats invités en entretien.",
+        "connections": "Votre téléphone est visible par vos relations."
+      },
+      "edit": "Modifier mon profil"
+    },
+    "edit": {
+      "title": "Modifier mon profil",
+      "back": "Profil",
+      "headline": "Accroche",
+      "headlinePlaceholder": "Par exemple : je recrute les talents data de l'entreprise et je réponds à chaque candidature.",
+      "orbi": "Orbi propose une accroche",
+      "orbiText": "Je recrute les talents {domains} de {org}. Je réponds à chaque candidature.",
+      "orbiTextNoDomain": "Je recrute pour {org}. Je réponds à chaque candidature.",
+      "orbiNote": "Orbi propose, vous relisez avant d'enregistrer.",
+      "hiringNow": "Badge « Recrute en ce moment »",
+      "hiringNowLine": "Les talents vous trouvent plus vite",
+      "contactsFor": "Qui voit votre téléphone",
+      "contacts": {
+        "interview": "Candidats en entretien",
+        "nobody": "Équipe seulement"
+      },
+      "company": "Entreprise",
+      "companyAccepted": "Rattachement accepté",
+      "companyAcceptedBy": "Rattachement accepté par {admin}",
+      "companyNote": "Pour changer d'entreprise, quittez {org} depuis Confidentialité et données : votre profil et vos messages restent à vous.",
+      "save": "Enregistrer",
+      "saved": "Profil enregistré.",
+      "error": "Vérifiez l'accroche : 280 caractères au plus."
+    },
+    "stats": {
+      "title": "Mes statistiques",
+      "line": "30 derniers jours · toutes vos offres",
+      "received": "candidatures reçues · 30 jours",
+      "delay": "délai moyen de première réponse",
+      "delayValue": "{days} j",
+      "delayNone": "–",
+      "percent": "{percent} %",
+      "answered": "candidats ayant reçu une réponse",
+      "interviews": "entretiens menés",
+      "funnel": "Du dépôt à l'embauche",
+      "phase": {
+        "recue": "Reçues",
+        "preselection": "Présélection",
+        "entretien": "Entretien",
+        "proposition": "Proposition",
+        "recrute": "Recrutées"
+      },
+      "waiting": "Les {percent} % sans réponse",
+      "waitingLine": "Répondre depuis Décisions",
+      "note": "Calculé sur les offres que vous voyez, de la même façon pour tous les candidats."
+    },
+    "saved": {
+      "title": "Publications enregistrées",
+      "empty": "Aucune publication enregistrée. Touchez le signet d'une publication du Fil pour la retrouver ici.",
+      "remove": "Retirer « {title} » des publications enregistrées",
+      "removed": "Publication retirée."
+    },
+    "team": {
+      "title": "Équipe de recrutement",
+      "line": "{org} · {count, plural, one {# personne} other {# personnes}} sur {max} places",
+      "lineUnlimited": "{org} · {count, plural, one {# personne} other {# personnes}}",
+      "you": "{name} (vous)",
+      "follows": "Suit {count, plural, one {# candidature} other {# candidatures}}",
+      "files": "{count, plural, =0 {aucun dossier} one {# dossier} other {# dossiers}}",
+      "adminLine": "Gère la page, l'équipe et la formule",
+      "role": {
+        "admin": "Administrateur",
+        "recruiter": "Recruteur",
+        "manager": "Manager",
+        "viewer": "Lecture seule"
+      },
+      "who": "Qui peut faire quoi",
+      "whoAdmin": "Page, équipe, formule, toutes les offres",
+      "whoRecruiter": "Publie, trie, planifie, répond, publie au nom de l'entreprise",
+      "whoManager": "Voit les dossiers répartis, note et évalue",
+      "whoViewer": "Lit sans rien modifier",
+      "note": "{admin} ajoute ou retire des personnes depuis l'administration, sur ordinateur.",
+      "noteNoAdmin": "L'administrateur ajoute ou retire des personnes depuis l'administration, sur ordinateur.",
+      "noteAdmin": "Vous ajoutez ou retirez des personnes depuis l'administration, sur ordinateur.",
+      "propose": "Proposer un collègue",
+      "invite": "Inviter un collègue",
+      "sheetText": "{admin} reçoit la demande et l'ajoute depuis l'administration. {seats, plural, =-1 {} =0 {Plus de place dans la formule {plan}.} one {Il reste # place dans la formule {plan}.} other {Il reste # places dans la formule {plan}.}}",
+      "sheetTextNoAdmin": "L'administrateur reçoit la demande et l'ajoute depuis l'administration.",
+      "sheetTextAdmin": "La personne reçoit une invitation par e-mail. {seats, plural, =-1 {} =0 {Plus de place dans la formule {plan}.} one {Il reste # place dans la formule {plan}.} other {Il reste # places dans la formule {plan}.}}",
+      "email": "E-mail professionnel",
+      "emailPlaceholder": "prenom.nom@entreprise.com",
+      "send": "Envoyer la demande",
+      "sendInvite": "Envoyer l'invitation",
+      "cancel": "Annuler",
+      "ok": {
+        "proposed": "Demande envoyée à l'administrateur.",
+        "invited": "Invitation envoyée."
+      },
+      "error": {
+        "email": "Indiquez une adresse e-mail valide.",
+        "seats": "Plus de place dans la formule : l'administrateur peut en changer sur ordinateur.",
+        "member": "Cette personne fait déjà partie de l'équipe.",
+        "trop": "Trop de demandes d'un coup. Réessayez dans un moment."
+      }
+    },
+    "plan": {
+      "title": "Formule et usage",
+      "of": "Formule de {org}",
+      "price": "{price} USD par mois",
+      "priceFree": "Gratuite",
+      "priceQuote": "Sur devis",
+      "paidUntil": "payée jusqu'au {date}",
+      "managedBy": "Gérée par {admin}, administrateur, sur ordinateur.",
+      "managedByNoAdmin": "Gérée par l'administrateur, sur ordinateur.",
+      "managedByYou": "Vous la gérez depuis l'administration, sur ordinateur.",
+      "usage": "Utilisation ce mois",
+      "seats": "Utilisateurs",
+      "offers": "Offres actives",
+      "searches": "Recherches de talents ce mois",
+      "credits": "Crédits Orbi ce mois",
+      "value": "{used} / {limit}",
+      "valueUnlimited": "{used} · sans limite",
+      "compare": "Comparer",
+      "perMonth": "{price} USD/mois",
+      "current": "Formule actuelle",
+      "lineSeats": "{count, plural, =-1 {Utilisateurs sans limite} one {# utilisateur} other {# utilisateurs}}",
+      "lineOffers": "{count, plural, =-1 {offres sans limite} one {# offre active} other {# offres actives}}",
+      "ask": "Demander {plan} à {admin}",
+      "askNoAdmin": "Demander {plan} à l'administrateur",
+      "asked": "Demande envoyée à l'administrateur.",
+      "adminNote": "Changer de formule se fait sur ordinateur, depuis l'administration de l'entreprise."
+    },
+    "templates": {
+      "title": "Modèles de messages",
+      "sub": "Utilisés dans Messages et dans les réponses groupées.",
+      "own": "Modèle de {org}",
+      "jumanly": "Texte de Jumanly, à adapter",
+      "decision": "S'envoie depuis l'écran de décision",
+      "note": "Les modèles se créent et se modifient sur ordinateur. Un modèle s'insère dans votre message : rien ne part sans que vous l'envoyiez."
+    },
+    "notifs": {
+      "title": "Notifications",
+      "rh": {
+        "applications": "Nouvelle candidature",
+        "applicationsLine": "Et les offres qui se terminent",
+        "interviews": "Entretiens",
+        "interviewsLine": "Confirmations, reports, annulations",
+        "team": "Activité de l'équipe",
+        "teamLine": "Dossiers confiés, profils partagés, demandes"
+      },
+      "messages": "Nouveau message",
+      "messagesLine": "Candidats et équipe",
+      "emails": "Par e-mail aussi",
+      "emailsLine": "Une copie des notifications importantes",
+      "note": "La sécurité du compte et la modération arrivent toujours.",
+      "saved": "Réglage enregistré."
+    },
+    "privacy": {
+      "title": "Confidentialité et données",
+      "log": "Journal des consultations",
+      "logText": "Chaque profil que vous ouvrez est enregistré. Les talents savent que {org} a consulté leur profil.",
+      "logCount": "{count, plural, =0 {Aucun profil consulté ce mois} one {# profil consulté ce mois} other {# profils consultés ce mois}}",
+      "logOpen": "Voir le journal",
+      "share": "Ce que vous partagez",
+      "shareText": "Votre e-mail professionnel est visible des candidats. Votre téléphone se règle dans votre profil.",
+      "shareLink": "Régler la visibilité",
+      "data": "Vos données",
+      "dataLink": "Télécharger mes données",
+      "leave": "Quitter {org}",
+      "leaveText": "Le logo disparaît de votre profil. Les candidatures restent à l'entreprise, vos messages personnels restent à vous.",
+      "leaveLink": "Quitter l'entreprise",
+      "leaveOwner": "Vous êtes propriétaire de la page : transférez-la à un autre administrateur sur ordinateur avant de partir.",
+      "leaveConfirmTitle": "Quitter {org} ?",
+      "leaveConfirmText": "Vous perdez l'accès aux offres et aux candidatures de l'entreprise. Rien n'est effacé ; l'administrateur peut vous inviter à nouveau.",
+      "leaveConfirm": "Quitter l'entreprise",
+      "leaveCancel": "Annuler",
+      "leaveError": "Impossible de quitter l'entreprise pour l'instant."
+    },
+    "language": {
+      "title": "Langue",
+      "fr": "Français",
+      "frLine": "Langue actuelle",
+      "en": "English",
+      "enLine": "Bientôt disponible"
+    },
+    "help": {
+      "title": "Aide et contact",
+      "q1": "Comment répondre à tous les candidats non retenus ?",
+      "a1": "Dans Candidatures › Décisions, touchez « Répondre aux candidats sans réponse ». Vous relisez le message avant l'envoi ; chacun le reçoit avec son prénom.",
+      "q2": "Pourquoi ce score ?",
+      "a2": "Le score compare les compétences, l'expérience, la formation, les langues et la localisation demandées dans l'offre. Il est calculé de la même façon pour tous et n'utilise jamais le nom, l'âge, la photo, le genre ou la nationalité. « Pourquoi ? » détaille chaque critère.",
+      "q3": "Qui peut voir mes contacts ?",
+      "a3": "Votre e-mail professionnel est visible des candidats. Votre téléphone n'est montré qu'aux personnes que vous choisissez dans votre profil.",
+      "q4": "Comment changer de formule ?",
+      "a4": "L'administrateur de l'entreprise change la formule sur ordinateur. Depuis Formule et usage, vous pouvez lui demander une formule plus grande.",
+      "write": "Écrire à l'équipe Jumanly",
+      "writeText": "Réponse par e-mail à {email}, sous 24 h ouvrées.",
+      "mail": "Écrire à {email}",
+      "direct": "Ou directement : {email}"
+    },
+    "company": {
+      "own": "Votre entreprise · page administrée par {admin}, modifiable sur ordinateur",
+      "ownNoAdmin": "Votre entreprise · page modifiable sur ordinateur par l'administrateur",
+      "ownAdmin": "Votre entreprise · vous administrez cette page, modifiable sur ordinateur",
+      "publish": "Publier au nom de {org}"
+    },
+    "mode": {
+      "title": "{org}",
+      "line": "Vous agissez au nom de l'entreprise",
+      "back": "Retour au compte",
+      "tabs": {
+        "label": "Espace de l'entreprise",
+        "accueil": "Accueil",
+        "publications": "Publications",
+        "messages": "Messages",
+        "offres": "Offres"
+      },
+      "joins": "Demandes pour rejoindre l'équipe",
+      "joinsNone": "Aucune demande pour rejoindre l'équipe.",
+      "followers": "{count, plural, one {abonné} other {abonnés}}",
+      "activeOffers": "{count, plural, one {offre active} other {offres actives}}",
+      "applications": "candidatures · 30 jours",
+      "members": "{count, plural, one {membre de l'équipe} other {membres de l'équipe}}",
+      "noPosts": "L'entreprise n'a encore rien publié.",
+      "messagesText": "Les conversations de l'entreprise avec les candidats et les talents.",
+      "messagesOpen": "Ouvrir les messages",
+      "offersText": "Les offres de l'entreprise, leurs candidatures et leurs statistiques.",
+      "offersOpen": "Ouvrir les offres",
+      "adminNote": "La page, l'équipe et la formule se modifient sur ordinateur.",
+      "notAdmin": "Réservé à l'administrateur de la page."
+    }
+  },
   "pricing": {
     "seo": {
       "title": "Tarifs et forfaits · Jumanly",
@@ -20515,6 +20816,8 @@
       "candidateAssigned": "Un collègue vous confie le dossier de {candidate} pour « {jobTitle} ».",
       "talentShared": "{colleague} vous partage le profil d'un talent.",
       "teamMessage": "{name} vous a écrit dans Équipe.",
+      "colleagueProposed": "{name} propose d'ajouter {email} à l'équipe de {org}.",
+      "planRequested": "{name} demande la formule {plan} pour l'équipe.",
       "feedReply": "{name} a répondu à votre publication.",
       "feedMention": "{name} vous a mentionné dans une réponse.",
       "feedLike": "{name} a aimé votre publication.",

@@ -8,13 +8,13 @@ import { Toaster } from "@/components/motion/toaster";
 import { initials } from "@/components/ui/avatar";
 import { AppearanceRoot } from "@/components/talent/appearance";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
+import { ViewSync } from "@/components/phone/view-sync";
 import { appearanceScript, type Appearance } from "@/lib/appearance";
 import { TalentCommand } from "@/components/talent/web/command";
 import { TalentTopBar } from "@/components/talent/web/top-bar";
 import { OrbiPanel } from "@/components/talent/web/orbi-panel";
 import type { AbstractIntlMessages } from "next-intl";
 import { recruiterOrbiActions, recruiterOrbiAides } from "@/server/services/recruiter-orbi";
-import { RecruiterBottomBar } from "./bottom-bar";
 import { RecruiterHeader } from "./header";
 import { OrgMark } from "./org-mark";
 import { OrgSheet, type OrgChoice } from "./org-sheet";
@@ -22,9 +22,8 @@ import { RecruiterSideNav } from "./side-nav";
 
 /**
  * Recruiter space, one code for three widths (docs/refonte-mobile, brief recruteur lot 1;
- * docs/refonte-web, recruteur lot 1). Phone (< 768 px): the head with the active organization and
- * the big title, the page, the floating bar À traiter · Offres · Orbi · Candidats · Messages.
- * Tablet (768 to 1199 px): the 84 px rail and the top bar. Computer (≥ 1200 px): the 232 px
+ * docs/refonte-web, recruteur lot 1). A phone, or a window under 768 px, gets the Modèle B
+ * (`PhoneShell`, docs/modele-b-recruteur). Tablet (768 to 1199 px): the 84 px rail and the top bar. Computer (≥ 1200 px): the 232 px
  * sidebar with the organization and its menu under the name, and the top bar. The frame is the
  * talent's (`t-cadre`, lot W0): same surfaces, icons, `Ctrl K` and light or dark mode.
  */
@@ -82,6 +81,8 @@ export function RecruiterShell({
       <AppearanceRoot appearance={appearance} />
       <AppMotionRoot reduce={reduceMotion} />
       <DesktopNotifier title={t("web.desktopTitle")} />
+      {/* A window narrowed under 768 px gets the phone's Modèle B (recruteur M8). */}
+      <ViewSync view="wide" />
       <Toaster label={tt("region.aria")} closeLabel={tt("close")} placement="bottom" />
       <Suspense fallback={null}>
         <AppIntroGate data={intro} reduce={reduceMotion} />
@@ -173,18 +174,6 @@ export function RecruiterShell({
           </main>
         </div>
       </div>
-      <RecruiterBottomBar
-        unreadMessages={unreadMessages}
-        labels={{
-          aria: t("nav.aria"),
-          messagesBadge: t("nav.messagesBadge", { count: unreadMessages }),
-          today: t("nav.today"),
-          offers: t("nav.offers"),
-          orbi: t("nav.orbi"),
-          candidates: t("nav.candidates"),
-          messages: t("nav.messages"),
-        }}
-      />
       <Suspense fallback={null}>
         <OrbiPanel
           texts={orbiTexts}

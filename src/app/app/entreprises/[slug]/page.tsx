@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
-import { getFormatter } from "next-intl/server";
+import { getFormatter, getTranslations } from "next-intl/server";
 import { PhoneCompany } from "@/components/phone/explorer/company";
 import { companyTone, explorerWords } from "@/components/phone/explorer/data";
 import { ExplorerTexts } from "@/components/phone/explorer/server";
@@ -8,8 +8,10 @@ import { feedWords, initialsOf, shortName, toneOf } from "@/components/phone/fil
 import { sendTargetViews } from "@/components/phone/fil/server";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { getActiveSpace, publishingSpace } from "@/server/hire-context";
 import { companyPage } from "@/server/services/explore";
 import { authorFeed } from "@/server/services/feed";
+import { isOrgAdmin, orgAdmin } from "@/server/services/hire-phone-account";
 import { isPhone } from "@/server/view";
 
 export const metadata: Metadata = { robots: { index: false } };
@@ -40,7 +42,34 @@ export default async function OrganizationPage({ params }: PageProps<"/app/entre
     getFormatter(),
   ]);
   if (!company) notFound();
-  const posts = await authorFeed(db, user.id, { organizationId: company.id });
+  const [posts, space, active] = await Promise.all([
+    authorFeed(db, user.id, { organizationId: company.id }),
+    publishingSpace(user.id),
+    getActiveSpace(user.id),
+  ]);
+  // The recruiter's own company (Modèle B recruteur M8, planche Recruteur-entreprise): who
+  // administers the page, edited on a computer, and « Publier au nom de … ».
+  const own =
+    space && space.organizationId === company.id
+      ? await (async () => {
+          const tc = await getTranslations("phoneRhCompte.company");
+          const admin = await orgAdmin(db, company.id);
+          return {
+            note:
+              active && isOrgAdmin(active.role)
+                ? tc("ownAdmin")
+                : admin.name
+                  ? tc("own", { admin: admin.name })
+                  : tc("ownNoAdmin"),
+            publish: space.canPublishAsOrg
+              ? {
+                  href: "/app/fil/publier?nom=entreprise",
+                  label: tc("publish", { org: shortName(company.name) }),
+                }
+              : null,
+          };
+        })()
+      : undefined;
   const { t } = words;
   const name = shortName(company.name);
   const handle = company.slug
@@ -90,6 +119,7 @@ export default async function OrganizationPage({ params }: PageProps<"/app/entre
         }}
         posts={posts.map(fil.post)}
         targets={targets}
+        own={own}
       />
     </ExplorerTexts>
   );

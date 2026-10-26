@@ -166,12 +166,18 @@ test("conversation : brouillon d'Orbi relu puis envoyé, modèles, liste des mes
 
   // The templates' page: a template created there is offered in the conversation.
   await page.goto("/app/hire/modeles");
-  await expect(main(page).getByRole("heading", { level: 1 })).toHaveText("Modèles de message");
+  // On a phone, the templates of Compte (Modèle B recruteur M8): read there, written on a computer.
+  await expect(
+    main(page).getByRole("heading", { level: 1 }).filter({ visible: true }).first(),
+  ).toHaveText(isMobile ? "Modèles de messages" : "Modèles de message");
   await expectAccessible(page);
   await noOverflow(page, "modèles");
 });
 
-test("organisation : page, modification, vérification, équipe et invitation", async ({ page }) => {
+test("organisation : page, modification, vérification, équipe et invitation", async ({
+  page,
+  isMobile,
+}) => {
   test.setTimeout(180_000);
   const { organization } = await freshRecruiter(page, "lot5-org", "reports.export");
   await page.goto("/app/organisation");
@@ -194,6 +200,16 @@ test("organisation : page, modification, vérification, équipe et invitation", 
   await noOverflow(page, "vérification");
 
   await page.goto("/app/organisation/equipe");
+  // On a phone, « Équipe de recrutement » of Compte (Modèle B recruteur M8, its own e2e).
+  if (isMobile) {
+    await expect(page).toHaveURL(/\/app\/hire\/compte\/equipe$/);
+    await page.goto("/app/hire/rapports");
+    await expect(page).toHaveURL(/\/app\/hire\/compte\/statistiques$/);
+    expect(
+      (await page.request.get("/app/hire/rapports/export?format=csv")).headers()["content-type"],
+    ).toContain("application/pdf");
+    return;
+  }
   await expectAccessible(page);
   await noOverflow(page, "équipe");
   await main(page).getByRole("button", { name: "Inviter dans l'équipe" }).click();
@@ -245,6 +261,7 @@ test("abonnement, formules RH, rapports en PDF, paramètres et journal des consu
   await noOverflow(page, "formules");
 
   await page.goto("/app/hire/rapports");
+  if (isMobile) await expect(page).toHaveURL(/\/app\/hire\/compte\/statistiques$/);
   await expectAccessible(page);
   await noOverflow(page, "rapports");
   // Without the right to export, the PDF is offered with the plan that opens it.
@@ -259,9 +276,21 @@ test("abonnement, formules RH, rapports en PDF, paramètres et journal des consu
 
   // One seat on the free plan, taken by the owner: the invitation sheet points to a bigger plan.
   await page.goto("/app/organisation/equipe?inviter=1");
-  await expect(
-    page.getByRole("dialog", { name: "Inviter dans l'équipe" }).getByText("Plus de siège libre."),
-  ).toBeVisible();
+  if (isMobile) {
+    // On a phone, the team of Compte (Modèle B recruteur M8): the sheet says no place is left.
+    await page
+      .getByRole("button", { name: "Inviter un collègue" })
+      .filter({ visible: true })
+      .click();
+    await expect(
+      page.getByRole("dialog", { name: "Inviter un collègue" }).getByText(/Plus de place/),
+    ).toBeVisible();
+    await page.keyboard.press("Escape");
+  } else {
+    await expect(
+      page.getByRole("dialog", { name: "Inviter dans l'équipe" }).getByText("Plus de siège libre."),
+    ).toBeVisible();
+  }
   await noOverflow(page, "équipe pleine");
 
   await page.goto("/app/parametres");

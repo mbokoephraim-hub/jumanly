@@ -16,7 +16,7 @@ import {
   eraseAccount,
   ownedOrganizations,
 } from "@/server/services/account-deletion";
-import { NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
+import { mutedAfter, NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
 
 /**
  * Where each part of the settings lives (planche talent-4 § 8): the list, then one page per
@@ -229,7 +229,7 @@ export async function updateNotifications(formData: FormData) {
   await db.user.update({
     where: { id: user.id },
     data: {
-      notificationsMuted: NOTIFICATION_CATEGORIES.filter((category) => !kept.has(category)),
+      notificationsMuted: mutedAfter(user.notificationsMuted, NOTIFICATION_CATEGORIES, kept),
       notificationEmails: parsed.data.emails === "1",
       newsletter: parsed.data.newsletter === "on",
     },

@@ -63,11 +63,14 @@ export function PhoneCompany({
   posts,
   targets,
   initialTab = "apropos",
+  own,
 }: {
   company: CompanyPageView;
   posts: PostView[];
   targets: SendTarget[];
   initialTab?: Tab;
+  /** The recruiter's own company (Modèle B recruteur M8): who administers it, « Publier au nom de ». */
+  own?: { note: string; publish: { href: string; label: string } | null };
 }) {
   const t = useTranslations("phoneExplorer");
   const [tab, setTab] = useState<Tab>(initialTab);
@@ -161,6 +164,19 @@ export function PhoneCompany({
           <span>{t("company.offers", { count: company.offers.length })}</span>
         </p>
       </div>
+      {own ? (
+        <p className="nb-rc-own">
+          <PhoneIcon name="organisation" size={18} />
+          {own.note}
+        </p>
+      ) : null}
+      {own?.publish ? (
+        <div className="nb-rc-pied" data-nav="">
+          <Link href={own.publish.href} className="nb-bouton" data-large="" data-plein="">
+            {own.publish.label}
+          </Link>
+        </div>
+      ) : null}
 
       <div className="nb-ex-onglets" role="tablist" aria-label={t("company.tabs")}>
         {TABS.map((key) => (

@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { PDFDocument, PDFName, PDFString } from "pdf-lib";
-import { hidesRecruiterTabBar } from "@/config/navigation";
 import {
   checkJobSheet,
   JOB_SHEET_MAX_BYTES,
@@ -182,16 +181,5 @@ describe("fiche de poste en PDF", () => {
       "Préparer le rapport mensuel",
       "Former les agences au suivi",
     ]);
-  });
-});
-
-describe("barre du bas de l'espace recruteur", () => {
-  it("se cache sur une offre, ses étapes et sa fiche, pas sur Mes offres", () => {
-    expect(hidesRecruiterTabBar("/app/hire/offres")).toBe(false);
-    expect(hidesRecruiterTabBar("/app/hire")).toBe(false);
-    expect(hidesRecruiterTabBar("/app/hire/offres/nouvelle")).toBe(true);
-    expect(hidesRecruiterTabBar("/app/hire/offres/abc")).toBe(true);
-    expect(hidesRecruiterTabBar("/app/hire/offres/abc/modifier")).toBe(true);
-    expect(hidesRecruiterTabBar("/app/hire/offres/abc/fiche")).toBe(true);
   });
 });

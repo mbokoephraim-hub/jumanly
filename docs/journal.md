@@ -4244,3 +4244,52 @@ Sections 07 et 10 des captures (120 à 134, 180 à 184). Au téléphone :
   (chaque bouton, captures dans `captures/etape-2-mobile/m7/`) ; branches téléphone ajoutées dans
   `mobile-recruteur-gerer.spec.ts` et `mobile-recruteur-ats.spec.ts`.
 - Choix notés dans `docs/decisions/2026-10-26-modele-b-recruteur-messages.md`.
+
+## Modèle B recruteur mobile · M8, compte, entreprise et changer de profil (26 octobre 2026)
+
+Sections 08, 09 et 11 des captures (135 à 179, 185 à 192). Au téléphone, l'avatar ouvre Compte :
+
+- **Compte** (`/app/hire/compte`) : retour au Fil, cloche, carte de la personne (poste,
+  « Rattaché·e à … » avec le logo, seulement après l'accord), « Changer de profil », Mon activité
+  (profil recruteur, statistiques, publications enregistrées), l'entreprise (page, équipe, formule
+  et usage), Réglages (notifications, modèles, confidentialité, langue, aide), « Se déconnecter »
+  après confirmation.
+- **Mon profil recruteur** (`/compte/profil`) : l'aperçu que voient les talents (accroche, « Recrute
+  en ce moment », domaines, offres en cours, contacts) ; **Modifier** (`/compte/profil/modifier`) :
+  accroche (Orbi en propose une, relue avant d'enregistrer), badge, qui voit le téléphone,
+  l'entreprise.
+- **Mes statistiques** (`/compte/statistiques`) : 30 jours sur les offres que l'on voit : reçues,
+  délai moyen de première réponse, part ayant reçu une réponse, entretiens, du dépôt à l'embauche,
+  « Les N % sans réponse » vers Décisions.
+- **Publications enregistrées** (`/compte/enregistrees`), le signet les retire.
+- **Équipe** (`/compte/equipe`) : membres, rôles, dossiers suivis, « Qui peut faire quoi » ;
+  « Proposer un collègue » (demande aux administrateurs) ou, pour un administrateur, « Inviter un
+  collègue ».
+- **Formule et usage** (`/compte/formule`) : lecture seule, usage du mois (utilisateurs, offres
+  actives, recherches de talents, crédits Orbi), comparaison, « Demander … à l'administrateur ».
+- **Modèles de messages** (`/app/hire/modeles` au téléphone), **Notifications**
+  (`/compte/notifications`), **Confidentialité et données** (`/compte/confidentialite` : journal
+  des consultations du mois, ce que l'on partage, copie des données, quitter l'entreprise),
+  **Langue** (`/compte/langue`), **Aide et contact** (`/compte/aide`, par e-mail seulement).
+- **Page de l'entreprise** : celle du talent (`/app/entreprises/[slug]`), avec, sur sa propre
+  entreprise, « Votre entreprise · page administrée par … » et « Publier au nom de … ».
+- **Changer de profil** : recruteur, talent (l'espace talent du Modèle B), entreprise ; un
+  administrateur ouvre « Agir au nom de l'entreprise » (`/app/hire/entreprise` : demandes pour
+  rejoindre, chiffres, messages, offres, « Publier au nom de … »).
+- **Nettoyage** : barre du bas de l'ancienne coque supprimée (`bottom-bar.tsx`,
+  `hidesRecruiterTabBar` et ses tests), partie téléphone de l'ancien Compte RH supprimée, textes
+  orphelins retirés ; une fenêtre d'ordinateur rétrécie passe au Modèle B ; `/app/hire/entretiens`,
+  `/app/hire/rapports` et `/app/organisation/equipe` mènent au téléphone vers leurs écrans
+  Modèle B.
+- Code : `src/components/phone/recruteur/compte.tsx`, `compte-client.tsx` ;
+  `src/server/services/hire-phone-account.ts` ; `src/server/actions/phone-rh-compte.ts`. Deux
+  notifications ajoutées (`colleagueProposed`, `planRequested`) et les interrupteurs du recruteur
+  (`rh.*`). Pas de migration.
+- Textes : partie « Modèle B recruteur · Compte, entreprise et changer de profil au téléphone »
+  (`phoneRhCompte`).
+- Tests : `tests/db/modele-b-recruteur-compte.test.ts` (statistiques, équipe et journal des
+  consultations dans la seule organisation, demandes aux seuls administrateurs avec limite,
+  formule jamais changée, quitter sans rien effacer, mode entreprise réservé, interrupteurs
+  séparés), `tests/e2e/modele-b-recruteur-compte.spec.ts` (chaque bouton, captures dans
+  `captures/etape-2-mobile/m8/`) ; `mobile-recruteur-gerer.spec.ts` suit les nouvelles adresses.
+- Choix notés dans `docs/decisions/2026-10-26-modele-b-recruteur-compte.md`.

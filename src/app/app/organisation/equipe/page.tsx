@@ -19,7 +19,9 @@ import {
 } from "@/server/actions/organization";
 import { db } from "@/server/db";
 import { can, level, limit, resolvePlan } from "@/server/entitlements";
+import { redirect } from "next/navigation";
 import { requireHire } from "@/server/hire-context";
+import { isPhone } from "@/server/view";
 import { hirePermissions } from "@/server/services/hire";
 import {
   grantableRoles,
@@ -48,6 +50,8 @@ const activityTypes = ["stage_changed", "note", "decision", "document_requested"
 export default async function TeamPage({ searchParams }: PageProps<"/app/organisation/equipe">) {
   const params = await searchParams;
   const { user, space, ctx } = await requireHire("/app/organisation/equipe");
+  // On a phone, « Équipe de recrutement » of Compte (planche Recruteur-equipe) (Modèle B recruteur M8).
+  if (await isPhone()) redirect("/app/hire/compte/equipe");
   const t = await getTranslations("rhTeam");
   const to = await getTranslations("org");
   const format = await getFormatter();
