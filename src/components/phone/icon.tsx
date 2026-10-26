@@ -64,6 +64,7 @@ export const phoneIcons = {
   cv: "M6 3.5h12v17H6zM12 7.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM8.5 16c.6-1.6 1.9-2.5 3.5-2.5s2.9.9 3.5 2.5",
   minuteur: "M12 4.5a8 8 0 1 0 0 16 8 8 0 0 0 0-16zM12 8.5v4l2.5 2.5",
   envoyer: "M5 12h13M13 6l6 6-6 6",
+  partager: "M21 3 10.5 13.5M21 3l-6.5 18-4-7.5L3 9.5z",
   plusOptions: "M5 12h.01M12 12h.01M19 12h.01",
 } as const;
 

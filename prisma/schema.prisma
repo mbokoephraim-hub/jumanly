@@ -2448,6 +2448,9 @@ model FeedPost {
   organizationId String?
   organization   Organization?          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   kind           FeedPostKind           @default(post)
+  /// The hook line of a post (docs/fil-menu-publication § 2): 60 characters at most; none for an
+  /// answer, nor for the posts published before 26/10/2026.
+  title          String?
   body           String
   /// A photo: an uploaded one (/api/fil/image/…) or a demo picture.
   imageUrl       String?

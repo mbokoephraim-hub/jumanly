@@ -153,6 +153,8 @@ export async function seedFeed(db: SeedClient) {
     author: Key;
     hours: number;
     kind?: "newRole" | "work" | "event";
+    /** docs/fil-menu-publication § 2: a hook line of 60 characters at most. */
+    title: string;
     body: string;
     image?: [string, string];
     job?: boolean;
@@ -162,6 +164,7 @@ export async function seedFeed(db: SeedClient) {
     {
       author: "baobab",
       hours: 2,
+      title: "Nous recrutons 3 analystes data à Kinshasa",
       body: "On recrute trois analystes data à Kinshasa. Candidature en 5 minutes.",
       job: true,
       replies: [
@@ -173,6 +176,7 @@ export async function seedFeed(db: SeedClient) {
     {
       author: "amani",
       hours: 3,
+      title: "Mon premier badge sur Jumanly",
       body: "Badge « Bâtisseuse de communauté » obtenu ! Merci à toutes les personnes qui ont répondu à mes questions sur Jumanly.",
       image: [
         "/modele-b/fil-amani.jpg",
@@ -186,6 +190,7 @@ export async function seedFeed(db: SeedClient) {
     {
       author: "patrick",
       hours: 5,
+      title: "Premier jour chez Fleuve Banque",
       kind: "newRole",
       body: "Premier jour chez Fleuve Banque comme analyste crédit. Offre trouvée sur Jumanly il y a trois semaines.",
       image: ["/modele-b/fil-patrick.jpg", "Patrick rit, assis à son bureau."],
@@ -200,6 +205,7 @@ export async function seedFeed(db: SeedClient) {
     {
       author: "sarah",
       hours: 8,
+      title: "Ma bannière pour une marque en ligne",
       kind: "work",
       body: "Ma bannière pour une marque de courses en ligne, projet d’école. Vos avis m’intéressent !",
       image: [
@@ -214,6 +220,7 @@ export async function seedFeed(db: SeedClient) {
     {
       author: "mwinda",
       hours: 20,
+      title: "Portes ouvertes chez Mwinda Énergie",
       kind: "event",
       body: `Portes ouvertes ${eventDay}, 10 h, à Gombe. Venez rencontrer l’équipe solaire et déposer votre CV sur place.`,
       eventAt,
@@ -225,6 +232,7 @@ export async function seedFeed(db: SeedClient) {
     {
       author: "joel",
       hours: 30,
+      title: "275 abonnés en une semaine",
       kind: "work",
       body: "Ma campagne pour Baobab Fintech : 275 nouveaux abonnés en une semaine. Je cherche un poste de community manager à Kinshasa.",
       image: ["/modele-b/fil-joel.jpg", "Visuel de campagne : 275 nouveaux abonnés."],
@@ -241,6 +249,7 @@ export async function seedFeed(db: SeedClient) {
       data: {
         ...by(post.author),
         kind: post.kind ?? "post",
+        title: post.title,
         body: post.body,
         imageUrl: post.image?.[0] ?? null,
         imageAlt: post.image?.[1] ?? null,

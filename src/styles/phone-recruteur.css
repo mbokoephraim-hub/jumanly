@@ -1165,18 +1165,6 @@
   min-height: 100dvh;
   padding-bottom: 130px;
 }
-.nb-rh-pub-barre {
-  display: grid;
-  grid-template-columns: 44px 1fr 44px;
-  align-items: center;
-  padding: var(--nb-haut) 12px 10px;
-  border-bottom: 1px solid var(--nb-filet);
-}
-.nb-rh-pub-barre h1 {
-  text-align: center;
-  font-size: 17px;
-  font-weight: 700;
-}
 .nb-rh-pub-corps {
   padding: 4px 20px 0;
 }
@@ -1186,14 +1174,6 @@
   font-size: 14px;
   font-weight: 600;
   color: var(--nb-gris);
-}
-.nb-rh-pub-ligne {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-.nb-rh-pub-ligne [data-plein] {
-  color: var(--nb-corail);
 }
 .nb-rh-pub-qui,
 .nb-rh-pub-offres {
@@ -1251,11 +1231,6 @@
   color: var(--nb-nuit);
   border-color: var(--nb-creme);
 }
-.nb-rh-pub-texte textarea {
-  min-height: 128px;
-  font-size: 16px;
-  line-height: 1.45;
-}
 .nb-rh-pub .nb-rh-orbi-ligne {
   width: auto;
   margin-top: 14px;
@@ -1264,12 +1239,6 @@
   background: none;
   font-weight: 700;
   color: var(--nb-menthe-claire);
-}
-.nb-rh-pub-photo {
-  margin-top: 14px;
-}
-.nb-rh-pub-ajout {
-  margin-top: 14px;
 }
 
 /* ── M4 · Offres (planches Recruteur-offres*, -offre-*, -publier-*) ─────────────────────────── */

@@ -60,7 +60,7 @@ test.describe("Modèle B · plein écran", () => {
 
     // Nor the text of a new post in the Fil.
     await page.goto("/app/fil/publier", { waitUntil: "networkidle" });
-    const text = page.getByRole("textbox", { name: /publication/i });
+    const text = page.getByRole("textbox", { name: /^Texte/ });
     await text.click();
     await expect(text).toBeFocused();
     expect(await text.evaluate((el) => getComputedStyle(el).outlineStyle)).toBe("none");

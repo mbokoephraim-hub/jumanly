@@ -53,18 +53,29 @@ describe("Fil du recruteur", () => {
     const author = await person();
     const org = await company();
     await expect(
-      createPost(db, author, { body: "Nous recrutons (fictif)", as: "org" }, labels, {
-        organizationId: org,
-        canPublishAsOrg: false,
-      }),
+      createPost(
+        db,
+        author,
+        { title: "Titre fictif", body: "Nous recrutons (fictif)", as: "org" },
+        labels,
+        {
+          organizationId: org,
+          canPublishAsOrg: false,
+        },
+      ),
     ).rejects.toBeInstanceOf(FeedError);
     await expect(
-      createPost(db, author, { body: "Nous recrutons (fictif)", as: "org" }, labels),
+      createPost(
+        db,
+        author,
+        { title: "Titre fictif", body: "Nous recrutons (fictif)", as: "org" },
+        labels,
+      ),
     ).rejects.toBeInstanceOf(FeedError);
     const id = await createPost(
       db,
       author,
-      { body: "Nous recrutons (fictif)", as: "org" },
+      { title: "Titre fictif", body: "Nous recrutons (fictif)", as: "org" },
       labels,
       {
         organizationId: org,
@@ -86,18 +97,36 @@ describe("Fil du recruteur", () => {
     const space = { organizationId: mine, canPublishAsOrg: true };
     const foreign = await job(other);
     await expect(
-      createPost(db, author, { body: "Offre", jobId: foreign.id }, labels, space),
+      createPost(
+        db,
+        author,
+        { title: "Titre fictif", body: "Offre", jobId: foreign.id },
+        labels,
+        space,
+      ),
     ).rejects.toBeInstanceOf(FeedError);
     const draft = await job(mine, "draft");
     await expect(
-      createPost(db, author, { body: "Offre", jobId: draft.id }, labels, space),
+      createPost(
+        db,
+        author,
+        { title: "Titre fictif", body: "Offre", jobId: draft.id },
+        labels,
+        space,
+      ),
     ).rejects.toBeInstanceOf(FeedError);
     const open = await job(mine);
     // Without a recruiter's space, no offer at all.
     await expect(
-      createPost(db, author, { body: "Offre", jobId: open.id }, labels),
+      createPost(db, author, { title: "Titre fictif", body: "Offre", jobId: open.id }, labels),
     ).rejects.toBeInstanceOf(FeedError);
-    const id = await createPost(db, author, { body: "", jobId: open.id }, labels, space);
+    const id = await createPost(
+      db,
+      author,
+      { title: "Titre fictif", body: "", jobId: open.id },
+      labels,
+      space,
+    );
     expect((await db.feedPost.findUniqueOrThrow({ where: { id } })).jobId).toBe(open.id);
   });
 
@@ -106,13 +135,19 @@ describe("Fil du recruteur", () => {
     const space = { organizationId: await company(), canPublishAsOrg: true };
     const past = new Date(Date.now() - 3 * 86_400_000);
     await expect(
-      createPost(db, author, { body: "Portes ouvertes", eventAt: past }, labels, space),
+      createPost(
+        db,
+        author,
+        { title: "Titre fictif", body: "Portes ouvertes", eventAt: past },
+        labels,
+        space,
+      ),
     ).rejects.toBeInstanceOf(FeedError);
     const when = new Date(Date.now() + 7 * 86_400_000);
     const id = await createPost(
       db,
       author,
-      { body: "Portes ouvertes", eventAt: when },
+      { title: "Titre fictif", body: "Portes ouvertes", eventAt: when },
       labels,
       space,
     );
@@ -126,8 +161,18 @@ describe("Fil du recruteur", () => {
     const viewer = await person();
     const author = await person();
     const blocked = await person();
-    const seen = await createPost(db, author, { body: `Un ${word} fictif` }, labels);
-    const hidden = await createPost(db, blocked, { body: `Un autre ${word}` }, labels);
+    const seen = await createPost(
+      db,
+      author,
+      { title: "Titre fictif", body: `Un ${word} fictif` },
+      labels,
+    );
+    const hidden = await createPost(
+      db,
+      blocked,
+      { title: "Titre fictif", body: `Un autre ${word}` },
+      labels,
+    );
     await db.connection.create({
       data: { requesterId: viewer, addresseeId: blocked, status: "blocked" },
     });

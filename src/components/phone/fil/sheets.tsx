@@ -187,7 +187,7 @@ export function PostSheets({
       : sheet === "send"
         ? t("send.title")
         : sheet === "reshare"
-          ? t("repost")
+          ? t("shareSheet")
           : post.mine
             ? t("menu.mine")
             : t("menu.title", { name: post.author.name });
