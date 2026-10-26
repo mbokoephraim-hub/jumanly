@@ -399,8 +399,9 @@ async function declaredCandidates(db: PrismaClient, organizationId: string) {
     where: {
       endDate: null,
       company: { contains: word, mode: "insensitive" },
+      // Only a profile shown to recruiters: an anonymous one keeps its name hidden (étape 3, A6).
       profile: {
-        visibility: { not: "private" },
+        visibility: "recruiters",
         user: {
           memberships: { none: { organizationId, status: "active" } },
         },
@@ -412,7 +413,7 @@ async function declaredCandidates(db: PrismaClient, organizationId: string) {
       id: true,
       title: true,
       company: true,
-      profile: { select: { user: { select: { id: true, name: true } } } },
+      profile: { select: { user: { select: { id: true, name: true, image: true } } } },
       declaredAt: {
         where: { organizationId },
         select: { status: true },
@@ -425,6 +426,7 @@ async function declaredCandidates(db: PrismaClient, organizationId: string) {
       experienceId: experience.id,
       userId: experience.profile.user.id,
       name: experience.profile.user.name,
+      image: experience.profile.user.image,
       title: experience.title,
       status: experience.declaredAt[0]?.status ?? null,
     }));

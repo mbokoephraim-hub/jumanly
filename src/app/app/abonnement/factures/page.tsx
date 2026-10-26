@@ -9,6 +9,7 @@ import { Sheet, SheetButton } from "@/components/talent/sheet";
 import { interpolate, slot } from "@/lib/interpolate";
 import { saveBillingDetailsAction } from "@/server/actions/billing";
 import { requireUser } from "@/server/auth/session";
+import { sendCompanyAdminToBilling } from "@/server/company-billing";
 import { db } from "@/server/db";
 import { getActiveSpace } from "@/server/hire-context";
 import { ownedOrganization } from "@/server/services/accounts";
@@ -34,6 +35,8 @@ export default async function InvoicesPage({
   // In the recruiter space, the invoices of the organization, for its owner (recruteur lot 5):
   // they are billed to it and only its owner opens them. A partner keeps its own page.
   const space = await getActiveSpace(user.id);
+  // A company's owner and administrators read their invoices in « Formule et facturation ».
+  await sendCompanyAdminToBilling(space);
   const owned = space ? await ownedOrganization(db, user.id) : null;
   const org = space && owned?.id === space.organizationId ? owned : null;
   if (space ? !org : await inOrganizationSpace(user.id)) redirect("/app/abonnement");

@@ -50,6 +50,8 @@ export type CompanyPageView = {
     image: string | null;
     title: string | null;
     link: "none" | "sent" | "connected";
+    /** Says they work there, the company has not confirmed yet. */
+    declared?: boolean;
   }[];
 };
 
@@ -289,6 +291,8 @@ export function PhoneCompany({
                     {member.title ? <span>{member.title}</span> : null}
                     {member.link === "connected" ? (
                       <small>{t("company.memberConnected")}</small>
+                    ) : member.declared ? (
+                      <small>{t("company.memberDeclared")}</small>
                     ) : null}
                   </span>
                 </MemberLink>

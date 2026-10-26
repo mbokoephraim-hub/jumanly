@@ -123,13 +123,15 @@ test("web recruteur 3 : menu du compte, compte, organisation, équipe, abonnemen
     "aria-current",
     "page",
   );
+  // The owner reads the team's journal in the company's space (étape 3, A5 and A6).
   await rubrics.getByRole("link", { name: "Journal des consultations" }).click();
-  await expect(page).toHaveURL(/\/app\/parametres\/consultations$/);
+  await expect(page).toHaveURL(/\/app\/organisation\/journal$/);
   await expect(
-    main(page).getByRole("heading", { level: 2, name: "Journal des consultations" }),
+    main(page).getByRole("heading", { level: 1, name: "Journal des consultations" }),
   ).toBeVisible();
   await noOverflow(page);
   await expectAccessible(page);
+  await page.goto("/app/parametres");
   await rubrics.getByRole("link", { name: "Messagerie et rappels" }).click();
   await expect(page).toHaveURL(/\/app\/parametres\/messagerie$/);
   await expect(main(page).getByRole("switch", { name: /J-3/ })).toBeChecked();

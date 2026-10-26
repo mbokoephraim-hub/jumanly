@@ -16,6 +16,7 @@ import { formatUsd } from "@/lib/money";
 import { AI_CREDITS_KEY } from "@/server/ai";
 import { cancelSubscription, resumeSubscription } from "@/server/actions/billing";
 import { requireUser } from "@/server/auth/session";
+import { sendCompanyAdminToBilling } from "@/server/company-billing";
 import { db } from "@/server/db";
 import { parseLimit, resolvePlan } from "@/server/entitlements";
 import { effectiveStatus } from "@/server/entitlements/periods";
@@ -37,6 +38,9 @@ export default async function PlansPage({ searchParams }: PageProps<"/app/abonne
   const params = await searchParams;
   const user = await requireUser("/app/abonnement/formules");
   const space = await getActiveSpace(user.id);
+  // A company's owner and administrators pay in « Formule et facturation » (étape 3, A6); a
+  // return from the payment provider (`?paiement=`) still lands here.
+  if (Object.keys(params).length === 0) await sendCompanyAdminToBilling(space);
   if (space)
     return (
       <RecruiterPlans

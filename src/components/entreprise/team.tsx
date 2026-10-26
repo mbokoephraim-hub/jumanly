@@ -264,6 +264,9 @@ export function TeamScreen({
         <p className="ae-meta ae-grandit">
           {data.seatsLine} {data.onlyYou ? t("onlyYou") : t("admins")}
         </p>
+        <Link href="/app/organisation/structure" className="ae-btn2 ae-btn-m">
+          {t("structure")}
+        </Link>
         <button type="button" className="ae-btn2 ae-btn-m" onClick={() => setDialog("invite")}>
           {t("invite")}
         </button>

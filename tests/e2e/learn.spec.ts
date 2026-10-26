@@ -275,12 +275,18 @@ test("la page publique de vérification signale un numéro inconnu", async ({ pa
   await expectAccessible(page);
 });
 
-test("aucune erreur d'accessibilité WCAG 2.2 AA dans Learn", async ({ page }) => {
+test("aucune erreur d'accessibilité WCAG 2.2 AA dans Learn", async ({ page, isMobile }) => {
   await logIn(page, demo.talentPro);
   for (const path of [
     "/app/learn",
-    "/app/learn/rechercher",
-    "/app/learn/rechercher?domaine=career-employability&niveau=beginner",
+    // On the phone, the search lives in the Formation tab: its address leads back to /app/learn
+    // once the page has arrived, which would pull the page away from under the check.
+    ...(isMobile
+      ? []
+      : [
+          "/app/learn/rechercher",
+          "/app/learn/rechercher?domaine=career-employability&niveau=beginner",
+        ]),
     "/app/learn/parcours/demo-premier-emploi",
     "/app/learn/mes-formations",
     "/app/learn/mes-formations?vue=attestations",

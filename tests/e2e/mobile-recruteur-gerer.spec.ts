@@ -233,7 +233,8 @@ test("organisation : page, modification, vérification, équipe et invitation", 
     "aria-selected",
     "true",
   );
-  await expect(main(page).getByText(invited)).toBeVisible();
+  // The toast also names the address: the line of the list is the exact text.
+  await expect(main(page).getByText(invited, { exact: true })).toBeVisible();
   await noOverflow(page, "invitation");
 
   // Reports of this plan: the PDF export (the CSV is gone, its address gives the PDF).
@@ -314,8 +315,16 @@ test("abonnement, formules RH, rapports en PDF, paramètres et journal des consu
   await expectAccessible(page);
   await noOverflow(page, "paramètres");
   await settings.getByRole("link", { name: /Journal des consultations/ }).click();
-  await expect(page).toHaveURL(/\/app\/parametres\/consultations$/);
-  await expect(main(page).getByText("Aucun profil ouvert pour l'instant.")).toBeVisible();
+  if (isMobile) {
+    await expect(page).toHaveURL(/\/app\/parametres\/consultations$/);
+    await expect(main(page).getByText("Aucun profil ouvert pour l'instant.")).toBeVisible();
+  } else {
+    // On a computer, the owner reads the team's journal in the company's space (étape 3, A6).
+    await expect(page).toHaveURL(/\/app\/organisation\/journal$/);
+    await expect(
+      main(page).getByText("Aucune consultation sur les 90 derniers jours."),
+    ).toBeVisible();
+  }
   await expectAccessible(page);
 
   // Former addresses.
