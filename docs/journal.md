@@ -4331,3 +4331,51 @@ n'ont pas changé. Aucune donnée n'a été effacée et aucune migration n'a ét
   - la création et la modification des modèles de messages, qui restent sur ordinateur.
 - **À valider par Ephraïm** : l'ensemble de l'étape 2 au téléphone, avant l'étape 3 (entreprise et
   administration recruteur, web seulement).
+
+## Étape 3 · espace administrateur d'entreprise (Modèle B, ordinateur) · A0, diagnostic (26 octobre 2026)
+
+Référence : `docs/modele-b-recruteur/` (brief § 2 à 6, lots A1 à A6), sections 04 et 06 de
+`web/captures/INDEX.md` (captures 020 à 029 et 074 à 091), sources `web/maquette/Web-Acces.dc.html`
+(étapes `a-*`) et `Web-App.dc.html` (`qui="joseph"`). Elle remplace les planches `admin-1` et
+`admin-2` de `docs/refonte-web/`.
+
+**Le cadre existant.** L'administrateur utilise l'appli du recruteur sur ordinateur
+(`RecruiterShell`, barre latérale `src/components/recruiter/side-nav.tsx`). Son mode sombre est déjà
+proche du Modèle B (fond nuit, lime pour les actions). On y branche la partie ENTREPRISE, réservée
+à `org_owner` et `org_admin`. Les écrans recruteur ne changent pas (voir
+`docs/decisions/2026-10-26-etape-3-cadre.md`).
+
+**Écrans entreprise existants, tous à refaire sur le Modèle B :**
+
+| Existant | Devient | Lot |
+|---|---|---|
+| `/inscription` → `/inscription/forfait`, `/compte`, `/verification`, `/paiement`, puis `/app/bienvenue` (création de l'organisation) | Inscription de l'administrateur en 9 étapes, avec l'aperçu en direct de la page (020 à 029) | A1 |
+| `/app/organisation/equipe` (sièges, tableau des membres, « Qui peut faire quoi ») | Équipe : membres et rôles, droits par membre, tâches, invitations et demandes, membres déclarés (076 à 078) | A2 |
+| `/app/organisation` (carte, chiffres, présentation), `/app/organisation/modifier`, `/verification`, `/structure` | Page entreprise : modifier, aperçu public (081, 082) ; la vérification et la structure (équipes, départements) y sont reprises | A3 |
+| `/app/abonnement`, `/abonnement/formules`, `/abonnement/factures`, `/abonnement/payer` (pour une organisation) | Formule et facturation : jauges, changement de formule, factures, fenêtre de paiement (083) | A4 |
+| `/app/parametres/consultations` (journal de l'organisation ou du membre) | Journal des consultations (084) | A5 |
+| `/app/hire/modeles` (modèles de l'organisation) ; étapes de l'ATS par offre seulement ; aucune grille d'entretien réglable | Réglages : étapes de l'ATS, modèles de messages, grille d'entretien (085 à 087) | A5 |
+
+**Ce qui manque dans les données, avec des migrations additives :**
+- droits ajustés par membre (A2) ;
+- tâches confiées à un membre, avec leur état Attribuée → Acceptée → En cours → Terminée (A2) ;
+- réponse de l'administrateur à un membre déclaré par son expérience (A2) ;
+- étapes de l'ATS et grille d'entretien par défaut de l'organisation (A5).
+
+**À supprimer en A6.** Les pages de l'ancien `/app/organisation` :
+- `page.tsx`, `equipe`, `modifier`, `structure`, `verification` ;
+- `src/components/org/structure-tabs.tsx` ;
+- les parties organisation de `/app/abonnement` ;
+- leurs textes devenus orphelins.
+
+Les anciennes adresses mènent aux nouvelles. Environ 38 liens vers `/app/organisation` sont à
+reprendre.
+
+**Captures du Joseph de la maquette non reprises dans cette étape.** Ce sont des écrans du recruteur
+vus par l'administrateur, qui gardent leurs écrans actuels :
+- l'accueil (074, 075) ;
+- le tableau de bord (079) et Mon espace (080) ;
+- les candidatures (088), l'agenda (089) et les offres (090) de l'équipe ;
+- « agir au nom de l'entreprise » (091).
+
+L'accueil de l'administrateur pourra montrer les demandes en attente, reprises en A2.
