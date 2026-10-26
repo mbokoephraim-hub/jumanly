@@ -7,9 +7,10 @@ import { lastCode } from "./outbox";
 import { logIn } from "./session";
 
 // Étape 3 · A1 (docs/modele-b-recruteur/web, captures 020 à 029) : l'inscription de
-// l'administrateur d'entreprise sur ordinateur, chaque bouton ouvre quelque chose. « Baobab
-// Fintech » et les adresses sont fictives. Avec CAPTURE_DIR, les écrans sont photographiés à la
-// largeur CAPTURE_WIDTH (1440 par défaut).
+// l'administrateur d'entreprise sur ordinateur, chaque bouton ouvre quelque chose. « Kivu Fintech »
+// et les adresses sont fictives ; le nom n'est pas « Baobab Fintech » pour ne pas doubler, dans la
+// recherche d'entreprise du recruteur au téléphone, l'entreprise du seed. Avec CAPTURE_DIR, les
+// écrans sont photographiés à la largeur CAPTURE_WIDTH (1440 par défaut).
 
 const WIDTH = Number(process.env.CAPTURE_WIDTH ?? 1440);
 const CAPTURE_DIR = process.env.CAPTURE_DIR;
@@ -34,7 +35,7 @@ async function createAccount(page: Page, plan: RegExp) {
   await next(page).click();
   await expect(page).toHaveURL(/etape=compte/);
   await page.getByLabel("Prénom et nom").fill("Joseph Ilunga");
-  await page.getByLabel("Nom de l'entreprise").fill(`Baobab Fintech ${stamp}`);
+  await page.getByLabel("Nom de l'entreprise").fill(`Kivu Fintech ${stamp}`);
   await page.getByLabel("E-mail professionnel").fill(email);
   await page.getByLabel("Mot de passe").fill("Baobab-Fictive-2026!");
   await page.getByRole("checkbox").click();
@@ -44,7 +45,7 @@ async function createAccount(page: Page, plan: RegExp) {
   await page.getByLabel("Code à 6 chiffres").fill(await lastCode(email, since));
   await next(page).click();
   await expect(page).toHaveURL(/etape=role/, { timeout: 20_000 });
-  return { email, org: `Baobab Fintech ${stamp}` };
+  return { email, org: `Kivu Fintech ${stamp}` };
 }
 
 async function roleToPayment(page: Page) {
@@ -103,7 +104,7 @@ test.describe("Étape 3 · inscription de l'administrateur d'entreprise", () => 
     const stamp = unique();
     const email = `joseph.${stamp}@baobab-fictive.cd`;
     await page.getByLabel("Prénom et nom").fill("Joseph Ilunga");
-    await page.getByLabel("Nom de l'entreprise").fill(`Baobab Fintech ${stamp}`);
+    await page.getByLabel("Nom de l'entreprise").fill(`Kivu Fintech ${stamp}`);
     await page.getByLabel("E-mail professionnel").fill(email);
     await page.getByLabel("Mot de passe").fill("Baobab-Fictive-2026!");
     await page.getByRole("checkbox").click();
@@ -127,7 +128,7 @@ test.describe("Étape 3 · inscription de l'administrateur d'entreprise", () => 
     // 4 · rôle, avec l'aperçu de la page entreprise.
     await expect(page).toHaveURL(/etape=role/, { timeout: 20_000 });
     const preview = page.getByTestId("apercu-entreprise");
-    await expect(preview).toContainText(`Baobab Fintech ${stamp}`);
+    await expect(preview).toContainText(`Kivu Fintech ${stamp}`);
     await expect(preview).toContainText("Formule Company");
     await page.getByLabel("Intitulé de votre poste").fill("");
     await next(page).click();
@@ -241,7 +242,7 @@ test.describe("Étape 3 · inscription de l'administrateur d'entreprise", () => 
     // Prêt.
     await expect(page).toHaveURL(/etape=pret/, { timeout: 20_000 });
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-      `L'espace Baobab Fintech ${stamp} est prêt`,
+      `L'espace Kivu Fintech ${stamp} est prêt`,
     );
     await expect(page.getByText("Page entreprise créée, vérification en cours")).toBeVisible();
     await expect(page.getByText("Formule Company active")).toBeVisible();
