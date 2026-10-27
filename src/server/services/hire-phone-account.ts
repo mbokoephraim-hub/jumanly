@@ -550,7 +550,19 @@ export async function rhCompanyMode(db: PrismaClient, ctx: HireContext, now = ne
   const [organization, followers, activeJobs, applications, members] = await Promise.all([
     db.organization.findUniqueOrThrow({
       where: { id: ctx.organizationId },
-      select: { name: true, slug: true, logo: true },
+      select: {
+        name: true,
+        slug: true,
+        logo: true,
+        banner: true,
+        sector: true,
+        size: true,
+        city: true,
+        website: true,
+        description: true,
+        hiringNow: true,
+        verifiedAt: true,
+      },
     }),
     db.feedFollow.count({ where: { organizationId: ctx.organizationId } }),
     db.job.count({ where: { organizationId: ctx.organizationId, status: "published" } }),

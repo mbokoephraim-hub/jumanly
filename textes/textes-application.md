@@ -16232,8 +16232,32 @@ Conventions :
 | `phoneRhCompte.mode.messagesOpen` | Ouvrir les messages |
 | `phoneRhCompte.mode.offersText` | Les offres de l'entreprise, leurs candidatures et leurs statistiques. |
 | `phoneRhCompte.mode.offersOpen` | Ouvrir les offres |
-| `phoneRhCompte.mode.adminNote` | La page, l'équipe et la formule se modifient sur ordinateur. |
+| `phoneRhCompte.mode.adminNote` | L'équipe et la formule se modifient sur ordinateur. |
 | `phoneRhCompte.mode.notAdmin` | Réservé à l'administrateur de la page. |
+| `phoneRhEntreprise.title` | Profil de l'entreprise |
+| `phoneRhEntreprise.cancel` | Annuler |
+| `phoneRhEntreprise.close` | Fermer |
+| `phoneRhEntreprise.save` | Enregistrer |
+| `phoneRhEntreprise.imagesHint` | Touchez la bannière ou le logo pour les changer. Une photo nette, au centre de l'image. |
+| `phoneRhEntreprise.sectorPlaceholder` | Banque, télécoms, santé… |
+| `phoneRhEntreprise.websitePlaceholder` | entreprise.cd |
+| `phoneRhEntreprise.counter` | {count} / 3 000 |
+| `phoneRhEntreprise.bannerSheet` | Bannière |
+| `phoneRhEntreprise.logoSheet` | Logo |
+| `phoneRhEntreprise.removeBanner` | Retirer la bannière |
+| `phoneRhEntreprise.removeLogo` | Retirer le logo |
+| `phoneRhEntreprise.bannerSaved` | Nouvelle bannière en ligne |
+| `phoneRhEntreprise.logoSaved` | Nouveau logo en ligne |
+| `phoneRhEntreprise.imageRemoved` | Image retirée |
+| `phoneRhEntreprise.imageError.image` | Choisissez une image. |
+| `phoneRhEntreprise.imageError.fileType` | Cette image n'est pas lisible : choisissez un PNG, un JPEG ou un WebP. |
+| `phoneRhEntreprise.imageError.fileSize` | Cette image dépasse 4 Mo. |
+| `phoneRhEntreprise.card.edit` | Modifier le profil |
+| `phoneRhEntreprise.card.view` | Voir la page |
+| `phoneRhEntreprise.card.hiring` | Recrute en ce moment |
+| `phoneRhEntreprise.card.verified` | Entreprise vérifiée |
+| `phoneRhEntreprise.card.noAbout` | La présentation n'est pas encore écrite. Ajoutez-la depuis « Modifier le profil ». |
+| `phoneRhEntreprise.card.complete` | Profil rempli à {percent} % |
 
 ### Modèle B · inscription de l'administrateur d'entreprise sur ordinateur
 
