@@ -9,6 +9,7 @@ import {
   type VideoPlayerLabels,
   type VideoResume,
 } from "@/components/learn/video-player";
+import { YouTubeEmbed } from "@/components/learn/youtube-embed";
 import { showToast } from "@/components/motion/toaster";
 import { submitExerciseAction, submitQuizAction } from "@/server/actions/learn";
 import { finishLessonAction, lessonCheckAction } from "@/server/actions/learn-phone";
@@ -31,6 +32,8 @@ export type LessonView = {
   tone: number;
   video: {
     src: string;
+    /** A YouTube lesson, played in the embedded player. */
+    youtube: string | null;
     poster: string | null;
     lowMp4: string | null;
     length: string;
@@ -180,7 +183,11 @@ export function PhoneLesson({ view }: { view: LessonView }) {
         <i style={{ width: `${view.percent}%` }} />
       </span>
 
-      {view.video ? (
+      {view.video?.youtube ? (
+        <div className="nb-fo-video">
+          <YouTubeEmbed id={view.video.youtube} title={view.title} />
+        </div>
+      ) : view.video ? (
         playing ? (
           <div className="nb-fo-video" ref={videoBox}>
             <VideoPlayer

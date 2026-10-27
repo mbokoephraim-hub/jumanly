@@ -25297,8 +25297,8 @@
         "video": {
           "text": "Vidéo",
           "upload": "Téléverser la vidéo",
-          "id": "Identifiant de la vidéo",
-          "hint": "Identifiant de la vidéo dans la bibliothèque vidéo. En local, une adresse https directe fonctionne aussi."
+          "id": "Vidéo : lien YouTube ou identifiant",
+          "hint": "Collez un lien YouTube (youtube.com ou youtu.be) : la vidéo se lit dans Jumanly, sans renvoyer vers YouTube. Sinon, l'identifiant de la vidéo envoyée dans la bibliothèque."
         },
         "subtitles": "Sous-titres",
         "resources": "Ressources à télécharger",
@@ -25464,7 +25464,8 @@
         "done": "Vidéo envoyée. L'encodage commence.",
         "saved": "Vidéo enregistrée pour cette leçon.",
         "state": {
-          "none": "Aucune vidéo pour l'instant.",
+          "none": "Aucune vidéo pour l'instant. Envoyez un fichier, ou collez un lien YouTube dans le champ « Vidéo » ci-dessus.",
+          "youtube": "Vidéo YouTube, lue dans Jumanly. Pour la remplacer, changez le lien ci-dessus ou envoyez un fichier.",
           "ready": "Vidéo prête à être lue.",
           "processing": "Encodage en cours ({progress} %).",
           "failed": "L'encodage a échoué. Envoyez le fichier à nouveau."

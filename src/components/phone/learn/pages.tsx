@@ -214,6 +214,7 @@ export async function PhoneLessonScreen({
     video: playback
       ? {
           src: playback.src,
+          youtube: playback.youtube ?? null,
           poster: playback.poster ?? null,
           lowMp4: playback.lowMp4 ?? null,
           length: clock(current.durationSec || minutes * 60),
