@@ -11,11 +11,18 @@ import { applyImport, CV_TEXT_MAX, importCvText, parseImport } from "@/server/se
 const PATH = "/app/profil/import";
 
 /**
- * Where the import answers: its page, or the « Importer un CV » window of « CV et documents » on a
- * computer (`retour=cv`, planche studio-cv § 1). Only these two places: never an address sent.
+ * Where the import answers: its page, the « Importer un CV » window of « CV et documents » on a
+ * computer (`retour=cv`, planche studio-cv § 1), or « Créer un CV » on the phone
+ * (`retour=nouveau`). Only these places: never an address sent.
  */
 function where(formData: FormData | undefined, params = "") {
-  const fromList = formData?.get("retour") === "cv";
+  const from = formData?.get("retour");
+  // « Créer un CV » on the phone (docs/carriere-v3, captures 13 to 15).
+  if (from === "nouveau") {
+    const step = params === "etape=verification" ? "etape=trouve" : `etape=import&${params}`;
+    return `/app/career/cv/nouveau?${params ? step : "etape=import"}`;
+  }
+  const fromList = from === "cv";
   const base = fromList ? "/app/career/cv?importer=1" : PATH;
   if (!params) return base;
   return `${base}${fromList ? "&" : "?"}${params}`;

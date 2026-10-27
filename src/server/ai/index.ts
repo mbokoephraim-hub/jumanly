@@ -118,6 +118,7 @@ export async function runAi<T>(
     schema: GenerateInput<T>["schema"];
     template: () => T;
     maxTokens?: number;
+    image?: GenerateInput<T>["image"];
     /** Beyond this delay the call counts as unavailable: credits released, nothing kept. */
     timeoutMs?: number;
     /** Who pays the credits and holds the gate: the person by default, or their organization. */
@@ -169,6 +170,7 @@ export async function runAi<T>(
       schema: input.schema,
       template: input.template,
       maxTokens: input.maxTokens,
+      image: input.image,
     });
     result = input.timeoutMs ? await withTimeout(generation, input.timeoutMs) : await generation;
   } catch (error) {

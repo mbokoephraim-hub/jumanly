@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { PhoneTemplates } from "@/components/phone/career/templates";
 import { FlowHead } from "@/components/talent/flow-head";
 import { StudioFrame } from "@/components/talent/cv/studio/studio-frame";
 import { TalentIcon } from "@/components/talent/icon";
@@ -63,16 +62,10 @@ export default async function CvTemplatesPage({
   const query = await searchParams;
   const user = await requireUser("/app/career/cv/modeles");
   const cvId = typeof query.cv === "string" ? query.cv : "";
-  // The phone (Modèle B, planche Carrière-cv-modele): a new CV (`?nouveau=1`) or a CV's template.
+  // The phone (docs/carriere-v3): the step Modèle of a CV, or of a new one.
   if (await isPhone()) {
-    const mine = cvId
-      ? await db.document.findFirst({
-          where: { id: cvId, kind: "cv", profile: { userId: user.id } },
-          select: { id: true, templateId: true },
-        })
-      : null;
-    if (cvId && !mine) notFound();
-    if (mine || query.nouveau === "1") return <PhoneTemplates userId={user.id} cv={mine} />;
+    if (cvId) redirect(`/app/career/cv/${encodeURIComponent(cvId)}?etape=modele`);
+    if (query.nouveau === "1") redirect("/app/career/cv/nouveau?etape=modele");
   }
   const cv = await db.document.findFirst({
     where: { kind: "cv", profile: { userId: user.id }, ...(cvId ? { id: cvId } : {}) },

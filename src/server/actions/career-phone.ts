@@ -113,6 +113,27 @@ const headSchema = z.object({
   showEmail: z.boolean().optional(),
 });
 
+const availabilitySchema = z.enum(["open", "listening", "not_looking"]);
+
+/**
+ * The availability chip of Carrière (docs/carriere-v3, capture 01): one tap moves it to the next
+ * one (Disponible tout de suite · À l’écoute des offres · Pas disponible).
+ */
+export async function setCareerAvailabilityAction(raw: string): Promise<Result> {
+  const parsed = availabilitySchema.safeParse(raw);
+  if (!parsed.success) return fail("invalid");
+  const { profile } = await mine();
+  await db.talentProfile.update({
+    where: { id: profile.id },
+    data: {
+      availability: parsed.data,
+      availableFrom: parsed.data === "open" ? null : profile.availableFrom,
+    },
+  });
+  refresh();
+  return { ok: true };
+}
+
 /**
  * « Modifier le profil » (planche Carrière-modifier): the displayed name (first word = first name),
  * the title, the city, the bio and the availability.
@@ -483,13 +504,13 @@ export async function newCareerCvAction(formData: FormData) {
   });
   if (template) await applyTemplate(db, user.id, cv.id, template);
   refresh();
-  if (orbi && (await improveCvSummary(db, user.id, cv.id)) === "done")
-    redirect(`/app/career/cv/${cv.id}?vue=ameliorer`);
-  redirect(`/app/career/cv/${cv.id}`);
+  // Orbi's summary waits on Contenu, to keep or refuse (docs/carriere-v3, capture 09).
+  if (orbi) await improveCvSummary(db, user.id, cv.id);
+  redirect(`/app/career/cv/${cv.id}?etape=contenu`);
 }
 
 /**
- * « Ajouter à mon profil et créer le CV » (planche Carrière-cv-import-ok): only the groups left
+ * « Ajouter à mon profil et créer le CV » (docs/carriere-v3, capture 15): only the groups left
  * ticked enter the profile, then a CV is made from it.
  */
 export async function applyCareerImportAction(formData: FormData) {
@@ -500,13 +521,15 @@ export async function applyCareerImportAction(formData: FormData) {
     where: { id, userId: user.id, feature: "cv_parse", status: "pending" },
   });
   const payload = pending ? parseImport(pending.payload) : null;
-  if (!payload) redirect("/app/profil/import");
+  if (!payload) redirect("/app/career/cv/nouveau?etape=import");
   const all = (group: "experiences" | "educations" | "skills") =>
     chosen.has(group) ? payload[group].map((_, index) => index) : [];
   await applyImport(db, user.id, id, {
     experiences: all("experiences"),
     educations: all("educations"),
     skills: all("skills"),
+    languages: chosen.has("languages"),
+    contact: chosen.has("contact"),
   });
   await newCareerCvAction(new FormData());
 }

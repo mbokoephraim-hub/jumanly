@@ -1,13 +1,17 @@
 import "server-only";
 import QRCode from "qrcode";
 import { getFormatter, getTranslations } from "next-intl/server";
+import { accentHex } from "@/features/cv/render/palette";
 import { languageName } from "@/lib/dates";
+import { colorOf, PROFILE_PALETTE } from "@/lib/profile-colors";
 import { profileLanguageCodes } from "@/server/services/profile-view";
 import { siteUrl } from "@/lib/seo";
 import type { CareerHome } from "@/server/services/career-phone";
 import { handleFromName } from "@/lib/social-links";
 import { companyTone } from "../explorer/data";
 import { initialsOf, shortName, toneOf } from "../fil/data";
+import type { ProfileView } from "../profil/data";
+import { profileView } from "../profil/server";
 
 /** « @grace.mbuyi »: the name in small letters, without accents, joined by dots. */
 export const handleOf = handleFromName;
@@ -30,7 +34,23 @@ export type CareerSearchItem = {
   href: string;
 };
 
+export const AVAILABILITIES = ["open", "listening", "not_looking"] as const;
+export type Availability = (typeof AVAILABILITIES)[number];
+
+/** The grounds of the drawn tiles of the portfolio (maquette Carriere.dc.html, `real`). */
+const TILE_GROUNDS = ["#0F3F37", "#1E4E79", "#3B2C66", "#5A3D0B", "#6B2A22"] as const;
+
 export type CareerView = {
+  /** The head, the person's own profile as others see it (docs/carriere-v3, captures 01). */
+  person: ProfileView;
+  /** The name of the person's plan, in the cream tag after the name. */
+  planTag: string | null;
+  /** « CDI, Stage »: the contracts the person looks for. */
+  contracts: string | null;
+  availabilityKey: Availability;
+  availabilities: { key: Availability; label: string }[];
+  /** « Profil complété » card: Orbi's next suggestion, « Ajouter » or a link. */
+  completion: { text: string | null; href: string | null };
   name: string;
   initials: string;
   tone: number;
@@ -48,6 +68,8 @@ export type CareerView = {
   skills: { id: string; name: string }[];
   experiences: CareerEntry[];
   educations: CareerEntry[];
+  /** « Formation »: studies and Jumanly attestations (tagged « Jumanly »). */
+  educationRows: { id: string; title: string; line: string; href: string; jumanly: boolean }[];
   places: string[];
   cvs: {
     id: string;
@@ -57,6 +79,11 @@ export type CareerView = {
     href: string;
     pdf: string;
     primary: boolean;
+    /** « Modèle Moderne · modifié hier ». */
+    meta: string;
+    score: number;
+    /** The CV's accent colour, for its drawn thumbnail. */
+    color: string;
   }[];
   adapt: { text: string; href: string } | null;
   projects: {
@@ -67,6 +94,8 @@ export type CareerView = {
     cover: string | null;
     tone: number;
     href: string;
+    ground: string;
+    skills: { name: string; color: string }[];
   }[];
   progression: {
     stage: string;
@@ -77,7 +106,10 @@ export type CareerView = {
     courses: string;
     percent: number;
     applications: number;
-    steps: { text: string; href: string }[];
+    /** The ring of « candidatures », in percent (five applications fill it). */
+    applicationsPercent: number;
+    coursesPercent: number;
+    steps: { text: string; title: string; detail: string; href: string }[];
   };
   applications: {
     id: string;
@@ -91,6 +123,15 @@ export type CareerView = {
     bars: number;
     note: string;
     noteStrong: boolean;
+    /** « Baobab Fintech · il y a 6 j ». */
+    meta: string;
+    score: number | null;
+    /** 0 Envoyée, 1 Vue, 2 Entretien, 3 Réponse. */
+    step: number;
+    /** « Entretien jeudi 29 oct. à 10 h · préparez-vous avec Orbi ». */
+    interview: string | null;
+    /** The answer once given (« Non retenue », « Retirée »…), shown on the card. */
+    answer: string | null;
   }[];
   share: { url: string; qr: string; pdf: string | null; open: boolean };
   search: CareerSearchItem[];
@@ -126,6 +167,22 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
       : date.getTime() >= midnight.getTime() - DAY
         ? t("when.yesterday")
         : t("when.on", { date: day(date) });
+
+  // « il y a 6 j », « hier », « aujourd’hui ».
+  const daysAgo = (date: Date) => {
+    if (date >= midnight) return t("when.today");
+    const days = Math.ceil((midnight.getTime() - date.getTime()) / DAY);
+    return days <= 1 ? t("when.yesterday") : t("when.daysAgo", { days });
+  };
+  // « 10 h », « 14 h 30 ».
+  const hourOf = (date: Date) => {
+    const [hour = "0", minute = "00"] = format
+      .dateTime(date, { hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+      .split(/\D+/);
+    return minute === "00"
+      ? t("when.hour", { hour: Number(hour) })
+      : t("when.hourMinute", { hour: Number(hour), minute });
+  };
 
   const name = home.user.name;
   const city = home.user.city;
@@ -175,11 +232,47 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
       href: `/app/learn/attestations/${item.id}`,
     })),
   ];
+  const educationRows: CareerView["educationRows"] = [
+    ...home.profile.educations.map((item) => ({
+      id: item.id,
+      title: item.degree,
+      line: [
+        item.school,
+        item.startYear && item.endYear
+          ? t("when.range", { start: String(item.startYear), end: String(item.endYear) })
+          : item.endYear
+            ? String(item.endYear)
+            : null,
+      ]
+        .filter(Boolean)
+        .join(" · "),
+      href: `/app/career/profil/formation/${item.id}`,
+      jumanly: false,
+    })),
+    ...home.attestations.map((item) => ({
+      id: item.id,
+      title: item.title,
+      line: t("attestation", { date: format.dateTime(item.issuedAt, { dateStyle: "medium" }) }),
+      href: `/app/learn/attestations/${item.id}`,
+      jumanly: true,
+    })),
+  ];
   const places = [
     ...home.profile.languages.map((language) => languageLabel(language.code)),
     ...home.profile.desiredLocations,
   ];
 
+  // « modifié hier », « 3 oct. ».
+  const cvWhen = (date: Date) =>
+    date >= midnight
+      ? t("cv.changedToday")
+      : date.getTime() >= midnight.getTime() - DAY
+        ? t("cv.changedYesterday")
+        : day(date);
+  const accentOf = (style: unknown) => {
+    const code = (style as { accent?: unknown } | null)?.accent;
+    return (typeof code === "string" && accentHex(code)) || "#0F3F37";
+  };
   const cvs = home.cvs.map((cv) => {
     const template = tc.has(cv.templateId as "classique")
       ? tc(cv.templateId as "classique")
@@ -195,6 +288,9 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
       href: `/app/career/cv/${cv.id}`,
       pdf: `/app/career/cv/${cv.id}/pdf`,
       primary: cv.isPrimary,
+      meta: t("cv.meta", { template, when: cvWhen(cv.updatedAt) }),
+      score: cv.score,
+      color: accentOf(cv.style),
     };
   });
 
@@ -208,43 +304,49 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
     cover: project.cover,
     tone: index % 5,
     href: `/app/career/portfolio/${project.id}`,
+    ground:
+      project.featured && project.cover ? "#F2EDE5" : TILE_GROUNDS[index % TILE_GROUNDS.length]!,
+    skills: project.skills.map((name) => ({ name, color: PROFILE_PALETTE[colorOf(name)] })),
   }));
 
   // « Prochaines étapes »: three things that move the person forward, from their own data.
-  const steps: { text: string; href: string }[] = [];
+  type Step = { text: string; title: string; detail: string; href: string };
+  const step = (key: string, href: string, values: Record<string, string | number> = {}): Step => {
+    const title = t(`progression.step.${key}` as "progression.step.cv", values);
+    return {
+      text: title,
+      title,
+      detail: t(`progression.stepText.${key}` as "progression.stepText.cv", values),
+      href,
+    };
+  };
+  const steps: Step[] = [];
   if (home.suggestion)
-    steps.push({
-      text: t("progression.step.skill", { skill: home.suggestion.name }),
-      href: "/app/career/cv?ajouter=competences",
-    });
-  if (home.progression.upcoming)
-    steps.push({
-      text: t("progression.step.interview", {
-        date: format.dateTime(home.progression.upcoming.at, { weekday: "long" }),
+    steps.push(
+      step("skill", "/app/career/cv?ajouter=competences", {
+        skill: home.suggestion.name,
+        count: home.suggestion.count,
       }),
-      href: `/app/suivi/${home.progression.upcoming.id}`,
-    });
-  if (home.cvs.length === 0)
-    steps.push({ text: t("progression.step.cv"), href: "/app/career/cv?nouveau=1" });
-  if (home.projects.length === 0)
-    steps.push({ text: t("progression.step.project"), href: "/app/career/portfolio/nouvelle" });
-  const missing: Record<string, { text: string; href: string }> = {
-    summary: { text: t("progression.step.about"), href: "/app/career/profil/apropos" },
-    experience: {
-      text: t("progression.step.experience"),
-      href: "/app/career/profil/experience/nouvelle",
-    },
-    education: {
-      text: t("progression.step.education"),
-      href: "/app/career/profil/formation/nouvelle",
-    },
-    languages: { text: t("progression.step.languages"), href: "/app/career/cv?ajouter=langues" },
+    );
+  if (home.projects.length === 0) steps.push(step("project", "/app/career/portfolio/nouvelle"));
+  if (home.progression.upcoming)
+    steps.push(
+      step(
+        "interview",
+        `/app/career/entretiens/nouveau?candidature=${home.progression.upcoming.id}`,
+        { date: format.dateTime(home.progression.upcoming.at, { weekday: "long" }) },
+      ),
+    );
+  if (home.cvs.length === 0) steps.push(step("cv", "/app/career/cv/nouveau"));
+  const missing: Record<string, Step> = {
+    summary: step("about", "/app/career/profil/apropos"),
+    experience: step("experience", "/app/career/profil/experience/nouvelle"),
+    education: step("education", "/app/career/profil/formation/nouvelle"),
+    languages: step("languages", "/app/career/cv?ajouter=langues"),
   };
   for (const key of home.missing) if (missing[key]) steps.push(missing[key]!);
-  if (home.applications.length === 0)
-    steps.push({ text: t("progression.step.apply"), href: "/app/jobs" });
-  if (home.progression.courses.all === 0)
-    steps.push({ text: t("progression.step.course"), href: "/app/learn" });
+  if (home.applications.length === 0) steps.push(step("apply", "/app/jobs"));
+  if (home.progression.courses.all === 0) steps.push(step("course", "/app/learn"));
   const stages = ["discovery", "building", "ready", "competitive"] as const;
   const stageIndex = home.progression.stage ? stages.indexOf(home.progression.stage) : -1;
   const nextSteps = steps.slice(0, 3);
@@ -283,6 +385,22 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
       bars: row.bars,
       note,
       noteStrong: Boolean(row.interviewAt),
+      meta: t("applications.meta", { company, when: daysAgo(row.createdAt) }),
+      score: row.score,
+      step: Math.max(0, Math.min(3, row.bars - 1)),
+      answer: ["notSelected", "withdrawn", "jobClosed", "hired", "offer"].includes(row.status)
+        ? t(`applications.status.${row.status}`)
+        : null,
+      interview: row.interviewAt
+        ? t("applications.interviewNote", {
+            day: format.dateTime(row.interviewAt, {
+              weekday: "long",
+              day: "numeric",
+              month: "short",
+            }),
+            time: hourOf(row.interviewAt),
+          })
+        : null,
     };
   });
 
@@ -391,7 +509,32 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
     })),
   ];
 
+  const tl = await getTranslations("talent.profile.preferences.contract");
+  const contract = (code: string) => (tl.has(code as "cdi") ? tl(code as "cdi") : code);
+  const firstMissing = home.missing.map((key) => missing[key]).find(Boolean) ?? null;
+  const person = await profileView(home.person!, { now });
+
   return {
+    person,
+    planTag: home.plan,
+    contracts:
+      home.profile.desiredContracts.length > 0
+        ? home.profile.desiredContracts.slice(0, 3).map(contract).join(", ")
+        : null,
+    availabilityKey: home.profile.availability,
+    availabilities: AVAILABILITIES.map((key) => ({ key, label: t(`availability.${key}`) })),
+    completion: home.suggestion
+      ? {
+          text: t("completion.skill", {
+            skill: home.suggestion.name,
+            count: home.suggestion.count,
+          }),
+          href: null,
+        }
+      : firstMissing
+        ? { text: firstMissing.title, href: firstMissing.href }
+        : { text: home.percent >= 100 ? t("completion.done") : null, href: null },
+    educationRows,
     name,
     initials: initialsOf(name),
     tone: toneOf(name, false),
@@ -442,6 +585,11 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
       }),
       percent: home.percent,
       applications: home.progression.applications,
+      applicationsPercent: Math.min(100, home.progression.applications * 20),
+      coursesPercent:
+        home.progression.courses.all === 0
+          ? 0
+          : Math.round((100 * home.progression.courses.done) / home.progression.courses.all),
       steps: nextSteps,
     },
     applications,

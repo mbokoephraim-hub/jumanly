@@ -8862,6 +8862,220 @@ Conventions :
 | `phoneProfile.why.rule` | Calculé sans le nom, la photo, l’âge, le genre ni la nationalité. Orbi recommande, vous décidez : aucune candidature n’est écartée automatiquement. |
 | `phoneProfile.why.ok` | Compris |
 
+### Créer un CV au téléphone (carrière v3)
+
+*docs/carriere-v3, captures 06 à 15, maquette `Cv.dc.html`, validées le 26/10/2026 : départ (Orbi, modèle, import), les quatre étapes d'un CV (Modèle, Contenu, Mise en forme, Aperçu), Orbi le prépare, importer un CV (fichier ou photo) et ce qu'Orbi a trouvé.*
+
+| Clé | Texte |
+|---|---|
+| `phoneCv.seo` | Créer un CV |
+| `phoneCv.back` | Retour |
+| `phoneCv.close` | Fermer |
+| `phoneCv.continue` | Continuer |
+| `phoneCv.save` | Enregistrer |
+| `phoneCv.error` | Ça n’a pas marché. Réessayez dans un instant. |
+| `phoneCv.steps.label` | Étapes du CV |
+| `phoneCv.steps.count` | {step} / {all} |
+| `phoneCv.steps.modele` | Modèle |
+| `phoneCv.steps.contenu` | Contenu |
+| `phoneCv.steps.style` | Style |
+| `phoneCv.steps.apercu` | Aperçu |
+| `phoneCv.start.title` | Nouveau CV |
+| `phoneCv.start.sub` | Comment voulez-vous commencer ? |
+| `phoneCv.start.filled` | Votre profil remplit déjà {percent} % du CV |
+| `phoneCv.start.orbi` | Orbi le prépare |
+| `phoneCv.start.orbiText` | À partir de votre profil et de votre Cap, en 30 secondes |
+| `phoneCv.start.fastest` | Le plus rapide |
+| `phoneCv.start.modele` | Partir d’un modèle |
+| `phoneCv.start.modeleText` | 15 modèles, votre profil remplit le contenu |
+| `phoneCv.start.import` | Importer mon CV |
+| `phoneCv.start.importText` | PDF, Word ou photo, Orbi le lit pour vous |
+| `phoneCv.start.noLogo` | Le CV téléchargé ne porte ni logo ni couleur Jumanly. |
+| `phoneCv.start.limit` | Vous avez déjà 10 CV, le maximum. Supprimez-en un pour en créer un nouveau. |
+| `phoneCv.template.title` | Choisir un modèle |
+| `phoneCv.template.sub` | {count} modèles · {plan} : {included} inclus |
+| `phoneCv.template.subNoPlan` | {count} modèles · {included} inclus |
+| `phoneCv.template.filters` | Filtrer les modèles |
+| `phoneCv.template.filterAll` | Tous · {count} |
+| `phoneCv.template.filterFree` | Gratuits |
+| `phoneCv.template.free` | Gratuit |
+| `phoneCv.template.paid` | Formule payante |
+| `phoneCv.template.hint` | Touchez pour choisir, touchez encore pour voir en grand. |
+| `phoneCv.template.with` | Avec {plan} |
+| `phoneCv.template.locked` | Ce modèle est inclus dans {plan}. |
+| `phoneCv.template.lockedLabel` | {name}, inclus dans {plan} |
+| `phoneCv.template.lockedError` | Ce modèle n’est pas inclus dans votre formule. Choisissez-en un autre ou changez de formule. |
+| `phoneCv.template.selectedLabel` | {name}, choisi. Touchez encore pour le voir en grand. |
+| `phoneCv.template.unlock` | Passer à {plan} |
+| `phoneCv.template.apply` | Appliquer ce modèle |
+| `phoneCv.template.largeTitle` | Modèle {name} |
+| `phoneCv.template.largeSub` | Aperçu avec un exemple rempli |
+| `phoneCv.template.largeAlt` | Le modèle {name}, rempli avec un exemple |
+| `phoneCv.template.largeNote` | Exemple rempli. Le vôtre reprend votre profil, et le PDF ne porte ni logo ni couleur Jumanly. |
+| `phoneCv.template.use` | Utiliser ce modèle |
+| `phoneCv.template.withPhoto` | avec photo |
+| `phoneCv.template.withoutPhoto` | sans photo |
+| `phoneCv.template.ats.excellent` | ATS excellente |
+| `phoneCv.template.ats.veryGood` | ATS très bonne |
+| `phoneCv.template.ats.good` | ATS bonne |
+| `phoneCv.orbi.title` | Orbi prépare votre CV |
+| `phoneCv.orbi.sub` | Vous pourrez tout modifier |
+| `phoneCv.orbi.writing` | Orbi écrit votre CV… |
+| `phoneCv.orbi.ready` | Votre CV est prêt |
+| `phoneCv.orbi.progress` | Avancement |
+| `phoneCv.orbi.lineProfile` | Profil et Cap lus |
+| `phoneCv.orbi.lineExperiences` | Expériences reprises avec vos points |
+| `phoneCv.orbi.lineSkillsFor` | Compétences classées pour {job} |
+| `phoneCv.orbi.lineSkills` | Compétences classées |
+| `phoneCv.orbi.lineLayout` | Mise en page {template} |
+| `phoneCv.orbi.see` | Voir le contenu |
+| `phoneCv.orbi.noSummary` | Orbi n’a pas pu proposer de résumé cette fois. Vous pourrez l’écrire ou réessayer sur Contenu. |
+| `phoneCv.orbi.limit` | Vous avez déjà 10 CV, le maximum. Supprimez-en un pour en créer un nouveau. |
+| `phoneCv.orbi.error` | Orbi n’a pas pu préparer le CV. Réessayez dans un instant. |
+| `phoneCv.orbi.backToCvs` | Revenir à mes CV |
+| `phoneCv.import.title` | Importer un CV |
+| `phoneCv.import.step` | Étape {step} sur 3 |
+| `phoneCv.import.choose` | Choisir mon CV |
+| `phoneCv.import.chooseText` | PDF ou Word, {max} Mo au plus |
+| `phoneCv.import.photo` | Photographier un CV papier |
+| `phoneCv.import.photoText` | Orbi lit la photo |
+| `phoneCv.import.photoName` | la photo |
+| `phoneCv.import.last` | Votre dernière lecture |
+| `phoneCv.import.lastWhen` | Lu {when}, à vérifier |
+| `phoneCv.import.pasted` | CV collé |
+| `phoneCv.import.consent` | Rien n’est publié sans votre accord. Vous choisissez ce qui entre dans votre profil. |
+| `phoneCv.import.error.format` | Ce fichier n’est ni un PDF ni un document Word (.docx). |
+| `phoneCv.import.error.size` | Ce fichier dépasse {max} Mo. |
+| `phoneCv.import.error.empty` | Ce fichier est vide. |
+| `phoneCv.import.error.unreadable` | Ce fichier n’a pas pu être lu. S’il s’agit d’un scan, photographiez plutôt le CV papier. |
+| `phoneCv.import.error.photo` | Pour lire une photo, Orbi doit être activé (Paramètres › Orbi) et avoir des crédits. Vous pouvez aussi choisir un PDF ou un Word. |
+| `phoneCv.import.error.orbi` | Orbi n’a pas pu lire la photo. Réessayez avec une photo nette, bien éclairée, ou choisissez un PDF. |
+| `phoneCv.read.title` | Orbi lit {name}… |
+| `phoneCv.read.contact` | Coordonnées |
+| `phoneCv.read.experiences` | Expériences |
+| `phoneCv.read.education` | Formation |
+| `phoneCv.read.skills` | Compétences et langues |
+| `phoneCv.read.never` | Le fichier n’est pas gardé : seul ce que vous validez entre dans votre profil. |
+| `phoneCv.found.title` | Voici ce qu’Orbi a trouvé |
+| `phoneCv.found.hint` | Décochez ce que vous ne voulez pas reprendre. |
+| `phoneCv.found.nothing` | Orbi n’a rien trouvé à reprendre dans ce fichier. Vous pouvez créer le CV depuis votre profil. |
+| `phoneCv.found.contact` | Coordonnées |
+| `phoneCv.found.experiences` | {count, plural, one {# expérience} other {# expériences}} |
+| `phoneCv.found.educations` | {count, plural, one {# formation} other {# formations}} |
+| `phoneCv.found.skills` | {count, plural, one {# compétence} other {# compétences}} |
+| `phoneCv.found.languages` | {count, plural, one {# langue} other {# langues}} |
+| `phoneCv.found.new` | nouveau |
+| `phoneCv.found.already` | déjà là |
+| `phoneCv.found.newSome` | {count, plural, one {+# nouvelle} other {+# nouvelles}} |
+| `phoneCv.found.newMany` | {count, plural, one {+# nouvelle} other {+# nouvelles}} |
+| `phoneCv.found.undated` | {count, plural, one {Une expérience n’a pas de date de début : elle ne sera pas ajoutée, vous pourrez l’ajouter à la main.} other {# expériences n’ont pas de date de début : elles ne seront pas ajoutées, vous pourrez les ajouter à la main.}} |
+| `phoneCv.found.rulesOnly` | Sans Orbi, seules les compétences et les langues sont reconnues. Activez Orbi pour lire aussi les expériences et les formations. |
+| `phoneCv.found.consent` | Seuls les groupes cochés entrent dans votre profil. Votre ville n’est reprise que si votre profil n’en a pas. |
+| `phoneCv.found.apply` | Ajouter à mon profil et créer le CV |
+| `phoneCv.found.applyEmpty` | Créer le CV depuis mon profil |
+| `phoneCv.content.title` | Contenu |
+| `phoneCv.content.sub` | Rempli depuis votre profil |
+| `phoneCv.content.orbiTitle` | Orbi a tout rempli depuis votre profil. |
+| `phoneCv.content.orbiText` | Décochez ce que vous ne voulez pas, touchez un bloc pour le modifier. |
+| `phoneCv.content.summary` | Résumé |
+| `phoneCv.content.summaryEdit` | Modifier le résumé |
+| `phoneCv.content.summaryEmpty` | Pas encore de résumé. Écrivez deux ou trois phrases, ou laissez Orbi les proposer. |
+| `phoneCv.content.summaryHint` | Deux ou trois phrases : ce que vous savez faire, avec un chiffre concret, et ce que vous cherchez. |
+| `phoneCv.content.rewrite` | Réécrire avec Orbi |
+| `phoneCv.content.proposal` | Proposition d’Orbi |
+| `phoneCv.content.keep` | Garder |
+| `phoneCv.content.refuse` | Refuser |
+| `phoneCv.content.kept` | Résumé mis à jour. |
+| `phoneCv.content.refused` | Le résumé reste le vôtre. |
+| `phoneCv.content.orbiError.consent` | Activez Orbi dans Paramètres pour qu’il propose un résumé. |
+| `phoneCv.content.orbiError.entitlement` | Votre formule n’inclut pas cette aide d’Orbi. |
+| `phoneCv.content.orbiError.quota` | Vos crédits Orbi du mois sont utilisés. |
+| `phoneCv.content.orbiError.unavailable` | Orbi est indisponible pour le moment. Réessayez plus tard. |
+| `phoneCv.content.orbiError.same` | Orbi n’a rien de mieux à proposer pour ce résumé. |
+| `phoneCv.content.orbiError.empty` | Ajoutez d’abord un titre ou une expérience : Orbi part de ce qui est écrit. |
+| `phoneCv.content.sections` | Sections du CV |
+| `phoneCv.content.dragHint` | glisser pour l’ordre |
+| `phoneCv.content.contact` | Coordonnées |
+| `phoneCv.content.handle` | Déplacer {name} |
+| `phoneCv.content.handleHint` | Glissez la poignée, ou utilisez les flèches haut et bas, pour changer l’ordre. |
+| `phoneCv.content.moved` | {name} est maintenant en position {place} sur {all}. |
+| `phoneCv.content.show` | Afficher {name} sur le CV |
+| `phoneCv.content.edit` | Modifier {name} |
+| `phoneCv.content.emptySection` | Rien pour l’instant : touchez pour ajouter. |
+| `phoneCv.content.more` | + Section |
+| `phoneCv.content.moreTitle` | Ajouter une section |
+| `phoneCv.content.moreNone` | Toutes vos sections sont déjà sur le CV. |
+| `phoneCv.content.moreAdd` | Remettre {name} |
+| `phoneCv.content.moreProfile` | Projets, bénévolat et certificats ne sont pas encore repris sur le CV. Ajoutez-les à votre profil : ils comptent déjà pour les recruteurs. |
+| `phoneCv.content.moreProfileLink` | Ouvrir mon profil |
+| `phoneCv.style.title` | Mise en forme |
+| `phoneCv.style.sub` | L’aperçu change en direct |
+| `phoneCv.style.color` | Couleur |
+| `phoneCv.style.colorAdvised` | {name} · recommandée |
+| `phoneCv.style.font` | Police |
+| `phoneCv.style.density` | Densité |
+| `phoneCv.style.densities.airy` | Aérée |
+| `phoneCv.style.densities.standard` | Normale |
+| `phoneCv.style.densities.compact` | Serrée |
+| `phoneCv.style.photo` | Photo sur le CV |
+| `phoneCv.style.photoNone` | Pas de photo dans ce modèle |
+| `phoneCv.style.language` | Langue des titres |
+| `phoneCv.style.languages.fr` | Français |
+| `phoneCv.style.languages.en` | Anglais |
+| `phoneCv.style.languageValue` | {language} › |
+| `phoneCv.style.languageChange` | Langue des titres : {current}. Toucher pour changer. |
+| `phoneCv.style.next` | Voir l’aperçu |
+| `phoneCv.preview.title` | Aperçu et vérification |
+| `phoneCv.preview.sub` | Orbi relit avant de télécharger |
+| `phoneCv.preview.scoreLabel` | Score du CV : {score} sur 100 |
+| `phoneCv.preview.outOf` | sur 100 |
+| `phoneCv.preview.checked` | Vérifié par Orbi |
+| `phoneCv.preview.pages` | {count, plural, one {# page} other {# pages}} |
+| `phoneCv.preview.readable` | lisible par les logiciels de recrutement |
+| `phoneCv.preview.checks` | Ce qu’Orbi a vérifié |
+| `phoneCv.preview.why` | Pourquoi ? |
+| `phoneCv.preview.whyTitle` | Comment ce score est calculé |
+| `phoneCv.preview.why1` | Le score suit des règles fixes, sans IA : rien n’est inventé et le même CV a toujours le même score. |
+| `phoneCv.preview.why2For` | Il compte la lisibilité par les logiciels de recrutement (40 %), les résultats chiffrés (30 %) et les compétences demandées dans les offres de {job} (30 %). |
+| `phoneCv.preview.why2` | Il compte la lisibilité par les logiciels de recrutement (40 %), les résultats chiffrés (30 %) et vos compétences (30 %). Choisissez votre Cap pour le comparer aux offres. |
+| `phoneCv.preview.why3` | Il vous aide à améliorer votre CV : il ne décide jamais d’une candidature. |
+| `phoneCv.preview.part.ats` | Lisibilité |
+| `phoneCv.preview.part.impact` | Résultats chiffrés |
+| `phoneCv.preview.part.keywords` | Compétences demandées |
+| `phoneCv.preview.whyNote` | « Corriger » reprend ce que votre profil contient déjà ; sinon, il ouvre l’endroit où l’écrire. |
+| `phoneCv.preview.ok` | Fait : |
+| `phoneCv.preview.todo` | À faire : |
+| `phoneCv.preview.fix` | Corriger |
+| `phoneCv.preview.fixed` | {count, plural, one {Une ligne reprise de votre profil.} other {# éléments repris de votre profil.}} |
+| `phoneCv.preview.fixProfile` | Votre profil n’a rien à reprendre ici. Ajoutez-le d’abord à votre profil. |
+| `phoneCv.preview.name` | Nom du CV |
+| `phoneCv.preview.nameValue` | {title} › |
+| `phoneCv.preview.partValue` | {value}/100 |
+| `phoneCv.preview.primary` | Utiliser par défaut pour postuler |
+| `phoneCv.preview.primaryOnly` | C’est votre seul CV : il reste celui par défaut. |
+| `phoneCv.preview.word` | Word |
+| `phoneCv.preview.adapt` | Adapter à une offre |
+| `phoneCv.preview.pdf` | Télécharger en PDF |
+| `phoneCv.preview.downloading` | Téléchargement du PDF, sans logo Jumanly. |
+| `phoneCv.preview.exportError` | Le PDF n’a pas pu être créé. Réessayez dans un instant. |
+| `phoneCv.check.headline.ok` | Un titre clair sous votre nom |
+| `phoneCv.check.headline.todo` | Ajoutez un titre sous votre nom |
+| `phoneCv.check.summary.ok` | Un résumé de deux ou trois phrases |
+| `phoneCv.check.summary.todo` | Écrivez un résumé de deux ou trois phrases |
+| `phoneCv.check.figure.ok` | Un résultat chiffré, concret |
+| `phoneCv.check.figure.todo` | Ajoutez un chiffre au résumé ou à une expérience (ex. 120 kits) |
+| `phoneCv.check.dates.ok` | Chaque expérience a ses dates |
+| `phoneCv.check.dates.todo` | Ajoutez les dates de chaque expérience |
+| `phoneCv.check.skills.ok` | Au moins trois compétences |
+| `phoneCv.check.skills.todo` | Ajoutez au moins trois compétences |
+| `phoneCv.check.keywords.ok` | Les compétences demandées pour votre Cap |
+| `phoneCv.check.keywords.todo` | Ajoutez {skills}, demandées pour votre Cap |
+| `phoneCv.check.languages.ok` | Vos langues |
+| `phoneCv.check.languages.todo` | Ajoutez vos langues |
+| `phoneCv.check.readable.ok` | Lisible par les logiciels de recrutement |
+| `phoneCv.check.readable.todo` | Ce modèle est moins bien lu par les logiciels de recrutement |
+
+
 ### Modèle B · Carrière au téléphone
 
 *Lot B5 (docs/modele-b, rangées 11 à 15, planche `Carriere.dc.html`) : l'onglet Carrière (profil, CV, portfolio, progression, candidatures), sa recherche, partager le profil, modifier le profil, paramètres, formule et paiement, CV, réalisations et candidatures.*
@@ -8879,8 +9093,8 @@ Conventions :
 | `phoneCareer.cap` | Cap · {job} |
 | `phoneCareer.noCap` | Choisir mon Cap |
 | `phoneCareer.availability.open` | Disponible tout de suite |
-| `phoneCareer.availability.listening` | À l’écoute |
-| `phoneCareer.availability.not_looking` | Pas en recherche |
+| `phoneCareer.availability.listening` | À l’écoute des offres |
+| `phoneCareer.availability.not_looking` | Pas disponible |
 | `phoneCareer.complete` | Profil complété |
 | `phoneCareer.completeValue` | {percent} % |
 | `phoneCareer.tabs` | Rubriques de Carrière |
@@ -8979,6 +9193,51 @@ Conventions :
 | `phoneCareer.applications.empty` | Aucune candidature pour l’instant. Postuler est gratuit, toujours. |
 | `phoneCareer.applications.explore` | Voir les offres |
 | `phoneCareer.applications.steps` | {count, plural, one {Étape # sur 4} other {Étape # sur 4}} |
+| `phoneCareer.title` | Carrière |
+| `phoneCareer.bannerEdit` | Changer la bannière |
+| `phoneCareer.photoEdit` | Changer la photo |
+| `phoneCareer.socialAdd` | Ajouter un réseau ou un site |
+| `phoneCareer.availabilityChange` | Disponibilité : {current}. Toucher pour changer. |
+| `phoneCareer.completion.skill` | {count, plural, one {Ajoutez {skill} : une offre de plus vous correspond.} other {Ajoutez {skill} : # offres de plus vous correspondent.}} |
+| `phoneCareer.completion.done` | Votre profil est complet. Gardez-le à jour. |
+| `phoneCareer.completionGo` | Compléter |
+| `phoneCareer.suggestionAddLabel` | Ajouter {skill} à mes compétences |
+| `phoneCareer.seeAsOthers` | Voir mon profil comme les autres |
+| `phoneCareer.folded` | Carrière · profil complété à {percent} % |
+| `phoneCareer.experiences` | Expériences |
+| `phoneCareer.pointAdd` | + Ajouter un point |
+| `phoneCareer.pointAddLabel` | Ajouter un point à « {title} » |
+| `phoneCareer.experienceEdit` | Modifier « {title} » |
+| `phoneCareer.jumanly` | Jumanly |
+| `phoneCareer.languagesTitle` | Langues |
+| `phoneCareer.when.daysAgo` | il y a {days} j |
+| `phoneCareer.when.hour` | {hour} h |
+| `phoneCareer.when.hourMinute` | {hour} h {minute} |
+| `phoneCareer.cv.score` | {score}/100 |
+| `phoneCareer.cv.empty` | Pas encore de CV. Orbi peut en préparer un depuis votre profil, en une minute. |
+| `phoneCareer.cv.newLong` | + Nouveau CV · modèle, import ou Orbi |
+| `phoneCareer.cv.changedToday` | modifié aujourd’hui |
+| `phoneCareer.cv.changedYesterday` | modifié hier |
+| `phoneCareer.cv.meta` | Modèle {template} · {when} |
+| `phoneCareer.progression.stepText.skill` | {count, plural, one {Une offre de plus vous correspond} other {# offres de plus vous correspondent}} |
+| `phoneCareer.progression.stepText.project` | Montrez ce que vous savez faire, en 2 minutes |
+| `phoneCareer.progression.stepText.interview` | Simulation avec Orbi, 10 minutes |
+| `phoneCareer.progression.stepText.cv` | Orbi le prépare depuis votre profil |
+| `phoneCareer.progression.stepText.about` | Quelques lignes sur vous, en 2 minutes |
+| `phoneCareer.progression.stepText.experience` | Stage, emploi, bénévolat : tout compte |
+| `phoneCareer.progression.stepText.education` | Diplôme, formation ou attestation |
+| `phoneCareer.progression.stepText.languages` | Les langues que vous parlez |
+| `phoneCareer.progression.stepText.apply` | Postuler est gratuit, toujours |
+| `phoneCareer.progression.stepText.course` | Un cours court pour progresser |
+| `phoneCareer.applications.meta` | {company} · {when} |
+| `phoneCareer.applications.score` | {score} % |
+| `phoneCareer.applications.scoreLabel` | Correspondance avec l’offre : {score} % |
+| `phoneCareer.applications.where` | Où en est la candidature : {status} |
+| `phoneCareer.applications.step.sent` | Envoyée |
+| `phoneCareer.applications.step.viewed` | Vue |
+| `phoneCareer.applications.step.interview` | Entretien |
+| `phoneCareer.applications.step.answer` | Réponse |
+| `phoneCareer.applications.interviewNote` | Entretien {day} à {time} |
 | `phoneCareer.searchHint` | Tapez une lettre : vos compétences, expériences, CV, réalisations, candidatures et réglages s’affichent. |
 | `phoneCareer.searchIn` | Chercher dans |
 | `phoneCareer.searchScope.tout` | Tout |

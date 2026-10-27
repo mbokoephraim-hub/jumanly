@@ -17,7 +17,7 @@ import { PROFILE_TABS, type ProfileTab, type ProfileView } from "./data";
 const REASONS = ["harassment", "impersonation", "spam", "inappropriate", "other"] as const;
 
 /** The networks' drawings (maquette `Profil.dc.html`, ICS). */
-const SOCIAL_PATHS = {
+export const SOCIAL_PATHS = {
   linkedin:
     "M4.5 3.5h15a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1h-15a1 1 0 0 1-1-1v-15a1 1 0 0 1 1-1zM8 10.5v6M8 7.5v.01M12 16.5v-3.5a2 2 0 0 1 4 0v3.5M12 10.5v6",
   instagram:
@@ -32,7 +32,7 @@ const SOCIAL_PATHS = {
 } as const;
 
 /** The ring around the photo: the colours of the first five skills, in equal parts. */
-function ringOf(colors: string[]) {
+export function ringOf(colors: string[]) {
   if (colors.length === 0) return "var(--nb-surface)";
   if (colors.length === 1) return colors[0]!;
   const step = 100 / colors.length;

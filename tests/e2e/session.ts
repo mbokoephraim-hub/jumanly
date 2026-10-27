@@ -221,11 +221,12 @@ export async function finishOnboarding(page: Page, place?: { country: string; ci
  * editor is open.
  */
 export async function newCvFromList(page: Page) {
-  // On the phone (Modèle B, lot B5): « Nouveau CV » → « Choisir un modèle », the first one open.
+  // On the phone (docs/carriere-v3): « Nouveau CV » → « Choisir un modèle », the first free one,
+  // « Continuer » opens the CV on Contenu.
   if ((page.viewportSize()?.width ?? 1280) < 768) {
-    await page.goto("/app/career/cv/modeles?nouveau=1");
-    await page.locator(".nb-ca-modeles form button").first().click();
-    await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
+    await page.goto("/app/career/cv/nouveau?etape=modele");
+    await page.getByRole("button", { name: "Continuer" }).click();
+    await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+\?etape=contenu/);
     return new URL(page.url()).pathname.split("/").pop()!;
   }
   await page.goto("/app/career/cv");

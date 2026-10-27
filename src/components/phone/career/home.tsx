@@ -3,48 +3,157 @@
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useTransition,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { showToast } from "@/components/motion/toaster";
-import { addSuggestedSkillsAction, newCareerCvAction } from "@/server/actions/career-phone";
+import {
+  addSuggestedSkillsAction,
+  setCareerAvailabilityAction,
+} from "@/server/actions/career-phone";
 import { deleteCv, duplicateCv, setPrimaryCv } from "@/server/actions/cv";
-import { CompanyMark } from "../explorer/cards";
 import { FilAvatar } from "../fil/avatar";
-import { DrawnBanner } from "./banner";
-import { OrbiDisc, PhoneIcon } from "../icon";
+import { PhoneIcon } from "../icon";
+import { ringOf, SOCIAL_PATHS, VerifiedMark } from "../profil/profile";
 import { PhoneSheet } from "../sheet";
-import type { CareerEntry, CareerView } from "./data";
+import type { Availability, CareerView } from "./data";
 import { CvExportButton } from "./cv-export";
 import { CareerSearch } from "./search";
 import { ShareSheet } from "./share";
 import { LanguagesSheet, SkillsSheet } from "./sheets";
 
-type Sheet = "share" | "cv" | "competences" | "langues";
+type Sheet = "share" | "competences" | "langues";
 
 const TABS = ["profil", "cv", "portfolio", "progression", "candidatures"] as const;
 type Tab = (typeof TABS)[number];
 
+/** A tint of a palette colour (« #A6F26B » → « #A6F26B1F »). */
+const tint = (color: string, alpha: string) => `${color}${alpha}`;
+
+/** The colour of each availability (maquette Carriere.dc.html, DISPO). */
+const AVAILABILITY_COLOR: Record<Availability, string> = {
+  open: "var(--nb-menthe)",
+  listening: "var(--nb-ambre)",
+  not_looking: "var(--nb-brume)",
+};
+
+/** The colours of the next steps of « Progression », in order. */
+const STEP_COLORS = ["#F4C463", "#FF8A7A", "#2FD3A6"] as const;
+
+function Svg({ d, size = 15, width = 2.2 }: { d: string; size?: number; width?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={width}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d={d} />
+    </svg>
+  );
+}
+
+const PEN = "M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4";
+const CAMERA = "M4 8h3l2-3h6l2 3h3v11H4zM12 9.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4z";
+const PLUS = "M12 5v14M5 12h14";
+const SHARE = "M12 15V4M7.5 8.5 12 4l4.5 4.5M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5";
+const EYE =
+  "M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z";
+const STAR =
+  "M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z";
+
+/** Orbi's mint disc with its star, without the dot (cards of the CV tab). */
+function OrbiStar({ size = 40 }: { size?: number }) {
+  return (
+    <span className="nb-cr-etoile" style={{ width: size, height: size }} aria-hidden>
+      <svg width={size * 0.55} height={size * 0.55} viewBox="0 0 48 48">
+        <path d={STAR} fill="#0B1A1F" />
+      </svg>
+    </span>
+  );
+}
+
+/** A ring in percent with its value in the middle (« 70 % », « 2/5 »). */
+function Ring({
+  percent,
+  color,
+  size,
+  children,
+}: {
+  percent: number;
+  color: string;
+  size: number;
+  children: ReactNode;
+}) {
+  return (
+    <span
+      className="nb-cr-anneau"
+      style={
+        {
+          width: size,
+          height: size,
+          background: `conic-gradient(${color} 0 ${percent}%, var(--nb-haute) ${percent}% 100%)`,
+          "--trou": `${size - 10}px`,
+        } as CSSProperties
+      }
+    >
+      <span>{children}</span>
+    </span>
+  );
+}
+
 /**
- * The Carrière tab on the phone (Modèle B, lot B5, planche Carrière): the person's banner, photo,
- * Cap and how complete the profile is, then « Profil · CV · Portfolio · Progression · Candidatures »
- * in place. Kept mounted under the pages, like the other tabs.
+ * Carrière on the phone (docs/carriere-v3, validated 26/10/2026, captures 01 to 05): the person's
+ * own profile with the head of a profile (banner, photo and its ring, networks, chips), what
+ * differs in one's own space (pencils, « Profil complété », « Modifier · Partager · Voir comme les
+ * autres »), then « Profil · CV · Portfolio · Progression · Candidatures » in a segment that stays
+ * at the top; past the head, a small identity folds above it. Kept mounted under the pages.
  */
 export function PhoneCareer({ view }: { view: CareerView }) {
   const t = useTranslations("phoneCareer");
+  const tp = useTranslations("phoneProfile");
   const [tab, setTab] = useState<Tab>("profil");
   const [searching, setSearching] = useState(false);
   const [sheet, setSheet] = useState<Sheet | null>(null);
+  const [cvMenu, setCvMenu] = useState<CareerView["cvs"][number] | null>(null);
+  const [suggestion, setSuggestion] = useState(view.suggestion);
+  const [availability, setAvailability] = useState(view.availabilityKey);
+  const [folded, setFolded] = useState(false);
+  const [pending, start] = useTransition();
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+  const sentinel = useRef<HTMLDivElement>(null);
+  const person = view.person;
+
+  // A new value from the server (another screen changed it) replaces the local one.
+  const [seen, setSeen] = useState({ suggestion: view.suggestion, availability });
+  if (
+    seen.suggestion?.skillId !== view.suggestion?.skillId ||
+    seen.availability !== view.availabilityKey
+  ) {
+    setSeen({ suggestion: view.suggestion, availability: view.availabilityKey });
+    setSuggestion(view.suggestion);
+    setAvailability(view.availabilityKey);
+  }
 
   // « Ajouter des compétences », « Langues et lieux », « Nouveau CV » asked from another screen
   // (Progression's next steps, the search): `?ajouter=` opens the sheet over the profile.
-  const asked =
-    pathname !== "/app/career/cv"
-      ? null
-      : (params.get("ajouter") ?? (params.get("nouveau") === "1" ? "cv" : null));
-  // `?onglet=portfolio`: the tab a page of the tab goes back to when it was opened directly.
-  const tabAsked = pathname === "/app/career/cv" ? params.get("onglet") : null;
+  const here = pathname === "/app/career/cv";
+  const asked = here ? params.get("ajouter") : null;
+  const tabAsked = here ? params.get("onglet") : null;
+  const newAsked = here && params.get("nouveau") === "1";
   useEffect(() => {
     if (!TABS.includes(tabAsked as Tab)) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- follows the address
@@ -52,15 +161,27 @@ export function PhoneCareer({ view }: { view: CareerView }) {
     router.replace("/app/career/cv", { scroll: false });
   }, [tabAsked, router]);
   useEffect(() => {
-    if (asked !== "competences" && asked !== "langues" && asked !== "cv") return;
+    if (asked !== "competences" && asked !== "langues") return;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- follows the address
-    setTab(asked === "cv" ? "cv" : "profil");
+    setTab("profil");
     setSheet(asked);
     router.replace("/app/career/cv", { scroll: false });
   }, [asked, router]);
-  const [cvMenu, setCvMenu] = useState<CareerView["cvs"][number] | null>(null);
-  const [suggestion, setSuggestion] = useState(view.suggestion);
-  const [pending, start] = useTransition();
+  useEffect(() => {
+    if (newAsked) router.replace("/app/career/cv/nouveau");
+  }, [newAsked, router]);
+
+  // Past the head, the small identity folds above the tabs (maquette, réglage `replie`).
+  useEffect(() => {
+    const element = sentinel.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry) return;
+      setFolded(!entry.isIntersecting && entry.boundingClientRect.top < 0);
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [searching]);
 
   const addSuggestion = () => {
     if (!suggestion) return;
@@ -72,36 +193,24 @@ export function PhoneCareer({ view }: { view: CareerView }) {
       }
     });
   };
+  const nextAvailability = () => {
+    const keys = view.availabilities.map((item) => item.key);
+    const next = keys[(keys.indexOf(availability) + 1) % keys.length]!;
+    const before = availability;
+    setAvailability(next);
+    start(async () => {
+      const result = await setCareerAvailabilityAction(next).catch(() => null);
+      if (!result?.ok) {
+        setAvailability(before);
+        showToast({ message: t("form.error"), tone: "error" });
+      }
+    });
+  };
+  const availabilityLabel =
+    view.availabilities.find((item) => item.key === availability)?.label ?? view.availability;
 
   return (
-    <div className="nb-page nb-ex nb-ca">
-      <div
-        className="nb-ca-banniere"
-        data-ton={view.tone}
-        data-image={view.banner ? "" : undefined}
-        aria-hidden
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element -- the person's own upload */}
-        {view.banner ? <img src={view.banner} alt="" /> : <DrawnBanner />}
-      </div>
-      <div className="nb-ca-haut">
-        <p className="nb-ca-sur">{t("eyebrow")}</p>
-        <span className="nb-ca-ronds">
-          <button
-            type="button"
-            className="nb-ex-rond"
-            aria-label={t("search")}
-            aria-expanded={searching}
-            onClick={() => setSearching(true)}
-          >
-            <PhoneIcon name="recherche" size={20} />
-          </button>
-          <Link href="/app/parametres" className="nb-ex-rond" aria-label={t("settings")}>
-            <PhoneIcon name="reglages" size={20} />
-          </Link>
-        </span>
-      </div>
-
+    <div className="nb-page nb-ca nb-pf nb-cr">
       {searching ? (
         <CareerSearch
           items={view.search}
@@ -109,78 +218,243 @@ export function PhoneCareer({ view }: { view: CareerView }) {
           onClose={() => setSearching(false)}
           onNewCv={() => {
             setSearching(false);
-            setTab("cv");
-            setSheet("cv");
+            router.push("/app/career/cv/nouveau");
           }}
         />
       ) : (
         <>
-          <div className="nb-ex-id nb-ca-id">
-            <div className="nb-ex-id-haut">
-              <span className="nb-ex-id-photo">
+          <header className="nb-cr-tete">
+            <h1>{t("title")}</h1>
+            <span className="nb-cr-ronds">
+              <button
+                type="button"
+                className="nb-pf-rb"
+                aria-label={t("search")}
+                onClick={() => setSearching(true)}
+              >
+                <PhoneIcon name="recherche" size={18} />
+              </button>
+              <Link href="/app/parametres" className="nb-pf-rb nb-cr-rb" aria-label={t("settings")}>
+                <PhoneIcon name="reglages" size={18} />
+              </Link>
+            </span>
+          </header>
+
+          <div
+            className="nb-pf-banniere"
+            style={{ background: person.bannerColor.background } as CSSProperties}
+          >
+            {view.banner ? (
+              // eslint-disable-next-line @next/next/no-img-element -- the person's own upload
+              <img src={view.banner} alt="" />
+            ) : (
+              <svg viewBox="0 0 350 88" preserveAspectRatio="xMidYMid slice" aria-hidden>
+                <g fill="none" stroke="#A6F26B" strokeWidth="14" strokeOpacity=".35">
+                  <circle cx="300" cy="10" r="46" />
+                  <circle cx="300" cy="10" r="86" />
+                  <circle cx="300" cy="10" r="126" />
+                </g>
+                <circle cx="44" cy="70" r="5" fill="var(--nb-lime)" />
+              </svg>
+            )}
+            <Link href="/app/career/profil" className="nb-cr-crayon" aria-label={t("bannerEdit")}>
+              <Svg d={PEN} size={14} />
+            </Link>
+            <span className="nb-pf-banniere-t">
+              {view.cap ? t("cap", { job: view.cap }) : t("noCap")}
+            </span>
+          </div>
+
+          <div className="nb-pf-photo-l">
+            <span className="nb-pf-photo" style={{ background: ringOf(person.ring) }}>
+              {view.image ? (
+                // eslint-disable-next-line @next/next/no-img-element -- the person's own photo
+                <img src={view.image} alt={t("photo", { name: view.name })} />
+              ) : (
+                <span
+                  className="nb-pf-photo-i nb-cr-initiales"
+                  role="img"
+                  aria-label={t("photo", { name: view.name })}
+                >
+                  {view.initials}
+                </span>
+              )}
+              <Link
+                href="/app/career/profil"
+                className="nb-cr-appareil"
+                aria-label={t("photoEdit")}
+              >
+                <Svg d={CAMERA} size={12} width={2.6} />
+              </Link>
+            </span>
+            <ul className="nb-pf-reseaux" aria-label={tp("socials")}>
+              {person.socials.map((item) => (
+                <li key={item.kind}>
+                  <a
+                    href={item.href}
+                    className="nb-pf-so"
+                    aria-label={item.label}
+                    {...(item.kind === "email"
+                      ? {}
+                      : { target: "_blank", rel: "noopener noreferrer nofollow" })}
+                  >
+                    <Svg d={SOCIAL_PATHS[item.kind]} size={15} width={1.9} />
+                  </a>
+                </li>
+              ))}
+              <li>
+                <Link
+                  href="/app/career/profil"
+                  className="nb-pf-so nb-cr-so-plus"
+                  aria-label={t("socialAdd")}
+                >
+                  <Svg d={PLUS} size={14} width={2.4} />
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="nb-pf-id">
+            <h2 className="nb-cr-nom">
+              {view.name}
+              {person.verified ? <VerifiedMark label={tp("verified")} /> : null}
+              {view.planTag ? (
+                <span className="nb-pf-tag nb-cr-formule">{view.planTag}</span>
+              ) : null}
+            </h2>
+            <p className="nb-pf-alias">{person.handle}</p>
+            {person.place ? (
+              <p className="nb-pf-lieu">
+                {person.place.flag ? (
+                  <span className="nb-pf-drapeau" role="img" aria-label={person.place.flagLabel}>
+                    {person.place.flag}
+                  </span>
+                ) : null}
+                <span>{person.place.text}</span>
+              </p>
+            ) : null}
+            {person.bio ? (
+              <p className="nb-pf-bio">{person.bio}</p>
+            ) : (
+              <p className="nb-pf-bio nb-cr-vide">
+                <Link href="/app/career/profil/apropos">{t("aboutEmpty")}</Link>
+              </p>
+            )}
+            <div className="nb-pf-chips">
+              <span className="nb-pf-st">
+                <Svg
+                  d="M9 4.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM2.5 19.5c.8-3.3 3.4-5 6.5-5s5.7 1.7 6.5 5M16 4.8a3.4 3.4 0 0 1 0 6.4M18.5 14.6c1.6.8 2.6 2.4 3 4.9"
+                  size={13}
+                />
+                {tp.rich("connections", {
+                  count: person.connections,
+                  b: (chunks) => <b>{chunks}</b>,
+                })}
+              </span>
+              {person.domain ? (
+                <span className="nb-pf-st" data-ambre="">
+                  <Svg d="M3.5 8.5h17v11h-17zM8.5 8.5V5.5h7v3" size={13} />
+                  {person.domain}
+                </span>
+              ) : null}
+              {view.contracts ? (
+                <span className="nb-pf-st" data-ciel="">
+                  <Svg
+                    d="M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM15.5 8.5l-2 5-5 2 2-5z"
+                    size={13}
+                  />
+                  {tp.rich("seeks", { contract: view.contracts, b: (chunks) => <b>{chunks}</b> })}
+                </span>
+              ) : null}
+              <button
+                type="button"
+                className="nb-pf-st nb-cr-dispo"
+                onClick={nextAvailability}
+                aria-label={t("availabilityChange", { current: availabilityLabel })}
+              >
+                <i style={{ background: AVAILABILITY_COLOR[availability] }} aria-hidden />
+                {availabilityLabel}
+              </button>
+            </div>
+
+            <div className="nb-cr-carte nb-cr-complet">
+              <Ring percent={view.percent} color="var(--nb-lime)" size={48}>
+                {t("completeValue", { percent: view.percent })}
+              </Ring>
+              <span className="nb-cr-complet-t">
+                <b>{t("complete")}</b>
+                {view.completion.text ? <small>{view.completion.text}</small> : null}
+              </span>
+              {suggestion ? (
+                <button
+                  type="button"
+                  className="nb-cr-pastille"
+                  onClick={addSuggestion}
+                  disabled={pending}
+                  aria-label={t("suggestionAddLabel", { skill: suggestion.skill })}
+                >
+                  {t("suggestionAdd")}
+                </button>
+              ) : view.completion.href ? (
+                <Link href={view.completion.href} className="nb-cr-pastille">
+                  {t("completionGo")}
+                </Link>
+              ) : null}
+            </div>
+            <div className="nb-cr-actions">
+              <Link href="/app/career/profil" className="nb-cr-bt" data-creme="">
+                <Svg d={PEN} />
+                {t("edit")}
+              </Link>
+              <button type="button" className="nb-cr-bt" onClick={() => setSheet("share")}>
+                <Svg d={SHARE} width={2} />
+                {t("share")}
+              </button>
+              <Link
+                href={`/app/personnes/${person.id}?apercu=1`}
+                className="nb-cr-bt nb-cr-oeil"
+                aria-label={t("seeAsOthers")}
+              >
+                <Svg d={EYE} size={17} width={2} />
+              </Link>
+            </div>
+          </div>
+
+          <div ref={sentinel} className="nb-cr-repere" aria-hidden />
+          <div className="nb-pf-onglets nb-cr-onglets" data-replie={folded ? "" : undefined}>
+            <div className="nb-cr-mini" aria-hidden={!folded} inert={!folded}>
+              <span className="nb-cr-mini-photo" style={{ background: ringOf(person.ring) }}>
                 <FilAvatar
                   initials={view.initials}
                   image={view.image}
                   tone={view.tone}
                   org={false}
-                  size={64}
+                  size={32}
                 />
               </span>
-              <span className="nb-ex-id-actions">
-                <button
-                  type="button"
-                  className="nb-bouton"
-                  data-contour=""
-                  onClick={() => setSheet("share")}
-                >
-                  {t("share")}
-                </button>
-                <Link href="/app/career/profil" className="nb-bouton" data-creme="">
-                  {t("edit")}
-                </Link>
+              <span className="nb-cr-mini-t">
+                <b>{view.name}</b>
+                <small>{t("folded", { percent: view.percent })}</small>
               </span>
-            </div>
-            <h1 className="nb-ex-id-nom">{view.name}</h1>
-            <p className="nb-meta nb-ex-id-handle">{view.handle}</p>
-            <div className="nb-ca-puces">
-              <span className="nb-ca-cap">
-                {view.cap ? t("cap", { job: view.cap }) : t("noCap")}
-              </span>
-              <span className="nb-ca-dispo">{view.availability}</span>
-            </div>
-            <div className="nb-ca-complet">
-              <span>{t("complete")}</span>
-              <b>{t("completeValue", { percent: view.percent })}</b>
-            </div>
-            <span
-              className="nb-ca-barre"
-              role="progressbar"
-              aria-label={t("complete")}
-              aria-valuenow={view.percent}
-              aria-valuemin={0}
-              aria-valuemax={100}
-            >
-              <span style={{ width: `${view.percent}%` }} />
-            </span>
-          </div>
-
-          <div className="nb-ex-onglets nb-ca-onglets" role="tablist" aria-label={t("tabs")}>
-            {TABS.map((key) => (
               <button
-                key={key}
                 type="button"
-                role="tab"
-                id={`car-${key}`}
-                aria-selected={tab === key}
-                aria-controls="car-panneau"
-                onClick={() => setTab(key)}
+                className="nb-pf-rb"
+                aria-label={t("search")}
+                onClick={() => setSearching(true)}
               >
-                {t(`tab.${key}`)}
+                <PhoneIcon name="recherche" size={18} />
               </button>
-            ))}
+            </div>
+            <Segment tab={tab} onPick={setTab} label={t("tabs")} names={(key) => t(`tab.${key}`)} />
           </div>
 
-          <div id="car-panneau" role="tabpanel" aria-labelledby={`car-${tab}`}>
+          <div
+            id="car-panneau"
+            role="tabpanel"
+            aria-labelledby={`car-${tab}`}
+            className="nb-pf-pane"
+            key={tab}
+          >
             {tab === "profil" ? (
               <ProfilePanel
                 view={view}
@@ -190,9 +464,7 @@ export function PhoneCareer({ view }: { view: CareerView }) {
                 onSheet={setSheet}
               />
             ) : null}
-            {tab === "cv" ? (
-              <CvPanel view={view} onNew={() => setSheet("cv")} onMenu={setCvMenu} />
-            ) : null}
+            {tab === "cv" ? <CvPanel view={view} onMenu={setCvMenu} /> : null}
             {tab === "portfolio" ? <PortfolioPanel view={view} /> : null}
             {tab === "progression" ? <ProgressionPanel view={view} /> : null}
             {tab === "candidatures" ? <ApplicationsPanel view={view} /> : null}
@@ -206,29 +478,6 @@ export function PhoneCareer({ view }: { view: CareerView }) {
         name={view.name}
         share={view.share}
       />
-      <PhoneSheet
-        open={sheet === "cv"}
-        onClose={() => setSheet(null)}
-        label={t("cv.new")}
-        closeLabel={t("close")}
-      >
-        <b className="nb-ex-feuille-t">{t("cv.new")}</b>
-        <Link href="/app/career/cv/modeles?nouveau=1" className="nb-opt nb-ca-opt">
-          <b>{t("cv.fromTemplate")}</b>
-          <small>{t("cv.fromTemplateText")}</small>
-        </Link>
-        <Link href="/app/profil/import" className="nb-opt nb-ca-opt">
-          <b>{t("cv.import")}</b>
-          <small>{t("cv.importText")}</small>
-        </Link>
-        <form action={newCareerCvAction}>
-          <input type="hidden" name="orbi" value="1" />
-          <button type="submit" className="nb-opt nb-ca-opt" data-orbi="">
-            <b>{t("cv.orbi")}</b>
-            <small>{t("cv.orbiText")}</small>
-          </button>
-        </form>
-      </PhoneSheet>
       <CvMenu cv={cvMenu} onClose={() => setCvMenu(null)} />
       <SkillsSheet
         open={sheet === "competences"}
@@ -242,48 +491,85 @@ export function PhoneCareer({ view }: { view: CareerView }) {
   );
 }
 
-function Section({
-  title,
-  action,
-  children,
+/**
+ * « Profil · CV · Portfolio · Progression · Candidatures »: each tab as wide as its word, the
+ * Lime pill sliding under the chosen one.
+ */
+function Segment({
+  tab,
+  onPick,
+  label,
+  names,
 }: {
-  title: string;
-  action?: { label: string; href?: string; onClick?: () => void; aria: string } | null;
-  children: React.ReactNode;
+  tab: Tab;
+  onPick: (tab: Tab) => void;
+  label: string;
+  names: (tab: Tab) => string;
 }) {
+  const box = useRef<HTMLDivElement>(null);
+  const [pill, setPill] = useState<{ left: number; width: number } | null>(null);
+  useLayoutEffect(() => {
+    const measure = () => {
+      const button = box.current?.querySelector<HTMLElement>(`#car-${tab}`);
+      if (button) setPill({ left: button.offsetLeft, width: button.offsetWidth });
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    if (box.current) observer.observe(box.current);
+    return () => observer.disconnect();
+  }, [tab]);
   return (
-    <section className="nb-ca-sec" aria-label={title}>
-      <div className="nb-ca-sec-t">
-        <h2>{title}</h2>
-        {action?.href ? (
-          <Link href={action.href} aria-label={action.aria}>
-            {action.label}
-          </Link>
-        ) : action ? (
-          <button type="button" onClick={action.onClick} aria-label={action.aria}>
-            {action.label}
-          </button>
-        ) : null}
-      </div>
-      {children}
-    </section>
+    <div
+      ref={box}
+      className="nb-cr-seg"
+      role="tablist"
+      aria-label={label}
+      data-mesure={pill ? "" : undefined}
+    >
+      <span
+        className="nb-cr-ind"
+        style={pill ? { left: pill.left, width: pill.width } : { opacity: 0 }}
+        aria-hidden
+      />
+      {TABS.map((key) => (
+        <button
+          key={key}
+          type="button"
+          role="tab"
+          id={`car-${key}`}
+          aria-selected={tab === key}
+          aria-controls="car-panneau"
+          onClick={() => onPick(key)}
+        >
+          {names(key)}
+        </button>
+      ))}
+    </div>
   );
 }
 
-function Entry({ entry, edit }: { entry: CareerEntry; edit: string }) {
+function Heading({
+  title,
+  action,
+  far,
+}: {
+  title: string;
+  action?: { label: string; aria: string; href?: string; onClick?: () => void };
+  far?: boolean;
+}) {
   return (
-    <div className="nb-ex-entree nb-ca-entree">
-      <CompanyMark initials={entry.initials} logo={null} tone={entry.tone} size={48} />
-      <span>
-        <b>{entry.title}</b>
-        <small>{entry.when}</small>
-      </span>
-      {entry.href ? (
-        <Link href={entry.href} className="nb-ca-lien" aria-label={`${edit} : ${entry.title}`}>
-          {edit}
+    <h2 className="nb-pf-h nb-cr-h" data-loin={far ? "" : undefined}>
+      {title}
+      {action?.href ? (
+        <Link href={action.href} aria-label={action.aria}>
+          {action.label}
         </Link>
+      ) : action ? (
+        <button type="button" onClick={action.onClick} aria-label={action.aria}>
+          {action.label}
+        </button>
       ) : null}
-    </div>
+    </h2>
   );
 }
 
@@ -301,169 +587,285 @@ function ProfilePanel({
   onSheet: (sheet: "competences" | "langues") => void;
 }) {
   const t = useTranslations("phoneCareer");
-  const modify = t("modify");
+  const tp = useTranslations("phoneProfile");
+  const person = view.person;
   const add = t("add");
+  const modify = t("modify");
   return (
-    <div className="nb-ca-profil">
-      {suggestion ? (
-        <div className="nb-ca-orbi">
-          <OrbiDisc size={44} />
-          <p>{suggestion.text}</p>
-          <button type="button" onClick={onAdd} disabled={adding}>
-            {t("suggestionAdd")}
-          </button>
-        </div>
-      ) : null}
-
-      <Section
-        title={t("about")}
-        action={{
-          label: modify,
-          href: "/app/career/profil/apropos",
-          aria: `${modify} : ${t("about")}`,
-        }}
-      >
-        <p className="nb-ex-texte">{view.about ?? t("aboutEmpty")}</p>
-      </Section>
-
-      <Section
+    <>
+      <Heading
         title={t("skills")}
         action={{
           label: add,
-          onClick: () => onSheet("competences"),
           aria: `${add} : ${t("skills")}`,
+          onClick: () => onSheet("competences"),
         }}
-      >
-        {view.skills.length > 0 ? (
-          <div className="nb-ex-comp">
-            {view.skills.map((skill) => (
-              <span key={skill.id}>{skill.name}</span>
+      />
+      {person.skills.length === 0 ? (
+        <p className="nb-pf-vide">{t("skillsEmpty")}</p>
+      ) : (
+        <>
+          <div className="nb-pf-barre-f" aria-hidden>
+            {person.families.map((family, at) => (
+              <span
+                key={family.label}
+                style={{
+                  flex: family.share,
+                  background: family.color,
+                  animationDelay: `${at * 0.1}s`,
+                }}
+              />
             ))}
           </div>
-        ) : (
-          <p className="nb-ex-texte nb-meta">{t("skillsEmpty")}</p>
-        )}
-      </Section>
+          <ul className="nb-pf-legende">
+            {person.families.map((family) => (
+              <li key={family.label}>
+                <i style={{ background: family.color }} aria-hidden />
+                {family.label}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      <ul className="nb-pf-comp">
+        {person.skills.map((skill, at) => (
+          <li
+            key={skill.name}
+            className="nb-pf-sk"
+            style={{
+              background: tint(skill.color, "1F"),
+              borderColor: tint(skill.color, "55"),
+              color: skill.color,
+              animationDelay: `${at * 0.05}s`,
+            }}
+          >
+            <i style={{ background: skill.color }} aria-hidden />
+            {skill.name}
+            {skill.verified ? (
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                role="img"
+                aria-label={tp("skillVerified")}
+              >
+                <circle cx="12" cy="12" r="10" fill={skill.color} />
+                <path
+                  d="m7.5 12.5 3 3 6-6.5"
+                  fill="none"
+                  stroke="#0B1A1F"
+                  strokeWidth="2.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            ) : null}
+          </li>
+        ))}
+        {suggestion ? (
+          <li>
+            <button
+              type="button"
+              className="nb-pf-sk nb-cr-sk-plus"
+              onClick={onAdd}
+              disabled={adding}
+              aria-label={t("suggestionAddLabel", { skill: suggestion.skill })}
+            >
+              <Svg d={PLUS} size={12} width={2.6} />
+              {suggestion.skill}
+            </button>
+          </li>
+        ) : null}
+      </ul>
 
-      <Section
-        title={t("experience")}
+      <Heading
+        far
+        title={t("experiences")}
         action={{
           label: add,
+          aria: `${add} : ${t("experiences")}`,
           href: "/app/career/profil/experience/nouvelle",
-          aria: `${add} : ${t("experience")}`,
         }}
-      >
-        {view.experiences.length > 0 ? (
-          view.experiences.map((entry) => <Entry key={entry.id} entry={entry} edit={modify} />)
-        ) : (
-          <p className="nb-ex-texte nb-meta">{t("experienceEmpty")}</p>
-        )}
-      </Section>
+      />
+      {person.experiences.length === 0 ? (
+        <p className="nb-pf-vide">{t("experienceEmpty")}</p>
+      ) : (
+        person.experiences.map((item, at) => {
+          const href = `/app/career/profil/experience/${item.id}`;
+          return (
+            <div key={item.id} className="nb-pf-xp nb-cr-xp">
+              {at < person.experiences.length - 1 ? (
+                <span
+                  className="nb-pf-fil"
+                  style={{ background: `linear-gradient(${item.color}, rgba(255,255,255,.08))` }}
+                  aria-hidden
+                />
+              ) : null}
+              <span className="nb-pf-lg" style={{ background: item.color }} aria-hidden>
+                {item.initials}
+              </span>
+              <div>
+                <h3>
+                  {item.title}
+                  {item.current ? <span className="nb-pf-tag">{tp("current")}</span> : null}
+                </h3>
+                <p className="nb-pf-xp-ent">
+                  {item.company} · <span style={{ color: item.color }}>{item.type}</span>
+                </p>
+                <p className="nb-pf-xp-d">{item.dates}</p>
+                {item.points.length > 0 ? (
+                  <ul className="nb-pf-pts">
+                    {item.points.map((point, n) => (
+                      <li key={n}>
+                        <i style={{ background: item.color }} aria-hidden />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                <Link
+                  href={href}
+                  className="nb-cr-point"
+                  style={{ color: item.color }}
+                  aria-label={t("pointAddLabel", { title: item.title })}
+                >
+                  {t("pointAdd")}
+                </Link>
+              </div>
+              <Link
+                href={href}
+                className="nb-cr-ed"
+                aria-label={t("experienceEdit", { title: item.title })}
+              >
+                <Svg d={PEN} size={13} />
+              </Link>
+            </div>
+          );
+        })
+      )}
 
-      <Section
+      <Heading
         title={t("education")}
         action={{
           label: add,
-          href: "/app/career/profil/formation/nouvelle",
           aria: `${add} : ${t("education")}`,
+          href: "/app/career/profil/formation/nouvelle",
         }}
-      >
-        {view.educations.length > 0 ? (
-          view.educations.map((entry) => <Entry key={entry.id} entry={entry} edit={modify} />)
-        ) : (
-          <p className="nb-ex-texte nb-meta">{t("educationEmpty")}</p>
-        )}
-      </Section>
+      />
+      {view.educationRows.length === 0 ? (
+        <p className="nb-pf-vide">{t("educationEmpty")}</p>
+      ) : (
+        view.educationRows.map((item) => (
+          <Link key={item.id} href={item.href} className="nb-pf-form nb-cr-form">
+            <span aria-hidden data-jumanly={item.jumanly ? "" : undefined}>
+              <PhoneIcon name="formation" size={17} />
+            </span>
+            <span>
+              <b>{item.title}</b>
+              <small>{item.line}</small>
+            </span>
+            {item.jumanly ? <span className="nb-pf-tag nb-cr-jumanly">{t("jumanly")}</span> : null}
+          </Link>
+        ))
+      )}
 
-      <Section
-        title={t("languages")}
+      <Heading
+        far
+        title={t("languagesTitle")}
         action={{
           label: modify,
+          aria: `${modify} : ${t("languagesTitle")}`,
           onClick: () => onSheet("langues"),
-          aria: `${modify} : ${t("languages")}`,
         }}
-      >
-        {view.places.length > 0 ? (
-          <div className="nb-ex-comp">
-            {view.places.map((place) => (
-              <span key={place}>{place}</span>
-            ))}
-          </div>
-        ) : (
-          <p className="nb-ex-texte nb-meta">{t("languagesEmpty")}</p>
-        )}
-      </Section>
-    </div>
-  );
-}
-
-/** A small CV page drawn in CSS (planche Carrière-CV): never the real content. */
-function CvThumb({ strong }: { strong: boolean }) {
-  return (
-    <span className="nb-ca-cv-mini" data-fort={strong ? "" : undefined} aria-hidden>
-      <i />
-      <i />
-      <i />
-      <i />
-      <i />
-    </span>
+      />
+      {person.languages.length === 0 ? (
+        <p className="nb-pf-vide">{t("languagesEmpty")}</p>
+      ) : (
+        <ul className="nb-pf-langues">
+          {person.languages.map((language) => (
+            <li key={language.name}>
+              <b>{language.name}</b>
+              <span className="nb-pf-niv" aria-hidden>
+                {[1, 2, 3, 4, 5].map((bar) => (
+                  <i key={bar} data-on={bar <= language.level ? "" : undefined} />
+                ))}
+              </span>
+              <small>{language.label}</small>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
   );
 }
 
 function CvPanel({
   view,
-  onNew,
   onMenu,
 }: {
   view: CareerView;
-  onNew: () => void;
   onMenu: (cv: CareerView["cvs"][number]) => void;
 }) {
   const t = useTranslations("phoneCareer");
   return (
-    <div className="nb-ca-liste">
-      <button type="button" className="nb-ca-cv nb-ca-cv-nouveau" onClick={onNew}>
-        <span className="nb-ca-cv-plus" aria-hidden>
-          <PhoneIcon name="plus" size={22} />
-        </span>
-        <span>
-          <b>{t("cv.new")}</b>
-          <small>{t("cv.newText")}</small>
-        </span>
-      </button>
-      {view.cvs.map((cv, index) => (
-        <div key={cv.id} className="nb-ca-cv">
-          <Link href={cv.href} className="nb-ca-cv-l">
-            <CvThumb strong={index % 2 === 0} />
-            <span>
-              <b>{cv.title}</b>
-              <small>{cv.line}</small>
-              <span className="nb-ca-tags">
-                {cv.tags.map((tag) => (
-                  <em key={tag.text} data-fort={tag.strong ? "" : undefined}>
-                    {tag.text}
-                  </em>
-                ))}
-              </span>
-            </span>
-          </Link>
-          <button
-            type="button"
-            className="nb-ca-plus"
-            aria-label={t("cv.more", { title: cv.title })}
-            onClick={() => onMenu(cv)}
-          >
-            <PhoneIcon name="plusOptions" size={22} />
-          </button>
-        </div>
-      ))}
+    <div className="nb-cr-pad">
       {view.adapt ? (
-        <div className="nb-ca-orbi">
-          <OrbiDisc size={44} />
+        <div className="nb-cr-carte nb-cr-orbi">
+          <OrbiStar />
           <p>{view.adapt.text}</p>
-          <Link href={view.adapt.href}>{t("cv.adaptButton")}</Link>
+          <Link href={view.adapt.href} className="nb-cr-pastille">
+            {t("cv.adaptButton")}
+          </Link>
         </div>
       ) : null}
+      {view.cvs.length > 0 ? (
+        <ul className="nb-cr-grille">
+          {view.cvs.map((cv, at) => (
+            <li
+              key={cv.id}
+              className="nb-cr-carte nb-cr-cv"
+              style={{ animationDelay: `${at * 0.08}s` }}
+            >
+              <Link href={`${cv.href}?etape=apercu`} className="nb-cr-cv-l">
+                <span
+                  className="nb-cr-cv-page"
+                  style={{ "--accent": cv.color } as CSSProperties}
+                  aria-hidden
+                >
+                  <i data-titre="" />
+                  <i data-sous="" />
+                  <i />
+                  <i data-w="85" />
+                  <i data-w="70" />
+                  <i data-section="" />
+                  <i />
+                  <i data-w="80" />
+                </span>
+                <em className="nb-cr-cv-note" data-defaut={cv.primary ? "" : undefined}>
+                  {cv.primary ? t("cv.primary") : t("cv.score", { score: cv.score })}
+                </em>
+                <span className="nb-cr-cv-t">
+                  <b>{cv.title}</b>
+                  <small>{cv.meta}</small>
+                </span>
+              </Link>
+              <button
+                type="button"
+                className="nb-cr-cv-plus"
+                aria-label={t("cv.more", { title: cv.title })}
+                onClick={() => onMenu(cv)}
+              >
+                <PhoneIcon name="plusOptions" size={18} />
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="nb-pf-vide nb-cr-vide-cv">{t("cv.empty")}</p>
+      )}
+      <Link href="/app/career/cv/nouveau" className="nb-cr-nouveau">
+        {t("cv.newLong")}
+      </Link>
     </div>
   );
 }
@@ -505,7 +907,7 @@ function CvMenu({ cv, onClose }: { cv: CareerView["cvs"][number] | null; onClose
       ) : cv ? (
         <>
           <b className="nb-ex-feuille-t">{cv.title}</b>
-          <Link href={cv.href} className="nb-opt nb-fil-opt">
+          <Link href={`${cv.href}?etape=contenu`} className="nb-opt nb-fil-opt">
             {t("cv.menu.edit")}
           </Link>
           <CvExportButton
@@ -549,38 +951,58 @@ function CvMenu({ cv, onClose }: { cv: CareerView["cvs"][number] | null; onClose
 function PortfolioPanel({ view }: { view: CareerView }) {
   const t = useTranslations("phoneCareer");
   return (
-    <div className="nb-ca-reals">
-      {view.projects.map((project) => (
-        <Link key={project.id} href={project.href} className="nb-ca-real">
-          <span className="nb-ex-real-img" data-ton={project.tone} aria-hidden>
-            {project.featured ? <em className="nb-ca-avant">{t("portfolio.featured")}</em> : null}
-            {project.cover ? (
-              // eslint-disable-next-line @next/next/no-img-element -- private file, served by the API
-              <img src={project.cover} alt="" loading="lazy" />
-            ) : (
-              <svg viewBox="0 0 160 110" fill="none">
-                <path
-                  d="M18 82 L58 56 L90 70 L128 32 L150 44"
-                  stroke="rgba(255,255,255,.7)"
-                  strokeWidth="6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            )}
-          </span>
-          <b>{project.title}</b>
-          <small>{project.line}</small>
-        </Link>
+    <ul className="nb-cr-grille nb-cr-pad">
+      {view.projects.map((project, at) => (
+        <li
+          key={project.id}
+          className="nb-cr-carte nb-cr-real"
+          style={{ animationDelay: `${at * 0.06}s` }}
+        >
+          <Link href={project.href} className="nb-cr-real-l">
+            <span className="nb-cr-real-img" style={{ background: project.ground }} aria-hidden>
+              {project.cover ? (
+                // eslint-disable-next-line @next/next/no-img-element -- private file, served by the API
+                <img src={project.cover} alt="" loading="lazy" />
+              ) : (
+                <svg viewBox="0 0 160 112">
+                  <g fill="none" stroke="#FFFFFF" strokeOpacity=".25" strokeWidth="12">
+                    <circle cx="140" cy="0" r="40" />
+                    <circle cx="140" cy="0" r="72" />
+                  </g>
+                </svg>
+              )}
+              {project.featured ? (
+                <em className="nb-pf-tag nb-cr-avant">{t("portfolio.featured")}</em>
+              ) : null}
+            </span>
+            <span className="nb-cr-real-t">
+              <b>{project.title}</b>
+              {project.skills.length > 0 ? (
+                <span className="nb-pf-real-s">
+                  {project.skills.map((skill) => (
+                    <span
+                      key={skill.name}
+                      style={{ background: tint(skill.color, "22"), color: skill.color }}
+                    >
+                      {skill.name}
+                    </span>
+                  ))}
+                </span>
+              ) : (
+                <small>{project.line}</small>
+              )}
+            </span>
+          </Link>
+        </li>
       ))}
-      <Link href="/app/career/portfolio/nouvelle" className="nb-ca-real nb-ca-real-ajout">
-        <span className="nb-ca-cv-plus" aria-hidden>
-          <PhoneIcon name="plus" size={22} />
-        </span>
-        <b>{t("portfolio.add")}</b>
-        <small>{t("portfolio.addText")}</small>
-      </Link>
-    </div>
+      <li>
+        <Link href="/app/career/portfolio/nouvelle" className="nb-cr-ajout">
+          <Svg d={PLUS} size={22} width={2.4} />
+          <b>{t("portfolio.add")}</b>
+          <small>{t("portfolio.addText")}</small>
+        </Link>
+      </li>
+    </ul>
   );
 }
 
@@ -589,57 +1011,75 @@ function ProgressionPanel({ view }: { view: CareerView }) {
   const progression = view.progression;
   const stages = ["discovery", "building", "ready", "competitive"] as const;
   return (
-    <div className="nb-ca-prog">
-      <p className="nb-ca-groupe">{t("progression.stageLabel")}</p>
-      <p className="nb-ca-stade">{progression.stage}</p>
-      <p className="nb-meta">{progression.next}</p>
-      {progression.diagnostic ? (
-        <Link href="/app/career/diagnostic" className="nb-bouton" data-plein="" data-large="">
-          {t("progression.diagnostic")}
-        </Link>
-      ) : null}
-      <ol className="nb-ca-stades" aria-label={t("progression.stageLabel")}>
-        {stages.map((stage, index) => (
-          <li
-            key={stage}
-            data-etat={
-              index < progression.stageIndex
-                ? "fait"
-                : index === progression.stageIndex
-                  ? "actuel"
-                  : undefined
-            }
-            aria-current={index === progression.stageIndex ? "step" : undefined}
-          >
-            <span aria-hidden />
-            {t(`progression.stage.${stage}`)}
-          </li>
-        ))}
-      </ol>
-      <div className="nb-ca-chiffres">
-        <span>
-          <b>{progression.courses}</b>
+    <div className="nb-cr-pad">
+      <div className="nb-cr-carte nb-cr-stade">
+        <p className="nb-cr-sur">{t("progression.stageLabel")}</p>
+        <p className="nb-cr-stade-n">{progression.stage}</p>
+        <p className="nb-cr-stade-d">{progression.next}</p>
+        {progression.diagnostic ? (
+          <Link href="/app/career/diagnostic" className="nb-cr-pastille nb-cr-faire">
+            {t("progression.diagnostic")}
+          </Link>
+        ) : null}
+        <ol className="nb-cr-frise" aria-label={t("progression.stageLabel")}>
+          {stages.map((stage, index) => (
+            <li
+              key={stage}
+              data-fait={index <= progression.stageIndex ? "" : undefined}
+              aria-current={index === progression.stageIndex ? "step" : undefined}
+            >
+              <span aria-hidden />
+              {t(`progression.stage.${stage}`)}
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div className="nb-cr-chiffres">
+        <div className="nb-cr-carte">
+          <Ring percent={progression.coursesPercent} color="#C3A6FF" size={52}>
+            {progression.courses}
+          </Ring>
           <small>{t("progression.courses")}</small>
-        </span>
-        <span>
-          <b>{t("completeValue", { percent: progression.percent })}</b>
+        </div>
+        <div className="nb-cr-carte">
+          <Ring percent={progression.percent} color="var(--nb-lime)" size={52}>
+            {t("completeValue", { percent: progression.percent })}
+          </Ring>
           <small>{t("progression.profile")}</small>
-        </span>
-        <span>
-          <b>{progression.applications}</b>
+        </div>
+        <div className="nb-cr-carte">
+          <Ring percent={progression.applicationsPercent} color="#7CC4FF" size={52}>
+            {progression.applications}
+          </Ring>
           <small>{t("progression.applications")}</small>
-        </span>
+        </div>
       </div>
       {progression.steps.length > 0 ? (
         <>
-          <p className="nb-ca-groupe">{t("progression.steps")}</p>
-          {progression.steps.map((step) => (
-            <Link key={step.text} href={step.href} className="nb-ca-etape">
-              <span className="nb-ca-rond" aria-hidden />
-              <span>{step.text}</span>
-              <small>{t("progression.open")}</small>
-            </Link>
-          ))}
+          <h2 className="nb-pf-h nb-cr-h0">{t("progression.steps")}</h2>
+          <ol className="nb-cr-etapes">
+            {progression.steps.map((step, index) => {
+              const color = STEP_COLORS[index % STEP_COLORS.length]!;
+              return (
+                <li key={step.title}>
+                  <Link href={step.href}>
+                    <span
+                      className="nb-cr-num"
+                      style={{ background: tint(color, "33"), color }}
+                      aria-hidden
+                    >
+                      {index + 1}
+                    </span>
+                    <span className="nb-cr-etape-t">
+                      <b>{step.title}</b>
+                      <small>{step.detail}</small>
+                    </span>
+                    <PhoneIcon name="chevron" size={16} />
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
         </>
       ) : null}
     </div>
@@ -650,37 +1090,62 @@ function ApplicationsPanel({ view }: { view: CareerView }) {
   const t = useTranslations("phoneCareer");
   if (view.applications.length === 0)
     return (
-      <div className="nb-ca-vide">
+      <div className="nb-cr-pad nb-cr-vide-c">
         <p className="nb-ex-texte">{t("applications.empty")}</p>
         <Link href="/app/jobs" className="nb-bouton" data-plein="">
           {t("applications.explore")}
         </Link>
       </div>
     );
+  const steps = ["sent", "viewed", "interview", "answer"] as const;
   return (
-    <div className="nb-ca-liste">
-      {view.applications.map((row) => (
-        <Link key={row.id} href={row.href} className="nb-ca-cand">
-          <CompanyMark initials={row.initials} logo={null} tone={row.tone} size={48} />
-          <span className="nb-ca-cand-c">
-            <span className="nb-ca-cand-t">
-              <b>{row.title}</b>
-              <em data-fort={row.strong ? "" : undefined}>{row.status}</em>
+    <ul className="nb-cr-pad nb-cr-cands">
+      {view.applications.map((row, at) => (
+        <li key={row.id} style={{ animationDelay: `${at * 0.07}s` }}>
+          <Link href={row.href} className="nb-cr-carte nb-cr-cand">
+            <span className="nb-cr-cand-h">
+              <span className="nb-cr-logo" data-ton={row.tone} aria-hidden>
+                {row.initials}
+              </span>
+              <span className="nb-cr-cand-t">
+                <b>{row.title}</b>
+                <small>{row.meta}</small>
+              </span>
+              {row.score !== null ? (
+                <em
+                  className="nb-cr-score"
+                  data-fort={row.score >= 75 ? "" : undefined}
+                  aria-label={t("applications.scoreLabel", { score: row.score })}
+                >
+                  {t("applications.score", { score: row.score })}
+                </em>
+              ) : null}
             </span>
-            <small>{row.line}</small>
-            <span
-              className="nb-ca-barres"
-              role="img"
-              aria-label={t("applications.steps", { count: row.bars })}
+            <ol
+              className="nb-cr-frise"
+              aria-label={t("applications.where", { status: row.status })}
             >
-              {[1, 2, 3, 4].map((bar) => (
-                <i key={bar} data-plein={bar <= row.bars ? "" : undefined} />
+              {steps.map((key, index) => (
+                <li
+                  key={key}
+                  data-fait={index <= row.step ? "" : undefined}
+                  aria-current={index === row.step ? "step" : undefined}
+                >
+                  <span aria-hidden />
+                  {t(`applications.step.${key}`)}
+                </li>
               ))}
-            </span>
-            <small data-fort={row.noteStrong ? "" : undefined}>{row.note}</small>
-          </span>
-        </Link>
+            </ol>
+            {row.answer ? (
+              <p className="nb-cr-note" data-reponse="">
+                {row.answer}
+              </p>
+            ) : row.interview ? (
+              <p className="nb-cr-note">{row.interview}</p>
+            ) : null}
+          </Link>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }

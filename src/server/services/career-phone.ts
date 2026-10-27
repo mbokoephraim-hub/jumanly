@@ -8,6 +8,9 @@ import { stageFor, type Stage, stages } from "./diagnostic-scoring";
 import { isJobOpen, openJobWhere } from "./jobs";
 import { followedCourses } from "./learn-space";
 import { listProjects, type PortfolioProject } from "./portfolio";
+import { parseCv } from "./cv";
+import { cvScore, targetSkillsFor } from "./cv-coach";
+import { personProfile } from "./person-profile";
 import { completeness, getFullProfile, parseProfileLanguages } from "./profile";
 
 /**
@@ -99,6 +102,8 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
     jobCities,
     plan,
     savedJob,
+    person,
+    targets,
   ] = await Promise.all([
     db.document.findMany({
       where: { profileId: profile.id, kind: "cv" },
@@ -110,6 +115,8 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
         isPrimary: true,
         updatedAt: true,
         adaptedForJobId: true,
+        content: true,
+        style: true,
       },
     }),
     listProjects(db, profile.id),
@@ -136,6 +143,9 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
       orderBy: { createdAt: "desc" },
       select: { job: { select: { id: true, organization: { select: { name: true } } } } },
     }),
+    // The head of Carrière is the person's own profile, as others see it (docs/carriere-v3).
+    personProfile(db, userId, userId, "candidate"),
+    targetSkillsFor(db, userId),
   ]);
   const complete = completeness(profile);
 
@@ -164,6 +174,8 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
       bars: applicationBars(status),
       interviewAt: interview?.startsAt ?? null,
       open: isJobOpen(application.job, now),
+      /** The score shown when the person applied, frozen with the application. */
+      score: application.matchScore,
     };
   });
   const active = rows.filter(
@@ -188,6 +200,7 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
     userId,
     portfolioSlug: profile.portfolioPublic ? profile.portfolioSlug : null,
     user: profile.user,
+    person,
     profile: {
       banner: profile.banner,
       handle: profile.handle,
@@ -195,6 +208,7 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
       summary: profile.summary,
       targetJob: profile.targetJob,
       availability: profile.availability,
+      desiredContracts: profile.desiredContracts,
       visibility: profile.visibility,
       desiredLocations: profile.desiredLocations,
       languages: parseProfileLanguages(profile.languages),
@@ -223,12 +237,16 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
       isPrimary: cv.isPrimary,
       updatedAt: cv.updatedAt,
       uses: uses.get(cv.id) ?? 0,
+      style: cv.style,
+      /** The CV's score out of 100 (fixed rules, partie 08 § 8.9), with its « Pourquoi ? ». */
+      score: cvScore(parseCv(cv.content), targets.skills).total,
     })),
     adapt,
     projects: projects.map((project) => ({
       id: project.id,
       title: project.title,
       tool: project.skills[0] ?? null,
+      skills: project.skills.slice(0, 3),
       photos: project.files.filter((file) => file.type.startsWith("image/")).length,
       cover: projectCover(project),
       files: project.files.length,

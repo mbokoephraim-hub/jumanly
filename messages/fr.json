@@ -10713,6 +10713,264 @@
       "ok": "Compris"
     }
   },
+  "phoneCv": {
+    "seo": "Créer un CV",
+    "back": "Retour",
+    "close": "Fermer",
+    "continue": "Continuer",
+    "save": "Enregistrer",
+    "error": "Ça n’a pas marché. Réessayez dans un instant.",
+    "steps": {
+      "label": "Étapes du CV",
+      "count": "{step} / {all}",
+      "modele": "Modèle",
+      "contenu": "Contenu",
+      "style": "Style",
+      "apercu": "Aperçu"
+    },
+    "start": {
+      "title": "Nouveau CV",
+      "sub": "Comment voulez-vous commencer ?",
+      "filled": "Votre profil remplit déjà {percent} % du CV",
+      "orbi": "Orbi le prépare",
+      "orbiText": "À partir de votre profil et de votre Cap, en 30 secondes",
+      "fastest": "Le plus rapide",
+      "modele": "Partir d’un modèle",
+      "modeleText": "15 modèles, votre profil remplit le contenu",
+      "import": "Importer mon CV",
+      "importText": "PDF, Word ou photo, Orbi le lit pour vous",
+      "noLogo": "Le CV téléchargé ne porte ni logo ni couleur Jumanly.",
+      "limit": "Vous avez déjà 10 CV, le maximum. Supprimez-en un pour en créer un nouveau."
+    },
+    "template": {
+      "title": "Choisir un modèle",
+      "sub": "{count} modèles · {plan} : {included} inclus",
+      "subNoPlan": "{count} modèles · {included} inclus",
+      "filters": "Filtrer les modèles",
+      "filterAll": "Tous · {count}",
+      "filterFree": "Gratuits",
+      "free": "Gratuit",
+      "paid": "Formule payante",
+      "hint": "Touchez pour choisir, touchez encore pour voir en grand.",
+      "with": "Avec {plan}",
+      "locked": "Ce modèle est inclus dans {plan}.",
+      "lockedLabel": "{name}, inclus dans {plan}",
+      "lockedError": "Ce modèle n’est pas inclus dans votre formule. Choisissez-en un autre ou changez de formule.",
+      "selectedLabel": "{name}, choisi. Touchez encore pour le voir en grand.",
+      "unlock": "Passer à {plan}",
+      "apply": "Appliquer ce modèle",
+      "largeTitle": "Modèle {name}",
+      "largeSub": "Aperçu avec un exemple rempli",
+      "largeAlt": "Le modèle {name}, rempli avec un exemple",
+      "largeNote": "Exemple rempli. Le vôtre reprend votre profil, et le PDF ne porte ni logo ni couleur Jumanly.",
+      "use": "Utiliser ce modèle",
+      "withPhoto": "avec photo",
+      "withoutPhoto": "sans photo",
+      "ats": {
+        "excellent": "ATS excellente",
+        "veryGood": "ATS très bonne",
+        "good": "ATS bonne"
+      }
+    },
+    "orbi": {
+      "title": "Orbi prépare votre CV",
+      "sub": "Vous pourrez tout modifier",
+      "writing": "Orbi écrit votre CV…",
+      "ready": "Votre CV est prêt",
+      "progress": "Avancement",
+      "lineProfile": "Profil et Cap lus",
+      "lineExperiences": "Expériences reprises avec vos points",
+      "lineSkillsFor": "Compétences classées pour {job}",
+      "lineSkills": "Compétences classées",
+      "lineLayout": "Mise en page {template}",
+      "see": "Voir le contenu",
+      "noSummary": "Orbi n’a pas pu proposer de résumé cette fois. Vous pourrez l’écrire ou réessayer sur Contenu.",
+      "limit": "Vous avez déjà 10 CV, le maximum. Supprimez-en un pour en créer un nouveau.",
+      "error": "Orbi n’a pas pu préparer le CV. Réessayez dans un instant.",
+      "backToCvs": "Revenir à mes CV"
+    },
+    "import": {
+      "title": "Importer un CV",
+      "step": "Étape {step} sur 3",
+      "choose": "Choisir mon CV",
+      "chooseText": "PDF ou Word, {max} Mo au plus",
+      "photo": "Photographier un CV papier",
+      "photoText": "Orbi lit la photo",
+      "photoName": "la photo",
+      "last": "Votre dernière lecture",
+      "lastWhen": "Lu {when}, à vérifier",
+      "pasted": "CV collé",
+      "consent": "Rien n’est publié sans votre accord. Vous choisissez ce qui entre dans votre profil.",
+      "error": {
+        "format": "Ce fichier n’est ni un PDF ni un document Word (.docx).",
+        "size": "Ce fichier dépasse {max} Mo.",
+        "empty": "Ce fichier est vide.",
+        "unreadable": "Ce fichier n’a pas pu être lu. S’il s’agit d’un scan, photographiez plutôt le CV papier.",
+        "photo": "Pour lire une photo, Orbi doit être activé (Paramètres › Orbi) et avoir des crédits. Vous pouvez aussi choisir un PDF ou un Word.",
+        "orbi": "Orbi n’a pas pu lire la photo. Réessayez avec une photo nette, bien éclairée, ou choisissez un PDF."
+      }
+    },
+    "read": {
+      "title": "Orbi lit {name}…",
+      "contact": "Coordonnées",
+      "experiences": "Expériences",
+      "education": "Formation",
+      "skills": "Compétences et langues",
+      "never": "Le fichier n’est pas gardé : seul ce que vous validez entre dans votre profil."
+    },
+    "found": {
+      "title": "Voici ce qu’Orbi a trouvé",
+      "hint": "Décochez ce que vous ne voulez pas reprendre.",
+      "nothing": "Orbi n’a rien trouvé à reprendre dans ce fichier. Vous pouvez créer le CV depuis votre profil.",
+      "contact": "Coordonnées",
+      "experiences": "{count, plural, one {# expérience} other {# expériences}}",
+      "educations": "{count, plural, one {# formation} other {# formations}}",
+      "skills": "{count, plural, one {# compétence} other {# compétences}}",
+      "languages": "{count, plural, one {# langue} other {# langues}}",
+      "new": "nouveau",
+      "already": "déjà là",
+      "newSome": "{count, plural, one {+# nouvelle} other {+# nouvelles}}",
+      "newMany": "{count, plural, one {+# nouvelle} other {+# nouvelles}}",
+      "undated": "{count, plural, one {Une expérience n’a pas de date de début : elle ne sera pas ajoutée, vous pourrez l’ajouter à la main.} other {# expériences n’ont pas de date de début : elles ne seront pas ajoutées, vous pourrez les ajouter à la main.}}",
+      "rulesOnly": "Sans Orbi, seules les compétences et les langues sont reconnues. Activez Orbi pour lire aussi les expériences et les formations.",
+      "consent": "Seuls les groupes cochés entrent dans votre profil. Votre ville n’est reprise que si votre profil n’en a pas.",
+      "apply": "Ajouter à mon profil et créer le CV",
+      "applyEmpty": "Créer le CV depuis mon profil"
+    },
+    "content": {
+      "title": "Contenu",
+      "sub": "Rempli depuis votre profil",
+      "orbiTitle": "Orbi a tout rempli depuis votre profil.",
+      "orbiText": "Décochez ce que vous ne voulez pas, touchez un bloc pour le modifier.",
+      "summary": "Résumé",
+      "summaryEdit": "Modifier le résumé",
+      "summaryEmpty": "Pas encore de résumé. Écrivez deux ou trois phrases, ou laissez Orbi les proposer.",
+      "summaryHint": "Deux ou trois phrases : ce que vous savez faire, avec un chiffre concret, et ce que vous cherchez.",
+      "rewrite": "Réécrire avec Orbi",
+      "proposal": "Proposition d’Orbi",
+      "keep": "Garder",
+      "refuse": "Refuser",
+      "kept": "Résumé mis à jour.",
+      "refused": "Le résumé reste le vôtre.",
+      "orbiError": {
+        "consent": "Activez Orbi dans Paramètres pour qu’il propose un résumé.",
+        "entitlement": "Votre formule n’inclut pas cette aide d’Orbi.",
+        "quota": "Vos crédits Orbi du mois sont utilisés.",
+        "unavailable": "Orbi est indisponible pour le moment. Réessayez plus tard.",
+        "same": "Orbi n’a rien de mieux à proposer pour ce résumé.",
+        "empty": "Ajoutez d’abord un titre ou une expérience : Orbi part de ce qui est écrit."
+      },
+      "sections": "Sections du CV",
+      "dragHint": "glisser pour l’ordre",
+      "contact": "Coordonnées",
+      "handle": "Déplacer {name}",
+      "handleHint": "Glissez la poignée, ou utilisez les flèches haut et bas, pour changer l’ordre.",
+      "moved": "{name} est maintenant en position {place} sur {all}.",
+      "show": "Afficher {name} sur le CV",
+      "edit": "Modifier {name}",
+      "emptySection": "Rien pour l’instant : touchez pour ajouter.",
+      "more": "+ Section",
+      "moreTitle": "Ajouter une section",
+      "moreNone": "Toutes vos sections sont déjà sur le CV.",
+      "moreAdd": "Remettre {name}",
+      "moreProfile": "Projets, bénévolat et certificats ne sont pas encore repris sur le CV. Ajoutez-les à votre profil : ils comptent déjà pour les recruteurs.",
+      "moreProfileLink": "Ouvrir mon profil"
+    },
+    "style": {
+      "title": "Mise en forme",
+      "sub": "L’aperçu change en direct",
+      "color": "Couleur",
+      "colorAdvised": "{name} · recommandée",
+      "font": "Police",
+      "density": "Densité",
+      "densities": {
+        "airy": "Aérée",
+        "standard": "Normale",
+        "compact": "Serrée"
+      },
+      "photo": "Photo sur le CV",
+      "photoNone": "Pas de photo dans ce modèle",
+      "language": "Langue des titres",
+      "languages": {
+        "fr": "Français",
+        "en": "Anglais"
+      },
+      "languageValue": "{language} ›",
+      "languageChange": "Langue des titres : {current}. Toucher pour changer.",
+      "next": "Voir l’aperçu"
+    },
+    "preview": {
+      "title": "Aperçu et vérification",
+      "sub": "Orbi relit avant de télécharger",
+      "scoreLabel": "Score du CV : {score} sur 100",
+      "outOf": "sur 100",
+      "checked": "Vérifié par Orbi",
+      "pages": "{count, plural, one {# page} other {# pages}}",
+      "readable": "lisible par les logiciels de recrutement",
+      "checks": "Ce qu’Orbi a vérifié",
+      "why": "Pourquoi ?",
+      "whyTitle": "Comment ce score est calculé",
+      "why1": "Le score suit des règles fixes, sans IA : rien n’est inventé et le même CV a toujours le même score.",
+      "why2For": "Il compte la lisibilité par les logiciels de recrutement (40 %), les résultats chiffrés (30 %) et les compétences demandées dans les offres de {job} (30 %).",
+      "why2": "Il compte la lisibilité par les logiciels de recrutement (40 %), les résultats chiffrés (30 %) et vos compétences (30 %). Choisissez votre Cap pour le comparer aux offres.",
+      "why3": "Il vous aide à améliorer votre CV : il ne décide jamais d’une candidature.",
+      "part": {
+        "ats": "Lisibilité",
+        "impact": "Résultats chiffrés",
+        "keywords": "Compétences demandées"
+      },
+      "whyNote": "« Corriger » reprend ce que votre profil contient déjà ; sinon, il ouvre l’endroit où l’écrire.",
+      "ok": "Fait :",
+      "todo": "À faire :",
+      "fix": "Corriger",
+      "fixed": "{count, plural, one {Une ligne reprise de votre profil.} other {# éléments repris de votre profil.}}",
+      "fixProfile": "Votre profil n’a rien à reprendre ici. Ajoutez-le d’abord à votre profil.",
+      "name": "Nom du CV",
+      "nameValue": "{title} ›",
+      "partValue": "{value}/100",
+      "primary": "Utiliser par défaut pour postuler",
+      "primaryOnly": "C’est votre seul CV : il reste celui par défaut.",
+      "word": "Word",
+      "adapt": "Adapter à une offre",
+      "pdf": "Télécharger en PDF",
+      "downloading": "Téléchargement du PDF, sans logo Jumanly.",
+      "exportError": "Le PDF n’a pas pu être créé. Réessayez dans un instant."
+    },
+    "check": {
+      "headline": {
+        "ok": "Un titre clair sous votre nom",
+        "todo": "Ajoutez un titre sous votre nom"
+      },
+      "summary": {
+        "ok": "Un résumé de deux ou trois phrases",
+        "todo": "Écrivez un résumé de deux ou trois phrases"
+      },
+      "figure": {
+        "ok": "Un résultat chiffré, concret",
+        "todo": "Ajoutez un chiffre au résumé ou à une expérience (ex. 120 kits)"
+      },
+      "dates": {
+        "ok": "Chaque expérience a ses dates",
+        "todo": "Ajoutez les dates de chaque expérience"
+      },
+      "skills": {
+        "ok": "Au moins trois compétences",
+        "todo": "Ajoutez au moins trois compétences"
+      },
+      "keywords": {
+        "ok": "Les compétences demandées pour votre Cap",
+        "todo": "Ajoutez {skills}, demandées pour votre Cap"
+      },
+      "languages": {
+        "ok": "Vos langues",
+        "todo": "Ajoutez vos langues"
+      },
+      "readable": {
+        "ok": "Lisible par les logiciels de recrutement",
+        "todo": "Ce modèle est moins bien lu par les logiciels de recrutement"
+      }
+    }
+  },
   "phoneCareer": {
     "seo": "Carrière",
     "eyebrow": "Carrière",
@@ -10726,8 +10984,8 @@
     "noCap": "Choisir mon Cap",
     "availability": {
       "open": "Disponible tout de suite",
-      "listening": "À l’écoute",
-      "not_looking": "Pas en recherche"
+      "listening": "À l’écoute des offres",
+      "not_looking": "Pas disponible"
     },
     "complete": "Profil complété",
     "completeValue": "{percent} %",
@@ -10761,7 +11019,10 @@
       "place": "{when} · {place}",
       "today": "aujourd’hui",
       "yesterday": "hier",
-      "on": "le {date}"
+      "on": "le {date}",
+      "daysAgo": "il y a {days} j",
+      "hour": "{hour} h",
+      "hourMinute": "{hour} h {minute}"
     },
     "cv": {
       "new": "Nouveau CV",
@@ -10787,7 +11048,13 @@
         "delete": "Supprimer",
         "deleteQuestion": "Supprimer « {title} » ?",
         "deleteText": "Ce CV disparaît. Les candidatures déjà envoyées gardent leur copie."
-      }
+      },
+      "score": "{score}/100",
+      "empty": "Pas encore de CV. Orbi peut en préparer un depuis votre profil, en une minute.",
+      "newLong": "+ Nouveau CV · modèle, import ou Orbi",
+      "changedToday": "modifié aujourd’hui",
+      "changedYesterday": "modifié hier",
+      "meta": "Modèle {template} · {when}"
     },
     "portfolio": {
       "featured": "Mise en avant",
@@ -10826,6 +11093,18 @@
         "languages": "Ajouter mes langues",
         "apply": "Postuler à une offre",
         "course": "Suivre un cours"
+      },
+      "stepText": {
+        "skill": "{count, plural, one {Une offre de plus vous correspond} other {# offres de plus vous correspondent}}",
+        "project": "Montrez ce que vous savez faire, en 2 minutes",
+        "interview": "Simulation avec Orbi, 10 minutes",
+        "cv": "Orbi le prépare depuis votre profil",
+        "about": "Quelques lignes sur vous, en 2 minutes",
+        "experience": "Stage, emploi, bénévolat : tout compte",
+        "education": "Diplôme, formation ou attestation",
+        "languages": "Les langues que vous parlez",
+        "apply": "Postuler est gratuit, toujours",
+        "course": "Un cours court pour progresser"
       }
     },
     "applications": {
@@ -10847,8 +11126,38 @@
       "waiting": "En attente de lecture",
       "empty": "Aucune candidature pour l’instant. Postuler est gratuit, toujours.",
       "explore": "Voir les offres",
-      "steps": "{count, plural, one {Étape # sur 4} other {Étape # sur 4}}"
+      "steps": "{count, plural, one {Étape # sur 4} other {Étape # sur 4}}",
+      "meta": "{company} · {when}",
+      "score": "{score} %",
+      "scoreLabel": "Correspondance avec l’offre : {score} %",
+      "where": "Où en est la candidature : {status}",
+      "step": {
+        "sent": "Envoyée",
+        "viewed": "Vue",
+        "interview": "Entretien",
+        "answer": "Réponse"
+      },
+      "interviewNote": "Entretien {day} à {time}"
     },
+    "title": "Carrière",
+    "bannerEdit": "Changer la bannière",
+    "photoEdit": "Changer la photo",
+    "socialAdd": "Ajouter un réseau ou un site",
+    "availabilityChange": "Disponibilité : {current}. Toucher pour changer.",
+    "completion": {
+      "skill": "{count, plural, one {Ajoutez {skill} : une offre de plus vous correspond.} other {Ajoutez {skill} : # offres de plus vous correspondent.}}",
+      "done": "Votre profil est complet. Gardez-le à jour."
+    },
+    "completionGo": "Compléter",
+    "suggestionAddLabel": "Ajouter {skill} à mes compétences",
+    "seeAsOthers": "Voir mon profil comme les autres",
+    "folded": "Carrière · profil complété à {percent} %",
+    "experiences": "Expériences",
+    "pointAdd": "+ Ajouter un point",
+    "pointAddLabel": "Ajouter un point à « {title} »",
+    "experienceEdit": "Modifier « {title} »",
+    "jumanly": "Jumanly",
+    "languagesTitle": "Langues",
     "searchHint": "Tapez une lettre : vos compétences, expériences, CV, réalisations, candidatures et réglages s’affichent.",
     "searchIn": "Chercher dans",
     "searchScope": {
