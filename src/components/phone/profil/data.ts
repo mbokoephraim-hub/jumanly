@@ -27,7 +27,10 @@ export type ProfileView = {
   verified: boolean;
   handle: string;
   place: { flag: string; flagLabel: string; text: string; time: string | null } | null;
+  /** The short line under the name: the person's title. */
   bio: string | null;
+  /** « À propos », before the skills: a title and up to 400 characters on who they are. */
+  about: { title: string | null; text: string } | null;
   connections: number;
   contract: string | null;
   activity: string | null;

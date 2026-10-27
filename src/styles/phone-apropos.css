@@ -1,0 +1,293 @@
+/*
+ * « À propos » (titre + texte) et la photo de profil vue en grand (décisions d'Ephraïm du
+ * 27/10/2026). Importé par les composants, jamais par globals.css : un téléphone resté ouvert
+ * pendant une mise en ligne reçoit ainsi ces règles avec l'écran.
+ */
+
+/* À propos : la carte avant les compétences. */
+.nb-pf-presente {
+  margin: 18px 20px 4px;
+  padding: 14px 16px 15px;
+  border-radius: 18px;
+  background: var(--nb-surface);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.nb-pf-presente h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--nb-creme);
+}
+.nb-pf-presente p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #dce6e3;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.nb-pf-presente a {
+  color: var(--nb-lime);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.nb-pf-h + .nb-pf-presente {
+  margin-top: 0;
+}
+.nb-ca-it > span > small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--nb-brume);
+}
+.nb-ca-compte[data-trop] {
+  color: var(--nb-corail);
+}
+
+/* La photo vue en grand : elle avance devant l'écran, l'interface derrière est floutée. */
+.nb-pv {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--nb-creme);
+  overflow: auto;
+}
+.nb-pv::backdrop {
+  background: rgba(5, 13, 16, 0.62);
+  -webkit-backdrop-filter: blur(18px) saturate(1.1);
+  backdrop-filter: blur(18px) saturate(1.1);
+  animation: nb-pv-voile 260ms ease-out;
+}
+.nb-pv-in {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: calc(env(safe-area-inset-top, 0px) + 14px) 20px
+    calc(env(safe-area-inset-bottom, 0px) + 28px);
+  pointer-events: none;
+}
+.nb-pv-in > * {
+  pointer-events: auto;
+}
+.nb-pv-haut {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  font-size: 16px;
+}
+.nb-pv-fermer {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--nb-creme);
+}
+.nb-pv-photo {
+  margin-top: 6vh;
+  width: min(72vw, 300px);
+  aspect-ratio: 1;
+  padding: 5px;
+  border-radius: 50%;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  animation: nb-pv-avance 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.nb-pv-photo > img,
+.nb-pv-initiales {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid var(--nb-nuit);
+}
+.nb-pv-initiales {
+  background: var(--nb-lime);
+  color: #0f3f37;
+  font-size: clamp(56px, 22vw, 96px);
+  font-weight: 800;
+}
+.nb-pv-nom {
+  margin: 6px 0 0;
+  font-size: 19px;
+  font-weight: 700;
+}
+.nb-pv-aide {
+  margin: 0;
+  max-width: 300px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--nb-brume);
+}
+.nb-pv-actions {
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 14px;
+}
+.nb-pv-actions button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 76px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--nb-creme);
+}
+.nb-pv-actions button > span {
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+.nb-pv-actions button:first-child > span {
+  background: var(--nb-lime);
+  border-color: var(--nb-lime);
+  color: var(--nb-nuit);
+}
+.nb-pv-ab {
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.nb-pv-choix {
+  width: min(100%, 340px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+.nb-pv-choix button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--nb-creme);
+}
+.nb-pv-choix button[data-gris] {
+  justify-content: center;
+  background: none;
+  border-color: transparent;
+  color: var(--nb-brume);
+}
+.nb-pv-cadre {
+  position: relative;
+  margin-top: 3vh;
+  width: min(86vw, 340px);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #000;
+  touch-action: none;
+  cursor: grab;
+}
+.nb-pv-cadre:focus-visible {
+  outline: 2px solid var(--nb-lime);
+  outline-offset: 3px;
+}
+.nb-pv-libre {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: none;
+  transform-origin: center;
+  user-select: none;
+  pointer-events: none;
+}
+.nb-pv-cercle {
+  position: absolute;
+  inset: 7%;
+  border-radius: 50%;
+  box-shadow: 0 0 0 999px rgba(5, 13, 16, 0.62);
+  outline: 2px solid rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+}
+.nb-pv-zoom {
+  width: min(86vw, 340px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  color: var(--nb-brume);
+}
+.nb-pv-zoom input {
+  flex: 1;
+  accent-color: var(--nb-lime);
+}
+.nb-pv-bas {
+  width: min(86vw, 340px);
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+.nb-pv-bas .nb-bouton {
+  flex: 1;
+}
+@keyframes nb-pv-voile {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes nb-pv-avance {
+  from {
+    opacity: 0;
+    transform: scale(0.45) translateY(40px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-pv::backdrop,
+  .nb-pv-photo {
+    animation: none;
+  }
+}
+
+/* Carrière : la photo est un bouton qui l'ouvre en grand. */
+.nb-cr-photo-bt {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.nb-cr-photo-bt > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: 50% 22%;
+  border: 3px solid var(--nb-nuit);
+  background: var(--nb-nuit);
+}
+.nb-cr-photo-bt:focus-visible {
+  outline: 2px solid var(--nb-lime);
+  outline-offset: 2px;
+}

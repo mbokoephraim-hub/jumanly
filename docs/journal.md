@@ -4835,3 +4835,11 @@ profil et les candidats dans la même identité visuelle.
   l'utilisent (Fil, Explorer, Carrière, Hub, Chat, onglets recruteur, profil recruteur). Comme pour
   le Chat (#173), un téléphone resté ouvert pendant une mise en ligne gardait l'ancienne feuille
   globale et ne voyait pas les nouveaux en-têtes.
+
+## Carrière · « À propos » et photo vue en grand (27 octobre 2026)
+
+- Demande d'Ephraïm : une présentation (titre + texte de 400 caractères) avant les compétences, et la photo de profil qu'on touche pour l'agrandir devant un fond flouté, la modifier, la recadrer ou revenir aux initiales.
+- Nouveau champ `TalentProfile.aboutTitle` (migration `20261027170000_profile_about_title`) ; le texte reste `summary`. La page « À propos » du téléphone limite le texte à 400 caractères (un texte plus ancien et plus long reste affiché, il faut le raccourcir pour enregistrer). « Modifier le profil » renvoie vers cette page au lieu de garder son propre champ « Bio ».
+- La carte « À propos » s'affiche avant les compétences dans Carrière (onglet Profil) et dans l'onglet « À propos » du profil vu par les autres ; la ligne sous le nom montre désormais le titre professionnel.
+- Photo : `src/components/phone/career/photo-viewer.tsx` (un `<dialog>` dont le fond est flouté), styles dans `src/styles/phone-apropos.css`, importés par les composants.
+- Publié sans attendre la vérification complète, à la demande d'Ephraïm (seuls la compilation et ESLint ont tourné).

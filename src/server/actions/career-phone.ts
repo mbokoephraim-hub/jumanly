@@ -2,6 +2,7 @@
 
 import { refresh, revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { ABOUT_TEXT_MAX, ABOUT_TITLE_MAX } from "@/lib/profile-about";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { Prisma } from "@/generated/prisma/client";
@@ -191,14 +192,19 @@ export async function saveCareerHeadAction(raw: z.input<typeof headSchema>): Pro
   return saved(profile.id);
 }
 
-/** « À propos » (planche Carrière-apropos): the text alone. */
-export async function saveCareerAboutAction(summary: string): Promise<Result> {
-  const parsed = z.string().trim().max(PROFILE_SUMMARY_MAX).safeParse(summary);
-  if (!parsed.success) return fail("invalid");
+/** « À propos » (planche Carrière-apropos): its title and its text, before the skills. */
+export async function saveCareerAboutAction(raw: { title: string; text: string }): Promise<Result> {
+  const parsed = z
+    .object({
+      title: z.string().trim().max(ABOUT_TITLE_MAX),
+      text: z.string().trim().max(ABOUT_TEXT_MAX),
+    })
+    .safeParse(raw);
+  if (!parsed.success) return fail("aboutTooLong");
   const { profile } = await mine();
   await db.talentProfile.update({
     where: { id: profile.id },
-    data: { summary: parsed.data || null },
+    data: { aboutTitle: parsed.data.title || null, summary: parsed.data.text || null },
   });
   return saved(profile.id);
 }

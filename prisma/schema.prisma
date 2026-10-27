@@ -1152,6 +1152,8 @@ model TalentProfile {
   userId                 String                   @unique
   user                   User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
   headline               String?
+  /// Title of « À propos » (« Ce que je fais »), above the summary on the phone profile.
+  aboutTitle             String?
   summary                String?
   /// Main goal chosen on the welcome screen (firstJob, newJob, reconversion…).
   goal                   String?
@@ -1699,20 +1701,20 @@ enum MessageKind {
 }
 
 model Message {
-  id             String       @id @default(cuid(2))
+  id             String            @id @default(cuid(2))
   conversationId String
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversation   Conversation      @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   senderId       String?
   body           String
-  kind           MessageKind  @default(text)
+  kind           MessageKind       @default(text)
   /// document_request: { name, due, submittedAt?, document? } ; text with a document: { document }
-  payload        Json         @default("{}")
+  payload        Json              @default("{}")
   /// Hidden by moderation after a report.
   hiddenAt       DateTime?
   /// Sent while « Messages éphémères » was on: hidden for both sides after this time (never deleted).
   expiresAt      DateTime?
   reactions      MessageReaction[]
-  createdAt      DateTime     @default(now())
+  createdAt      DateTime          @default(now())
 
   @@index([conversationId, createdAt])
 }

@@ -21,10 +21,11 @@ import {
 import { deleteCv, duplicateCv, setPrimaryCv } from "@/server/actions/cv";
 import { FilAvatar } from "../fil/avatar";
 import { PhoneIcon } from "../icon";
-import { ringOf, SOCIAL_PATHS, VerifiedMark } from "../profil/profile";
+import { AboutCard, ringOf, SOCIAL_PATHS, VerifiedMark } from "../profil/profile";
 import { PhoneSheet } from "../sheet";
 import type { Availability, CareerView } from "./data";
 import { CvExportButton } from "./cv-export";
+import { PhotoViewer } from "./photo-viewer";
 import { CareerSearch } from "./search";
 import { ShareSheet } from "./share";
 import { LanguagesSheet, SkillsSheet } from "./sheets";
@@ -131,6 +132,7 @@ export function PhoneCareer({ view }: { view: CareerView }) {
   const [suggestion, setSuggestion] = useState(view.suggestion);
   const [availability, setAvailability] = useState(view.availabilityKey);
   const [folded, setFolded] = useState(false);
+  const [photoOpen, setPhotoOpen] = useState(false);
   const [pending, start] = useTransition();
   const params = useSearchParams();
   const pathname = usePathname();
@@ -268,25 +270,30 @@ export function PhoneCareer({ view }: { view: CareerView }) {
 
           <div className="nb-pf-photo-l">
             <span className="nb-pf-photo" style={{ background: ringOf(person.ring) }}>
-              {view.image ? (
-                // eslint-disable-next-line @next/next/no-img-element -- the person's own photo
-                <img src={view.image} alt={t("photo", { name: view.name })} />
-              ) : (
-                <span
-                  className="nb-pf-photo-i nb-cr-initiales"
-                  role="img"
-                  aria-label={t("photo", { name: view.name })}
-                >
-                  {view.initials}
-                </span>
-              )}
-              <Link
-                href="/app/career/profil"
+              {/* A touch brings the photo forward (PhotoViewer): change, crop or initials. */}
+              <button
+                type="button"
+                className="nb-cr-photo-bt"
+                onClick={() => setPhotoOpen(true)}
+                aria-label={t("photoOpen")}
+              >
+                {view.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- the person's own photo
+                  <img src={view.image} alt="" />
+                ) : (
+                  <span className="nb-pf-photo-i nb-cr-initiales" aria-hidden>
+                    {view.initials}
+                  </span>
+                )}
+              </button>
+              <button
+                type="button"
                 className="nb-cr-appareil"
+                onClick={() => setPhotoOpen(true)}
                 aria-label={t("photoEdit")}
               >
                 <Svg d={CAMERA} size={12} width={2.6} />
-              </Link>
+              </button>
             </span>
             <ul className="nb-pf-reseaux" aria-label={tp("socials")}>
               {person.socials.map((item) => (
@@ -334,13 +341,7 @@ export function PhoneCareer({ view }: { view: CareerView }) {
                 <span>{person.place.text}</span>
               </p>
             ) : null}
-            {person.bio ? (
-              <p className="nb-pf-bio">{person.bio}</p>
-            ) : (
-              <p className="nb-pf-bio nb-cr-vide">
-                <Link href="/app/career/profil/apropos">{t("aboutEmpty")}</Link>
-              </p>
-            )}
+            {person.bio ? <p className="nb-pf-bio">{person.bio}</p> : null}
             <div className="nb-pf-chips">
               <span className="nb-pf-st">
                 <Svg
@@ -480,6 +481,14 @@ export function PhoneCareer({ view }: { view: CareerView }) {
         share={view.share}
       />
       <CvMenu cv={cvMenu} onClose={() => setCvMenu(null)} />
+      <PhotoViewer
+        open={photoOpen}
+        onClose={() => setPhotoOpen(false)}
+        image={view.image}
+        initials={view.initials}
+        name={view.name}
+        ring={ringOf(person.ring)}
+      />
       <SkillsSheet
         open={sheet === "competences"}
         onClose={() => setSheet(null)}
@@ -594,6 +603,23 @@ function ProfilePanel({
   const modify = t("modify");
   return (
     <>
+      <Heading
+        title={t("about")}
+        action={{
+          label: person.about ? modify : add,
+          aria: `${person.about ? modify : add} : ${t("about")}`,
+          href: "/app/career/profil/apropos",
+        }}
+      />
+      {person.about ? (
+        <AboutCard about={person.about} />
+      ) : (
+        <div className="nb-pf-presente">
+          <p>
+            <Link href="/app/career/profil/apropos">{t("aboutEmpty")}</Link>
+          </p>
+        </div>
+      )}
       <Heading
         title={t("skills")}
         action={{
