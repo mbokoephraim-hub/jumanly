@@ -26035,7 +26035,49 @@
         "usage": "Consommation",
         "weights": "Poids du matching",
         "disputes": "Révisions humaines",
-        "audit": "Journal d'audit"
+        "audit": "Journal d'audit",
+        "skills": "Compétences"
+      },
+      "skills": {
+        "title": "Compétences et synonymes",
+        "intro": "Le score de matching compare les compétences d'une offre et d'un profil par leur nom et leurs synonymes. Quand une même compétence s'écrit de plusieurs façons (« Excel », « MS Excel »), ajoutez un synonyme ou fusionnez-la dans la bonne compétence : les scores en tiennent compte tout de suite. Seuls des nombres sont affichés, jamais qui détient une compétence.",
+        "filter": {
+          "custom": "Créées par les membres ({count})",
+          "all": "Tout le référentiel"
+        },
+        "search": "Chercher une compétence",
+        "count": "{shown} sur {total} compétences, les plus utilisées d'abord",
+        "empty": "Aucune compétence ici pour l'instant.",
+        "custom": "Créée par un membre",
+        "usage": "{profiles, plural, =0 {aucun profil} one {# profil} other {# profils}} · {jobs, plural, =0 {aucune offre} one {# offre} other {# offres}} · {courses, plural, =0 {aucune formation} one {# formation} other {# formations}}",
+        "aliases": "Synonymes",
+        "noAlias": "Aucun",
+        "removeAlias": "Retirer le synonyme « {alias} »",
+        "improve": "Améliorer le matching de cette compétence",
+        "reason": "Motif (pour le journal)",
+        "addAlias": {
+          "title": "Ajouter un synonyme",
+          "hint": "Une autre façon d'écrire la même compétence, reconnue par le score.",
+          "label": "Synonyme",
+          "submit": "Ajouter"
+        },
+        "merge": {
+          "title": "Fusionner dans une autre compétence",
+          "hint": "Les profils, offres et formations passent sur la compétence choisie ; ce nom en devient un synonyme.",
+          "label": "Compétence du référentiel",
+          "submit": "Fusionner"
+        },
+        "ok": {
+          "alias": "Synonyme ajouté.",
+          "aliasRemoved": "Synonyme retiré.",
+          "merged": "Compétences fusionnées."
+        },
+        "error": {
+          "champs": "Vérifiez les champs : le motif fait au moins 3 caractères.",
+          "notFound": "Compétence introuvable. Choisissez un nom de la liste.",
+          "same": "Une compétence ne peut pas être fusionnée dans elle-même.",
+          "alias": "Ce synonyme existe déjà pour cette compétence."
+        }
       },
       "usage": {
         "byFeature": "Par fonction",
