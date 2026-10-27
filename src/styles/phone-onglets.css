@@ -43,11 +43,11 @@
   justify-content: center;
   border-radius: 50%;
   background: var(--nb-surface);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(var(--nb-voile), 0.08);
   color: var(--nb-creme);
 }
 .nb-app .nb-tete-onglet .nb-ch-rb[aria-pressed="true"] {
-  border-color: var(--nb-lime);
+  border-color: var(--nb-lime-t);
 }
 .nb-app .nb-tete-onglet .nb-compteur {
   top: -2px;
@@ -81,7 +81,7 @@
   padding: 3px;
   border-radius: 20px;
   background: var(--nb-surface);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(var(--nb-voile), 0.06);
 }
 .nb-app .nb-page.nb-fil > .nb-fil-onglets [role="tab"],
 .nb-app .nb-rh-fil > .nb-fil-onglets [role="tab"],
@@ -102,7 +102,7 @@
 .nb-app .nb-cr-seg button {
   font-size: 13px;
   font-weight: 600;
-  color: #c9d6d2;
+  color: var(--nb-t-c9d6d2, #c9d6d2);
 }
 .nb-app .nb-page.nb-fil > .nb-fil-onglets [role="tab"][aria-selected="true"],
 .nb-app .nb-rh-fil > .nb-fil-onglets [role="tab"][aria-selected="true"],
@@ -172,7 +172,7 @@
   margin: 4px 20px 10px;
   padding: 3px;
   min-height: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(var(--nb-voile), 0.06);
   border-radius: 20px;
   background: var(--nb-surface);
   overflow-x: auto;
@@ -187,7 +187,7 @@
   justify-content: center;
   font-size: 13px;
   font-weight: 600;
-  color: #c9d6d2;
+  color: var(--nb-t-c9d6d2, #c9d6d2);
   white-space: nowrap;
 }
 .nb-app .nb-rh-vues a[aria-current="page"],
@@ -206,16 +206,16 @@
 
 /* « Mon profil recruteur »: a person's profile (docs/profil-personne), without portfolio. */
 .nb-app .nb-rc-vitrine .nb-pf-alias a {
-  color: var(--nb-lime);
+  color: var(--nb-lime-t);
   font-weight: 600;
 }
 .nb-app .nb-rc-vitrine .nb-pf-st svg {
-  color: var(--nb-ambre);
+  color: var(--nb-ambre-t);
 }
 .nb-app .nb-rc-profil-dom {
   background: rgba(166, 242, 107, 0.12);
   border-color: rgba(166, 242, 107, 0.33);
-  color: var(--nb-lime);
+  color: var(--nb-lime-t);
 }
 .nb-app .nb-rc-profil-dom i {
   background: var(--nb-lime);
@@ -226,7 +226,7 @@
 .nb-app .nb-rc-vitrine a.nb-pf-rb {
   border-radius: 50%;
   background: var(--nb-surface);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(var(--nb-voile), 0.08);
   color: var(--nb-creme);
 }
 .nb-app .nb-rc-vitrine .nb-rc-mail,

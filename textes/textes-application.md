@@ -9690,6 +9690,14 @@ Conventions :
 | `phoneCareer.reglages.application` | Application |
 | `phoneCareer.reglages.language` | Langue |
 | `phoneCareer.reglages.french` | Français |
+| `phoneCareer.reglages.theme.title` | Apparence |
+| `phoneCareer.reglages.theme.text` | Les couleurs de l’appli sur ce téléphone. |
+| `phoneCareer.reglages.theme.sombre` | Sombre |
+| `phoneCareer.reglages.theme.sombreText` | Fond nuit, le design d’origine |
+| `phoneCareer.reglages.theme.clair` | Clair |
+| `phoneCareer.reglages.theme.clairText` | Fond crème doux, texte Sapin |
+| `phoneCareer.reglages.theme.auto` | Comme mon téléphone |
+| `phoneCareer.reglages.theme.autoText` | Clair le jour ou sombre, selon le réglage du téléphone |
 | `phoneCareer.reglages.help` | Aide et contact |
 | `phoneCareer.reglages.signOut` | Se déconnecter |
 | `phoneCareer.reglages.signOutQuestion` | Se déconnecter ? |

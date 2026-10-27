@@ -2,9 +2,7 @@ import { Suspense, type ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { AppMotionRoot } from "@/components/motion/app-motion-root";
 import { Toaster } from "@/components/motion/toaster";
-import { AppearanceRoot } from "@/components/talent/appearance";
 import { OfflineDrafts } from "@/components/talent/offline-drafts";
-import { appearanceScript } from "@/lib/appearance";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
 import { orbiActions } from "@/lib/orbi";
 import {
@@ -18,7 +16,7 @@ import {
 import { recruiterOrbiActions } from "@/server/services/recruiter-orbi";
 import { phoneThemeScript } from "@/lib/phone-theme";
 import { PhoneArrivals } from "./arrivals";
-import { PhoneThemeColor } from "./theme-color";
+import { PhoneThemeRoot } from "./theme-root";
 import { PhoneNav } from "./nav";
 import { Opening } from "./opening";
 import { openingScript } from "./opening-script";
@@ -28,7 +26,7 @@ import { PhoneStack } from "./stack";
 import { ViewSync } from "./view-sync";
 
 /**
- * The talent space on a phone (Modèle B, docs/modele-b): dark only, the five tabs kept mounted
+ * The talent space on a phone (Modèle B, docs/modele-b): dark, or light « Crème doux » by choice, the five tabs kept mounted
  * under the pages, the pill menu (docs/fil-menu-publication), Orbi floating on each tab, the logo alone for 1.2 s
  * while everything loads behind it (brief § 3).
  */
@@ -135,16 +133,14 @@ export async function PhoneShell({
     >
       {/* Before the first paint: the logo alone, and the dark class of the screens without a mockup. */}
       <script dangerouslySetInnerHTML={{ __html: openingScript(tBrand("brand")) }} />
-      <script dangerouslySetInnerHTML={{ __html: appearanceScript("dark") }} />
-      <script dangerouslySetInnerHTML={{ __html: phoneThemeScript() }} />
-      <AppearanceRoot appearance="dark" />
+      <script dangerouslySetInnerHTML={{ __html: phoneThemeScript(true) }} />
+      <PhoneThemeRoot />
       <Opening />
       <ViewSync view="phone" />
       <AppMotionRoot reduce={reduceMotion} />
       <Toaster label={t("toasts")} closeLabel={t("close")} placement="top" />
       <PhoneArrivals />
       <PhonePreload />
-      <PhoneThemeColor />
       <OfflineDrafts
         scope={account.id}
         labels={{

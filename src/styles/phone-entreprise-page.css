@@ -46,10 +46,10 @@
 
 .nb-co-globe {
   display: inline-flex;
-  color: var(--nb-lime);
+  color: var(--nb-lime-t);
 }
 .nb-co .nb-pf-st[data-recrute] {
-  color: var(--nb-lime);
+  color: var(--nb-lime-t);
   border: 1px solid rgba(166, 242, 107, 0.3);
 }
 
@@ -91,7 +91,7 @@
   padding: 12px;
   border-radius: 18px;
   background: var(--nb-surface);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(var(--nb-voile), 0.06);
   min-width: 0;
 }
 .nb-co-fait > i {
@@ -103,7 +103,7 @@
   align-items: center;
   justify-content: center;
   background: rgba(166, 242, 107, 0.12);
-  color: var(--nb-lime);
+  color: var(--nb-lime-t);
 }
 .nb-co-fait small {
   font-size: 11px;
@@ -118,7 +118,7 @@
 .nb-co-fait em {
   font-style: normal;
   font-size: 11.5px;
-  color: #c9d6d2;
+  color: var(--nb-t-c9d6d2, #c9d6d2);
 }
 .nb-co-site {
   display: flex;
@@ -129,7 +129,7 @@
   padding: 0 14px;
   border-radius: 16px;
   background: var(--nb-surface);
-  color: var(--nb-lime);
+  color: var(--nb-lime-t);
   font-size: 13.5px;
   font-weight: 600;
   text-decoration: none;
@@ -160,7 +160,7 @@
   padding: 10px 12px;
   border-radius: 20px;
   background: var(--nb-surface);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(var(--nb-voile), 0.06);
 }
 .nb-co-membre-l {
   display: flex;
@@ -184,14 +184,14 @@
 }
 .nb-co-membre-t span {
   font-size: 12.5px;
-  color: #c9d6d2;
+  color: var(--nb-t-c9d6d2, #c9d6d2);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .nb-co-membre-t small {
   font-size: 11px;
-  color: var(--nb-lime);
+  color: var(--nb-lime-t);
 }
 .nb-co-membre-t small:empty {
   display: none;

@@ -11669,6 +11669,16 @@
       "application": "Application",
       "language": "Langue",
       "french": "Français",
+      "theme": {
+        "title": "Apparence",
+        "text": "Les couleurs de l’appli sur ce téléphone.",
+        "sombre": "Sombre",
+        "sombreText": "Fond nuit, le design d’origine",
+        "clair": "Clair",
+        "clairText": "Fond crème doux, texte Sapin",
+        "auto": "Comme mon téléphone",
+        "autoText": "Clair le jour ou sombre, selon le réglage du téléphone"
+      },
       "help": "Aide et contact",
       "signOut": "Se déconnecter",
       "signOutQuestion": "Se déconnecter ?",

@@ -4951,3 +4951,9 @@ bibliothèque, et se supprime.
 - Entreprises : la recherche trouve toutes les organisations par leur nom, qu'elles recrutent ou non (avant, seulement celles avec une offre ouverte). Celles qui recrutent passent en premier.
 - « Personnes à connaître », le compteur des filtres et les demandes de mise en relation suivent la même règle.
 - Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
+## 2026-10-27 · Thème clair « Crème doux » de l'appli téléphone
+
+- Paramètres › Apparence (talent et recruteur) : Sombre (par défaut), Clair, ou « Comme mon téléphone ». Choix gardé sur le téléphone (localStorage `jm-theme`), appliqué avant le premier affichage (`phoneThemeScript(true)`) et à chaud (`PhoneThemeRoot`, `<html data-nb-theme>`).
+- Palette claire : fond #F2EDE5, cartes #FBF8F3, texte Sapin #0F3F37, accents Lime avec texte Sapin ; versions foncées des accents pour le texte (contraste AA).
+- Toutes les couleurs écrites en dur des CSS téléphone passent par des jetons (`--nb-t-…`, `--nb-f-…`, `--nb-voile`, `--nb-nuit-rgb`, `--nb-encre`) avec la valeur sombre en repli : le sombre est inchangé. Restent sombres : appel vidéo, caméra, visionneuse, aperçus papier des CV.
+- Pages de connexion : toujours sombres.
