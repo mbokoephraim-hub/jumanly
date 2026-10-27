@@ -4788,3 +4788,11 @@ Modèle B ; feuille `src/styles/phone-chat.css`, classes `nb-ch-`, textes `phone
   reste). Titres de rubrique à 16 px au lieu de 19 px.
 - Fond de l'onglet Explorer : le même que Fil, Carrière et les autres onglets (`--nb-nuit`), au lieu
   du noir plus profond.
+
+## Correctif : Chat sans mise en forme sur jumanly.io (27 octobre 2026)
+
+Après la mise en ligne, un téléphone resté ouvert affichait le nouveau Chat avec l'ancienne
+feuille de style globale (texte brut, onglets collés). Les styles du Chat sont maintenant chargés
+avec ses composants (`parts.tsx`) et non plus par `globals.css`. Vérifié : lint, types, build,
+e2e `chat-v2` et `modele-b-messages` (téléphone), feuille du Chat chargée à part sur
+`/app/messages`.
