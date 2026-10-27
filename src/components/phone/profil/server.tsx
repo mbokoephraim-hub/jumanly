@@ -107,7 +107,10 @@ export async function profileView(
     }
   };
   const shares = familyShares(person.skills.map((skill) => skill.category));
-  const domain = person.sector ?? (shares[0] ? family(shares[0].family) : null);
+  const recruiter = person.recruiter;
+  const domain = recruiter
+    ? (recruiter.organization?.name ?? null)
+    : (person.sector ?? (shares[0] ? family(shares[0].family) : null));
   const bannerKey = colorOf(domain ?? person.name);
   const code = countryCode(person.country);
   const country = code ? countryName(code) : null;
@@ -354,7 +357,7 @@ export async function profileView(
     verified: person.verified,
     handle: t("handle", { handle: person.handle ?? handleFrom(person.name) }),
     place,
-    bio: person.headline,
+    bio: recruiter?.headline ?? person.headline,
     about: person.about ? { title: person.aboutTitle, text: person.about } : null,
     connections: person.connections,
     contract: person.contract
@@ -377,5 +380,15 @@ export async function profileView(
     files,
     link: person.link,
     conversationId: person.conversationId,
+    recruiter: recruiter
+      ? {
+          post: recruiter.jobTitle,
+          organization: recruiter.organization,
+          hiringNow: recruiter.hiringNow,
+          seeking: recruiter.seeking,
+          domains: recruiter.domains,
+          offers: t("recruiter.offers", { count: recruiter.offers }),
+        }
+      : null,
   };
 }

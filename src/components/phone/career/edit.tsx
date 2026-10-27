@@ -347,7 +347,17 @@ export type HeadValues = {
  * « Modifier le profil » (planche Carrière-modifier, feuille Carrière-photo): the photo, the name,
  * the title, the city, the bio and the availability; « Paramètres du compte » below.
  */
-export function HeadForm({ values }: { values: HeadValues }) {
+export function HeadForm({
+  values,
+  recruiter = false,
+}: {
+  values: HeadValues;
+  /**
+   * A recruiter's own profile (Ephraïm 27/10/2026): the title and « Recrute en ce moment » are
+   * set in « Recrutement », so the title and the talent's availability are left out here.
+   */
+  recruiter?: boolean;
+}) {
   const t = useTranslations("phoneCareer.form");
   const router = useRouter();
   const [form, setForm] = useState(values);
@@ -459,18 +469,20 @@ export function HeadForm({ values }: { values: HeadValues }) {
       <p id="ca-alias-aide" className="nb-meta nb-ca-aide">
         {t("handleHint")}
       </p>
-      <Field label={t("headline")}>
-        {(id) => (
-          <input
-            id={id}
-            className="nb-ca-in"
-            value={form.headline}
-            onChange={(event) => set({ headline: event.target.value })}
-            placeholder={t("headlinePlaceholder")}
-            maxLength={120}
-          />
-        )}
-      </Field>
+      {recruiter ? null : (
+        <Field label={t("headline")}>
+          {(id) => (
+            <input
+              id={id}
+              className="nb-ca-in"
+              value={form.headline}
+              onChange={(event) => set({ headline: event.target.value })}
+              placeholder={t("headlinePlaceholder")}
+              maxLength={120}
+            />
+          )}
+        </Field>
+      )}
       <Field label={t("city")}>
         {(id) => (
           <input
@@ -492,15 +504,17 @@ export function HeadForm({ values }: { values: HeadValues }) {
         </span>
         <PhoneIcon name="chevron" size={18} />
       </Link>
-      <Chips
-        label={t("availability")}
-        value={form.availability}
-        onChange={(availability) => set({ availability })}
-        options={(["open", "listening", "not_looking"] as const).map((value) => ({
-          value,
-          text: t(`availabilityOption.${value}`),
-        }))}
-      />
+      {recruiter ? null : (
+        <Chips
+          label={t("availability")}
+          value={form.availability}
+          onChange={(availability) => set({ availability })}
+          options={(["open", "listening", "not_looking"] as const).map((value) => ({
+            value,
+            text: t(`availabilityOption.${value}`),
+          }))}
+        />
+      )}
       <h2 className="nb-ca-sous">{t("socials")}</h2>
       <p className="nb-meta nb-ca-aide">{t("socialsHint")}</p>
       {SOCIAL_KINDS.map((kind) => (

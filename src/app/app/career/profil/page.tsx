@@ -23,12 +23,16 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CareerEditPage() {
   const user = await requireUser("/app/career/profil");
   if (!(await isPhone())) redirect("/app/profil?fenetre=modifier");
-  const profile = await getFullProfile(db, user.id);
+  const [profile, recruiter] = await Promise.all([
+    getFullProfile(db, user.id),
+    db.recruiterProfile.findUnique({ where: { userId: user.id }, select: { id: true } }),
+  ]);
   const name = profile.user.name;
   const socials = parseSocialLinks(profile.socialLinks);
   return (
     <CareerTexts>
       <HeadForm
+        recruiter={recruiter !== null}
         values={{
           name,
           handle: profile.handle ?? handleOf(name),

@@ -2,7 +2,7 @@ import type { SocialKind } from "@/lib/social-links";
 
 /** The tabs of a person's profile (docs/profil-personne § Onglets), in the order of the segment. */
 export const PROFILE_TABS = ["publications", "apropos", "realisations", "portfolio"] as const;
-export type ProfileTab = (typeof PROFILE_TABS)[number];
+export type ProfileTab = (typeof PROFILE_TABS)[number] | "suivi";
 
 /**
  * A person's profile as the phone shows it (docs/profil-personne, maquette `Profil.dc.html`):
@@ -32,6 +32,16 @@ export type ProfileView = {
   /** « À propos », before the skills: a title and up to 400 characters on who they are. */
   about: { title: string | null; text: string } | null;
   connections: number;
+  /** A recruiter's profile (Ephraïm 27/10/2026): no portfolio, the post and the hiring. */
+  recruiter: {
+    post: string | null;
+    organization: { name: string; slug: string } | null;
+    hiringNow: boolean;
+    seeking: string | null;
+    domains: string[];
+    /** « 3 offres en cours ». */
+    offers: string;
+  } | null;
   contract: string | null;
   activity: string | null;
   common: {

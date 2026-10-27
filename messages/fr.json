@@ -10669,7 +10669,8 @@
       "publications": "Publications",
       "apropos": "À propos",
       "realisations": "Réalisations",
-      "portfolio": "Portfolio"
+      "portfolio": "Portfolio",
+      "suivi": "Suivi"
     },
     "skills": "Compétences",
     "skillsCount": "{count, plural, =0 {Aucune compétence} one {# compétence} other {# compétences}}",
@@ -10752,7 +10753,23 @@
       "error": "Cette photo n’a pas pu être enregistrée. Essayez une image JPEG ou PNG de moins de 5 Mo.",
       "failed": "Une erreur est survenue. Réessayez."
     },
-    "photoOpen": "Voir la photo de profil en grand"
+    "photoOpen": "Voir la photo de profil en grand",
+    "own": {
+      "edit": "Modifier",
+      "add": "Ajouter",
+      "about": "À propos",
+      "aboutEmpty": "Présentez-vous en quelques lignes : qui vous êtes et ce que vous faites.",
+      "seekingEmpty": "Décrivez le candidat que vous cherchez : métier, niveau, qualités.",
+      "educationEmpty": "Diplôme, formation ou attestation.",
+      "languagesEmpty": "Ajoutez les langues que vous parlez."
+    },
+    "recruiter": {
+      "seeking": "Candidat recherché",
+      "domains": "Domaines de recrutement",
+      "hiringNow": "Recrute en ce moment",
+      "offers": "{count, plural, =0 {Aucune offre en cours} one {# offre en cours} other {# offres en cours}}",
+      "postAt": "{post} chez {org}"
+    }
   },
   "phoneCv": {
     "seo": "Créer un CV",
@@ -19489,7 +19506,20 @@
         "interview": "Votre téléphone n'est visible que par les candidats invités en entretien.",
         "connections": "Votre téléphone est visible par vos relations."
       },
-      "edit": "Modifier mon profil"
+      "edit": "Modifier mon profil",
+      "title": "Mon profil",
+      "editHead": "Modifier",
+      "editHiring": "Recrutement",
+      "seeAsOthers": "Voir mon profil comme les autres",
+      "languagesEdit": "Modifier"
+    },
+    "follow": {
+      "title": "Tableau de bord",
+      "offers": "Offres en cours",
+      "received": "Candidatures reçues",
+      "new": "Nouvelles à lire",
+      "stats": "Mes statistiques",
+      "statsHint": "Délai de réponse, entretiens, entonnoir des 30 derniers jours"
     },
     "edit": {
       "title": "Modifier mon profil",
@@ -19500,6 +19530,9 @@
       "orbiText": "Je recrute les talents {domains} de {org}. Je réponds à chaque candidature.",
       "orbiTextNoDomain": "Je recrute pour {org}. Je réponds à chaque candidature.",
       "orbiNote": "Orbi propose, vous relisez avant d'enregistrer.",
+      "seeking": "Le candidat que je recherche",
+      "seekingPlaceholder": "Ex. : un ou une comptable junior, rigoureux, à l’aise avec Excel, disponible à Kinshasa.",
+      "seekingCount": "{count} / 400",
       "hiringNow": "Badge « Recrute en ce moment »",
       "hiringNowLine": "Les talents vous trouvent plus vite",
       "contactsFor": "Qui voit votre téléphone",

@@ -82,6 +82,7 @@ export function PersonProfile({
   actions,
   more,
   initialTab = "apropos",
+  own,
 }: {
   person: ProfileView;
   posts: PostView[];
@@ -94,6 +95,8 @@ export function PersonProfile({
   /** « ··· »: the recruiter's menu; the profile's own (share, report) when left out. */
   more?: { label: string; onOpen: () => void };
   initialTab?: ProfileTab;
+  /** One's own recruiter profile: the pencils of each section, the photo to change, « Suivi ». */
+  own?: OwnProfile;
 }) {
   const t = useTranslations("phoneProfile");
   const tx = useTranslations("phoneExplorer.person");
@@ -107,7 +110,19 @@ export function PersonProfile({
   const [pending, start] = useTransition();
   const [photoOpen, setPhotoOpen] = useState(false);
   const shown = posts.filter((post) => !gone.includes(post.id));
-  const index = PROFILE_TABS.indexOf(tab);
+  // A recruiter has no portfolio; on their own profile, « Suivi » (their dashboard) instead.
+  const tabs: readonly ProfileTab[] = person.recruiter
+    ? own
+      ? ["publications", "apropos", "realisations", "suivi"]
+      : ["publications", "apropos", "realisations"]
+    : PROFILE_TABS;
+  const index = tabs.indexOf(tab);
+  const edit = (title: string, href: string | undefined, label?: string) =>
+    own && href ? (
+      <Link href={href} aria-label={`${label ?? t("own.edit")} : ${title}`}>
+        {label ?? t("own.edit")}
+      </Link>
+    ) : null;
 
   const share = async () => {
     setMenu(null);
@@ -269,6 +284,16 @@ export function PersonProfile({
             ) : null}
           </p>
         ) : null}
+        {person.recruiter?.post ? (
+          <p className="nb-pf-poste">
+            {person.recruiter.organization
+              ? t("recruiter.postAt", {
+                  post: person.recruiter.post,
+                  org: person.recruiter.organization.name,
+                })
+              : person.recruiter.post}
+          </p>
+        ) : null}
         {person.bio ? <p className="nb-pf-bio">{person.bio}</p> : null}
         <div className="nb-pf-chips">
           <span className="nb-pf-st">
@@ -324,6 +349,13 @@ export function PersonProfile({
               {t.rich("seeks", { contract: person.contract, b: (chunks) => <b>{chunks}</b> })}
             </span>
           ) : null}
+          {person.recruiter?.hiringNow ? (
+            <span className="nb-pf-st" data-recrute="">
+              <i className="nb-pf-point" aria-hidden />
+              {t("recruiter.hiringNow")}
+            </span>
+          ) : null}
+          {person.recruiter ? <span className="nb-pf-st">{person.recruiter.offers}</span> : null}
           {person.activity ? (
             <span className="nb-pf-st">
               <i className="nb-pf-point" aria-hidden />
@@ -353,13 +385,21 @@ export function PersonProfile({
       {actions}
 
       <div className="nb-pf-onglets">
-        <div className="nb-pf-seg" role="tablist" aria-label={t("tabs")}>
+        <div
+          className="nb-pf-seg"
+          role="tablist"
+          aria-label={t("tabs")}
+          style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}
+        >
           <span
             className="nb-pf-ind"
-            style={{ transform: `translateX(${index * 100}%)` }}
+            style={{
+              width: `calc((100% - 6px) / ${tabs.length})`,
+              transform: `translateX(${index * 100}%)`,
+            }}
             aria-hidden
           />
-          {PROFILE_TABS.map((key) => (
+          {tabs.map((key) => (
             <button
               key={key}
               type="button"
@@ -384,11 +424,51 @@ export function PersonProfile({
       >
         {tab === "apropos" ? (
           <>
-            {person.about ? <AboutCard about={person.about} /> : null}
-            <h2 className="nb-pf-h">
-              {t("skills")} <span>{person.skillsCount}</span>
-            </h2>
-            {person.skills.length === 0 ? (
+            {own ? (
+              <h2 className="nb-pf-h nb-cr-h">
+                {t("own.about")}
+                {edit(t("own.about"), own.edits.about, person.about ? undefined : t("own.add"))}
+              </h2>
+            ) : null}
+            {person.about ? (
+              <AboutCard about={person.about} />
+            ) : own ? (
+              <div className="nb-pf-presente">
+                <p>
+                  <Link href={own.edits.about}>{t("own.aboutEmpty")}</Link>
+                </p>
+              </div>
+            ) : null}
+            {person.recruiter && (person.recruiter.seeking || own) ? (
+              <>
+                <h2 className="nb-pf-h nb-cr-h" data-loin="">
+                  {t("recruiter.seeking")}
+                  {edit(t("recruiter.seeking"), own?.edits.seeking)}
+                </h2>
+                <div className="nb-pf-presente">
+                  {person.recruiter.seeking ? (
+                    <p>{person.recruiter.seeking}</p>
+                  ) : own ? (
+                    <p>
+                      <Link href={own.edits.seeking}>{t("own.seekingEmpty")}</Link>
+                    </p>
+                  ) : null}
+                  {person.recruiter.domains.length > 0 ? (
+                    <ul className="nb-pf-domaines" aria-label={t("recruiter.domains")}>
+                      {person.recruiter.domains.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
+              </>
+            ) : null}
+            {person.recruiter && person.skills.length === 0 ? null : (
+              <h2 className="nb-pf-h" data-loin={person.recruiter ? "" : undefined}>
+                {t("skills")} <span>{person.skillsCount}</span>
+              </h2>
+            )}
+            {person.recruiter && person.skills.length === 0 ? null : person.skills.length === 0 ? (
               <p className="nb-pf-vide">{t("noSkills", { name: person.first })}</p>
             ) : (
               <>
@@ -451,8 +531,11 @@ export function PersonProfile({
               </>
             )}
 
-            <h2 className="nb-pf-h" data-loin="">
-              {t("experiences")} <span>{person.experiencesCount}</span>
+            <h2 className={own ? "nb-pf-h nb-cr-h" : "nb-pf-h"} data-loin="">
+              <span className="nb-pf-h-t">
+                {t("experiences")} <span>{person.experiencesCount}</span>
+              </span>
+              {edit(t("experiences"), own?.edits.experience, t("own.add"))}
             </h2>
             {person.experiences.length === 0 ? (
               <p className="nb-pf-vide">{t("noExperience")}</p>
@@ -514,9 +597,15 @@ export function PersonProfile({
               })
             )}
 
-            {person.educations.length > 0 ? (
+            {person.educations.length > 0 || own ? (
               <>
-                <h2 className="nb-pf-h">{t("education")}</h2>
+                <h2 className={own ? "nb-pf-h nb-cr-h" : "nb-pf-h"}>
+                  {t("education")}
+                  {edit(t("education"), own?.edits.education, t("own.add"))}
+                </h2>
+                {person.educations.length === 0 ? (
+                  <p className="nb-pf-vide">{t("own.educationEmpty")}</p>
+                ) : null}
                 {person.educations.map((item) => (
                   <div key={item.id} className="nb-pf-form">
                     <span aria-hidden>
@@ -531,11 +620,15 @@ export function PersonProfile({
               </>
             ) : null}
 
-            {person.languages.length > 0 ? (
+            {person.languages.length > 0 || own ? (
               <>
-                <h2 className="nb-pf-h" data-loin="">
+                <h2 className={own ? "nb-pf-h nb-cr-h" : "nb-pf-h"} data-loin="">
                   {t("languages")}
+                  {own?.edits.languages}
                 </h2>
+                {person.languages.length === 0 ? (
+                  <p className="nb-pf-vide">{t("own.languagesEmpty")}</p>
+                ) : null}
                 <ul className="nb-pf-langues">
                   {person.languages.map((item) => (
                     <li key={item.name}>
@@ -571,6 +664,14 @@ export function PersonProfile({
             ))
           )
         ) : null}
+
+        {tab === "realisations" && own ? (
+          <h2 className="nb-pf-h nb-cr-h">
+            {t("tab.realisations")}
+            {edit(t("tab.realisations"), own.edits.projects, t("own.add"))}
+          </h2>
+        ) : null}
+        {tab === "suivi" ? own?.suivi : null}
 
         {tab === "realisations" ? (
           person.works.length === 0 ? (
@@ -679,6 +780,7 @@ export function PersonProfile({
         initials={person.initials}
         name={person.name}
         ring={ringOf(person.ring)}
+        editable={Boolean(own)}
       />
       <PostSheets
         post={open?.post ?? null}
@@ -813,3 +915,18 @@ export function AboutCard({ about }: { about: NonNullable<ProfileView["about"]> 
     </div>
   );
 }
+
+/** One's own recruiter profile (Ephraïm 27/10/2026): where each section is changed. */
+export type OwnProfile = {
+  edits: {
+    about: string;
+    seeking: string;
+    experience: string;
+    education: string;
+    projects: string;
+    /** « Langues et lieux »: its own button and sheet. */
+    languages: ReactNode;
+  };
+  /** « Suivi »: the recruiter's dashboard. */
+  suivi: ReactNode;
+};
