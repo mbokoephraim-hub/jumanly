@@ -14,7 +14,7 @@
   background:
     radial-gradient(120% 140% at 0% 0%, rgba(166, 242, 107, 0.16), transparent 60%),
     var(--nb-surface);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(var(--nb-voile), 0.06);
 }
 .nb-rg-moi > span {
   flex: 1;
@@ -42,7 +42,7 @@
   padding: 0 12px;
   border-radius: 999px;
   background: var(--nb-lime);
-  color: var(--nb-nuit);
+  color: var(--nb-encre);
   font-style: normal;
   font-size: 12.5px;
   font-weight: 700;
@@ -62,7 +62,7 @@
   margin: 0 16px;
   border-radius: 20px;
   background: var(--nb-surface);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(var(--nb-voile), 0.06);
   overflow: hidden;
 }
 .nb-rg-bloc .nb-ca-it,
@@ -94,23 +94,23 @@
   align-items: center;
   justify-content: center;
   background: rgba(166, 242, 107, 0.14);
-  color: var(--nb-lime);
+  color: var(--nb-lime-t);
 }
 .nb-rg-ic[data-ton="menthe"] {
   background: rgba(47, 211, 166, 0.14);
-  color: var(--nb-menthe);
+  color: var(--nb-menthe-t);
 }
 .nb-rg-ic[data-ton="bleu"] {
   background: rgba(120, 178, 240, 0.16);
-  color: #9cc8f5;
+  color: var(--nb-t-9cc8f5, #9cc8f5);
 }
 .nb-rg-ic[data-ton="ambre"] {
   background: rgba(255, 196, 92, 0.15);
-  color: #ffc45c;
+  color: var(--nb-t-ffc45c, #ffc45c);
 }
 .nb-rg-ic[data-ton="corail"] {
   background: rgba(240, 138, 124, 0.15);
-  color: var(--nb-corail);
+  color: var(--nb-corail-t);
 }
 .nb-rg-ic svg {
   margin: 0 !important;
@@ -124,4 +124,23 @@
 }
 .nb-rg-bloc .nb-ca-faq > p {
   border-bottom: 1px solid var(--nb-filet);
+}
+
+/* « Apparence » : un petit aperçu de chaque choix devant son nom. */
+.nb-rg-apercu {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--nb-filet-fort);
+  background: #0b1a1f;
+  box-shadow: inset 0 -10px 0 #13282c;
+}
+.nb-rg-apercu[data-theme="clair"] {
+  background: #f2ede5;
+  box-shadow: inset 0 -10px 0 #a6f26b;
+}
+.nb-rg-apercu[data-theme="auto"] {
+  background: linear-gradient(135deg, #f2ede5 50%, #0b1a1f 50%);
+  box-shadow: none;
 }
