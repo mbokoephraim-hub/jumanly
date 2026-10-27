@@ -7,27 +7,52 @@ import { z } from "zod";
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { parseCv } from "./cv";
 import { cvScore, targetSkillsFor } from "./cv-coach";
+import { familySkills } from "./job-families";
 import { answersSchema, SKILLS_ASSESSED, type Draft } from "./diagnostic-scoring";
 import { notify } from "./notifications";
 
 const DAY = 86_400_000;
 export const REMIND_AFTER_DAYS = 30;
 
+/** Title words too common to tell one job from another (« Social media manager »). */
+const vagueWords = new Set([
+  "manager",
+  "assistant",
+  "assistante",
+  "responsable",
+  "charge",
+  "chargé",
+  "chargée",
+  "chef",
+  "cheffe",
+  "agent",
+  "junior",
+  "senior",
+  "stagiaire",
+  "stage",
+  "officer",
+]);
+
 /** Words of a job title worth searching for in offer titles. */
 const titleWords = (role: string) =>
   role
     .split(/[\s,/·'-]+/)
     .map((word) => word.trim())
-    .filter((word) => word.length >= 4);
+    .filter((word) => word.length >= 4 && !vagueWords.has(word.toLowerCase()));
 
 /**
- * The skills most asked for in the published offers whose title is close to the target job
- * (`scope: "role"`), or in all published offers when none is (`scope: "all"`). `offers` is the
- * real number of offers compared.
+ * The skills assessed in the diagnostic, those of the target job first: the key skills of its
+ * family (`field`), then the ones most asked for in the published offers whose title is close to
+ * it (`scope: "role"`). Without a target job, the ones most asked for in all published offers
+ * (`scope: "all"`); with a target job matching nothing, none (the flow then asks about the skills
+ * the person named). `offers` is the real number of offers compared.
  */
 export async function demandedSkills(db: PrismaClient, role: string) {
   const { counts, offers, scope } = await skillDemand(db, role);
-  return { skills: counts.slice(0, SKILLS_ASSESSED).map(([name]) => name), offers, scope };
+  const family = familySkills(role);
+  const fromOffers = scope === "all" && role.trim() ? [] : counts.map(([name]) => name);
+  const skills = [...new Set([...family, ...fromOffers])].slice(0, SKILLS_ASSESSED);
+  return { skills, offers, scope, field: family.length > 0 };
 }
 
 /**

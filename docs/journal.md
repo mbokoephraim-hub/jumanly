@@ -4934,3 +4934,12 @@ bibliothèque, et se supprime.
 - Nouveaux champs `Organization.foundedYear`, `international`, `socialLinks`, modifiés dans « Profil de l'entreprise » au téléphone avec le pays du siège. Le formulaire de l'ordinateur ne les envoie pas : ils restent tels quels quand il enregistre.
 - Domaines : le champ Secteur, séparé par des virgules.
 - Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
+
+## 27/10/2026 · Compétences libres, niveau des langues, diagnostic lié au métier
+
+- Retours d'une utilisatrice transmis par Ephraïm, quatre points corrigés.
+- Compétences : quand la liste n'a pas la compétence cherchée, on peut l'ajouter telle qu'elle est écrite (feuille « Ajouter des compétences » du téléphone et écran « Ajouter une compétence » de l'ordinateur). Elle est créée dans `Skill` avec la catégorie `custom` (`findOrCreateSkill`), réutilisée si une autre personne tape le même nom, mais jamais proposée dans les recherches des autres.
+- Langues (téléphone) : chaque langue cochée demande son niveau (Débutant, Intermédiaire, Professionnel, Langue maternelle). Plus de « Professionnel » par défaut : on ne peut pas enregistrer sans niveau. « Notions » devient « Débutant » partout ; un ancien « Courant » reste affiché là où il avait été choisi.
+- Diagnostic : nouvelle réponse « Aucun niveau · Je ne connais pas cette compétence » (niveau 0). Elle ne demande pas de preuve, compte 0 point comme « Notions » et n'amène pas la question de suivi « Pouvez-vous le prouver ? ».
+- Diagnostic : les compétences évaluées sont d'abord les compétences clés du métier visé (familles de métiers, `src/server/services/job-families.ts` : social media, marketing digital, communication, data, finance, RH…), puis celles des offres proches. Les mots trop vagues d'un titre (« manager », « assistant », « chargé »…) ne servent plus à trouver les offres proches. Un métier qui ne correspond à rien ne reçoit plus les compétences de toutes les offres (Power BI, SQL…) : le diagnostic évalue les compétences que la personne a citées. Deux compétences ajoutées au référentiel : « Planification éditoriale », « Analyse des performances ».
+- Publié avec le contrôle rapide seulement (tsc, ESLint, compilation), à la demande d'Ephraïm.

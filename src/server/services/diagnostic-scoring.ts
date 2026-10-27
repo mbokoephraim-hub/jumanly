@@ -76,8 +76,8 @@ export const educationAnswers = [
   "doctorate",
 ] as const;
 
-/** Self-assessment levels: Notions, Intermédiaire, Avancé, Expert. */
-export const SKILL_LEVELS = [1, 2, 3, 4] as const;
+/** Self-assessment levels: Aucun niveau (0), Notions, Intermédiaire, Avancé, Expert. */
+export const SKILL_LEVELS = [0, 1, 2, 3, 4] as const;
 /** Skills assessed one by one (the most asked for in the offers of the target job). */
 export const SKILLS_ASSESSED = 5;
 
@@ -88,7 +88,8 @@ const text = (max: number) => z.string().trim().max(max).default("");
 
 export const skillCheckSchema = z.object({
   skill: z.string().trim().min(1).max(80),
-  level: z.coerce.number().int().min(1).max(4),
+  /** 0: « Je ne connais pas cette compétence » (no proof asked, « Rien encore » kept). */
+  level: z.coerce.number().int().min(0).max(4),
   proof: pick(choiceAnswers.skillProof),
 });
 export type SkillCheck = z.infer<typeof skillCheckSchema>;
@@ -250,7 +251,7 @@ export function ruleFollowUps(draft: Draft): { code: string; skill?: string }[] 
   else if (!achievement && worked) codes.push({ code: "achievementStory" });
   if (!draft.targetRole?.trim()) codes.push({ code: "energy" });
   if (draft.obstacle && draft.obstacle !== "a1") codes.push({ code: "obstacleTried" });
-  const unproven = draft.skillChecks?.find((item) => item.proof === "a4");
+  const unproven = draft.skillChecks?.find((item) => item.proof === "a4" && item.level > 0);
   if (unproven) codes.push({ code: "skillProof", skill: unproven.skill });
   if (draft.pitch === "a2" || draft.pitch === "a3") codes.push({ code: "pitch" });
   codes.push({ code: "nextJob" }, { code: "proudSkill" });
@@ -352,7 +353,8 @@ export function scoreDimensions(draft: Draft): DimensionScore[] {
         "skillLevels",
         checks.length === 0
           ? 0
-          : (p.skills.level * checks.reduce((sum, item) => sum + (item.level - 1) / 3, 0)) /
+          : (p.skills.level *
+              checks.reduce((sum, item) => sum + Math.max(0, item.level - 1) / 3, 0)) /
               checks.length,
         p.skills.level,
       ),

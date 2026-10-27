@@ -155,7 +155,7 @@ export default async function DiagnosticPage({
   const found = await demandedSkills(db, initial.targetRole ?? "");
   const skills: SkillSource =
     found.skills.length > 0
-      ? { names: found.skills, offers: found.offers, scope: found.scope }
+      ? { names: found.skills, offers: found.offers, scope: found.field ? "field" : found.scope }
       : { names: [], offers: 0, scope: "own" };
   const assessed = (initial.skillChecks ?? []).map((item) => item.skill);
   const tProfile = await getTranslations("talent.profile.education.level");

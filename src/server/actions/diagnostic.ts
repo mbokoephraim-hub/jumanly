@@ -31,7 +31,7 @@ function answersFromForm(formData: FormData) {
   const skillChecks = Array.from({ length: SKILLS_ASSESSED }, (_, index) => ({
     skill: formData.get(`skill-${index}`),
     level: formData.get(`skillLevel-${index}`),
-    proof: formData.get(`skillProof-${index}`),
+    proof: formData.get(`skillLevel-${index}`) === "0" ? "a4" : formData.get(`skillProof-${index}`),
   })).filter((item) => item.skill && item.level && item.proof);
   return {
     ...entries,
