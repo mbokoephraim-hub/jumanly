@@ -119,6 +119,12 @@ export async function RhCompteScreen({ ctx }: { ctx: HireContext }) {
         line={t("row.statsLine")}
       />
       <RhCompteRow
+        href="/app/fil/mes-publications"
+        icon="document"
+        title={t("row.posts")}
+        line={t("row.postsLine")}
+      />
+      <RhCompteRow
         href="/app/hire/compte/enregistrees"
         icon="signet"
         title={t("row.saved")}

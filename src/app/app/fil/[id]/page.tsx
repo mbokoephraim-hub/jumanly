@@ -30,16 +30,21 @@ export default async function FilPostPage({ params, searchParams }: PageProps<"/
   ]);
   if (!data) notFound();
   const fromNotifs = query.de === "notifs";
+  const fromMine = query.de === "mes-publications";
   return (
     <FilTexts>
       <PostDetail
         post={words.post(data.post)}
         replies={data.replies.map(words.reply)}
         me={meOf({ name: user.name, image: user.image ?? null })}
-        back={{
-          href: fromNotifs ? "/app/notifications" : "/app",
-          label: words.t(fromNotifs ? "detail.backNotifs" : "detail.back"),
-        }}
+        back={
+          fromMine
+            ? { href: "/app/fil/mes-publications", label: words.t("mine.title") }
+            : {
+                href: fromNotifs ? "/app/notifications" : "/app",
+                label: words.t(fromNotifs ? "detail.backNotifs" : "detail.back"),
+              }
+        }
         targets={targets}
       />
     </FilTexts>

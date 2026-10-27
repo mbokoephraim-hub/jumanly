@@ -155,3 +155,7 @@
   max-height: 125vw;
   border-radius: 18px;
 }
+.nb-fil-mes-aide {
+  padding: 4px 20px 8px;
+  font-size: 13.5px;
+}

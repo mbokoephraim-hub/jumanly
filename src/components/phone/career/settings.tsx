@@ -130,6 +130,9 @@ export function PhoneSettings({
         <Row href="/app/career/profil" icon="personne">
           {t("namePhoto")}
         </Row>
+        <Row href="/app/fil/mes-publications" icon="document" tone="menthe">
+          {t("posts")}
+        </Row>
         <div className="nb-ca-it" data-ligne="">
           <Tile icon="email" tone="bleu" />
           <span>{t("email")}</span>
