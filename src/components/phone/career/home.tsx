@@ -1136,7 +1136,13 @@ function ApplicationsPanel({ view }: { view: CareerView }) {
                 </li>
               ))}
             </ol>
-            {row.interview ? <p className="nb-cr-note">{row.interview}</p> : null}
+            {row.answer ? (
+              <p className="nb-cr-note" data-reponse="">
+                {row.answer}
+              </p>
+            ) : row.interview ? (
+              <p className="nb-cr-note">{row.interview}</p>
+            ) : null}
           </Link>
         </li>
       ))}

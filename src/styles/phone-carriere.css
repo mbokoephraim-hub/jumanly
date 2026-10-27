@@ -822,6 +822,10 @@ a.nb-cr-rb {
   height: 5px;
   margin-bottom: 5px;
 }
+.nb-cr .nb-cr-note[data-reponse] {
+  background: rgba(255, 255, 255, 0.06);
+  color: #e8f0ee;
+}
 .nb-cr .nb-cr-note {
   margin-top: 10px;
   padding: 8px 10px;

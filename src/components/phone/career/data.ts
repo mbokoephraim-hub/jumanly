@@ -130,6 +130,8 @@ export type CareerView = {
     step: number;
     /** « Entretien jeudi 29 oct. à 10 h · préparez-vous avec Orbi ». */
     interview: string | null;
+    /** The answer once given (« Non retenue », « Retirée »…), shown on the card. */
+    answer: string | null;
   }[];
   share: { url: string; qr: string; pdf: string | null; open: boolean };
   search: CareerSearchItem[];
@@ -386,6 +388,9 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
       meta: t("applications.meta", { company, when: daysAgo(row.createdAt) }),
       score: row.score,
       step: Math.max(0, Math.min(3, row.bars - 1)),
+      answer: ["notSelected", "withdrawn", "jobClosed", "hired", "offer"].includes(row.status)
+        ? t(`applications.status.${row.status}`)
+        : null,
       interview: row.interviewAt
         ? t("applications.interviewNote", {
             day: format.dateTime(row.interviewAt, {
