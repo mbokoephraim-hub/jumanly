@@ -14,7 +14,7 @@ import {
   PhoneLoginForm,
   PhoneResetForm,
   ProviderList,
-  SignupCodeForm,
+  SignupLinkSent,
   SignupEmailForm,
   SignupPasswordForm,
 } from "./auth";
@@ -206,13 +206,15 @@ export async function PhonePasswordPage({
   );
 }
 
-/** « Vérifiez votre boîte mail » (Modèle B, planche Code). */
+/** « Confirmez votre adresse » (Modèle B, planche Code): the link sent by e-mail. */
 export async function PhoneCodePage({
   email,
   recruiter = false,
+  expired = false,
 }: {
   email: string;
   recruiter?: boolean;
+  expired?: boolean;
 }) {
   const t = await getTranslations("phoneAccueil");
   const [before = "", after = ""] = t("code.subtitle", { email: "\u0000" }).split("\u0000");
@@ -230,7 +232,7 @@ export async function PhoneCodePage({
             </>
           }
         />
-        <SignupCodeForm email={email} />
+        <SignupLinkSent expired={expired} />
       </div>
     </div>
   );

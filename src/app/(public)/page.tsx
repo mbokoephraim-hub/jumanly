@@ -26,6 +26,7 @@ import {
   signatureLight,
   stagger,
 } from "@/components/site/marketing";
+import { EntryChooser } from "@/components/site/entry-chooser";
 import { InstallApp } from "@/components/site/install-app";
 import { CountUp, MotionRoot } from "@/components/site/motion";
 import { PublicCourseCard, PublicJobCard } from "@/components/site/public-cards";
@@ -207,22 +208,24 @@ export default async function HomePage() {
                 {lastWord}
               </span>
             </h1>
-            <p className={cx(lead, "jm-rise text-blanc/80")} style={stagger(3)}>
+            {/* Talent or recruiter, then « S'inscrire » or « Se connecter »: always in view. */}
+            <div className="jm-rise" style={stagger(3)}>
+              <EntryChooser
+                texts={{
+                  question: t("home.entry.question"),
+                  signup: t("home.entry.signup"),
+                  login: t("home.entry.login"),
+                  talent: {
+                    label: t("home.entry.talent.label"),
+                    text: t("home.entry.talent.text"),
+                  },
+                  rh: { label: t("home.entry.rh.label"), text: t("home.entry.rh.text") },
+                }}
+              />
+            </div>
+            <p className={cx(lead, "jm-rise text-blanc/80")} style={stagger(4)}>
               {t("home.hero.subtitle")}
             </p>
-            <div className="jm-rise flex flex-col gap-3 sm:flex-row" style={stagger(4)}>
-              <ButtonLink
-                href={signupHref({ profil: "talent" })}
-                size="lg"
-                iconAfter={chevron}
-                className="shadow-[0_0_32px_rgba(166,242,107,0.45)]"
-              >
-                {t("home.hero.ctaPrimary")}
-              </ButtonLink>
-              <ButtonLink href="/recruteurs" variant="inverse" size="lg">
-                {t("home.hero.ctaSecondary")}
-              </ButtonLink>
-            </div>
             <ul
               className="jm-rise flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-x-5 xl:flex-nowrap"
               style={stagger(5)}

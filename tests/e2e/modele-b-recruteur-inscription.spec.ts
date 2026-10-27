@@ -43,7 +43,7 @@ test.describe("Modèle B recruteur · inscription au téléphone", () => {
     await capture(page, "005-bienvenue-3");
     await expectAccessible(page);
 
-    await page.getByRole("link", { name: "Créer un compte" }).click();
+    await page.getByRole("link", { name: "S'inscrire" }).click();
     await expect(page).toHaveURL(/\/inscription\?profil=rh$/);
     await expect(page.getByRole("heading", { name: "Créer votre compte recruteur" })).toBeVisible();
     await capture(page, "006-inscription");

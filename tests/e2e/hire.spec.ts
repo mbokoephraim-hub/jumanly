@@ -3,7 +3,7 @@ import sharp from "sharp";
 import { expect, test, type Browser, type Page } from "./fixtures";
 import { expectAccessible } from "./a11y";
 import { fillOffer, publishFilledOffer, slugOf } from "./offer-flow";
-import { lastCode } from "./outbox";
+import { openConfirmationLink } from "./outbox";
 import { demo, logIn, testEmail } from "./session";
 import { openCandidateFile } from "./hire-wide";
 import { phoneRecruiterWithPage } from "./recruiter-phone";
@@ -31,8 +31,7 @@ async function signUpRecruiter(page: Page, email: string, orgName: string) {
   const since = Date.now();
   await page.getByRole("button", { name: "Créer mon compte" }).click();
   await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
-  await page.getByLabel("Code à 6 chiffres").fill(await lastCode(email, since));
-  await page.getByRole("button", { name: "Valider" }).click();
+  await openConfirmationLink(page, email, since);
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
   // First steps of a recruiter (planche recruteur-3 OBR1 to OBR3).
   await expect(page.getByRole("heading", { name: "Vous recrutez pour…" })).toBeVisible();

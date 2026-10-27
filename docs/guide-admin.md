@@ -57,7 +57,7 @@ loupe ouvre la recherche.
 1. Cherchez la personne par son nom ou son e-mail, puis ouvrez sa fiche.
 2. Regardez l'état du compte : e-mail vérifié ou non, double authentification, dernière connexion,
    organisations, attestations.
-3. Si l'e-mail n'est pas vérifié : « Renvoyer le code de vérification ». En dernier recours,
+3. Si l'e-mail n'est pas vérifié : « Renvoyer l'e-mail de vérification » (un nouveau lien de confirmation). En dernier recours,
    « Marquer comme vérifié » (avec un motif).
 4. Si la personne a perdu son mot de passe : « Envoyer un lien de réinitialisation ».
 5. La carte « Droits et quotas » montre ce que son forfait permet et ce qu'elle a déjà consommé.

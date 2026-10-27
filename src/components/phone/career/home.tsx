@@ -21,11 +21,11 @@ import {
 import { deleteCv, duplicateCv, setPrimaryCv } from "@/server/actions/cv";
 import { FilAvatar } from "../fil/avatar";
 import { PhoneIcon } from "../icon";
+import { PhotoViewer } from "../profil/photo-viewer";
 import { AboutCard, ringOf, SOCIAL_PATHS, VerifiedMark } from "../profil/profile";
 import { PhoneSheet } from "../sheet";
 import type { Availability, CareerView } from "./data";
 import { CvExportButton } from "./cv-export";
-import { PhotoViewer } from "./photo-viewer";
 import { CareerSearch } from "./search";
 import { ShareSheet } from "./share";
 import { LanguagesSheet, SkillsSheet } from "./sheets";
@@ -490,6 +490,7 @@ export function PhoneCareer({ view }: { view: CareerView }) {
         initials={view.initials}
         name={view.name}
         ring={ringOf(person.ring)}
+        editable
       />
       <SkillsSheet
         open={sheet === "competences"}

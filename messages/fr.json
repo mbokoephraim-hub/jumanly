@@ -175,8 +175,6 @@
       "eyebrow": "Formation · Carrière · Recrutement",
       "title": "Learn. Grow. Connect.",
       "subtitle": "Jumanly réunit la formation, le développement de carrière, les offres d'emploi et le recrutement sur une seule plateforme. Formez-vous, construisez un profil qui vous ressemble et rencontrez les employeurs qui ont besoin de vos compétences.",
-      "ctaPrimary": "Créer mon compte gratuit",
-      "ctaSecondary": "Je recrute",
       "reassurance1": "Inscription gratuite",
       "reassurance2": "Candidatures toujours gratuites",
       "reassurance3": "Mobile Money et carte",
@@ -187,6 +185,19 @@
         "matchText": "87 % compatible · Pourquoi ?",
         "matchShort": "87 % compatible"
       }
+    },
+    "entry": {
+      "question": "Vous êtes…",
+      "talent": {
+        "label": "Talent",
+        "text": "Je me forme, je construis mon profil et je postule, toujours gratuitement."
+      },
+      "rh": {
+        "label": "Recruteur",
+        "text": "Je publie des offres et je trouve des talents, seul ou avec mon entreprise."
+      },
+      "signup": "S'inscrire",
+      "login": "Se connecter"
     },
     "audiences": {
       "title": "Une plateforme, trois façons d'avancer",
@@ -1639,7 +1650,9 @@
       "title": "Confirmez votre connexion",
       "text": "Votre compte est protégé par la vérification en deux étapes. Nous venons d'envoyer un code à {digits} chiffres à votre adresse e-mail."
     },
-    "deleted": "Votre compte et toutes vos données ont été supprimés. Vous pouvez créer un nouveau compte à tout moment, il repartira de zéro."
+    "deleted": "Votre compte et toutes vos données ont été supprimés. Vous pouvez créer un nouveau compte à tout moment, il repartira de zéro.",
+    "confirmed": "Votre adresse est confirmée. Connectez-vous pour ouvrir votre espace.",
+    "linkExpired": "Ce lien de confirmation a expiré. Connectez-vous : nous vous en envoyons un nouveau."
   },
   "forgot": {
     "seo": {
@@ -2220,11 +2233,16 @@
       "submitting": "Création…"
     },
     "verify": {
-      "head": "Vérifier l'e-mail",
-      "title": "Entrez le code",
-      "text": "Nous l'avons envoyé à {email}",
+      "head": "Confirmer l'e-mail",
+      "title": "Ouvrez votre boîte mail",
+      "text": "Nous avons envoyé un lien de confirmation à {email}",
+      "how": "Touchez « Confirmer mon adresse » dans l'e-mail, sur ce téléphone ou sur votre ordinateur : votre espace s'ouvre aussitôt.",
+      "expired": "Ce lien a expiré. Demandez-en un nouveau ci-dessous.",
+      "resent": "Un nouveau lien vous a été envoyé.",
+      "done": "Adresse déjà confirmée ?",
+      "login": "Se connecter",
       "notReceived": "Pas reçu ? Regardez dans les indésirables ou",
-      "resend": "renvoyez le code",
+      "resend": "renvoyez le lien",
       "change": "Modifier l'adresse",
       "submit": "Valider",
       "submitting": "Vérification…"
@@ -9709,8 +9727,11 @@
       "seo": "Bienvenue sur Jumanly",
       "next": "Écran suivant",
       "dot": "Écran {n} : {word}",
-      "signup": "Créer un compte",
+      "signup": "S'inscrire",
       "login": "Se connecter",
+      "who": "Vous êtes",
+      "talent": "Talent",
+      "recruiter": "Recruteur",
       "s1": {
         "word": "Learn",
         "title": "Apprenez ce que les employeurs cherchent",
@@ -9799,17 +9820,20 @@
       "submitting": "Création…"
     },
     "code": {
-      "title": "Vérifiez votre boîte mail",
-      "subtitle": "Nous avons envoyé un code à 6 chiffres à {email}.",
+      "title": "Confirmez votre adresse",
+      "subtitle": "Nous avons envoyé un lien de confirmation à {email}.",
+      "how": "Ouvrez l'e-mail et touchez « Confirmer mon adresse » : votre espace s'ouvre aussitôt, sur ce téléphone comme sur un ordinateur.",
+      "expired": "Ce lien a expiré. Demandez-en un nouveau.",
+      "login": "Déjà confirmé ? Se connecter",
       "label": "Code à 6 chiffres",
       "error": "Le code contient 6 chiffres.",
       "submit": "Vérifier",
       "submitting": "Vérification…",
-      "resend": "Renvoyer le code",
+      "resend": "Renvoyer le lien",
       "resendIn": "Renvoyer dans {time}",
-      "resent": "Nouveau code envoyé.",
+      "resent": "Nouveau lien envoyé.",
       "change": "Changer d'adresse",
-      "help": "Pas reçu ? Regardez dans les spams. Le code reste valable {minutes} minutes."
+      "help": "Pas reçu ? Regardez dans les spams. Le lien reste valable {hours} heures."
     },
     "login": {
       "title": "Bon retour",
@@ -10711,7 +10735,30 @@
       "line": "{job} · {company}",
       "rule": "Calculé sans le nom, la photo, l’âge, le genre ni la nationalité. Orbi recommande, vous décidez : aucune candidature n’est écartée automatiquement.",
       "ok": "Compris"
-    }
+    },
+    "photoViewer": {
+      "title": "Photo de profil",
+      "close": "Fermer",
+      "photoOf": "Photo de profil de {name}",
+      "initialsOf": "Initiales de {name}",
+      "initialsHint": "Sans photo, Jumanly affiche les initiales de votre nom.",
+      "change": "Modifier",
+      "crop": "Recadrer",
+      "initials": "Initiales",
+      "initialsBack": "Vos initiales sont de retour.",
+      "back": "Retour",
+      "cropTitle": "Recadrer la photo",
+      "drag": "Faites glisser la photo pour la placer dans le cercle, puis réglez le zoom.",
+      "zoom": "Zoom",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "camera": "Prendre une photo",
+      "gallery": "Choisir dans la galerie",
+      "saved": "Photo mise à jour.",
+      "error": "Cette photo n’a pas pu être enregistrée. Essayez une image JPEG ou PNG de moins de 5 Mo.",
+      "failed": "Une erreur est survenue. Réessayez."
+    },
+    "photoOpen": "Voir la photo de profil en grand"
   },
   "phoneCv": {
     "seo": "Créer un CV",
@@ -11224,23 +11271,6 @@
     "bannerEdit": "Changer la bannière",
     "photoEdit": "Changer la photo",
     "photoOpen": "Voir ma photo de profil en grand",
-    "photoViewer": {
-      "title": "Photo de profil",
-      "close": "Fermer",
-      "photoOf": "Photo de profil de {name}",
-      "initialsOf": "Initiales de {name}",
-      "initialsHint": "Sans photo, Jumanly affiche les initiales de votre nom.",
-      "change": "Modifier",
-      "crop": "Recadrer",
-      "initials": "Initiales",
-      "initialsBack": "Vos initiales sont de retour.",
-      "back": "Retour",
-      "cropTitle": "Recadrer la photo",
-      "drag": "Faites glisser la photo pour la placer dans le cercle, puis réglez le zoom.",
-      "zoom": "Zoom",
-      "cancel": "Annuler",
-      "save": "Enregistrer"
-    },
     "socialAdd": "Ajouter un réseau ou un site",
     "availabilityChange": "Disponibilité : {current}. Toucher pour changer.",
     "completion": {
@@ -19723,8 +19753,8 @@
         "subtitle": "Vous en serez l'administrateur"
       },
       "code": {
-        "title": "Vérifiez votre e-mail",
-        "subtitle": "Un code à 6 chiffres vient de partir"
+        "title": "Confirmez votre e-mail",
+        "subtitle": "Un lien de confirmation vient de partir"
       },
       "role": {
         "title": "Votre rôle",
@@ -19786,11 +19816,13 @@
       }
     },
     "code": {
-      "sentTo": "Envoyé à {email}",
+      "sentTo": "Lien envoyé à {email}",
+      "how": "Ouvrez l'e-mail et cliquez sur « Confirmer mon adresse » : vous revenez ici, connecté, pour la suite de l'inscription.",
+      "login": "Déjà confirmé ? Se connecter",
       "label": "Code reçu",
       "aria": "Code à 6 chiffres",
-      "resend": "Renvoyer le code",
-      "resent": "Nouveau code envoyé à {email}",
+      "resend": "Renvoyer le lien",
+      "resent": "Nouveau lien envoyé à {email}",
       "error": "Le code compte 6 chiffres"
     },
     "role": {
@@ -22580,6 +22612,13 @@
       "p2": "Il est valable {minutes} minutes. Ne le communiquez à personne : l'équipe Jumanly ne vous le demandera jamais.",
       "p3": "Vous n'êtes pas à l'origine de cette demande ? Ignorez cet e-mail."
     },
+    "verifyLink": {
+      "subject": "Confirmez votre adresse e-mail Jumanly",
+      "preheader": "Un clic et votre espace s'ouvre.",
+      "p1": "Pour terminer votre inscription, confirmez que cette adresse est bien la vôtre. Touchez le bouton ci-dessous, depuis votre téléphone ou votre ordinateur : votre espace Jumanly s'ouvre aussitôt.",
+      "cta": "Confirmer mon adresse",
+      "p2": "Le lien est valable {hours} heures. Ne le transférez à personne."
+    },
     "magicLink": {
       "subject": "Votre lien de connexion à Jumanly",
       "preheader": "Connectez-vous en un clic. Lien valable {minutes} minutes.",
@@ -24293,7 +24332,7 @@
           "reason": "Comment l'adresse a été confirmée",
           "submit": "Marquer comme vérifié"
         },
-        "resendHint": "Un nouveau code est envoyé à l'adresse du compte.",
+        "resendHint": "Un nouveau lien de confirmation est envoyé à l'adresse du compte.",
         "credits": {
           "text": "Ajouter des crédits",
           "confirm": "Les crédits s'ajoutent au quota de la période en cours, jusqu'à la date indiquée. Un nouvel ajout remplace le précédent et s'y additionne.",
@@ -24348,7 +24387,7 @@
         "deleted": "Ce compte est déjà supprimé."
       },
       "done": {
-        "codeSent": "Code de vérification envoyé.",
+        "codeSent": "Lien de confirmation envoyé.",
         "resetSent": "Lien de réinitialisation envoyé.",
         "verified": "Adresse e-mail marquée comme vérifiée.",
         "planGranted": "Forfait offert.",

@@ -1,5 +1,5 @@
 import { expect, type Page } from "@playwright/test";
-import { lastCode } from "./outbox";
+import { openConfirmationLink } from "./outbox";
 import { PASSWORD } from "./session";
 
 // The recruiter's sign-up on a phone (Modèle B recruteur, M2): e-mail, password, code, then the
@@ -21,8 +21,7 @@ export async function phoneRecruiterAccount(page: Page, email: string) {
   const sent = Date.now();
   await page.getByRole("button", { name: "Créer mon compte" }).click();
   await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
-  await page.getByLabel("Code à 6 chiffres").fill(await lastCode(email, sent));
-  await page.getByRole("button", { name: "Vérifier" }).click();
+  await openConfirmationLink(page, email, sent);
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 }
 

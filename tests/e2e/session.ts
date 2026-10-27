@@ -1,6 +1,6 @@
 import { expect, type Page } from "@playwright/test";
 import { strToU8, zipSync } from "fflate";
-import { codesSince, lastCode } from "./outbox";
+import { codesSince, lastCode, openConfirmationLink } from "./outbox";
 
 /** Demo accounts from prisma/seed/accounts.ts (local and preview only). */
 export const DEMO_PASSWORD = "Demo-Jumanly-2026";
@@ -87,7 +87,7 @@ export const PASSWORD = "kinshasa-2026";
 
 /**
  * A talent's sign-up from a plan chosen on /tarifs (refonte mobile, lot 2): « Continuer avec mon
- * e-mail », the account, then the 6-digit code. Ends on « Compte validé » (/app/bienvenue).
+ * e-mail », the account, then the link of the confirmation e-mail. Ends on « Compte validé » (/app/bienvenue).
  */
 export async function signUpFromPricing(page: Page, planButton: string, email: string) {
   await page.goto("/tarifs");
@@ -151,7 +151,7 @@ export async function signUpWithEmail(page: Page, email: string, name = "Awa Fic
   if (await onPhone(page)) {
     // The tests of the intro play it on the computer; on a phone, Modèle B has the logo alone.
     await skipIntro(page);
-    // Modèle B (planche Accueil): the e-mail, the password, then the code. The name comes at the
+    // Modèle B (planche Accueil): the e-mail, the password, then the confirmation link. The name comes at the
     // first step of the profile.
     await page.getByLabel("Adresse e-mail").fill(email);
     await page.getByRole("button", { name: "Continuer", exact: true }).click();
@@ -160,8 +160,7 @@ export async function signUpWithEmail(page: Page, email: string, name = "Awa Fic
     const sent = Date.now();
     await page.getByRole("button", { name: "Créer mon compte" }).click();
     await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
-    await page.getByLabel("Code à 6 chiffres").fill(await lastCode(email, sent));
-    await page.getByRole("button", { name: "Vérifier" }).click();
+    await openConfirmationLink(page, email, sent);
     await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
     phoneNames.set(page, name);
     return;
@@ -175,8 +174,7 @@ export async function signUpWithEmail(page: Page, email: string, name = "Awa Fic
   const since = Date.now();
   await page.getByRole("button", { name: "Créer mon compte" }).click();
   await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
-  await page.getByLabel("Code à 6 chiffres").fill(await lastCode(email, since));
-  await page.getByRole("button", { name: "Valider" }).click();
+  await openConfirmationLink(page, email, since);
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 }
 
