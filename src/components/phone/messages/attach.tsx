@@ -6,37 +6,34 @@ import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { showToast } from "@/components/motion/toaster";
 import {
-  sendContactAction,
-  sendOrganizationAction,
+  sendCertificateAction,
   sendOwnDocumentAction,
   sendPhotosAction,
   sendRdvAction,
   sendUploadAction,
   type MsgResult,
 } from "@/server/actions/messages-phone";
-import { FilAvatar } from "../fil/avatar";
-import { OrbiDisc, PhoneIcon, type PhoneIconName } from "../icon";
-import { askOrbi } from "../orbi-bus";
+import { PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
 import { shrinkPhoto } from "./media";
-import { SheetBack, WhoAvatar } from "./parts";
+import { SheetBack } from "./parts";
 import type { AttachDoc, ThreadView } from "./types";
 
-export type AttachSheet =
-  "joindre" | "docs" | "cv" | "lettre" | "contact" | "agenda" | "org" | null;
+export type AttachSheet = "joindre" | "photos" | "docs" | "cv" | "attestation" | "agenda" | null;
 
-const CHOICES = [
-  ["docs", "document", "#1E4E79"],
-  ["cv", "cv", "#14745F"],
-  ["lettre", "email", "#7A5C00"],
-  ["contact", "personne", "#3A2A4F"],
-  ["agenda", "agenda", "#B8432F"],
-  ["org", "organisation", "#0F3F37"],
-] as const satisfies readonly (readonly [
-  Exclude<AttachSheet, null | "joindre">,
-  PhoneIconName,
-  string,
-])[];
+/** The six tiles of « Joindre » (planche Chat-joindre): colour and drawing of each. */
+const TILES = [
+  ["photo", "#FF9EC7", "M4 5.5h16v13H4zM4 15l4.5-4.5 4 4 2.5-2.5L20 17M15.5 9.5v.01"],
+  ["camera", "#F4C463", "M4 8.5h3l1.5-2.5h7L17 8.5h3v10H4zM12 10.5a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"],
+  ["document", "#7CC4FF", "M6 3.5h8l4 4v13H6zM14 3.5v4h4M9 12.5h6M9 16h6"],
+  ["cv", "#A6F26B", "M5.5 3.5h9l4 4v13h-13zM14.5 3.5v4h4M8.5 11.5h7M8.5 15h7M8.5 18h4"],
+  [
+    "certificate",
+    "#2FD3A6",
+    "M12 3.5l2.5 2 3.2.2.6 3.1 2.2 2.2-1.6 2.8.4 3.2-3 1.2-1.8 2.7-2.5-1.4-2.5 1.4-1.8-2.7-3-1.2.4-3.2L3.5 11l2.2-2.2.6-3.1 3.2-.2zM9 12l2 2 4-4",
+  ],
+  ["meeting", "#C3A6FF", "M4.5 6.5h15v13h-15zM4.5 10.5h15M8.5 4v4M15.5 4v4"],
+] as const;
 
 const HOURS = ["10:00", "14:00", "16:00"] as const;
 const MODES = ["visio", "place", "call"] as const;
@@ -63,21 +60,25 @@ export function useSendError() {
 }
 
 /**
- * « Joindre » (planches Messages-joindre, -photos-hd, -sans-acces, -docs, -cv, -lettre, -contact,
- * -agenda, -org): the six choices, the photos chosen on the phone (with « HD »), then each list.
- * The phone's photos come only through the person's own choice (« Autoriser l’accès » opens the
- * phone's picker): Jumanly never reads the gallery by itself.
+ * « Joindre » (planche Chat-joindre): Photo, Appareil, Document, Mon CV, Attestation,
+ * Rendez-vous; then the photos chosen on the phone (with « HD »), the documents, the CVs, the
+ * attestations of the courses finished and the proposal of a meeting. The phone's photos come only
+ * through the person's own choice: Jumanly never reads the gallery by itself.
  */
 export function AttachSheets({
   view,
   sheet,
   setSheet,
+  onCamera,
 }: {
   view: ThreadView;
   sheet: AttachSheet;
   setSheet: (sheet: AttachSheet) => void;
+  /** « Appareil »: the camera of the conversation. */
+  onCamera: () => void;
 }) {
   const t = useTranslations("phoneMsg");
+  const tc = useTranslations("phoneChat.attach");
   const sendError = useSendError();
   const [picked, setPicked] = useState<Picked[]>([]);
   const [hd, setHd] = useState(false);
@@ -136,13 +137,13 @@ export function AttachSheets({
       return sendUploadAction(form);
     }, t("attach.docSent"));
 
-  const docLine = (doc: AttachDoc, done: string) => (
+  const docLine = (doc: AttachDoc, done: string, send: () => Promise<MsgResult>) => (
     <button
       key={doc.id}
       type="button"
       className="nb-opt"
       disabled={pending}
-      onClick={() => run(() => sendOwnDocumentAction(view.id, doc.id), done)}
+      onClick={() => run(send, done)}
     >
       <span className="nb-ms-ext" aria-hidden>
         {t("pdf")}
@@ -154,10 +155,37 @@ export function AttachSheets({
     </button>
   );
 
+  const tile = (key: (typeof TILES)[number][0]) => {
+    switch (key) {
+      case "photo":
+        return () => (picked.length ? setSheet("photos") : photoInput.current?.click());
+      case "camera":
+        return () => {
+          close();
+          onCamera();
+        };
+      case "document":
+        return () => setSheet("docs");
+      case "cv":
+        return () => setSheet("cv");
+      case "certificate":
+        return () => setSheet("attestation");
+      case "meeting":
+        return () => setSheet("agenda");
+    }
+  };
+
   const hourLabel = (value: string) => t("agenda.hour", { hour: Number(value.slice(0, 2)) });
   const dayLabel = view.days.find((item) => item.value === day)?.label ?? "";
   const label =
-    sheet === "joindre" || sheet === null ? t("attach.title") : t(`attach.sheet.${sheet}`);
+    sheet === "joindre" || sheet === null
+      ? tc("title")
+      : sheet === "photos"
+        ? tc("photos")
+        : sheet === "attestation"
+          ? tc("certificates")
+          : t(`attach.sheet.${sheet}`);
+  const back = <SheetBack label={tc("title")} onClick={() => setSheet("joindre")} />;
 
   return (
     <PhoneSheet open={sheet !== null} onClose={close} label={label} closeLabel={t("close")}>
@@ -181,12 +209,13 @@ export function AttachSheets({
               ...current,
             ].slice(0, 8),
           );
+          setSheet("photos");
         }}
       />
       <input
         ref={fileInput}
         type="file"
-        accept="application/pdf,image/*"
+        accept="application/pdf,image/*,.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         hidden
         onChange={(event) => {
           const file = event.target.files?.[0];
@@ -196,69 +225,77 @@ export function AttachSheets({
       />
 
       {sheet === "joindre" ? (
+        <div className="nb-ch-joindre">
+          {TILES.map(([key, color, path], index) => (
+            <button
+              key={key}
+              type="button"
+              onClick={tile(key)}
+              style={{ animationDelay: `${index * 0.04}s` }}
+            >
+              <span style={{ background: `${color}22`, color }} aria-hidden>
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d={path} />
+                </svg>
+              </span>
+              <b>{tc(`${key}.title`)}</b>
+              <small>{tc(`${key}.sub`)}</small>
+            </button>
+          ))}
+        </div>
+      ) : null}
+
+      {sheet === "photos" ? (
         <div className="nb-ms-joindre">
-          <div className="nb-ms-choix6">
-            {CHOICES.map(([key, icon, color]) => (
-              <button key={key} type="button" className="nb-ms-type" onClick={() => setSheet(key)}>
-                <span style={{ background: color }}>
-                  <PhoneIcon name={icon} size={24} stroke={1.8} />
-                </span>
-                {t(`attach.choice.${key}`)}
-              </button>
-            ))}
-          </div>
+          {back}
           <div className="nb-ms-recentes-h">
-            <b>{t("attach.recent")}</b>
+            <b>{tc("photos")}</b>
             <span className="nb-meta">
               {chosen.length ? t("attach.picked", { count: chosen.length }) : t("attach.touch")}
             </span>
           </div>
-          {picked.length ? (
-            <div className="nb-ms-galerie">
-              {picked.map((item, index) => {
-                const rank = chosen.indexOf(item);
-                return (
-                  <button
-                    key={item.url}
-                    type="button"
-                    aria-label={t("attach.pick")}
-                    aria-pressed={item.on}
-                    onClick={() =>
-                      setPicked((current) =>
-                        current.map((other, at) =>
-                          at === index
-                            ? { ...other, on: !other.on && chosen.length < 4 ? true : false }
-                            : other,
-                        ),
-                      )
-                    }
-                  >
-                    <img src={item.url} alt="" />
-                    <span className="nb-ms-num">{rank >= 0 ? rank + 1 : ""}</span>
-                  </button>
-                );
-              })}
-              <button
-                type="button"
-                className="nb-ms-galerie-plus"
-                aria-label={t("attach.more")}
-                onClick={() => photoInput.current?.click()}
-              >
-                <PhoneIcon name="plus" size={24} />
-              </button>
-            </div>
-          ) : (
-            <div className="nb-ms-acces">
-              <p>{t("attach.allowText")}</p>
-              <button
-                type="button"
-                className="nb-ms-oui"
-                onClick={() => photoInput.current?.click()}
-              >
-                {t("attach.allow")}
-              </button>
-            </div>
-          )}
+          <div className="nb-ms-galerie">
+            {picked.map((item, index) => {
+              const rank = chosen.indexOf(item);
+              return (
+                <button
+                  key={item.url}
+                  type="button"
+                  aria-label={t("attach.pick")}
+                  aria-pressed={item.on}
+                  onClick={() =>
+                    setPicked((current) =>
+                      current.map((other, at) =>
+                        at === index
+                          ? { ...other, on: !other.on && chosen.length < 4 ? true : false }
+                          : other,
+                      ),
+                    )
+                  }
+                >
+                  <img src={item.url} alt="" />
+                  <span className="nb-ms-num">{rank >= 0 ? rank + 1 : ""}</span>
+                </button>
+              );
+            })}
+            <button
+              type="button"
+              className="nb-ms-galerie-plus"
+              aria-label={t("attach.more")}
+              onClick={() => photoInput.current?.click()}
+            >
+              <PhoneIcon name="plus" size={24} />
+            </button>
+          </div>
           {chosen.length ? (
             <div className="nb-ms-envoi">
               <button
@@ -290,7 +327,7 @@ export function AttachSheets({
 
       {sheet === "docs" ? (
         <div>
-          <SheetBack label={t("attach.title")} onClick={() => setSheet("joindre")} />
+          {back}
           <h2 className="nb-ms-sht">{t("attach.sheet.docs")}</h2>
           <p className="nb-meta nb-ms-shtnote">{t("attach.phone")}</p>
           <button
@@ -304,13 +341,15 @@ export function AttachSheets({
             </span>
             <span>
               {t("attach.pickFile")}
-              <small>{t("attach.pickFileNote")}</small>
+              <small>{tc("pickFileNote")}</small>
             </span>
           </button>
           {view.documents.length ? (
             <>
               <p className="nb-meta nb-ms-shtnote nb-ms-shtsec">{t("attach.jumanly")}</p>
-              {view.documents.map((doc) => docLine(doc, t("attach.docSent")))}
+              {view.documents.map((doc) =>
+                docLine(doc, t("attach.docSent"), () => sendOwnDocumentAction(view.id, doc.id)),
+              )}
             </>
           ) : null}
         </div>
@@ -318,7 +357,7 @@ export function AttachSheets({
 
       {sheet === "cv" ? (
         <div>
-          <SheetBack label={t("attach.title")} onClick={() => setSheet("joindre")} />
+          {back}
           <h2 className="nb-ms-sht">{t("attach.sheet.cv")}</h2>
           {view.cvs.map((doc) => (
             <button
@@ -348,75 +387,28 @@ export function AttachSheets({
           {view.cvs.length === 0 ? (
             <p className="nb-meta nb-ms-shtnote">{t("attach.noCv")}</p>
           ) : null}
-          <Link href="/app/career/cv/modeles?nouveau=1" className="nb-ms-plus" onClick={close}>
+          <Link href="/app/career/cv/nouveau" className="nb-ms-plus" onClick={close}>
             {t("attach.newCv")}
           </Link>
         </div>
       ) : null}
 
-      {sheet === "lettre" ? (
+      {sheet === "attestation" ? (
         <div>
-          <SheetBack label={t("attach.title")} onClick={() => setSheet("joindre")} />
-          <h2 className="nb-ms-sht">{t("attach.sheet.lettre")}</h2>
-          {view.letters.map((doc) => docLine(doc, t("attach.letterSent")))}
-          {view.letters.length === 0 ? (
-            <p className="nb-meta nb-ms-shtnote">{t("attach.noLetter")}</p>
-          ) : null}
-          <div className="nb-ms-orbilettre">
-            <OrbiDisc size={34} />
-            <span>
-              {view.company
-                ? t("attach.orbiLetter", { company: view.company })
-                : t("attach.orbiLetterAny")}
-            </span>
-            <button
-              type="button"
-              onClick={() => {
-                close();
-                askOrbi(
-                  view.company
-                    ? t("attach.orbiLetterAsk", { company: view.company })
-                    : t("attach.orbiLetterAskAny"),
-                );
-              }}
-            >
-              {t("attach.write")}
-            </button>
-          </div>
-        </div>
-      ) : null}
-
-      {sheet === "contact" ? (
-        <div>
-          <SheetBack label={t("attach.title")} onClick={() => setSheet("joindre")} />
-          <h2 className="nb-ms-sht">{t("attach.sheet.contact")}</h2>
-          <p className="nb-meta nb-ms-shtnote">{t("attach.fromConnections")}</p>
-          {view.contacts.map((item) => (
-            <button
-              key={item.connectionId}
-              type="button"
-              className="nb-opt"
-              disabled={pending}
-              onClick={() =>
-                run(() => sendContactAction(view.id, item.connectionId), t("attach.contactSent"))
-              }
-            >
-              <WhoAvatar who={item.who} size={40} />
-              <span>
-                {item.who.name}
-                <small>{item.who.line}</small>
-              </span>
-            </button>
-          ))}
-          {view.contacts.length === 0 ? (
-            <p className="nb-meta nb-ms-shtnote">{t("attach.noContacts")}</p>
+          {back}
+          <h2 className="nb-ms-sht">{tc("certificates")}</h2>
+          {view.certificates.map((doc) =>
+            docLine(doc, tc("certificateSent"), () => sendCertificateAction(view.id, doc.id)),
+          )}
+          {view.certificates.length === 0 ? (
+            <p className="nb-meta nb-ms-shtnote">{tc("noCertificates")}</p>
           ) : null}
         </div>
       ) : null}
 
       {sheet === "agenda" ? (
         <div>
-          <SheetBack label={t("attach.title")} onClick={() => setSheet("joindre")} />
+          {back}
           <h2 className="nb-ms-sht">{t("attach.sheet.agenda")}</h2>
           <p className="nb-meta nb-ms-shtnote">{t("agenda.day")}</p>
           <div className="nb-ms-puces">
@@ -470,33 +462,6 @@ export function AttachSheets({
           >
             {t("agenda.send", { when: `${dayLabel}, ${hourLabel(hour)}` })}
           </button>
-        </div>
-      ) : null}
-
-      {sheet === "org" ? (
-        <div>
-          <SheetBack label={t("attach.title")} onClick={() => setSheet("joindre")} />
-          <h2 className="nb-ms-sht">{t("attach.sheet.org")}</h2>
-          {view.orgs.map((org) => (
-            <button
-              key={org.id}
-              type="button"
-              className="nb-opt"
-              disabled={pending}
-              onClick={() =>
-                run(() => sendOrganizationAction(view.id, org.id), t("attach.orgSent"))
-              }
-            >
-              <FilAvatar initials={org.initials} image={org.image} tone={org.tone} org size={40} />
-              <span>
-                {org.name}
-                <small>{org.line}</small>
-              </span>
-            </button>
-          ))}
-          {view.orgs.length === 0 ? (
-            <p className="nb-meta nb-ms-shtnote">{t("attach.noOrgs")}</p>
-          ) : null}
         </div>
       ) : null}
     </PhoneSheet>

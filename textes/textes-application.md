@@ -10486,6 +10486,188 @@ Conventions :
 | `phoneMsg.orbi.seeOffers` | Voir les offres |
 | `phoneMsg.orbi.reread` | Écrivez votre message dans la discussion, puis touchez l’étincelle : « Corriger les fautes » ou « Plus professionnel ». Je propose, vous choisissez. |
 
+### Chat talent (docs/chat-v2)
+
+*Chat validé le 27/10/2026 (docs/chat-v2, planches `Chat*.dc.html`) : la liste (en ligne maintenant, résumé d’Orbi, segment, étiquettes de rôle, « écrit… »), la discussion (contexte de la candidature, carte Entretien, réponses suggérées, réactions, Joindre, Orbi rédige, note vocale), le menu ··· et l’appel vidéo. Remplace l’apparence des écrans Messages du Modèle B ; les textes `phoneMsg.*` encore utilisés restent dans la partie précédente.*
+
+| Clé | Texte |
+|---|---|
+| `phoneChat.title` | Chat |
+| `phoneChat.search` | Rechercher |
+| `phoneChat.new` | Nouveau message |
+| `phoneChat.online` | En ligne maintenant |
+| `phoneChat.onlineOpen` | Écrire à {name}, en ligne |
+| `phoneChat.tabs` | Trier les discussions |
+| `phoneChat.tab.tout` | Tout |
+| `phoneChat.tab.connexions` | Connexions |
+| `phoneChat.tab.recruteurs` | Recruteurs |
+| `phoneChat.tab.entreprises` | Entreprises |
+| `phoneChat.tag.connexions` | Connexion |
+| `phoneChat.tag.recruteurs` | Recruteur |
+| `phoneChat.tag.entreprises` | Entreprise |
+| `phoneChat.typing` | écrit |
+| `phoneChat.typingOf` | {name} écrit… |
+| `phoneChat.read` | Lu |
+| `phoneChat.sent` | Envoyé |
+| `phoneChat.muted` | Notifications coupées |
+| `phoneChat.pinned` | Épinglée |
+| `phoneChat.unread` | {count, plural, one {# message non lu} other {# messages non lus}} |
+| `phoneChat.requests.title` | Demandes de connexion |
+| `phoneChat.requests.names` | {rest, plural, =0 {{a} et {b}} one {{a}, {b} et # autre} other {{a}, {b} et # autres}} |
+| `phoneChat.empty.tout` | Aucune discussion pour l’instant. Écrivez à une connexion ou attendez la réponse d’un recruteur. |
+| `phoneChat.empty.connexions` | Aucune discussion avec vos connexions pour l’instant. |
+| `phoneChat.empty.recruteurs` | Aucun recruteur ne vous a encore écrit. |
+| `phoneChat.empty.entreprises` | Aucune entreprise ne vous a encore écrit. |
+| `phoneChat.note` | Vous écrivez à vos connexions et aux recruteurs de vos candidatures. |
+| `phoneChat.orbi.title` | {count, plural, one {# message non lu} other {# messages non lus}} · Orbi résume |
+| `phoneChat.orbi.touch` | Touchez pour un résumé en une phrase par discussion |
+| `phoneChat.orbi.thinking` | Orbi lit vos messages… |
+| `phoneChat.orbi.simple` | Résumé simple, sans l’IA d’Orbi |
+| `phoneChat.orbi.none` | Aucun message non lu à résumer. |
+| `phoneChat.orbi.template.text` | {name} : « {text} » |
+| `phoneChat.orbi.template.voice` | {name} vous a laissé une note vocale de {duration}. |
+| `phoneChat.orbi.template.photo` | {name} vous a envoyé une photo. |
+| `phoneChat.orbi.template.file` | {name} vous a envoyé un document. |
+| `phoneChat.orbi.template.interview` | {name} vous propose un entretien : choisissez un créneau. |
+| `phoneChat.orbi.template.document` | {name} vous demande : {document}. |
+| `phoneChat.orbi.template.other` | {name} vous a écrit. |
+| `phoneChat.status.online` | {place, select, none {En ligne} other {En ligne · {place}}} |
+| `phoneChat.openProfile` | Voir le profil de {name} |
+| `phoneChat.options` | Options de la discussion |
+| `phoneChat.cancel` | Annuler |
+| `phoneChat.ephemeralOn` | Messages éphémères activés · toucher pour les désactiver |
+| `phoneChat.context.title` | {job} · {company} |
+| `phoneChat.context.stage` | Étape : {stage} · {score} % |
+| `phoneChat.context.stageOnly` | Étape : {stage} |
+| `phoneChat.context.see` | Voir › |
+| `phoneChat.stage.new` | candidature reçue |
+| `phoneChat.stage.screening` | présélection |
+| `phoneChat.stage.test` | test |
+| `phoneChat.stage.interview` | entretien |
+| `phoneChat.stage.offer` | proposition |
+| `phoneChat.stage.hired` | recruté·e |
+| `phoneChat.stage.rejected` | non retenue |
+| `phoneChat.stage.withdrawn` | retirée |
+| `phoneChat.day.today` | Aujourd’hui |
+| `phoneChat.day.yesterday` | Hier |
+| `phoneChat.react` | Réagir |
+| `phoneChat.reactWith` | Réagir avec {emoji} |
+| `phoneChat.reactions` | {count, plural, one {# réaction} other {# réactions}} : {emojis} |
+| `phoneChat.interview.label` | Entretien |
+| `phoneChat.interview.title` | {day} · {hour} |
+| `phoneChat.interview.hour` | {hour} h |
+| `phoneChat.interview.hourMinutes` | {hour} h {minute} |
+| `phoneChat.interview.mode.video` | En visio |
+| `phoneChat.interview.mode.onsite` | Sur place |
+| `phoneChat.interview.mode.audio` | Par téléphone |
+| `phoneChat.interview.meta` | {place} · {minutes} min |
+| `phoneChat.interview.toConfirm` | Créneau à choisir · {minutes} min |
+| `phoneChat.interview.agenda` | Ajouter à l’agenda |
+| `phoneChat.interview.inAgenda` | ✓ Dans l’agenda |
+| `phoneChat.interview.reminders` | Rappels la veille et une heure avant |
+| `phoneChat.interview.choose` | Choisir un créneau |
+| `phoneChat.interview.practice` | S’entraîner |
+| `phoneChat.suggest.label` | Réponses suggérées par Orbi |
+| `phoneChat.suggest.sendNow` | Je vous l’envoie tout de suite |
+| `phoneChat.suggest.there` | {when, select, none {Merci, je serai là !} other {Merci, je serai là {when} !}} |
+| `phoneChat.suggest.when` | {minute, select, none {{day} à {hour} h} other {{day} à {hour} h {minute}}} |
+| `phoneChat.suggest.address` | Pouvez-vous me confirmer l’adresse ? |
+| `phoneChat.suggest.link` | Pouvez-vous m’envoyer le lien de la visio ? |
+| `phoneChat.suggest.choose` | Merci, je choisis un créneau. |
+| `phoneChat.suggest.yes` | Oui, bien sûr. |
+| `phoneChat.suggest.thanks` | Merci beaucoup pour votre retour ! |
+| `phoneChat.suggest.received` | Bien reçu, merci. |
+| `phoneChat.suggest.peerThanks` | Merci ! |
+| `phoneChat.suggest.peerLater` | Je te réponds un peu plus tard. |
+| `phoneChat.suggest.peerYes` | Oui, avec plaisir ! |
+| `phoneChat.compose.placeholder` | Écrire à {name}… |
+| `phoneChat.orbiSheet.title` | Orbi vous aide à répondre |
+| `phoneChat.orbiSheet.sub` | Vous relisez, vous envoyez |
+| `phoneChat.orbiSheet.tones` | Ton de la réponse |
+| `phoneChat.orbiSheet.mode.reply` | Proposer une réponse |
+| `phoneChat.orbiSheet.mode.pro` | Plus professionnel |
+| `phoneChat.orbiSheet.mode.short` | Plus court |
+| `phoneChat.orbiSheet.mode.english` | En anglais |
+| `phoneChat.orbiSheet.draft` | Texte proposé par Orbi, modifiable |
+| `phoneChat.orbiSheet.thinking` | Orbi écrit… |
+| `phoneChat.orbiSheet.send` | Envoyer |
+| `phoneChat.orbiSheet.again` | Autre version |
+| `phoneChat.orbiSheet.simple` | Proposition simple, sans l’IA d’Orbi. |
+| `phoneChat.orbiSheet.needsAi` | Activez l’IA d’Orbi dans vos réglages pour qu’il vous propose une réponse. |
+| `phoneChat.attach.title` | Joindre |
+| `phoneChat.attach.photo.title` | Photo |
+| `phoneChat.attach.photo.sub` | Galerie |
+| `phoneChat.attach.camera.title` | Appareil |
+| `phoneChat.attach.camera.sub` | Photo |
+| `phoneChat.attach.document.title` | Document |
+| `phoneChat.attach.document.sub` | PDF, Word |
+| `phoneChat.attach.cv.title` | Mon CV |
+| `phoneChat.attach.cv.sub` | CV Data |
+| `phoneChat.attach.certificate.title` | Attestation |
+| `phoneChat.attach.certificate.sub` | Jumanly |
+| `phoneChat.attach.meeting.title` | Rendez-vous |
+| `phoneChat.attach.meeting.sub` | Agenda |
+| `phoneChat.attach.photos` | Photos choisies |
+| `phoneChat.attach.pickFileNote` | PDF, Word ou photo, 10 Mo au plus |
+| `phoneChat.attach.certificates` | Mes attestations |
+| `phoneChat.attach.noCertificates` | Vous n’avez pas encore d’attestation. Terminez une formation pour en recevoir une. |
+| `phoneChat.attach.certificateSent` | Attestation envoyée |
+| `phoneChat.attach.certificateLine` | {hours} h · délivrée le {date} |
+| `phoneChat.attach.certificateName` | Attestation · {title} |
+| `phoneChat.attach.certificateMeta` | Attestation Jumanly vérifiable |
+| `phoneChat.menu.label` | Options de la discussion |
+| `phoneChat.menu.profile` | Voir le profil |
+| `phoneChat.menu.page` | Voir la page |
+| `phoneChat.menu.application` | Voir la candidature |
+| `phoneChat.menu.search` | Rechercher dans la discussion |
+| `phoneChat.menu.medias` | Médias, liens et documents |
+| `phoneChat.menu.notifications` | Notifications |
+| `phoneChat.menu.pin` | Épingler la discussion |
+| `phoneChat.menu.unpin` | Désépingler la discussion |
+| `phoneChat.menu.pinnedToast` | Discussion épinglée en haut de la liste |
+| `phoneChat.menu.unpinnedToast` | Discussion désépinglée |
+| `phoneChat.menu.report.label` | Signaler |
+| `phoneChat.menu.report.title` | Signaler la discussion avec {name} ? |
+| `phoneChat.menu.report.text` | L’équipe Jumanly lit votre signalement. {name} n’est pas prévenu·e. |
+| `phoneChat.menu.report.reasons` | Raison du signalement |
+| `phoneChat.menu.report.reason.harassment` | Harcèlement ou propos blessants |
+| `phoneChat.menu.report.reason.scam` | Arnaque ou fausse offre |
+| `phoneChat.menu.report.reason.spam` | Messages indésirables |
+| `phoneChat.menu.report.reason.inappropriate` | Contenu inapproprié |
+| `phoneChat.menu.report.reason.other` | Autre raison |
+| `phoneChat.menu.report.send` | Signaler |
+| `phoneChat.menu.report.done` | Merci, l’équipe Jumanly va regarder. |
+| `phoneChat.menu.report.already` | Vous avez déjà signalé cette discussion. |
+| `phoneChat.menu.block.label` | Bloquer |
+| `phoneChat.menu.block.title` | Bloquer {name} ? |
+| `phoneChat.menu.unblock` | Débloquer |
+| `phoneChat.menu.unblockTitle` | Débloquer {name} ? |
+| `phoneChat.menu.unblockText` | {name} pourra de nouveau vous écrire. |
+| `phoneChat.call.button` | Appeler {name} en vidéo |
+| `phoneChat.call.ask` | Souhaitez-vous appeler {name} en vidéo ? |
+| `phoneChat.call.noteOnline` | {name} est en ligne. L’appel n’est pas enregistré. |
+| `phoneChat.call.note` | L’appel n’est pas enregistré. |
+| `phoneChat.call.no` | Non |
+| `phoneChat.call.yes` | Oui, appeler |
+| `phoneChat.call.label` | Appel vidéo avec {name} |
+| `phoneChat.call.encrypted` | Chiffré de bout en bout |
+| `phoneChat.call.you` | Vous |
+| `phoneChat.call.ringing` | Appel en cours |
+| `phoneChat.call.timer` | Durée de l’appel |
+| `phoneChat.call.micro` | Micro |
+| `phoneChat.call.camera` | Caméra |
+| `phoneChat.call.speaker` | Haut-parleur |
+| `phoneChat.call.hangUp` | Raccrocher |
+| `phoneChat.call.ended` | Appel terminé · {duration} |
+| `phoneChat.call.cancelled` | Appel annulé |
+| `phoneChat.call.failed` | L’appel n’a pas pu démarrer. Réessayez dans un instant. |
+| `phoneChat.call.context` | Entretien · {job} |
+| `phoneChat.call.line` | Appel vidéo · {duration} |
+| `phoneChat.call.lineMissed` | Appel vidéo sans réponse |
+| `phoneChat.duration.short` | {seconds} s |
+| `phoneChat.duration.long` | {minutes} min {seconds} s |
+| `phoneChat.duration.hours` | {hours} h {minutes} min |
+
 ### Refonte recruteur · Cadre mobile (lot 1)
 
 *Coquille de l'espace recruteur (docs/refonte-mobile/BRIEF-RECRUTEUR, lot 1) : organisation active, barre du bas À traiter · Offres · Orbi · Candidats · Messages, Compte RH, premiers pas.*

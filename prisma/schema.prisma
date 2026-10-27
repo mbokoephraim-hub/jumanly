@@ -861,6 +861,8 @@ model User {
   interviewsOrganized  Interview[]
   notifications        Notification[]
   participations       ConversationParticipant[]
+  messageReactions     MessageReaction[]
+  videoCalls           VideoCall[]
   connectionsSent      Connection[]              @relation("ConnectionRequester")
   connectionsReceived  Connection[]              @relation("ConnectionAddressee")
   enrollments          Enrollment[]
@@ -1647,6 +1649,7 @@ model Conversation {
   ephemeralSeconds Int?
   participants     ConversationParticipant[]
   messages         Message[]
+  videoCalls       VideoCall[]
   lastMessageAt    DateTime                  @default(now())
   createdAt        DateTime                  @default(now())
 
@@ -1666,6 +1669,10 @@ model ConversationParticipant {
   /// « Effacer la discussion » (Modèle B lot B8): the messages before it are hidden for this person
   /// only; the other side keeps them and nothing is deleted.
   clearedAt      DateTime?
+  /// « Épingler la discussion » (Chat v2): shown first in this person's list.
+  pinnedAt       DateTime?
+  /// Last keystroke in the composer (Chat v2): the other side reads « écrit… » for a few seconds.
+  typingAt       DateTime?
 
   @@unique([conversationId, userId])
 }
@@ -1704,7 +1711,47 @@ model Message {
   hiddenAt       DateTime?
   /// Sent while « Messages éphémères » was on: hidden for both sides after this time (never deleted).
   expiresAt      DateTime?
+  reactions      MessageReaction[]
   createdAt      DateTime     @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+/// A reaction under a message (Chat v2): one per person and message, changed or taken back.
+model MessageReaction {
+  id        String   @id @default(cuid(2))
+  messageId String
+  message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emoji     String
+  createdAt DateTime @default(now())
+
+  @@unique([messageId, userId])
+}
+
+enum VideoCallStatus {
+  ringing
+  active
+  ended
+  missed
+}
+
+/// A video call of a conversation (Chat v2): only between connections, or with the recruiter of an
+/// application. Nothing of the call itself is recorded: only who called, when and how long.
+model VideoCall {
+  id             String          @id @default(cuid(2))
+  conversationId String
+  conversation   Conversation    @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  callerId       String
+  caller         User            @relation(fields: [callerId], references: [id], onDelete: Cascade)
+  status         VideoCallStatus @default(ringing)
+  /// The video provider (`VIDEO_PROVIDER`, « fake » by default) and its room.
+  provider       String
+  roomId         String
+  answeredAt     DateTime?
+  endedAt        DateTime?
+  createdAt      DateTime        @default(now())
 
   @@index([conversationId, createdAt])
 }

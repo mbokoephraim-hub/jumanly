@@ -1,19 +1,23 @@
 import "server-only";
+import { clockParts } from "@/lib/clock-parts";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getFormatter, getMessages, getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { pickMessages } from "@/i18n/client-messages";
 import { db } from "@/server/db";
 import { ConnectError, markRead } from "@/server/services/connect";
 import { touchPresence } from "@/server/services/hire-messaging";
+import { suggestReplies } from "@/server/services/chat";
 import {
   phoneConnections,
   phoneConversation,
   phoneInbox,
   phoneRequests,
+  type PhoneConversation,
 } from "@/server/services/messages-phone";
-import { shortName } from "../fil/data";
+import { callAllowed } from "@/server/services/video-call";
+import { initialsOf, shortName } from "../fil/data";
 import {
   attachments,
   messageViews,
@@ -32,7 +36,7 @@ type Viewer = { id: string; showPresence: boolean };
 export async function MessagesTexts({ children }: { children: ReactNode }) {
   const messages = await getMessages();
   return (
-    <NextIntlClientProvider messages={pickMessages(messages, ["phoneMsg", "phone"])}>
+    <NextIntlClientProvider messages={pickMessages(messages, ["phoneMsg", "phoneChat", "phone"])}>
       {children}
     </NextIntlClientProvider>
   );
@@ -81,39 +85,124 @@ export async function MessagesTab({ user }: { user: Viewer }) {
   );
 }
 
+/** The words of a suggestion: « Je vous l’envoie tout de suite », « Merci, je serai là… ». */
+async function suggestionTexts(
+  conversation: PhoneConversation,
+  userId: string,
+  interviews: { mode: string; status: string; startsAt: Date | null; timezone: string }[],
+) {
+  const t = await getTranslations("phoneChat.suggest");
+  const format = await getFormatter();
+  const peer = conversation.kind === "peer";
+  const lastTheirs = [...conversation.messages]
+    .reverse()
+    .find(
+      (message) =>
+        message.senderId !== userId &&
+        message.senderId !== null &&
+        !message.hiddenAt &&
+        message.kind !== "system" &&
+        message.kind !== "decision",
+    );
+  const interview = interviews.at(-1) ?? null;
+  const keys = suggestReplies({
+    peer,
+    last: lastTheirs ? { kind: lastTheirs.kind, body: lastTheirs.body } : null,
+    interview: interview
+      ? {
+          confirmed: interview.status === "confirmed" && interview.startsAt !== null,
+          onSite: interview.mode === "onsite",
+          video: interview.mode === "video",
+        }
+      : null,
+  });
+  const when = () => {
+    const date = interview?.startsAt;
+    if (!date) return "none";
+    const zone = { timeZone: interview.timezone };
+    const day = format.dateTime(date, { weekday: "long", ...zone });
+    const { hour, minute } = clockParts(date, zone.timeZone);
+    return t("when", { day, hour, minute: minute ? String(minute).padStart(2, "0") : "none" });
+  };
+  const mine = new Set(
+    conversation.messages
+      .filter((message) => message.senderId === userId)
+      .map((message) => message.body.trim()),
+  );
+  return keys
+    .map((key) =>
+      key === "there" ? t("there", { when: when() }) : t(key, { peer: peer ? "yes" : "no" }),
+    )
+    .filter((text) => !mine.has(text));
+}
+
 /** One conversation as its talent sees it on the phone, with what « Joindre » offers. */
 export async function threadView(user: Viewer, conversationId: string, now = new Date()) {
   const conversation = await phoneConversation(db, user.id, conversationId, now);
-  const [words, items] = await Promise.all([messageWords(user, now), phoneInbox(db, user.id, now)]);
+  const [words, items, tch] = await Promise.all([
+    messageWords(user, now),
+    phoneInbox(db, user.id, now),
+    getTranslations("phoneChat"),
+  ]);
   const titles = await recruiterTitles(db, [conversation.item, ...items]);
   const who = words.ofCounterpart(
     conversation.item.counterpart,
     titleOf(titles, conversation.item),
   );
-  const counterpart = conversation.item.counterpart;
-  const otherUserId =
-    conversation.kind === "peer" && counterpart.kind === "person" ? counterpart.person.id : null;
-  const [messages, joined] = await Promise.all([
+  const interviewIds = conversation.messages.flatMap((message) => {
+    const value = (message.payload as { interviewId?: unknown } | null)?.interviewId;
+    return message.kind === "invitation" && typeof value === "string" ? [value] : [];
+  });
+  const [messages, joined, interviews] = await Promise.all([
     messageViews(db, words, conversation, user.id, who),
-    attachments(db, words, user.id, otherUserId),
+    attachments(db, words, user.id),
+    interviewIds.length
+      ? db.interview.findMany({
+          where: { id: { in: interviewIds } },
+          orderBy: { createdAt: "asc" },
+          select: { mode: true, status: true, startsAt: true, timezone: true },
+        })
+      : Promise.resolve([]),
   ]);
-  const company =
-    counterpart.kind === "organization"
-      ? shortName(counterpart.organization.name)
-      : counterpart.organization
-        ? shortName(counterpart.organization.name)
-        : null;
+  const application = conversation.application;
+  const company = application ? shortName(application.organization) : null;
+  const stage =
+    application?.status === "active"
+      ? tch(`stage.${application.stage}`)
+      : application
+        ? tch(`stage.${application.status}`)
+        : "";
   const view: ThreadView = {
     id: conversationId,
     kind: conversation.kind === "peer" ? "peer" : "organization",
     who,
-    company,
     muted: conversation.muted,
     ephemeral: conversation.ephemeralSeconds,
     blocked: conversation.blocked,
     blockedByMe: conversation.blockedByMe,
     canWrite: conversation.canWrite,
     messages,
+    context:
+      application && company
+        ? {
+            initials: initialsOf(company),
+            title: tch("context.title", { job: application.job, company }),
+            line:
+              application.score !== null
+                ? tch("context.stage", { stage, score: application.score })
+                : tch("context.stageOnly", { stage }),
+            href: `/app/suivi/${application.id}`,
+          }
+        : null,
+    applicationHref: application ? `/app/suivi/${application.id}` : null,
+    callLine: application ? tch("call.context", { job: application.job }) : who.line,
+    canCall: callAllowed(conversation),
+    pinned: conversation.item.pinned,
+    typing: conversation.item.typing,
+    suggestions: conversation.canWrite
+      ? await suggestionTexts(conversation, user.id, interviews)
+      : [],
+    me: { initials: initialsOf(conversation.viewer.name) },
     ...joined,
     days: nextDays(words, now),
     forwardTo: items

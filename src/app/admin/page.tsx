@@ -50,6 +50,7 @@ const aiFeature: Record<string, AiFeatureText> = {
   job_writer: "jobDraft",
   learn_coach: "learnCoach",
   orbi_chat: "orbiChat",
+  chat_summary: "orbiChat",
 };
 
 const familyTone: Record<FamilyKey, string> = {

@@ -4751,3 +4751,31 @@ l'ordinateur garde « CV et documents » et le studio.
   `intelligence`, `cv-documents`, `modele-b-carriere` mis à jour.
 - Restent à faire : les éditeurs de section (`?partie=`) gardent l'ancien écran ; projets, bénévolat
   et certificats ne sont pas des sections du CV. Décision : `docs/decisions/2026-10-26-carriere-v3.md`.
+
+## Chat du talent : liste, discussion, menu ··· et appel vidéo (27 octobre 2026)
+
+Le Chat du talent au téléphone refait d'après `docs/chat-v2/` (captures 01 à 13, maquettes
+`Chat*.dc.html`, validées par Ephraïm le 27/10/2026). Remplace l'apparence des écrans Messages du
+Modèle B ; feuille `src/styles/phone-chat.css`, classes `nb-ch-`, textes `phoneChat.*`.
+
+- Liste : « Chat », en ligne maintenant (anneau aux couleurs des compétences, point menthe), carte
+  « Orbi résume » (fonction d'IA `chat_summary`), segment Tout · Connexions · Recruteurs · Entreprises
+  avec pilule Lime glissante et compteurs, demandes de connexion, lignes avec étiquette de rôle,
+  coche « lu », « écrit… » en temps réel, discussions épinglées en tête.
+- Discussion : en-tête flouté (statut en ligne ou « écrit… », appel vidéo, ···), candidature épinglée
+  (offre, étape, score, « Voir »), séparateurs de jour, bulles Lime texte Sapin, carte Entretien
+  (agenda avec rappels, S’entraîner), réponses suggérées par Orbi (un toucher envoie), réactions,
+  « + » Joindre (six tuiles, attestations des formations), Orbi rédige (quatre tons, Envoyer, Autre
+  version), note vocale avec onde.
+- Menu ··· : fiche de la personne, profil, candidature, recherche, médias, notifications,
+  épingler, Signaler (raison, puis signalement à la modération) et Bloquer avec confirmation.
+- Appel vidéo : confirmation, plein écran (chiffré de bout en bout, sa vignette, onde Lime, minuteur
+  menthe, micro, caméra, haut-parleur, raccrocher), « Appel terminé · durée » ; fournisseur factice.
+- Base : migration `20261027060000_chat_v2` (`MessageReaction`, `VideoCall`, `pinnedAt`, `typingAt`).
+  Services `chat.ts`, `chat-summary.ts`, `video-call.ts` ; actions `src/server/actions/chat.ts` ;
+  route `/app/messages/pouls`.
+- Tests : `tests/unit/chat-v2.test.ts`, `tests/db/chat-v2.test.ts`, e2e `chat-v2.spec.ts` (ouvrir,
+  réponse suggérée, réaction, appel) ; `modele-b-messages`, `hire`, `hire-advanced`,
+  `modele-b-plein-ecran` mis à jour.
+- Décisions : `docs/decisions/2026-10-27-chat-v2.md`. Reste à choisir : un vrai fournisseur d'appel
+  vidéo.

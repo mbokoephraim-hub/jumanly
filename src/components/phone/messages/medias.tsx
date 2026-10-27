@@ -6,12 +6,23 @@ import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 import { PhoneBack } from "../back";
 import type { Open } from "./bubble";
-import { sharedOf } from "./infos";
 import type { ThreadView } from "./types";
 import { MediaViewer } from "./viewer";
 
 const TABS = ["medias", "liens", "docs"] as const;
 export type MediaTab = (typeof TABS)[number];
+
+/** The photos, links and documents of a conversation, newest first. */
+export function sharedOf(view: ThreadView) {
+  const photos = view.messages.flatMap((message) =>
+    message.bubble.kind === "photos"
+      ? message.bubble.photos.map((photo, index) => ({ message, photo, index }))
+      : [],
+  );
+  const links = view.messages.filter((message) => message.bubble.kind === "link");
+  const docs = view.messages.filter((message) => message.bubble.kind === "doc");
+  return { photos: photos.reverse(), links: links.reverse(), docs: docs.reverse() };
+}
 
 /**
  * « Médias, liens et documents » of a conversation (planche Messages-medias): the photos by month,
