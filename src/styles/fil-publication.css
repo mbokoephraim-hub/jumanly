@@ -101,7 +101,7 @@
   margin-top: 6px;
   padding: 10px 12px;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(var(--nb-voile), 0.16);
   background: var(--nb-surface);
   color: var(--nb-texte);
   font-size: 14.5px;
@@ -128,7 +128,7 @@
 .nb-fil-com-ok,
 .nb-fil-modif-ok {
   background: var(--nb-lime);
-  color: var(--nb-nuit);
+  color: var(--nb-encre);
 }
 .nb-fil-modif-t {
   font-size: 17px;

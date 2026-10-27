@@ -10,7 +10,7 @@
   padding: 14px 16px 15px;
   border-radius: 18px;
   background: var(--nb-surface);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(var(--nb-voile), 0.06);
 }
 .nb-pf-presente h3 {
   margin: 0 0 6px;
@@ -23,12 +23,12 @@
   margin: 0;
   font-size: 13.5px;
   line-height: 1.55;
-  color: #dce6e3;
+  color: var(--nb-t-dce6e3, #dce6e3);
   white-space: pre-line;
   overflow-wrap: anywhere;
 }
 .nb-pf-presente a {
-  color: var(--nb-lime);
+  color: var(--nb-lime-t);
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -43,7 +43,7 @@
   color: var(--nb-brume);
 }
 .nb-ca-compte[data-trop] {
-  color: var(--nb-corail);
+  color: var(--nb-corail-t);
 }
 
 /* La photo vue en grand : elle avance devant l'écran, l'interface derrière est floutée. */
@@ -95,7 +95,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--nb-voile), 0.1);
   color: var(--nb-creme);
 }
 .nb-pv-photo {
@@ -160,13 +160,13 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(var(--nb-voile), 0.12);
+  border: 1px solid rgba(var(--nb-voile), 0.14);
 }
 .nb-pv-actions button:first-child > span {
   background: var(--nb-lime);
   border-color: var(--nb-lime);
-  color: var(--nb-nuit);
+  color: var(--nb-encre);
 }
 .nb-pv-ab {
   font-size: 14px;
@@ -187,8 +187,8 @@
   min-height: 52px;
   padding: 0 18px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(var(--nb-voile), 0.1);
+  border: 1px solid rgba(var(--nb-voile), 0.12);
   font-size: 15px;
   font-weight: 600;
   color: var(--nb-creme);
@@ -228,7 +228,7 @@
   inset: 7%;
   border-radius: 50%;
   box-shadow: 0 0 0 999px rgba(5, 13, 16, 0.62);
-  outline: 2px solid rgba(255, 255, 255, 0.85);
+  outline: 2px solid rgba(var(--nb-voile), 0.85);
   pointer-events: none;
 }
 .nb-pv-zoom {
@@ -288,7 +288,7 @@
   background: var(--nb-nuit);
 }
 .nb-cr-photo-bt:focus-visible {
-  outline: 2px solid var(--nb-lime);
+  outline: 2px solid var(--nb-lime-t);
   outline-offset: 2px;
 }
 .nb-cr-photo-bt > .nb-pf-photo-i {
@@ -316,7 +316,7 @@
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
-  color: var(--nb-lime);
+  color: var(--nb-lime-t);
   background: rgba(166, 242, 107, 0.12);
   border: 1px solid rgba(166, 242, 107, 0.35);
 }
@@ -351,13 +351,13 @@
   padding: 12px;
   border-radius: 18px;
   background: var(--nb-surface);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(var(--nb-voile), 0.06);
   color: var(--nb-creme);
 }
 .nb-rs-tuiles b {
   font-size: 24px;
   font-weight: 800;
-  color: var(--nb-lime);
+  color: var(--nb-lime-t);
 }
 .nb-rs-tuiles small {
   font-size: 12px;

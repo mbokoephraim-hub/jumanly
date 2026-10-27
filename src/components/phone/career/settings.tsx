@@ -3,7 +3,7 @@
 import "@/styles/phone-reglages.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useState, useTransition, type ReactNode } from "react";
+import { useState, useSyncExternalStore, useTransition, type ReactNode } from "react";
 import { showToast } from "@/components/motion/toaster";
 import { signOut } from "@/server/actions/auth";
 import { becomeRecruiterAction } from "@/server/actions/hire";
@@ -12,6 +12,13 @@ import {
   saveCareerPrivacyAction,
 } from "@/server/actions/career-phone";
 import { changeEmailAction } from "@/server/actions/settings";
+import {
+  PHONE_THEME_EVENT,
+  PHONE_THEMES,
+  readPhoneTheme,
+  savePhoneTheme,
+  type PhoneTheme,
+} from "@/lib/phone-theme";
 import { PhoneBack } from "../back";
 import { FilAvatar } from "../fil/avatar";
 import { PhoneIcon, type phoneIcons } from "../icon";
@@ -180,6 +187,7 @@ export function PhoneSettings({
           <span>{t("language")}</span>
           <small>{language}</small>
         </div>
+        <ThemeRow />
         <Row href="/app/compte/aide" icon="idee">
           {t("help")}
         </Row>
@@ -261,6 +269,66 @@ function SignOut() {
  * The e-mail, and « Changer d'adresse »: a link goes to the new address; the address changes
  * once it is opened (Ephraïm, 27/10/2026). Until then, the old one keeps working.
  */
+/**
+ * « Apparence » (Ephraïm, 27/10/2026): Sombre, Clair « Crème doux » or « Comme mon téléphone ».
+ * Kept on this phone and applied at once (PhoneThemeRoot); talent and recruiter alike.
+ */
+function subscribeTheme(onChange: () => void) {
+  window.addEventListener(PHONE_THEME_EVENT, onChange);
+  return () => window.removeEventListener(PHONE_THEME_EVENT, onChange);
+}
+
+function ThemeRow() {
+  const t = useTranslations("phoneCareer.reglages");
+  const [open, setOpen] = useState(false);
+  // Read from this phone (localStorage); the server does not know it and draws « Sombre ».
+  const theme = useSyncExternalStore(subscribeTheme, readPhoneTheme, () => "sombre" as const);
+  const choose = (value: PhoneTheme) => savePhoneTheme(value);
+  return (
+    <>
+      <button type="button" className="nb-ca-it" data-ligne="" onClick={() => setOpen(true)}>
+        <Tile icon="apparence" tone="ambre" />
+        <span>{t("theme.title")}</span>
+        <small>{t(`theme.${theme}`)}</small>
+        <PhoneIcon name="chevron" size={18} />
+      </button>
+      <PhoneSheet
+        open={open}
+        onClose={() => setOpen(false)}
+        label={t("theme.title")}
+        closeLabel={t("close")}
+      >
+        <div className="nb-ca-feuille">
+          <b className="nb-ex-feuille-t" id="rg-theme">
+            {t("theme.title")}
+          </b>
+          <p className="nb-meta">{t("theme.text")}</p>
+          <div role="radiogroup" aria-labelledby="rg-theme" className="nb-rg-bloc">
+            {PHONE_THEMES.map((key) => (
+              <button
+                key={key}
+                type="button"
+                role="radio"
+                aria-checked={theme === key}
+                className="nb-ca-it"
+                data-ligne=""
+                onClick={() => choose(key)}
+              >
+                <i className="nb-rg-apercu" data-theme={key} aria-hidden />
+                <span>
+                  {t(`theme.${key}`)}
+                  <small className="nb-meta">{t(`theme.${key}Text`)}</small>
+                </span>
+                <i className="nb-ca-radio" aria-hidden />
+              </button>
+            ))}
+          </div>
+        </div>
+      </PhoneSheet>
+    </>
+  );
+}
+
 function EmailRow({ email }: { email: string }) {
   const t = useTranslations("phoneCareer.reglages");
   const [open, setOpen] = useState(false);
@@ -413,6 +481,7 @@ export function PhoneRecruiterSettings({
         <Row href="/app/hire/compte/langue" end={language} icon="messages" tone="bleu">
           {t("language")}
         </Row>
+        <ThemeRow />
         <Row href="/app/hire/compte/aide" icon="idee">
           {t("help")}
         </Row>
