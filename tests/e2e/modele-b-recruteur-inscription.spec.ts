@@ -31,6 +31,8 @@ test.describe("Modèle B recruteur · inscription au téléphone", () => {
     );
     await capture(page, "003-bienvenue");
     await expectAccessible(page);
+    // The screens follow one another by themselves; a touch on a dot stops them (27/10/2026).
+    await page.getByRole("button", { name: /^Écran 1/ }).click();
     await page.getByRole("button", { name: "Écran suivant" }).click();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Toutes vos candidatures au même endroit",

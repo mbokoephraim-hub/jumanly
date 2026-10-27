@@ -24,9 +24,18 @@ test.describe("Modèle B · accueil au téléphone", () => {
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Apprenez ce que les employeurs cherchent",
     );
-    await expectAccessible(page);
 
-    // The three screens: a touch on the picture or on a dot.
+    // The three screens follow one another by themselves (27/10/2026)…
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Un profil qui progresse avec vous",
+      { timeout: 8000 },
+    );
+    // … until a touch on a dot or on the picture, which stops them.
+    await page.getByRole("button", { name: "Écran 1 : Learn" }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Apprenez ce que les employeurs cherchent",
+    );
+    await expectAccessible(page);
     await page.getByRole("button", { name: "Écran suivant" }).click();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Un profil qui progresse avec vous",
@@ -71,7 +80,7 @@ test.describe("Modèle B · accueil au téléphone", () => {
     await expect(page.getByRole("heading", { name: "Mot de passe oublié" })).toBeVisible();
     await page.getByRole("link", { name: "Retour" }).click();
     await expect(page).toHaveURL(/\/connexion$/);
-    await page.getByRole("link", { name: "Créer un compte" }).click();
+    await page.getByRole("link", { name: "S'inscrire" }).click();
     await expect(page).toHaveURL(/\/inscription$/);
 
     // The conditions in three points, then « J'ai compris ».

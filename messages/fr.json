@@ -175,6 +175,8 @@
       "eyebrow": "Formation · Carrière · Recrutement",
       "title": "Learn. Grow. Connect.",
       "subtitle": "Jumanly réunit la formation, le développement de carrière, les offres d'emploi et le recrutement sur une seule plateforme. Formez-vous, construisez un profil qui vous ressemble et rencontrez les employeurs qui ont besoin de vos compétences.",
+      "ctaPrimary": "Créer mon compte gratuit",
+      "ctaSecondary": "Je recrute",
       "reassurance1": "Inscription gratuite",
       "reassurance2": "Candidatures toujours gratuites",
       "reassurance3": "Mobile Money et carte",
@@ -185,19 +187,6 @@
         "matchText": "87 % compatible · Pourquoi ?",
         "matchShort": "87 % compatible"
       }
-    },
-    "entry": {
-      "question": "Vous êtes…",
-      "talent": {
-        "label": "Talent",
-        "text": "Je me forme, je construis mon profil et je postule, toujours gratuitement."
-      },
-      "rh": {
-        "label": "Recruteur",
-        "text": "Je publie des offres et je trouve des talents, seul ou avec mon entreprise."
-      },
-      "signup": "S'inscrire",
-      "login": "Se connecter"
     },
     "audiences": {
       "title": "Une plateforme, trois façons d'avancer",
@@ -2176,6 +2165,10 @@
       "magicSent": "Lien envoyé à {email}. Il est valable {minutes} minutes.",
       "noAccount": "Pas encore de compte ?",
       "signup": "Créer un compte",
+      "who": "Vous êtes",
+      "talent": "Talent",
+      "recruiter": "Recruteur",
+      "signupButton": "S'inscrire",
       "licence": "Activer une licence offerte par un partenaire"
     },
     "twoFactor": {
@@ -9838,6 +9831,7 @@
     "login": {
       "title": "Bon retour",
       "subtitle": "Connectez-vous pour retrouver votre Fil.",
+      "signupButton": "S'inscrire",
       "or": "ou",
       "email": "Adresse e-mail",
       "password": "Mot de passe",

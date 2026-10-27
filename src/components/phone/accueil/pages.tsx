@@ -36,6 +36,15 @@ function Head({ title, text }: { title: string; text?: React.ReactNode }) {
 }
 
 /** « Bon retour » (Modèle B, planche Connexion). */
+/** « Se connecter » as a talent or as a recruiter, keeping the interrupted action. */
+function loginHref(recruiter: boolean, next?: string) {
+  const query = new URLSearchParams({
+    ...(recruiter ? { profil: "rh" } : {}),
+    ...(next ? { suite: next } : {}),
+  }).toString();
+  return query ? `/connexion?${query}` : "/connexion";
+}
+
 export async function PhoneLoginPage({
   next,
   notices,
@@ -61,6 +70,19 @@ export async function PhoneLoginPage({
           title={t("login.title")}
           text={recruiter ? tr("login.subtitle") : t("login.subtitle")}
         />
+        {/* Talent or recruiter, then « Se connecter » or « S'inscrire » (27/10/2026). */}
+        <nav className="nb-profil-choix" data-large="" aria-label={t("welcome.who")}>
+          {[false, true].map((item) => (
+            <Link
+              key={String(item)}
+              href={loginHref(item, next)}
+              aria-current={recruiter === item ? "page" : undefined}
+              replace
+            >
+              {t(item ? "welcome.recruiter" : "welcome.talent")}
+            </Link>
+          ))}
+        </nav>
         {notices.map((notice) => (
           <AccessNotice key={notice.text} tone={notice.tone}>
             {notice.text}
@@ -73,12 +95,15 @@ export async function PhoneLoginPage({
         />
         {list.length > 0 ? <OrLine>{t("login.or")}</OrLine> : null}
         <PhoneLoginForm next={next} />
+        <Link
+          href={signup ? `/inscription?${signup}` : "/inscription"}
+          className="nb-bs nb-form-envoi"
+        >
+          {t("login.signupButton")}
+        </Link>
         <div className="nb-liens">
           <Link href="/mot-de-passe-oublie" className="nb-lien" data-creme="">
             {t("login.forgot")}
-          </Link>
-          <Link href={signup ? `/inscription?${signup}` : "/inscription"} className="nb-lien">
-            {t("login.signup")}
           </Link>
         </div>
         <p className="nb-pied">

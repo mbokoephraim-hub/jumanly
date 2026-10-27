@@ -206,16 +206,11 @@ Conventions :
 | `home.hero.eyebrow` | Formation · Carrière · Recrutement |
 | `home.hero.title` | Learn. Grow. Connect. |
 | `home.hero.subtitle` | Jumanly réunit la formation, le développement de carrière, les offres d'emploi et le recrutement sur une seule plateforme. Formez-vous, construisez un profil qui vous ressemble et rencontrez les employeurs qui ont besoin de vos compétences. |
+| `home.hero.ctaPrimary` | Créer mon compte gratuit |
+| `home.hero.ctaSecondary` | Je recrute |
 | `home.hero.reassurance1` | Inscription gratuite |
 | `home.hero.reassurance2` | Candidatures toujours gratuites |
 | `home.hero.reassurance3` | Mobile Money et carte |
-| `home.entry.question` | Vous êtes… |
-| `home.entry.talent.label` | Talent |
-| `home.entry.talent.text` | Je me forme, je construis mon profil et je postule, toujours gratuitement. |
-| `home.entry.rh.label` | Recruteur |
-| `home.entry.rh.text` | Je publie des offres et je trouve des talents, seul ou avec mon entreprise. |
-| `home.entry.signup` | S'inscrire |
-| `home.entry.login` | Se connecter |
 | `home.hero.imageAlt` | Aperçu du tableau de bord Jumanly sur ordinateur et sur téléphone : progression des formations, candidatures en cours et offres compatibles. |
 | `home.hero.visual.badge` | Attestation obtenue |
 | `home.hero.visual.matchTitle` | Analyste de données junior |
@@ -1735,6 +1730,10 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `access.login.magicSent` | Lien envoyé à {email}. Il est valable {minutes} minutes. |
 | `access.login.noAccount` | Pas encore de compte ? |
 | `access.login.signup` | Créer un compte |
+| `access.login.who` | Vous êtes |
+| `access.login.talent` | Talent |
+| `access.login.recruiter` | Recruteur |
+| `access.login.signupButton` | S'inscrire |
 | `access.login.licence` | Activer une licence offerte par un partenaire |
 
 #### `/connexion/deux-etapes` · Connexion en deux étapes
@@ -8110,6 +8109,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneAccueil.code.help` | Pas reçu ? Regardez dans les spams. Le lien reste valable {hours} heures. |
 | `phoneAccueil.login.title` | Bon retour |
 | `phoneAccueil.login.subtitle` | Connectez-vous pour retrouver votre Fil. |
+| `phoneAccueil.login.signupButton` | S'inscrire |
 | `phoneAccueil.login.or` | ou |
 | `phoneAccueil.login.email` | Adresse e-mail |
 | `phoneAccueil.login.password` | Mot de passe |
