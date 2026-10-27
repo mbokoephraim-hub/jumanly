@@ -10,7 +10,7 @@ import { FormationTab } from "@/components/phone/learn/server";
 import { MessagesTab } from "@/components/phone/messages/server";
 import { TalentShell } from "@/components/talent/shell";
 import { isPhone } from "@/server/view";
-import { Skeleton } from "@/components/ui";
+import { ShellLoading } from "@/components/app/shell-loading";
 import { requireUser } from "@/server/auth/session";
 import { touchPresence } from "@/server/services/hire-messaging";
 import { db } from "@/server/db";
@@ -38,7 +38,7 @@ import { recruiterBarCounts } from "@/server/services/hire-phone";
 /** Signed-in space: every page below needs a session (checked on the server). */
 export default function SignedInLayout({ children }: LayoutProps<"/app">) {
   return (
-    <Suspense fallback={<Skeleton className="m-6 h-[60dvh] rounded-panel" />}>
+    <Suspense fallback={<ShellLoading />}>
       <SignedIn>{children}</SignedIn>
     </Suspense>
   );
@@ -52,7 +52,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
     update: {},
     create: { userId: user.id },
   });
-  const [hire, partners, space, partnerSpace, unread] = await Promise.all([
+  const [hire, partners, space, partnerSpace, unread, , phone] = await Promise.all([
     hireMemberships(db, user.id),
     partnerMemberships(db, user.id),
     getActiveSpace(user.id),
@@ -60,6 +60,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
     unreadNotifications(db, user.id),
     // Recruteur lot 6: « En ligne » in the messaging (at most one write a minute).
     touchPresence(db, user.id),
+    isPhone(),
   ]);
   const intro = await introData({
     profile: introProfile(
@@ -73,7 +74,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
   // Personal space: the talent shell of the mobile redesign (docs/refonte-mobile).
   if (!partnerSpace && !space) {
     // On a phone: Modèle B (docs/modele-b), dark, five tabs kept mounted.
-    if (await isPhone()) {
+    if (phone) {
       // The pill menu's count on Chat (docs/fil-menu-publication § 1).
       const unreadMessages = await unreadCount(db, { userId: user.id });
       return (
@@ -155,7 +156,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("org.roles");
 
   // Recruiter space on a phone: Modèle B (docs/modele-b-recruteur), dark, five tabs.
-  if (space && !partnerSpace && (await isPhone())) {
+  if (space && !partnerSpace && phone) {
     const counts = await recruiterBarCounts(db, {
       userId: user.id,
       organizationId: space.organizationId,

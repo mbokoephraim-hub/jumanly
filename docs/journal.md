@@ -4985,3 +4985,9 @@ bibliothèque, et se supprime.
 - Ajouter ou retirer un synonyme ; fusionner une compétence dans une autre (les profils, offres et formations passent sur la cible, l'ancien nom devient synonyme). Le score compare noms et synonymes : effet immédiat. Chaque action est au journal avec son motif.
 - Ouvert aux administrateurs et aux responsables carrière.
 - Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
+
+## 2026-10-27 · Plus de bloc gris au chargement
+
+- Demande d'Ephraïm : après un enregistrement ou à l'ouverture d'une page, un écran sombre avec un grand bloc gris arrondi s'affichait.
+- Cause : l'attente de tout l'espace connecté (`src/app/app/layout.tsx`, et `/admin`) montrait un squelette gris de 60 % de l'écran à chaque chargement complet d'une page (ouverture de l'appli, rechargement, retour vers une page chargée à part). Les navigations dans l'appli gardaient déjà la page précédente.
+- Correction : ce bloc est remplacé par la seule barre fine de chargement en haut, sur le fond de l'espace (`src/components/app/shell-loading.tsx`) ; la détection du téléphone se fait en parallèle des autres lectures de l'espace.
