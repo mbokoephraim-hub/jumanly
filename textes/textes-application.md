@@ -8513,6 +8513,9 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.profileOffers` | Offres en cours |
 | `phoneFil.profilePosts` | Publications |
 | `phoneFil.profileNoPosts` | Aucune publication pour l'instant. |
+| `phoneFil.mine.title` | Mes publications |
+| `phoneFil.mine.hint` | Toutes vos publications, même anciennes. Touchez « ··· » pour en modifier ou en supprimer une. |
+| `phoneFil.mine.write` | Écrire une publication |
 
 ## Partie 04 · Espace recruteur et entreprise
 
@@ -9605,6 +9608,7 @@ Conventions :
 | `phoneCareer.reglages.editProfile` | Modifier le profil |
 | `phoneCareer.reglages.account` | Compte |
 | `phoneCareer.reglages.namePhoto` | Nom et photo |
+| `phoneCareer.reglages.posts` | Mes publications |
 | `phoneCareer.reglages.email` | E-mail |
 | `phoneCareer.reglages.password` | Mot de passe et sécurité |
 | `phoneCareer.reglages.subscription` | Abonnement |
@@ -15996,6 +16000,8 @@ Conventions :
 | `phoneRhCompte.row.statsLine` | Réponses, délais, entretiens |
 | `phoneRhCompte.row.saved` | Publications enregistrées |
 | `phoneRhCompte.row.savedLine` | {count, plural, =0 {Aucune pour l'instant} one {# publication} other {# publications}} |
+| `phoneRhCompte.row.posts` | Mes publications |
+| `phoneRhCompte.row.postsLine` | Les modifier ou les supprimer, même anciennes |
 | `phoneRhCompte.row.page` | Page de l'entreprise |
 | `phoneRhCompte.row.pageVerified` | Vérifiée · administrée par {admin} |
 | `phoneRhCompte.row.pageVerifiedNoAdmin` | Vérifiée |

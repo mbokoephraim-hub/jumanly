@@ -1113,12 +1113,26 @@ export async function latestCertificate(db: PrismaClient, userId: string) {
   });
 }
 
+/** Every post a person wrote, in their name or in their company's, most recent first. */
+export async function ownPosts(db: PrismaClient, userId: string, now = new Date(), take = 500) {
+  const rows = await db.feedPost.findMany({
+    where: { parentId: null, authorId: userId, hiddenAt: null },
+    orderBy: { createdAt: "desc" },
+    take,
+    select: postSelect,
+  });
+  const { connected } = await circle(db, userId);
+  return toItems(db, userId, rows, connected, now);
+}
+
 /** The posts of one person (in their own name) or of one organization, most recent first. */
 export async function authorFeed(
   db: PrismaClient,
   viewerId: string,
   author: { userId: string } | { organizationId: string },
   now = new Date(),
+  /** « Mes publications » reaches every post, however old (Ephraïm, 27/10/2026). */
+  take = PAGE,
 ): Promise<FeedItem[]> {
   const { connected, blocked } = await circle(db, viewerId);
   if ("userId" in author && blocked.includes(author.userId)) return [];
@@ -1131,7 +1145,7 @@ export async function authorFeed(
         : { organizationId: author.organizationId }),
     },
     orderBy: { createdAt: "desc" },
-    take: PAGE,
+    take,
     select: postSelect,
   });
   return toItems(db, viewerId, rows, connected, now, blocked);

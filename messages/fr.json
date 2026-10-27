@@ -10324,7 +10324,12 @@
     "profileMessage": "Message",
     "profileOffers": "Offres en cours",
     "profilePosts": "Publications",
-    "profileNoPosts": "Aucune publication pour l'instant."
+    "profileNoPosts": "Aucune publication pour l'instant.",
+    "mine": {
+      "title": "Mes publications",
+      "hint": "Toutes vos publications, même anciennes. Touchez « ··· » pour en modifier ou en supprimer une.",
+      "write": "Écrire une publication"
+    }
   },
   "phoneExplorer": {
     "seo": "Explorer",
@@ -11572,6 +11577,7 @@
       "editProfile": "Modifier le profil",
       "account": "Compte",
       "namePhoto": "Nom et photo",
+      "posts": "Mes publications",
       "email": "E-mail",
       "password": "Mot de passe et sécurité",
       "subscription": "Abonnement",
@@ -19488,6 +19494,8 @@
       "statsLine": "Réponses, délais, entretiens",
       "saved": "Publications enregistrées",
       "savedLine": "{count, plural, =0 {Aucune pour l'instant} one {# publication} other {# publications}}",
+      "posts": "Mes publications",
+      "postsLine": "Les modifier ou les supprimer, même anciennes",
       "page": "Page de l'entreprise",
       "pageVerified": "Vérifiée · administrée par {admin}",
       "pageVerifiedNoAdmin": "Vérifiée",
