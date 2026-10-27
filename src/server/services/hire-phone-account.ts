@@ -141,6 +141,7 @@ export async function rhRecruiterProfile(db: PrismaClient, ctx: HireContext) {
     headline: profile?.headline?.trim() || null,
     hiringNow: profile?.hiringNow ?? true,
     seeking: profile?.seeking ?? "",
+    seekingTraits: profile?.seekingTraits ?? "",
     domains: profile?.domains ?? [],
     contactsFor: (profile?.contactsFor ?? "interview") as RhContactsFor,
     workEmail: profile?.workEmail ?? user.email,
@@ -164,7 +165,8 @@ export const rhProfileEditSchema = z.object({
   hiringNow: z.boolean(),
   contactsFor: z.enum(["interview", "nobody", "connections"]),
   /** « Le candidat que je recherche » (Ephraïm 27/10/2026). */
-  seeking: z.string().trim().max(400).optional(),
+  seeking: z.string().trim().max(120).optional(),
+  seekingTraits: z.string().trim().max(400).optional(),
 });
 
 /** « Modifier mon profil » (planche Recruteur-compte-modifier): the hook, the badge, the phone. */
@@ -175,6 +177,9 @@ export async function saveRhProfile(db: PrismaClient, ctx: HireContext, raw: unk
     ...parsed.data,
     headline: parsed.data.headline || null,
     ...(parsed.data.seeking === undefined ? {} : { seeking: parsed.data.seeking || null }),
+    ...(parsed.data.seekingTraits === undefined
+      ? {}
+      : { seekingTraits: parsed.data.seekingTraits || null }),
   };
   await db.recruiterProfile.upsert({
     where: { userId: ctx.userId },

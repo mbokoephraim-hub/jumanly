@@ -367,3 +367,10 @@
 .nb-rs-stats {
   margin-top: 12px;
 }
+.nb-pf-presente-l {
+  display: block;
+  margin: 10px 0 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--nb-brume);
+}

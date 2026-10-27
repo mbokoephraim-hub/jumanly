@@ -386,6 +386,7 @@ export async function profileView(
           organization: recruiter.organization,
           hiringNow: recruiter.hiringNow,
           seeking: recruiter.seeking,
+          seekingTraits: recruiter.seekingTraits,
           domains: recruiter.domains,
           offers: t("recruiter.offers", { count: recruiter.offers }),
         }

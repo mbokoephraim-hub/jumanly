@@ -439,7 +439,8 @@ export function PersonProfile({
                 </p>
               </div>
             ) : null}
-            {person.recruiter && (person.recruiter.seeking || own) ? (
+            {person.recruiter &&
+            (person.recruiter.seeking || person.recruiter.seekingTraits || own) ? (
               <>
                 <h2 className="nb-pf-h nb-cr-h" data-loin="">
                   {t("recruiter.seeking")}
@@ -447,8 +448,15 @@ export function PersonProfile({
                 </h2>
                 <div className="nb-pf-presente">
                   {person.recruiter.seeking ? (
-                    <p>{person.recruiter.seeking}</p>
-                  ) : own ? (
+                    <h3>{t("recruiter.post", { post: person.recruiter.seeking })}</h3>
+                  ) : null}
+                  {person.recruiter.seekingTraits ? (
+                    <>
+                      <b className="nb-pf-presente-l">{t("recruiter.traits")}</b>
+                      <p>{person.recruiter.seekingTraits}</p>
+                    </>
+                  ) : null}
+                  {person.recruiter.seeking || person.recruiter.seekingTraits ? null : own ? (
                     <p>
                       <Link href={own.edits.seeking}>{t("own.seekingEmpty")}</Link>
                     </p>

@@ -8926,10 +8926,12 @@ Conventions :
 | `phoneProfile.own.add` | Ajouter |
 | `phoneProfile.own.about` | À propos |
 | `phoneProfile.own.aboutEmpty` | Présentez-vous en quelques lignes : qui vous êtes et ce que vous faites. |
-| `phoneProfile.own.seekingEmpty` | Décrivez le candidat que vous cherchez : métier, niveau, qualités. |
+| `phoneProfile.own.seekingEmpty` | Précisez le poste que vous cherchez et le type de collaborateurs que vous voulez : motivation, caractère. |
 | `phoneProfile.own.educationEmpty` | Diplôme, formation ou attestation. |
 | `phoneProfile.own.languagesEmpty` | Ajoutez les langues que vous parlez. |
-| `phoneProfile.recruiter.seeking` | Candidat recherché |
+| `phoneProfile.recruiter.seeking` | Les candidats que je cherche |
+| `phoneProfile.recruiter.post` | Poste : {post} |
+| `phoneProfile.recruiter.traits` | Collaborateurs que je veux |
 | `phoneProfile.recruiter.domains` | Domaines de recrutement |
 | `phoneProfile.recruiter.hiringNow` | Recrute en ce moment |
 | `phoneProfile.recruiter.offers` | {count, plural, =0 {Aucune offre en cours} one {# offre en cours} other {# offres en cours}} |
@@ -16053,8 +16055,11 @@ Conventions :
 | `phoneRhCompte.edit.orbiText` | Je recrute les talents {domains} de {org}. Je réponds à chaque candidature. |
 | `phoneRhCompte.edit.orbiTextNoDomain` | Je recrute pour {org}. Je réponds à chaque candidature. |
 | `phoneRhCompte.edit.orbiNote` | Orbi propose, vous relisez avant d'enregistrer. |
-| `phoneRhCompte.edit.seeking` | Le candidat que je recherche |
-| `phoneRhCompte.edit.seekingPlaceholder` | Ex. : un ou une comptable junior, rigoureux, à l’aise avec Excel, disponible à Kinshasa. |
+| `phoneRhCompte.edit.seeking` | Les candidats que je cherche |
+| `phoneRhCompte.edit.seekingPost` | Poste recherché |
+| `phoneRhCompte.edit.seekingPostPlaceholder` | Ex. : Comptable junior |
+| `phoneRhCompte.edit.seekingTraits` | Le type de collaborateurs que je veux (motivation, caractère) |
+| `phoneRhCompte.edit.seekingTraitsPlaceholder` | Ex. : des personnes curieuses, rigoureuses, qui aiment apprendre et travailler en équipe. |
 | `phoneRhCompte.edit.seekingCount` | {count} / 400 |
 | `phoneRhCompte.edit.hiringNow` | Badge « Recrute en ce moment » |
 | `phoneRhCompte.edit.hiringNowLine` | Les talents vous trouvent plus vite |

@@ -37,7 +37,9 @@ export type ProfileView = {
     post: string | null;
     organization: { name: string; slug: string } | null;
     hiringNow: boolean;
+    /** The post looked for, then the kind of colleagues wanted (motivation, character). */
     seeking: string | null;
+    seekingTraits: string | null;
     domains: string[];
     /** « 3 offres en cours ». */
     offers: string;

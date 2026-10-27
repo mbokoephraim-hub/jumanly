@@ -274,7 +274,13 @@ export function RhProfileEdit({
   action,
   error,
 }: {
-  initial: { headline: string; hiringNow: boolean; contactsFor: string; seeking: string };
+  initial: {
+    headline: string;
+    hiringNow: boolean;
+    contactsFor: string;
+    seeking: string;
+    seekingTraits: string;
+  };
   /** Orbi's hook, written from the profile's domains (deterministic, no credit). */
   orbi: string;
   company: ReactNode;
@@ -285,6 +291,7 @@ export function RhProfileEdit({
   const [headline, setHeadline] = useState(initial.headline);
   const [hiring, setHiring] = useState(initial.hiringNow);
   const [seeking, setSeeking] = useState(initial.seeking);
+  const [traits, setTraits] = useState(initial.seekingTraits);
   const [contacts, setContacts] = useState(
     initial.contactsFor === "connections" ? "interview" : initial.contactsFor,
   );
@@ -312,18 +319,31 @@ export function RhProfileEdit({
         {t("orbi")}
       </button>
       <p className="nb-rc-note">{t("orbiNote")}</p>
-      <label className="nb-rc-champ" id="recherche">
-        <span>{t("seeking")}</span>
-        <textarea
+      <p className="nb-rc-label" id="recherche">
+        {t("seeking")}
+      </p>
+      <label className="nb-rc-champ">
+        <span>{t("seekingPost")}</span>
+        <input
           name="seeking"
-          rows={5}
-          maxLength={400}
+          maxLength={120}
           value={seeking}
-          placeholder={t("seekingPlaceholder")}
+          placeholder={t("seekingPostPlaceholder")}
           onChange={(event) => setSeeking(event.target.value)}
         />
       </label>
-      <p className="nb-rc-note">{t("seekingCount", { count: seeking.length })}</p>
+      <label className="nb-rc-champ">
+        <span>{t("seekingTraits")}</span>
+        <textarea
+          name="seekingTraits"
+          rows={5}
+          maxLength={400}
+          value={traits}
+          placeholder={t("seekingTraitsPlaceholder")}
+          onChange={(event) => setTraits(event.target.value)}
+        />
+      </label>
+      <p className="nb-rc-note">{t("seekingCount", { count: traits.length })}</p>
       <div className="nb-rc-bloc nb-rc-interrupteur">
         <span className="nb-rc-t">
           <b>{t("hiringNow")}</b>

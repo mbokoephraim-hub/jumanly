@@ -33,6 +33,7 @@ export async function rhSaveProfileAction(formData: FormData) {
     hiringNow: formData.get("hiringNow") === "on",
     contactsFor: String(formData.get("contactsFor") ?? "interview"),
     seeking: String(formData.get("seeking") ?? ""),
+    seekingTraits: String(formData.get("seekingTraits") ?? ""),
   });
   redirect(saved ? `${COMPTE}/profil?ok=1` : `${COMPTE}/profil/modifier?erreur=1`);
 }

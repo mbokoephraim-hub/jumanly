@@ -348,6 +348,7 @@ export async function RhProfileEditScreen({ ctx, query }: { ctx: HireContext; qu
           hiringNow: data.hiringNow,
           contactsFor: data.contactsFor,
           seeking: data.seeking,
+          seekingTraits: data.seekingTraits,
         }}
         company={
           <>
