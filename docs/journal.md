@@ -4985,3 +4985,9 @@ bibliothèque, et se supprime.
 - Ajouter ou retirer un synonyme ; fusionner une compétence dans une autre (les profils, offres et formations passent sur la cible, l'ancien nom devient synonyme). Le score compare noms et synonymes : effet immédiat. Chaque action est au journal avec son motif.
 - Ouvert aux administrateurs et aux responsables carrière.
 - Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
+
+## 2026-10-27 · Changement d'adresse e-mail réparé
+
+- « Changer d'adresse » (Paramètres, talent et recruteur au téléphone) envoie maintenant le lien lui-même au lieu de passer par `auth.api.changeEmail`, qui masquait un envoi échoué et affichait « Lien envoyé » alors que rien ne partait. Même jeton Better Auth (`change-email-verification`), l'adresse change à l'ouverture du lien.
+- E-mail dédié « Confirmez votre nouvelle adresse » (`mail.changeEmail.*`) au lieu du texte d'inscription.
+- En production sans RESEND_API_KEY ni SMTP_HOST, l'application dit clairement que l'envoi d'e-mails n'est pas encore activé (`emailChange.unavailable`).

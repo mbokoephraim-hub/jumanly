@@ -50,6 +50,17 @@ export async function sendVerificationLink(to: string, url: string, firstName?: 
   });
 }
 
+/** « Changer d'adresse » in Paramètres: the link sent to the new address makes it the account's. */
+export async function sendEmailChangeLink(to: string, url: string, firstName?: string | null) {
+  await send(to, t("mail.changeEmail.subject"), {
+    preview: t("mail.changeEmail.preheader"),
+    greeting: greeting(firstName),
+    paragraphs: [t("mail.changeEmail.p1")],
+    cta: { label: t("mail.changeEmail.cta"), href: url },
+    footnote: `${t("mail.verifyLink.p2", { hours: VERIFY_LINK_HOURS })} ${t("mail.verifyCode.p3")}`,
+  });
+}
+
 /** Code of « Mot de passe oublié » (refonte mobile, lot 2): typed on /reinitialiser. */
 export async function sendPasswordCode(to: string, code: string, firstName?: string | null) {
   await send(to, t("mail.resetCode.subject", { code }), {
