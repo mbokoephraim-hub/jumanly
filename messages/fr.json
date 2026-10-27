@@ -12222,6 +12222,7 @@
   "phoneLearn": {
     "title": "Formation",
     "account": "Mon profil",
+    "settings": "Paramètres",
     "tabs": "Choisir une rubrique",
     "tab": {
       "forYou": "Pour vous",

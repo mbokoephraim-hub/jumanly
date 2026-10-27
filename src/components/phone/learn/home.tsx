@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FilAvatar } from "../fil/avatar";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { askOrbiFrom } from "../orbi-bus";
 import type { CourseCard, FormationView } from "./data";
@@ -77,15 +76,9 @@ export function PhoneFormation({ view }: { view: FormationView }) {
     <div className="nb-page nb-fo nb-fo-accueil">
       <header className="nb-tete-onglet">
         <h1>{t("title")}</h1>
-        <Link href="/app/career/cv" className="nb-tete-moi" aria-label={t("account")}>
-          <FilAvatar
-            initials={view.me.initials}
-            image={view.me.image}
-            tone={0}
-            org={false}
-            me
-            size={36}
-          />
+        {/* Paramètres in place of the avatar, as on the Fil (Ephraïm, 27/10/2026). */}
+        <Link href="/app/parametres" className="nb-rond" aria-label={t("settings")}>
+          <PhoneIcon name="reglages" size={23} />
         </Link>
       </header>
 
