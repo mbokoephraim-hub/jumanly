@@ -100,9 +100,6 @@ html:has(.nb-app) body {
 .nb-onglet[data-etat="dessous"] {
   z-index: 1;
 }
-.nb-onglet[data-explorer] {
-  background: var(--nb-noir);
-}
 .nb-pile {
   z-index: 10;
 }
@@ -4200,8 +4197,9 @@ html[data-nb-decouvert] .nb-spl-halo {
   padding: 0 20px;
   margin: 28px 0 10px;
 }
+/* Smaller section titles (Ephraïm, 27/10/2026). */
 .nb-ex-sec h2 {
-  font-size: 19px;
+  font-size: 16px;
   font-weight: 600;
 }
 .nb-ex-sec a {

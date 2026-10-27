@@ -24,8 +24,8 @@ export type ExplorerMe = {
 
 /**
  * Explorer (Modèle B, planche Offres, rangée 07): the head (me, the bookmark), the search in two
- * steps, then « Offres pour vous », « Entreprises qui recrutent », « Nouvelles cette semaine » and
- * « Personnes à connaître ». The chips filter in place, everything arrived with the page.
+ * steps, then « Offres pour vous », « Entreprises qui recrutent » and « Personnes à
+ * connaître » (« Nouvelles cette semaine » removed, Ephraïm, 27/10/2026). The chips filter in place, everything arrived with the page.
  * « Filtres » (docs/fil-menu-publication § 3) reads the lists that meet them on the server.
  */
 export function PhoneExplorer({
@@ -49,11 +49,10 @@ export function PhoneExplorer({
   const [filters, setFilters] = useState<ExploreFilters>(NO_FILTERS);
   // The lists that meet the filters; none while no filter is on (the page's own lists).
   const [filtered, setFiltered] = useState<ExplorerHomeView | null>(null);
-  const { offers, fresh, domains, companies, sectors, people } = filtered ?? lists;
+  const { offers, domains, companies, sectors, people } = filtered ?? lists;
 
   const forYou = offers.filter((offer) => !domain || offer.domain === domain).slice(0, 8);
   const hiring = companies.filter((company) => !sector || company.sector === sector).slice(0, 8);
-  const newOnes = fresh.filter((offer) => !sector || offer.sector === sector).slice(0, 8);
   const show = (section: "offres" | "entreprises" | "personnes") =>
     showsSection(filters.scope, section);
 
@@ -61,7 +60,8 @@ export function PhoneExplorer({
     <div className="nb-page nb-ex">
       <header className="nb-ex-haut">
         <Link href="/app/career/cv" className="nb-ex-moi" aria-label={t("account")}>
-          <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={40} />
+          {/* The size of the Fil's avatar and of the bookmark beside it (Ephraïm, 27/10/2026). */}
+          <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={28} />
         </Link>
         <h1>{t("title")}</h1>
         <SavedLink count={saved} />
@@ -129,25 +129,6 @@ export function PhoneExplorer({
                 <div className="nb-ex-rangee nb-ex-ents">
                   {hiring.map((company) => (
                     <CompanyCard key={company.slug} company={company} />
-                  ))}
-                </div>
-              )}
-            </section>
-          ) : null}
-
-          {show("offres") ? (
-            <section aria-labelledby="ex-nouvelles">
-              <Section
-                id="ex-nouvelles"
-                title={sector ?? t("fresh")}
-                href="/app/explorer/nouvelles"
-              />
-              {newOnes.length === 0 ? (
-                <p className="nb-ex-vide">{t("noFresh")}</p>
-              ) : (
-                <div className="nb-ex-rangee nb-ex-cartes">
-                  {newOnes.map((offer) => (
-                    <OfferCard key={offer.id} offer={offer} />
                   ))}
                 </div>
               )}
