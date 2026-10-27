@@ -8973,6 +8973,8 @@ Conventions :
 | `phoneCv.found.consent` | Seuls les groupes cochés entrent dans votre profil. Votre ville n’est reprise que si votre profil n’en a pas. |
 | `phoneCv.found.apply` | Ajouter à mon profil et créer le CV |
 | `phoneCv.found.applyEmpty` | Créer le CV depuis mon profil |
+| `phoneCv.found.keepOnly` | Garder seulement ce CV, sans toucher à mon profil |
+| `phoneCv.found.keepNote` | Le CV importé est gardé dans « Mes CV » tel qu’Orbi l’a lu ; vous pourrez le modifier. |
 | `phoneCv.content.title` | Contenu |
 | `phoneCv.content.sub` | Rempli depuis votre profil |
 | `phoneCv.content.orbiTitle` | Orbi a tout rempli depuis votre profil. |
@@ -9025,6 +9027,7 @@ Conventions :
 | `phoneCv.style.languageValue` | {language} › |
 | `phoneCv.style.languageChange` | Langue des titres : {current}. Toucher pour changer. |
 | `phoneCv.style.next` | Voir l’aperçu |
+| `phoneCv.style.emptyNote` | Votre CV est encore vide : l’aperçu montre un exemple. Remplissez-le à l’étape Aperçu. |
 | `phoneCv.preview.title` | Aperçu et vérification |
 | `phoneCv.preview.sub` | Orbi relit avant de télécharger |
 | `phoneCv.preview.scoreLabel` | Score du CV : {score} sur 100 |
@@ -9058,6 +9061,29 @@ Conventions :
 | `phoneCv.preview.pdf` | Télécharger en PDF |
 | `phoneCv.preview.downloading` | Téléchargement du PDF, sans logo Jumanly. |
 | `phoneCv.preview.exportError` | Le PDF n’a pas pu être créé. Réessayez dans un instant. |
+| `phoneCv.preview.empty` | Votre CV est encore vide : l’aperçu montre un exemple, pas votre CV. Remplissez-le avant de le télécharger. |
+| `phoneCv.preview.fillProfile` | Reprendre mon profil |
+| `phoneCv.preview.fillWrite` | Écrire le contenu |
+| `phoneCv.preview.filled` | Votre CV reprend maintenant votre profil. |
+| `phoneCv.preview.fillNothing` | Votre profil est encore vide. Ajoutez vos expériences et compétences, ou importez un CV. |
+| `phoneCv.preview.pdfEmpty` | Remplissez votre CV pour le télécharger |
+| `phoneCv.preview.preparing` | Préparation du PDF… |
+| `phoneCv.preview.downloaded` | CV téléchargé. Il est aussi gardé dans « Mes CV ». |
+| `phoneCv.preview.addProfile` | Ajouter à mon profil |
+| `phoneCv.preview.addTitle` | Ajouter ce CV à mon profil |
+| `phoneCv.preview.addSub` | Seul ce que votre profil n’a pas encore est ajouté. Rien n’est remplacé. |
+| `phoneCv.preview.addPart.headline` | Le titre |
+| `phoneCv.preview.addPart.summary` | Le résumé |
+| `phoneCv.preview.addPart.experiences` | {count, plural, one {# expérience} other {# expériences}} |
+| `phoneCv.preview.addPart.educations` | {count, plural, one {# formation} other {# formations}} |
+| `phoneCv.preview.addPart.skills` | {count, plural, one {# compétence} other {# compétences}} |
+| `phoneCv.preview.addPart.languages` | {count, plural, one {# langue} other {# langues}} |
+| `phoneCv.preview.addNothing` | Votre profil contient déjà tout ce qui est sur ce CV. |
+| `phoneCv.preview.addConfirm` | Ajouter à mon profil |
+| `phoneCv.preview.added` | {count, plural, one {Un élément ajouté à votre profil.} other {# éléments ajoutés à votre profil.}} |
+| `phoneCv.preview.finish` | Terminer |
+| `phoneCv.preview.saved` | Votre CV est enregistré dans « Mes CV ». |
+| `phoneCv.preview.autosave` | Chaque changement est enregistré tout seul : revenir en arrière ne perd rien. |
 | `phoneCv.check.headline.ok` | Un titre clair sous votre nom |
 | `phoneCv.check.headline.todo` | Ajoutez un titre sous votre nom |
 | `phoneCv.check.summary.ok` | Un résumé de deux ou trois phrases |

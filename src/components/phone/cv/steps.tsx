@@ -168,7 +168,7 @@ export async function PhoneCvSteps({
     );
   }
 
-  const { data } = await previewData(source);
+  const { data, demo } = await previewData(source);
 
   if (step === "style") {
     const colors = [...cvColors]
@@ -193,6 +193,7 @@ export async function PhoneCvSteps({
           style={style}
           colors={colors}
           fonts={fonts}
+          empty={demo}
           steps={steps}
         />
       </CvTexts>
@@ -242,6 +243,7 @@ export async function PhoneCvSteps({
           tp("why3"),
         ]}
         error={exportError ? tp("exportError") : null}
+        empty={demo}
         steps={steps}
       />
     </CvTexts>

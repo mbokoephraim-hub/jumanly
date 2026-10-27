@@ -32,6 +32,7 @@ export function CvStyleStep({
   style: saved,
   colors,
   fonts,
+  empty,
   steps,
 }: {
   cvId: string;
@@ -41,6 +42,8 @@ export function CvStyleStep({
   style: CvStyle;
   colors: { code: string; hex: string; ats: boolean; name: string }[];
   fonts: { code: CvStyle["font"]; label: string; family: string }[];
+  /** Nothing written yet: the preview is an example. */
+  empty: boolean;
   steps: ComponentProps<typeof CvFrame>["steps"];
 }) {
   const t = useTranslations("phoneCv");
@@ -79,6 +82,7 @@ export function CvStyleStep({
         </Link>
       }
     >
+      {empty ? <p className="nb-cv-note">{t("style.emptyNote")}</p> : null}
       <div className="nb-cv-vivant">
         <div className="nb-cv-vivant-page">
           <CvPaginationProvider>

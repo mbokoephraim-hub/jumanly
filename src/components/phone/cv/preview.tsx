@@ -13,10 +13,48 @@ import {
 } from "@/features/cv/render/CvPreview";
 import type { CvStyle } from "@/features/cv/style";
 import type { CvTemplate } from "@/features/cv/templates/registry";
-import { fixCvCheckAction, renameCvAction, setCvPrimaryAction } from "@/server/actions/cv-flow";
+import {
+  addCvToProfileAction,
+  fillCvFromProfileAction,
+  fixCvCheckAction,
+  previewCvIntoProfileAction,
+  renameCvAction,
+  setCvPrimaryAction,
+} from "@/server/actions/cv-flow";
 import { PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
 import { CvFrame } from "./frame";
+
+type AddCounts = Extract<
+  Awaited<ReturnType<typeof previewCvIntoProfileAction>>,
+  { ok: true }
+>["counts"];
+const ADD_PARTS = [
+  "headline",
+  "summary",
+  "experiences",
+  "educations",
+  "skills",
+  "languages",
+] as const;
+
+/** Saves the PDF answered by the server; a refusal (redirect to a page) is an error. */
+async function savePdf(cvId: string) {
+  const response = await fetch(`/app/career/cv/${cvId}/pdf`, { credentials: "same-origin" });
+  if (!response.ok || !response.headers.get("Content-Type")?.includes("application/pdf"))
+    throw new Error("export");
+  const blob = await response.blob();
+  const name =
+    /filename="([^"]+)"/.exec(response.headers.get("Content-Disposition") ?? "")?.[1] ?? "CV.pdf";
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = name;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 30_000);
+}
 
 export type PreviewCheck = {
   key: string;
@@ -38,6 +76,8 @@ function Pages({ readable }: { readable: boolean }) {
  * Aperçu et vérification (capture 11): the real CV, Orbi's score out of 100 with what was
  * checked (fixed rules, « Pourquoi ? » says how it is counted, « Corriger » takes what the
  * profile already has), the CV's name, « Utiliser par défaut », Word, Adapter, then the PDF.
+ * An empty CV shows an example: it is filled from the profile before it can be downloaded.
+ * « Ajouter à mon profil » and « Terminer » end the flow on Carrière (Ephraïm, 27/10).
  */
 export function CvPreviewStep({
   cvId,
@@ -50,6 +90,7 @@ export function CvPreviewStep({
   checks,
   why,
   error,
+  empty,
   steps,
 }: {
   cvId: string;
@@ -62,6 +103,8 @@ export function CvPreviewStep({
   checks: PreviewCheck[];
   why: string[];
   error: string | null;
+  /** Nothing written yet: the preview is an example, the PDF is not offered. */
+  empty: boolean;
   steps: ComponentProps<typeof CvFrame>["steps"];
 }) {
   const t = useTranslations("phoneCv");
@@ -71,6 +114,8 @@ export function CvPreviewStep({
   const [naming, setNaming] = useState(false);
   const [explaining, setExplaining] = useState(false);
   const [name, setName] = useState(title);
+  const [preparing, setPreparing] = useState(false);
+  const [adding, setAdding] = useState<{ counts: AddCounts; total: number } | null>(null);
 
   const fail = (message = t("error")) => showToast({ message, tone: "error" });
   const fix = (check: PreviewCheck) => {
@@ -84,6 +129,43 @@ export function CvPreviewStep({
       } else fail(result.error === "profile" ? t("preview.fixProfile") : t("error"));
     });
   };
+  const download = async () => {
+    setPreparing(true);
+    try {
+      await savePdf(cvId);
+      showToast({ message: t("preview.downloaded") });
+    } catch {
+      fail(t("preview.exportError"));
+    } finally {
+      setPreparing(false);
+    }
+  };
+  const fill = () =>
+    start(async () => {
+      const result = await fillCvFromProfileAction(cvId);
+      if (result.ok) {
+        showToast({ message: t("preview.filled") });
+        router.refresh();
+      } else fail(result.error === "profile" ? t("preview.fillNothing") : t("error"));
+    });
+  const askAdd = () =>
+    start(async () => {
+      const result = await previewCvIntoProfileAction(cvId);
+      if (result.ok) setAdding({ counts: result.counts, total: result.total });
+      else fail();
+    });
+  const add = () =>
+    start(async () => {
+      const result = await addCvToProfileAction(cvId);
+      if (!result.ok) return fail();
+      setAdding(null);
+      showToast({ message: t("preview.added", { count: result.added }) });
+      router.refresh();
+    });
+  const finish = () => {
+    showToast({ message: t("preview.saved") });
+    router.replace("/app/career/cv?onglet=cv");
+  };
   const readable = checks.find((check) => check.key === "readable")?.ok ?? true;
   const ring = `conic-gradient(var(--nb-lime) ${score.total * 3.6}deg, var(--nb-haute) 0)`;
   return (
@@ -93,18 +175,47 @@ export function CvPreviewStep({
       back={{ href: `/app/career/cv/${cvId}?etape=style`, label: t("back") }}
       steps={steps}
       bottom={
-        <a
-          href={`/app/career/cv/${cvId}/pdf`}
-          download
-          className="nb-bouton nb-cv-principal"
-          data-plein=""
-          data-large=""
-          onClick={() => showToast({ message: t("preview.downloading") })}
-        >
-          {t("preview.pdf")}
-        </a>
+        <div className="nb-cv-fin">
+          <button
+            type="button"
+            className="nb-bouton nb-cv-principal"
+            data-plein=""
+            data-large=""
+            disabled={empty || preparing}
+            aria-busy={preparing}
+            onClick={download}
+          >
+            {empty ? t("preview.pdfEmpty") : preparing ? t("preview.preparing") : t("preview.pdf")}
+          </button>
+          <button type="button" className="nb-bouton" data-contour="" onClick={finish}>
+            {t("preview.finish")}
+          </button>
+        </div>
       }
     >
+      {empty ? (
+        <div className="nb-cv-vide" role="status">
+          <p>{t("preview.empty")}</p>
+          <div className="nb-cv-deux">
+            <button
+              type="button"
+              className="nb-bouton"
+              data-plein=""
+              disabled={pending}
+              onClick={fill}
+            >
+              {t("preview.fillProfile")}
+            </button>
+            <Link
+              href={`/app/career/cv/${cvId}?etape=contenu`}
+              className="nb-bouton"
+              data-contour=""
+            >
+              {t("preview.fillWrite")}
+            </Link>
+          </div>
+        </div>
+      ) : null}
       {error ? (
         <p className="nb-cv-erreur" role="alert">
           {error}
@@ -190,6 +301,18 @@ export function CvPreviewStep({
           </button>
         </div>
       </div>
+      {empty ? null : (
+        <button
+          type="button"
+          className="nb-bouton nb-cv-ajout-profil"
+          data-contour=""
+          data-large=""
+          disabled={pending}
+          onClick={askAdd}
+        >
+          {t("preview.addProfile")}
+        </button>
+      )}
       <div className="nb-cv-deux">
         <a href={`/app/career/cv/${cvId}/word`} download className="nb-bouton" data-contour="">
           {t("preview.word")}
@@ -237,6 +360,49 @@ export function CvPreviewStep({
             {t("save")}
           </button>
         </form>
+      </PhoneSheet>
+
+      <p className="nb-cv-note" data-centre="">
+        {t("preview.autosave")}
+      </p>
+
+      <PhoneSheet
+        open={adding !== null}
+        onClose={() => setAdding(null)}
+        label={t("preview.addTitle")}
+        closeLabel={t("close")}
+      >
+        <div className="nb-cv-feuille-f">
+          <b className="nb-cv-feuille-t">{t("preview.addTitle")}</b>
+          <p className="nb-cv-aide">{t("preview.addSub")}</p>
+          {adding && adding.total > 0 ? (
+            <ul className="nb-cv-parts">
+              {ADD_PARTS.filter((part) => adding.counts[part] > 0).map((part) => (
+                <li key={part}>
+                  <span>
+                    {part === "headline" || part === "summary"
+                      ? t(`preview.addPart.${part}`)
+                      : t(`preview.addPart.${part}`, { count: adding.counts[part] })}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="nb-cv-note">{t("preview.addNothing")}</p>
+          )}
+          {adding && adding.total > 0 ? (
+            <button
+              type="button"
+              className="nb-bouton"
+              data-plein=""
+              data-large=""
+              disabled={pending}
+              onClick={add}
+            >
+              {t("preview.addConfirm")}
+            </button>
+          ) : null}
+        </div>
       </PhoneSheet>
 
       <PhoneSheet

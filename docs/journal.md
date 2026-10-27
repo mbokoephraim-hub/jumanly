@@ -4836,6 +4836,25 @@ profil et les candidats dans la même identité visuelle.
   le Chat (#173), un téléphone resté ouvert pendant une mise en ligne gardait l'ancienne feuille
   globale et ne voyait pas les nouveaux en-têtes.
 
+## Carrière v3 : fin de la création d'un CV (27 octobre 2026)
+
+Demande d'Ephraïm : le PDF téléchargé ne contenait que le haut du CV, « juste le logo ».
+
+- Cause : un CV encore vide (profil vide à sa création) montrait à l'aperçu un CV d'exemple rempli,
+  mais le PDF imprimait le vrai CV, presque vide. Désormais l'aperçu le dit (« l'aperçu montre un
+  exemple »), propose « Reprendre mon profil » ou « Écrire le contenu », et le téléchargement reste
+  fermé tant que le CV est vide. Le PDF est récupéré par le navigateur puis enregistré, avec un
+  message clair en cas d'échec.
+- « Ajouter à mon profil » (Aperçu) : ce que le CV contient et que le profil n'a pas encore
+  (titre, résumé, expériences datées, formations, compétences du référentiel, langues), après une
+  feuille qui montre ce qui sera ajouté. Rien n'est remplacé (`src/server/services/cv-to-profile.ts`).
+- « Terminer » ramène à Carrière (onglet CV). Créer un CV remplace l'adresse au lieu de l'empiler :
+  « Retour » depuis Contenu ne repasse plus par le choix du modèle (qui recréait un CV).
+- Import : « Garder seulement ce CV » garde le CV importé dans « Mes CV » tel qu'il a été lu, sans
+  toucher au profil ; son nom est celui du fichier.
+- « Adapter à une offre » vérifié au téléphone.
+- Tests : `tests/unit/cv-to-profile.test.ts`, e2e `carriere-v3` (CV vide, PDF lu avec pdftotext,
+  ajout au profil, Terminer, import gardé), `mobile-profil-cv`.
 ## Carrière · « À propos » et photo vue en grand (27 octobre 2026)
 
 - Demande d'Ephraïm : une présentation (titre + texte de 400 caractères) avant les compétences, et la photo de profil qu'on touche pour l'agrandir devant un fond flouté, la modifier, la recadrer ou revenir aux initiales.
