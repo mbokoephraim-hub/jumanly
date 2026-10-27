@@ -210,7 +210,8 @@ async function keep(db: PrismaClient, userId: string, payload: ImportPayload) {
   });
 }
 
-export type PhotoImportResult = { ok: true } | { ok: false; error: "ai" | AiError["code"] };
+export type PhotoImportResult =
+  { ok: true; id: string } | { ok: false; error: "ai" | AiError["code"] };
 
 /**
  * « Photographier un CV papier »: only the model can read a picture, so Orbi must be ready
@@ -240,12 +241,12 @@ export async function importCvPhoto(
       template: () => empty,
       image,
     });
-    await keep(db, userId, {
+    const kept = await keep(db, userId, {
       ...clean(run.output),
       source: "ai",
       file: { ...file, name: file.name.slice(0, 200) },
     });
-    return { ok: true };
+    return { ok: true, id: kept.id };
   } catch (error) {
     if (error instanceof AiError) return { ok: false, error: error.code };
     throw error;

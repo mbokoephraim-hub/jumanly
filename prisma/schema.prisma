@@ -1304,6 +1304,12 @@ model Document {
   /// Offer a CV was adapted to (« Adapter mon CV à cette offre »): proposed first when applying.
   /// A plain id, not a relation: the CV stays if the offer goes.
   adaptedForJobId String?
+  /// The file a talent imported and kept as it is (« Garder mon CV », Ephraïm 27/10): PDF or Word,
+  /// in the private file storage. Null for a CV made in Jumanly.
+  fileKey         String?
+  fileName        String?
+  /// "pdf" | "docx".
+  fileType        String?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 

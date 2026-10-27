@@ -4886,6 +4886,24 @@ proposer le type d'utilisateur et « S'inscrire » / « Se connecter ».
   téléphone : choix Talent / Recruteur à côté du logo, boutons « S'inscrire » et « Se connecter ».
 - Tests : `tests/unit/signup-confirmation.test.ts`, e2e d'inscription passés au lien
   (`openConfirmationLink`), accueil (`foundation`, `modele-b-accueil`).
+## Carrière · importer un CV : trois choix, et lire ses CV dans l'appli (27 octobre 2026)
+
+Demande d'Ephraïm : un CV importé doit pouvoir être gardé, servir à remplir le profil, ou servir à
+créer un autre CV ; un CV de la bibliothèque se lit dans l'appli, se ferme pour revenir à la
+bibliothèque, et se supprime.
+
+- « Voici ce qu'Orbi a trouvé » propose trois choix : « Garder mon CV » (le fichier tel quel dans
+  « Mes CV »), « Remplir mon profil avec ce CV » (Orbi range les groupes cochés dans le profil, le
+  CV est aussi gardé) et « Créer un nouveau CV avec ces informations » (choix du modèle, puis
+  Contenu, Mise en forme, Aperçu ; le PDF est ce CV).
+- Le fichier d'origine est gardé (stockage privé) et sert aussi aux candidatures : le recruteur
+  reçoit le fichier importé.
+- Nouvel écran « Lire » (`/app/career/cv/[id]/lire`) : PDF dessiné page par page, photo, ou mise en
+  page pour un fichier Word et un CV fait sur Jumanly ; Télécharger, Utiliser par défaut pour
+  postuler, Modifier (ou « En faire un CV modifiable »), Supprimer. « Fermer » revient à « Mes CV ».
+  Les cartes de la bibliothèque ouvrent cet écran.
+- Tests e2e `carriere-v3` : les trois choix, lecture du PDF, téléchargement, fermeture, suppression,
+  PDF du nouveau CV.
 
 ## Profil du recruteur à l'identité du profil talent, photo agrandie pour les visiteurs (27 octobre 2026)
 

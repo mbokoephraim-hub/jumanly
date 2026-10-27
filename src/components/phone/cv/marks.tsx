@@ -3,6 +3,7 @@
  * with the same strokes as the mockup, and Orbi's star.
  */
 const PATHS = {
+  nouveau: "M5.5 3.5h9l4 4v13h-13zM14.5 3.5v4h4M12 11v6M9 14h6",
   modele: "M5.5 3.5h9l4 4v13h-13zM14.5 3.5v4h4M8.5 11.5h7M8.5 15h7M8.5 18h4",
   import:
     "M12 15.5V4M7.5 8.5 12 4l4.5 4.5M4.5 15v3.5a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5V15",

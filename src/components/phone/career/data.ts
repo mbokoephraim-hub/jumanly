@@ -13,6 +13,8 @@ import { initialsOf, shortName, toneOf } from "../fil/data";
 import type { ProfileView } from "../profil/data";
 import { profileView } from "../profil/server";
 
+const fileKind = (type: string) => (type === "docx" ? "docx" : type === "image" ? "image" : "pdf");
+
 /** « @grace.mbuyi »: the name in small letters, without accents, joined by dots. */
 export const handleOf = handleFromName;
 
@@ -84,6 +86,8 @@ export type CareerView = {
     score: number;
     /** The CV's accent colour, for its drawn thumbnail. */
     color: string;
+    /** An imported CV kept as its file: read and saved as it is, not edited. */
+    file: boolean;
   }[];
   adapt: { text: string; href: string } | null;
   projects: {
@@ -277,7 +281,9 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
     const template = tc.has(cv.templateId as "classique")
       ? tc(cv.templateId as "classique")
       : cv.templateId;
-    const tags: { text: string; strong?: boolean }[] = [{ text: template }];
+    const tags: { text: string; strong?: boolean }[] = [
+      { text: cv.fileType ? t("cv.imported") : template },
+    ];
     if (cv.isPrimary) tags.push({ text: t("cv.primary"), strong: true });
     else if (cv.uses > 0) tags.push({ text: t("cv.uses", { count: cv.uses }) });
     return {
@@ -288,9 +294,15 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
       href: `/app/career/cv/${cv.id}`,
       pdf: `/app/career/cv/${cv.id}/pdf`,
       primary: cv.isPrimary,
-      meta: t("cv.meta", { template, when: cvWhen(cv.updatedAt) }),
+      meta: cv.fileType
+        ? t("cv.metaFile", {
+            kind: t(`cv.fileKind.${fileKind(cv.fileType)}`),
+            when: cvWhen(cv.updatedAt),
+          })
+        : t("cv.meta", { template, when: cvWhen(cv.updatedAt) }),
       score: cv.score,
       color: accentOf(cv.style),
+      file: Boolean(cv.fileType),
     };
   });
 

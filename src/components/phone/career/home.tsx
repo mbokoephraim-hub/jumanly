@@ -161,8 +161,10 @@ export function PhoneCareer({ view }: { view: CareerView }) {
     if (!TABS.includes(tabAsked as Tab)) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- follows the address
     setTab(tabAsked as Tab);
+    // « Supprimer » from the menu or the reader comes back here (Ephraïm, 27/10).
+    if (params.get("ok") === "supprime") showToast({ message: t("cv.deleted") });
     router.replace("/app/career/cv", { scroll: false });
-  }, [tabAsked, router]);
+  }, [tabAsked, router, params, t]);
   useEffect(() => {
     if (asked !== "competences" && asked !== "langues") return;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- follows the address
@@ -854,7 +856,7 @@ function CvPanel({
               className="nb-cr-carte nb-cr-cv"
               style={{ animationDelay: `${at * 0.08}s` }}
             >
-              <Link href={`${cv.href}?etape=apercu`} className="nb-cr-cv-l">
+              <Link href={`${cv.href}/lire`} className="nb-cr-cv-l">
                 <span
                   className="nb-cr-cv-page"
                   style={{ "--accent": cv.color } as CSSProperties}
@@ -870,7 +872,11 @@ function CvPanel({
                   <i data-w="80" />
                 </span>
                 <em className="nb-cr-cv-note" data-defaut={cv.primary ? "" : undefined}>
-                  {cv.primary ? t("cv.primary") : t("cv.score", { score: cv.score })}
+                  {cv.primary
+                    ? t("cv.primary")
+                    : cv.file
+                      ? t("cv.imported")
+                      : t("cv.score", { score: cv.score })}
                 </em>
                 <span className="nb-cr-cv-t">
                   <b>{cv.title}</b>
@@ -918,6 +924,7 @@ function CvMenu({ cv, onClose }: { cv: CareerView["cvs"][number] | null; onClose
           <p className="nb-meta nb-ca-feuille-d">{t("cv.menu.deleteText")}</p>
           <form action={deleteCv} className="nb-ca-feuille-b">
             <input type="hidden" name="id" value={cv.id} />
+            <input type="hidden" name="retour" value="cv" />
             <button type="submit" className="nb-bouton" data-large="" data-plein-rouge="">
               {t("cv.menu.delete")}
             </button>
@@ -935,24 +942,44 @@ function CvMenu({ cv, onClose }: { cv: CareerView["cvs"][number] | null; onClose
       ) : cv ? (
         <>
           <b className="nb-ex-feuille-t">{cv.title}</b>
-          <Link href={`${cv.href}?etape=contenu`} className="nb-opt nb-fil-opt">
-            {t("cv.menu.edit")}
+          <Link href={`${cv.href}/lire`} className="nb-opt nb-fil-opt">
+            {t("cv.menu.read")}
           </Link>
-          <CvExportButton
-            id={cv.id}
-            title={cv.title}
-            label={t("cv.menu.export")}
-            className="nb-opt nb-fil-opt"
-          />
-          <Link href={`${cv.href}?adapter=`} className="nb-opt nb-fil-opt">
-            {t("cv.menu.adapt")}
-          </Link>
-          <form action={duplicateCv}>
-            <input type="hidden" name="id" value={cv.id} />
-            <button type="submit" className="nb-opt nb-fil-opt">
-              {t("cv.menu.duplicate")}
-            </button>
-          </form>
+          {cv.file ? (
+            <>
+              <a href={`${cv.href}/fichier?telecharger=1`} className="nb-opt nb-fil-opt" download>
+                {t("cv.menu.download")}
+              </a>
+              {/* The file stays as it is; a copy made in Jumanly can be changed. */}
+              <form action={duplicateCv}>
+                <input type="hidden" name="id" value={cv.id} />
+                <button type="submit" className="nb-opt nb-fil-opt">
+                  {t("cv.menu.editable")}
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <Link href={`${cv.href}?etape=contenu`} className="nb-opt nb-fil-opt">
+                {t("cv.menu.edit")}
+              </Link>
+              <CvExportButton
+                id={cv.id}
+                title={cv.title}
+                label={t("cv.menu.export")}
+                className="nb-opt nb-fil-opt"
+              />
+              <Link href={`${cv.href}?adapter=`} className="nb-opt nb-fil-opt">
+                {t("cv.menu.adapt")}
+              </Link>
+              <form action={duplicateCv}>
+                <input type="hidden" name="id" value={cv.id} />
+                <button type="submit" className="nb-opt nb-fil-opt">
+                  {t("cv.menu.duplicate")}
+                </button>
+              </form>
+            </>
+          )}
           {!cv.primary ? (
             <form action={setPrimaryCv}>
               <input type="hidden" name="id" value={cv.id} />
