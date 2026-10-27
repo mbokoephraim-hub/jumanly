@@ -20329,9 +20329,8 @@ Conventions :
 | `admin.users.action.resetPassword` | Envoyer un lien de réinitialisation |
 | `admin.users.action.grantPlan.text` | Attribuer un forfait manuellement |
 | `admin.users.action.grantPlan.until` | Jusqu'au |
-| `admin.users.action.exportData` | Générer l'export de ses données |
-| `admin.users.action.delete.text` | Supprimer le compte |
-| `admin.users.action.delete.confirm` | Supprimer définitivement le compte de {userName} ? Cette action est irréversible. |
+| `admin.users.action.delete.text` | Anonymiser le compte |
+| `admin.users.action.delete.confirm` | Anonymiser le compte de {userName} ? Cette action est irréversible. |
 | `admin.users.suspended` | Compte suspendu. |
 | `admin.users.updated` | Utilisateur mis à jour. |
 | `admin.users.supportReadOnly` | Votre rôle Support permet de consulter les comptes et abonnements, sans les modifier. |
@@ -20416,9 +20415,15 @@ Conventions :
 | `admin.users.action.delete.continue` | Continuer |
 | `admin.users.action.delete.reasonShown` | Motif : {reason} |
 | `admin.users.action.delete.typeEmail` | Saisissez l'e-mail du compte pour confirmer ({email}) |
-| `admin.users.action.delete.submit` | Supprimer définitivement |
+| `admin.users.action.delete.submit` | Anonymiser le compte |
 | `admin.users.action.until` | Jusqu'au |
 | `admin.users.action.reason` | Motif |
+| `admin.users.action.erase.text` | Effacer définitivement (veto) |
+| `admin.users.action.erase.confirm` | Effacer pour toujours le compte de {userName} et tous ses documents ? |
+| `admin.users.action.erase.intro` | Droit de veto de l'administrateur : le compte est supprimé avec tout ce qu'il contient (profil, CV, documents, candidatures, publications, messages envoyés, historique). Rien n'est gardé, même anonymisé, sauf les paiements sans nom (obligation comptable) et la ligne du journal. Si la personne possède une entreprise, celle-ci passe à un autre administrateur de l'équipe ; sans équipe, ses offres sont fermées. |
+| `admin.users.action.erase.typeWord` | Écrivez EFFACER pour confirmer |
+| `admin.users.action.erase.submit` | Effacer définitivement |
+| `admin.users.done.erased` | Compte et documents effacés définitivement. |
 | `admin.users.block.self` | Vous ne pouvez pas supprimer votre propre compte. |
 | `admin.users.block.lastAdmin` | C'est le dernier administrateur de la plateforme : nommez-en un autre avant de supprimer ce compte. |
 | `admin.users.block.owner` | Cette personne est propriétaire d'une organisation : la propriété doit être transférée avant la suppression. |
@@ -20438,7 +20443,7 @@ Conventions :
 | `admin.users.error.quota` | Ce quota n'existe pas dans le forfait de la personne. |
 | `admin.users.error.unlimited` | Ce quota est déjà illimité. |
 | `admin.users.error.grant` | Ce forfait offert n'existe plus. |
-| `admin.users.error.confirm` | L'e-mail saisi ne correspond pas au compte, ou l'envoi a échoué. |
+| `admin.users.error.confirm` | La confirmation saisie ne correspond pas, ou l'envoi a échoué. |
 | `admin.users.error.self` | Vous ne pouvez pas faire cette action sur votre propre compte. |
 | `admin.users.error.lastAdmin` | C'est le dernier administrateur de la plateforme. |
 | `admin.users.error.owner` | Cette personne est propriétaire d'une organisation. |
@@ -20635,6 +20640,13 @@ Conventions :
 | `admin.orgs.done.infoRequested` | Demande de complément envoyée. |
 | `admin.orgs.done.suspended` | Organisation suspendue. |
 | `admin.orgs.done.reactivated` | Organisation réactivée. |
+| `admin.orgs.done.planGranted` | Formule offerte. Elle s'applique tout de suite. |
+| `admin.orgs.error.plan` | Choisissez une formule payante recruteur ou entreprise, et une date de fin dans les deux ans. |
+| `admin.orgs.grant.text` | Offrir une formule |
+| `admin.orgs.grant.confirm` | Offrir une formule à {org} jusqu'à une date, sans paiement ? |
+| `admin.orgs.grant.plan` | Formule |
+| `admin.orgs.grant.until` | Jusqu'au |
+| `admin.orgs.grant.submit` | Offrir la formule |
 | `admin.orgs.error.status` | Cette action n'est plus possible dans l'état actuel de l'organisation. |
 | `admin.orgs.error.reason` | Indiquez un motif (3 caractères au moins). |
 | `admin.orgs.detail.members` | Membres et rôles |

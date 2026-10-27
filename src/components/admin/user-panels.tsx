@@ -6,6 +6,7 @@ import { formatShortDate } from "@/lib/dates";
 import {
   addCreditsAction,
   deleteUserAction,
+  eraseUserAction,
   grantPlanAction,
   removeOverrideAction,
   revokePlanAction,
@@ -13,7 +14,12 @@ import {
 } from "@/server/actions/admin-users";
 import { db } from "@/server/db";
 import { parseLimit } from "@/server/entitlements";
-import { deletionCheck, grantablePlans, type userRights } from "@/server/services/admin-users";
+import {
+  deletionCheck,
+  ERASE_WORD,
+  grantablePlans,
+  type userRights,
+} from "@/server/services/admin-users";
 
 const DAY = 86_400_000;
 const isoDay = (date: Date) => date.toISOString().slice(0, 10);
@@ -295,6 +301,43 @@ export async function UserPanels({
               {cancel}
               <Button type="submit" variant="danger">
                 {t("users.action.delete.submit")}
+              </Button>
+            </div>
+          </form>
+        )}
+      </SensitivePanel>
+    );
+  }
+
+  if (action === "effacer") {
+    const block = await deletionCheck(db, actorId, user.id);
+    panel = (
+      <SensitivePanel
+        title={t("users.action.erase.text")}
+        text={t("users.action.erase.confirm", { userName: user.name })}
+        closeHref={ficheHref}
+      >
+        <p className="rounded-[14px] bg-creme px-3.5 py-2.5 text-[12.5px] leading-[18px]">
+          {t("users.action.erase.intro")}
+        </p>
+        {block === "self" || block === "lastAdmin" ? (
+          <Alert tone="warning" title={t(`users.block.${block}`)} />
+        ) : (
+          <form action={eraseUserAction} className="flex flex-col gap-3.5">
+            {hidden}
+            <ReasonField id="utilisateurs-erase-reason" maxLength={500} />
+            <TextField
+              id="utilisateurs-erase-word"
+              name="confirmWord"
+              required
+              autoComplete="off"
+              placeholder={ERASE_WORD}
+              label={t("users.action.erase.typeWord")}
+            />
+            <div className="flex flex-wrap justify-end gap-2">
+              {cancel}
+              <Button type="submit" variant="danger">
+                {t("users.action.erase.submit")}
               </Button>
             </div>
           </form>

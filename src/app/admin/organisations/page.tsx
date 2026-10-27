@@ -17,14 +17,15 @@ import {
 } from "@/components/admin/kit";
 import { OrgCard, orgStatusTone } from "@/components/admin/organisations-fiche";
 import { planTone } from "@/components/admin/utilisateurs-fiche";
-import { Alert, Button, ButtonLink, TextArea } from "@/components/ui";
+import { Alert, Button, ButtonLink, Select, TextArea, TextField } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { decideVerificationAction } from "@/server/actions/admin";
 import {
+  grantOrgPlanAction,
   reactivateOrganizationAction,
   suspendOrganizationAction,
 } from "@/server/actions/admin-orgs";
-import { organizationDetail } from "@/server/services/admin-orgs";
+import { grantableOrgPlans, organizationDetail } from "@/server/services/admin-orgs";
 import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { GRACE_DAYS, resolvePlan } from "@/server/entitlements";
@@ -162,6 +163,9 @@ export default async function AdminOrganizations({
   const revoking = verifiable && action === "retirer" && fiche.verificationStatus === "verified";
   const suspending = canAct && action === "suspendre" && !fiche.suspendedAt;
   const reactivating = canAct && action === "reactiver" && !!fiche.suspendedAt;
+  const granting = verifiable && action === "offrir";
+  const grantPlans = granting ? await grantableOrgPlans(db) : [];
+  const isoDay = (date: Date) => date.toISOString().slice(0, 10);
   const actionHref = (name: string) => `${ficheHref}&action=${name}#organisations-panneau`;
   const [detail, fichePlan] = fiche
     ? await Promise.all([
@@ -169,10 +173,10 @@ export default async function AdminOrganizations({
         resolvePlan(db, { type: "organization", id: fiche.id }, now),
       ])
     : [null, null];
-  const doneKey = (["infoRequested", "suspended", "reactivated"] as const).find(
+  const doneKey = (["infoRequested", "suspended", "reactivated", "planGranted"] as const).find(
     (value) => value === params.ok,
   );
-  const errorKey = (["status", "reason", "notFound"] as const).find(
+  const errorKey = (["status", "reason", "notFound", "plan", "until"] as const).find(
     (value) => value === params.erreur,
   );
   const okOrg = one(params.org);
@@ -213,7 +217,13 @@ export default async function AdminOrganizations({
       {errorKey && (
         <Alert
           tone="error"
-          title={t(errorKey === "reason" ? "orgs.error.reason" : "orgs.error.status")}
+          title={t(
+            errorKey === "reason"
+              ? "orgs.error.reason"
+              : errorKey === "plan" || errorKey === "until"
+                ? "orgs.error.plan"
+                : "orgs.error.status",
+          )}
         />
       )}
 
@@ -472,6 +482,53 @@ export default async function AdminOrganizations({
                       {tc("cancel")}
                     </ButtonLink>
                     <Button type="submit">{t("orgs.reactivate.text")}</Button>
+                  </div>
+                </form>
+              </SensitivePanel>
+            </div>
+          )}
+          {granting && (
+            <div
+              id="organisations-panneau"
+              className="flex scroll-mt-6 flex-col gap-2 max-lg:order-2"
+            >
+              <SectionRule>{t("sensitive.label")}</SectionRule>
+              <SensitivePanel
+                title={t("orgs.grant.text")}
+                text={t("orgs.grant.confirm", { org: fiche.name })}
+                closeHref={ficheHref}
+                icon="portefeuille"
+                tone="neutral"
+              >
+                <form action={grantOrgPlanAction} className="flex flex-col gap-3.5">
+                  <input type="hidden" name="organizationId" value={fiche.id} />
+                  <input type="hidden" name="back" value={`${ficheHref}&action=offrir`} />
+                  <Select
+                    id="organisations-grant-plan"
+                    name="planCode"
+                    required
+                    label={t("orgs.grant.plan")}
+                    options={grantPlans.map((option) => ({
+                      value: option.code,
+                      label: option.name,
+                    }))}
+                  />
+                  <TextField
+                    id="organisations-grant-until"
+                    name="until"
+                    type="date"
+                    required
+                    label={t("orgs.grant.until")}
+                    min={isoDay(new Date(now.getTime() + 86_400_000))}
+                    max={isoDay(new Date(now.getTime() + 730 * 86_400_000))}
+                    defaultValue={isoDay(new Date(now.getTime() + 30 * 86_400_000))}
+                  />
+                  <ReasonField id="organisations-grant-reason" maxLength={500} />
+                  <div className="flex flex-wrap justify-end gap-2">
+                    <ButtonLink href={ficheHref} scroll={false} variant="tertiary">
+                      {tc("cancel")}
+                    </ButtonLink>
+                    <Button type="submit">{t("orgs.grant.submit")}</Button>
                   </div>
                 </form>
               </SensitivePanel>
