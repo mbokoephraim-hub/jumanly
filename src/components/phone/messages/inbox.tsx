@@ -4,12 +4,16 @@
 import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, useTransition } from "react";
 import { showToast } from "@/components/motion/toaster";
+import { chatSummaryAction } from "@/server/actions/chat";
 import { openConnectionAction, searchMessagesAction } from "@/server/actions/messages-phone";
+import type { ChatSummary } from "@/server/services/chat-summary";
+import { FilAvatar } from "../fil/avatar";
 import { PhoneIcon, type PhoneIconName } from "../icon";
 import { PhoneSheet } from "../sheet";
-import { WhoAvatar, WhoName } from "./parts";
+import { useChatPulse } from "./live";
+import { ReadMark, Spark, Typing, WhoAvatar, WhoName } from "./parts";
 import type { ConnectionView, FoundMessage, InboxRow, InboxTab, InboxView, WhoView } from "./types";
 
 const TABS: InboxTab[] = ["connexions", "recruteurs", "entreprises"];
@@ -53,34 +57,98 @@ function keepRecent(q: string) {
 
 const fmtCount = (count: number) => (count > 99 ? "99+" : String(count));
 
-/** A conversation in a list: face, name, time, last words, unread count. */
-function Row({ row }: { row: InboxRow }) {
-  const t = useTranslations("phoneMsg");
+/** The colour of each rubric's label (planche Chat-liste): lime, lilac, amber. */
+const TAG_COLOR: Record<InboxTab, string> = {
+  connexions: "#A6F26B",
+  recruteurs: "#C3A6FF",
+  entreprises: "#F4C463",
+};
+
+/**
+ * A conversation in the list (planche Chat-liste): the face and its ring, the name, the green
+ * check, the coloured label of the rubric, the last words (bold while unread) or « écrit… », the
+ * time, the number of unread messages or the double check of « Lu ».
+ */
+function Row({
+  row,
+  online,
+  typing,
+  index,
+}: {
+  row: InboxRow;
+  online: boolean;
+  typing: boolean;
+  index: number;
+}) {
+  const t = useTranslations("phoneChat");
+  const color = TAG_COLOR[row.tab];
   return (
     <Link
       href={`/app/messages/${row.id}`}
-      className="nb-ms-ligne"
+      className="nb-ch-ligne"
       data-nonlu={row.unread ? "" : undefined}
+      style={{ animationDelay: `${Math.min(index, 8) * 0.05}s` }}
     >
-      <WhoAvatar who={row.who} />
-      <span className="nb-ms-ligne-c">
-        <span className="nb-ms-ligne-h">
+      <WhoAvatar who={row.who} size={54} online={online} />
+      <span className="nb-ch-ligne-c">
+        <span className="nb-ch-ligne-h">
           <WhoName who={row.who} />
-          <span className="nb-ms-heure">{row.time}</span>
-        </span>
-        <span className="nb-ms-ligne-b">
-          <span className="nb-ms-apercu">{row.preview}</span>
-          {row.muted ? (
-            <span className="nb-ms-muet" role="img" aria-label={t("muted")}>
-              <PhoneIcon name="muet" size={15} stroke={1.8} />
+          <span className="nb-ch-tag" style={{ color, background: `${color}1F` }}>
+            {t(`tag.${row.tab}`)}
+          </span>
+          {row.pinned ? (
+            <span className="nb-ch-epingle" role="img" aria-label={t("pinned")}>
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden
+              >
+                <path d="M9 3.5h6l-1 5 3.5 3.5h-11L10 8.5zM12 12v8.5" />
+              </svg>
             </span>
           ) : null}
-          {row.unread ? (
-            <span className="nb-ms-badge" aria-label={t("unread", { count: row.unread })}>
-              {fmtCount(row.unread)}
-            </span>
-          ) : null}
         </span>
+        {typing ? (
+          <Typing label={t("typing")} />
+        ) : (
+          <span className="nb-ch-apercu">
+            {row.voice ? (
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                aria-hidden
+              >
+                <path d="M12 3.5a3 3 0 0 1 3 3v5a3 3 0 0 1-6 0v-5a3 3 0 0 1 3-3zM5.5 11a6.5 6.5 0 0 0 13 0M12 17.5v3" />
+              </svg>
+            ) : null}
+            <span>{row.preview}</span>
+          </span>
+        )}
+      </span>
+      <span className="nb-ch-ligne-d">
+        <span className="nb-ch-heure">{row.time}</span>
+        {row.unread ? (
+          <span className="nb-ch-badge" aria-label={t("unread", { count: row.unread })}>
+            {fmtCount(row.unread)}
+          </span>
+        ) : row.lastMine && row.lastRead ? (
+          <ReadMark label={t("read")} color="#2FD3A6" />
+        ) : row.muted ? (
+          <span className="nb-ch-muet" role="img" aria-label={t("muted")}>
+            <PhoneIcon name="muet" size={15} stroke={1.8} />
+          </span>
+        ) : null}
       </span>
     </Link>
   );
@@ -129,16 +197,142 @@ function PersonLine({ who, onClick, href }: { who: WhoView; onClick?: () => void
   );
 }
 
+const CHAT_TABS = ["tout", ...TABS] as const;
+type ChatTab = (typeof CHAT_TABS)[number];
+
 /**
- * The Messages tab on the phone (Modèle B, lot B8, planches Messages, -recruteurs, -entreprises,
- * -nouveau, -recherche*): the search, the three rubrics, the connection requests, the
- * conversations. Kept mounted under the pages, like the other tabs. A talent writes only to their
- * connections, and answers the organizations that wrote to them.
+ * « Tout · Connexions · Recruteurs · Entreprises » (planche Chat-liste): the Lime pill slides
+ * under the tab chosen, each tab with its unread count. Until the tabs are measured, the chosen
+ * one carries the Lime itself (no dark text on dark).
+ */
+function Segment({
+  tab,
+  setTab,
+  counts,
+}: {
+  tab: ChatTab;
+  setTab: (tab: ChatTab) => void;
+  counts: Record<ChatTab, number>;
+}) {
+  const t = useTranslations("phoneChat");
+  const box = useRef<HTMLDivElement>(null);
+  const [pill, setPill] = useState<{ left: number; width: number } | null>(null);
+  useLayoutEffect(() => {
+    const node = box.current?.querySelector<HTMLElement>(`[data-tab="${tab}"]`);
+    if (!node) return;
+    setPill({ left: node.offsetLeft, width: node.offsetWidth });
+  }, [tab]);
+  return (
+    <div
+      ref={box}
+      className="nb-ch-seg"
+      role="tablist"
+      aria-label={t("tabs")}
+      data-mesure={pill ? "" : undefined}
+    >
+      {pill ? (
+        <span className="nb-ch-ind" style={{ left: pill.left, width: pill.width }} aria-hidden />
+      ) : null}
+      {CHAT_TABS.map((key) => (
+        <button
+          key={key}
+          type="button"
+          role="tab"
+          id={`ch-${key}`}
+          data-tab={key}
+          aria-selected={tab === key}
+          aria-controls="ch-panneau"
+          onClick={() => setTab(key)}
+        >
+          {t(`tab.${key}`)}
+          {counts[key] ? (
+            <b aria-label={t("unread", { count: counts[key] })}>{fmtCount(counts[key])}</b>
+          ) : null}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/**
+ * « N messages non lus · Orbi résume » (planche Chat-liste-orbi): a touch asks Orbi for the
+ * essential, one sentence per conversation, the most urgent in bold; a touch again folds it.
+ */
+function OrbiSummary({ count }: { count: number }) {
+  const t = useTranslations("phoneChat.orbi");
+  const [summary, setSummary] = useState<ChatSummary | null>(null);
+  const [shown, setShown] = useState(false);
+  const [pending, start] = useTransition();
+  const lines = summary?.lines ?? [];
+  const toggle = () => {
+    if (shown) {
+      setShown(false);
+      return;
+    }
+    if (summary && lines.length) {
+      setShown(true);
+      return;
+    }
+    start(async () => {
+      const result = await chatSummaryAction().catch(() => null);
+      if (!result || result.lines.length === 0) {
+        showToast({ message: t("none") });
+        return;
+      }
+      setSummary(result);
+      setShown(true);
+    });
+  };
+  const open = shown && lines.length > 0;
+  return (
+    <button
+      type="button"
+      className="nb-ch-orbi"
+      aria-expanded={open}
+      aria-busy={pending}
+      onClick={toggle}
+    >
+      <span className="nb-ch-orbi-i" aria-hidden>
+        <Spark size={18} />
+      </span>
+      <span className="nb-ch-orbi-c" aria-live="polite">
+        {open ? (
+          <>
+            <b>{lines[0]!.text}</b>
+            {lines.length > 1 ? (
+              <span>
+                {lines
+                  .slice(1)
+                  .map((line) => line.text)
+                  .join(" · ")}
+              </span>
+            ) : null}
+            {summary?.source === "template" ? <small>{t("simple")}</small> : null}
+          </>
+        ) : (
+          <>
+            <b>{t("title", { count })}</b>
+            <span>{pending ? t("thinking") : t("touch")}</span>
+          </>
+        )}
+      </span>
+    </button>
+  );
+}
+
+/**
+ * The Chat tab on the phone (docs/chat-v2, planches Chat-liste, Chat-liste-orbi): « Chat »,
+ * Rechercher and Nouveau message, the people online now, Orbi's summary of the unread messages,
+ * « Tout · Connexions · Recruteurs · Entreprises », the connection requests and the
+ * conversations, kept live (« écrit… », « En ligne », new messages). Kept mounted under the pages,
+ * like the other tabs. A talent writes only to their connections and to the recruiters of their
+ * applications.
  */
 export function PhoneMessages({ view }: { view: InboxView }) {
   const t = useTranslations("phoneMsg");
+  const tc = useTranslations("phoneChat");
   const format = useFormatter();
-  const [tab, setTab] = useState<InboxTab>("connexions");
+  const [tab, setTab] = useState<ChatTab>("tout");
   const [q, setQ] = useState("");
   const [searching, setSearching] = useState(false);
   const [type, setType] = useState<SearchType | null>(null);
@@ -156,6 +350,7 @@ export function PhoneMessages({ view }: { view: InboxView }) {
   // `?onglet=recruteurs`: the rubric a page goes back to; `?filtre=demandes` (a notification):
   // the requests; `?q=` (the search of the space): the search, already typed.
   const root = pathname === "/app/messages";
+  const live = useChatPulse({ conversationId: null, every: 8_000, active: root });
   const askedTab = root ? params.get("onglet") : null;
   const askedFilter = root ? params.get("filtre") : null;
   const askedQuery = root ? params.get("q") : null;
@@ -171,8 +366,8 @@ export function PhoneMessages({ view }: { view: InboxView }) {
       router.replace("/app/messages", { scroll: false });
       return;
     }
-    if (!TABS.includes(askedTab as InboxTab)) return;
-    setTab(askedTab as InboxTab);
+    if (!CHAT_TABS.includes(askedTab as ChatTab)) return;
+    setTab(askedTab as ChatTab);
     setSearching(false);
     router.replace("/app/messages", { scroll: false });
   }, [askedTab, askedFilter, askedQuery, router]);
@@ -196,10 +391,48 @@ export function PhoneMessages({ view }: { view: InboxView }) {
     return () => clearTimeout(timer);
   }, [query, type]);
 
+  const isOnline = (who: WhoView) =>
+    who.personId && live.online ? live.online.has(who.personId) : who.online;
+  const isTyping = (row: InboxRow) => (live.typing ? live.typing.has(row.id) : row.typing);
+
   const byId = useMemo(() => new Map(view.rows.map((row) => [row.id, row])), [view.rows]);
-  const unreadOf = (key: InboxTab) =>
-    view.rows.filter((row) => row.tab === key).reduce((sum, row) => sum + row.unread, 0);
-  const rows = view.rows.filter((row) => row.tab === tab);
+  const counts = useMemo(() => {
+    const sum = (key: InboxTab) =>
+      view.rows.filter((row) => row.tab === key).reduce((total, row) => total + row.unread, 0);
+    const value = {
+      connexions: sum("connexions"),
+      recruteurs: sum("recruteurs"),
+      entreprises: sum("entreprises"),
+    };
+    return { tout: value.connexions + value.recruteurs + value.entreprises, ...value };
+  }, [view.rows]);
+  const rows = tab === "tout" ? view.rows : view.rows.filter((row) => row.tab === tab);
+
+  // « En ligne maintenant »: the people of the conversations and the connections, online now.
+  const onlineNow = useMemo(() => {
+    const seen = new Set<string>();
+    const people: {
+      key: string;
+      who: WhoView;
+      row: InboxRow | null;
+      connection: ConnectionView | null;
+    }[] = [];
+    for (const row of view.rows) {
+      const id = row.who.personId;
+      if (!id || seen.has(id)) continue;
+      seen.add(id);
+      people.push({ key: row.id, who: row.who, row, connection: null });
+    }
+    for (const item of view.connections) {
+      const id = item.who.personId;
+      if (!id || seen.has(id)) continue;
+      seen.add(id);
+      people.push({ key: item.connectionId, who: item.who, row: null, connection: item });
+    }
+    return people;
+  }, [view.rows, view.connections]);
+  const railPeople = onlineNow.filter((person) => isOnline(person.who)).slice(0, 12);
+
   const people = useMemo(() => {
     if (!query) return [];
     const words = query.toLocaleLowerCase("fr");
@@ -233,109 +466,171 @@ export function PhoneMessages({ view }: { view: InboxView }) {
   };
   const remember = () => keepRecent(query);
 
-  const firstRequest = view.requests[0]?.who.name ?? view.orgRequests[0]?.who.name ?? null;
-  const pendingCount = view.requests.length + view.orgRequests.length;
+  const pending = [
+    ...view.requests.map((item) => item.who),
+    ...view.orgRequests.map((item) => item.who),
+  ];
+  const names =
+    pending.length === 1
+      ? pending[0]!.name
+      : pending.length > 1
+        ? tc("requests.names", {
+            a: pending[0]!.name,
+            b: pending[1]!.name,
+            rest: pending.length - 2,
+          })
+        : "";
   const typeName = (key: SearchType) => t(`search.type.${key}`);
 
   return (
-    <div className="nb-page nb-ms nb-ms-accueil">
-      <header className="nb-tete nb-ms-tete">
-        <h1>{t("title")}</h1>
-        <button
-          type="button"
-          className="nb-rond"
-          aria-label={t("new")}
-          onClick={() => setNewOpen(true)}
-        >
-          <PhoneIcon name="modifier" size={22} stroke={1.8} />
-        </button>
+    <div className="nb-page nb-ch nb-ch-liste">
+      <header className="nb-ch-tete">
+        <h1>{tc("title")}</h1>
+        <div>
+          <button
+            type="button"
+            className="nb-ch-rb"
+            aria-label={tc("search")}
+            aria-pressed={searching}
+            onClick={() => (searching ? cancel() : startSearching())}
+          >
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              aria-hidden
+            >
+              <circle cx="11" cy="11" r="6.5" />
+              <path d="m20 20-4.4-4.4" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            className="nb-ch-rb nb-ch-rb-lime"
+            aria-label={tc("new")}
+            onClick={() => setNewOpen(true)}
+          >
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
+            >
+              <path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4" />
+            </svg>
+          </button>
+        </div>
       </header>
 
-      <div className="nb-ms-cherche">
-        <label className="nb-ms-champ">
-          <PhoneIcon name="recherche" size={18} stroke={1.8} />
-          <input
-            type="search"
-            value={q}
-            placeholder={t("search.placeholder")}
-            aria-label={t("search.label")}
-            onFocus={startSearching}
-            onChange={(event) => {
-              setQ(event.target.value);
-              startSearching();
-            }}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") remember();
-            }}
-          />
-          {q ? (
-            <button
-              type="button"
-              className="nb-ms-effacer"
-              aria-label={t("search.clear")}
-              onClick={() => setQ("")}
-            >
-              <PhoneIcon name="fermer" size={16} stroke={2} />
-            </button>
-          ) : null}
-        </label>
-        {searching ? (
+      {searching ? (
+        <div className="nb-ms-cherche">
+          <label className="nb-ms-champ">
+            <PhoneIcon name="recherche" size={18} stroke={1.8} />
+            <input
+              type="search"
+              value={q}
+              autoFocus
+              placeholder={t("search.placeholder")}
+              aria-label={t("search.label")}
+              onChange={(event) => setQ(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") remember();
+              }}
+            />
+            {q ? (
+              <button
+                type="button"
+                className="nb-ms-effacer"
+                aria-label={t("search.clear")}
+                onClick={() => setQ("")}
+              >
+                <PhoneIcon name="fermer" size={16} stroke={2} />
+              </button>
+            ) : null}
+          </label>
           <button type="button" className="nb-ms-annuler" onClick={cancel}>
             {t("cancel")}
           </button>
-        ) : null}
-      </div>
-
-      {!searching ? (
+        </div>
+      ) : (
         <>
-          <div className="nb-ms-onglets" role="tablist" aria-label={t("tabsLabel")}>
-            {TABS.map((key) => {
-              const count = unreadOf(key);
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  role="tab"
-                  id={`ms-${key}`}
-                  aria-selected={tab === key}
-                  aria-controls="ms-panneau"
-                  onClick={() => setTab(key)}
-                >
-                  {t(`tab.${key}`)}
-                  {count ? (
-                    <span className="nb-ms-badge nb-ms-badge-p" aria-label={t("unread", { count })}>
-                      {fmtCount(count)}
-                    </span>
-                  ) : null}
-                </button>
-              );
-            })}
+          {railPeople.length ? (
+            <section className="nb-ch-enligne" aria-labelledby="ch-enligne">
+              <p className="nb-ch-sec" id="ch-enligne">
+                {tc("online")}
+              </p>
+              <div className="nb-ch-rail">
+                {railPeople.map((person, index) => (
+                  <button
+                    key={person.key}
+                    type="button"
+                    className="nb-ch-rail-p"
+                    style={{ animationDelay: `${index * 0.06}s` }}
+                    aria-label={tc("onlineOpen", { name: person.who.name })}
+                    onClick={() =>
+                      person.row
+                        ? router.push(`/app/messages/${person.row.id}`)
+                        : person.connection
+                          ? openConnection(person.connection)
+                          : undefined
+                    }
+                  >
+                    <WhoAvatar who={person.who} size={58} online />
+                    <span>{person.who.first}</span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          ) : null}
+          {counts.tout ? <OrbiSummary count={counts.tout} /> : null}
+          <div className="nb-ch-segbox">
+            <Segment tab={tab} setTab={setTab} counts={counts} />
           </div>
-          <div id="ms-panneau" role="tabpanel" aria-labelledby={`ms-${tab}`}>
-            {tab === "connexions" ? (
-              <Link href="/app/messages/demandes" className="nb-ms-ligne nb-ms-demandes">
-                <span className="nb-ms-demandes-i" aria-hidden>
-                  <PhoneIcon name="personne" size={22} stroke={1.8} />
+          <div id="ch-panneau" role="tabpanel" aria-labelledby={`ch-${tab}`}>
+            {(tab === "tout" || tab === "connexions") && pending.length ? (
+              <Link href="/app/messages/demandes" className="nb-ch-ligne nb-ch-demandes">
+                <span className="nb-ch-pile" aria-hidden>
+                  {pending.slice(0, 2).map((who) => (
+                    <FilAvatar
+                      key={who.name}
+                      initials={who.initials}
+                      image={who.image}
+                      tone={who.tone}
+                      org={who.org}
+                      size={36}
+                    />
+                  ))}
                 </span>
-                <span className="nb-ms-ligne-c">
-                  <b>{t("requests.title")}</b>
-                  <span className="nb-meta">
-                    {firstRequest
-                      ? t("requests.summary", { name: firstRequest, others: pendingCount - 1 })
-                      : t("requests.none")}
-                  </span>
+                <span className="nb-ch-ligne-c">
+                  <b>{tc("requests.title")}</b>
+                  <span className="nb-ch-noms">{names}</span>
                 </span>
-                {pendingCount ? <span className="nb-ms-badge">{pendingCount}</span> : null}
+                <span className="nb-ch-badge nb-ch-badge-ambre">{pending.length}</span>
               </Link>
             ) : null}
-            {rows.map((row) => (
-              <Row key={row.id} row={row} />
+            {rows.map((row, index) => (
+              <Row
+                key={row.id}
+                row={row}
+                index={index}
+                online={isOnline(row.who)}
+                typing={isTyping(row)}
+              />
             ))}
-            {rows.length === 0 ? <p className="nb-meta nb-ms-vide">{t(`empty.${tab}`)}</p> : null}
-            <p className="nb-meta nb-ms-pied">{t("onlyConnections")}</p>
+            {rows.length === 0 ? <p className="nb-ch-vide">{tc(`empty.${tab}`)}</p> : null}
+            <p className="nb-ch-note">{tc("note")}</p>
           </div>
         </>
-      ) : null}
+      )}
 
       {searching && !query && !type ? (
         <div className="nb-ms-options">

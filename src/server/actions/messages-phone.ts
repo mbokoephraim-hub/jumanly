@@ -29,12 +29,10 @@ import {
   clearConversation,
   ensurePeerConversation,
   ephemeralChoices,
-  phoneConnections,
   searchMessages,
   searchTypes,
   setEphemeral,
   setMuted,
-  shareableOrganizations,
   visibleMessage,
 } from "@/server/services/messages-phone";
 import { respondContactRequest } from "@/server/services/talent-search";
@@ -180,45 +178,20 @@ export async function sendOwnDocumentAction(conversationId: string, documentId: 
   );
 }
 
-/** « Partager un contact »: one of the talent's connections. */
-export async function sendContactAction(conversationId: string, connectionId: string) {
-  const connection = idSchema.safeParse(connectionId);
-  if (!connection.success) return { ok: false, error: "invalid" } as const;
-  return send(conversationId, "contact", async (userId) => {
-    const row = (await phoneConnections(db, userId)).find(
-      (item) => item.connectionId === connection.data,
-    );
-    if (!row) throw new ConnectError("notFound");
-    const words = await messageWords({ showPresence: false });
-    const who = words.ofPerson(row.person, null);
-    return sendAs(userId, conversationId, {
-      body: who.name,
-      kind: "contact",
-      payload: { userId: row.person.id, name: who.name, line: who.line },
+/** « Attestation » (Chat v2): the attestation of a course the talent finished, with its number. */
+export async function sendCertificateAction(conversationId: string, certificateId: string) {
+  const certificate = idSchema.safeParse(certificateId);
+  if (!certificate.success) return { ok: false, error: "invalid" } as const;
+  return send(conversationId, "attestation", async (userId) => {
+    const row = await db.certificate.findFirst({
+      where: { id: certificate.data, revokedAt: null, enrollment: { userId } },
+      select: { code: true, courseTitle: true, hours: true },
     });
-  });
-}
-
-/** « Partager une organisation »: one the talent follows or applied to. */
-export async function sendOrganizationAction(conversationId: string, organizationId: string) {
-  const organization = idSchema.safeParse(organizationId);
-  if (!organization.success) return { ok: false, error: "invalid" } as const;
-  return send(conversationId, "organisation", async (userId) => {
-    const org = (await shareableOrganizations(db, userId)).find(
-      (item) => item.id === organization.data,
-    );
-    if (!org) throw new ConnectError("notFound");
-    const words = await messageWords({ showPresence: false });
+    if (!row) throw new ConnectError("notFound");
     return sendAs(userId, conversationId, {
-      body: org.name,
-      kind: "organization",
-      payload: {
-        orgId: org.id,
-        slug: org.slug,
-        name: org.name,
-        line: words.orgLine(org),
-        logo: org.logo,
-      },
+      body: row.courseTitle,
+      kind: "file",
+      payload: { certificate: { code: row.code, title: row.courseTitle, hours: row.hours } },
     });
   });
 }

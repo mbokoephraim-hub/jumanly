@@ -1,13 +1,13 @@
 import "server-only";
+import { clockParts } from "@/lib/clock-parts";
 import { getFormatter, getTranslations } from "next-intl/server";
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
+import { reactionsOf, ringColors } from "@/server/services/chat";
 import { attachableDocuments } from "@/server/services/conversation-attachments";
 import { isOnline } from "@/server/services/hire-messaging";
 import { similarJobs } from "@/server/services/jobs";
 import { decisionParagraphs } from "@/server/services/message-templates";
 import {
-  phoneConnections,
-  shareableOrganizations,
   type Counterpart,
   type InboxItem,
   type InboxOrganization,
@@ -16,16 +16,7 @@ import {
   type PhoneConversation,
 } from "@/server/services/messages-phone";
 import { initialsOf, shortName, toneOf } from "../fil/data";
-import type {
-  AttachDoc,
-  Bubble,
-  ConnectionView,
-  InboxRow,
-  MessageView,
-  ShareOrg,
-  ThreadView,
-  WhoView,
-} from "./types";
+import type { AttachDoc, Bubble, InboxRow, MessageView, ThreadView, WhoView } from "./types";
 
 const DAY = 86_400_000;
 
@@ -49,6 +40,7 @@ type Payload = {
   note?: string;
   interviewId?: string;
   ephemeral?: { by?: string; seconds?: number | null };
+  certificate?: { code?: string; title?: string; hours?: number };
   outcome?: string;
   retracted?: boolean;
   signer?: string;
@@ -146,6 +138,8 @@ export async function messageWords(viewer: { showPresence: boolean }, now = new 
       line: orgLine(org),
       status: t("status.company"),
       href: `/app/entreprises/${org.slug}`,
+      personId: null,
+      ring: ringColors(org.name),
     };
   };
 
@@ -171,6 +165,11 @@ export async function messageWords(viewer: { showPresence: boolean }, now = new 
         : personLine(person),
       status: online ? t("status.online") : visible ? seen(person.lastSeenAt!) : "",
       href: organization ? `/app/entreprises/${organization.slug}` : `/app/personnes/${person.id}`,
+      personId: person.id,
+      ring: ringColors(
+        person.name,
+        person.talentProfile?.skills.map((row) => row.skill.name) ?? [],
+      ),
     };
   };
 
@@ -199,7 +198,11 @@ export async function messageWords(viewer: { showPresence: boolean }, now = new 
         break;
       case "file":
         text = t("preview.doc", {
-          name: payload.upload?.name ?? payload.document?.title ?? last.body,
+          name:
+            payload.upload?.name ??
+            payload.document?.title ??
+            payload.certificate?.title ??
+            last.body,
         });
         break;
       case "slot":
@@ -249,6 +252,11 @@ export async function messageWords(viewer: { showPresence: boolean }, now = new 
       preview: preview(item.last, userId, who.first),
       unread: item.unread,
       muted: item.muted,
+      pinned: item.pinned,
+      typing: item.typing,
+      lastMine: item.last?.senderId === userId,
+      lastRead: item.lastRead,
+      voice: item.last?.kind === "voice",
     };
   };
 
@@ -315,7 +323,7 @@ export async function messageViews(
   const signerIds = [
     ...new Set(decisions.flatMap((message) => (message.senderId ? [message.senderId] : []))),
   ];
-  const [interviews, people, signers, similar, tc, ts, th] = await Promise.all([
+  const [interviews, people, signers, similar, tc, ts, th, tch, reactions] = await Promise.all([
     interviewIds.length
       ? db.interview.findMany({
           where: { id: { in: interviewIds } },
@@ -328,6 +336,7 @@ export async function messageViews(
             mode: true,
             address: true,
             link: true,
+            durationMinutes: true,
           },
         })
       : Promise.resolve([]),
@@ -349,7 +358,25 @@ export async function messageViews(
     getTranslations("connect.decision"),
     getTranslations("suivi.similar"),
     getTranslations(),
+    getTranslations("phoneChat"),
+    reactionsOf(
+      db,
+      conversation.messages.map((message) => message.id),
+      userId,
+    ),
   ]);
+  /** « Jeudi 29 octobre · 10 h », in the time zone of the interview. */
+  const interviewTitle = (date: Date, timeZone?: string) => {
+    const zone = timeZone ? { timeZone } : {};
+    const day = format.dateTime(date, { weekday: "long", day: "numeric", month: "long", ...zone });
+    const { hour, minute } = clockParts(date, timeZone);
+    return tch("interview.title", {
+      day: day.charAt(0).toUpperCase() + day.slice(1),
+      hour: minute
+        ? tch("interview.hourMinutes", { hour, minute: String(minute).padStart(2, "0") })
+        : tch("interview.hour", { hour }),
+    });
+  };
   const longDate = (date: Date, timeZone?: string) => {
     const text = format.dateTime(date, {
       weekday: "long",
@@ -445,13 +472,28 @@ export async function messageViews(
         };
       }
       case "file": {
+        if (payload.certificate?.code)
+          return {
+            kind: "doc",
+            name: tch("attach.certificateName", {
+              title: payload.certificate.title ?? message.body,
+            }),
+            meta: tch("attach.certificateMeta"),
+            ext: t("pdf"),
+            href: `/attestations/${payload.certificate.code}`,
+          };
         if (payload.upload) {
           const pdf = payload.upload.type === "application/pdf";
+          const word = payload.upload.type?.includes("wordprocessingml") ?? false;
           return {
             kind: "doc",
             name: payload.upload.name ?? message.body,
             meta: sizeOf(payload.upload.size ?? 0, format),
-            ext: pdf ? "PDF" : (payload.upload.type?.split("/")[1] ?? "").toUpperCase(),
+            ext: pdf
+              ? "PDF"
+              : word
+                ? "DOCX"
+                : (payload.upload.type?.split("/")[1] ?? "").toUpperCase(),
             href: mediaSrc(id, message.id),
           };
         }
@@ -482,26 +524,25 @@ export async function messageViews(
       case "invitation": {
         const interview = interviews.find((row) => row.id === payload.interviewId);
         if (!interview) return { kind: "text", text: message.body };
-        const confirmed = interview.status === "confirmed" && interview.startsAt;
+        const confirmed = Boolean(interview.status === "confirmed" && interview.startsAt);
         const first = interview.startsAt ?? interview.slots[0] ?? null;
+        const place =
+          interview.mode === "onsite" && interview.address
+            ? interview.address
+            : tch(`interview.mode.${interview.mode}`);
         return {
-          kind: "event",
-          label: t("event.interview"),
-          title: first ? longDate(first, interview.timezone) : message.body,
+          kind: "interview",
+          id: interview.id,
+          title: first ? interviewTitle(first, interview.timezone) : message.body,
           meta: confirmed
-            ? (interview.address ?? t(`event.mode.${interview.mode}`))
-            : t("event.toConfirm"),
-          action: confirmed
-            ? {
-                href: `/app/suivi/entretiens/${interview.id}/agenda`,
-                label: t("event.agenda"),
-                download: true,
-              }
-            : {
-                href: `/app/suivi/entretiens/${interview.id}`,
-                label: t("event.choose"),
-                download: false,
-              },
+            ? tch("interview.meta", { place, minutes: interview.durationMinutes })
+            : tch("interview.toConfirm", { minutes: interview.durationMinutes }),
+          confirmed,
+          agendaHref: confirmed ? `/app/suivi/entretiens/${interview.id}/agenda` : null,
+          chooseHref: confirmed ? null : `/app/suivi/entretiens/${interview.id}`,
+          practiceHref: conversation.application
+            ? `/app/career/entretiens/nouveau?candidature=${conversation.application.id}`
+            : "/app/career/entretiens/nouveau",
         };
       }
       case "document_request":
@@ -526,6 +567,18 @@ export async function messageViews(
   };
 
   const readBy = conversation.readBy;
+  const dayKey = (date: Date) =>
+    format.dateTime(date, { year: "numeric", month: "2-digit", day: "2-digit" });
+  const today = dayKey(new Date());
+  const yesterday = dayKey(new Date(Date.now() - DAY));
+  /** « Aujourd’hui », « Hier », « Vendredi 16 octobre ». */
+  const dayOf = (date: Date) => {
+    const key = dayKey(date);
+    if (key === today) return tch("day.today");
+    if (key === yesterday) return tch("day.yesterday");
+    const text = format.dateTime(date, { weekday: "long", day: "numeric", month: "long" });
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  };
   return conversation.messages.map((message) => {
     const bubble = bubbleOf(message);
     const searchText =
@@ -539,7 +592,9 @@ export async function messageViews(
               ? `${bubble.title} ${bubble.display}`
               : bubble.kind === "event"
                 ? `${bubble.label} ${bubble.title} ${bubble.meta}`
-                : "";
+                : bubble.kind === "interview"
+                  ? `${bubble.title} ${bubble.meta}`
+                  : "";
     return {
       id: message.id,
       mine: message.senderId === userId,
@@ -548,6 +603,13 @@ export async function messageViews(
       ephemeral: message.expiresAt !== null,
       read: Boolean(readBy && message.senderId === userId && readBy >= message.createdAt),
       words: searchText,
+      day: dayOf(message.createdAt),
+      reactions: reactions.get(message.id) ?? null,
+      reactable:
+        !message.hiddenAt &&
+        bubble.kind !== "system" &&
+        bubble.kind !== "decision" &&
+        message.kind !== "document_request",
       bubble,
     };
   });
@@ -575,49 +637,39 @@ export function nextDays(words: MessageWords, now = new Date()) {
   return days;
 }
 
-/** What « Joindre » offers in a conversation: CVs, letters, documents, connections, organizations. */
-export async function attachments(
-  db: PrismaClient,
-  words: MessageWords,
-  userId: string,
-  exceptUserId: string | null,
-) {
-  const [cvs, letters, documents, connections, orgs] = await Promise.all([
+/**
+ * What « Joindre » offers in a conversation (planche Chat-joindre): the CVs, the documents and
+ * letters kept on Jumanly, and the attestations of the courses finished.
+ */
+export async function attachments(db: PrismaClient, words: MessageWords, userId: string) {
+  const [cvs, letters, documents, certificates, tch] = await Promise.all([
     attachableDocuments(db, userId, "cv"),
     attachableDocuments(db, userId, "lettre"),
     attachableDocuments(db, userId, "document"),
-    phoneConnections(db, userId),
-    shareableOrganizations(db, userId),
+    db.certificate.findMany({
+      where: { enrollment: { userId }, revokedAt: null },
+      orderBy: { issuedAt: "desc" },
+      take: 20,
+      select: { id: true, courseTitle: true, hours: true, issuedAt: true },
+    }),
+    getTranslations("phoneChat.attach"),
   ]);
   const doc = (row: { id: string; title: string; updatedAt: Date }): AttachDoc => ({
     id: row.id,
     title: row.title,
     line: words.t("attach.changed", { date: words.dayMonth(row.updatedAt) }),
   });
-  const contacts: ConnectionView[] = connections
-    .filter((row) => row.person.id !== exceptUserId)
-    .map((row) => ({
-      connectionId: row.connectionId,
-      conversationId: row.conversationId,
-      who: words.ofPerson(row.person, null),
-    }));
-  const shareOrgs: ShareOrg[] = orgs.map((org) => {
-    const view = words.ofOrganization(org);
-    return {
-      id: org.id,
-      name: view.name,
-      line: view.line,
-      initials: view.initials,
-      image: view.image,
-      tone: view.tone,
-    };
-  });
   return {
     cvs: cvs.map(doc),
-    letters: letters.map(doc),
-    documents: documents.filter((row) => row.kind === "bio" || row.kind === "other").map(doc),
-    contacts,
-    orgs: shareOrgs,
+    documents: [
+      ...documents.filter((row) => row.kind === "bio" || row.kind === "other"),
+      ...letters,
+    ].map(doc),
+    certificates: certificates.map((row) => ({
+      id: row.id,
+      title: row.courseTitle,
+      line: tch("certificateLine", { hours: row.hours, date: words.dayMonth(row.issuedAt) }),
+    })),
   };
 }
 

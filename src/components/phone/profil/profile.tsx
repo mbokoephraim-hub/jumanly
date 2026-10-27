@@ -46,9 +46,9 @@ export function ringOf(colors: string[]) {
 /** A tint of a palette colour (« #A6F26B » → « #A6F26B1F »). */
 const tint = (color: string, alpha: string) => `${color}${alpha}`;
 
-export function VerifiedMark({ label }: { label: string }) {
+export function VerifiedMark({ label, size = 18 }: { label: string; size?: number }) {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" role="img" aria-label={label}>
+    <svg width={size} height={size} viewBox="0 0 24 24" role="img" aria-label={label}>
       <path
         d="M12 2.5l2.4 1.8 3-.1.9 2.9 2.4 1.8-1 2.8 1 2.8-2.4 1.8-.9 2.9-3-.1L12 21.5l-2.4-1.8-3 .1-.9-2.9-2.4-1.8 1-2.8-1-2.8 2.4-1.8.9-2.9 3 .1z"
         fill="var(--nb-lime)"

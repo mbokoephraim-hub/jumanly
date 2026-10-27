@@ -100,6 +100,20 @@ export async function storeVoice(
 
 export type StoredUpload = { key: string; name: string; size: number; type: string };
 
+const DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+/**
+ * A Word document (.docx, « Document · PDF, Word » of Chat v2): a zip archive (PK\x03\x04) that
+ * holds the folder `word/`. Read from the bytes, never from the name the phone gives.
+ */
+export function isWordDocument(bytes: Uint8Array) {
+  if (bytes[0] !== 0x50 || bytes[1] !== 0x4b || bytes[2] !== 0x03 || bytes[3] !== 0x04)
+    return false;
+  return Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).includes(
+    "word/document.xml",
+  );
+}
+
 /** A document taken from the phone (« Documents · Sur ce téléphone »). */
 export async function storeUpload(
   db: PrismaClient,
@@ -109,9 +123,10 @@ export async function storeUpload(
 ): Promise<StoredUpload> {
   if (bytes.byteLength === 0) throw new MediaError("empty");
   if (bytes.byteLength > UPLOAD_MAX_BYTES) throw new MediaError("size");
-  const type = sniffDocumentType(bytes);
+  const type = sniffDocumentType(bytes) ?? (isWordDocument(bytes) ? DOCX : null);
   if (!type) throw new MediaError("type");
-  const extension = type === "application/pdf" ? "pdf" : type.split("/")[1]!;
+  const extension =
+    type === "application/pdf" ? "pdf" : type === DOCX ? "docx" : type.split("/")[1]!;
   const key = keyFor(conversationId, extension);
   await fileStorage(db).put(key, { contentType: type, bytes });
   const clean =

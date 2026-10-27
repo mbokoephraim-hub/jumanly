@@ -3,7 +3,9 @@
 /* eslint-disable @next/next/no-img-element -- photos of a conversation, served privately */
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { showToast } from "@/components/motion/toaster";
+import { REACTIONS } from "@/lib/reactions";
 import { FilAvatar } from "../fil/avatar";
 import { PhoneIcon } from "../icon";
 import { WAVE } from "./media";
@@ -197,6 +199,8 @@ function Content({
           ) : null}
         </span>
       );
+    case "interview":
+      return null;
     case "voice":
       return <Voice src={bubble.src} duration={bubble.duration} mine={message.mine} />;
     case "link": {
@@ -227,31 +231,144 @@ function Content({
   }
 }
 
-/** One message of a conversation: a line of the system, or a bubble with its time and « Lu ». */
+const AGENDA_KEY = "jm-chat-agenda";
+
+function agendaSaved(id: string) {
+  try {
+    return (JSON.parse(localStorage.getItem(AGENDA_KEY) ?? "[]") as string[]).includes(id);
+  } catch {
+    return false;
+  }
+}
+
+function keepAgenda(id: string) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(AGENDA_KEY) ?? "[]") as string[];
+    localStorage.setItem(
+      AGENDA_KEY,
+      JSON.stringify([id, ...saved.filter((item) => item !== id)].slice(0, 30)),
+    );
+  } catch {
+    // Private browsing: the button simply forgets it next time.
+  }
+}
+
+/**
+ * The interview card (planche Chat-conv, « ENTRETIEN »): the day and hour, where and how long;
+ * « Ajouter à l’agenda » downloads the event with its two reminders and becomes « ✓ Dans
+ * l’agenda »; « S’entraîner » opens a simulation of this interview with Orbi. While the time is
+ * not chosen: « Choisir un créneau ».
+ */
+function InterviewCard({ bubble }: { bubble: Extract<Bubble, { kind: "interview" }> }) {
+  const t = useTranslations("phoneChat.interview");
+  const [saved, setSaved] = useState(false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from this phone
+    setSaved(agendaSaved(bubble.id));
+  }, [bubble.id]);
+  const add = () => {
+    if (!bubble.agendaHref) return;
+    const link = document.createElement("a");
+    link.href = bubble.agendaHref;
+    link.download = "";
+    document.body.append(link);
+    link.click();
+    link.remove();
+    keepAgenda(bubble.id);
+    setSaved(true);
+    showToast({ message: t("reminders") });
+  };
+  return (
+    <article className="nb-ch-rdv">
+      <div className="nb-ch-rdv-h">
+        <span className="nb-ch-rdv-k">{t("label")}</span>
+        <b>{bubble.title}</b>
+        <span>{bubble.meta}</span>
+      </div>
+      <div className="nb-ch-rdv-b">
+        {bubble.agendaHref ? (
+          <button
+            type="button"
+            className="nb-ch-rdv-ag"
+            data-ok={saved ? "" : undefined}
+            onClick={add}
+          >
+            {saved ? t("inAgenda") : t("agenda")}
+          </button>
+        ) : bubble.chooseHref ? (
+          <Link href={bubble.chooseHref} className="nb-ch-rdv-ag">
+            {t("choose")}
+          </Link>
+        ) : null}
+        <Link href={bubble.practiceHref} className="nb-ch-rdv-tr">
+          {t("practice")}
+        </Link>
+      </div>
+      {saved ? <span className="nb-ch-rdv-rap">{t("reminders")}</span> : null}
+    </article>
+  );
+}
+
+/** The single check of « Envoyé », the double one of « Lu ». */
+function Ticks({ read, label }: { read: boolean; label: string }) {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      role="img"
+      aria-label={label}
+    >
+      <path d={read ? "m2.5 12.5 4 4 8-9M10.5 16.5l.5.5 10-10" : "m5 12.5 4.5 4.5 10-11"} />
+    </svg>
+  );
+}
+
+/**
+ * One message of the Chat (planches Chat-conv, Chat-reaction): a line of the system, a decision,
+ * the interview card, or a bubble (received on `#13282C`, sent in Lime with Sapin text) with its
+ * time, its checks, and its reactions under it. A touch on a bubble shows the bar of the six
+ * reactions; the same reaction again takes it back.
+ */
 export function MessageBubble({
   message,
   hit,
   current,
   onOpen,
+  picking,
+  onPick,
+  onReact,
+  fresh,
 }: {
   message: MessageView;
   /** Found by the search in the conversation; `current`: the one shown. */
   hit: boolean;
   current: boolean;
   onOpen: (open: Open) => void;
+  /** The bar of reactions is shown above this message. */
+  picking: boolean;
+  onPick: (id: string | null) => void;
+  onReact: (message: MessageView, emoji: string) => void;
+  /** Arrived while the conversation is open: it rises gently. */
+  fresh: boolean;
 }) {
-  const t = useTranslations("phoneMsg.bubble");
+  const t = useTranslations("phoneChat");
   const tm = useTranslations("phoneMsg");
   if (message.bubble.kind === "system")
     return (
-      <li className="nb-ms-m" data-sys="" id={`m-${message.id}`}>
-        <span className="nb-ms-sys">{message.bubble.text}</span>
+      <li className="nb-ch-m" data-sys="" id={`m-${message.id}`}>
+        <span className="nb-ch-sys">{message.bubble.text}</span>
       </li>
     );
   if (message.bubble.kind === "decision") {
     const decision = message.bubble;
     return (
-      <li className="nb-ms-m nb-ms-dec" id={`m-${message.id}`}>
+      <li className="nb-ch-m nb-ms-dec" id={`m-${message.id}`}>
         <article className="nb-ms-decision" data-retenue={decision.hired ? "" : undefined}>
           <b className="nb-ms-decision-t">{decision.title}</b>
           {decision.paragraphs.map((paragraph, index) => (
@@ -275,25 +392,92 @@ export function MessageBubble({
     );
   }
   const kind = message.bubble.kind;
+  const reactions = message.reactions;
+  const bar = picking ? (
+    <span className="nb-ch-barre" role="toolbar" aria-label={t("react")}>
+      {REACTIONS.map((emoji) => (
+        <button
+          key={emoji}
+          type="button"
+          aria-label={t("reactWith", { emoji })}
+          aria-pressed={reactions?.mine === emoji}
+          onClick={(event) => {
+            event.stopPropagation();
+            onReact(message, emoji);
+          }}
+        >
+          {emoji}
+        </button>
+      ))}
+    </span>
+  ) : null;
+  const chip = reactions ? (
+    <span
+      className="nb-ch-rx"
+      role="img"
+      aria-label={t("reactions", { count: reactions.count, emojis: reactions.emojis.join(" ") })}
+    >
+      {reactions.emojis.join("")}
+      {reactions.count > 0 ? <b>{reactions.count}</b> : null}
+    </span>
+  ) : null;
+  const toggle = (event: MouseEvent) => {
+    if (!message.reactable) return;
+    if ((event.target as HTMLElement).closest("a, button, audio, input")) return;
+    event.stopPropagation();
+    onPick(picking ? null : message.id);
+  };
+  if (kind === "interview" && message.bubble.kind === "interview")
+    return (
+      <li className="nb-ch-m" id={`m-${message.id}`} data-reagit={reactions ? "" : undefined}>
+        <div className="nb-ch-carte" onClick={toggle}>
+          {bar}
+          <InterviewCard bubble={message.bubble} />
+          {chip}
+        </div>
+      </li>
+    );
   return (
-    <li className="nb-ms-m" data-moi={message.mine ? "" : undefined} id={`m-${message.id}`}>
+    <li
+      className="nb-ch-m"
+      data-moi={message.mine ? "" : undefined}
+      data-reagit={reactions ? "" : undefined}
+      id={`m-${message.id}`}
+    >
       <div
-        className="nb-ms-bulle"
+        className="nb-ch-bulle"
         data-type={kind}
+        data-nouveau={fresh ? "" : undefined}
         data-trouve={current ? "courant" : hit ? "" : undefined}
+        onClick={toggle}
       >
+        {bar}
         <Content bubble={message.bubble} message={message} onOpen={onOpen} />
-        <span className="nb-ms-heure-b">
+        <span className="nb-ch-heure-b">
           {kind === "photos" && message.bubble.kind === "photos" && message.bubble.hd ? (
             <b className="nb-ms-hd">{tm("hd")}</b>
           ) : null}
           {message.ephemeral ? <PhoneIcon name="minuteur" size={12} stroke={2} /> : null}
           {message.time}
           {message.mine ? (
-            <span className="nb-ms-lu">{message.read ? t("read") : t("sent")}</span>
+            <Ticks read={message.read} label={message.read ? t("read") : t("sent")} />
           ) : null}
         </span>
+        {chip}
       </div>
+      {message.reactable ? (
+        <button
+          type="button"
+          className="nb-ch-reagir"
+          aria-expanded={picking}
+          onClick={(event) => {
+            event.stopPropagation();
+            onPick(picking ? null : message.id);
+          }}
+        >
+          {t("react")}
+        </button>
+      ) : null}
     </li>
   );
 }

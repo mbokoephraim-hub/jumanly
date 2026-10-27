@@ -12631,6 +12631,241 @@
       "reread": "Écrivez votre message dans la discussion, puis touchez l’étincelle : « Corriger les fautes » ou « Plus professionnel ». Je propose, vous choisissez."
     }
   },
+  "phoneChat": {
+    "title": "Chat",
+    "search": "Rechercher",
+    "new": "Nouveau message",
+    "online": "En ligne maintenant",
+    "onlineOpen": "Écrire à {name}, en ligne",
+    "tabs": "Trier les discussions",
+    "tab": {
+      "tout": "Tout",
+      "connexions": "Connexions",
+      "recruteurs": "Recruteurs",
+      "entreprises": "Entreprises"
+    },
+    "tag": {
+      "connexions": "Connexion",
+      "recruteurs": "Recruteur",
+      "entreprises": "Entreprise"
+    },
+    "typing": "écrit",
+    "typingOf": "{name} écrit…",
+    "read": "Lu",
+    "sent": "Envoyé",
+    "muted": "Notifications coupées",
+    "pinned": "Épinglée",
+    "unread": "{count, plural, one {# message non lu} other {# messages non lus}}",
+    "requests": {
+      "title": "Demandes de connexion",
+      "names": "{rest, plural, =0 {{a} et {b}} one {{a}, {b} et # autre} other {{a}, {b} et # autres}}"
+    },
+    "empty": {
+      "tout": "Aucune discussion pour l’instant. Écrivez à une connexion ou attendez la réponse d’un recruteur.",
+      "connexions": "Aucune discussion avec vos connexions pour l’instant.",
+      "recruteurs": "Aucun recruteur ne vous a encore écrit.",
+      "entreprises": "Aucune entreprise ne vous a encore écrit."
+    },
+    "note": "Vous écrivez à vos connexions et aux recruteurs de vos candidatures.",
+    "orbi": {
+      "title": "{count, plural, one {# message non lu} other {# messages non lus}} · Orbi résume",
+      "touch": "Touchez pour un résumé en une phrase par discussion",
+      "thinking": "Orbi lit vos messages…",
+      "simple": "Résumé simple, sans l’IA d’Orbi",
+      "none": "Aucun message non lu à résumer.",
+      "template": {
+        "text": "{name} : « {text} »",
+        "voice": "{name} vous a laissé une note vocale de {duration}.",
+        "photo": "{name} vous a envoyé une photo.",
+        "file": "{name} vous a envoyé un document.",
+        "interview": "{name} vous propose un entretien : choisissez un créneau.",
+        "document": "{name} vous demande : {document}.",
+        "other": "{name} vous a écrit."
+      }
+    },
+    "status": {
+      "online": "{place, select, none {En ligne} other {En ligne · {place}}}"
+    },
+    "openProfile": "Voir le profil de {name}",
+    "options": "Options de la discussion",
+    "cancel": "Annuler",
+    "ephemeralOn": "Messages éphémères activés · toucher pour les désactiver",
+    "context": {
+      "title": "{job} · {company}",
+      "stage": "Étape : {stage} · {score} %",
+      "stageOnly": "Étape : {stage}",
+      "see": "Voir ›"
+    },
+    "stage": {
+      "new": "candidature reçue",
+      "screening": "présélection",
+      "test": "test",
+      "interview": "entretien",
+      "offer": "proposition",
+      "hired": "recruté·e",
+      "rejected": "non retenue",
+      "withdrawn": "retirée"
+    },
+    "day": {
+      "today": "Aujourd’hui",
+      "yesterday": "Hier"
+    },
+    "react": "Réagir",
+    "reactWith": "Réagir avec {emoji}",
+    "reactions": "{count, plural, one {# réaction} other {# réactions}} : {emojis}",
+    "interview": {
+      "label": "Entretien",
+      "title": "{day} · {hour}",
+      "hour": "{hour} h",
+      "hourMinutes": "{hour} h {minute}",
+      "mode": {
+        "video": "En visio",
+        "onsite": "Sur place",
+        "audio": "Par téléphone"
+      },
+      "meta": "{place} · {minutes} min",
+      "toConfirm": "Créneau à choisir · {minutes} min",
+      "agenda": "Ajouter à l’agenda",
+      "inAgenda": "✓ Dans l’agenda",
+      "reminders": "Rappels la veille et une heure avant",
+      "choose": "Choisir un créneau",
+      "practice": "S’entraîner"
+    },
+    "suggest": {
+      "label": "Réponses suggérées par Orbi",
+      "sendNow": "Je vous l’envoie tout de suite",
+      "there": "{when, select, none {Merci, je serai là !} other {Merci, je serai là {when} !}}",
+      "when": "{minute, select, none {{day} à {hour} h} other {{day} à {hour} h {minute}}}",
+      "address": "Pouvez-vous me confirmer l’adresse ?",
+      "link": "Pouvez-vous m’envoyer le lien de la visio ?",
+      "choose": "Merci, je choisis un créneau.",
+      "yes": "Oui, bien sûr.",
+      "thanks": "Merci beaucoup pour votre retour !",
+      "received": "Bien reçu, merci.",
+      "peerThanks": "Merci !",
+      "peerLater": "Je te réponds un peu plus tard.",
+      "peerYes": "Oui, avec plaisir !"
+    },
+    "compose": {
+      "placeholder": "Écrire à {name}…"
+    },
+    "orbiSheet": {
+      "title": "Orbi vous aide à répondre",
+      "sub": "Vous relisez, vous envoyez",
+      "tones": "Ton de la réponse",
+      "mode": {
+        "reply": "Proposer une réponse",
+        "pro": "Plus professionnel",
+        "short": "Plus court",
+        "english": "En anglais"
+      },
+      "draft": "Texte proposé par Orbi, modifiable",
+      "thinking": "Orbi écrit…",
+      "send": "Envoyer",
+      "again": "Autre version",
+      "simple": "Proposition simple, sans l’IA d’Orbi.",
+      "needsAi": "Activez l’IA d’Orbi dans vos réglages pour qu’il vous propose une réponse."
+    },
+    "attach": {
+      "title": "Joindre",
+      "photo": {
+        "title": "Photo",
+        "sub": "Galerie"
+      },
+      "camera": {
+        "title": "Appareil",
+        "sub": "Photo"
+      },
+      "document": {
+        "title": "Document",
+        "sub": "PDF, Word"
+      },
+      "cv": {
+        "title": "Mon CV",
+        "sub": "CV Data"
+      },
+      "certificate": {
+        "title": "Attestation",
+        "sub": "Jumanly"
+      },
+      "meeting": {
+        "title": "Rendez-vous",
+        "sub": "Agenda"
+      },
+      "photos": "Photos choisies",
+      "pickFileNote": "PDF, Word ou photo, 10 Mo au plus",
+      "certificates": "Mes attestations",
+      "noCertificates": "Vous n’avez pas encore d’attestation. Terminez une formation pour en recevoir une.",
+      "certificateSent": "Attestation envoyée",
+      "certificateLine": "{hours} h · délivrée le {date}",
+      "certificateName": "Attestation · {title}",
+      "certificateMeta": "Attestation Jumanly vérifiable"
+    },
+    "menu": {
+      "label": "Options de la discussion",
+      "profile": "Voir le profil",
+      "page": "Voir la page",
+      "application": "Voir la candidature",
+      "search": "Rechercher dans la discussion",
+      "medias": "Médias, liens et documents",
+      "notifications": "Notifications",
+      "pin": "Épingler la discussion",
+      "unpin": "Désépingler la discussion",
+      "pinnedToast": "Discussion épinglée en haut de la liste",
+      "unpinnedToast": "Discussion désépinglée",
+      "report": {
+        "label": "Signaler",
+        "title": "Signaler la discussion avec {name} ?",
+        "text": "L’équipe Jumanly lit votre signalement. {name} n’est pas prévenu·e.",
+        "reasons": "Raison du signalement",
+        "reason": {
+          "harassment": "Harcèlement ou propos blessants",
+          "scam": "Arnaque ou fausse offre",
+          "spam": "Messages indésirables",
+          "inappropriate": "Contenu inapproprié",
+          "other": "Autre raison"
+        },
+        "send": "Signaler",
+        "done": "Merci, l’équipe Jumanly va regarder.",
+        "already": "Vous avez déjà signalé cette discussion."
+      },
+      "block": {
+        "label": "Bloquer",
+        "title": "Bloquer {name} ?"
+      },
+      "unblock": "Débloquer",
+      "unblockTitle": "Débloquer {name} ?",
+      "unblockText": "{name} pourra de nouveau vous écrire."
+    },
+    "call": {
+      "button": "Appeler {name} en vidéo",
+      "ask": "Souhaitez-vous appeler {name} en vidéo ?",
+      "noteOnline": "{name} est en ligne. L’appel n’est pas enregistré.",
+      "note": "L’appel n’est pas enregistré.",
+      "no": "Non",
+      "yes": "Oui, appeler",
+      "label": "Appel vidéo avec {name}",
+      "encrypted": "Chiffré de bout en bout",
+      "you": "Vous",
+      "ringing": "Appel en cours",
+      "timer": "Durée de l’appel",
+      "micro": "Micro",
+      "camera": "Caméra",
+      "speaker": "Haut-parleur",
+      "hangUp": "Raccrocher",
+      "ended": "Appel terminé · {duration}",
+      "cancelled": "Appel annulé",
+      "failed": "L’appel n’a pas pu démarrer. Réessayez dans un instant.",
+      "context": "Entretien · {job}",
+      "line": "Appel vidéo · {duration}",
+      "lineMissed": "Appel vidéo sans réponse"
+    },
+    "duration": {
+      "short": "{seconds} s",
+      "long": "{minutes} min {seconds} s",
+      "hours": "{hours} h {minutes} min"
+    }
+  },
   "hireShell": {
     "skip": "Aller au contenu principal",
     "nav": {

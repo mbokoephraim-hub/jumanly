@@ -23,6 +23,10 @@ export type WhoView = {
   status: string;
   /** Their page in Explorer, or null when it does not open. */
   href: string | null;
+  /** The person behind the face (for « En ligne » kept live), null for an organization. */
+  personId: string | null;
+  /** The colours of the ring around the face (Chat v2): their skills, or their name. */
+  ring: string[];
 };
 
 export type InboxRow = {
@@ -33,6 +37,13 @@ export type InboxRow = {
   preview: string;
   unread: number;
   muted: boolean;
+  pinned: boolean;
+  typing: boolean;
+  /** My last message, and whether it was read (the double check of the list). */
+  lastMine: boolean;
+  lastRead: boolean;
+  /** The last message is a voice note (the microphone before the preview). */
+  voice: boolean;
 };
 
 export type ConnectionView = {
@@ -102,6 +113,20 @@ export type Bubble =
       tone: number;
       href: string;
     }
+  | {
+      /** An interview proposed in the conversation (planche Chat-conv, carte Entretien). */
+      kind: "interview";
+      id: string;
+      title: string;
+      meta: string;
+      confirmed: boolean;
+      /** The .ics of a confirmed interview (« Ajouter à l’agenda »). */
+      agendaHref: string | null;
+      /** « Choisir un créneau » while the time is not chosen. */
+      chooseHref: string | null;
+      /** « S’entraîner »: a simulation of this interview with Orbi. */
+      practiceHref: string;
+    }
   | { kind: "voice"; src: string; seconds: number; duration: string }
   | { kind: "link"; title: string; url: string; display: string; internal: boolean };
 
@@ -116,37 +141,53 @@ export type MessageView = {
   read: boolean;
   /** The words of the message, for the search in the conversation. */
   words: string;
+  /** « Vendredi 16 octobre », « Aujourd’hui »: the separator drawn when the day changes. */
+  day: string;
+  /** The reactions under it (Chat v2), and whether one can react to it. */
+  reactions: { emojis: string[]; count: number; mine: string | null } | null;
+  reactable: boolean;
   bubble: Bubble;
 };
 
-export type AttachDoc = { id: string; title: string; line: string };
-export type ShareOrg = {
-  id: string;
-  name: string;
-  line: string;
+/** The application a conversation comes from, pinned under its head (Chat v2). */
+export type ContextView = {
   initials: string;
-  image: string | null;
-  tone: number;
+  title: string;
+  line: string;
+  href: string;
 };
+
+export type AttachDoc = { id: string; title: string; line: string };
 
 export type ThreadView = {
   id: string;
   kind: "peer" | "organization";
   who: WhoView;
-  /** The organization a letter is written for (« Orbi rédige une lettre pour… »). */
-  company: string | null;
   muted: boolean;
   ephemeral: number | null;
   blocked: boolean;
   blockedByMe: boolean;
   canWrite: boolean;
   messages: MessageView[];
+  /** The application under the head, when the conversation comes from one. */
+  context: ContextView | null;
+  /** « Voir la candidature » in the menu ···. */
+  applicationHref: string | null;
+  /** The line under the name during a call: « Entretien · Analyste… » or their line. */
+  callLine: string;
+  /** A video call is possible here (connections, or the recruiter of an application). */
+  canCall: boolean;
+  pinned: boolean;
+  /** The other side is typing (as the page was read). */
+  typing: boolean;
+  /** The replies Orbi suggests above the field (rules, no credit). */
+  suggestions: string[];
+  /** My initials, for my own tile during a call. */
+  me: { initials: string };
   /** What « Joindre » offers. */
+  certificates: AttachDoc[];
   cvs: AttachDoc[];
-  letters: AttachDoc[];
   documents: AttachDoc[];
-  contacts: ConnectionView[];
-  orgs: ShareOrg[];
   /** The next three working days for « Agenda », as `YYYY-MM-DD` with their label. */
   days: { value: string; label: string }[];
   /** The other conversations, for « Transférer ». */

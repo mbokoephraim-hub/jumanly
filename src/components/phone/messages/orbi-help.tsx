@@ -1,86 +1,91 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { messageHelpAction } from "@/server/actions/messages-phone";
 import type { HelpResult } from "@/server/services/message-help";
-import { OrbiDisc } from "../icon";
 import { PhoneSheet } from "../sheet";
+import { Spark } from "./parts";
 
-const MODES = ["reply", "pro", "short", "fix", "english"] as const;
+const MODES = ["reply", "pro", "short", "english"] as const;
 type Mode = (typeof MODES)[number];
 
 /**
- * Orbi helps to write (planche Messages-orbi): « Proposer une réponse », « Plus professionnel »,
- * « Plus court », « Corriger les fautes », « Traduire en anglais ». Orbi writes a text; « Utiliser »
- * puts it in the field, where the person reads it, changes it and sends it, or not.
+ * « Orbi vous aide à répondre » (planche Chat-orbi): « Proposer une réponse · Plus professionnel ·
+ * Plus court · En anglais », the text Orbi writes (the person can change it), « Envoyer » and
+ * « Autre version ». Nothing leaves without the person's touch on « Envoyer ». One credit of the
+ * person per text, with their consent (`message_help`); without the model, a simple text.
  */
 export function OrbiHelp({
   open,
   onClose,
   conversationId,
-  name,
   draft,
-  onUse,
+  onSend,
 }: {
   open: boolean;
   onClose: () => void;
   conversationId: string;
-  name: string;
+  /** What the person had written: « Plus professionnel » and « Plus court » start from it. */
   draft: string;
-  onUse: (text: string) => void;
+  onSend: (text: string) => void;
 }) {
-  const t = useTranslations("phoneMsg.help");
+  const t = useTranslations("phoneChat.orbiSheet");
   const tm = useTranslations("phoneMsg");
-  const [mode, setMode] = useState<Mode | null>(null);
+  const [mode, setMode] = useState<Mode>("reply");
+  const [text, setText] = useState("");
   const [result, setResult] = useState<HelpResult | null>(null);
   const [pending, start] = useTransition();
-
-  useEffect(() => {
-    if (open) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- a closed sheet starts again
-    setMode(null);
-    setResult(null);
-  }, [open]);
+  const opened = useRef(false);
 
   const ask = (next: Mode, again = false) => {
     setMode(next);
-    setResult(null);
     start(async () => {
       const answer = await messageHelpAction({ conversationId, mode: next, draft, again }).catch(
         () => null,
       );
-      setResult(answer ?? { ok: false, error: "invalid" });
+      const value = answer ?? ({ ok: false, error: "invalid" } as const);
+      setResult(value);
+      if (value.ok) setText(value.text);
     });
   };
 
-  const text = result?.ok ? result.text : null;
+  // Opening the sheet is the person's ask: Orbi proposes at once.
+  useEffect(() => {
+    if (!open) {
+      opened.current = false;
+      return;
+    }
+    if (opened.current) return;
+    opened.current = true;
+
+    setText("");
+    setResult(null);
+    ask(draft.trim() ? "pro" : "reply");
+    // `ask` reads the draft of this opening.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
   const failure =
-    result && !result.ok
-      ? result.error === "empty"
-        ? t("fixEmpty")
-        : result.error === "needsAi"
-          ? t("needsAi")
-          : tm("error")
-      : null;
+    result && !result.ok ? (result.error === "needsAi" ? t("needsAi") : tm("error")) : null;
 
   return (
     <PhoneSheet open={open} onClose={onClose} label={t("title")} closeLabel={tm("close")}>
-      <div className="nb-ms-orbi">
-        <div className="nb-ms-orbi-h">
-          <OrbiDisc size={44} />
+      <div className="nb-ch-redige">
+        <div className="nb-ch-redige-h">
+          <span className="nb-ch-disque" aria-hidden>
+            <Spark size={17} />
+          </span>
           <span>
             <b>{t("title")}</b>
-            <span className="nb-meta">{t("for", { name })}</span>
+            <span>{t("sub")}</span>
           </span>
         </div>
-        {draft.trim() ? <p className="nb-ms-votre">{t("yours", { text: draft.trim() })}</p> : null}
-        <div className="nb-ms-puces">
+        <div className="nb-ch-tons" role="group" aria-label={t("tones")}>
           {MODES.map((key) => (
             <button
               key={key}
               type="button"
-              className="nb-chip"
               aria-pressed={mode === key}
               disabled={pending}
               onClick={() => ask(key)}
@@ -89,45 +94,40 @@ export function OrbiHelp({
             </button>
           ))}
         </div>
-        {pending ? (
-          <p className="nb-meta nb-ms-orbi-att" aria-live="polite">
-            {t("thinking")}
-          </p>
+        <label className="nb-ch-brouillon" data-attente={pending ? "" : undefined}>
+          <span className="nb-ch-sr">{t("draft")}</span>
+          <textarea
+            value={pending ? t("thinking") : (failure ?? text)}
+            readOnly={pending || Boolean(failure)}
+            rows={4}
+            maxLength={4000}
+            onChange={(event) => setText(event.target.value)}
+          />
+        </label>
+        {result?.ok && result.source === "template" ? (
+          <p className="nb-ch-simple">{t("simple")}</p>
         ) : null}
-        {text ? (
-          <div className="nb-ms-orbi-rep" aria-live="polite">
-            <p>{text}</p>
-            {result?.ok && result.source === "template" ? (
-              <p className="nb-meta">{t("simple")}</p>
-            ) : null}
-            <div className="nb-ms-orbi-b">
-              <button
-                type="button"
-                className="nb-ms-utiliser"
-                onClick={() => {
-                  onUse(text);
-                  onClose();
-                }}
-              >
-                {t("use")}
-              </button>
-              <button
-                type="button"
-                className="nb-bs"
-                disabled={pending}
-                onClick={() => ask("reply", true)}
-              >
-                {t("again")}
-              </button>
-            </div>
-          </div>
-        ) : null}
-        {failure ? (
-          <p className="nb-ms-orbi-rep nb-meta" aria-live="polite">
-            {failure}
-          </p>
-        ) : null}
-        <p className="nb-meta nb-ms-decide">{t("decide")}</p>
+        <div className="nb-ch-redige-b">
+          <button
+            type="button"
+            className="nb-ch-envoyer-l"
+            disabled={pending || !text.trim() || Boolean(failure)}
+            onClick={() => {
+              onSend(text.trim());
+              onClose();
+            }}
+          >
+            {t("send")}
+          </button>
+          <button
+            type="button"
+            className="nb-ch-autre"
+            disabled={pending}
+            onClick={() => ask(mode, true)}
+          >
+            {t("again")}
+          </button>
+        </div>
       </div>
     </PhoneSheet>
   );

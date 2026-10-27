@@ -177,11 +177,9 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
 
   await talent.goto(threadUrl);
   await expect(talent.getByRole("main")).toContainText("êtes-vous disponible mardi");
-  // On a phone (Modèle B, lot B8) the composer is the field « Écrire un message ».
+  // On a phone (Chat, docs/chat-v2) the composer is the field « Écrire à … ».
   await (
-    isMobile
-      ? talent.getByRole("textbox", { name: "Écrire un message" })
-      : talent.locator("#cv-corps")
+    isMobile ? talent.getByRole("textbox", { name: /^Écrire à / }) : talent.locator("#cv-corps")
   ).fill("Bonjour, oui, mardi me convient.");
   await talent.getByRole("button", { name: "Envoyer", exact: true }).click();
   await expect(talent.getByRole("main")).toContainText("mardi me convient");

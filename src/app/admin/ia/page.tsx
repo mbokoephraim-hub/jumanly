@@ -75,6 +75,7 @@ const featureText: Record<
   job_writer: "jobDraft",
   learn_coach: "learnCoach",
   orbi_chat: "orbiChat",
+  chat_summary: "orbiChat",
 };
 
 const statusKey = { open: "open", in_review: "inReview" } as const;
