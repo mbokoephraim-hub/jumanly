@@ -54,6 +54,8 @@ async function Login({ searchParams }: Pick<PageProps<"/connexion">, "searchPara
     const notices: { tone: "ok" | "err"; text: string }[] = [];
     if (params.deconnecte) notices.push({ tone: "ok", text: t("auth.success.logout") });
     if (params.suppression) notices.push({ tone: "ok", text: t("login.deleted") });
+    if (params.confirmee) notices.push({ tone: "ok", text: t("login.confirmed") });
+    if (params.lien) notices.push({ tone: "err", text: t("login.linkExpired") });
     if (failed) notices.push({ tone: "err", text: t(`auth.error.${failed as "google"}Failed`) });
     if (suite) notices.push({ tone: "ok", text: t("auth.resume.generic") });
     return <PhoneLoginPage next={suite} notices={notices} recruiter={params.profil === "rh"} />;
@@ -68,6 +70,8 @@ async function Login({ searchParams }: Pick<PageProps<"/connexion">, "searchPara
       />
       {params.deconnecte && notice("ok", t("auth.success.logout"))}
       {params.suppression && notice("ok", t("login.deleted"))}
+      {params.confirmee && notice("ok", t("login.confirmed"))}
+      {params.lien && notice("err", t("login.linkExpired"))}
       {failed && notice("err", t(`auth.error.${failed as "google"}Failed`))}
       {suite && notice("ok", t("auth.resume.generic"))}
       <LoginForm

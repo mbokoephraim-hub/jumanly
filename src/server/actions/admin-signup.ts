@@ -37,6 +37,7 @@ import {
 import { notify } from "@/server/services/notifications";
 import { BrandImageError, saveBrandImage } from "@/server/services/organization-brand";
 import { refreshPayment, startCheckout } from "@/server/services/subscriptions";
+import { confirmationCallback } from "@/server/services/signup-confirmation";
 import { readSignupFlow, writeSignupFlow } from "@/server/signup-flow";
 import { fileStorage } from "@/server/storage";
 
@@ -147,6 +148,7 @@ export async function adminSignUpAction(
         newsletter: false,
         aiConsentAt: now,
         termsAcceptedAt: now,
+        callbackURL: confirmationCallback({ plan }),
       },
     });
     userId = result.user.id;
@@ -217,38 +219,8 @@ async function welcome(userId: string, orgName: string) {
   }).catch((error) => reportError(error, { message: "E-mail de bienvenue non envoyé" }));
 }
 
-// ─── Step 3 · the 6-digit code ────────────────────────────────────────
-
-export async function adminVerifyAction(
-  _: AdminSignupState,
-  formData: FormData,
-): Promise<AdminSignupState> {
-  const flow = await readSignupFlow();
-  const email = emailField.safeParse(flow.email);
-  if (!email.success) redirect(step("compte"));
-  const code = String(formData.get("code") ?? "").replace(/\D/g, "");
-  const values = { code };
-  if (code.length !== 6) return { status: "invalid", errors: { code: "code.error" }, values };
-  try {
-    await auth.api.verifyEmailOTP({
-      headers: await headers(),
-      body: { email: email.data, otp: code },
-    });
-  } catch (error) {
-    const reason = apiCode(error);
-    const message = reason.includes("EXPIRED")
-      ? "auth.error.codeExpired"
-      : reason.includes("TOO_MANY")
-        ? "auth.error.codeTooManyAttempts"
-        : "auth.error.codeInvalid";
-    return { status: "invalid", errors: { code: message }, values };
-  }
-  const user = await db.user.findUnique({ where: { email: email.data } });
-  if (!user) redirect(step("compte"));
-  const org = await setupAccount(db, user.id, { profile: "company" });
-  if (org) await welcome(user.id, org.name);
-  redirect(step("role"));
-}
+// ─── Step 3 · the link sent by e-mail ────────────────────────────────
+// It opens /inscription/confirmee signed in, which brings the administrator back to the role.
 
 // ─── Steps 4 to 7 · role, company, logo and banner, verification ─────
 

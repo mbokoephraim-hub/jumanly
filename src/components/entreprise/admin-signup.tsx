@@ -27,10 +27,9 @@ import {
   adminStartFreeAction,
   adminStartPaymentAction,
   adminVerificationAction,
-  adminVerifyAction,
   type AdminSignupState,
 } from "@/server/actions/admin-signup";
-import { resendCode } from "@/server/actions/auth";
+import { resendLink } from "@/server/actions/auth";
 import { signInWithProvider } from "@/server/actions/auth";
 
 /**
@@ -773,35 +772,18 @@ function SocialStep({ data }: { data: SignupData }) {
   );
 }
 
-// ─── 3 · Code ────────────────────────────────────────────────────────
+// ─── 3 · Lien de confirmation (devenu lien le 27/10/2026) ─────────────
 
 function CodeStep({ data, flash }: { data: SignupData; flash: (text: string) => void }) {
   const t = useTranslations("adminSignup");
   const errorText = useErrorText();
-  const [state, action, pending] = useActionState(adminVerifyAction, initial);
   const [sending, startSending] = useTransition();
-  const err = errorText(state.errors?.code);
   return (
-    <form action={action} noValidate>
+    <div>
       <p style={{ fontSize: 14.5, marginTop: 22 }}>
         {interpolate(t("code.sentTo", { email: slot("email") }), { email: <b>{data.email}</b> })}
       </p>
-      <label className="ae-lab" htmlFor="ae-code">
-        {t("code.label")}
-      </label>
-      <input
-        id="ae-code"
-        name="code"
-        className="ae-in ae-code"
-        inputMode="numeric"
-        autoComplete="one-time-code"
-        maxLength={7}
-        aria-label={t("code.aria")}
-        defaultValue={state.values?.code}
-        aria-invalid={err ? true : undefined}
-        aria-describedby={err ? "ae-code-erreur" : undefined}
-      />
-      <FieldError id="ae-code-erreur" text={err} />
+      <p style={{ fontSize: 14.5, marginTop: 10 }}>{t("code.how")}</p>
       <button
         type="button"
         className="ae-lien"
@@ -809,7 +791,7 @@ function CodeStep({ data, flash }: { data: SignupData; flash: (text: string) => 
         disabled={sending}
         onClick={() =>
           startSending(async () => {
-            const result = await resendCode({ status: "idle" });
+            const result = await resendLink({ status: "idle" });
             flash(
               result.error
                 ? (errorText(`auth.error.${result.error}`) ?? "")
@@ -820,8 +802,12 @@ function CodeStep({ data, flash }: { data: SignupData; flash: (text: string) => 
       >
         {t("code.resend")}
       </button>
-      <Submit pending={pending}>{t("continue")}</Submit>
-    </form>
+      <p style={{ fontSize: 14.5, marginTop: 12 }}>
+        <Link href="/connexion" className="ae-lien">
+          {t("code.login")}
+        </Link>
+      </p>
+    </div>
   );
 }
 

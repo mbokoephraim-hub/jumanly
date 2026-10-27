@@ -17,7 +17,7 @@ import { interpolate, slot } from "@/lib/interpolate";
 import { CODE_DIGITS, CODE_MINUTES, MIN_AGE, PASSWORD_MIN } from "@/lib/password";
 import {
   requestPasswordCode,
-  resendCode,
+  resendLink,
   resendPasswordCode,
   resetPassword,
   resetPasswordWithCode,
@@ -25,7 +25,6 @@ import {
   sendTwoFactorCode,
   signIn,
   signUp,
-  verifyEmail,
   verifyTwoFactor,
   type AuthFormState,
 } from "@/server/actions/auth";
@@ -516,30 +515,23 @@ export function SignupForm({
   );
 }
 
-export function VerifyForm({ email }: { email: string }) {
+/** « Ouvrez votre boîte mail »: the link of the e-mail confirms the address and opens the space. */
+export function VerifyForm({ expired = false }: { expired?: boolean }) {
   const t = useTranslations("access");
   const errorText = useErrorText();
-  const [state, action, pending] = useActionState(verifyEmail, idle);
-  const [resent, resend, resending] = useActionState(resendCode, idle);
+  const [resent, resend, resending] = useActionState(resendLink, idle);
   const [arrival] = useState(() => ({}));
   const wait = useCountdown(resent.status === "sent" ? resent : arrival);
   return (
     <>
-      {resent.status === "sent" && <Notice tone="ok">{t("code.resent")}</Notice>}
+      {resent.status === "sent" ? (
+        <Notice tone="ok">{t("verify.resent")}</Notice>
+      ) : expired ? (
+        <Notice tone="err">{t("verify.expired")}</Notice>
+      ) : null}
       {resent.error && <Notice tone="err">{errorText(resent.error)}</Notice>}
-      <form id="inscription-code" action={action} noValidate className="flex flex-col gap-4">
-        <input type="hidden" name="email" value={email} />
-        <CodeInput
-          label={t("code.label", { digits: CODE_DIGITS })}
-          error={errorText(state.errors?.code)}
-        />
-        <AccessBar>
-          <button type="submit" className="t-bt t-p t-pl t-press" disabled={pending}>
-            {pending ? t("verify.submitting") : t("verify.submit")}
-          </button>
-        </AccessBar>
-      </form>
-      <form action={resend} className="t-mention">
+      <p className="t-aide-c">{t("verify.how")}</p>
+      <form id="inscription-lien" action={resend} className="t-mention">
         {t("verify.notReceived")}{" "}
         <button type="submit" disabled={wait > 0 || resending}>
           {t("verify.resend")}
@@ -547,6 +539,8 @@ export function VerifyForm({ email }: { email: string }) {
         {wait > 0 && ` ${t("code.resendIn", { time: formatWait(wait) })}`}
         <br />
         <Link href="/inscription/compte">{t("verify.change")}</Link>
+        <br />
+        {t("verify.done")} <Link href="/connexion">{t("verify.login")}</Link>
       </form>
     </>
   );

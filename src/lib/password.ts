@@ -25,3 +25,5 @@ export const MIN_AGE = 16;
 export const CODE_DIGITS = 6;
 /** E-mail codes and sign-in links stay valid this long. */
 export const CODE_MINUTES = 15;
+/** Life of the sign-up confirmation link sent by e-mail. */
+export const VERIFY_LINK_HOURS = 24;

@@ -206,11 +206,16 @@ Conventions :
 | `home.hero.eyebrow` | Formation · Carrière · Recrutement |
 | `home.hero.title` | Learn. Grow. Connect. |
 | `home.hero.subtitle` | Jumanly réunit la formation, le développement de carrière, les offres d'emploi et le recrutement sur une seule plateforme. Formez-vous, construisez un profil qui vous ressemble et rencontrez les employeurs qui ont besoin de vos compétences. |
-| `home.hero.ctaPrimary` | Créer mon compte gratuit |
-| `home.hero.ctaSecondary` | Je recrute |
 | `home.hero.reassurance1` | Inscription gratuite |
 | `home.hero.reassurance2` | Candidatures toujours gratuites |
 | `home.hero.reassurance3` | Mobile Money et carte |
+| `home.entry.question` | Vous êtes… |
+| `home.entry.talent.label` | Talent |
+| `home.entry.talent.text` | Je me forme, je construis mon profil et je postule, toujours gratuitement. |
+| `home.entry.rh.label` | Recruteur |
+| `home.entry.rh.text` | Je publie des offres et je trouve des talents, seul ou avec mon entreprise. |
+| `home.entry.signup` | S'inscrire |
+| `home.entry.login` | Se connecter |
 | `home.hero.imageAlt` | Aperçu du tableau de bord Jumanly sur ordinateur et sur téléphone : progression des formations, candidatures en cours et offres compatibles. |
 | `home.hero.visual.badge` | Attestation obtenue |
 | `home.hero.visual.matchTitle` | Analyste de données junior |
@@ -1267,6 +1272,8 @@ Rappel du paramètre `?suite=` : si le visiteur arrive depuis une action (postul
 | `login.twoFactor.title` | Confirmez votre connexion |
 | `login.twoFactor.text` | Votre compte est protégé par la vérification en deux étapes. Nous venons d'envoyer un code à {digits} chiffres à votre adresse e-mail. |
 | `login.deleted` | Votre compte et toutes vos données ont été supprimés. Vous pouvez créer un nouveau compte à tout moment, il repartira de zéro. |
+| `login.confirmed` | Votre adresse est confirmée. Connectez-vous pour ouvrir votre espace. |
+| `login.linkExpired` | Ce lien de confirmation a expiré. Connectez-vous : nous vous en envoyons un nouveau. |
 
 ---
 
@@ -1803,11 +1810,16 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 
 | Clé | Texte |
 |---|---|
-| `access.verify.head` | Vérifier l'e-mail |
-| `access.verify.title` | Entrez le code |
-| `access.verify.text` | Nous l'avons envoyé à {email} |
+| `access.verify.head` | Confirmer l'e-mail |
+| `access.verify.title` | Ouvrez votre boîte mail |
+| `access.verify.text` | Nous avons envoyé un lien de confirmation à {email} |
+| `access.verify.how` | Touchez « Confirmer mon adresse » dans l'e-mail, sur ce téléphone ou sur votre ordinateur : votre espace s'ouvre aussitôt. |
+| `access.verify.expired` | Ce lien a expiré. Demandez-en un nouveau ci-dessous. |
+| `access.verify.resent` | Un nouveau lien vous a été envoyé. |
+| `access.verify.done` | Adresse déjà confirmée ? |
+| `access.verify.login` | Se connecter |
 | `access.verify.notReceived` | Pas reçu ? Regardez dans les indésirables ou |
-| `access.verify.resend` | renvoyez le code |
+| `access.verify.resend` | renvoyez le lien |
 | `access.verify.change` | Modifier l'adresse |
 | `access.verify.submit` | Valider |
 | `access.verify.submitting` | Vérification… |
@@ -8009,8 +8021,11 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneAccueil.welcome.seo` | Bienvenue sur Jumanly |
 | `phoneAccueil.welcome.next` | Écran suivant |
 | `phoneAccueil.welcome.dot` | Écran {n} : {word} |
-| `phoneAccueil.welcome.signup` | Créer un compte |
+| `phoneAccueil.welcome.signup` | S'inscrire |
 | `phoneAccueil.welcome.login` | Se connecter |
+| `phoneAccueil.welcome.who` | Vous êtes |
+| `phoneAccueil.welcome.talent` | Talent |
+| `phoneAccueil.welcome.recruiter` | Recruteur |
 | `phoneAccueil.welcome.s1.word` | Learn |
 | `phoneAccueil.welcome.s1.title` | Apprenez ce que les employeurs cherchent |
 | `phoneAccueil.welcome.s1.text` | Des cours courts, gratuits pour commencer, et une attestation à la fin. |
@@ -8079,17 +8094,20 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneAccueil.password.suggested` | Mot de passe suggéré : notez-le ou laissez le téléphone l'enregistrer. |
 | `phoneAccueil.password.submit` | Créer mon compte |
 | `phoneAccueil.password.submitting` | Création… |
-| `phoneAccueil.code.title` | Vérifiez votre boîte mail |
-| `phoneAccueil.code.subtitle` | Nous avons envoyé un code à 6 chiffres à {email}. |
+| `phoneAccueil.code.title` | Confirmez votre adresse |
+| `phoneAccueil.code.subtitle` | Nous avons envoyé un lien de confirmation à {email}. |
+| `phoneAccueil.code.how` | Ouvrez l'e-mail et touchez « Confirmer mon adresse » : votre espace s'ouvre aussitôt, sur ce téléphone comme sur un ordinateur. |
+| `phoneAccueil.code.expired` | Ce lien a expiré. Demandez-en un nouveau. |
+| `phoneAccueil.code.login` | Déjà confirmé ? Se connecter |
 | `phoneAccueil.code.label` | Code à 6 chiffres |
 | `phoneAccueil.code.error` | Le code contient 6 chiffres. |
 | `phoneAccueil.code.submit` | Vérifier |
 | `phoneAccueil.code.submitting` | Vérification… |
-| `phoneAccueil.code.resend` | Renvoyer le code |
+| `phoneAccueil.code.resend` | Renvoyer le lien |
 | `phoneAccueil.code.resendIn` | Renvoyer dans {time} |
-| `phoneAccueil.code.resent` | Nouveau code envoyé. |
+| `phoneAccueil.code.resent` | Nouveau lien envoyé. |
 | `phoneAccueil.code.change` | Changer d'adresse |
-| `phoneAccueil.code.help` | Pas reçu ? Regardez dans les spams. Le code reste valable {minutes} minutes. |
+| `phoneAccueil.code.help` | Pas reçu ? Regardez dans les spams. Le lien reste valable {hours} heures. |
 | `phoneAccueil.login.title` | Bon retour |
 | `phoneAccueil.login.subtitle` | Connectez-vous pour retrouver votre Fil. |
 | `phoneAccueil.login.or` | ou |
@@ -16142,8 +16160,8 @@ Conventions :
 | `adminSignup.steps.forfait.subtitle` | Commencez gratuitement ou recrutez à plusieurs |
 | `adminSignup.steps.compte.title` | Créer le compte de l'entreprise |
 | `adminSignup.steps.compte.subtitle` | Vous en serez l'administrateur |
-| `adminSignup.steps.code.title` | Vérifiez votre e-mail |
-| `adminSignup.steps.code.subtitle` | Un code à 6 chiffres vient de partir |
+| `adminSignup.steps.code.title` | Confirmez votre e-mail |
+| `adminSignup.steps.code.subtitle` | Un lien de confirmation vient de partir |
 | `adminSignup.steps.role.title` | Votre rôle |
 | `adminSignup.steps.role.subtitle` | Administrateur : équipe, rôles, offres et formule |
 | `adminSignup.steps.entreprise.title` | L'entreprise |
@@ -16182,11 +16200,13 @@ Conventions :
 | `adminSignup.account.error.required` | Écrivez votre nom et votre e-mail professionnel |
 | `adminSignup.account.error.org` | Écrivez le nom de l'entreprise |
 | `adminSignup.account.error.terms` | Acceptez les conditions pour continuer |
-| `adminSignup.code.sentTo` | Envoyé à {email} |
+| `adminSignup.code.sentTo` | Lien envoyé à {email} |
+| `adminSignup.code.how` | Ouvrez l'e-mail et cliquez sur « Confirmer mon adresse » : vous revenez ici, connecté, pour la suite de l'inscription. |
+| `adminSignup.code.login` | Déjà confirmé ? Se connecter |
 | `adminSignup.code.label` | Code reçu |
 | `adminSignup.code.aria` | Code à 6 chiffres |
-| `adminSignup.code.resend` | Renvoyer le code |
-| `adminSignup.code.resent` | Nouveau code envoyé à {email} |
+| `adminSignup.code.resend` | Renvoyer le lien |
+| `adminSignup.code.resent` | Nouveau lien envoyé à {email} |
 | `adminSignup.code.error` | Le code compte 6 chiffres |
 | `adminSignup.role.label` | Intitulé de votre poste |
 | `adminSignup.role.placeholder` | Intitulé du poste |
@@ -18547,6 +18567,16 @@ Conventions :
 | `mail.verifyCode.p2` | Il est valable {minutes} minutes. Ne le communiquez à personne : l'équipe Jumanly ne vous le demandera jamais. |
 | `mail.verifyCode.p3` | Vous n'êtes pas à l'origine de cette demande ? Ignorez cet e-mail. |
 
+### E-mail · Lien de confirmation de l'adresse (inscription)
+
+| Clé | Texte |
+|---|---|
+| `mail.verifyLink.subject` | Confirmez votre adresse e-mail Jumanly |
+| `mail.verifyLink.preheader` | Un clic et votre espace s'ouvre. |
+| `mail.verifyLink.p1` | Pour terminer votre inscription, confirmez que cette adresse est bien la vôtre. Touchez le bouton ci-dessous, depuis votre téléphone ou votre ordinateur : votre espace Jumanly s'ouvre aussitôt. |
+| `mail.verifyLink.cta` | Confirmer mon adresse |
+| `mail.verifyLink.p2` | Le lien est valable {hours} heures. Ne le transférez à personne. |
+
 ### E-mail · Lien de connexion (lien magique)
 
 | Clé | Texte |
@@ -20139,7 +20169,7 @@ Conventions :
 | `admin.users.action.verifyEmail.confirm` | Marquer l'adresse {email} comme vérifiée ? Faites-le seulement si vous avez confirmé par un autre moyen qu'elle appartient bien à cette personne. |
 | `admin.users.action.verifyEmail.reason` | Comment l'adresse a été confirmée |
 | `admin.users.action.verifyEmail.submit` | Marquer comme vérifié |
-| `admin.users.action.resendHint` | Un nouveau code est envoyé à l'adresse du compte. |
+| `admin.users.action.resendHint` | Un nouveau lien de confirmation est envoyé à l'adresse du compte. |
 | `admin.users.action.grantPlan.confirm` | Le forfait choisi s'applique tout de suite et s'arrête seul à la date indiquée, sans paiement. Le forfait payé ou la licence de la personne, s'il en a un, n'est pas modifié. |
 | `admin.users.action.grantPlan.plan` | Forfait offert |
 | `admin.users.action.grantPlan.submit` | Offrir le forfait |
@@ -20169,7 +20199,7 @@ Conventions :
 | `admin.users.block.lastAdmin` | C'est le dernier administrateur de la plateforme : nommez-en un autre avant de supprimer ce compte. |
 | `admin.users.block.owner` | Cette personne est propriétaire d'une organisation : la propriété doit être transférée avant la suppression. |
 | `admin.users.block.deleted` | Ce compte est déjà supprimé. |
-| `admin.users.done.codeSent` | Code de vérification envoyé. |
+| `admin.users.done.codeSent` | Lien de confirmation envoyé. |
 | `admin.users.done.resetSent` | Lien de réinitialisation envoyé. |
 | `admin.users.done.verified` | Adresse e-mail marquée comme vérifiée. |
 | `admin.users.done.planGranted` | Forfait offert. |

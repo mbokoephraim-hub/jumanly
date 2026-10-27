@@ -316,9 +316,12 @@ function RecruiterIllustration({ slide }: { slide: (typeof SLIDES)[number] }) {
   );
 }
 
-export function PhoneDiscover({ recruiter = false }: { recruiter?: boolean }) {
-  const t = useTranslations(recruiter ? "phoneRhAccueil.welcome" : "phoneAccueil.welcome");
+export function PhoneDiscover({ recruiter: asked = false }: { recruiter?: boolean }) {
   const common = useTranslations("phoneAccueil.welcome");
+  const rh = useTranslations("phoneRhAccueil.welcome");
+  // Talent or recruiter, always offered above « S'inscrire » and « Se connecter » (27/10/2026).
+  const [recruiter, setRecruiter] = useState(asked);
+  const t = recruiter ? rh : common;
   const [phase, setPhase] = useState<"ouverture" | "depart" | "bienvenue">("ouverture");
   const [slide, setSlide] = useState(0);
 
@@ -344,17 +347,37 @@ export function PhoneDiscover({ recruiter = false }: { recruiter?: boolean }) {
   return (
     <div className="nb-page nb-decouvrir">
       <div className="nb-bienvenue" data-ecran="" inert={phase === "ouverture"}>
-        <div className="nb-bienvenue-logo">
-          <span
-            dangerouslySetInnerHTML={{
-              __html: LOGO_SVG.replace('width="58" height="58"', 'width="30" height="30"'),
-            }}
-          />
-          <span
-            dangerouslySetInnerHTML={{
-              __html: WORDMARK_SVG.replace('width="150" height="37.9"', 'width="96" height="24.3"'),
-            }}
-          />
+        <div className="nb-bienvenue-logo" data-choix="">
+          <span>
+            <span
+              dangerouslySetInnerHTML={{
+                __html: LOGO_SVG.replace('width="58" height="58"', 'width="30" height="30"'),
+              }}
+            />
+            <span
+              dangerouslySetInnerHTML={{
+                __html: WORDMARK_SVG.replace(
+                  'width="150" height="37.9"',
+                  'width="80" height="20.2"',
+                ),
+              }}
+            />
+          </span>
+          <div className="nb-profil-choix" role="group" aria-label={common("who")}>
+            {[false, true].map((item) => (
+              <button
+                key={String(item)}
+                type="button"
+                aria-pressed={recruiter === item}
+                onClick={() => {
+                  setRecruiter(item);
+                  setSlide(0);
+                }}
+              >
+                {common(item ? "recruiter" : "talent")}
+              </button>
+            ))}
+          </div>
         </div>
         <button
           type="button"

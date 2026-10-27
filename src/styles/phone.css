@@ -2713,6 +2713,37 @@ html[data-nb-decouvert] .nb-spl-halo {
   display: flex;
   gap: 6px;
 }
+/* Talent or recruiter, next to the logo, with « S'inscrire » and « Se connecter » below (27/10/2026). */
+.nb-bienvenue-logo[data-choix] {
+  justify-content: space-between;
+  padding: 0 20px;
+}
+.nb-bienvenue-logo[data-choix] > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nb-profil-choix {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--nb-surface);
+  box-shadow: inset 0 0 0 1px var(--nb-filet-fort);
+}
+.nb-profil-choix button {
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 650;
+  text-align: center;
+  color: var(--nb-texte);
+}
+.nb-profil-choix button[aria-pressed="true"] {
+  background: var(--nb-creme);
+  color: var(--nb-nuit);
+}
 .nb-points-sl button {
   height: 24px;
   min-width: 24px;
