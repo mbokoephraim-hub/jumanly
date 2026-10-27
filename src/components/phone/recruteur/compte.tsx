@@ -1,6 +1,8 @@
 import "server-only";
 import "@/styles/phone-onglets.css";
+import "@/styles/phone-apropos.css";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
@@ -11,6 +13,11 @@ import { formatDate } from "@/lib/dates";
 import { formatUsd } from "@/lib/money";
 import { rhRequestPlanAction, rhSaveProfileAction } from "@/server/actions/phone-rh-compte";
 import { db } from "@/server/db";
+import { authorFeed } from "@/server/services/feed";
+import { recruiterBarCounts } from "@/server/services/hire-phone";
+import { personProfile } from "@/server/services/person-profile";
+import { ensureProfile, parseProfileLanguages } from "@/server/services/profile";
+import { profileLanguageCodes } from "@/server/services/profile-view";
 import type { HireContext } from "@/server/services/hire";
 import {
   rhAccountHub,
@@ -24,9 +31,14 @@ import {
 } from "@/server/services/hire-phone-account";
 import { listTemplates, templateKinds } from "@/server/services/message-templates";
 import { RECRUITER_SWITCHES } from "@/server/services/notifications";
-import { FilAvatar } from "../fil/avatar";
 import { PhoneIcon } from "../icon";
+import { feedWords } from "../fil/data";
+import { sendTargetViews } from "../fil/server";
+import { PersonProfile } from "../profil/profile";
+import { profileView, ProfileTexts } from "../profil/server";
+import { languageLabel } from "../career/data";
 import { RhBell } from "./head";
+import { OwnLanguages } from "./own-languages";
 import {
   RhCompteFrame,
   RhCompteHub,
@@ -168,141 +180,151 @@ export async function RhCompteScreen({ ctx }: { ctx: HireContext }) {
   );
 }
 
-/** « Mon profil recruteur » (planche Recruteur-compte-profil): the preview talents see. */
+/**
+ * « Mon profil » of a recruiter on the phone (Ephraïm 27/10/2026): the same profile as a talent's
+ * (banner, ringed photo, networks, name, bio, flag, connections), with what a recruiter shows:
+ * the post, « Recrute en ce moment », the candidate looked for. « Publications · À propos ·
+ * Réalisations · Suivi »: each section has its pencil, « Suivi » is the recruiter's dashboard.
+ * No portfolio, CV or applications.
+ */
 export async function RhProfileScreen({ ctx, query }: { ctx: HireContext; query: Query }) {
   const t = await getTranslations("phoneRhCompte");
   const tj = await getTranslations("jobs.search.remote");
-  const data = await rhRecruiterProfile(db, ctx);
-  const place = data.city
-    ? data.otherCities.length > 0
-      ? t("profile.alsoIn", { city: data.city, others: data.otherCities.join(", ") })
-      : data.city
-    : null;
-  // The same identity as a person's profile (docs/profil-personne, Ephraïm 27/10/2026): the
-  // bar, the banner, the ringed photo, the name and the chips; no portfolio for a recruiter.
+  const now = new Date();
+  // A member who never went through the recruiter's steps still has a recruiter profile here.
+  await db.recruiterProfile.upsert({
+    where: { userId: ctx.userId },
+    create: { userId: ctx.userId },
+    update: {},
+  });
+  const [data, person, posts, fil, targets, counts, talent] = await Promise.all([
+    rhRecruiterProfile(db, ctx),
+    personProfile(db, ctx.userId, ctx.userId, "candidate"),
+    authorFeed(db, ctx.userId, { userId: ctx.userId }),
+    feedWords(ctx.userId, now),
+    sendTargetViews(ctx.userId),
+    recruiterBarCounts(db, ctx),
+    ensureProfile(db, ctx.userId),
+  ]);
+  if (!person) notFound();
+  const view = await profileView(person, { now });
+  const known = parseProfileLanguages(talent.languages);
+  const received = data.jobs.reduce((sum, job) => sum + job.applications, 0);
+  const tiles = [
+    { label: t("follow.offers"), value: data.jobs.length, href: "/app/hire/offres" },
+    { label: t("follow.received"), value: received, href: "/app/hire/candidatures" },
+    { label: t("follow.new"), value: counts.newApplications, href: "/app/hire/candidatures" },
+  ];
   return (
-    <div className="nb-page nb-pf nb-rc-vitrine" data-pied="">
+    <ProfileTexts extra={["phoneCareer"]}>
       {one(query.ok) === "1" ? <ToastOnLoad message={t("edit.saved")} tone="success" /> : null}
-      <header className="nb-pf-barre">
-        <Link href="/app/hire/compte" className="nb-pf-rb" aria-label={t("profile.back")}>
-          <PhoneIcon name="retour" size={20} stroke={2} />
-        </Link>
-        <span className="nb-pf-titre">{t("profile.preview")}</span>
-        <Link
-          href="/app/hire/compte/profil/modifier"
-          className="nb-pf-rb"
-          aria-label={t("profile.edit")}
-        >
-          <PhoneIcon name="modifier" size={18} stroke={2} />
-        </Link>
-      </header>
-      <div className="nb-pf-banniere" style={{ background: "#0f3f37" }}>
-        <svg viewBox="0 0 350 88" preserveAspectRatio="xMidYMid slice" aria-hidden>
-          <g fill="none" stroke="#2fd3a6" strokeWidth="14" strokeOpacity=".5">
-            <circle cx="300" cy="10" r="46" />
-            <circle cx="300" cy="10" r="86" />
-            <circle cx="300" cy="10" r="126" />
-          </g>
-          <circle cx="44" cy="70" r="5" fill="var(--nb-lime)" />
-        </svg>
-        <span className="nb-pf-banniere-t">{data.org.name}</span>
-      </div>
-      <div className="nb-pf-photo-l">
-        <span className="nb-pf-photo" style={{ background: "var(--nb-lime)" }}>
-          {data.user.image ? (
-            // eslint-disable-next-line @next/next/no-img-element -- the profile picture
-            <img src={data.user.image} alt="" />
-          ) : (
-            <span className="nb-pf-photo-i" aria-hidden>
-              <FilAvatar
-                initials={initialsOf(data.user.name)}
-                image={null}
-                tone={0}
-                org={false}
-                size={64}
-              />
-            </span>
-          )}
-        </span>
-      </div>
-      <div className="nb-pf-id">
-        <h1>{data.user.name}</h1>
-        <p className="nb-pf-alias">
-          {data.jobTitle ? `${t("profile.at", { jobTitle: data.jobTitle })} ` : null}
-          <Link href={`/app/entreprises/${data.org.slug}`}>{data.org.name}</Link>
-        </p>
-        {place ? <p className="nb-pf-lieu">{place}</p> : null}
-        <p className="nb-pf-bio">{data.headline ?? t("profile.noHeadline")}</p>
-        <div className="nb-pf-chips">
-          {data.hiringNow ? (
-            <span className="nb-pf-st">
-              <i className="nb-pf-point" aria-hidden />
-              {t("profile.hiringNow")}
-            </span>
-          ) : null}
-          <span className="nb-pf-st">
-            <PhoneIcon name="offres" size={13} stroke={2.2} />
-            {t("profile.offersCount", { count: data.jobs.length })}
-          </span>
-        </div>
-      </div>
-      <div className="nb-pf-pane">
-        {data.domains.length > 0 ? (
-          <section aria-labelledby="rc-pour">
-            <h2 className="nb-pf-h" id="rc-pour">
-              {t("profile.recruitsFor")}
-            </h2>
-            <ul className="nb-pf-comp">
-              {data.domains.map((domain) => (
-                <li key={domain} className="nb-pf-sk nb-rc-profil-dom">
-                  <i aria-hidden />
-                  {domain}
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
-        <section aria-labelledby="rc-offres">
-          <h2 className="nb-pf-h" data-loin="" id="rc-offres">
-            {t("profile.offers")}
-          </h2>
-          {data.jobs.length === 0 ? <p className="nb-pf-vide">{t("profile.noOffer")}</p> : null}
-          {data.jobs.map((job) => (
-            <Link key={job.id} href={`/app/hire/offres/${job.id}`} className="nb-rc-offre">
-              <span className="nb-rc-t">
-                <b>{job.title}</b>
-                <small>
-                  {t("profile.offerLine", {
-                    city: job.remote === "remote" ? `${job.city} · ${tj("full")}` : job.city,
-                    count: job.applications,
-                  })}
-                </small>
-              </span>
-              <PhoneIcon name="chevron" size={18} />
+      <PersonProfile
+        person={view}
+        posts={posts.map(fil.post)}
+        targets={targets}
+        title={t("profile.title")}
+        back="/app/hire/compte"
+        actions={
+          <div className="nb-cr-actions nb-rs-actions">
+            <Link href="/app/career/profil" className="nb-cr-bt" data-creme="">
+              <PhoneIcon name="modifier" size={15} stroke={2.2} />
+              {t("profile.editHead")}
             </Link>
-          ))}
-        </section>
-        <section aria-labelledby="rc-contacts">
-          <h2 className="nb-pf-h" data-loin="" id="rc-contacts">
-            {t("profile.contacts")}
-          </h2>
-          <p className="nb-rc-mail">{data.workEmail}</p>
-          <p className="nb-rc-note">
-            {t(`profile.contactsFor.${data.contactsFor}` as "profile.contactsFor.interview")}
-          </p>
-        </section>
-      </div>
-      <div className="nb-rc-pied">
-        <Link
-          href="/app/hire/compte/profil/modifier"
-          className="nb-bouton"
-          data-large=""
-          data-plein=""
-        >
-          {t("profile.edit")}
-        </Link>
-      </div>
-    </div>
+            <Link href="/app/hire/compte/profil/modifier" className="nb-cr-bt">
+              {t("profile.editHiring")}
+            </Link>
+            <Link
+              href={`/app/personnes/${ctx.userId}?apercu=1`}
+              className="nb-cr-bt nb-cr-oeil"
+              aria-label={t("profile.seeAsOthers")}
+            >
+              <PhoneIcon name="profil" size={17} stroke={2} />
+            </Link>
+          </div>
+        }
+        own={{
+          edits: {
+            about: "/app/career/profil/apropos",
+            seeking: "/app/hire/compte/profil/modifier#recherche",
+            experience: "/app/career/profil/experience/nouvelle",
+            education: "/app/career/profil/formation/nouvelle",
+            projects: "/app/career/portfolio/nouvelle",
+            languages: (
+              <OwnLanguages
+                label={t("profile.languagesEdit")}
+                choices={{
+                  skills: [],
+                  languages: [
+                    ...new Set([
+                      ...known.map((item) => item.code),
+                      ...profileLanguageCodes.slice(0, 8),
+                    ]),
+                  ].map((code) => ({
+                    code,
+                    label: languageLabel(code),
+                    on: known.some((item) => item.code === code),
+                  })),
+                  places: [
+                    ...new Set([
+                      ...talent.desiredLocations,
+                      ...(data.city ? [data.city] : []),
+                      ...data.otherCities,
+                    ]),
+                  ].map((name) => ({ name, on: talent.desiredLocations.includes(name) })),
+                }}
+              />
+            ),
+          },
+          suivi: (
+            <>
+              <h2 className="nb-pf-h">{t("follow.title")}</h2>
+              <ul className="nb-rs-tuiles">
+                {tiles.map((tile) => (
+                  <li key={tile.label}>
+                    <Link href={tile.href}>
+                      <b>{tile.value}</b>
+                      <small>{tile.label}</small>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <Link href="/app/hire/compte/statistiques" className="nb-ca-it nb-rs-stats">
+                <span>
+                  {t("follow.stats")}
+                  <small>{t("follow.statsHint")}</small>
+                </span>
+                <PhoneIcon name="chevron" size={18} />
+              </Link>
+              <h2 className="nb-pf-h" data-loin="">
+                {t("profile.offers")}
+              </h2>
+              {data.jobs.length === 0 ? <p className="nb-pf-vide">{t("profile.noOffer")}</p> : null}
+              {data.jobs.map((job) => (
+                <Link key={job.id} href={`/app/hire/offres/${job.id}`} className="nb-rc-offre">
+                  <span className="nb-rc-t">
+                    <b>{job.title}</b>
+                    <small>
+                      {t("profile.offerLine", {
+                        city: job.remote === "remote" ? `${job.city} · ${tj("full")}` : job.city,
+                        count: job.applications,
+                      })}
+                    </small>
+                  </span>
+                  <PhoneIcon name="chevron" size={18} />
+                </Link>
+              ))}
+              <h2 className="nb-pf-h" data-loin="">
+                {t("profile.contacts")}
+              </h2>
+              <p className="nb-rc-mail">{data.workEmail}</p>
+              <p className="nb-rc-note">
+                {t(`profile.contactsFor.${data.contactsFor}` as "profile.contactsFor.interview")}
+              </p>
+            </>
+          ),
+        }}
+      />
+    </ProfileTexts>
   );
 }
 
@@ -325,6 +347,7 @@ export async function RhProfileEditScreen({ ctx, query }: { ctx: HireContext; qu
           headline: data.headline ?? "",
           hiringNow: data.hiringNow,
           contactsFor: data.contactsFor,
+          seeking: data.seeking,
         }}
         company={
           <>

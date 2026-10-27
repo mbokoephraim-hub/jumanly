@@ -3,7 +3,7 @@ import { parseSocialLinks } from "@/lib/social-links";
 import { links } from "./explore";
 import { lastActive } from "./hire-phone-talents";
 import { parseProject, portfolioLevel } from "./portfolio";
-import { parseProfileLanguages } from "./profile";
+import { ensureProfile, parseProfileLanguages } from "./profile";
 
 /**
  * Everything the profile of a person shows (docs/profil-personne): who, the networks they chose,
@@ -23,6 +23,11 @@ export async function personProfile(
   const mine = await links(db, viewerId);
   const link = mine.get(userId);
   if (mode === "connection" && link === "blocked") return null;
+  // A recruiter's profile is a professional page, open to every member (Ephraïm 27/10/2026);
+  // its sections (À propos, expérience…) live in a talent profile that stays private, so the
+  // recruiter never shows up in talent searches.
+  const recruiter = await recruiterBlock(db, userId);
+  if (recruiter) await ensureProfile(db, userId);
   const user = await db.user.findUnique({
     where: { id: userId },
     select: {
@@ -89,7 +94,8 @@ export async function personProfile(
   const profile = user?.talentProfile;
   if (!user || !profile) return null;
   const connected = link === "connected";
-  if (mode === "connection" && profile.visibility !== "recruiters" && !connected) return null;
+  if (mode === "connection" && !recruiter && profile.visibility !== "recruiters" && !connected)
+    return null;
 
   const [circle, conversation, seen, certificates, level] = await Promise.all([
     db.connection.findMany({
@@ -197,6 +203,56 @@ export async function personProfile(
     })),
     certificates,
     portfolio: published && profile.portfolioSlug ? profile.portfolioSlug : null,
+    recruiter,
+  };
+}
+
+/**
+ * What a recruiter's profile adds (Ephraïm 27/10/2026): the post, the organization, « Recrute en
+ * ce moment », the candidate looked for and the domains. Null for anyone without a recruiter
+ * profile.
+ */
+async function recruiterBlock(db: PrismaClient, userId: string) {
+  const [profile, membership] = await Promise.all([
+    db.recruiterProfile.findUnique({
+      where: { userId },
+      select: {
+        jobTitle: true,
+        headline: true,
+        hiringNow: true,
+        seeking: true,
+        domains: true,
+        personalOrganizationId: true,
+      },
+    }),
+    db.membership.findFirst({
+      where: { userId, status: "active", organization: { type: { not: "partner" } } },
+      orderBy: { createdAt: "asc" },
+      select: {
+        jobTitle: true,
+        organization: { select: { id: true, name: true, slug: true } },
+      },
+    }),
+  ]);
+  if (!profile) return null;
+  const organization = membership?.organization ?? null;
+  const offers = organization
+    ? await db.job.count({
+        where: {
+          organizationId: organization.id,
+          status: "published",
+          OR: [{ createdById: userId }, { assignedToId: userId }],
+        },
+      })
+    : 0;
+  return {
+    jobTitle: membership?.jobTitle?.trim() || profile.jobTitle?.trim() || null,
+    headline: profile.headline?.trim() || null,
+    hiringNow: profile.hiringNow,
+    seeking: profile.seeking?.trim() || null,
+    domains: profile.domains,
+    organization: organization ? { name: organization.name, slug: organization.slug } : null,
+    offers,
   };
 }
 

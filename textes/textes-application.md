@@ -8900,6 +8900,19 @@ Conventions :
 | `phoneProfile.photoViewer.error` | Cette photo n’a pas pu être enregistrée. Essayez une image JPEG ou PNG de moins de 5 Mo. |
 | `phoneProfile.photoViewer.failed` | Une erreur est survenue. Réessayez. |
 | `phoneProfile.photoOpen` | Voir la photo de profil en grand |
+| `phoneProfile.tab.suivi` | Suivi |
+| `phoneProfile.own.edit` | Modifier |
+| `phoneProfile.own.add` | Ajouter |
+| `phoneProfile.own.about` | À propos |
+| `phoneProfile.own.aboutEmpty` | Présentez-vous en quelques lignes : qui vous êtes et ce que vous faites. |
+| `phoneProfile.own.seekingEmpty` | Décrivez le candidat que vous cherchez : métier, niveau, qualités. |
+| `phoneProfile.own.educationEmpty` | Diplôme, formation ou attestation. |
+| `phoneProfile.own.languagesEmpty` | Ajoutez les langues que vous parlez. |
+| `phoneProfile.recruiter.seeking` | Candidat recherché |
+| `phoneProfile.recruiter.domains` | Domaines de recrutement |
+| `phoneProfile.recruiter.hiringNow` | Recrute en ce moment |
+| `phoneProfile.recruiter.offers` | {count, plural, =0 {Aucune offre en cours} one {# offre en cours} other {# offres en cours}} |
+| `phoneProfile.recruiter.postAt` | {post} chez {org} |
 
 ### Créer un CV au téléphone (carrière v3)
 
@@ -15953,6 +15966,17 @@ Conventions :
 | `phoneRhCompte.profile.contactsFor.interview` | Votre téléphone n'est visible que par les candidats invités en entretien. |
 | `phoneRhCompte.profile.contactsFor.connections` | Votre téléphone est visible par vos relations. |
 | `phoneRhCompte.profile.edit` | Modifier mon profil |
+| `phoneRhCompte.profile.title` | Mon profil |
+| `phoneRhCompte.profile.editHead` | Modifier |
+| `phoneRhCompte.profile.editHiring` | Recrutement |
+| `phoneRhCompte.profile.seeAsOthers` | Voir mon profil comme les autres |
+| `phoneRhCompte.profile.languagesEdit` | Modifier |
+| `phoneRhCompte.follow.title` | Tableau de bord |
+| `phoneRhCompte.follow.offers` | Offres en cours |
+| `phoneRhCompte.follow.received` | Candidatures reçues |
+| `phoneRhCompte.follow.new` | Nouvelles à lire |
+| `phoneRhCompte.follow.stats` | Mes statistiques |
+| `phoneRhCompte.follow.statsHint` | Délai de réponse, entretiens, entonnoir des 30 derniers jours |
 | `phoneRhCompte.edit.title` | Modifier mon profil |
 | `phoneRhCompte.edit.back` | Profil |
 | `phoneRhCompte.edit.headline` | Accroche |
@@ -15961,6 +15985,9 @@ Conventions :
 | `phoneRhCompte.edit.orbiText` | Je recrute les talents {domains} de {org}. Je réponds à chaque candidature. |
 | `phoneRhCompte.edit.orbiTextNoDomain` | Je recrute pour {org}. Je réponds à chaque candidature. |
 | `phoneRhCompte.edit.orbiNote` | Orbi propose, vous relisez avant d'enregistrer. |
+| `phoneRhCompte.edit.seeking` | Le candidat que je recherche |
+| `phoneRhCompte.edit.seekingPlaceholder` | Ex. : un ou une comptable junior, rigoureux, à l’aise avec Excel, disponible à Kinshasa. |
+| `phoneRhCompte.edit.seekingCount` | {count} / 400 |
 | `phoneRhCompte.edit.hiringNow` | Badge « Recrute en ce moment » |
 | `phoneRhCompte.edit.hiringNowLine` | Les talents vous trouvent plus vite |
 | `phoneRhCompte.edit.contactsFor` | Qui voit votre téléphone |

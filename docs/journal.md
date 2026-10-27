@@ -4886,3 +4886,13 @@ proposer le type d'utilisateur et « S'inscrire » / « Se connecter ».
   téléphone : choix Talent / Recruteur à côté du logo, boutons « S'inscrire » et « Se connecter ».
 - Tests : `tests/unit/signup-confirmation.test.ts`, e2e d'inscription passés au lien
   (`openConfirmationLink`), accueil (`foundation`, `modele-b-accueil`).
+
+## Profil du recruteur à l'identité du profil talent, photo agrandie pour les visiteurs (27 octobre 2026)
+
+- Demande d'Ephraïm : un visiteur touche la photo d'un profil et elle s'agrandit devant l'écran flouté, sans pouvoir la modifier. Le profil d'un recruteur reprend l'identité du profil talent, vu par les autres comme par lui-même.
+- La photo agrandie est partagée (`src/components/phone/profil/photo-viewer.tsx`, option `editable`). On ne peut la modifier que sur son propre profil (Carrière, ou « Mon profil » du recruteur).
+- Le profil d'un recruteur s'ouvre à tous les membres sur `/app/personnes/[id]`. Il montre la bannière, la photo à anneau, les réseaux, le nom, le poste chez l'organisation, la bio, le drapeau, les connexions, « Recrute en ce moment », le nombre d'offres en cours et les publications. L'onglet « À propos » contient le titre et le texte, le candidat recherché (nouveau champ `RecruiterProfile.seeking`), l'expérience, la formation et les langues. Il y a aussi un onglet « Réalisations », mais pas de portfolio.
+- « Mon profil » du recruteur (`/app/hire/compte/profil`, téléphone) utilise le même composant `PersonProfile`, avec `own`. Chaque section a son crayon, et l'onglet « Suivi » sert de tableau de bord : offres en cours, candidatures reçues, nouvelles à lire, statistiques, offres et contacts.
+- Décision : les sections personnelles du recruteur (À propos, expérience, formation, langues, réalisations, bannière, réseaux) sont rangées dans un `TalentProfile`, qui reste privé (`visibility = private`). Le recruteur n'apparaît donc jamais dans les recherches de talents, et on réutilise les formulaires de Carrière. « Modifier le profil » cache le titre et la disponibilité du talent pour un recruteur ; ces réglages sont dans « Recrutement ».
+- Limite : ajouter une réalisation suit le droit `portfolio` du compte, comme pour un talent.
+- Publié avec le contrôle rapide seulement (tsc, ESLint, tests en base de l'Explorer), à la demande d'Ephraïm.

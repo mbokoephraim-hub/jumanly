@@ -29,7 +29,14 @@ export default async function PersonPage({
   // « Voir comme les autres » from Carrière (docs/carriere-v3): one's own profile as a
   // connection sees it; otherwise one's own space.
   const self = id === user.id;
-  if (self && (await searchParams).apercu !== "1") redirect("/app/career/cv");
+  // A recruiter's own profile is under Compte (Ephraïm 27/10/2026).
+  const home = (await db.recruiterProfile.findUnique({
+    where: { userId: user.id },
+    select: { id: true },
+  }))
+    ? "/app/hire/compte/profil"
+    : "/app/career/cv";
+  if (self && (await searchParams).apercu !== "1") redirect(home);
   const now = new Date();
   const [person, posts, fil, targets, t] = await Promise.all([
     personProfile(db, user.id, id, self ? "candidate" : "connection"),
@@ -47,7 +54,7 @@ export default async function PersonPage({
         posts={posts.map(fil.post)}
         targets={targets}
         title={t("titleProfile")}
-        back={self ? "/app/career/cv" : "/app/jobs"}
+        back={self ? home : "/app/jobs"}
         actions={self ? null : <ConnectionActions person={view} />}
       />
     </ProfileTexts>

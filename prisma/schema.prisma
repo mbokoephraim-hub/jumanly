@@ -2660,6 +2660,8 @@ model RecruiterProfile {
   headline               String?
   /// « Recrute en ce moment » on the profile.
   hiringNow              Boolean   @default(true)
+  /// « Le candidat que je recherche » (Ephraïm 27/10/2026), up to 400 characters.
+  seeking                String?
   completedAt            DateTime?
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
