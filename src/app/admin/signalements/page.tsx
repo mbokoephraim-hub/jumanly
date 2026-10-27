@@ -20,7 +20,8 @@ import { Alert, Button, Checkbox, TextArea } from "@/components/ui";
 import { formatDateTime, formatShortDate as formatDate } from "@/lib/dates";
 import { cx } from "@/lib/cx";
 import { closeReportAction, reportNoteAction } from "@/server/actions/admin-moderation";
-import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
+import { canWriteArea } from "@/server/auth/roles";
+import { canWriteAdmin, requireAdminArea } from "@/server/auth/session";
 import { db } from "@/server/db";
 import {
   listReports,
@@ -66,12 +67,12 @@ const one = (value: string | string[] | undefined) =>
  */
 export default async function AdminReports({ searchParams }: PageProps<"/admin/signalements">) {
   const raw = await searchParams;
-  const admin = await requireAdmin();
+  const admin = await requireAdminArea("reports");
   // Content editors see the admin shell, but only the courses.
   if (!admin) notFound();
   const t = await getTranslations("admin.reports");
   const tr = await getTranslations("report.reason");
-  const writable = canWriteAdmin(admin);
+  const writable = canWriteArea(admin.platformRole, "reports");
 
   const tabParam = one(raw.onglet) ?? "";
   const onglet: Tab = tabParam in tabs ? (tabParam as Tab) : "ouverts";
@@ -323,6 +324,7 @@ export default async function AdminReports({ searchParams }: PageProps<"/admin/s
                   count={count(selected)}
                   context={context}
                   writable={writable}
+                  suspends={canWriteAdmin(admin)}
                   adminId={admin.id}
                   showContext={one(raw.contexte) === "1"}
                   selfHref={hrefOf(params, { id: selected.id })}
@@ -353,6 +355,7 @@ async function ReportDetail({
   count,
   context,
   writable,
+  suspends,
   adminId,
   showContext,
   selfHref,
@@ -365,6 +368,8 @@ async function ReportDetail({
   count: number;
   context: Context;
   writable: boolean;
+  /** Suspending the author's account stays with the platform administrators. */
+  suspends: boolean;
   adminId: string;
   showContext: boolean;
   selfHref: string;
@@ -387,7 +392,7 @@ async function ReportDetail({
       : ["dismiss", "warn"];
   const resolution = decisions.find((item) => item === report.resolution);
   const open = report.status !== "closed";
-  const canSuspend = writable && author && author.id !== adminId && author.platformRole === "user";
+  const canSuspend = suspends && author && author.id !== adminId && author.platformRole === "user";
   const internal = notes.filter((note) => note.action === "report.note");
 
   return (

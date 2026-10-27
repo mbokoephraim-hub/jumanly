@@ -626,6 +626,8 @@ export type UserState = (typeof USER_STATES)[number];
 export const PLATFORM_ROLES = [
   "user",
   "content_editor",
+  "career_manager",
+  "moderator",
   "support_agent",
   "platform_admin",
 ] as const;

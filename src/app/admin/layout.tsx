@@ -10,6 +10,7 @@ import { SectionNav } from "@/components/layout/section-nav";
 import { TopSearch } from "@/components/layout/top-search";
 import type { Section, SectionLink } from "@/config/section-navigation";
 import { Skeleton } from "@/components/ui";
+import { adminAreas, type AdminArea } from "@/server/auth/roles";
 import { requireAdminShell } from "@/server/auth/session";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -42,29 +43,25 @@ const links = [
   { key: "reports", href: "/admin/signalements", icon: "securite", group: "control" },
   { key: "ai", href: "/admin/ia", icon: "intelligence", group: "control" },
   { key: "audit", href: "/admin/journal", icon: "doc", group: "control" },
-] as const satisfies readonly { key: string; href: string; icon: IconName; group: string }[];
+] as const satisfies readonly { key: AdminArea; href: string; icon: IconName; group: string }[];
 
 const groups = ["steer", "accounts", "offer", "content", "control"] as const;
 
-// Mockup 07-01 (mobile): the floating pill shows the three most used sections and « more ».
-const pillKeys = {
-  admin: ["dashboard", "users", "reports"],
-  editor: ["courses", "content"],
-} as const;
+// Mockup 07-01 (mobile): the floating pill shows the three most used sections and « more »; a
+// delegated role gets its first three sections.
+const pillKeys = { admin: ["dashboard", "users", "reports"] } as const;
 
 async function AdminShell({ children }: { children: React.ReactNode }) {
   const admin = await requireAdminShell();
   if (!admin) notFound();
-  const editorOnly = admin.platformRole === "content_editor";
-  // Content editors only see courses and contents; support agents (read only) see everything
-  // except these two editing tools, which they cannot open.
-  const contentKeys: readonly string[] = ["courses", "content"];
-  const visible = links.filter((link) =>
-    editorOnly
-      ? contentKeys.includes(link.key)
-      : admin.platformRole !== "support_agent" || !contentKeys.includes(link.key),
-  );
-  const pill = (editorOnly ? pillKeys.editor : pillKeys.admin) as readonly string[];
+  // Each role sees its sections (src/server/auth/roles.ts): everything for administrators,
+  // everything but the editing tools for support, its own sections for a delegated role.
+  const areas = adminAreas(admin.platformRole);
+  const visible = links.filter((link) => areas.includes(link.key));
+  const editorOnly = !areas.includes("dashboard");
+  const pill = (
+    editorOnly ? visible.slice(0, 3).map((link) => link.key) : pillKeys.admin
+  ) as readonly string[];
   const [t, a11y, tNav, tCommon] = await Promise.all([
     getTranslations("admin"),
     getTranslations("a11y"),
@@ -90,7 +87,7 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
       links,
     };
   });
-  const home = editorOnly ? "/admin/formations" : "/admin";
+  const home = visible[0]?.href ?? "/admin";
   const roleLabel = t(`role.${admin.platformRole === "user" ? "readOnly" : admin.platformRole}`);
   const initials = admin.name
     .split(/[\s-]+/)

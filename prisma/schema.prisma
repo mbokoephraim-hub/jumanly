@@ -787,6 +787,10 @@ model ContactMessage {
 enum PlatformRole {
   user
   content_editor
+  /// Responsable carrière (27/10/2026): conseils et FAQ, offres, IA et matching.
+  career_manager
+  /// Modération (27/10/2026): offres et signalements.
+  moderator
   support_agent
   platform_admin
 }

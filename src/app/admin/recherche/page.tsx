@@ -45,7 +45,7 @@ export default async function AdminSearch({ searchParams }: PageProps<"/admin/re
   const kinds = searchKindsFor(user.platformRole);
   const results = await adminSearch(db, q, user.platformRole);
   const count = kinds.reduce((sum, kind) => sum + results[kind].length, 0);
-  const editor = user.platformRole === "content_editor";
+  const editor = !["platform_admin", "support_agent"].includes(user.platformRole);
 
   return (
     <>

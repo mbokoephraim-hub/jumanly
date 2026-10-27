@@ -8,7 +8,23 @@ import { AdminPageHeader, adminCard, adminTitle, FilterMenu, Tag } from "@/compo
 import { Alert, ButtonLink } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
-import { requireAdmin, requireCourseEditor } from "@/server/auth/session";
+import { adminAreas, type AdminArea } from "@/server/auth/roles";
+import { requireAdmin, requireAdminShell } from "@/server/auth/session";
+
+const AREA_HOME: Record<AdminArea, string> = {
+  dashboard: "/admin",
+  users: "/admin/utilisateurs",
+  organizations: "/admin/organisations",
+  partners: "/admin/partenaires",
+  plans: "/admin/forfaits",
+  subscriptions: "/admin/abonnements",
+  courses: "/admin/formations",
+  content: "/admin/contenus",
+  jobs: "/admin/offres",
+  reports: "/admin/signalements",
+  ai: "/admin/ia",
+  audit: "/admin/journal",
+};
 import { db } from "@/server/db";
 import {
   DASHBOARD_PERIODS,
@@ -117,8 +133,10 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
   const params = await searchParams;
   await connection();
   if (!(await requireAdmin())) {
-    // Content editors land on the courses, the only part of the admin they use.
-    if (await requireCourseEditor()) redirect("/admin/formations");
+    // A delegated role lands on its first section (courses, contents, offers…).
+    const shell = await requireAdminShell();
+    const first = shell && adminAreas(shell.platformRole)[0];
+    if (first) redirect(AREA_HOME[first]);
     notFound();
   }
   const t = await getTranslations("admin");

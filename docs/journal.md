@@ -4964,3 +4964,10 @@ bibliothèque, et se supprime.
 - Les couleurs de badges écrites en dur dans `@theme` (ambre-fond, down-fond, up-texte…) passent par des variables avec la valeur d'origine en repli : rien ne change hors de l'admin.
 - Barre latérale du recruteur sur ordinateur (src/components/admin/side-nav.tsx) : groupes nommés, libellés dès 1200 px, icônes seules de 768 à 1199 px ; compte et « Retour à l'application » en bas. Téléphone : en-tête sombre et pilule flottante sombre.
 - Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
+
+## 2026-10-27 · Administration principale (3/5 : rôles délégués)
+
+- Rôles de l'administration (migration `admin_delegated_roles`) : Responsable formation (`content_editor` : formations, contenus), Responsable carrière (`career_manager`, nouveau : contenus, modération des offres, IA et matching), Modération (`moderator`, nouveau : offres et signalements), Support (lecture seule), Administrateur (tout, veto).
+- Matrice unique dans src/server/auth/roles.ts (`adminAreas`, `canWriteArea`) ; pages et actions vérifient la rubrique (`requireAdminArea`). Suspendre un compte depuis un signalement reste réservé à l'administrateur.
+- Barre latérale, pilule du téléphone et accueil `/admin` suivent les rubriques du rôle. Le lien « Administration » du compte apparaît pour tous ces rôles. Chaque rôle a une description dans la fiche utilisateur.
+- Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
