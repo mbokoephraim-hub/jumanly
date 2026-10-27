@@ -168,7 +168,6 @@ export function PhoneStack({
             key={tab}
             className="nb-couche nb-onglet"
             data-onglet-couche={tab}
-            data-explorer={tab === "explorer" ? "" : undefined}
             data-etat={state}
             data-entree={state === "actif" && entering ? entering : undefined}
             data-sortie={state === "dessous" ? leaving?.dir : undefined}
