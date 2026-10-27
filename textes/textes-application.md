@@ -8879,6 +8879,27 @@ Conventions :
 | `phoneProfile.why.line` | {job} · {company} |
 | `phoneProfile.why.rule` | Calculé sans le nom, la photo, l’âge, le genre ni la nationalité. Orbi recommande, vous décidez : aucune candidature n’est écartée automatiquement. |
 | `phoneProfile.why.ok` | Compris |
+| `phoneProfile.photoViewer.title` | Photo de profil |
+| `phoneProfile.photoViewer.close` | Fermer |
+| `phoneProfile.photoViewer.photoOf` | Photo de profil de {name} |
+| `phoneProfile.photoViewer.initialsOf` | Initiales de {name} |
+| `phoneProfile.photoViewer.initialsHint` | Sans photo, Jumanly affiche les initiales de votre nom. |
+| `phoneProfile.photoViewer.change` | Modifier |
+| `phoneProfile.photoViewer.crop` | Recadrer |
+| `phoneProfile.photoViewer.initials` | Initiales |
+| `phoneProfile.photoViewer.initialsBack` | Vos initiales sont de retour. |
+| `phoneProfile.photoViewer.back` | Retour |
+| `phoneProfile.photoViewer.cropTitle` | Recadrer la photo |
+| `phoneProfile.photoViewer.drag` | Faites glisser la photo pour la placer dans le cercle, puis réglez le zoom. |
+| `phoneProfile.photoViewer.zoom` | Zoom |
+| `phoneProfile.photoViewer.cancel` | Annuler |
+| `phoneProfile.photoViewer.save` | Enregistrer |
+| `phoneProfile.photoViewer.camera` | Prendre une photo |
+| `phoneProfile.photoViewer.gallery` | Choisir dans la galerie |
+| `phoneProfile.photoViewer.saved` | Photo mise à jour. |
+| `phoneProfile.photoViewer.error` | Cette photo n’a pas pu être enregistrée. Essayez une image JPEG ou PNG de moins de 5 Mo. |
+| `phoneProfile.photoViewer.failed` | Une erreur est survenue. Réessayez. |
+| `phoneProfile.photoOpen` | Voir la photo de profil en grand |
 
 ### Créer un CV au téléphone (carrière v3)
 
@@ -9241,21 +9262,6 @@ Conventions :
 | `phoneCareer.bannerEdit` | Changer la bannière |
 | `phoneCareer.photoEdit` | Changer la photo |
 | `phoneCareer.photoOpen` | Voir ma photo de profil en grand |
-| `phoneCareer.photoViewer.title` | Photo de profil |
-| `phoneCareer.photoViewer.close` | Fermer |
-| `phoneCareer.photoViewer.photoOf` | Photo de profil de {name} |
-| `phoneCareer.photoViewer.initialsOf` | Initiales de {name} |
-| `phoneCareer.photoViewer.initialsHint` | Sans photo, Jumanly affiche les initiales de votre nom. |
-| `phoneCareer.photoViewer.change` | Modifier |
-| `phoneCareer.photoViewer.crop` | Recadrer |
-| `phoneCareer.photoViewer.initials` | Initiales |
-| `phoneCareer.photoViewer.initialsBack` | Vos initiales sont de retour. |
-| `phoneCareer.photoViewer.back` | Retour |
-| `phoneCareer.photoViewer.cropTitle` | Recadrer la photo |
-| `phoneCareer.photoViewer.drag` | Faites glisser la photo pour la placer dans le cercle, puis réglez le zoom. |
-| `phoneCareer.photoViewer.zoom` | Zoom |
-| `phoneCareer.photoViewer.cancel` | Annuler |
-| `phoneCareer.photoViewer.save` | Enregistrer |
 | `phoneCareer.socialAdd` | Ajouter un réseau ou un site |
 | `phoneCareer.availabilityChange` | Disponibilité : {current}. Toucher pour changer. |
 | `phoneCareer.completion.skill` | {count, plural, one {Ajoutez {skill} : une offre de plus vous correspond.} other {Ajoutez {skill} : # offres de plus vous correspondent.}} |

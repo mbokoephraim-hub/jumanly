@@ -13,6 +13,7 @@ import { PostCard, type PostSheet } from "../fil/post";
 import { PostSheets, type SendTarget } from "../fil/sheets";
 import { PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
+import { PhotoViewer } from "./photo-viewer";
 import { PROFILE_TABS, type ProfileTab, type ProfileView } from "./data";
 
 const REASONS = ["harassment", "impersonation", "spam", "inappropriate", "other"] as const;
@@ -104,6 +105,7 @@ export function PersonProfile({
     person.experiences.slice(0, 1).map((e) => e.id),
   );
   const [pending, start] = useTransition();
+  const [photoOpen, setPhotoOpen] = useState(false);
   const shown = posts.filter((post) => !gone.includes(post.id));
   const index = PROFILE_TABS.indexOf(tab);
 
@@ -184,24 +186,28 @@ export function PersonProfile({
 
       <div className="nb-pf-photo-l">
         <span className="nb-pf-photo" style={{ background: ringOf(person.ring) }}>
-          {person.image ? (
-            // eslint-disable-next-line @next/next/no-img-element -- the person's own photo
-            <img src={person.image} alt={t("photo", { name: person.name })} />
-          ) : (
-            <span
-              className="nb-pf-photo-i"
-              role="img"
-              aria-label={t("photo", { name: person.name })}
-            >
-              <FilAvatar
-                initials={person.initials}
-                image={null}
-                tone={person.tone}
-                org={false}
-                size={64}
-              />
-            </span>
-          )}
+          {/* A touch brings the photo forward, the screen behind blurs (PhotoViewer). */}
+          <button
+            type="button"
+            className="nb-cr-photo-bt"
+            onClick={() => setPhotoOpen(true)}
+            aria-label={t("photoOpen")}
+          >
+            {person.image ? (
+              // eslint-disable-next-line @next/next/no-img-element -- the person's own photo
+              <img src={person.image} alt="" />
+            ) : (
+              <span className="nb-pf-photo-i" aria-hidden>
+                <FilAvatar
+                  initials={person.initials}
+                  image={null}
+                  tone={person.tone}
+                  org={false}
+                  size={64}
+                />
+              </span>
+            )}
+          </button>
           {person.online ? (
             <span className="nb-pf-enligne" role="img" aria-label={t("activity.now")} />
           ) : null}
@@ -666,6 +672,14 @@ export function PersonProfile({
         ) : null}
       </div>
 
+      <PhotoViewer
+        open={photoOpen}
+        onClose={() => setPhotoOpen(false)}
+        image={person.image}
+        initials={person.initials}
+        name={person.name}
+        ring={ringOf(person.ring)}
+      />
       <PostSheets
         post={open?.post ?? null}
         sheet={open?.sheet ?? null}
