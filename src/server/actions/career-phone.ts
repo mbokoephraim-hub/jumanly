@@ -1,7 +1,7 @@
 "use server";
 
 import { refresh, revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { Prisma } from "@/generated/prisma/client";
@@ -506,7 +506,7 @@ export async function newCareerCvAction(formData: FormData) {
   refresh();
   // Orbi's summary waits on Contenu, to keep or refuse (docs/carriere-v3, capture 09).
   if (orbi) await improveCvSummary(db, user.id, cv.id);
-  redirect(`/app/career/cv/${cv.id}?etape=contenu`);
+  redirect(`/app/career/cv/${cv.id}?etape=contenu`, RedirectType.replace);
 }
 
 /**

@@ -10835,7 +10835,9 @@
       "rulesOnly": "Sans Orbi, seules les compétences et les langues sont reconnues. Activez Orbi pour lire aussi les expériences et les formations.",
       "consent": "Seuls les groupes cochés entrent dans votre profil. Votre ville n’est reprise que si votre profil n’en a pas.",
       "apply": "Ajouter à mon profil et créer le CV",
-      "applyEmpty": "Créer le CV depuis mon profil"
+      "applyEmpty": "Créer le CV depuis mon profil",
+      "keepOnly": "Garder seulement ce CV, sans toucher à mon profil",
+      "keepNote": "Le CV importé est gardé dans « Mes CV » tel qu’Orbi l’a lu ; vous pourrez le modifier."
     },
     "content": {
       "title": "Contenu",
@@ -10897,7 +10899,8 @@
       },
       "languageValue": "{language} ›",
       "languageChange": "Langue des titres : {current}. Toucher pour changer.",
-      "next": "Voir l’aperçu"
+      "next": "Voir l’aperçu",
+      "emptyNote": "Votre CV est encore vide : l’aperçu montre un exemple. Remplissez-le à l’étape Aperçu."
     },
     "preview": {
       "title": "Aperçu et vérification",
@@ -10934,7 +10937,32 @@
       "adapt": "Adapter à une offre",
       "pdf": "Télécharger en PDF",
       "downloading": "Téléchargement du PDF, sans logo Jumanly.",
-      "exportError": "Le PDF n’a pas pu être créé. Réessayez dans un instant."
+      "exportError": "Le PDF n’a pas pu être créé. Réessayez dans un instant.",
+      "empty": "Votre CV est encore vide : l’aperçu montre un exemple, pas votre CV. Remplissez-le avant de le télécharger.",
+      "fillProfile": "Reprendre mon profil",
+      "fillWrite": "Écrire le contenu",
+      "filled": "Votre CV reprend maintenant votre profil.",
+      "fillNothing": "Votre profil est encore vide. Ajoutez vos expériences et compétences, ou importez un CV.",
+      "pdfEmpty": "Remplissez votre CV pour le télécharger",
+      "preparing": "Préparation du PDF…",
+      "downloaded": "CV téléchargé. Il est aussi gardé dans « Mes CV ».",
+      "addProfile": "Ajouter à mon profil",
+      "addTitle": "Ajouter ce CV à mon profil",
+      "addSub": "Seul ce que votre profil n’a pas encore est ajouté. Rien n’est remplacé.",
+      "addPart": {
+        "headline": "Le titre",
+        "summary": "Le résumé",
+        "experiences": "{count, plural, one {# expérience} other {# expériences}}",
+        "educations": "{count, plural, one {# formation} other {# formations}}",
+        "skills": "{count, plural, one {# compétence} other {# compétences}}",
+        "languages": "{count, plural, one {# langue} other {# langues}}"
+      },
+      "addNothing": "Votre profil contient déjà tout ce qui est sur ce CV.",
+      "addConfirm": "Ajouter à mon profil",
+      "added": "{count, plural, one {Un élément ajouté à votre profil.} other {# éléments ajoutés à votre profil.}}",
+      "finish": "Terminer",
+      "saved": "Votre CV est enregistré dans « Mes CV ».",
+      "autosave": "Chaque changement est enregistré tout seul : revenir en arrière ne perd rien."
     },
     "check": {
       "headline": {

@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { expect, test } from "./fixtures";
@@ -113,12 +113,21 @@ test("télécharger mon CV sur téléphone : créer, aperçu, PDF", async ({ pag
   await page.waitForURL(/etape=style/);
   await page.getByRole("link", { name: "Voir l’aperçu" }).filter({ visible: true }).click();
   await page.waitForURL(/etape=apercu/);
-  const href = await page.getByRole("link", { name: "Télécharger en PDF" }).getAttribute("href");
-  expect(href).toBe(`/app/career/cv/${id}/pdf`);
-  const pdf = await page.request.get(href!);
-  expect(pdf.status()).toBe(200);
+  // A new account has an empty CV: a summary is written first (the PDF is never an empty page).
+  await page.getByRole("link", { name: "Écrire le contenu" }).click();
+  await page.getByRole("button", { name: "Modifier le résumé" }).click();
+  const sheet = page.getByRole("dialog", { name: "Résumé" });
+  await sheet.getByRole("textbox").fill("Analyste junior (fictive) qui aime les chiffres.");
+  await sheet.getByRole("button", { name: "Enregistrer" }).click();
+  await expect(sheet).toBeHidden();
+  await expect(
+    page.getByText("Analyste junior (fictive)").filter({ visible: true }).first(),
+  ).toBeVisible();
+  await page.goto(`/app/career/cv/${id}?etape=apercu`);
+  const download = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Télécharger en PDF" }).click();
   const path = join(mkdtempSync(join(tmpdir(), "cv-mobile-")), "cv.pdf");
-  writeFileSync(path, await pdf.body());
+  await (await download).saveAs(path);
   // The contact e-mail of the fictional account is the only place the word may appear.
   const text = execFileSync("pdftotext", ["-layout", path, "-"]).toString();
   expect(text.replace(/\S+@\S+/g, "")).not.toMatch(/Jumanly/i);

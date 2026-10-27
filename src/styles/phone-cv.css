@@ -1328,3 +1328,46 @@ h2.nb-cv-h {
 .nb-app[data-reduit] .nb-cv-sec {
   transition: none;
 }
+
+/* Fin du parcours (Ephraïm, 27/10) : télécharger, puis Terminer ; CV vide ; ajouter au profil. */
+.nb-cv:has(.nb-cv-fin) {
+  padding-bottom: calc(150px + var(--nb-bas));
+}
+.nb-cv-fin {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.nb-cv-fin > .nb-bouton:not(.nb-cv-principal) {
+  height: 44px;
+}
+.nb-cv-principal:disabled {
+  opacity: 1;
+  background: #24363a;
+  border-color: #24363a;
+  color: #d5e2df;
+}
+.nb-cv-vide .nb-bouton {
+  height: auto;
+  min-height: 44px;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 1.2;
+}
+.nb-cv-vide {
+  margin-bottom: 14px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255, 193, 94, 0.1);
+  border: 1px solid rgba(255, 193, 94, 0.35);
+}
+.nb-cv-vide p {
+  margin: 0;
+  color: #ffe2b3;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.nb-cv-ajout-profil {
+  margin-top: 16px;
+  height: 46px;
+}

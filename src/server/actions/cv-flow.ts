@@ -1,7 +1,7 @@
 "use server";
 
 import { refresh } from "next/cache";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { cvFonts, type CvFontCode } from "@/features/cv/render/palette";
@@ -13,6 +13,7 @@ import {
   applyTemplate,
   canUseTemplate,
   cvFromProfile,
+  isEmptyCv,
   cvSectionIds,
   MAX_CVS,
   parseCv,
@@ -27,7 +28,13 @@ import {
   targetSkillsFor,
   type ImproveResult,
 } from "@/server/services/cv-coach";
-import { importCvPhoto } from "@/server/services/cv-import";
+import { importCvPhoto, parseImport } from "@/server/services/cv-import";
+import {
+  applyCvIntoProfile,
+  cvFromExtraction,
+  planSize,
+  previewCvIntoProfile,
+} from "@/server/services/cv-to-profile";
 import { CV_FILE_MAX_BYTES } from "@/server/services/cv-file";
 import { ensureProfile, getFullProfile } from "@/server/services/profile";
 
@@ -86,7 +93,8 @@ export async function startCvFromTemplateAction(formData: FormData) {
   if (!cv) redirect("/app/career/cv/nouveau?erreur=limite");
   await applyTemplate(db, user.id, cv.id, template.id);
   refresh();
-  redirect(`/app/career/cv/${cv.id}?etape=contenu`);
+  // Replace: « Retour » from Contenu must not land on the template picker and make a second CV.
+  redirect(`/app/career/cv/${cv.id}?etape=contenu`, RedirectType.replace);
 }
 
 /** « Appliquer ce modèle » on an existing CV (step Modèle): only the layout changes. */
@@ -101,7 +109,7 @@ export async function setCvTemplateStepAction(formData: FormData) {
     redirect(
       `/app/career/cv/${cv.id}?etape=modele&modele=${encodeURIComponent(template)}&erreur=modele`,
     );
-  redirect(`/app/career/cv/${cv.id}?etape=contenu`);
+  redirect(`/app/career/cv/${cv.id}?etape=contenu`, RedirectType.replace);
 }
 
 /** Orbi lays the CV out in « Moderne » when the person's plan includes it. */
@@ -356,4 +364,112 @@ export async function readCvPhotoAction(formData: FormData) {
   refresh();
   if (!result.ok) redirect(`${back}&erreur=${result.error === "ai" ? "photo" : "orbi"}`);
   redirect("/app/career/cv/nouveau?etape=trouve");
+}
+
+/**
+ * « Reprendre mon profil » (Ephraïm, 27/10): an empty CV is filled with what the profile holds,
+ * so the PDF is the real CV and never an empty page. The CV's settings stay.
+ */
+export async function fillCvFromProfileAction(
+  cvId: string,
+): Promise<{ ok: true } | { ok: false; error: "missing" | "profile" }> {
+  const { user, profile } = await owner();
+  const cv = await ownedCv(profile.id, cvId);
+  if (!cv) return { ok: false, error: "missing" };
+  const content = cvFromProfile(await getFullProfile(db, user.id), parseCv(cv.content));
+  if (isEmptyCv(content)) return { ok: false, error: "profile" };
+  await saveContent(cv.id, content);
+  refresh();
+  return { ok: true };
+}
+
+/** What « Ajouter à mon profil » would add, counted by part, for the sheet that asks first. */
+export async function previewCvIntoProfileAction(cvId: string): Promise<
+  | {
+      ok: true;
+      counts: {
+        headline: number;
+        summary: number;
+        experiences: number;
+        educations: number;
+        skills: number;
+        languages: number;
+      };
+      total: number;
+    }
+  | { ok: false; error: "missing" }
+> {
+  const { user, profile } = await owner();
+  const cv = await ownedCv(profile.id, cvId);
+  if (!cv) return { ok: false, error: "missing" };
+  const plan = await previewCvIntoProfile(db, user.id, parseCv(cv.content));
+  return {
+    ok: true,
+    counts: {
+      headline: plan.headline ? 1 : 0,
+      summary: plan.summary ? 1 : 0,
+      experiences: plan.experiences.length,
+      educations: plan.educations.length,
+      skills: plan.skills.length,
+      languages: plan.languages.length,
+    },
+    total: planSize(plan),
+  };
+}
+
+/** « Ajouter à mon profil »: only what the profile does not have yet; nothing is replaced. */
+export async function addCvToProfileAction(
+  cvId: string,
+): Promise<{ ok: true; added: number } | { ok: false; error: "missing" }> {
+  const { user, profile } = await owner();
+  const cv = await ownedCv(profile.id, cvId);
+  if (!cv) return { ok: false, error: "missing" };
+  const added = await applyCvIntoProfile(db, user.id, parseCv(cv.content));
+  refresh();
+  return { ok: true, added };
+}
+
+/**
+ * « Garder seulement ce CV » (Ephraïm, 27/10): an imported CV kept in « Mes CV » as it was read,
+ * without touching the profile; its name is the file's.
+ */
+export async function keepImportedCvAction(formData: FormData) {
+  const { user, profile } = await owner();
+  const importId = id.safeParse(String(formData.get("import") ?? ""));
+  const pending = importId.success
+    ? await db.aiSuggestion.findFirst({
+        where: { id: importId.data, userId: user.id, feature: "cv_parse", status: "pending" },
+      })
+    : null;
+  const read = pending ? parseImport(pending.payload) : null;
+  if (!pending || !read) redirect("/app/career/cv/nouveau?etape=import", RedirectType.replace);
+  const count = await db.document.count({ where: { profileId: profile.id, kind: "cv" } });
+  if (count >= MAX_CVS) redirect("/app/career/cv/nouveau?erreur=limite", RedirectType.replace);
+  const account = await db.user.findUniqueOrThrow({
+    where: { id: user.id },
+    select: { name: true, firstName: true, lastName: true, email: true, city: true, country: true },
+  });
+  const t = await getTranslations("career.cv");
+  const fileTitle = read.file?.name
+    .replace(/\.[a-z0-9]{2,5}$/i, "")
+    .trim()
+    .slice(0, 80);
+  const cv = await db.document.create({
+    data: {
+      profileId: profile.id,
+      kind: "cv",
+      title: fileTitle || (count === 0 ? t("default") : `${t("default")} ${count + 1}`),
+      templateId: DEFAULT_TEMPLATE_ID,
+      isPrimary: count === 0,
+      content: cvFromExtraction(read, {
+        name: [account.firstName, account.lastName].filter(Boolean).join(" ") || account.name,
+        email: account.email,
+        city: account.city ?? "",
+        country: account.country ?? "",
+      }),
+    },
+  });
+  await db.aiSuggestion.update({ where: { id: pending.id }, data: { status: "applied" } });
+  refresh();
+  redirect(`/app/career/cv/${cv.id}?etape=contenu`, RedirectType.replace);
 }
