@@ -4978,3 +4978,10 @@ bibliothèque, et se supprime.
 - La vidéo se lit dans Jumanly avec le lecteur YouTube « confidentialité renforcée » (`youtube-nocookie.com`, sans suggestions d'autres chaînes) : leçon sur ordinateur, leçon au téléphone, aperçu de l'admin, aperçu public. Aucun lien vers YouTube n'est proposé. CSP : `frame-src https://www.youtube-nocookie.com`.
 - Le suivi de la reprise (minute où l'on s'est arrêté) ne s'applique pas aux vidéos YouTube ; la leçon se termine avec le bouton habituel.
 - Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
+
+## 2026-10-27 · Administration principale (5/5 : outils de matching)
+
+- « IA et matching › Compétences » (src/components/admin/skills-tab.tsx, service src/server/services/skills-admin.ts) : compétences créées par les membres et référentiel complet, les plus utilisées d'abord, avec le nombre de profils, d'offres et de formations (jamais qui).
+- Ajouter ou retirer un synonyme ; fusionner une compétence dans une autre (les profils, offres et formations passent sur la cible, l'ancien nom devient synonyme). Le score compare noms et synonymes : effet immédiat. Chaque action est au journal avec son motif.
+- Ouvert aux administrateurs et aux responsables carrière.
+- Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.

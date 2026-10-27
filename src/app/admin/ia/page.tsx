@@ -1,3 +1,4 @@
+import { SkillsTab } from "@/components/admin/skills-tab";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
@@ -43,6 +44,7 @@ import { formatUsd } from "@/lib/money";
 const tabs = {
   consommation: "usage",
   poids: "weights",
+  competences: "skills",
   revisions: "disputes",
   journal: "audit",
 } as const;
@@ -166,6 +168,7 @@ export default async function AdminAi({ searchParams }: PageProps<"/admin/ia">) 
               missing={params.erreur === "reponse"}
             />
           )}
+          {tab === "competences" && <SkillsTab params={params} writable={writable} />}
           {tab === "journal" && <AuditTab />}
         </div>
         <aside className="flex min-w-0 flex-col gap-4">

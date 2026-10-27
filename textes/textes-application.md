@@ -21593,6 +21593,36 @@ Conventions :
 | `admin.ai.tab.weights` | Poids du matching |
 | `admin.ai.tab.disputes` | Révisions humaines |
 | `admin.ai.tab.audit` | Journal d'audit |
+| `admin.ai.tab.skills` | Compétences |
+| `admin.ai.skills.title` | Compétences et synonymes |
+| `admin.ai.skills.intro` | Le score de matching compare les compétences d'une offre et d'un profil par leur nom et leurs synonymes. Quand une même compétence s'écrit de plusieurs façons (« Excel », « MS Excel »), ajoutez un synonyme ou fusionnez-la dans la bonne compétence : les scores en tiennent compte tout de suite. Seuls des nombres sont affichés, jamais qui détient une compétence. |
+| `admin.ai.skills.filter.custom` | Créées par les membres ({count}) |
+| `admin.ai.skills.filter.all` | Tout le référentiel |
+| `admin.ai.skills.search` | Chercher une compétence |
+| `admin.ai.skills.count` | {shown} sur {total} compétences, les plus utilisées d'abord |
+| `admin.ai.skills.empty` | Aucune compétence ici pour l'instant. |
+| `admin.ai.skills.custom` | Créée par un membre |
+| `admin.ai.skills.usage` | {profiles, plural, =0 {aucun profil} one {# profil} other {# profils}} · {jobs, plural, =0 {aucune offre} one {# offre} other {# offres}} · {courses, plural, =0 {aucune formation} one {# formation} other {# formations}} |
+| `admin.ai.skills.aliases` | Synonymes |
+| `admin.ai.skills.noAlias` | Aucun |
+| `admin.ai.skills.removeAlias` | Retirer le synonyme « {alias} » |
+| `admin.ai.skills.improve` | Améliorer le matching de cette compétence |
+| `admin.ai.skills.reason` | Motif (pour le journal) |
+| `admin.ai.skills.addAlias.title` | Ajouter un synonyme |
+| `admin.ai.skills.addAlias.hint` | Une autre façon d'écrire la même compétence, reconnue par le score. |
+| `admin.ai.skills.addAlias.label` | Synonyme |
+| `admin.ai.skills.addAlias.submit` | Ajouter |
+| `admin.ai.skills.merge.title` | Fusionner dans une autre compétence |
+| `admin.ai.skills.merge.hint` | Les profils, offres et formations passent sur la compétence choisie ; ce nom en devient un synonyme. |
+| `admin.ai.skills.merge.label` | Compétence du référentiel |
+| `admin.ai.skills.merge.submit` | Fusionner |
+| `admin.ai.skills.ok.alias` | Synonyme ajouté. |
+| `admin.ai.skills.ok.aliasRemoved` | Synonyme retiré. |
+| `admin.ai.skills.ok.merged` | Compétences fusionnées. |
+| `admin.ai.skills.error.champs` | Vérifiez les champs : le motif fait au moins 3 caractères. |
+| `admin.ai.skills.error.notFound` | Compétence introuvable. Choisissez un nom de la liste. |
+| `admin.ai.skills.error.same` | Une compétence ne peut pas être fusionnée dans elle-même. |
+| `admin.ai.skills.error.alias` | Ce synonyme existe déjà pour cette compétence. |
 | `admin.ai.usage.byFeature` | Par fonction |
 | `admin.ai.usage.byPlan` | Par forfait |
 | `admin.ai.usage.cost.text` | Coût estimé : {amount} {currency} |
