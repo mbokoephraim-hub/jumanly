@@ -4872,7 +4872,7 @@ Conventions :
 | `talent.profile.languages.level.fluent` | Courant |
 | `talent.profile.languages.level.professional` | Professionnel |
 | `talent.profile.languages.level.intermediate` | Intermédiaire |
-| `talent.profile.languages.level.basic` | Notions |
+| `talent.profile.languages.level.basic` | Débutant |
 | `talent.profile.languages.cefr.text` | Niveau CECR (facultatif) |
 | `talent.profile.languages.cefr.placeholder` | Ex. : B2 |
 | `talent.profile.languages.empty` | Ajoutez les langues dans lesquelles vous pouvez travailler. |
@@ -5928,11 +5928,14 @@ Conventions :
 | `career.diagnostic.q.skillLevel.text` | Votre niveau en {skill} ? |
 | `career.diagnostic.q.skillLevel.source.role` | L'une des compétences les plus demandées dans les offres publiées pour ce métier ({count, plural, one {# offre} other {# offres}}). |
 | `career.diagnostic.q.skillLevel.source.all` | L'une des compétences les plus demandées dans les offres publiées sur Jumanly ({count, plural, one {# offre} other {# offres}}). |
+| `career.diagnostic.q.skillLevel.source.field` | Une compétence clé du métier que vous visez. |
 | `career.diagnostic.q.skillLevel.source.own` | Une compétence que vous avez citée. |
+| `career.diagnostic.q.skillLevel.l0` | Aucun niveau |
 | `career.diagnostic.q.skillLevel.l1` | Notions |
 | `career.diagnostic.q.skillLevel.l2` | Intermédiaire |
 | `career.diagnostic.q.skillLevel.l3` | Avancé |
 | `career.diagnostic.q.skillLevel.l4` | Expert |
+| `career.diagnostic.q.skillLevel.l0Hint` | Je ne connais pas cette compétence |
 | `career.diagnostic.q.skillLevel.l1Hint` | Je connais les bases |
 | `career.diagnostic.q.skillLevel.l2Hint` | Je l'utilise avec un peu d'aide |
 | `career.diagnostic.q.skillLevel.l3Hint` | Je l'utilise seul, au quotidien |
@@ -7774,6 +7777,8 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `profil.skills.search` | Chercher une compétence |
 | `profil.skills.pick` | Compétence trouvée |
 | `profil.skills.none` | Aucune compétence ne correspond à « {query} ». Essayez un autre mot. |
+| `profil.skills.notListed` | Cette compétence n’est pas encore dans la liste. Vous pouvez l’ajouter telle que vous l’avez écrite. |
+| `profil.skills.custom` | Ajouter « {skill} » |
 | `profil.skills.level` | Niveau |
 | `profil.skills.levels.beginner` | Débutant |
 | `profil.skills.levels.intermediate` | Intermédiaire |
@@ -7861,7 +7866,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `profil.languages.level.fluent` | Courant |
 | `profil.languages.level.professional` | Professionnel |
 | `profil.languages.level.intermediate` | Intermédiaire |
-| `profil.languages.level.basic` | Notions |
+| `profil.languages.level.basic` | Débutant |
 | `profil.languages.cefr` | Niveau européen (facultatif) |
 | `profil.languages.cefrNone` | Sans |
 | `profil.languages.save` | Ajouter |
@@ -9624,6 +9629,8 @@ Conventions :
 | `phoneCareer.sheets.skillsSuggested` | Suggérées par Orbi, d’après les offres ouvertes |
 | `phoneCareer.sheets.skillsFound` | Dans la liste des compétences |
 | `phoneCareer.sheets.skillsNone` | Aucune compétence trouvée. Essayez un autre mot. |
+| `phoneCareer.sheets.skillsCustom` | + Ajouter « {skill} » |
+| `phoneCareer.sheets.skillsCustomHint` | Pas dans la liste ? Ajoutez-la telle que vous l’avez écrite. |
 | `phoneCareer.sheets.skillsAdd` | {count, plural, =0 {Ajouter} other {Ajouter (#)}} |
 | `phoneCareer.sheets.skillsAdded` | {count, plural, one {# compétence ajoutée} other {# compétences ajoutées}}. |
 | `phoneCareer.sheets.skillsMax` | Vous avez atteint le nombre maximum de compétences. |
@@ -9632,6 +9639,13 @@ Conventions :
 | `phoneCareer.sheets.places` | Où je veux travailler |
 | `phoneCareer.sheets.placeAdd` | Ajouter une ville |
 | `phoneCareer.sheets.languagesSaved` | Langues et lieux enregistrés. |
+| `phoneCareer.sheets.languageLevel` | Votre niveau en {language} |
+| `phoneCareer.sheets.languageLevelBasic` | Débutant |
+| `phoneCareer.sheets.languageLevelIntermediate` | Intermédiaire |
+| `phoneCareer.sheets.languageLevelProfessional` | Professionnel |
+| `phoneCareer.sheets.languageLevelFluent` | Courant |
+| `phoneCareer.sheets.languageLevelNative` | Langue maternelle |
+| `phoneCareer.sheets.languageLevelMissing` | Choisissez votre niveau pour chaque langue. |
 | `phoneCareer.reglages.back` | Retour |
 | `phoneCareer.reglages.close` | Fermer |
 | `phoneCareer.reglages.cancel` | Annuler |

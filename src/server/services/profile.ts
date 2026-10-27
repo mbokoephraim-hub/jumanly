@@ -281,6 +281,38 @@ export async function findSkill(db: PrismaClient, name: string) {
   );
 }
 
+/** Category of the skills typed by talents when the reference list has none that fits. */
+export const CUSTOM_SKILL_CATEGORY = "custom";
+
+/**
+ * The skill of the reference list with this name, or a new one typed by the person (category
+ * `custom`): reused by the next person who types the same name, kept out of the suggestions.
+ */
+export async function findOrCreateSkill(db: PrismaClient, raw: string) {
+  const name = raw.replace(/\s+/g, " ").trim().slice(0, 80);
+  if (name.length < 2) return null;
+  const known = await findSkill(db, name);
+  if (known) return known;
+  const base =
+    name
+      .normalize("NFD")
+      .replace(/\p{M}/gu, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 50) || "competence";
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const slug = attempt === 0 ? `perso-${base}` : `perso-${base}-${attempt + 1}`;
+    const taken = await db.skill.findUnique({ where: { slug }, select: { id: true } });
+    if (taken) continue;
+    return db.skill.create({
+      data: { name, slug, category: CUSTOM_SKILL_CATEGORY, aliases: [] },
+      select: { id: true, name: true, aliases: true },
+    });
+  }
+  return null;
+}
+
 export function normalize(value: string) {
   return value.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase().trim();
 }

@@ -5811,7 +5811,7 @@
           "fluent": "Courant",
           "professional": "Professionnel",
           "intermediate": "Intermédiaire",
-          "basic": "Notions"
+          "basic": "Débutant"
         },
         "cefr": {
           "text": "Niveau CECR (facultatif)",
@@ -7384,12 +7384,15 @@
           "source": {
             "role": "L'une des compétences les plus demandées dans les offres publiées pour ce métier ({count, plural, one {# offre} other {# offres}}).",
             "all": "L'une des compétences les plus demandées dans les offres publiées sur Jumanly ({count, plural, one {# offre} other {# offres}}).",
+            "field": "Une compétence clé du métier que vous visez.",
             "own": "Une compétence que vous avez citée."
           },
+          "l0": "Aucun niveau",
           "l1": "Notions",
           "l2": "Intermédiaire",
           "l3": "Avancé",
           "l4": "Expert",
+          "l0Hint": "Je ne connais pas cette compétence",
           "l1Hint": "Je connais les bases",
           "l2Hint": "Je l'utilise avec un peu d'aide",
           "l3Hint": "Je l'utilise seul, au quotidien",
@@ -9426,6 +9429,8 @@
       "search": "Chercher une compétence",
       "pick": "Compétence trouvée",
       "none": "Aucune compétence ne correspond à « {query} ». Essayez un autre mot.",
+      "notListed": "Cette compétence n’est pas encore dans la liste. Vous pouvez l’ajouter telle que vous l’avez écrite.",
+      "custom": "Ajouter « {skill} »",
       "level": "Niveau",
       "levels": {
         "beginner": "Débutant",
@@ -9532,7 +9537,7 @@
         "fluent": "Courant",
         "professional": "Professionnel",
         "intermediate": "Intermédiaire",
-        "basic": "Notions"
+        "basic": "Débutant"
       },
       "cefr": "Niveau européen (facultatif)",
       "cefrNone": "Sans",
@@ -11595,6 +11600,8 @@
       "skillsSuggested": "Suggérées par Orbi, d’après les offres ouvertes",
       "skillsFound": "Dans la liste des compétences",
       "skillsNone": "Aucune compétence trouvée. Essayez un autre mot.",
+      "skillsCustom": "+ Ajouter « {skill} »",
+      "skillsCustomHint": "Pas dans la liste ? Ajoutez-la telle que vous l’avez écrite.",
       "skillsAdd": "{count, plural, =0 {Ajouter} other {Ajouter (#)}}",
       "skillsAdded": "{count, plural, one {# compétence ajoutée} other {# compétences ajoutées}}.",
       "skillsMax": "Vous avez atteint le nombre maximum de compétences.",
@@ -11602,7 +11609,14 @@
       "languages": "Langues",
       "places": "Où je veux travailler",
       "placeAdd": "Ajouter une ville",
-      "languagesSaved": "Langues et lieux enregistrés."
+      "languagesSaved": "Langues et lieux enregistrés.",
+      "languageLevel": "Votre niveau en {language}",
+      "languageLevelBasic": "Débutant",
+      "languageLevelIntermediate": "Intermédiaire",
+      "languageLevelProfessional": "Professionnel",
+      "languageLevelFluent": "Courant",
+      "languageLevelNative": "Langue maternelle",
+      "languageLevelMissing": "Choisissez votre niveau pour chaque langue."
     },
     "reglages": {
       "back": "Retour",

@@ -7,6 +7,7 @@ import { colorOf, PROFILE_PALETTE } from "@/lib/profile-colors";
 import { profileLanguageCodes } from "@/server/services/profile-view";
 import { siteUrl } from "@/lib/seo";
 import type { CareerHome } from "@/server/services/career-phone";
+import type { ProfileLanguage } from "@/server/services/profile";
 import { handleFromName } from "@/lib/social-links";
 import { companyTone } from "../explorer/data";
 import { initialsOf, shortName, toneOf } from "../fil/data";
@@ -142,7 +143,7 @@ export type CareerView = {
   /** The two sheets of the profile: « Ajouter des compétences », « Langues et lieux ». */
   sheets: {
     skills: { id: string; name: string }[];
-    languages: { code: string; label: string; on: boolean }[];
+    languages: { code: string; label: string; on: boolean; level?: ProfileLanguage["level"] }[];
     places: { name: string; on: boolean }[];
   };
 };
@@ -623,6 +624,7 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
         code,
         label: languageLabel(code),
         on: home.profile.languages.some((item) => item.code === code),
+        level: home.profile.languages.find((item) => item.code === code)?.level,
       })),
       places: [
         ...new Set([

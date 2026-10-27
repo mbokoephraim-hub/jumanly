@@ -26,6 +26,9 @@ import {
   getFullProfile,
   monthToDate,
   parseProfileLanguages,
+  CUSTOM_SKILL_CATEGORY,
+  findOrCreateSkill,
+  languageLevels,
   PROFILE_SKILLS_MAX,
   PROFILE_SUMMARY_MAX,
   refreshCompleteness,
@@ -53,21 +56,31 @@ import { fileStorage } from "@/server/storage";
  * validates, checks the session and touches only the person's own profile.
  */
 
-const skillIds = z.array(z.string().min(1).max(40)).min(1).max(10);
+const skillIds = z.array(z.string().min(1).max(40)).max(10);
+const typedSkills = z.array(z.string().trim().min(2).max(80)).max(10);
 
 /** « Ajouter » on Orbi's card or in « Ajouter des compétences »: declared skills, level 2. */
-export async function addSuggestedSkillsAction(ids: string[]) {
+export async function addSuggestedSkillsAction(ids: string[], typed: string[] = []) {
   const parsed = skillIds.safeParse(ids);
-  if (!parsed.success) return { ok: false as const, error: "invalid" as const };
+  const names = typedSkills.safeParse(typed);
+  if (!parsed.success || !names.success || parsed.data.length + names.data.length === 0)
+    return { ok: false as const, error: "invalid" as const };
   const user = await requireUser("/app/career/cv");
   const profile = await ensureProfile(db, user.id);
-  const skills = await db.skill.findMany({
+  const listed = await db.skill.findMany({
     where: { id: { in: parsed.data } },
     select: { id: true },
   });
   const count = await db.profileSkill.count({ where: { profileId: profile.id } });
-  if (count + skills.length > PROFILE_SKILLS_MAX)
+  if (count + listed.length + names.data.length > PROFILE_SKILLS_MAX)
     return { ok: false as const, error: "max" as const };
+  // A skill typed outside the list: the same one if it exists, otherwise a new one.
+  const created = [];
+  for (const name of names.data) {
+    const skill = await findOrCreateSkill(db, name);
+    if (skill) created.push({ id: skill.id });
+  }
+  const skills = [...new Map([...listed, ...created].map((skill) => [skill.id, skill])).values()];
   await db.profileSkill.createMany({
     data: skills.map((skill) => ({ profileId: profile.id, skillId: skill.id, level: 2 })),
     skipDuplicates: true,
@@ -309,14 +322,15 @@ export async function deleteCareerEducationAction(id: string): Promise<Result> {
 }
 
 const languagesInput = z.object({
-  languages: z.array(z.string().regex(/^[a-z]{2,3}$/)).max(12),
+  languages: z
+    .array(z.object({ code: z.string().regex(/^[a-z]{2,3}$/), level: z.enum(languageLevels) }))
+    .max(12),
   places: z.array(z.string().trim().min(1).max(80)).max(10),
 });
 
 /**
- * « Langues et lieux » (planche Carrière-langues): the languages ticked (a language already
- * there keeps its level, a new one is « professional ») and the places where the person wants
- * to work.
+ * « Langues et lieux » (planche Carrière-langues): the languages ticked, each with the level
+ * the person chose, and the places where the person wants to work.
  */
 export async function saveCareerLanguagesAction(
   raw: z.input<typeof languagesInput>,
@@ -325,9 +339,13 @@ export async function saveCareerLanguagesAction(
   if (!parsed.success) return fail("invalid");
   const { profile } = await mine();
   const before = parseProfileLanguages(profile.languages);
-  const languages = [...new Set(parsed.data.languages)].map(
-    (code) => before.find((item) => item.code === code) ?? { code, level: "professional" as const },
-  );
+  const languages = [
+    ...new Map(parsed.data.languages.map((item) => [item.code, item.level])).entries(),
+  ].map(([code, level]) => {
+    const known = before.find((item) => item.code === code);
+    // The CEFR level stays while the level is unchanged.
+    return known?.level === level ? known : { code, level };
+  });
   await db.talentProfile.update({
     where: { id: profile.id },
     data: { languages, desiredLocations: [...new Set(parsed.data.places)] },
@@ -411,7 +429,11 @@ export async function searchCareerSkillsAction(query: string) {
   if (!parsed.success) return [];
   await requireUser("/app/career/cv");
   return db.skill.findMany({
-    where: { name: { contains: parsed.data, mode: "insensitive" } },
+    // Skills typed by others stay out of the list (reused only when typed again).
+    where: {
+      name: { contains: parsed.data, mode: "insensitive" },
+      category: { not: CUSTOM_SKILL_CATEGORY },
+    },
     select: { id: true, name: true },
     orderBy: { name: "asc" },
     take: 8,

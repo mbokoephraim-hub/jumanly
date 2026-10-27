@@ -20,6 +20,7 @@ import {
   dimensions,
   optionalQuestions,
   screensFor,
+  SKILL_LEVELS,
   SKILLS_ASSESSED,
   type Draft,
   type Screen,
@@ -27,7 +28,11 @@ import {
 import { TalentIcon } from "./icon";
 import { OrbiMark } from "./orbi-mark";
 
-export type SkillSource = { names: string[]; offers: number; scope: "role" | "all" | "own" };
+export type SkillSource = {
+  names: string[];
+  offers: number;
+  scope: "field" | "role" | "all" | "own";
+};
 type Option = { value: string; label: string; hint?: string };
 
 const split = (value: string | undefined) =>
@@ -97,7 +102,14 @@ export function DiagnosticFlow({
     setAnswers((current) => {
       const checks = current.skillChecks ?? [];
       const before = checks.find((item) => item.skill === skill);
-      const next = { skill, level: 0, proof: "", ...before, ...patch } as {
+      // « Aucun niveau »: nothing to prove, « Rien encore » is kept; leaving it asks again.
+      const proof =
+        patch.level === 0
+          ? { proof: "a4" }
+          : patch.level !== undefined && before?.level === 0
+            ? { proof: "" }
+            : {};
+      const next = { skill, proof: "", ...before, ...patch, ...proof } as {
         skill: string;
         level: number;
         proof: string;
@@ -115,7 +127,7 @@ export function DiagnosticFlow({
     if ("followUp" in item) return true;
     if ("skill" in item) {
       const value = check(item.skill);
-      return Boolean(value?.level && value.proof);
+      return value?.level !== undefined && Boolean(value.proof);
     }
     if (optionalQuestions.includes(item.id) || item.id === "values") return true;
     const value = answers[item.id];
@@ -131,7 +143,11 @@ export function DiagnosticFlow({
       fetchedRole.current = role;
       next =
         found.skills.length > 0
-          ? { names: found.skills, offers: found.offers, scope: found.scope }
+          ? {
+              names: found.skills,
+              offers: found.offers,
+              scope: found.field ? "field" : found.scope,
+            }
           : { names: [], offers: 0, scope: "own" };
     }
     if (screen.id === "topSkills" && next.names.length === 0) {
@@ -265,26 +281,32 @@ export function DiagnosticFlow({
             hint={
               skills.scope === "own"
                 ? t("q.skillLevel.source.own")
-                : skills.scope === "all"
-                  ? t("q.skillLevel.source.all", { count: skills.offers })
-                  : t("q.skillLevel.source.role", { count: skills.offers })
+                : skills.scope === "field"
+                  ? t("q.skillLevel.source.field")
+                  : skills.scope === "all"
+                    ? t("q.skillLevel.source.all", { count: skills.offers })
+                    : t("q.skillLevel.source.role", { count: skills.offers })
             }
             name={`skillLevel-${item.index}`}
-            value={value?.level ? String(value.level) : undefined}
+            value={value?.level !== undefined ? String(value.level) : undefined}
             onChange={(level) => setCheck(item.skill, { level: Number(level) })}
-            options={[1, 2, 3, 4].map((level) => ({
+            options={SKILL_LEVELS.map((level) => ({
               value: String(level),
               label: d(`q.skillLevel.l${level}`),
               hint: d(`q.skillLevel.l${level}Hint`),
             }))}
           />
-          <Choices
-            legend={t("q.skillProof.text")}
-            name={`skillProof-${item.index}`}
-            value={value?.proof || undefined}
-            onChange={(proof) => setCheck(item.skill, { proof })}
-            options={choices("skillProof")}
-          />
+          {value?.level === 0 ? (
+            <input type="hidden" name={`skillProof-${item.index}`} value="a4" />
+          ) : (
+            <Choices
+              legend={t("q.skillProof.text")}
+              name={`skillProof-${item.index}`}
+              value={value?.proof || undefined}
+              onChange={(proof) => setCheck(item.skill, { proof })}
+              options={choices("skillProof")}
+            />
+          )}
         </>
       );
     }
