@@ -4810,3 +4810,24 @@ feuille de style globale (texte brut, onglets collés). Les styles du Chat sont 
 avec ses composants (`parts.tsx`) et non plus par `globals.css`. Vérifié : lint, types, build,
 e2e `chat-v2` et `modele-b-messages` (téléphone), feuille du Chat chargée à part sur
 `/app/messages`.
+
+## Espace recruteur au téléphone · même identité que l'espace talent (27 octobre 2026)
+
+Demande d'Ephraïm : le Fil du recruteur identique à celui des talents, et Offres, Messages, son
+profil et les candidats dans la même identité visuelle.
+
+- En-tête des cinq onglets recruteur : la classe commune `nb-tete-onglet` (titre 28 px à gauche,
+  boutons ronds identiques, « + » de la même couleur que les autres). L'onglet Messages s'intitule
+  « Chat », comme dans la barre.
+- Fil : même ordre et mêmes éléments que chez un talent (onglets en pastilles, puis la ligne
+  « Publier » avec le nom) ; « Publier au nom de… » reste en dessous. La recherche du Fil est
+  retirée, comme chez un talent.
+- Offres, Candidatures, Talents : la loupe devient une barre de recherche visible, au style
+  d'Explorer ; toucher la barre ouvre les mêmes options (« Rechercher dans », recherches récentes).
+- Pastilles : vues de Candidatures et de Talents, onglets Candidats · Réseau · Équipe du Chat, filtres
+  d'offres et choix de portée passent au Lime avec texte Sapin quand ils sont choisis.
+- « Mon profil recruteur » prend la mise en page du profil d'une personne (`docs/profil-personne`) :
+  barre, bannière, photo cerclée, nom, poste et entreprise, puces, sections ; pas de portfolio.
+  La vue candidat (profil d'une personne) était déjà au nouveau style.
+- Vérifié : lint, types, tests (413), tests en base (367), build, e2e recruteur au téléphone
+  (18 sur 18). Captures : `/mnt/project-files/captures/recruteur-harmonise/`.

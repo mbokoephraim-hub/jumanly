@@ -91,9 +91,9 @@ export function RhMessagesList({ rows, tab, org }: { rows: RhListRow[]; tab: Tab
 
   return (
     <div className="nb-rm">
-      <div className="nb-rm-cherche" role="search">
-        <label className="nb-rm-champ">
-          <PhoneIcon name="recherche" size={18} />
+      <div className="nb-ex-champ" role="search">
+        <label className="nb-ex-recherche">
+          <PhoneIcon name="recherche" size={18} stroke={2} />
           <input
             ref={field}
             type="search"
@@ -110,7 +110,7 @@ export function RhMessagesList({ rows, tab, org }: { rows: RhListRow[]; tab: Tab
           ) : null}
         </label>
         {searching ? (
-          <button type="button" className="nb-rm-annuler" onClick={cancel}>
+          <button type="button" className="nb-ex-annuler" onClick={cancel}>
             {t("search.cancel")}
           </button>
         ) : null}

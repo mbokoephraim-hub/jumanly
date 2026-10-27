@@ -26,7 +26,7 @@ test.describe("Modèle B recruteur · Fil au téléphone", () => {
     await page.goto("/app/hire");
     await expect(main(page).getByRole("heading", { name: "Fil", exact: true })).toBeVisible();
     await expect(
-      fil(page).getByRole("link", { name: "Un titre, un texte, une image" }),
+      fil(page).getByRole("link", { name: /Un titre, un texte, une image/ }),
     ).toBeVisible();
     await expect(fil(page).getByRole("link", { name: /^Publier au nom de Baobab/ })).toBeVisible();
 
@@ -53,35 +53,8 @@ test.describe("Modèle B recruteur · Fil au téléphone", () => {
       "/app/hire/talents",
     );
 
-    // Search in two steps: the options of the Fil, then posts, people and companies.
-    await main(page)
-      .getByRole("button", { name: "Rechercher", exact: true })
-      .filter({ visible: true })
-      .click();
-    const field = main(page).getByRole("searchbox", { name: "Rechercher dans le Fil" });
-    await expect(field).toBeFocused();
-    const scopes = main(page).getByRole("radiogroup", { name: "Rechercher dans" });
-    for (const scope of ["Tout", "Publications", "Personnes", "Entreprises"])
-      await expect(scopes.getByRole("radio", { name: scope })).toBeVisible();
-    await expect(scopes.getByRole("radio", { name: "Mes offres" })).toHaveCount(0);
-    await capture(page, "034-fil-recherche");
-    await field.fill("portes");
-    await expect(main(page).getByRole("region", { name: "Publications" })).toBeVisible();
-    await capture(page, "035-fil-recherche-texte");
-    await scopes.getByRole("radio", { name: "Personnes" }).click();
-    await expect(main(page).getByRole("region", { name: "Publications" })).toHaveCount(0);
-    await scopes.getByRole("radio", { name: "Publications" }).click();
-    await main(page)
-      .getByRole("region", { name: "Publications" })
-      .getByRole("link")
-      .first()
-      .click();
-    await expect(page).toHaveURL(/\/app\/fil\/[^/]+$/);
-    await capture(page, "036-fil-publication");
-    await page.goBack();
-    await expect(page).toHaveURL(/\/app\/hire$/);
-    const cancel = main(page).getByRole("button", { name: "Annuler" });
-    if (await cancel.isVisible()) await cancel.click();
+    // Like a talent's Fil (Ephraïm, 27/10/2026): no search field on the Fil.
+    await expect(main(page).getByRole("search").filter({ visible: true })).toHaveCount(0);
 
     // The menu ··· of a post.
     await fil(page).getByRole("button", { name: "Plus d'options" }).first().click();

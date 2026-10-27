@@ -11,9 +11,9 @@ import { PhoneFil } from "../fil/feed";
 import { FilTexts, meOf, sendTargetViews } from "../fil/server";
 
 /**
- * The recruiter's Fil (Modèle B recruteur, M3, planches Recruteur-fil*): the line to publish in
- * their own name, « Publier au nom de… » when they manage the company's offers, then « Pour vous ·
- * Abonnements · Entreprises » as for a talent. The head (search, bell, avatar) is the tab's.
+ * The recruiter's Fil: the same as a talent's (Ephraïm, 27/10/2026), « Pour vous · Abonnements ·
+ * Entreprises », then the line to publish in their own name, and « Publier au nom de… » when they
+ * manage the company's offers. The head (bell, avatar) is the tab's.
  */
 export async function RhFil({
   user,
@@ -32,31 +32,20 @@ export async function RhFil({
     publishingSpace(user.id),
   ]);
   const me = meOf(user);
-  const compose = (
+  const compose = space?.canPublishAsOrg ? (
     <div className="nb-rh-fil-haut">
-      <div className="nb-rh-fil-publier">
-        <Link href="/app/fil/publier" className="nb-rh-fil-publier-l">
-          <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={40} />
-          <span className="nb-meta">{t("prompt")}</span>
-        </Link>
-        <Link href="/app/fil/publier" className="nb-fil-publier-b">
-          {t("publish")}
-        </Link>
-      </div>
-      {space?.canPublishAsOrg ? (
-        <Link href="/app/fil/publier?nom=entreprise" className="nb-rh-fil-org">
-          <FilAvatar
-            initials={initialsOf(space.org.name)}
-            image={space.org.logo}
-            tone={0}
-            org
-            size={24}
-          />
-          {t("asOrg", { org: shortName(space.org.name) })}
-        </Link>
-      ) : null}
+      <Link href="/app/fil/publier?nom=entreprise" className="nb-rh-fil-org">
+        <FilAvatar
+          initials={initialsOf(space.org.name)}
+          image={space.org.logo}
+          tone={0}
+          org
+          size={24}
+        />
+        {t("asOrg", { org: shortName(space.org.name) })}
+      </Link>
     </div>
-  );
+  ) : null;
   return (
     <FilTexts recruiter>
       <PhoneFil
