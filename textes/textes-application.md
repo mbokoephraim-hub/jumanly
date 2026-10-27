@@ -9640,6 +9640,23 @@ Conventions :
 | `phoneCareer.reglages.account` | Compte |
 | `phoneCareer.reglages.namePhoto` | Nom et photo |
 | `phoneCareer.reglages.posts` | Mes publications |
+| `phoneCareer.reglages.emailChange.action` | Changer |
+| `phoneCareer.reglages.emailChange.title` | Changer d'adresse e-mail |
+| `phoneCareer.reglages.emailChange.text` | Nous envoyons un lien à la nouvelle adresse. Elle remplace {email} dès que vous l'ouvrez. |
+| `phoneCareer.reglages.emailChange.label` | Nouvelle adresse e-mail |
+| `phoneCareer.reglages.emailChange.placeholder` | nom@exemple.com |
+| `phoneCareer.reglages.emailChange.send` | Envoyer le lien |
+| `phoneCareer.reglages.emailChange.sent` | Lien envoyé à {email}. Ouvrez-le pour confirmer. |
+| `phoneCareer.reglages.emailChange.done` | Votre nouvelle adresse e-mail est enregistrée. |
+| `phoneCareer.reglages.emailChange.invalid` | Cette adresse e-mail n'est pas valide. |
+| `phoneCareer.reglages.emailChange.same` | C'est déjà votre adresse. |
+| `phoneCareer.reglages.emailChange.failed` | Le lien n'a pas pu partir. Réessayez dans un instant. |
+| `phoneCareer.reglages.rh.line` | Recruteur · {org} |
+| `phoneCareer.reglages.rh.group` | Équipe · {org} |
+| `phoneCareer.reglages.rh.team` | Mon équipe |
+| `phoneCareer.reglages.rh.teamAdmin` | Équipe · ajouter un recruteur |
+| `phoneCareer.reglages.rh.company` | Profil de l'entreprise |
+| `phoneCareer.reglages.rh.journal` | Profils consultés |
 | `phoneCareer.reglages.email` | E-mail |
 | `phoneCareer.reglages.password` | Mot de passe et sécurité |
 | `phoneCareer.reglages.subscription` | Abonnement |
@@ -16246,9 +16263,9 @@ Conventions :
 | `phoneRhCompte.help.writeText` | Réponse par e-mail à {email}, sous 24 h ouvrées. |
 | `phoneRhCompte.help.mail` | Écrire à {email} |
 | `phoneRhCompte.help.direct` | Ou directement : {email} |
-| `phoneRhCompte.company.own` | Votre entreprise · page administrée par {admin}, modifiable sur ordinateur |
-| `phoneRhCompte.company.ownNoAdmin` | Votre entreprise · page modifiable sur ordinateur par l'administrateur |
-| `phoneRhCompte.company.ownAdmin` | Votre entreprise · vous administrez cette page, modifiable sur ordinateur |
+| `phoneRhCompte.company.own` | Votre entreprise · administrée par {admin} |
+| `phoneRhCompte.company.ownNoAdmin` | Votre entreprise |
+| `phoneRhCompte.company.ownAdmin` | Vous administrez cette page |
 | `phoneRhCompte.company.publish` | Publier au nom de {org} |
 | `phoneRhCompte.mode.title` | {org} |
 | `phoneRhCompte.mode.line` | Vous agissez au nom de l'entreprise |

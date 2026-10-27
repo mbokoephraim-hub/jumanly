@@ -11,6 +11,7 @@ import {
   saveCareerNotificationsAction,
   saveCareerPrivacyAction,
 } from "@/server/actions/career-phone";
+import { changeEmailAction } from "@/server/actions/settings";
 import { PhoneBack } from "../back";
 import { FilAvatar } from "../fil/avatar";
 import { PhoneIcon, type phoneIcons } from "../icon";
@@ -113,7 +114,6 @@ export function PhoneSettings({
   recruiter: "open" | "become";
 }) {
   const t = useTranslations("phoneCareer.reglages");
-  const [leaving, setLeaving] = useState(false);
   const [hiring, setHiring] = useState(false);
   return (
     <SettingsFrame title={t("title")} back="/app/career/cv">
@@ -133,11 +133,7 @@ export function PhoneSettings({
         <Row href="/app/fil/mes-publications" icon="document" tone="menthe">
           {t("posts")}
         </Row>
-        <div className="nb-ca-it" data-ligne="">
-          <Tile icon="email" tone="bleu" />
-          <span>{t("email")}</span>
-          <small>{email}</small>
-        </div>
+        <EmailRow email={email} />
         <Row href="/app/parametres/securite" icon="cadenas" tone="menthe">
           {t("password")}
         </Row>
@@ -189,17 +185,7 @@ export function PhoneSettings({
         </Row>
         {install}
       </Group>
-      <div className="nb-rg-bloc nb-rg-sortie">
-        <button
-          type="button"
-          className="nb-ca-it nb-ca-sortir"
-          data-ligne=""
-          onClick={() => setLeaving(true)}
-        >
-          <Tile icon="fleche" tone="corail" />
-          <span>{t("signOut")}</span>
-        </button>
-      </div>
+      <SignOut />
       <PhoneSheet
         open={hiring}
         onClose={() => setHiring(false)}
@@ -223,6 +209,27 @@ export function PhoneSettings({
           </button>
         </form>
       </PhoneSheet>
+    </SettingsFrame>
+  );
+}
+
+/** « Se déconnecter », after a confirmation. */
+function SignOut() {
+  const t = useTranslations("phoneCareer.reglages");
+  const [leaving, setLeaving] = useState(false);
+  return (
+    <>
+      <div className="nb-rg-bloc nb-rg-sortie">
+        <button
+          type="button"
+          className="nb-ca-it nb-ca-sortir"
+          data-ligne=""
+          onClick={() => setLeaving(true)}
+        >
+          <Tile icon="fleche" tone="corail" />
+          <span>{t("signOut")}</span>
+        </button>
+      </div>
       <PhoneSheet
         open={leaving}
         onClose={() => setLeaving(false)}
@@ -246,6 +253,172 @@ export function PhoneSettings({
           </button>
         </form>
       </PhoneSheet>
+    </>
+  );
+}
+
+/**
+ * The e-mail, and « Changer d'adresse »: a link goes to the new address; the address changes
+ * once it is opened (Ephraïm, 27/10/2026). Until then, the old one keeps working.
+ */
+function EmailRow({ email }: { email: string }) {
+  const t = useTranslations("phoneCareer.reglages");
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
+  const [pending, start] = useTransition();
+  const send = () =>
+    start(async () => {
+      const result = await changeEmailAction(value);
+      if (!result.ok) {
+        showToast({ message: t(`emailChange.${result.error}`), tone: "error" });
+        return;
+      }
+      setOpen(false);
+      setValue("");
+      showToast({ message: t("emailChange.sent", { email: result.email }) });
+    });
+  return (
+    <>
+      <button type="button" className="nb-ca-it" data-ligne="" onClick={() => setOpen(true)}>
+        <Tile icon="email" tone="bleu" />
+        <span>
+          {t("email")}
+          <small className="nb-meta">{email}</small>
+        </span>
+        <small>
+          <em>{t("emailChange.action")}</em>
+        </small>
+      </button>
+      <PhoneSheet
+        open={open}
+        onClose={() => setOpen(false)}
+        label={t("emailChange.title")}
+        closeLabel={t("close")}
+      >
+        <form
+          className="nb-ca-feuille"
+          onSubmit={(event) => {
+            event.preventDefault();
+            send();
+          }}
+        >
+          <b className="nb-ex-feuille-t">{t("emailChange.title")}</b>
+          <p className="nb-meta">{t("emailChange.text", { email })}</p>
+          <input
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            autoCapitalize="none"
+            className="nb-ca-in"
+            value={value}
+            onChange={(event) => setValue(event.target.value)}
+            placeholder={t("emailChange.placeholder")}
+            aria-label={t("emailChange.label")}
+            required
+            maxLength={254}
+          />
+          <button
+            type="submit"
+            className="nb-bouton"
+            data-large=""
+            data-plein=""
+            disabled={pending || !value.trim()}
+          >
+            {t("emailChange.send")}
+          </button>
+        </form>
+      </PhoneSheet>
+    </>
+  );
+}
+
+/**
+ * « Paramètres » of a recruiter on the phone (Ephraïm, 27/10/2026): the same page as a talent's,
+ * with the recruiter's own rows: the team (add a recruiter), the company's plan, the recruiter's
+ * notifications, the journal of the profiles opened.
+ */
+export function PhoneRecruiterSettings({
+  name,
+  image,
+  initials,
+  tone,
+  email,
+  org,
+  plan,
+  admin,
+  language,
+  install,
+}: {
+  name: string;
+  image: string | null;
+  initials: string;
+  tone: number;
+  email: string;
+  org: string;
+  plan: string;
+  /** The page's administrator: the team and the company's profile. */
+  admin: boolean;
+  language: string;
+  install: ReactNode;
+}) {
+  const t = useTranslations("phoneCareer.reglages");
+  return (
+    <SettingsFrame title={t("title")} back="/app/hire/compte">
+      <Link href="/app/hire/compte/profil" className="nb-rg-moi">
+        <FilAvatar initials={initials} image={image} tone={tone} org={false} size={58} square />
+        <span>
+          <b>{name}</b>
+          <small className="nb-meta">{t("rh.line", { org })}</small>
+          <em>{t("editProfile")}</em>
+        </span>
+        <PhoneIcon name="chevron" size={18} />
+      </Link>
+      <Group title={t("account")} id="rg-compte">
+        <Row href="/app/hire/compte/profil/modifier" icon="personne">
+          {t("namePhoto")}
+        </Row>
+        <EmailRow email={email} />
+        <Row href="/app/parametres/securite" icon="cadenas" tone="menthe">
+          {t("password")}
+        </Row>
+        <Row href="/app/fil/mes-publications" icon="document" tone="menthe">
+          {t("posts")}
+        </Row>
+      </Group>
+      <Group title={t("rh.group", { org })} id="rg-equipe">
+        <Row href="/app/hire/compte/equipe" icon="talents" tone="bleu">
+          {admin ? t("rh.teamAdmin") : t("rh.team")}
+        </Row>
+        {admin ? (
+          <Row href="/app/hire/entreprise/profil" icon="organisation" tone="bleu">
+            {t("rh.company")}
+          </Row>
+        ) : null}
+        <Row href="/app/hire/compte/formule" end={<em>{plan}</em>} icon="signet" tone="ambre">
+          {t("plan")}
+        </Row>
+      </Group>
+      <Group title={t("privacyGroup")} id="rg-vie-privee">
+        <Row href="/app/hire/compte/notifications" icon="cloche" tone="ambre">
+          {t("notifications")}
+        </Row>
+        <Row href="/app/hire/compte/confidentialite" icon="cacher" tone="menthe">
+          {t("privacy")}
+        </Row>
+        <Row href="/app/parametres/consultations" icon="document" tone="menthe">
+          {t("rh.journal")}
+        </Row>
+      </Group>
+      <Group title={t("application")} id="rg-appli">
+        <Row href="/app/hire/compte/langue" end={language} icon="messages" tone="bleu">
+          {t("language")}
+        </Row>
+        <Row href="/app/hire/compte/aide" icon="idee">
+          {t("help")}
+        </Row>
+        {install}
+      </Group>
+      <SignOut />
     </SettingsFrame>
   );
 }

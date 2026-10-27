@@ -89,6 +89,35 @@ export async function changePassword(formData: FormData) {
   back("securite", { ok: "password" });
 }
 
+/**
+ * « Changer d'adresse » (Ephraïm, 27/10/2026): a link goes to the new address; the account's
+ * address changes once it is opened. An address already used answers the same way (nothing leaks).
+ */
+export async function changeEmailAction(
+  raw: string,
+): Promise<{ ok: true; email: string } | { ok: false; error: "invalid" | "same" | "failed" }> {
+  const parsed = z
+    .email()
+    .max(254)
+    .safeParse(
+      String(raw ?? "")
+        .trim()
+        .toLowerCase(),
+    );
+  const user = await requireUser("/app/parametres");
+  if (!parsed.success) return { ok: false, error: "invalid" };
+  if (parsed.data === user.email.toLowerCase()) return { ok: false, error: "same" };
+  try {
+    await auth.api.changeEmail({
+      headers: await headers(),
+      body: { newEmail: parsed.data, callbackURL: "/app/parametres?adresse=changee" },
+    });
+  } catch {
+    return { ok: false, error: "failed" };
+  }
+  return { ok: true, email: parsed.data };
+}
+
 export async function revokeSession(formData: FormData) {
   await requireUser("/app/parametres");
   const token = String(formData.get("token") ?? "");

@@ -14,7 +14,13 @@ import { initialsOf, toneOf } from "../fil/data";
 import { PhoneIcon } from "../icon";
 import { PhonePay, PhonePayEnd, PhonePayWait, PhonePlans, type PlanCard } from "./billing";
 import { CareerTexts } from "./server";
-import { NotificationsForm, PhoneHelp, PhoneSettings, PrivacyForm } from "./settings";
+import {
+  NotificationsForm,
+  PhoneHelp,
+  PhoneRecruiterSettings,
+  PhoneSettings,
+  PrivacyForm,
+} from "./settings";
 
 /** The only contact of Jumanly (CLAUDE.md § 8): by e-mail, never by phone. */
 export const CONTACT_EMAIL = "assistant@jumanly.io";
@@ -81,6 +87,39 @@ export async function InstallRow() {
         </>
       }
     />
+  );
+}
+
+/** « Paramètres » of a recruiter on the phone: the talent's page, with the recruiter's rows. */
+export async function PhoneRecruiterSettingsScreen({
+  user,
+  organizationId,
+  admin,
+}: {
+  user: User;
+  organizationId: string;
+  admin: boolean;
+}) {
+  const t = await getTranslations("phoneCareer.reglages");
+  const [plan, org] = await Promise.all([
+    resolvePlan(db, { type: "organization", id: organizationId }, new Date()),
+    db.organization.findUnique({ where: { id: organizationId }, select: { name: true } }),
+  ]);
+  return (
+    <CareerTexts>
+      <PhoneRecruiterSettings
+        name={user.name}
+        image={user.image}
+        initials={initialsOf(user.name)}
+        tone={toneOf(user.name, false)}
+        email={user.email}
+        org={org?.name ?? ""}
+        plan={plan?.planName ?? t("noPlan")}
+        admin={admin}
+        install={<InstallRow />}
+        language={t("french")}
+      />
+    </CareerTexts>
   );
 }
 

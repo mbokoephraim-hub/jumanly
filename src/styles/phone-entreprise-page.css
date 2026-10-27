@@ -196,3 +196,12 @@
 .nb-co-membre-t small:empty {
   display: none;
 }
+/* L'encart « Votre entreprise » tient sur une ligne (Ephraïm, 27/10/2026). */
+.nb-co-own {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nb-co-own > svg {
+  flex: none;
+}
