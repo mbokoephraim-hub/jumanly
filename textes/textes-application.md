@@ -9665,6 +9665,7 @@ Conventions :
 | `phoneCareer.reglages.emailChange.invalid` | Cette adresse e-mail n'est pas valide. |
 | `phoneCareer.reglages.emailChange.same` | C'est déjà votre adresse. |
 | `phoneCareer.reglages.emailChange.failed` | Le lien n'a pas pu partir. Réessayez dans un instant. |
+| `phoneCareer.reglages.emailChange.unavailable` | L'envoi d'e-mails n'est pas encore activé sur Jumanly : votre adresse ne peut pas être changée pour le moment. |
 | `phoneCareer.reglages.rh.line` | Recruteur · {org} |
 | `phoneCareer.reglages.rh.group` | Équipe · {org} |
 | `phoneCareer.reglages.rh.team` | Mon équipe |
@@ -18800,6 +18801,15 @@ Conventions :
 | `mail.verifyLink.p1` | Pour terminer votre inscription, confirmez que cette adresse est bien la vôtre. Touchez le bouton ci-dessous, depuis votre téléphone ou votre ordinateur : votre espace Jumanly s'ouvre aussitôt. |
 | `mail.verifyLink.cta` | Confirmer mon adresse |
 | `mail.verifyLink.p2` | Le lien est valable {hours} heures. Ne le transférez à personne. |
+
+### E-mail · Lien de confirmation d'une nouvelle adresse (Paramètres)
+
+| Clé | Texte |
+|---|---|
+| `mail.changeEmail.subject` | Confirmez votre nouvelle adresse e-mail Jumanly |
+| `mail.changeEmail.preheader` | Un clic et cette adresse devient celle de votre compte. |
+| `mail.changeEmail.p1` | Vous avez demandé à utiliser cette adresse pour votre compte Jumanly. Touchez le bouton ci-dessous pour la confirmer : elle remplacera aussitôt l'ancienne. |
+| `mail.changeEmail.cta` | Confirmer ma nouvelle adresse |
 
 ### E-mail · Lien de connexion (lien magique)
 

@@ -4991,3 +4991,8 @@ bibliothèque, et se supprime.
 - Demande d'Ephraïm : après un enregistrement ou à l'ouverture d'une page, un écran sombre avec un grand bloc gris arrondi s'affichait.
 - Cause : l'attente de tout l'espace connecté (`src/app/app/layout.tsx`, et `/admin`) montrait un squelette gris de 60 % de l'écran à chaque chargement complet d'une page (ouverture de l'appli, rechargement, retour vers une page chargée à part). Les navigations dans l'appli gardaient déjà la page précédente.
 - Correction : ce bloc est remplacé par la seule barre fine de chargement en haut, sur le fond de l'espace (`src/components/app/shell-loading.tsx`) ; la détection du téléphone se fait en parallèle des autres lectures de l'espace.
+## 2026-10-27 · Changement d'adresse e-mail réparé
+
+- « Changer d'adresse » (Paramètres, talent et recruteur au téléphone) envoie maintenant le lien lui-même au lieu de passer par `auth.api.changeEmail`, qui masquait un envoi échoué et affichait « Lien envoyé » alors que rien ne partait. Même jeton Better Auth (`change-email-verification`), l'adresse change à l'ouverture du lien.
+- E-mail dédié « Confirmez votre nouvelle adresse » (`mail.changeEmail.*`) au lieu du texte d'inscription.
+- En production sans RESEND_API_KEY ni SMTP_HOST, l'application dit clairement que l'envoi d'e-mails n'est pas encore activé (`emailChange.unavailable`).
