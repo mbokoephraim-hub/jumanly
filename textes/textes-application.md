@@ -9222,6 +9222,22 @@ Conventions :
 | `phoneCareer.title` | Carrière |
 | `phoneCareer.bannerEdit` | Changer la bannière |
 | `phoneCareer.photoEdit` | Changer la photo |
+| `phoneCareer.photoOpen` | Voir ma photo de profil en grand |
+| `phoneCareer.photoViewer.title` | Photo de profil |
+| `phoneCareer.photoViewer.close` | Fermer |
+| `phoneCareer.photoViewer.photoOf` | Photo de profil de {name} |
+| `phoneCareer.photoViewer.initialsOf` | Initiales de {name} |
+| `phoneCareer.photoViewer.initialsHint` | Sans photo, Jumanly affiche les initiales de votre nom. |
+| `phoneCareer.photoViewer.change` | Modifier |
+| `phoneCareer.photoViewer.crop` | Recadrer |
+| `phoneCareer.photoViewer.initials` | Initiales |
+| `phoneCareer.photoViewer.initialsBack` | Vos initiales sont de retour. |
+| `phoneCareer.photoViewer.back` | Retour |
+| `phoneCareer.photoViewer.cropTitle` | Recadrer la photo |
+| `phoneCareer.photoViewer.drag` | Faites glisser la photo pour la placer dans le cercle, puis réglez le zoom. |
+| `phoneCareer.photoViewer.zoom` | Zoom |
+| `phoneCareer.photoViewer.cancel` | Annuler |
+| `phoneCareer.photoViewer.save` | Enregistrer |
 | `phoneCareer.socialAdd` | Ajouter un réseau ou un site |
 | `phoneCareer.availabilityChange` | Disponibilité : {current}. Toucher pour changer. |
 | `phoneCareer.completion.skill` | {count, plural, one {Ajoutez {skill} : une offre de plus vous correspond.} other {Ajoutez {skill} : # offres de plus vous correspondent.}} |
@@ -9331,6 +9347,7 @@ Conventions :
 | `phoneCareer.form.error` | Ça n’a pas marché. Réessayez dans un instant. |
 | `phoneCareer.form.errors.invalid` | Vérifiez les champs en rouge. |
 | `phoneCareer.form.errors.required` | Ce champ est obligatoire. |
+| `phoneCareer.form.errors.aboutTooLong` | Votre texte dépasse 400 caractères : raccourcissez-le. |
 | `phoneCareer.form.errors.name` | Écrivez votre nom avec des lettres seulement. |
 | `phoneCareer.form.errors.handle` | Lettres, chiffres et points seulement, de 3 à 30 caractères. |
 | `phoneCareer.form.errors.handleTaken` | Ce nom d’utilisateur est déjà pris. Essayez-en un autre. |
@@ -9383,8 +9400,6 @@ Conventions :
 | `phoneCareer.form.headline` | Titre |
 | `phoneCareer.form.headlinePlaceholder` | Ex. : Analyste de données junior |
 | `phoneCareer.form.city` | Ville |
-| `phoneCareer.form.bio` | Bio |
-| `phoneCareer.form.bioOrbi` | Orbi peut raccourcir et corriger votre bio. |
 | `phoneCareer.form.improve` | Améliorer |
 | `phoneCareer.form.availability` | Disponibilité |
 | `phoneCareer.form.availabilityOption.open` | Disponible tout de suite |
@@ -9392,7 +9407,11 @@ Conventions :
 | `phoneCareer.form.availabilityOption.not_looking` | Pas en recherche |
 | `phoneCareer.form.accountSettings` | Paramètres du compte |
 | `phoneCareer.form.aboutTitle` | À propos |
+| `phoneCareer.form.aboutHint` | Un titre et quelques lignes sur vous |
+| `phoneCareer.form.aboutHeading` | Titre |
+| `phoneCareer.form.aboutHeadingPlaceholder` | Ex. : Ce que je fais |
 | `phoneCareer.form.aboutLabel` | Votre texte |
+| `phoneCareer.form.aboutPlaceholder` | Qui vous êtes, ce que vous faites et ce que vous cherchez. |
 | `phoneCareer.form.aboutSaved` | Votre texte est enregistré. |
 | `phoneCareer.form.count` | {count} / {max} |
 | `phoneCareer.form.aboutOrbi` | Orbi réécrit votre texte pour les recruteurs. |

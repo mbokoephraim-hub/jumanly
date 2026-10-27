@@ -1,3 +1,4 @@
+import { ABOUT_TEXT_MAX } from "@/lib/profile-about";
 import { z } from "zod";
 import type { PrismaClient } from "@/generated/prisma/client";
 import { AiError, runAi } from "@/server/ai";
@@ -272,7 +273,7 @@ export type RewriteKind = "about" | "experience" | "project";
 
 const REWRITE_SYSTEM = {
   about: [
-    "Tu es Orbi, l'assistant de Jumanly. Tu réécris le texte « À propos » d'un profil en français simple, en 2 ou 3 phrases, à la première personne, pour des recruteurs.",
+    "Tu es Orbi, l'assistant de Jumanly. Tu réécris le texte « À propos » d'un profil en français simple, en 2 ou 3 phrases, à la première personne, pour des recruteurs, en 400 caractères au plus.",
     "Commence par un verbe d'action ou par le métier, termine par l'objectif.",
   ],
   project: [
@@ -327,7 +328,9 @@ export async function rewriteCareerText(
       schema: rewriteOutput,
       template: () => ({ text: rewriteTemplate(input.kind, text) }),
     });
-    const proposed = run.output.text.trim().slice(0, input.kind === "about" ? 1000 : 3000);
+    const proposed = run.output.text
+      .trim()
+      .slice(0, input.kind === "about" ? ABOUT_TEXT_MAX : 3000);
     return proposed && proposed !== text ? proposed : { error: "same" };
   } catch (error) {
     if (error instanceof AiError) return { error: error.code };
