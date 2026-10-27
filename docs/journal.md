@@ -4779,3 +4779,11 @@ Modèle B ; feuille `src/styles/phone-chat.css`, classes `nb-ch-`, textes `phone
   `modele-b-plein-ecran` mis à jour.
 - Décisions : `docs/decisions/2026-10-27-chat-v2.md`. Reste à choisir : un vrai fournisseur d'appel
   vidéo.
+
+### Correctif : Chat sans mise en forme sur jumanly.io (27 octobre 2026)
+
+Après la mise en ligne, un téléphone resté ouvert affichait le nouveau Chat avec l'ancienne
+feuille de style globale (texte brut, onglets collés). Les styles du Chat sont maintenant chargés
+avec ses composants (`parts.tsx`) et non plus par `globals.css`. Vérifié : lint, types, build,
+e2e `chat-v2` et `modele-b-messages` (téléphone), feuille du Chat chargée à part sur
+`/app/messages`.
