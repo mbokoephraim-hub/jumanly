@@ -1,6 +1,7 @@
 import "server-only";
 import "@/styles/phone-onglets.css";
 import "@/styles/phone-apropos.css";
+import "@/styles/phone-entreprise.css";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
@@ -37,6 +38,7 @@ import { sendTargetViews } from "../fil/server";
 import { PersonProfile } from "../profil/profile";
 import { profileView, ProfileTexts } from "../profil/server";
 import { languageLabel } from "../career/data";
+import { sizeKeyOf } from "@/server/services/admin-signup";
 import { RhBell } from "./head";
 import { OwnLanguages } from "./own-languages";
 import {
@@ -818,6 +820,23 @@ export async function RhCompanyModeScreen({ ctx, query }: { ctx: HireContext; qu
   const t = await getTranslations("phoneRhCompte.mode");
   const tc = await getTranslations("phoneRhCompte.company");
   const data = await rhCompanyMode(db, ctx);
+  const te = await getTranslations("phoneRhEntreprise.card");
+  const ts = await getTranslations("adminSignup.company");
+  const org = data.org;
+  const sizeKey = sizeKeyOf(org.size);
+  const facts = [org.sector, org.city, sizeKey ? ts(`sizesLong.${sizeKey}`) : org.size].filter(
+    Boolean,
+  );
+  const filled = [
+    org.logo,
+    org.banner,
+    org.sector,
+    org.size,
+    org.city,
+    org.website,
+    org.description,
+  ];
+  const percent = Math.round((filled.filter(Boolean).length / filled.length) * 100);
   const tab = one(query.onglet);
   const current = tab === "messages" || tab === "offres" ? tab : "accueil";
   return (
@@ -855,6 +874,67 @@ export async function RhCompanyModeScreen({ ctx, query }: { ctx: HireContext; qu
       </nav>
       {current === "accueil" ? (
         <>
+          <section className="nb-ep-carte" aria-labelledby="ep-nom">
+            <div className="nb-ep-carte-banniere">
+              {org.banner ? (
+                // eslint-disable-next-line @next/next/no-img-element -- the company's banner
+                <img src={org.banner} alt="" />
+              ) : null}
+            </div>
+            <div className="nb-ep-carte-corps">
+              <span className="nb-ep-carte-logo" aria-hidden>
+                {org.logo ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- a small logo
+                  <img src={org.logo} alt="" />
+                ) : (
+                  initialsOf(org.name)
+                )}
+              </span>
+              <h2 id="ep-nom">
+                {org.name}
+                {org.verifiedAt ? (
+                  <span className="nb-ep-verifie" role="img" aria-label={te("verified")}>
+                    <PhoneIcon name="coche" size={12} stroke={3} />
+                  </span>
+                ) : null}
+              </h2>
+              {facts.length > 0 ? <p className="nb-meta">{facts.join(" · ")}</p> : null}
+              {org.hiringNow ? <span className="nb-ep-badge">{te("hiring")}</span> : null}
+              <p className="nb-ep-apropos">{org.description || te("noAbout")}</p>
+              {org.website ? (
+                <a href={org.website} className="nb-ep-site" target="_blank" rel="noreferrer">
+                  <PhoneIcon name="lien" size={15} />
+                  {org.website.replace(/^https?:\/\//, "")}
+                </a>
+              ) : null}
+              {percent < 100 ? (
+                <div className="nb-ep-jauge">
+                  <span>{te("complete", { percent })}</span>
+                  <i aria-hidden>
+                    <b style={{ width: `${percent}%` }} />
+                  </i>
+                </div>
+              ) : null}
+              <div className="nb-ep-carte-boutons">
+                <Link
+                  href="/app/hire/entreprise/profil"
+                  className="nb-bouton"
+                  data-large=""
+                  data-plein=""
+                >
+                  {te("edit")}
+                </Link>
+                <Link
+                  href={`/app/entreprises/${org.slug}`}
+                  className="nb-bouton"
+                  data-large=""
+                  data-contour=""
+                >
+                  {te("view")}
+                </Link>
+              </div>
+            </div>
+          </section>
           <div className="nb-rc-demandes">
             <JoinRequestsCard ctx={ctx} answer={one(query.demande)} />
           </div>

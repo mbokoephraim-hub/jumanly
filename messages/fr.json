@@ -19770,8 +19770,38 @@
       "messagesOpen": "Ouvrir les messages",
       "offersText": "Les offres de l'entreprise, leurs candidatures et leurs statistiques.",
       "offersOpen": "Ouvrir les offres",
-      "adminNote": "La page, l'équipe et la formule se modifient sur ordinateur.",
+      "adminNote": "L'équipe et la formule se modifient sur ordinateur.",
       "notAdmin": "Réservé à l'administrateur de la page."
+    }
+  },
+  "phoneRhEntreprise": {
+    "title": "Profil de l'entreprise",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "save": "Enregistrer",
+    "imagesHint": "Touchez la bannière ou le logo pour les changer. Une photo nette, au centre de l'image.",
+    "sectorPlaceholder": "Banque, télécoms, santé…",
+    "websitePlaceholder": "entreprise.cd",
+    "counter": "{count} / 3 000",
+    "bannerSheet": "Bannière",
+    "logoSheet": "Logo",
+    "removeBanner": "Retirer la bannière",
+    "removeLogo": "Retirer le logo",
+    "bannerSaved": "Nouvelle bannière en ligne",
+    "logoSaved": "Nouveau logo en ligne",
+    "imageRemoved": "Image retirée",
+    "imageError": {
+      "image": "Choisissez une image.",
+      "fileType": "Cette image n'est pas lisible : choisissez un PNG, un JPEG ou un WebP.",
+      "fileSize": "Cette image dépasse 4 Mo."
+    },
+    "card": {
+      "edit": "Modifier le profil",
+      "view": "Voir la page",
+      "hiring": "Recrute en ce moment",
+      "verified": "Entreprise vérifiée",
+      "noAbout": "La présentation n'est pas encore écrite. Ajoutez-la depuis « Modifier le profil ».",
+      "complete": "Profil rempli à {percent} %"
     }
   },
   "adminSignup": {
