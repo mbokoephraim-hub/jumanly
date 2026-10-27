@@ -12,6 +12,7 @@ import {
   FeedError,
   createPost,
   deletePost,
+  editPost,
   feedDigest,
   freshMatches,
   hiringOrganizations,
@@ -88,6 +89,11 @@ export async function hidePostTypeAction(id: string, hide: boolean) {
 
 export async function deletePostAction(id: string) {
   return run((userId) => deletePost(db, userId, idOf(id)));
+}
+
+/** « Modifier »: the title and the text of the viewer's post, or the text of their comment. */
+export async function editPostAction(input: { id: string; title?: string; body: string }) {
+  return run((userId) => editPost(db, userId, input));
 }
 
 export async function replyAction(input: { post: string; body: string }) {

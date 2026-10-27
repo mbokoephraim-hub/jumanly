@@ -10156,7 +10156,11 @@
       "report": "Signaler",
       "reportSub": "Contenu faux, abusif ou arnaque",
       "delete": "Supprimer la publication",
-      "deleteSub": "Elle disparaît du Fil"
+      "deleteSub": "Elle disparaît du Fil",
+      "edit": "Modifier la publication",
+      "editSub": "Le titre et le texte",
+      "share": "Partager",
+      "shareSub": "Republier, citer ou envoyer"
     },
     "toast": {
       "saved": "Publication enregistrée",
@@ -10167,7 +10171,28 @@
       "reposted": "Republiée sur votre profil",
       "unreposted": "Republication annulée",
       "sentTo": "Envoyée à {name}",
-      "error": "Cela n'a pas fonctionné. Réessayez dans un instant."
+      "error": "Cela n'a pas fonctionné. Réessayez dans un instant.",
+      "edited": "Publication modifiée"
+    },
+    "edit": {
+      "title": "Modifier la publication",
+      "save": "Enregistrer",
+      "empty": "Le titre ne peut pas être vide."
+    },
+    "edited": "modifié",
+    "seeComments": "{count, plural, one {Voir le commentaire} other {Voir les # commentaires}}",
+    "addComment": "Ajouter un commentaire…",
+    "comment": {
+      "more": "Options du commentaire",
+      "sheet": "Votre commentaire",
+      "edit": "Modifier le commentaire",
+      "delete": "Supprimer le commentaire",
+      "deleteSub": "Il disparaît de la publication",
+      "label": "Modifier votre commentaire",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "edited": "Commentaire modifié",
+      "deleted": "Commentaire supprimé"
     },
     "report": {
       "title": "Signaler la publication",

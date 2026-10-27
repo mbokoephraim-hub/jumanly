@@ -4916,3 +4916,11 @@ bibliothèque, et se supprime.
 - Décision : les sections personnelles du recruteur (À propos, expérience, formation, langues, réalisations, bannière, réseaux) sont rangées dans un `TalentProfile`, qui reste privé (`visibility = private`). Le recruteur n'apparaît donc jamais dans les recherches de talents, et on réutilise les formulaires de Carrière. « Modifier le profil » cache le titre et la disponibilité du talent pour un recruteur ; ces réglages sont dans « Recrutement ».
 - Limite : ajouter une réalisation suit le droit `portfolio` du compte, comme pour un talent.
 - Publié avec le contrôle rapide seulement (tsc, ESLint, tests en base de l'Explorer), à la demande d'Ephraïm.
+
+## 27/10/2026 · Fil : publications réordonnées, commentaires visibles, modifier et supprimer
+
+- Une publication du Fil (talent, recruteur, entreprise) montre maintenant : l'avatar carré arrondi, le nom, l'heure et la ville ; le titre et le texte sur toute la largeur ; la photo à son format, coins arrondis (comme Instagram, jusqu'au portrait 4:5) ; puis Commenter · J'aime à gauche et Enregistrer à droite. L'encoche sur la photo disparaît. « Partager » passe dans le menu « ··· ».
+- Les deux derniers commentaires s'affichent sous chaque publication, avec « Voir les N commentaires ».
+- L'auteur d'un commentaire peut le modifier ou le supprimer (« ··· » à côté de son nom). L'auteur d'une publication peut la modifier (titre et texte) ou la supprimer, y compris une publication faite au nom de son entreprise. Une publication ou un commentaire modifié affiche « modifié » (nouveau champ `FeedPost.editedAt`).
+- La ville d'une personne vient de `User.city`.
+- Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.

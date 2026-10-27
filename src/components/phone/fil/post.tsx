@@ -1,6 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element -- photos of the Fil: small, already reduced */
+import "@/styles/fil-publication.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useOptimistic, useTransition } from "react";
@@ -8,9 +9,10 @@ import { showToast } from "@/components/motion/toaster";
 import { likePostAction, participateAction, savePostAction } from "@/server/actions/feed";
 import { PhoneIcon } from "../icon";
 import { FilAvatar } from "./avatar";
+import { FilComment } from "./comments";
 import type { PostView } from "./data";
 
-export type PostSheet = "menu" | "report" | "reshare" | "send";
+export type PostSheet = "menu" | "report" | "reshare" | "send" | "edit";
 
 /** The tag line of an attachment: a work of the portfolio, or an attestation. */
 export function Attachment({ value }: { value: NonNullable<PostView["attachment"]> }) {
@@ -157,16 +159,8 @@ export function PostActions({
   );
 }
 
-/** J'aime · Commenter · Envoyer · Enregistrer: in the notch of the photo, or under the text. */
-function CardActions({
-  post,
-  href,
-  onSheet,
-}: {
-  post: PostView;
-  href: string;
-  onSheet: (post: PostView, sheet: PostSheet) => void;
-}) {
+/** Commenter · J'aime on the left, Enregistrer on the right, under the photo or the text. */
+function CardActions({ post, href }: { post: PostView; href: string }) {
   const t = useTranslations("phoneFil");
   const [shown, set] = useOptimistic({
     liked: post.liked,
@@ -191,7 +185,15 @@ function CardActions({
       );
     });
   return (
-    <>
+    <div className="nb-fil-barre-actions">
+      <Link
+        href={href}
+        className="nb-fil-ab"
+        aria-label={t("commentCount", { count: post.replies })}
+      >
+        <PhoneIcon name="repondre" size={22} stroke={1.9} />
+        {post.replies > 0 ? <span aria-hidden>{post.replies}</span> : null}
+      </Link>
       <button
         type="button"
         className="nb-fil-ab"
@@ -202,26 +204,11 @@ function CardActions({
       >
         <PhoneIcon
           name="jaime"
-          size={25}
+          size={23}
           stroke={1.9}
           fill={shown.liked ? "currentColor" : undefined}
         />
-      </button>
-      <Link
-        href={href}
-        className="nb-fil-ab"
-        aria-label={t("commentCount", { count: post.replies })}
-      >
-        <PhoneIcon name="repondre" size={23} stroke={1.9} />
-      </Link>
-      <button
-        type="button"
-        className="nb-fil-ab"
-        onClick={() => onSheet(post, "reshare")}
-        aria-haspopup="dialog"
-        aria-label={t("share")}
-      >
-        <PhoneIcon name="partager" size={22} stroke={1.9} />
+        {shown.likes > 0 ? <span aria-hidden>{shown.likes}</span> : null}
       </button>
       <button
         type="button"
@@ -234,36 +221,20 @@ function CardActions({
       >
         <PhoneIcon
           name="signet"
-          size={20}
+          size={21}
           stroke={1.9}
           fill={shown.saved ? "currentColor" : undefined}
         />
       </button>
-    </>
-  );
-}
-
-/** Two faces, a heart and the count of J'aime (bottom right of the photo). */
-function Reactions({ post }: { post: PostView }) {
-  const t = useTranslations("phoneFil");
-  if (post.likes === 0) return null;
-  return (
-    <span className="nb-fil-reac" role="img" aria-label={t("reactions", { count: post.likes })}>
-      {post.likers.map((liker, index) => (
-        <FilAvatar key={index} {...liker} org={false} size={24} />
-      ))}
-      <PhoneIcon name="jaime" size={13} stroke={0} fill="#FF6B6B" />
-      <span aria-hidden>{post.likes}</span>
-    </span>
+    </div>
   );
 }
 
 /**
- * A post in a list of the Fil (docs/fil-menu-publication § 2): the author on top (avatar 44, a
- * Lime ring when the company is verified, name, line and time, « ··· »), then, aligned on the
- * name: the title (two lines), the text, and the photo with its notch for J'aime · Commenter ·
- * Envoyer · Enregistrer and the reactions on the right. Nothing else on the photo. Without a
- * photo, the actions come under the text.
+ * A post in a list of the Fil (Ephraïm, 27/10/2026): the author on top (a square avatar rounded
+ * on its four corners, the name, then the time and the city, « ··· »), then the title and the
+ * text, then the photo at its own size (like Instagram, rounded corners), then Commenter · J'aime
+ * on the left and Enregistrer on the right, and the last comments.
  */
 export function PostCard({
   post,
@@ -277,8 +248,11 @@ export function PostCard({
 }) {
   const t = useTranslations("phoneFil");
   const href = from ? `${post.href}?de=${from}` : post.href;
+  const when = [post.ago, post.author.city, post.edited ? t("edited") : null]
+    .filter(Boolean)
+    .join(" · ");
   return (
-    <article className="nb-fil-post" aria-labelledby={`p-${post.id}`}>
+    <article className="nb-fil-post nb-fil-carte" aria-labelledby={`p-${post.id}`}>
       <div className="nb-fil-ph">
         <Link
           href={post.author.href}
@@ -287,7 +261,7 @@ export function PostCard({
           aria-label={t("profile")}
           tabIndex={-1}
         >
-          <FilAvatar {...post.author} size={39} />
+          <FilAvatar {...post.author} size={post.author.verified ? 39 : 44} square />
         </Link>
         <span className="nb-fil-qui">
           <Link href={post.author.href} id={`p-${post.id}`} className="nb-fil-nom">
@@ -309,9 +283,7 @@ export function PostCard({
               </svg>
             ) : null}
           </Link>
-          <small className="nb-fil-ligne">
-            {[post.author.byline, post.ago].filter(Boolean).join(" · ")}
-          </small>
+          <small className="nb-fil-ligne">{when}</small>
         </span>
         <button
           type="button"
@@ -336,24 +308,25 @@ export function PostCard({
         ) : null}
         <PostMedia post={post} withImage={false} />
         {post.image ? (
-          <div className="nb-fil-im">
+          <Link href={href} className="nb-fil-photo" tabIndex={-1}>
             <img src={post.image.src} alt={post.image.alt} loading="lazy" />
-            <Reactions post={post} />
-            <i className="nb-fil-k1" aria-hidden />
-            <i className="nb-fil-k2" aria-hidden />
-            <div className="nb-fil-encoche">
-              <CardActions post={post} href={href} onSheet={onSheet} />
-            </div>
-          </div>
-        ) : (
-          <div className="nb-fil-sous">
-            <CardActions post={post} href={href} onSheet={onSheet} />
-            <Reactions post={post} />
-          </div>
-        )}
-        {post.replies > 0 ? (
+          </Link>
+        ) : null}
+        <CardActions post={post} href={href} />
+        {post.comments.length > 0 ? (
+          <ul className="nb-fil-coms">
+            {post.comments.map((reply) => (
+              <FilComment key={reply.id} reply={reply} compact />
+            ))}
+          </ul>
+        ) : null}
+        {post.replies > post.comments.length ? (
           <Link href={href} className="nb-fil-voir">
-            {t("comments", { count: post.replies })}
+            {t("seeComments", { count: post.replies })}
+          </Link>
+        ) : post.canReply ? (
+          <Link href={href} className="nb-fil-voir">
+            {t("addComment")}
           </Link>
         ) : null}
       </div>

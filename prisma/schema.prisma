@@ -2535,6 +2535,8 @@ model FeedPost {
   eventAt        DateTime?
   /// Taken down by moderation after a report.
   hiddenAt       DateTime?
+  /// The author changed the title or the text (« modifié »).
+  editedAt       DateTime?
   likes          FeedLike[]
   reposts        FeedRepost[]
   saves          FeedSave[]

@@ -10,7 +10,7 @@ import { z } from "zod";
 import { Prisma } from "@/generated/prisma/client";
 import type { FeedPostKind, PrismaClient } from "@/generated/prisma/client";
 import { matchesForUser } from "@/server/matching/service";
-import { FEED_POST_MAX, postTextSchema } from "./feed-limits";
+import { FEED_POST_MAX, FEED_REPLY_MAX, postTextSchema } from "./feed-limits";
 import { rankFeed, type AuthorSignals } from "./feed-rank";
 import { photoType } from "./profile-photo";
 import { notify } from "./notifications";
@@ -18,9 +18,7 @@ import { notify } from "./notifications";
 export const FEED_TABS = ["pourvous", "abonnements", "entreprises"] as const;
 export type FeedTab = (typeof FEED_TABS)[number];
 
-/** An answer: at most this many characters. */
-export const FEED_REPLY_MAX = 2000;
-export { FEED_POST_MAX };
+export { FEED_POST_MAX, FEED_REPLY_MAX };
 /** A photo reduced on the phone stays far below this. */
 export const FEED_IMAGE_MAX = 1_000_000;
 const IMAGE_PREFIX = "/api/fil/image/";
@@ -44,6 +42,7 @@ const personSelect = {
   id: true,
   name: true,
   image: true,
+  city: true,
   talentProfile: {
     select: {
       headline: true,
@@ -80,6 +79,7 @@ const postSelect = {
   replyPolicy: true,
   eventAt: true,
   createdAt: true,
+  editedAt: true,
   authorId: true,
   organizationId: true,
   parentId: true,
@@ -164,8 +164,9 @@ export type FeedItem = {
   reposted: boolean;
   saved: boolean;
   mine: boolean;
-  /** The first answer, shown under the post in the Fil. */
-  firstReply: { name: string; org: boolean; image: string | null; body: string } | null;
+  /** The last two comments, shown under the post in the Fil (oldest first). */
+  comments: FeedReply[];
+  edited: boolean;
   canReply: boolean;
   replyPolicy: string;
 };
@@ -195,7 +196,7 @@ function authorOf(row: PostRow): FeedAuthor {
       profile?.experiences[0]?.title || profile?.headline || profile?.desiredJobTitles[0] || null,
     company: profile?.experiences[0]?.company ?? null,
     sector: null,
-    city: null,
+    city: row.author?.city ?? null,
     offers: 0,
   };
 }
@@ -244,13 +245,14 @@ async function toItems(
   rows: PostRow[],
   connected: string[],
   now: Date,
+  blocked: string[] = [],
 ): Promise<FeedItem[]> {
   if (rows.length === 0) return [];
   const ids = rows.map((row) => row.id);
   const jobIds = [
     ...new Set(rows.flatMap((row) => (row.job?.status === "published" ? [row.job.id] : []))),
   ];
-  const [likes, recentLikes, reposts, saves, going, firsts, matches] = await Promise.all([
+  const [likes, recentLikes, reposts, saves, going, latest, matches] = await Promise.all([
     db.feedLike.findMany({
       where: { userId: viewerId, postId: { in: ids } },
       select: { postId: true },
@@ -273,22 +275,31 @@ async function toItems(
       where: { userId: viewerId, postId: { in: ids } },
       select: { postId: true },
     }),
-    db.feedPost.findMany({
-      where: { parentId: { in: ids }, hiddenAt: null },
-      orderBy: { createdAt: "asc" },
-      distinct: ["parentId"],
-      select: {
-        parentId: true,
-        body: true,
-        author: { select: { name: true, image: true } },
-        organization: { select: { name: true, logo: true } },
-      },
-    }),
+    // Two comments per post, so that the Fil shows them (one small query per commented post).
+    Promise.all(
+      rows
+        .filter((row) => row._count.replies > 0)
+        .map((row) =>
+          db.feedPost.findMany({
+            where: { parentId: row.id, hiddenAt: null, ...notBlocked(blocked) },
+            orderBy: { createdAt: "desc" },
+            take: 2,
+            select: postSelect,
+          }),
+        ),
+    ),
     jobIds.length > 0 ? matchesForUser(db, viewerId, jobIds, now) : new Map(),
   ]);
   const has = (list: { postId: string }[], id: string) => list.some((row) => row.postId === id);
+  const shownComments = latest.flat();
+  const commentLikes =
+    shownComments.length > 0
+      ? await db.feedLike.findMany({
+          where: { userId: viewerId, postId: { in: shownComments.map((reply) => reply.id) } },
+          select: { postId: true },
+        })
+      : [];
   return rows.map((row) => {
-    const first = firsts.find((reply) => reply.parentId === row.id);
     const match = row.job ? matches.get(row.job.id) : undefined;
     const quoted = row.quoted && !row.quoted.hiddenAt ? row.quoted : null;
     return {
@@ -333,15 +344,12 @@ async function toItems(
       reposts: row._count.reposts,
       reposted: has(reposts, row.id),
       saved: has(saves, row.id),
-      mine: row.authorId === viewerId && !row.organizationId,
-      firstReply: first
-        ? {
-            name: first.organization?.name ?? first.author?.name ?? "",
-            org: Boolean(first.organization),
-            image: first.organization?.logo ?? first.author?.image ?? null,
-            body: first.body,
-          }
-        : null,
+      mine: row.authorId === viewerId,
+      comments: shownComments
+        .filter((reply) => reply.parentId === row.id)
+        .reverse()
+        .map((reply) => replyOf(reply, viewerId, commentLikes)),
+      edited: Boolean(row.editedAt),
       canReply: mayReply(row, viewerId, connected),
       replyPolicy: row.replyPolicy,
     };
@@ -397,7 +405,7 @@ export async function listFeed(
     take: tab === "pourvous" ? CANDIDATES : PAGE,
     select: postSelect,
   });
-  if (tab !== "pourvous") return toItems(db, viewerId, rows, connected, now);
+  if (tab !== "pourvous") return toItems(db, viewerId, rows, connected, now, blocked);
   const people = [
     ...new Set(rows.flatMap((row) => (row.authorId && !row.organizationId ? [row.authorId] : []))),
   ];
@@ -421,6 +429,7 @@ export async function listFeed(
     ranked.map((post) => byId.get(post.id)!),
     connected,
     now,
+    blocked,
   );
 }
 
@@ -496,7 +505,25 @@ export type FeedReply = {
   likes: number;
   liked: boolean;
   mine: boolean;
+  edited: boolean;
 };
+
+function notBlocked(blocked: string[]) {
+  return blocked.length > 0 ? { NOT: { authorId: { in: blocked }, organizationId: null } } : {};
+}
+
+function replyOf(reply: PostRow, viewerId: string, liked: { postId: string }[]): FeedReply {
+  return {
+    id: reply.id,
+    author: authorOf(reply),
+    body: reply.body,
+    createdAt: reply.createdAt,
+    likes: reply._count.likes,
+    liked: liked.some((like) => like.postId === reply.id),
+    mine: reply.authorId === viewerId,
+    edited: Boolean(reply.editedAt),
+  };
+}
 
 /** A post and its answers (oldest first), or null when it is not visible to the viewer. */
 export async function getPost(db: PrismaClient, viewerId: string, id: string, now = new Date()) {
@@ -506,13 +533,9 @@ export async function getPost(db: PrismaClient, viewerId: string, id: string, no
     select: postSelect,
   });
   if (!row || (row.authorId && !row.organizationId && blocked.includes(row.authorId))) return null;
-  const [item] = await toItems(db, viewerId, [row], connected, now);
+  const [item] = await toItems(db, viewerId, [row], connected, now, blocked);
   const replies = await db.feedPost.findMany({
-    where: {
-      parentId: id,
-      hiddenAt: null,
-      ...(blocked.length > 0 ? { NOT: { authorId: { in: blocked }, organizationId: null } } : {}),
-    },
+    where: { parentId: id, hiddenAt: null, ...notBlocked(blocked) },
     orderBy: { createdAt: "asc" },
     take: 200,
     select: postSelect,
@@ -523,15 +546,7 @@ export async function getPost(db: PrismaClient, viewerId: string, id: string, no
   });
   return {
     post: item,
-    replies: replies.map((reply): FeedReply => ({
-      id: reply.id,
-      author: authorOf(reply),
-      body: reply.body,
-      createdAt: reply.createdAt,
-      likes: reply._count.likes,
-      liked: liked.some((like) => like.postId === reply.id),
-      mine: reply.authorId === viewerId && !reply.organizationId,
-    })),
+    replies: replies.map((reply) => replyOf(reply, viewerId, liked)),
   };
 }
 
@@ -870,15 +885,47 @@ export async function setTypeHidden(
   return type;
 }
 
-/** Deletes one of the viewer's own posts or answers, with its answers. */
+/** Deletes one of the viewer's own posts or comments, with its comments. */
 export async function deletePost(db: PrismaClient, userId: string, postId: string) {
-  const { count } = await db.feedPost.deleteMany({
-    where: { id: postId, authorId: userId, organizationId: null },
-  });
+  const { count } = await db.feedPost.deleteMany({ where: { id: postId, authorId: userId } });
   if (count === 0) throw new FeedError("notFound");
 }
 
-/** The connections a post can be sent to (« Envoyer à »), with their conversation. */
+export const editSchema = z.object({
+  id: z.string().trim().min(1).max(60),
+  title: z.string().optional(),
+  body: z.string(),
+});
+
+/**
+ * Changes the title and the text of one of the viewer's own posts, or the text of one of their
+ * comments. The photo, the offer and the rest stay; the post shows « modifié ».
+ */
+export async function editPost(
+  db: PrismaClient,
+  userId: string,
+  raw: z.input<typeof editSchema>,
+  now = new Date(),
+) {
+  const parsed = editSchema.safeParse(raw);
+  if (!parsed.success) throw new FeedError("invalid");
+  const row = await db.feedPost.findFirst({
+    where: { id: parsed.data.id, authorId: userId, hiddenAt: null },
+    select: { id: true, parentId: true },
+  });
+  if (!row) throw new FeedError("notFound");
+  if (row.parentId) {
+    const body = replySchema.shape.body.safeParse(parsed.data.body);
+    if (!body.success) throw new FeedError("invalid");
+    await db.feedPost.update({ where: { id: row.id }, data: { body: body.data, editedAt: now } });
+    return row.id;
+  }
+  const text = postTextSchema.safeParse({ title: parsed.data.title, body: parsed.data.body });
+  if (!text.success) throw new FeedError("invalid");
+  await db.feedPost.update({ where: { id: row.id }, data: { ...text.data, editedAt: now } });
+  return row.id;
+}
+
 export async function sendTargets(db: PrismaClient, userId: string) {
   const rows = await db.connection.findMany({
     where: { status: "accepted", OR: [{ requesterId: userId }, { addresseeId: userId }] },
@@ -1087,7 +1134,7 @@ export async function authorFeed(
     take: PAGE,
     select: postSelect,
   });
-  return toItems(db, viewerId, rows, connected, now);
+  return toItems(db, viewerId, rows, connected, now, blocked);
 }
 
 /** Who a person is, as the Fil shows them (null for someone blocked or unknown). */
