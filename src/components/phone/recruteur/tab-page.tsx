@@ -1,5 +1,6 @@
 "use client";
 
+import "@/styles/phone-onglets.css";
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { PhoneIcon, type PhoneIconName } from "../icon";
@@ -138,6 +139,7 @@ export function RhTabPage({
   }, [query, scope, search?.tab]);
 
   const close = () => {
+    input.current?.blur();
     setOpen(false);
     setQuery("");
     setGroups(null);
@@ -146,7 +148,7 @@ export function RhTabPage({
 
   return (
     <div className={className ? `nb-page nb-rh ${className}` : "nb-page nb-rh"}>
-      <header className="nb-rh-tete">
+      <header className="nb-tete-onglet">
         {ownHeading ? (
           <h1>{title}</h1>
         ) : (
@@ -154,30 +156,23 @@ export function RhTabPage({
             {title}
           </p>
         )}
-        {search && !open ? (
-          <button
-            type="button"
-            className="nb-recherche-rond"
-            aria-label={texts.open}
-            aria-expanded={false}
-            onClick={() => setOpen(true)}
-          >
-            <PhoneIcon name="recherche" size={20} stroke={1.8} />
-          </button>
-        ) : null}
         {actions}
         {avatar}
       </header>
-      {open && search ? (
-        <div className="nb-rh-recherche" role="search">
-          <div className="nb-rh-recherche-l">
-            <label className="nb-rh-champ">
-              <PhoneIcon name="recherche" size={20} stroke={1.8} />
+      {search ? (
+        <div className="nb-rh-recherche" role="search" data-ouverte={open ? "" : undefined}>
+          <div className="nb-ex-champ">
+            <label className="nb-ex-recherche">
+              <PhoneIcon name="recherche" size={18} stroke={2} />
               <input
                 ref={input}
                 type="search"
                 value={query}
-                onChange={(event) => setQuery(event.target.value)}
+                onFocus={() => setOpen(true)}
+                onChange={(event) => {
+                  setOpen(true);
+                  setQuery(event.target.value);
+                }}
                 onKeyDown={(event) => {
                   if (event.key === "Escape") close();
                 }}
@@ -189,7 +184,6 @@ export function RhTabPage({
                 <button
                   type="button"
                   aria-label={texts.clear}
-                  className="nb-rh-effacer"
                   onClick={() => {
                     setQuery("");
                     setGroups(null);
@@ -200,112 +194,118 @@ export function RhTabPage({
                 </button>
               ) : null}
             </label>
-            <button type="button" className="nb-rh-annuler" data-retour="" onClick={close}>
-              {texts.cancel}
-            </button>
-          </div>
-          <p className="nb-meta nb-rh-dans">{search.searchIn ?? texts.searchIn}</p>
-          <div
-            className="nb-rh-pilules"
-            role="radiogroup"
-            aria-label={search.searchIn ?? texts.searchIn}
-          >
-            {search.scopes.map((item) => (
-              <button
-                key={item.key}
-                type="button"
-                role="radio"
-                aria-checked={item.key === scope}
-                className="nb-pilule"
-                onClick={() => setScope(item.key)}
-              >
-                {item.label}
+            {open ? (
+              <button type="button" className="nb-ex-annuler" data-retour="" onClick={close}>
+                {texts.cancel}
               </button>
-            ))}
+            ) : null}
           </div>
-          {!typed ? (
+          {open ? (
             <>
-              {recents.length > 0 ? (
-                <>
-                  <p className="nb-meta nb-rh-dans">{texts.recent}</p>
-                  {recents.map((recent) => (
-                    <button
-                      key={recent.q}
-                      type="button"
-                      className="nb-rh-recent"
-                      onClick={() => setQuery(recent.q)}
-                    >
-                      <PhoneIcon name="horloge" size={20} stroke={1.8} />
-                      <span>{recent.q}</span>
-                      <span className="nb-meta">{recent.kind}</span>
-                    </button>
-                  ))}
-                </>
-              ) : null}
-              {search.note ? <p className="nb-meta nb-rh-note">{search.note}</p> : null}
-            </>
-          ) : groups === null ? null : groups.length === 0 ? (
-            <p className="nb-vide">{texts.empty.replace("{query}", query.trim())}</p>
-          ) : (
-            groups.map((group) => (
-              <section key={group.title} aria-label={group.title}>
-                <p className="nb-meta nb-rh-groupe">{group.title}</p>
-                {group.items.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="nb-rh-res"
-                    data-publication={item.post ? "" : undefined}
-                    onClick={() =>
-                      keepRecent(search.tab, {
-                        q: query.trim(),
-                        kind:
-                          search.searchIn && scope !== search.scopes[0]?.key
-                            ? (
-                                search.scopes.find((item) => item.key === scope)?.label ?? ""
-                              ).toLowerCase()
-                            : group.title.replace(/\s*·.*$/, "").toLowerCase(),
-                      })
-                    }
+              <p className="nb-meta nb-rh-dans">{search.searchIn ?? texts.searchIn}</p>
+              <div
+                className="nb-rh-pilules"
+                role="radiogroup"
+                aria-label={search.searchIn ?? texts.searchIn}
+              >
+                {search.scopes.map((item) => (
+                  <button
+                    key={item.key}
+                    type="button"
+                    role="radio"
+                    aria-checked={item.key === scope}
+                    className="nb-pilule"
+                    onClick={() => setScope(item.key)}
                   >
-                    {item.post ? null : (
-                      <span
-                        className="nb-rh-mini"
-                        data-org={item.org ? "" : undefined}
-                        data-icone={item.icon ? "" : undefined}
-                      >
-                        {item.icon ? (
-                          <PhoneIcon name={item.icon} size={22} stroke={1.8} />
-                        ) : item.image ? (
-                          // eslint-disable-next-line @next/next/no-img-element -- a 48 px picture
-                          <img src={item.image} alt="" />
-                        ) : (
-                          item.initials
-                        )}
-                      </span>
-                    )}
-                    <span className="nb-rh-res-t">
-                      {item.post ? (
-                        <span>{item.title}</span>
-                      ) : (
-                        <b>
-                          {item.title}
-                          {item.unseen ? <i className="nb-rh-point" aria-hidden /> : null}
-                        </b>
-                      )}
-                      {item.sub ? <span className="nb-meta">{item.sub}</span> : null}
-                      {item.sub2 ? <span className="nb-meta">{item.sub2}</span> : null}
-                    </span>
-                    {typeof item.score === "number" && search.percent ? (
-                      <span className="nb-rh-pct" data-niveau={levelOf(item.score)}>
-                        {search.percent.replace("{score}", String(item.score))}
-                      </span>
-                    ) : null}
-                  </Link>
+                    {item.label}
+                  </button>
                 ))}
-              </section>
-            ))
-          )}
+              </div>
+              {!typed ? (
+                <>
+                  {recents.length > 0 ? (
+                    <>
+                      <p className="nb-meta nb-rh-dans">{texts.recent}</p>
+                      {recents.map((recent) => (
+                        <button
+                          key={recent.q}
+                          type="button"
+                          className="nb-rh-recent"
+                          onClick={() => setQuery(recent.q)}
+                        >
+                          <PhoneIcon name="horloge" size={20} stroke={1.8} />
+                          <span>{recent.q}</span>
+                          <span className="nb-meta">{recent.kind}</span>
+                        </button>
+                      ))}
+                    </>
+                  ) : null}
+                  {search.note ? <p className="nb-meta nb-rh-note">{search.note}</p> : null}
+                </>
+              ) : groups === null ? null : groups.length === 0 ? (
+                <p className="nb-vide">{texts.empty.replace("{query}", query.trim())}</p>
+              ) : (
+                groups.map((group) => (
+                  <section key={group.title} aria-label={group.title}>
+                    <p className="nb-meta nb-rh-groupe">{group.title}</p>
+                    {group.items.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="nb-rh-res"
+                        data-publication={item.post ? "" : undefined}
+                        onClick={() =>
+                          keepRecent(search.tab, {
+                            q: query.trim(),
+                            kind:
+                              search.searchIn && scope !== search.scopes[0]?.key
+                                ? (
+                                    search.scopes.find((item) => item.key === scope)?.label ?? ""
+                                  ).toLowerCase()
+                                : group.title.replace(/\s*·.*$/, "").toLowerCase(),
+                          })
+                        }
+                      >
+                        {item.post ? null : (
+                          <span
+                            className="nb-rh-mini"
+                            data-org={item.org ? "" : undefined}
+                            data-icone={item.icon ? "" : undefined}
+                          >
+                            {item.icon ? (
+                              <PhoneIcon name={item.icon} size={22} stroke={1.8} />
+                            ) : item.image ? (
+                              // eslint-disable-next-line @next/next/no-img-element -- a 48 px picture
+                              <img src={item.image} alt="" />
+                            ) : (
+                              item.initials
+                            )}
+                          </span>
+                        )}
+                        <span className="nb-rh-res-t">
+                          {item.post ? (
+                            <span>{item.title}</span>
+                          ) : (
+                            <b>
+                              {item.title}
+                              {item.unseen ? <i className="nb-rh-point" aria-hidden /> : null}
+                            </b>
+                          )}
+                          {item.sub ? <span className="nb-meta">{item.sub}</span> : null}
+                          {item.sub2 ? <span className="nb-meta">{item.sub2}</span> : null}
+                        </span>
+                        {typeof item.score === "number" && search.percent ? (
+                          <span className="nb-rh-pct" data-niveau={levelOf(item.score)}>
+                            {search.percent.replace("{score}", String(item.score))}
+                          </span>
+                        ) : null}
+                      </Link>
+                    ))}
+                  </section>
+                ))
+              )}
+            </>
+          ) : null}
         </div>
       ) : null}
       <div className="nb-rh-corps" hidden={open && search !== null}>

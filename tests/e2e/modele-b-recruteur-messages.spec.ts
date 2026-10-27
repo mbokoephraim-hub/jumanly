@@ -73,7 +73,7 @@ test.describe("Modèle B recruteur · Messages, notifications et Orbi au télép
 
     // Messages: Candidats first, the unread count beside each list.
     await page.goto("/app/messages");
-    await expect(main(page).getByRole("heading", { name: "Messages", exact: true })).toBeVisible();
+    await expect(main(page).getByRole("heading", { name: "Chat", exact: true })).toBeVisible();
     await expect(tabs(page).getByRole("tab", { name: /^Candidats/ })).toHaveAttribute(
       "aria-selected",
       "true",

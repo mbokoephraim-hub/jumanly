@@ -17688,7 +17688,7 @@
       "offres": "Offres",
       "candidatures": "Candidatures",
       "talents": "Talents",
-      "messages": "Messages",
+      "messages": "Chat",
       "candidaturesNew": "Candidatures, {count, plural, one {# nouvelle} other {# nouvelles}}",
       "chat": "Chat",
       "messagesUnread": "Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}}"
@@ -18120,8 +18120,6 @@
     }
   },
   "phoneRhFil": {
-    "prompt": "Un titre, un texte, une image",
-    "publish": "Publier",
     "asOrg": "Publier au nom de {org}",
     "end": "Vous êtes à jour. Pendant ce temps,",
     "endLink": "cherchez des talents",
@@ -19356,6 +19354,7 @@
       "noHeadline": "Ajoutez une accroche : les talents savent à qui ils écrivent.",
       "recruitsFor": "Recrute pour",
       "offers": "Offres en cours",
+      "offersCount": "{count, plural, =0 {Aucune offre en cours} one {# offre en cours} other {# offres en cours}}",
       "offerLine": "{city} · {count, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}}",
       "noOffer": "Aucune offre en cours.",
       "contacts": "Contacts",

@@ -55,13 +55,12 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
     await filters.getByRole("link", { name: "Toutes" }).click();
 
     // Search in two steps, the options of Offres.
-    await main(page)
-      .getByRole("button", { name: "Rechercher", exact: true })
-      .filter({ visible: true })
-      .click();
-    const field = main(page).getByRole("searchbox", {
-      name: "Rechercher une offre, une entreprise ou une personne",
-    });
+    const field = main(page)
+      .getByRole("searchbox", {
+        name: "Rechercher une offre, une entreprise ou une personne",
+      })
+      .filter({ visible: true });
+    await field.click();
     await expect(field).toBeFocused();
     const scopes = main(page).getByRole("radiogroup", { name: "Rechercher dans" });
     await expect(scopes.getByRole("radio", { name: "Mes offres" })).toBeVisible();

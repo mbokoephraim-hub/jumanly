@@ -33,14 +33,14 @@ test.describe("Modèle B recruteur · coque au téléphone", () => {
       [/^Offres$/, /\/app\/hire\/offres$/, "Offres"],
       [/^Candidatures/, /\/app\/hire\/candidats$/, "Candidatures"],
       [/^Talents$/, /\/app\/hire\/talents$/, "Talents"],
-      [/^Chat/, /\/app\/messages$/, "Messages"],
+      [/^Chat/, /\/app\/messages$/, "Chat"],
       [/^Fil$/, /\/app\/hire$/, "Fil"],
     ] as const) {
       await nav.getByRole("link", { name }).click();
       await expect(page).toHaveURL(path);
       await expect(nav.getByRole("link", { name })).toHaveAttribute("aria-current", "page");
       await expect(
-        page.locator("main .nb-rh-tete > :first-child").filter({ visible: true }),
+        page.locator("main .nb-tete-onglet > :first-child").filter({ visible: true }),
       ).toHaveText(title);
     }
 
@@ -76,13 +76,12 @@ test.describe("Modèle B recruteur · coque au téléphone", () => {
 
     await settled(page);
     // Search in two steps: first the options of the page, then the results from the first letter.
-    await main
-      .getByRole("button", { name: "Rechercher", exact: true })
-      .filter({ visible: true })
-      .click();
-    const field = main.getByRole("searchbox", {
-      name: "Rechercher une offre, une entreprise ou une personne",
-    });
+    const field = main
+      .getByRole("searchbox", {
+        name: "Rechercher une offre, une entreprise ou une personne",
+      })
+      .filter({ visible: true });
+    await field.click();
     await expect(field).toBeFocused();
     const scopes = main.getByRole("radiogroup", { name: "Rechercher dans" });
     for (const scope of ["Tout", "Mes offres", "Entreprises", "Personnes"])
@@ -98,10 +97,8 @@ test.describe("Modèle B recruteur · coque au téléphone", () => {
     await expect(main.getByRole("region", { name: /^Personnes/ })).toHaveCount(0);
     // « Annuler » brings the page back as it was.
     await main.getByRole("button", { name: "Annuler" }).click();
-    await expect(field).toHaveCount(0);
-    await expect(
-      main.getByRole("button", { name: "Rechercher", exact: true }).filter({ visible: true }),
-    ).toBeVisible();
+    await expect(scopes).toHaveCount(0);
+    await expect(field).toHaveValue("");
 
     // The avatar opens the account, its corner shows the company's mark.
     await main.getByRole("link", { name: "Mon compte" }).filter({ visible: true }).click();

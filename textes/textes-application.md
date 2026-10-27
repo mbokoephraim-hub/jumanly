@@ -14535,7 +14535,7 @@ Conventions :
 | `phoneRh.nav.offres` | Offres |
 | `phoneRh.nav.candidatures` | Candidatures |
 | `phoneRh.nav.talents` | Talents |
-| `phoneRh.nav.messages` | Messages |
+| `phoneRh.nav.messages` | Chat |
 | `phoneRh.nav.candidaturesNew` | Candidatures, {count, plural, one {# nouvelle} other {# nouvelles}} |
 | `phoneRh.nav.chat` | Chat |
 | `phoneRh.nav.messagesUnread` | Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}} |
@@ -14872,8 +14872,6 @@ Conventions :
 
 | Clé | Texte |
 |---|---|
-| `phoneRhFil.prompt` | Un titre, un texte, une image |
-| `phoneRhFil.publish` | Publier |
 | `phoneRhFil.asOrg` | Publier au nom de {org} |
 | `phoneRhFil.end` | Vous êtes à jour. Pendant ce temps, |
 | `phoneRhFil.endLink` | cherchez des talents |
@@ -15878,6 +15876,7 @@ Conventions :
 | `phoneRhCompte.profile.noHeadline` | Ajoutez une accroche : les talents savent à qui ils écrivent. |
 | `phoneRhCompte.profile.recruitsFor` | Recrute pour |
 | `phoneRhCompte.profile.offers` | Offres en cours |
+| `phoneRhCompte.profile.offersCount` | {count, plural, =0 {Aucune offre en cours} one {# offre en cours} other {# offres en cours}} |
 | `phoneRhCompte.profile.offerLine` | {city} · {count, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} |
 | `phoneRhCompte.profile.noOffer` | Aucune offre en cours. |
 | `phoneRhCompte.profile.contacts` | Contacts |

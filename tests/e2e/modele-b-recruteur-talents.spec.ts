@@ -92,8 +92,8 @@ test.describe("Modèle B recruteur · Talents au téléphone", () => {
     ).toBeVisible();
 
     // The search in two steps: the scopes, then the results from the first letters.
-    await page.getByRole("button", { name: "Rechercher" }).first().click();
-    const search = page.getByRole("search");
+    const search = page.getByRole("search").filter({ visible: true });
+    await search.getByRole("searchbox").click();
     await expect(search.getByRole("radio", { name: "Compétence" })).toBeVisible();
     await expect(search.getByRole("radio", { name: "Métier" })).toBeVisible();
     await expect(search.getByRole("radio", { name: "Ville" })).toBeVisible();

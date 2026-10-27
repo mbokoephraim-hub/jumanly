@@ -2,7 +2,8 @@
  * The five tabs of the talent phone (Fil, Explorer, Carrière, Hub, Chat) share one head and one
  * row of tabs (Ephraïm, 27/10/2026): the title on the left, at the same size and height on every
  * tab; round buttons of the same size and colour on the right; tabs as a pill, Lime when chosen.
- * Imported last so that it wins over each screen's own sheet.
+ * Imported by the screens that use it (not globals.css), so that a phone left open across a release
+ * gets it with the new screen; its `.nb-app` rules win over each screen's own sheet.
  */
 .nb-app .nb-tete-onglet {
   display: flex;
@@ -65,12 +66,14 @@
 
 /* Tabs as a pill (Fil, Hub, Carrière, Chat): the same height, text and colours. */
 .nb-app .nb-page.nb-fil > .nb-fil-onglets,
+.nb-app .nb-rh-fil > .nb-fil-onglets,
 .nb-app .nb-fo-onglets {
   display: flex;
   margin: 4px 20px 10px;
   border-bottom: 0;
 }
 .nb-app .nb-page.nb-fil > .nb-fil-onglets,
+.nb-app .nb-rh-fil > .nb-fil-onglets,
 .nb-app .nb-fo-onglets,
 .nb-app .nb-ch-seg,
 .nb-app .nb-cr-seg {
@@ -81,6 +84,7 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
 }
 .nb-app .nb-page.nb-fil > .nb-fil-onglets [role="tab"],
+.nb-app .nb-rh-fil > .nb-fil-onglets [role="tab"],
 .nb-app .nb-fo-onglets [role="tab"] {
   flex: 1 1 0;
   min-width: 0;
@@ -92,6 +96,7 @@
     color 0.3s;
 }
 .nb-app .nb-page.nb-fil > .nb-fil-onglets [role="tab"],
+.nb-app .nb-rh-fil > .nb-fil-onglets [role="tab"],
 .nb-app .nb-fo-onglets [role="tab"],
 .nb-app .nb-ch-seg button,
 .nb-app .nb-cr-seg button {
@@ -100,6 +105,7 @@
   color: #c9d6d2;
 }
 .nb-app .nb-page.nb-fil > .nb-fil-onglets [role="tab"][aria-selected="true"],
+.nb-app .nb-rh-fil > .nb-fil-onglets [role="tab"][aria-selected="true"],
 .nb-app .nb-fo-onglets [role="tab"][aria-selected="true"] {
   background: var(--nb-lime);
   color: #0f3f37;
@@ -109,6 +115,7 @@
   color: #0f3f37;
 }
 .nb-app .nb-page.nb-fil > .nb-fil-onglets [role="tab"]::after,
+.nb-app .nb-rh-fil > .nb-fil-onglets [role="tab"]::after,
 .nb-app .nb-fo-onglets [role="tab"]::after {
   content: none;
 }
@@ -118,7 +125,114 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .nb-app .nb-page.nb-fil > .nb-fil-onglets [role="tab"],
+  .nb-app .nb-rh-fil > .nb-fil-onglets [role="tab"],
   .nb-app .nb-fo-onglets [role="tab"] {
     transition: none;
   }
+}
+
+/* The recruiter's tabs (Ephraïm, 27/10/2026): the same head, a visible search field like
+   Explorer's, and the same pills, Lime when chosen. */
+.nb-app .nb-tete-onglet .nb-rh-titre {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.nb-app .nb-tete-onglet .nb-rh-moi {
+  margin: 0 4px;
+}
+.nb-app .nb-rh-recherche .nb-ex-champ {
+  padding: 2px 20px 8px;
+}
+.nb-app .nb-rm .nb-rm-onglets {
+  margin-top: 12px;
+}
+.nb-app .nb-rh-fil-haut {
+  padding: 4px 20px 6px;
+  border-bottom: 1px solid var(--nb-filet);
+}
+.nb-app .nb-rh-fil .nb-rh-fil-org {
+  margin-top: 0;
+}
+.nb-app .nb-rh .nb-chip[aria-current="page"],
+.nb-app .nb-rh .nb-chip[aria-pressed="true"],
+.nb-app .nb-rh .nb-chip[aria-selected="true"] {
+  background: var(--nb-lime);
+  border-color: var(--nb-lime);
+  color: #0f3f37;
+}
+.nb-app .nb-rh-vues,
+.nb-app .nb-rm-onglets {
+  display: flex;
+  gap: 0;
+  margin: 4px 20px 10px;
+  padding: 3px;
+  min-height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  background: var(--nb-surface);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nb-app .nb-rh-vues a,
+.nb-app .nb-rm-onglets [role="tab"] {
+  flex: 1 0 auto;
+  min-height: 34px;
+  padding: 0 12px;
+  border-radius: 17px;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #c9d6d2;
+  white-space: nowrap;
+}
+.nb-app .nb-rh-vues a[aria-current="page"],
+.nb-app .nb-rm-onglets [role="tab"][aria-selected="true"] {
+  background: var(--nb-lime);
+  color: #0f3f37;
+}
+.nb-app .nb-rm-onglets [role="tab"]::after {
+  content: none;
+}
+.nb-app .nb-rh-vues a[aria-current="page"] i,
+.nb-app .nb-rm-onglets [role="tab"][aria-selected="true"] .nb-rm-compte {
+  background: #0f3f37;
+  color: var(--nb-lime);
+}
+
+/* « Mon profil recruteur »: a person's profile (docs/profil-personne), without portfolio. */
+.nb-app .nb-rc-vitrine .nb-pf-alias a {
+  color: var(--nb-lime);
+  font-weight: 600;
+}
+.nb-app .nb-rc-vitrine .nb-pf-st svg {
+  color: var(--nb-ambre);
+}
+.nb-app .nb-rc-profil-dom {
+  background: rgba(166, 242, 107, 0.12);
+  border-color: rgba(166, 242, 107, 0.33);
+  color: var(--nb-lime);
+}
+.nb-app .nb-rc-profil-dom i {
+  background: var(--nb-lime);
+}
+.nb-app .nb-rc-vitrine .nb-pf-pane section + section {
+  margin-top: 8px;
+}
+.nb-app .nb-rc-vitrine a.nb-pf-rb {
+  border-radius: 50%;
+  background: var(--nb-surface);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--nb-creme);
+}
+.nb-app .nb-rc-vitrine .nb-rc-mail,
+.nb-app .nb-rc-vitrine .nb-rc-note {
+  padding: 0 20px;
+}
+.nb-app .nb-rc-vitrine .nb-rc-note {
+  margin-top: 6px;
 }

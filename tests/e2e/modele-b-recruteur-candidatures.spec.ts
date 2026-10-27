@@ -214,11 +214,10 @@ test.describe("Modèle B recruteur · Candidatures au téléphone", () => {
 
     // Search in two steps: by name, skill or city.
     await page.goto("/app/hire/candidats");
-    await main(page)
-      .getByRole("button", { name: "Rechercher", exact: true })
-      .filter({ visible: true })
-      .click();
-    const field = main(page).getByRole("searchbox", { name: "Rechercher un candidat" });
+    const field = main(page)
+      .getByRole("searchbox", { name: "Rechercher un candidat" })
+      .filter({ visible: true });
+    await field.click();
     await expect(field).toBeFocused();
     const scopes = main(page).getByRole("radiogroup", { name: "Chercher par" });
     for (const name of ["Tout", "Nom", "Compétence", "Ville"])

@@ -1,6 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element -- photos of the conversations: small, already reduced */
+import "@/styles/phone-onglets.css";
 import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";

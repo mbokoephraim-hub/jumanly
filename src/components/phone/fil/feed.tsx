@@ -1,5 +1,6 @@
 "use client";
 
+import "@/styles/phone-onglets.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useTransition, type ReactNode } from "react";
@@ -38,7 +39,8 @@ export function PhoneFil({
   targets: SendTarget[];
   /**
    * The recruiter's Fil (Modèle B recruteur, M3): the tab's head comes from the page, the line to
-   * publish is theirs (with « Publier au nom de… »), no Orbi card, and the end points to Talents.
+   * publish is the talent's, followed by « Publier au nom de… » when they manage the company's
+   * offers; no Orbi card, and the end points to Talents.
    */
   recruiter?: { compose: ReactNode; end: { text: string; link: string; href: string } };
 }) {
@@ -66,9 +68,7 @@ export function PhoneFil({
 
   return (
     <div className={recruiter ? "nb-fil nb-rh-fil" : "nb-page nb-fil"}>
-      {recruiter ? (
-        recruiter.compose
-      ) : (
+      {recruiter ? null : (
         <header className="nb-tete-onglet">
           <h1>{t("title")}</h1>
           <FilBell initial={unread} />
@@ -92,20 +92,19 @@ export function PhoneFil({
           </button>
         ))}
       </div>
-      {recruiter ? null : (
-        <div className="nb-fil-publier">
-          <Link href="/app/fil/publier" className="nb-fil-publier-l">
-            <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={40} />
-            <span>
-              <b>{me.name}</b>
-              <span className="nb-meta">{t("compose.prompt")}</span>
-            </span>
-          </Link>
-          <Link href="/app/fil/publier" className="nb-fil-publier-b">
-            {t("compose.button")}
-          </Link>
-        </div>
-      )}
+      <div className="nb-fil-publier">
+        <Link href="/app/fil/publier" className="nb-fil-publier-l">
+          <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={40} />
+          <span>
+            <b>{me.name}</b>
+            <span className="nb-meta">{t("compose.prompt")}</span>
+          </span>
+        </Link>
+        <Link href="/app/fil/publier" className="nb-fil-publier-b">
+          {t("compose.button")}
+        </Link>
+      </div>
+      {recruiter?.compose}
       <div id="fil-liste" role="tabpanel" aria-labelledby={`fil-${tab}`}>
         {posts.length === 0 ? <p className="nb-vide">{t(`empty.${tab}`)}</p> : null}
         {posts.map((post, index) => (

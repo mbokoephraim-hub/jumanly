@@ -1,4 +1,5 @@
 import "server-only";
+import "@/styles/phone-onglets.css";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
@@ -23,6 +24,7 @@ import {
 } from "@/server/services/hire-phone-account";
 import { listTemplates, templateKinds } from "@/server/services/message-templates";
 import { RECRUITER_SWITCHES } from "@/server/services/notifications";
+import { FilAvatar } from "../fil/avatar";
 import { PhoneIcon } from "../icon";
 import { RhBell } from "./head";
 import {
@@ -176,78 +178,120 @@ export async function RhProfileScreen({ ctx, query }: { ctx: HireContext; query:
       ? t("profile.alsoIn", { city: data.city, others: data.otherCities.join(", ") })
       : data.city
     : null;
+  // The same identity as a person's profile (docs/profil-personne, Ephraïm 27/10/2026): the
+  // bar, the banner, the ringed photo, the name and the chips; no portfolio for a recruiter.
   return (
-    <div className="nb-page nb-rc nb-rc-profil-page" data-pied="">
+    <div className="nb-page nb-pf nb-rc-vitrine" data-pied="">
       {one(query.ok) === "1" ? <ToastOnLoad message={t("edit.saved")} tone="success" /> : null}
-      <div className="nb-rc-bandeau">
-        <Link href="/app/hire/compte" className="nb-rc-rond" aria-label={t("profile.back")}>
-          <PhoneIcon name="retour" size={22} stroke={2} />
+      <header className="nb-pf-barre">
+        <Link href="/app/hire/compte" className="nb-pf-rb" aria-label={t("profile.back")}>
+          <PhoneIcon name="retour" size={20} stroke={2} />
         </Link>
-        <span>{t("profile.preview")}</span>
+        <span className="nb-pf-titre">{t("profile.preview")}</span>
+        <Link
+          href="/app/hire/compte/profil/modifier"
+          className="nb-pf-rb"
+          aria-label={t("profile.edit")}
+        >
+          <PhoneIcon name="modifier" size={18} stroke={2} />
+        </Link>
+      </header>
+      <div className="nb-pf-banniere" style={{ background: "#0f3f37" }}>
+        <svg viewBox="0 0 350 88" preserveAspectRatio="xMidYMid slice" aria-hidden>
+          <g fill="none" stroke="#2fd3a6" strokeWidth="14" strokeOpacity=".5">
+            <circle cx="300" cy="10" r="46" />
+            <circle cx="300" cy="10" r="86" />
+            <circle cx="300" cy="10" r="126" />
+          </g>
+          <circle cx="44" cy="70" r="5" fill="var(--nb-lime)" />
+        </svg>
+        <span className="nb-pf-banniere-t">{data.org.name}</span>
       </div>
-      <div className="nb-rc-id">
-        <span className="nb-rc-av nb-rc-av-xl">
-          <span className="nb-rc-ini nb-rc-ini-xl" aria-hidden>
-            {data.user.image ? (
-              // eslint-disable-next-line @next/next/no-img-element -- the profile picture
-              <img src={data.user.image} alt="" />
-            ) : (
-              initialsOf(data.user.name)
-            )}
-          </span>
-          <span className="nb-rc-ini nb-rc-logo" aria-hidden>
-            {data.org.logo ? (
-              // eslint-disable-next-line @next/next/no-img-element -- a small logo
-              <img src={data.org.logo} alt="" />
-            ) : (
-              initialsOf(data.org.name)
-            )}
-          </span>
+      <div className="nb-pf-photo-l">
+        <span className="nb-pf-photo" style={{ background: "var(--nb-lime)" }}>
+          {data.user.image ? (
+            // eslint-disable-next-line @next/next/no-img-element -- the profile picture
+            <img src={data.user.image} alt="" />
+          ) : (
+            <span className="nb-pf-photo-i" aria-hidden>
+              <FilAvatar
+                initials={initialsOf(data.user.name)}
+                image={null}
+                tone={0}
+                org={false}
+                size={64}
+              />
+            </span>
+          )}
         </span>
-        <h1 className="nb-rc-nom">{data.user.name}</h1>
-        <p className="nb-rc-poste">
+      </div>
+      <div className="nb-pf-id">
+        <h1>{data.user.name}</h1>
+        <p className="nb-pf-alias">
           {data.jobTitle ? `${t("profile.at", { jobTitle: data.jobTitle })} ` : null}
           <Link href={`/app/entreprises/${data.org.slug}`}>{data.org.name}</Link>
         </p>
-        {place ? <p className="nb-rc-lieu">{place}</p> : null}
-        {data.hiringNow ? <span className="nb-rc-badge">{t("profile.hiringNow")}</span> : null}
-        <p className="nb-rc-accroche">{data.headline ?? t("profile.noHeadline")}</p>
-      </div>
-      {data.domains.length > 0 ? (
-        <section className="nb-rc-sec" aria-labelledby="rc-pour">
-          <h2 id="rc-pour">{t("profile.recruitsFor")}</h2>
-          <ul className="nb-rc-tags">
-            {data.domains.map((domain) => (
-              <li key={domain}>{domain}</li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-      <section className="nb-rc-sec" aria-labelledby="rc-offres">
-        <h2 id="rc-offres">{t("profile.offers")}</h2>
-        {data.jobs.length === 0 ? <p className="nb-rc-note">{t("profile.noOffer")}</p> : null}
-        {data.jobs.map((job) => (
-          <Link key={job.id} href={`/app/hire/offres/${job.id}`} className="nb-rc-offre">
-            <span className="nb-rc-t">
-              <b>{job.title}</b>
-              <small>
-                {t("profile.offerLine", {
-                  city: job.remote === "remote" ? `${job.city} · ${tj("full")}` : job.city,
-                  count: job.applications,
-                })}
-              </small>
+        {place ? <p className="nb-pf-lieu">{place}</p> : null}
+        <p className="nb-pf-bio">{data.headline ?? t("profile.noHeadline")}</p>
+        <div className="nb-pf-chips">
+          {data.hiringNow ? (
+            <span className="nb-pf-st">
+              <i className="nb-pf-point" aria-hidden />
+              {t("profile.hiringNow")}
             </span>
-            <PhoneIcon name="chevron" size={18} />
-          </Link>
-        ))}
-      </section>
-      <section className="nb-rc-sec" aria-labelledby="rc-contacts">
-        <h2 id="rc-contacts">{t("profile.contacts")}</h2>
-        <p className="nb-rc-mail">{data.workEmail}</p>
-        <p className="nb-rc-note">
-          {t(`profile.contactsFor.${data.contactsFor}` as "profile.contactsFor.interview")}
-        </p>
-      </section>
+          ) : null}
+          <span className="nb-pf-st">
+            <PhoneIcon name="offres" size={13} stroke={2.2} />
+            {t("profile.offersCount", { count: data.jobs.length })}
+          </span>
+        </div>
+      </div>
+      <div className="nb-pf-pane">
+        {data.domains.length > 0 ? (
+          <section aria-labelledby="rc-pour">
+            <h2 className="nb-pf-h" id="rc-pour">
+              {t("profile.recruitsFor")}
+            </h2>
+            <ul className="nb-pf-comp">
+              {data.domains.map((domain) => (
+                <li key={domain} className="nb-pf-sk nb-rc-profil-dom">
+                  <i aria-hidden />
+                  {domain}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+        <section aria-labelledby="rc-offres">
+          <h2 className="nb-pf-h" data-loin="" id="rc-offres">
+            {t("profile.offers")}
+          </h2>
+          {data.jobs.length === 0 ? <p className="nb-pf-vide">{t("profile.noOffer")}</p> : null}
+          {data.jobs.map((job) => (
+            <Link key={job.id} href={`/app/hire/offres/${job.id}`} className="nb-rc-offre">
+              <span className="nb-rc-t">
+                <b>{job.title}</b>
+                <small>
+                  {t("profile.offerLine", {
+                    city: job.remote === "remote" ? `${job.city} · ${tj("full")}` : job.city,
+                    count: job.applications,
+                  })}
+                </small>
+              </span>
+              <PhoneIcon name="chevron" size={18} />
+            </Link>
+          ))}
+        </section>
+        <section aria-labelledby="rc-contacts">
+          <h2 className="nb-pf-h" data-loin="" id="rc-contacts">
+            {t("profile.contacts")}
+          </h2>
+          <p className="nb-rc-mail">{data.workEmail}</p>
+          <p className="nb-rc-note">
+            {t(`profile.contactsFor.${data.contactsFor}` as "profile.contactsFor.interview")}
+          </p>
+        </section>
+      </div>
       <div className="nb-rc-pied">
         <Link
           href="/app/hire/compte/profil/modifier"
