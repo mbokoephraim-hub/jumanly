@@ -278,6 +278,28 @@ h2.nb-cv-h {
   border: 1px solid rgba(255, 255, 255, 0.06);
   color: var(--nb-creme);
 }
+button.nb-cv-depart {
+  width: 100%;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.nb-cv-depart[data-cle="profile"] {
+  border-color: rgba(47, 211, 166, 0.45);
+}
+.nb-cv-depart[data-cle="profile"] .nb-cv-depart-i {
+  background: rgba(47, 211, 166, 0.13);
+  color: var(--nb-menthe);
+}
+.nb-cv-choix-t {
+  margin: 22px 0 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--nb-creme);
+}
+.nb-cv-departs[data-choix] {
+  margin-top: 10px;
+}
 .nb-cv-depart[data-cle="orbi"] {
   border-color: rgba(47, 211, 166, 0.45);
 }
@@ -1370,4 +1392,109 @@ h2.nb-cv-h {
 .nb-cv-ajout-profil {
   margin-top: 16px;
   height: 46px;
+}
+
+/* « Lire » un CV de « Mes CV » (Ephraïm, 27/10) : le CV lui-même, puis Fermer vers la
+   bibliothèque. */
+.nb-cv-lire-ok {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 4px 0 14px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(47, 211, 166, 0.12);
+  color: var(--nb-creme);
+  font-size: 14px;
+  line-height: 1.4;
+}
+.nb-cv-lire-ok > svg {
+  flex: none;
+  margin-top: 1px;
+  color: var(--nb-menthe);
+}
+.nb-cv-lire-ok a,
+.nb-cv-lire-postuler a {
+  color: var(--nb-lime);
+  font-weight: 800;
+  text-decoration: underline;
+}
+.nb-cv-lire-doc {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.nb-cv-lire-doc .cv-apercu {
+  border-radius: 10px;
+  background: #fff;
+}
+.nb-cv-lire-pages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 60vh;
+  border-radius: 10px;
+}
+.nb-cv-lire-pages[aria-busy="true"] {
+  background: rgba(255, 255, 255, 0.06);
+}
+.nb-cv-lire-pages[data-pret] {
+  min-height: 0;
+}
+.nb-cv-lire-page {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  background: #fff;
+}
+.nb-cv-lire-postuler {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 18px 0 0;
+  color: #c9d6d2;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.nb-cv-lire-postuler > svg {
+  flex: none;
+  color: var(--nb-lime);
+}
+.nb-cv-lire-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.nb-cv-lire-actions .nb-opt {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: var(--nb-surface);
+  color: var(--nb-creme);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+.nb-cv-lire-actions .nb-opt[aria-pressed="true"] {
+  border-color: rgba(166, 242, 107, 0.5);
+  color: var(--nb-lime);
+}
+.nb-cv-lire-actions .nb-opt[data-danger] {
+  color: #ff8a80;
+}
+@media (min-width: 768px) {
+  .nb-cv-lire {
+    max-width: 720px;
+    margin: 0 auto;
+  }
 }

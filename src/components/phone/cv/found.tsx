@@ -2,12 +2,17 @@ import "server-only";
 import { getTranslations } from "next-intl/server";
 import { languageName } from "@/lib/dates";
 import { PROFILE_PALETTE, colorOf } from "@/lib/profile-colors";
-import { applyCareerImportAction } from "@/server/actions/career-phone";
-import { keepImportedCvAction } from "@/server/actions/cv-flow";
+import { newCareerCvAction } from "@/server/actions/career-phone";
+import {
+  keepImportedCvAction,
+  newCvFromImportAction,
+  profileFromImportAction,
+} from "@/server/actions/cv-flow";
 import { normalize, parseProfileLanguages, type getFullProfile } from "@/server/services/profile";
 import type { ImportPayload } from "@/server/services/cv-import";
 import { PhoneIcon } from "../icon";
 import { CvFrame } from "./frame";
+import { CvMark } from "./marks";
 
 type Profile = Awaited<ReturnType<typeof getFullProfile>>;
 type Group = {
@@ -25,8 +30,10 @@ const label = (code: string) => {
 
 /**
  * « Voici ce qu’Orbi a trouvé » (capture 15): what the file holds, group by group, each one
- * marked « nouveau » or « déjà là » against the profile, ticked by default. Only the groups left
- * ticked enter the profile, then the CV is made (rule: nothing enters without consent).
+ * marked « nouveau » or « déjà là » against the profile, ticked by default. Then three ways
+ * (Ephraïm, 27/10): keep the CV as it is, fill the profile with the groups left ticked (the CV is
+ * kept too), or make a new CV in Jumanly from what was read. Nothing enters the profile without
+ * that tap.
  */
 export async function CvFound({
   importId,
@@ -111,38 +118,24 @@ export async function CvFound({
     ] as (Group | false)[]
   ).filter((group): group is Group => Boolean(group));
   const undated = read.experiences.filter((item) => !item.start).length;
+  // With nothing read, the profile cannot be filled and the new CV starts from the profile.
+  const ways = [
+    { key: "keep", mark: "modele", action: keepImportedCvAction },
+    ...(groups.length > 0
+      ? ([
+          { key: "profile", mark: "orbi", action: profileFromImportAction },
+          { key: "newCv", mark: "nouveau", action: newCvFromImportAction },
+        ] as const)
+      : ([{ key: "fromProfile", mark: "nouveau", action: newCareerCvAction }] as const)),
+  ] as const;
 
   return (
     <CvFrame
       title={t("title")}
       sub={tc("import.step", { step: 3 })}
       back={{ href: "/app/career/cv/nouveau?etape=import", label: tc("back") }}
-      bottom={
-        <div className="nb-cv-fin">
-          <button
-            type="submit"
-            form="cv-trouve"
-            className="nb-bouton nb-cv-principal"
-            data-plein=""
-            data-large=""
-          >
-            {groups.length > 0 ? t("apply") : t("applyEmpty")}
-          </button>
-          {groups.length > 0 ? (
-            <button
-              type="submit"
-              form="cv-trouve"
-              formAction={keepImportedCvAction}
-              className="nb-bouton"
-              data-contour=""
-            >
-              {t("keepOnly")}
-            </button>
-          ) : null}
-        </div>
-      }
     >
-      <form id="cv-trouve" action={applyCareerImportAction}>
+      <form id="cv-trouve" action={keepImportedCvAction}>
         <input type="hidden" name="import" value={importId} />
         <p className="nb-cv-aide">{groups.length > 0 ? t("hint") : t("nothing")}</p>
         <ul className="nb-cv-trouves">
@@ -170,8 +163,29 @@ export async function CvFound({
         </ul>
         {undated > 0 ? <p className="nb-cv-note">{t("undated", { count: undated })}</p> : null}
         {read.source === "rules" ? <p className="nb-cv-note">{t("rulesOnly")}</p> : null}
-        <p className="nb-cv-note">{t("consent")}</p>
-        {groups.length > 0 ? <p className="nb-cv-note">{t("keepNote")}</p> : null}
+        <h2 className="nb-cv-choix-t">{t("choose")}</h2>
+        <ul className="nb-cv-departs" data-choix="">
+          {ways.map((way, index) => (
+            <li key={way.key} style={{ animationDelay: `${0.06 * index + 0.1}s` }}>
+              <button
+                type="submit"
+                formAction={way.action}
+                className="nb-cv-depart"
+                data-cle={way.key}
+              >
+                <span className="nb-cv-depart-i" aria-hidden>
+                  <CvMark name={way.mark} size={24} />
+                </span>
+                <span className="nb-cv-depart-t">
+                  <b>{t(way.key)}</b>
+                  <small>{t(`${way.key}Text`)}</small>
+                </span>
+                <PhoneIcon name="chevron" size={18} />
+              </button>
+            </li>
+          ))}
+        </ul>
+        {groups.length > 0 ? <p className="nb-cv-note">{t("consent")}</p> : null}
       </form>
     </CvFrame>
   );

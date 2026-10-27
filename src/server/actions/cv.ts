@@ -6,6 +6,7 @@ import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { fileStorage } from "@/server/storage";
 import type { Prisma } from "@/generated/prisma/client";
 import { darkenToContrast, cvFonts, type CvFontCode } from "@/features/cv/render/palette";
 import {
@@ -298,6 +299,8 @@ export async function deleteCv(formData: FormData) {
   const { profile } = await owner();
   const cv = await ownedCv(profile.id, formData.get("id"));
   await db.document.delete({ where: { id: cv.id } });
+  // The file of an imported CV goes with it; copies sent with applications stay.
+  if (cv.fileKey) await fileStorage(db).remove(cv.fileKey);
   if (cv.isPrimary) {
     const next = await db.document.findFirst({
       where: { profileId: profile.id, kind: "cv" },
@@ -305,7 +308,13 @@ export async function deleteCv(formData: FormData) {
     });
     if (next) await db.document.update({ where: { id: next.id }, data: { isPrimary: true } });
   }
-  redirect("/app/career/cv?ok=supprime");
+  refresh();
+  // From « Mes CV » on the phone (menu ··· or the reader), back on the same tab.
+  redirect(
+    formData.get("retour") === "cv"
+      ? "/app/career/cv?onglet=cv&ok=supprime"
+      : "/app/career/cv?ok=supprime",
+  );
 }
 
 /** « Améliorer » on the summary (planche talent-4 § 6): Orbi proposes, the talent decides. */

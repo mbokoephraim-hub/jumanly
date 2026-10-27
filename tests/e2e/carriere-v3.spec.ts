@@ -2,9 +2,18 @@ import { execFileSync } from "node:child_process";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import type { Page } from "@playwright/test";
 import { expect, test } from "./fixtures";
 import { expectAccessible } from "./a11y";
-import { fictiveDocx, signUpFromPricing, testEmail } from "./session";
+import { fictiveDocx, fictivePdf, signUpFromPricing, testEmail } from "./session";
+
+/** « Importer mon CV »: the file is sent once the page is interactive, then Orbi's findings. */
+async function importFile(page: Page, file: { name: string; mimeType: string; buffer: Buffer }) {
+  await page.goto("/app/career/cv/nouveau?etape=import");
+  await page.waitForLoadState("networkidle");
+  await page.locator("#cv-nouveau-fichier").setInputFiles(file);
+  await expect(page.getByText("Voici ce qu’Orbi a trouvé")).toBeVisible({ timeout: 15_000 });
+}
 
 // Carrière v3 (docs/carriere-v3, captures 06 to 15): « Nouveau CV » on the phone, its three ways
 // in, then the four steps of a CV (modèle, contenu, mise en forme, aperçu) down to the PDF.
@@ -105,25 +114,100 @@ test.describe("Carrière v3 · créer un CV au téléphone", () => {
     await page.waitForURL("**/app/career/cv?onglet=cv");
   });
 
-  test("importer un CV et le garder tel quel dans « Mes CV »", async ({ page }) => {
-    test.setTimeout(120_000);
-    await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("carriere-v3-import"));
+  test("importer un PDF, le garder, le lire dans l’appli puis le supprimer", async ({ page }) => {
+    test.setTimeout(150_000);
+    await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("carriere-v3-garde"));
     await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
-    await page.goto("/app/career/cv/nouveau?etape=import");
-    // The field sends the file once the page is interactive.
-    await page.waitForLoadState("networkidle");
+    await importFile(
+      page,
+      await fictivePdf([
+        "Aline Fictive",
+        "Comptable (fictive)",
+        "Excel, comptabilité, archivage.",
+        "Français, anglais.",
+      ]),
+    );
+    // Three ways out of what Orbi found.
+    for (const name of [
+      /^Garder mon CV/,
+      /^Remplir mon profil avec ce CV/,
+      /^Créer un nouveau CV avec ces informations/,
+    ])
+      await expect(page.getByRole("button", { name })).toBeVisible();
+    await expectAccessible(page);
+    await page.getByRole("button", { name: /^Garder mon CV/ }).click();
+
+    // The file itself, drawn page by page in the app.
+    await page.waitForURL(/\/app\/career\/cv\/[^/?]+\/lire\?importe=garde/);
+    await expect(page.getByText("Votre CV est rangé dans « Mes CV ».")).toBeVisible();
+    await expect(page.locator(".nb-cv-lire-pages[data-pret] canvas")).toHaveCount(1, {
+      timeout: 20_000,
+    });
+    await expectAccessible(page);
+    const download = page.waitForEvent("download");
+    await page.getByRole("button", { name: "Télécharger le fichier" }).click();
+    const file = join(mkdtempSync(join(tmpdir(), "cv-garde-")), "cv.pdf");
+    await (await download).saveAs(file);
+    expect(execFileSync("pdftotext", [file, "-"]).toString()).toContain("Comptable (fictive)");
+
+    // Fermer: back on the library, the CV there; it opens again in the reader.
+    await page.getByRole("button", { name: "Fermer et revenir à mes CV" }).click();
+    await page.waitForURL(/\/app\/career\/cv$/);
+    const card = page.locator("#car-panneau").getByRole("link", { name: /cv-fictif/ });
+    await expect(card).toBeVisible();
+    await card.click();
+    await page.waitForURL(/\/lire$/);
+
+    // Supprimer, after a question.
+    await page.getByRole("button", { name: "Supprimer ce CV" }).click();
     await page
-      .locator("#cv-nouveau-fichier")
-      .setInputFiles(fictiveDocx(["Comptable (fictif).", "Excel, comptabilité, archivage."]));
-    await expect(page.getByText("Voici ce qu’Orbi a trouvé")).toBeVisible({ timeout: 15_000 });
-    await page
-      .getByRole("button", { name: "Garder seulement ce CV, sans toucher à mon profil" })
+      .getByRole("dialog", { name: "Supprimer « cv-fictif » ?" })
+      .getByRole("button", { name: "Supprimer", exact: true })
       .click();
-    await page.waitForURL(/\/app\/career\/cv\/[^/?]+\?etape=contenu/);
-    // Kept as read: its skills are on the CV, the profile is untouched.
+    await page.waitForURL(/\/app\/career\/cv$/);
+    await expect(page.getByText("CV supprimé.")).toBeVisible();
+    await expect(page.locator("#car-panneau")).not.toContainText("cv-fictif");
+  });
+
+  test("importer un CV pour remplir le profil : le CV reste dans « Mes CV »", async ({ page }) => {
+    test.setTimeout(120_000);
+    await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("carriere-v3-profil"));
+    await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
+    await importFile(page, fictiveDocx(["Comptable (fictif).", "Excel, comptabilité, archivage."]));
+    await page.getByRole("button", { name: /^Remplir mon profil avec ce CV/ }).click();
+    await page.waitForURL(/\/lire\?importe=profil/);
+    await expect(page.getByText(/dans votre profil\. Votre CV est aussi rangé/)).toBeVisible();
+    // A Word file is read through what it holds.
     await expect(page.getByText("Excel").filter({ visible: true }).first()).toBeVisible();
-    await page.goto("/app/career/cv?onglet=cv");
+    await page.getByRole("button", { name: "Fermer et revenir à mes CV" }).click();
+    await page.waitForURL(/\/app\/career\/cv$/);
     await expect(page.locator("#car-panneau")).toContainText("cv-fictif");
+  });
+
+  test("importer un CV pour en créer un autre, puis le PDF de ce CV", async ({ page }) => {
+    test.setTimeout(150_000);
+    await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("carriere-v3-autre"));
+    await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
+    await importFile(page, fictiveDocx(["Comptable (fictif).", "Excel, comptabilité, archivage."]));
+    await page.getByRole("button", { name: /^Créer un nouveau CV avec ces informations/ }).click();
+    await page.waitForURL(/\/app\/career\/cv\/[^/?]+\?etape=modele/);
+    const id = new URL(page.url()).pathname.split("/").pop()!;
+    await page.getByRole("button", { name: /^Gratuits/ }).click();
+    await page.locator(".nb-cv-modele:not([data-verrou])").first().click();
+    await page
+      .getByRole("button", { name: "Appliquer ce modèle" })
+      .filter({ visible: true })
+      .click();
+    await page.waitForURL(/etape=contenu/);
+    await expect(page.getByText("Excel").filter({ visible: true }).first()).toBeVisible();
+
+    // The PDF is this CV, with what was read.
+    await page.goto(`/app/career/cv/${id}?etape=apercu`);
+    const download = page.waitForEvent("download");
+    await page.getByRole("button", { name: "Télécharger en PDF" }).click();
+    const file = join(mkdtempSync(join(tmpdir(), "cv-autre-")), "cv.pdf");
+    await (await download).saveAs(file);
+    expect(execFileSync("pdftotext", [file, "-"]).toString()).toContain("Excel");
   });
 
   test("Orbi prépare le CV à partir du profil", async ({ page }) => {

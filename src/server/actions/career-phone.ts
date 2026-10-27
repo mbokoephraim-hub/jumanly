@@ -19,7 +19,6 @@ import { DEFAULT_TEMPLATE_ID } from "@/features/cv/templates/registry";
 import { rewriteCareerText, type RewriteKind } from "@/server/services/career-phone";
 import { applyTemplate, cvFromProfile, MAX_CVS } from "@/server/services/cv";
 import { improveCvSummary } from "@/server/services/cv-coach";
-import { applyImport, parseImport } from "@/server/services/cv-import";
 import {
   educationSchema,
   ensureProfile,
@@ -513,31 +512,6 @@ export async function newCareerCvAction(formData: FormData) {
   // Orbi's summary waits on Contenu, to keep or refuse (docs/carriere-v3, capture 09).
   if (orbi) await improveCvSummary(db, user.id, cv.id);
   redirect(`/app/career/cv/${cv.id}?etape=contenu`, RedirectType.replace);
-}
-
-/**
- * « Ajouter à mon profil et créer le CV » (docs/carriere-v3, capture 15): only the groups left
- * ticked enter the profile, then a CV is made from it.
- */
-export async function applyCareerImportAction(formData: FormData) {
-  const { user } = await mine();
-  const id = String(formData.get("import") ?? "").slice(0, 60);
-  const chosen = new Set(formData.getAll("groupe").map(String));
-  const pending = await db.aiSuggestion.findFirst({
-    where: { id, userId: user.id, feature: "cv_parse", status: "pending" },
-  });
-  const payload = pending ? parseImport(pending.payload) : null;
-  if (!payload) redirect("/app/career/cv/nouveau?etape=import");
-  const all = (group: "experiences" | "educations" | "skills") =>
-    chosen.has(group) ? payload[group].map((_, index) => index) : [];
-  await applyImport(db, user.id, id, {
-    experiences: all("experiences"),
-    educations: all("educations"),
-    skills: all("skills"),
-    languages: chosen.has("languages"),
-    contact: chosen.has("contact"),
-  });
-  await newCareerCvAction(new FormData());
 }
 
 /**
