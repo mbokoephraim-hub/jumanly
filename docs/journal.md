@@ -4788,3 +4788,17 @@ Modèle B ; feuille `src/styles/phone-chat.css`, classes `nb-ch-`, textes `phone
   reste). Titres de rubrique à 16 px au lieu de 19 px.
 - Fond de l'onglet Explorer : le même que Fil, Carrière et les autres onglets (`--nb-nuit`), au lieu
   du noir plus profond.
+
+## Onglets du téléphone · un seul en-tête et un seul style d'onglets (27 octobre 2026)
+
+Demande d'Ephraïm : chaque titre de page doit se ressembler (taille, position), les options et les
+couleurs aussi.
+
+- Nouvelle feuille `src/styles/phone-onglets.css` (importée en dernier) et classe `nb-tete-onglet`
+  pour l'en-tête des cinq onglets (Fil, Explorer, Carrière, Hub, Chat) : titre à gauche, 28 px, même
+  hauteur ; à droite, boutons ronds de 44 px (fond surface, liseré fin) et photo de 36 px.
+- Explorer : le titre passe à gauche comme ailleurs ; Enregistrées et la photo sont à droite.
+- Chat : le bouton « Nouveau message » prend la même couleur que les autres boutons ronds.
+- Onglets : Fil et Hub passent des onglets soulignés aux pastilles (comme Carrière et Chat), même
+  hauteur (40 px), même texte (13 px) et mêmes couleurs (Lime et texte Sapin quand choisi).
+- Les anciennes règles d'en-tête propres à chaque écran sont retirées.

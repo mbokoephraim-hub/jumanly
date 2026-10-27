@@ -484,7 +484,7 @@ export function PhoneMessages({ view }: { view: InboxView }) {
 
   return (
     <div className="nb-page nb-ch nb-ch-liste">
-      <header className="nb-ch-tete">
+      <header className="nb-tete-onglet">
         <h1>{tc("title")}</h1>
         <div>
           <button
@@ -510,7 +510,7 @@ export function PhoneMessages({ view }: { view: InboxView }) {
           </button>
           <button
             type="button"
-            className="nb-ch-rb nb-ch-rb-lime"
+            className="nb-ch-rb"
             aria-label={tc("new")}
             onClick={() => setNewOpen(true)}
           >

@@ -1,0 +1,124 @@
+/*
+ * The five tabs of the talent phone (Fil, Explorer, Carrière, Hub, Chat) share one head and one
+ * row of tabs (Ephraïm, 27/10/2026): the title on the left, at the same size and height on every
+ * tab; round buttons of the same size and colour on the right; tabs as a pill, Lime when chosen.
+ * Imported last so that it wins over each screen's own sheet.
+ */
+.nb-app .nb-tete-onglet {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 0;
+  padding: calc(var(--nb-haut) + 24px) 20px 12px;
+}
+.nb-app .nb-tete-onglet h1 {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  text-align: left;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.nb-app .nb-tete-onglet > div,
+.nb-app .nb-tete-onglet > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* Round buttons: 44 px, the surface colour, a thin edge, cream icon. */
+.nb-app .nb-tete-onglet .nb-rond,
+.nb-app .nb-tete-onglet .nb-ch-rb,
+.nb-app .nb-tete-onglet .nb-pf-rb {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  flex: none;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--nb-surface);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--nb-creme);
+}
+.nb-app .nb-tete-onglet .nb-ch-rb[aria-pressed="true"] {
+  border-color: var(--nb-lime);
+}
+.nb-app .nb-tete-onglet .nb-compteur {
+  top: -2px;
+  right: -2px;
+}
+/* The person's picture: 44 px to touch, 36 px to see. */
+.nb-app .nb-tete-moi {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* Tabs as a pill (Fil, Hub, Carrière, Chat): the same height, text and colours. */
+.nb-app .nb-page.nb-fil > .nb-fil-onglets,
+.nb-app .nb-fo-onglets {
+  display: flex;
+  margin: 4px 20px 10px;
+  border-bottom: 0;
+}
+.nb-app .nb-page.nb-fil > .nb-fil-onglets,
+.nb-app .nb-fo-onglets,
+.nb-app .nb-ch-seg,
+.nb-app .nb-cr-seg {
+  height: 40px;
+  padding: 3px;
+  border-radius: 20px;
+  background: var(--nb-surface);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.nb-app .nb-page.nb-fil > .nb-fil-onglets [role="tab"],
+.nb-app .nb-fo-onglets [role="tab"] {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+  border-radius: 17px;
+  white-space: nowrap;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+.nb-app .nb-page.nb-fil > .nb-fil-onglets [role="tab"],
+.nb-app .nb-fo-onglets [role="tab"],
+.nb-app .nb-ch-seg button,
+.nb-app .nb-cr-seg button {
+  font-size: 13px;
+  font-weight: 600;
+  color: #c9d6d2;
+}
+.nb-app .nb-page.nb-fil > .nb-fil-onglets [role="tab"][aria-selected="true"],
+.nb-app .nb-fo-onglets [role="tab"][aria-selected="true"] {
+  background: var(--nb-lime);
+  color: #0f3f37;
+}
+.nb-app .nb-ch-seg button[aria-selected="true"],
+.nb-app .nb-cr-seg button[aria-selected="true"] {
+  color: #0f3f37;
+}
+.nb-app .nb-page.nb-fil > .nb-fil-onglets [role="tab"]::after,
+.nb-app .nb-fo-onglets [role="tab"]::after {
+  content: none;
+}
+.nb-app .nb-ch-ind,
+.nb-app .nb-cr-ind {
+  border-radius: 17px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-app .nb-page.nb-fil > .nb-fil-onglets [role="tab"],
+  .nb-app .nb-fo-onglets [role="tab"] {
+    transition: none;
+  }
+}

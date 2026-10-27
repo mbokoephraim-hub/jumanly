@@ -74,9 +74,9 @@ export function PhoneFormation({ view }: { view: FormationView }) {
 
   return (
     <div className="nb-page nb-fo nb-fo-accueil">
-      <header className="nb-fo-haut">
+      <header className="nb-tete-onglet">
         <h1>{t("title")}</h1>
-        <Link href="/app/career/cv" aria-label={t("account")}>
+        <Link href="/app/career/cv" className="nb-tete-moi" aria-label={t("account")}>
           <FilAvatar
             initials={view.me.initials}
             image={view.me.image}
