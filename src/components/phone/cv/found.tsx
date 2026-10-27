@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { languageName } from "@/lib/dates";
 import { PROFILE_PALETTE, colorOf } from "@/lib/profile-colors";
 import { applyCareerImportAction } from "@/server/actions/career-phone";
+import { keepImportedCvAction } from "@/server/actions/cv-flow";
 import { normalize, parseProfileLanguages, type getFullProfile } from "@/server/services/profile";
 import type { ImportPayload } from "@/server/services/cv-import";
 import { PhoneIcon } from "../icon";
@@ -117,15 +118,28 @@ export async function CvFound({
       sub={tc("import.step", { step: 3 })}
       back={{ href: "/app/career/cv/nouveau?etape=import", label: tc("back") }}
       bottom={
-        <button
-          type="submit"
-          form="cv-trouve"
-          className="nb-bouton nb-cv-principal"
-          data-plein=""
-          data-large=""
-        >
-          {groups.length > 0 ? t("apply") : t("applyEmpty")}
-        </button>
+        <div className="nb-cv-fin">
+          <button
+            type="submit"
+            form="cv-trouve"
+            className="nb-bouton nb-cv-principal"
+            data-plein=""
+            data-large=""
+          >
+            {groups.length > 0 ? t("apply") : t("applyEmpty")}
+          </button>
+          {groups.length > 0 ? (
+            <button
+              type="submit"
+              form="cv-trouve"
+              formAction={keepImportedCvAction}
+              className="nb-bouton"
+              data-contour=""
+            >
+              {t("keepOnly")}
+            </button>
+          ) : null}
+        </div>
       }
     >
       <form id="cv-trouve" action={applyCareerImportAction}>
@@ -157,6 +171,7 @@ export async function CvFound({
         {undated > 0 ? <p className="nb-cv-note">{t("undated", { count: undated })}</p> : null}
         {read.source === "rules" ? <p className="nb-cv-note">{t("rulesOnly")}</p> : null}
         <p className="nb-cv-note">{t("consent")}</p>
+        {groups.length > 0 ? <p className="nb-cv-note">{t("keepNote")}</p> : null}
       </form>
     </CvFrame>
   );
