@@ -72,8 +72,9 @@ export function PhoneFil({
         <header className="nb-tete-onglet">
           <h1>{t("title")}</h1>
           <FilBell initial={unread} />
-          <Link href="/app/career/cv" className="nb-tete-moi" aria-label={t("account")}>
-            <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={36} />
+          {/* Paramètres beside the bell, in place of the avatar (Ephraïm, 27/10/2026). */}
+          <Link href="/app/parametres" className="nb-rond" aria-label={t("settings")}>
+            <PhoneIcon name="reglages" size={23} />
           </Link>
         </header>
       )}

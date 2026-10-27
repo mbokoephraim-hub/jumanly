@@ -83,6 +83,16 @@ export async function RhBell() {
   );
 }
 
+/** Paramètres, in place of the avatar at the top of the Fil (Ephraïm, 27/10/2026). */
+export async function RhSettings() {
+  const t = await getTranslations("phoneRh.head");
+  return (
+    <Link href="/app/parametres" className="nb-rond" aria-label={t("settings")}>
+      <PhoneIcon name="reglages" size={21} stroke={1.8} />
+    </Link>
+  );
+}
+
 /** « + » of Offres (planche Recruteur-offres): the lime round that starts a new offer. */
 export async function RhNewOffer() {
   const t = await getTranslations("phoneRh.head");
@@ -108,11 +118,14 @@ export async function RhTab({
   className,
   legacy = true,
   noSearch = false,
+  avatar,
   children,
 }: {
   tab: RecruiterTab;
   /** The page carries its own search field (Messages, planche 120). */
   noSearch?: boolean;
+  /** What stands at the top right in place of the avatar (Paramètres on the Fil). */
+  avatar?: ReactNode;
   subtitle?: ReactNode;
   actions?: ReactNode;
   className?: string;
@@ -141,7 +154,7 @@ export async function RhTab({
       title={t(`nav.${tab}`)}
       subtitle={subtitle}
       actions={actions}
-      avatar={<RhAvatar />}
+      avatar={avatar ?? <RhAvatar />}
       search={noSearch ? null : search}
       className={className}
       ownHeading={!legacy}
