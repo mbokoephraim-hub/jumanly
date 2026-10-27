@@ -9,7 +9,7 @@ import { NavLink } from "@/components/layout/nav-link";
 import { SectionNav } from "@/components/layout/section-nav";
 import { TopSearch } from "@/components/layout/top-search";
 import type { Section, SectionLink } from "@/config/section-navigation";
-import { Skeleton } from "@/components/ui";
+import { ShellLoading } from "@/components/app/shell-loading";
 import { adminAreas, type AdminArea } from "@/server/auth/roles";
 import { requireAdminShell } from "@/server/auth/session";
 
@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
  */
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
-    <Suspense fallback={<Skeleton className="m-6 h-[60dvh] rounded-panel" />}>
+    <Suspense fallback={<ShellLoading />}>
       <AdminShell>{children}</AdminShell>
     </Suspense>
   );
