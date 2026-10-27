@@ -4855,3 +4855,26 @@ Demande d'Ephraïm : le PDF téléchargé ne contenait que le haut du CV, « jus
 - « Adapter à une offre » vérifié au téléphone.
 - Tests : `tests/unit/cv-to-profile.test.ts`, e2e `carriere-v3` (CV vide, PDF lu avec pdftotext,
   ajout au profil, Terminer, import gardé), `mobile-profil-cv`.
+
+## Confirmation de l'e-mail par un lien, accueil Talent / Recruteur (27 octobre 2026)
+
+Demande d'Ephraïm : le code à 6 chiffres rendait l'inscription lente ; l'accueil doit toujours
+proposer le type d'utilisateur et « S'inscrire » / « Se connecter ».
+
+- Inscription (talent, recruteur, administrateur d'entreprise) : un e-mail « Confirmer mon
+  adresse » remplace le code. Le lien (valable 24 heures) confirme l'adresse et ouvre Jumanly
+  connecté, sur le téléphone ou l'ordinateur où il est ouvert (`emailVerification` de Better Auth,
+  `src/app/(auth)/(acces)/inscription/confirmee/route.ts`). La suite (premières questions,
+  paiement d'un forfait d'organisation, rôle de l'administrateur) est lue sur le compte, pas sur
+  le cookie d'inscription, pour marcher d'un appareil à l'autre. L'e-mail de bienvenue part une
+  fois, à la confirmation (`src/server/services/signup-confirmation.ts`).
+- Écran « Ouvrez votre boîte mail » : renvoyer le lien, changer d'adresse, « Déjà confirmé ? Se
+  connecter ». Lien expiré : message et nouveau lien. Une connexion avec une adresse non confirmée
+  renvoie un lien. L'administration renvoie aussi un lien.
+- Les codes restent pour « Mot de passe oublié » et la vérification en deux étapes.
+- Sans fournisseur d'e-mail, le journal « [e-mail factice] » affiche le lien en clair.
+- Accueil ordinateur et téléphone : bloc « Vous êtes… » (Talent / Recruteur) avec « S'inscrire »
+  et « Se connecter » sous le titre (`src/components/site/entry-chooser.tsx`). Écran Bienvenue du
+  téléphone : choix Talent / Recruteur à côté du logo, boutons « S'inscrire » et « Se connecter ».
+- Tests : `tests/unit/signup-confirmation.test.ts`, e2e d'inscription passés au lien
+  (`openConfirmationLink`), accueil (`foundation`, `modele-b-accueil`).

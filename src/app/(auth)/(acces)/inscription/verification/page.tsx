@@ -20,24 +20,30 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default function VerifyPage() {
+export default function VerifyPage({ searchParams }: PageProps<"/inscription/verification">) {
   return (
     <Suspense fallback={null}>
-      <VerifyStep />
+      <VerifyStep searchParams={searchParams} />
     </Suspense>
   );
 }
 
-/** « Vérifier l'e-mail » (planche talent-4 § 1): the 6-digit code, valid 15 minutes, 5 attempts. */
-async function VerifyStep() {
+/**
+ * « Confirmer l'e-mail » (planche talent-4 § 1, devenue lien le 27/10/2026): the link of the
+ * e-mail confirms the address and opens the space, on the phone or the computer.
+ */
+async function VerifyStep({
+  searchParams,
+}: Pick<PageProps<"/inscription/verification">, "searchParams">) {
   const flow = await readSignupFlow();
   if (!flow.email) redirect("/inscription");
+  const expired = Boolean((await searchParams).lien);
   // Modèle B is the talent's phone: a recruiter keeps the code page of their own journey.
   if ((flow.profile ?? "talent") === "talent" && (await isPhone()))
-    return <PhoneCodePage email={flow.email} />;
+    return <PhoneCodePage email={flow.email} expired={expired} />;
   // The recruiter's phone sign-up (Modèle B recruteur, M2) has the same code screen.
   if (flow.profile === "rh" && (await isPhone()))
-    return <PhoneCodePage email={flow.email} recruiter />;
+    return <PhoneCodePage email={flow.email} recruiter expired={expired} />;
   const t = await getTranslations("access");
   return (
     <>
@@ -49,7 +55,7 @@ async function VerifyStep() {
         <h1>{t("verify.title")}</h1>
         <p>{t("verify.text", { email: flow.email })}</p>
       </div>
-      <VerifyForm email={flow.email} />
+      <VerifyForm expired={expired} />
     </>
   );
 }

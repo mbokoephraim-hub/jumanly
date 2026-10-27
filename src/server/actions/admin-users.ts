@@ -6,6 +6,7 @@ import { z } from "zod";
 import { auth } from "@/server/auth";
 import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { confirmationCallback } from "@/server/services/signup-confirmation";
 import {
   addCredits,
   addCreditsSchema,
@@ -84,7 +85,7 @@ async function target(userId: string) {
   return user;
 }
 
-/** « Renvoyer le code de vérification » to the account's address. */
+/** « Renvoyer l'e-mail de vérification »: a new confirmation link to the account's address. */
 export async function resendVerificationAction(formData: FormData) {
   const { context } = await writer();
   const input = userOnly.safeParse(Object.fromEntries(formData));
@@ -92,9 +93,9 @@ export async function resendVerificationAction(formData: FormData) {
   const user = await target(input.data.userId);
   await run(formData, "codeSent", async () => {
     try {
-      await auth.api.sendVerificationOTP({
-        headers: await headers(),
-        body: { email: user.email, type: "email-verification" },
+      // Without the administrator's session: Better Auth would refuse another person's address.
+      await auth.api.sendVerificationEmail({
+        body: { email: user.email, callbackURL: confirmationCallback() },
       });
     } catch {
       throw new AdminUserError("confirm");

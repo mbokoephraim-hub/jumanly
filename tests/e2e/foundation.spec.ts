@@ -6,9 +6,22 @@ test("la page d'accueil publique s'affiche en français", async ({ page }) => {
   await expect(page).toHaveTitle(/Jumanly/);
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(
-    page.getByRole("link", { name: "Créer mon compte gratuit" }).first(),
-  ).toHaveAttribute("href", /^\/inscription/);
+  // Talent or recruiter, then « S'inscrire » or « Se connecter », always in view (27/10/2026).
+  const entry = page.getByRole("group", { name: "Vous êtes…" });
+  await expect(entry.getByRole("link", { name: "S'inscrire" })).toHaveAttribute(
+    "href",
+    "/inscription?profil=talent",
+  );
+  await expect(entry.getByRole("link", { name: "Se connecter" })).toBeInViewport();
+  await entry.getByRole("button", { name: "Recruteur" }).click();
+  await expect(entry.getByRole("link", { name: "S'inscrire" })).toHaveAttribute(
+    "href",
+    "/inscription?profil=rh",
+  );
+  await expect(entry.getByRole("link", { name: "Se connecter" })).toHaveAttribute(
+    "href",
+    "/connexion?profil=rh",
+  );
 });
 
 test("la bibliothèque de composants est complète et non indexée", async ({ page }) => {

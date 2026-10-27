@@ -3,7 +3,7 @@ import { join } from "node:path";
 import type { Page } from "@playwright/test";
 import { expect, test } from "./fixtures";
 import { expectAccessible } from "./a11y";
-import { lastCode } from "./outbox";
+import { openConfirmationLink } from "./outbox";
 import { logIn } from "./session";
 
 // Étape 3 · A1 (docs/modele-b-recruteur/web, captures 020 à 029) : l'inscription de
@@ -42,8 +42,7 @@ async function createAccount(page: Page, plan: RegExp) {
   const since = Date.now();
   await next(page).click();
   await expect(page).toHaveURL(/etape=code/, { timeout: 20_000 });
-  await page.getByLabel("Code à 6 chiffres").fill(await lastCode(email, since));
-  await next(page).click();
+  await openConfirmationLink(page, email, since);
   await expect(page).toHaveURL(/etape=role/, { timeout: 20_000 });
   return { email, org: `Kivu Fintech ${stamp}` };
 }
@@ -116,14 +115,13 @@ test.describe("Étape 3 · inscription de l'administrateur d'entreprise", () => 
     // 3 · code : renvoyer, un code faux, puis le bon.
     await expect(page).toHaveURL(/etape=code/, { timeout: 20_000 });
     await expect(page.getByText(email)).toBeVisible();
-    await page.getByLabel("Code à 6 chiffres").fill("12");
-    await next(page).click();
-    await expect(page.getByText("Le code compte 6 chiffres")).toBeVisible();
-    await page.getByRole("button", { name: "Renvoyer le code" }).click();
-    await expect(page.locator(".ae-toast")).toContainText(/Nouveau code envoyé|Patientez|Attendez/);
-    await page.getByLabel("Code à 6 chiffres").fill(await lastCode(email, since));
+    await expect(
+      page.getByText("Ouvrez l'e-mail et cliquez sur « Confirmer mon adresse »"),
+    ).toBeVisible();
+    await page.getByRole("button", { name: "Renvoyer le lien" }).click();
+    await expect(page.locator(".ae-toast")).toContainText(/Nouveau lien envoyé|Patientez|Attendez/);
     await shot(page, "022-code");
-    await next(page).click();
+    await openConfirmationLink(page, email, since);
 
     // 4 · rôle, avec l'aperçu de la page entreprise.
     await expect(page).toHaveURL(/etape=role/, { timeout: 20_000 });

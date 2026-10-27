@@ -2,7 +2,8 @@
  * Authentication (docs/specifications.md, partie 10 § 10.1) with Better Auth:
  * e-mail + password (10 characters minimum, leaked passwords refused outside local and preview,
  * without blocking when the check service is down),
- * 6-digit e-mail code valid 15 minutes with 5 attempts, magic link, Google, Apple and LinkedIn
+ * e-mail confirmed at sign-up by a link valid 24 hours that opens the app signed in, 6-digit codes
+ * for « mot de passe oublié » and the two-step verification, magic link, Google, Apple and LinkedIn
  * when configured, 30-day sliding sessions in httpOnly cookies, e-mail two-step verification,
  * rate limits.
  */
@@ -23,10 +24,13 @@ import {
   sendPasswordCode,
   sendResetPassword,
   sendVerificationCode,
+  sendVerificationLink,
+  VERIFY_LINK_HOURS,
 } from "@/server/account-emails";
 import { db } from "@/server/db";
 import { leakedPasswordCheck } from "./password-check";
 import { bootstrapAdminIfListed } from "@/server/services/admin-bootstrap";
+import { welcomeConfirmedAccount } from "@/server/services/signup-confirmation";
 
 const DAY = 60 * 60 * 24;
 
@@ -78,7 +82,20 @@ export const auth = betterAuth({
       await sendPasswordChanged(user.email, await firstNameOf(user.email), new Date());
     },
   },
-  emailVerification: { autoSignInAfterVerification: true },
+  // The link of the e-mail confirms the address and opens Jumanly signed in, on whichever device
+  // it is opened (decision of 2026-10-27: no more code to type at sign-up).
+  emailVerification: {
+    sendOnSignUp: true,
+    sendOnSignIn: false,
+    autoSignInAfterVerification: true,
+    expiresIn: VERIFY_LINK_HOURS * 60 * 60,
+    sendVerificationEmail: async ({ user, url }) => {
+      await sendVerificationLink(user.email, url, await firstNameOf(user.email));
+    },
+    afterEmailVerification: async (user) => {
+      await welcomeConfirmedAccount(db, user.id);
+    },
+  },
   socialProviders: {
     ...(googleEnabled && {
       google: {
@@ -162,7 +179,7 @@ export const auth = betterAuth({
       "/sign-in/email": { window: 15 * 60, max: 10 },
       "/sign-up/email": { window: 60 * 60, max: 10 },
       "/request-password-reset": { window: 15 * 60, max: 5 },
-      "/email-otp/send-verification-otp": { window: 60, max: 3 },
+      "/send-verification-email": { window: 60, max: 3 },
       "/email-otp/request-password-reset": { window: 15 * 60, max: 5 },
       "/sign-in/magic-link": { window: 15 * 60, max: 5 },
     },
@@ -173,10 +190,10 @@ export const auth = betterAuth({
       expiresIn: OTP_MINUTES * 60,
       allowedAttempts: 5,
       storeOTP: "hashed",
-      sendVerificationOnSignUp: true,
-      overrideDefaultEmailVerification: true,
+      // Only « Mot de passe oublié » still uses a code here (refonte mobile, lot 2).
+      sendVerificationOnSignUp: false,
+      overrideDefaultEmailVerification: false,
       sendVerificationOTP: async ({ email, otp, type }) => {
-        // « Mot de passe oublié » sends its own code (refonte mobile, lot 2).
         if (type === "forget-password") {
           await sendPasswordCode(email, otp, await firstNameOf(email));
           return;

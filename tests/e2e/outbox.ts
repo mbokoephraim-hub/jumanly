@@ -1,3 +1,4 @@
+import type { Page } from "@playwright/test";
 import { existsSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -55,4 +56,13 @@ export async function lastLink(to: string, path: string, since: number): Promise
     await new Promise((resolve) => setTimeout(resolve, 250));
   }
   throw new Error(`Aucun lien ${path} reçu pour ${to}`);
+}
+
+/**
+ * Sign-up: opens the link of the confirmation e-mail (decision of 2026-10-27), which confirms the
+ * address and signs the person in, on whichever page (device) opens it.
+ */
+export async function openConfirmationLink(page: Page, to: string, since: number) {
+  const link = await lastLink(to, "/api/auth/verify-email", since);
+  await page.goto(link);
 }
