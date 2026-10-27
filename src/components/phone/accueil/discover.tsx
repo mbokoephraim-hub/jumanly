@@ -11,6 +11,8 @@ import { DISCOVER_SEEN_KEY as SEEN_KEY } from "./discover-flag";
 const LONG_MS = 3900;
 const SHORT_MS = 1700;
 const REDUCED_MS = 900;
+/** Time on each screen of « Bienvenue » before the next one comes. */
+const AUTO_MS = 4500;
 const SLIDES = ["s1", "s2", "s3"] as const;
 
 const MARK = `<svg width="72" height="72" viewBox="0 0 120 120" aria-hidden="true" style="display:block;overflow:visible"><rect width="120" height="120" rx="30" fill="#A6F26B"/><g transform="translate(2.25 -4.35) scale(1.1)"><path class="nb-lg-trait" d="M70 55 V70 A19 19 0 0 1 33.15 76.50" fill="none" stroke="#0F3F37" stroke-width="17" stroke-linecap="round" stroke-dasharray="72"/><circle class="nb-lg-tete" cx="70" cy="31" r="11.5" fill="#0F3F37"/></g></svg>`;
@@ -343,6 +345,19 @@ export function PhoneDiscover({ recruiter: asked = false }: { recruiter?: boolea
     };
   }, []);
 
+  // The three screens follow one another by themselves, until the person picks one (a tap on a
+  // dot or on the scene stops it, WCAG 2.2.2). Not with reduced motion.
+  const [auto, setAuto] = useState(true);
+  useEffect(() => {
+    if (phase !== "bienvenue" || !auto) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(
+      () => setSlide((current) => (current + 1) % SLIDES.length),
+      AUTO_MS,
+    );
+    return () => window.clearInterval(timer);
+  }, [phase, auto]);
+
   const key = SLIDES[slide];
   return (
     <div className="nb-page nb-decouvrir">
@@ -383,7 +398,10 @@ export function PhoneDiscover({ recruiter: asked = false }: { recruiter?: boolea
           type="button"
           className="nb-bienvenue-scene"
           aria-label={common("next")}
-          onClick={() => setSlide((slide + 1) % SLIDES.length)}
+          onClick={() => {
+            setAuto(false);
+            setSlide((slide + 1) % SLIDES.length);
+          }}
         >
           {recruiter ? <RecruiterIllustration slide={key} /> : <Illustration slide={key} />}
         </button>
@@ -399,7 +417,10 @@ export function PhoneDiscover({ recruiter: asked = false }: { recruiter?: boolea
               type="button"
               aria-label={common("dot", { n: index + 1, word: t(`${item}.word`) })}
               aria-current={index === slide || undefined}
-              onClick={() => setSlide(index)}
+              onClick={() => {
+                setAuto(false);
+                setSlide(index);
+              }}
             >
               <span />
             </button>

@@ -10,7 +10,17 @@ test("connexion et inscription mènent l'une à l'autre, le recruteur vers son f
   test.skip(isMobile, "Au téléphone : l'accueil du Modèle B (modele-b-accueil.spec.ts).");
   await page.goto("/connexion");
   await expect(page.getByRole("heading", { name: "Bon retour" })).toBeVisible();
-  await page.getByRole("link", { name: "Créer un compte" }).click();
+  // Talent or recruiter, then « Se connecter » or « S'inscrire » (27/10/2026).
+  const who = page.getByRole("navigation", { name: "Vous êtes" });
+  await expect(who.getByRole("link", { name: "Talent" })).toHaveAttribute("aria-current", "page");
+  await who.getByRole("link", { name: "Recruteur" }).click();
+  await expect(page).toHaveURL(/\/connexion\?profil=rh$/);
+  await expect(page.getByRole("link", { name: "S'inscrire" })).toHaveAttribute(
+    "href",
+    "/inscription?profil=rh",
+  );
+  await who.getByRole("link", { name: "Talent" }).click();
+  await page.getByRole("link", { name: "S'inscrire" }).click();
   await expect(page).toHaveURL(/\/inscription/);
   await expect(page.getByRole("heading", { name: "Créez votre compte" })).toBeVisible();
   await page.getByRole("link", { name: "Continuer avec mon e-mail" }).click();

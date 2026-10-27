@@ -4881,8 +4881,10 @@ proposer le type d'utilisateur et « S'inscrire » / « Se connecter ».
   renvoie un lien. L'administration renvoie aussi un lien.
 - Les codes restent pour « Mot de passe oublié » et la vérification en deux étapes.
 - Sans fournisseur d'e-mail, le journal « [e-mail factice] » affiche le lien en clair.
-- Accueil ordinateur et téléphone : bloc « Vous êtes… » (Talent / Recruteur) avec « S'inscrire »
-  et « Se connecter » sous le titre (`src/components/site/entry-chooser.tsx`). Écran Bienvenue du
-  téléphone : choix Talent / Recruteur à côté du logo, boutons « S'inscrire » et « Se connecter ».
+- Retouches le même jour (demande d'Ephraïm) : le site public garde ses boutons d'origine ; le
+  choix Talent / Recruteur et « S'inscrire » / « Se connecter » sont sur la page de connexion
+  (téléphone et ordinateur) et sur l'écran Bienvenue du téléphone. Bienvenue : l'image ne couvre
+  plus le texte (colonne, illustration réduite sur les petits écrans) et les trois écrans défilent
+  seuls toutes les 4,5 s, jusqu'à ce qu'on touche un point ou l'image (pas en animations réduites).
 - Tests : `tests/unit/signup-confirmation.test.ts`, e2e d'inscription passés au lien
   (`openConfirmationLink`), accueil (`foundation`, `modele-b-accueil`).

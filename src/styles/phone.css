@@ -2425,16 +2425,19 @@ html[data-nb-decouvert] .nb-spl-halo {
   animation-delay: 0.2s;
   animation-duration: 1.4s;
 }
+/* A column (27/10/2026): the scene takes the room the texts leave, so they never overlap. */
 .nb-bienvenue {
   position: absolute;
   inset: 0;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-top: calc(24px + env(safe-area-inset-top));
+  padding-bottom: max(30px, env(safe-area-inset-bottom));
 }
 .nb-bienvenue-logo {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(24px + env(safe-area-inset-top));
+  flex: none;
+  min-height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -2444,13 +2447,45 @@ html[data-nb-decouvert] .nb-spl-halo {
   display: block;
 }
 .nb-bienvenue-scene {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(70px + env(safe-area-inset-top));
-  height: min(400px, 47dvh);
+  position: relative;
+  flex: 1 1 0;
+  min-height: 0;
+  max-height: 420px;
+  margin-top: 6px;
   display: block;
   overflow: hidden;
+  container-type: size;
+}
+/* The 390 × 400 illustration shrinks with the room left on short phones. */
+@container (max-height: 390px) {
+  .nb-illu {
+    zoom: 0.9;
+  }
+}
+@container (max-height: 350px) {
+  .nb-illu {
+    zoom: 0.8;
+  }
+}
+@container (max-height: 310px) {
+  .nb-illu {
+    zoom: 0.7;
+  }
+}
+@container (max-height: 270px) {
+  .nb-illu {
+    zoom: 0.6;
+  }
+}
+@container (max-height: 230px) {
+  .nb-illu {
+    zoom: 0.5;
+  }
+}
+@container (max-height: 190px) {
+  .nb-illu {
+    zoom: 0.42;
+  }
 }
 .nb-illu {
   position: absolute;
@@ -2684,10 +2719,9 @@ html[data-nb-decouvert] .nb-spl-halo {
   font-weight: 700;
 }
 .nb-bienvenue-texte {
-  position: absolute;
-  left: 24px;
-  right: 24px;
-  bottom: calc(198px + max(30px, env(safe-area-inset-bottom)));
+  flex: none;
+  padding: 0 24px;
+  margin-top: 8px;
 }
 .nb-mot {
   font-size: 12.5px;
@@ -2706,10 +2740,15 @@ html[data-nb-decouvert] .nb-spl-halo {
 .nb-bienvenue-texte .nb-sous {
   margin-top: 8px;
 }
+.nb-bienvenue .nb-bas-fixe {
+  position: static;
+  flex: none;
+  margin: 0 20px;
+}
 .nb-points-sl {
-  position: absolute;
-  left: 18px;
-  bottom: calc(150px + max(30px, env(safe-area-inset-bottom)));
+  flex: none;
+  margin: 12px 0 14px;
+  padding-left: 18px;
   display: flex;
   gap: 6px;
 }
@@ -2731,7 +2770,16 @@ html[data-nb-decouvert] .nb-spl-halo {
   background: var(--nb-surface);
   box-shadow: inset 0 0 0 1px var(--nb-filet-fort);
 }
+.nb-profil-choix[data-large] {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 18px 0;
+}
+.nb-profil-choix a,
 .nb-profil-choix button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-height: 34px;
   padding: 0 12px;
   border-radius: 999px;
@@ -2740,6 +2788,11 @@ html[data-nb-decouvert] .nb-spl-halo {
   text-align: center;
   color: var(--nb-texte);
 }
+.nb-profil-choix[data-large] a {
+  min-height: 42px;
+  font-size: 15px;
+}
+.nb-profil-choix a[aria-current="page"],
 .nb-profil-choix button[aria-pressed="true"] {
   background: var(--nb-creme);
   color: var(--nb-nuit);
