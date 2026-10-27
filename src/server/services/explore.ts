@@ -20,7 +20,7 @@ import {
   showsSection,
 } from "./explore-filters";
 import { openJobWhere } from "./jobs";
-import { declaredMembers } from "./org-team";
+import { parseSocialLinks } from "@/lib/social-links";
 
 /** The offers read for the home of Explorer: enough for every chip, ranked afterwards. */
 const HOME_OFFERS = 60;
@@ -575,11 +575,18 @@ export async function companyPage(
       country: true,
       sector: true,
       size: true,
+      foundedYear: true,
+      international: true,
+      socialLinks: true,
+      hiringNow: true,
+      bannerTheme: true,
       verifiedAt: true,
       createdAt: true,
       _count: { select: { feedFollowers: true } },
+      // « Membres »: the company's recruiters only, each one's page open to everyone (Ephraïm
+      // 27/10/2026); managers, readers and the people who say they work there stay out.
       memberships: {
-        where: { status: "active" },
+        where: { status: "active", role: { in: ["org_owner", "org_admin", "recruiter"] } },
         orderBy: { createdAt: "asc" },
         select: {
           jobTitle: true,
@@ -592,7 +599,7 @@ export async function companyPage(
     },
   });
   if (!org) return null;
-  const [rows, following, mine, declared] = await Promise.all([
+  const [rows, following, mine] = await Promise.all([
     db.job.findMany({
       where: { ...openJobWhere(now), organizationId: org.id },
       orderBy: { publishedAt: "desc" },
@@ -603,12 +610,13 @@ export async function companyPage(
       select: { id: true },
     }),
     links(db, userId),
-    declaredMembers(db, org.id),
   ]);
   const offers = await ranked(db, userId, rows, now);
-  // Members: never someone who blocked me or whom I blocked.
+  // Members: never someone who blocked me or whom I blocked. The page's owner first.
+  const rank = { org_owner: 0, org_admin: 1, recruiter: 2 } as Record<string, number>;
   const members = org.memberships
-    .filter((member) => member.user.id !== userId && mine.get(member.user.id) !== "blocked")
+    .filter((member) => mine.get(member.user.id) !== "blocked")
+    .sort((a, b) => (rank[a.role] ?? 3) - (rank[b.role] ?? 3))
     .map((member) => ({
       id: member.user.id,
       name: member.user.name,
@@ -616,27 +624,11 @@ export async function companyPage(
       title: member.jobTitle?.trim() || null,
       role: member.role as typeof member.role | null,
       link: linkOf(mine.get(member.user.id)),
-      /** Their page opens only when their profile is visible, or for a connection. */
-      visible:
-        member.user.talentProfile?.visibility === "recruiters" ||
-        mine.get(member.user.id) === "connected",
-      declared: false,
-    }));
-  // Then the people who say they work there (étape 3, A6, as on the company's own page): until
-  // the company answers, « Indiqué par la personne »; never one it said does not work there.
-  for (const person of declared) {
-    if (person.userId === userId || mine.get(person.userId) === "blocked") continue;
-    members.push({
-      id: person.userId,
-      name: person.name,
-      image: person.image,
-      title: person.title,
-      role: null,
-      link: linkOf(mine.get(person.userId)),
+      /** A recruiter's profile is a professional page, open to every member. */
       visible: true,
-      declared: person.status !== "confirmed",
-    });
-  }
+      declared: false,
+      self: member.user.id === userId,
+    }));
   return {
     id: org.id,
     slug: org.slug,
@@ -649,6 +641,11 @@ export async function companyPage(
     country: org.country,
     sector: org.sector,
     size: org.size,
+    foundedYear: org.foundedYear,
+    international: org.international,
+    socialLinks: parseSocialLinks(org.socialLinks),
+    hiringNow: org.hiringNow,
+    bannerTheme: org.bannerTheme,
     createdAt: org.createdAt,
     verified: org.verifiedAt !== null,
     followers: org._count.feedFollowers,

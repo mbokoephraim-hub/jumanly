@@ -1,5 +1,6 @@
 import type { PrismaClient } from "@/generated/prisma/client";
 import { z } from "zod";
+import { cleanSocialLinks, socialLinksInput } from "@/lib/social-links";
 import { hirePermissions, HireError, type HireContext } from "./hire";
 import { openJobWhere } from "./jobs";
 import { declaredMembers } from "./org-team";
@@ -41,6 +42,12 @@ export const companyPageSchema = z.object({
     .pipe(z.union([z.literal(""), z.url().max(208)])),
   description: z.string().trim().max(3000).default(""),
   hiringNow: z.boolean().default(false),
+  // The phone's « Profil de l'entreprise » (Ephraïm 27/10/2026): left out by the computer's
+  // screen, so a field it does not send is kept as it is.
+  country: z.union([z.literal(""), z.string().regex(/^[A-Z]{2}$/)]).optional(),
+  foundedYear: z.union([z.literal(""), z.coerce.number().int().min(1800).max(2100)]).optional(),
+  international: z.boolean().optional(),
+  socialLinks: socialLinksInput.optional(),
 });
 
 export type CompanyPageInput = z.input<typeof companyPageSchema>;
@@ -65,6 +72,14 @@ export async function updateCompanyPage(db: PrismaClient, ctx: HireContext, raw:
         website: input.website || null,
         description: input.description || null,
         hiringNow: input.hiringNow,
+        ...(input.country === undefined ? {} : { country: input.country || null }),
+        ...(input.foundedYear === undefined
+          ? {}
+          : { foundedYear: input.foundedYear === "" ? null : input.foundedYear }),
+        ...(input.international === undefined ? {} : { international: input.international }),
+        ...(input.socialLinks === undefined
+          ? {}
+          : { socialLinks: cleanSocialLinks(input.socialLinks) }),
       },
     }),
     db.auditLog.create({
@@ -95,6 +110,10 @@ const orgSelect = {
   hiringNow: true,
   verifiedAt: true,
   verificationStatus: true,
+  country: true,
+  foundedYear: true,
+  international: true,
+  socialLinks: true,
 } as const;
 
 /** The people the page shows: the team (confirmed by the company), then those who say they work there. */

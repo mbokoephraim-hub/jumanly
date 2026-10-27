@@ -23,7 +23,10 @@ export async function updateCompanyPageAction(input: CompanyPageInput): Promise<
   const t = await getTranslations("orgPage");
   const result = await updateCompanyPage(db, ctx, input);
   if (!result.ok) {
-    const key = result.field === "name" || result.field === "website" ? result.field : "other";
+    const key =
+      (["name", "website", "foundedYear", "socialLinks"] as const).find(
+        (field) => field === result.field,
+      ) ?? "other";
     return { ok: false, text: t(`error.${key}`), field: key };
   }
   // The public company page, Explorer and the job pages show the page.

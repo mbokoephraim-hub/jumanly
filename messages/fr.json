@@ -10646,7 +10646,42 @@
       "noMember": "Aucun membre ne correspond à « {query} ».",
       "menu": "Page de {name}",
       "menuShare": "Partager la page",
-      "shared": "Lien de la page copié."
+      "shared": "Lien de la page copié.",
+      "title": "Entreprise",
+      "share": "Partager la page",
+      "socials": "Réseaux de l’entreprise",
+      "social": {
+        "linkedin": "LinkedIn de l’entreprise",
+        "instagram": "Instagram de l’entreprise",
+        "facebook": "Facebook de l’entreprise",
+        "x": "X de l’entreprise",
+        "website": "Site de l’entreprise"
+      },
+      "flag": "Drapeau : {country}",
+      "place": "{city}, {country}",
+      "seatLine": "Siège à {place}",
+      "international": "International",
+      "hiring": "Recrute en ce moment",
+      "followersChip": "{count, plural, =0 {<b>0</b> abonné} one {<b>#</b> abonné} other {<b>#</b> abonnés}}",
+      "offersChip": "{count, plural, =0 {<b>0</b> offre ouverte} one {<b>#</b> offre ouverte} other {<b>#</b> offres ouvertes}}",
+      "edit": "Modifier",
+      "publish": "Publier",
+      "whoWeAre": "Qui sommes-nous",
+      "founded": "Création",
+      "foundedValue": "En {year}",
+      "age": "{count, plural, one {# an d’existence} other {# ans d’existence}}",
+      "newBorn": "Créée cette année",
+      "employeesLabel": "Employés",
+      "domains": "Domaines",
+      "contact": "Liens",
+      "recruiters": "{count, plural, =0 {Aucun recruteur visible} one {# recruteur de l’entreprise} other {# recruteurs de l’entreprise}}",
+      "noRecruiter": "{name} n’a pas encore de recruteur sur Jumanly.",
+      "role": {
+        "org_owner": "Responsable de la page",
+        "org_admin": "Administrateur",
+        "recruiter": "Recruteur"
+      },
+      "seeProfile": "Voir le profil"
     }
   },
   "phoneProfile": {
@@ -19810,6 +19845,30 @@
       "verified": "Entreprise vérifiée",
       "noAbout": "La présentation n'est pas encore écrite. Ajoutez-la depuis « Modifier le profil ».",
       "complete": "Profil rempli à {percent} %"
+    },
+    "country": "Pays du siège",
+    "countryNone": "Non indiqué",
+    "cityLabel": "Ville du siège",
+    "foundedYear": "Année de création",
+    "foundedPlaceholder": "2018",
+    "sectorHint": "Plusieurs domaines ? Séparez-les par des virgules.",
+    "international": {
+      "label": "Entreprise internationale",
+      "hint": "La page affiche « International » au lieu du drapeau du siège."
+    },
+    "socials": "Réseaux sociaux",
+    "socialsHint": "Collez l'adresse de la page de l'entreprise. Seuls les réseaux remplis s'affichent.",
+    "social": {
+      "linkedin": "LinkedIn",
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "x": "X"
+    },
+    "socialPlaceholder": {
+      "linkedin": "linkedin.com/company/…",
+      "instagram": "instagram.com/…",
+      "facebook": "facebook.com/…",
+      "x": "x.com/…"
     }
   },
   "adminSignup": {
@@ -20333,6 +20392,8 @@
       "name": "Le nom doit compter au moins 2 caractères",
       "website": "Cette adresse de site n'est pas valide",
       "other": "Une information n'est pas valide : vérifiez le formulaire",
+      "foundedYear": "L'année de création doit être une année entre 1800 et aujourd'hui",
+      "socialLinks": "Un lien de réseau n'est pas valide : collez l'adresse de la page sur ce réseau",
       "generic": "Ce geste n'a pas abouti. Réessayez."
     },
     "declared": {

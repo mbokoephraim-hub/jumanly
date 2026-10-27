@@ -1,0 +1,198 @@
+/* Page d'une entreprise au téléphone, dans l'identité du profil d'une personne (Ephraïm,
+   27/10/2026). La tête, les onglets et les puces viennent de phone-profil.css (nb-pf-) ; ici, le
+   logo carré, « En bref », les liens et les recruteurs. */
+
+.nb-co-logo {
+  position: relative;
+  flex: none;
+  width: 80px;
+  height: 80px;
+  border-radius: 22px;
+  border: 3px solid var(--nb-nuit);
+  background: #0f3f37;
+  color: var(--nb-lime);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+}
+.nb-co-logo > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.nb-co-logo > b {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.nb-co-logo[data-ton="1"] {
+  background: #ffe1a1;
+  color: #8a5a00;
+}
+.nb-co-logo[data-ton="2"] {
+  background: #cfe4f7;
+  color: #1e4e79;
+}
+.nb-co-logo[data-ton="3"] {
+  background: #c9f1e3;
+  color: #14745f;
+}
+.nb-co-logo[data-ton="4"] {
+  background: #fbe4e0;
+  color: #9a3524;
+}
+
+.nb-co-globe {
+  display: inline-flex;
+  color: var(--nb-lime);
+}
+.nb-co .nb-pf-st[data-recrute] {
+  color: var(--nb-lime);
+  border: 1px solid rgba(166, 242, 107, 0.3);
+}
+
+.nb-co .nb-pf-bt {
+  text-decoration: none;
+}
+.nb-co .nb-co-modifier {
+  background: var(--nb-creme);
+  color: var(--nb-nuit);
+  border-color: var(--nb-creme);
+}
+.nb-co .nb-pf-bt[data-etat="chat"] {
+  background: none;
+  cursor: pointer;
+}
+.nb-co-own {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 20px 0;
+  font-size: 12px;
+  color: var(--nb-brume);
+}
+
+/* À propos */
+.nb-co-texte {
+  white-space: pre-line;
+}
+.nb-co-faits {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 20px;
+}
+.nb-co-fait {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px;
+  border-radius: 18px;
+  background: var(--nb-surface);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  min-width: 0;
+}
+.nb-co-fait > i {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  margin-bottom: 4px;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(166, 242, 107, 0.12);
+  color: var(--nb-lime);
+}
+.nb-co-fait small {
+  font-size: 11px;
+  color: var(--nb-brume);
+}
+.nb-co-fait b {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--nb-creme);
+  overflow-wrap: anywhere;
+}
+.nb-co-fait em {
+  font-style: normal;
+  font-size: 11.5px;
+  color: #c9d6d2;
+}
+.nb-co-site {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 20px;
+  min-height: 48px;
+  padding: 0 14px;
+  border-radius: 16px;
+  background: var(--nb-surface);
+  color: var(--nb-lime);
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.nb-co-site span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Offres */
+.nb-co-offres {
+  padding: 4px 0 8px;
+}
+
+/* Membres : les recruteurs */
+.nb-co-membres {
+  padding-top: 4px;
+}
+.nb-co-membres .nb-ex-recherche {
+  margin: 8px 20px 0;
+}
+.nb-co-membre {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 20px 8px;
+  padding: 10px 12px;
+  border-radius: 20px;
+  background: var(--nb-surface);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.nb-co-membre-l {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+.nb-co-membre-t {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.nb-co-membre-t b {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--nb-creme);
+}
+.nb-co-membre-t span {
+  font-size: 12.5px;
+  color: #c9d6d2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-co-membre-t small {
+  font-size: 11px;
+  color: var(--nb-lime);
+}
+.nb-co-membre-t small:empty {
+  display: none;
+}

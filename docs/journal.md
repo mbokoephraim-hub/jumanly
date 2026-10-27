@@ -4924,3 +4924,13 @@ bibliothèque, et se supprime.
 - L'auteur d'un commentaire peut le modifier ou le supprimer (« ··· » à côté de son nom). L'auteur d'une publication peut la modifier (titre et texte) ou la supprimer, y compris une publication faite au nom de son entreprise. Une publication ou un commentaire modifié affiche « modifié » (nouveau champ `FeedPost.editedAt`).
 - La ville d'une personne vient de `User.city`.
 - Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
+
+## 27/10/2026 · Page d'une entreprise au téléphone, dans l'identité du profil
+
+- Demande d'Ephraïm : la page d'une entreprise (vue par tous et par ses administrateurs) reprend l'identité du profil talent ou recruteur au téléphone.
+- Tête : bannière (image ou couleur choisie à l'inscription), logo carré à coins arrondis, réseaux sociaux (LinkedIn, Instagram, Facebook, X, site), nom et badge vérifié, @identifiant, siège avec son drapeau (« 🇨🇩 Kinshasa, RD Congo ») ou « International », première phrase de la présentation, puces abonnés · offres ouvertes · employés · « Recrute en ce moment ». Boutons : « Suivre » et « Partager » pour un visiteur ; « Modifier » et « Publier » pour un administrateur.
+- Onglets : Publications (ouvert d'abord) · À propos (qui sommes-nous, puis en bref : création et années d'existence, employés, siège, sur Jumanly depuis ; domaines ; liens) · Offres · Membres.
+- Membres : seulement les recruteurs de l'entreprise (responsable de la page, administrateurs, recruteurs), le responsable en premier, chacun cliquable vers son profil par n'importe qui. Les managers, lecteurs et personnes qui se déclarent employées n'y sont plus. Un recruteur sans profil recruteur rempli a quand même sa page (`recruiterBlock`).
+- Nouveaux champs `Organization.foundedYear`, `international`, `socialLinks`, modifiés dans « Profil de l'entreprise » au téléphone avec le pays du siège. Le formulaire de l'ordinateur ne les envoie pas : ils restent tels quels quand il enregistre.
+- Domaines : le champ Secteur, séparé par des virgules.
+- Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
