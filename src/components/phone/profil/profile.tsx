@@ -1,5 +1,6 @@
 "use client";
 
+import "@/styles/phone-apropos.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useState, useTransition, type CSSProperties, type ReactNode } from "react";
@@ -377,6 +378,7 @@ export function PersonProfile({
       >
         {tab === "apropos" ? (
           <>
+            {person.about ? <AboutCard about={person.about} /> : null}
             <h2 className="nb-pf-h">
               {t("skills")} <span>{person.skillsCount}</span>
             </h2>
@@ -781,6 +783,19 @@ export function ConnectionActions({ person }: { person: ProfileView }) {
           {t("chat")}
         </Link>
       ) : null}
+    </div>
+  );
+}
+
+/**
+ * « À propos », before the skills (décision d'Ephraïm du 27/10/2026): the person's own title and
+ * up to 400 characters on who they are and what they do.
+ */
+export function AboutCard({ about }: { about: NonNullable<ProfileView["about"]> }) {
+  return (
+    <div className="nb-pf-presente">
+      {about.title ? <h3>{about.title}</h3> : null}
+      <p>{about.text}</p>
     </div>
   );
 }

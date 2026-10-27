@@ -354,7 +354,8 @@ export async function profileView(
     verified: person.verified,
     handle: t("handle", { handle: person.handle ?? handleFrom(person.name) }),
     place,
-    bio: person.about ?? person.headline,
+    bio: person.headline,
+    about: person.about ? { title: person.aboutTitle, text: person.about } : null,
     connections: person.connections,
     contract: person.contract
       ? tl(`preferences.contract.${person.contract}` as "preferences.contract.cdi")

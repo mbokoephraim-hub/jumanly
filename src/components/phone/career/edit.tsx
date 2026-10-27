@@ -1,9 +1,11 @@
 "use client";
 
+import "@/styles/phone-apropos.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useId, useRef, useState, useTransition, type ReactNode } from "react";
+import { ABOUT_TEXT_MAX, ABOUT_TITLE_MAX } from "@/lib/profile-about";
 import { showToast } from "@/components/motion/toaster";
 import {
   deleteCareerEducationAction,
@@ -482,27 +484,14 @@ export function HeadForm({ values }: { values: HeadValues }) {
           />
         )}
       </Field>
-      <Field label={t("bio")}>
-        {(id) => (
-          <textarea
-            id={id}
-            className="nb-ca-in"
-            value={form.summary}
-            onChange={(event) => set({ summary: event.target.value })}
-            maxLength={1000}
-            rows={5}
-          />
-        )}
-      </Field>
-      <div className="nb-ca-ob">
-        <div className="nb-ca-ob-h">
-          <OrbiDisc size={34} />
-          <span>{t("bioOrbi")}</span>
-          <Link href="/app/career/profil/apropos" data-orbi="">
-            {t("improve")}
-          </Link>
-        </div>
-      </div>
+      {/* The presentation has its own page now (« À propos », a title and 400 characters). */}
+      <Link href="/app/career/profil/apropos" className="nb-ca-it">
+        <span>
+          {t("aboutTitle")}
+          <small>{t("aboutHint")}</small>
+        </span>
+        <PhoneIcon name="chevron" size={18} />
+      </Link>
       <Chips
         label={t("availability")}
         value={form.availability}
@@ -623,17 +612,43 @@ export function HeadForm({ values }: { values: HeadValues }) {
 }
 
 /** « À propos » (planche Carrière-apropos): the text, its length and Orbi's rewrite. */
-export function AboutForm({ summary, target }: { summary: string; target: string | null }) {
+export function AboutForm({
+  title: initialTitle,
+  summary,
+  target,
+}: {
+  title: string;
+  summary: string;
+  target: string | null;
+}) {
   const t = useTranslations("phoneCareer.form");
+  const [title, setTitle] = useState(initialTitle);
   const [text, setText] = useState(summary);
-  const { pending, save } = useSave();
+  const { pending, error, save } = useSave();
+  // A text written before the 400-character limit (or imported from a CV) stays until shortened.
+  const over = text.trim().length > ABOUT_TEXT_MAX;
   return (
     <FormPage
       title={t("aboutTitle")}
       pending={pending}
-      onSave={() => save(() => saveCareerAboutAction(text), t("aboutSaved"))}
+      onSave={() => save(() => saveCareerAboutAction({ title, text }), t("aboutSaved"))}
     >
-      <Field label={t("aboutLabel")}>
+      <Field label={t("aboutHeading")}>
+        {(id) => (
+          <input
+            id={id}
+            className="nb-ca-in"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            maxLength={ABOUT_TITLE_MAX}
+            placeholder={t("aboutHeadingPlaceholder")}
+          />
+        )}
+      </Field>
+      <Field
+        label={t("aboutLabel")}
+        error={over && error === "aboutTooLong" ? t("errors.aboutTooLong") : null}
+      >
         {(id) => (
           <textarea
             id={id}
@@ -641,12 +656,16 @@ export function AboutForm({ summary, target }: { summary: string; target: string
             data-haut=""
             value={text}
             onChange={(event) => setText(event.target.value)}
-            maxLength={1000}
+            maxLength={Math.max(ABOUT_TEXT_MAX, summary.length)}
+            placeholder={t("aboutPlaceholder")}
+            aria-invalid={over || undefined}
             rows={7}
           />
         )}
       </Field>
-      <p className="nb-meta nb-ca-compte">{t("count", { count: text.length, max: 1000 })}</p>
+      <p className="nb-meta nb-ca-compte" data-trop={over ? "" : undefined}>
+        {t("count", { count: text.trim().length, max: ABOUT_TEXT_MAX })}
+      </p>
       <OrbiRewrite
         kind="about"
         text={text}
