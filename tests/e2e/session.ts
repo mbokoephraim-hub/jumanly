@@ -260,3 +260,19 @@ export function fictiveDocx(paragraphs: string[]) {
     buffer: Buffer.from(bytes),
   };
 }
+
+/** A fictional PDF CV (Ephraïm, 27/10: « Garder mon CV »), one line of text per entry. */
+export async function fictivePdf(lines: string[]) {
+  const { PDFDocument, StandardFonts } = await import("pdf-lib");
+  const pdf = await PDFDocument.create();
+  const font = await pdf.embedFont(StandardFonts.Helvetica);
+  const page = pdf.addPage([595, 842]);
+  lines.forEach((line, index) =>
+    page.drawText(line, { x: 56, y: 780 - index * 22, size: 13, font }),
+  );
+  return {
+    name: "cv-fictif.pdf",
+    mimeType: "application/pdf",
+    buffer: Buffer.from(await pdf.save()),
+  };
+}

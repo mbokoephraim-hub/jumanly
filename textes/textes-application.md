@@ -8957,8 +8957,8 @@ Conventions :
 | `phoneCv.read.skills` | Compétences et langues |
 | `phoneCv.read.never` | Le fichier n’est pas gardé : seul ce que vous validez entre dans votre profil. |
 | `phoneCv.found.title` | Voici ce qu’Orbi a trouvé |
-| `phoneCv.found.hint` | Décochez ce que vous ne voulez pas reprendre. |
-| `phoneCv.found.nothing` | Orbi n’a rien trouvé à reprendre dans ce fichier. Vous pouvez créer le CV depuis votre profil. |
+| `phoneCv.found.hint` | Décochez ce que vous ne voulez pas reprendre dans votre profil. |
+| `phoneCv.found.nothing` | Orbi n’a rien trouvé à reprendre dans ce fichier. Vous pouvez le garder tel quel, ou créer un CV depuis votre profil. |
 | `phoneCv.found.contact` | Coordonnées |
 | `phoneCv.found.experiences` | {count, plural, one {# expérience} other {# expériences}} |
 | `phoneCv.found.educations` | {count, plural, one {# formation} other {# formations}} |
@@ -8970,11 +8970,49 @@ Conventions :
 | `phoneCv.found.newMany` | {count, plural, one {+# nouvelle} other {+# nouvelles}} |
 | `phoneCv.found.undated` | {count, plural, one {Une expérience n’a pas de date de début : elle ne sera pas ajoutée, vous pourrez l’ajouter à la main.} other {# expériences n’ont pas de date de début : elles ne seront pas ajoutées, vous pourrez les ajouter à la main.}} |
 | `phoneCv.found.rulesOnly` | Sans Orbi, seules les compétences et les langues sont reconnues. Activez Orbi pour lire aussi les expériences et les formations. |
-| `phoneCv.found.consent` | Seuls les groupes cochés entrent dans votre profil. Votre ville n’est reprise que si votre profil n’en a pas. |
-| `phoneCv.found.apply` | Ajouter à mon profil et créer le CV |
-| `phoneCv.found.applyEmpty` | Créer le CV depuis mon profil |
-| `phoneCv.found.keepOnly` | Garder seulement ce CV, sans toucher à mon profil |
-| `phoneCv.found.keepNote` | Le CV importé est gardé dans « Mes CV » tel qu’Orbi l’a lu ; vous pourrez le modifier. |
+| `phoneCv.found.consent` | Seul « Remplir mon profil » change votre profil, et seulement avec les groupes cochés. Votre ville n’est reprise que si votre profil n’en a pas. |
+| `phoneCv.found.choose` | Que voulez-vous faire de ce CV ? |
+| `phoneCv.found.keep` | Garder mon CV |
+| `phoneCv.found.keepText` | Il est rangé tel quel dans « Mes CV ». Vous pourrez le lire, le télécharger et postuler avec. |
+| `phoneCv.found.profile` | Remplir mon profil avec ce CV |
+| `phoneCv.found.profileText` | Orbi range dans votre profil les groupes cochés. Le CV est aussi gardé dans « Mes CV ». |
+| `phoneCv.found.newCv` | Créer un nouveau CV avec ces informations |
+| `phoneCv.found.newCvText` | Vous choisissez un modèle, puis vous modifiez le contenu. Votre profil ne change pas. |
+| `phoneCv.found.fromProfile` | Créer un nouveau CV depuis mon profil |
+| `phoneCv.found.fromProfileText` | Orbi le remplit avec ce que votre profil contient, puis vous le modifiez. |
+| `phoneCv.reader.seo` | Lire un CV |
+| `phoneCv.reader.close` | Fermer et revenir à mes CV |
+| `phoneCv.reader.kind.pdf` | PDF importé |
+| `phoneCv.reader.kind.docx` | Fichier Word importé |
+| `phoneCv.reader.kind.image` | Photo importée |
+| `phoneCv.reader.kind.jumanly` | CV fait sur Jumanly |
+| `phoneCv.reader.kept` | Votre CV est rangé dans « Mes CV ». |
+| `phoneCv.reader.profileFilled` | {count, plural, =0 {Votre profil avait déjà tout. Votre CV est rangé dans « Mes CV ».} one {Orbi a rangé un élément dans votre profil. Votre CV est aussi rangé dans « Mes CV ».} other {Orbi a rangé # éléments dans votre profil. Votre CV est aussi rangé dans « Mes CV ».}} |
+| `phoneCv.reader.seeProfile` | Voir mon profil |
+| `phoneCv.reader.pagesLabel` | Le CV « {title} » |
+| `phoneCv.reader.unreadable` | Ce PDF ne s’affiche pas ici. Téléchargez-le pour le lire. |
+| `phoneCv.reader.wordNote` | Un fichier Word ne s’affiche pas tel quel sur le téléphone : voici ce qu’il contient. Le fichier se télécharge tel que vous l’avez importé. |
+| `phoneCv.reader.emptyNote` | Ce CV est encore vide : voici un exemple de sa mise en page. Touchez « Modifier » pour l’écrire. |
+| `phoneCv.reader.downloadFile` | Télécharger le fichier |
+| `phoneCv.reader.downloadPdf` | Télécharger en PDF |
+| `phoneCv.reader.emptyPdf` | Remplissez votre CV pour le télécharger |
+| `phoneCv.reader.preparing` | Préparation du PDF… |
+| `phoneCv.reader.downloaded` | PDF téléchargé. |
+| `phoneCv.reader.downloadError` | Le PDF n’a pas pu être préparé. Réessayez dans un instant. |
+| `phoneCv.reader.apply` | Quand vous postulez à une offre, vous choisissez le CV à envoyer : celui-ci en fait partie. |
+| `phoneCv.reader.applyLink` | Voir les offres |
+| `phoneCv.reader.primary` | Utiliser par défaut pour postuler |
+| `phoneCv.reader.primaryIs` | CV utilisé par défaut |
+| `phoneCv.reader.primaryOn` | Ce CV est proposé en premier quand vous postulez. |
+| `phoneCv.reader.primaryOff` | Ce CV n’est plus celui par défaut. |
+| `phoneCv.reader.edit` | Modifier |
+| `phoneCv.reader.editable` | En faire un CV modifiable |
+| `phoneCv.reader.delete` | Supprimer ce CV |
+| `phoneCv.reader.deleteQuestion` | Supprimer « {title} » ? |
+| `phoneCv.reader.deleteText` | Ce CV disparaît de « Mes CV ». Les candidatures déjà envoyées gardent leur copie. |
+| `phoneCv.reader.deleteConfirm` | Supprimer |
+| `phoneCv.reader.cancel` | Annuler |
+| `phoneCv.reader.error` | Ça n’a pas marché. Réessayez. |
 | `phoneCv.content.title` | Contenu |
 | `phoneCv.content.sub` | Rempli depuis votre profil |
 | `phoneCv.content.orbiTitle` | Orbi a tout rempli depuis votre profil. |
@@ -9171,6 +9209,9 @@ Conventions :
 | `phoneCareer.cv.menu.duplicate` | Dupliquer |
 | `phoneCareer.cv.menu.primary` | Utiliser par défaut |
 | `phoneCareer.cv.menu.delete` | Supprimer |
+| `phoneCareer.cv.menu.read` | Lire le CV |
+| `phoneCareer.cv.menu.download` | Télécharger le fichier |
+| `phoneCareer.cv.menu.editable` | En faire un CV modifiable |
 | `phoneCareer.portfolio.featured` | Mise en avant |
 | `phoneCareer.portfolio.line` | {tool} · {count, plural, =0 {sans photo} one {une photo} other {# photos}} |
 | `phoneCareer.portfolio.lineNoTool` | {count, plural, =0 {Sans photo} one {Une photo} other {# photos}} |
@@ -9261,6 +9302,12 @@ Conventions :
 | `phoneCareer.cv.changedToday` | modifié aujourd’hui |
 | `phoneCareer.cv.changedYesterday` | modifié hier |
 | `phoneCareer.cv.meta` | Modèle {template} · {when} |
+| `phoneCareer.cv.metaFile` | {kind} importé · {when} |
+| `phoneCareer.cv.fileKind.pdf` | PDF |
+| `phoneCareer.cv.fileKind.docx` | Fichier Word |
+| `phoneCareer.cv.fileKind.image` | Photo |
+| `phoneCareer.cv.imported` | Importé |
+| `phoneCareer.cv.deleted` | CV supprimé. |
 | `phoneCareer.progression.stepText.skill` | {count, plural, one {Une offre de plus vous correspond} other {# offres de plus vous correspondent}} |
 | `phoneCareer.progression.stepText.project` | Montrez ce que vous savez faire, en 2 minutes |
 | `phoneCareer.progression.stepText.interview` | Simulation avec Orbi, 10 minutes |

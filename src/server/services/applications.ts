@@ -11,6 +11,8 @@ import type { Prisma, PrismaClient, StageKind } from "@/generated/prisma/client"
 import { snapshotAttachments, type AttachmentRef } from "./application-attachments";
 import { isJobOpen } from "./jobs";
 import { reportError } from "@/server/observability";
+import { fileStorage } from "@/server/storage";
+import { copyCvFileForApplication } from "./cv-original";
 
 /**
  * The stages an organization may follow (Réglages du recrutement, étape 3, A5), in their order.
@@ -165,6 +167,20 @@ export async function applyToJob(
         events: { create: { actorId: input.userId, type: "submitted" } },
       },
     });
+    // An imported CV kept as a file goes as that file, copied: deleting the CV later keeps it.
+    if (cv?.fileKey) {
+      const key = await copyCvFileForApplication(fileStorage(db), cv.fileKey, application.id);
+      if (key)
+        await db.application.update({
+          where: { id: application.id },
+          data: {
+            cvSnapshot: {
+              ...(application.cvSnapshot as Prisma.JsonObject),
+              file: { key, name: cv.fileName ?? cv.title, type: cv.fileType ?? "pdf" },
+            },
+          },
+        });
+    }
     // The score shown at that moment is kept with the application; applying never waits on it.
     await freezeApplicationMatch(db, application.id, now).catch((error) => reportError(error));
     // The draft of the staged form has done its job (docs/ux-mobile-talent, prompt 4).

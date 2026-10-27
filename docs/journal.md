@@ -4862,3 +4862,22 @@ Demande d'Ephraïm : le PDF téléchargé ne contenait que le haut du CV, « jus
 - La carte « À propos » s'affiche avant les compétences dans Carrière (onglet Profil) et dans l'onglet « À propos » du profil vu par les autres ; la ligne sous le nom montre désormais le titre professionnel.
 - Photo : `src/components/phone/career/photo-viewer.tsx` (un `<dialog>` dont le fond est flouté), styles dans `src/styles/phone-apropos.css`, importés par les composants.
 - Publié sans attendre la vérification complète, à la demande d'Ephraïm (seuls la compilation et ESLint ont tourné).
+
+## Carrière · importer un CV : trois choix, et lire ses CV dans l'appli (27 octobre 2026)
+
+Demande d'Ephraïm : un CV importé doit pouvoir être gardé, servir à remplir le profil, ou servir à
+créer un autre CV ; un CV de la bibliothèque se lit dans l'appli, se ferme pour revenir à la
+bibliothèque, et se supprime.
+
+- « Voici ce qu'Orbi a trouvé » propose trois choix : « Garder mon CV » (le fichier tel quel dans
+  « Mes CV »), « Remplir mon profil avec ce CV » (Orbi range les groupes cochés dans le profil, le
+  CV est aussi gardé) et « Créer un nouveau CV avec ces informations » (choix du modèle, puis
+  Contenu, Mise en forme, Aperçu ; le PDF est ce CV).
+- Le fichier d'origine est gardé (stockage privé) et sert aussi aux candidatures : le recruteur
+  reçoit le fichier importé.
+- Nouvel écran « Lire » (`/app/career/cv/[id]/lire`) : PDF dessiné page par page, photo, ou mise en
+  page pour un fichier Word et un CV fait sur Jumanly ; Télécharger, Utiliser par défaut pour
+  postuler, Modifier (ou « En faire un CV modifiable »), Supprimer. « Fermer » revient à « Mes CV ».
+  Les cartes de la bibliothèque ouvrent cet écran.
+- Tests e2e `carriere-v3` : les trois choix, lecture du PDF, téléchargement, fermeture, suppression,
+  PDF du nouveau CV.

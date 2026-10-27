@@ -28,7 +28,13 @@ import {
   targetSkillsFor,
   type ImproveResult,
 } from "@/server/services/cv-coach";
-import { importCvPhoto, parseImport } from "@/server/services/cv-import";
+import { applyImport, importCvPhoto, parseImport } from "@/server/services/cv-import";
+import {
+  dropImportedFile,
+  holdImportedFile,
+  keepImportedFile,
+} from "@/server/services/cv-original";
+import { fileStorage } from "@/server/storage";
 import {
   applyCvIntoProfile,
   cvFromExtraction,
@@ -344,7 +350,7 @@ function photoType(bytes: Uint8Array): PhotoType | null {
 
 /**
  * « Photographier un CV papier » (capture 13): the picture, made lighter on the phone, is read
- * by Orbi and never kept; what was found waits on « Voici ce qu’Orbi a trouvé ».
+ * by Orbi and waits, to be kept if the talent chooses so; what was found waits on « Voici ce qu’Orbi a trouvé ».
  */
 export async function readCvPhotoAction(formData: FormData) {
   const { user } = await owner();
@@ -361,6 +367,8 @@ export async function readCvPhotoAction(formData: FormData) {
     { mediaType: type, data: Buffer.from(bytes).toString("base64") },
     { name: file.name || "photo.jpg", kind: "image", pages: 1, size: file.size },
   );
+  if (result.ok)
+    await holdImportedFile(fileStorage(db), user.id, result.id, { contentType: type, bytes });
   refresh();
   if (!result.ok) redirect(`${back}&erreur=${result.error === "ai" ? "photo" : "orbi"}`);
   redirect("/app/career/cv/nouveau?etape=trouve");
@@ -430,10 +438,12 @@ export async function addCvToProfileAction(
 }
 
 /**
- * « Garder seulement ce CV » (Ephraïm, 27/10): an imported CV kept in « Mes CV » as it was read,
- * without touching the profile; its name is the file's.
+ * The three ways out of « Voici ce qu’Orbi a trouvé » (Ephraïm, 27/10). Each one makes a CV in
+ * « Mes CV » from what was read; the file itself is kept unless a new CV is being made.
  */
-export async function keepImportedCvAction(formData: FormData) {
+type ImportChoice = "keep" | "profile" | "new";
+
+async function cvFromImport(formData: FormData, choice: ImportChoice) {
   const { user, profile } = await owner();
   const importId = id.safeParse(String(formData.get("import") ?? ""));
   const pending = importId.success
@@ -444,7 +454,7 @@ export async function keepImportedCvAction(formData: FormData) {
   const read = pending ? parseImport(pending.payload) : null;
   if (!pending || !read) redirect("/app/career/cv/nouveau?etape=import", RedirectType.replace);
   const count = await db.document.count({ where: { profileId: profile.id, kind: "cv" } });
-  if (count >= MAX_CVS) redirect("/app/career/cv/nouveau?erreur=limite", RedirectType.replace);
+  if (count >= MAX_CVS) redirect("/app/career/cv?onglet=cv&erreur=limite", RedirectType.replace);
   const account = await db.user.findUniqueOrThrow({
     where: { id: user.id },
     select: { name: true, firstName: true, lastName: true, email: true, city: true, country: true },
@@ -454,11 +464,12 @@ export async function keepImportedCvAction(formData: FormData) {
     .replace(/\.[a-z0-9]{2,5}$/i, "")
     .trim()
     .slice(0, 80);
+  const numbered = count === 0 ? t("default") : `${t("default")} ${count + 1}`;
   const cv = await db.document.create({
     data: {
       profileId: profile.id,
       kind: "cv",
-      title: fileTitle || (count === 0 ? t("default") : `${t("default")} ${count + 1}`),
+      title: choice === "new" ? numbered : fileTitle || numbered,
       templateId: DEFAULT_TEMPLATE_ID,
       isPrimary: count === 0,
       content: cvFromExtraction(read, {
@@ -469,7 +480,54 @@ export async function keepImportedCvAction(formData: FormData) {
       }),
     },
   });
+  const storage = fileStorage(db);
+  if (choice === "new") await dropImportedFile(storage, user.id, pending.id);
+  else if (read.file)
+    await keepImportedFile(db, storage, user.id, pending.id, cv.id, {
+      name: read.file.name,
+      kind: read.file.kind,
+    });
+  return { user, pending, read, cv };
+}
+
+/** 1. « Garder mon CV »: the CV as it is, in « Mes CV », the profile untouched. */
+export async function keepImportedCvAction(formData: FormData) {
+  const { pending, cv } = await cvFromImport(formData, "keep");
   await db.aiSuggestion.update({ where: { id: pending.id }, data: { status: "applied" } });
   refresh();
-  redirect(`/app/career/cv/${cv.id}?etape=contenu`, RedirectType.replace);
+  redirect(`/app/career/cv/${cv.id}/lire?importe=garde`, RedirectType.replace);
+}
+
+/**
+ * 2. « Remplir mon profil avec ce CV »: Orbi puts the groups left ticked into the profile, each
+ * in its place, and the CV is kept in « Mes CV » as well.
+ */
+export async function profileFromImportAction(formData: FormData) {
+  const chosen = new Set(formData.getAll("groupe").map(String));
+  const { user, pending, read, cv } = await cvFromImport(formData, "profile");
+  const all = (group: "experiences" | "educations" | "skills") =>
+    chosen.has(group) ? read[group].map((_, index) => index) : [];
+  const added = await applyImport(db, user.id, pending.id, {
+    experiences: all("experiences"),
+    educations: all("educations"),
+    skills: all("skills"),
+    languages: chosen.has("languages"),
+    contact: chosen.has("contact"),
+  });
+  refresh();
+  redirect(
+    `/app/career/cv/${cv.id}/lire?importe=profil&ajouts=${typeof added === "number" ? added : 0}`,
+    RedirectType.replace,
+  );
+}
+
+/**
+ * 3. « Créer un nouveau CV avec ces informations »: what was read fills a CV made in Jumanly, a
+ * template is chosen, then Contenu, Mise en forme and Aperçu as for any CV.
+ */
+export async function newCvFromImportAction(formData: FormData) {
+  const { pending, cv } = await cvFromImport(formData, "new");
+  await db.aiSuggestion.update({ where: { id: pending.id }, data: { status: "applied" } });
+  refresh();
+  redirect(`/app/career/cv/${cv.id}?etape=modele`, RedirectType.replace);
 }
