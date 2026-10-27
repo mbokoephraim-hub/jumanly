@@ -3,17 +3,6 @@
    ici, ce qui diffère dans son propre espace, les cinq rubriques et le parcours « Nouveau CV ». */
 
 /* ─── Carrière ─── */
-.nb-cr-tete {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: calc(var(--nb-haut) + 20px) 20px 10px;
-}
-.nb-cr-tete h1 {
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
 .nb-cr-ronds {
   display: flex;
   gap: 8px;

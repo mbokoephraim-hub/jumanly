@@ -58,13 +58,13 @@ export function PhoneExplorer({
 
   return (
     <div className="nb-page nb-ex">
-      <header className="nb-ex-haut">
-        <Link href="/app/career/cv" className="nb-ex-moi" aria-label={t("account")}>
-          {/* The size of the Fil's avatar and of the bookmark beside it (Ephraïm, 27/10/2026). */}
-          <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={28} />
-        </Link>
+      {/* The same head as the other tabs (Ephraïm, 27/10/2026): title left, round buttons right. */}
+      <header className="nb-tete-onglet">
         <h1>{t("title")}</h1>
         <SavedLink count={saved} />
+        <Link href="/app/career/cv" className="nb-tete-moi" aria-label={t("account")}>
+          <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={36} />
+        </Link>
       </header>
 
       <ExplorerSearch

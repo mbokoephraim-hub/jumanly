@@ -69,12 +69,11 @@ export function PhoneFil({
       {recruiter ? (
         recruiter.compose
       ) : (
-        <header className="nb-tete nb-fil-haut">
+        <header className="nb-tete-onglet">
           <h1>{t("title")}</h1>
           <FilBell initial={unread} />
-          <Link href="/app/career/cv" className="nb-fil-moi" aria-label={t("account")}>
-            {/* The size of the bell beside it (Ephraïm, 22/10/2026). */}
-            <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={28} />
+          <Link href="/app/career/cv" className="nb-tete-moi" aria-label={t("account")}>
+            <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={36} />
           </Link>
         </header>
       )}

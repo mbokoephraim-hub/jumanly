@@ -2789,17 +2789,6 @@ html[data-nb-decouvert] .nb-spl-halo {
   background: #ffe1a1;
   color: #8a5a00;
 }
-.nb-fil-haut {
-  padding-top: calc(var(--nb-haut) + 24px);
-  padding-bottom: 6px;
-}
-.nb-fil-haut h1 {
-  font-size: 34px;
-}
-.nb-fil-moi {
-  border-radius: 50%;
-  display: inline-flex;
-}
 .nb-fil-onglets [role="tab"] {
   height: 52px;
   font-size: 15px;
@@ -3769,21 +3758,6 @@ html[data-nb-decouvert] .nb-spl-halo {
 /* ─── Explorer (lot B4, planches Offres, Entreprise, Personne) ─── */
 .nb-ex {
   padding-bottom: calc(var(--nb-nav) + 90px);
-}
-.nb-ex-haut {
-  padding: var(--nb-haut) 20px 0;
-  display: grid;
-  grid-template-columns: 44px 1fr 44px;
-  align-items: center;
-  min-height: calc(var(--nb-haut) + 44px);
-}
-.nb-ex-haut h1 {
-  text-align: center;
-  font-size: 19px;
-  font-weight: 600;
-}
-.nb-ex-moi {
-  display: inline-flex;
 }
 .nb-ex-signet {
   justify-self: end;
@@ -7921,21 +7895,6 @@ input:checked + .nb-ca-radio::after {
 }
 .nb-fo-accueil {
   padding-bottom: calc(var(--nb-nav) + 90px);
-}
-.nb-fo-haut {
-  padding: calc(var(--nb-haut) + 26px) 20px 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.nb-fo-haut h1 {
-  flex: 1;
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-.nb-fo-haut a {
-  display: inline-flex;
 }
 .nb-fo-onglets {
   display: grid;

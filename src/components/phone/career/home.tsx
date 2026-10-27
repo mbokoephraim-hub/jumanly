@@ -223,7 +223,7 @@ export function PhoneCareer({ view }: { view: CareerView }) {
         />
       ) : (
         <>
-          <header className="nb-cr-tete">
+          <header className="nb-tete-onglet">
             <h1>{t("title")}</h1>
             <span className="nb-cr-ronds">
               <button
