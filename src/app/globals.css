@@ -52,14 +52,14 @@
   --color-feuille-fonce: var(--jm-feuille-fonce);
   --color-ambre-fonce: var(--jm-ambre-fonce);
   /* Teintes de badges et de retours (planche 00-02) */
-  --color-ia: #14745f;
-  --color-gris-clair: #e9eeec;
-  --color-up-texte: #1f7a35;
-  --color-down-fond: #fbe3df;
-  --color-down-texte: #b23a2b;
-  --color-ambre-fond: #fcebc6;
-  --color-ambre-texte: #8a5a00;
-  --color-menthe-texte: #0b5e49;
+  --color-ia: var(--jm-ia, #14745f);
+  --color-gris-clair: var(--jm-gris-clair, #e9eeec);
+  --color-up-texte: var(--jm-up-texte, #1f7a35);
+  --color-down-fond: var(--jm-down-fond, #fbe3df);
+  --color-down-texte: var(--jm-down-texte, #b23a2b);
+  --color-ambre-fond: var(--jm-ambre-fond, #fcebc6);
+  --color-ambre-texte: var(--jm-ambre-texte, #8a5a00);
+  --color-menthe-texte: var(--jm-menthe-texte, #0b5e49);
 
   --radius-card: var(--jm-radius-card);
   --radius-box: var(--jm-radius-box);
