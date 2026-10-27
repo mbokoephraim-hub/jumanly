@@ -62,6 +62,9 @@ export function enabledProviders(): SocialProviderId[] {
 /** Apple may hide the address behind its relay: that address is the one Apple verified. */
 const APPLE_RELAY = /@privaterelay\.appleid\.com$/i;
 
+/** The page a confirmed change of address leads to (« Paramètres »). */
+const CHANGED = "adresse=changee";
+
 export const auth = betterAuth({
   appName: "Jumanly",
   baseURL: process.env.BETTER_AUTH_URL || siteUrl(),
@@ -92,7 +95,10 @@ export const auth = betterAuth({
     sendVerificationEmail: async ({ user, url }) => {
       await sendVerificationLink(user.email, url, await firstNameOf(user.email));
     },
-    afterEmailVerification: async (user) => {
+    afterEmailVerification: async (user, request) => {
+      // A new address confirmed from « Changer d'adresse » is not a new account: no welcome.
+      if (request?.url && new URL(request.url).searchParams.get("callbackURL")?.includes(CHANGED))
+        return;
       await welcomeConfirmedAccount(db, user.id);
     },
   },
@@ -127,6 +133,8 @@ export const auth = betterAuth({
   },
   session: { expiresIn: 30 * DAY, updateAge: DAY },
   user: {
+    // « Changer d'adresse » in Paramètres: the link of emailVerification goes to the new address.
+    changeEmail: { enabled: true },
     additionalFields: {
       firstName: { type: "string", required: false },
       lastName: { type: "string", required: false },

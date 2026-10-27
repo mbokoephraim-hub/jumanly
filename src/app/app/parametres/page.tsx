@@ -23,7 +23,12 @@ import { redirect } from "next/navigation";
 import { RecruiterSettings } from "@/components/recruiter/settings";
 import { getActiveSpace } from "@/server/hire-context";
 import { inPartnerSpaceOnly } from "@/server/talent-space";
-import { PhoneSettingsScreen } from "@/components/phone/career/settings-server";
+import {
+  PhoneRecruiterSettingsScreen,
+  PhoneSettingsScreen,
+} from "@/components/phone/career/settings-server";
+import { ToastOnLoad } from "@/components/motion/toast-on-load";
+import { isOrgAdmin } from "@/server/services/hire-phone-account";
 import { isPhone } from "@/server/view";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -100,10 +105,34 @@ export default async function SettingsPage({ searchParams }: PageProps<"/app/par
     redirect(`/app/parametres/${tab}${query.size ? `?${query}` : ""}`);
   }
   const space = await getActiveSpace(user.id);
-  if (space) return <RecruiterSettings user={user} space={space} params={params} />;
+  // Back from the link of « Changer d'adresse »: the new address is the account's now.
+  const changed =
+    one(params.adresse) === "changee" ? (
+      <ToastOnLoad message={(await getTranslations("phoneCareer.reglages"))("emailChange.done")} />
+    ) : null;
+  if (space) {
+    // The phone: the same page as a talent's, with the recruiter's rows (Ephraïm, 27/10/2026).
+    if ((await isPhone()) && one(params.supprimer) !== "1")
+      return (
+        <>
+          {changed}
+          <PhoneRecruiterSettingsScreen
+            user={user}
+            organizationId={space.organizationId}
+            admin={isOrgAdmin(space.role)}
+          />
+        </>
+      );
+    return <RecruiterSettings user={user} space={space} params={params} />;
+  }
   // The phone (Modèle B, planche Carrière-parametres); deleting the account keeps its own sheet.
   if ((await isPhone()) && one(params.supprimer) !== "1")
-    return <PhoneSettingsScreen user={user} />;
+    return (
+      <>
+        {changed}
+        <PhoneSettingsScreen user={user} />
+      </>
+    );
   const t = await getTranslations();
   const [org, credential] = await Promise.all([
     ownedOrganizations(db, user.id).then((owned) => owned.blocking),

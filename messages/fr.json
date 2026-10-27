@@ -11613,6 +11613,27 @@
       "account": "Compte",
       "namePhoto": "Nom et photo",
       "posts": "Mes publications",
+      "emailChange": {
+        "action": "Changer",
+        "title": "Changer d'adresse e-mail",
+        "text": "Nous envoyons un lien à la nouvelle adresse. Elle remplace {email} dès que vous l'ouvrez.",
+        "label": "Nouvelle adresse e-mail",
+        "placeholder": "nom@exemple.com",
+        "send": "Envoyer le lien",
+        "sent": "Lien envoyé à {email}. Ouvrez-le pour confirmer.",
+        "done": "Votre nouvelle adresse e-mail est enregistrée.",
+        "invalid": "Cette adresse e-mail n'est pas valide.",
+        "same": "C'est déjà votre adresse.",
+        "failed": "Le lien n'a pas pu partir. Réessayez dans un instant."
+      },
+      "rh": {
+        "line": "Recruteur · {org}",
+        "group": "Équipe · {org}",
+        "team": "Mon équipe",
+        "teamAdmin": "Équipe · ajouter un recruteur",
+        "company": "Profil de l'entreprise",
+        "journal": "Profils consultés"
+      },
       "email": "E-mail",
       "password": "Mot de passe et sécurité",
       "subscription": "Abonnement",
@@ -19786,9 +19807,9 @@
       "direct": "Ou directement : {email}"
     },
     "company": {
-      "own": "Votre entreprise · page administrée par {admin}, modifiable sur ordinateur",
-      "ownNoAdmin": "Votre entreprise · page modifiable sur ordinateur par l'administrateur",
-      "ownAdmin": "Votre entreprise · vous administrez cette page, modifiable sur ordinateur",
+      "own": "Votre entreprise · administrée par {admin}",
+      "ownNoAdmin": "Votre entreprise",
+      "ownAdmin": "Vous administrez cette page",
       "publish": "Publier au nom de {org}"
     },
     "mode": {
