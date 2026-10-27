@@ -47,10 +47,11 @@ function Svg({ d, size = 20 }: { d: string; size?: number }) {
 }
 
 /**
- * The profile photo seen large (décision d'Ephraïm du 27/10/2026): a touch on the photo of
- * Carrière brings it forward, the screen behind blurs. From there: « Modifier » (camera or
- * gallery, then placed in the circle), « Recadrer » the current one, or « Initiales » to go back
- * to the round Jumanly draws from the name. A <dialog>: focus stays inside, Échap closes it.
+ * The profile photo seen large (décisions d'Ephraïm du 27/10/2026): a touch on the photo of a
+ * profile brings it forward, the screen behind blurs. On one's own (`editable`): « Modifier »
+ * (camera or gallery, then placed in the circle), « Recadrer » the current one, or « Initiales »
+ * to go back to the round Jumanly draws from the name. A <dialog>: focus stays inside, Échap
+ * closes it.
  */
 export function PhotoViewer({
   open,
@@ -59,6 +60,7 @@ export function PhotoViewer({
   initials,
   name,
   ring,
+  editable = false,
 }: {
   open: boolean;
   onClose: () => void;
@@ -68,9 +70,10 @@ export function PhotoViewer({
   name: string;
   /** The ring of skill colours around the photo, as on the profile. */
   ring: string;
+  /** One's own photo: « Modifier », « Recadrer », « Initiales ». A visitor only sees it large. */
+  editable?: boolean;
 }) {
-  const t = useTranslations("phoneCareer.photoViewer");
-  const tf = useTranslations("phoneCareer.form");
+  const t = useTranslations("phoneProfile.photoViewer");
   const router = useRouter();
   const dialog = useRef<HTMLDialogElement>(null);
   const stage = useRef<HTMLDivElement>(null);
@@ -147,7 +150,7 @@ export function PhotoViewer({
     probe.onerror = () => {
       if (local) URL.revokeObjectURL(url);
       setMode("voir");
-      showToast({ message: tf("photoError"), tone: "error" });
+      showToast({ message: t("error"), tone: "error" });
     };
     setMode("recadrer");
     probe.src = url;
@@ -212,10 +215,10 @@ export function PhotoViewer({
         if (!result.ok) throw new Error(result.error);
         setShown(URL.createObjectURL(blob));
         reset();
-        showToast({ message: tf("photoSaved") });
+        showToast({ message: t("saved") });
         router.refresh();
       } catch {
-        showToast({ message: tf("photoError"), tone: "error" });
+        showToast({ message: t("error"), tone: "error" });
       }
     });
   };
@@ -224,7 +227,7 @@ export function PhotoViewer({
     start(async () => {
       const result = await removeCareerPhotoAction().catch(() => null);
       if (!result?.ok) {
-        showToast({ message: tf("error"), tone: "error" });
+        showToast({ message: t("failed"), tone: "error" });
         return;
       }
       setShown(null);
@@ -346,17 +349,17 @@ export function PhotoViewer({
                 )}
               </span>
               <p className="nb-pv-nom">{name}</p>
-              {shown ? null : <p className="nb-pv-aide">{t("initialsHint")}</p>}
+              {shown || !editable ? null : <p className="nb-pv-aide">{t("initialsHint")}</p>}
 
-              {mode === "choisir" ? (
+              {!editable ? null : mode === "choisir" ? (
                 <div className="nb-pv-choix">
                   <button type="button" onClick={() => camera.current?.click()}>
                     <Svg d={CAMERA} />
-                    {tf("photoCamera")}
+                    {t("camera")}
                   </button>
                   <button type="button" onClick={() => gallery.current?.click()}>
                     <Svg d={PICTURE} />
-                    {tf("photoGallery")}
+                    {t("gallery")}
                   </button>
                   <button type="button" data-gris="" onClick={() => setMode("voir")}>
                     {t("back")}

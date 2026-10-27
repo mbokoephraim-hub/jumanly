@@ -291,3 +291,7 @@
   outline: 2px solid var(--nb-lime);
   outline-offset: 2px;
 }
+.nb-cr-photo-bt > .nb-pf-photo-i {
+  width: 100%;
+  height: 100%;
+}

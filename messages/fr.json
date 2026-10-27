@@ -10735,7 +10735,30 @@
       "line": "{job} · {company}",
       "rule": "Calculé sans le nom, la photo, l’âge, le genre ni la nationalité. Orbi recommande, vous décidez : aucune candidature n’est écartée automatiquement.",
       "ok": "Compris"
-    }
+    },
+    "photoViewer": {
+      "title": "Photo de profil",
+      "close": "Fermer",
+      "photoOf": "Photo de profil de {name}",
+      "initialsOf": "Initiales de {name}",
+      "initialsHint": "Sans photo, Jumanly affiche les initiales de votre nom.",
+      "change": "Modifier",
+      "crop": "Recadrer",
+      "initials": "Initiales",
+      "initialsBack": "Vos initiales sont de retour.",
+      "back": "Retour",
+      "cropTitle": "Recadrer la photo",
+      "drag": "Faites glisser la photo pour la placer dans le cercle, puis réglez le zoom.",
+      "zoom": "Zoom",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "camera": "Prendre une photo",
+      "gallery": "Choisir dans la galerie",
+      "saved": "Photo mise à jour.",
+      "error": "Cette photo n’a pas pu être enregistrée. Essayez une image JPEG ou PNG de moins de 5 Mo.",
+      "failed": "Une erreur est survenue. Réessayez."
+    },
+    "photoOpen": "Voir la photo de profil en grand"
   },
   "phoneCv": {
     "seo": "Créer un CV",
@@ -11195,23 +11218,6 @@
     "bannerEdit": "Changer la bannière",
     "photoEdit": "Changer la photo",
     "photoOpen": "Voir ma photo de profil en grand",
-    "photoViewer": {
-      "title": "Photo de profil",
-      "close": "Fermer",
-      "photoOf": "Photo de profil de {name}",
-      "initialsOf": "Initiales de {name}",
-      "initialsHint": "Sans photo, Jumanly affiche les initiales de votre nom.",
-      "change": "Modifier",
-      "crop": "Recadrer",
-      "initials": "Initiales",
-      "initialsBack": "Vos initiales sont de retour.",
-      "back": "Retour",
-      "cropTitle": "Recadrer la photo",
-      "drag": "Faites glisser la photo pour la placer dans le cercle, puis réglez le zoom.",
-      "zoom": "Zoom",
-      "cancel": "Annuler",
-      "save": "Enregistrer"
-    },
     "socialAdd": "Ajouter un réseau ou un site",
     "availabilityChange": "Disponibilité : {current}. Toucher pour changer.",
     "completion": {
