@@ -4944,6 +4944,13 @@ bibliothèque, et se supprime.
 - Diagnostic : les compétences évaluées sont d'abord les compétences clés du métier visé (familles de métiers, `src/server/services/job-families.ts` : social media, marketing digital, communication, data, finance, RH…), puis celles des offres proches. Les mots trop vagues d'un titre (« manager », « assistant », « chargé »…) ne servent plus à trouver les offres proches. Un métier qui ne correspond à rien ne reçoit plus les compétences de toutes les offres (Power BI, SQL…) : le diagnostic évalue les compétences que la personne a citées. Deux compétences ajoutées au référentiel : « Planification éditoriale », « Analyse des performances ».
 - Publié avec le contrôle rapide seulement (tsc, ESLint, compilation), à la demande d'Ephraïm.
 
+## 2026-10-27 · Tout le monde se retrouve dans Explorer
+
+- Recherche d'Explorer (talent et recruteur) : on trouve désormais chaque membre dès son inscription, talents et recruteurs, par son nom, son titre ou son poste de recruteur. Avant, seuls les profils « Visible des recruteurs » apparaissaient, alors que tout nouveau compte est « Privé » par défaut.
+- Choix respectés : un profil « Anonyme » n'apparaît jamais par son nom (le talent a choisi de masquer son nom) ; un compte suspendu ou supprimé n'apparaît pas ; une personne bloquée non plus. « Privé » garde le talent hors du vivier des recruteurs, pas hors d'Explorer : sa page s'ouvre avec seulement son nom, sa photo, son titre et sa ville tant que les deux ne sont pas en relation.
+- Entreprises : la recherche trouve toutes les organisations par leur nom, qu'elles recrutent ou non (avant, seulement celles avec une offre ouverte). Celles qui recrutent passent en premier.
+- « Personnes à connaître », le compteur des filtres et les demandes de mise en relation suivent la même règle.
+- Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
 ## 2026-10-27 · Thème clair « Crème doux » de l'appli téléphone
 
 - Paramètres › Apparence (talent et recruteur) : Sombre (par défaut), Clair, ou « Comme mon téléphone ». Choix gardé sur le téléphone (localStorage `jm-theme`), appliqué avant le premier affichage (`phoneThemeScript(true)`) et à chaud (`PhoneThemeRoot`, `<html data-nb-theme>`).
