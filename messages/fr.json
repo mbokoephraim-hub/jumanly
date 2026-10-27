@@ -11638,7 +11638,8 @@
         "done": "Votre nouvelle adresse e-mail est enregistrée.",
         "invalid": "Cette adresse e-mail n'est pas valide.",
         "same": "C'est déjà votre adresse.",
-        "failed": "Le lien n'a pas pu partir. Réessayez dans un instant."
+        "failed": "Le lien n'a pas pu partir. Réessayez dans un instant.",
+        "unavailable": "L'envoi d'e-mails n'est pas encore activé sur Jumanly : votre adresse ne peut pas être changée pour le moment."
       },
       "rh": {
         "line": "Recruteur · {org}",
@@ -22817,6 +22818,12 @@
       "p1": "Pour terminer votre inscription, confirmez que cette adresse est bien la vôtre. Touchez le bouton ci-dessous, depuis votre téléphone ou votre ordinateur : votre espace Jumanly s'ouvre aussitôt.",
       "cta": "Confirmer mon adresse",
       "p2": "Le lien est valable {hours} heures. Ne le transférez à personne."
+    },
+    "changeEmail": {
+      "subject": "Confirmez votre nouvelle adresse e-mail Jumanly",
+      "preheader": "Un clic et cette adresse devient celle de votre compte.",
+      "p1": "Vous avez demandé à utiliser cette adresse pour votre compte Jumanly. Touchez le bouton ci-dessous pour la confirmer : elle remplacera aussitôt l'ancienne.",
+      "cta": "Confirmer ma nouvelle adresse"
     },
     "magicLink": {
       "subject": "Votre lien de connexion à Jumanly",
