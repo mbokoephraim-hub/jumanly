@@ -2,7 +2,8 @@
  * The five tabs of the talent phone (Fil, Explorer, Carrière, Hub, Chat) share one head and one
  * row of tabs (Ephraïm, 27/10/2026): the title on the left, at the same size and height on every
  * tab; round buttons of the same size and colour on the right; tabs as a pill, Lime when chosen.
- * Imported last so that it wins over each screen's own sheet.
+ * Imported by the screens that use it (not globals.css), so that a phone left open across a release
+ * gets it with the new screen; its `.nb-app` rules win over each screen's own sheet.
  */
 .nb-app .nb-tete-onglet {
   display: flex;

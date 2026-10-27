@@ -1,5 +1,6 @@
 "use client";
 
+import "@/styles/phone-onglets.css";
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { PhoneIcon, type PhoneIconName } from "../icon";

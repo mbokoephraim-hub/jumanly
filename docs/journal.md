@@ -4831,3 +4831,7 @@ profil et les candidats dans la même identité visuelle.
   La vue candidat (profil d'une personne) était déjà au nouveau style.
 - Vérifié : lint, types, tests (413), tests en base (367), build, e2e recruteur au téléphone
   (18 sur 18). Captures : `/mnt/project-files/captures/recruteur-harmonise/`.
+- Correctif : `phone-onglets.css` n'est plus importé par `globals.css` mais par les écrans qui
+  l'utilisent (Fil, Explorer, Carrière, Hub, Chat, onglets recruteur, profil recruteur). Comme pour
+  le Chat (#173), un téléphone resté ouvert pendant une mise en ligne gardait l'ancienne feuille
+  globale et ne voyait pas les nouveaux en-têtes.

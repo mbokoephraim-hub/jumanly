@@ -1,5 +1,6 @@
 "use client";
 
+import "@/styles/phone-onglets.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
