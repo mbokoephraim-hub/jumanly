@@ -2,6 +2,8 @@ import { z } from "zod";
 
 /** A post, with or without a photo (Ephraïm, 22/10/2026): short, like a status. */
 export const FEED_POST_MAX = 220;
+/** A comment: at most this many characters. */
+export const FEED_REPLY_MAX = 2000;
 /** Its hook line (docs/fil-menu-publication § 2): two lines, 30 to 50 characters advised. */
 export const FEED_TITLE_MAX = 60;
 /** Its text: about 120 characters. Title and text together stay within FEED_POST_MAX. */

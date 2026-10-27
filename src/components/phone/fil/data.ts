@@ -20,6 +20,8 @@ export type AuthorView = {
   byline: string;
   /** A company verified by Jumanly: a Lime ring. */
   verified: boolean;
+  /** The city, beside the time of a post. */
+  city: string | null;
 };
 
 export type PostView = {
@@ -49,14 +51,9 @@ export type PostView = {
   mine: boolean;
   canReply: boolean;
   closedNote: string | null;
-  firstReply: {
-    name: string;
-    initials: string;
-    image: string | null;
-    tone: number;
-    org: boolean;
-    body: string;
-  } | null;
+  /** The last comments, shown under the post in the Fil. */
+  comments: ReplyView[];
+  edited: boolean;
 };
 
 export type ReplyView = {
@@ -67,6 +64,7 @@ export type ReplyView = {
   likes: number;
   liked: boolean;
   mine: boolean;
+  edited: boolean;
 };
 
 const MINUTE = 60_000;
@@ -159,6 +157,7 @@ export async function feedWords(viewerId: string, now = new Date()) {
       line,
       byline: org ? [t("tag.company"), value.city].filter(Boolean).join(" · ") : line,
       verified: org && Boolean(value.verified),
+      city: value.city,
     };
   };
 
@@ -245,21 +244,8 @@ export async function feedWords(viewerId: string, now = new Date()) {
               name: view.name.split(" ")[0] ?? view.name,
             },
           ),
-      firstReply: item.firstReply
-        ? {
-            name: item.firstReply.org ? shortName(item.firstReply.name) : item.firstReply.name,
-            initials: initialsOf(
-              item.firstReply.org ? shortName(item.firstReply.name) : item.firstReply.name,
-            ),
-            image: item.firstReply.image,
-            tone: toneOf(
-              item.firstReply.org ? shortName(item.firstReply.name) : item.firstReply.name,
-              item.firstReply.org,
-            ),
-            org: item.firstReply.org,
-            body: item.firstReply.body,
-          }
-        : null,
+      comments: item.comments.map(reply),
+      edited: item.edited,
     };
   };
 
@@ -271,6 +257,7 @@ export async function feedWords(viewerId: string, now = new Date()) {
     likes: item.likes,
     liked: item.liked,
     mine: item.mine,
+    edited: item.edited,
   });
 
   return { t, format, ago, stamp, author, post, reply };

@@ -8385,6 +8385,27 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.toast.unreposted` | Republication annulée |
 | `phoneFil.toast.sentTo` | Envoyée à {name} |
 | `phoneFil.toast.error` | Cela n'a pas fonctionné. Réessayez dans un instant. |
+| `phoneFil.toast.edited` | Publication modifiée |
+| `phoneFil.menu.edit` | Modifier la publication |
+| `phoneFil.menu.editSub` | Le titre et le texte |
+| `phoneFil.menu.share` | Partager |
+| `phoneFil.menu.shareSub` | Republier, citer ou envoyer |
+| `phoneFil.edit.title` | Modifier la publication |
+| `phoneFil.edit.save` | Enregistrer |
+| `phoneFil.edit.empty` | Le titre ne peut pas être vide. |
+| `phoneFil.edited` | modifié |
+| `phoneFil.seeComments` | {count, plural, one {Voir le commentaire} other {Voir les # commentaires}} |
+| `phoneFil.addComment` | Ajouter un commentaire… |
+| `phoneFil.comment.more` | Options du commentaire |
+| `phoneFil.comment.sheet` | Votre commentaire |
+| `phoneFil.comment.edit` | Modifier le commentaire |
+| `phoneFil.comment.delete` | Supprimer le commentaire |
+| `phoneFil.comment.deleteSub` | Il disparaît de la publication |
+| `phoneFil.comment.label` | Modifier votre commentaire |
+| `phoneFil.comment.save` | Enregistrer |
+| `phoneFil.comment.cancel` | Annuler |
+| `phoneFil.comment.edited` | Commentaire modifié |
+| `phoneFil.comment.deleted` | Commentaire supprimé |
 | `phoneFil.report.title` | Signaler la publication |
 | `phoneFil.report.anonymous` | {name} ne saura pas que c'est vous. |
 | `phoneFil.report.scam` | Fausse offre ou arnaque |

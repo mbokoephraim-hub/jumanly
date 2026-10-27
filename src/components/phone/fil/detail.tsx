@@ -3,59 +3,17 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useOptimistic, useRef, useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { showToast } from "@/components/motion/toaster";
-import { likePostAction, replyAction } from "@/server/actions/feed";
+import { replyAction } from "@/server/actions/feed";
 import { PhoneBack } from "../back";
 import { PhoneIcon } from "../icon";
 import { FilAvatar } from "./avatar";
+import { FilComment } from "./comments";
 import type { PostView, ReplyView } from "./data";
 import type { FilMe } from "./feed";
 import { PostActions, PostMedia, type PostSheet } from "./post";
 import { PostSheets, type SendTarget } from "./sheets";
-
-function ReplyRow({ reply, onAnswer }: { reply: ReplyView; onAnswer: (name: string) => void }) {
-  const t = useTranslations("phoneFil");
-  const [shown, set] = useOptimistic({ liked: reply.liked, likes: reply.likes });
-  const [, start] = useTransition();
-  return (
-    <li className="nb-fil-reponse">
-      <Link href={reply.author.href} tabIndex={-1} aria-hidden>
-        <FilAvatar {...reply.author} size={36} />
-      </Link>
-      <div>
-        <p className="nb-fil-tete">
-          <Link href={reply.author.href} className="nb-fil-nom">
-            {reply.author.name}
-          </Link>
-          <span className="nb-meta">{reply.ago}</span>
-        </p>
-        <p className="nb-fil-rep-texte">{reply.body}</p>
-        <div className="nb-fil-actions" data-petit="">
-          <button
-            type="button"
-            aria-pressed={shown.liked}
-            aria-label={t("likeCount", { count: shown.likes })}
-            data-on={shown.liked ? "" : undefined}
-            onClick={() =>
-              start(async () => {
-                set({ liked: !shown.liked, likes: shown.likes + (shown.liked ? -1 : 1) });
-                const result = await likePostAction(reply.id);
-                if (!result.ok) showToast({ message: t("toast.error"), tone: "error" });
-              })
-            }
-          >
-            <PhoneIcon name="jaime" size={18} fill={shown.liked ? "currentColor" : undefined} />
-            <span aria-hidden>{shown.likes}</span>
-          </button>
-          <button type="button" onClick={() => onAnswer(reply.author.name)}>
-            {t("reply")}
-          </button>
-        </div>
-      </div>
-    </li>
-  );
-}
 
 /**
  * A publication and its answers (planche Fil, rangées 05-06): « ‹ Fil », the post in full with its
@@ -125,13 +83,17 @@ export function PostDetail({
       <article className="nb-fil-grand" aria-labelledby="fil-auteur">
         <div className="nb-fil-grand-tete">
           <Link href={post.author.href} tabIndex={-1} aria-hidden>
-            <FilAvatar {...post.author} size={48} />
+            <FilAvatar {...post.author} size={48} square />
           </Link>
           <span className="nb-fil-grand-nom">
             <Link href={post.author.href} id="fil-auteur" className="nb-fil-nom">
               {post.author.name}
             </Link>
-            <span className="nb-meta">{post.author.line}</span>
+            <span className="nb-meta">
+              {[post.ago, post.author.city, post.edited ? t("edited") : null]
+                .filter(Boolean)
+                .join(" · ")}
+            </span>
           </span>
           {post.mine ? null : (
             <Link href={post.author.href} className="nb-fil-profil">
@@ -148,7 +110,7 @@ export function PostDetail({
       {replies.length === 0 ? <p className="nb-vide">{t("detail.noReplies")}</p> : null}
       <ul className="nb-fil-reponses">
         {replies.map((reply) => (
-          <ReplyRow key={reply.id} reply={reply} onAnswer={answer} />
+          <FilComment key={reply.id} reply={reply} onAnswer={answer} />
         ))}
       </ul>
       <div className="nb-fil-repondre">
