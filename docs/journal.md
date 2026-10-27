@@ -4971,3 +4971,10 @@ bibliothèque, et se supprime.
 - Matrice unique dans src/server/auth/roles.ts (`adminAreas`, `canWriteArea`) ; pages et actions vérifient la rubrique (`requireAdminArea`). Suspendre un compte depuis un signalement reste réservé à l'administrateur.
 - Barre latérale, pilule du téléphone et accueil `/admin` suivent les rubriques du rôle. Le lien « Administration » du compte apparaît pour tous ces rôles. Chaque rôle a une description dans la fiche utilisateur.
 - Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
+
+## 2026-10-27 · Administration principale (4/5 : leçons YouTube)
+
+- Dans l'éditeur de leçon, le champ « Vidéo » accepte un lien YouTube (youtube.com, youtu.be, shorts, embed). Il est gardé comme `youtube:<id>` dans `Lesson.videoId` et une leçon texte devient une leçon vidéo (src/lib/youtube.ts).
+- La vidéo se lit dans Jumanly avec le lecteur YouTube « confidentialité renforcée » (`youtube-nocookie.com`, sans suggestions d'autres chaînes) : leçon sur ordinateur, leçon au téléphone, aperçu de l'admin, aperçu public. Aucun lien vers YouTube n'est proposé. CSP : `frame-src https://www.youtube-nocookie.com`.
+- Le suivi de la reprise (minute où l'on s'est arrêté) ne s'applique pas aux vidéos YouTube ; la leçon se termine avec le bouton habituel.
+- Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.

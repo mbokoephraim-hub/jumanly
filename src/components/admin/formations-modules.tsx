@@ -6,6 +6,7 @@ import { Icon, type IconName } from "@/components/brand/icon";
 import { Alert, Button, ButtonLink, Checkbox, Select, TextArea, TextField } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { VideoUploader } from "@/components/admin/video-uploader";
+import { youtubeIdOf, youtubeWatchUrl } from "@/lib/youtube";
 import { videoProvider } from "@/server/adapters/video";
 import {
   addLessonAction,
@@ -450,7 +451,11 @@ export async function LessonEditor({
           icon="video"
           label={t("lesson.video.id")}
           hint={t("lesson.video.hint")}
-          defaultValue={lesson.videoId ?? ""}
+          defaultValue={
+            youtubeIdOf(lesson.videoId)
+              ? youtubeWatchUrl(youtubeIdOf(lesson.videoId)!)
+              : (lesson.videoId ?? "")
+          }
           maxLength={300}
         />
         <TextField
@@ -706,13 +711,15 @@ async function LessonVideo({
       <p className="text-[12.5px]">
         {!lesson.videoId
           ? t("state.none")
-          : status === null
-            ? t("state.ready")
-            : status.state === "ready"
+          : youtubeIdOf(lesson.videoId)
+            ? t("state.youtube")
+            : status === null
               ? t("state.ready")
-              : status.state === "failed"
-                ? t("state.failed")
-                : t("state.processing", { progress: status.progress })}
+              : status.state === "ready"
+                ? t("state.ready")
+                : status.state === "failed"
+                  ? t("state.failed")
+                  : t("state.processing", { progress: status.progress })}
       </p>
       {direct ? (
         <VideoUploader

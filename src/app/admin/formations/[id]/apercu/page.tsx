@@ -5,6 +5,7 @@ import { AdminPageHeader, Tag, adminCard, adminLabel } from "@/components/admin/
 import { courseStatusTone } from "@/components/admin/formations-list";
 import { Icon } from "@/components/brand/icon";
 import { VideoPlayer } from "@/components/learn/video-player";
+import { YouTubeEmbed } from "@/components/learn/youtube-embed";
 import { speeds } from "@/components/learn/course-bits";
 import { Alert, ButtonLink } from "@/components/ui";
 import { cx } from "@/lib/cx";
@@ -104,7 +105,11 @@ export default async function AdminCoursePreview({
                 {current.title}
               </h2>
               {current.kind === "video" &&
-                (playback ? (
+                (playback?.youtube ? (
+                  <div className="overflow-hidden rounded-[18px] bg-nuit">
+                    <YouTubeEmbed id={playback.youtube} title={current.title} />
+                  </div>
+                ) : playback ? (
                   <div className="overflow-hidden rounded-[18px] bg-nuit">
                     <VideoPlayer
                       src={playback.src}

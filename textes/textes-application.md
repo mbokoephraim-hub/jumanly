@@ -20995,8 +20995,8 @@ Conventions :
 | `admin.courses.lesson.previewBadge` | Aperçu public |
 | `admin.courses.lesson.video.text` | Vidéo |
 | `admin.courses.lesson.video.upload` | Téléverser la vidéo |
-| `admin.courses.lesson.video.id` | Identifiant de la vidéo |
-| `admin.courses.lesson.video.hint` | Identifiant de la vidéo dans la bibliothèque vidéo. En local, une adresse https directe fonctionne aussi. |
+| `admin.courses.lesson.video.id` | Vidéo : lien YouTube ou identifiant |
+| `admin.courses.lesson.video.hint` | Collez un lien YouTube (youtube.com ou youtu.be) : la vidéo se lit dans Jumanly, sans renvoyer vers YouTube. Sinon, l'identifiant de la vidéo envoyée dans la bibliothèque. |
 | `admin.courses.lesson.subtitles` | Sous-titres |
 | `admin.courses.lesson.resources` | Ressources à télécharger |
 | `admin.courses.lesson.transcript` | Transcription |
@@ -21122,7 +21122,8 @@ Conventions :
 | `admin.courses.video.sending` | Envoi en cours… |
 | `admin.courses.video.done` | Vidéo envoyée. L'encodage commence. |
 | `admin.courses.video.saved` | Vidéo enregistrée pour cette leçon. |
-| `admin.courses.video.state.none` | Aucune vidéo pour l'instant. |
+| `admin.courses.video.state.none` | Aucune vidéo pour l'instant. Envoyez un fichier, ou collez un lien YouTube dans le champ « Vidéo » ci-dessus. |
+| `admin.courses.video.state.youtube` | Vidéo YouTube, lue dans Jumanly. Pour la remplacer, changez le lien ci-dessus ou envoyez un fichier. |
 | `admin.courses.video.state.ready` | Vidéo prête à être lue. |
 | `admin.courses.video.state.processing` | Encodage en cours ({progress} %). |
 | `admin.courses.video.state.failed` | L'encodage a échoué. Envoyez le fichier à nouveau. |

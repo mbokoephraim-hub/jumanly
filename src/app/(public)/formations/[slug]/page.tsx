@@ -6,6 +6,7 @@ import { z } from "zod";
 import { Logo } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { VideoPlayer } from "@/components/learn/video-player";
+import { YouTubeEmbed } from "@/components/learn/youtube-embed";
 import { speeds } from "@/components/learn/course-bits";
 import { Glow, IconTile, Pattern, sectionTitle, stagger, wrap } from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
@@ -445,7 +446,10 @@ export default async function TrainingPage({ params }: PageProps<"/formations/[s
                   </summary>
                   <div className="flex flex-col gap-3">
                     <h3 className="text-[15px] font-semibold">{preview.title}</h3>
-                    {previewVideo && (
+                    {previewVideo?.youtube && (
+                      <YouTubeEmbed id={previewVideo.youtube} title={preview.title} />
+                    )}
+                    {previewVideo && !previewVideo.youtube && (
                       <VideoPlayer
                         src={previewVideo.src}
                         poster={previewVideo.poster}

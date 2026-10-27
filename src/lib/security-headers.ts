@@ -21,7 +21,8 @@ export function contentSecurityPolicy({ production }: { production: boolean }) {
     "connect-src": ["'self'", "https://*.b-cdn.net", "https://*.sentry.io"],
     "worker-src": ["'self'", "blob:"],
     "manifest-src": ["'self'"],
-    "frame-src": ["'none'"],
+    // YouTube lessons, embedded with the privacy-enhanced player.
+    "frame-src": ["https://www.youtube-nocookie.com"],
     "object-src": ["'none'"],
     "base-uri": ["'self'"],
     // Sign-in with a provider continues on its page (Google, Apple, LinkedIn).
