@@ -55,8 +55,8 @@ test("recherche de talents et mise en relation acceptée", async ({
   if (isMobile) {
     // Modèle B recruteur (M6): the search of the tab Talents, by city, then « Proposer une offre ».
     await recruiter.goto("/app/hire/talents");
-    await recruiter.getByRole("button", { name: "Rechercher" }).first().click();
-    const search = recruiter.getByRole("search");
+    const search = recruiter.getByRole("search").filter({ visible: true });
+    await search.getByRole("searchbox").click();
     await search.getByRole("radio", { name: "Ville" }).click();
     await search.getByRole("searchbox").fill(city);
     await search
