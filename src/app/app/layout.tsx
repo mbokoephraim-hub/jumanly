@@ -15,7 +15,7 @@ import { requireUser } from "@/server/auth/session";
 import { touchPresence } from "@/server/services/hire-messaging";
 import { db } from "@/server/db";
 import { resolvePlan } from "@/server/entitlements";
-import { ADMIN_ROLES } from "@/server/auth/session";
+import { ADMIN_SHELL_ROLES } from "@/server/auth/roles";
 import type { AbstractIntlMessages } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { AvatarMenuContent } from "@/components/talent/web/avatar-menu";
@@ -274,7 +274,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
         name: user.name,
         image: user.image,
         planName: plan?.planName ?? "",
-        isAdmin: (ADMIN_ROLES as readonly string[]).includes(user.platformRole),
+        isAdmin: (ADMIN_SHELL_ROLES as readonly string[]).includes(user.platformRole),
         isTester: isTester(user),
       }}
     >

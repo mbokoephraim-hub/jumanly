@@ -11,7 +11,8 @@ import { cx } from "@/lib/cx";
 import { AI_CREDITS_KEY } from "@/server/ai";
 import { signOut } from "@/server/actions/auth";
 import { becomeRecruiterAction, switchSpace } from "@/server/actions/hire";
-import { ADMIN_ROLES, requireUser } from "@/server/auth/session";
+import { ADMIN_SHELL_ROLES } from "@/server/auth/roles";
+import { requireUser } from "@/server/auth/session";
 import { phoneTalentRedirect } from "@/server/phone-routes";
 import { db } from "@/server/db";
 import { resolvePlan, usage } from "@/server/entitlements";
@@ -158,7 +159,7 @@ export default async function AccountPage() {
     credits.limit < 0
       ? t("plan.unlimited")
       : t("plan.credits", { count: Math.max(0, credits.limit - credits.used) });
-  const admin = (ADMIN_ROLES as readonly string[]).includes(user.platformRole);
+  const admin = (ADMIN_SHELL_ROLES as readonly string[]).includes(user.platformRole);
   const percent = completeness(profile).percent;
   const role = profile.headline || profile.desiredJobTitles[0];
   const place = [role, user.city].filter(Boolean).join(" · ");

@@ -19919,7 +19919,9 @@ Conventions :
 | `admin.env.badge` | Administration |
 | `admin.role.platform_admin` | Administrateur de la plateforme |
 | `admin.role.support_agent` | Support |
-| `admin.role.content_editor` | Éditeur de contenus |
+| `admin.role.content_editor` | Responsable formation |
+| `admin.role.career_manager` | Responsable carrière |
+| `admin.role.moderator` | Modération |
 | `admin.role.readOnly` | Accès en lecture seule |
 | `admin.audit.notice` | Toutes les actions d'administration sont enregistrées dans le journal d'audit. |
 | `admin.reason.required` | Indiquez le motif de cette action. Il sera enregistré dans le journal d'audit. |
@@ -19954,7 +19956,9 @@ Conventions :
 | `admin.kit.pager.range` | {from} à {to} sur {total} |
 | `admin.kit.summary` | En résumé |
 | `admin.platformRole.user` | Utilisateur |
-| `admin.platformRole.content_editor` | Éditeur de contenus |
+| `admin.platformRole.content_editor` | Responsable formation |
+| `admin.platformRole.career_manager` | Responsable carrière |
+| `admin.platformRole.moderator` | Modération |
 | `admin.platformRole.support_agent` | Support |
 | `admin.platformRole.platform_admin` | Administrateur |
 | `admin.memberRole.talent` | Talent |
@@ -20135,7 +20139,7 @@ Conventions :
 |---|---|
 | `admin.search.title` | Recherche |
 | `admin.search.label` | Rechercher un compte, une organisation, une offre, une formation ou un forfait |
-| `admin.search.labelEditor` | Rechercher une formation |
+| `admin.search.labelEditor` | Rechercher dans mes rubriques |
 | `admin.search.placeholder` | Nom, e-mail, titre ou identifiant |
 | `admin.search.submit` | Rechercher |
 | `admin.search.hint` | Saisissez au moins 2 caractères. |
@@ -20337,6 +20341,12 @@ Conventions :
 | `admin.users.search.submit` | Rechercher |
 | `admin.users.empty` | Aucun utilisateur ne correspond à cette recherche. |
 | `admin.users.role.user` | Aucun rôle plateforme |
+| `admin.users.roleHint.user` | Utilise l'application, sans accès à l'administration. |
+| `admin.users.roleHint.content_editor` | Gère les formations (création, leçons, vidéos et liens YouTube, quiz, publication) et les contenus. |
+| `admin.users.roleHint.career_manager` | Gère les conseils et la FAQ, la modération des offres d'emploi, l'IA et le matching. |
+| `admin.users.roleHint.moderator` | Traite les offres signalées ou à vérifier et les signalements. |
+| `admin.users.roleHint.support_agent` | Consulte toute l'administration sans rien modifier. |
+| `admin.users.roleHint.platform_admin` | Tous les droits, y compris le veto d'effacement des comptes. Vérification en deux étapes obligatoire. |
 | `admin.users.action.roles.save` | Enregistrer le rôle |
 | `admin.users.selfProtected` | Vous ne pouvez pas modifier votre propre rôle ni suspendre votre propre compte. |
 | `admin.users.count` | {count, plural, one {# utilisateur} other {# utilisateurs}} |

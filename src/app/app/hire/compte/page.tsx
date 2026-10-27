@@ -11,7 +11,7 @@ import { cx } from "@/lib/cx";
 import { AI_CREDITS_KEY } from "@/server/ai";
 import { signOut } from "@/server/actions/auth";
 import { switchSpace } from "@/server/actions/hire";
-import { ADMIN_ROLES } from "@/server/auth/session";
+import { ADMIN_SHELL_ROLES } from "@/server/auth/roles";
 import { db } from "@/server/db";
 import { resolvePlan, usage } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
@@ -132,7 +132,7 @@ export default async function RecruiterAccountPage() {
       : { key: "toVerify", tone: "t-amb" };
   const talents = pools.reduce((sum, pool) => sum + pool._count.entries, 0);
   const planName = plan?.planName ?? "";
-  const admin = (ADMIN_ROLES as readonly string[]).includes(user.platformRole);
+  const admin = (ADMIN_SHELL_ROLES as readonly string[]).includes(user.platformRole);
   const line = membership?.jobTitle
     ? t("line", { jobTitle: membership.jobTitle, org })
     : t("lineNoTitle", { org });

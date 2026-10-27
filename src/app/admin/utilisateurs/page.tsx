@@ -278,7 +278,14 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
                         defaultChecked={fiche.platformRole === value}
                         className="mt-px size-5 shrink-0 accent-sapin"
                       />
-                      <span>{value === "user" ? t("users.role.user") : t(`role.${value}`)}</span>
+                      <span className="flex flex-col">
+                        <span className="font-semibold">
+                          {value === "user" ? t("users.role.user") : t(`role.${value}`)}
+                        </span>
+                        <span className="text-[12px] leading-4 text-ardoise">
+                          {t(`users.roleHint.${value}`)}
+                        </span>
+                      </span>
                     </label>
                   ))}
                 </fieldset>

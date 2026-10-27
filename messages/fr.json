@@ -24000,7 +24000,9 @@
     "role": {
       "platform_admin": "Administrateur de la plateforme",
       "support_agent": "Support",
-      "content_editor": "Éditeur de contenus",
+      "content_editor": "Responsable formation",
+      "career_manager": "Responsable carrière",
+      "moderator": "Modération",
       "readOnly": "Accès en lecture seule"
     },
     "audit": {
@@ -24036,7 +24038,9 @@
     },
     "platformRole": {
       "user": "Utilisateur",
-      "content_editor": "Éditeur de contenus",
+      "content_editor": "Responsable formation",
+      "career_manager": "Responsable carrière",
+      "moderator": "Modération",
       "support_agent": "Support",
       "platform_admin": "Administrateur"
     },
@@ -24244,7 +24248,7 @@
     "search": {
       "title": "Recherche",
       "label": "Rechercher un compte, une organisation, une offre, une formation ou un forfait",
-      "labelEditor": "Rechercher une formation",
+      "labelEditor": "Rechercher dans mes rubriques",
       "placeholder": "Nom, e-mail, titre ou identifiant",
       "submit": "Rechercher",
       "hint": "Saisissez au moins 2 caractères.",
@@ -24561,6 +24565,14 @@
       "empty": "Aucun utilisateur ne correspond à cette recherche.",
       "role": {
         "user": "Aucun rôle plateforme"
+      },
+      "roleHint": {
+        "user": "Utilise l'application, sans accès à l'administration.",
+        "content_editor": "Gère les formations (création, leçons, vidéos et liens YouTube, quiz, publication) et les contenus.",
+        "career_manager": "Gère les conseils et la FAQ, la modération des offres d'emploi, l'IA et le matching.",
+        "moderator": "Traite les offres signalées ou à vérifier et les signalements.",
+        "support_agent": "Consulte toute l'administration sans rien modifier.",
+        "platform_admin": "Tous les droits, y compris le veto d'effacement des comptes. Vérification en deux étapes obligatoire."
       },
       "selfProtected": "Vous ne pouvez pas modifier votre propre rôle ni suspendre votre propre compte.",
       "count": "{count, plural, one {# utilisateur} other {# utilisateurs}}",

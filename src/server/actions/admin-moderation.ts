@@ -2,7 +2,8 @@
 
 import { notFound, redirect } from "next/navigation";
 import { refresh, updateTag } from "next/cache";
-import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
+import { canWriteArea, type AdminArea } from "@/server/auth/roles";
+import { requireAdminArea } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { mailModeration } from "@/server/hire-emails";
 import {
@@ -19,10 +20,10 @@ import { hiringTeam, notify } from "@/server/services/notifications";
  * Moderation of Jumanly Admin (Admin v2, étape 7): « Demander une correction » on a job, notes
  * and decisions on reports. Validate → session → role (support agents read only) → service.
  */
-async function moderator() {
-  const admin = await requireAdmin();
+async function moderator(area: AdminArea) {
+  const admin = await requireAdminArea(area);
   if (!admin) notFound();
-  if (!canWriteAdmin(admin)) redirect("/admin?erreur=lecture");
+  if (!canWriteArea(admin.platformRole, area)) redirect("/admin?erreur=lecture");
   return admin;
 }
 
@@ -44,7 +45,7 @@ export async function requestJobChangesAction(formData: FormData) {
   const jobId = String(formData.get("job") ?? "").slice(0, 60);
   if (!input.success)
     redirect(`/admin/offres?id=${encodeURIComponent(jobId)}&action=correction&erreur=motif`);
-  const admin = await moderator();
+  const admin = await moderator("jobs");
   const job = await requestJobChanges(db, admin.id, input.data);
   if (job) {
     updateTag("jobs");
@@ -66,7 +67,7 @@ export async function reportNoteAction(formData: FormData) {
     note: formData.get("note"),
   });
   if (!input.success) redirect(reportsHref(formData, { erreur: "note" }));
-  const admin = await moderator();
+  const admin = await moderator("reports");
   await addReportNote(db, admin.id, input.data);
   refresh();
   redirect(reportsHref(formData, { ok: "note" }));
@@ -79,7 +80,7 @@ export async function closeReportAction(formData: FormData) {
     reason: formData.get("reason"),
   });
   if (!input.success) redirect(reportsHref(formData, { erreur: "motif" }));
-  const admin = await moderator();
+  const admin = await moderator("reports");
   const result = await closeReport(db, admin.id, input.data);
   if (result) {
     updateTag("jobs");

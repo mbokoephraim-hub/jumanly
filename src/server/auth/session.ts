@@ -31,7 +31,7 @@ export async function requireUser(suite?: string): Promise<CurrentUser> {
   return user;
 }
 
-import { ADMIN_ROLES, ADMIN_SHELL_ROLES, CONTENT_ROLES } from "./roles";
+import { ADMIN_ROLES, ADMIN_SHELL_ROLES, adminAreas, CONTENT_ROLES, type AdminArea } from "./roles";
 
 export { ADMIN_ROLES };
 
@@ -56,6 +56,12 @@ export async function requireAdminShell() {
     redirect("/app/parametres?onglet=securite&raison=deux-etapes");
   }
   return user;
+}
+
+/** Someone who may open this section of the admin (administrators, support, delegated roles). */
+export async function requireAdminArea(area: AdminArea) {
+  const user = await requireAdminShell();
+  return user && adminAreas(user.platformRole).includes(area) ? user : null;
 }
 
 /** The course editor: content editors and administrators (two-step verification required). */
