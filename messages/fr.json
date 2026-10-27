@@ -10038,6 +10038,7 @@
     "bell": "{count, plural, =0 {Notifications} one {Notifications, # non lue} other {Notifications, # non lues}}",
     "bellMany": "99+",
     "account": "Votre carrière",
+    "settings": "Paramètres",
     "tabs": "Fils",
     "tab": {
       "pourvous": "Pour vous",
@@ -17863,6 +17864,7 @@
     },
     "head": {
       "account": "Mon compte",
+      "settings": "Paramètres",
       "notifications": "{count, plural, =0 {Notifications} one {Notifications, # nouvelle} other {Notifications, # nouvelles}}",
       "newOffer": "Publier une offre"
     },

@@ -14,7 +14,7 @@ import { activeCount, listOffers } from "@/server/services/hire-offers";
 import { applicationsThisWeek, hireToday } from "@/server/services/hire-today";
 import { atsToday } from "@/server/services/hire-ats";
 import { isPhone } from "@/server/view";
-import { RhTab, RhBell } from "@/components/phone/recruteur/head";
+import { RhTab, RhBell, RhSettings } from "@/components/phone/recruteur/head";
 import { RhFil } from "@/components/phone/recruteur/fil";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -460,7 +460,7 @@ export default async function HireTodayPage() {
   if (await isPhone()) {
     const { user } = await requireHire("/app/hire");
     return (
-      <RhTab tab="fil" actions={<RhBell />} legacy={false} noSearch>
+      <RhTab tab="fil" actions={<RhBell />} avatar={<RhSettings />} legacy={false} noSearch>
         <RhFil user={{ id: user.id, name: user.name, image: user.image ?? null }} />
       </RhTab>
     );

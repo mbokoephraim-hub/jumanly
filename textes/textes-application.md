@@ -8282,6 +8282,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.bell` | {count, plural, =0 {Notifications} one {Notifications, # non lue} other {Notifications, # non lues}} |
 | `phoneFil.bellMany` | 99+ |
 | `phoneFil.account` | Votre carrière |
+| `phoneFil.settings` | Paramètres |
 | `phoneFil.tabs` | Fils |
 | `phoneFil.tab.pourvous` | Pour vous |
 | `phoneFil.tab.abonnements` | Abonnements |
@@ -14690,6 +14691,7 @@ Conventions :
 | `phoneRh.nav.chat` | Chat |
 | `phoneRh.nav.messagesUnread` | Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}} |
 | `phoneRh.head.account` | Mon compte |
+| `phoneRh.head.settings` | Paramètres |
 | `phoneRh.head.notifications` | {count, plural, =0 {Notifications} one {Notifications, # nouvelle} other {Notifications, # nouvelles}} |
 | `phoneRh.head.newOffer` | Publier une offre |
 | `phoneRh.search.open` | Rechercher |
