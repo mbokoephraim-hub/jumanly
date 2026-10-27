@@ -1,5 +1,6 @@
 "use client";
 
+import "@/styles/phone-reglages.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useState, useTransition, type ReactNode } from "react";
@@ -12,7 +13,7 @@ import {
 } from "@/server/actions/career-phone";
 import { PhoneBack } from "../back";
 import { FilAvatar } from "../fil/avatar";
-import { PhoneIcon } from "../icon";
+import { PhoneIcon, type phoneIcons } from "../icon";
 import { PhoneSheet } from "../sheet";
 
 /** A page of the settings (planches Carrière-parametres to -aide): « Retour », the title. */
@@ -38,9 +39,45 @@ export function SettingsFrame({
   );
 }
 
-function Row({ href, children, end }: { href: string; children: ReactNode; end?: ReactNode }) {
+type IconName = keyof typeof phoneIcons;
+
+/** The coloured tile in front of a row (Modèle B: a square rounded on its four corners). */
+function Tile({ icon, tone = "lime" }: { icon: IconName; tone?: string }) {
+  return (
+    <i className="nb-rg-ic" data-ton={tone} aria-hidden>
+      <PhoneIcon name={icon} size={19} stroke={1.9} />
+    </i>
+  );
+}
+
+/** A group of rows: its title, then one rounded card. */
+function Group({ title, id, children }: { title: string; id?: string; children: ReactNode }) {
+  return (
+    <section className="nb-rg-groupe" aria-labelledby={id}>
+      <p className="nb-ca-gr" id={id}>
+        {title}
+      </p>
+      <div className="nb-rg-bloc">{children}</div>
+    </section>
+  );
+}
+
+function Row({
+  href,
+  children,
+  end,
+  icon,
+  tone,
+}: {
+  href: string;
+  children: ReactNode;
+  end?: ReactNode;
+  icon?: IconName;
+  tone?: string;
+}) {
   return (
     <Link href={href} className="nb-ca-it" data-ligne="">
+      {icon ? <Tile icon={icon} tone={tone} /> : null}
       <span>{children}</span>
       {end ? <small>{end}</small> : null}
       <PhoneIcon name="chevron" size={18} />
@@ -80,63 +117,86 @@ export function PhoneSettings({
   const [hiring, setHiring] = useState(false);
   return (
     <SettingsFrame title={t("title")} back="/app/career/cv">
-      <Link href="/app/career/profil" className="nb-ca-it nb-ca-moi" data-ligne="">
-        <FilAvatar initials={initials} image={image} tone={tone} org={false} size={52} />
+      <Link href="/app/career/profil" className="nb-rg-moi">
+        <FilAvatar initials={initials} image={image} tone={tone} org={false} size={58} square />
         <span>
           <b>{name}</b>
-          <small className="nb-meta">{t("editProfile")}</small>
+          <small className="nb-meta">{email}</small>
+          <em>{t("editProfile")}</em>
         </span>
         <PhoneIcon name="chevron" size={18} />
       </Link>
-      <p className="nb-ca-gr">{t("account")}</p>
-      <Row href="/app/career/profil">{t("namePhoto")}</Row>
-      <div className="nb-ca-it" data-ligne="">
-        <span>{t("email")}</span>
-        <small>{email}</small>
-      </div>
-      <Row href="/app/parametres/securite">{t("password")}</Row>
-      <p className="nb-ca-gr">{t("subscription")}</p>
-      <Row href="/app/abonnement" end={<em>{plan}</em>}>
-        {t("plan")}
-      </Row>
-      <p className="nb-ca-gr">{t("recruiter.group")}</p>
-      {recruiter === "open" ? (
-        <form action={becomeRecruiterAction}>
-          <button type="submit" className="nb-ca-it" data-ligne="">
+      <Group title={t("account")} id="rg-compte">
+        <Row href="/app/career/profil" icon="personne">
+          {t("namePhoto")}
+        </Row>
+        <div className="nb-ca-it" data-ligne="">
+          <Tile icon="email" tone="bleu" />
+          <span>{t("email")}</span>
+          <small>{email}</small>
+        </div>
+        <Row href="/app/parametres/securite" icon="cadenas" tone="menthe">
+          {t("password")}
+        </Row>
+      </Group>
+      <Group title={t("subscription")} id="rg-formule">
+        <Row href="/app/abonnement" end={<em>{plan}</em>} icon="signet" tone="ambre">
+          {t("plan")}
+        </Row>
+      </Group>
+      <Group title={t("recruiter.group")} id="rg-recrutement">
+        {recruiter === "open" ? (
+          <form action={becomeRecruiterAction}>
+            <button type="submit" className="nb-ca-it" data-ligne="">
+              <Tile icon="organisation" tone="bleu" />
+              <span>
+                {t("recruiter.open")}
+                <small className="nb-meta">{t("recruiter.openText")}</small>
+              </span>
+              <PhoneIcon name="chevron" size={18} />
+            </button>
+          </form>
+        ) : (
+          <button type="button" className="nb-ca-it" data-ligne="" onClick={() => setHiring(true)}>
+            <Tile icon="organisation" tone="bleu" />
             <span>
-              {t("recruiter.open")}
-              <small className="nb-meta">{t("recruiter.openText")}</small>
+              {t("recruiter.become")}
+              <small className="nb-meta">{t("recruiter.becomeText")}</small>
             </span>
             <PhoneIcon name="chevron" size={18} />
           </button>
-        </form>
-      ) : (
-        <button type="button" className="nb-ca-it" data-ligne="" onClick={() => setHiring(true)}>
-          <span>
-            {t("recruiter.become")}
-            <small className="nb-meta">{t("recruiter.becomeText")}</small>
-          </span>
-          <PhoneIcon name="chevron" size={18} />
+        )}
+      </Group>
+      <Group title={t("privacyGroup")} id="rg-vie-privee">
+        <Row href="/app/parametres/confidentialite" icon="cacher" tone="menthe">
+          {t("privacy")}
+        </Row>
+        <Row href="/app/parametres/notifications" icon="cloche" tone="ambre">
+          {t("notifications")}
+        </Row>
+      </Group>
+      <Group title={t("application")} id="rg-appli">
+        <div className="nb-ca-it" data-ligne="">
+          <Tile icon="messages" tone="bleu" />
+          <span>{t("language")}</span>
+          <small>{language}</small>
+        </div>
+        <Row href="/app/compte/aide" icon="idee">
+          {t("help")}
+        </Row>
+        {install}
+      </Group>
+      <div className="nb-rg-bloc nb-rg-sortie">
+        <button
+          type="button"
+          className="nb-ca-it nb-ca-sortir"
+          data-ligne=""
+          onClick={() => setLeaving(true)}
+        >
+          <Tile icon="fleche" tone="corail" />
+          <span>{t("signOut")}</span>
         </button>
-      )}
-      <p className="nb-ca-gr">{t("privacyGroup")}</p>
-      <Row href="/app/parametres/confidentialite">{t("privacy")}</Row>
-      <Row href="/app/parametres/notifications">{t("notifications")}</Row>
-      <p className="nb-ca-gr">{t("application")}</p>
-      <div className="nb-ca-it" data-ligne="">
-        <span>{t("language")}</span>
-        <small>{language}</small>
       </div>
-      <Row href="/app/compte/aide">{t("help")}</Row>
-      {install}
-      <button
-        type="button"
-        className="nb-ca-it nb-ca-sortir"
-        data-ligne=""
-        onClick={() => setLeaving(true)}
-      >
-        {t("signOut")}
-      </button>
       <PhoneSheet
         open={hiring}
         onClose={() => setHiring(false)}
@@ -262,7 +322,7 @@ export function PrivacyForm({ initial }: { initial: Privacy }) {
       <p className="nb-ca-gr" id="ca-qui">
         {t("whoSees")}
       </p>
-      <div role="radiogroup" aria-labelledby="ca-qui">
+      <div role="radiogroup" aria-labelledby="ca-qui" className="nb-rg-bloc">
         {(["recruiters", "anonymous", "private"] as const).map((key) => (
           <button
             key={key}
@@ -282,45 +342,47 @@ export function PrivacyForm({ initial }: { initial: Privacy }) {
           </button>
         ))}
       </div>
-      <p className="nb-ca-gr">{t("options")}</p>
-      <Switch
-        label={t("matching")}
-        hint={t("matchingText")}
-        on={value.matching}
-        onChange={(matching) => set({ matching })}
-        disabled={pending}
-      />
-      <Switch
-        label={t("contactRequests")}
-        on={value.contactRequests}
-        onChange={(contactRequests) => set({ contactRequests })}
-        disabled={pending}
-      />
-      <Switch
-        label={t("ai")}
-        hint={t("aiText")}
-        on={value.ai}
-        onChange={(ai) => set({ ai })}
-        disabled={pending}
-      />
-      <Switch
-        label={t("newsletter")}
-        on={value.newsletter}
-        onChange={(newsletter) => set({ newsletter })}
-        disabled={pending}
-      />
-      <p className="nb-ca-gr">{t("data")}</p>
-      <a href="/app/parametres/export" download className="nb-ca-it" data-ligne="">
-        <span>{t("download")}</span>
-        <PhoneIcon name="chevron" size={18} />
-      </a>
-      <Link href="/app/parametres/consultations" className="nb-ca-it" data-ligne="">
-        <span>{t("views")}</span>
-        <PhoneIcon name="chevron" size={18} />
-      </Link>
-      <Link href="/app/parametres?supprimer=1" className="nb-ca-it nb-ca-sortir" data-ligne="">
-        <span>{t("deleteAccount")}</span>
-      </Link>
+      <Group title={t("options")}>
+        <Switch
+          label={t("matching")}
+          hint={t("matchingText")}
+          on={value.matching}
+          onChange={(matching) => set({ matching })}
+          disabled={pending}
+        />
+        <Switch
+          label={t("contactRequests")}
+          on={value.contactRequests}
+          onChange={(contactRequests) => set({ contactRequests })}
+          disabled={pending}
+        />
+        <Switch
+          label={t("ai")}
+          hint={t("aiText")}
+          on={value.ai}
+          onChange={(ai) => set({ ai })}
+          disabled={pending}
+        />
+        <Switch
+          label={t("newsletter")}
+          on={value.newsletter}
+          onChange={(newsletter) => set({ newsletter })}
+          disabled={pending}
+        />
+      </Group>
+      <Group title={t("data")}>
+        <a href="/app/parametres/export" download className="nb-ca-it" data-ligne="">
+          <span>{t("download")}</span>
+          <PhoneIcon name="chevron" size={18} />
+        </a>
+        <Link href="/app/parametres/consultations" className="nb-ca-it" data-ligne="">
+          <span>{t("views")}</span>
+          <PhoneIcon name="chevron" size={18} />
+        </Link>
+        <Link href="/app/parametres?supprimer=1" className="nb-ca-it nb-ca-sortir" data-ligne="">
+          <span>{t("deleteAccount")}</span>
+        </Link>
+      </Group>
     </SettingsFrame>
   );
 }
@@ -340,27 +402,29 @@ export function NotificationsForm({ initial }: { initial: Notifications }) {
   );
   return (
     <SettingsFrame title={t("notifications")} back="/app/parametres">
-      <p className="nb-ca-gr">{t("onPhone")}</p>
-      {Object.entries(value.categories).map(([key, on]) => (
+      <Group title={t("onPhone")}>
+        {Object.entries(value.categories).map(([key, on]) => (
+          <Switch
+            key={key}
+            label={t(`category.${key}` as "category.applications")}
+            hint={t(`category.${key}Text` as "category.applicationsText")}
+            on={on}
+            disabled={pending}
+            onChange={(next) =>
+              change({ ...value, categories: { ...value.categories, [key]: next } })
+            }
+          />
+        ))}
+      </Group>
+      <Group title={t("byEmail")}>
         <Switch
-          key={key}
-          label={t(`category.${key}` as "category.applications")}
-          hint={t(`category.${key}Text` as "category.applicationsText")}
-          on={on}
+          label={t("emails")}
+          hint={t("emailsText")}
+          on={value.emails}
           disabled={pending}
-          onChange={(next) =>
-            change({ ...value, categories: { ...value.categories, [key]: next } })
-          }
+          onChange={(emails) => change({ ...value, emails })}
         />
-      ))}
-      <p className="nb-ca-gr">{t("byEmail")}</p>
-      <Switch
-        label={t("emails")}
-        hint={t("emailsText")}
-        on={value.emails}
-        disabled={pending}
-        onChange={(emails) => change({ ...value, emails })}
-      />
+      </Group>
     </SettingsFrame>
   );
 }
@@ -376,23 +440,26 @@ export function PhoneHelp({
   const t = useTranslations("phoneCareer.reglages");
   return (
     <SettingsFrame title={t("help")} back="/app/parametres">
-      <p className="nb-ca-gr">{t("faq")}</p>
-      {questions.map((item) => (
-        <details key={item.id} className="nb-ca-faq">
-          <summary className="nb-ca-it" data-ligne="">
-            <span>{item.question}</span>
-            <PhoneIcon name="plus" size={16} />
-          </summary>
-          <p>{item.answer}</p>
-        </details>
-      ))}
-      <p className="nb-ca-gr">{t("writeTeam")}</p>
-      <a href={`mailto:${email}`} className="nb-ca-it nb-ca-mail" data-ligne="">
-        <span>
-          <b>{email}</b>
-          <small className="nb-meta">{t("answerByEmail")}</small>
-        </span>
-      </a>
+      <Group title={t("faq")}>
+        {questions.map((item) => (
+          <details key={item.id} className="nb-ca-faq">
+            <summary className="nb-ca-it" data-ligne="">
+              <span>{item.question}</span>
+              <PhoneIcon name="plus" size={16} />
+            </summary>
+            <p>{item.answer}</p>
+          </details>
+        ))}
+      </Group>
+      <Group title={t("writeTeam")}>
+        <a href={`mailto:${email}`} className="nb-ca-it nb-ca-mail" data-ligne="">
+          <Tile icon="email" tone="bleu" />
+          <span>
+            <b>{email}</b>
+            <small className="nb-meta">{t("answerByEmail")}</small>
+          </span>
+        </a>
+      </Group>
     </SettingsFrame>
   );
 }

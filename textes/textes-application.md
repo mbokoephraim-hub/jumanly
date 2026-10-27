@@ -10162,6 +10162,7 @@ Conventions :
 |---|---|
 | `phoneLearn.title` | Formation |
 | `phoneLearn.account` | Mon profil |
+| `phoneLearn.settings` | Paramètres |
 | `phoneLearn.tabs` | Choisir une rubrique |
 | `phoneLearn.tab.forYou` | Pour vous |
 | `phoneLearn.tab.mine` | Mes cours |
