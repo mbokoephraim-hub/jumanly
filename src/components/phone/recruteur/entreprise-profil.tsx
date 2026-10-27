@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useRef, useState, useTransition } from "react";
+import type { SocialLinks } from "@/lib/social-links";
 import { showToast } from "@/components/motion/toaster";
 import { removeBrandImageAction, uploadBrandImageAction } from "@/server/actions/organization";
 import { updateCompanyPageAction } from "@/server/actions/org-page";
@@ -28,7 +29,15 @@ export type PhoneCompanyProfileData = {
   hiringNow: boolean;
   verified: boolean;
   sizes: { value: string; label: string }[];
+  /** ISO code of the seat's country. */
+  country: string;
+  countries: { value: string; label: string }[];
+  foundedYear: string;
+  international: boolean;
+  socialLinks: SocialLinks;
 };
+
+const NETWORKS = ["linkedin", "instagram", "facebook", "x"] as const;
 
 type Kind = "banner" | "logo";
 
@@ -50,6 +59,15 @@ export function PhoneCompanyProfile({ data }: { data: PhoneCompanyProfileData })
     website: data.website,
     description: data.description,
     hiringNow: data.hiringNow,
+    country: data.country,
+    foundedYear: data.foundedYear,
+    international: data.international,
+    socialLinks: {
+      linkedin: data.socialLinks.linkedin ?? "",
+      instagram: data.socialLinks.instagram ?? "",
+      facebook: data.socialLinks.facebook ?? "",
+      x: data.socialLinks.x ?? "",
+    },
   });
   const [error, setError] = useState<string | null>(null);
   const [sheet, setSheet] = useState<Kind | null>(null);
@@ -170,6 +188,7 @@ export function PhoneCompanyProfile({ data }: { data: PhoneCompanyProfileData })
             />
           )}
         </Field>
+        <p className="nb-meta nb-ep-aide nb-ep-aide-champ">{t("sectorHint")}</p>
         <div className="nb-ca-deux">
           <Field label={to("field.size")}>
             {(id) => (
@@ -188,7 +207,61 @@ export function PhoneCompanyProfile({ data }: { data: PhoneCompanyProfileData })
               </select>
             )}
           </Field>
-          <Field label={to("field.city")}>
+          <Field
+            label={t("foundedYear")}
+            error={error === "foundedYear" ? to("error.foundedYear") : null}
+          >
+            {(id) => (
+              <input
+                id={id}
+                className="nb-ca-in"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={4}
+                value={form.foundedYear}
+                onChange={(event) =>
+                  set({ foundedYear: event.target.value.replace(/\D/g, "").slice(0, 4) })
+                }
+                placeholder={t("foundedPlaceholder")}
+              />
+            )}
+          </Field>
+        </div>
+        <div className="nb-ca-bascule">
+          <span id="ep-international">
+            {t("international.label")}
+            <small className="nb-meta">{t("international.hint")}</small>
+          </span>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={form.international}
+            aria-labelledby="ep-international"
+            className="nb-switch"
+            onClick={() => set({ international: !form.international })}
+          >
+            <span />
+          </button>
+        </div>
+        <div className="nb-ca-deux">
+          <Field label={t("country")}>
+            {(id) => (
+              <select
+                id={id}
+                className="nb-ca-in"
+                value={form.country}
+                onChange={(event) => set({ country: event.target.value })}
+              >
+                <option value="">{t("countryNone")}</option>
+                {data.countries.map((country) => (
+                  <option key={country.value} value={country.value}>
+                    {country.label}
+                  </option>
+                ))}
+              </select>
+            )}
+          </Field>
+          <Field label={t("cityLabel")}>
             {(id) => (
               <input
                 id={id}
@@ -235,6 +308,33 @@ export function PhoneCompanyProfile({ data }: { data: PhoneCompanyProfileData })
             </>
           )}
         </Field>
+        <h2 className="nb-ep-titre">{t("socials")}</h2>
+        <p className="nb-meta nb-ep-aide nb-ep-aide-champ">{t("socialsHint")}</p>
+        {NETWORKS.map((kind) => (
+          <Field key={kind} label={t(`social.${kind}`)}>
+            {(id) => (
+              <input
+                id={id}
+                type="url"
+                inputMode="url"
+                autoCapitalize="none"
+                autoCorrect="off"
+                className="nb-ca-in"
+                value={form.socialLinks[kind]}
+                onChange={(event) =>
+                  set({ socialLinks: { ...form.socialLinks, [kind]: event.target.value } })
+                }
+                placeholder={t(`socialPlaceholder.${kind}`)}
+                maxLength={300}
+              />
+            )}
+          </Field>
+        ))}
+        {error === "socialLinks" ? (
+          <p className="nb-ca-erreur" role="alert">
+            {to("error.socialLinks")}
+          </p>
+        ) : null}
         <div className="nb-ca-bascule">
           <span id="ep-recrute">
             {to("hiring.label")}

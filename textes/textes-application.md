@@ -8754,6 +8754,37 @@ Conventions :
 | `phoneExplorer.company.menu` | Page de {name} |
 | `phoneExplorer.company.menuShare` | Partager la page |
 | `phoneExplorer.company.shared` | Lien de la page copié. |
+| `phoneExplorer.company.title` | Entreprise |
+| `phoneExplorer.company.share` | Partager la page |
+| `phoneExplorer.company.socials` | Réseaux de l’entreprise |
+| `phoneExplorer.company.social.linkedin` | LinkedIn de l’entreprise |
+| `phoneExplorer.company.social.instagram` | Instagram de l’entreprise |
+| `phoneExplorer.company.social.facebook` | Facebook de l’entreprise |
+| `phoneExplorer.company.social.x` | X de l’entreprise |
+| `phoneExplorer.company.social.website` | Site de l’entreprise |
+| `phoneExplorer.company.flag` | Drapeau : {country} |
+| `phoneExplorer.company.place` | {city}, {country} |
+| `phoneExplorer.company.seatLine` | Siège à {place} |
+| `phoneExplorer.company.international` | International |
+| `phoneExplorer.company.hiring` | Recrute en ce moment |
+| `phoneExplorer.company.followersChip` | {count, plural, =0 {<b>0</b> abonné} one {<b>#</b> abonné} other {<b>#</b> abonnés}} |
+| `phoneExplorer.company.offersChip` | {count, plural, =0 {<b>0</b> offre ouverte} one {<b>#</b> offre ouverte} other {<b>#</b> offres ouvertes}} |
+| `phoneExplorer.company.edit` | Modifier |
+| `phoneExplorer.company.publish` | Publier |
+| `phoneExplorer.company.whoWeAre` | Qui sommes-nous |
+| `phoneExplorer.company.founded` | Création |
+| `phoneExplorer.company.foundedValue` | En {year} |
+| `phoneExplorer.company.age` | {count, plural, one {# an d’existence} other {# ans d’existence}} |
+| `phoneExplorer.company.newBorn` | Créée cette année |
+| `phoneExplorer.company.employeesLabel` | Employés |
+| `phoneExplorer.company.domains` | Domaines |
+| `phoneExplorer.company.contact` | Liens |
+| `phoneExplorer.company.recruiters` | {count, plural, =0 {Aucun recruteur visible} one {# recruteur de l’entreprise} other {# recruteurs de l’entreprise}} |
+| `phoneExplorer.company.noRecruiter` | {name} n’a pas encore de recruteur sur Jumanly. |
+| `phoneExplorer.company.role.org_owner` | Responsable de la page |
+| `phoneExplorer.company.role.org_admin` | Administrateur |
+| `phoneExplorer.company.role.recruiter` | Recruteur |
+| `phoneExplorer.company.seeProfile` | Voir le profil |
 | `phoneExplorer.person.back` | Retour |
 | `phoneExplorer.person.more` | Plus d’options |
 | `phoneExplorer.person.handle` | @{handle} |
@@ -16258,6 +16289,24 @@ Conventions :
 | `phoneRhEntreprise.card.verified` | Entreprise vérifiée |
 | `phoneRhEntreprise.card.noAbout` | La présentation n'est pas encore écrite. Ajoutez-la depuis « Modifier le profil ». |
 | `phoneRhEntreprise.card.complete` | Profil rempli à {percent} % |
+| `phoneRhEntreprise.country` | Pays du siège |
+| `phoneRhEntreprise.countryNone` | Non indiqué |
+| `phoneRhEntreprise.cityLabel` | Ville du siège |
+| `phoneRhEntreprise.foundedYear` | Année de création |
+| `phoneRhEntreprise.foundedPlaceholder` | 2018 |
+| `phoneRhEntreprise.sectorHint` | Plusieurs domaines ? Séparez-les par des virgules. |
+| `phoneRhEntreprise.international.label` | Entreprise internationale |
+| `phoneRhEntreprise.international.hint` | La page affiche « International » au lieu du drapeau du siège. |
+| `phoneRhEntreprise.socials` | Réseaux sociaux |
+| `phoneRhEntreprise.socialsHint` | Collez l'adresse de la page de l'entreprise. Seuls les réseaux remplis s'affichent. |
+| `phoneRhEntreprise.social.linkedin` | LinkedIn |
+| `phoneRhEntreprise.social.instagram` | Instagram |
+| `phoneRhEntreprise.social.facebook` | Facebook |
+| `phoneRhEntreprise.social.x` | X |
+| `phoneRhEntreprise.socialPlaceholder.linkedin` | linkedin.com/company/… |
+| `phoneRhEntreprise.socialPlaceholder.instagram` | instagram.com/… |
+| `phoneRhEntreprise.socialPlaceholder.facebook` | facebook.com/… |
+| `phoneRhEntreprise.socialPlaceholder.x` | x.com/… |
 
 ### Modèle B · inscription de l'administrateur d'entreprise sur ordinateur
 
@@ -16650,6 +16699,8 @@ Conventions :
 | `orgPage.error.name` | Le nom doit compter au moins 2 caractères |
 | `orgPage.error.website` | Cette adresse de site n'est pas valide |
 | `orgPage.error.other` | Une information n'est pas valide : vérifiez le formulaire |
+| `orgPage.error.foundedYear` | L'année de création doit être une année entre 1800 et aujourd'hui |
+| `orgPage.error.socialLinks` | Un lien de réseau n'est pas valide : collez l'adresse de la page sur ce réseau |
 | `orgPage.declared.title` | Membres déclarés |
 | `orgPage.declared.text` | Ces personnes indiquent travailler chez vous. Confirmer est facultatif : sans réponse, « Indiqué par la personne » reste affiché. |
 | `orgPage.declared.line` | Indique travailler chez {org} · {title} |

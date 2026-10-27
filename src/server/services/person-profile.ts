@@ -230,11 +230,16 @@ async function recruiterBlock(db: PrismaClient, userId: string) {
       orderBy: { createdAt: "asc" },
       select: {
         jobTitle: true,
+        role: true,
         organization: { select: { id: true, name: true, slug: true } },
       },
     }),
   ]);
-  if (!profile) return null;
+  // A recruiter of a company without a recruiter profile yet is listed in its « Membres »: their
+  // page opens too (Ephraïm 27/10/2026).
+  const recruiting =
+    membership && ["org_owner", "org_admin", "recruiter"].includes(membership.role);
+  if (!profile && !recruiting) return null;
   const organization = membership?.organization ?? null;
   const offers = organization
     ? await db.job.count({
@@ -246,11 +251,11 @@ async function recruiterBlock(db: PrismaClient, userId: string) {
       })
     : 0;
   return {
-    jobTitle: membership?.jobTitle?.trim() || profile.jobTitle?.trim() || null,
-    headline: profile.headline?.trim() || null,
-    hiringNow: profile.hiringNow,
-    seeking: profile.seeking?.trim() || null,
-    domains: profile.domains,
+    jobTitle: membership?.jobTitle?.trim() || profile?.jobTitle?.trim() || null,
+    headline: profile?.headline?.trim() || null,
+    hiringNow: profile?.hiringNow ?? false,
+    seeking: profile?.seeking?.trim() || null,
+    domains: profile?.domains ?? [],
     organization: organization ? { name: organization.name, slug: organization.slug } : null,
     offers,
   };

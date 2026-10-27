@@ -119,6 +119,12 @@ model Organization {
   city                    String?
   sector                  String?
   size                    String?
+  /// Year the company was created, shown in « À propos » of its page (Ephraïm 27/10/2026).
+  foundedYear             Int?
+  /// Present in several countries: its page says « International » instead of its seat's flag.
+  international           Boolean                  @default(false)
+  /// { linkedin, instagram, x, facebook } as https addresses (`src/lib/social-links.ts`).
+  socialLinks             Json?
   verifiedAt              DateTime?
   /// Profile fields shown on the public page (partie 07 § 4).
   legalName               String?

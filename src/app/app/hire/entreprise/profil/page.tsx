@@ -6,7 +6,10 @@ import {
   PhoneCompanyProfile,
   type PhoneCompanyProfileData,
 } from "@/components/phone/recruteur/entreprise-profil";
+import { countryOptions } from "@/config/countries";
 import { pickMessages } from "@/i18n/client-messages";
+import { countryCode } from "@/lib/countries";
+import { parseSocialLinks } from "@/lib/social-links";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
 import { signupSizes } from "@/server/services/admin-signup";
@@ -58,6 +61,11 @@ export default async function Page() {
     hiringNow: org.hiringNow,
     verified: Boolean(org.verifiedAt),
     sizes,
+    country: countryCode(org.country) ?? "",
+    countries: countryOptions("code"),
+    foundedYear: org.foundedYear ? String(org.foundedYear) : "",
+    international: org.international,
+    socialLinks: parseSocialLinks(org.socialLinks),
   };
   return (
     <NextIntlClientProvider messages={pickMessages(messages, ["orgPage", "phoneRhEntreprise"])}>
