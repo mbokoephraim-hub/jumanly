@@ -1,5 +1,8 @@
 "use client";
 
+// The Chat's styles come with its pieces, not with the app's global sheet: a phone that kept the
+// app open across a release still gets the new Chat with its styles.
+import "@/styles/phone-chat.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";

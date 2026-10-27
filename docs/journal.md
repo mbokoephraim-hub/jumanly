@@ -4802,3 +4802,11 @@ couleurs aussi.
 - Onglets : Fil et Hub passent des onglets soulignés aux pastilles (comme Carrière et Chat), même
   hauteur (40 px), même texte (13 px) et mêmes couleurs (Lime et texte Sapin quand choisi).
 - Les anciennes règles d'en-tête propres à chaque écran sont retirées.
+
+## Correctif : Chat sans mise en forme sur jumanly.io (27 octobre 2026)
+
+Après la mise en ligne, un téléphone resté ouvert affichait le nouveau Chat avec l'ancienne
+feuille de style globale (texte brut, onglets collés). Les styles du Chat sont maintenant chargés
+avec ses composants (`parts.tsx`) et non plus par `globals.css`. Vérifié : lint, types, build,
+e2e `chat-v2` et `modele-b-messages` (téléphone), feuille du Chat chargée à part sur
+`/app/messages`.
