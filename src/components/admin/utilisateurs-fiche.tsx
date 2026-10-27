@@ -113,6 +113,7 @@ export async function UserCard({
   actionHref,
   back,
   canAct,
+  eraseHref,
   className,
 }: {
   user: {
@@ -134,6 +135,8 @@ export async function UserCard({
   actionHref: (action: string) => string;
   back: string;
   canAct: boolean;
+  /** « Effacer définitivement » (veto), administrators only. */
+  eraseHref?: string;
   className?: string;
 }) {
   const [t, tc, tq] = await Promise.all([
@@ -468,16 +471,6 @@ export async function UserCard({
             <ActionLink href={actionHref("credits")} icon="intelligence">
               {t("users.action.credits.text")}
             </ActionLink>
-            <li>
-              <a
-                href={`/admin/utilisateurs/donnees?id=${encodeURIComponent(user.id)}`}
-                download
-                className={actionLine}
-              >
-                <Icon name="telecharger" className="size-4 shrink-0" />
-                {t("users.action.exportData")}
-              </a>
-            </li>
             <ActionLink href={`${back}#utilisateurs-roles`} icon="edit">
               {t("users.action.roles.text")}
             </ActionLink>
@@ -500,6 +493,20 @@ export async function UserCard({
             )}
             <ActionLink href={actionHref("supprimer")} icon="fermer" danger>
               {t("users.action.delete.text")}
+            </ActionLink>
+            {eraseHref && (
+              <ActionLink href={eraseHref} icon="alerte" danger>
+                {t("users.action.erase.text")}
+              </ActionLink>
+            )}
+          </ul>
+        </nav>
+      )}
+      {deleted && eraseHref && (
+        <nav aria-label={t("users.detail.actions")} className="mt-3.5">
+          <ul className="flex flex-col gap-1.5">
+            <ActionLink href={eraseHref} icon="alerte" danger>
+              {t("users.action.erase.text")}
             </ActionLink>
           </ul>
         </nav>

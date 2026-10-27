@@ -13,6 +13,8 @@ import {
   AdminUserError,
   deleteUser,
   deleteUserSchema,
+  eraseUserForGood,
+  eraseUserSchema,
   grantPlan,
   grantPlanSchema,
   markEmailVerified,
@@ -172,4 +174,12 @@ export async function deleteUserAction(formData: FormData) {
   const input = deleteUserSchema.safeParse(Object.fromEntries(formData));
   if (!input.success) invalid(formData);
   await run(formData, "deleted", () => deleteUser(db, context, input.data));
+}
+
+/** « Effacer définitivement » (veto): reason and the word EFFACER typed to confirm. */
+export async function eraseUserAction(formData: FormData) {
+  const { context } = await writer();
+  const input = eraseUserSchema.safeParse(Object.fromEntries(formData));
+  if (!input.success) invalid(formData);
+  await run(formData, "erased", () => eraseUserForGood(db, context, input.data));
 }

@@ -7,6 +7,8 @@ import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { mailOrgNotice } from "@/server/hire-emails";
 import {
+  grantOrgPlan,
+  grantOrgPlanSchema,
   infoRequestSchema,
   OrgAdminError,
   reactivateOrganization,
@@ -110,4 +112,12 @@ export async function reactivateOrganizationAction(formData: FormData) {
     await reactivateOrganization(db, context, input.data);
     await tell(input.data.organizationId, "reactivated", input.data.reason);
   });
+}
+
+/** « Offrir une formule » to an organization until a date, with a reason. */
+export async function grantOrgPlanAction(formData: FormData) {
+  const context = await writer();
+  const input = grantOrgPlanSchema.safeParse(Object.fromEntries(formData));
+  if (!input.success) redirect(withParam(backOf(formData), "erreur", "reason"));
+  await run(formData, "planGranted", () => grantOrgPlan(db, context, input.data));
 }

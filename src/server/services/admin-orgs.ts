@@ -18,7 +18,15 @@ export const DOCUMENTS_MAX = 6;
 export class OrgAdminError extends Error {
   constructor(
     readonly code:
-      "forbidden" | "notFound" | "fileType" | "fileSize" | "fileCount" | "status" | "reason",
+      | "forbidden"
+      | "notFound"
+      | "fileType"
+      | "fileSize"
+      | "fileCount"
+      | "status"
+      | "reason"
+      | "plan"
+      | "until",
   ) {
     super(code);
     this.name = "OrgAdminError";
@@ -342,4 +350,69 @@ export async function organizationDetail(
     documents,
     quotas,
   };
+}
+
+// ─── Offrir une formule (27/10/2026) ─────────────────────────────
+
+const GRANT_MAX_MS = 730 * 86_400_000;
+
+/** Paid recruiter and company plans an administrator may give to an organization. */
+export async function grantableOrgPlans(db: PrismaClient) {
+  return db.plan.findMany({
+    where: { family: { in: ["rh", "company"] }, active: true, priceCents: { gt: 0 } },
+    orderBy: [{ family: "asc" }, { sortOrder: "asc" }],
+    select: { code: true, name: true },
+  });
+}
+
+export const grantOrgPlanSchema = z.object({
+  organizationId: z.string().min(1),
+  planCode: z.string().min(1).max(60),
+  until: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  reason: z.string().trim().min(3).max(500),
+});
+
+/**
+ * « Offrir une formule » to an organization until a date: a sponsored subscription (`source =
+ * admin`), like a plan given to a person; nothing is charged and the journal keeps the reason.
+ */
+export async function grantOrgPlan(
+  db: PrismaClient,
+  context: AuditContext,
+  input: z.infer<typeof grantOrgPlanSchema>,
+  now = new Date(),
+) {
+  const until = new Date(`${input.until}T23:59:59.999Z`);
+  if (
+    Number.isNaN(until.getTime()) ||
+    until.getTime() <= now.getTime() ||
+    until.getTime() > now.getTime() + GRANT_MAX_MS
+  )
+    throw new OrgAdminError("until");
+  const [organization, plan] = await Promise.all([
+    db.organization.findUnique({ where: { id: input.organizationId }, select: { type: true } }),
+    db.plan.findUnique({ where: { code: input.planCode } }),
+  ]);
+  if (!organization || organization.type === "partner") throw new OrgAdminError("notFound");
+  if (!plan || !["rh", "company"].includes(plan.family) || !plan.active || !plan.priceCents)
+    throw new OrgAdminError("plan");
+  const subscription = await db.subscription.create({
+    data: {
+      subjectType: "organization",
+      subjectId: input.organizationId,
+      planId: plan.id,
+      status: "sponsored",
+      source: "admin",
+      currentPeriodStart: now,
+      currentPeriodEnd: until,
+    },
+  });
+  invalidate({ type: "organization", id: input.organizationId });
+  await audit(db, context, "organization.plan.grant", input.organizationId, {
+    plan: plan.code,
+    until: until.toISOString(),
+    subscriptionId: subscription.id,
+    reason: input.reason,
+  });
+  return subscription;
 }

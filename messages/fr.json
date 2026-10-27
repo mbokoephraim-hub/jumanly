@@ -24513,17 +24513,16 @@
           "revokeTitle": "Retirer le forfait offert",
           "revokeConfirm": "Retirer le forfait {plan} offert jusqu'au {date} ? La personne revient à son forfait habituel."
         },
-        "exportData": "Générer l'export de ses données",
         "delete": {
-          "text": "Supprimer le compte",
-          "confirm": "Supprimer définitivement le compte de {userName} ? Cette action est irréversible.",
+          "text": "Anonymiser le compte",
+          "confirm": "Anonymiser le compte de {userName} ? Cette action est irréversible.",
           "intro": "Le compte est anonymisé : nom, e-mail, profil, CV, expériences et historique sont effacés ; les candidatures et paiements sont conservés sans données personnelles. La personne ne peut plus se connecter.",
           "step1": "Étape 1 sur 2 · Motif",
           "step2": "Étape 2 sur 2 · Confirmation",
           "continue": "Continuer",
           "reasonShown": "Motif : {reason}",
           "typeEmail": "Saisissez l'e-mail du compte pour confirmer ({email})",
-          "submit": "Supprimer définitivement"
+          "submit": "Anonymiser le compte"
         },
         "verifyEmail": {
           "text": "Marquer l'e-mail comme vérifié",
@@ -24547,7 +24546,14 @@
         },
         "exportHint": "Fichier JSON avec tout ce que Jumanly conserve sur la personne (droit d'accès). Le téléchargement est journalisé.",
         "until": "Jusqu'au",
-        "reason": "Motif"
+        "reason": "Motif",
+        "erase": {
+          "text": "Effacer définitivement (veto)",
+          "confirm": "Effacer pour toujours le compte de {userName} et tous ses documents ?",
+          "intro": "Droit de veto de l'administrateur : le compte est supprimé avec tout ce qu'il contient (profil, CV, documents, candidatures, publications, messages envoyés, historique). Rien n'est gardé, même anonymisé, sauf les paiements sans nom (obligation comptable) et la ligne du journal. Si la personne possède une entreprise, celle-ci passe à un autre administrateur de l'équipe ; sans équipe, ses offres sont fermées.",
+          "typeWord": "Écrivez EFFACER pour confirmer",
+          "submit": "Effacer définitivement"
+        }
       },
       "suspended": "Compte suspendu.",
       "updated": "Utilisateur mis à jour.",
@@ -24579,13 +24585,8 @@
         "apple": "Apple",
         "magicLink": "Lien par e-mail"
       },
-      "block": {
-        "self": "Vous ne pouvez pas supprimer votre propre compte.",
-        "lastAdmin": "C'est le dernier administrateur de la plateforme : nommez-en un autre avant de supprimer ce compte.",
-        "owner": "Cette personne est propriétaire d'une organisation : la propriété doit être transférée avant la suppression.",
-        "deleted": "Ce compte est déjà supprimé."
-      },
       "done": {
+        "erased": "Compte et documents effacés définitivement.",
         "codeSent": "Lien de confirmation envoyé.",
         "resetSent": "Lien de réinitialisation envoyé.",
         "verified": "Adresse e-mail marquée comme vérifiée.",
@@ -24595,6 +24596,12 @@
         "overrideRemoved": "Ajout retiré.",
         "deleted": "Compte supprimé et anonymisé."
       },
+      "block": {
+        "self": "Vous ne pouvez pas supprimer votre propre compte.",
+        "lastAdmin": "C'est le dernier administrateur de la plateforme : nommez-en un autre avant de supprimer ce compte.",
+        "owner": "Cette personne est propriétaire d'une organisation : la propriété doit être transférée avant la suppression.",
+        "deleted": "Ce compte est déjà supprimé."
+      },
       "error": {
         "champs": "Vérifiez les champs du formulaire.",
         "motif": "Indiquez un motif (3 caractères au moins).",
@@ -24603,7 +24610,7 @@
         "quota": "Ce quota n'existe pas dans le forfait de la personne.",
         "unlimited": "Ce quota est déjà illimité.",
         "grant": "Ce forfait offert n'existe plus.",
-        "confirm": "L'e-mail saisi ne correspond pas au compte, ou l'envoi a échoué.",
+        "confirm": "La confirmation saisie ne correspond pas, ou l'envoi a échoué.",
         "self": "Vous ne pouvez pas faire cette action sur votre propre compte.",
         "lastAdmin": "C'est le dernier administrateur de la plateforme.",
         "owner": "Cette personne est propriétaire d'une organisation.",
@@ -24822,11 +24829,20 @@
       "done": {
         "infoRequested": "Demande de complément envoyée.",
         "suspended": "Organisation suspendue.",
-        "reactivated": "Organisation réactivée."
+        "reactivated": "Organisation réactivée.",
+        "planGranted": "Formule offerte. Elle s'applique tout de suite."
       },
       "error": {
+        "plan": "Choisissez une formule payante recruteur ou entreprise, et une date de fin dans les deux ans.",
         "status": "Cette action n'est plus possible dans l'état actuel de l'organisation.",
         "reason": "Indiquez un motif (3 caractères au moins)."
+      },
+      "grant": {
+        "text": "Offrir une formule",
+        "confirm": "Offrir une formule à {org} jusqu'à une date, sans paiement ?",
+        "plan": "Formule",
+        "until": "Jusqu'au",
+        "submit": "Offrir la formule"
       },
       "detail": {
         "members": "Membres et rôles",
