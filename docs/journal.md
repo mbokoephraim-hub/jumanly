@@ -4780,7 +4780,16 @@ Modèle B ; feuille `src/styles/phone-chat.css`, classes `nb-ch-`, textes `phone
 - Décisions : `docs/decisions/2026-10-27-chat-v2.md`. Reste à choisir : un vrai fournisseur d'appel
   vidéo.
 
-### Correctif : Chat sans mise en forme sur jumanly.io (27 octobre 2026)
+## Explorer · corrections d'Ephraïm (27 octobre 2026)
+
+- Avatar de l'en-tête à 28 px, comme dans le Fil et à la taille de l'icône Enregistrées.
+- Rubriques gardées : « Offres pour vous », « Entreprises qui recrutent », « Personnes à connaître » ;
+  « Nouvelles cette semaine » retirée de l'accueil d'Explorer (la page `/app/explorer/nouvelles`
+  reste). Titres de rubrique à 16 px au lieu de 19 px.
+- Fond de l'onglet Explorer : le même que Fil, Carrière et les autres onglets (`--nb-nuit`), au lieu
+  du noir plus profond.
+
+## Correctif : Chat sans mise en forme sur jumanly.io (27 octobre 2026)
 
 Après la mise en ligne, un téléphone resté ouvert affichait le nouveau Chat avec l'ancienne
 feuille de style globale (texte brut, onglets collés). Les styles du Chat sont maintenant chargés
