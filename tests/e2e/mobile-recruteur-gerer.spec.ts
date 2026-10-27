@@ -162,7 +162,8 @@ test("conversation : brouillon d'Orbi relu puis envoyé, modèles, liste des mes
   // The list: the conversation, the offer, the filters.
   await page.goto("/app/messages");
   const list = main(page);
-  await expect(list.getByRole("heading", { level: 1 })).toHaveText("Chat");
+  // The phone's tab is named « Chat » like the talent's; the computer keeps « Messages ».
+  await expect(list.getByRole("heading", { level: 1 })).toHaveText(isMobile ? "Chat" : "Messages");
   await expect(list.locator(`a[href^="${conversation}"]`)).toBeVisible();
   await expectAccessible(page);
   await noOverflow(page, "messages");
