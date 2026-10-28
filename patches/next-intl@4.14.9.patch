@@ -1,0 +1,33 @@
+diff --git a/dist/esm/development/server/react-server/getConfig.js b/dist/esm/development/server/react-server/getConfig.js
+index 6e1a9ff70f0efa5a1f311af5eb78d472012d59ad..bc3853ce09c42c0270751e5b56809da917d49962 100644
+--- a/dist/esm/development/server/react-server/getConfig.js
++++ b/dist/esm/development/server/react-server/getConfig.js
+@@ -2,6 +2,7 @@ import { cache } from 'react';
+ import { initializeConfig, _createIntlFormatters, _createCache } from 'use-intl/core';
+ import { isPromise } from '../../shared/utils.js';
+ import { getRequestLocale } from './RequestLocale.js';
++import { getCachedRequestLocale } from './RequestLocaleCache.js';
+ import getRuntimeConfig from 'next-intl/config';
+ import validateLocale from './validateLocale.js';
+ 
+@@ -54,6 +55,12 @@ async function getConfigImpl(localeOverride) {
+     timeZone: runtimeConfig.timeZone || getDefaultTimeZone()
+   };
+ }
+-const getConfig = cache(getConfigImpl);
++const getConfigCached = cache(getConfigImpl);
++
++// Jumanly: a configuration read before `setRequestLocale` (a not-found boundary rendered alongside
++// the page) must not fix the language of the whole request. The configuration is cached per locale.
++function getConfig(localeOverride) {
++  return getConfigCached(localeOverride ?? getCachedRequestLocale());
++}
+ 
+ export { getConfig as default };
+diff --git a/dist/esm/production/server/react-server/getConfig.js b/dist/esm/production/server/react-server/getConfig.js
+index 1274834bbf98fcd412905b5232be76fa39512a9d..243f23446e7d73384fb6fb031aa545902ce1901b 100644
+--- a/dist/esm/production/server/react-server/getConfig.js
++++ b/dist/esm/production/server/react-server/getConfig.js
+@@ -1 +1 @@
+-import{cache as e}from"react";import{initializeConfig as t,_createIntlFormatters as o,_createCache as r}from"use-intl/core";import{isPromise as n}from"../../shared/utils.js";import{getRequestLocale as i}from"./RequestLocale.js";import s from"next-intl/config";const a=e((function(){return Intl.DateTimeFormat().resolvedOptions().timeZone}));const c=e((async function(e,t){let o=e({locale:t,get requestLocale(){return t?Promise.resolve(t):i()}});if(n(o)&&(o=await o),!o.locale)throw new Error("No locale was returned from `getRequestConfig`.\n\nSee https://next-intl.dev/docs/usage/configuration#i18n-request");return o})),m=e(o),l=e(r);const u=e((async function(e){const o=await c(s,e);return{...t(o),_formatters:m(l()),timeZone:o.timeZone||a()}}));export{u as default};
++import{cache as e}from"react";import{initializeConfig as t,_createIntlFormatters as o,_createCache as r}from"use-intl/core";import{isPromise as n}from"../../shared/utils.js";import{getRequestLocale as i}from"./RequestLocale.js";import s from"next-intl/config";import{getCachedRequestLocale as J}from"./RequestLocaleCache.js";const a=e((function(){return Intl.DateTimeFormat().resolvedOptions().timeZone}));const c=e((async function(e,t){let o=e({locale:t,get requestLocale(){return t?Promise.resolve(t):i()}});if(n(o)&&(o=await o),!o.locale)throw new Error("No locale was returned from `getRequestConfig`.\n\nSee https://next-intl.dev/docs/usage/configuration#i18n-request");return o})),m=e(o),l=e(r);const u=e((async function(e){const o=await c(s,e);return{...t(o),_formatters:m(l()),timeZone:o.timeZone||a()}}));function jumanlyGetConfig(e){return u(e??J())}export{jumanlyGetConfig as default};

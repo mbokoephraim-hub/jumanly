@@ -127,3 +127,48 @@ export function buildMessages(entries: TextEntry[]): { messages: Messages; error
 export function isTextFile(name: string): boolean {
   return name.endsWith(".md") && name.toLowerCase() !== "lisezmoi.md";
 }
+
+/**
+ * Variables of a text (`{name}`, `{count, plural, …}`), for comparing two languages. Only the
+ * arguments are read: the branches of a plural or a select are translated text.
+ */
+function variables(text: string): string[] {
+  const names = new Set<string>();
+  // What each open brace is: an argument with options, a simple `{name}`, or a branch of text.
+  const stack: ("argument" | "simple" | "branch")[] = [];
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === "{") {
+      const top = stack.at(-1);
+      if (top === "argument") {
+        stack.push("branch");
+        continue;
+      }
+      const argument = /^\{\s*([a-zA-Z0-9_]+)\s*([,}])/.exec(text.slice(i));
+      if (argument) names.add(argument[1]);
+      stack.push(argument?.[2] === "," ? "argument" : "simple");
+    } else if (text[i] === "}") {
+      stack.pop();
+    }
+  }
+  return [...names].sort();
+}
+
+/** An English text must translate an existing French key and keep its variables. */
+export function checkTranslation(reference: TextEntry[], translated: TextEntry[]): string[] {
+  const french = new Map(reference.map((entry) => [entry.key, entry]));
+  const errors: string[] = [];
+  for (const entry of translated) {
+    const where = `${entry.file}:${entry.line}`;
+    const source = french.get(entry.key);
+    if (!source) {
+      errors.push(`${where} : « ${entry.key} » n'existe pas en français`);
+      continue;
+    }
+    const expected = variables(source.text).join(", ");
+    const found = variables(entry.text).join(", ");
+    if (expected !== found) {
+      errors.push(`${where} : « ${entry.key} » doit garder les variables {${expected}} (trouvé {${found}})`);
+    }
+  }
+  return errors;
+}

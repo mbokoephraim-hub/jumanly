@@ -10,6 +10,11 @@ overrides:
   undici: '>=8.12.2'
   '@react-email/ui>next': 16.4.2
 
+patchedDependencies:
+  next-intl@4.14.9:
+    hash: 90015950a6b75dd39931b738e6eb61019d10a2ed52bdf0cba95674d49827e5d6
+    path: patches/next-intl@4.14.9.patch
+
 importers:
 
   .:
@@ -49,7 +54,7 @@ importers:
         version: 16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.0)(@types/node@22.20.5)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       next-intl:
         specifier: 4.14.9
-        version: 4.14.9(@swc/helpers@0.5.23)(@types/react@19.3.0)(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.0)(@types/node@22.20.5)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
+        version: 4.14.9(patch_hash=90015950a6b75dd39931b738e6eb61019d10a2ed52bdf0cba95674d49827e5d6)(@swc/helpers@0.5.23)(@types/react@19.3.0)(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.0)(@types/node@22.20.5)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
       nodemailer:
         specifier: 10.1.2
         version: 10.1.2
@@ -8298,7 +8303,7 @@ snapshots:
 
   next-intl-swc-plugin-extractor@4.14.9: {}
 
-  next-intl@4.14.9(@swc/helpers@0.5.23)(@types/react@19.3.0)(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.0)(@types/node@22.20.5)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0):
+  next-intl@4.14.9(patch_hash=90015950a6b75dd39931b738e6eb61019d10a2ed52bdf0cba95674d49827e5d6)(@swc/helpers@0.5.23)(@types/react@19.3.0)(next@16.4.2(@babel/core@7.29.7)(@playwright/test@1.64.0)(@types/node@22.20.5)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0):
     dependencies:
       '@eloqnt/config': 0.1.1
       '@eloqnt/format-json': 0.1.0
