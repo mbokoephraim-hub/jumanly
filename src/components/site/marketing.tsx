@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Character, type CharacterName, type Pose } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { cx } from "@/lib/cx";
+import { keepTogether } from "@/lib/typography";
 
 /**
  * Building blocks of the public site, identity of 28/10/2026 (docs/decisions/2026-10-28-site-public.md):
@@ -185,7 +186,7 @@ export function SectionHead({
       )}
     >
       {eyebrow && <Eyebrow dark={dark}>{eyebrow}</Eyebrow>}
-      <Heading className={sectionTitle}>{title}</Heading>
+      <Heading className={sectionTitle}>{keepTogether(title)}</Heading>
       {text && <p className={cx(lead, dark ? "text-blanc/75" : "text-ardoise")}>{text}</p>}
     </div>
   );
@@ -546,7 +547,7 @@ export function LimeCtaBand({
         />
         <div className="relative flex max-w-[660px] flex-col gap-5">
           <h2 className="text-[32px] leading-[38px] font-semibold tracking-[-0.035em] lg:text-[54px] lg:leading-[58px]">
-            {title}
+            {keepTogether(title)}
           </h2>
           {text && <p className="text-lg leading-7 text-sapin/85">{text}</p>}
           <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:flex-wrap">{actions}</div>
@@ -679,5 +680,244 @@ export function PathLine({
         vectorEffect="non-scaling-stroke"
       />
     </svg>
+  );
+}
+
+const heroTones = {
+  lime: "bg-lime-clair text-sapin",
+  blanc: "bg-blanc text-sapin",
+  sapin: "bg-sapin text-blanc",
+  nuit: "bg-nuit text-blanc",
+} as const;
+
+/**
+ * Top of a public page: a large rounded panel with the eyebrow, a very large title, the lead, the
+ * actions and, beside them, a picture (PhotoFrame, phone screens, floating cards).
+ */
+export function SiteHero({
+  eyebrow,
+  title,
+  text,
+  actions,
+  extra,
+  visual,
+  tone = "lime",
+  compact = false,
+  className,
+}: {
+  eyebrow?: string;
+  title: ReactNode;
+  text?: ReactNode;
+  actions?: ReactNode;
+  /** Under the actions: badges, reassurance, a form. */
+  extra?: ReactNode;
+  visual?: ReactNode;
+  tone?: keyof typeof heroTones;
+  /** Smaller title, for list and document pages. */
+  compact?: boolean;
+  className?: string;
+}) {
+  const dark = tone === "sapin" || tone === "nuit";
+  return (
+    <section data-scene className="bg-papier px-2 pt-2 sm:px-3 lg:px-4 lg:pt-3">
+      <div
+        className={cx(
+          "relative mx-auto max-w-[1400px] overflow-hidden rounded-[32px] px-5 lg:rounded-[48px] lg:px-14",
+          compact ? "pt-10 pb-10 lg:pt-16 lg:pb-16" : "pt-10 pb-8 lg:pt-20 lg:pb-20",
+          heroTones[tone],
+          className,
+        )}
+      >
+        <Shape
+          name={dark ? "forme-orbites-lime" : "forme-orbites-sapin"}
+          className={cx(
+            "jm-drift -top-56 -left-56 w-[640px]",
+            dark ? "opacity-[0.1]" : "opacity-[0.06]",
+          )}
+        />
+        {tone === "lime" && (
+          <span
+            aria-hidden
+            className="absolute -right-40 -bottom-40 size-[560px] rounded-full bg-lime/50 blur-3xl"
+          />
+        )}
+        <div
+          className={cx(
+            "relative mx-auto flex max-w-[1200px] flex-col gap-10 lg:flex-row lg:items-center",
+            visual ? "lg:gap-14" : "",
+          )}
+        >
+          <div className={cx("flex flex-col gap-6", visual && "lg:w-[560px] lg:shrink-0")}>
+            {eyebrow && (
+              <div className="jm-rise" style={stagger(0)}>
+                <Eyebrow dark={dark}>{eyebrow}</Eyebrow>
+              </div>
+            )}
+            <h1
+              className={cx(
+                "jm-word",
+                compact
+                  ? "text-[36px] leading-10 font-semibold tracking-[-0.04em] lg:text-[56px] lg:leading-[60px]"
+                  : heroTitle,
+              )}
+              style={stagger(1)}
+            >
+              {typeof title === "string" ? keepTogether(title) : title}
+            </h1>
+            {text && (
+              <div
+                className={cx(
+                  lead,
+                  "jm-rise max-w-[620px]",
+                  dark ? "text-blanc/80" : "text-sapin/85",
+                )}
+                style={stagger(2)}
+              >
+                {text}
+              </div>
+            )}
+            {actions && (
+              <div
+                className="jm-rise flex flex-col gap-3 sm:flex-row sm:flex-wrap"
+                style={stagger(3)}
+              >
+                {actions}
+              </div>
+            )}
+            {extra && (
+              <div className="jm-rise" style={stagger(4)}>
+                {extra}
+              </div>
+            )}
+          </div>
+          {visual && (
+            <div className="jm-rise relative min-w-0 flex-1" style={stagger(2)}>
+              {visual}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** A phone screen of the app (public/apercus), in a Nuit frame with a deep shadow. */
+export function PhoneShot({
+  src,
+  alt = "",
+  width,
+  className,
+  priority = false,
+  scroll,
+}: {
+  /** File in public/apercus, without extension. */
+  src: string;
+  alt?: string;
+  /** Width in pixels; the height follows the screen. */
+  width: number;
+  className?: string;
+  priority?: boolean;
+  /** Slow scroll of the screen inside its frame (`.jm-screen`), in pixels. */
+  scroll?: number;
+}) {
+  return (
+    <div
+      className={cx(
+        "overflow-hidden rounded-[30px] shadow-[0_30px_60px_rgba(0,0,0,0.4)] ring-[6px] ring-nuit",
+        className,
+      )}
+      style={{ width, height: Math.round(width * 2.05) }}
+    >
+      <img
+        src={`/apercus/${src}.webp`}
+        alt={alt}
+        width={width}
+        height={Math.round(width * 2.16)}
+        loading={priority ? undefined : "lazy"}
+        fetchPriority={priority ? "high" : undefined}
+        className={cx("w-full max-w-none", scroll !== undefined && "jm-screen")}
+        style={
+          scroll !== undefined ? ({ "--jm-scroll": `${scroll}px` } as CSSProperties) : undefined
+        }
+      />
+    </div>
+  );
+}
+
+/** A check in a Lime disc, then a line of text (lists of guarantees, reassurance). */
+export function CheckLine({ children, dark = false }: { children: ReactNode; dark?: boolean }) {
+  return (
+    <li className="flex items-start gap-3 text-[15px] leading-6">
+      <span
+        aria-hidden
+        className={cx(
+          "mt-px flex size-6 shrink-0 items-center justify-center rounded-full",
+          dark ? "bg-lime text-sapin" : "bg-lime text-sapin",
+        )}
+      >
+        <Icon name="check" className="size-3.5" />
+      </span>
+      <span>{children}</span>
+    </li>
+  );
+}
+
+/** Reassurance chips (a check, a few words) on a hero. */
+export function CheckChips({ items, dark = false }: { items: string[]; dark?: boolean }) {
+  return (
+    <ul className="flex flex-wrap gap-2">
+      {items.map((item) => (
+        <li
+          key={item}
+          className={cx(
+            "flex items-center gap-1.5 rounded-pill py-1.5 pr-3 pl-1.5 text-xs leading-[17px] font-semibold",
+            dark
+              ? "bg-blanc/10 text-blanc ring-1 ring-blanc/15 ring-inset"
+              : "bg-blanc/75 text-sapin",
+          )}
+        >
+          <span className="flex size-5 items-center justify-center rounded-full bg-lime text-sapin">
+            <Icon name="check" className="size-3" />
+          </span>
+          {item}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/**
+ * The rounded panel of a hero, for pages that lay out their own top (catalogs, detail pages): the
+ * same frame as SiteHero, with free content inside.
+ */
+export function HeroPanel({
+  tone = "lime",
+  className,
+  children,
+}: {
+  tone?: keyof typeof heroTones;
+  className?: string;
+  children: ReactNode;
+}) {
+  const dark = tone === "sapin" || tone === "nuit";
+  return (
+    <section data-scene className="bg-papier px-2 pt-2 sm:px-3 lg:px-4 lg:pt-3">
+      <div
+        className={cx(
+          "relative mx-auto max-w-[1400px] overflow-hidden rounded-[32px] lg:rounded-[48px]",
+          heroTones[tone],
+          className,
+        )}
+      >
+        <Shape
+          name={dark ? "forme-orbites-lime" : "forme-orbites-sapin"}
+          className={cx(
+            "jm-drift -top-56 -left-56 w-[640px]",
+            dark ? "opacity-[0.1]" : "opacity-[0.06]",
+          )}
+        />
+        {children}
+      </div>
+    </section>
   );
 }

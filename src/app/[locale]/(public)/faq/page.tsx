@@ -4,17 +4,13 @@ import { Character } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { FaqSearch, FaqThemes } from "@/components/site/faq-search";
 import {
-  Eyebrow,
-  Glow,
   IconTile,
   LimeCtaBand,
   MarketingSection,
-  lead,
-  stagger,
+  SiteButton,
+  SiteHero,
 } from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
-import { ButtonLink } from "@/components/ui";
-import { cx } from "@/lib/cx";
 import { jsonLdScript, pageMetadata } from "@/lib/seo";
 import { getContentOverrides } from "@/server/queries/public";
 import { faqItems } from "@/server/services/contents";
@@ -73,47 +69,29 @@ export default async function FaqPage({ params }: PageProps<"/[locale]/faq">) {
       />
       <MotionRoot />
 
-      {/* Hero with the search */}
-      <MarketingSection
-        scene
-        className="pt-10 pb-10 lg:pt-[72px] lg:pb-16"
-        background={
-          <>
-            <Glow className="-top-48 -left-40 size-[520px] bg-lime/40" />
-            <Glow className="-right-40 -bottom-56 size-[560px] bg-menthe/30" delay={-8} />
-          </>
-        }
-        innerClassName="flex items-end gap-12"
-      >
-        <div className="relative z-1 flex min-w-0 flex-1 flex-col gap-5">
-          <div className="jm-rise" style={stagger(0)}>
-            <Eyebrow>{t("hero.eyebrow")}</Eyebrow>
-          </div>
-          <h1
-            className="jm-word text-[36px] leading-10 font-semibold tracking-[-0.035em] lg:text-[56px] lg:leading-[60px]"
-            style={stagger(1)}
-          >
-            {t("hero.title")}
-          </h1>
-          <p className={cx(lead, "jm-rise text-sapin/85")} style={stagger(2)}>
-            {t("hero.text")}
-          </p>
-          <div className="jm-rise" style={stagger(3)}>
+      <SiteHero
+        compact
+        eyebrow={t("hero.eyebrow")}
+        title={t("hero.title")}
+        text={t("hero.text")}
+        extra={
+          <div className="max-w-[620px]">
             <FaqSearch
               label={t("search.label")}
               placeholder={t("search.placeholder")}
               empty={t("search.empty")}
             />
           </div>
-        </div>
-        <div className="jm-breathe -mb-10 hidden shrink-0 lg:-mb-16 lg:block">
-          <Character name="fatou" pose="montre" height={330} />
-        </div>
-      </MarketingSection>
+        }
+        visual={
+          <div className="jm-breathe -mb-10 hidden justify-end lg:-mb-16 lg:flex">
+            <Character name="fatou" pose="montre" height={330} />
+          </div>
+        }
+      />
 
       {/* Themes and questions */}
       <MarketingSection
-        tone="blanc"
         className="overflow-clip! pt-8 lg:pt-[72px]"
         innerClassName="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-16"
       >
@@ -127,15 +105,15 @@ export default async function FaqPage({ params }: PageProps<"/[locale]/faq">) {
               icon: group.icon,
             }))}
           />
-          <div className="hidden flex-col gap-2.5 rounded-card bg-creme p-6 lg:flex">
+          <div className="hidden flex-col gap-2.5 rounded-[28px] bg-blanc p-6 lg:flex">
             <p className="flex items-center gap-2 text-sm font-semibold">
               <Icon name="message" className="size-4 shrink-0 text-feuille-fonce" />
               {t("cta.title")}
             </p>
             <p className="text-[13px] leading-5 text-ardoise">{t("cta.text")}</p>
-            <ButtonLink href="/contact" variant="secondary" className="self-start">
+            <SiteButton href="/contact" size="md" className="self-start">
               {t("cta.button")}
-            </ButtonLink>
+            </SiteButton>
           </div>
         </aside>
         <div className="flex min-w-0 flex-1 flex-col gap-10">
@@ -158,7 +136,7 @@ export default async function FaqPage({ params }: PageProps<"/[locale]/faq">) {
                   data-faq
                   name={`faq-${group.theme}`}
                   open={index === 0}
-                  className="group scroll-mt-24 rounded-[20px] bg-creme px-5 py-[18px] lg:px-6 lg:py-5"
+                  className="group scroll-mt-24 rounded-[24px] bg-blanc px-5 py-[18px] lg:px-6 lg:py-5"
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-base leading-[23px] font-semibold [&::-webkit-details-marker]:hidden">
                     {item.question}
@@ -183,15 +161,14 @@ export default async function FaqPage({ params }: PageProps<"/[locale]/faq">) {
       </MarketingSection>
 
       <LimeCtaBand
-        animated
         spacedTop
         title={t("cta.title")}
         text={t("cta.text")}
         character={{ name: "kofi", pose: "joie", height: 330, mobileHeight: 250 }}
         actions={
-          <ButtonLink href="/contact" variant="secondary" size="lg" icon={<Icon name="message" />}>
+          <SiteButton href="/contact" icon="message">
             {t("cta.button")}
-          </ButtonLink>
+          </SiteButton>
         }
       />
     </>

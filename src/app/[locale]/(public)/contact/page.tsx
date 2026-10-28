@@ -7,10 +7,10 @@ import { Icon, type IconName } from "@/components/brand/icon";
 import { ContactForm } from "@/components/site/contact-form";
 import {
   Eyebrow,
-  Glow,
   IconTile,
-  ImmersiveBackdrop,
-  Pattern,
+  Shape,
+  SiteButton,
+  heroTitle,
   lead,
   stagger,
   wrap,
@@ -18,11 +18,12 @@ import {
 import { MotionRoot } from "@/components/site/motion";
 import { planValues } from "@/components/site/pricing";
 import { QuoteForm, type QuoteDefaults } from "@/components/site/quote-form";
-import { ButtonLink, Skeleton } from "@/components/ui";
+import { Skeleton } from "@/components/ui";
 import { countryOptions } from "@/config/countries";
 import { dynamic, numbered } from "@/i18n/dynamic";
 import { pickMessages } from "@/i18n/client-messages";
 import { cx } from "@/lib/cx";
+import { keepTogether } from "@/lib/typography";
 import { pageMetadata } from "@/lib/seo";
 import { getCurrentUser } from "@/server/auth/session";
 import { db } from "@/server/db";
@@ -32,7 +33,9 @@ import { contactSubjects, type ContactSubject } from "@/server/services/contact-
 import { plansOf, type PublicPlan } from "@/server/services/plans";
 import { applySiteLocale } from "@/i18n/site-locale";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/contact">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/contact">): Promise<Metadata> {
   await applySiteLocale(params);
   const t = await getTranslations("contact.seo");
   return pageMetadata({ path: "/contact", title: t("title"), description: t("description") });
@@ -50,7 +53,10 @@ function subjectOf(sujet: string | string[] | undefined): ContactSubject | undef
   );
 }
 
-export default async function ContactPage({ params, searchParams }: PageProps<"/[locale]/contact">) {
+export default async function ContactPage({
+  params,
+  searchParams,
+}: PageProps<"/[locale]/contact">) {
   await applySiteLocale(params);
   return (
     <>
@@ -139,28 +145,26 @@ function Hero({
   character: ReactNode;
 }) {
   return (
-    <section
-      data-scene
-      data-spotlight
-      className="relative overflow-hidden bg-gradient-depth pt-10 pb-[120px] text-blanc lg:pt-[72px] lg:pb-[200px]"
-    >
-      <ImmersiveBackdrop />
-      <div className={cx(wrap, "relative flex items-end gap-12")}>
-        <div className="flex max-w-[720px] flex-1 flex-col gap-5">
-          <div className="jm-rise" style={stagger(0)}>
-            <Eyebrow dark>{eyebrow}</Eyebrow>
+    <section data-scene className="bg-papier px-2 pt-2 sm:px-3 lg:px-4 lg:pt-3">
+      <div className="relative mx-auto max-w-[1400px] overflow-hidden rounded-[32px] bg-sapin px-1 pt-10 pb-[120px] text-blanc lg:rounded-[48px] lg:pt-20 lg:pb-[200px]">
+        <Shape
+          name="forme-orbites-lime"
+          className="jm-drift -top-56 -left-56 w-[640px] opacity-[0.1]"
+        />
+        <div className={cx(wrap, "relative flex items-end gap-12")}>
+          <div className="flex max-w-[720px] flex-1 flex-col gap-5">
+            <div className="jm-rise" style={stagger(0)}>
+              <Eyebrow dark>{eyebrow}</Eyebrow>
+            </div>
+            <h1 className={cx("jm-word", heroTitle)} style={stagger(1)}>
+              {keepTogether(title)}
+            </h1>
+            <p className={cx(lead, "jm-rise text-blanc/75")} style={stagger(2)}>
+              {text}
+            </p>
           </div>
-          <h1
-            className="jm-word text-[36px] leading-10 font-semibold tracking-[-0.035em] lg:text-[56px] lg:leading-[60px]"
-            style={stagger(1)}
-          >
-            {title}
-          </h1>
-          <p className={cx(lead, "jm-rise text-blanc/75")} style={stagger(2)}>
-            {text}
-          </p>
+          <div className="jm-breathe -mb-6 hidden shrink-0 lg:block">{character}</div>
         </div>
-        <div className="jm-breathe -mb-6 hidden shrink-0 lg:block">{character}</div>
       </div>
     </section>
   );
@@ -177,8 +181,7 @@ function Body({
   asideWidth: string;
 }) {
   return (
-    <section className="relative z-2 bg-creme pb-14 lg:pb-24">
-      <Glow className="top-40 -left-40 size-[460px] bg-lime/30" delay={-5} />
+    <section className="relative z-2 bg-papier pb-14 lg:pb-24">
       <div
         className={cx(
           wrap,
@@ -267,7 +270,7 @@ async function ContactAside() {
   return (
     <>
       <div
-        className="jm-rise rounded-card bg-blanc px-6 py-6 lg:px-[30px] lg:py-7"
+        className="jm-rise rounded-[28px] bg-blanc px-6 py-6 lg:px-[30px] lg:py-7"
         style={stagger(4)}
       >
         <h2 className="mb-1.5 text-xl leading-[26px] font-semibold tracking-[-0.015em]">
@@ -296,20 +299,16 @@ async function ContactAside() {
         </ul>
       </div>
       <div
-        className="jm-rise jm-flow relative flex flex-col items-start gap-3.5 overflow-hidden rounded-card bg-lime p-6 text-sapin lg:p-7"
-        style={{
-          ...stagger(5),
-          backgroundImage:
-            "linear-gradient(120deg, #D9FA72 0%, #A6F26B 35%, #7DE36B 60%, #E3F67C 100%)",
-        }}
+        className="jm-rise relative flex flex-col items-start gap-3.5 overflow-hidden rounded-[28px] bg-lime-clair p-6 text-sapin lg:p-7"
+        style={stagger(5)}
       >
         <span className="jm-float">
           <IconTile icon="recherche" size={46} className="bg-sapin text-lime" />
         </span>
         <p className="text-base leading-[25px] font-medium">{t("faqHint.text")}</p>
-        <ButtonLink href="/faq" variant="secondary" iconAfter={<Icon name="chev-r" />}>
+        <SiteButton href="/faq" size="md">
           {t("faqHint.cta")}
-        </ButtonLink>
+        </SiteButton>
       </div>
     </>
   );
@@ -326,11 +325,9 @@ async function QuotePlanCard({ plan }: { plan: PublicPlan }) {
   return (
     <div
       data-scene
-      className="jm-rise relative flex flex-col gap-4 overflow-hidden rounded-card bg-nuit p-6 text-blanc lg:p-[26px]"
+      className="jm-rise relative flex flex-col gap-4 overflow-hidden rounded-[28px] bg-nuit p-6 text-blanc lg:p-[26px]"
       style={stagger(4)}
     >
-      <Pattern name="motif-reseau-sombre" opacity={0.35} />
-      <Glow className="-top-24 -right-24 size-[300px] bg-feuille/30" />
       <div className="relative flex items-center justify-between gap-3">
         {tagline && (
           <p className="text-[11px] leading-[14px] font-semibold tracking-[0.09em] text-neon uppercase">

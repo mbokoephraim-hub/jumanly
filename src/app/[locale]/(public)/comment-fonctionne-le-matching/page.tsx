@@ -5,25 +5,25 @@ import { Icon, type IconName } from "@/components/brand/icon";
 import {
   Eyebrow,
   FaqAccordion,
-  Glow,
   IconTile,
   MarketingSection,
-  Pattern,
+  SiteButton,
+  SiteHero,
   Shape,
-  iaFlow,
   lead,
   sectionTitle,
   stagger,
 } from "@/components/site/marketing";
 import { CountUp, MotionRoot } from "@/components/site/motion";
-import { ButtonLink } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { pageMetadata } from "@/lib/seo";
 import { signupHref } from "@/lib/signup";
 import { getMatchingWeights } from "@/server/queries/public";
 import { applySiteLocale } from "@/i18n/site-locale";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/comment-fonctionne-le-matching">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/comment-fonctionne-le-matching">): Promise<Metadata> {
   await applySiteLocale(params);
   const t = await getTranslations("matchingPage.meta");
   return pageMetadata({
@@ -32,8 +32,6 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/comment-
     description: t("description"),
   });
 }
-
-const chevron = <Icon name="chev-r" />;
 
 /** The eight criteria of the texts (s2.list.1 to 8), with their icons. */
 const criteria: { n: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8; icon: IconName }[] = [
@@ -73,7 +71,9 @@ const sectionNav = [
 ] as const;
 
 /** The matching explained to everyone (partie 08 § 8.6), linked from every « Pourquoi ? ». */
-export default async function MatchingPage({ params }: PageProps<"/[locale]/comment-fonctionne-le-matching">) {
+export default async function MatchingPage({
+  params,
+}: PageProps<"/[locale]/comment-fonctionne-le-matching">) {
   await applySiteLocale(params);
   const t = await getTranslations();
   const weights = await getMatchingWeights();
@@ -83,70 +83,44 @@ export default async function MatchingPage({ params }: PageProps<"/[locale]/comm
     <>
       <MotionRoot />
 
-      {/* Hero on the AI gradient, with the score ring and the orb */}
-      <section
-        data-scene
-        data-spotlight
-        className="jm-flow relative overflow-hidden bg-gradient-ai pt-12 pb-14 text-blanc lg:pt-20 lg:pb-24"
-        style={{ backgroundImage: iaFlow }}
-      >
-        <Shape
-          name="forme-orbites-lime"
-          className="jm-drift -top-[200px] -right-[200px] w-[720px] opacity-16 brightness-0 invert"
-        />
-        <Glow className="-bottom-48 -left-40 size-[520px] bg-lime/20" delay={-6} />
-        <div aria-hidden className="jm-spotlight pointer-events-none absolute inset-0" />
-        <div className="relative mx-auto flex w-full max-w-[1200px] flex-col gap-10 px-4 lg:flex-row lg:items-center lg:gap-16 xl:px-0">
-          <div className="flex flex-col gap-6 lg:flex-1">
-            <p className="jm-rise flex items-center gap-2.5" style={stagger(0)}>
-              <AiOrb size={26} className="jm-pulse" />
-              <span className="text-[13px] leading-[18px] font-medium tracking-[0.12em] text-neon uppercase">
-                {t("matchingPage.eyebrow")}
-              </span>
-            </p>
-            <h1
-              className="jm-word text-[36px] leading-10 font-semibold tracking-[-0.035em] lg:text-[56px] lg:leading-[60px]"
-              style={stagger(1)}
-            >
-              {t("matchingPage.title")}
-            </h1>
-            <p className={cx(lead, "jm-rise text-blanc/85")} style={stagger(2)}>
-              {t("matchingPage.lead")}
-            </p>
-            <nav aria-label={t("matchingPage.nav.label")} className="jm-rise" style={stagger(3)}>
-              <ul className="flex flex-wrap gap-2">
-                {sectionNav.map((item) => (
-                  <li key={item.key}>
-                    <a
-                      href={`#${item.target}`}
-                      className="inline-flex h-[30px] items-center rounded-pill bg-blanc/10 px-3 text-[11px] font-semibold ring-1 ring-blanc/20 transition-colors ring-inset hover:bg-blanc/20"
-                    >
-                      {t(`matchingPage.nav.${item.key}`)}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
+      <SiteHero
+        tone="nuit"
+        eyebrow={t("matchingPage.eyebrow")}
+        title={t("matchingPage.title")}
+        text={t("matchingPage.lead")}
+        extra={
+          <nav aria-label={t("matchingPage.nav.label")}>
+            <ul className="flex flex-wrap gap-2">
+              {sectionNav.map((item) => (
+                <li key={item.key}>
+                  <a
+                    href={`#${item.target}`}
+                    className="inline-flex h-[30px] items-center rounded-pill bg-blanc/10 px-3 text-[11px] font-semibold ring-1 ring-blanc/20 transition-colors ring-inset hover:bg-blanc/20"
+                  >
+                    {t(`matchingPage.nav.${item.key}`)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        }
+        visual={
           <ScoreRing
             score={score}
             band={t("match.band.veryHigh.text")}
             why={t("common.why")}
             alt={t("matchingPage.hero.imageAlt")}
           />
-        </div>
-      </section>
+        }
+      />
 
       {/* 1 to 3: score, criteria, weights */}
-      <MarketingSection
-        tone="blanc"
-        background={<Glow className="-top-40 -right-32 size-[460px] bg-menthe/25" />}
-      >
+      <MarketingSection>
         <div className="grid gap-5 lg:grid-cols-2">
           <article
             id="score"
             data-reveal
-            className="flex scroll-mt-24 flex-col gap-3.5 rounded-card bg-creme p-6 lg:p-7"
+            className="flex scroll-mt-24 flex-col gap-3.5 rounded-[28px] bg-blanc p-6 lg:p-7"
           >
             <h2 className="text-xl leading-[26px] font-semibold tracking-[-0.015em] lg:text-2xl lg:leading-[30px]">
               {t("matchingPage.s1.title")}
@@ -170,7 +144,7 @@ export default async function MatchingPage({ params }: PageProps<"/[locale]/comm
           <article
             id="criteres"
             data-reveal
-            className="flex scroll-mt-24 flex-col gap-3.5 rounded-card bg-creme p-6 lg:row-span-2 lg:p-7"
+            className="flex scroll-mt-24 flex-col gap-3.5 rounded-[28px] bg-blanc p-6 lg:row-span-2 lg:p-7"
             style={stagger(1)}
           >
             <h2 className="text-xl leading-[26px] font-semibold tracking-[-0.015em] lg:text-2xl lg:leading-[30px]">
@@ -200,7 +174,7 @@ export default async function MatchingPage({ params }: PageProps<"/[locale]/comm
 
           <article
             data-reveal
-            className="flex flex-col gap-3.5 rounded-card bg-creme p-6 lg:p-7"
+            className="flex flex-col gap-3.5 rounded-[28px] bg-blanc p-6 lg:p-7"
             style={stagger(2)}
           >
             <h2 className="text-xl leading-[26px] font-semibold tracking-[-0.015em] lg:text-2xl lg:leading-[30px]">
@@ -239,10 +213,7 @@ export default async function MatchingPage({ params }: PageProps<"/[locale]/comm
       </MarketingSection>
 
       {/* 4: bands */}
-      <MarketingSection
-        background={<Glow className="-bottom-40 left-1/3 size-[480px] bg-lime/30" delay={-9} />}
-        innerClassName="flex flex-col gap-8"
-      >
+      <MarketingSection innerClassName="flex flex-col gap-8">
         <h2 data-reveal className={sectionTitle}>
           {t("matchingPage.s4.title")}
         </h2>
@@ -291,15 +262,9 @@ export default async function MatchingPage({ params }: PageProps<"/[locale]/comm
       {/* 6: what we never use */}
       <MarketingSection
         id="jamais"
-        tone="profondeur"
+        tone="sapin"
         scene
         className="scroll-mt-20"
-        background={
-          <>
-            <Pattern name="motif-reseau-sombre" opacity={0.22} />
-            <Glow className="-top-40 left-1/4 size-[520px] bg-feuille/30" />
-          </>
-        }
         innerClassName="flex flex-col gap-8"
       >
         <div data-reveal className="flex max-w-[780px] flex-col gap-4">
@@ -366,7 +331,7 @@ export default async function MatchingPage({ params }: PageProps<"/[locale]/comm
           >
             <span
               aria-hidden
-              className="flex items-center gap-3 rounded-[16px] bg-creme px-3.5 py-3"
+              className="flex items-center gap-3 rounded-[18px] bg-blanc px-3.5 py-3"
             >
               <span className="flex-1 text-[13px]">{t("settings.privacy.ai.matching.text")}</span>
               <span className="relative inline-block h-[26px] w-11 shrink-0 rounded-pill bg-sapin">
@@ -402,12 +367,11 @@ export default async function MatchingPage({ params }: PageProps<"/[locale]/comm
       </MarketingSection>
 
       {/* Closing band on the AI gradient */}
-      <section className="bg-creme py-14 lg:py-24">
+      <section className="bg-papier py-14 lg:py-24">
         <div className="mx-auto w-full max-w-[1200px] px-4 xl:px-0">
           <div
             data-reveal
-            className="jm-flow relative flex flex-col items-start gap-6 overflow-hidden rounded-[32px] bg-gradient-ai px-6 py-8 text-blanc lg:flex-row lg:items-center lg:px-12 lg:py-10"
-            style={{ backgroundImage: iaFlow }}
+            className="jm-flow relative flex flex-col items-start gap-6 overflow-hidden rounded-[32px] bg-sapin px-6 py-8 text-blanc lg:flex-row lg:items-center lg:rounded-[48px] lg:px-12 lg:py-10"
           >
             <Shape
               name="forme-orbites-lime"
@@ -417,14 +381,9 @@ export default async function MatchingPage({ params }: PageProps<"/[locale]/comm
             <h2 className="relative flex-1 text-[26px] leading-8 font-semibold tracking-[-0.025em] lg:text-[32px] lg:leading-[38px]">
               {t("matchingPage.finalCta.title")}
             </h2>
-            <ButtonLink
-              href={signupHref({ profil: "talent" })}
-              size="lg"
-              iconAfter={chevron}
-              className="relative shadow-[0_0_32px_rgba(166,242,107,0.45)]"
-            >
+            <SiteButton href={signupHref({ profil: "talent" })} tone="lime" className="relative">
               {t("matchingPage.cta")}
-            </ButtonLink>
+            </SiteButton>
             <div className="jm-breathe relative -mr-2.5 -mb-8 self-end lg:hidden">
               <Character name="kofi" pose="joie" height={220} />
             </div>

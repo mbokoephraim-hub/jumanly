@@ -1,26 +1,27 @@
 /* eslint-disable @next/next/no-img-element -- product previews are static WebP files already sized */
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { AiOrb, Character } from "@/components/brand";
+import { AiOrb } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import {
   ArrowLink,
-  Eyebrow,
-  Glow,
+  CheckChips,
+  CheckLine,
+  FloatCard,
   IconTile,
-  ImmersiveBackdrop,
   LimeCtaBand,
   MarketingSection,
-  Pattern,
+  PhoneShot,
+  PhotoFrame,
   SectionHead,
-  Shape,
+  SiteButton,
+  SiteHero,
   lead,
   sectionTitle,
   stagger,
 } from "@/components/site/marketing";
 import { CountUp, MotionRoot } from "@/components/site/motion";
 import { PublicPlanCards } from "@/components/site/pricing";
-import { ButtonLink } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
 import { pageMetadata } from "@/lib/seo";
@@ -29,7 +30,9 @@ import { getPublicPlans } from "@/server/queries/public";
 import { lowestPaidPrice } from "@/server/services/plans";
 import { applySiteLocale } from "@/i18n/site-locale";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/recruteurs">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/recruteurs">): Promise<Metadata> {
   await applySiteLocale(params);
   const t = await getTranslations("recruiters.seo");
   const from = lowestPaidPrice(await getPublicPlans(), "rh");
@@ -40,13 +43,11 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/recruteu
   });
 }
 
-const chevron = <Icon name="chev-r" />;
-
 /** Hire cards (mockup 01-04): tile colors of each advantage. */
 const benefits = [
-  { key: "pipeline", icon: "hire", tile: "bg-brume text-sapin" },
+  { key: "pipeline", icon: "hire", tile: "bg-lime-clair text-sapin" },
   { key: "cv", icon: "doc", tile: "bg-neon text-sapin" },
-  { key: "matching", icon: "intelligence", tile: "bg-gradient-ai text-lime" },
+  { key: "matching", icon: "intelligence", tile: "bg-nuit text-lime" },
   { key: "messaging", icon: "message", tile: "bg-menthe-claire text-sapin" },
 ] as const satisfies { key: string; icon: IconName; tile: string }[];
 
@@ -76,62 +77,30 @@ export default async function RecruitersPage({ params }: PageProps<"/[locale]/re
     <>
       <MotionRoot />
 
-      {/* Hero, on the depth gradient, with the pipeline capture */}
-      <MarketingSection
-        tone="profondeur"
-        scene
-        spotlight
-        className="pt-10 pb-14 lg:pt-[72px] lg:pb-24"
-        background={<ImmersiveBackdrop />}
-      >
-        <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:gap-14">
-          <div className="relative z-1 flex flex-col gap-6 xl:w-[520px] xl:shrink-0">
-            <div className="jm-rise" style={stagger(0)}>
-              <Eyebrow dark>{t("recruiters.hero.eyebrow")}</Eyebrow>
-            </div>
-            <h1
-              className="jm-word text-[36px] leading-10 font-semibold tracking-[-0.035em] lg:text-[56px] lg:leading-[60px]"
-              style={stagger(1)}
-            >
-              {t("recruiters.hero.title")}
-            </h1>
-            <p className={cx(lead, "jm-rise text-blanc/75")} style={stagger(3)}>
-              {t("recruiters.hero.text")}
-            </p>
-            <div className="jm-rise flex flex-col gap-3 sm:flex-row" style={stagger(4)}>
-              <ButtonLink
-                href={signup}
-                size="lg"
-                iconAfter={chevron}
-                className="shadow-[0_0_32px_rgba(166,242,107,0.45)]"
-              >
-                {t("recruiters.hero.cta")}
-              </ButtonLink>
-              <ButtonLink href="/tarifs#rh" variant="inverse" size="lg">
-                {t("recruiters.hero.secondary")}
-              </ButtonLink>
-            </div>
-            <p
-              className="jm-rise inline-flex items-center gap-2 self-start rounded-pill bg-blanc/10 py-2 pr-4 pl-2.5 text-[13.5px] leading-5 font-semibold ring-1 ring-blanc/20 ring-inset"
-              style={stagger(5)}
-            >
-              <Icon name="check" className="size-[18px] text-lime" />
-              {t("recruiters.hero.badge")}
-            </p>
-          </div>
+      <SiteHero
+        eyebrow={t("recruiters.hero.eyebrow")}
+        title={t("recruiters.hero.title")}
+        text={t("recruiters.hero.text")}
+        actions={
+          <>
+            <SiteButton href={signup}>{t("recruiters.hero.cta")}</SiteButton>
+            <SiteButton href="/tarifs#rh" tone="light">
+              {t("recruiters.hero.secondary")}
+            </SiteButton>
+          </>
+        }
+        extra={<CheckChips items={[t("recruiters.hero.badge")]} />}
+        visual={
           <HeroVisual
             alt={t("recruiters.hero.imageAlt")}
             chipTitle={t("recruiters.hero.visual.title")}
             chipText={t("recruiters.hero.visual.text")}
           />
-        </div>
-      </MarketingSection>
+        }
+      />
 
       {/* Jumanly Hire */}
-      <MarketingSection
-        background={<Glow className="-top-40 -right-32 size-[480px] bg-lime/30" />}
-        innerClassName="flex flex-col gap-10 lg:gap-12"
-      >
+      <MarketingSection innerClassName="flex flex-col gap-10 lg:gap-12">
         <div data-reveal className="flex flex-col gap-5 lg:flex-row lg:items-end lg:gap-20">
           <SectionHead
             eyebrow={t("recruiters.benefits.eyebrow")}
@@ -144,7 +113,7 @@ export default async function RecruitersPage({ params }: PageProps<"/[locale]/re
             <li
               key={benefit.key}
               data-reveal
-              className="jm-lift flex flex-col gap-3 rounded-card bg-blanc p-6 lg:p-7"
+              className="jm-lift flex flex-col gap-3 rounded-[28px] bg-blanc p-6 ring-1 ring-sapin/6 lg:p-7"
               style={stagger(index)}
             >
               <IconTile icon={benefit.icon} className={benefit.tile} />
@@ -163,34 +132,18 @@ export default async function RecruitersPage({ params }: PageProps<"/[locale]/re
       <MarketingSection
         tone="blanc"
         scene
-        background={<Glow className="top-1/3 -left-40 size-[460px] bg-menthe/20" delay={-6} />}
         innerClassName="flex flex-col gap-10 lg:flex-row lg:items-center lg:gap-20"
       >
         <div data-reveal className="flex flex-col gap-6 lg:flex-1">
-          <span className="flex items-center gap-2.5">
-            <AiOrb size={30} className="jm-pulse" />
-            <span className="text-[13px] leading-[18px] font-medium tracking-[0.12em] text-ia uppercase">
-              {t("recruiters.matching.eyebrow")}
-            </span>
+          <span className="inline-flex items-center gap-2 self-start rounded-pill bg-nuit py-1 pr-3.5 pl-1 text-[13px] font-semibold text-blanc">
+            <AiOrb size={24} className="jm-pulse" />
+            {t("recruiters.matching.eyebrow")}
           </span>
           <h2 className={sectionTitle}>{t("recruiters.matching.title")}</h2>
           <p className={cx(lead, "text-ardoise")}>{t("recruiters.matching.text")}</p>
           <ul className="flex flex-col gap-3">
-            {(["point1", "point2", "point3"] as const).map((key, index) => (
-              <li
-                key={key}
-                data-reveal
-                className="flex items-start gap-3 text-base leading-6"
-                style={stagger(index)}
-              >
-                <span
-                  aria-hidden
-                  className="mt-px flex size-6 shrink-0 items-center justify-center rounded-full bg-lime-clair text-sapin"
-                >
-                  <Icon name="check" className="size-3.5" />
-                </span>
-                {t(`recruiters.matching.${key}`)}
-              </li>
+            {(["point1", "point2", "point3"] as const).map((key) => (
+              <CheckLine key={key}>{t(`recruiters.matching.${key}`)}</CheckLine>
             ))}
           </ul>
           <ArrowLink href="/comment-fonctionne-le-matching" className="text-feuille-fonce">
@@ -201,18 +154,7 @@ export default async function RecruitersPage({ params }: PageProps<"/[locale]/re
       </MarketingSection>
 
       {/* Commitments */}
-      <MarketingSection
-        tone="profondeur"
-        scene
-        background={
-          <>
-            <Pattern name="motif-reseau-sombre" opacity={0.22} />
-            <Glow className="-top-40 left-1/4 size-[520px] bg-feuille/30" />
-            <Glow className="-right-32 -bottom-48 size-[460px] bg-menthe/20" delay={-9} />
-          </>
-        }
-        innerClassName="flex flex-col gap-10"
-      >
+      <MarketingSection tone="sapin" innerClassName="flex flex-col gap-10">
         <div data-reveal>
           <SectionHead
             center
@@ -226,7 +168,7 @@ export default async function RecruitersPage({ params }: PageProps<"/[locale]/re
             <li
               key={item.key}
               data-reveal
-              className="jm-lift flex flex-col gap-3.5 rounded-card bg-blanc/7 p-6 ring-1 ring-blanc/12 backdrop-blur-sm ring-inset lg:p-7"
+              className="jm-lift flex flex-col gap-3.5 rounded-[28px] bg-blanc/8 p-6 ring-1 ring-blanc/12 ring-inset lg:p-7"
               style={stagger(index)}
             >
               <IconTile icon={item.icon} size={48} className="bg-lime text-sapin" />
@@ -237,12 +179,7 @@ export default async function RecruitersPage({ params }: PageProps<"/[locale]/re
       </MarketingSection>
 
       {/* RH plans */}
-      <MarketingSection
-        tone="lime"
-        scene
-        background={<Glow className="-top-32 right-1/4 size-[420px] bg-lime/50" delay={-11} />}
-        innerClassName="flex flex-col gap-10"
-      >
+      <MarketingSection tone="lime" innerClassName="flex flex-col gap-10">
         <div data-reveal>
           <SectionHead
             center
@@ -256,32 +193,27 @@ export default async function RecruitersPage({ params }: PageProps<"/[locale]/re
         </div>
         <div
           data-reveal
-          className="flex flex-col gap-4 rounded-box bg-blanc px-6 py-[18px] sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-col gap-4 rounded-[28px] bg-blanc py-3 pr-3 pl-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <p className="flex items-center gap-3 text-sm font-medium">
-            <Icon name="mobile-money" className="size-[22px] shrink-0" />
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-lime-clair">
+              <Icon name="mobile-money" className="size-5" />
+            </span>
             {t("recruiters.plans.payment")}
           </p>
-          <ButtonLink
-            href="/tarifs#rh"
-            variant="secondary"
-            iconAfter={chevron}
-            className="self-start sm:self-auto"
-          >
+          <SiteButton href="/tarifs#rh" className="self-start sm:self-auto">
             {t("recruiters.plans.cta")}
-          </ButtonLink>
+          </SiteButton>
         </div>
       </MarketingSection>
 
       {/* Upsell to Jumanly for Companies */}
-      <section data-scene className="bg-creme pt-14 lg:pt-24">
+      <section className="bg-papier pt-14 lg:pt-24">
         <div className="mx-auto w-full max-w-[1200px] px-4 xl:px-0">
           <div
             data-reveal
-            className="jm-lift relative flex flex-col items-start gap-6 overflow-hidden rounded-[32px] bg-gradient-depth px-6 py-7 text-blanc lg:flex-row lg:items-center lg:px-11 lg:py-9"
+            className="jm-lift relative flex flex-col items-start gap-6 overflow-hidden rounded-[32px] bg-nuit px-6 py-7 text-blanc lg:flex-row lg:items-center lg:px-11 lg:py-9"
           >
-            <Pattern name="motif-reseau-sombre" opacity={0.3} />
-            <Glow className="-top-24 right-1/4 size-[320px] bg-feuille/35" />
             <span aria-hidden className="jm-float relative flex">
               {t("recruiters.upsell.initials")
                 .split(",")
@@ -289,7 +221,7 @@ export default async function RecruitersPage({ params }: PageProps<"/[locale]/re
                   <span
                     key={initials}
                     className={cx(
-                      "flex size-11 items-center justify-center rounded-full text-[13px] font-semibold ring-2 ring-sapin",
+                      "flex size-11 items-center justify-center rounded-full text-[13px] font-semibold ring-2 ring-nuit",
                       index > 0 && "-ml-2",
                       avatarTones[index % avatarTones.length],
                     )}
@@ -297,7 +229,7 @@ export default async function RecruitersPage({ params }: PageProps<"/[locale]/re
                     {initials.trim()}
                   </span>
                 ))}
-              <span className="-ml-2 flex size-11 items-center justify-center rounded-full bg-neon text-[15px] font-semibold text-sapin ring-2 ring-sapin">
+              <span className="-ml-2 flex size-11 items-center justify-center rounded-full bg-neon text-[15px] font-semibold text-sapin ring-2 ring-nuit">
                 {t("recruiters.upsell.more")}
               </span>
             </span>
@@ -311,37 +243,27 @@ export default async function RecruitersPage({ params }: PageProps<"/[locale]/re
                 })}
               </p>
             </div>
-            <ButtonLink
-              href="/entreprises"
-              size="lg"
-              iconAfter={chevron}
-              className="relative lg:self-center"
-            >
+            <SiteButton href="/entreprises" tone="lime" className="relative lg:self-center">
               {t("recruiters.upsell.cta")}
-            </ButtonLink>
+            </SiteButton>
           </div>
         </div>
       </section>
 
+      <section aria-hidden className="h-14 bg-papier lg:h-24" />
       <LimeCtaBand
-        animated
-        spacedTop
         title={t("recruiters.finalCta.title")}
         text={t("recruiters.finalCta.text")}
         character={{ name: "nadia", pose: "joie", height: 330, mobileHeight: 250 }}
-        actions={
-          <ButtonLink href={signup} variant="secondary" size="lg" iconAfter={chevron}>
-            {t("recruiters.finalCta.primary")}
-          </ButtonLink>
-        }
+        actions={<SiteButton href={signup}>{t("recruiters.finalCta.primary")}</SiteButton>}
       />
     </>
   );
 }
 
 /**
- * Hero visual (mockup 01-04): the Hire pipeline on a depth panel, Nadia pointing at it and the
- * « 3 profils suggérés » chip. The labels belong to the illustration, described by its alternative.
+ * Hero picture: the Hire pipeline in a Sapin frame, Nadia pointing at it and the « 3 profils
+ * suggérés » card. The labels belong to the illustration, described by its alternative.
  */
 function HeroVisual({
   alt,
@@ -352,66 +274,37 @@ function HeroVisual({
   chipTitle: string;
   chipText: string;
 }) {
-  const shadow = "shadow-[0_30px_60px_rgba(0,0,0,0.32)]";
   return (
     <>
-      {/* Desktop: 620 px stage */}
-      <div
-        className="jm-rise relative hidden h-[620px] min-w-0 flex-1 overflow-hidden rounded-[40px] bg-blanc/6 ring-1 ring-blanc/12 ring-inset xl:block"
-        style={stagger(4)}
+      <PhotoFrame
+        tone="sapin"
+        character={{ name: "nadia", pose: "montre", height: 300 }}
+        className="h-[440px] sm:h-[520px] lg:h-[600px] [&>div]:justify-end [&>div]:pr-2"
       >
-        <Shape
-          name="forme-halo-couleur"
-          className="jm-drift -top-40 -right-40 w-[560px] opacity-50"
-        />
-        <div className="jm-float-slow absolute top-[70px] left-[60px]">
+        <div className="jm-float-slow absolute top-14 left-10 max-lg:hidden">
           <img
             src="/apercus/recruteurs-pipeline.webp"
             alt={alt}
-            width={760}
-            height={540}
+            width={700}
+            height={497}
             fetchPriority="high"
-            className={cx("w-[760px] max-w-none rounded-[18px]", shadow)}
+            className="w-[700px] max-w-none rounded-[20px] shadow-[0_30px_60px_rgba(0,0,0,0.35)] ring-[6px] ring-nuit"
           />
         </div>
-        <div className="jm-breathe absolute right-0 bottom-0">
-          <Character name="nadia" pose="montre" height={320} />
+        <div className="jm-float absolute top-8 left-6 lg:hidden">
+          <PhoneShot src="recruteurs-pipeline-mobile" alt={alt} width={200} priority />
         </div>
-        <div
-          aria-hidden
-          className="jm-pop absolute bottom-11 left-[30px] z-2 flex items-center gap-2.5 rounded-[18px] bg-blanc px-4 py-3 text-sapin shadow-[0_18px_40px_rgba(11,26,31,0.35)]"
-          style={stagger(0)}
-        >
-          <AiOrb size={28} className="jm-pulse" />
-          <span className="flex flex-col">
-            <span className="text-xs leading-[17px] font-semibold">{chipTitle}</span>
-            <span className="text-[11px] leading-[15px] text-ardoise">{chipText}</span>
-          </span>
-        </div>
-      </div>
-
-      {/* Mobile and tablet: the mobile pipeline on a 380 px panel */}
-      <div
-        className="jm-rise relative h-[380px] overflow-hidden rounded-[28px] bg-blanc/6 ring-1 ring-blanc/12 ring-inset xl:hidden"
-        style={stagger(6)}
+      </PhotoFrame>
+      <FloatCard
+        className="jm-pop bottom-8 left-3 z-2 flex items-center gap-2.5 lg:-left-6"
+        style={stagger(0)}
       >
-        <Shape
-          name="forme-halo-couleur"
-          className="jm-drift -top-24 -right-24 w-[360px] opacity-50"
-        />
-        <div className="jm-float absolute top-[30px] left-6">
-          <img
-            src="/apercus/recruteurs-pipeline-mobile.webp"
-            alt={alt}
-            width={200}
-            height={433}
-            className={cx("w-[200px] rounded-[28px]", shadow)}
-          />
-        </div>
-        <div className="jm-breathe absolute -right-1.5 -bottom-1">
-          <Character name="nadia" pose="montre" height={230} />
-        </div>
-      </div>
+        <AiOrb size={28} className="jm-pulse" />
+        <span className="flex flex-col">
+          <span className="text-xs leading-[17px] font-semibold">{chipTitle}</span>
+          <span className="text-[11px] leading-[15px] text-ardoise">{chipText}</span>
+        </span>
+      </FloatCard>
     </>
   );
 }
@@ -441,13 +334,9 @@ async function ExampleCard() {
     >
       <div
         aria-hidden
-        className="jm-flow absolute -inset-x-3 -top-5 bottom-8 rounded-[40px] opacity-15 lg:-top-[30px] lg:-right-[30px] lg:bottom-10 lg:left-10"
-        style={{
-          backgroundImage:
-            "linear-gradient(45deg, #0F3F37 0%, #14745F 35%, #2FD3A6 55%, #14745F 75%, #0F3F37 100%)",
-        }}
+        className="absolute -inset-x-3 -top-5 bottom-8 rounded-[40px] bg-lime-clair lg:-top-[30px] lg:-right-[30px] lg:bottom-10 lg:left-10"
       />
-      <div className="jm-ring relative flex flex-col gap-4 rounded-card bg-blanc p-5 shadow-[0_30px_60px_rgba(11,26,31,0.16)] lg:p-[26px]">
+      <div className="relative flex flex-col gap-4 rounded-[28px] bg-blanc p-5 shadow-[0_30px_60px_rgba(11,26,31,0.16)] ring-1 ring-sapin/6 lg:p-[26px]">
         <div className="flex items-center gap-3">
           <span
             aria-hidden
@@ -521,7 +410,7 @@ async function ExampleCard() {
             </li>
           ))}
         </ul>
-        <div className="flex flex-col gap-2 rounded-[16px] bg-creme px-3.5 py-3">
+        <div className="flex flex-col gap-2 rounded-[16px] bg-papier px-3.5 py-3">
           <span className="flex items-center gap-2 text-xs leading-[17px] font-semibold">
             <Icon name="eye" className="size-4 shrink-0" />
             {t("match.why.recruiter.title", { score, candidateName: name })}
@@ -534,7 +423,7 @@ async function ExampleCard() {
           </span>
         </div>
         <div aria-hidden className="flex flex-wrap gap-2">
-          <span className="inline-flex h-8 items-center rounded-pill bg-sapin px-[13px] text-xs font-semibold text-blanc">
+          <span className="inline-flex h-8 items-center rounded-pill bg-nuit px-[13px] text-xs font-semibold text-blanc">
             {t("recruiters.example.shortlist")}
           </span>
           <span className="inline-flex h-8 items-center rounded-pill px-[13px] text-xs font-semibold ring-[1.5px] ring-brume ring-inset">

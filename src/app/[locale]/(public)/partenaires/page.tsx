@@ -4,20 +4,18 @@ import { getMessages, getTranslations } from "next-intl/server";
 import { Character } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import {
-  Glow,
   IconTile,
   MarketingSection,
   NumberDisc,
   PathLine,
-  Pattern,
   SectionHead,
   Shape,
-  lead,
+  SiteButton,
+  SiteHero,
   stagger,
 } from "@/components/site/marketing";
 import { CountUp, MotionRoot } from "@/components/site/motion";
 import { PartnerForm } from "@/components/site/partner-form";
-import { ButtonLink } from "@/components/ui";
 import { countryOptions } from "@/config/countries";
 import { pickMessages } from "@/i18n/client-messages";
 import { cx } from "@/lib/cx";
@@ -25,13 +23,13 @@ import { withoutPlaceholders } from "@/lib/placeholders";
 import { pageMetadata } from "@/lib/seo";
 import { applySiteLocale } from "@/i18n/site-locale";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/partenaires">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/partenaires">): Promise<Metadata> {
   await applySiteLocale(params);
   const t = await getTranslations("partners.seo");
   return pageMetadata({ path: "/partenaires", title: t("title"), description: t("description") });
 }
-
-const chevron = <Icon name="chev-r" />;
 
 /** Institutions (mockup 01-06): tiles alternate Lime, Néon and Menthe claire. */
 const institutions = [
@@ -68,56 +66,20 @@ export default async function PartnersPage({ params }: PageProps<"/[locale]/part
     <>
       <MotionRoot />
 
-      {/* Hero, on Crème lit by brand lights, with the aggregated dashboard */}
-      <MarketingSection
-        scene
-        className="pt-10 pb-14 lg:pt-[72px] lg:pb-24"
-        background={
-          <>
-            <Glow className="-top-48 -left-40 size-[560px] bg-lime/40" />
-            <Glow className="top-1/3 -right-48 size-[620px] bg-menthe/30" delay={-7} />
-            <Glow className="-bottom-56 left-1/3 size-[480px] bg-neon/50" delay={-14} />
-          </>
+      <SiteHero
+        eyebrow={t("partners.hero.eyebrow")}
+        title={t("partners.hero.title")}
+        text={t("partners.hero.text")}
+        actions={
+          <SiteButton href={`#${anchor}`} icon="message">
+            {t("partners.hero.cta")}
+          </SiteButton>
         }
-      >
-        <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:gap-14">
-          <div className="relative z-1 flex flex-col gap-6 xl:w-[520px] xl:shrink-0">
-            <p
-              className="jm-rise text-[13px] leading-[18px] font-medium tracking-[0.12em] text-feuille-fonce uppercase"
-              style={stagger(0)}
-            >
-              {t("partners.hero.eyebrow")}
-            </p>
-            <h1
-              className="jm-word text-[36px] leading-10 font-semibold tracking-[-0.035em] lg:text-[56px] lg:leading-[60px]"
-              style={stagger(1)}
-            >
-              {t("partners.hero.title")}
-            </h1>
-            <p className={cx(lead, "jm-rise text-sapin/85")} style={stagger(3)}>
-              {t("partners.hero.text")}
-            </p>
-            <div className="jm-rise" style={stagger(4)}>
-              <ButtonLink
-                href={`#${anchor}`}
-                size="lg"
-                icon={<Icon name="message" />}
-                className="shadow-[0_0_32px_rgba(166,242,107,0.55)]"
-              >
-                {t("partners.hero.cta")}
-              </ButtonLink>
-            </div>
-          </div>
-          <HeroVisual />
-        </div>
-      </MarketingSection>
+        visual={<HeroVisual />}
+      />
 
       {/* Institutions */}
-      <MarketingSection
-        tone="blanc"
-        background={<Glow className="-top-40 -right-32 size-[460px] bg-lime/25" />}
-        innerClassName="flex flex-col gap-10"
-      >
+      <MarketingSection innerClassName="flex flex-col gap-10">
         <div data-reveal>
           <SectionHead center eyebrow={t("partners.who.eyebrow")} title={t("partners.who.title")} />
         </div>
@@ -126,7 +88,7 @@ export default async function PartnersPage({ params }: PageProps<"/[locale]/part
             <li
               key={item.key}
               data-reveal
-              className="jm-lift flex items-start gap-[18px] rounded-card bg-creme p-6 lg:p-7"
+              className="jm-lift flex items-start gap-[18px] rounded-[28px] bg-blanc p-6 lg:p-7"
               style={stagger(index % 3)}
             >
               <IconTile icon={item.icon} className={cx(item.tile, "text-sapin")} />
@@ -144,18 +106,7 @@ export default async function PartnersPage({ params }: PageProps<"/[locale]/part
       </MarketingSection>
 
       {/* How it works: the line draws itself from one step to the next */}
-      <MarketingSection
-        tone="profondeur"
-        scene
-        background={
-          <>
-            <Pattern name="motif-reseau-sombre" opacity={0.22} />
-            <Glow className="-top-40 left-1/4 size-[520px] bg-feuille/30" />
-            <Glow className="-right-32 -bottom-48 size-[460px] bg-menthe/20" delay={-9} />
-          </>
-        }
-        innerClassName="flex flex-col gap-12"
-      >
+      <MarketingSection tone="sapin" scene innerClassName="flex flex-col gap-12">
         <div data-reveal>
           <SectionHead
             center
@@ -193,17 +144,12 @@ export default async function PartnersPage({ params }: PageProps<"/[locale]/part
       </MarketingSection>
 
       {/* A concrete example, on Lime */}
-      <section data-scene className="bg-creme pt-14 lg:pt-24">
+      <section data-scene className="bg-papier pt-14 lg:pt-24">
         <div className="mx-auto w-full max-w-[1200px] px-4 xl:px-0">
           <div
             data-reveal
-            className="jm-flow relative flex flex-col gap-6 overflow-hidden rounded-[28px] bg-lime px-6 py-8 text-sapin lg:rounded-[40px] lg:px-16 lg:py-14"
-            style={{
-              backgroundImage:
-                "linear-gradient(120deg, #D9FA72 0%, #A6F26B 30%, #7DE36B 55%, #E3F67C 80%, #D9FA72 100%)",
-            }}
+            className="relative flex flex-col gap-6 overflow-hidden rounded-[32px] bg-lime-clair px-6 py-8 text-sapin lg:rounded-[48px] lg:px-16 lg:py-14"
           >
-            <Pattern name="motif-trajectoires-lime" opacity={0.45} />
             <div className="jm-breathe absolute top-7 right-14 hidden lg:block">
               <Character name="amani" pose="joie" height={200} />
             </div>
@@ -247,8 +193,7 @@ export default async function PartnersPage({ params }: PageProps<"/[locale]/part
 
       {/* Privacy */}
       <MarketingSection
-        tone="blanc"
-        className="mt-14 lg:mt-24"
+        className="pt-14 lg:pt-24"
         innerClassName="flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-20"
       >
         <div data-reveal className="flex flex-col gap-5 lg:flex-1">
@@ -263,7 +208,7 @@ export default async function PartnersPage({ params }: PageProps<"/[locale]/part
             <li
               key={point.key}
               data-reveal
-              className="jm-lift flex items-center gap-3 rounded-[18px] bg-creme px-4 py-3.5"
+              className="jm-lift flex items-center gap-3 rounded-[22px] bg-blanc px-4 py-3.5"
               style={stagger(index)}
             >
               <IconTile icon={point.icon} size={44} className="bg-blanc text-sapin" />
@@ -276,7 +221,7 @@ export default async function PartnersPage({ params }: PageProps<"/[locale]/part
       </MarketingSection>
 
       {references && (
-        <MarketingSection tone="blanc" className="pt-0 lg:pt-0">
+        <MarketingSection className="pt-0 lg:pt-0">
           <SectionHead title={t("partners.references.title")} text={references} />
         </MarketingSection>
       )}
@@ -285,7 +230,6 @@ export default async function PartnersPage({ params }: PageProps<"/[locale]/part
       <MarketingSection
         id={anchor}
         className="scroll-mt-20"
-        background={<Glow className="top-1/4 -left-40 size-[480px] bg-lime/30" delay={-4} />}
         innerClassName="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-16"
       >
         <div data-reveal className="flex flex-col gap-5 lg:w-[400px] lg:shrink-0">
@@ -315,13 +259,12 @@ export default async function PartnersPage({ params }: PageProps<"/[locale]/part
       </MarketingSection>
 
       {/* Licence code */}
-      <section className="bg-creme pb-14 lg:pb-24">
+      <section className="bg-papier pb-14 lg:pb-24">
         <div className="mx-auto w-full max-w-[1200px] px-4 xl:px-0">
           <div
             data-reveal
-            className="jm-lift relative flex flex-col items-start gap-5 overflow-hidden rounded-[28px] bg-gradient-depth px-6 py-7 text-blanc lg:flex-row lg:items-center lg:px-9"
+            className="jm-lift relative flex flex-col items-start gap-5 overflow-hidden rounded-[32px] bg-nuit px-6 py-7 text-blanc lg:flex-row lg:items-center lg:px-9"
           >
-            <Glow className="-top-24 right-1/4 size-[320px] bg-feuille/35" />
             <span className="jm-float relative">
               <IconTile icon="certificat" size={56} className="bg-lime text-sapin" />
             </span>
@@ -333,9 +276,9 @@ export default async function PartnersPage({ params }: PageProps<"/[locale]/part
                 {t("partners.beneficiary.text")}
               </p>
             </div>
-            <ButtonLink href="/activer" size="lg" iconAfter={chevron} className="relative">
+            <SiteButton href="/activer" tone="lime" className="relative">
               {t("partners.beneficiary.cta")}
-            </ButtonLink>
+            </SiteButton>
           </div>
         </div>
       </section>
@@ -440,17 +383,11 @@ async function HeroVisual() {
     <div
       role="img"
       aria-label={t("imageAlt")}
-      className="jm-rise jm-flow relative h-[420px] min-w-0 overflow-hidden rounded-[28px] bg-sapin sm:h-[560px] xl:h-[620px] xl:flex-1 xl:rounded-[40px]"
-      style={{
-        ...stagger(4),
-        backgroundImage:
-          "linear-gradient(135deg, #0F3F37 0%, #14745F 40%, #0F3F37 70%, #1C8A72 100%)",
-      }}
+      className="relative h-[420px] min-w-0 overflow-hidden rounded-[32px] bg-sapin sm:h-[560px] xl:h-[600px] xl:rounded-[40px]"
     >
-      <Pattern name="motif-reseau-sombre" size={420} opacity={0.35} />
       <Shape
-        name="forme-halo-couleur"
-        className="jm-drift -right-40 -bottom-40 w-[520px] opacity-40"
+        name="forme-orbites-lime"
+        className="jm-drift -right-40 -bottom-40 w-[560px] opacity-[0.12]"
       />
       <div className="jm-float-slow absolute top-6 left-4 w-[calc(100%-32px)] max-w-[470px] sm:top-[60px] sm:left-10">
         {dashboard}

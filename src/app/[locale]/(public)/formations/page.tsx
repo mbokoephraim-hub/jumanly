@@ -5,7 +5,15 @@ import { getTranslations } from "next-intl/server";
 import { Character } from "@/components/brand";
 import { Icon } from "@/components/brand/icon";
 import { FilterPanel } from "@/components/site/filter-panel";
-import { Eyebrow, Glow, IconTile, Pattern, lead, stagger, wrap } from "@/components/site/marketing";
+import {
+  Eyebrow,
+  HeroPanel,
+  IconTile,
+  SiteButton,
+  lead,
+  stagger,
+  wrap,
+} from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
 import { Pagination, withParams } from "@/components/site/navigation-bits";
 import { PublicCourseCard } from "@/components/site/public-cards";
@@ -22,7 +30,9 @@ import {
 } from "@/server/services/courses";
 import { applySiteLocale } from "@/i18n/site-locale";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/formations">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/formations">): Promise<Metadata> {
   await applySiteLocale(params);
   const t = await getTranslations("trainings.seo");
   return pageMetadata({ path: "/formations", title: t("title"), description: t("description") });
@@ -39,18 +49,16 @@ const accessLabels = {
 const FORM_ID = "trainings-filters";
 
 /** Public catalog (mockup 01-10): search in the hero, filters on the side, course cards, pagination. */
-export default async function TrainingsPage({ params, searchParams }: PageProps<"/[locale]/formations">) {
+export default async function TrainingsPage({
+  params,
+  searchParams,
+}: PageProps<"/[locale]/formations">) {
   await applySiteLocale(params);
   const t = await getTranslations("trainings");
   return (
     <>
       <MotionRoot />
-      <section
-        data-scene
-        className="relative overflow-hidden bg-creme pt-10 pb-8 lg:pt-16 lg:pb-11"
-      >
-        <Glow className="-top-48 -left-40 size-[520px] bg-lime/40" />
-        <Glow className="-right-40 -bottom-56 size-[480px] bg-menthe/30" delay={-8} />
+      <HeroPanel className="pt-10 pb-8 lg:pt-16 lg:pb-11">
         <div className={cx(wrap, "relative flex items-end gap-12")}>
           <div className="flex min-w-0 flex-1 flex-col gap-6">
             <div className="flex flex-col gap-4">
@@ -58,7 +66,7 @@ export default async function TrainingsPage({ params, searchParams }: PageProps<
                 <Eyebrow>{t("hero.eyebrow")}</Eyebrow>
               </div>
               <h1
-                className="jm-word text-[40px] leading-[44px] font-semibold tracking-[-0.035em] lg:text-[56px] lg:leading-[60px]"
+                className="jm-word text-[40px] leading-[44px] font-semibold tracking-[-0.04em] lg:text-[64px] lg:leading-[66px]"
                 style={stagger(1)}
               >
                 {t("hero.title")}
@@ -75,17 +83,16 @@ export default async function TrainingsPage({ params, searchParams }: PageProps<
             <Character name="amani" pose="montre" height={300} />
           </div>
         </div>
-      </section>
-      <section className="bg-creme pt-3 pb-14 lg:pb-24">
+      </HeroPanel>
+      <section className="bg-papier pt-8 pb-14 lg:pt-12 lg:pb-24">
         <div className={cx(wrap, "flex flex-col gap-12")}>
           <Suspense fallback={<ResultsSkeleton />}>
             <Results searchParams={searchParams} />
           </Suspense>
           <div
             data-reveal
-            className="relative flex flex-col items-start gap-5 overflow-hidden rounded-[28px] bg-sapin px-6 py-7 text-blanc lg:flex-row lg:items-center lg:gap-6 lg:px-8"
+            className="relative flex flex-col items-start gap-5 overflow-hidden rounded-[32px] bg-sapin px-6 py-7 text-blanc lg:flex-row lg:items-center lg:gap-6 lg:px-8"
           >
-            <Pattern name="motif-trajectoires-sombre" size={380} opacity={0.18} />
             <span className="jm-float relative">
               <IconTile icon="learn" size={56} className="bg-lime text-sapin" />
             </span>
@@ -95,14 +102,9 @@ export default async function TrainingsPage({ params, searchParams }: PageProps<
               </h2>
               <p className="text-[14.5px] leading-[22px] text-blanc/75">{t("banner.text")}</p>
             </div>
-            <ButtonLink
-              href="/tarifs"
-              size="lg"
-              iconAfter={<Icon name="chev-r" />}
-              className="relative w-full lg:w-auto"
-            >
+            <SiteButton href="/tarifs" tone="lime" className="relative">
               {t("banner.cta")}
-            </ButtonLink>
+            </SiteButton>
           </div>
         </div>
       </section>
@@ -295,7 +297,7 @@ async function Results({
             </button>
             <Link
               href="/formations"
-              className="flex h-11 items-center justify-center rounded-pill text-sm font-semibold ring-[1.5px] ring-brume ring-inset hover:bg-creme"
+              className="flex h-11 items-center justify-center rounded-pill text-sm font-semibold ring-[1.5px] ring-brume ring-inset hover:bg-papier"
             >
               {t("filters.reset")}
             </Link>
@@ -345,7 +347,7 @@ async function Results({
                     href={withParams("/formations", { ...current, tri: option })}
                     aria-current={option === sort ? "true" : undefined}
                     className={cx(
-                      "flex h-10 items-center rounded-[12px] px-3 text-sm hover:bg-creme",
+                      "flex h-10 items-center rounded-[12px] px-3 text-sm hover:bg-papier",
                       option === sort && "font-semibold",
                     )}
                   >

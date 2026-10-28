@@ -7,10 +7,9 @@ import { Icon, type IconName } from "@/components/brand/icon";
 import { FilterPanel } from "@/components/site/filter-panel";
 import {
   Eyebrow,
-  Glow,
+  HeroPanel,
   IconTile,
-  Pattern,
-  iaFlow,
+  SiteButton,
   lead,
   stagger,
   wrap,
@@ -34,7 +33,9 @@ import {
 } from "@/server/services/jobs";
 import { applySiteLocale } from "@/i18n/site-locale";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/offres">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/offres">): Promise<Metadata> {
   await applySiteLocale(params);
   const t = await getTranslations("jobs.seo");
   return pageMetadata({ path: "/offres", title: t("title"), description: t("description") });
@@ -50,16 +51,14 @@ export default async function JobsPage({ params, searchParams }: PageProps<"/[lo
   return (
     <>
       <MotionRoot />
-      <section data-scene className="relative overflow-hidden bg-creme pt-10 lg:pt-14">
-        <Glow className="-top-48 -left-40 size-[520px] bg-lime/40" />
-        <Glow className="top-10 -right-40 size-[460px] bg-menthe/30" delay={-8} />
+      <HeroPanel className="pt-10 lg:pt-16">
         <div className={cx(wrap, "relative flex items-end gap-12")}>
           <div className="flex min-w-0 flex-1 flex-col gap-4 pb-6 lg:pb-8">
             <div className="jm-rise" style={stagger(0)}>
               <Eyebrow>{t("hero.eyebrow")}</Eyebrow>
             </div>
             <h1
-              className="jm-word text-[40px] leading-[44px] font-semibold tracking-[-0.035em] lg:text-[56px] lg:leading-[60px]"
+              className="jm-word text-[40px] leading-[44px] font-semibold tracking-[-0.04em] lg:text-[64px] lg:leading-[66px]"
               style={stagger(1)}
             >
               {t("hero.title")}
@@ -72,7 +71,7 @@ export default async function JobsPage({ params, searchParams }: PageProps<"/[lo
             <Character name="diallo" pose="telephone" height={220} />
           </div>
         </div>
-      </section>
+      </HeroPanel>
       <Suspense fallback={<ResultsSkeleton />}>
         <Results searchParams={searchParams} />
       </Suspense>
@@ -82,7 +81,7 @@ export default async function JobsPage({ params, searchParams }: PageProps<"/[lo
 
 function ResultsSkeleton() {
   return (
-    <section className="bg-creme pb-16">
+    <section className="bg-papier pt-8 pb-16">
       <div className={cx(wrap, "flex flex-col gap-6")}>
         <Skeleton className="h-[94px] rounded-[28px]" />
         <div className="flex flex-col gap-4">
@@ -167,7 +166,11 @@ function IconInput({
   );
 }
 
-async function Results({ searchParams }: { searchParams: PageProps<"/[locale]/offres">["searchParams"] }) {
+async function Results({
+  searchParams,
+}: {
+  searchParams: PageProps<"/[locale]/offres">["searchParams"];
+}) {
   const t = await getTranslations("jobs");
   const job = await getTranslations("job");
   const filters = parseJobFilters(await searchParams);
@@ -180,7 +183,7 @@ async function Results({ searchParams }: { searchParams: PageProps<"/[locale]/of
 
   if (result.openTotal === 0) {
     return (
-      <section className="bg-creme pb-16">
+      <section className="bg-papier pt-8 pb-16">
         <div className={wrap}>
           <EmptyState
             title={t("emptyAll.title")}
@@ -197,7 +200,7 @@ async function Results({ searchParams }: { searchParams: PageProps<"/[locale]/of
   const filtersCard = <SideFilters filters={current} />;
 
   return (
-    <section className="relative bg-creme pb-14 lg:pb-24">
+    <section className="relative bg-papier pt-8 pb-14 lg:pt-12 lg:pb-24">
       <div className={cx(wrap, "flex flex-col gap-8 lg:gap-10")}>
         <form
           action="/offres"
@@ -312,7 +315,7 @@ async function Results({ searchParams }: { searchParams: PageProps<"/[locale]/of
                         href={withParams("/offres", { ...current, tri: option })}
                         aria-current={option === sort ? "true" : undefined}
                         className={cx(
-                          "flex h-10 items-center rounded-[12px] px-3 text-sm hover:bg-creme",
+                          "flex h-10 items-center rounded-[12px] px-3 text-sm hover:bg-papier",
                           option === sort && "font-semibold",
                         )}
                       >
@@ -337,18 +340,15 @@ async function Results({ searchParams }: { searchParams: PageProps<"/[locale]/of
               <div className="mt-3">{filtersCard}</div>
             </FilterPanel>
 
-            <div
-              className="jm-flow relative flex flex-col items-start gap-4 overflow-hidden rounded-[24px] bg-gradient-ai px-5 py-5 text-blanc sm:flex-row sm:items-center lg:px-6"
-              style={{ backgroundImage: iaFlow }}
-            >
+            <div className="relative flex flex-col items-start gap-4 overflow-hidden rounded-[28px] bg-nuit px-5 py-5 text-blanc sm:flex-row sm:items-center lg:px-6">
               <AiOrb size={36} className="jm-pulse shrink-0 max-sm:hidden" />
               <p className="flex flex-1 items-start gap-3 text-[15px] leading-[22px]">
                 <AiOrb size={32} className="jm-pulse shrink-0 sm:hidden" />
                 {t("matchHint.text")}
               </p>
-              <ButtonLink href={loginHref("/app/jobs")} size="sm" className="h-10 px-4">
+              <SiteButton href={loginHref("/app/jobs")} tone="lime" size="md">
                 {t("matchHint.cta")}
-              </ButtonLink>
+              </SiteButton>
             </div>
 
             {result.jobs.length === 0 ? (
@@ -389,13 +389,8 @@ async function Results({ searchParams }: { searchParams: PageProps<"/[locale]/of
           <aside className="flex flex-col gap-5 lg:w-[340px] lg:shrink-0">
             <div
               data-reveal
-              className="jm-flow relative flex min-h-[280px] flex-col items-start gap-3 overflow-hidden rounded-[28px] bg-lime p-6 text-sapin lg:min-h-[410px]"
-              style={{
-                backgroundImage:
-                  "linear-gradient(120deg, #D9FA72 0%, #A6F26B 35%, #7DE36B 60%, #E3F67C 100%)",
-              }}
+              className="relative flex min-h-[280px] flex-col items-start gap-3 overflow-hidden rounded-[32px] bg-lime-clair p-6 text-sapin lg:min-h-[410px]"
             >
-              <Pattern name="motif-points-lime" size={260} opacity={0.6} />
               <IconTile icon="hire" size={46} className="relative bg-sapin text-lime" />
               <h2 className="relative text-[22px] leading-7 font-semibold tracking-[-0.015em]">
                 {t("recruiterBanner.title")}
@@ -403,14 +398,9 @@ async function Results({ searchParams }: { searchParams: PageProps<"/[locale]/of
               <p className="relative max-w-[260px] text-[15px] leading-[22px]">
                 {t("recruiterBanner.text")}
               </p>
-              <ButtonLink
-                href={signupHref({ profil: "rh" })}
-                variant="secondary"
-                iconAfter={<Icon name="chev-r" />}
-                className="relative"
-              >
+              <SiteButton href={signupHref({ profil: "rh" })} size="md" className="relative">
                 {t("recruiterBanner.cta")}
-              </ButtonLink>
+              </SiteButton>
               <div className="jm-breathe absolute right-5 -bottom-1 hidden lg:block">
                 <Character name="nadia" pose="montre" height={180} />
               </div>
@@ -497,7 +487,7 @@ async function SideFilters({ filters }: { filters: Omit<JobFilters, "page"> }) {
       </nav>
       <Link
         href="/offres"
-        className="flex h-11 items-center justify-center rounded-pill text-sm font-semibold ring-[1.5px] ring-brume ring-inset hover:bg-creme"
+        className="flex h-11 items-center justify-center rounded-pill text-sm font-semibold ring-[1.5px] ring-brume ring-inset hover:bg-papier"
       >
         {t("search.reset")}
       </Link>

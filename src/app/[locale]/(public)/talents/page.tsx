@@ -2,26 +2,26 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { AiOrb, Character } from "@/components/brand";
+import { AiOrb } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import {
+  CheckChips,
+  CheckLine,
   Eyebrow,
-  Glow,
+  FloatCard,
   IconTile,
-  ImmersiveBackdrop,
   LimeCtaBand,
   MarketingSection,
-  Pattern,
+  PhoneShot,
+  PhotoFrame,
   SectionHead,
-  Shape,
-  lead,
+  SiteButton,
+  SiteHero,
   sectionTitle,
-  signatureLight,
   stagger,
 } from "@/components/site/marketing";
 import { CountUp, MotionRoot } from "@/components/site/motion";
 import { PublicPlanCards } from "@/components/site/pricing";
-import { ButtonLink } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
 import { pageMetadata } from "@/lib/seo";
@@ -30,7 +30,9 @@ import { getPublicPlans } from "@/server/queries/public";
 import { lowestPaidPrice } from "@/server/services/plans";
 import { applySiteLocale } from "@/i18n/site-locale";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/talents">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/talents">): Promise<Metadata> {
   await applySiteLocale(params);
   const t = await getTranslations("talents.seo");
   const from = lowestPaidPrice(await getPublicPlans(), "talent");
@@ -41,34 +43,14 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/talents"
   });
 }
 
-const chevron = <Icon name="chev-r" />;
-
 type ModuleKey = "learn" | "career" | "jobs" | "connect";
 
-/** Zigzag rows (mockup 01-03): the panel takes the module's color, as a gradient that flows. */
-const modules: { key: ModuleKey; icon: IconName; tint: string; gradient: string; tag: string }[] = [
-  { key: "learn", icon: "learn", tint: "bg-lime", gradient: signatureLight, tag: "bg-lime" },
-  {
-    key: "career",
-    icon: "career",
-    tint: "bg-neon",
-    gradient: "linear-gradient(135deg, #E3F67C 0%, #D9FA72 40%, #BFEFDF 75%, #E3F67C 100%)",
-    tag: "bg-neon",
-  },
-  {
-    key: "jobs",
-    icon: "jobs",
-    tint: "bg-menthe-claire",
-    gradient: "linear-gradient(135deg, #BFEFDF 0%, #E4FAD0 40%, #A6F26B 75%, #BFEFDF 100%)",
-    tag: "bg-menthe-claire",
-  },
-  {
-    key: "connect",
-    icon: "connect",
-    tint: "bg-brume",
-    gradient: "linear-gradient(135deg, #DCE5E1 0%, #BFEFDF 45%, #E3F67C 80%, #DCE5E1 100%)",
-    tag: "bg-blanc ring-[1.5px] ring-brume ring-inset",
-  },
+/** Zigzag rows: the picture takes the module's tint, plain, with a large orbit. */
+const modules: { key: ModuleKey; icon: IconName; tint: string }[] = [
+  { key: "learn", icon: "learn", tint: "bg-lime-clair" },
+  { key: "career", icon: "career", tint: "bg-neon/60" },
+  { key: "jobs", icon: "jobs", tint: "bg-menthe-claire" },
+  { key: "connect", icon: "connect", tint: "bg-blanc" },
 ];
 
 export default async function TalentsPage({ params }: PageProps<"/[locale]/talents">) {
@@ -81,63 +63,31 @@ export default async function TalentsPage({ params }: PageProps<"/[locale]/talen
     <>
       <MotionRoot />
 
-      {/* Hero, on the depth gradient */}
-      <MarketingSection
-        tone="profondeur"
-        scene
-        spotlight
-        className="pt-12 pb-16 lg:pt-[72px] lg:pb-24"
-        background={<ImmersiveBackdrop />}
-      >
-        <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:gap-14">
-          <div className="relative z-1 flex flex-col gap-6 xl:w-[540px] xl:shrink-0">
-            <div className="jm-rise" style={stagger(0)}>
-              <Eyebrow dark>{t("talents.hero.eyebrow")}</Eyebrow>
-            </div>
-            <h1
-              className="jm-word text-[36px] leading-10 font-semibold tracking-[-0.035em] lg:text-[56px] lg:leading-[60px]"
-              style={stagger(1)}
-            >
-              {t("talents.hero.title")}
-            </h1>
-            <p className={cx(lead, "jm-rise text-blanc/80")} style={stagger(3)}>
-              {t("talents.hero.text")}
-            </p>
-            <div className="jm-rise flex flex-col gap-3 sm:flex-row" style={stagger(4)}>
-              <ButtonLink
-                href={signup}
-                size="lg"
-                iconAfter={chevron}
-                className="shadow-[0_0_32px_rgba(166,242,107,0.45)]"
-              >
-                {t("talents.hero.cta")}
-              </ButtonLink>
-              <ButtonLink href="/tarifs#talents" variant="inverse" size="lg">
-                {t("talents.hero.secondary")}
-              </ButtonLink>
-            </div>
-            <p
-              className="jm-rise inline-flex items-center gap-2 self-start rounded-pill bg-blanc py-2 pr-4 pl-2.5 text-[13.5px] leading-5 font-semibold text-sapin"
-              style={stagger(5)}
-            >
-              <Icon name="check" className="size-[18px] text-feuille-fonce" />
-              {t("talents.hero.badge")}
-            </p>
-          </div>
+      <SiteHero
+        eyebrow={t("talents.hero.eyebrow")}
+        title={t("talents.hero.title")}
+        text={t("talents.hero.text")}
+        actions={
+          <>
+            <SiteButton href={signup}>{t("talents.hero.cta")}</SiteButton>
+            <SiteButton href="/tarifs#talents" tone="light">
+              {t("talents.hero.secondary")}
+            </SiteButton>
+          </>
+        }
+        extra={<CheckChips items={[t("talents.hero.badge")]} />}
+        visual={
           <HeroVisual
             alt={t("talents.hero.imageAlt")}
             badge={t("talents.hero.visual.badge")}
             matchTitle={t("talents.hero.visual.matchTitle")}
             matchText={t("talents.hero.visual.matchText")}
           />
-        </div>
-      </MarketingSection>
+        }
+      />
 
       {/* One account */}
-      <MarketingSection
-        className="pb-10 lg:pb-14"
-        background={<Glow className="-top-40 -left-32 size-[460px] bg-lime/35" />}
-      >
+      <MarketingSection className="pb-10 lg:pb-14">
         <div data-reveal>
           <SectionHead
             center
@@ -152,7 +102,6 @@ export default async function TalentsPage({ params }: PageProps<"/[locale]/talen
       <MarketingSection
         scene
         className="pt-0 lg:pt-0"
-        background={<Glow className="top-1/2 -right-40 size-[520px] bg-menthe/25" delay={-8} />}
         innerClassName="flex flex-col gap-14 lg:gap-[88px]"
       >
         {modules.map((module, index) => (
@@ -164,16 +113,13 @@ export default async function TalentsPage({ params }: PageProps<"/[locale]/talen
             )}
           >
             <div data-reveal className="flex flex-col gap-4 lg:w-[440px] lg:shrink-0">
-              <span
-                className={cx(
-                  "inline-flex h-[30px] items-center gap-1.5 self-start rounded-pill px-3.5 text-xs font-semibold text-sapin",
-                  module.tag,
-                )}
-              >
-                <Icon name={module.icon} className="size-3.5" />
+              <span className="inline-flex h-9 items-center gap-2 self-start rounded-pill bg-blanc py-1 pr-4 pl-1 text-[13px] font-semibold text-sapin ring-1 ring-sapin/8">
+                <span className="flex size-7 items-center justify-center rounded-full bg-nuit text-lime">
+                  <Icon name={module.icon} className="size-3.5" />
+                </span>
                 {t(`talents.${module.key}.label`)}
               </span>
-              <h3 className="text-[28px] leading-[34px] font-semibold tracking-[-0.025em] lg:text-[32px] lg:leading-[38px]">
+              <h3 className="text-[30px] leading-[36px] font-semibold tracking-[-0.035em] lg:text-[40px] lg:leading-[46px]">
                 {t(`talents.${module.key}.title`)}
               </h3>
               <p className="text-base leading-[26px] text-ardoise">
@@ -203,14 +149,14 @@ export default async function TalentsPage({ params }: PageProps<"/[locale]/talen
             <div
               data-reveal="zoom"
               className={cx(
-                "jm-flow jm-lift relative h-[220px] min-w-0 overflow-hidden rounded-box pt-4 pl-4 lg:h-[420px] lg:flex-1 lg:rounded-[32px] lg:pt-10 lg:pl-10",
+                "jm-lift relative h-[240px] min-w-0 overflow-hidden rounded-[28px] pt-5 pl-5 ring-1 ring-sapin/6 lg:h-[440px] lg:flex-1 lg:rounded-[40px] lg:pt-12 lg:pl-12",
                 module.tint,
               )}
-              style={{ ...stagger(1), backgroundImage: module.gradient }}
+              style={stagger(1)}
             >
-              <Shape
-                name="forme-orbites-sapin"
-                className="jm-drift -top-[90px] -right-[90px] hidden w-[300px] opacity-12 lg:block"
+              <span
+                aria-hidden
+                className="absolute -top-24 -right-24 size-[320px] rounded-full border-[40px] border-sapin/5"
               />
               <img
                 src={`/apercus/talents-module-${module.key}.webp`}
@@ -219,7 +165,7 @@ export default async function TalentsPage({ params }: PageProps<"/[locale]/talen
                 height={400}
                 loading="lazy"
                 decoding="async"
-                className="jm-float-slow relative w-[390px] max-w-none rounded-tl-sm shadow-[0_10px_30px_rgba(11,26,31,0.18)] lg:w-[675px] lg:rounded-tl-[16px] lg:shadow-[0_20px_50px_rgba(11,26,31,0.2)]"
+                className="jm-float-slow relative w-[390px] max-w-none rounded-tl-[16px] shadow-[0_10px_30px_rgba(11,26,31,0.18)] lg:w-[675px] lg:rounded-tl-[22px] lg:shadow-[0_20px_50px_rgba(11,26,31,0.2)]"
                 style={{ animationDelay: `${index * -2}s` }}
               />
             </div>
@@ -229,49 +175,30 @@ export default async function TalentsPage({ params }: PageProps<"/[locale]/talen
 
       {/* Guarantees and visibility */}
       <MarketingSection
-        tone="profondeur"
-        scene
-        background={
-          <>
-            <Pattern name="motif-reseau-sombre" opacity={0.22} />
-            <Glow className="-top-40 left-1/4 size-[520px] bg-feuille/30" />
-            <Glow className="-right-32 -bottom-48 size-[460px] bg-menthe/20" delay={-9} />
-          </>
-        }
+        tone="sapin"
         innerClassName="grid items-center gap-8 lg:grid-cols-2 lg:gap-16"
       >
         <div data-reveal className="flex flex-col gap-6">
           <Eyebrow dark>{t("talents.guarantees.eyebrow")}</Eyebrow>
           <h2 className={sectionTitle}>{t("talents.guarantees.title")}</h2>
           <ul className="flex flex-col gap-4">
-            {(["item1", "item2", "item3", "item4"] as const).map((key, index) => (
-              <li
-                key={key}
-                data-reveal
-                className="flex items-start gap-3 text-base leading-6"
-                style={stagger(index)}
-              >
-                <span
-                  aria-hidden
-                  className="mt-px flex size-6 shrink-0 items-center justify-center rounded-full bg-lime text-sapin"
-                >
-                  <Icon name="check" className="size-3.5" />
-                </span>
+            {(["item1", "item2", "item3", "item4"] as const).map((key) => (
+              <CheckLine key={key} dark>
                 {t(`talents.guarantees.${key}`)}
-              </li>
+              </CheckLine>
             ))}
           </ul>
         </div>
         <div
           data-reveal="zoom"
-          className="jm-ring flex flex-col gap-4 rounded-box bg-blanc/10 p-6 backdrop-blur-sm lg:rounded-card lg:p-9"
+          className="flex flex-col gap-4 rounded-[32px] bg-blanc p-6 text-sapin lg:p-9"
           style={stagger(1)}
         >
-          <IconTile icon="confidentialite" className="bg-lime text-sapin" />
+          <IconTile icon="confidentialite" className="bg-nuit text-lime" />
           <h3 className="text-xl leading-[26px] font-semibold tracking-[-0.015em] lg:text-2xl lg:leading-[30px]">
             {t("talents.privacy.title")}
           </h3>
-          <p className="text-[15px] leading-6 text-blanc/70">{t("talents.privacy.text")}</p>
+          <p className="text-[15px] leading-6 text-ardoise">{t("talents.privacy.text")}</p>
           {/* Illustration of the visibility setting, which lives in the talent's profile. */}
           <ul aria-hidden className="flex flex-col gap-2">
             {(
@@ -288,8 +215,8 @@ export default async function TalentsPage({ params }: PageProps<"/[locale]/talen
                   className={cx(
                     "flex items-center gap-3 rounded-[16px] px-4 py-3.5",
                     on
-                      ? "bg-lime text-sapin shadow-[0_0_28px_rgba(166,242,107,0.45)]"
-                      : "bg-blanc/7 text-blanc ring-1 ring-blanc/14 ring-inset",
+                      ? "bg-lime text-sapin"
+                      : "bg-papier text-sapin ring-1 ring-sapin/8 ring-inset",
                   )}
                 >
                   <Icon name={icon} className="size-[18px] shrink-0" />
@@ -299,7 +226,7 @@ export default async function TalentsPage({ params }: PageProps<"/[locale]/talen
                   <span
                     className={cx(
                       "flex size-[22px] shrink-0 items-center justify-center rounded-full",
-                      on ? "bg-sapin" : "ring-[1.5px] ring-blanc/40 ring-inset",
+                      on ? "bg-nuit" : "ring-[1.5px] ring-sapin/30 ring-inset",
                     )}
                   >
                     {on && <span className="size-2 rounded-full bg-lime" />}
@@ -312,12 +239,7 @@ export default async function TalentsPage({ params }: PageProps<"/[locale]/talen
       </MarketingSection>
 
       {/* Plans */}
-      <MarketingSection
-        tone="lime"
-        scene
-        background={<Glow className="-top-32 right-1/4 size-[420px] bg-lime/50" delay={-11} />}
-        innerClassName="flex flex-col gap-10"
-      >
+      <MarketingSection tone="lime" innerClassName="flex flex-col gap-10">
         <div data-reveal>
           <SectionHead
             center
@@ -331,80 +253,60 @@ export default async function TalentsPage({ params }: PageProps<"/[locale]/talen
         </div>
         <div
           data-reveal
-          className="flex flex-col gap-4 rounded-box bg-blanc px-6 py-[18px] sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-col gap-4 rounded-[28px] bg-blanc py-3 pr-3 pl-4 sm:flex-row sm:items-center sm:justify-between"
         >
           <p className="flex items-center gap-3 text-sm font-medium">
-            <Icon name="mobile-money" className="size-[22px] shrink-0" />
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-lime-clair">
+              <Icon name="mobile-money" className="size-5" />
+            </span>
             {t("talents.plans.payment")}
           </p>
-          <ButtonLink
-            href="/tarifs#talents"
-            variant="secondary"
-            iconAfter={chevron}
-            className="self-start sm:self-auto"
-          >
+          <SiteButton href="/tarifs#talents" className="self-start sm:self-auto">
             {t("talents.plans.cta")}
-          </ButtonLink>
+          </SiteButton>
         </div>
       </MarketingSection>
 
       {/* Partner licence */}
-      <section data-scene className="bg-creme pt-14 lg:pt-24">
+      <section className="bg-papier pt-14 lg:pt-24">
         <div className="mx-auto w-full max-w-[1200px] px-4 xl:px-0">
           <div
             data-reveal
-            className="jm-flow jm-lift relative flex flex-col gap-6 overflow-hidden rounded-[32px] bg-neon px-6 py-7 text-sapin lg:flex-row lg:items-center lg:px-11 lg:py-9"
-            style={{
-              backgroundImage:
-                "linear-gradient(120deg, #E3F67C 0%, #D9FA72 35%, #BFEFDF 70%, #E3F67C 100%)",
-            }}
+            className="jm-lift relative flex flex-col gap-6 overflow-hidden rounded-[32px] bg-blanc px-6 py-7 text-sapin ring-1 ring-sapin/6 lg:flex-row lg:items-center lg:px-11 lg:py-9"
           >
-            <Pattern name="motif-pastilles-lime" opacity={0.35} />
             <span
               aria-hidden
-              className="jm-float relative flex size-16 shrink-0 items-center justify-center rounded-sm bg-gradient-depth text-lime"
+              className="relative flex size-16 shrink-0 items-center justify-center rounded-full bg-nuit text-lime"
             >
               <Icon name="certificat" className="size-[30px]" />
             </span>
             <div className="relative flex flex-1 flex-col gap-2">
-              <h2 className="text-xl leading-[26px] font-semibold tracking-[-0.015em] lg:text-2xl lg:leading-[30px]">
+              <h2 className="text-xl leading-[26px] font-semibold tracking-[-0.02em] lg:text-2xl lg:leading-[30px]">
                 {t("talents.partners.title")}
               </h2>
-              <p className="text-[15px] leading-6 opacity-85">{t("talents.partners.text")}</p>
+              <p className="text-[15px] leading-6 text-ardoise">{t("talents.partners.text")}</p>
             </div>
-            <ButtonLink
-              href="/activer"
-              variant="secondary"
-              size="lg"
-              iconAfter={chevron}
-              className="relative self-start lg:self-center"
-            >
+            <SiteButton href="/activer" tone="lime" className="relative self-start lg:self-center">
               {t("talents.partners.cta")}
-            </ButtonLink>
+            </SiteButton>
           </div>
         </div>
       </section>
 
+      <section aria-hidden className="h-14 bg-papier lg:h-24" />
       <LimeCtaBand
-        animated
-        spacedTop
         title={t("talents.finalCta.title")}
         text={t("talents.finalCta.text")}
         character={{ name: "fatou", pose: "joie", height: 330, mobileHeight: 250 }}
-        actions={
-          <ButtonLink href={signup} variant="secondary" size="lg" iconAfter={chevron}>
-            {t("talents.finalCta.primary")}
-          </ButtonLink>
-        }
+        actions={<SiteButton href={signup}>{t("talents.finalCta.primary")}</SiteButton>}
       />
     </>
   );
 }
 
 /**
- * Hero visual (mockup 01-03): two phone screens on a Sapin panel with the « Trajectoires » pattern,
- * Kofi with his phone and two floating cards. Decorative labels are part of the illustration,
- * described by the image's alternative text.
+ * Hero picture: two phone screens in a Sapin frame, Kofi with his phone and two floating cards.
+ * Decorative labels are part of the illustration, described by the image's alternative text.
  */
 function HeroVisual({
   alt,
@@ -417,90 +319,44 @@ function HeroVisual({
   matchTitle: string;
   matchText: string;
 }) {
-  const shadow = "shadow-[0_30px_60px_rgba(0,0,0,0.32)]";
   return (
     <>
-      {/* Desktop: 640 px stage */}
-      <div
-        className="jm-rise relative hidden h-[640px] min-w-0 flex-1 overflow-hidden rounded-[40px] bg-blanc/6 ring-1 ring-blanc/12 ring-inset xl:block"
-        style={stagger(4)}
+      <PhotoFrame
+        tone="sapin"
+        character={{ name: "kofi", pose: "telephone", height: 300 }}
+        className="h-[440px] sm:h-[520px] lg:h-[600px] [&>div]:justify-end [&>div]:pr-2"
       >
-        <Shape
-          name="forme-halo-couleur"
-          className="jm-drift -top-40 -right-40 w-[560px] opacity-60"
-        />
-        <div className="jm-float-slow absolute top-14 left-[90px]">
-          <img
-            src="/apercus/talents-tableau-de-bord-mobile.webp"
-            alt={alt}
-            width={250}
-            height={541}
-            fetchPriority="high"
-            className={cx("w-[250px] rounded-[28px]", shadow)}
-          />
+        <div className="jm-float-slow absolute top-10 left-6 sm:left-14 lg:top-14">
+          <PhoneShot src="talents-tableau-de-bord-mobile" alt={alt} width={200} priority />
         </div>
         <div
-          className="jm-float absolute top-[150px] left-[330px]"
+          className="jm-float absolute top-28 left-[180px] max-sm:hidden sm:left-[250px] lg:top-36"
           style={{ animationDelay: "-2s" }}
         >
-          <img
-            src="/apercus/talents-offre-mobile.webp"
-            alt=""
-            width={210}
-            height={454}
-            className={cx("w-[210px] rounded-[28px] opacity-96", shadow)}
-          />
+          <PhoneShot src="talents-offre-mobile" width={180} />
         </div>
-        <div className="jm-breathe absolute right-1.5 bottom-0">
-          <Character name="kofi" pose="telephone" height={330} />
-        </div>
-        <div
-          aria-hidden
-          className="jm-pop absolute bottom-[120px] left-6 z-2 flex items-center gap-2.5 rounded-md bg-lime px-4 py-3 text-sapin shadow-[0_0_32px_rgba(166,242,107,0.5)]"
-          style={stagger(1)}
-        >
-          <span className="flex size-8 items-center justify-center rounded-full bg-sapin text-lime">
-            <Icon name="certificat" className="size-4" />
-          </span>
-          <span className="text-xs leading-[17px] font-semibold">{badge}</span>
-        </div>
-        <div
-          aria-hidden
-          className="jm-pop absolute top-[30px] right-[180px] z-2 flex items-center gap-2.5 rounded-md bg-blanc px-4 py-3 text-sapin shadow-[0_18px_40px_rgba(11,26,31,0.35)]"
-          style={stagger(0)}
-        >
-          <AiOrb size={28} className="jm-pulse" />
-          <div className="flex flex-col">
-            <span className="text-xs leading-[17px] font-semibold">{matchTitle}</span>
-            <span className="text-[11px] leading-[15px] text-ardoise">
-              <CountUp text={matchText} />
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile and tablet: one phone on a 400 px panel */}
-      <div
-        className="jm-rise relative h-[400px] overflow-hidden rounded-card bg-blanc/6 ring-1 ring-blanc/12 ring-inset xl:hidden"
-        style={stagger(6)}
+      </PhotoFrame>
+      <FloatCard
+        className="jm-pop top-4 right-3 flex items-center gap-2.5 lg:top-10 lg:-right-4"
+        style={stagger(0)}
       >
-        <Shape
-          name="forme-halo-couleur"
-          className="jm-drift -top-24 -right-24 w-[360px] opacity-60"
-        />
-        <div className="jm-float absolute top-[30px] left-1/2 -translate-x-1/2">
-          <img
-            src="/apercus/talents-tableau-de-bord-mobile.webp"
-            alt={alt}
-            width={200}
-            height={433}
-            className={cx("w-[200px] rounded-[28px]", shadow)}
-          />
+        <AiOrb size={28} className="jm-pulse" />
+        <div className="flex flex-col">
+          <span className="text-xs leading-[17px] font-semibold">{matchTitle}</span>
+          <span className="text-[11px] leading-[15px] text-ardoise">
+            <CountUp text={matchText} />
+          </span>
         </div>
-        <div className="jm-breathe absolute -right-2 -bottom-1.5">
-          <Character name="kofi" pose="telephone" height={210} />
-        </div>
-      </div>
+      </FloatCard>
+      <FloatCard
+        className="jm-pop bottom-8 left-3 flex items-center gap-2.5 bg-lime! lg:-left-6"
+        style={stagger(1)}
+      >
+        <span className="flex size-8 items-center justify-center rounded-full bg-nuit text-lime">
+          <Icon name="certificat" className="size-4" />
+        </span>
+        <span className="text-xs leading-[17px] font-semibold">{badge}</span>
+      </FloatCard>
     </>
   );
 }

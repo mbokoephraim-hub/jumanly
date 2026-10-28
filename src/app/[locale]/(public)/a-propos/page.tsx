@@ -5,30 +5,26 @@ import { getTranslations } from "next-intl/server";
 import { Icon, type IconName } from "@/components/brand/icon";
 import {
   Eyebrow,
-  Glow,
   IconTile,
-  ImmersiveBackdrop,
   LimeCtaBand,
   MarketingSection,
   PathLine,
-  Pattern,
   PoseCycle,
   SectionHead,
   Shape,
-  iaFlow,
-  lead,
-  outlineOnLime,
-  signatureLight,
+  SiteButton,
+  SiteHero,
   stagger,
 } from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
-import { ButtonLink } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { pageMetadata } from "@/lib/seo";
 import { signupHref } from "@/lib/signup";
 import { applySiteLocale } from "@/i18n/site-locale";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/a-propos">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/a-propos">): Promise<Metadata> {
   await applySiteLocale(params);
   const t = await getTranslations("about.seo");
   return pageMetadata({ path: "/a-propos", title: t("title"), description: t("description") });
@@ -92,42 +88,20 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
     <>
       <MotionRoot />
 
-      {/* Hero, on the depth gradient */}
-      <MarketingSection
-        tone="profondeur"
-        scene
-        spotlight
-        className="pt-12 pb-16 lg:pt-[72px] lg:pb-24"
-        background={<ImmersiveBackdrop />}
-      >
-        <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:gap-14">
-          <div className="relative z-10 flex flex-col gap-6 xl:w-[560px] xl:shrink-0">
-            <div className="jm-rise" style={stagger(0)}>
-              <Eyebrow dark>{t("hero.eyebrow")}</Eyebrow>
-            </div>
-            <h1
-              className="jm-word text-[36px] leading-10 font-semibold tracking-[-0.035em] lg:text-[56px] lg:leading-[60px]"
-              style={stagger(1)}
-            >
-              {t("hero.title")}
-            </h1>
-            <p className={cx(lead, "jm-rise text-blanc/80")} style={stagger(3)}>
-              {t("hero.text")}
-            </p>
-          </div>
+      <SiteHero
+        tone="nuit"
+        eyebrow={t("hero.eyebrow")}
+        title={t("hero.title")}
+        text={t("hero.text")}
+        visual={
           <div
             role="img"
             aria-label={t("hero.imageAlt")}
-            className="jm-rise relative h-[360px] overflow-hidden rounded-card bg-blanc/6 ring-1 ring-blanc/12 ring-inset xl:h-[600px] xl:min-w-0 xl:flex-1 xl:rounded-[40px]"
-            style={stagger(4)}
+            className="relative h-[360px] overflow-hidden rounded-[32px] bg-sapin xl:h-[600px] xl:rounded-[40px]"
           >
             <Shape
               name="forme-orbites-lime"
-              className="jm-drift -top-[50px] -left-10 w-[220px] opacity-35 xl:w-[380px]"
-            />
-            <Shape
-              name="forme-halo-couleur"
-              className="jm-drift -right-40 -bottom-40 w-[520px] opacity-50"
+              className="jm-drift -top-[50px] -left-10 w-[220px] opacity-[0.15] xl:w-[380px]"
             />
             <div className="absolute inset-x-0 bottom-0 flex items-end justify-center gap-1.5">
               <span className="xl:hidden">
@@ -161,35 +135,25 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
               </div>
             ))}
           </div>
-        </div>
-      </MarketingSection>
+        }
+      />
 
       {/* Vision and mission: two cards whose gradient flows */}
-      <MarketingSection
-        scene
-        background={
-          <>
-            <Glow className="-top-40 -left-32 size-[460px] bg-lime/35" />
-            <Glow className="-right-40 -bottom-40 size-[520px] bg-menthe/25" delay={-8} />
-          </>
-        }
-      >
+      <MarketingSection scene>
         <div className="grid gap-3.5 lg:grid-cols-2 lg:gap-5">
           {(
             [
               {
                 key: "vision",
                 icon: "objectif",
-                card: "text-blanc",
-                gradient: iaFlow,
+                card: "bg-sapin text-blanc",
                 tile: "bg-lime text-sapin",
                 arc: "forme-trajectoire-lime",
               },
               {
                 key: "mission",
                 icon: "career",
-                card: "text-sapin",
-                gradient: signatureLight,
+                card: "bg-lime-clair text-sapin",
                 tile: "bg-sapin text-lime",
                 arc: "forme-trajectoire-sapin",
               },
@@ -199,10 +163,10 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
               key={item.key}
               data-reveal
               className={cx(
-                "jm-flow jm-lift relative flex flex-col gap-[18px] overflow-hidden rounded-box p-7 lg:rounded-card lg:p-11",
+                "jm-lift relative flex flex-col gap-[18px] overflow-hidden rounded-[32px] p-7 lg:rounded-[40px] lg:p-11",
                 item.card,
               )}
-              style={{ ...stagger(index), backgroundImage: item.gradient }}
+              style={stagger(index)}
             >
               <Shape
                 name={item.arc}
@@ -230,7 +194,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
             title={t("positioning.title")}
             text={t("positioning.intro")}
           />
-          <div className="mt-2 flex flex-col gap-2.5 rounded-box bg-blanc p-5 lg:rounded-card lg:p-7">
+          <div className="mt-2 flex flex-col gap-2.5 rounded-[28px] bg-blanc p-5 lg:p-7">
             <h3 className="flex items-center gap-2.5 text-xl leading-[26px] font-semibold tracking-[-0.015em]">
               <Icon name="connect" className="size-5 shrink-0 text-feuille-fonce" />
               {t("continuity.title")}
@@ -294,18 +258,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
       </MarketingSection>
 
       {/* Values */}
-      <MarketingSection
-        tone="profondeur"
-        scene
-        background={
-          <>
-            <Pattern name="motif-points-sombre" opacity={0.25} />
-            <Glow className="-top-40 left-1/4 size-[520px] bg-feuille/30" />
-            <Glow className="-right-32 -bottom-48 size-[460px] bg-menthe/20" delay={-9} />
-          </>
-        }
-        innerClassName="flex flex-col gap-12"
-      >
+      <MarketingSection tone="sapin" scene innerClassName="flex flex-col gap-12">
         <div data-reveal>
           <SectionHead center dark eyebrow={t("values.eyebrow")} title={t("values.title")} />
         </div>
@@ -315,7 +268,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
               key={value.key}
               data-reveal
               className={cx(
-                "jm-lift flex flex-col gap-3 rounded-box bg-blanc/7 p-5 ring-1 ring-blanc/12 backdrop-blur-sm ring-inset lg:rounded-card lg:p-7",
+                "jm-lift flex flex-col gap-3 rounded-[28px] bg-blanc/7 p-5 ring-1 ring-blanc/12 ring-inset lg:p-7",
                 value.span,
               )}
               style={stagger(index % 3)}
@@ -338,14 +291,11 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
       </MarketingSection>
 
       {/* The Growth Lab and launch */}
-      <MarketingSection
-        scene
-        background={<Glow className="-top-32 right-1/4 size-[420px] bg-lime/40" delay={-11} />}
-      >
+      <MarketingSection scene>
         <div className="grid gap-3.5 lg:grid-cols-2 lg:gap-6">
           <div
             data-reveal
-            className="jm-lift flex flex-col gap-[18px] rounded-box bg-lime-clair p-7 lg:rounded-card lg:p-11"
+            className="jm-lift flex flex-col gap-[18px] rounded-[32px] bg-lime-clair p-7 lg:rounded-[40px] lg:p-11"
           >
             <div className="flex items-center gap-4">
               <img src="/marque/jumanly-symbole-lime.svg" alt="" width={56} height={56} />
@@ -362,10 +312,9 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
           </div>
           <div
             data-reveal
-            className="jm-lift relative flex flex-col gap-[18px] overflow-hidden rounded-box bg-gradient-depth p-7 text-blanc lg:rounded-card lg:p-11"
+            className="jm-lift relative flex flex-col gap-[18px] overflow-hidden rounded-[32px] bg-nuit p-7 text-blanc lg:rounded-[40px] lg:p-11"
             style={stagger(1)}
           >
-            <Glow className="-top-24 -right-24 size-[300px] bg-feuille/40" />
             <Eyebrow dark>{t("launch.eyebrow")}</Eyebrow>
             <h2 className={cardTitle}>{t("launch.title")}</h2>
             <p className="text-[15px] leading-[26px] text-blanc/78 lg:text-base">
@@ -380,7 +329,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
                 <li key={step} className="relative flex items-center gap-3">
                   <span
                     aria-hidden
-                    className="jm-glow flex size-11 shrink-0 items-center justify-center rounded-full bg-gradient-signature text-[17px] font-semibold text-sapin"
+                    className="jm-glow flex size-11 shrink-0 items-center justify-center rounded-full bg-lime text-[17px] font-semibold text-sapin"
                     style={stagger(index)}
                   >
                     {index + 1}
@@ -393,29 +342,16 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
         </div>
       </MarketingSection>
 
+      <section aria-hidden className="h-14 bg-papier lg:h-24" />
       <LimeCtaBand
-        animated
         title={t("cta.title")}
         character={{ name: "amani", pose: "joie", height: 330, mobileHeight: 240 }}
         actions={
           <>
-            <ButtonLink
-              href={signupHref()}
-              variant="secondary"
-              size="lg"
-              iconAfter={<Icon name="chev-r" />}
-            >
-              {t("cta.primary")}
-            </ButtonLink>
-            <ButtonLink
-              href="/contact"
-              variant="tertiary"
-              size="lg"
-              icon={<Icon name="message" />}
-              className={outlineOnLime}
-            >
+            <SiteButton href={signupHref()}>{t("cta.primary")}</SiteButton>
+            <SiteButton href="/contact" tone="light" icon="message">
               {t("cta.secondary")}
-            </ButtonLink>
+            </SiteButton>
           </>
         }
       />
