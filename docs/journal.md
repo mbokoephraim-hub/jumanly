@@ -5001,3 +5001,8 @@ bibliothèque, et se supprime.
 
 - À la demande d'Ephraïm (le Lime clair fatiguait les yeux sur le crème), dans le thème clair seulement : les fonds Lime deviennent Sapin (#0F3F37) et le menthe un vert foncé (#0D6B53), avec un texte crème dessus (`--nb-sur-lime`, `--nb-encre`). Les teintes Lime et menthe suivent (`--nb-lime-rgb`, `--nb-menthe-rgb`). Textes gris et filets plus foncés. Le thème sombre ne change pas.
 - Sur un fond Sapin fixe, le texte Lime reste Lime.
+
+## 2026-10-28 · CI remise au vert après l'administration Modèle B
+
+- Parcours e2e de l'admin alignés sur #193 à #195 : barre latérale (libellés à 1440 px, icônes seules à 1024 px), rôle « Support » dont le libellé porte maintenant sa description, export des données privées retiré (le test vérifie son absence), suppression devenue « Anonymiser le compte ».
+- Deux défauts de contraste réels sous `.jm-admin-bg` : les initiales sur fond IA (menthe claire en sombre) passent en Sapin, et le sélecteur d'espace en sombre utilise un blanc fixe au lieu du jeton « blanc », redéfini en couleur de carte. Même correction pour les vignettes `bg-[#14745f]` des pages Partenaires et Offres de l'admin.

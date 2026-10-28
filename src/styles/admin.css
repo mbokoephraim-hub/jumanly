@@ -73,6 +73,10 @@
   color-scheme: light;
   color: #0f3f37;
 }
+/* Initiales sur fond IA (avatars, logos) : la menthe du sombre est claire, le texte passe en Sapin. */
+.jm-admin-bg .bg-ia.text-neon {
+  color: #0f3f37;
+}
 /* Fonds Sapin pleins (boutons secondaires, interrupteurs allumés, encarts) : vert profond, texte blanc. */
 .jm-admin-bg .bg-sapin,
 .jm-admin-bg .checked\:bg-sapin:checked,
