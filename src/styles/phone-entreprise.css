@@ -11,7 +11,11 @@
 .nb-ep-carte-banniere {
   aspect-ratio: 3 / 1;
   background:
-    radial-gradient(120% 160% at 0% 0%, rgba(166, 242, 107, 0.35), transparent 55%),
+    radial-gradient(
+      120% 160% at 0% 0%,
+      rgba(var(--nb-lime-rgb, 166, 242, 107), 0.35),
+      transparent 55%
+    ),
     linear-gradient(135deg, #0f3f37, var(--nb-f-13282c, #13282c));
 }
 .nb-ep-carte-banniere img {
@@ -34,7 +38,7 @@
   border-radius: 20px;
   border: 3px solid var(--nb-surface);
   background: #0f3f37;
-  color: var(--nb-lime);
+  color: #a6f26b;
   font-weight: 800;
   font-size: 22px;
   overflow: hidden;
@@ -75,7 +79,7 @@
   height: 26px;
   padding: 0 11px;
   border-radius: 999px;
-  background: rgba(166, 242, 107, 0.14);
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.14);
   color: var(--nb-lime-t);
   font-size: 12.5px;
   font-weight: 700;
@@ -151,7 +155,11 @@
   border-radius: 20px;
   overflow: hidden;
   background:
-    radial-gradient(120% 160% at 0% 0%, rgba(166, 242, 107, 0.35), transparent 55%),
+    radial-gradient(
+      120% 160% at 0% 0%,
+      rgba(var(--nb-lime-rgb, 166, 242, 107), 0.35),
+      transparent 55%
+    ),
     linear-gradient(135deg, #0f3f37, var(--nb-f-13282c, #13282c));
 }
 .nb-ep-banniere img,
@@ -170,7 +178,7 @@
   border-radius: 22px;
   border: 3px solid var(--nb-nuit);
   background: #0f3f37;
-  color: var(--nb-lime);
+  color: #a6f26b;
   font-weight: 800;
   font-size: 26px;
   display: flex;

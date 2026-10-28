@@ -83,7 +83,7 @@
   align-items: center;
   gap: 12px;
   padding: 0 16px;
-  border: 1px solid rgba(166, 242, 107, 0.35);
+  border: 1px solid rgba(var(--nb-lime-rgb, 166, 242, 107), 0.35);
   color: var(--nb-t-9fb3ae, #9fb3ae);
 }
 .nb-rh-champ input {
@@ -136,7 +136,7 @@
 .nb-rh-pilules .nb-pilule[aria-checked="true"] {
   background: var(--nb-lime);
   border-color: var(--nb-lime);
-  color: #0f3f37;
+  color: var(--nb-sur-lime, #0f3f37);
 }
 .nb-rh-recent {
   width: 100%;
@@ -193,7 +193,7 @@
 .nb-rh-mini[data-icone] {
   border-radius: 14px;
   background: #0f3f37;
-  color: var(--nb-lime);
+  color: #a6f26b;
 }
 .nb-rh-mini img {
   width: 100%;
@@ -238,7 +238,7 @@
   background: #b93a2b;
 }
 .t-rh.nb-cadre .t-ri-inv .t-dts li.t-on {
-  background: rgba(166, 242, 107, 0.12);
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.12);
 }
 .t-rh.nb-cadre .t-ri-inv .t-dts li.t-on .t-t {
   color: var(--nb-creme);
@@ -321,7 +321,7 @@
   font-size: 10.5px;
 }
 .nb-rh-illu-etapes > span[data-on] {
-  background: rgba(166, 242, 107, 0.14);
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.14);
   color: var(--nb-lime-t);
 }
 .nb-rh-illu-chiffres b,
@@ -376,7 +376,7 @@
   padding: 12px 14px;
   border-radius: 18px;
   background: var(--nb-f-0f2a2a, #0f2a2a);
-  border: 1px solid rgba(47, 211, 166, 0.4);
+  border: 1px solid rgba(var(--nb-menthe-rgb, 47, 211, 166), 0.4);
   box-shadow: 0 20px 40px -16px rgba(0, 0, 0, 0.8);
   font-size: 13.5px;
   line-height: 1.45;
@@ -645,7 +645,7 @@
 }
 .nb-rh-role[aria-checked="true"] {
   border-color: var(--nb-lime-t);
-  background: rgba(166, 242, 107, 0.08);
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.08);
 }
 .nb-rh-role[aria-checked="true"] svg {
   color: var(--nb-lime-t);
@@ -838,7 +838,7 @@
   border-radius: 8px;
   font-size: 13px;
   font-weight: 700;
-  background: rgba(47, 211, 166, 0.14);
+  background: rgba(var(--nb-menthe-rgb, 47, 211, 166), 0.14);
   color: var(--nb-menthe-claire-t);
 }
 .nb-rh-etat[data-etat="pending"] {
@@ -847,7 +847,7 @@
 }
 .nb-rh-etat[data-etat="accepted"],
 .nb-rh-etat[data-etat="created"] {
-  background: rgba(166, 242, 107, 0.14);
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.14);
   color: var(--nb-lime-t);
 }
 .nb-rh-demander {
@@ -1000,7 +1000,7 @@
   margin-top: 14px;
   padding: 6px 12px;
   border-radius: 14px;
-  background: rgba(166, 242, 107, 0.14);
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.14);
   color: var(--nb-lime-t);
   font-size: 13.5px;
   font-weight: 700;
@@ -1028,7 +1028,7 @@
   margin-top: 14px;
   padding: 12px 16px;
   border-radius: 18px;
-  border: 1px solid rgba(47, 211, 166, 0.4);
+  border: 1px solid rgba(var(--nb-menthe-rgb, 47, 211, 166), 0.4);
   background: var(--nb-f-0f2a2a, #0f2a2a);
   font-size: 15px;
   font-weight: 700;
@@ -3302,7 +3302,7 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
 }
 .nb-rh-choix-o:has(input:checked) {
   border-color: var(--nb-lime-t);
-  background: rgba(166, 242, 107, 0.08);
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.08);
 }
 .nb-rh-choix-o input,
 .nb-rh-coche input {
@@ -3344,7 +3344,7 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
 .nb-rm .nb-chip[aria-checked="true"] {
   background: var(--nb-lime);
   border-color: var(--nb-lime);
-  color: #0f3f37;
+  color: var(--nb-sur-lime, #0f3f37);
 }
 .nb-rm-onglets {
   display: flex;
@@ -4638,7 +4638,7 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
   margin: 14px 20px 0;
   padding: 14px 16px;
   border-radius: 18px;
-  background: rgba(166, 242, 107, 0.1);
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.1);
   color: var(--nb-lime-t);
   font-size: 14px;
   font-weight: 600;
