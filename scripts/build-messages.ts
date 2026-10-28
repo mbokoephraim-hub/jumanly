@@ -1,5 +1,7 @@
 /**
- * Generates `messages/fr.json` from the `| Clé | Texte |` tables in `textes/*.md`.
+ * Generates `messages/fr.json` from the `| Clé | Texte |` tables in `textes/*.md`, and
+ * `messages/en.json` from `textes/en/*.md` (English of the public site, laid over French: every
+ * English key must exist in French and keep the same variables).
  *
  *   pnpm messages          regenerate the file
  *   pnpm messages:check    fail if the file is out of date (CI, build)
@@ -10,12 +12,14 @@
  */
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
-import { buildMessages, extractEntries, isTextFile } from "./lib/texts";
+import { buildMessages, checkTranslation, extractEntries, isTextFile } from "./lib/texts";
 
 const root = join(import.meta.dirname, "..");
 const textsDir = join(root, "textes");
 const output = join(root, "messages", "fr.json");
 const systemOutput = join(root, "messages", "fr.systeme.json");
+const englishDir = join(textsDir, "en");
+const englishOutput = join(root, "messages", "en.json");
 const checkOnly = process.argv.includes("--check");
 
 const files = readdirSync(textsDir).filter(isTextFile).sort();
@@ -26,6 +30,16 @@ const entries = files.flatMap((name) => {
 
 const { messages, errors } = buildMessages(entries);
 
+const englishFiles = existsSync(englishDir)
+  ? readdirSync(englishDir).filter(isTextFile).sort()
+  : [];
+const englishEntries = englishFiles.flatMap((name) => {
+  const path = join(englishDir, name);
+  return extractEntries(readFileSync(path, "utf8"), relative(root, path));
+});
+const english = buildMessages(englishEntries);
+errors.push(...english.errors, ...checkTranslation(entries, englishEntries));
+
 if (errors.length > 0) {
   console.error(`✗ ${errors.length} erreur(s) dans textes/ :`);
   for (const error of errors) console.error(`  - ${error}`);
@@ -33,6 +47,7 @@ if (errors.length > 0) {
 }
 
 const json = `${JSON.stringify(messages, null, 2)}\n`;
+const englishJson = `${JSON.stringify(english.messages, null, 2)}\n`;
 type Tree = { [key: string]: string | Tree };
 const tree = messages as Tree;
 const branch = (node: Tree, key: string) => node[key] as Tree;
@@ -51,13 +66,18 @@ const systemJson = `${JSON.stringify(
 if (checkOnly) {
   const current = existsSync(output) ? readFileSync(output, "utf8") : "";
   const currentSystem = existsSync(systemOutput) ? readFileSync(systemOutput, "utf8") : "";
-  if (current !== json || currentSystem !== systemJson) {
+  const currentEnglish = existsSync(englishOutput) ? readFileSync(englishOutput, "utf8") : "";
+  if (current !== json || currentSystem !== systemJson || currentEnglish !== englishJson) {
     console.error("✗ messages/fr.json n'est pas à jour. Lancez « pnpm messages ».");
     process.exit(1);
   }
-  console.log(`✓ messages/fr.json à jour (${entries.length} textes).`);
+  console.log(
+    `✓ messages/fr.json à jour (${entries.length} textes, ${englishEntries.length} en anglais).`,
+  );
 } else {
   writeFileSync(output, json);
   writeFileSync(systemOutput, systemJson);
+  writeFileSync(englishOutput, englishJson);
   console.log(`✓ messages/fr.json généré : ${entries.length} textes, ${files.length} fichier(s).`);
+  console.log(`✓ messages/en.json généré : ${englishEntries.length} textes en anglais.`);
 }

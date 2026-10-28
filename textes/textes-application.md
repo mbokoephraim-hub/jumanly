@@ -114,6 +114,11 @@ Conventions :
 | `nav.menu.close` | Fermer le menu |
 | `nav.menu.label` | Menu principal |
 | `nav.logo.label` | Jumanly, retour à l'accueil |
+| `nav.language.label` | Langue du site |
+| `nav.language.fr` | Français |
+| `nav.language.en` | English |
+| `nav.language.frShort` | FR |
+| `nav.language.enShort` | EN |
 
 ---
 
@@ -152,6 +157,7 @@ Conventions :
 | `footer.payments` | Paiement par Mobile Money et carte bancaire. Prix en USD. |
 | `footer.copyright` | © {year} Jumanly. Tous droits réservés. |
 | `footer.language` | Langue : Français |
+| `footer.big` | Learn. Grow. Connect. |
 
 ---
 
@@ -221,6 +227,17 @@ Conventions :
 
 | Clé | Texte |
 |---|---|
+| `home.stats.label` | Jumanly en quelques chiffres |
+| `home.stats.free.value` | 0 USD |
+| `home.stats.free.label` | pour postuler, quel que soit le forfait |
+| `home.stats.modules.value` | 5 |
+| `home.stats.modules.label` | services reliés à votre profil |
+| `home.stats.why.value` | 100 % |
+| `home.stats.why.label` | des suggestions avec leur « Pourquoi ? » |
+| `home.stats.payment.value` | 2 |
+| `home.stats.payment.label` | moyens de payer : Mobile Money et carte |
+| `home.hero.visual.notification` | Nouvelle offre compatible |
+| `home.hero.visual.notificationText` | Stage · Marketing digital |
 | `home.audiences.title` | Une plateforme, trois façons d'avancer |
 | `home.audiences.subtitle` | Que vous cherchiez un emploi, que vous recrutiez seul ou en équipe, Jumanly s'adapte à votre situation. |
 | `home.audiences.eyebrow` | Pour qui ? |
