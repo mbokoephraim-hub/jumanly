@@ -216,6 +216,8 @@ async function Activation({ searchParams }: Pick<PageProps<"/activer">, "searchP
         )}
       </section>
       {!token && (
+        // A full reload empties the code field (the rule mistakes /activer for a public page).
+        // eslint-disable-next-line @next/next/no-html-link-for-pages
         <a
           href="/activer"
           className="text-center text-[13px] font-semibold text-sapin hover:underline"

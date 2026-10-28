@@ -1,0 +1,2821 @@
+{
+  "trainings": {
+    "seo": {
+      "title": "Jumanly Learn courses · Employability and professional skills",
+      "description": "Video courses, exercises and certificates to boost your employability. A selection is free, the others are included in the Starter, Pro and Premium plans."
+    },
+    "hero": {
+      "eyebrow": "Jumanly Learn",
+      "title": "Courses",
+      "text": "Video courses, materials, exercises, assessments and certificates. Start with the free courses, then unlock more learning paths depending on your plan."
+    },
+    "search": {
+      "label": "Search for a course",
+      "placeholder": "E.g.: interview, CV, public speaking",
+      "submit": "Search"
+    },
+    "filters": {
+      "title": "Filters",
+      "open": "Filter",
+      "apply": "Show results",
+      "reset": "Clear filters",
+      "theme": {
+        "label": "Topic",
+        "all": "All topics"
+      },
+      "level": {
+        "label": "Level",
+        "all": "All levels",
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "advanced": "Advanced"
+      },
+      "access": {
+        "label": "Access",
+        "all": "All courses",
+        "free": "Free",
+        "starter": "Included in Starter",
+        "pro": "Included in Pro",
+        "premium": "Included in Premium"
+      }
+    },
+    "sort": {
+      "label": "Sort by",
+      "recent": "Most recent",
+      "popular": "Most followed",
+      "duration": "Duration"
+    },
+    "results": {
+      "count": "{count, plural, =0 {No courses} one {# course} other {# courses}}"
+    },
+    "card": {
+      "duration": "{duration}",
+      "lessons": "{count, plural, one {# lesson} other {# lessons}}",
+      "level": "{level} level",
+      "certificate": "Certificate",
+      "badge": {
+        "free": "Free",
+        "plan": "Included in {plan}"
+      },
+      "cta": "See the course",
+      "imageAlt": "Illustration of the course {title}"
+    },
+    "empty": {
+      "title": "No course matches your search",
+      "text": "Try other keywords or remove a filter.",
+      "cta": "Clear filters"
+    },
+    "emptyCatalog": {
+      "title": "The catalog is on its way",
+      "text": "The first courses are coming soon. Create your account to be notified when they open."
+    },
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next",
+      "page": "Page {page} of {total}"
+    },
+    "banner": {
+      "title": "Unlock more courses",
+      "text": "The Starter, Pro and Premium plans gradually open the fundamental courses, the standard paths and the advanced paths.",
+      "cta": "See the plans"
+    }
+  },
+  "training": {
+    "seo": {
+      "title": "{title} · Jumanly Learn course",
+      "description": "{summary} Duration: {duration}. Level: {level}."
+    },
+    "breadcrumb": {
+      "trainings": "Courses"
+    },
+    "badge": {
+      "free": "Free course",
+      "plan": "Included in {plan} and above"
+    },
+    "meta": {
+      "duration": "Duration: {duration}",
+      "level": "Level: {level}",
+      "lessons": "{count, plural, one {# lesson} other {# lessons}}",
+      "certificate": "Certificate of completion",
+      "language": "Language: {language}"
+    },
+    "about": {
+      "title": "About this course"
+    },
+    "objectives": {
+      "title": "What you will learn"
+    },
+    "audience": {
+      "title": "Who is it for?"
+    },
+    "program": {
+      "title": "Program",
+      "module": "Module {number} · {title}",
+      "lessonDuration": "{duration}",
+      "preview": "Free preview",
+      "locked": "Available after sign-up"
+    },
+    "preview": {
+      "title": "Preview of the first lesson",
+      "text": "Watch the first lesson for free, without creating an account.",
+      "play": "Play the preview",
+      "position": "Module {module} · Lesson {lesson}",
+      "videoAlt": "Preview video of the course {title}"
+    },
+    "certificate": {
+      "title": "A certificate to showcase",
+      "text": "When you finish the course and its assessments, you get a downloadable certificate, verifiable through a public link and visible on your profile.",
+      "sample": {
+        "intro": "Jumanly certifies that",
+        "text": "has taken and completed “{title}” ({duration})."
+      }
+    },
+    "instructor": {
+      "role": "Instructor of this course"
+    },
+    "cta": {
+      "start": "Start",
+      "startFree": "Start for free",
+      "requiredPlan": "This course is included in the {plan} plan. Create your account to access it.",
+      "seePlans": "See the plans",
+      "note": "Free sign-up. You will come straight back to this course."
+    },
+    "related": {
+      "title": "Related courses"
+    },
+    "notFound": {
+      "title": "Course not found",
+      "text": "This course does not exist or is no longer available.",
+      "cta": "See the catalog"
+    }
+  },
+  "jobs": {
+    "seo": {
+      "title": "Jobs, internships and assignments · Jumanly Jobs",
+      "description": "Find jobs, internships and assignments and apply for free. Follow each application step by step on Jumanly."
+    },
+    "hero": {
+      "eyebrow": "Jumanly Jobs",
+      "title": "Job offers",
+      "text": "Jobs, internships and assignments posted by recruiters and companies. Applying is always free."
+    },
+    "search": {
+      "keyword": {
+        "label": "Keyword",
+        "placeholder": "Job, skill, company"
+      },
+      "city": {
+        "label": "City",
+        "placeholder": "Your city"
+      },
+      "country": {
+        "label": "Country",
+        "placeholder": "All countries"
+      },
+      "contract": {
+        "label": "Contract type",
+        "all": "All contracts",
+        "cdi": "Permanent",
+        "cdd": "Fixed-term",
+        "internship": "Internship",
+        "mission": "Assignment or freelance",
+        "alternance": "Work-study",
+        "volunteer": "Volunteering"
+      },
+      "remote": {
+        "label": "Remote work",
+        "all": "Any",
+        "onsite": "On site",
+        "hybrid": "Hybrid",
+        "full": "Fully remote"
+      },
+      "submit": "Search",
+      "reset": "Clear filters",
+      "openFilters": "Filters",
+      "filtersCount": "{count, plural, =0 {Filters} other {Filters · #}}"
+    },
+    "results": {
+      "count": "{count, plural, =0 {No offers} one {# offer} other {# offers}}"
+    },
+    "sort": {
+      "label": "Sort by",
+      "recent": "Most recent",
+      "deadline": "Closing soon"
+    },
+    "card": {
+      "company": "{company}",
+      "location": "{city}, {country}",
+      "remote": {
+        "onsite": "On site",
+        "hybrid": "Hybrid",
+        "full": "Remote"
+      },
+      "published": "Posted {relativeDate}",
+      "deadline": "Deadline: {date}",
+      "verified": "Verified company",
+      "save": "Save the offer",
+      "saveLoginHint": "Sign in to save this offer.",
+      "cta": "See the offer",
+      "logoAlt": "{company} logo"
+    },
+    "matchHint": {
+      "text": "Sign in to see how well you match each offer and why.",
+      "cta": "Sign in"
+    },
+    "empty": {
+      "title": "No offer matches your search",
+      "text": "Widen the area, remove a filter or try another keyword.",
+      "cta": "Clear filters"
+    },
+    "emptyAll": {
+      "title": "The first offers are coming soon",
+      "text": "Create your account now to prepare your profile and be notified of new offers.",
+      "cta": "Create my free account"
+    },
+    "recruiterBanner": {
+      "title": "Hiring?",
+      "text": "Post your first offer for free with RH Free.",
+      "cta": "Post an offer"
+    },
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next",
+      "page": "Page {page} of {total}"
+    }
+  },
+  "job": {
+    "seo": {
+      "title": "{title} · {company} · {city} · Jumanly",
+      "description": "{company} is hiring: {title} in {city}, {contract}. Apply for free on Jumanly."
+    },
+    "breadcrumb": {
+      "jobs": "Job offers"
+    },
+    "header": {
+      "company": "{company}",
+      "verified": "Verified company",
+      "verifiedHelp": "Jumanly has verified the identity of this company.",
+      "location": "{city}, {country}",
+      "contract": "{contract}",
+      "remote": "{remote}",
+      "salary": "{salary}",
+      "salaryHidden": "Salary not disclosed",
+      "published": "Posted on {date}",
+      "deadline": "Applications until {date}",
+      "logoAlt": "{company} logo"
+    },
+    "cta": {
+      "apply": "Apply for free",
+      "applyNote": "Free, whatever your plan. You will come back to this offer after signing in.",
+      "save": "Save",
+      "share": "Share",
+      "shareCopied": "Link copied.",
+      "report": "Report this offer"
+    },
+    "description": {
+      "title": "Job description"
+    },
+    "missions": {
+      "title": "Responsibilities"
+    },
+    "requirements": {
+      "title": "Profile we are looking for"
+    },
+    "skills": {
+      "required": "Required skills",
+      "preferred": "Preferred skills"
+    },
+    "criteria": {
+      "title": "Essential criteria",
+      "help": "These criteria are set by the recruiter. They are shown so that you know exactly what is expected."
+    },
+    "languages": {
+      "title": "Languages"
+    },
+    "benefits": {
+      "title": "What we offer"
+    },
+    "process": {
+      "title": "Hiring process"
+    },
+    "company": {
+      "title": "About {company}",
+      "cta": "See the company page"
+    },
+    "match": {
+      "title": "How well you match this offer",
+      "text": "Sign in to see your match score, the reasons for this score and the courses that can close a gap.",
+      "cta": "Sign in"
+    },
+    "closed": {
+      "title": "This offer no longer accepts applications",
+      "text": "Discover other similar offers.",
+      "cta": "See similar offers"
+    },
+    "similar": {
+      "title": "Similar offers"
+    },
+    "notFound": {
+      "title": "Offer not found",
+      "text": "This offer has been removed or does not exist.",
+      "cta": "See all offers"
+    },
+    "report": {
+      "title": "Report this offer",
+      "reason": {
+        "label": "Reason",
+        "fraud": "Fraudulent offer or request for money",
+        "discrimination": "Discriminatory content",
+        "misleading": "Misleading information",
+        "other": "Other"
+      },
+      "details": {
+        "label": "Details",
+        "placeholder": "Describe what seems wrong to you."
+      },
+      "submit": "Send the report",
+      "loginRequired": "Sign in to report an offer.",
+      "success": "Thank you. Our team will review this offer."
+    },
+    "safety": {
+      "text": "A recruiter must never ask you for money to apply. If in doubt, report the offer."
+    }
+  },
+  "companyPage": {
+    "seo": {
+      "title": "{company} · Offers and overview · Jumanly",
+      "description": "Discover {company} and its open offers. Apply for free on Jumanly."
+    },
+    "verified": "Verified company",
+    "hiringNow": "Hiring now",
+    "logoAlt": "{company} logo",
+    "coverAlt": "Cover image of {company}",
+    "sector": "Sector: {sector}",
+    "size": "Size: {size}",
+    "location": "Head office: {city}, {country}",
+    "website": "Website",
+    "about": {
+      "title": "Overview"
+    },
+    "jobs": {
+      "title": "Open offers",
+      "count": "{count, plural, =0 {No open offers} one {# open offer} other {# open offers}}",
+      "empty": "This company has no open offer at the moment.",
+      "emptyCta": "See all offers",
+      "row": "{city} · {contract}"
+    },
+    "notFound": {
+      "title": "Company not found",
+      "text": "This page does not exist or is no longer public."
+    }
+  },
+  "learn": {
+    "card": {
+      "modules": "{count, plural, one {# module} other {# modules}}",
+      "instructor": "{name}"
+    },
+    "pdf": {
+      "title": "As a PDF",
+      "programme": "Download the program",
+      "programmeHint": "Goals, modules and lessons, to keep or share."
+    }
+  },
+  "career": {
+    "portfolio": {
+      "project": {
+        "context": "Context",
+        "role": "Your role",
+        "result": "Result",
+        "skills": "Skills used"
+      },
+      "page": {
+        "footer": "Portfolio published on Jumanly",
+        "seo": "Portfolio · Jumanly",
+        "eyebrow": "Portfolio",
+        "projects": "Projects",
+        "count": "{count, plural, one {# project} other {# projects}}",
+        "share": "Share",
+        "shareCopied": "Link copied"
+      }
+    }
+  },
+  "certificate": {
+    "verify": {
+      "title": "Certificate verification",
+      "seo": {
+        "title": "Certificate verification · Jumanly",
+        "description": "Check that a Jumanly course certificate is genuine using its number."
+      },
+      "intro": "Enter the number shown on the certificate to check that it was issued by Jumanly.",
+      "form": {
+        "label": "Certificate number",
+        "placeholder": "E.g.: JMN-XXXX-XXXX",
+        "submit": "Verify"
+      }
+    }
+  },
+  "talent": {
+    "profile": {
+      "visibility": {
+        "private": {
+          "text": "Private"
+        },
+        "recruiters": {
+          "text": "Visible to recruiters"
+        },
+        "anonymous": {
+          "text": "Anonymous"
+        }
+      }
+    }
+  },
+  "settings": {
+    "privacy": {
+      "ai": {
+        "matching": {
+          "text": "Calculate my match with offers"
+        }
+      }
+    }
+  },
+  "org": {
+    "verification": {
+      "badge": {
+        "tooltip": "Jumanly has verified that this organization exists and the role of the person who manages it."
+      }
+    }
+  },
+  "ai": {
+    "card": {
+      "ignore": "Ignore"
+    },
+    "dispute": {
+      "cta": "Report an error"
+    }
+  },
+  "match": {
+    "score": {
+      "value": "{score}%",
+      "compact": "{score}% match"
+    },
+    "band": {
+      "veryHigh": {
+        "text": "Very good match",
+        "range": "85 to 100"
+      },
+      "high": {
+        "text": "Good match",
+        "range": "70 to 84"
+      },
+      "partial": {
+        "text": "Partial match",
+        "range": "50 to 69"
+      },
+      "low": {
+        "text": "Weak match",
+        "range": "Under 50"
+      }
+    },
+    "criterion": {
+      "requiredSkills": {
+        "text": "Required skills"
+      },
+      "preferredSkills": {
+        "text": "Preferred skills"
+      },
+      "experience": {
+        "text": "Experience"
+      },
+      "languages": {
+        "text": "Languages"
+      },
+      "weight": "Weight: {weight}%",
+      "status": {
+        "met": "Met",
+        "partial": "Partly met"
+      }
+    },
+    "why": {
+      "talent": {
+        "title": "Why {score}%?",
+        "intro": "Your score is the sum of eight criteria, weighted by the recruiter. Here are the details for “{jobTitle}”.",
+        "met": {
+          "title": "What matches",
+          "item": {
+            "skillVerified": "{skill}: confirmed by your Jumanly certificate",
+            "experience": "{years, plural, one {# year} other {# years}} of experience for {min} required",
+            "language": "{language} {level}",
+            "location": "Compatible location: {city} · {workMode}"
+          }
+        },
+        "partial": {
+          "title": "What partly matches",
+          "item": {
+            "language": "{language}: {expected} expected, you state {actual}"
+          }
+        },
+        "missing": {
+          "title": "Missing skills",
+          "preferred": "Preferred: {skill}"
+        },
+        "courses": {
+          "title": "Jumanly courses to close the gap",
+          "item": "“{courseTitle}” · {hours} h",
+          "impact": "Your score would rise to {newScore}%",
+          "included": "Included in your plan",
+          "cta": "See the course"
+        },
+        "reportError": "Does the score look wrong? Report an error"
+      },
+      "recruiter": {
+        "title": "Why {score}% for {candidateName}?",
+        "rule": "AI ranks and explains, you decide. A score alone never justifies a decision."
+      }
+    }
+  },
+  "matchingPage": {
+    "meta": {
+      "title": "How matching works · Jumanly",
+      "description": "The Jumanly match score explained simply: the criteria, the weights, what the AI never uses, and your right to a human review."
+    },
+    "title": "How matching works",
+    "lead": "On Jumanly, AI recommends and people decide. Here is, in plain language, how we calculate the match between a talent and an offer.",
+    "panel": {
+      "title": "How matching works",
+      "readMore": "Read the full explanation"
+    },
+    "s1": {
+      "title": "1. A score from 0 to 100",
+      "body": "For each offer, we compare the recruiter's needs with your profile. The result is a score from 0 to 100. The higher it is, the more your profile fits what the offer asks for."
+    },
+    "s2": {
+      "title": "2. Eight criteria, and only those",
+      "body": "The score adds up eight criteria related to the job:",
+      "list": {
+        "1": "required skills;",
+        "2": "preferred skills;",
+        "3": "experience;",
+        "4": "location and remote work;",
+        "5": "contract type and availability;",
+        "6": "languages;",
+        "7": "education or degree;",
+        "8": "how close your profile is to the job description."
+      }
+    },
+    "s3": {
+      "title": "3. Weights chosen by the recruiter",
+      "body": "Each criterion counts for a share of the score. The recruiter can give more weight to what really matters for the job. These weights are shown in the score explanation.",
+      "example": "Fictional example · Junior data analyst, Baobab Fintech"
+    },
+    "s4": {
+      "title": "4. Four easy-to-read levels",
+      "veryHigh": "85 to 100: Very good match",
+      "high": "70 to 84: Good match",
+      "partial": "50 to 69: Partial match",
+      "low": "Under 50: Weak match",
+      "note": "A low score is not a rejection. You can always apply, for free."
+    },
+    "s5": {
+      "title": "5. A “Why?” on every score",
+      "body": "Every score comes with an explanation: the criteria met, those partly met, the missing skills, and the Jumanly courses that can close the gap.",
+      "example": "Fictional example: Grâce Mbuyi, Pro talent in Kinshasa.",
+      "imageAlt": "Example explanation of an 87% score, with the criteria met, the missing skills and a course to close the gap"
+    },
+    "s6": {
+      "title": "6. What we never use",
+      "body": "This information is never taken into account in the score, or in any suggestion:",
+      "list": {
+        "1": "gender;",
+        "2": "age;",
+        "3": "photo;",
+        "4": "origin;",
+        "5": "religion;",
+        "6": "family situation;",
+        "7": "health."
+      },
+      "plan": "Your Jumanly plan is not taken into account either: a Free profile is hired just like a subscriber."
+    },
+    "s7": {
+      "title": "7. AI rejects no one",
+      "body": "Matching ranks and explains. It never rules out an application. If an offer sets knockout criteria (for example a degree required by law), they are shown on the offer; a candidate who does not meet them is flagged to the recruiter, never rejected automatically. Every decision is made by a person."
+    },
+    "s8": {
+      "title": "8. You can challenge it",
+      "body": "If your score looks wrong, tap “Report an error” under the explanation. Someone from the Jumanly team checks the calculation and replies by e-mail."
+    },
+    "s9": {
+      "title": "9. You stay in control",
+      "body": "You can turn off the match calculation in your settings. You can still apply; the recruiter will see your application without a score."
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "q1": "Does paying for a plan improve my score?",
+      "a1": "No. The plan is not part of the calculation. Plans give access to tools to progress (courses, AI coach), which can help you strengthen your profile.",
+      "q2": "How can I improve my score?",
+      "a2": "Complete your profile, state the level of your skills and take the courses suggested in the “Why?”. Jumanly certificates make your skills verifiable.",
+      "q3": "Does the recruiter see my score?",
+      "a3": "Yes, with the same explanation as you. It helps them prioritize, not decide for you.",
+      "q4": "Who can contact me through matching?",
+      "a4": "Only the recruiters of the offers you apply to, or those whose introduction request you accept if your profile is visible in the talent pool.",
+      "eyebrow": "FAQ"
+    },
+    "contact": "A question about matching? Write to us at assistant@jumanly.io or infojumanly@gmail.com.",
+    "cta": "Create my profile for free",
+    "eyebrow": "Jumanly Intelligence",
+    "nav": {
+      "label": "Contents",
+      "s1": "1. A score from 0 to 100",
+      "s2": "2. Eight criteria",
+      "s6": "6. What we never use",
+      "s8": "8. You can challenge it"
+    },
+    "hero": {
+      "imageAlt": "Example match score: 87%, very good match"
+    },
+    "example": {
+      "job": "Junior data analyst",
+      "company": "Baobab Fintech",
+      "skill": "SQL",
+      "language": "French",
+      "languageLevel": "C2",
+      "city": "Kinshasa",
+      "workMode": "Hybrid",
+      "partialLanguage": "English",
+      "partialExpected": "B2",
+      "partialActual": "B1",
+      "missingSkill": "Power BI",
+      "course": "Dashboards with Power BI"
+    },
+    "finalCta": {
+      "title": "On Jumanly, AI recommends and people decide."
+    }
+  },
+  "legal": {
+    "validationBanner": "To be approved by a lawyer before publication",
+    "lastUpdated": "Last updated: {lastUpdated}",
+    "toc": "Contents",
+    "eyebrow": "Legal information",
+    "print": "Print",
+    "backToTop": "Back to top",
+    "contactLine": "For any question: infojumanly@gmail.com. For professionals and partners: assistant@jumanly.io.",
+    "nav": {
+      "notice": "Legal notice",
+      "privacy": "Privacy",
+      "terms": "Terms and conditions",
+      "cookies": "Cookies"
+    }
+  },
+  "notice": {
+    "seo": {
+      "title": "Legal notice · Jumanly",
+      "description": "Legal information about the publisher and the host of the Jumanly platform."
+    },
+    "title": "Legal notice",
+    "intro": "The jumanly.io website and the Jumanly platform are published by The Growth Lab. This notice informs users of the identity of the parties involved.",
+    "publisher": {
+      "title": "1. Publisher",
+      "text": "Jumanly is a platform developed and published by The Growth Lab. Company name: [company name of The Growth Lab]. Legal form: [legal form]. Share capital: [amount, if applicable]. Registered office: [full address]. Country: [country of registration]. Registration number: [RCCM number or equivalent]. Tax identification number: [number]. E-mail: infojumanly@gmail.com."
+    },
+    "director": {
+      "title": "2. Publication director",
+      "text": "[Position of the publication director within The Growth Lab]. Contact: assistant@jumanly.io."
+    },
+    "host": {
+      "title": "3. Hosting",
+      "text": "The platform is hosted by: [name of the host], [legal form], [address], [country]. Data is stored in data centers located in: [country or region of the servers]."
+    },
+    "ip": {
+      "title": "4. Intellectual property",
+      "text": "The Jumanly brand, the logo, the slogan “Learn. Grow. Connect.”, the visual identity, the platform's specific code and the learning content are protected. Their ownership is established contractually by The Growth Lab [to be specified]. Any reproduction or use without prior written permission is prohibited. Content published by users (profiles, CVs, offers) remains their property, under the conditions set out in the terms and conditions."
+    },
+    "content": {
+      "title": "5. Content published by users",
+      "text": "Job offers are published under the responsibility of the recruiters and companies that post them. The Growth Lab moderates reported content and may remove any content that is clearly unlawful, fraudulent or contrary to the terms and conditions. To report content: the “Report” button or infojumanly@gmail.com."
+    },
+    "liability": {
+      "title": "6. Liability",
+      "text": "The Growth Lab does its utmost to ensure the accuracy of the information and the availability of the service, without being able to guarantee permanent availability. Artificial intelligence suggestions are provided for information only and are neither guaranteed professional advice nor a hiring decision."
+    },
+    "law": {
+      "title": "7. Applicable law",
+      "text": "This notice is governed by the law of [country of jurisdiction]."
+    },
+    "contact": {
+      "title": "8. Contact",
+      "text": "General questions: infojumanly@gmail.com. Professionals, partners and press: assistant@jumanly.io. Website: jumanly.io."
+    }
+  },
+  "privacy": {
+    "seo": {
+      "title": "Privacy policy · Jumanly",
+      "description": "How Jumanly processes your personal data, uses AI in an explainable way and respects your visibility choices."
+    },
+    "title": "Privacy policy",
+    "summary": {
+      "title": "The essentials in a few lines",
+      "item1": "You choose who sees your profile.",
+      "item2": "AI makes explained suggestions. It never makes a hiring decision.",
+      "item3": "Partner institutions only see aggregated statistics, never your CVs or your messages without your consent.",
+      "item4": "We do not sell your data.",
+      "item5": "You can export your data and delete your account at any time."
+    },
+    "controller": {
+      "title": "1. Data controller",
+      "text": "The data controller is The Growth Lab, [company name], [address], [country], publisher of Jumanly. For any question about your data: infojumanly@gmail.com. [Data protection officer or contact person: to be appointed, contact by e-mail only]."
+    },
+    "data": {
+      "title": "2. Data we process",
+      "account": "Account data: last name, first name, e-mail address, encrypted password, country, city, language, profile chosen at sign-up, consents.",
+      "profile": "Professional profile data: title, summary, photo (optional), experience, education, skills and levels, languages, availability, preferences (contract, location, remote work, desired salary), visibility setting.",
+      "documents": "Documents: CVs imported or created, letters, bio, portfolio, files sent to a recruiter.",
+      "learning": "Learning data: courses taken, progress, quiz and assessment results, certificates.",
+      "career": "Preparation data: answers to the career assessment, progress plan, interview simulations (text and, for voice simulations, audio recording and transcript).",
+      "applications": "Application data: offers viewed and saved, applications, stages, recruiters' notes and assessments, decision history.",
+      "messages": "Communications: messages, invitations, document requests, appointments.",
+      "org": "Recruiter and organization data: professional identity, position, organization, offers posted, members, roles, company verification information.",
+      "billing": "Payment data: plan, history, amounts, Mobile Money operator and number used (masked), last four digits of the card, billing information. Full card details and Mobile Money PINs are processed by our payment providers and are never stored by Jumanly.",
+      "technical": "Technical data: connection logs, IP address, device and browser type, cookies (see the cookie policy).",
+      "ai": "AI usage data: requests sent to the assistants, suggestions produced, suggestions applied or ignored, quota consumption.",
+      "sensitive": "We do not ask you for sensitive data (origin, religion, opinions, health, etc.). Avoid including it in your CV or your messages. [Possible processing of disability-related data for inclusion purposes: to be studied with the lawyer]"
+    },
+    "purposes": {
+      "title": "3. Why we process it",
+      "service": "Providing the service: creating and managing your account, your courses, your documents, your applications and your conversations. Basis: performance of the contract (terms and conditions).",
+      "matching": "Bringing talents and offers together: calculating a match, suggesting offers, courses or profiles, with an explanation. Basis: performance of the contract [and legitimate interest, to be confirmed].",
+      "recruitment": "Allowing recruiters to manage their hiring while respecting your visibility choices. Basis: performance of the contract.",
+      "billing": "Managing subscriptions, payments, invoices and sponsored licenses. Basis: performance of the contract and legal accounting obligations.",
+      "security": "Ensuring security, preventing fraud, fake recruiters and mass data extraction. Basis: legitimate interest.",
+      "improvement": "Improving the platform using usage statistics. Basis: legitimate interest, or consent for audience measurement cookies.",
+      "partners": "Producing aggregated reports for the institutions that fund licenses. Basis: [legitimate interest or performance of the contract with the partner, to be confirmed].",
+      "marketing": "Sending you tips and news by e-mail, if you have agreed to it. Basis: consent, which can be withdrawn at any time.",
+      "legal": "Meeting our legal obligations and responding to requests from authorized authorities."
+    },
+    "ai": {
+      "title": "4. Artificial intelligence and explainable matching",
+      "principle": "At Jumanly, AI recommends and people decide. AI tools help you write, correct, prepare and spot opportunities. The matching engine helps recruiters spot profiles. None of these recommendations ever automatically becomes a decision.",
+      "noAutomatedDecision": "No decision producing legal effects or significantly affecting you is made solely on the basis of automated processing. No application is accepted or rejected automatically by AI: a recruiter always decides.",
+      "explanation": "Each suggestion comes with a “Why?” link showing what it is based on: skills present or missing, experience, criteria set by the recruiter, preferences you have stated.",
+      "criteria": "The match score relies only on professional criteria: skills and their level, experience, education, languages, location and work preferences, explicit criteria of the offer. It never uses your plan, your photo, your age, your gender or any sensitive data.",
+      "rights": "At any time, you can ask for an explanation of a suggestion or a score, challenge a score you believe to be inaccurate, and ask for a person to step in. Write to infojumanly@gmail.com, naming the offer or suggestion concerned.",
+      "audit": "Matching calculations and suggestions are logged so that they can be checked and explained.",
+      "providers": "Some AI processing is carried out by technical providers acting on our behalf. [Contractual commitment not to use the data to train models: to be checked before publication] [List of AI providers, countries of processing and contractual safeguards to be completed]",
+      "free": "The simplified career assessment and the general tips of the Free plan rely on fixed rules and content, without calling on AI."
+    },
+    "visibility": {
+      "title": "5. Visibility of your profile",
+      "intro": "You choose who can see your profile, and you can change this setting at any time in your settings.",
+      "private": "Private: only the recruiters of the offers you apply to see your full profile.",
+      "recruiters": "Visible to recruiters: your profile, with your name, appears in the talent pool that subscribed recruiters can browse.",
+      "anonymous": "Anonymous: your profile appears in the talent pool without your name or your photo. They are only revealed if you accept an introduction request.",
+      "contact": "You must accept an introduction request before any conversation. Recruiters' searches and requests are limited by quotas to prevent mass data extraction.",
+      "application": "When you apply, the recruiter of the offer can access your profile, the attached documents and the conversations linked to that application.",
+      "public": "Some pages can be made public at your request: a shareable portfolio, the verification link of a certificate."
+    },
+    "recipients": {
+      "title": "6. Who can access your data",
+      "recruiters": "Recruiters and companies, within the limits described above and according to the roles assigned within their organization.",
+      "partners": "Partner institutions (Jumanly Partners) that fund your license only receive aggregated usage and impact reports: number of licenses activated, courses taken, certificates earned, applications sent, reported hires. They have no access to your CVs, messages or personal data, unless you give explicit and specific consent, which you can withdraw at any time.",
+      "team": "The authorized teams of The Growth Lab, for support and moderation. Support has no access to the content of your private messages.",
+      "processors": "Our technical subcontractors: hosting [name], e-mail delivery [name], Mobile Money and card payment [names], artificial intelligence [names], audience measurement [name]. They act on our instructions and are bound by confidentiality.",
+      "authorities": "Authorities, when the law requires it.",
+      "noSale": "We neither sell nor rent your personal data."
+    },
+    "transfers": {
+      "title": "7. Transfers outside your country",
+      "text": "Some providers may process data in other countries: [list of countries]. These transfers are governed by [contractual safeguards or applicable mechanisms, to be specified]."
+    },
+    "retention": {
+      "title": "8. Retention periods",
+      "intro": "We keep your data for as long as needed for the purposes described. Proposed periods, to be confirmed:",
+      "account": "Account and profile: as long as the account is active. Account inactive for [period to be defined]: notice by e-mail, then deletion or anonymization.",
+      "applications": "Applications and related conversations: [period to be defined] after the offer closes, unless you delete your account before.",
+      "recruiterNotes": "Recruiters' notes, assessments and decision history: [period to be defined] after the offer closes.",
+      "voice": "Audio recordings of interview simulations: [period to be defined, as short as possible]; the transcript and feedback remain available in your space.",
+      "certificates": "Certificates: kept as long as the account exists, so they can be verified.",
+      "billing": "Invoices and accounting data: [legal period of the country of jurisdiction].",
+      "logs": "Technical and security logs: [period to be defined].",
+      "ai": "Audit log of matching and AI suggestions: [period to be defined].",
+      "deletion": "When you delete your account, your data is deleted or anonymized within [period to be defined], except for data the law requires us to keep."
+    },
+    "rights": {
+      "title": "9. Your rights",
+      "list": "Depending on the applicable law, you have the following rights: access to your data; rectification; erasure; restriction of processing; objection; portability; withdrawal of your consent at any time; the right not to be subject to a decision based solely on automated processing; the right to obtain an explanation of an AI suggestion and to challenge it; [the right to set instructions for what happens to your data after your death, if applicable].",
+      "selfService": "Several of these rights can be exercised directly in “Settings”: editing your profile, changing your visibility, exporting your data, deleting your account, managing your e-mail preferences.",
+      "howTo": "For any other request, write to infojumanly@gmail.com. We may ask you to prove your identity. We reply within [legal period to be specified].",
+      "complaint": "If you believe your rights are not respected, you can contact the competent data protection authority: [name of the authority of the country of jurisdiction]."
+    },
+    "security": {
+      "title": "10. Security",
+      "text": "We protect your data with appropriate technical and organizational measures: encrypted communications, encrypted passwords, role-based access control, logging, backups. In the event of a data breach that puts you at risk, we inform you as provided for by law."
+    },
+    "minors": {
+      "title": "11. Minors",
+      "text": "Jumanly is reserved for people aged at least [minimum age to be defined]. [Access conditions for minors, for example for internships, to be defined with the lawyer]"
+    },
+    "changes": {
+      "title": "12. Changes",
+      "text": "We may change this policy. In the event of a significant change, we will let you know by e-mail or in the app before it takes effect."
+    },
+    "contact": {
+      "title": "13. Contact",
+      "text": "Personal data and general questions: infojumanly@gmail.com. Professionals and partners: assistant@jumanly.io."
+    }
+  },
+  "terms": {
+    "seo": {
+      "title": "Terms of use and sale · Jumanly",
+      "description": "Rules for using the Jumanly platform and the conditions of subscriptions, payments and sponsored licenses."
+    },
+    "title": "Terms of use and sale",
+    "intro": "These terms govern the use of the Jumanly platform, published by The Growth Lab ([company name], [address], [country]), and subscriptions to its paid plans. By creating an account, you accept them.",
+    "part1": {
+      "title": "Part 1 · Using the platform"
+    },
+    "definitions": {
+      "title": "1. Definitions",
+      "text": "“Platform”: the jumanly.io website and its services. “User”: anyone with an account. “Talent”: a user who uses the learning, career and application services. “Recruiter”: a user who posts offers and manages hiring, alone or within an organization. “Organization”: a company or body with a shared recruiter space. “Partner”: an institution that funds licenses for beneficiaries. “Plan”: a free or paid package defining the features and quotas available. “Quota”: the volume of use of a feature per period."
+    },
+    "services": {
+      "title": "2. Services offered",
+      "text": "Jumanly brings together five services: Learn (courses), Career (career tools), Jobs (offers and applications), Hire (recruitment management) and Connect (messages, invitations, appointments), supported by artificial intelligence tools. The features available depend on your plan, described on the Pricing page."
+    },
+    "account": {
+      "title": "3. Account",
+      "text": "You must provide accurate information and keep it up to date. Your account is personal; you are responsible for keeping your credentials confidential. A single account can belong to one or more organizations, with the roles they assign to you. Minimum age: [to be defined]."
+    },
+    "free": {
+      "title": "4. Free applications",
+      "text": "Creating an account and a profile, and applying, are free and unlimited, whatever the plan. No paid option is a condition for applying. Profiles on the free plan can be shortlisted and hired just like paying subscribers."
+    },
+    "ai": {
+      "title": "5. Artificial intelligence",
+      "text": "AI suggestions (corrections, recommendations, match scores) are provided as help. They come with an explanation and can be applied or ignored. They are not a hiring decision: only recruiters decide. AI can make mistakes; you remain responsible for the content you publish. You can ask for an explanation or challenge a suggestion at infojumanly@gmail.com."
+    },
+    "talentRules": {
+      "title": "6. Talents' commitments",
+      "text": "You agree to publish truthful information about your background, not to impersonate anyone and not to send falsified documents."
+    },
+    "recruiterRules": {
+      "title": "7. Commitments of recruiters and organizations",
+      "text": "You agree to post real, lawful and non-discriminatory offers; never to ask a candidate for money to apply or be hired; to use candidates' data only for the hiring concerned; to respect their visibility choices; not to extract, copy or resell talent pool data; and to comply with applicable labor and data protection law. The holder of the organization account is responsible for the actions of its members."
+    },
+    "partnerRules": {
+      "title": "8. Partners",
+      "text": "Partners access aggregated reports. They have no access to beneficiaries' CVs, messages or personal data without their explicit consent. The specific conditions of each partnership are set by contract."
+    },
+    "prohibited": {
+      "title": "9. Prohibited uses",
+      "text": "The following are prohibited in particular: unlawful, hateful, discriminatory or misleading content; fraudulent offers; harassment; sending unsolicited messages in bulk; automated data extraction (bots, scraping); bypassing quotas or security measures; reselling access."
+    },
+    "moderation": {
+      "title": "10. Moderation, suspension and reporting",
+      "text": "Any user can report an offer or a message. The Growth Lab may remove content, suspend or close an account in the event of a breach, after informing the user except in an emergency or where required by law. The user can challenge this by e-mail at infojumanly@gmail.com."
+    },
+    "content": {
+      "title": "11. Content and intellectual property",
+      "text": "You remain the owner of the content you publish. You grant The Growth Lab a non-exclusive license, limited to what is needed for the service to work (hosting, display to authorized recipients, processing by AI tools at your request). The courses, the Jumanly brand and software remain the property of their owners; courses are for personal use only."
+    },
+    "certificates": {
+      "title": "12. Certificates",
+      "text": "Certificates issued by Jumanly Learn certify the successful completion of a course on the platform. They are not a degree or a state certification, unless stated otherwise."
+    },
+    "availability": {
+      "title": "13. Availability and liability",
+      "text": "The Growth Lab strives to provide continuous access to the service, without guaranteeing permanent availability. Jumanly is not a party to employment relationships between talents and employers and does not guarantee getting a job or being hired. [Limitations of liability to be drafted by the lawyer]"
+    },
+    "data": {
+      "title": "14. Personal data",
+      "text": "The processing of your data is described in the privacy policy."
+    },
+    "closure": {
+      "title": "15. Closing your account",
+      "text": "You can delete your account at any time from your settings. A current paid plan is not refunded merely because the account is deleted, unless otherwise provided in article 22 [to be defined]."
+    },
+    "part2": {
+      "title": "Part 2 · Subscriptions, payments and licenses"
+    },
+    "plans": {
+      "title": "16. Plans and prices",
+      "text": "The plans, their features, their quotas and their prices are described on the Pricing page, which forms part of these terms. Prices are in US dollars (USD), [including or excluding taxes: to be specified according to applicable tax rules]. The amount may be converted into your local currency by the operator or the bank at payment time; any conversion or operator fees [are paid by the user / are included: to be defined]. The Company Premium plan and Partners licenses are subject to a specific quote and contract."
+    },
+    "quotas": {
+      "title": "17. Quotas",
+      "text": "Some features are subject to quotas per period, visible in your dashboard. The period is one month from the start date of the subscription. You are notified at 80% and then at 100%. Once a quota is reached, the feature is temporarily limited until renewal, unless you buy an option or change plans. Quotas may change; any reduction applies to the next period, after notice. Quotas never apply to applying."
+    },
+    "payment": {
+      "title": "18. Payment",
+      "text": "Payment is made by Mobile Money or bank card, through approved payment providers. Subscriptions are monthly and payable in advance. With Mobile Money, the subscription is prepaid for one period and is not renewed automatically. [Automatic renewal by card: to be defined with the provider] A receipt and an invoice are made available after each payment."
+    },
+    "renewal": {
+      "title": "19. Renewal, grace period and return to the free plan",
+      "text": "We remind you of the due date 7 days and 3 days before, and on the day itself. Without renewal, your plan stays active for a grace period of {graceDays} days. At the end of this period, your account automatically returns to the free plan of its family (Free or RH Free). Your data is kept; only the paid features are paused. For an organization, offers and members beyond the limits of the free plan are paused, not deleted."
+    },
+    "change": {
+      "title": "20. Changing plans",
+      "text": "Upgrade: it is immediate. The time left on the previous plan is credited according to the following rule: [pro rata rule to be defined]. Downgrade: it takes effect at the end of the period already paid, without a refund of the current period [to be confirmed]."
+    },
+    "cancellation": {
+      "title": "21. Cancellation",
+      "text": "You can cancel at any time from “My subscription”. The plan stays active until the end of the paid period, then the account returns to the free plan. [Conditions for termination by The Growth Lab and suspension for breach: to be defined] [Termination conditions of Company Premium and Partners contracts: according to the contract]"
+    },
+    "refund": {
+      "title": "22. Right of withdrawal and refunds",
+      "text": "[Existence and length of a right of withdrawal under applicable law: to be defined] [Refund cases (double payment, payment debited without activation, prolonged unavailability of the service) and terms: to be defined] If a payment is debited without your plan being activated, write to infojumanly@gmail.com with the payment reference: we will sort it out."
+    },
+    "sponsored": {
+      "title": "23. Sponsored licenses (Jumanly Partners)",
+      "text": "A sponsored license gives free access to a Starter, Pro or Premium plan for the period set by the partner. It is activated with a single-use, personal code or invitation link. If you already have a lower paid plan, the license applies in its place [rule for the period already paid: to be defined]. If your plan is higher, the license is put on hold. When the license ends, your account returns to the free plan, without losing data."
+    },
+    "addons": {
+      "title": "24. Additional options",
+      "text": "Some services may be offered separately (for example extra AI or simulation credits). Their price and conditions are shown before any purchase. No option is a condition for free access to applications."
+    },
+    "priceChange": {
+      "title": "25. Changes to prices and plans",
+      "text": "The Growth Lab may change its prices and plans. Any change is notified to you at least [period to be defined] before it applies, and does not affect the period already paid."
+    },
+    "invoices": {
+      "title": "26. Invoices",
+      "text": "Invoices are available in “My subscription”. Organizations can enter their company name, address and tax number."
+    },
+    "part3": {
+      "title": "Part 3 · Final provisions"
+    },
+    "modification": {
+      "title": "27. Changes to the terms",
+      "text": "We may change these terms. Significant changes are notified to you by e-mail or in the app before they take effect."
+    },
+    "law": {
+      "title": "28. Applicable law and disputes",
+      "text": "These terms are governed by the law of [country of jurisdiction]. In the event of a dispute, we invite you to write to us first at infojumanly@gmail.com to look for an amicable solution. Failing that, the dispute will be brought before [competent court], subject to the protective rules applicable to consumers."
+    },
+    "contact": {
+      "title": "29. Contact",
+      "text": "General questions and billing for individuals: infojumanly@gmail.com. Organizations, quotes and partners: assistant@jumanly.io."
+    }
+  },
+  "cookiesPolicy": {
+    "seo": {
+      "title": "Cookie policy · Jumanly",
+      "description": "Which cookies Jumanly uses, why, and how to manage your choices."
+    },
+    "title": "Cookie policy",
+    "what": {
+      "title": "1. What is a cookie?",
+      "text": "A cookie is a small file placed on your device when you visit a website. It lets the site remember information, such as your sign-in or your preferences."
+    },
+    "categories": {
+      "title": "2. The cookies we use"
+    },
+    "necessary": {
+      "title": "Necessary cookies",
+      "text": "Essential for the site to work: keeping you signed in, security and fraud prevention, remembering your cookie and language choices. They cannot be turned off."
+    },
+    "analytics": {
+      "title": "Audience measurement cookies",
+      "text": "They help us understand how the site is used so we can improve it. They are only set with your consent. Tool used: [name of the audience measurement tool]."
+    },
+    "preferences": {
+      "title": "Preference cookies",
+      "text": "They remember optional settings, such as your search filters. They are only set with your consent."
+    },
+    "noAds": "Jumanly does not use advertising cookies. [To be confirmed before publication]",
+    "table": {
+      "title": "3. Detailed list",
+      "colName": "Name",
+      "colPurpose": "Purpose",
+      "colCategory": "Category",
+      "colDuration": "Duration",
+      "colProvider": "Set by",
+      "content": "[Table to generate from the cookies actually set in production]"
+    },
+    "duration": {
+      "title": "4. Retention period",
+      "text": "Your choices are kept for [period to be defined]. Cookies subject to consent last at most [period to be defined]. We ask for your consent again at the end of this period."
+    },
+    "manage": {
+      "title": "5. Managing your choices",
+      "text": "You can change your choices at any time with the “Manage cookies” link at the bottom of every page, or in your browser settings. Refusing optional cookies does not prevent you from using Jumanly.",
+      "cta": "Manage cookies"
+    },
+    "contact": {
+      "title": "6. Contact",
+      "text": "For any question: infojumanly@gmail.com."
+    }
+  },
+  "cookiesTable": {
+    "consent": {
+      "name": "jm_consent",
+      "purpose": "Remember your cookie choices",
+      "category": "Necessary",
+      "duration": "6 months",
+      "provider": "Jumanly"
+    }
+  },
+  "common": {
+    "brand": "Jumanly",
+    "slogan": "Learn. Grow. Connect.",
+    "signature": "A platform developed by The Growth Lab",
+    "currency": "USD",
+    "perMonth": "/month",
+    "priceMonthly": "{price} USD/month",
+    "free": "Free",
+    "onQuote": "On quote",
+    "included": "Included",
+    "notIncluded": "Not included",
+    "recommended": "Recommended",
+    "new": "New",
+    "seeMore": "See more",
+    "seeAll": "See all",
+    "learnMore": "Learn more",
+    "back": "Back",
+    "close": "Close",
+    "rail": {
+      "previous": "Previous tabs",
+      "next": "Next tabs"
+    },
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "send": "Send",
+    "retry": "Try again",
+    "loading": "Loading…",
+    "required": "Required",
+    "optional": "Optional",
+    "why": "Why?",
+    "verifiedCompany": "Verified company",
+    "applyFree": "Apply for free",
+    "seePlans": "See the plans",
+    "requiredPlan": "Plan required: {plan}",
+    "freeApplications": "Applying is always free",
+    "aiRecommendsHumanDecides": "AI recommends, people decide.",
+    "error": {
+      "generic": "Something went wrong. Please try again in a moment.",
+      "network": "Unable to connect. Check your Internet access, then try again.",
+      "notFound": {
+        "title": "Page not found",
+        "text": "This page does not exist or has been moved.",
+        "cta": "Back to home"
+      },
+      "server": {
+        "title": "The service is temporarily unavailable",
+        "text": "Our teams have been notified. Please try again in a few minutes."
+      }
+    },
+    "seo": {
+      "titleSuffix": "· Jumanly",
+      "publisher": "The Growth Lab"
+    },
+    "alt": {
+      "logo": "Jumanly, Learn. Grow. Connect.",
+      "aiOrb": "Artificial intelligence suggestion"
+    }
+  },
+  "nav": {
+    "skipToContent": "Skip to main content",
+    "home": "Home",
+    "talents": "Talents",
+    "recruiters": "Recruiters",
+    "companies": "Companies",
+    "partners": "Partners",
+    "trainings": "Courses",
+    "jobs": "Jobs",
+    "pricing": "Pricing",
+    "about": "About",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "group": {
+      "solutions": "Solutions",
+      "discover": "Discover"
+    },
+    "signup": "Create an account",
+    "goToApp": "My space",
+    "menu": {
+      "open": "Open the menu",
+      "close": "Close the menu",
+      "label": "Main menu"
+    },
+    "logo": {
+      "label": "Jumanly, back to home"
+    },
+    "language": {
+      "label": "Site language",
+      "fr": "Français",
+      "en": "English",
+      "frShort": "FR",
+      "enShort": "EN"
+    },
+    "login": "Sign in"
+  },
+  "footer": {
+    "tagline": "Learn, build your career path and meet the right opportunities, on a single platform.",
+    "slogan": "Learn. Grow. Connect.",
+    "signature": "A platform developed by The Growth Lab",
+    "col": {
+      "solutions": {
+        "text": "Solutions",
+        "talents": "Jumanly for Talents",
+        "rh": "Jumanly for RH",
+        "companies": "Jumanly for Companies",
+        "partners": "Jumanly Partners"
+      },
+      "discover": {
+        "text": "Discover",
+        "trainings": "Courses",
+        "jobs": "Jobs",
+        "pricing": "Pricing",
+        "about": "About",
+        "faq": "Frequently asked questions"
+      },
+      "contact": {
+        "text": "Write to us",
+        "proLabel": "Professionals and partners",
+        "pro": "assistant@jumanly.io",
+        "generalLabel": "General questions",
+        "general": "infojumanly@gmail.com",
+        "site": "jumanly.io",
+        "form": "Contact form"
+      }
+    },
+    "legal": {
+      "notice": "Legal notice",
+      "privacy": "Privacy",
+      "terms": "Terms and conditions",
+      "cookies": "Cookies",
+      "cookieSettings": "Manage cookies"
+    },
+    "payments": "Pay with Mobile Money or bank card. Prices in USD.",
+    "copyright": "© {year} Jumanly. All rights reserved.",
+    "language": "Language: English",
+    "big": "Learn. Grow. Connect."
+  },
+  "cookies": {
+    "banner": {
+      "title": "Your privacy matters",
+      "text": "Jumanly uses cookies that the site needs to work. With your consent, we also use audience measurement cookies to improve the platform. You can change your mind at any time.",
+      "acceptAll": "Accept all",
+      "rejectAll": "Reject all",
+      "customize": "Customize",
+      "policyLink": "Cookie policy"
+    },
+    "modal": {
+      "title": "Cookie settings",
+      "intro": "Choose the categories you accept. Necessary cookies cannot be turned off, because the site would not work without them.",
+      "necessary": {
+        "title": "Necessary",
+        "text": "Sign-in, security, remembering your cookie and language choices.",
+        "status": "Always on"
+      },
+      "analytics": {
+        "title": "Audience measurement",
+        "text": "Anonymous traffic statistics to understand which pages are useful and improve the site."
+      },
+      "preferences": {
+        "title": "Preferences",
+        "text": "Remembering optional settings, such as your search filters."
+      },
+      "toggleOn": "On",
+      "toggleOff": "Off",
+      "save": "Save my choices",
+      "acceptAll": "Accept all",
+      "rejectAll": "Reject all"
+    },
+    "toast": {
+      "saved": "Your cookie choices have been saved."
+    }
+  },
+  "home": {
+    "seo": {
+      "title": "Jumanly · Learn, grow, hire. Learn. Grow. Connect.",
+      "description": "Courses, career tools, job offers and recruitment on a single platform. Applying is always free. Pay with Mobile Money or card.",
+      "ogTitle": "Jumanly · Learn. Grow. Connect.",
+      "ogDescription": "The platform that connects learning, careers and recruitment. Start for free.",
+      "ogImageAlt": "Jumanly logo and the slogan Learn. Grow. Connect."
+    },
+    "hero": {
+      "eyebrow": "Learning · Career · Recruitment",
+      "title": "Learn. Grow. Connect.",
+      "subtitle": "Jumanly brings together learning, career development, job offers and recruitment on a single platform. Build your skills, create a profile that reflects who you are and meet the employers who need what you can do.",
+      "ctaPrimary": "Create my free account",
+      "ctaSecondary": "I'm hiring",
+      "reassurance1": "Free sign-up",
+      "reassurance2": "Applying is always free",
+      "reassurance3": "Mobile Money and card",
+      "imageAlt": "Preview of the Jumanly dashboard on a computer and a phone: course progress, ongoing applications and matching job offers.",
+      "visual": {
+        "badge": "Certificate earned",
+        "matchTitle": "Junior data analyst",
+        "matchText": "87% match · Why?",
+        "matchShort": "87% match",
+        "notification": "New matching offer",
+        "notificationText": "Internship · Digital marketing"
+      }
+    },
+    "stats": {
+      "label": "Jumanly in a few figures",
+      "free": {
+        "value": "0 USD",
+        "label": "to apply, whatever your plan"
+      },
+      "modules": {
+        "value": "5",
+        "label": "services connected to your profile"
+      },
+      "why": {
+        "value": "100%",
+        "label": "of suggestions come with their “Why?”"
+      },
+      "payment": {
+        "value": "2",
+        "label": "ways to pay: Mobile Money and card"
+      }
+    },
+    "audiences": {
+      "title": "One platform, three ways to move forward",
+      "subtitle": "Whether you are looking for a job or hiring on your own or as a team, Jumanly adapts to your situation.",
+      "eyebrow": "Who is it for?",
+      "talents": {
+        "label": "Jumanly for Talents",
+        "title": "You are building your career",
+        "text": "Students, recent graduates, job seekers or professionals: build your skills, prepare your applications and apply for free.",
+        "cta": "Discover the talent space"
+      },
+      "rh": {
+        "label": "Jumanly for RH",
+        "title": "You hire on your own or in a small team",
+        "text": "Independent recruiters, consultants and HR managers: post your offers, sort applications and talk with candidates in a clear tool.",
+        "cta": "Discover the recruiter space"
+      },
+      "companies": {
+        "label": "Jumanly for Companies",
+        "title": "You hire as a team",
+        "text": "SMEs, large companies and groups: share applications between recruiters and managers, organize your teams and steer your hiring.",
+        "cta": "Discover the company space"
+      }
+    },
+    "journey": {
+      "title": "From learning to hiring, one continuous path",
+      "subtitle": "Each step feeds the next. What you learn enriches your profile, and your profile brings you closer to the right offers.",
+      "eyebrow": "The path",
+      "step1": {
+        "number": "1",
+        "title": "Learn",
+        "text": "Take video courses, do the exercises and earn certificates to showcase on your profile."
+      },
+      "step2": {
+        "number": "2",
+        "title": "Build your profile",
+        "text": "Take your career assessment, create your CV and prepare your applications with clear advice."
+      },
+      "step3": {
+        "number": "3",
+        "title": "Apply",
+        "text": "Find jobs, internships and assignments, apply for free and follow each application step by step."
+      },
+      "step4": {
+        "number": "4",
+        "title": "Connect and get hired",
+        "text": "Talk with recruiters, receive invitations and organize your interviews in one place."
+      }
+    },
+    "modules": {
+      "title": "Five connected services",
+      "subtitle": "Jumanly is not a pile of separate tools. Each service is connected to your profile, your offers and your applications.",
+      "eyebrow": "The modules",
+      "learn": {
+        "name": "Jumanly Learn",
+        "text": "Video courses, learning materials, exercises, assessments and certificates.",
+        "imageAlt": "Jumanly Learn course catalog"
+      },
+      "career": {
+        "name": "Jumanly Career",
+        "text": "Career assessment, CV, cover letters, LinkedIn preparation, progress plan and interview simulations.",
+        "imageAlt": "CV editor with suggestions from the AI coach"
+      },
+      "jobs": {
+        "name": "Jumanly Jobs",
+        "text": "Jobs, internships and assignments: search, save, apply for free and follow your applications.",
+        "imageAlt": "Job search with filters"
+      },
+      "hire": {
+        "name": "Jumanly Hire",
+        "text": "Job posting, talent search, CV analysis and a hiring pipeline for recruiters and companies.",
+        "imageAlt": "Hiring pipeline organized in stages"
+      },
+      "connect": {
+        "name": "Jumanly Connect",
+        "text": "Messages, invitations, document requests, appointments and notifications between candidates and recruiters.",
+        "imageAlt": "Messages between a candidate and a recruiter"
+      },
+      "intelligence": {
+        "name": "Jumanly Intelligence",
+        "text": "Working for every module: document analysis, recommendations and explainable matching. Every suggestion tells you why."
+      }
+    },
+    "trainings": {
+      "title": "Courses that make you more employable",
+      "subtitle": "Start with a selection of free courses, then unlock more complete learning paths depending on your plan.",
+      "eyebrow": "Jumanly Learn",
+      "cta": "See all courses",
+      "empty": "The first courses are coming soon. Create your account to be notified when they open."
+    },
+    "jobs": {
+      "title": "The latest opportunities",
+      "subtitle": "Jobs, internships and assignments posted by recruiters and companies. Applying is always free.",
+      "eyebrow": "Jumanly Jobs",
+      "cta": "See all offers",
+      "empty": "The first offers will be posted soon. Create your account to prepare your profile now.",
+      "recruiterCta": "Hiring? Post an offer for free"
+    },
+    "pricing": {
+      "title": "Start for free, grow at your own pace",
+      "subtitle": "Each family of plans starts with a free plan. Paid plans add tools, never a condition for applying.",
+      "eyebrow": "Plans",
+      "talents": {
+        "name": "Jumanly for Talents",
+        "price": "From 0 to {price} USD/month",
+        "text": "Free, Starter, Pro and Premium: from discovery to intensive preparation."
+      },
+      "rh": {
+        "name": "Jumanly for RH",
+        "price": "From 0 to {price} USD/month",
+        "text": "RH Free, RH Pro and RH Premium: to hire on your own or in a small team."
+      },
+      "companies": {
+        "name": "Jumanly for Companies",
+        "price": "From {price} USD/month",
+        "text": "Company, Company Plus and Company Premium: for organizations with several recruiters."
+      },
+      "partners": {
+        "name": "Jumanly Partners",
+        "price": "By contract",
+        "text": "Licenses funded by an institution for a group of beneficiaries."
+      },
+      "payment": "Pay with Mobile Money or bank card. Prices in USD.",
+      "cta": "Compare the plans"
+    },
+    "trust": {
+      "title": "A platform that respects you",
+      "subtitle": "Our commitments are built into the way Jumanly works.",
+      "eyebrow": "Our commitments",
+      "free": {
+        "title": "Applying is always free",
+        "text": "Whatever your plan, applying costs nothing. Free profiles are hired just like subscribers."
+      },
+      "ai": {
+        "title": "AI recommends, people decide",
+        "text": "Matching brings needs and skills together, but no hiring decision is ever made automatically. Every suggestion explains its “Why?”."
+      },
+      "privacy": {
+        "title": "Your privacy respected",
+        "text": "You choose who sees your profile. A recruiter only sees your full profile if you apply to their offer or have made it visible."
+      },
+      "payment": {
+        "title": "Payment that fits",
+        "text": "Pay with Mobile Money or bank card. No commitment: you can go back to the free plan without losing your data."
+      }
+    },
+    "testimonials": {
+      "title": "They use Jumanly",
+      "item1": "[Testimonial to collect during the beta: talent]",
+      "item2": "[Testimonial to collect during the beta: recruiter]",
+      "item3": "[Testimonial to collect during the beta: company]",
+      "partnersTitle": "They support Jumanly",
+      "partnersLogos": "[Partner logos to provide, with their written consent]"
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "eyebrow": "FAQ",
+      "q1": "Is Jumanly free?",
+      "a1": "Yes, you can create your account, build your profile, browse offers and apply for free. Paid plans add courses and preparation tools.",
+      "q2": "Do I have to pay to apply for an offer?",
+      "a2": "No, never. Applying is free for everyone, whatever the plan.",
+      "q3": "How does the artificial intelligence work?",
+      "a3": "AI makes suggestions and always explains why. It never makes decisions for you or for recruiters.",
+      "q4": "How can I pay?",
+      "a4": "With Mobile Money or a bank card. Prices are shown in USD.",
+      "cta": "See all questions"
+    },
+    "finalCta": {
+      "title": "Your next step starts here",
+      "text": "Create your free account in a few minutes. You will then choose the plan that suits you.",
+      "primary": "Create my free account",
+      "secondary": "Sign in"
+    }
+  },
+  "about": {
+    "seo": {
+      "title": "About Jumanly · Vision, mission and values",
+      "description": "Jumanly connects learning, careers and recruitment to bring talents and employers together. A platform developed by The Growth Lab."
+    },
+    "hero": {
+      "eyebrow": "About",
+      "title": "Connecting skills with opportunities",
+      "text": "Jumanly is a digital platform that brings together professional training, career development, discovering opportunities and managing recruitment in a single ecosystem.",
+      "imageAlt": "Talents and recruiters connected by the Jumanly platform",
+      "chips": {
+        "learn": "Learn",
+        "exchange": "Connect",
+        "recruit": "Hire"
+      }
+    },
+    "vision": {
+      "title": "Our vision",
+      "text": "To build a leading African platform that makes it easier to develop skills, progress professionally and bring talents and employers together."
+    },
+    "mission": {
+      "title": "Our mission",
+      "text": "To support people as they build their professional path and help organizations identify, assess and hire the skills they need more effectively."
+    },
+    "positioning": {
+      "title": "Where three worlds meet",
+      "eyebrow": "Positioning",
+      "intro": "Our ambition is not to offer several services on one website, but to connect them into one continuous professional experience.",
+      "edtech": {
+        "title": "EdTech",
+        "text": "Digital learning and skills development."
+      },
+      "careertech": {
+        "title": "CareerTech",
+        "text": "Career support, building a professional profile and getting ready for opportunities."
+      },
+      "hrtech": {
+        "title": "HRTech",
+        "text": "Finding talent, automating some HR tasks and managing recruitment."
+      }
+    },
+    "continuity": {
+      "title": "A continuous experience",
+      "text": "A talent can learn, enrich their profile, improve their application and apply. An employer can find that profile, review their qualifications, talk with the candidate and organize the hiring. Everything happens in one place."
+    },
+    "values": {
+      "title": "Our values",
+      "eyebrow": "What guides us",
+      "access": {
+        "title": "Accessibility",
+        "text": "Everyone should be able to build a professional presence, even without the means to pay. That is why the account, the profile and applications are free."
+      },
+      "fairness": {
+        "title": "Fairness",
+        "text": "Free profiles are shortlisted and hired just like paying subscribers. The plan gives no priority in applications."
+      },
+      "transparency": {
+        "title": "Transparency",
+        "text": "Every AI suggestion explains its “Why?”. Quotas are visible and prices are clearly displayed."
+      },
+      "humanDecision": {
+        "title": "Human decision",
+        "text": "AI recommends, people decide. No recommendation ever automatically becomes a hiring decision."
+      },
+      "privacy": {
+        "title": "Respect for privacy",
+        "text": "You choose how visible your profile is. Institutional partners only receive aggregated data."
+      }
+    },
+    "growthlab": {
+      "title": "An initiative of The Growth Lab",
+      "eyebrow": "The Growth Lab",
+      "text": "Jumanly is developed and run by The Growth Lab, which leads the product strategy, the organization of content, the commercial policy, partnership management and the supervision of the platform.",
+      "signature": "A platform developed by The Growth Lab"
+    },
+    "launch": {
+      "title": "A platform built with its users",
+      "text": "Jumanly opens in stages: a closed test, then a community beta with talents and employers, before opening gradually to the public. Feedback from the first users shapes every version.",
+      "eyebrow": "Launch",
+      "step1": "Closed test",
+      "step2": "Community beta",
+      "step3": "Gradual opening to the public"
+    },
+    "cta": {
+      "title": "Want to join us or work with us?",
+      "primary": "Create my free account",
+      "secondary": "Write to us"
+    }
+  },
+  "talents": {
+    "seo": {
+      "title": "Jumanly for Talents · Learn, prepare your applications, apply for free",
+      "description": "Courses, CV, LinkedIn preparation, interview simulations and job offers. Start for free, applying is always free. Plans from {price} USD/month."
+    },
+    "hero": {
+      "eyebrow": "Jumanly for Talents",
+      "title": "From learning to getting hired",
+      "text": "Learn, build a profile that stands out, apply and follow every application. Four plans to move forward at your own pace.",
+      "cta": "Create my free account",
+      "secondary": "See the plans",
+      "badge": "Applying is always free",
+      "imageAlt": "A talent's dashboard on a phone, with their progress and applications",
+      "visual": {
+        "badge": "Certificate earned",
+        "matchTitle": "Junior data analyst",
+        "matchText": "87% match · Why?"
+      }
+    },
+    "intro": {
+      "title": "One account for your whole journey",
+      "text": "A single account connects your courses, your application documents and the offers. Each step feeds the next, and the AI always explains why it gives you advice.",
+      "eyebrow": "One account"
+    },
+    "learn": {
+      "label": "Learn",
+      "title": "Learn",
+      "text": "Video courses, materials, exercises, assessments and certificates to showcase on your profile. The first courses cover employability, professional skills, positioning and getting ready for recruitment.",
+      "imageAlt": "Course player with video, progress and quiz"
+    },
+    "career": {
+      "label": "Career",
+      "title": "Build your profile",
+      "text": "Career assessment, CV, cover letters, bio, LinkedIn preparation, progress plan and interview simulations. The AI coach justifies every suggestion, and you choose whether to apply it.",
+      "imageAlt": "CV editor with a suggestion from the AI coach and its explanation",
+      "decide": "Apply or ignore: you decide"
+    },
+    "jobs": {
+      "label": "Jobs",
+      "title": "Apply for free",
+      "text": "Jobs, internships and assignments. Check the criteria, save the offers that interest you, apply and follow each application step by step.",
+      "imageAlt": "Offer details with a match score and a Why link"
+    },
+    "connect": {
+      "label": "Connect",
+      "title": "Talk with recruiters",
+      "text": "Messages linked to your applications, invitations, document requests and interview appointments, all in one place.",
+      "imageAlt": "Conversation between a talent and a recruiter"
+    },
+    "guarantees": {
+      "title": "Our guarantees",
+      "item1": "Free applications, whatever the plan.",
+      "item2": "Free profiles hired just like subscribers.",
+      "item3": "Your privacy choices are respected.",
+      "item4": "License funded by a partner? Activate it with your code.",
+      "eyebrow": "Commitments"
+    },
+    "privacy": {
+      "title": "You decide who sees you",
+      "text": "Your profile can stay private, be visible to recruiters, or appear anonymously until you accept an introduction. You can change this setting at any time."
+    },
+    "plans": {
+      "title": "Four plans, one journey",
+      "text": "Start for free, then move to the plan that matches your goal. Each plan includes everything in the previous one.",
+      "note": "The plan cards use the `pricing.talent.*` texts of file 05.",
+      "cta": "Compare the plans in detail",
+      "eyebrow": "Plans",
+      "payment": "Pay with Mobile Money or bank card. Prices in USD."
+    },
+    "partners": {
+      "title": "Your license offered by a partner",
+      "text": "University, bank, foundation or employer: with Jumanly Partners, an institution can fund your plan. If you have received a code, activate it in a few seconds.",
+      "cta": "Activate a code"
+    },
+    "finalCta": {
+      "title": "Ready to take the first step?",
+      "text": "Create your free account, take your career assessment and discover the offers that suit you.",
+      "primary": "Create my free account"
+    }
+  },
+  "recruiters": {
+    "seo": {
+      "title": "Jumanly for RH · A simple ATS and explainable matching for hiring",
+      "description": "Post your offers, analyze CVs, shortlist and talk with candidates. Free recruiter account to get started, RH plans from {price} USD/month."
+    },
+    "hero": {
+      "eyebrow": "Jumanly for RH",
+      "title": "Hire with method, even on your own",
+      "text": "For independent recruiters, HR consultants, HR managers and small teams: post, sort, talk and decide, without a complex setup.",
+      "cta": "Create my free recruiter account",
+      "secondary": "See the RH plans",
+      "badge": "A free recruiter account to get started",
+      "imageAlt": "Jumanly Hire pipeline with applications sorted by stage",
+      "visual": {
+        "title": "3 suggested profiles",
+        "text": "Why? · Apply or ignore"
+      }
+    },
+    "intro": {
+      "text": "Jumanly Hire brings your offers, applications and conversations together in an ATS sized for you. Matching brings needs and qualifications together. You keep the decision."
+    },
+    "benefits": {
+      "title": "All your hiring in one place",
+      "pipeline": {
+        "title": "A clear pipeline",
+        "text": "Each application moves from stage to stage, from receipt to offer."
+      },
+      "cv": {
+        "title": "Comparable CVs",
+        "text": "Structured CV analysis, shortlisting and ranking of applications."
+      },
+      "matching": {
+        "title": "Explainable matching",
+        "text": "Profile suggestions that tell you why. AI recommends, people decide."
+      },
+      "messaging": {
+        "title": "Tracked conversations",
+        "text": "Messages linked to applications, appointments and interviews in one place."
+      },
+      "eyebrow": "Jumanly Hire"
+    },
+    "matching": {
+      "title": "Matching, explained",
+      "text": "For each offer, you set the required and preferred skills, their weight and your knockout criteria. Jumanly calculates a match and shows what supports it: skills present, skills missing, criteria met. You see the reasoning and stay in charge of the choice.",
+      "point1": "Explicit criteria, set by you.",
+      "point2": "A “Why?” on every score.",
+      "point3": "No application ever rejected automatically by AI.",
+      "imageAlt": "Application card with a match score and its explanation",
+      "eyebrow": "Jumanly Intelligence",
+      "link": "How matching works"
+    },
+    "guarantees": {
+      "title": "Responsible hiring",
+      "item1": "Access to candidates governed by their privacy choices.",
+      "item2": "Search and contact quotas that prevent mass data extraction.",
+      "item3": "Hiring statistics at every stage.",
+      "item4": "Move up to Jumanly for Companies at any time.",
+      "eyebrow": "Our commitments"
+    },
+    "plans": {
+      "title": "Three plans to hire better",
+      "text": "Start with a free account and one active offer, then add users, offers and tools as your needs grow.",
+      "cta": "Compare the RH plans",
+      "eyebrow": "RH plans",
+      "payment": "Pay with Mobile Money or bank card. Prices in USD."
+    },
+    "upsell": {
+      "title": "More than 3 recruiters or several departments?",
+      "text": "Jumanly for Companies adds teams, permissions and consolidated reports, from {price} USD per month.",
+      "cta": "Discover Jumanly for Companies",
+      "initials": "MK, AD, FS, JB",
+      "more": "+8"
+    },
+    "finalCta": {
+      "title": "Post your first offer for free",
+      "text": "A recruiter account, one active offer, receiving applications and messages: all of this is included in RH Free.",
+      "primary": "Create my recruiter account"
+    },
+    "example": {
+      "initials": "GM",
+      "name": "Grâce Mbuyi",
+      "role": "Junior data analyst · Kinshasa",
+      "intro": "Weighted sum of the eight criteria of your offer, using the weights you set.",
+      "missing": "Missing skills: Power BI (preferred)",
+      "shortlist": "Shortlist",
+      "message": "Send a message"
+    }
+  },
+  "companies": {
+    "seo": {
+      "title": "Jumanly for Companies · Hire as a team and steer your recruitment",
+      "description": "Verified company profile, shared ATS, teams, permissions and consolidated reports. Company plans from {price} USD/month, Company Premium on quote."
+    },
+    "hero": {
+      "eyebrow": "Jumanly for Companies",
+      "title": "Hire together, steer at a glance",
+      "text": "A shared hiring environment for SMEs, large companies and groups: several recruiters, several departments, one common view.",
+      "cta": "Create my company account",
+      "secondary": "Request a quote",
+      "badge": "Start for free with RH Free",
+      "imageAlt": "Hiring dashboard shared between several recruiters of a company",
+      "visual": {
+        "orgInitials": "BF",
+        "orgName": "Baobab Fintech",
+        "team": "4 recruiters on this offer",
+        "initials": "MK, AD, JB, FS"
+      }
+    },
+    "intro": {
+      "text": "The difference with the RH plans lies in the number of team members, organization management and steering tools. Recruiters and managers work on the same applications, each with their own rights."
+    },
+    "benefits": {
+      "title": "Hiring organized at the scale of your organization",
+      "verified": {
+        "title": "A verified company profile",
+        "text": "A recognizable employer brand, marked “Verified company” on every offer."
+      },
+      "teams": {
+        "title": "Teams and permissions",
+        "text": "Offers assigned to managers, rights by role, departments and subsidiaries."
+      },
+      "ats": {
+        "title": "A shared ATS",
+        "text": "Collaborative management of applications, interviews and scorecards."
+      },
+      "reports": {
+        "title": "Consolidated reports",
+        "text": "Dashboards by team and department, authorized exportable reports."
+      },
+      "eyebrow": "Why Company"
+    },
+    "roles": {
+      "title": "Everyone has a role",
+      "text": "Owner, administrator, recruiter, manager or viewer: give each team member the rights they need, nothing more. The roles available depend on your plan.",
+      "eyebrow": "Roles",
+      "chip": {
+        "owner": "Owner",
+        "admin": "Administrator",
+        "recruiter": "Recruiter",
+        "manager": "Manager",
+        "viewer": "Viewer"
+      },
+      "example": {
+        "members": "Organization members",
+        "member1": {
+          "name": "Moussa Kanté",
+          "team": "HR department"
+        },
+        "member2": {
+          "name": "Aminata Diop",
+          "team": "HR department"
+        },
+        "member3": {
+          "name": "Jean Bakala",
+          "team": "Finance"
+        },
+        "member4": {
+          "name": "Fatoumata Sy",
+          "team": "Tech"
+        },
+        "member5": {
+          "name": "Paul Nzeza",
+          "team": "General management"
+        }
+      },
+      "imageAlt": "Fictional list of the members of an organization, each with their role"
+    },
+    "guarantees": {
+      "title": "Our commitments",
+      "item1": "Free start with the RH Free features.",
+      "item2": "Volumes and services set by contract for Company Premium.",
+      "item3": "Access to candidates governed by their privacy choices.",
+      "item4": "AI recommends, your teams decide.",
+      "eyebrow": "Commitments"
+    },
+    "plans": {
+      "title": "Three plans sized for your organization",
+      "text": "Choose according to the number of recruiters and managers, the volume of offers and the level of steering. The Premium plan is built with you.",
+      "cta": "Compare the Company plans",
+      "eyebrow": "Company plans",
+      "payment": "Pay with Mobile Money or bank card. Prices in USD."
+    },
+    "quote": {
+      "title": "A group, several entities or specific needs?",
+      "text": "Company Premium adapts to your organization: entities and subsidiaries, configurable workflows, integrations with your authorized HR tools, custom dashboards and setup support.",
+      "cta": "Request a quote"
+    },
+    "partners": {
+      "title": "Fund your teams' employability",
+      "text": "With Jumanly Partners, offer Starter, Pro or Premium licenses to employees, interns or cohorts of young people.",
+      "cta": "Discover Jumanly Partners"
+    },
+    "finalCta": {
+      "title": "Start for free, grow when you are ready",
+      "text": "Create your company account with RH Free, post a first offer, then move to a Company plan as soon as your team grows.",
+      "primary": "Create my company account",
+      "secondary": "Request a quote"
+    }
+  },
+  "partners": {
+    "seo": {
+      "title": "Jumanly Partners · Fund access to learning and employment",
+      "description": "Banks, universities, foundations, companies, public programs: offer Jumanly licenses to your beneficiaries and track the impact with aggregated reports."
+    },
+    "hero": {
+      "eyebrow": "Jumanly Partners",
+      "title": "Fund the professional future of a group of beneficiaries",
+      "text": "Jumanly Partners lets an institution fund access to the Starter, Pro or Premium plans for students, young people, employees or communities.",
+      "cta": "Contact us",
+      "imageAlt": "Partner dashboard with aggregated usage indicators",
+      "visual": {
+        "orgInitials": "FH",
+        "orgName": "Fondation Horizon",
+        "program": "Cohort 2026 program · Starter · 6 months",
+        "aggregated": "Aggregated",
+        "licenses": {
+          "label": "Licenses activated",
+          "value": "412 / 500"
+        },
+        "courses": {
+          "label": "Courses taken",
+          "value": "1,268"
+        },
+        "certificates": {
+          "label": "Certificates earned",
+          "value": "534"
+        },
+        "applications": {
+          "label": "Applications sent",
+          "value": "2,041"
+        },
+        "chart": {
+          "title": "Licenses activated per month",
+          "months": "May, Jun., Jul., Aug., Sep., Oct."
+        }
+      }
+    },
+    "who": {
+      "title": "Which institutions is it for?",
+      "banks": {
+        "title": "Banks",
+        "text": "Fund young people's access to employability tools."
+      },
+      "universities": {
+        "title": "Universities",
+        "text": "Offer employability licenses to final-year students."
+      },
+      "companies": {
+        "title": "Companies",
+        "text": "Offer preparation or professional development courses to their employees."
+      },
+      "international": {
+        "title": "International organizations and cooperation agencies",
+        "text": "Fund cohorts of young people as part of employment programs."
+      },
+      "foundations": {
+        "title": "Foundations",
+        "text": "Support beneficiaries from specific communities."
+      },
+      "public": {
+        "title": "Public programs",
+        "text": "Support access to employment at the scale of a program."
+      },
+      "eyebrow": "Institutions"
+    },
+    "how": {
+      "title": "How it works",
+      "step1": {
+        "title": "You choose",
+        "text": "The number of licenses, the plan (Starter, Pro or Premium) and the length of access."
+      },
+      "step2": {
+        "title": "We sign a contract",
+        "text": "The contract sets the volumes, the duration and the conditions. There is no online purchase."
+      },
+      "step3": {
+        "title": "Your beneficiaries activate",
+        "text": "Each person activates their license with a code or an invitation link, then enjoys the plan for the agreed period."
+      },
+      "step4": {
+        "title": "You track the impact",
+        "text": "Your dashboard shows aggregated reports: licenses activated, courses taken, certificates earned, applications sent, reported hires."
+      },
+      "eyebrow": "The model"
+    },
+    "example": {
+      "title": "A concrete example",
+      "text": "A bank funds Starter access for 500 young people for six months.",
+      "formula": "500 beneficiaries × 5 USD × 6 months = 15,000 USD",
+      "note": "This amount is an indicative commercial basis, calculated at the individual reference price. It may be subject to institutional discounts and does not include any additional deployment costs.",
+      "formulaAlt": "Example: five hundred beneficiaries times five dollars times six months equals fifteen thousand dollars.",
+      "beneficiaries": {
+        "value": "500",
+        "unit": "beneficiaries"
+      },
+      "price": {
+        "value": "5 USD"
+      },
+      "months": {
+        "value": "6",
+        "unit": "months"
+      },
+      "total": {
+        "value": "15,000 USD"
+      }
+    },
+    "privacy": {
+      "title": "Useful reports, protected privacy",
+      "text": "You receive aggregated usage and impact reports. You have no access to your beneficiaries' CVs, messages or personal data, unless they give their explicit consent.",
+      "point1": "Aggregated indicators only.",
+      "point2": "No access to CVs or messages.",
+      "point3": "No personal data without consent.",
+      "point4": "Reports exported as PDF.",
+      "eyebrow": "Privacy"
+    },
+    "references": {
+      "title": "They already fund licenses",
+      "content": "[Partner logos and references to provide, with their written consent]"
+    },
+    "contact": {
+      "anchor": "contact",
+      "title": "Let's build your program together",
+      "text": "Describe your project. Our team replies by e-mail to prepare a tailored proposal. You can also write to us directly at assistant@jumanly.io.",
+      "form": {
+        "org": {
+          "label": "Name of the institution",
+          "placeholder": "E.g.: University of…"
+        },
+        "type": {
+          "label": "Type of institution",
+          "placeholder": "Choose a type",
+          "bank": "Bank or financial institution",
+          "university": "University or school",
+          "foundation": "Foundation",
+          "company": "Company",
+          "international": "International organization or cooperation agency",
+          "public": "Public program",
+          "other": "Other"
+        },
+        "name": {
+          "label": "Your full name",
+          "placeholder": "First and last name"
+        },
+        "role": {
+          "label": "Your position",
+          "placeholder": "E.g.: CSR manager"
+        },
+        "email": {
+          "label": "Work e-mail",
+          "placeholder": "name@institution.org"
+        },
+        "country": {
+          "label": "Country",
+          "placeholder": "Choose a country"
+        },
+        "beneficiaries": {
+          "label": "Approximate number of beneficiaries",
+          "placeholder": "E.g.: 200",
+          "help": "An estimate is enough. We will refine it together."
+        },
+        "plan": {
+          "label": "Plan considered",
+          "starter": "Starter",
+          "pro": "Pro",
+          "premium": "Premium",
+          "unsure": "I don't know yet"
+        },
+        "duration": {
+          "label": "Duration considered",
+          "placeholder": "E.g.: 6 months"
+        },
+        "message": {
+          "label": "Your project",
+          "placeholder": "Target audience, goals, timeline…"
+        },
+        "consent": "I agree that Jumanly may use this information to answer my request, in line with the privacy policy.",
+        "submit": "Send my request",
+        "sending": "Sending…",
+        "error": {
+          "required": "This field is required.",
+          "email": "Enter a valid e-mail address.",
+          "number": "Enter a number.",
+          "consent": "We need your consent to be able to reply to you."
+        }
+      },
+      "success": {
+        "title": "Thank you, your request has been sent",
+        "text": "We will reply by e-mail to {email}. Remember to check your spam folder."
+      },
+      "error": "Your request could not be sent. Try again or write to us at assistant@jumanly.io.",
+      "eyebrow": "Contact"
+    },
+    "beneficiary": {
+      "title": "Have you received a license code?",
+      "text": "Activate your sponsored access in a few seconds.",
+      "cta": "Activate my code"
+    }
+  },
+  "brand": {
+    "characters": {
+      "amani": "Amani, the talent",
+      "kofi": "Kofi, the recent graduate",
+      "nadia": "Nadia, the recruiter",
+      "diallo": "Mr. Diallo, the executive",
+      "fatou": "Fatou, the trainer",
+      "orbi": "Orbi, the AI assistant"
+    }
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content",
+    "mainNav": "Main navigation",
+    "breadcrumb": "Breadcrumb",
+    "openMenu": "Open the menu",
+    "closeMenu": "Close the menu",
+    "close": "Close",
+    "closeDialog": "Close the window",
+    "search": "Search",
+    "clearSearch": "Clear the search",
+    "filters": "Open the filters",
+    "sort": "Sort the results",
+    "pagination": "Pagination",
+    "page": "Page {page} of {total}",
+    "nextPage": "Next page",
+    "previousPage": "Previous page",
+    "avatar": {
+      "text": "Photo of {name}",
+      "initials": "Initials of {name}",
+      "logo": "{name} logo"
+    },
+    "logo": "Jumanly, back to home",
+    "notifications": "Notifications",
+    "unread": "unread",
+    "newWindow": "opens in a new tab",
+    "download": "Download {fileName} ({size})",
+    "progress": "Progress: {percent}%",
+    "rating": "Rating: {rating} out of 5",
+    "score": "Score: {score} out of 100",
+    "badge": {
+      "verified": "Verified company",
+      "new": "New"
+    },
+    "locked": "Locked",
+    "required": "required",
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "moreActions": {
+      "text": "More actions",
+      "for": "More actions for {name}"
+    },
+    "dragHandle": "Drag handle",
+    "chart": {
+      "summary": "Chart: {summary}"
+    },
+    "tabList": "Tabs",
+    "loading": "Loading",
+    "liveRegion": {
+      "updated": "Content updated"
+    },
+    "carousel": {
+      "previous": "Previous item",
+      "next": "Next item"
+    },
+    "video": {
+      "player": "Video player: {title}"
+    },
+    "aiOrb": "Jumanly Intelligence suggestion",
+    "theme": {
+      "toggle": "Change theme"
+    },
+    "language": {
+      "switch": "Change language"
+    },
+    "dateInput": "Expected format: day, month, year"
+  },
+  "ui": {
+    "duration": {
+      "minutes": "{minutes} min",
+      "hours": "{hours} h"
+    },
+    "salary": {
+      "range": "{min} to {max} USD/month"
+    },
+    "languageLevel": "{language} ({level})",
+    "breadcrumb": "Breadcrumb",
+    "pagination": "Pagination"
+  },
+  "system": {
+    "404": {
+      "meta": {
+        "title": "Page not found · Jumanly"
+      },
+      "code": "404",
+      "title": "This page cannot be found",
+      "body": "The link may be wrong, or the page may have moved.",
+      "job": "This offer is no longer online. It may have been filled.",
+      "course": "This course is no longer available.",
+      "cta": {
+        "home": "Back to home",
+        "jobs": "See the offers",
+        "courses": "See the courses"
+      },
+      "search": "Or search for what you need:",
+      "searchPlaceholder": "Search for a course, an offer…",
+      "pageTitle": "Page not found"
+    },
+    "install": {
+      "button": "Install the app",
+      "text": "No need for the Play Store",
+      "ios": {
+        "title": "Install Jumanly on your iPhone",
+        "intro": "Safari has no install button: three taps are enough.",
+        "step1": {
+          "title": "Tap “Share”",
+          "text": "The square with an arrow pointing up, at the bottom of the screen (at the top on iPad)."
+        },
+        "step2": {
+          "title": "Choose “Add to Home Screen”",
+          "text": "Scroll through the list of actions if needed."
+        },
+        "step3": {
+          "title": "Tap “Add”",
+          "text": "Jumanly then opens from its icon, like an app."
+        },
+        "steps": "Installation steps",
+        "close": "Close",
+        "done": "Got it"
+      }
+    }
+  },
+  "pricing": {
+    "seo": {
+      "title": "Pricing and plans · Jumanly",
+      "description": "Talents from 0 USD, RH plans, Company plans and Partners licenses. Applying is always free. Pay with Mobile Money or bank card, prices in USD."
+    },
+    "hero": {
+      "eyebrow": "Pricing",
+      "title": "Start for free, grow at your own pace",
+      "subtitle": "Each family starts with a free plan. Paid plans add tools, never a condition for applying.",
+      "badge": "Applying is always free"
+    },
+    "tabs": {
+      "label": "Choose a family of plans",
+      "talents": "Talents",
+      "rh": "RH",
+      "companies": "Companies",
+      "partners": "Partners"
+    },
+    "payment": {
+      "methods": "Pay with Mobile Money or bank card. Prices in USD, per month.",
+      "prepaidShort": "No commitment, prepaid for one month with Mobile Money"
+    },
+    "card": {
+      "perMonth": "/month",
+      "currency": "USD",
+      "free": "Free",
+      "quote": "On quote",
+      "idealFor": "Ideal for: {audience}",
+      "includesPrevious": "Everything in {plan}, plus:",
+      "provisional": "Quotas may change. They are always shown in your dashboard."
+    },
+    "talent": {
+      "title": "Jumanly for Talents",
+      "subtitle": "Four plans, one journey. Each plan includes everything in the previous one.",
+      "free": {
+        "ideal": "students and recent graduates",
+        "f1": "Account and professional profile",
+        "f2": "Simplified career assessment",
+        "f3": "Browsing job offers",
+        "f4": "Free applications and application tracking",
+        "f5": "One standard CV template",
+        "f6": "Selection of free courses",
+        "f7": "General career preparation tips",
+        "f8": "Messages linked to applications",
+        "note": "Free profiles are shortlisted and hired just like paying subscribers.",
+        "cta": "Create my free account"
+      },
+      "starter": {
+        "badge": "Entry offer",
+        "price": "{price} USD/month",
+        "ideal": "a first job or a career change",
+        "f1": "Fundamental employability courses",
+        "f2": "Several CV templates",
+        "f3": "Creating and correcting professional documents",
+        "f4": "LinkedIn preparation tools",
+        "f5": "Personalized career assessment",
+        "f6": "Monthly AI assistance quota",
+        "f7": "Text interview simulations",
+        "f8": "Individual progress plan",
+        "cta": "Choose Starter"
+      },
+      "pro": {
+        "badge": "Recommended",
+        "price": "{price} USD/month",
+        "ideal": "talents aiming for a move up or a promotion",
+        "f1": "All the standard learning paths",
+        "f2": "More AI corrections",
+        "f3": "Advanced tailoring of your CV to different offers",
+        "f4": "Voice interview simulations, within a monthly limit",
+        "f5": "Exercises for specific jobs",
+        "f6": "Professional development recommendations",
+        "f7": "Additional career and application management tools",
+        "cta": "Choose Pro"
+      },
+      "premium": {
+        "price": "{price} USD/month",
+        "ideal": "managers and experienced profiles",
+        "f1": "Higher AI quotas",
+        "f2": "More interview simulations",
+        "f3": "Advanced professional paths",
+        "f4": "Enhanced portfolio and professional presentation",
+        "f5": "Detailed progress reports",
+        "f6": "Priority technical support",
+        "f7": "Specialized learning resources",
+        "note": "Support from a human expert is not included. If it is offered, it will be a separate service.",
+        "cta": "Choose Premium"
+      },
+      "partnersBand": {
+        "title": "Your license offered by a partner",
+        "text": "University, bank, foundation or employer: with Jumanly Partners, an institution can fund your plan.",
+        "cta": "Activate a code"
+      },
+      "compare": {
+        "title": "Compare the Talents plans",
+        "toggleShow": "Show the detailed comparison",
+        "toggleHide": "Hide the comparison",
+        "colFeature": "Feature",
+        "apply": "Profile, offers and free applications",
+        "messaging": "Messages linked to applications",
+        "diagnostic": {
+          "text": "Career assessment",
+          "simple": "Simplified",
+          "personalized": "Personalized"
+        },
+        "trainings": {
+          "text": "Courses",
+          "free": "Free selection",
+          "fundamentals": "Employability",
+          "standard": "Standard paths",
+          "advanced": "Advanced paths and specialized resources"
+        },
+        "cv": {
+          "text": "CV templates",
+          "free": "5 templates",
+          "starter": "10 templates",
+          "tailored": "All, tailored to each offer"
+        },
+        "documents": "Professional documents and LinkedIn preparation",
+        "ai": {
+          "text": "AI assistance",
+          "monthly": "{quota} credits/month"
+        },
+        "interviewText": "Text interview simulations",
+        "interviewVoice": "Voice interview simulations",
+        "interview": {
+          "monthly": "{quota}/month"
+        },
+        "plan": {
+          "text": "Progress plan",
+          "base": "Individual",
+          "reco": "+ recommendations",
+          "reports": "+ detailed reports"
+        },
+        "exercises": "Exercises by job",
+        "portfolio": {
+          "text": "Portfolio",
+          "standard": "Standard",
+          "enriched": "Enhanced"
+        },
+        "support": {
+          "text": "Technical support",
+          "standard": "Standard",
+          "priority": "Priority"
+        },
+        "note": "The quotas shown are monthly and renew on the anniversary date of your subscription. They may change; the current values are always visible in your dashboard."
+      }
+    },
+    "rh": {
+      "title": "Jumanly for RH",
+      "subtitle": "For independent recruiters, HR consultants, HR managers and small teams. Start with a free account and one active offer, then add users, offers and tools.",
+      "free": {
+        "ideal": "occasional hiring",
+        "f1": "One recruiter account",
+        "f2": "One active offer",
+        "f3": "Receiving and reviewing applications",
+        "f4": "Simple stage management",
+        "f5": "Viewing the profiles of applicants",
+        "f6": "Messages linked to applications",
+        "f7": "Basic dashboard",
+        "cta": "Create my recruiter account"
+      },
+      "pro": {
+        "badge": "Recommended",
+        "price": "{price} USD/month",
+        "ideal": "independent recruiters",
+        "f1": "Up to {seats} HR users",
+        "f2": "{jobs} active offers",
+        "f3": "Managing several hiring processes",
+        "f4": "Advanced search in the talent pool",
+        "f5": "Matching suggestions",
+        "f6": "Structured CV analysis",
+        "f7": "Manual shortlisting and ranking",
+        "f8": "Messages and appointments",
+        "f9": "Hiring statistics",
+        "cta": "Choose RH Pro"
+      },
+      "premium": {
+        "price": "{price} USD/month",
+        "ideal": "consultants and small teams",
+        "f1": "Up to {seats} HR users",
+        "f2": "{jobs} active offers",
+        "f3": "Advanced ATS tools",
+        "f4": "Enhanced, explainable matching",
+        "f5": "In-depth talent search filters",
+        "f6": "Collaboration between recruiters",
+        "f7": "Scorecards",
+        "f8": "Decision history",
+        "f9": "Advanced reports and dashboards",
+        "f10": "Higher search and AI assistance quotas",
+        "f11": "Priority support",
+        "cta": "Choose RH Premium"
+      },
+      "privacyNote": "Access to candidates is governed by their privacy choices. Search and contact quotas prevent the mass extraction of personal data.",
+      "upsell": {
+        "title": "More than {seats} recruiters or several departments?",
+        "text": "Jumanly for Companies adds teams, permissions and consolidated reports, from {price} USD per month.",
+        "cta": "See the Companies plans"
+      },
+      "compare": {
+        "title": "Compare the RH plans",
+        "seats": "HR users",
+        "jobs": "Active offers",
+        "applications": "Receiving and reviewing applications",
+        "pipeline": {
+          "text": "Hiring management",
+          "simple": "Simple stages",
+          "multi": "Several in parallel",
+          "advanced": "Advanced ATS"
+        },
+        "search": {
+          "text": "Talent pool search",
+          "advanced": "Advanced, {quota}/month",
+          "deep": "In-depth filters, {quota}/month"
+        },
+        "contacts": {
+          "text": "Introduction requests",
+          "monthly": "{quota}/month"
+        },
+        "matching": {
+          "text": "Matching",
+          "suggestions": "Suggestions",
+          "explainable": "Enhanced and explainable"
+        },
+        "cvAnalysis": "Structured CV analysis",
+        "shortlist": "Shortlisting and ranking",
+        "messaging": {
+          "text": "Messages",
+          "applications": "Linked to applications",
+          "appointments": "+ appointments"
+        },
+        "collaboration": "Collaboration between recruiters",
+        "scorecards": "Scorecards and decision history",
+        "reports": {
+          "text": "Steering",
+          "basic": "Basic dashboard",
+          "stats": "Statistics",
+          "advanced": "Advanced reports"
+        },
+        "ai": {
+          "text": "AI assistance",
+          "monthly": "{quota} credits/month"
+        },
+        "support": {
+          "text": "Support",
+          "standard": "Standard",
+          "priority": "Priority"
+        }
+      }
+    },
+    "company": {
+      "title": "Jumanly for Companies",
+      "subtitle": "A shared hiring environment for organizations. Choose according to the number of recruiters and managers, the volume of offers and the level of steering.",
+      "startFree": {
+        "text": "Not ready yet? Your company can start for free with RH Free, then move up to a Company plan.",
+        "cta": "Start with RH Free"
+      },
+      "base": {
+        "price": "{price} USD/month",
+        "ideal": "SMEs with structured hiring",
+        "f1": "Up to {seats} users, recruiters or managers",
+        "f2": "{jobs} active offers",
+        "f3": "Verified company profile",
+        "f4": "Shared hiring dashboard",
+        "f5": "Collaborative application management",
+        "f6": "Advanced ATS",
+        "f7": "Talent search and profile matching",
+        "f8": "Messages and interview scheduling",
+        "f9": "Scorecards",
+        "f10": "Hiring statistics",
+        "cta": "Choose Company"
+      },
+      "plus": {
+        "badge": "Recommended",
+        "price": "{price} USD/month",
+        "ideal": "companies with several departments",
+        "f1": "Up to {seats} users",
+        "f2": "{jobs} active offers",
+        "f3": "Several HR teams",
+        "f4": "Offers assigned to managers",
+        "f5": "Advanced permissions",
+        "f6": "Shared talent pools and lists",
+        "f7": "Advanced matching and search",
+        "f8": "Collaborative interview management",
+        "f9": "Dashboards by team and department",
+        "f10": "Consolidated activity reports and authorized report exports",
+        "f11": "Priority support",
+        "cta": "Choose Company Plus"
+      },
+      "premium": {
+        "ideal": "groups and organizations with specific needs",
+        "f1": "{seats} users or more, by contract",
+        "f2": "Negotiated offer volumes",
+        "f3": "Several organizational entities",
+        "f4": "Department and subsidiary management",
+        "f5": "Configurable hiring workflows",
+        "f6": "Integrations with authorized HR tools",
+        "f7": "Custom dashboards",
+        "f8": "Advanced permissions",
+        "f9": "Setup support",
+        "f10": "Contractual maintenance and support",
+        "cta": "Request a quote",
+        "note": "Hiring, user and service volumes are set by contract."
+      },
+      "partnersBand": {
+        "title": "Fund your teams' employability",
+        "text": "With Jumanly Partners, offer Starter, Pro or Premium licenses to employees, interns or cohorts of young people.",
+        "cta": "Discover Jumanly Partners"
+      },
+      "compare": {
+        "title": "Compare the Companies plans",
+        "seats": {
+          "text": "Users",
+          "contract": "{seats} and more, by contract"
+        },
+        "jobs": {
+          "text": "Active offers",
+          "negotiated": "Negotiated"
+        },
+        "verified": "Verified company profile",
+        "ats": "Advanced ATS and shared applications",
+        "search": {
+          "text": "Talent search and matching",
+          "standard": "Included, {quota} searches/month",
+          "advanced": "Advanced, {quota} searches/month",
+          "contract": "Advanced, volume by contract"
+        },
+        "contacts": {
+          "text": "Introduction requests",
+          "monthly": "{quota}/month",
+          "contract": "By contract"
+        },
+        "interviews": {
+          "text": "Interviews",
+          "organize": "Scheduling",
+          "team": "Team management"
+        },
+        "scorecards": "Scorecards and decision history",
+        "teams": {
+          "text": "HR teams and departments",
+          "multi": "Several teams",
+          "entities": "+ entities and subsidiaries"
+        },
+        "permissions": {
+          "text": "Permissions",
+          "standard": "Standard",
+          "advanced": "Advanced"
+        },
+        "pools": "Shared talent pools",
+        "dashboards": {
+          "text": "Dashboards",
+          "shared": "Shared",
+          "team": "By team and department",
+          "custom": "Custom"
+        },
+        "reports": {
+          "text": "Reports",
+          "stats": "Statistics",
+          "consolidated": "Consolidated, with export",
+          "custom": "Tailor-made, with export"
+        },
+        "workflows": "Configurable workflows and integrations",
+        "onboarding": "Setup support",
+        "ai": {
+          "text": "AI assistance",
+          "monthly": "{quota} credits/month",
+          "contract": "By contract"
+        },
+        "support": {
+          "text": "Support",
+          "standard": "Standard",
+          "priority": "Priority",
+          "contract": "By contract"
+        }
+      }
+    },
+    "partners": {
+      "title": "Jumanly Partners",
+      "subtitle": "An institution funds access to Jumanly for a group of beneficiaries: students, young people, employees or communities.",
+      "price": "By contract",
+      "f1": "Batches of Starter, Pro or Premium licenses",
+      "f2": "Access period set by contract",
+      "f3": "Activation by code or invitation link",
+      "f4": "Dashboard of licenses purchased, activated and active",
+      "f5": "Aggregated usage and impact reports, exportable as PDF",
+      "f6": "No access to CVs, messages or unauthorized personal data",
+      "example": {
+        "title": "Indicative example",
+        "text": "A bank funds Starter access for 500 young people for six months.",
+        "formula": "500 beneficiaries × 5 USD × 6 months = 15,000 USD",
+        "note": "Indicative commercial basis at the individual reference price, subject to institutional discounts and excluding additional deployment costs."
+      },
+      "noOnline": "Partners licenses are not sold online: the contract is drawn up with our team.",
+      "cta": "Contact us",
+      "ctaSecondary": "Learn more about Jumanly Partners",
+      "beneficiary": "Received a code? Activate your license."
+    },
+    "guarantees": {
+      "title": "What never changes, whatever the plan",
+      "apply": "Applying stays free and unlimited, even when your quotas are used up.",
+      "equal": "Free profiles are hired just like subscribers.",
+      "ai": "AI recommends, people decide. Every suggestion explains its “Why?”.",
+      "data": "Going back to the free plan deletes no data.",
+      "quotas": "Your quotas are visible at any time in your dashboard."
+    },
+    "faq": {
+      "title": "Billing questions",
+      "eyebrow": "FAQ",
+      "q1": "Which payment methods do you accept?",
+      "a1": "Mobile Money and bank card. The available operators depend on your country and are shown at payment time.",
+      "q2": "Why are prices in USD?",
+      "a2": "So that the price is the same in every country. The amount is converted into your currency at payment time, at the rate of the operator or the bank.",
+      "q3": "Does the subscription renew automatically?",
+      "a3": "With Mobile Money, the subscription is prepaid for one month and does not renew on its own. We remind you of the due date in advance, and you renew in one step. [Automatic renewal by card: to be confirmed with the payment provider]",
+      "q4": "What happens if I don't renew in time?",
+      "a4": "You get a grace period of a few days during which your plan stays active. After that, you automatically go back to the free plan, without losing your data.",
+      "q5": "Can I change plans in the middle of the month?",
+      "a5": "Yes. An upgrade applies immediately, and the time left on your current plan is taken into account. A downgrade takes effect at the end of the period already paid.",
+      "q6": "Can I cancel at any time?",
+      "a6": "Yes. Your plan stays active until the end of the paid period, then you go back to the free plan. Your data is kept.",
+      "q7": "Can I get a refund?",
+      "a7": "Refund rules are set out in our terms of sale. [Refund rules to be defined]",
+      "q8": "What happens when a quota is reached?",
+      "a8": "The feature concerned is paused until your period renews. You can wait, or move to a higher plan. You are notified at 80% and then at 100% of each quota.",
+      "q9": "Do I have to pay to apply?",
+      "a9": "No, never. No paid option is a condition for applying.",
+      "q10": "Can I get an invoice?",
+      "a10": "Yes. Each payment comes with a receipt sent by e-mail and an invoice you can download in “My subscription”. For an organization, you can enter the company name and billing address.",
+      "q11": "An institution funds my plan. What happens if I already have a subscription?",
+      "a11": "If the license offered is higher than your plan, it applies right away. If your current plan is higher, the license is put on hold.",
+      "q12": "Do you offer quarterly or annual plans?",
+      "a12": "Not at the moment. Subscriptions are monthly. Other durations may be offered later.",
+      "more": "More questions? Read the full FAQ or write to us at infojumanly@gmail.com."
+    },
+    "finalCta": {
+      "title": "Ready to start?",
+      "text": "Create your account for free. You can change plans whenever you like.",
+      "primary": "Create my free account",
+      "secondary": "Request a quote"
+    }
+  },
+  "quote": {
+    "title": "Request a Company Premium quote",
+    "hero": {
+      "title": "Request a quote",
+      "text": "For large groups and organizations with specific needs: describe your project and we will build the proposal with you."
+    },
+    "subtitle": "Describe your organization and your needs. We prepare a tailored proposal and reply by e-mail.",
+    "org": {
+      "label": "Name of the organization",
+      "placeholder": "Company or group name"
+    },
+    "name": {
+      "label": "Your full name",
+      "placeholder": "First and last name"
+    },
+    "role": {
+      "label": "Your position",
+      "placeholder": "E.g.: Head of human resources"
+    },
+    "email": {
+      "label": "Work e-mail",
+      "placeholder": "name@company.com"
+    },
+    "country": {
+      "label": "Country of the head office",
+      "placeholder": "Choose a country"
+    },
+    "users": {
+      "label": "Expected number of users",
+      "placeholder": "Recruiters and managers"
+    },
+    "entities": {
+      "label": "Number of entities, subsidiaries or departments",
+      "placeholder": "E.g.: 4"
+    },
+    "jobs": {
+      "label": "Estimated number of offers per year",
+      "placeholder": "An estimate is enough"
+    },
+    "needs": {
+      "label": "Specific needs",
+      "workflows": "Configurable hiring workflows",
+      "integrations": "Integrations with our HR tools",
+      "dashboards": "Custom dashboards",
+      "onboarding": "Setup support",
+      "support": "Contractual maintenance and support",
+      "partners": "Partners licenses for our employees"
+    },
+    "tools": {
+      "label": "HR tools used today",
+      "placeholder": "Optional"
+    },
+    "message": {
+      "label": "Message",
+      "placeholder": "Context, timeline, constraints…"
+    },
+    "consent": "I agree that Jumanly may use this information to answer my request, in line with the privacy policy.",
+    "submit": "Send my request",
+    "submitting": "Sending…",
+    "success": {
+      "title": "Thank you, your request has been sent",
+      "text": "Our team will reply by e-mail to {email}. In the meantime, you can start for free with RH Free or choose the Company plan.",
+      "cta": "Back to the plans"
+    },
+    "error": {
+      "required": "This field is required.",
+      "email": "Enter a valid e-mail address.",
+      "number": "Enter a number.",
+      "consent": "We need your consent to be able to reply to you.",
+      "send": "Your request could not be sent. Try again or write to us at assistant@jumanly.io."
+    },
+    "direct": "Prefer to write directly? assistant@jumanly.io"
+  },
+  "faq": {
+    "seo": {
+      "title": "Frequently asked questions · Jumanly",
+      "description": "Free access, plans, payment by Mobile Money and card, artificial intelligence, privacy, recruitment and partner licenses: all the answers about Jumanly."
+    },
+    "hero": {
+      "title": "Frequently asked questions",
+      "text": "Can't find your answer? Write to us and we will reply by e-mail.",
+      "eyebrow": "FAQ"
+    },
+    "search": {
+      "label": "Search for a question",
+      "placeholder": "E.g.: payment, profile visibility",
+      "empty": "No question matches. Try another word or write to us."
+    },
+    "themes": {
+      "label": "Topics"
+    },
+    "theme": {
+      "general": "Jumanly in general",
+      "talents": "Talents and applications",
+      "learn": "Courses",
+      "ai": "Artificial intelligence",
+      "privacy": "Privacy and data",
+      "billing": "Plans and payment",
+      "recruiters": "Recruiters and companies",
+      "partners": "Partners and licenses"
+    },
+    "general": {
+      "q1": "What is Jumanly?",
+      "a1": "Jumanly is a platform that brings together professional training, career development, job offers and recruitment management. It is for talents, human resources professionals and organizations.",
+      "q2": "Who is behind Jumanly?",
+      "a2": "Jumanly is a platform developed and run by The Growth Lab, which leads its strategy, content, commercial policy and supervision.",
+      "q3": "Can I use Jumanly on my phone?",
+      "a3": "Yes. The site is designed for phones first and also works on tablets and computers, from your browser.",
+      "q4": "Can I be both a talent and a recruiter?",
+      "a4": "Yes. You have a personal account and you can also be a member of one or more organizations. A switcher lets you move from your personal space to your organization's space."
+    },
+    "talents": {
+      "q1": "Do I have to pay to apply?",
+      "a1": "No. Applications are free and unlimited for everyone, whatever your plan, even if your AI assistance quotas are used up.",
+      "q2": "Do recruiters favor paying subscribers?",
+      "a2": "No. Free profiles can be shortlisted and hired just like paying subscribers. Your plan gives you no priority and no disadvantage in applications.",
+      "q3": "How do I follow my applications?",
+      "a3": "In your space, the “My applications” section shows the stage of each application, its history and the recruiter's messages.",
+      "q4": "What does the free plan include?",
+      "a4": "Your account and professional profile, a simplified career assessment, browsing offers, free applications and their tracking, 5 CV templates, a selection of free courses, general preparation tips and messages linked to applications."
+    },
+    "learn": {
+      "q1": "Do the courses give a certificate?",
+      "a1": "Yes. When you finish a course and its assessments, you get a certificate you can download as a PDF, with a public verification link. It can appear on your profile.",
+      "q2": "Which courses are free?",
+      "a2": "A selection of courses is open to everyone. In the catalog, each course shows whether it is free or included in a plan.",
+      "q3": "Can I try a course before signing up?",
+      "a3": "Yes. The first lesson of each course can be previewed on its public page."
+    },
+    "ai": {
+      "q1": "Does the AI decide who gets hired?",
+      "a1": "No. AI recommends, people decide. Matching helps recruiters spot profiles, but no application is ever accepted or rejected automatically.",
+      "q2": "How do I know why the AI suggests something to me?",
+      "a2": "Every suggestion has a “Why?” link that explains what it is based on: skills, experience, the criteria of the offer. You can apply or ignore each suggestion.",
+      "q3": "What happens when my AI assistance quota is reached?",
+      "a3": "The feature concerned is paused until your period renews. You can wait or move to a higher plan. Applying, however, always remains possible."
+    },
+    "privacy": {
+      "q1": "Who can see my profile?",
+      "a1": "You choose between three settings: private (only the recruiters of the offers you apply to see it), visible to recruiters, or anonymous (name and photo hidden until you accept an introduction).",
+      "q2": "Can a recruiter contact me if I have not applied?",
+      "a2": "Only if your profile is visible in the talent pool. The recruiter then sends you an introduction request, which you are free to accept or decline before any conversation.",
+      "q3": "Can I download or delete my data?",
+      "a3": "Yes. In your settings, you can export your data and ask for your account to be deleted."
+    },
+    "billing": {
+      "q1": "How can I pay?",
+      "a1": "With Mobile Money or a bank card. Prices are shown in USD.",
+      "q2": "Does my subscription renew automatically?",
+      "a2": "With Mobile Money, the subscription is prepaid for a period. We remind you of the due date 7 days and 3 days before, and on the day itself. Without renewal, you get a short grace period, then you go back to the free plan.",
+      "q3": "Do I lose my data if I go back to the free plan?",
+      "a3": "No. Your profile, CVs, certificates and applications are kept. Only the paid features are paused.",
+      "q4": "Can I change plans?",
+      "a4": "Yes, at any time. An upgrade applies immediately. A downgrade takes effect at the end of the period already paid."
+    },
+    "recruiters": {
+      "q1": "Can I hire for free?",
+      "a1": "Yes. RH Free includes a recruiter account, one active offer, receiving applications, simple stage management and messages linked to applications.",
+      "q2": "What is the difference between Jumanly for RH and Jumanly for Companies?",
+      "a2": "The RH plans suit independent recruiters and small teams, up to 3 users. The Company plans add more team members, a verified company profile, team management, permissions and steering reports.",
+      "q3": "Why is talent search limited by quotas?",
+      "a3": "To protect talents. Search and introduction quotas prevent the mass extraction of personal data.",
+      "q4": "How do I get the “Verified company” badge?",
+      "a4": "The verified company profile is included in the Company plans. Our team checks your organization's information before showing the badge."
+    },
+    "partners": {
+      "q1": "What is a sponsored license?",
+      "a1": "It is Starter, Pro or Premium access funded by an institution (bank, university, foundation, company, public program) for an agreed period. You have nothing to pay.",
+      "q2": "How do I activate my license?",
+      "a2": "With the code or invitation link you received from the institution. Sign in or create your account, then enter your code on the activation page.",
+      "q3": "Can the institution funding my license see my CV or my messages?",
+      "a3": "No. It only receives aggregated usage and impact reports, with no CVs, no messages and no personal data, unless you consent to it."
+    },
+    "cta": {
+      "title": "Still have a question?",
+      "text": "Write to us and we will reply by e-mail.",
+      "button": "Contact us"
+    }
+  },
+  "contact": {
+    "seo": {
+      "title": "Contact · Jumanly",
+      "description": "A question, a hiring project or a partnership idea? Write to the Jumanly team through the form or by e-mail."
+    },
+    "hero": {
+      "title": "Contact us",
+      "text": "A question, a suggestion or a project? Fill in the form or write to us directly. We reply by e-mail.",
+      "eyebrow": "Contact"
+    },
+    "emails": {
+      "title": "Our addresses",
+      "pro": {
+        "label": "Professionals, companies and partners",
+        "value": "assistant@jumanly.io"
+      },
+      "general": {
+        "label": "General questions",
+        "value": "infojumanly@gmail.com"
+      },
+      "site": {
+        "label": "Website",
+        "value": "jumanly.io"
+      }
+    },
+    "faqHint": {
+      "text": "Your answer may already be in the frequently asked questions.",
+      "cta": "Read the FAQ"
+    },
+    "form": {
+      "title": "Send a message",
+      "subject": {
+        "label": "Subject",
+        "placeholder": "Choose a subject",
+        "account": "My account and signing in",
+        "talent": "Courses, career and applications",
+        "billing": "Subscription and payment",
+        "recruiter": "Recruitment and RH plans",
+        "quote": "Company Premium quote request",
+        "partners": "Jumanly Partners and sponsored licenses",
+        "privacy": "Personal data and privacy",
+        "report": "Report abuse or a suspicious offer",
+        "press": "Press and media",
+        "other": "Other request"
+      },
+      "name": {
+        "label": "Full name",
+        "placeholder": "First and last name"
+      },
+      "email": {
+        "label": "E-mail",
+        "placeholder": "you@example.com",
+        "help": "We will reply to this address."
+      },
+      "organization": {
+        "label": "Organization",
+        "placeholder": "Name of your company or institution",
+        "help": "Optional, useful for professional requests."
+      },
+      "country": {
+        "label": "Country",
+        "placeholder": "Choose a country"
+      },
+      "quote": {
+        "users": {
+          "label": "Expected number of users",
+          "placeholder": "E.g.: 40"
+        },
+        "entities": {
+          "label": "Number of entities or subsidiaries",
+          "placeholder": "E.g.: 3"
+        }
+      },
+      "message": {
+        "label": "Message",
+        "placeholder": "Describe your request in a few lines.",
+        "counter": "{count} / {max} characters"
+      },
+      "consent": "I agree that Jumanly may use this information to answer my request, in line with the privacy policy.",
+      "consentLink": "privacy policy",
+      "submit": "Send my message",
+      "sending": "Sending…",
+      "error": {
+        "required": "This field is required.",
+        "email": "Enter a valid e-mail address.",
+        "messageShort": "Your message is too short. Add a few details.",
+        "messageLong": "Your message is longer than {max} characters.",
+        "consent": "We need your consent to be able to reply to you.",
+        "rateLimit": "You have sent several messages in a short time. Try again in a few minutes.",
+        "send": "Your message could not be sent. Try again or write to us at infojumanly@gmail.com."
+      }
+    },
+    "success": {
+      "title": "Thank you, your message has been sent",
+      "text": "We will reply by e-mail to {email}. Remember to check your spam folder.",
+      "cta": "Back to home"
+    }
+  }
+}

@@ -62,20 +62,20 @@ export function CookieConsent() {
       {visible && !settingsOpen && (
         <section
           aria-labelledby="cookie-banner-title"
-          className="fixed inset-x-3 bottom-3 z-40 mx-auto flex max-w-3xl flex-col gap-4 rounded-card border border-brume bg-blanc p-5 text-sapin md:inset-x-6 md:p-6"
+          className="fixed inset-x-2 bottom-2 z-40 flex max-h-[calc(100dvh-1rem)] flex-col gap-4 overflow-y-auto rounded-[28px] bg-blanc p-5 text-sapin shadow-[0_20px_60px_rgba(11,26,31,0.22)] ring-1 ring-sapin/8 sm:inset-x-auto sm:bottom-4 sm:left-4 sm:max-w-[440px] md:p-6"
         >
           <div className="flex flex-col gap-2">
-            <h2 id="cookie-banner-title" className="text-lg font-semibold">
+            <h2 id="cookie-banner-title" className="text-lg font-semibold tracking-[-0.015em]">
               {t("banner.title")}
             </h2>
-            <p className="text-[15px] leading-6 text-ardoise">
+            <p className="text-sm leading-[22px] text-ardoise">
               {t("banner.text")}{" "}
               <Link href="/cookies" className="font-medium text-sapin underline">
                 {t("banner.policyLink")}
               </Link>
             </p>
           </div>
-          <div className="flex flex-col gap-2 sm:flex-row">
+          <div className="flex flex-wrap gap-2 [&>button]:flex-1">
             <Button variant="secondary" onClick={() => decide(all)}>
               {t("banner.acceptAll")}
             </Button>

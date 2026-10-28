@@ -1,3 +1,5 @@
+import { displayLocale, intlLocale } from "@/lib/display-locale";
+
 /** Countries offered in the forms: African countries first, then the main diaspora countries. ISO 3166-1 codes. */
 export const african = [
   "DZ",
@@ -64,19 +66,19 @@ export const others = ["BE", "CA", "FR", "DE", "CH", "GB", "US"];
 export function countryOptions(
   value: "name" | "code" = "name",
 ): { value: string; label: string }[] {
-  const names = new Intl.DisplayNames(["fr-FR"], { type: "region" });
+  const names = new Intl.DisplayNames([intlLocale()], { type: "region" });
   const sort = (codes: string[]) =>
     codes
       .map((code) => ({
         value: value === "code" ? code : (names.of(code) ?? code),
         label: names.of(code) ?? code,
       }))
-      .sort((a, b) => a.label.localeCompare(b.label, "fr"));
+      .sort((a, b) => a.label.localeCompare(b.label, displayLocale()));
   return [...sort(african), ...sort(others)];
 }
 
 /** "CD" → "Congo-Kinshasa"; any other value is returned as is. */
 export function countryName(code: string): string {
   if (!/^[A-Z]{2}$/.test(code)) return code;
-  return new Intl.DisplayNames(["fr-FR"], { type: "region" }).of(code) ?? code;
+  return new Intl.DisplayNames([intlLocale()], { type: "region" }).of(code) ?? code;
 }

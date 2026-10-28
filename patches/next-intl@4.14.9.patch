@@ -1,0 +1,222 @@
+diff --git a/dist/esm/development/server/react-server/getConfig.js b/dist/esm/development/server/react-server/getConfig.js
+index 6e1a9ff70f0efa5a1f311af5eb78d472012d59ad..bc3853ce09c42c0270751e5b56809da917d49962 100644
+--- a/dist/esm/development/server/react-server/getConfig.js
++++ b/dist/esm/development/server/react-server/getConfig.js
+@@ -2,6 +2,7 @@ import { cache } from 'react';
+ import { initializeConfig, _createIntlFormatters, _createCache } from 'use-intl/core';
+ import { isPromise } from '../../shared/utils.js';
+ import { getRequestLocale } from './RequestLocale.js';
++import { getCachedRequestLocale } from './RequestLocaleCache.js';
+ import getRuntimeConfig from 'next-intl/config';
+ import validateLocale from './validateLocale.js';
+ 
+@@ -54,6 +55,12 @@ async function getConfigImpl(localeOverride) {
+     timeZone: runtimeConfig.timeZone || getDefaultTimeZone()
+   };
+ }
+-const getConfig = cache(getConfigImpl);
++const getConfigCached = cache(getConfigImpl);
++
++// Jumanly: a configuration read before `setRequestLocale` (a not-found boundary rendered alongside
++// the page) must not fix the language of the whole request. The configuration is cached per locale.
++function getConfig(localeOverride) {
++  return getConfigCached(localeOverride ?? getCachedRequestLocale());
++}
+ 
+ export { getConfig as default };
+diff --git a/dist/esm/development/server/react-server/getConfigNow.js b/dist/esm/development/server/react-server/getConfigNow.js
+index ebc141db133ce5571076a33a9dcc115a996bc8fd..e76299f8af6913ad50600ef9f00382bb875e2735 100644
+--- a/dist/esm/development/server/react-server/getConfigNow.js
++++ b/dist/esm/development/server/react-server/getConfigNow.js
+@@ -1,3 +1,4 @@
++import { getCachedRequestLocale } from './RequestLocaleCache.js';
+ import { cache } from 'react';
+ import getConfig from './getConfig.js';
+ 
+@@ -5,6 +6,9 @@ async function getConfigNowImpl(locale) {
+   const config = await getConfig(locale);
+   return config.now;
+ }
+-const getConfigNow = cache(getConfigNowImpl);
++const getConfigNowCached = cache(getConfigNowImpl);
++function getConfigNow(locale) {
++  return getConfigNowCached(locale ?? getCachedRequestLocale());
++}
+ 
+ export { getConfigNow as default };
+diff --git a/dist/esm/development/server/react-server/getFormats.js b/dist/esm/development/server/react-server/getFormats.js
+index f8bf811aeb907db490d5799ea9251660e144cb16..bb54110b4a7625db630284b5fda75f81257cb7f0 100644
+--- a/dist/esm/development/server/react-server/getFormats.js
++++ b/dist/esm/development/server/react-server/getFormats.js
+@@ -1,10 +1,14 @@
++import { getCachedRequestLocale } from './RequestLocaleCache.js';
+ import { cache } from 'react';
+ import getConfig from './getConfig.js';
+ 
+-async function getFormatsCachedImpl() {
+-  const config = await getConfig();
++async function getFormatsCachedImpl(requestLocale) {
++  const config = await getConfig(requestLocale);
+   return config.formats;
+ }
+-const getFormats = cache(getFormatsCachedImpl);
++const getFormatsCached = cache(getFormatsCachedImpl);
++function getFormats() {
++  return getFormatsCached(getCachedRequestLocale());
++}
+ 
+ export { getFormats as default };
+diff --git a/dist/esm/development/server/react-server/getFormatter.js b/dist/esm/development/server/react-server/getFormatter.js
+index 9245402fcf1cb54ee4ee4d37a7b85985b523cc4b..25bd1f612704440339ed3cbf53d74579db260d75 100644
+--- a/dist/esm/development/server/react-server/getFormatter.js
++++ b/dist/esm/development/server/react-server/getFormatter.js
+@@ -1,3 +1,4 @@
++import { getCachedRequestLocale } from './RequestLocaleCache.js';
+ import { cache } from 'react';
+ import getConfig from './getConfig.js';
+ import getFormatterCached$1 from './getServerFormatter.js';
+@@ -15,7 +16,7 @@ const getFormatterCached = cache(getFormatterCachedImpl);
+  * you can override it by passing in additional options.
+  */
+ async function getFormatter(opts) {
+-  return getFormatterCached(opts?.locale);
++  return getFormatterCached(opts?.locale ?? getCachedRequestLocale());
+ }
+ 
+ export { getFormatter as default };
+diff --git a/dist/esm/development/server/react-server/getLocale.js b/dist/esm/development/server/react-server/getLocale.js
+index a5fc97973df7f113daaeb87a640fa780aa9e19bd..4043dcae63d71dbd5fa85c4467655b5570c37b82 100644
+--- a/dist/esm/development/server/react-server/getLocale.js
++++ b/dist/esm/development/server/react-server/getLocale.js
+@@ -1,10 +1,15 @@
++import { getCachedRequestLocale } from './RequestLocaleCache.js';
+ import { cache } from 'react';
+ import getConfig from './getConfig.js';
+ 
+-async function getLocaleCachedImpl() {
+-  const config = await getConfig();
++async function getLocaleCachedImpl(requestLocale) {
++  const config = await getConfig(requestLocale);
+   return config.locale;
+ }
+-const getLocaleCached = cache(getLocaleCachedImpl);
++const getLocaleCachedInner = cache(getLocaleCachedImpl);
++// Jumanly: cached per request locale (see getConfig.js).
++function getLocaleCached() {
++  return getLocaleCachedInner(getCachedRequestLocale());
++}
+ 
+ export { getLocaleCached as default };
+diff --git a/dist/esm/development/server/react-server/getMessages.js b/dist/esm/development/server/react-server/getMessages.js
+index e7490baa2dcbdbc9b8ee22fed3937b5f528b6cb9..617e72d2b8e07030205c7951cd89d25ab61231df 100644
+--- a/dist/esm/development/server/react-server/getMessages.js
++++ b/dist/esm/development/server/react-server/getMessages.js
+@@ -1,3 +1,4 @@
++import { getCachedRequestLocale } from './RequestLocaleCache.js';
+ import { cache } from 'react';
+ import getConfig from './getConfig.js';
+ 
+@@ -13,7 +14,7 @@ async function getMessagesCachedImpl(locale) {
+ }
+ const getMessagesCached = cache(getMessagesCachedImpl);
+ async function getMessages(opts) {
+-  return getMessagesCached(opts?.locale);
++  return getMessagesCached(opts?.locale ?? getCachedRequestLocale());
+ }
+ 
+ export { getMessages as default, getMessagesFromConfig };
+diff --git a/dist/esm/development/server/react-server/getTimeZone.js b/dist/esm/development/server/react-server/getTimeZone.js
+index 6fe6cfa3416f39f6f6bce276fd7b786b51735c46..0e0a289765e1a4b382c72c72e2e35d5494aa892b 100644
+--- a/dist/esm/development/server/react-server/getTimeZone.js
++++ b/dist/esm/development/server/react-server/getTimeZone.js
+@@ -1,3 +1,4 @@
++import { getCachedRequestLocale } from './RequestLocaleCache.js';
+ import { cache } from 'react';
+ import getConfig from './getConfig.js';
+ 
+@@ -7,7 +8,7 @@ async function getTimeZoneCachedImpl(locale) {
+ }
+ const getTimeZoneCached = cache(getTimeZoneCachedImpl);
+ async function getTimeZone(opts) {
+-  return getTimeZoneCached(opts?.locale);
++  return getTimeZoneCached(opts?.locale ?? getCachedRequestLocale());
+ }
+ 
+ export { getTimeZone as default };
+diff --git a/dist/esm/development/server/react-server/getTranslations.js b/dist/esm/development/server/react-server/getTranslations.js
+index f393b26888e784e3b4e04d39e0a2a1ebdbc12afd..ab1c1ae0739c9d63d5c5e6f933a20d1fdd2f9283 100644
+--- a/dist/esm/development/server/react-server/getTranslations.js
++++ b/dist/esm/development/server/react-server/getTranslations.js
+@@ -1,3 +1,4 @@
++import { getCachedRequestLocale } from './RequestLocaleCache.js';
+ import { cache } from 'react';
+ import getConfig from './getConfig.js';
+ import getServerTranslator from './getServerTranslator.js';
+@@ -23,6 +24,10 @@ async function getTranslations(namespaceOrOpts) {
+   const config = await getConfig(locale);
+   return getServerTranslator(config, namespace);
+ }
+-var getTranslations_default = cache(getTranslations);
++const getTranslationsCached = cache((namespaceOrOpts, _requestLocale) => getTranslations(namespaceOrOpts));
++// Jumanly: cached per request locale (see getConfig.js).
++function getTranslations_default(namespaceOrOpts) {
++  return getTranslationsCached(namespaceOrOpts, getCachedRequestLocale());
++}
+ 
+ export { getTranslations_default as default };
+diff --git a/dist/esm/production/server/react-server/getConfig.js b/dist/esm/production/server/react-server/getConfig.js
+index 1274834bbf98fcd412905b5232be76fa39512a9d..243f23446e7d73384fb6fb031aa545902ce1901b 100644
+--- a/dist/esm/production/server/react-server/getConfig.js
++++ b/dist/esm/production/server/react-server/getConfig.js
+@@ -1 +1 @@
+-import{cache as e}from"react";import{initializeConfig as t,_createIntlFormatters as o,_createCache as r}from"use-intl/core";import{isPromise as n}from"../../shared/utils.js";import{getRequestLocale as i}from"./RequestLocale.js";import s from"next-intl/config";const a=e((function(){return Intl.DateTimeFormat().resolvedOptions().timeZone}));const c=e((async function(e,t){let o=e({locale:t,get requestLocale(){return t?Promise.resolve(t):i()}});if(n(o)&&(o=await o),!o.locale)throw new Error("No locale was returned from `getRequestConfig`.\n\nSee https://next-intl.dev/docs/usage/configuration#i18n-request");return o})),m=e(o),l=e(r);const u=e((async function(e){const o=await c(s,e);return{...t(o),_formatters:m(l()),timeZone:o.timeZone||a()}}));export{u as default};
++import{cache as e}from"react";import{initializeConfig as t,_createIntlFormatters as o,_createCache as r}from"use-intl/core";import{isPromise as n}from"../../shared/utils.js";import{getRequestLocale as i}from"./RequestLocale.js";import s from"next-intl/config";import{getCachedRequestLocale as J}from"./RequestLocaleCache.js";const a=e((function(){return Intl.DateTimeFormat().resolvedOptions().timeZone}));const c=e((async function(e,t){let o=e({locale:t,get requestLocale(){return t?Promise.resolve(t):i()}});if(n(o)&&(o=await o),!o.locale)throw new Error("No locale was returned from `getRequestConfig`.\n\nSee https://next-intl.dev/docs/usage/configuration#i18n-request");return o})),m=e(o),l=e(r);const u=e((async function(e){const o=await c(s,e);return{...t(o),_formatters:m(l()),timeZone:o.timeZone||a()}}));function jumanlyGetConfig(e){return u(e??J())}export{jumanlyGetConfig as default};
+diff --git a/dist/esm/production/server/react-server/getConfigNow.js b/dist/esm/production/server/react-server/getConfigNow.js
+index 517e659ad7886ecbf13d601a015bad5af19bd222..f88da88fec8b05e2311a2504daef2e432756fac3 100644
+--- a/dist/esm/production/server/react-server/getConfigNow.js
++++ b/dist/esm/production/server/react-server/getConfigNow.js
+@@ -1 +1 @@
+-import{cache as t}from"react";import o from"./getConfig.js";const r=t((async function(t){return(await o(t)).now}));export{r as default};
++import{getCachedRequestLocale as J}from"./RequestLocaleCache.js";import{cache as t}from"react";import o from"./getConfig.js";const q=t((async function(t){return(await o(t)).now}));function r(t){return q(t??J())}export{r as default};
+diff --git a/dist/esm/production/server/react-server/getFormats.js b/dist/esm/production/server/react-server/getFormats.js
+index 152feb5897b980abe4b22000e9c557a9111bdd0a..179f3911413a183f8c01a9ecfc03b554447b1c73 100644
+--- a/dist/esm/production/server/react-server/getFormats.js
++++ b/dist/esm/production/server/react-server/getFormats.js
+@@ -1 +1 @@
+-import{cache as t}from"react";import o from"./getConfig.js";const r=t((async function(){return(await o()).formats}));export{r as default};
++import{getCachedRequestLocale as J}from"./RequestLocaleCache.js";import{cache as t}from"react";import o from"./getConfig.js";const q=t((async function(l){return(await o(l)).formats}));function r(){return q(J())}export{r as default};
+diff --git a/dist/esm/production/server/react-server/getFormatter.js b/dist/esm/production/server/react-server/getFormatter.js
+index df64e0cc30228fb8726239d1fcd9d5c258e1c7be..379da76bbd92d1399814c104153ceaa02ef7791e 100644
+--- a/dist/esm/production/server/react-server/getFormatter.js
++++ b/dist/esm/production/server/react-server/getFormatter.js
+@@ -1 +1 @@
+-import{cache as t}from"react";import r from"./getConfig.js";import o from"./getServerFormatter.js";const e=t((async function(t){const e=await r(t);return o(e)}));async function n(t){return e(t?.locale)}export{n as default};
++import{getCachedRequestLocale as J}from"./RequestLocaleCache.js";import{cache as t}from"react";import r from"./getConfig.js";import o from"./getServerFormatter.js";const e=t((async function(t){const e=await r(t);return o(e)}));async function n(t){return e(t?.locale??J())}export{n as default};
+diff --git a/dist/esm/production/server/react-server/getLocale.js b/dist/esm/production/server/react-server/getLocale.js
+index 5f887287d2c94687b1ebd6dc1a1c48eb8169f01a..f146b9ba7b8a33b983e22c99a8461723234a71ef 100644
+--- a/dist/esm/production/server/react-server/getLocale.js
++++ b/dist/esm/production/server/react-server/getLocale.js
+@@ -1 +1 @@
+-import{cache as t}from"react";import o from"./getConfig.js";const r=t((async function(){return(await o()).locale}));export{r as default};
++import{getCachedRequestLocale as J}from"./RequestLocaleCache.js";import{cache as t}from"react";import o from"./getConfig.js";const q=t((async function(l){return(await o(l)).locale}));function r(){return q(J())}export{r as default};
+diff --git a/dist/esm/production/server/react-server/getMessages.js b/dist/esm/production/server/react-server/getMessages.js
+index 2eb5b938a961f7f9932ec12bf8a97f14ef3cbb73..e5c5fd7006705ec050d5ee79f322b4c7388880f7 100644
+--- a/dist/esm/production/server/react-server/getMessages.js
++++ b/dist/esm/production/server/react-server/getMessages.js
+@@ -1 +1 @@
+-import{cache as e}from"react";import t from"./getConfig.js";function o(e){if(!e.messages)throw new Error("No messages found. Have you configured them correctly? See https://next-intl.dev/docs/configuration#messages");return e.messages}const n=e((async function(e){return o(await t(e))}));async function r(e){return n(e?.locale)}export{r as default,o as getMessagesFromConfig};
++import{getCachedRequestLocale as J}from"./RequestLocaleCache.js";import{cache as e}from"react";import t from"./getConfig.js";function o(e){if(!e.messages)throw new Error("No messages found. Have you configured them correctly? See https://next-intl.dev/docs/configuration#messages");return e.messages}const n=e((async function(e){return o(await t(e))}));async function r(e){return n(e?.locale??J())}export{r as default,o as getMessagesFromConfig};
+diff --git a/dist/esm/production/server/react-server/getTimeZone.js b/dist/esm/production/server/react-server/getTimeZone.js
+index 19973a33a81e24b78b340e94f4bdb86b4ae35729..bb5f8308ee6354c346a504567ace78a8280552a2 100644
+--- a/dist/esm/production/server/react-server/getTimeZone.js
++++ b/dist/esm/production/server/react-server/getTimeZone.js
+@@ -1 +1 @@
+-import{cache as t}from"react";import n from"./getConfig.js";const o=t((async function(t){return(await n(t)).timeZone}));async function r(t){return o(t?.locale)}export{r as default};
++import{getCachedRequestLocale as J}from"./RequestLocaleCache.js";import{cache as t}from"react";import n from"./getConfig.js";const o=t((async function(t){return(await n(t)).timeZone}));async function r(t){return o(t?.locale??J())}export{r as default};
+diff --git a/dist/esm/production/server/react-server/getTranslations.js b/dist/esm/production/server/react-server/getTranslations.js
+index 6d3f01a893004776f8a82544ee002c18884805a2..b949179320907b2e48a2a0b709cc8f6072159a96 100644
+--- a/dist/esm/production/server/react-server/getTranslations.js
++++ b/dist/esm/production/server/react-server/getTranslations.js
+@@ -1 +1 @@
+-import{cache as r}from"react";import t from"./getConfig.js";import e from"./getServerTranslator.js";var o=r((async function(r){let o,a;"string"==typeof r?o=r:r&&(a=r.locale,o=r.namespace);const n=await t(a);return e(n,o)}));export{o as default};
++import{getCachedRequestLocale as J}from"./RequestLocaleCache.js";import{cache as r}from"react";import t from"./getConfig.js";import e from"./getServerTranslator.js";var q=r((async function(r,_l){let o,a;"string"==typeof r?o=r:r&&(a=r.locale,o=r.namespace);const n=await t(a);return e(n,o)}));function o(r){return q(r,J())}export{o as default};

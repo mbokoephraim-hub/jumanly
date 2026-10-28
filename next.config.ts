@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 import { securityHeaders } from "./src/lib/security-headers";
+import { publicSiteRewrites, siteLocales } from "./src/i18n/site-routes";
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
@@ -33,8 +34,12 @@ const nextConfig: NextConfig = {
   // production : en local, le site est servi en http.
   // Maintenance (mockup 08-04): with MAINTENANCE_MODE=1 at build time, every page shows
   // /maintenance; built files, pictures, course media and the scheduled tasks keep working.
+  // Public site in French or English (src/i18n/site-routes.ts): same addresses, the language comes
+  // from the visitor's choice, each language rendered statically.
   async rewrites() {
-    if (process.env.MAINTENANCE_MODE !== "1") return [];
+    if (process.env.MAINTENANCE_MODE !== "1") {
+      return { beforeFiles: publicSiteRewrites(), afterFiles: [], fallback: [] };
+    }
     return {
       beforeFiles: [
         { source: "/", destination: "/maintenance" },
@@ -47,6 +52,17 @@ const nextConfig: NextConfig = {
       afterFiles: [],
       fallback: [],
     };
+  },
+  // `/en/tarifs` or `/fr/tarifs`: the language is kept, then the usual address is shown.
+  async redirects() {
+    return siteLocales.flatMap((locale) => [
+      { source: `/${locale}`, destination: `/langue?vers=${locale}&suite=/`, permanent: false },
+      {
+        source: `/${locale}/:path*`,
+        destination: `/langue?vers=${locale}&suite=/:path*`,
+        permanent: false,
+      },
+    ]);
   },
   async headers() {
     return securityHeaders({ production: process.env.APP_ENV === "production" });
