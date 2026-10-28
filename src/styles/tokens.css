@@ -21,6 +21,8 @@
   --jm-lime-clair: #e4fad0; /* fond de tendance +, étape validée */
   --jm-ambre: #f2b33d; /* alerte douce : quota à 80 %, délai de grâce */
   --jm-corail: #e25c4b; /* erreur, baisse ; jamais pour un score de candidat */
+  /* Site public (refonte du 28/10/2026) : fond clair et aéré, sous les blocs Sapin et Lime clair */
+  --jm-papier: #f7f6f1;
 
   /* Dégradés */
   --jm-degrade-signature: linear-gradient(135deg, #d9fa72 0%, #7de36b 50%, #1e9a64 100%);

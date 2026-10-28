@@ -30,7 +30,9 @@ const entries = files.flatMap((name) => {
 
 const { messages, errors } = buildMessages(entries);
 
-const englishFiles = existsSync(englishDir) ? readdirSync(englishDir).filter(isTextFile).sort() : [];
+const englishFiles = existsSync(englishDir)
+  ? readdirSync(englishDir).filter(isTextFile).sort()
+  : [];
 const englishEntries = englishFiles.flatMap((name) => {
   const path = join(englishDir, name);
   return extractEntries(readFileSync(path, "utf8"), relative(root, path));

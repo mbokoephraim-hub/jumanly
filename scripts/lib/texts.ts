@@ -167,7 +167,9 @@ export function checkTranslation(reference: TextEntry[], translated: TextEntry[]
     const expected = variables(source.text).join(", ");
     const found = variables(entry.text).join(", ");
     if (expected !== found) {
-      errors.push(`${where} : « ${entry.key} » doit garder les variables {${expected}} (trouvé {${found}})`);
+      errors.push(
+        `${where} : « ${entry.key} » doit garder les variables {${expected}} (trouvé {${found}})`,
+      );
     }
   }
   return errors;

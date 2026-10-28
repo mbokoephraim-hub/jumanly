@@ -21,7 +21,7 @@ export default async function PublicLayout({ children, params }: LayoutProps<"/[
   const t = await getTranslations("nav");
   const messages = await getMessages();
   return (
-    <div lang={locale} className="flex min-h-dvh flex-col">
+    <div lang={locale} className="flex min-h-dvh flex-col bg-papier">
       <a
         href="#content"
         className="sr-only z-50 rounded-md bg-lime px-4 py-2 font-medium text-sapin focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
