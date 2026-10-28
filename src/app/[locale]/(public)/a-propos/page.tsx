@@ -275,7 +275,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
             >
               <div className="flex items-start justify-between">
                 <IconTile icon={value.icon} className="bg-lime text-sapin" />
-                <span aria-hidden className="text-[40px] leading-10 font-semibold text-blanc/14">
+                <span aria-hidden className="text-[40px] leading-10 font-semibold text-lime">
                   {String(index + 1).padStart(2, "0")}
                 </span>
               </div>

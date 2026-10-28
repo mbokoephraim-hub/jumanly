@@ -5001,3 +5001,10 @@ bibliothèque, et se supprime.
 
 - À la demande d'Ephraïm (le Lime clair fatiguait les yeux sur le crème), dans le thème clair seulement : les fonds Lime deviennent Sapin (#0F3F37) et le menthe un vert foncé (#0D6B53), avec un texte crème dessus (`--nb-sur-lime`, `--nb-encre`). Les teintes Lime et menthe suivent (`--nb-lime-rgb`, `--nb-menthe-rgb`). Textes gris et filets plus foncés. Le thème sombre ne change pas.
 - Sur un fond Sapin fixe, le texte Lime reste Lime.
+
+## 2026-10-28 · Site public : nouvelle identité, français et anglais
+
+- Toutes les pages publiques (accueil, talents, recruteurs, entreprises, partenaires, à propos, matching, FAQ, contact, formations, offres et leurs fiches, attestations, tarifs, pages légales, 404, pages entreprise et portfolio) reprennent la nouvelle identité : voir docs/decisions/2026-10-28-site-public.md.
+- Site bilingue avec sélecteur FR / EN : voir docs/decisions/2026-10-28-site-bilingue.md. 1 753 textes traduits dans `textes/en/`.
+- Les contenus de la base (offres, formations de démonstration, descriptions des forfaits) restent en français sur la version anglaise.
+- Test unitaire `phone-preload` réparé (il échouait déjà sur main).

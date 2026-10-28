@@ -65,15 +65,20 @@ export function MotionRoot() {
  * « De 0 à 19 USD/mois »). Server rendering and screen readers get the final text.
  */
 export function CountUp({ text, duration = 1400 }: { text: string; duration?: number }) {
+  // Where the number sits in the text (the same in both languages: "1 268" or "1,268").
   const parts = splitLastNumber(text);
   const ref = useRef<HTMLSpanElement>(null);
   const [shown, setShown] = useState<string | null>(null);
 
   useEffect(() => {
     const element = ref.current;
-    if (!parts || !element || reducedMotion()) return;
-    const { value, decimals } = parts;
-    const format = new Intl.NumberFormat("fr-FR", {
+    if (!element || reducedMotion()) return;
+    // The language of the page: English pages write "1,268", French ones "1 268".
+    const english = element.closest("[lang]")?.getAttribute("lang") === "en";
+    const live = splitLastNumber(text, english ? "en" : "fr");
+    if (!live) return;
+    const { value, decimals } = live;
+    const format = new Intl.NumberFormat(english ? "en-US" : "fr-FR", {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals,
     });

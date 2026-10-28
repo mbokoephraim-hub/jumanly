@@ -1,3 +1,5 @@
+import { displayLocale } from "./display-locale";
+
 /**
  * A person's country as the profile shows it (docs/profil-personne § En-tête 6): the flag drawn
  * from the ISO code of `User.country` (no external picture), the name in French and the local
@@ -58,7 +60,7 @@ export function flagOf(code: string) {
 }
 
 /** « RD Congo » for « CD » (the French usage of the platform), Intl's name otherwise. */
-export function countryName(code: string, locale = "fr") {
+export function countryName(code: string, locale: string = displayLocale()) {
   if (code === "CD" && locale === "fr") return "RD Congo";
   try {
     return new Intl.DisplayNames([locale], { type: "region" }).of(code) ?? code;

@@ -1,3 +1,4 @@
+import { intlLocale } from "@/lib/display-locale";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
@@ -176,7 +177,11 @@ async function ProjectCard({
 }) {
   const t = await getTranslations("career.portfolio");
   const cover = covers[index % covers.length]!;
-  const month = new Intl.DateTimeFormat("fr", { month: "long", year: "numeric", timeZone: "UTC" });
+  const month = new Intl.DateTimeFormat(intlLocale(), {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
   const date = project.date
     ? month.format(new Date(`${project.date}-01T00:00:00Z`)).replace(/^./, (c) => c.toUpperCase())
     : null;

@@ -1,4 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
+import { setDisplayLocale } from "@/lib/display-locale";
 import { siteLocales } from "./site-routes";
 
 export { siteLocales };
@@ -23,5 +24,6 @@ export async function applySiteLocale(params: Promise<{ locale: string }>): Prom
   const { locale } = await params;
   const value = isSiteLocale(locale) ? locale : "fr";
   setRequestLocale(value);
+  setDisplayLocale(value);
   return value;
 }
