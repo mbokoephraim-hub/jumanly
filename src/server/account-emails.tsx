@@ -6,12 +6,13 @@
 import { render, toPlainText } from "@react-email/components";
 import { siteUrl, t } from "../../emails/_components/translator";
 import TransactionalEmail, { type TransactionalEmailProps } from "../../emails/transactional";
-import { CODE_MINUTES } from "@/lib/password";
+import { CODE_MINUTES, VERIFY_LINK_HOURS } from "@/lib/password";
 import { emailSender } from "./adapters/email";
 
 export const OTP_MINUTES = CODE_MINUTES;
 export const LINK_MINUTES = CODE_MINUTES;
 export const RESET_MINUTES = 60;
+export { VERIFY_LINK_HOURS };
 
 export function greeting(firstName?: string | null) {
   return firstName
@@ -35,6 +36,28 @@ export async function sendVerificationCode(to: string, code: string, firstName?:
     paragraphs: [t("mail.verifyCode.p1")],
     code,
     footnote: `${t("mail.verifyCode.p2", { minutes: OTP_MINUTES })} ${t("mail.verifyCode.p3")}`,
+  });
+}
+
+/** Sign-up: « Confirmer mon adresse » opens Jumanly signed in, on the phone or the computer. */
+export async function sendVerificationLink(to: string, url: string, firstName?: string | null) {
+  await send(to, t("mail.verifyLink.subject"), {
+    preview: t("mail.verifyLink.preheader"),
+    greeting: greeting(firstName),
+    paragraphs: [t("mail.verifyLink.p1")],
+    cta: { label: t("mail.verifyLink.cta"), href: url },
+    footnote: `${t("mail.verifyLink.p2", { hours: VERIFY_LINK_HOURS })} ${t("mail.verifyCode.p3")}`,
+  });
+}
+
+/** « Changer d'adresse » in Paramètres: the link sent to the new address makes it the account's. */
+export async function sendEmailChangeLink(to: string, url: string, firstName?: string | null) {
+  await send(to, t("mail.changeEmail.subject"), {
+    preview: t("mail.changeEmail.preheader"),
+    greeting: greeting(firstName),
+    paragraphs: [t("mail.changeEmail.p1")],
+    cta: { label: t("mail.changeEmail.cta"), href: url },
+    footnote: `${t("mail.verifyLink.p2", { hours: VERIFY_LINK_HOURS })} ${t("mail.verifyCode.p3")}`,
   });
 }
 

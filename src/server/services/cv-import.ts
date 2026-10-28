@@ -6,7 +6,15 @@
 import { z } from "zod";
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { aiReadiness, runAi, AiError } from "@/server/ai";
-import { monthToDate, normalize, refreshCompleteness, ensureProfile } from "./profile";
+import type { AiImage } from "@/server/ai/provider";
+import { languageName } from "@/lib/dates";
+import {
+  monthToDate,
+  normalize,
+  parseProfileLanguages,
+  refreshCompleteness,
+  ensureProfile,
+} from "./profile";
 
 export const CV_TEXT_MAX = 15_000;
 
@@ -32,8 +40,47 @@ export const extractionSchema = z.object({
     }),
   ),
   skills: z.array(z.string()),
+  /** ISO 639-1 codes of the languages written on the CV (« fr », « ln »). */
+  languages: z.array(z.string()),
+  /** What the CV says of the person (« Coordonnées »); only the city may fill an empty profile. */
+  contact: z.object({
+    name: z.string().nullable(),
+    email: z.string().nullable(),
+    city: z.string().nullable(),
+  }),
 });
 export type Extraction = z.infer<typeof extractionSchema>;
+
+const noContact: Extraction["contact"] = { name: null, email: null, city: null };
+
+/** Languages found by name in a CV, without the model: the common ones of the region and beyond. */
+const KNOWN_LANGUAGES = [
+  "fr",
+  "en",
+  "ln",
+  "sw",
+  "kg",
+  "lu",
+  "pt",
+  "es",
+  "ar",
+  "de",
+  "it",
+  "zh",
+  "wo",
+  "yo",
+  "ha",
+  "am",
+  "rw",
+  "rn",
+  "mg",
+  "ff",
+  "ig",
+  "zu",
+  "nl",
+  "ru",
+];
+const EMAIL = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/i;
 
 const MONTH = /^\d{4}-(0[1-9]|1[0-2])$/;
 
@@ -54,12 +101,23 @@ export async function extractByRules(db: PrismaClient, text: string): Promise<Ex
       }),
     )
     .map((skill) => skill.name);
-  return { experiences: [], educations: [], skills: found.slice(0, 40) };
+  const languages = KNOWN_LANGUAGES.filter((code) =>
+    folded.includes(` ${normalize(languageName(code))} `),
+  );
+  const email = text.match(EMAIL)?.[0] ?? null;
+  return {
+    experiences: [],
+    educations: [],
+    skills: found.slice(0, 40),
+    languages,
+    contact: { ...noContact, email },
+  };
 }
 
 const SYSTEM = [
   "Tu extrais les informations d'un CV en JSON, pour Jumanly. Tu recopies ce qui est écrit, sans rien inventer ni reformuler.",
   "Dates au format AAAA-MM (null si absente). Une ligne par réalisation dans « description ».",
+  "Langues : codes ISO 639-1 (fr, en, ln, sw…). Coordonnées : nom, e-mail et ville seulement (null si absents).",
   "Ignore et ne recopie jamais : photo, âge, date de naissance, genre, nationalité, origine, religion, situation familiale, santé, adresse.",
 ].join("\n");
 
@@ -86,13 +144,21 @@ function clean(extraction: Extraction): Extraction {
       0,
       40,
     ),
+    languages: [...new Set(extraction.languages.map((code) => code.trim().toLowerCase()))]
+      .filter((code) => /^[a-z]{2,3}$/.test(code))
+      .slice(0, 12),
+    contact: {
+      name: extraction.contact.name?.trim().slice(0, 120) || null,
+      email: extraction.contact.email?.match(EMAIL)?.[0] ?? null,
+      city: extraction.contact.city?.trim().slice(0, 80) || null,
+    },
   };
 }
 
 /** The file the text was read from (« Importer un CV »), shown while the talent checks the items. */
 export const importFileSchema = z.object({
   name: z.string().max(200),
-  kind: z.enum(["pdf", "docx"]),
+  kind: z.enum(["pdf", "docx", "image"]),
   pages: z.number().int().nullable(),
   size: z.number().int(),
 });
@@ -134,16 +200,69 @@ export async function importCvText(
     payload = { ...(await rules()), source: "rules" };
   }
   if (file) payload.file = { ...file, name: file.name.slice(0, 200) };
+  return keep(db, userId, payload);
+}
+
+async function keep(db: PrismaClient, userId: string, payload: ImportPayload) {
   await db.aiSuggestion.deleteMany({ where: { userId, feature: "cv_parse", status: "pending" } });
   return db.aiSuggestion.create({
     data: { userId, feature: "cv_parse", payload: payload as unknown as Prisma.InputJsonValue },
   });
 }
 
+export type PhotoImportResult =
+  { ok: true; id: string } | { ok: false; error: "ai" | AiError["code"] };
+
+/**
+ * « Photographier un CV papier »: only the model can read a picture, so Orbi must be ready
+ * (consent, right, credits: checked by `runAi`, logged in AiUsage). The picture is never kept.
+ */
+export async function importCvPhoto(
+  db: PrismaClient,
+  userId: string,
+  image: AiImage,
+  file: ImportFile,
+): Promise<PhotoImportResult> {
+  if ((await aiReadiness(db, userId, "cv_parse")) !== "ready") return { ok: false, error: "ai" };
+  const empty: Extraction = {
+    experiences: [],
+    educations: [],
+    skills: [],
+    languages: [],
+    contact: noContact,
+  };
+  try {
+    const run = await runAi(db, {
+      userId,
+      feature: "cv_parse",
+      system: SYSTEM,
+      prompt: "Voici la photo d'un CV papier. Recopie ce qu'il contient.",
+      schema: extractionSchema,
+      template: () => empty,
+      image,
+    });
+    const kept = await keep(db, userId, {
+      ...clean(run.output),
+      source: "ai",
+      file: { ...file, name: file.name.slice(0, 200) },
+    });
+    return { ok: true, id: kept.id };
+  } catch (error) {
+    if (error instanceof AiError) return { ok: false, error: error.code };
+    throw error;
+  }
+}
+
+/** Imports kept before languages and contact were read have neither: both start empty. */
+const storedImportSchema = extractionSchema.extend({
+  languages: z.array(z.string()).default([]),
+  contact: extractionSchema.shape.contact.default(noContact),
+  source: z.enum(["ai", "rules"]),
+  file: importFileSchema.optional(),
+});
+
 export function parseImport(value: Prisma.JsonValue): ImportPayload | null {
-  const parsed = extractionSchema
-    .extend({ source: z.enum(["ai", "rules"]), file: importFileSchema.optional() })
-    .safeParse(value);
+  const parsed = storedImportSchema.safeParse(value);
   return parsed.success ? parsed.data : null;
 }
 
@@ -155,7 +274,15 @@ export async function applyImport(
   db: PrismaClient,
   userId: string,
   suggestionId: string,
-  chosen: { experiences: number[]; educations: number[]; skills: number[] },
+  chosen: {
+    experiences: number[];
+    educations: number[];
+    skills: number[];
+    /** « Langues »: the languages not yet in the profile are added. */
+    languages?: boolean;
+    /** « Coordonnées »: the city fills the profile only when it has none. */
+    contact?: boolean;
+  },
 ) {
   const suggestion = await db.aiSuggestion.findFirst({
     where: { id: suggestionId, userId, feature: "cv_parse", status: "pending" },
@@ -215,6 +342,27 @@ export async function applyImport(
       });
       added++;
     }
+  }
+  if (chosen.languages && payload.languages.length > 0) {
+    const before = parseProfileLanguages(profile.languages);
+    const known = new Set(before.map((item) => item.code));
+    const fresh = payload.languages
+      .filter((code) => !known.has(code))
+      .map((code) => ({ code, level: "professional" as const }));
+    if (fresh.length > 0) {
+      await db.talentProfile.update({
+        where: { id: profile.id },
+        data: { languages: [...before, ...fresh].slice(0, 12) },
+      });
+      added += fresh.length;
+    }
+  }
+  if (chosen.contact && payload.contact.city) {
+    const updated = await db.user.updateMany({
+      where: { id: userId, OR: [{ city: null }, { city: "" }] },
+      data: { city: payload.contact.city },
+    });
+    added += updated.count;
   }
   await db.aiSuggestion.update({ where: { id: suggestion.id }, data: { status: "applied" } });
   await refreshCompleteness(db, profile.id);

@@ -2,6 +2,8 @@ import "server-only";
 import { NextResponse } from "next/server";
 import { db } from "@/server/db";
 import { canUseTemplate } from "@/server/services/cv";
+import { cvFileResponse } from "@/server/services/cv-original";
+import { fileStorage } from "@/server/storage";
 import { MAX_PAGES } from "../style";
 import { splitName } from "../render/build";
 import { parseCv } from "@/server/services/cv";
@@ -79,6 +81,10 @@ export async function exportCvCopy(
   fileName: string,
   origin: string,
 ) {
+  // An imported CV kept as a file is sent as that file (Ephraïm, 27/10).
+  const file = (snapshot as { file?: { key?: string; name?: string } } | null)?.file;
+  const stored = file?.key ? await fileStorage(db).get(file.key) : null;
+  if (stored) return cvFileResponse(stored, file?.name || fileName, "inline");
   const content = (snapshot as { content?: unknown } | null)?.content;
   if (!content) return new NextResponse(null, { status: 404 });
   const name = parseCv(content as never).info.name.trim();

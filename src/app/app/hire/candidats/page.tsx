@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { after } from "next/server";
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
@@ -24,6 +24,10 @@ import { requireHire } from "@/server/hire-context";
 import { reportError } from "@/server/observability";
 import { HireError, hirePermissions } from "@/server/services/hire";
 import { candidateList, type CandidateRow } from "@/server/services/hire-candidates";
+import { isPhone } from "@/server/view";
+import { RhTab } from "@/components/phone/recruteur/head";
+import { RhCandidatures, rhCandidaturesLine } from "@/components/phone/recruteur/candidatures";
+import { rhApplications } from "@/server/services/hire-phone-candidatures";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hireCandidates");
@@ -42,7 +46,7 @@ const DAY = 86_400_000;
  * many are hidden and shows them again in one tap. « Rechercher des talents » (`?vue=talents`, managers
  * only) and its « Mes propositions » (`?vue=propositions`) are drawn by talent-search.tsx (lot 4).
  */
-export default async function CandidatesPage({ searchParams }: PageProps<"/app/hire/candidats">) {
+async function CandidatesPageContent({ searchParams }: PageProps<"/app/hire/candidats">) {
   const query = await searchParams;
   const { ctx } = await requireHire("/app/hire/candidats", "readApplications");
   const t = await getTranslations("hireCandidates");
@@ -456,5 +460,28 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/app/h
         </ul>
       </Sheet>
     </div>
+  );
+}
+
+/**
+ * On a phone, the tab Candidatures of Modèle B (docs/modele-b-recruteur, lot M5): the offers, then
+ * « Fort potentiel · Toutes · Entretiens · Décisions ».
+ */
+export default async function CandidatesPage(props: PageProps<"/app/hire/candidats">) {
+  if (!(await isPhone())) return <CandidatesPageContent {...props} />;
+  const query = await props.searchParams;
+  // The talent search (`?vue=talents`) and the proposals are the Talents tab on a phone (M6).
+  if (query.vue === "talents") redirect("/app/hire/talents");
+  if (query.vue === "propositions") redirect("/app/hire/talents?onglet=propositions");
+  const { ctx } = await requireHire("/app/hire/candidats", "readApplications");
+  const offre = typeof query.offre === "string" ? query.offre : null;
+  const data = await rhApplications(db, ctx, offre).catch((error) => {
+    if (error instanceof HireError) notFound();
+    throw error;
+  });
+  return (
+    <RhTab tab="candidatures" legacy={false} subtitle={await rhCandidaturesLine(data)}>
+      <RhCandidatures ctx={ctx} query={query} data={data} />
+    </RhTab>
   );
 }

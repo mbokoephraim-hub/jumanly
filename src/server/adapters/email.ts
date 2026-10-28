@@ -112,6 +112,14 @@ function smtpSender(): EmailSender | undefined {
   return new SmtpEmailSender({ host, port, user, password }, from);
 }
 
+/**
+ * Whether a real message can leave: in production the fake adapter only prints in the logs, so an
+ * action that depends on the recipient opening a link must say so instead of claiming success.
+ */
+export function emailDeliveryAvailable(): boolean {
+  return emailSender().id !== "fake" || process.env.VERCEL_ENV !== "production";
+}
+
 export function emailSender(): EmailSender {
   if (!sender) {
     const apiKey = process.env.RESEND_API_KEY;

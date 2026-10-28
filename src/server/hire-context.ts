@@ -11,6 +11,7 @@ import { requireUser, type CurrentUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { hirePermissions, type HireContext } from "@/server/services/hire";
 import { hireMemberships, resolveSpace } from "@/server/services/organization";
+import { effectiveRights, type MemberRight } from "@/server/services/org-team";
 
 export const SPACE_COOKIE = "jm_space";
 
@@ -40,6 +41,8 @@ export async function setActiveSpace(value: string) {
 export async function requireHire(
   suite = "/app/hire",
   need?: keyof ReturnType<typeof hirePermissions>,
+  /** « Droits de … » set in Équipe (étape 3, A2): a switch turned off closes the gesture. */
+  right?: MemberRight,
 ): Promise<{ user: CurrentUser; space: ActiveSpace; ctx: HireContext }> {
   const user = await requireUser(suite);
   const space = await getActiveSpace(user.id);
@@ -53,6 +56,7 @@ export async function requireHire(
   }
   const ctx = { userId: user.id, organizationId: space.organizationId, role: space.role };
   if (need && !hirePermissions(space.role)[need]) notFound();
+  if (right && !effectiveRights(space.role, space.rights)[right]) notFound();
   return { user, space, ctx };
 }
 
@@ -64,4 +68,32 @@ export async function connectViewer(suite = "/app/messages") {
     ? { userId: user.id, organizationId: space.organizationId, role: space.role }
     : null;
   return { user, space, viewer: { userId: user.id, hire } };
+}
+
+/**
+ * Where a recruiter publishes in the Fil (Modèle B recruteur, M3): the active organization, whose
+ * offers may be joined to a post, and whether the person may publish in its name — a member who
+ * manages the offers, in a company page (never the space under their own name).
+ */
+export async function publishingSpace(userId: string) {
+  const space = await getActiveSpace(userId);
+  if (!space) return null;
+  const [personal, org] = await Promise.all([
+    db.recruiterProfile.findFirst({
+      where: { userId, personalOrganizationId: space.organizationId },
+      select: { id: true },
+    }),
+    db.organization.findUniqueOrThrow({
+      where: { id: space.organizationId },
+      select: { name: true, logo: true },
+    }),
+  ]);
+  return {
+    organizationId: space.organizationId,
+    canPublishAsOrg:
+      hirePermissions(space.role).manage &&
+      effectiveRights(space.role, space.rights).page &&
+      !personal,
+    org,
+  };
 }

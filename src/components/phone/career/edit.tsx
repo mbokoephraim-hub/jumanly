@@ -1,9 +1,11 @@
 "use client";
 
+import "@/styles/phone-apropos.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useId, useRef, useState, useTransition, type ReactNode } from "react";
+import { ABOUT_TEXT_MAX, ABOUT_TITLE_MAX } from "@/lib/profile-about";
 import { showToast } from "@/components/motion/toaster";
 import {
   deleteCareerEducationAction,
@@ -22,6 +24,7 @@ import { FilAvatar } from "../fil/avatar";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { pagesSeen } from "../pages-seen";
 import { PhoneSheet } from "../sheet";
+import { SOCIAL_KINDS, type SocialKind } from "@/lib/social-links";
 
 /** Where a form of the profile goes back to when it was opened directly. */
 const CAREER = "/app/career/cv";
@@ -324,7 +327,12 @@ async function square(file: File): Promise<Blob> {
 
 export type HeadValues = {
   name: string;
+  /** Without « @ »; the one drawn from the name when the person has not chosen one. */
   handle: string;
+  /** False while the handle is the one drawn from the name (it is not saved unless changed). */
+  handleChosen: boolean;
+  socials: Record<SocialKind, string>;
+  showEmail: boolean;
   headline: string;
   city: string;
   summary: string;
@@ -339,7 +347,17 @@ export type HeadValues = {
  * « Modifier le profil » (planche Carrière-modifier, feuille Carrière-photo): the photo, the name,
  * the title, the city, the bio and the availability; « Paramètres du compte » below.
  */
-export function HeadForm({ values }: { values: HeadValues }) {
+export function HeadForm({
+  values,
+  recruiter = false,
+}: {
+  values: HeadValues;
+  /**
+   * A recruiter's own profile (Ephraïm 27/10/2026): the title and « Recrute en ce moment » are
+   * set in « Recrutement », so the title and the talent's availability are left out here.
+   */
+  recruiter?: boolean;
+}) {
   const t = useTranslations("phoneCareer.form");
   const router = useRouter();
   const [form, setForm] = useState(values);
@@ -383,6 +401,11 @@ export function HeadForm({ values }: { values: HeadValues }) {
               city: form.city,
               summary: form.summary,
               availability: form.availability,
+              // The handle drawn from the name is shared by namesakes: kept only once chosen.
+              handle:
+                !values.handleChosen && form.handle === values.handle ? undefined : form.handle,
+              socials: form.socials,
+              showEmail: form.showEmail,
             }),
           t("headSaved"),
         )
@@ -419,21 +442,47 @@ export function HeadForm({ values }: { values: HeadValues }) {
           />
         )}
       </Field>
-      <Field label={t("handle")}>
-        {(id) => <input id={id} className="nb-ca-in" value={values.handle} readOnly />}
-      </Field>
-      <Field label={t("headline")}>
+      <Field
+        label={t("handle")}
+        error={
+          error === "handle"
+            ? t("errors.handle")
+            : error === "handleTaken"
+              ? t("errors.handleTaken")
+              : null
+        }
+      >
         {(id) => (
           <input
             id={id}
             className="nb-ca-in"
-            value={form.headline}
-            onChange={(event) => set({ headline: event.target.value })}
-            placeholder={t("headlinePlaceholder")}
-            maxLength={120}
+            value={form.handle}
+            onChange={(event) => set({ handle: event.target.value.replace(/^@/, "") })}
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
+            maxLength={30}
+            aria-describedby="ca-alias-aide"
           />
         )}
       </Field>
+      <p id="ca-alias-aide" className="nb-meta nb-ca-aide">
+        {t("handleHint")}
+      </p>
+      {recruiter ? null : (
+        <Field label={t("headline")}>
+          {(id) => (
+            <input
+              id={id}
+              className="nb-ca-in"
+              value={form.headline}
+              onChange={(event) => set({ headline: event.target.value })}
+              placeholder={t("headlinePlaceholder")}
+              maxLength={120}
+            />
+          )}
+        </Field>
+      )}
       <Field label={t("city")}>
         {(id) => (
           <input
@@ -447,36 +496,63 @@ export function HeadForm({ values }: { values: HeadValues }) {
           />
         )}
       </Field>
-      <Field label={t("bio")}>
-        {(id) => (
-          <textarea
-            id={id}
-            className="nb-ca-in"
-            value={form.summary}
-            onChange={(event) => set({ summary: event.target.value })}
-            maxLength={1000}
-            rows={5}
-          />
-        )}
-      </Field>
-      <div className="nb-ca-ob">
-        <div className="nb-ca-ob-h">
-          <OrbiDisc size={34} />
-          <span>{t("bioOrbi")}</span>
-          <Link href="/app/career/profil/apropos" data-orbi="">
-            {t("improve")}
-          </Link>
-        </div>
+      {/* The presentation has its own page now (« À propos », a title and 400 characters). */}
+      <Link href="/app/career/profil/apropos" className="nb-ca-it">
+        <span>
+          {t("aboutTitle")}
+          <small>{t("aboutHint")}</small>
+        </span>
+        <PhoneIcon name="chevron" size={18} />
+      </Link>
+      {recruiter ? null : (
+        <Chips
+          label={t("availability")}
+          value={form.availability}
+          onChange={(availability) => set({ availability })}
+          options={(["open", "listening", "not_looking"] as const).map((value) => ({
+            value,
+            text: t(`availabilityOption.${value}`),
+          }))}
+        />
+      )}
+      <h2 className="nb-ca-sous">{t("socials")}</h2>
+      <p className="nb-meta nb-ca-aide">{t("socialsHint")}</p>
+      {SOCIAL_KINDS.map((kind) => (
+        <Field
+          key={kind}
+          label={t(`social.${kind}`)}
+          error={error === "socials" && form.socials[kind] ? t("errors.socials") : null}
+        >
+          {(id) => (
+            <input
+              id={id}
+              type="url"
+              inputMode="url"
+              className="nb-ca-in"
+              value={form.socials[kind]}
+              onChange={(event) =>
+                set({ socials: { ...form.socials, [kind]: event.target.value } })
+              }
+              placeholder={t(`socialPlaceholder.${kind}`)}
+              autoCapitalize="none"
+              maxLength={300}
+            />
+          )}
+        </Field>
+      ))}
+      <div className="nb-ca-bascule">
+        <span id="ca-courriel">{t("showEmail")}</span>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={form.showEmail}
+          aria-labelledby="ca-courriel"
+          className="nb-switch"
+          onClick={() => set({ showEmail: !form.showEmail })}
+        >
+          <span />
+        </button>
       </div>
-      <Chips
-        label={t("availability")}
-        value={form.availability}
-        onChange={(availability) => set({ availability })}
-        options={(["open", "listening", "not_looking"] as const).map((value) => ({
-          value,
-          text: t(`availabilityOption.${value}`),
-        }))}
-      />
       <Link href="/app/parametres" className="nb-ca-it">
         {t("accountSettings")}
         <PhoneIcon name="chevron" size={18} />
@@ -550,17 +626,43 @@ export function HeadForm({ values }: { values: HeadValues }) {
 }
 
 /** « À propos » (planche Carrière-apropos): the text, its length and Orbi's rewrite. */
-export function AboutForm({ summary, target }: { summary: string; target: string | null }) {
+export function AboutForm({
+  title: initialTitle,
+  summary,
+  target,
+}: {
+  title: string;
+  summary: string;
+  target: string | null;
+}) {
   const t = useTranslations("phoneCareer.form");
+  const [title, setTitle] = useState(initialTitle);
   const [text, setText] = useState(summary);
-  const { pending, save } = useSave();
+  const { pending, error, save } = useSave();
+  // A text written before the 400-character limit (or imported from a CV) stays until shortened.
+  const over = text.trim().length > ABOUT_TEXT_MAX;
   return (
     <FormPage
       title={t("aboutTitle")}
       pending={pending}
-      onSave={() => save(() => saveCareerAboutAction(text), t("aboutSaved"))}
+      onSave={() => save(() => saveCareerAboutAction({ title, text }), t("aboutSaved"))}
     >
-      <Field label={t("aboutLabel")}>
+      <Field label={t("aboutHeading")}>
+        {(id) => (
+          <input
+            id={id}
+            className="nb-ca-in"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            maxLength={ABOUT_TITLE_MAX}
+            placeholder={t("aboutHeadingPlaceholder")}
+          />
+        )}
+      </Field>
+      <Field
+        label={t("aboutLabel")}
+        error={over && error === "aboutTooLong" ? t("errors.aboutTooLong") : null}
+      >
         {(id) => (
           <textarea
             id={id}
@@ -568,12 +670,16 @@ export function AboutForm({ summary, target }: { summary: string; target: string
             data-haut=""
             value={text}
             onChange={(event) => setText(event.target.value)}
-            maxLength={1000}
+            maxLength={Math.max(ABOUT_TEXT_MAX, summary.length)}
+            placeholder={t("aboutPlaceholder")}
+            aria-invalid={over || undefined}
             rows={7}
           />
         )}
       </Field>
-      <p className="nb-meta nb-ca-compte">{t("count", { count: text.length, max: 1000 })}</p>
+      <p className="nb-meta nb-ca-compte" data-trop={over ? "" : undefined}>
+        {t("count", { count: text.trim().length, max: ABOUT_TEXT_MAX })}
+      </p>
       <OrbiRewrite
         kind="about"
         text={text}

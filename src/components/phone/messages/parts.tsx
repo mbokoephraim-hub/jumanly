@@ -1,27 +1,56 @@
 "use client";
 
+// The Chat's styles come with its pieces, not with the app's global sheet: a phone that kept the
+// app open across a release still gets the new Chat with its styles.
+import "@/styles/phone-chat.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
-import { Verified } from "../explorer/cards";
 import { FilAvatar } from "../fil/avatar";
+import { ringOf, VerifiedMark } from "../profil/profile";
 import type { WhoView } from "./types";
 
-/** A face with the mint dot of « En ligne » (planche Messages). */
-export function WhoAvatar({ who, size = 52 }: { who: WhoView; size?: number }) {
+/**
+ * A face with the ring of its colours and the mint dot of « En ligne » (docs/chat-v2, `.av`):
+ * the ring is 2.5 px, then a dark gap, then the photo or the initials. `online` overrides the
+ * state read with the page (the Chat keeps it live).
+ */
+export function WhoAvatar({
+  who,
+  size = 52,
+  online,
+  dot = true,
+}: {
+  who: WhoView;
+  size?: number;
+  online?: boolean;
+  /** Without the dot (the face of the menu ···). */
+  dot?: boolean;
+}) {
+  const inner = size - 10;
+  const shown = online ?? who.online;
   return (
-    <span className="nb-ms-av" style={{ width: size, height: size }}>
-      <FilAvatar
-        initials={who.initials}
-        image={who.image}
-        tone={who.tone}
-        org={who.org}
-        size={size}
-      />
-      {who.online ? (
-        <span
-          className="nb-ms-enligne"
-          style={{ width: Math.round(size / 4), height: Math.round(size / 4) }}
+    <span
+      className="nb-ch-av"
+      style={{ width: size, height: size, background: ringOf(who.ring) }}
+      aria-hidden
+    >
+      <span className="nb-ch-av-in">
+        <FilAvatar
+          initials={who.initials}
+          image={who.image}
+          tone={who.tone}
+          org={who.org}
+          size={inner}
+        />
+      </span>
+      {dot && shown ? (
+        <i
+          className="nb-ch-on"
+          style={{
+            width: Math.max(10, Math.round(size / 4.6)),
+            height: Math.max(10, Math.round(size / 4.6)),
+          }}
         />
       ) : null}
     </span>
@@ -33,9 +62,9 @@ export function WhoName({ who, as = "b" }: { who: WhoView; as?: "b" | "span" }) 
   const t = useTranslations("phoneMsg");
   const Tag = as;
   return (
-    <span className="nb-ms-nom">
+    <span className="nb-ch-nom">
       <Tag>{who.name}</Tag>
-      {who.verified ? <Verified label={t("verified")} size={16} /> : null}
+      {who.verified ? <VerifiedMark label={t("verified")} size={14} /> : null}
     </span>
   );
 }
@@ -110,5 +139,48 @@ export function Radio({ on }: { on: boolean }) {
     <span className="nb-ms-radio" data-on={on ? "" : undefined} aria-hidden>
       <i />
     </span>
+  );
+}
+
+/** The double check of « Lu » (planche Chat-liste). */
+export function ReadMark({ label, color }: { label: string; color?: string }) {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color ?? "currentColor"}
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      role="img"
+      aria-label={label}
+    >
+      <path d="m2.5 12.5 4 4 8-9M10.5 16.5l.5.5 10-10" />
+    </svg>
+  );
+}
+
+/** « écrit » and its three dots. */
+export function Typing({ label }: { label: string }) {
+  return (
+    <span className="nb-ch-ecrit">
+      {label}
+      <span className="nb-ch-dots" aria-hidden>
+        <i />
+        <i />
+        <i />
+      </span>
+    </span>
+  );
+}
+
+/** Orbi's four-pointed star (planche Chat). */
+export function Spark({ size }: { size: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M12 2.5c.6 4.6 2.9 6.9 7.5 7.5-4.6.6-6.9 2.9-7.5 7.5-.6-4.6-2.9-6.9-7.5-7.5 4.6-.6 6.9-2.9 7.5-7.5z" />
+    </svg>
   );
 }

@@ -18,6 +18,15 @@ export const widePlanner = (page: Page) => width(page) >= 768;
  */
 export async function openCandidateFile(page: Page, name: RegExp) {
   const main = page.locator("main").filter({ visible: true });
+  // On a phone (Modèle B recruteur, M5) the tab opens on « Fort potentiel »: a new application
+  // is in « Toutes », stage « Reçue ».
+  const views = main.getByRole("navigation", { name: "Vues des candidatures" });
+  // Waits for the list (or the phone's views) before deciding which screen this is.
+  await expect(views.or(main.getByRole("link", { name })).first()).toBeVisible();
+  if (await views.count()) {
+    await views.getByRole("link", { name: "Toutes", exact: true }).click();
+    await page.waitForURL(/vue=toutes/);
+  }
   await main.getByRole("link", { name }).first().click();
   // A click before the list is interactive still follows the link to the file: both are fine.
   await page.waitForURL(
@@ -31,6 +40,12 @@ export async function openCandidateFile(page: Page, name: RegExp) {
     await expect(pane).toHaveCount(0);
   }
   await expect(page).toHaveURL(/\/app\/hire\/candidats\/[^/?]+$/);
+  // On a phone the candidate opens on their profile (docs/profil-personne): go on to the file.
+  if (await page.evaluate(() => /Mobi|iPhone|iPod/.test(navigator.userAgent))) {
+    await expect(page.locator(".nb-rh-fiche-p").filter({ visible: true })).toBeVisible();
+    await page.goto(`${page.url()}?onglet=resume`);
+    await expect(page.locator(".nb-rh-fiche").filter({ visible: true })).toBeVisible();
+  }
 }
 
 /** In the planner, once a day is chosen: on a phone « Heures » leads to the times of that day. */

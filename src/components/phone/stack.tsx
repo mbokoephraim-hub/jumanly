@@ -9,7 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { PHONE_TABS, rootTab, tabOf, type PhoneTab } from "@/lib/phone-tabs";
+import { rootTab, tabOf, tabsOf, type PhoneTab, type TabSetName } from "@/lib/phone-tabs";
 import { countPage } from "./pages-seen";
 
 /** How long a tab change lasts (passage d'onglet, 320 ms) before the old tab hides. */
@@ -20,15 +20,16 @@ const GESTURE_MS = 20_000;
 export type Gesture = "approche" | "carte" | "retour" | "orbi" | "onglet-d" | "onglet-g";
 
 /** Reads what was touched (generateurs/transitions_lib.py): back, Orbi, a big card, or a button. */
-function gestureOf(target: Element): Gesture {
+function gestureOf(target: Element, set: TabSetName): Gesture {
   const control = target.closest("a, button, [role='button']");
   if (!control) return "approche";
   if (control.closest("[data-retour]")) return "retour";
   if (control.closest("[data-orbi]")) return "orbi";
   const tab = control.closest<HTMLElement>("[data-onglet]");
   if (tab?.dataset.onglet) {
-    const from = PHONE_TABS.indexOf(tabOf(window.location.pathname));
-    const to = PHONE_TABS.indexOf(tab.dataset.onglet as PhoneTab);
+    const tabs = tabsOf(set);
+    const from = tabs.indexOf(tabOf(window.location.pathname, set));
+    const to = tabs.indexOf(tab.dataset.onglet as PhoneTab);
     return to >= from ? "onglet-d" : "onglet-g";
   }
   const box = control.getBoundingClientRect();
@@ -48,18 +49,22 @@ function gestureOf(target: Element): Gesture {
  */
 export function PhoneStack({
   tabs,
+  set = "talent",
   reduce,
   children,
 }: {
+  /** The talent's tabs or the recruiter's (src/lib/phone-tabs.ts). */
+  set?: TabSetName;
   tabs: Partial<Record<PhoneTab, ReactNode>>;
   /** « Réduire les animations » (settings): a short fade only. */
   reduce: boolean;
   children: ReactNode;
 }) {
   const pathname = usePathname();
-  const root = rootTab(pathname);
+  const root = rootTab(pathname, set);
+  const order = tabsOf(set);
   const kept = (tab: PhoneTab) => tabs[tab] !== undefined;
-  const [base, setBase] = useState<PhoneTab>(root ?? tabOf(pathname));
+  const [base, setBase] = useState<PhoneTab>(root ?? tabOf(pathname, set));
   const [leaving, setLeaving] = useState<{ tab: PhoneTab; dir: "d" | "g" } | null>(null);
   const [entering, setEntering] = useState<"d" | "g" | null>(null);
   const last = useRef(pathname);
@@ -78,7 +83,7 @@ export function PhoneStack({
     };
     const onPointer = (event: PointerEvent) => {
       if (!(event.target instanceof Element)) return;
-      touched = gestureOf(event.target);
+      touched = gestureOf(event.target, set);
       html.style.setProperty("--nb-x", `${Math.round(event.clientX)}px`);
       html.style.setProperty("--nb-y", `${Math.round(event.clientY)}px`);
     };
@@ -91,7 +96,7 @@ export function PhoneStack({
       if (url.origin !== window.location.origin || url.pathname === window.location.pathname)
         return;
       // A keyboard activation has no pointer: the gesture comes from the link itself.
-      mark(event.detail === 0 && target ? gestureOf(target) : touched);
+      mark(event.detail === 0 && target ? gestureOf(target, set) : touched);
     };
     const onSubmit = () => mark("approche");
     const onBack = () => mark("retour");
@@ -106,7 +111,7 @@ export function PhoneStack({
       window.removeEventListener("popstate", onBack);
       clearTimeout(forget);
     };
-  }, []);
+  }, [set]);
 
   useEffect(() => {
     const html = document.documentElement;
@@ -130,8 +135,8 @@ export function PhoneStack({
     }, 450);
     if (!root || root === base) return () => clearTimeout(settle);
     const previous = base;
-    const from = rootTab(before);
-    const dir = PHONE_TABS.indexOf(root) >= PHONE_TABS.indexOf(previous) ? "d" : "g";
+    const from = rootTab(before, set);
+    const dir = order.indexOf(root) >= order.indexOf(previous) ? "d" : "g";
     // eslint-disable-next-line react-hooks/set-state-in-effect -- follows the address
     setBase(root);
     // Tab to tab, both kept: the new one slides over the old, which steps back then hides.
@@ -155,7 +160,7 @@ export function PhoneStack({
   const pileEmpty = root !== null && kept(root);
   return (
     <>
-      {PHONE_TABS.map((tab) => {
+      {order.map((tab) => {
         if (!kept(tab)) return null;
         const state = tab === base ? "actif" : tab === leaving?.tab ? "dessous" : "cache";
         return (
@@ -163,7 +168,6 @@ export function PhoneStack({
             key={tab}
             className="nb-couche nb-onglet"
             data-onglet-couche={tab}
-            data-explorer={tab === "explorer" ? "" : undefined}
             data-etat={state}
             data-entree={state === "actif" && entering ? entering : undefined}
             data-sortie={state === "dessous" ? leaving?.dir : undefined}

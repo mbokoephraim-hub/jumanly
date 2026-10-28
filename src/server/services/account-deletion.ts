@@ -102,3 +102,54 @@ export async function eraseAccount(db: PrismaClient, userId: string) {
   invalidate({ type: "user", id: userId });
   for (const id of erasable) invalidate({ type: "organization", id });
 }
+
+/**
+ * « Effacer définitivement » from the admin (veto of the platform administrator, 27/10/2026): the
+ * same erasure as « Supprimer mon compte », also for an account already anonymized, and without
+ * waiting for the owner to hand over their organizations. Each organization the person owns goes
+ * to another active member (an administrator first, else the oldest member); one where nobody
+ * else works is erased with the account when it is empty, and otherwise stays without owner,
+ * its offers closed (the company page and the applications belong to the company and the
+ * candidates, not to the person).
+ */
+export async function eraseAccountByAdmin(db: PrismaClient, userId: string) {
+  const owned = await db.membership.findMany({
+    where: { userId, role: "org_owner", status: "active" },
+    select: {
+      id: true,
+      organizationId: true,
+      organization: { select: { _count: { select: { jobs: true, entities: true } } } },
+    },
+  });
+  for (const membership of owned) {
+    const others = await db.membership.findMany({
+      where: {
+        organizationId: membership.organizationId,
+        status: "active",
+        userId: { not: userId },
+      },
+      orderBy: { createdAt: "asc" },
+      select: { id: true, role: true },
+    });
+    const heir = others.find((row) => row.role === "org_admin") ?? others[0];
+    if (heir) {
+      await db.$transaction([
+        db.membership.update({ where: { id: heir.id }, data: { role: "org_owner" } }),
+        db.membership.delete({ where: { id: membership.id } }),
+      ]);
+    } else if (membership.organization._count.jobs + membership.organization._count.entities > 0) {
+      await db.$transaction([
+        db.job.updateMany({
+          where: {
+            organizationId: membership.organizationId,
+            status: { in: ["draft", "pending_review", "published"] },
+          },
+          data: { status: "closed" },
+        }),
+        db.membership.delete({ where: { id: membership.id } }),
+      ]);
+    }
+    invalidate({ type: "organization", id: membership.organizationId });
+  }
+  await eraseAccount(db, userId);
+}

@@ -3,6 +3,7 @@
  * database work, called by the admin actions after the role check (content editor or administrator).
  */
 import { z } from "zod";
+import { youtubeIdOf, youtubeVideoId } from "@/lib/youtube";
 import { editorialLines } from "./learn-domains";
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { slugify } from "./accounts";
@@ -806,6 +807,8 @@ export async function updateLesson(
   const lesson = await db.lesson.findFirst({ where: { id: lessonId, module: { courseId } } });
   if (!lesson) return null;
   const { resources, invalid } = parseResourceLines(input.resources);
+  // A YouTube link is kept as `youtube:<id>` and makes the lesson a video lesson.
+  const youtube = youtubeIdOf(input.videoId);
   const paragraphs = input.paragraphs
     .split(/\r?\n\s*\r?\n/)
     .map((paragraph) => paragraph.trim())
@@ -814,8 +817,8 @@ export async function updateLesson(
     where: { id: lessonId },
     data: {
       title: input.title,
-      kind: input.kind,
-      videoId: input.videoId || null,
+      kind: youtube && input.kind === "text" ? "video" : input.kind,
+      videoId: youtube ? youtubeVideoId(youtube) : input.videoId || null,
       durationSec: input.durationMinutes * 60,
       content: {
         ...(paragraphs.length > 0 ? { paragraphs } : {}),

@@ -1,0 +1,15 @@
+# Modèle B recruteur, M4 : les Offres au téléphone
+
+Date : 22/10/2026 · Lot M4 (`docs/modele-b-recruteur/`, captures 041 à 056).
+
+1. **Quatre étapes, comme les captures** (le poste, les détails, la présélection, l'aperçu), puis l'écran « Votre offre est en ligne ». Les « 5 étapes » de la consigne sont ces cinq planches (Recruteur-publier-1 à -5) : quatre étapes à remplir et l'écran de confirmation, que les maquettes numérotent « Étape 1 sur 4 » à « Étape 4 sur 4 ». Elles enregistrent par le même service que l'ordinateur (`saveJobStep`) : mêmes règles de texte, de compétences et d'organisation. Ce que le téléphone ne montre pas (missions, exigences, avantages, date de clôture, consignes, nombre de postes) est gardé tel quel.
+2. **Compétences à l'étape 1.** Une offre ne se publie pas sans compétence attendue (règle du matching, doc 08) ; les captures n'ont pas de champ, il est ajouté sous le texte. Les noms passent par le référentiel, comme sur ordinateur.
+3. **Texte proposé par Orbi** : le bouton « Proposer un texte » appelle l'assistant de rédaction existant (consentement, droit, crédits, journal `AiUsage`). Le texte est à relire ; sans modèle configuré, Orbi le dit et la personne écrit elle-même.
+4. **Ville** : les puces sont la ville du recruteur, ses autres villes (inscription M2) et celle de l'entreprise, plus « Autre ville ». Le pays vient de l'entreprise ou du recruteur ; s'il est inconnu, un champ « Pays du poste » apparaît.
+5. **Documents demandés** : CV, Lettre, Diplôme, Portfolio, les quatre types que le service connaît. « Attestation » (capture 053) n'est pas ajoutée : il faudrait un nouveau type de document côté talent. Les questions ne sont jamais une condition pour candidater (règle d'or 1).
+6. **Contrats** : CDI, CDD, Stage, Freelance au téléphone, comme les captures ; une offre en mission, alternance ou volontariat garde son contrat et s'affiche correctement.
+7. **Chiffres** : vues, jours en ligne, candidatures, part des vues qui deviennent candidatures et nouvelles à traiter viennent des données réelles (`listOffers`). Le graphique compte les candidatures par jour sur 7 ou 30 jours (les vues ne sont pas datées par jour). « D'où viennent les candidats » suit la source de la candidature : l'offre sur Jumanly, une invitation, la recherche de talents.
+8. **Rapport PDF d'une offre clôturée** : c'est le rapport de recrutement existant, sur la période de l'offre, seulement si l'organisation a le droit `reports.export` ; sinon la feuille le dit. Retenus = candidatures au statut « recrutée ».
+9. **Candidats d'une offre** (capture 050, `?vue=candidats`) : classement du tableau ATS, score sans nom, âge ni photo ; « Trier dans Candidatures » mène à la liste filtrée sur l'offre. Ouvrir un candidat passe par sa fiche, qui journalise la consultation.
+10. **« Brouillon »** enregistre et revient aux Offres ; « Dupliquer » ouvre la copie dans les étapes. Une entreprise non vérifiée envoie son offre en vérification (« Envoyer en vérification »).
+11. Aucune migration.

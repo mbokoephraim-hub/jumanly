@@ -16,6 +16,12 @@ export type AuthorView = {
   href: string;
   /** « Analyste crédit · Fleuve Banque », « Fintech · Kinshasa · 8 offres ». */
   line: string;
+  /** Under the name of a post: « Entreprise · Kinshasa », « Analyste crédit · Fleuve Banque ». */
+  byline: string;
+  /** A company verified by Jumanly: a Lime ring. */
+  verified: boolean;
+  /** The city, beside the time of a post. */
+  city: string | null;
 };
 
 export type PostView = {
@@ -26,6 +32,8 @@ export type PostView = {
   tag: { text: string; tone: string } | null;
   ago: string;
   stamp: string;
+  /** The hook line (docs/fil-menu-publication § 2); none on the older posts. */
+  title: string | null;
   body: string;
   image: { src: string; alt: string } | null;
   job: { href: string; title: string; line: string; score: string | null } | null;
@@ -34,6 +42,8 @@ export type PostView = {
   event: { participants: number; going: boolean } | null;
   likes: number;
   liked: boolean;
+  /** Two faces beside the count of J'aime. */
+  likers: { initials: string; image: string | null; tone: number }[];
   replies: number;
   reposts: number;
   reposted: boolean;
@@ -41,14 +51,9 @@ export type PostView = {
   mine: boolean;
   canReply: boolean;
   closedNote: string | null;
-  firstReply: {
-    name: string;
-    initials: string;
-    image: string | null;
-    tone: number;
-    org: boolean;
-    body: string;
-  } | null;
+  /** The last comments, shown under the post in the Fil. */
+  comments: ReplyView[];
+  edited: boolean;
 };
 
 export type ReplyView = {
@@ -59,6 +64,7 @@ export type ReplyView = {
   likes: number;
   liked: boolean;
   mine: boolean;
+  edited: boolean;
 };
 
 const MINUTE = 60_000;
@@ -149,6 +155,9 @@ export async function feedWords(viewerId: string, now = new Date()) {
             ? `/app/entreprises/${value.id}`
             : `/app/personnes/${value.id}`,
       line,
+      byline: org ? [t("tag.company"), value.city].filter(Boolean).join(" · ") : line,
+      verified: org && Boolean(value.verified),
+      city: value.city,
     };
   };
 
@@ -176,6 +185,7 @@ export async function feedWords(viewerId: string, now = new Date()) {
       tag: tag ? { text: t(tag.key as "tag.company"), tone: tag.tone } : null,
       ago: ago(item.createdAt),
       stamp: stamp(item.createdAt),
+      title: item.title,
       body: item.body,
       image: item.imageUrl
         ? { src: item.imageUrl, alt: item.imageAlt ?? t("publish.photoAlt", { name: view.name }) }
@@ -213,6 +223,11 @@ export async function feedWords(viewerId: string, now = new Date()) {
       event: item.event ? { participants: item.event.participants, going: item.event.going } : null,
       likes: item.likes,
       liked: item.liked,
+      likers: item.likers.map((liker) => ({
+        initials: initialsOf(liker.name),
+        image: liker.image,
+        tone: toneOf(liker.name, false),
+      })),
       replies: item.replies,
       reposts: item.reposts,
       reposted: item.reposted,
@@ -229,21 +244,8 @@ export async function feedWords(viewerId: string, now = new Date()) {
               name: view.name.split(" ")[0] ?? view.name,
             },
           ),
-      firstReply: item.firstReply
-        ? {
-            name: item.firstReply.org ? shortName(item.firstReply.name) : item.firstReply.name,
-            initials: initialsOf(
-              item.firstReply.org ? shortName(item.firstReply.name) : item.firstReply.name,
-            ),
-            image: item.firstReply.image,
-            tone: toneOf(
-              item.firstReply.org ? shortName(item.firstReply.name) : item.firstReply.name,
-              item.firstReply.org,
-            ),
-            org: item.firstReply.org,
-            body: item.firstReply.body,
-          }
-        : null,
+      comments: item.comments.map(reply),
+      edited: item.edited,
     };
   };
 
@@ -255,6 +257,7 @@ export async function feedWords(viewerId: string, now = new Date()) {
     likes: item.likes,
     liked: item.liked,
     mine: item.mine,
+    edited: item.edited,
   });
 
   return { t, format, ago, stamp, author, post, reply };

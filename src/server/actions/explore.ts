@@ -9,9 +9,18 @@ import { reportError } from "@/server/observability";
 import { applyToJob } from "@/server/services/applications";
 import { ConnectionError, requestConnection } from "@/server/services/connections";
 import { createReport } from "@/server/services/moderation";
-import { EXPLORE_SCOPES, exploreSearch, toggleFollowCompany } from "@/server/services/explore";
+import {
+  EXPLORE_SCOPES,
+  explorerCount,
+  explorerHome,
+  exploreSearch,
+  toggleFollowCompany,
+} from "@/server/services/explore";
+import { exploreFiltersSchema } from "@/server/services/explore-filters";
 import {
   explorerWords,
+  homeView,
+  type ExplorerHomeView,
   type CompanyView,
   type OfferView,
   type PersonView,
@@ -101,6 +110,41 @@ export async function exploreSearchAction(
     };
   } catch (error) {
     void reportError(error, { message: "Explorer · recherche" });
+    return { ok: false, error: "failed" };
+  }
+}
+
+export type ExploreFiltered = {
+  /** « Voir N résultats ». */
+  count: number;
+  /** The lists that meet the filters, only when asked (« Voir »). */
+  home: ExplorerHomeView | null;
+};
+
+/**
+ * The filters of Explorer (docs/fil-menu-publication § 3): while they change, how many results
+ * they give; on « Voir N résultats », the lists themselves. Read on the server, never stored.
+ */
+export async function exploreFilterAction(
+  filters: unknown,
+  withLists: boolean,
+): Promise<ExploreResult<ExploreFiltered>> {
+  const parsed = exploreFiltersSchema.safeParse(filters);
+  if (!parsed.success) return { ok: false, error: "invalid" };
+  const user = await requireUser(PAGE);
+  const now = new Date();
+  try {
+    const [count, home, words] = await Promise.all([
+      explorerCount(db, user.id, parsed.data, now),
+      withLists ? explorerHome(db, user.id, now, parsed.data) : null,
+      withLists ? explorerWords(now) : null,
+    ]);
+    return {
+      ok: true,
+      value: { count: count.total, home: home && words ? homeView(home, words) : null },
+    };
+  } catch (error) {
+    void reportError(error, { message: "Explorer · filtres" });
     return { ok: false, error: "failed" };
   }
 }

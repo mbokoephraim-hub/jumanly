@@ -9,6 +9,9 @@ test("espace recruteur : barre du bas, organisation active, Compte RH et profil 
   page,
   isMobile,
 }) => {
+  // On a phone the recruiter space is Modèle B (docs/modele-b-recruteur): its bar, Orbi and the
+  // account are checked by modele-b-recruteur-coque.spec.ts.
+  test.skip(isMobile, "Remplacé au téléphone par le Modèle B (modele-b-recruteur-coque.spec.ts).");
   test.setTimeout(90_000);
   await logIn(page, "entreprise@jumanly.test", undefined, "/app/hire");
   await page.goto("/app/hire");

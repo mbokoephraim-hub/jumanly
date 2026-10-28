@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Jumanly Modèle B · Recruteur · Page entreprise</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050D10}
+a{color:#A6F26B;text-decoration:none}
+.fd,.fd *{box-sizing:border-box}
+.fd{font-family:"Sora",system-ui,sans-serif;color:#F2EDE5;-webkit-font-smoothing:antialiased}
+.fd h1,.fd h2,.fd h3,.fd p{margin:0}
+.fd button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
+.fd textarea{font:inherit}
+.fd .scroll{scrollbar-width:none}.fd .scroll::-webkit-scrollbar{display:none}
+.fd .hrow{display:flex;gap:10px;overflow-x:auto;padding:0 20px 4px;scrollbar-width:none}
+.fd .hrow::after{content:"";flex:0 0 6px}
+.fd .hrow::-webkit-scrollbar{display:none}
+.fd .hrow>*{flex:none}
+.fd .sec{display:flex;align-items:baseline;justify-content:space-between;padding:0 20px;margin:28px 0 10px}
+.fd .sec h2{font-size:18px;font-weight:600}
+.fd .sec a,.fd .sec button{font-size:14px;font-weight:600;min-height:36px;display:inline-flex;align-items:center}
+.fd .meta{font-size:13px;color:#8FA39E}
+.fd .tag{display:inline-block;font-size:12.5px;padding:5px 9px;border-radius:7px;background:#1A2629;color:#C9D6D2;white-space:nowrap}
+.fd .ligne{width:100%;display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.07);color:#F2EDE5}
+.fd .mini{width:48px;height:48px;border-radius:14px;color:#FFFFFF;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .av{width:44px;height:44px;border-radius:50%;background:#1B3338;color:#F2EDE5;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .barre{display:block;height:4px;border-radius:2px;background:rgba(255,255,255,.1);margin-top:8px;overflow:hidden}
+.fd .barre i{display:block;height:100%;background:#A6F26B;border-radius:2px}
+.fd .chip,.fd .pill{height:38px;padding:0 15px;border-radius:19px;font-size:13.5px;font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;flex:none}
+.fd .bp{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:52px;border-radius:26px;background:#A6F26B;color:#0B1A1F;font-size:15px;font-weight:700;text-align:center}
+.fd .bs{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;padding:0 20px;border-radius:26px;border:1px solid rgba(255,255,255,.18);font-size:14px;font-weight:600;text-align:center;color:#F2EDE5}
+.fd .bloc{padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.07)}
+.fd .bloc h3{font-size:15px;font-weight:700;margin-bottom:10px}
+.fd .li{display:flex;gap:10px;font-size:14.5px;line-height:1.45;color:#ECE7DF;padding:4px 0}
+.fd .li i{width:6px;height:6px;border-radius:50%;background:#A6F26B;margin-top:8px;flex:none}
+.fd .barreh{padding:50px 12px 8px;display:flex;align-items:center;gap:4px;border-bottom:1px solid rgba(255,255,255,.08);min-height:102px}
+.fd .retour{height:44px;padding:0 8px;font-size:15px;font-weight:600;display:flex;align-items:center;gap:4px;white-space:nowrap;color:#F2EDE5}
+.fd .plus{font-size:18px;letter-spacing:1px;color:#B9CBC6;min-width:44px;min-height:44px;text-align:center;display:flex;align-items:center;justify-content:center}
+.fd .rond{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .nav{position:absolute;left:0;right:0;bottom:0;height:84px;padding:8px 6px 22px;background:rgba(11,26,31,.86);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(255,255,255,.07);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));z-index:4}
+.fd .nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;position:relative}
+.fd .voile{position:absolute;inset:0;width:100%;background:rgba(0,0,0,.55)}
+.fd .feuille{position:absolute;left:0;right:0;bottom:0;background:#13282C;border-radius:30px 30px 0 0;padding:10px 20px 28px;border-top:1px solid rgba(255,255,255,.08);max-height:760px;overflow-y:auto;scrollbar-width:none}
+.fd .poignee{display:block;width:40px;height:5px;border-radius:3px;background:rgba(255,255,255,.2);margin:0 auto 14px}
+.fd .opt{width:100%;display:flex;align-items:center;gap:14px;min-height:56px;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.06);font-size:15px;font-weight:600;color:#F2EDE5}
+.fd .opt small{display:block;font-size:12.5px;font-weight:400;color:#8FA39E;margin-top:2px}
+.fd .annuler{width:100%;height:50px;margin-top:12px;border-radius:999px;background:#1B3338;text-align:center;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#F2EDE5}
+.fd .q{width:100%;padding:14px 16px;border-radius:16px;background:#1B3338;font-size:14px;font-weight:600;line-height:1.4;display:block;color:#F2EDE5}
+.fd .champ{display:flex;align-items:center;gap:10px;min-height:52px;border-radius:26px;background:#0B1A1F;padding:0 6px 0 18px;border:1px solid rgba(47,211,166,.45);min-width:0}
+.fd .champ input{flex:1 1 0;width:0;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:14px;color:#F2EDE5}
+.fd .env{height:40px;padding:0 16px;border-radius:20px;background:#A6F26B;color:#0B1A1F;font-size:13px;font-weight:700;display:flex;align-items:center;flex:none}
+.fd .in{width:100%;height:52px;border-radius:16px;background:#0B1A1F;border:1px solid rgba(255,255,255,.14);padding:0 16px;font:inherit;font-size:15px;color:#F2EDE5;outline:0}
+.fd .ta{width:100%;min-height:96px;border-radius:16px;background:#0B1A1F;border:1px solid rgba(255,255,255,.14);padding:12px 14px;font-size:14.5px;line-height:1.45;color:#F2EDE5;outline:0;resize:none}
+.fd .lab{display:block;font-size:13px;font-weight:600;color:#B9CBC6;margin:20px 0 10px}
+.fd .bas{position:absolute;left:0;right:0;bottom:0;padding:12px 20px 28px;background:rgba(11,26,31,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.08);display:flex;gap:10px;z-index:4}
+.fd .seg{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.08);overflow-x:auto;scrollbar-width:none;padding:0 8px}
+.fd .seg::-webkit-scrollbar{display:none}
+.fd .seg button{height:46px;padding:0 12px;font-size:14px;white-space:nowrap;position:relative;flex:none}
+.fd .seg button i{position:absolute;left:12px;right:12px;bottom:-1px;height:3px;border-radius:2px;background:#A6F26B}
+.fd .carte{width:100%;display:block;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:#13282C;padding:16px;color:#F2EDE5}
+.fd .kpi{display:flex;gap:8px}
+.fd .kpi span{flex:1;border-radius:12px;background:#0B1A1F;padding:9px 10px;font-size:11.5px;color:#8FA39E}
+.fd .kpi b{display:block;font-size:17px;font-weight:700;color:#F2EDE5;margin-bottom:1px}
+.fd .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fd .tuile{border-radius:16px;background:#13282C;border:1px solid rgba(255,255,255,.08);padding:14px;font-size:12.5px;color:#8FA39E;display:block}
+.fd .tuile b{display:block;font-size:24px;font-weight:700;color:#F2EDE5;letter-spacing:-0.02em;margin-bottom:2px}
+.fd .case{width:24px;height:24px;border-radius:7px;border:1.5px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#0B1A1F;flex:none}
+.fd .score{min-width:50px;height:30px;padding:0 9px;border-radius:15px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.fd .rech{flex:1;min-width:0;height:50px;border-radius:25px;background:#1A2629;display:flex;align-items:center;gap:12px;padding:0 16px}
+.fd .rech input{flex:1 1 0;width:0;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:16px;color:#F2EDE5}
+.fd .rech input::placeholder,.fd .in::placeholder,.fd .champ input::placeholder{color:#6F8580}
+/* mvt-jumanly 2 */
+:root{--mvt-o:.4;--mvt-s:.975;--mvt-tx:0px;--mvt-r:150%;--mvt-x:50%;--mvt-y:50%}
+[data-ecran]{animation:mvtEcran .34s cubic-bezier(.2,.8,.2,1) both;transform-origin:var(--mvt-x) var(--mvt-y)}
+.voile,.shb{animation:mvtVoile .26s ease-out both}
+.voile+div,.shb+div,.voile+.feuille,.shb+.shp,[style*="z-index: 10"]>button:first-child+div{animation:mvtMonte .34s cubic-bezier(.2,.8,.2,1) both}
+@keyframes mvtEcran{from{opacity:var(--mvt-o);transform:translateX(var(--mvt-tx)) scale(var(--mvt-s));clip-path:circle(var(--mvt-r) at var(--mvt-x) var(--mvt-y))}to{opacity:1;transform:none;clip-path:circle(150% at var(--mvt-x) var(--mvt-y))}}
+@keyframes mvtVoile{from{opacity:0}to{opacity:1}}
+@keyframes mvtMonte{from{transform:translateY(56px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){[data-ecran],.voile,.shb,.voile+div,.shb+div{animation:none!important}}
+/* fin mvt */
+</style>
+</helmet>
+<div class="fd" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #0B1A1F; border-radius: 44px;">
+
+<div style="position: absolute; inset: 0; display: flex; flex-direction: column;">
+<div class="scroll" style="flex: 1; overflow-y: auto; padding-bottom: 120px;">
+<div style="height: 160px; background: linear-gradient(150deg, {{e.bg}} 0%, #0B1A1F 100%); position: relative;">
+<a href="Recruteur-fil.dc.html" class="rond" aria-label="Retour au Fil" style="position: absolute; left: 12px; top: 50px; background: rgba(11,26,31,.55); color: #F2EDE5;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M15 5 8 12l7 7"></path></svg></a></div>
+<div style="padding: 0 20px; margin-top: -40px; position: relative;">
+<span style="width: 80px; height: 80px; border-radius: 22px; background: {{e.bg}}; color: {{e.fg}}; border: 4px solid #0B1A1F; font-size: 24px; font-weight: 800; display: flex; align-items: center; justify-content: center;">{{e.ini}}</span>
+<div style="display: flex; align-items: center; gap: 8px; margin-top: 12px;"><h1 style="font-size: 24px;">{{e.nom}}</h1><span style="width: 20px; height: 20px; border-radius: 50%; background: #A6F26B; color: #0B1A1F; display: flex; align-items: center; justify-content: center;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span></div>
+<p style="font-size: 14.5px; color: #C9D6D2; margin-top: 2px;">{{e.sect}}</p>
+<p class="meta" style="margin-top: 4px;">{{e.ville}}<sc-if value="{{e.aTaille}}" hint-placeholder-val="{{ true }}"> · {{e.taille}}</sc-if><sc-if value="{{e.aAbonnes}}" hint-placeholder-val="{{ true }}"> · {{e.abonnes}} abonnés</sc-if></p>
+<sc-if value="{{aReseau}}" hint-placeholder-val="{{ true }}"><button onClick="{{voirMembres}}" style="display: flex; align-items: center; gap: 10px; margin-top: 12px; min-height: 40px; text-align: left;"><span style="display: flex; flex: none;"><sc-for list="{{avsR}}" as="a" hint-placeholder-count="2"><span class="av" style="width: 30px; height: 30px; font-size: 10.5px; margin-left: {{a.ml}}; border: 2px solid #0B1A1F; background: {{a.bg}}; color: {{a.fg}};">{{a.ini}}</span></sc-for></span><span style="font-size: 13.5px; color: #C9D6D2; line-height: 1.35;">{{reseauT}}</span></button></sc-if>
+<sc-if value="{{nous}}" hint-placeholder-val="{{ true }}"><p style="margin-top: 12px; padding: 10px 14px; border-radius: 14px; background: rgba(166,242,107,.1); color: #A6F26B; font-size: 13px; font-weight: 600;">Votre entreprise · page administrée par Joseph Ilunga, modifiable sur ordinateur</p></sc-if>
+</div>
+<div style="margin-top: 16px;"><div class="seg" role="tablist"><sc-for list="{{ongletsE}}" as="o" hint-placeholder-count="4"><button role="tab" aria-selected="{{o.sel}}" onClick="{{o.pick}}" style="font-weight: {{o.fw}}; color: {{o.col}};">{{o.t}}<sc-if value="{{o.aN}}" hint-placeholder-val="{{ false }}"><span style="margin-left: 6px; font-size: 11.5px; font-weight: 800; color: #A6F26B;">{{o.n}}</span></sc-if><sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}"><i></i></sc-if></button></sc-for></div></div>
+<sc-if value="{{oApropos}}" hint-placeholder-val="{{ true }}"><div>
+<div class="bloc"><p style="font-size: 15px; line-height: 1.55;">{{e.desc}}</p></div>
+<sc-if value="{{aEquipe}}" hint-placeholder-val="{{ true }}"><div class="bloc"><h3>Équipe de recrutement</h3><sc-for list="{{e.equipe}}" as="m" hint-placeholder-count="4"><a href="Recruteur-equipe.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 7px 0; color: #F2EDE5;"><span class="av" style="width: 38px; height: 38px; font-size: 12px;">{{m.ini}}</span><span style="flex: 1;"><b style="display: block; font-size: 14.5px;">{{m.nom}}</b><span class="meta" style="font-size: 12.5px;">{{m.r}}</span></span></a></sc-for></div></sc-if>
+</div></sc-if>
+<sc-if value="{{oMembres}}" hint-placeholder-val="{{ false }}"><div>
+<sc-if value="{{aInviter}}" hint-placeholder-val="{{ true }}"><div style="padding: 16px 20px 2px;"><button onClick="{{inviterTous}}" class="bs" style="width: 100%;">{{inviterT}}</button></div></sc-if>
+<sc-if value="{{toutInvite}}" hint-placeholder-val="{{ false }}"><p class="meta" style="padding: 16px 20px 2px;">Vous êtes en relation ou en attente avec chaque membre.</p></sc-if>
+<sc-if value="{{aDuReseau}}" hint-placeholder-val="{{ true }}"><div><p style="padding: 18px 20px 10px; font-size: 13px; font-weight: 700; color: #8FA39E;">De votre réseau</p><div class="g2" style="padding: 0 20px;"><sc-for list="{{duReseau}}" as="m" hint-placeholder-count="2"><div style="padding: 14px 12px; border-radius: 20px; background: #13282C; text-align: center; display: flex; flex-direction: column;"><sc-if value="{{m.aLien}}" hint-placeholder-val="{{ true }}"><a href="{{m.href}}" style="display: block; color: #F2EDE5;"><span class="av" style="width: 56px; height: 56px; font-size: 16px; background: {{m.bg}}; color: {{m.fg}}; margin: 0 auto;">{{m.ini}}</span><b style="display: block; font-size: 14px; margin-top: 8px;">{{m.nom}}</b><span class="meta" style="display: block; font-size: 12px; line-height: 1.35; margin: 2px 0 10px;">{{m.r}}</span></a></sc-if><sc-if value="{{m.sansLien}}" hint-placeholder-val="{{ false }}"><span style="display: block;"><span class="av" style="width: 56px; height: 56px; font-size: 16px; background: {{m.bg}}; color: {{m.fg}}; margin: 0 auto;">{{m.ini}}</span><b style="display: block; font-size: 14px; margin-top: 8px;">{{m.nom}}</b><span class="meta" style="display: block; font-size: 12px; line-height: 1.35; margin: 2px 0 10px;">{{m.r}}</span></span></sc-if><button onClick="{{m.connecter}}" style="width: 100%; height: 34px; margin-top: auto; border-radius: 17px; border: 1px solid {{m.bbd}}; background: {{m.bbg}}; color: {{m.bcol}}; font-size: 12.5px; font-weight: 700; text-align: center;">{{m.bt}}</button></div></sc-for></div></div></sc-if>
+<sc-if value="{{aAutres}}" hint-placeholder-val="{{ true }}"><div><p style="padding: 20px 20px 4px; font-size: 13px; font-weight: 700; color: #8FA39E;">{{autresT}}</p><sc-for list="{{autres}}" as="m" hint-placeholder-count="3"><div class="ligne"><sc-if value="{{m.aLien}}" hint-placeholder-val="{{ false }}"><a href="{{m.href}}" style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; color: #F2EDE5;"><span class="av" style="width: 42px; height: 42px; font-size: 13px; background: {{m.bg}}; color: {{m.fg}};">{{m.ini}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 14.5px;">{{m.nom}}</b><span class="meta" style="font-size: 12.5px;">{{m.r}}</span><span style="display: block; font-size: 11.5px; font-weight: 700; color: {{m.confCol}}; margin-top: 2px;">{{m.confT}}</span></span></a></sc-if><sc-if value="{{m.sansLien}}" hint-placeholder-val="{{ true }}"><span style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;"><span class="av" style="width: 42px; height: 42px; font-size: 13px; background: {{m.bg}}; color: {{m.fg}};">{{m.ini}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 14.5px;">{{m.nom}}</b><span class="meta" style="font-size: 12.5px;">{{m.r}}</span><span style="display: block; font-size: 11.5px; font-weight: 700; color: {{m.confCol}}; margin-top: 2px;">{{m.confT}}</span></span></span></sc-if><button onClick="{{m.connecter}}" style="flex: none; height: 34px; padding: 0 14px; border-radius: 17px; border: 1px solid {{m.bbd}}; background: {{m.bbg}}; color: {{m.bcol}}; font-size: 12.5px; font-weight: 700;">{{m.bt}}</button></div></sc-for></div></sc-if>
+<sc-if value="{{sansMembres}}" hint-placeholder-val="{{ false }}"><p class="meta" style="padding: 30px 20px; text-align: center;">Personne n’a encore indiqué travailler ici.</p></sc-if>
+<p class="meta" style="padding: 18px 20px 0; font-size: 12.5px; line-height: 1.5;">Une personne apparaît ici dès qu’elle indique travailler chez {{e.nom}} dans son expérience. L’entreprise est prévenue et peut confirmer ; sinon, la mention « Indiqué par la personne » reste.</p>
+</div></sc-if>
+<sc-if value="{{oOffres}}" hint-placeholder-val="{{ false }}"><div>
+<sc-for list="{{e.offres}}" as="o" hint-placeholder-count="3"><a href="{{o.href}}" class="ligne"><span class="mini" style="width: 42px; height: 42px; background: #13282C; color: #A6F26B;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M3.5 8.5a1.5 1.5 0 0 1 1.5-1.5h14a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5zM8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7M3.5 12.5h17M12 11.5v2"></path></svg></span><span style="flex: 1;"><b style="display: block; font-size: 15px;">{{o.t}}</b><span class="meta">{{o.s}}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m9 6 6 6-6 6"></path></svg></a></sc-for>
+<sc-if value="{{sansOffres}}" hint-placeholder-val="{{ false }}"><p class="meta" style="padding: 30px 20px; text-align: center;">Pas d’offre en ce moment.</p></sc-if>
+</div></sc-if>
+<sc-if value="{{oPubs}}" hint-placeholder-val="{{ false }}"><div>
+<sc-for list="{{e.pubs}}" as="x" hint-placeholder-count="2"><a href="{{x.href}}" class="ligne" style="flex-direction: column; align-items: flex-start; gap: 4px;"><span style="font-size: 14.5px; line-height: 1.45;">{{x.t}}</span><span class="meta">{{x.d}}</span></a></sc-for>
+<sc-if value="{{sansPubs}}" hint-placeholder-val="{{ false }}"><p class="meta" style="padding: 30px 20px; text-align: center;">Aucune publication pour l’instant.</p></sc-if>
+</div></sc-if>
+</div>
+<div class="bas">
+<sc-if value="{{nous}}" hint-placeholder-val="{{ true }}"><a href="Recruteur-fil-publier-baobab.dc.html" class="bp">Publier au nom de Baobab Fintech</a></sc-if>
+<sc-if value="{{autre}}" hint-placeholder-val="{{ false }}"><button onClick="{{suivre}}" class="bp" style="background: {{sBg}}; color: {{sCol}}; border: 1px solid {{sBd}};">{{suivreT}}</button></sc-if>
+</div>
+</div>
+<sc-if value="{{fTous}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<b style="display: block; font-size: 17px;">{{inviterT}}</b><p class="meta" style="margin-top: 6px; line-height: 1.5;">Une invitation part vers chaque membre de {{e.nom}} que vous ne connaissez pas encore ({{nInv}}). Chacun l’accepte ou non. Aucun message n’est possible avant l’acceptation.</p><p style="margin-top: 10px; font-size: 13px; font-weight: 700; color: #F4D59A;">{{resteT}}</p><button onClick="{{confirmerTous}}" class="bp" style="margin-top: 16px;">Envoyer les invitations</button><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{aToast}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="position: absolute; left: 20px; right: 20px; top: 54px; z-index: 30; padding: 14px 16px; border-radius: 16px; background: #F2EDE5; color: #0B1A1F; font-size: 14px; font-weight: 600; box-shadow: 0 16px 30px -10px rgba(0,0,0,.7); display: flex; align-items: center; gap: 10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14745F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>{{toast}}</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"feuille": {"editor": "enum", "options": ["aucune", "tous"], "default": "aucune"}, "ent": {"editor": "enum", "options": ["baobab", "fleuve", "kivu", "mwinda", "lisanga", "jumanly"], "default": "baobab"}, "onglet": {"editor": "enum", "options": ["apropos", "membres", "offres", "publications"], "default": "apropos"}, "$preview": {"width": 390, "height": 844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined' && !window.__mvtJ) {
+      window.__mvtJ = 1;
+      const R = document.documentElement.style;
+      const pose = (o, s, tx, r) => { R.setProperty('--mvt-o', o); R.setProperty('--mvt-s', s); R.setProperty('--mvt-tx', tx); R.setProperty('--mvt-r', r); };
+      document.addEventListener('pointerdown', (e) => {
+        const b = e.target && e.target.closest && e.target.closest('button, a, [role="button"]');
+        if (!b) return;
+        const ec = b.closest('[data-ecran]') || document.body;
+        const z = ec.getBoundingClientRect(), k = b.getBoundingClientRect();
+        R.setProperty('--mvt-x', Math.round(e.clientX - z.left) + 'px');
+        R.setProperty('--mvt-y', Math.round(e.clientY - z.top) + 'px');
+        const lab = (b.getAttribute('aria-label') || '') + ' ' + (b.textContent || '').slice(0, 40);
+        if (b.querySelector('path[d^="M15 5 8 12"]') || /^\s*retour/i.test(lab)) pose('.6', '1', '-22px', '150%');
+        else if (b.querySelector('circle[fill="#2FD3A6"]') || /orbi/i.test(b.getAttribute('aria-label') || '')) pose('1', '1', '0px', '22px');
+        else if (k.height >= 64 && k.width >= 160) pose('.5', '.92', '0px', '150%');
+        else pose('.4', '.975', '0px', '150%');
+        clearTimeout(window.__mvtT);
+        window.__mvtT = setTimeout(() => { pose('.4', '.975', '0px', '150%'); }, 700);
+      }, true);
+    }
+    const st = this.state || {};
+    const p = this.props || {};
+    const has = (k) => Object.prototype.hasOwnProperty.call(st, k);
+    const S = (o) => this.setState(o);
+    const flash = (t) => { S({ toast: t }); clearTimeout(this._t); this._t = setTimeout(() => this.setState({ toast: null }), 2300); };
+    const val = (e) => (e && e.target ? e.target.value : '');
+    const oui = (x) => x === true || x === 'true';
+    const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const prop = (k, d) => (has(k) ? st[k] : (p[k] !== undefined && p[k] !== '' && p[k] !== 'aucune' ? p[k] : d));
+    const chiffre = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    // pastilles de choix (filtres, sous-onglets)
+    const pills = (liste, actif, cle) => liste.map(([k, t]) => ({ t, pick: () => S({ [cle]: k }), bg: k === actif ? '#F2EDE5' : 'transparent', col: k === actif ? '#0B1A1F' : '#F2EDE5', bd: k === actif ? '#F2EDE5' : 'rgba(255,255,255,.22)' }));
+    const onglets = (liste, actif, cle, extra) => liste.map(([k, t, n]) => ({ t, n: n || '', aN: !!n, sel: k === actif ? 'true' : 'false', on: k === actif, fw: k === actif ? '700' : '500', col: k === actif ? '#F2EDE5' : '#8FA39E', pick: () => S({ [cle]: k, ...(extra || {}) }) }));
+    // bande de score (doc 08) : jamais de rouge
+    const bande = (s) => (s >= 85 ? ['Très compatible', '#0B1A1F', '#A6F26B'] : s >= 70 ? ['Compatible', '#0B1A1F', '#9FE8D2'] : s >= 50 ? ['Partiellement compatible', '#0B1A1F', '#F4D59A'] : ['Peu compatible', '#0B1A1F', '#C9D6D2']);
+    // Orbi : questions propres à la page, réponse, action
+    const orbiKit = (OQ, sous, titre, bulleK) => {
+      const ouvert = has('orbi') ? st.orbi : oui(p.orbi);
+      const rep = has('oRep') ? st.oRep : (p.orbiRep && p.orbiRep !== 'aucune' ? p.orbiRep : null);
+      const r = rep && OQ[rep] ? OQ[rep] : null;
+      const oq = st.oq ?? '';
+      const cles = Object.keys(OQ);
+      return {
+        orbi: !!ouvert, ouvrirOrbi: () => S({ orbi: true, oRep: null }), fermerOrbi: () => S({ orbi: false }), autresQ: () => S({ oRep: null }),
+        aRep: !!r, sansRep: !r, orbiTitre: titre, orbiSous: sous,
+        questionsOrbi: cles.map((k) => ({ t: OQ[k].q, go: () => S({ oRep: k }) })),
+        ra: r ? { q: r.q, t: r.t, actT: r.actT || '', act: r.act || (() => S({ orbi: false })), aAct: !!r.act, aLien: !!r.href, href: r.href || '' } : { q: '', t: '', actT: '', act: () => {}, aAct: false, aLien: false, href: '' },
+        oq, ecrireOrbi: (e) => S({ oq: val(e) }), envoyerOrbi: () => { if (!oq.trim()) return flash('Écrivez votre question à Orbi'); S({ oRep: cles[0], oq: '' }); },
+        aBulle: !!bulleK, bulle: bulleK ? OQ[bulleK].q : '', bulleGo: () => S({ orbi: true, oRep: bulleK }),
+        aToast: !!st.toast, toast: st.toast || ''
+      };
+    };
+
+    // Page entreprise vue par une recruteuse : la sienne (Baobab Fintech) ou une autre.
+    const E = {
+      baobab: { nom: 'Baobab Fintech', ini: 'BF', bg: '#14745F', sect: 'Fintech · paiement mobile', ville: 'Kinshasa · Lubumbashi', taille: '120 personnes', nous: true, abonnes: '2 140',
+        desc: 'Baobab Fintech rend le paiement mobile simple pour 2 millions de clients en RD Congo : transferts, épargne et paiement des marchands.',
+        offres: [['Analyste de données junior', 'Kinshasa · CDI', 'Recruteur-offre-detail.dc.html'], ['Chargé·e de clientèle Mobile Money', 'Lubumbashi · CDI', 'Recruteur-offres-encours.dc.html'], ['Développeur·se mobile Flutter', 'Kinshasa · télétravail', 'Recruteur-offres-encours.dc.html']],
+        equipe: [['JI', 'Joseph Ilunga', 'Responsable RH · administrateur'], ['NK', 'Nadia Kalala', 'Chargée de recrutement (vous)'], ['AM', 'Aline Mukeba', 'Responsable data'], ['PN', 'Patrice Nzuzi', 'Responsable service client']],
+        pubs: [['Bienvenue à Joëlle, notre nouvelle stagiaire marketing, recrutée via Jumanly.', 'hier', 'Recruteur-fil-publication.dc.html']] },
+      fleuve: { nom: 'Fleuve Banque', ini: 'FB', bg: '#1E4E79', sect: 'Banque', ville: 'Kinshasa', taille: '800 personnes', abonnes: '9 300',
+        desc: 'Banque de détail présente dans 14 villes de RD Congo.', offres: [['Analyste crédit', 'Kinshasa · CDI · 5 postes', ''], ['Conseiller·e clientèle', 'Matadi · CDI', '']], equipe: [], pubs: [['Nous recrutons 5 analystes crédit à Kinshasa.', 'aujourd’hui', 'Recruteur-fil-entreprises.dc.html']] },
+      kivu: { nom: 'Kivu Data Lab', ini: 'KD', bg: '#4B2D7A', sect: 'Data et études', ville: 'Goma', taille: '35 personnes', abonnes: '1 800',
+        desc: 'Bureau d’études data pour les ONG et les entreprises de l’Est.', offres: [['Data analyst', 'Goma · CDI', ''], ['Stagiaire statistique', 'Goma · Stage', '']], equipe: [], pubs: [['Ce que nous avons appris en recrutant 12 data analysts à Goma.', 'lundi', 'Recruteur-fil-entreprises.dc.html']] },
+      mwinda: { nom: 'Mwinda Énergie', ini: 'ME', bg: '#B07A12', sect: 'Énergie solaire', ville: 'Kinshasa', taille: '200 personnes', abonnes: '3 100',
+        desc: 'Kits solaires pour les foyers et les petits commerces.', offres: [['Technicien·ne solaire', 'Kinshasa · CDI', ''], ['Commercial·e terrain', 'Kikwit · CDI', '']], equipe: [], pubs: [] },
+      lisanga: { nom: 'Lisanga Santé', ini: 'LS', bg: '#0F6B5A', sect: 'Santé', ville: 'Kinshasa', taille: '60 personnes', abonnes: '1 200',
+        desc: 'Réseau de centres de santé de proximité.', offres: [['Infirmier·ère', 'Kinshasa · CDI', '']], equipe: [], pubs: [] },
+      jumanly: { nom: 'Jumanly', ini: 'J', bg: '#A6F26B', fg: '#0F3F37', sect: 'Plateforme · une plateforme développée par The Growth Lab', ville: 'Afrique', taille: '', abonnes: '', jum: true,
+        desc: 'Learn. Grow. Connect. Se former, enrichir son profil, candidater et être recruté. Contact : assistant@jumanly.io.', offres: [], equipe: [], pubs: [['Journée carrière à Kinshasa le samedi 14 novembre.', 'lundi', 'Recruteur-fil-publication.dc.html']] }
+    };
+    // Membres : toute personne qui indique travailler ici dans son expérience. L’entreprise est prévenue et peut confirmer.
+    // [clé, nom, initiales, fond, texte, rôle, confirmé, page de profil]
+    const MB = {
+      baobab: [['joseph', 'Joseph Ilunga', 'JI', '#14745F', '#FFFFFF', 'Responsable RH · administrateur', true, 'Recruteur-equipe.dc.html'], ['aline', 'Aline Mukeba', 'AM', '#2A3B3E', '#F2EDE5', 'Responsable data', true, 'Recruteur-equipe.dc.html'], ['patrice', 'Patrice Nzuzi', 'PN', '#2A3B3E', '#F2EDE5', 'Responsable service client', true, 'Recruteur-equipe.dc.html'], ['joelle', 'Joëlle Kasongo', 'JK', '#F9E3C8', '#8A4B12', 'Stagiaire marketing digital', true, ''], ['grace', 'Grâce Mbuyi', 'GM', '#E3E8FB', '#2D3F8A', 'Analyste de données · depuis septembre', false, '']],
+      fleuve: [['christelle', 'Christelle Mwamba', 'CM', '#1E4E79', '#FFFFFF', 'Recruteuse', true, ''], ['nathalie', 'Nathalie Banza', 'NB', '#FBE3EF', '#8A2D5C', 'Conseillère clientèle · Lubumbashi', true, 'Recruteur-talent-nathalie.dc.html'], ['gloria', 'Gloria Ndaya', 'GN', '#EDE3FB', '#5A2D8A', 'Analyste crédit', false, 'Recruteur-talent-gloria.dc.html'], ['didier', 'Didier Mbala', 'DM', '#2A3B3E', '#F2EDE5', 'Directeur des risques', true, ''], ['sarah', 'Sarah Lukusa', 'SL', '#2A3B3E', '#F2EDE5', 'Chargée de conformité', false, '']],
+      kivu: [['tresor', 'Trésor Banza', 'TB', '#4B2D7A', '#FFFFFF', 'Responsable RH', true, ''], ['esther', 'Esther Kahindo', 'EK', '#2A3B3E', '#F2EDE5', 'Data analyst', true, ''], ['moise', 'Moïse Bahati', 'MB', '#2A3B3E', '#F2EDE5', 'Statisticien', false, '']],
+      mwinda: [['joel', 'Joël Kabeya', 'JK', '#E8F0D8', '#4F6B12', 'Community manager', false, 'Recruteur-talent-joel.dc.html'], ['ornella', 'Ornella Kazadi', 'OK', '#B07A12', '#FFFFFF', 'Chargée RH', true, ''], ['benoit', 'Benoît Mukendi', 'BM', '#2A3B3E', '#F2EDE5', 'Technicien solaire', true, '']],
+      lisanga: [['rose', 'Rose Kanku', 'RK', '#2A3B3E', '#F2EDE5', 'Infirmière', true, ''], ['paul', 'Paul Tshibangu', 'PT', '#2A3B3E', '#F2EDE5', 'Médecin', false, '']],
+      jumanly: []
+    };
+    // Réseau de Nadia : ses collègues, et Christelle, Nathalie, Joël
+    const RES0 = { joseph: 'relation', aline: 'relation', patrice: 'relation', joelle: 'relation', christelle: 'relation', nathalie: 'relation', joel: 'relation' };
+    const k = E[prop('ent', 'baobab')] ? prop('ent', 'baobab') : 'baobab';
+    const e = E[k];
+    const rel = st.rel || RES0;
+    const mb = MB[k].map(([mk, nom, ini, bg, fg, r, conf, h0]) => { const href = h0 || `Recruteur-personne-${mk}.dc.html`; const et = rel[mk] || ''; return { k: mk, nom, ini, bg, fg, r, conf, href, aLien: true, sansLien: false, et,
+      confT: conf ? 'Confirmé par ' + e.nom : 'Indiqué par la personne', confCol: conf ? '#A6F26B' : '#8FA39E', aConf: conf,
+      bt: et === 'relation' ? 'Relation' : et === 'attente' ? 'En attente' : 'Se connecter', bbg: et ? 'transparent' : '#A6F26B', bcol: et ? '#B9CBC6' : '#0B1A1F', bbd: et ? 'rgba(255,255,255,.22)' : '#A6F26B',
+      connecter: () => { if (et === 'relation') return; if (!et && (st.env ?? 4) >= 50) return flash('Limite atteinte : 50 invitations par jour'); S({ rel: { ...rel, [mk]: et === 'attente' ? undefined : 'attente' }, env: (st.env ?? 4) + (et ? 0 : 1) }); if (!et) flash('Invitation envoyée à ' + nom.split(' ')[0]); } }; });
+    const duReseau = mb.filter((m) => RES0[m.k] === 'relation');
+    const autres = mb.filter((m) => RES0[m.k] !== 'relation');
+    const envoyees = st.env ?? 4; const reste = Math.max(0, 50 - envoyees);
+    const aInviter = mb.filter((m) => !m.et);
+    const lot = aInviter.slice(0, reste);
+    const prenoms = duReseau.map((m) => m.nom.split(' ')[0]);
+    const nomsR = prenoms.length <= 2 ? prenoms.join(' et ') : prenoms.slice(0, 2).join(', ') + ' et ' + (prenoms.length - 2) + (prenoms.length - 2 > 1 ? ' autres' : ' autre');
+    const nR = duReseau.length;
+    const reseauT = e.nous ? nomsR + ' : ' + nR + ' collègues de votre réseau' : nR + (nR > 1 ? ' membres de votre réseau travaillent ici' : ' membre de votre réseau travaille ici');
+    const suivi = st.suivi ?? (k === 'jumanly');
+    const onglet = prop('onglet', 'apropos');
+    return {
+      e: { ...e, fg: e.fg || '#FFFFFF', aTaille: !!e.taille, aAbonnes: !!e.abonnes, offres: e.offres.map(([t, s, href]) => ({ t, s, href: href || `Recruteur-entreprise-${k}-offre.dc.html`, propre: !!href })), equipe: e.equipe.map(([ini, nom, r]) => ({ ini, nom, r })), pubs: e.pubs.map(([t, d, href]) => ({ t, d, href })) },
+      nous: !!e.nous, autre: !e.nous, aOffres: e.offres.length > 0, sansOffres: e.offres.length === 0, aEquipe: e.equipe.length > 0, aPubs: e.pubs.length > 0, sansPubs: e.pubs.length === 0,
+      ongletsE: onglets([['apropos', 'À propos'], ['membres', 'Membres', mb.length ? String(mb.length) : ''], ['offres', 'Offres', String(e.offres.length)], ['publications', 'Publications']], onglet, 'onglet'),
+      oApropos: onglet === 'apropos', oMembres: onglet === 'membres',
+      aReseau: nR > 0, reseauT, avsR: duReseau.slice(0, 3).map((m, i) => ({ ini: m.ini, bg: m.bg, fg: m.fg, ml: i ? '-8px' : '0px' })), voirMembres: () => S({ onglet: 'membres' }),
+      duReseau, autres, autresT: nR ? 'Autres membres' : 'Membres', aDuReseau: nR > 0, aAutres: autres.length > 0, sansMembres: mb.length === 0, aMembresL: mb.length > 0, nMembres: mb.length,
+      aInviter: aInviter.length > 0, toutInvite: mb.length > 0 && aInviter.length === 0, inviterT: aInviter.length === 1 ? 'Se connecter au membre restant' : 'Se connecter aux ' + aInviter.length + ' membres', nInv: aInviter.length,
+      inviterTous: () => S({ feuille: 'tous' }), fTous: (has('feuille') ? st.feuille : p.feuille) === 'tous', fermer: () => S({ feuille: null }),
+      confirmerTous: () => { if (!lot.length) return flash('Limite atteinte : 50 invitations par jour'); const r2 = { ...rel }; lot.forEach((m) => { r2[m.k] = 'attente'; }); S({ rel: r2, feuille: null, env: envoyees + lot.length }); flash(lot.length > 1 ? lot.length + ' invitations envoyées : chacun accepte ou non' : 'Invitation envoyée'); },
+      resteT: 'Au plus 50 invitations par jour : il vous en reste ' + reste + ' aujourd’hui.',
+ oOffres: onglet === 'offres', oPubs: onglet === 'publications',
+      suivi, suivreT: suivi ? 'Suivie' : 'Suivre', sBg: suivi ? 'transparent' : '#A6F26B', sCol: suivi ? '#F2EDE5' : '#0B1A1F', sBd: suivi ? 'rgba(255,255,255,.25)' : '#A6F26B',
+      suivre: () => { S({ suivi: !suivi }); if (!suivi) flash(`Vous suivez ${e.nom} : ses publications arrivent dans votre Fil`); },
+      aToast: !!st.toast, toast: st.toast || ''
+    };
+  }
+}
+
+</script>
+</body>
+</html>

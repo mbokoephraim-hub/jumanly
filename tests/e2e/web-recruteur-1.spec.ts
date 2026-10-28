@@ -152,7 +152,8 @@ test("web recruteur 1 : sur téléphone, la barre du bas reste et le cadre web n
   test.skip(!isMobile, "Téléphone.");
   await logIn(page, "entreprise@jumanly.test", undefined, "/app/hire");
   await page.goto("/app/hire");
-  await expect(page.locator(".t-barre-bas")).toBeVisible();
+  // Modèle B recruteur (M1): the phone's own bar of five tabs.
+  await expect(page.getByRole("navigation", { name: "Navigation principale" })).toBeVisible();
   await expect(page.locator(".t-rh-sb")).toBeHidden();
   await expect(page.locator(".t-rh-rl")).toBeHidden();
   await expect(page.getByText("Candidatures cette semaine")).toBeHidden();

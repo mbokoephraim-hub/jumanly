@@ -14,7 +14,7 @@ import {
   PhoneLoginForm,
   PhoneResetForm,
   ProviderList,
-  SignupCodeForm,
+  SignupLinkSent,
   SignupEmailForm,
   SignupPasswordForm,
 } from "./auth";
@@ -36,20 +36,53 @@ function Head({ title, text }: { title: string; text?: React.ReactNode }) {
 }
 
 /** « Bon retour » (Modèle B, planche Connexion). */
+/** « Se connecter » as a talent or as a recruiter, keeping the interrupted action. */
+function loginHref(recruiter: boolean, next?: string) {
+  const query = new URLSearchParams({
+    ...(recruiter ? { profil: "rh" } : {}),
+    ...(next ? { suite: next } : {}),
+  }).toString();
+  return query ? `/connexion?${query}` : "/connexion";
+}
+
 export async function PhoneLoginPage({
   next,
   notices,
+  recruiter = false,
 }: {
   next?: string;
   notices: { tone: "ok" | "err"; text: string }[];
+  /** « Se connecter » from the recruiter's welcome (Modèle B recruteur, M2). */
+  recruiter?: boolean;
 }) {
   const t = await getTranslations("phoneAccueil");
+  const tr = await getTranslations("phoneRhAccueil");
   const list = await providers();
+  const signup = new URLSearchParams({
+    ...(recruiter ? { profil: "rh" } : {}),
+    ...(next ? { suite: next } : {}),
+  }).toString();
   return (
     <div className="nb-page nb-ecran">
-      <AccessBack href="/decouvrir" label={t("back")} />
+      <AccessBack href={recruiter ? "/decouvrir?profil=rh" : "/decouvrir"} label={t("back")} />
       <div className="nb-corps">
-        <Head title={t("login.title")} text={t("login.subtitle")} />
+        <Head
+          title={t("login.title")}
+          text={recruiter ? tr("login.subtitle") : t("login.subtitle")}
+        />
+        {/* Talent or recruiter, then « Se connecter » or « S'inscrire » (27/10/2026). */}
+        <nav className="nb-profil-choix" data-large="" aria-label={t("welcome.who")}>
+          {[false, true].map((item) => (
+            <Link
+              key={String(item)}
+              href={loginHref(item, next)}
+              aria-current={recruiter === item ? "page" : undefined}
+              replace
+            >
+              {t(item ? "welcome.recruiter" : "welcome.talent")}
+            </Link>
+          ))}
+        </nav>
         {notices.map((notice) => (
           <AccessNotice key={notice.text} tone={notice.tone}>
             {notice.text}
@@ -58,19 +91,19 @@ export async function PhoneLoginPage({
         <ProviderList
           providers={list}
           action={signInWithProvider}
-          hidden={{ profil: "talent", next }}
+          hidden={{ profil: recruiter ? "rh" : "talent", next }}
         />
         {list.length > 0 ? <OrLine>{t("login.or")}</OrLine> : null}
         <PhoneLoginForm next={next} />
+        <Link
+          href={signup ? `/inscription?${signup}` : "/inscription"}
+          className="nb-bs nb-form-envoi"
+        >
+          {t("login.signupButton")}
+        </Link>
         <div className="nb-liens">
           <Link href="/mot-de-passe-oublie" className="nb-lien" data-creme="">
             {t("login.forgot")}
-          </Link>
-          <Link
-            href={next ? `/inscription?${new URLSearchParams({ suite: next })}` : "/inscription"}
-            className="nb-lien"
-          >
-            {t("login.signup")}
           </Link>
         </div>
         <p className="nb-pied">
@@ -88,14 +121,52 @@ export async function PhoneSignupPage({
   plan,
   next,
   defaultEmail,
+  recruiter = false,
 }: {
   plan?: { code: string; name: string };
   next?: string;
   defaultEmail?: string;
+  /** « Créer votre compte recruteur » (Modèle B recruteur, M2): no plan, its own conditions. */
+  recruiter?: boolean;
 }) {
   const t = await getTranslations("phoneAccueil");
+  const tr = await getTranslations("phoneRhAccueil");
   const ta = await getTranslations("access");
   const list = await providers();
+  if (recruiter)
+    return (
+      <div className="nb-page nb-ecran">
+        <AccessBack href="/decouvrir?profil=rh" label={t("back")} />
+        <div className="nb-corps">
+          <Head title={tr("signup.title")} text={tr("signup.subtitle")} />
+          <ProviderList
+            providers={list}
+            action={signInWithProvider}
+            hidden={{ profil: "rh", next }}
+          />
+          {list.length > 0 ? <OrLine>{t("signup.or")}</OrLine> : null}
+          <SignupEmailForm
+            defaultEmail={defaultEmail}
+            next={next}
+            recruiter
+            texts={{ placeholder: tr("signup.emailPlaceholder"), error: tr("signup.emailError") }}
+          />
+          <p className="nb-centre">
+            {tr("signup.hasAccount")}{" "}
+            <Link href={stepHref("/connexion", { profil: "rh", suite: next })} className="nb-lien">
+              {t("signup.login")}
+            </Link>
+          </p>
+          <LegalLine texts={await legalTexts(true)} />
+          <p className="nb-pied">
+            {tr("signup.talent")}{" "}
+            <Link href="/inscription" className="nb-lien" data-creme="">
+              {tr("signup.talentLink")}
+            </Link>
+          </p>
+        </div>
+      </div>
+    );
   return (
     <div className="nb-page nb-ecran">
       <AccessBack href="/decouvrir" label={t("back")} />
@@ -120,7 +191,7 @@ export async function PhoneSignupPage({
         <LegalLine texts={await legalTexts()} />
         <p className="nb-pied">
           {t("signup.recruiter")}{" "}
-          <Link href="/inscription/forfait?profil=rh" className="nb-lien" data-creme="">
+          <Link href="/decouvrir?profil=rh" className="nb-lien" data-creme="">
             {t("signup.recruiterLink")}
           </Link>
         </p>
@@ -134,16 +205,22 @@ export async function PhonePasswordPage({
   email,
   plan,
   next,
+  recruiter = false,
 }: {
   email: string;
   plan?: string;
   next?: string;
+  recruiter?: boolean;
 }) {
   const t = await getTranslations("phoneAccueil");
   return (
     <div className="nb-page nb-ecran">
       <AccessBack
-        href={stepHref("/inscription", { forfait: plan, suite: next })}
+        href={stepHref("/inscription", {
+          profil: recruiter ? "rh" : undefined,
+          forfait: plan,
+          suite: next,
+        })}
         label={t("back")}
       />
       <div className="nb-corps">
@@ -154,13 +231,21 @@ export async function PhonePasswordPage({
   );
 }
 
-/** « Vérifiez votre boîte mail » (Modèle B, planche Code). */
-export async function PhoneCodePage({ email }: { email: string }) {
+/** « Confirmez votre adresse » (Modèle B, planche Code): the link sent by e-mail. */
+export async function PhoneCodePage({
+  email,
+  recruiter = false,
+  expired = false,
+}: {
+  email: string;
+  recruiter?: boolean;
+  expired?: boolean;
+}) {
   const t = await getTranslations("phoneAccueil");
   const [before = "", after = ""] = t("code.subtitle", { email: "\u0000" }).split("\u0000");
   return (
     <div className="nb-page nb-ecran">
-      <AccessBack href="/inscription" label={t("back")} />
+      <AccessBack href={recruiter ? "/inscription?profil=rh" : "/inscription"} label={t("back")} />
       <div className="nb-corps">
         <Head
           title={t("code.title")}
@@ -172,7 +257,7 @@ export async function PhoneCodePage({ email }: { email: string }) {
             </>
           }
         />
-        <SignupCodeForm email={email} />
+        <SignupLinkSent expired={expired} />
       </div>
     </div>
   );

@@ -60,6 +60,7 @@ const DONE = [
   "creditsAdded",
   "overrideRemoved",
   "deleted",
+  "erased",
 ] as const;
 const ERRORS = [
   "champs",
@@ -158,6 +159,8 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
   const fiche = ficheId ? await db.user.findUnique({ where: { id: ficheId } }) : null;
   const ficheHref = fiche ? href({ fiche: fiche.id }) : href({});
   const canAct = writable && fiche !== null && fiche.id !== admin.id && fiche.status !== "deleted";
+  // Veto (« Effacer définitivement »): also on an anonymized account, never on one's own.
+  const canErase = writable && fiche !== null && fiche.id !== admin.id;
   const suspending = canAct && action === "suspendre" && fiche.status !== "suspended";
   const actionHref = (name: string, extra = "") =>
     `${ficheHref}&action=${name}${extra}#utilisateurs-panneau`;
@@ -211,7 +214,7 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
             </SensitivePanel>
           </div>
         )}
-        {canAct && (
+        {(canAct || (canErase && action === "effacer")) && (
           <UserPanels
             user={fiche}
             action={action}
@@ -275,7 +278,14 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
                         defaultChecked={fiche.platformRole === value}
                         className="mt-px size-5 shrink-0 accent-sapin"
                       />
-                      <span>{value === "user" ? t("users.role.user") : t(`role.${value}`)}</span>
+                      <span className="flex flex-col">
+                        <span className="font-semibold">
+                          {value === "user" ? t("users.role.user") : t(`role.${value}`)}
+                        </span>
+                        <span className="text-[12px] leading-4 text-ardoise">
+                          {t(`users.roleHint.${value}`)}
+                        </span>
+                      </span>
                     </label>
                   ))}
                 </fieldset>
@@ -296,6 +306,7 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
           now={now}
           closeHref={href({})}
           suspendHref={`${ficheHref}&action=suspendre`}
+          eraseHref={canErase ? actionHref("effacer") : undefined}
           actionHref={(name) => actionHref(name)}
           back={ficheHref}
           canAct={canAct}

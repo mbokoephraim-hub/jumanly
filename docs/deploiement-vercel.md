@@ -19,8 +19,9 @@ plus ; sans elle, la route refuse l'appel du cron).
 
 ## E-mails (codes de connexion, liens, reçus)
 
-Sans `RESEND_API_KEY` ni `SMTP_HOST`, aucun e-mail ne part : les codes s'affichent seulement dans
-les journaux Vercel (« e-mail factice »). Deux façons de les envoyer vraiment.
+Sans `RESEND_API_KEY` ni `SMTP_HOST`, aucun e-mail ne part : codes et liens s'affichent seulement dans
+les journaux Vercel (« e-mail factice »), avec le lien « Confirmer mon adresse » de l'inscription.
+Deux façons de les envoyer vraiment.
 
 ### Solution simple : la boîte Gmail infojumanly@gmail.com (SMTP)
 

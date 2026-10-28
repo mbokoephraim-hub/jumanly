@@ -1,3 +1,4 @@
+import { ABOUT_TEXT_MAX } from "@/lib/profile-about";
 import { z } from "zod";
 import type { PrismaClient } from "@/generated/prisma/client";
 import { AiError, runAi } from "@/server/ai";
@@ -8,6 +9,9 @@ import { stageFor, type Stage, stages } from "./diagnostic-scoring";
 import { isJobOpen, openJobWhere } from "./jobs";
 import { followedCourses } from "./learn-space";
 import { listProjects, type PortfolioProject } from "./portfolio";
+import { parseCv } from "./cv";
+import { cvScore, targetSkillsFor } from "./cv-coach";
+import { personProfile } from "./person-profile";
 import { completeness, getFullProfile, parseProfileLanguages } from "./profile";
 
 /**
@@ -99,6 +103,8 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
     jobCities,
     plan,
     savedJob,
+    person,
+    targets,
   ] = await Promise.all([
     db.document.findMany({
       where: { profileId: profile.id, kind: "cv" },
@@ -109,7 +115,10 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
         templateId: true,
         isPrimary: true,
         updatedAt: true,
+        fileType: true,
         adaptedForJobId: true,
+        content: true,
+        style: true,
       },
     }),
     listProjects(db, profile.id),
@@ -136,6 +145,9 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
       orderBy: { createdAt: "desc" },
       select: { job: { select: { id: true, organization: { select: { name: true } } } } },
     }),
+    // The head of Carrière is the person's own profile, as others see it (docs/carriere-v3).
+    personProfile(db, userId, userId, "candidate"),
+    targetSkillsFor(db, userId),
   ]);
   const complete = completeness(profile);
 
@@ -164,6 +176,8 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
       bars: applicationBars(status),
       interviewAt: interview?.startsAt ?? null,
       open: isJobOpen(application.job, now),
+      /** The score shown when the person applied, frozen with the application. */
+      score: application.matchScore,
     };
   });
   const active = rows.filter(
@@ -188,12 +202,15 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
     userId,
     portfolioSlug: profile.portfolioPublic ? profile.portfolioSlug : null,
     user: profile.user,
+    person,
     profile: {
       banner: profile.banner,
+      handle: profile.handle,
       headline: profile.headline,
       summary: profile.summary,
       targetJob: profile.targetJob,
       availability: profile.availability,
+      desiredContracts: profile.desiredContracts,
       visibility: profile.visibility,
       desiredLocations: profile.desiredLocations,
       languages: parseProfileLanguages(profile.languages),
@@ -222,12 +239,18 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
       isPrimary: cv.isPrimary,
       updatedAt: cv.updatedAt,
       uses: uses.get(cv.id) ?? 0,
+      style: cv.style,
+      /** An imported CV kept as its file (pdf, docx, image), null for a CV made in Jumanly. */
+      fileType: cv.fileType,
+      /** The CV's score out of 100 (fixed rules, partie 08 § 8.9), with its « Pourquoi ? ». */
+      score: cvScore(parseCv(cv.content), targets.skills).total,
     })),
     adapt,
     projects: projects.map((project) => ({
       id: project.id,
       title: project.title,
       tool: project.skills[0] ?? null,
+      skills: project.skills.slice(0, 3),
       photos: project.files.filter((file) => file.type.startsWith("image/")).length,
       cover: projectCover(project),
       files: project.files.length,
@@ -253,7 +276,7 @@ export type RewriteKind = "about" | "experience" | "project";
 
 const REWRITE_SYSTEM = {
   about: [
-    "Tu es Orbi, l'assistant de Jumanly. Tu réécris le texte « À propos » d'un profil en français simple, en 2 ou 3 phrases, à la première personne, pour des recruteurs.",
+    "Tu es Orbi, l'assistant de Jumanly. Tu réécris le texte « À propos » d'un profil en français simple, en 2 ou 3 phrases, à la première personne, pour des recruteurs, en 400 caractères au plus.",
     "Commence par un verbe d'action ou par le métier, termine par l'objectif.",
   ],
   project: [
@@ -308,7 +331,9 @@ export async function rewriteCareerText(
       schema: rewriteOutput,
       template: () => ({ text: rewriteTemplate(input.kind, text) }),
     });
-    const proposed = run.output.text.trim().slice(0, input.kind === "about" ? 1000 : 3000);
+    const proposed = run.output.text
+      .trim()
+      .slice(0, input.kind === "about" ? ABOUT_TEXT_MAX : 3000);
     return proposed && proposed !== text ? proposed : { error: "same" };
   } catch (error) {
     if (error instanceof AiError) return { error: error.code };

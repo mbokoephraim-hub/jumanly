@@ -1,29 +1,25 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getTranslations } from "next-intl/server";
-import { OrgBanner } from "@/components/jobs/org-banner";
-import { OrbiLine } from "@/components/recruiter/offers";
-import { FlowHead } from "@/components/talent/flow-head";
-import { TalentIcon } from "@/components/talent/icon";
-import { Notice } from "@/components/talent/notice";
-import { CompanyLogo } from "@/components/ui/avatar";
-import { countryName } from "@/config/countries";
-import { cx } from "@/lib/cx";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
+import { CompanyPageEditor, type CompanyPageData } from "@/components/entreprise/company-page";
+import { pickMessages } from "@/i18n/client-messages";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
-import { hirePermissions } from "@/server/services/hire";
-import { organizationCategories, seatUsage } from "@/server/services/organization";
+import { signupSizes } from "@/server/services/admin-signup";
+import { companyPageScreen } from "@/server/services/org-page";
 import { organizationSizes } from "@/server/services/recruiter-account";
 
+const PAGE = "/app/organisation";
+
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("org");
+  const t = await getTranslations("orgPage");
   return { title: t("title"), robots: { index: false } };
 }
 
 /** The tabs of the page before the redesign, now pages of their own (old links, e-mails). */
 const oldTabs: Record<string, string> = {
-  profil: "/app/organisation/modifier",
+  profil: "/app/organisation",
   verification: "/app/organisation/verification",
   membres: "/app/organisation/equipe",
   equipes: "/app/organisation/structure?onglet=equipes",
@@ -31,249 +27,71 @@ const oldTabs: Record<string, string> = {
   entites: "/app/organisation/structure?onglet=entites",
 };
 
-const one = (value: string | string[] | undefined) => (typeof value === "string" ? value : "");
-
 /**
- * Organisation (planche recruteur-3 `ORG_P`, r3plus): the card with the banner, the logo, the
- * name, the line and the verification; four figures of the organization; the presentation; an
- * Orbi line on what makes the page better; then the team, the verification and the structure.
- * Everything is read through the member's organization (golden rule n° 6).
+ * Page entreprise (étape 3, A3, capture 081), for the owner and the administrators only: a
+ * recruiter, a manager or a viewer gets « page introuvable ». Under 768 px the layout of
+ * `/app/organisation` shows « À ouvrir sur un ordinateur ».
  */
-export default async function OrganizationPage({ searchParams }: PageProps<"/app/organisation">) {
+export default async function CompanyPage({ searchParams }: PageProps<"/app/organisation">) {
   const params = await searchParams;
-  const old = oldTabs[one(params.onglet)];
-  if (old) redirect(old);
-  const { ctx } = await requireHire("/app/organisation");
-  const t = await getTranslations("org");
-  const tr = await getTranslations("rhOrg");
-  const tw = await getTranslations("hireWelcome.org");
-  const tw3 = await getTranslations("hireWeb3.org");
-  const admin = hirePermissions(ctx.role).administer;
-  const [organization, seats, jobs, applications, hired] = await Promise.all([
-    db.organization.findUniqueOrThrow({
-      where: { id: ctx.organizationId },
-      select: {
-        name: true,
-        slug: true,
-        banner: true,
-        logo: true,
-        description: true,
-        category: true,
-        sector: true,
-        size: true,
-        city: true,
-        country: true,
-        website: true,
-        verificationStatus: true,
-        verifiedAt: true,
-      },
-    }),
-    seatUsage(db, ctx.organizationId),
-    db.job.count({ where: { organizationId: ctx.organizationId, status: "published" } }),
-    db.application.count({ where: { job: { organizationId: ctx.organizationId } } }),
-    db.application.count({
-      where: { job: { organizationId: ctx.organizationId }, status: "hired" },
-    }),
+  const old = typeof params.onglet === "string" ? oldTabs[params.onglet] : undefined;
+  if (old && old !== PAGE) redirect(old);
+  const { ctx } = await requireHire(PAGE, "administer");
+  const [screen, messages, t, ts, tw] = await Promise.all([
+    companyPageScreen(db, ctx),
+    getMessages(),
+    getTranslations("hire.jobForm.brand"),
+    getTranslations("adminSignup.company"),
+    getTranslations("hireWelcome.org"),
   ]);
-  const meta = [
-    organization.category
-      ? t(`profile.category.${organization.category as (typeof organizationCategories)[number]}`)
-      : null,
-    organization.sector,
-    organization.size
-      ? (organizationSizes as readonly string[]).includes(organization.size)
-        ? tw(
-            `sizes.s${(organizationSizes as readonly string[]).indexOf(organization.size) + 1}` as "sizes.s1",
-          )
-        : tr("size", { size: organization.size })
-      : null,
-    [organization.city, organization.country ? countryName(organization.country) : null]
-      .filter(Boolean)
-      .join(", "),
-  ].filter(Boolean);
-  const verified = organization.verificationStatus === "verified";
-  const status = organization.verificationStatus;
-  const hint = !organization.banner
-    ? "banner"
-    : !organization.description
-      ? "description"
-      : !verified && status !== "pending"
-        ? "verify"
-        : null;
-  const figures = [
-    { key: "jobs", value: jobs },
-    { key: "applications", value: applications },
-    { key: "hired", value: hired },
-    { key: "members", value: seats.used },
-  ] as const;
-
+  const { org } = screen;
+  const sizes: CompanyPageData["sizes"] = Object.entries(signupSizes).map(([key, value]) => ({
+    value,
+    label: ts(`sizesLong.${key as keyof typeof signupSizes}`),
+  }));
+  // A size written by an older screen stays selectable as it is.
+  const index = (organizationSizes as readonly string[]).indexOf(org.size ?? "");
+  if (org.size && !sizes.some((size) => size.value === org.size))
+    sizes.push({
+      value: org.size,
+      label: index >= 0 ? tw(`sizes.s${index + 1}` as "sizes.s1") : org.size,
+    });
+  const data: CompanyPageData = {
+    org: {
+      name: org.name,
+      logo: org.logo,
+      banner: org.banner,
+      bannerTheme: org.bannerTheme,
+      sector: org.sector ?? "",
+      size: org.size ?? "",
+      city: org.city ?? "",
+      website: org.website ?? "",
+      description: org.description ?? "",
+      hiringNow: org.hiringNow,
+      verification: org.verificationStatus,
+    },
+    line: [org.sector, org.city].filter(Boolean).join(" · "),
+    sizes,
+    pending: screen.pending,
+    confirmed: screen.confirmed,
+    transferTo: screen.transferTo,
+    brand: {
+      banner: t("editBanner"),
+      logo: t("editLogo"),
+      bannerHint: t("bannerHint"),
+      logoHint: t("logoHint"),
+      choose: t("editor.choose"),
+      empty: t("editor.empty"),
+      cancel: t("editor.cancel"),
+      save: t("editor.save"),
+      removeBanner: t("editor.removeBanner"),
+      removeLogo: t("editor.removeLogo"),
+      error: t("editor.error"),
+    },
+  };
   return (
-    <div className="t-flux t-w4 t-large t-rw3-org">
-      <div className="t-w4-h">
-        <FlowHead
-          back="/app/hire/compte"
-          backLabel={tr("back")}
-          title={t("title")}
-          end={
-            admin ? (
-              <Link
-                href="/app/organisation/modifier"
-                className="t-bi t-press"
-                aria-label={tr("edit")}
-              >
-                <TalentIcon name="modifier" size="s" />
-              </Link>
-            ) : undefined
-          }
-        />
-        <p className="t-w4-web t-w4-sub">{tw3("sub")}</p>
-      </div>
-      {one(params.ok) && <Notice tone="ok">{t("profile.saved")}</Notice>}
-
-      <section className="t-verre t-r5-org" aria-labelledby="r5-org-nom">
-        <OrgBanner src={organization.banner} className="t-r5-ban" sizes="560px" />
-        <div className="t-r5-org-c">
-          <CompanyLogo
-            name={organization.name}
-            src={organization.logo}
-            size="lg"
-            className="t-r5-lg"
-          />
-          <h2 id="r5-org-nom">{organization.name}</h2>
-          {meta.length > 0 && <p>{meta.join(" · ")}</p>}
-          <span className={cx("t-tag", verified ? "t-vert" : "t-amb")}>
-            <TalentIcon name={verified ? "valider" : "horloge"} size="xs" />
-            {t(`verification.status.${status}`)}
-          </span>
-          {/* Ordinateur et tablette (planche web recruteur-3 § 3) : les deux actions sur la carte. */}
-          <div className="t-w4-web t-bts">
-            {organization.slug && (
-              <Link href={`/entreprises/${organization.slug}`} className="t-bt t-sec t-m t-press">
-                <TalentIcon name="profil" size="s" />
-                {tr("asTalent")}
-              </Link>
-            )}
-            {admin && (
-              <Link href="/app/organisation/modifier" className="t-bt t-p t-m t-press">
-                <TalentIcon name="modifier" size="s" />
-                {tw3("edit")}
-              </Link>
-            )}
-          </div>
-        </div>
-      </section>
-
-      <ul className="t-r5-st4" aria-label={tr("figures")}>
-        {figures.map((figure, index) => (
-          <li key={figure.key} className={`t-r5-s${index + 1}`}>
-            <b>{figure.value}</b>
-            {tr(`figure.${figure.key}`, { count: figure.value })}
-          </li>
-        ))}
-      </ul>
-
-      <div className="t-w4-g2">
-        <div className="t-w4-col">
-          <section className="t-verre t-carte t-r5-pres" aria-labelledby="r5-org-pres">
-            <h2 id="r5-org-pres">
-              <span className="t-cases t-c1" aria-hidden>
-                <TalentIcon name="document" size="s" />
-              </span>
-              {tr("presentation")}
-            </h2>
-            {organization.description ? (
-              <p className="t-r5-pre">{organization.description}</p>
-            ) : (
-              <p className="t-r5-vide-t">{tr("noDescription")}</p>
-            )}
-            {organization.website && (
-              <a
-                href={organization.website}
-                rel="noopener noreferrer"
-                target="_blank"
-                className="t-lien-d"
-              >
-                {organization.website.replace(/^https?:\/\//, "")}
-              </a>
-            )}
-          </section>
-        </div>
-        <div className="t-w4-col">
-          {hint && admin && (
-            <OrbiLine
-              action={
-                <Link
-                  href={
-                    hint === "verify"
-                      ? "/app/organisation/verification"
-                      : "/app/organisation/modifier"
-                  }
-                  className="t-bt t-sec t-s t-press"
-                >
-                  {tr(`hint.${hint}.cta`)}
-                </Link>
-              }
-            >
-              {tr(`hint.${hint}.text`)}
-            </OrbiLine>
-          )}
-
-          <ul className="t-verre t-liste t-lignes" aria-label={tr("manage")}>
-            <li>
-              <Link href="/app/organisation/equipe" className="t-li t-press">
-                <span className="t-cases t-c2" aria-hidden>
-                  <TalentIcon name="candidats" size="s" />
-                </span>
-                <span className="t-t">
-                  <b>{tr("team")}</b>
-                  <span>
-                    {seats.max < 0
-                      ? tr("seatsUnlimited", { used: seats.used })
-                      : tr("seats", { used: seats.used, max: seats.max })}
-                  </span>
-                </span>
-                <TalentIcon name="suivant" />
-              </Link>
-            </li>
-            <li>
-              <Link href="/app/organisation/verification" className="t-li t-press">
-                <span className="t-cases t-c3" aria-hidden>
-                  <TalentIcon name="valider" size="s" />
-                </span>
-                <span className="t-t">
-                  <b>{tr("verification")}</b>
-                  <span>{t(`verification.status.${status}`)}</span>
-                </span>
-                <TalentIcon name="suivant" />
-              </Link>
-            </li>
-            {admin && (
-              <li>
-                <Link href="/app/organisation/structure" className="t-li t-press">
-                  <span className="t-cases" aria-hidden>
-                    <TalentIcon name="entreprise" size="s" />
-                  </span>
-                  <span className="t-t">
-                    <b>{tr("structure")}</b>
-                    <span>{tr("structureLine")}</span>
-                  </span>
-                  <TalentIcon name="suivant" />
-                </Link>
-              </li>
-            )}
-          </ul>
-        </div>
-      </div>
-
-      {organization.slug && (
-        <Link
-          href={`/entreprises/${organization.slug}`}
-          className="t-bt t-sec t-m t-pl t-press t-w4-tel"
-        >
-          <TalentIcon name="profil" size="s" />
-          {tr("asTalent")}
-        </Link>
-      )}
-    </div>
+    <NextIntlClientProvider messages={pickMessages(messages, ["orgPage"])}>
+      <CompanyPageEditor data={data} />
+    </NextIntlClientProvider>
   );
 }

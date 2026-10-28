@@ -336,6 +336,18 @@ export const skillSeeds: SkillSeed[] = [
     aliases: ["digital content creation", "content creation"],
   },
   {
+    name: "Planification éditoriale",
+    slug: "planification-editoriale",
+    category: "digital",
+    aliases: ["calendrier éditorial", "ligne éditoriale", "editorial planning"],
+  },
+  {
+    name: "Analyse des performances",
+    slug: "analyse-des-performances",
+    category: "digital",
+    aliases: ["analyse des statistiques", "KPI", "performance analysis", "reporting digital"],
+  },
+  {
     name: "E-commerce",
     slug: "e-commerce",
     category: "digital",

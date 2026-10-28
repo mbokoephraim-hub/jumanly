@@ -176,39 +176,3 @@ export function recruiterTabOf(pathname: string): RecruiterTab | null {
     ) ?? null
   );
 }
-
-/**
- * Recruiter screens without the bottom bar (brief recruteur § 1): the work screens (a new or
- * edited offer, a candidate's file, a conversation), the screens opened from the head (account,
- * notifications, search) and Orbi, which opens as a conversation page.
- */
-export function hidesRecruiterTabBar(pathname: string) {
-  const [, app, section, page, sub] = pathname.split("/");
-  if (app !== "app" || !section) return false;
-  if (
-    [
-      "bienvenue",
-      "abonnement",
-      "parametres",
-      "recherche",
-      "testeur",
-      "notifications",
-      "orbi",
-      "organisation",
-      "compte",
-      "profil",
-    ].includes(section)
-  )
-    return true;
-  if (section === "messages") return Boolean(page);
-  if (section !== "hire") return false;
-  if (page === "compte") return true;
-  // Lot 5: the templates and the reports open from the account, with their own head.
-  if (page === "modeles" || page === "rapports") return true;
-  // Lot 2: an offer, its four steps and its job sheet have their own bar at the bottom.
-  if (page === "offres") return Boolean(sub);
-  if (page === "candidats") return Boolean(sub);
-  // Lot 4: an interview and a talent's profile have their own bar at the bottom.
-  if (page === "entretiens" || page === "talents") return Boolean(sub);
-  return false;
-}

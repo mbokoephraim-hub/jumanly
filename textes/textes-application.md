@@ -1010,6 +1010,7 @@ Note d'intégration : le tableau de bord du héros (`partners.hero.visual.*`, «
 | `companyPage.seo.title` | {company} · Offres et présentation · Jumanly |
 | `companyPage.seo.description` | Découvrez {company} et ses offres ouvertes. Postulez gratuitement sur Jumanly. |
 | `companyPage.verified` | Entreprise vérifiée |
+| `companyPage.hiringNow` | Recrute en ce moment |
 | `companyPage.logoAlt` | Logo de {company} |
 | `companyPage.coverAlt` | Image de présentation de {company} |
 | `companyPage.sector` | Secteur : {sector} |
@@ -1266,6 +1267,8 @@ Rappel du paramètre `?suite=` : si le visiteur arrive depuis une action (postul
 | `login.twoFactor.title` | Confirmez votre connexion |
 | `login.twoFactor.text` | Votre compte est protégé par la vérification en deux étapes. Nous venons d'envoyer un code à {digits} chiffres à votre adresse e-mail. |
 | `login.deleted` | Votre compte et toutes vos données ont été supprimés. Vous pouvez créer un nouveau compte à tout moment, il repartira de zéro. |
+| `login.confirmed` | Votre adresse est confirmée. Connectez-vous pour ouvrir votre espace. |
+| `login.linkExpired` | Ce lien de confirmation a expiré. Connectez-vous : nous vous en envoyons un nouveau. |
 
 ---
 
@@ -1727,6 +1730,10 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `access.login.magicSent` | Lien envoyé à {email}. Il est valable {minutes} minutes. |
 | `access.login.noAccount` | Pas encore de compte ? |
 | `access.login.signup` | Créer un compte |
+| `access.login.who` | Vous êtes |
+| `access.login.talent` | Talent |
+| `access.login.recruiter` | Recruteur |
+| `access.login.signupButton` | S'inscrire |
 | `access.login.licence` | Activer une licence offerte par un partenaire |
 
 #### `/connexion/deux-etapes` · Connexion en deux étapes
@@ -1802,11 +1809,16 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 
 | Clé | Texte |
 |---|---|
-| `access.verify.head` | Vérifier l'e-mail |
-| `access.verify.title` | Entrez le code |
-| `access.verify.text` | Nous l'avons envoyé à {email} |
+| `access.verify.head` | Confirmer l'e-mail |
+| `access.verify.title` | Ouvrez votre boîte mail |
+| `access.verify.text` | Nous avons envoyé un lien de confirmation à {email} |
+| `access.verify.how` | Touchez « Confirmer mon adresse » dans l'e-mail, sur ce téléphone ou sur votre ordinateur : votre espace s'ouvre aussitôt. |
+| `access.verify.expired` | Ce lien a expiré. Demandez-en un nouveau ci-dessous. |
+| `access.verify.resent` | Un nouveau lien vous a été envoyé. |
+| `access.verify.done` | Adresse déjà confirmée ? |
+| `access.verify.login` | Se connecter |
 | `access.verify.notReceived` | Pas reçu ? Regardez dans les indésirables ou |
-| `access.verify.resend` | renvoyez le code |
+| `access.verify.resend` | renvoyez le lien |
 | `access.verify.change` | Modifier l'adresse |
 | `access.verify.submit` | Valider |
 | `access.verify.submitting` | Vérification… |
@@ -4860,7 +4872,7 @@ Conventions :
 | `talent.profile.languages.level.fluent` | Courant |
 | `talent.profile.languages.level.professional` | Professionnel |
 | `talent.profile.languages.level.intermediate` | Intermédiaire |
-| `talent.profile.languages.level.basic` | Notions |
+| `talent.profile.languages.level.basic` | Débutant |
 | `talent.profile.languages.cefr.text` | Niveau CECR (facultatif) |
 | `talent.profile.languages.cefr.placeholder` | Ex. : B2 |
 | `talent.profile.languages.empty` | Ajoutez les langues dans lesquelles vous pouvez travailler. |
@@ -5916,11 +5928,14 @@ Conventions :
 | `career.diagnostic.q.skillLevel.text` | Votre niveau en {skill} ? |
 | `career.diagnostic.q.skillLevel.source.role` | L'une des compétences les plus demandées dans les offres publiées pour ce métier ({count, plural, one {# offre} other {# offres}}). |
 | `career.diagnostic.q.skillLevel.source.all` | L'une des compétences les plus demandées dans les offres publiées sur Jumanly ({count, plural, one {# offre} other {# offres}}). |
+| `career.diagnostic.q.skillLevel.source.field` | Une compétence clé du métier que vous visez. |
 | `career.diagnostic.q.skillLevel.source.own` | Une compétence que vous avez citée. |
+| `career.diagnostic.q.skillLevel.l0` | Aucun niveau |
 | `career.diagnostic.q.skillLevel.l1` | Notions |
 | `career.diagnostic.q.skillLevel.l2` | Intermédiaire |
 | `career.diagnostic.q.skillLevel.l3` | Avancé |
 | `career.diagnostic.q.skillLevel.l4` | Expert |
+| `career.diagnostic.q.skillLevel.l0Hint` | Je ne connais pas cette compétence |
 | `career.diagnostic.q.skillLevel.l1Hint` | Je connais les bases |
 | `career.diagnostic.q.skillLevel.l2Hint` | Je l'utilise avec un peu d'aide |
 | `career.diagnostic.q.skillLevel.l3Hint` | Je l'utilise seul, au quotidien |
@@ -7762,6 +7777,8 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `profil.skills.search` | Chercher une compétence |
 | `profil.skills.pick` | Compétence trouvée |
 | `profil.skills.none` | Aucune compétence ne correspond à « {query} ». Essayez un autre mot. |
+| `profil.skills.notListed` | Cette compétence n’est pas encore dans la liste. Vous pouvez l’ajouter telle que vous l’avez écrite. |
+| `profil.skills.custom` | Ajouter « {skill} » |
 | `profil.skills.level` | Niveau |
 | `profil.skills.levels.beginner` | Débutant |
 | `profil.skills.levels.intermediate` | Intermédiaire |
@@ -7849,7 +7866,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `profil.languages.level.fluent` | Courant |
 | `profil.languages.level.professional` | Professionnel |
 | `profil.languages.level.intermediate` | Intermédiaire |
-| `profil.languages.level.basic` | Notions |
+| `profil.languages.level.basic` | Débutant |
 | `profil.languages.cefr` | Niveau européen (facultatif) |
 | `profil.languages.cefrNone` | Sans |
 | `profil.languages.save` | Ajouter |
@@ -7937,7 +7954,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 
 ### Modèle B · Fondations de l'espace talent au téléphone
 
-*Coque du Modèle B (docs/modele-b, lot B1) : barre du bas en icônes seules, Orbi flottant et sa feuille, recherche en deux temps, retours.*
+*Coque du Modèle B (docs/modele-b, lot B1) : menu en pilule (docs/fil-menu-publication, § 1 : Hub et Chat remplacent Formation et Messages dans le menu), Orbi flottant et sa feuille, recherche en deux temps, retours.*
 
 | Clé | Texte |
 |---|---|
@@ -7945,8 +7962,9 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phone.nav.fil` | Fil |
 | `phone.nav.explorer` | Explorer |
 | `phone.nav.carriere` | Carrière |
-| `phone.nav.formation` | Formation |
-| `phone.nav.messages` | Messages |
+| `phone.nav.formation` | Hub |
+| `phone.nav.messages` | Chat |
+| `phone.nav.messagesUnread` | Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}} |
 | `phone.back` | Retour |
 | `phone.close` | Fermer |
 | `phone.cancel` | Annuler |
@@ -8007,8 +8025,11 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneAccueil.welcome.seo` | Bienvenue sur Jumanly |
 | `phoneAccueil.welcome.next` | Écran suivant |
 | `phoneAccueil.welcome.dot` | Écran {n} : {word} |
-| `phoneAccueil.welcome.signup` | Créer un compte |
+| `phoneAccueil.welcome.signup` | S'inscrire |
 | `phoneAccueil.welcome.login` | Se connecter |
+| `phoneAccueil.welcome.who` | Vous êtes |
+| `phoneAccueil.welcome.talent` | Talent |
+| `phoneAccueil.welcome.recruiter` | Recruteur |
 | `phoneAccueil.welcome.s1.word` | Learn |
 | `phoneAccueil.welcome.s1.title` | Apprenez ce que les employeurs cherchent |
 | `phoneAccueil.welcome.s1.text` | Des cours courts, gratuits pour commencer, et une attestation à la fin. |
@@ -8077,19 +8098,23 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneAccueil.password.suggested` | Mot de passe suggéré : notez-le ou laissez le téléphone l'enregistrer. |
 | `phoneAccueil.password.submit` | Créer mon compte |
 | `phoneAccueil.password.submitting` | Création… |
-| `phoneAccueil.code.title` | Vérifiez votre boîte mail |
-| `phoneAccueil.code.subtitle` | Nous avons envoyé un code à 6 chiffres à {email}. |
+| `phoneAccueil.code.title` | Confirmez votre adresse |
+| `phoneAccueil.code.subtitle` | Nous avons envoyé un lien de confirmation à {email}. |
+| `phoneAccueil.code.how` | Ouvrez l'e-mail et touchez « Confirmer mon adresse » : votre espace s'ouvre aussitôt, sur ce téléphone comme sur un ordinateur. |
+| `phoneAccueil.code.expired` | Ce lien a expiré. Demandez-en un nouveau. |
+| `phoneAccueil.code.login` | Déjà confirmé ? Se connecter |
 | `phoneAccueil.code.label` | Code à 6 chiffres |
 | `phoneAccueil.code.error` | Le code contient 6 chiffres. |
 | `phoneAccueil.code.submit` | Vérifier |
 | `phoneAccueil.code.submitting` | Vérification… |
-| `phoneAccueil.code.resend` | Renvoyer le code |
+| `phoneAccueil.code.resend` | Renvoyer le lien |
 | `phoneAccueil.code.resendIn` | Renvoyer dans {time} |
-| `phoneAccueil.code.resent` | Nouveau code envoyé. |
+| `phoneAccueil.code.resent` | Nouveau lien envoyé. |
 | `phoneAccueil.code.change` | Changer d'adresse |
-| `phoneAccueil.code.help` | Pas reçu ? Regardez dans les spams. Le code reste valable {minutes} minutes. |
+| `phoneAccueil.code.help` | Pas reçu ? Regardez dans les spams. Le lien reste valable {hours} heures. |
 | `phoneAccueil.login.title` | Bon retour |
 | `phoneAccueil.login.subtitle` | Connectez-vous pour retrouver votre Fil. |
+| `phoneAccueil.login.signupButton` | S'inscrire |
 | `phoneAccueil.login.or` | ou |
 | `phoneAccueil.login.email` | Adresse e-mail |
 | `phoneAccueil.login.password` | Mot de passe |
@@ -8262,11 +8287,12 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.bell` | {count, plural, =0 {Notifications} one {Notifications, # non lue} other {Notifications, # non lues}} |
 | `phoneFil.bellMany` | 99+ |
 | `phoneFil.account` | Votre carrière |
+| `phoneFil.settings` | Paramètres |
 | `phoneFil.tabs` | Fils |
 | `phoneFil.tab.pourvous` | Pour vous |
 | `phoneFil.tab.abonnements` | Abonnements |
 | `phoneFil.tab.entreprises` | Entreprises |
-| `phoneFil.compose.prompt` | Quoi de neuf ? |
+| `phoneFil.compose.prompt` | Un titre, un texte, une image |
 | `phoneFil.compose.button` | Publier |
 | `phoneFil.tag.company` | Entreprise |
 | `phoneFil.tag.newRole` | Nouveau poste |
@@ -8283,6 +8309,13 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.repost` | Republier |
 | `phoneFil.repostCount` | {count, plural, =0 {Republier} one {Republier, # republication} other {Republier, # republications}} |
 | `phoneFil.seeReplies` | {count, plural, one {Voir la réponse} other {Voir les # réponses}} |
+| `phoneFil.commentCount` | {count, plural, =0 {Commenter} one {Commenter, # commentaire} other {Commenter, # commentaires}} |
+| `phoneFil.comments` | {count, plural, one {# commentaire} other {# commentaires}} |
+| `phoneFil.share` | Envoyer |
+| `phoneFil.shareSheet` | Partager |
+| `phoneFil.save` | Enregistrer |
+| `phoneFil.reactions` | {count, plural, one {# personne aime} other {# personnes aiment}} |
+| `phoneFil.verified` | Entreprise vérifiée |
 | `phoneFil.score` | {score} % pour vous |
 | `phoneFil.offerLine` | {city} · {contract} · {remote} |
 | `phoneFil.contract.cdi` | CDI |
@@ -8358,6 +8391,27 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.toast.unreposted` | Republication annulée |
 | `phoneFil.toast.sentTo` | Envoyée à {name} |
 | `phoneFil.toast.error` | Cela n'a pas fonctionné. Réessayez dans un instant. |
+| `phoneFil.toast.edited` | Publication modifiée |
+| `phoneFil.menu.edit` | Modifier la publication |
+| `phoneFil.menu.editSub` | Le titre et le texte |
+| `phoneFil.menu.share` | Partager |
+| `phoneFil.menu.shareSub` | Republier, citer ou envoyer |
+| `phoneFil.edit.title` | Modifier la publication |
+| `phoneFil.edit.save` | Enregistrer |
+| `phoneFil.edit.empty` | Le titre ne peut pas être vide. |
+| `phoneFil.edited` | modifié |
+| `phoneFil.seeComments` | {count, plural, one {Voir le commentaire} other {Voir les # commentaires}} |
+| `phoneFil.addComment` | Ajouter un commentaire… |
+| `phoneFil.comment.more` | Options du commentaire |
+| `phoneFil.comment.sheet` | Votre commentaire |
+| `phoneFil.comment.edit` | Modifier le commentaire |
+| `phoneFil.comment.delete` | Supprimer le commentaire |
+| `phoneFil.comment.deleteSub` | Il disparaît de la publication |
+| `phoneFil.comment.label` | Modifier votre commentaire |
+| `phoneFil.comment.save` | Enregistrer |
+| `phoneFil.comment.cancel` | Annuler |
+| `phoneFil.comment.edited` | Commentaire modifié |
+| `phoneFil.comment.deleted` | Commentaire supprimé |
 | `phoneFil.report.title` | Signaler la publication |
 | `phoneFil.report.anonymous` | {name} ne saura pas que c'est vous. |
 | `phoneFil.report.scam` | Fausse offre ou arnaque |
@@ -8383,9 +8437,25 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.send.message` | Je te partage cette publication de {name} : {link} |
 | `phoneFil.publish.title` | Nouvelle publication |
 | `phoneFil.publish.cancel` | Annuler |
-| `phoneFil.publish.placeholder` | Quoi de neuf ? |
+| `phoneFil.publish.placeholder` | Quelques mots pour en dire plus |
 | `phoneFil.publish.label` | Votre publication |
-| `phoneFil.publish.photo` | Photo |
+| `phoneFil.publish.titleLabel` | Titre · une phrase d'accroche |
+| `phoneFil.publish.titlePlaceholder` | Une phrase qui donne envie de lire |
+| `phoneFil.publish.bodyLabel` | Texte · environ 120 caractères |
+| `phoneFil.publish.counter` | {count}/{max} |
+| `phoneFil.publish.counterLong` | {count} caractères sur {max}. |
+| `phoneFil.publish.bodyHint.short` | Encore un peu : visez environ 120 caractères. |
+| `phoneFil.publish.bodyHint.good` | Bonne longueur. |
+| `phoneFil.publish.bodyHint.long` | Presque au maximum. |
+| `phoneFil.publish.imageLabel` | Image · elle prend la forme arrondie du Fil |
+| `phoneFil.publish.imageAdd` | Ajouter une image |
+| `phoneFil.publish.imageChange` | Choisir une autre image |
+| `phoneFil.publish.imageChosen` | Image choisie |
+| `phoneFil.publish.preview` | Aperçu dans le Fil |
+| `phoneFil.publish.previewTitle` | Votre titre |
+| `phoneFil.publish.previewBody` | Votre texte |
+| `phoneFil.publish.missingTitle` | Ajoutez un titre |
+| `phoneFil.publish.draftTitle` | Attestation obtenue : {course} |
 | `phoneFil.publish.work` | Réalisation |
 | `phoneFil.publish.certificate` | Attestation |
 | `phoneFil.publish.remove` | Retirer la pièce jointe |
@@ -8405,8 +8475,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.publish.audience.nobody` | Personne ne peut répondre |
 | `phoneFil.publish.audience.label` | Qui peut répondre : {audience}. Changer |
 | `phoneFil.publish.submit` | Publier |
-| `phoneFil.publish.empty` | Écrivez quelque chose ou ajoutez une pièce jointe. |
-| `phoneFil.publish.count` | {count} / {max} caractères |
+| `phoneFil.publish.empty` | Ajoutez un titre avant de publier. |
 | `phoneFil.publish.done` | Publication partagée |
 | `phoneFil.publish.photoError` | Cette photo ne peut pas être ajoutée. Choisissez une image JPEG, PNG ou WebP. |
 | `phoneFil.publish.photoAlt` | Photo jointe par {name} |
@@ -8449,6 +8518,9 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.profileOffers` | Offres en cours |
 | `phoneFil.profilePosts` | Publications |
 | `phoneFil.profileNoPosts` | Aucune publication pour l'instant. |
+| `phoneFil.mine.title` | Mes publications |
+| `phoneFil.mine.hint` | Toutes vos publications, même anciennes. Touchez « ··· » pour en modifier ou en supprimer une. |
+| `phoneFil.mine.write` | Écrire une publication |
 
 ## Partie 04 · Espace recruteur et entreprise
 
@@ -8475,7 +8547,7 @@ Conventions :
 | `phoneExplorer.savedBadge` | {count, plural, =0 {Offres enregistrées} one {Offres enregistrées, # offre} other {Offres enregistrées, # offres}} |
 | `phoneExplorer.savedBadgeMany` | 99+ |
 | `phoneExplorer.search.label` | Rechercher une offre, une entreprise ou une personne |
-| `phoneExplorer.search.placeholder` | Offres, entreprises, personnes |
+| `phoneExplorer.search.placeholder` | Rechercher |
 | `phoneExplorer.search.clear` | Effacer |
 | `phoneExplorer.search.cancel` | Annuler |
 | `phoneExplorer.search.in` | Rechercher dans |
@@ -8500,11 +8572,44 @@ Conventions :
 | `phoneExplorer.search.see` | Voir › |
 | `phoneExplorer.search.today` | aujourd’hui |
 | `phoneExplorer.search.yesterday` | hier |
-| `phoneExplorer.cat.aria` | Afficher |
-| `phoneExplorer.cat.tout` | Tout |
-| `phoneExplorer.cat.offres` | Offres |
-| `phoneExplorer.cat.entreprises` | Entreprises |
-| `phoneExplorer.cat.personnes` | Personnes |
+| `phoneExplorer.filters.button` | Filtres |
+| `phoneExplorer.filters.buttonCount` | {count, plural, =0 {Filtres} one {Filtres, # filtre actif} other {Filtres, # filtres actifs}} |
+| `phoneExplorer.filters.title` | Filtres |
+| `phoneExplorer.filters.close` | Fermer les filtres |
+| `phoneExplorer.filters.clear` | Effacer |
+| `phoneExplorer.filters.scope` | Chercher dans |
+| `phoneExplorer.filters.scopes.tout` | Tout |
+| `phoneExplorer.filters.scopes.offres` | Offres |
+| `phoneExplorer.filters.scopes.entreprises` | Entreprises |
+| `phoneExplorer.filters.scopes.personnes` | Personnes |
+| `phoneExplorer.filters.contract` | Type de contrat · offres |
+| `phoneExplorer.filters.contracts.cdi` | CDI |
+| `phoneExplorer.filters.contracts.cdd` | CDD |
+| `phoneExplorer.filters.contracts.stage` | Stage |
+| `phoneExplorer.filters.salary` | Salaire mensuel · offres |
+| `phoneExplorer.filters.salaries.lt300` | Moins de 300 $ |
+| `phoneExplorer.filters.salaries.from300` | 300 à 800 $ |
+| `phoneExplorer.filters.salaries.from800` | 800 à 1 500 $ |
+| `phoneExplorer.filters.salaries.gt1500` | Plus de 1 500 $ |
+| `phoneExplorer.filters.scaleLow` | 0 $ |
+| `phoneExplorer.filters.scaleMid` | 800 $ |
+| `phoneExplorer.filters.scaleHigh` | 1 500 $ et plus |
+| `phoneExplorer.filters.sector` | Secteur · entreprises |
+| `phoneExplorer.filters.sectors.tech` | Tech |
+| `phoneExplorer.filters.sectors.telecom` | Télécom |
+| `phoneExplorer.filters.sectors.banque` | Banque |
+| `phoneExplorer.filters.sectors.energie` | Énergie |
+| `phoneExplorer.filters.sectors.mines` | Mines |
+| `phoneExplorer.filters.sectors.sante` | Santé |
+| `phoneExplorer.filters.sectors.cabinet` | Cabinet |
+| `phoneExplorer.filters.sectors.rh` | RH |
+| `phoneExplorer.filters.residence` | Résidence · personnes |
+| `phoneExplorer.filters.residences.rdc` | RDC |
+| `phoneExplorer.filters.residences.autre` | Autre pays |
+| `phoneExplorer.filters.residences.partout` | Partout |
+| `phoneExplorer.filters.see` | {count, plural, =0 {Aucun résultat} one {Voir # résultat} other {Voir # résultats}} |
+| `phoneExplorer.filters.counting` | Calcul des résultats… |
+| `phoneExplorer.filters.failed` | Les filtres n’ont pas pu s’appliquer. Réessayez. |
 | `phoneExplorer.chips.domains` | Domaines |
 | `phoneExplorer.chips.sectors` | Secteurs |
 | `phoneExplorer.chips.all` | Tout |
@@ -8652,10 +8757,42 @@ Conventions :
 | `phoneExplorer.company.membersSearch` | Rechercher un membre |
 | `phoneExplorer.company.membersCount` | {count, plural, =0 {Aucun membre visible} one {# membre sur Jumanly} other {# membres sur Jumanly}} |
 | `phoneExplorer.company.memberConnected` | Connecté avec vous |
+| `phoneExplorer.company.memberDeclared` | Indiqué par la personne |
 | `phoneExplorer.company.noMember` | Aucun membre ne correspond à « {query} ». |
 | `phoneExplorer.company.menu` | Page de {name} |
 | `phoneExplorer.company.menuShare` | Partager la page |
 | `phoneExplorer.company.shared` | Lien de la page copié. |
+| `phoneExplorer.company.title` | Entreprise |
+| `phoneExplorer.company.share` | Partager la page |
+| `phoneExplorer.company.socials` | Réseaux de l’entreprise |
+| `phoneExplorer.company.social.linkedin` | LinkedIn de l’entreprise |
+| `phoneExplorer.company.social.instagram` | Instagram de l’entreprise |
+| `phoneExplorer.company.social.facebook` | Facebook de l’entreprise |
+| `phoneExplorer.company.social.x` | X de l’entreprise |
+| `phoneExplorer.company.social.website` | Site de l’entreprise |
+| `phoneExplorer.company.flag` | Drapeau : {country} |
+| `phoneExplorer.company.place` | {city}, {country} |
+| `phoneExplorer.company.seatLine` | Siège à {place} |
+| `phoneExplorer.company.international` | International |
+| `phoneExplorer.company.hiring` | Recrute en ce moment |
+| `phoneExplorer.company.followersChip` | {count, plural, =0 {<b>0</b> abonné} one {<b>#</b> abonné} other {<b>#</b> abonnés}} |
+| `phoneExplorer.company.offersChip` | {count, plural, =0 {<b>0</b> offre ouverte} one {<b>#</b> offre ouverte} other {<b>#</b> offres ouvertes}} |
+| `phoneExplorer.company.edit` | Modifier |
+| `phoneExplorer.company.publish` | Publier |
+| `phoneExplorer.company.whoWeAre` | Qui sommes-nous |
+| `phoneExplorer.company.founded` | Création |
+| `phoneExplorer.company.foundedValue` | En {year} |
+| `phoneExplorer.company.age` | {count, plural, one {# an d’existence} other {# ans d’existence}} |
+| `phoneExplorer.company.newBorn` | Créée cette année |
+| `phoneExplorer.company.employeesLabel` | Employés |
+| `phoneExplorer.company.domains` | Domaines |
+| `phoneExplorer.company.contact` | Liens |
+| `phoneExplorer.company.recruiters` | {count, plural, =0 {Aucun recruteur visible} one {# recruteur de l’entreprise} other {# recruteurs de l’entreprise}} |
+| `phoneExplorer.company.noRecruiter` | {name} n’a pas encore de recruteur sur Jumanly. |
+| `phoneExplorer.company.role.org_owner` | Responsable de la page |
+| `phoneExplorer.company.role.org_admin` | Administrateur |
+| `phoneExplorer.company.role.recruiter` | Recruteur |
+| `phoneExplorer.company.seeProfile` | Voir le profil |
 | `phoneExplorer.person.back` | Retour |
 | `phoneExplorer.person.more` | Plus d’options |
 | `phoneExplorer.person.handle` | @{handle} |
@@ -8702,6 +8839,420 @@ Conventions :
 | `phoneExplorer.person.cancel` | Annuler |
 | `phoneExplorer.person.photo` | Photo de {name} |
 
+### Profil d'une personne · connexion et candidat
+
+*docs/profil-personne (validé le 26/10/2026) : en-tête compact (bannière 4:1, photo et anneau des compétences, réseaux, drapeau et heure locale), « Se connecter » puis « Chat », ou la carte du candidat côté recruteur ; onglets Publications · À propos · Réalisations · Portfolio ; feuille « Pourquoi ? ».*
+
+| Clé | Texte |
+|---|---|
+| `phoneProfile.back` | Retour |
+| `phoneProfile.titleProfile` | Profil |
+| `phoneProfile.titleCandidate` | Candidat |
+| `phoneProfile.share` | Partager le profil |
+| `phoneProfile.shared` | Lien du profil copié. |
+| `phoneProfile.more` | Plus d’options |
+| `phoneProfile.close` | Fermer |
+| `phoneProfile.photo` | Photo de {name} |
+| `phoneProfile.socials` | Réseaux |
+| `phoneProfile.social.linkedin` | LinkedIn |
+| `phoneProfile.social.instagram` | Instagram |
+| `phoneProfile.social.email` | E-mail |
+| `phoneProfile.social.x` | X (Twitter) |
+| `phoneProfile.social.facebook` | Facebook |
+| `phoneProfile.social.website` | Site web |
+| `phoneProfile.verified` | Profil vérifié |
+| `phoneProfile.notVerified` | Non vérifié |
+| `phoneProfile.handle` | @{handle} |
+| `phoneProfile.flag` | Drapeau : {country} |
+| `phoneProfile.place` | {city}, {country} |
+| `phoneProfile.time` | {hour} h {minute} |
+| `phoneProfile.timeLine` | · {time} |
+| `phoneProfile.connections` | {count, plural, one {<b>#</b> connexion} other {<b>#</b> connexions}} |
+| `phoneProfile.seeks` | Cherche : <b>{contract}</b> |
+| `phoneProfile.activity.now` | Actif maintenant |
+| `phoneProfile.activity.minutes` | Actif il y a {count} min |
+| `phoneProfile.activity.hours` | Actif il y a {count} h |
+| `phoneProfile.activity.days` | Actif il y a {count} j |
+| `phoneProfile.common.one` | {a} est une connexion en commun |
+| `phoneProfile.common.two` | {a} et {b} sont des connexions en commun |
+| `phoneProfile.common.many` | {a}, {b} et {count, plural, one {# autre connexion} other {# autres connexions}} en commun |
+| `phoneProfile.connect` | Se connecter |
+| `phoneProfile.accept` | Accepter |
+| `phoneProfile.sent` | Demande envoyée |
+| `phoneProfile.connected` | Connectés |
+| `phoneProfile.chat` | Chat |
+| `phoneProfile.connectSent` | Demande envoyée à {name}. |
+| `phoneProfile.connectAccepted` | Vous êtes connectés avec {name}. |
+| `phoneProfile.connectError` | La demande n’est pas partie. Réessayez. |
+| `phoneProfile.tabs` | Sections du profil |
+| `phoneProfile.tab.publications` | Publications |
+| `phoneProfile.tab.apropos` | À propos |
+| `phoneProfile.tab.realisations` | Réalisations |
+| `phoneProfile.tab.portfolio` | Portfolio |
+| `phoneProfile.skills` | Compétences |
+| `phoneProfile.skillsCount` | {count, plural, =0 {Aucune compétence} one {# compétence} other {# compétences}} |
+| `phoneProfile.skillVerified` | vérifiée |
+| `phoneProfile.family` | {label} {share} % |
+| `phoneProfile.noSkills` | {name} n’a pas encore ajouté de compétence. |
+| `phoneProfile.experiences` | Expériences |
+| `phoneProfile.experiencesCount` | {count, plural, =0 {Aucun poste} one {# poste} other {# postes}} |
+| `phoneProfile.noExperience` | Aucune expérience indiquée pour l’instant. |
+| `phoneProfile.current` | Actuel |
+| `phoneProfile.span` | {start} – {end} |
+| `phoneProfile.today` | aujourd’hui |
+| `phoneProfile.years` | {count, plural, one {# an} other {# ans}} |
+| `phoneProfile.months` | {count} mois |
+| `phoneProfile.moreLines` | Voir {count} de plus |
+| `phoneProfile.less` | Voir moins |
+| `phoneProfile.education` | Formation |
+| `phoneProfile.languages` | Langues |
+| `phoneProfile.level` | Niveau {level} sur 5 |
+| `phoneProfile.noPosts` | {name} n’a encore rien publié. |
+| `phoneProfile.noWorks` | {name} n’a pas encore montré de réalisation. |
+| `phoneProfile.noFiles` | {name} n’a pas encore ajouté de fichier ni de lien. |
+| `phoneProfile.work.project` | Projet |
+| `phoneProfile.work.event` | Événement |
+| `phoneProfile.work.certificate` | Certificat |
+| `phoneProfile.file.pdfBadge` | PDF |
+| `phoneProfile.file.linkBadge` | LIEN |
+| `phoneProfile.file.cvBadge` | CV |
+| `phoneProfile.file.webBadge` | WEB |
+| `phoneProfile.file.size` | {size} Mo |
+| `phoneProfile.file.pdf` | PDF · {size} |
+| `phoneProfile.file.link` | Lien · {host} |
+| `phoneProfile.file.cv` | CV de {name} |
+| `phoneProfile.file.cvLine` | PDF envoyé avec la candidature |
+| `phoneProfile.file.portfolioTitle` | jumanly.io/portfolio/{slug} |
+| `phoneProfile.file.portfolio` | Page publique Jumanly |
+| `phoneProfile.candidate.applied` | A candidaté : {job} |
+| `phoneProfile.candidate.line` | {company} · {when} · étape {stage} |
+| `phoneProfile.candidate.score` | Score de compatibilité : {score} % |
+| `phoneProfile.candidate.noScore` | Sans score |
+| `phoneProfile.candidate.why` | Pourquoi {score} % ? |
+| `phoneProfile.candidate.advance` | Avancer |
+| `phoneProfile.candidate.advanceTo` | Avancer à l’étape {stage} |
+| `phoneProfile.candidate.write` | Écrire à {name} |
+| `phoneProfile.candidate.dossier` | Dossier de candidature |
+| `phoneProfile.candidate.dossierHint` | Résumé, CV, réponses, notes et historique |
+| `phoneProfile.candidate.profile` | Profil |
+| `phoneProfile.candidate.backHint` | Revenir au profil de {name} |
+| `phoneProfile.why.title` | Pourquoi {score} % ? |
+| `phoneProfile.why.line` | {job} · {company} |
+| `phoneProfile.why.rule` | Calculé sans le nom, la photo, l’âge, le genre ni la nationalité. Orbi recommande, vous décidez : aucune candidature n’est écartée automatiquement. |
+| `phoneProfile.why.ok` | Compris |
+| `phoneProfile.photoViewer.title` | Photo de profil |
+| `phoneProfile.photoViewer.close` | Fermer |
+| `phoneProfile.photoViewer.photoOf` | Photo de profil de {name} |
+| `phoneProfile.photoViewer.initialsOf` | Initiales de {name} |
+| `phoneProfile.photoViewer.initialsHint` | Sans photo, Jumanly affiche les initiales de votre nom. |
+| `phoneProfile.photoViewer.change` | Modifier |
+| `phoneProfile.photoViewer.crop` | Recadrer |
+| `phoneProfile.photoViewer.initials` | Initiales |
+| `phoneProfile.photoViewer.initialsBack` | Vos initiales sont de retour. |
+| `phoneProfile.photoViewer.back` | Retour |
+| `phoneProfile.photoViewer.cropTitle` | Recadrer la photo |
+| `phoneProfile.photoViewer.drag` | Faites glisser la photo pour la placer dans le cercle, puis réglez le zoom. |
+| `phoneProfile.photoViewer.zoom` | Zoom |
+| `phoneProfile.photoViewer.cancel` | Annuler |
+| `phoneProfile.photoViewer.save` | Enregistrer |
+| `phoneProfile.photoViewer.camera` | Prendre une photo |
+| `phoneProfile.photoViewer.gallery` | Choisir dans la galerie |
+| `phoneProfile.photoViewer.saved` | Photo mise à jour. |
+| `phoneProfile.photoViewer.error` | Cette photo n’a pas pu être enregistrée. Essayez une image JPEG ou PNG de moins de 5 Mo. |
+| `phoneProfile.photoViewer.failed` | Une erreur est survenue. Réessayez. |
+| `phoneProfile.photoOpen` | Voir la photo de profil en grand |
+| `phoneProfile.tab.suivi` | Suivi |
+| `phoneProfile.own.edit` | Modifier |
+| `phoneProfile.own.add` | Ajouter |
+| `phoneProfile.own.about` | À propos |
+| `phoneProfile.own.aboutEmpty` | Présentez-vous en quelques lignes : qui vous êtes et ce que vous faites. |
+| `phoneProfile.own.seekingEmpty` | Décrivez le candidat que vous cherchez : métier, niveau, qualités. |
+| `phoneProfile.own.educationEmpty` | Diplôme, formation ou attestation. |
+| `phoneProfile.own.languagesEmpty` | Ajoutez les langues que vous parlez. |
+| `phoneProfile.recruiter.seeking` | Candidat recherché |
+| `phoneProfile.recruiter.domains` | Domaines de recrutement |
+| `phoneProfile.recruiter.hiringNow` | Recrute en ce moment |
+| `phoneProfile.recruiter.offers` | {count, plural, =0 {Aucune offre en cours} one {# offre en cours} other {# offres en cours}} |
+| `phoneProfile.recruiter.postAt` | {post} chez {org} |
+
+### Créer un CV au téléphone (carrière v3)
+
+*docs/carriere-v3, captures 06 à 15, maquette `Cv.dc.html`, validées le 26/10/2026 : départ (Orbi, modèle, import), les quatre étapes d'un CV (Modèle, Contenu, Mise en forme, Aperçu), Orbi le prépare, importer un CV (fichier ou photo) et ce qu'Orbi a trouvé.*
+
+| Clé | Texte |
+|---|---|
+| `phoneCv.seo` | Créer un CV |
+| `phoneCv.back` | Retour |
+| `phoneCv.close` | Fermer |
+| `phoneCv.continue` | Continuer |
+| `phoneCv.save` | Enregistrer |
+| `phoneCv.error` | Ça n’a pas marché. Réessayez dans un instant. |
+| `phoneCv.steps.label` | Étapes du CV |
+| `phoneCv.steps.count` | {step} / {all} |
+| `phoneCv.steps.modele` | Modèle |
+| `phoneCv.steps.contenu` | Contenu |
+| `phoneCv.steps.style` | Style |
+| `phoneCv.steps.apercu` | Aperçu |
+| `phoneCv.start.title` | Nouveau CV |
+| `phoneCv.start.sub` | Comment voulez-vous commencer ? |
+| `phoneCv.start.filled` | Votre profil remplit déjà {percent} % du CV |
+| `phoneCv.start.orbi` | Orbi le prépare |
+| `phoneCv.start.orbiText` | À partir de votre profil et de votre Cap, en 30 secondes |
+| `phoneCv.start.fastest` | Le plus rapide |
+| `phoneCv.start.modele` | Partir d’un modèle |
+| `phoneCv.start.modeleText` | 15 modèles, votre profil remplit le contenu |
+| `phoneCv.start.import` | Importer mon CV |
+| `phoneCv.start.importText` | PDF, Word ou photo, Orbi le lit pour vous |
+| `phoneCv.start.noLogo` | Le CV téléchargé ne porte ni logo ni couleur Jumanly. |
+| `phoneCv.start.limit` | Vous avez déjà 10 CV, le maximum. Supprimez-en un pour en créer un nouveau. |
+| `phoneCv.template.title` | Choisir un modèle |
+| `phoneCv.template.sub` | {count} modèles · {plan} : {included} inclus |
+| `phoneCv.template.subNoPlan` | {count} modèles · {included} inclus |
+| `phoneCv.template.filters` | Filtrer les modèles |
+| `phoneCv.template.filterAll` | Tous · {count} |
+| `phoneCv.template.filterFree` | Gratuits |
+| `phoneCv.template.free` | Gratuit |
+| `phoneCv.template.paid` | Formule payante |
+| `phoneCv.template.hint` | Touchez pour choisir, touchez encore pour voir en grand. |
+| `phoneCv.template.with` | Avec {plan} |
+| `phoneCv.template.locked` | Ce modèle est inclus dans {plan}. |
+| `phoneCv.template.lockedLabel` | {name}, inclus dans {plan} |
+| `phoneCv.template.lockedError` | Ce modèle n’est pas inclus dans votre formule. Choisissez-en un autre ou changez de formule. |
+| `phoneCv.template.selectedLabel` | {name}, choisi. Touchez encore pour le voir en grand. |
+| `phoneCv.template.unlock` | Passer à {plan} |
+| `phoneCv.template.apply` | Appliquer ce modèle |
+| `phoneCv.template.largeTitle` | Modèle {name} |
+| `phoneCv.template.largeSub` | Aperçu avec un exemple rempli |
+| `phoneCv.template.largeAlt` | Le modèle {name}, rempli avec un exemple |
+| `phoneCv.template.largeNote` | Exemple rempli. Le vôtre reprend votre profil, et le PDF ne porte ni logo ni couleur Jumanly. |
+| `phoneCv.template.use` | Utiliser ce modèle |
+| `phoneCv.template.withPhoto` | avec photo |
+| `phoneCv.template.withoutPhoto` | sans photo |
+| `phoneCv.template.ats.excellent` | ATS excellente |
+| `phoneCv.template.ats.veryGood` | ATS très bonne |
+| `phoneCv.template.ats.good` | ATS bonne |
+| `phoneCv.orbi.title` | Orbi prépare votre CV |
+| `phoneCv.orbi.sub` | Vous pourrez tout modifier |
+| `phoneCv.orbi.writing` | Orbi écrit votre CV… |
+| `phoneCv.orbi.ready` | Votre CV est prêt |
+| `phoneCv.orbi.progress` | Avancement |
+| `phoneCv.orbi.lineProfile` | Profil et Cap lus |
+| `phoneCv.orbi.lineExperiences` | Expériences reprises avec vos points |
+| `phoneCv.orbi.lineSkillsFor` | Compétences classées pour {job} |
+| `phoneCv.orbi.lineSkills` | Compétences classées |
+| `phoneCv.orbi.lineLayout` | Mise en page {template} |
+| `phoneCv.orbi.see` | Voir le contenu |
+| `phoneCv.orbi.noSummary` | Orbi n’a pas pu proposer de résumé cette fois. Vous pourrez l’écrire ou réessayer sur Contenu. |
+| `phoneCv.orbi.limit` | Vous avez déjà 10 CV, le maximum. Supprimez-en un pour en créer un nouveau. |
+| `phoneCv.orbi.error` | Orbi n’a pas pu préparer le CV. Réessayez dans un instant. |
+| `phoneCv.orbi.backToCvs` | Revenir à mes CV |
+| `phoneCv.import.title` | Importer un CV |
+| `phoneCv.import.step` | Étape {step} sur 3 |
+| `phoneCv.import.choose` | Choisir mon CV |
+| `phoneCv.import.chooseText` | PDF ou Word, {max} Mo au plus |
+| `phoneCv.import.photo` | Photographier un CV papier |
+| `phoneCv.import.photoText` | Orbi lit la photo |
+| `phoneCv.import.photoName` | la photo |
+| `phoneCv.import.last` | Votre dernière lecture |
+| `phoneCv.import.lastWhen` | Lu {when}, à vérifier |
+| `phoneCv.import.pasted` | CV collé |
+| `phoneCv.import.consent` | Rien n’est publié sans votre accord. Vous choisissez ce qui entre dans votre profil. |
+| `phoneCv.import.error.format` | Ce fichier n’est ni un PDF ni un document Word (.docx). |
+| `phoneCv.import.error.size` | Ce fichier dépasse {max} Mo. |
+| `phoneCv.import.error.empty` | Ce fichier est vide. |
+| `phoneCv.import.error.unreadable` | Ce fichier n’a pas pu être lu. S’il s’agit d’un scan, photographiez plutôt le CV papier. |
+| `phoneCv.import.error.photo` | Pour lire une photo, Orbi doit être activé (Paramètres › Orbi) et avoir des crédits. Vous pouvez aussi choisir un PDF ou un Word. |
+| `phoneCv.import.error.orbi` | Orbi n’a pas pu lire la photo. Réessayez avec une photo nette, bien éclairée, ou choisissez un PDF. |
+| `phoneCv.read.title` | Orbi lit {name}… |
+| `phoneCv.read.contact` | Coordonnées |
+| `phoneCv.read.experiences` | Expériences |
+| `phoneCv.read.education` | Formation |
+| `phoneCv.read.skills` | Compétences et langues |
+| `phoneCv.read.never` | Le fichier n’est pas gardé : seul ce que vous validez entre dans votre profil. |
+| `phoneCv.found.title` | Voici ce qu’Orbi a trouvé |
+| `phoneCv.found.hint` | Décochez ce que vous ne voulez pas reprendre dans votre profil. |
+| `phoneCv.found.nothing` | Orbi n’a rien trouvé à reprendre dans ce fichier. Vous pouvez le garder tel quel, ou créer un CV depuis votre profil. |
+| `phoneCv.found.contact` | Coordonnées |
+| `phoneCv.found.experiences` | {count, plural, one {# expérience} other {# expériences}} |
+| `phoneCv.found.educations` | {count, plural, one {# formation} other {# formations}} |
+| `phoneCv.found.skills` | {count, plural, one {# compétence} other {# compétences}} |
+| `phoneCv.found.languages` | {count, plural, one {# langue} other {# langues}} |
+| `phoneCv.found.new` | nouveau |
+| `phoneCv.found.already` | déjà là |
+| `phoneCv.found.newSome` | {count, plural, one {+# nouvelle} other {+# nouvelles}} |
+| `phoneCv.found.newMany` | {count, plural, one {+# nouvelle} other {+# nouvelles}} |
+| `phoneCv.found.undated` | {count, plural, one {Une expérience n’a pas de date de début : elle ne sera pas ajoutée, vous pourrez l’ajouter à la main.} other {# expériences n’ont pas de date de début : elles ne seront pas ajoutées, vous pourrez les ajouter à la main.}} |
+| `phoneCv.found.rulesOnly` | Sans Orbi, seules les compétences et les langues sont reconnues. Activez Orbi pour lire aussi les expériences et les formations. |
+| `phoneCv.found.consent` | Seul « Remplir mon profil » change votre profil, et seulement avec les groupes cochés. Votre ville n’est reprise que si votre profil n’en a pas. |
+| `phoneCv.found.choose` | Que voulez-vous faire de ce CV ? |
+| `phoneCv.found.keep` | Garder mon CV |
+| `phoneCv.found.keepText` | Il est rangé tel quel dans « Mes CV ». Vous pourrez le lire, le télécharger et postuler avec. |
+| `phoneCv.found.profile` | Remplir mon profil avec ce CV |
+| `phoneCv.found.profileText` | Orbi range dans votre profil les groupes cochés. Le CV est aussi gardé dans « Mes CV ». |
+| `phoneCv.found.newCv` | Créer un nouveau CV avec ces informations |
+| `phoneCv.found.newCvText` | Vous choisissez un modèle, puis vous modifiez le contenu. Votre profil ne change pas. |
+| `phoneCv.found.fromProfile` | Créer un nouveau CV depuis mon profil |
+| `phoneCv.found.fromProfileText` | Orbi le remplit avec ce que votre profil contient, puis vous le modifiez. |
+| `phoneCv.reader.seo` | Lire un CV |
+| `phoneCv.reader.close` | Fermer et revenir à mes CV |
+| `phoneCv.reader.kind.pdf` | PDF importé |
+| `phoneCv.reader.kind.docx` | Fichier Word importé |
+| `phoneCv.reader.kind.image` | Photo importée |
+| `phoneCv.reader.kind.jumanly` | CV fait sur Jumanly |
+| `phoneCv.reader.kept` | Votre CV est rangé dans « Mes CV ». |
+| `phoneCv.reader.profileFilled` | {count, plural, =0 {Votre profil avait déjà tout. Votre CV est rangé dans « Mes CV ».} one {Orbi a rangé un élément dans votre profil. Votre CV est aussi rangé dans « Mes CV ».} other {Orbi a rangé # éléments dans votre profil. Votre CV est aussi rangé dans « Mes CV ».}} |
+| `phoneCv.reader.seeProfile` | Voir mon profil |
+| `phoneCv.reader.pagesLabel` | Le CV « {title} » |
+| `phoneCv.reader.unreadable` | Ce PDF ne s’affiche pas ici. Téléchargez-le pour le lire. |
+| `phoneCv.reader.wordNote` | Un fichier Word ne s’affiche pas tel quel sur le téléphone : voici ce qu’il contient. Le fichier se télécharge tel que vous l’avez importé. |
+| `phoneCv.reader.emptyNote` | Ce CV est encore vide : voici un exemple de sa mise en page. Touchez « Modifier » pour l’écrire. |
+| `phoneCv.reader.downloadFile` | Télécharger le fichier |
+| `phoneCv.reader.downloadPdf` | Télécharger en PDF |
+| `phoneCv.reader.emptyPdf` | Remplissez votre CV pour le télécharger |
+| `phoneCv.reader.preparing` | Préparation du PDF… |
+| `phoneCv.reader.downloaded` | PDF téléchargé. |
+| `phoneCv.reader.downloadError` | Le PDF n’a pas pu être préparé. Réessayez dans un instant. |
+| `phoneCv.reader.apply` | Quand vous postulez à une offre, vous choisissez le CV à envoyer : celui-ci en fait partie. |
+| `phoneCv.reader.applyLink` | Voir les offres |
+| `phoneCv.reader.primary` | Utiliser par défaut pour postuler |
+| `phoneCv.reader.primaryIs` | CV utilisé par défaut |
+| `phoneCv.reader.primaryOn` | Ce CV est proposé en premier quand vous postulez. |
+| `phoneCv.reader.primaryOff` | Ce CV n’est plus celui par défaut. |
+| `phoneCv.reader.edit` | Modifier |
+| `phoneCv.reader.editable` | En faire un CV modifiable |
+| `phoneCv.reader.delete` | Supprimer ce CV |
+| `phoneCv.reader.deleteQuestion` | Supprimer « {title} » ? |
+| `phoneCv.reader.deleteText` | Ce CV disparaît de « Mes CV ». Les candidatures déjà envoyées gardent leur copie. |
+| `phoneCv.reader.deleteConfirm` | Supprimer |
+| `phoneCv.reader.cancel` | Annuler |
+| `phoneCv.reader.error` | Ça n’a pas marché. Réessayez. |
+| `phoneCv.content.title` | Contenu |
+| `phoneCv.content.sub` | Rempli depuis votre profil |
+| `phoneCv.content.orbiTitle` | Orbi a tout rempli depuis votre profil. |
+| `phoneCv.content.orbiText` | Décochez ce que vous ne voulez pas, touchez un bloc pour le modifier. |
+| `phoneCv.content.summary` | Résumé |
+| `phoneCv.content.summaryEdit` | Modifier le résumé |
+| `phoneCv.content.summaryEmpty` | Pas encore de résumé. Écrivez deux ou trois phrases, ou laissez Orbi les proposer. |
+| `phoneCv.content.summaryHint` | Deux ou trois phrases : ce que vous savez faire, avec un chiffre concret, et ce que vous cherchez. |
+| `phoneCv.content.rewrite` | Réécrire avec Orbi |
+| `phoneCv.content.proposal` | Proposition d’Orbi |
+| `phoneCv.content.keep` | Garder |
+| `phoneCv.content.refuse` | Refuser |
+| `phoneCv.content.kept` | Résumé mis à jour. |
+| `phoneCv.content.refused` | Le résumé reste le vôtre. |
+| `phoneCv.content.orbiError.consent` | Activez Orbi dans Paramètres pour qu’il propose un résumé. |
+| `phoneCv.content.orbiError.entitlement` | Votre formule n’inclut pas cette aide d’Orbi. |
+| `phoneCv.content.orbiError.quota` | Vos crédits Orbi du mois sont utilisés. |
+| `phoneCv.content.orbiError.unavailable` | Orbi est indisponible pour le moment. Réessayez plus tard. |
+| `phoneCv.content.orbiError.same` | Orbi n’a rien de mieux à proposer pour ce résumé. |
+| `phoneCv.content.orbiError.empty` | Ajoutez d’abord un titre ou une expérience : Orbi part de ce qui est écrit. |
+| `phoneCv.content.sections` | Sections du CV |
+| `phoneCv.content.dragHint` | glisser pour l’ordre |
+| `phoneCv.content.contact` | Coordonnées |
+| `phoneCv.content.handle` | Déplacer {name} |
+| `phoneCv.content.handleHint` | Glissez la poignée, ou utilisez les flèches haut et bas, pour changer l’ordre. |
+| `phoneCv.content.moved` | {name} est maintenant en position {place} sur {all}. |
+| `phoneCv.content.show` | Afficher {name} sur le CV |
+| `phoneCv.content.edit` | Modifier {name} |
+| `phoneCv.content.emptySection` | Rien pour l’instant : touchez pour ajouter. |
+| `phoneCv.content.more` | + Section |
+| `phoneCv.content.moreTitle` | Ajouter une section |
+| `phoneCv.content.moreNone` | Toutes vos sections sont déjà sur le CV. |
+| `phoneCv.content.moreAdd` | Remettre {name} |
+| `phoneCv.content.moreProfile` | Projets, bénévolat et certificats ne sont pas encore repris sur le CV. Ajoutez-les à votre profil : ils comptent déjà pour les recruteurs. |
+| `phoneCv.content.moreProfileLink` | Ouvrir mon profil |
+| `phoneCv.style.title` | Mise en forme |
+| `phoneCv.style.sub` | L’aperçu change en direct |
+| `phoneCv.style.color` | Couleur |
+| `phoneCv.style.colorAdvised` | {name} · recommandée |
+| `phoneCv.style.font` | Police |
+| `phoneCv.style.density` | Densité |
+| `phoneCv.style.densities.airy` | Aérée |
+| `phoneCv.style.densities.standard` | Normale |
+| `phoneCv.style.densities.compact` | Serrée |
+| `phoneCv.style.photo` | Photo sur le CV |
+| `phoneCv.style.photoNone` | Pas de photo dans ce modèle |
+| `phoneCv.style.language` | Langue des titres |
+| `phoneCv.style.languages.fr` | Français |
+| `phoneCv.style.languages.en` | Anglais |
+| `phoneCv.style.languageValue` | {language} › |
+| `phoneCv.style.languageChange` | Langue des titres : {current}. Toucher pour changer. |
+| `phoneCv.style.next` | Voir l’aperçu |
+| `phoneCv.style.emptyNote` | Votre CV est encore vide : l’aperçu montre un exemple. Remplissez-le à l’étape Aperçu. |
+| `phoneCv.preview.title` | Aperçu et vérification |
+| `phoneCv.preview.sub` | Orbi relit avant de télécharger |
+| `phoneCv.preview.scoreLabel` | Score du CV : {score} sur 100 |
+| `phoneCv.preview.outOf` | sur 100 |
+| `phoneCv.preview.checked` | Vérifié par Orbi |
+| `phoneCv.preview.pages` | {count, plural, one {# page} other {# pages}} |
+| `phoneCv.preview.readable` | lisible par les logiciels de recrutement |
+| `phoneCv.preview.checks` | Ce qu’Orbi a vérifié |
+| `phoneCv.preview.why` | Pourquoi ? |
+| `phoneCv.preview.whyTitle` | Comment ce score est calculé |
+| `phoneCv.preview.why1` | Le score suit des règles fixes, sans IA : rien n’est inventé et le même CV a toujours le même score. |
+| `phoneCv.preview.why2For` | Il compte la lisibilité par les logiciels de recrutement (40 %), les résultats chiffrés (30 %) et les compétences demandées dans les offres de {job} (30 %). |
+| `phoneCv.preview.why2` | Il compte la lisibilité par les logiciels de recrutement (40 %), les résultats chiffrés (30 %) et vos compétences (30 %). Choisissez votre Cap pour le comparer aux offres. |
+| `phoneCv.preview.why3` | Il vous aide à améliorer votre CV : il ne décide jamais d’une candidature. |
+| `phoneCv.preview.part.ats` | Lisibilité |
+| `phoneCv.preview.part.impact` | Résultats chiffrés |
+| `phoneCv.preview.part.keywords` | Compétences demandées |
+| `phoneCv.preview.whyNote` | « Corriger » reprend ce que votre profil contient déjà ; sinon, il ouvre l’endroit où l’écrire. |
+| `phoneCv.preview.ok` | Fait : |
+| `phoneCv.preview.todo` | À faire : |
+| `phoneCv.preview.fix` | Corriger |
+| `phoneCv.preview.fixed` | {count, plural, one {Une ligne reprise de votre profil.} other {# éléments repris de votre profil.}} |
+| `phoneCv.preview.fixProfile` | Votre profil n’a rien à reprendre ici. Ajoutez-le d’abord à votre profil. |
+| `phoneCv.preview.name` | Nom du CV |
+| `phoneCv.preview.nameValue` | {title} › |
+| `phoneCv.preview.partValue` | {value}/100 |
+| `phoneCv.preview.primary` | Utiliser par défaut pour postuler |
+| `phoneCv.preview.primaryOnly` | C’est votre seul CV : il reste celui par défaut. |
+| `phoneCv.preview.word` | Word |
+| `phoneCv.preview.adapt` | Adapter à une offre |
+| `phoneCv.preview.pdf` | Télécharger en PDF |
+| `phoneCv.preview.downloading` | Téléchargement du PDF, sans logo Jumanly. |
+| `phoneCv.preview.exportError` | Le PDF n’a pas pu être créé. Réessayez dans un instant. |
+| `phoneCv.preview.empty` | Votre CV est encore vide : l’aperçu montre un exemple, pas votre CV. Remplissez-le avant de le télécharger. |
+| `phoneCv.preview.fillProfile` | Reprendre mon profil |
+| `phoneCv.preview.fillWrite` | Écrire le contenu |
+| `phoneCv.preview.filled` | Votre CV reprend maintenant votre profil. |
+| `phoneCv.preview.fillNothing` | Votre profil est encore vide. Ajoutez vos expériences et compétences, ou importez un CV. |
+| `phoneCv.preview.pdfEmpty` | Remplissez votre CV pour le télécharger |
+| `phoneCv.preview.preparing` | Préparation du PDF… |
+| `phoneCv.preview.downloaded` | CV téléchargé. Il est aussi gardé dans « Mes CV ». |
+| `phoneCv.preview.addProfile` | Ajouter à mon profil |
+| `phoneCv.preview.addTitle` | Ajouter ce CV à mon profil |
+| `phoneCv.preview.addSub` | Seul ce que votre profil n’a pas encore est ajouté. Rien n’est remplacé. |
+| `phoneCv.preview.addPart.headline` | Le titre |
+| `phoneCv.preview.addPart.summary` | Le résumé |
+| `phoneCv.preview.addPart.experiences` | {count, plural, one {# expérience} other {# expériences}} |
+| `phoneCv.preview.addPart.educations` | {count, plural, one {# formation} other {# formations}} |
+| `phoneCv.preview.addPart.skills` | {count, plural, one {# compétence} other {# compétences}} |
+| `phoneCv.preview.addPart.languages` | {count, plural, one {# langue} other {# langues}} |
+| `phoneCv.preview.addNothing` | Votre profil contient déjà tout ce qui est sur ce CV. |
+| `phoneCv.preview.addConfirm` | Ajouter à mon profil |
+| `phoneCv.preview.added` | {count, plural, one {Un élément ajouté à votre profil.} other {# éléments ajoutés à votre profil.}} |
+| `phoneCv.preview.finish` | Terminer |
+| `phoneCv.preview.saved` | Votre CV est enregistré dans « Mes CV ». |
+| `phoneCv.preview.autosave` | Chaque changement est enregistré tout seul : revenir en arrière ne perd rien. |
+| `phoneCv.check.headline.ok` | Un titre clair sous votre nom |
+| `phoneCv.check.headline.todo` | Ajoutez un titre sous votre nom |
+| `phoneCv.check.summary.ok` | Un résumé de deux ou trois phrases |
+| `phoneCv.check.summary.todo` | Écrivez un résumé de deux ou trois phrases |
+| `phoneCv.check.figure.ok` | Un résultat chiffré, concret |
+| `phoneCv.check.figure.todo` | Ajoutez un chiffre au résumé ou à une expérience (ex. 120 kits) |
+| `phoneCv.check.dates.ok` | Chaque expérience a ses dates |
+| `phoneCv.check.dates.todo` | Ajoutez les dates de chaque expérience |
+| `phoneCv.check.skills.ok` | Au moins trois compétences |
+| `phoneCv.check.skills.todo` | Ajoutez au moins trois compétences |
+| `phoneCv.check.keywords.ok` | Les compétences demandées pour votre Cap |
+| `phoneCv.check.keywords.todo` | Ajoutez {skills}, demandées pour votre Cap |
+| `phoneCv.check.languages.ok` | Vos langues |
+| `phoneCv.check.languages.todo` | Ajoutez vos langues |
+| `phoneCv.check.readable.ok` | Lisible par les logiciels de recrutement |
+| `phoneCv.check.readable.todo` | Ce modèle est moins bien lu par les logiciels de recrutement |
+
+
 ### Modèle B · Carrière au téléphone
 
 *Lot B5 (docs/modele-b, rangées 11 à 15, planche `Carriere.dc.html`) : l'onglet Carrière (profil, CV, portfolio, progression, candidatures), sa recherche, partager le profil, modifier le profil, paramètres, formule et paiement, CV, réalisations et candidatures.*
@@ -8719,8 +9270,8 @@ Conventions :
 | `phoneCareer.cap` | Cap · {job} |
 | `phoneCareer.noCap` | Choisir mon Cap |
 | `phoneCareer.availability.open` | Disponible tout de suite |
-| `phoneCareer.availability.listening` | À l’écoute |
-| `phoneCareer.availability.not_looking` | Pas en recherche |
+| `phoneCareer.availability.listening` | À l’écoute des offres |
+| `phoneCareer.availability.not_looking` | Pas disponible |
 | `phoneCareer.complete` | Profil complété |
 | `phoneCareer.completeValue` | {percent} % |
 | `phoneCareer.tabs` | Rubriques de Carrière |
@@ -8771,6 +9322,9 @@ Conventions :
 | `phoneCareer.cv.menu.duplicate` | Dupliquer |
 | `phoneCareer.cv.menu.primary` | Utiliser par défaut |
 | `phoneCareer.cv.menu.delete` | Supprimer |
+| `phoneCareer.cv.menu.read` | Lire le CV |
+| `phoneCareer.cv.menu.download` | Télécharger le fichier |
+| `phoneCareer.cv.menu.editable` | En faire un CV modifiable |
 | `phoneCareer.portfolio.featured` | Mise en avant |
 | `phoneCareer.portfolio.line` | {tool} · {count, plural, =0 {sans photo} one {une photo} other {# photos}} |
 | `phoneCareer.portfolio.lineNoTool` | {count, plural, =0 {Sans photo} one {Une photo} other {# photos}} |
@@ -8819,6 +9373,58 @@ Conventions :
 | `phoneCareer.applications.empty` | Aucune candidature pour l’instant. Postuler est gratuit, toujours. |
 | `phoneCareer.applications.explore` | Voir les offres |
 | `phoneCareer.applications.steps` | {count, plural, one {Étape # sur 4} other {Étape # sur 4}} |
+| `phoneCareer.title` | Carrière |
+| `phoneCareer.bannerEdit` | Changer la bannière |
+| `phoneCareer.photoEdit` | Changer la photo |
+| `phoneCareer.photoOpen` | Voir ma photo de profil en grand |
+| `phoneCareer.socialAdd` | Ajouter un réseau ou un site |
+| `phoneCareer.availabilityChange` | Disponibilité : {current}. Toucher pour changer. |
+| `phoneCareer.completion.skill` | {count, plural, one {Ajoutez {skill} : une offre de plus vous correspond.} other {Ajoutez {skill} : # offres de plus vous correspondent.}} |
+| `phoneCareer.completion.done` | Votre profil est complet. Gardez-le à jour. |
+| `phoneCareer.completionGo` | Compléter |
+| `phoneCareer.suggestionAddLabel` | Ajouter {skill} à mes compétences |
+| `phoneCareer.seeAsOthers` | Voir mon profil comme les autres |
+| `phoneCareer.folded` | Carrière · profil complété à {percent} % |
+| `phoneCareer.experiences` | Expériences |
+| `phoneCareer.pointAdd` | + Ajouter un point |
+| `phoneCareer.pointAddLabel` | Ajouter un point à « {title} » |
+| `phoneCareer.experienceEdit` | Modifier « {title} » |
+| `phoneCareer.jumanly` | Jumanly |
+| `phoneCareer.languagesTitle` | Langues |
+| `phoneCareer.when.daysAgo` | il y a {days} j |
+| `phoneCareer.when.hour` | {hour} h |
+| `phoneCareer.when.hourMinute` | {hour} h {minute} |
+| `phoneCareer.cv.score` | {score}/100 |
+| `phoneCareer.cv.empty` | Pas encore de CV. Orbi peut en préparer un depuis votre profil, en une minute. |
+| `phoneCareer.cv.newLong` | + Nouveau CV · modèle, import ou Orbi |
+| `phoneCareer.cv.changedToday` | modifié aujourd’hui |
+| `phoneCareer.cv.changedYesterday` | modifié hier |
+| `phoneCareer.cv.meta` | Modèle {template} · {when} |
+| `phoneCareer.cv.metaFile` | {kind} importé · {when} |
+| `phoneCareer.cv.fileKind.pdf` | PDF |
+| `phoneCareer.cv.fileKind.docx` | Fichier Word |
+| `phoneCareer.cv.fileKind.image` | Photo |
+| `phoneCareer.cv.imported` | Importé |
+| `phoneCareer.cv.deleted` | CV supprimé. |
+| `phoneCareer.progression.stepText.skill` | {count, plural, one {Une offre de plus vous correspond} other {# offres de plus vous correspondent}} |
+| `phoneCareer.progression.stepText.project` | Montrez ce que vous savez faire, en 2 minutes |
+| `phoneCareer.progression.stepText.interview` | Simulation avec Orbi, 10 minutes |
+| `phoneCareer.progression.stepText.cv` | Orbi le prépare depuis votre profil |
+| `phoneCareer.progression.stepText.about` | Quelques lignes sur vous, en 2 minutes |
+| `phoneCareer.progression.stepText.experience` | Stage, emploi, bénévolat : tout compte |
+| `phoneCareer.progression.stepText.education` | Diplôme, formation ou attestation |
+| `phoneCareer.progression.stepText.languages` | Les langues que vous parlez |
+| `phoneCareer.progression.stepText.apply` | Postuler est gratuit, toujours |
+| `phoneCareer.progression.stepText.course` | Un cours court pour progresser |
+| `phoneCareer.applications.meta` | {company} · {when} |
+| `phoneCareer.applications.score` | {score} % |
+| `phoneCareer.applications.scoreLabel` | Correspondance avec l’offre : {score} % |
+| `phoneCareer.applications.where` | Où en est la candidature : {status} |
+| `phoneCareer.applications.step.sent` | Envoyée |
+| `phoneCareer.applications.step.viewed` | Vue |
+| `phoneCareer.applications.step.interview` | Entretien |
+| `phoneCareer.applications.step.answer` | Réponse |
+| `phoneCareer.applications.interviewNote` | Entretien {day} à {time} |
 | `phoneCareer.searchHint` | Tapez une lettre : vos compétences, expériences, CV, réalisations, candidatures et réglages s’affichent. |
 | `phoneCareer.searchIn` | Chercher dans |
 | `phoneCareer.searchScope.tout` | Tout |
@@ -8886,7 +9492,11 @@ Conventions :
 | `phoneCareer.form.error` | Ça n’a pas marché. Réessayez dans un instant. |
 | `phoneCareer.form.errors.invalid` | Vérifiez les champs en rouge. |
 | `phoneCareer.form.errors.required` | Ce champ est obligatoire. |
+| `phoneCareer.form.errors.aboutTooLong` | Votre texte dépasse 400 caractères : raccourcissez-le. |
 | `phoneCareer.form.errors.name` | Écrivez votre nom avec des lettres seulement. |
+| `phoneCareer.form.errors.handle` | Lettres, chiffres et points seulement, de 3 à 30 caractères. |
+| `phoneCareer.form.errors.handleTaken` | Ce nom d’utilisateur est déjà pris. Essayez-en un autre. |
+| `phoneCareer.form.errors.socials` | Cette adresse ne correspond pas au réseau. |
 | `phoneCareer.form.errors.endBeforeStart` | La fin doit venir après le début. |
 | `phoneCareer.form.errors.title` | Indiquez le poste. |
 | `phoneCareer.form.errors.company` | Indiquez l’entreprise. |
@@ -8918,11 +9528,23 @@ Conventions :
 | `phoneCareer.form.bannerError` | Cette image n’a pas pu être enregistrée. Essayez une image JPEG ou PNG. |
 | `phoneCareer.form.name` | Nom affiché |
 | `phoneCareer.form.handle` | Nom d’utilisateur |
+| `phoneCareer.form.handleHint` | Lettres, chiffres et points, de 3 à 30 caractères. Il s’affiche sous votre nom : @prenom.nom. |
+| `phoneCareer.form.socials` | Réseaux |
+| `phoneCareer.form.socialsHint` | Seuls les réseaux remplis s’affichent sur votre profil. |
+| `phoneCareer.form.social.linkedin` | LinkedIn |
+| `phoneCareer.form.social.instagram` | Instagram |
+| `phoneCareer.form.social.x` | X (Twitter) |
+| `phoneCareer.form.social.facebook` | Facebook |
+| `phoneCareer.form.social.website` | Site web |
+| `phoneCareer.form.socialPlaceholder.linkedin` | linkedin.com/in/votre-nom |
+| `phoneCareer.form.socialPlaceholder.instagram` | instagram.com/votre-nom |
+| `phoneCareer.form.socialPlaceholder.x` | x.com/votre-nom |
+| `phoneCareer.form.socialPlaceholder.facebook` | facebook.com/votre-nom |
+| `phoneCareer.form.socialPlaceholder.website` | votre-site.com |
+| `phoneCareer.form.showEmail` | Afficher mon e-mail sur mon profil |
 | `phoneCareer.form.headline` | Titre |
 | `phoneCareer.form.headlinePlaceholder` | Ex. : Analyste de données junior |
 | `phoneCareer.form.city` | Ville |
-| `phoneCareer.form.bio` | Bio |
-| `phoneCareer.form.bioOrbi` | Orbi peut raccourcir et corriger votre bio. |
 | `phoneCareer.form.improve` | Améliorer |
 | `phoneCareer.form.availability` | Disponibilité |
 | `phoneCareer.form.availabilityOption.open` | Disponible tout de suite |
@@ -8930,7 +9552,11 @@ Conventions :
 | `phoneCareer.form.availabilityOption.not_looking` | Pas en recherche |
 | `phoneCareer.form.accountSettings` | Paramètres du compte |
 | `phoneCareer.form.aboutTitle` | À propos |
+| `phoneCareer.form.aboutHint` | Un titre et quelques lignes sur vous |
+| `phoneCareer.form.aboutHeading` | Titre |
+| `phoneCareer.form.aboutHeadingPlaceholder` | Ex. : Ce que je fais |
 | `phoneCareer.form.aboutLabel` | Votre texte |
+| `phoneCareer.form.aboutPlaceholder` | Qui vous êtes, ce que vous faites et ce que vous cherchez. |
 | `phoneCareer.form.aboutSaved` | Votre texte est enregistré. |
 | `phoneCareer.form.count` | {count} / {max} |
 | `phoneCareer.form.aboutOrbi` | Orbi réécrit votre texte pour les recruteurs. |
@@ -9003,6 +9629,8 @@ Conventions :
 | `phoneCareer.sheets.skillsSuggested` | Suggérées par Orbi, d’après les offres ouvertes |
 | `phoneCareer.sheets.skillsFound` | Dans la liste des compétences |
 | `phoneCareer.sheets.skillsNone` | Aucune compétence trouvée. Essayez un autre mot. |
+| `phoneCareer.sheets.skillsCustom` | + Ajouter « {skill} » |
+| `phoneCareer.sheets.skillsCustomHint` | Pas dans la liste ? Ajoutez-la telle que vous l’avez écrite. |
 | `phoneCareer.sheets.skillsAdd` | {count, plural, =0 {Ajouter} other {Ajouter (#)}} |
 | `phoneCareer.sheets.skillsAdded` | {count, plural, one {# compétence ajoutée} other {# compétences ajoutées}}. |
 | `phoneCareer.sheets.skillsMax` | Vous avez atteint le nombre maximum de compétences. |
@@ -9011,6 +9639,13 @@ Conventions :
 | `phoneCareer.sheets.places` | Où je veux travailler |
 | `phoneCareer.sheets.placeAdd` | Ajouter une ville |
 | `phoneCareer.sheets.languagesSaved` | Langues et lieux enregistrés. |
+| `phoneCareer.sheets.languageLevel` | Votre niveau en {language} |
+| `phoneCareer.sheets.languageLevelBasic` | Débutant |
+| `phoneCareer.sheets.languageLevelIntermediate` | Intermédiaire |
+| `phoneCareer.sheets.languageLevelProfessional` | Professionnel |
+| `phoneCareer.sheets.languageLevelFluent` | Courant |
+| `phoneCareer.sheets.languageLevelNative` | Langue maternelle |
+| `phoneCareer.sheets.languageLevelMissing` | Choisissez votre niveau pour chaque langue. |
 | `phoneCareer.reglages.back` | Retour |
 | `phoneCareer.reglages.close` | Fermer |
 | `phoneCareer.reglages.cancel` | Annuler |
@@ -9018,6 +9653,25 @@ Conventions :
 | `phoneCareer.reglages.editProfile` | Modifier le profil |
 | `phoneCareer.reglages.account` | Compte |
 | `phoneCareer.reglages.namePhoto` | Nom et photo |
+| `phoneCareer.reglages.posts` | Mes publications |
+| `phoneCareer.reglages.emailChange.action` | Changer |
+| `phoneCareer.reglages.emailChange.title` | Changer d'adresse e-mail |
+| `phoneCareer.reglages.emailChange.text` | Nous envoyons un lien à la nouvelle adresse. Elle remplace {email} dès que vous l'ouvrez. |
+| `phoneCareer.reglages.emailChange.label` | Nouvelle adresse e-mail |
+| `phoneCareer.reglages.emailChange.placeholder` | nom@exemple.com |
+| `phoneCareer.reglages.emailChange.send` | Envoyer le lien |
+| `phoneCareer.reglages.emailChange.sent` | Lien envoyé à {email}. Ouvrez-le pour confirmer. |
+| `phoneCareer.reglages.emailChange.done` | Votre nouvelle adresse e-mail est enregistrée. |
+| `phoneCareer.reglages.emailChange.invalid` | Cette adresse e-mail n'est pas valide. |
+| `phoneCareer.reglages.emailChange.same` | C'est déjà votre adresse. |
+| `phoneCareer.reglages.emailChange.failed` | Le lien n'a pas pu partir. Réessayez dans un instant. |
+| `phoneCareer.reglages.emailChange.unavailable` | L'envoi d'e-mails n'est pas encore activé sur Jumanly : votre adresse ne peut pas être changée pour le moment. |
+| `phoneCareer.reglages.rh.line` | Recruteur · {org} |
+| `phoneCareer.reglages.rh.group` | Équipe · {org} |
+| `phoneCareer.reglages.rh.team` | Mon équipe |
+| `phoneCareer.reglages.rh.teamAdmin` | Équipe · ajouter un recruteur |
+| `phoneCareer.reglages.rh.company` | Profil de l'entreprise |
+| `phoneCareer.reglages.rh.journal` | Profils consultés |
 | `phoneCareer.reglages.email` | E-mail |
 | `phoneCareer.reglages.password` | Mot de passe et sécurité |
 | `phoneCareer.reglages.subscription` | Abonnement |
@@ -9037,6 +9691,14 @@ Conventions :
 | `phoneCareer.reglages.application` | Application |
 | `phoneCareer.reglages.language` | Langue |
 | `phoneCareer.reglages.french` | Français |
+| `phoneCareer.reglages.theme.title` | Apparence |
+| `phoneCareer.reglages.theme.text` | Les couleurs de l’appli sur ce téléphone. |
+| `phoneCareer.reglages.theme.sombre` | Sombre |
+| `phoneCareer.reglages.theme.sombreText` | Fond nuit, le design d’origine |
+| `phoneCareer.reglages.theme.clair` | Clair |
+| `phoneCareer.reglages.theme.clairText` | Fond crème doux, texte Sapin |
+| `phoneCareer.reglages.theme.auto` | Comme mon téléphone |
+| `phoneCareer.reglages.theme.autoText` | Clair le jour ou sombre, selon le réglage du téléphone |
 | `phoneCareer.reglages.help` | Aide et contact |
 | `phoneCareer.reglages.signOut` | Se déconnecter |
 | `phoneCareer.reglages.signOutQuestion` | Se déconnecter ? |
@@ -9575,6 +10237,7 @@ Conventions :
 |---|---|
 | `phoneLearn.title` | Formation |
 | `phoneLearn.account` | Mon profil |
+| `phoneLearn.settings` | Paramètres |
 | `phoneLearn.tabs` | Choisir une rubrique |
 | `phoneLearn.tab.forYou` | Pour vous |
 | `phoneLearn.tab.mine` | Mes cours |
@@ -10050,6 +10713,188 @@ Conventions :
 | `phoneMsg.orbi.seeOffers` | Voir les offres |
 | `phoneMsg.orbi.reread` | Écrivez votre message dans la discussion, puis touchez l’étincelle : « Corriger les fautes » ou « Plus professionnel ». Je propose, vous choisissez. |
 
+### Chat talent (docs/chat-v2)
+
+*Chat validé le 27/10/2026 (docs/chat-v2, planches `Chat*.dc.html`) : la liste (en ligne maintenant, résumé d’Orbi, segment, étiquettes de rôle, « écrit… »), la discussion (contexte de la candidature, carte Entretien, réponses suggérées, réactions, Joindre, Orbi rédige, note vocale), le menu ··· et l’appel vidéo. Remplace l’apparence des écrans Messages du Modèle B ; les textes `phoneMsg.*` encore utilisés restent dans la partie précédente.*
+
+| Clé | Texte |
+|---|---|
+| `phoneChat.title` | Chat |
+| `phoneChat.search` | Rechercher |
+| `phoneChat.new` | Nouveau message |
+| `phoneChat.online` | En ligne maintenant |
+| `phoneChat.onlineOpen` | Écrire à {name}, en ligne |
+| `phoneChat.tabs` | Trier les discussions |
+| `phoneChat.tab.tout` | Tout |
+| `phoneChat.tab.connexions` | Connexions |
+| `phoneChat.tab.recruteurs` | Recruteurs |
+| `phoneChat.tab.entreprises` | Entreprises |
+| `phoneChat.tag.connexions` | Connexion |
+| `phoneChat.tag.recruteurs` | Recruteur |
+| `phoneChat.tag.entreprises` | Entreprise |
+| `phoneChat.typing` | écrit |
+| `phoneChat.typingOf` | {name} écrit… |
+| `phoneChat.read` | Lu |
+| `phoneChat.sent` | Envoyé |
+| `phoneChat.muted` | Notifications coupées |
+| `phoneChat.pinned` | Épinglée |
+| `phoneChat.unread` | {count, plural, one {# message non lu} other {# messages non lus}} |
+| `phoneChat.requests.title` | Demandes de connexion |
+| `phoneChat.requests.names` | {rest, plural, =0 {{a} et {b}} one {{a}, {b} et # autre} other {{a}, {b} et # autres}} |
+| `phoneChat.empty.tout` | Aucune discussion pour l’instant. Écrivez à une connexion ou attendez la réponse d’un recruteur. |
+| `phoneChat.empty.connexions` | Aucune discussion avec vos connexions pour l’instant. |
+| `phoneChat.empty.recruteurs` | Aucun recruteur ne vous a encore écrit. |
+| `phoneChat.empty.entreprises` | Aucune entreprise ne vous a encore écrit. |
+| `phoneChat.note` | Vous écrivez à vos connexions et aux recruteurs de vos candidatures. |
+| `phoneChat.orbi.title` | {count, plural, one {# message non lu} other {# messages non lus}} · Orbi résume |
+| `phoneChat.orbi.touch` | Touchez pour un résumé en une phrase par discussion |
+| `phoneChat.orbi.thinking` | Orbi lit vos messages… |
+| `phoneChat.orbi.simple` | Résumé simple, sans l’IA d’Orbi |
+| `phoneChat.orbi.none` | Aucun message non lu à résumer. |
+| `phoneChat.orbi.template.text` | {name} : « {text} » |
+| `phoneChat.orbi.template.voice` | {name} vous a laissé une note vocale de {duration}. |
+| `phoneChat.orbi.template.photo` | {name} vous a envoyé une photo. |
+| `phoneChat.orbi.template.file` | {name} vous a envoyé un document. |
+| `phoneChat.orbi.template.interview` | {name} vous propose un entretien : choisissez un créneau. |
+| `phoneChat.orbi.template.document` | {name} vous demande : {document}. |
+| `phoneChat.orbi.template.other` | {name} vous a écrit. |
+| `phoneChat.status.online` | {place, select, none {En ligne} other {En ligne · {place}}} |
+| `phoneChat.openProfile` | Voir le profil de {name} |
+| `phoneChat.options` | Options de la discussion |
+| `phoneChat.cancel` | Annuler |
+| `phoneChat.ephemeralOn` | Messages éphémères activés · toucher pour les désactiver |
+| `phoneChat.context.title` | {job} · {company} |
+| `phoneChat.context.stage` | Étape : {stage} · {score} % |
+| `phoneChat.context.stageOnly` | Étape : {stage} |
+| `phoneChat.context.see` | Voir › |
+| `phoneChat.stage.new` | candidature reçue |
+| `phoneChat.stage.screening` | présélection |
+| `phoneChat.stage.test` | test |
+| `phoneChat.stage.interview` | entretien |
+| `phoneChat.stage.offer` | proposition |
+| `phoneChat.stage.hired` | recruté·e |
+| `phoneChat.stage.rejected` | non retenue |
+| `phoneChat.stage.withdrawn` | retirée |
+| `phoneChat.day.today` | Aujourd’hui |
+| `phoneChat.day.yesterday` | Hier |
+| `phoneChat.react` | Réagir |
+| `phoneChat.reactWith` | Réagir avec {emoji} |
+| `phoneChat.reactions` | {count, plural, one {# réaction} other {# réactions}} : {emojis} |
+| `phoneChat.interview.label` | Entretien |
+| `phoneChat.interview.title` | {day} · {hour} |
+| `phoneChat.interview.hour` | {hour} h |
+| `phoneChat.interview.hourMinutes` | {hour} h {minute} |
+| `phoneChat.interview.mode.video` | En visio |
+| `phoneChat.interview.mode.onsite` | Sur place |
+| `phoneChat.interview.mode.audio` | Par téléphone |
+| `phoneChat.interview.meta` | {place} · {minutes} min |
+| `phoneChat.interview.toConfirm` | Créneau à choisir · {minutes} min |
+| `phoneChat.interview.agenda` | Ajouter à l’agenda |
+| `phoneChat.interview.inAgenda` | ✓ Dans l’agenda |
+| `phoneChat.interview.reminders` | Rappels la veille et une heure avant |
+| `phoneChat.interview.choose` | Choisir un créneau |
+| `phoneChat.interview.practice` | S’entraîner |
+| `phoneChat.suggest.label` | Réponses suggérées par Orbi |
+| `phoneChat.suggest.sendNow` | Je vous l’envoie tout de suite |
+| `phoneChat.suggest.there` | {when, select, none {Merci, je serai là !} other {Merci, je serai là {when} !}} |
+| `phoneChat.suggest.when` | {minute, select, none {{day} à {hour} h} other {{day} à {hour} h {minute}}} |
+| `phoneChat.suggest.address` | Pouvez-vous me confirmer l’adresse ? |
+| `phoneChat.suggest.link` | Pouvez-vous m’envoyer le lien de la visio ? |
+| `phoneChat.suggest.choose` | Merci, je choisis un créneau. |
+| `phoneChat.suggest.yes` | Oui, bien sûr. |
+| `phoneChat.suggest.thanks` | Merci beaucoup pour votre retour ! |
+| `phoneChat.suggest.received` | Bien reçu, merci. |
+| `phoneChat.suggest.peerThanks` | Merci ! |
+| `phoneChat.suggest.peerLater` | Je te réponds un peu plus tard. |
+| `phoneChat.suggest.peerYes` | Oui, avec plaisir ! |
+| `phoneChat.compose.placeholder` | Écrire à {name}… |
+| `phoneChat.orbiSheet.title` | Orbi vous aide à répondre |
+| `phoneChat.orbiSheet.sub` | Vous relisez, vous envoyez |
+| `phoneChat.orbiSheet.tones` | Ton de la réponse |
+| `phoneChat.orbiSheet.mode.reply` | Proposer une réponse |
+| `phoneChat.orbiSheet.mode.pro` | Plus professionnel |
+| `phoneChat.orbiSheet.mode.short` | Plus court |
+| `phoneChat.orbiSheet.mode.english` | En anglais |
+| `phoneChat.orbiSheet.draft` | Texte proposé par Orbi, modifiable |
+| `phoneChat.orbiSheet.thinking` | Orbi écrit… |
+| `phoneChat.orbiSheet.send` | Envoyer |
+| `phoneChat.orbiSheet.again` | Autre version |
+| `phoneChat.orbiSheet.simple` | Proposition simple, sans l’IA d’Orbi. |
+| `phoneChat.orbiSheet.needsAi` | Activez l’IA d’Orbi dans vos réglages pour qu’il vous propose une réponse. |
+| `phoneChat.attach.title` | Joindre |
+| `phoneChat.attach.photo.title` | Photo |
+| `phoneChat.attach.photo.sub` | Galerie |
+| `phoneChat.attach.camera.title` | Appareil |
+| `phoneChat.attach.camera.sub` | Photo |
+| `phoneChat.attach.document.title` | Document |
+| `phoneChat.attach.document.sub` | PDF, Word |
+| `phoneChat.attach.cv.title` | Mon CV |
+| `phoneChat.attach.cv.sub` | CV Data |
+| `phoneChat.attach.certificate.title` | Attestation |
+| `phoneChat.attach.certificate.sub` | Jumanly |
+| `phoneChat.attach.meeting.title` | Rendez-vous |
+| `phoneChat.attach.meeting.sub` | Agenda |
+| `phoneChat.attach.photos` | Photos choisies |
+| `phoneChat.attach.pickFileNote` | PDF, Word ou photo, 10 Mo au plus |
+| `phoneChat.attach.certificates` | Mes attestations |
+| `phoneChat.attach.noCertificates` | Vous n’avez pas encore d’attestation. Terminez une formation pour en recevoir une. |
+| `phoneChat.attach.certificateSent` | Attestation envoyée |
+| `phoneChat.attach.certificateLine` | {hours} h · délivrée le {date} |
+| `phoneChat.attach.certificateName` | Attestation · {title} |
+| `phoneChat.attach.certificateMeta` | Attestation Jumanly vérifiable |
+| `phoneChat.menu.label` | Options de la discussion |
+| `phoneChat.menu.profile` | Voir le profil |
+| `phoneChat.menu.page` | Voir la page |
+| `phoneChat.menu.application` | Voir la candidature |
+| `phoneChat.menu.search` | Rechercher dans la discussion |
+| `phoneChat.menu.medias` | Médias, liens et documents |
+| `phoneChat.menu.notifications` | Notifications |
+| `phoneChat.menu.pin` | Épingler la discussion |
+| `phoneChat.menu.unpin` | Désépingler la discussion |
+| `phoneChat.menu.pinnedToast` | Discussion épinglée en haut de la liste |
+| `phoneChat.menu.unpinnedToast` | Discussion désépinglée |
+| `phoneChat.menu.report.label` | Signaler |
+| `phoneChat.menu.report.title` | Signaler la discussion avec {name} ? |
+| `phoneChat.menu.report.text` | L’équipe Jumanly lit votre signalement. {name} n’est pas prévenu·e. |
+| `phoneChat.menu.report.reasons` | Raison du signalement |
+| `phoneChat.menu.report.reason.harassment` | Harcèlement ou propos blessants |
+| `phoneChat.menu.report.reason.scam` | Arnaque ou fausse offre |
+| `phoneChat.menu.report.reason.spam` | Messages indésirables |
+| `phoneChat.menu.report.reason.inappropriate` | Contenu inapproprié |
+| `phoneChat.menu.report.reason.other` | Autre raison |
+| `phoneChat.menu.report.send` | Signaler |
+| `phoneChat.menu.report.done` | Merci, l’équipe Jumanly va regarder. |
+| `phoneChat.menu.report.already` | Vous avez déjà signalé cette discussion. |
+| `phoneChat.menu.block.label` | Bloquer |
+| `phoneChat.menu.block.title` | Bloquer {name} ? |
+| `phoneChat.menu.unblock` | Débloquer |
+| `phoneChat.menu.unblockTitle` | Débloquer {name} ? |
+| `phoneChat.menu.unblockText` | {name} pourra de nouveau vous écrire. |
+| `phoneChat.call.button` | Appeler {name} en vidéo |
+| `phoneChat.call.ask` | Souhaitez-vous appeler {name} en vidéo ? |
+| `phoneChat.call.noteOnline` | {name} est en ligne. L’appel n’est pas enregistré. |
+| `phoneChat.call.note` | L’appel n’est pas enregistré. |
+| `phoneChat.call.no` | Non |
+| `phoneChat.call.yes` | Oui, appeler |
+| `phoneChat.call.label` | Appel vidéo avec {name} |
+| `phoneChat.call.encrypted` | Chiffré de bout en bout |
+| `phoneChat.call.you` | Vous |
+| `phoneChat.call.ringing` | Appel en cours |
+| `phoneChat.call.timer` | Durée de l’appel |
+| `phoneChat.call.micro` | Micro |
+| `phoneChat.call.camera` | Caméra |
+| `phoneChat.call.speaker` | Haut-parleur |
+| `phoneChat.call.hangUp` | Raccrocher |
+| `phoneChat.call.ended` | Appel terminé · {duration} |
+| `phoneChat.call.cancelled` | Appel annulé |
+| `phoneChat.call.failed` | L’appel n’a pas pu démarrer. Réessayez dans un instant. |
+| `phoneChat.call.context` | Entretien · {job} |
+| `phoneChat.call.line` | Appel vidéo · {duration} |
+| `phoneChat.call.lineMissed` | Appel vidéo sans réponse |
+| `phoneChat.duration.short` | {seconds} s |
+| `phoneChat.duration.long` | {minutes} min {seconds} s |
+| `phoneChat.duration.hours` | {hours} h {minutes} min |
+
 ### Refonte recruteur · Cadre mobile (lot 1)
 
 *Coquille de l'espace recruteur (docs/refonte-mobile/BRIEF-RECRUTEUR, lot 1) : organisation active, barre du bas À traiter · Offres · Orbi · Candidats · Messages, Compte RH, premiers pas.*
@@ -10084,9 +10929,7 @@ Conventions :
 | `hireAccount.line` | {jobTitle} · {org} |
 | `hireAccount.lineNoTitle` | {org} |
 | `hireAccount.group.org` | Organisation et équipe |
-| `hireAccount.group.settings` | Abonnement et réglages |
 | `hireAccount.org.title` | Organisation |
-| `hireAccount.org.text` | Page, vérification |
 | `hireAccount.org.toVerify` | À vérifier |
 | `hireAccount.org.pending` | En cours |
 | `hireAccount.org.verified` | Vérifiée |
@@ -10096,12 +10939,10 @@ Conventions :
 | `hireAccount.pools.title` | Viviers |
 | `hireAccount.pools.text` | {pools, plural, =0 {Aucun vivier} one {# vivier} other {# viviers}}, {talents, plural, =0 {aucun talent} one {# talent} other {# talents}} |
 | `hireAccount.reports.title` | Rapports |
-| `hireAccount.reports.text` | Offres et candidatures |
 | `hireAccount.plan.title` | Abonnement |
 | `hireAccount.plan.text` | {plan} · {count, plural, =0 {aucun crédit Orbi} one {# crédit Orbi} other {# crédits Orbi}} |
 | `hireAccount.plan.textUnlimited` | {plan} · crédits Orbi illimités |
 | `hireAccount.settings.title` | Paramètres |
-| `hireAccount.settings.text` | Notifications, sécurité, confidentialité |
 | `hireAccount.help.title` | Aide |
 | `hireAccount.talent.title` | Passer à mon espace talent |
 | `hireAccount.signOut` | Se déconnecter |
@@ -11070,31 +11911,11 @@ Conventions :
 | `rhNotifications.brief.cta.messages` | Lire |
 | `rhProfile.seen` | Ce que voient les candidats |
 | `rhProfile.seenName` | {name} · {org} |
-| `rhOrg.back` | Compte |
-| `rhOrg.edit` | Modifier la page de l'organisation |
-| `rhOrg.size` | {size} personnes |
-| `rhOrg.figures` | L'organisation en chiffres |
-| `rhOrg.figure.jobs` | {count, plural, one {offre active} other {offres actives}} |
-| `rhOrg.figure.applications` | {count, plural, one {candidature reçue} other {candidatures reçues}} |
-| `rhOrg.figure.hired` | {count, plural, one {recruté} other {recrutés}} |
-| `rhOrg.figure.members` | {count, plural, one {membre} other {membres}} |
-| `rhOrg.presentation` | Présentation |
-| `rhOrg.noDescription` | Pas encore de présentation. Les talents lisent ce texte sur chaque offre. |
-| `rhOrg.hint.banner.text` | Ajoutez une bannière, une photo de vos bureaux par exemple : vos offres et votre page sont plus faciles à reconnaître. |
-| `rhOrg.hint.banner.cta` | Ajouter |
-| `rhOrg.hint.description.text` | Présentez votre organisation en quelques lignes : les talents la découvrent sur chaque offre. |
-| `rhOrg.hint.description.cta` | Écrire |
-| `rhOrg.hint.verify.text` | Une organisation vérifiée publie sans attente et affiche un badge sur ses offres. |
-| `rhOrg.hint.verify.cta` | Vérifier |
-| `rhOrg.manage` | Gérer l'organisation |
-| `rhOrg.team` | Équipe |
-| `rhOrg.seats` | {used, plural, one {# siège utilisé} other {# sièges utilisés}} sur {max} |
-| `rhOrg.seatsUnlimited` | {used, plural, one {# siège utilisé} other {# sièges utilisés}} |
-| `rhOrg.verification` | Vérification |
 | `rhOrg.structure` | Équipes, départements, entités |
-| `rhOrg.structureLine` | L'organisation de vos recrutements |
-| `rhOrg.asTalent` | Voir la page comme un talent |
-| `rhOrg.editBack` | Organisation |
+| `orgStructure.intro` | Rangez les membres et les offres par équipe, par département et, pour un groupe, par entité. |
+| `orgStructure.tabs` | Structure de l'entreprise |
+| `orgStructure.back` | Équipe |
+| `orgStructure.lockedLink` | Voir les formules |
 | `rhVerification.back` | Organisation |
 | `rhVerification.title` | Vérifier l'organisation |
 | `rhVerification.progress` | {done}/{total} |
@@ -11116,50 +11937,6 @@ Conventions :
 | `rhVerification.plans` | Voir les formules |
 | `rhVerification.meanwhile` | En attendant, vos offres passent en validation avant publication. |
 | `rhVerification.question` | Une question : assistant@jumanly.io |
-| `rhTeam.title` | Équipe |
-| `rhTeam.back` | Organisation |
-| `rhTeam.invite` | Inviter dans l'équipe |
-| `rhTeam.inviteTitle` | Inviter dans l'équipe |
-| `rhTeam.close` | Fermer |
-| `rhTeam.invalid` | Vérifiez les informations et réessayez. |
-| `rhTeam.seats` | Sièges utilisés : {used} sur {max} |
-| `rhTeam.seatsUnlimited` | {used, plural, one {# siège utilisé} other {# sièges utilisés}}, sans limite |
-| `rhTeam.members` | Membres de l'équipe |
-| `rhTeam.you` | {name}, vous |
-| `rhTeam.invited` | Invitation envoyée par e-mail · {ago} |
-| `rhTeam.pending` | En attente |
-| `rhTeam.today` | aujourd'hui |
-| `rhTeam.days` | {count, plural, one {il y a # jour} other {il y a # jours}} |
-| `rhTeam.invitationLine` | Rôle proposé : {role}. L'invitation expire le {date, date, long}. |
-| `rhTeam.rights.title` | Qui peut faire quoi |
-| `rhTeam.rights.short.org_admin` | Admin |
-| `rhTeam.rights.short.recruiter` | Recr. |
-| `rhTeam.rights.short.hiring_manager` | Resp. |
-| `rhTeam.rights.short.viewer` | Lect. |
-| `rhTeam.rights.manage` | Publier, décider, écrire |
-| `rhTeam.rights.evaluate` | Noter, évaluer |
-| `rhTeam.rights.readApplications` | Lire les candidatures |
-| `rhTeam.rights.administer` | Équipe, abonnement |
-| `rhTeam.rights.yes` | Oui |
-| `rhTeam.rights.no` | Non |
-| `rhTeam.rights.owner` | Le propriétaire a tous les droits, dont la facturation. Un responsable du recrutement ne voit que les offres qui lui sont confiées. |
-| `rhTeam.activity.title` | Activité récente |
-| `rhTeam.activity.you` | Vous |
-| `rhTeam.activity.former` | Ancien membre |
-| `rhTeam.activity.stage_changed` | {actor} {self, select, oui {avez fait} other {a fait}} avancer {name} |
-| `rhTeam.activity.note` | {actor} {self, select, oui {avez noté} other {a noté}} {name} |
-| `rhTeam.activity.decision` | {actor} {self, select, oui {avez annoncé} other {a annoncé}} sa décision à {name} |
-| `rhTeam.activity.document_requested` | {actor} {self, select, oui {avez demandé} other {a demandé}} un document à {name} |
-| `rhTeam.activity.message` | {actor} {self, select, oui {avez écrit} other {a écrit}} à {name} |
-| `rhTeam.emails` | E-mail |
-| `rhTeam.emailsHint` | Plusieurs adresses possibles, séparées par une virgule. Chaque personne reçoit un lien valable {days, plural, one {# jour} other {# jours}}. |
-| `rhTeam.saveRole` | Changer le rôle |
-| `rhTeam.full.plan` | <b>Plus de siège libre.</b> Retirez un membre ou une invitation, ou passez à {plan} ({seats}). |
-| `rhTeam.full.seatsUnlimited` | sièges illimités |
-| `rhTeam.full.seatsCount` | {count, plural, one {# siège} other {# sièges}} |
-| `rhTeam.full.noPlan` | <b>Plus de siège libre.</b> Retirez un membre ou une invitation pour en libérer un. |
-| `rhTeam.full.see` | Voir {plan} |
-| `rhTeam.full.plans` | Voir les formules |
 | `rhVerification.checked` | Contrôlé par Jumanly |
 | `rhReports.back` | Compte |
 | `rhReports.period.30d` | 30 jours |
@@ -12394,6 +13171,13 @@ Conventions :
 | `hireShell.web.agenda` | Agenda |
 | `hireShell.web.talents` | Talents |
 | `hireShell.web.reports` | Rapports |
+| `hireShell.web.entreprise.aria` | Entreprise |
+| `hireShell.web.entreprise.title` | ENTREPRISE |
+| `hireShell.web.entreprise.team` | Équipe |
+| `hireShell.web.entreprise.page` | Page entreprise |
+| `hireShell.web.entreprise.billing` | Formule et facturation |
+| `hireShell.web.entreprise.journal` | Journal |
+| `hireShell.web.entreprise.settings` | Réglages |
 | `hireShell.web.settings` | Paramètres |
 | `hireShell.web.shortcut` | Ctrl K |
 | `hireShell.web.search` | Candidat, offre, ou demander à Orbi |
@@ -13359,6 +14143,8 @@ Conventions :
 | `hire.history.event.rated` | {memberName} a rempli la grille d'évaluation |
 | `hire.history.event.noted` | {memberName} a ajouté une note |
 | `hire.history.event.interviewScheduled` | Entretien planifié le {date, date, medium} par {memberName} |
+| `hire.history.event.assigned` | Dossier confié à {to} par {memberName} |
+| `hire.history.event.proposal` | Proposition envoyée par {memberName} |
 | `hire.history.event.documentRequested` | {memberName} a demandé : {documentName} |
 | `hire.history.event.rejected` | {memberName} a décidé de ne pas retenir la candidature · Motif : {reason} |
 | `hire.history.event.rejectionSent` | Message de refus envoyé |
@@ -13815,6 +14601,7 @@ Conventions :
 | `org.verification.form.documentsHint` | Registre du commerce, pièce attestant votre fonction… 4 Mo au total par envoi, 6 documents au plus. |
 | `org.verification.documents.title` | Justificatifs envoyés |
 | `org.verification.documents.remove` | Retirer {name} |
+| `org.verification.documents.removeShort` | Retirer |
 | `org.verification.documents.removed` | Justificatif retiré. |
 | `org.verification.documents.meta` | {size} · envoyé le {date, date, medium} |
 | `org.verification.fileError.fileType` | Seuls les PDF et les images (PNG, JPEG, WEBP) sont acceptés. |
@@ -13965,6 +14752,578 @@ Conventions :
 | `org.delete.activeSubscription` | Résiliez d'abord l'abonnement en cours. |
 | `org.delete.done` | Organisation supprimée. |
 
+### Modèle B recruteur · coque au téléphone
+
+*Lot M1 (docs/modele-b-recruteur, mobile/, brief § 3 et § 4) : barre du bas Fil · Offres · Candidatures · Talents · Messages en icônes seules, Orbi flottant, avatar vers le compte, recherche en deux temps sous l'en-tête de chaque onglet.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRh.nav.fil` | Fil |
+| `phoneRh.nav.offres` | Offres |
+| `phoneRh.nav.candidatures` | Candidatures |
+| `phoneRh.nav.talents` | Talents |
+| `phoneRh.nav.messages` | Chat |
+| `phoneRh.nav.candidaturesNew` | Candidatures, {count, plural, one {# nouvelle} other {# nouvelles}} |
+| `phoneRh.nav.chat` | Chat |
+| `phoneRh.nav.messagesUnread` | Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}} |
+| `phoneRh.head.account` | Mon compte |
+| `phoneRh.head.settings` | Paramètres |
+| `phoneRh.head.notifications` | {count, plural, =0 {Notifications} one {Notifications, # nouvelle} other {Notifications, # nouvelles}} |
+| `phoneRh.head.newOffer` | Publier une offre |
+| `phoneRh.search.open` | Rechercher |
+| `phoneRh.search.cancel` | Annuler |
+| `phoneRh.search.clear` | Effacer |
+| `phoneRh.search.searchIn` | Rechercher dans |
+| `phoneRh.search.recent` | Recherches récentes |
+| `phoneRh.search.empty` | Aucun résultat pour « {query} ». |
+| `phoneRh.search.scopes.tout` | Tout |
+| `phoneRh.search.scopes.offres` | Mes offres |
+| `phoneRh.search.scopes.candidats` | Candidats |
+| `phoneRh.search.scopes.entreprises` | Entreprises |
+| `phoneRh.search.scopes.personnes` | Personnes |
+| `phoneRh.search.scopes.publications` | Publications |
+| `phoneRh.search.scopes.nom` | Nom |
+| `phoneRh.search.scopes.competence` | Compétence |
+| `phoneRh.search.scopes.ville` | Ville |
+| `phoneRh.search.scopes.metier` | Métier |
+| `phoneRh.search.searchBy` | Chercher par |
+| `phoneRh.search.percent` | {score} % |
+| `phoneRh.search.groups.offers` | Mes offres · {count} |
+| `phoneRh.search.groups.candidates` | Candidats · {count} |
+| `phoneRh.search.groups.companies` | Entreprises · {count} |
+| `phoneRh.search.groups.people` | Personnes · {count} |
+| `phoneRh.search.groups.peopleAndCompanies` | Personnes et entreprises |
+| `phoneRh.search.groups.posts` | Publications |
+| `phoneRh.search.offerLine` | {city} · {status} · {count, plural, =0 {0 candidature} one {# candidature} other {# candidatures}} |
+| `phoneRh.search.status.draft` | Brouillon |
+| `phoneRh.search.status.pending_review` | En vérification |
+| `phoneRh.search.status.published` | En cours |
+| `phoneRh.search.status.paused` | En pause |
+| `phoneRh.search.status.closed` | Terminée |
+| `phoneRh.search.status.archived` | Archivée |
+| `phoneRh.search.status.rejected` | Refusée |
+| `phoneRh.search.status.changes_requested` | À corriger |
+| `phoneRh.search.fil.label` | Rechercher dans le Fil |
+| `phoneRh.search.fil.placeholder` | Publications, personnes, entreprises |
+| `phoneRh.search.fil.note` | Publications, personnes et entreprises : tout Jumanly. |
+| `phoneRh.search.offres.label` | Rechercher une offre, une entreprise ou une personne |
+| `phoneRh.search.offres.placeholder` | Offres, entreprises, personnes |
+| `phoneRh.search.offres.note` | Mes offres : seulement les vôtres. Entreprises et personnes : tout Jumanly. |
+| `phoneRh.search.candidatures.label` | Rechercher un candidat |
+| `phoneRh.search.candidatures.placeholder` | Nom, compétence, ville |
+| `phoneRh.search.candidatures.note` | Seulement les personnes qui ont candidaté à vos offres. |
+| `phoneRh.search.talents.label` | Rechercher un talent |
+| `phoneRh.search.talents.placeholder` | Compétence, métier, ville |
+| `phoneRh.search.talents.note` | Seulement les talents qui ont rendu leur profil visible. |
+| `phoneRh.search.messages.label` | Rechercher dans les messages |
+| `phoneRh.search.messages.placeholder` | Nom, offre |
+| `phoneRh.search.messages.note` | Candidats de vos offres, et personnes de tout Jumanly. |
+| `phoneRh.orbi.plan` | Voir la formule |
+| `phoneRh.orbi.full` | Ouvrir la conversation complète |
+| `phoneRh.orbi.fil.bubble` | Que publier pour attirer des candidats ? |
+| `phoneRh.orbi.fil.from` | Orbi · depuis le Fil |
+| `phoneRh.orbi.fil.q1` | Que publier pour attirer des candidats ? |
+| `phoneRh.orbi.fil.q2` | Comment marche ma dernière publication ? |
+| `phoneRh.orbi.fil.q3` | Quels événements suivre ce mois-ci ? |
+| `phoneRh.orbi.fil.q4` | Écrire une publication sur une offre |
+| `phoneRh.orbi.offres.bubble` | Comment attirer plus de candidats ? |
+| `phoneRh.orbi.offres.from` | Orbi · depuis Offres |
+| `phoneRh.orbi.offres.q1` | Comment attirer plus de candidats ? |
+| `phoneRh.orbi.offres.q2` | Quelle offre marche le mieux ? |
+| `phoneRh.orbi.offres.q3` | Rédiger une nouvelle offre |
+| `phoneRh.orbi.offres.q4` | Faut-il relancer une offre ? |
+| `phoneRh.orbi.candidatures.bubble` | Qui recevoir en premier ? |
+| `phoneRh.orbi.candidatures.from` | Orbi · depuis Candidatures |
+| `phoneRh.orbi.candidatures.q1` | Qui recevoir en premier ? |
+| `phoneRh.orbi.candidatures.q2` | Faire le diagnostic de tous les CV |
+| `phoneRh.orbi.candidatures.q3` | Préparer mon prochain entretien |
+| `phoneRh.orbi.candidatures.q4` | Répondre aux candidats sans réponse |
+| `phoneRh.orbi.talents.bubble` | Qui proposer pour mes offres ? |
+| `phoneRh.orbi.talents.from` | Orbi · depuis Talents |
+| `phoneRh.orbi.talents.q1` | Qui proposer pour mes offres ? |
+| `phoneRh.orbi.talents.q2` | Relancer les propositions sans réponse |
+| `phoneRh.orbi.talents.q3` | Pourquoi je ne vois pas tous les talents ? |
+| `phoneRh.orbi.talents.q4` | Qui ajouter à mon vivier ? |
+| `phoneRh.orbi.messages.bubble` | Qui attend une réponse ? |
+| `phoneRh.orbi.messages.from` | Orbi · depuis Messages |
+| `phoneRh.orbi.messages.q1` | Qui attend une réponse de ma part ? |
+| `phoneRh.orbi.messages.q2` | Résumer mes non-lus |
+| `phoneRh.orbi.messages.q3` | Proposer une réponse à un candidat |
+| `phoneRh.orbi.messages.q4` | Relire un message avant de l'envoyer |
+
+### Modèle B recruteur · ouverture et inscription au téléphone
+
+*Lot M2 (docs/modele-b-recruteur, mobile/captures section 01) : bienvenue en trois écrans, compte recruteur, conditions pour les recruteurs, puis le profil recruteur en sept étapes (vous, où vous êtes, contacts, rôle, entreprise et demande de rattachement, ce que vous recrutez, profil), les notifications et « Profil prêt ». Les cartes de la bienvenue sont une illustration manifestement fictive.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhAccueil.welcome.s1.word` | Publier |
+| `phoneRhAccueil.welcome.s1.title` | Votre offre en ligne en 5 minutes |
+| `phoneRhAccueil.welcome.s1.text` | Orbi rédige avec vous. Les talents qui correspondent la voient en premier. |
+| `phoneRhAccueil.welcome.s2.word` | Trier |
+| `phoneRhAccueil.welcome.s2.title` | Toutes vos candidatures au même endroit |
+| `phoneRhAccueil.welcome.s2.text` | Étapes, CV lus par Orbi, notes de l'équipe. Le score explique toujours pourquoi. |
+| `phoneRhAccueil.welcome.s3.word` | Recruter |
+| `phoneRhAccueil.welcome.s3.title` | Entretiens, décisions, réponses |
+| `phoneRhAccueil.welcome.s3.text` | Planifiez, évaluez, répondez à chacun. Vous décidez, Orbi vous aide. |
+| `phoneRhAccueil.welcome.card.live` | En cours |
+| `phoneRhAccueil.welcome.card.new` | 3 nouvelles |
+| `phoneRhAccueil.welcome.card.job` | Analyste de données junior |
+| `phoneRhAccueil.welcome.card.jobMeta` | Kinshasa · CDI |
+| `phoneRhAccueil.welcome.card.views` | vues |
+| `phoneRhAccueil.welcome.card.days` | jours |
+| `phoneRhAccueil.welcome.card.applications` | candidatures |
+| `phoneRhAccueil.welcome.card.drafted` | J'ai rédigé le texte et deux questions de présélection. |
+| `phoneRhAccueil.welcome.card.received` | Reçues |
+| `phoneRhAccueil.welcome.card.shortlist` | Présélection |
+| `phoneRhAccueil.welcome.card.interview` | Entretien |
+| `phoneRhAccueil.welcome.card.offer` | Offre |
+| `phoneRhAccueil.welcome.card.c1Mark` | GM |
+| `phoneRhAccueil.welcome.card.c1Name` | Grâce Mbuyi |
+| `phoneRhAccueil.welcome.card.c1Meta` | SQL, Excel · Présélection |
+| `phoneRhAccueil.welcome.card.c2Mark` | EK |
+| `phoneRhAccueil.welcome.card.c2Name` | Esther Kabila |
+| `phoneRhAccueil.welcome.card.c2Meta` | Power BI · Reçue |
+| `phoneRhAccueil.welcome.card.read` | 38 CV lus : 12 couvrent tous vos critères. |
+| `phoneRhAccueil.welcome.card.when` | Entretien · jeudi 10 h |
+| `phoneRhAccueil.welcome.card.where` | Analyste de données junior · en visio |
+| `phoneRhAccueil.welcome.card.stars` | Quatre étoiles sur cinq |
+| `phoneRhAccueil.welcome.card.decision` | Décision : retenue |
+| `phoneRhAccueil.welcome.card.replies` | Réponse envoyée à 37 autres candidats |
+| `phoneRhAccueil.signup.title` | Créer votre compte recruteur |
+| `phoneRhAccueil.signup.subtitle` | Gratuit pour publier et trier. Cinq minutes suffisent. |
+| `phoneRhAccueil.signup.emailPlaceholder` | prenom.nom@entreprise.cd |
+| `phoneRhAccueil.signup.emailError` | Entrez une adresse e-mail valide, par exemple n.kalala@baobabfintech.cd. |
+| `phoneRhAccueil.signup.hasAccount` | Déjà inscrite ou inscrit ? |
+| `phoneRhAccueil.signup.talent` | Vous cherchez un emploi ? |
+| `phoneRhAccueil.signup.talentLink` | Créer un compte talent |
+| `phoneRhAccueil.legal.terms.title` | Conditions pour les recruteurs |
+| `phoneRhAccueil.legal.terms.p1` | Candidater reste gratuit pour les talents : aucune offre ne peut le faire payer. |
+| `phoneRhAccueil.legal.terms.p2` | Orbi recommande, vous décidez : aucun refus automatique. |
+| `phoneRhAccueil.legal.terms.p3` | Chaque candidat reçoit une réponse, même courte. |
+| `phoneRhAccueil.legal.privacy.p1` | Vous ne voyez un profil que si la personne a candidaté ou l'a rendu visible. |
+| `phoneRhAccueil.legal.privacy.p2` | Chaque consultation de profil est enregistrée. |
+| `phoneRhAccueil.legal.privacy.p3` | Le score ne tient jamais compte du nom, de l'âge, du genre ou de la photo. |
+| `phoneRhAccueil.login.subtitle` | Connectez-vous pour retrouver vos offres et vos candidatures. |
+| `phoneRhOnboarding.step` | Étape {n} sur 7 · {name} |
+| `phoneRhOnboarding.steps.1` | Vous |
+| `phoneRhOnboarding.steps.2` | Où vous êtes |
+| `phoneRhOnboarding.steps.3` | Vos contacts |
+| `phoneRhOnboarding.steps.4` | Votre rôle |
+| `phoneRhOnboarding.steps.5` | Votre entreprise |
+| `phoneRhOnboarding.steps.6` | Ce que vous recrutez |
+| `phoneRhOnboarding.steps.7` | Votre profil recruteur |
+| `phoneRhOnboarding.progress` | Étape {n} sur 7 |
+| `phoneRhOnboarding.previous` | Étape précédente |
+| `phoneRhOnboarding.next` | Continuer |
+| `phoneRhOnboarding.finish` | Terminer |
+| `phoneRhOnboarding.saving` | Enregistrement… |
+| `phoneRhOnboarding.close` | Fermer |
+| `phoneRhOnboarding.failed` | L'enregistrement n'a pas abouti. Réessayez. |
+| `phoneRhOnboarding.you.title` | Bonjour, présentez-vous |
+| `phoneRhOnboarding.you.text` | Les talents voient qui recrute. Un visage inspire confiance. |
+| `phoneRhOnboarding.you.from` | Repris de votre compte {provider}. Vous pouvez le corriger. |
+| `phoneRhOnboarding.you.first` | Prénom |
+| `phoneRhOnboarding.you.last` | Nom |
+| `phoneRhOnboarding.you.photo` | Photo |
+| `phoneRhOnboarding.you.photoAdd` | Ajouter une photo |
+| `phoneRhOnboarding.you.photoChange` | Changer la photo |
+| `phoneRhOnboarding.you.saved` | Photo enregistrée : un visage net et un fond sobre inspirent confiance. |
+| `phoneRhOnboarding.you.remove` | Retirer |
+| `phoneRhOnboarding.you.error` | Indiquez votre prénom et votre nom. |
+| `phoneRhOnboarding.place.based` | Vous êtes basé·e en |
+| `phoneRhOnboarding.place.change` | Changer |
+| `phoneRhOnboarding.place.changeAria` | Changer de pays, actuellement {country} |
+| `phoneRhOnboarding.place.city` | Dans quelle ville ? |
+| `phoneRhOnboarding.place.otherCity` | Autre ville |
+| `phoneRhOnboarding.place.cityInput` | Votre ville |
+| `phoneRhOnboarding.place.also` | Vous recrutez aussi à |
+| `phoneRhOnboarding.place.error` | Choisissez votre ville. |
+| `phoneRhOnboarding.place.dialSheet` | Indicatif du numéro |
+| `phoneRhOnboarding.contacts.title` | Comment vous joindre ? |
+| `phoneRhOnboarding.contacts.text` | L'e-mail professionnel confirme votre entreprise. Le reste est facultatif. |
+| `phoneRhOnboarding.contacts.workEmail` | E-mail professionnel · obligatoire |
+| `phoneRhOnboarding.contacts.workEmailPlaceholder` | prenom.nom@entreprise.cd |
+| `phoneRhOnboarding.contacts.domain` | Domaine {domain} : il servira à valider votre entreprise. |
+| `phoneRhOnboarding.contacts.personal` | Adresse personnelle : votre entreprise devra vous valider à la main. |
+| `phoneRhOnboarding.contacts.phone` | Téléphone · facultatif |
+| `phoneRhOnboarding.contacts.dialAria` | Indicatif {code}, {country}. Changer |
+| `phoneRhOnboarding.contacts.phoneError` | Au moins 8 chiffres. |
+| `phoneRhOnboarding.contacts.whatsapp` | Ce numéro est aussi sur WhatsApp |
+| `phoneRhOnboarding.contacts.linkedin` | LinkedIn · facultatif |
+| `phoneRhOnboarding.contacts.linkedinPlaceholder` | linkedin.com/in/votre-profil |
+| `phoneRhOnboarding.contacts.who` | Qui voit votre téléphone et votre LinkedIn ? |
+| `phoneRhOnboarding.contacts.nobody.title` | Personne |
+| `phoneRhOnboarding.contacts.nobody.text` | Vos contacts restent privés |
+| `phoneRhOnboarding.contacts.interview.title` | Candidats en entretien |
+| `phoneRhOnboarding.contacts.interview.text` | Seulement ceux que vous invitez |
+| `phoneRhOnboarding.contacts.connections.title` | Mes connexions |
+| `phoneRhOnboarding.contacts.connections.text` | Les personnes connectées avec vous |
+| `phoneRhOnboarding.contacts.errorEmail` | Indiquez votre e-mail professionnel. |
+| `phoneRhOnboarding.contacts.errorPhone` | Le numéro doit avoir au moins 8 chiffres, ou laissez-le vide. |
+| `phoneRhOnboarding.role.title` | Votre rôle dans le recrutement |
+| `phoneRhOnboarding.role.charge.title` | Chargé·e de recrutement |
+| `phoneRhOnboarding.role.charge.text` | Je gère les offres et les candidats |
+| `phoneRhOnboarding.role.rh.title` | Responsable RH |
+| `phoneRhOnboarding.role.rh.text` | Je pilote le recrutement et l'équipe |
+| `phoneRhOnboarding.role.manager.title` | Manager qui recrute |
+| `phoneRhOnboarding.role.manager.text` | Je recrute pour mon équipe |
+| `phoneRhOnboarding.role.dirigeant.title` | Dirigeant·e |
+| `phoneRhOnboarding.role.dirigeant.text` | Je dirige l'entreprise |
+| `phoneRhOnboarding.role.cabinet.title` | Cabinet de recrutement |
+| `phoneRhOnboarding.role.cabinet.text` | Je recrute pour des clients |
+| `phoneRhOnboarding.role.independant.title` | Indépendant·e |
+| `phoneRhOnboarding.role.independant.text` | Je recrute à mon compte |
+| `phoneRhOnboarding.role.job` | Votre poste, tel qu'il s'affichera |
+| `phoneRhOnboarding.role.jobs.charge` | Chargée de recrutement; Chargé de recrutement; Talent acquisition |
+| `phoneRhOnboarding.role.jobs.rh` | Responsable RH; DRH; Responsable du personnel |
+| `phoneRhOnboarding.role.jobs.manager` | Responsable d'équipe; Chef d'équipe; Responsable data |
+| `phoneRhOnboarding.role.jobs.dirigeant` | Directrice générale; Directeur général; Fondatrice; Fondateur |
+| `phoneRhOnboarding.role.jobs.cabinet` | Consultante en recrutement; Consultant en recrutement; Chasseur de têtes |
+| `phoneRhOnboarding.role.jobs.independant` | Recruteuse indépendante; Recruteur indépendant; Consultante RH |
+| `phoneRhOnboarding.role.error` | Choisissez votre rôle et votre poste. |
+| `phoneRhOnboarding.company.title` | Pour quelle entreprise recrutez-vous ? |
+| `phoneRhOnboarding.company.search` | Rechercher votre entreprise |
+| `phoneRhOnboarding.company.near` | Déjà sur Jumanly, près de vous |
+| `phoneRhOnboarding.company.on` | Sur Jumanly |
+| `phoneRhOnboarding.company.none` | « {query} » n'est pas encore sur Jumanly. |
+| `phoneRhOnboarding.company.create` | Mon entreprise n'est pas sur Jumanly |
+| `phoneRhOnboarding.company.createHint` | Créer sa page, vous en serez l'administrateur ou l'administratrice |
+| `phoneRhOnboarding.company.independent` | Je recrute en indépendant·e |
+| `phoneRhOnboarding.company.people` | {size} personnes |
+| `phoneRhOnboarding.company.recruiters` | {count, plural, one {# recruteur} other {# recruteurs}} |
+| `phoneRhOnboarding.company.managedBy` | {name} gère la page |
+| `phoneRhOnboarding.company.domainMatch` | Votre e-mail {domain} correspond : validation en général dans la journée. |
+| `phoneRhOnboarding.company.domainOther` | Votre e-mail n'est pas en @{domain} : l'administrateur vérifiera à la main. |
+| `phoneRhOnboarding.company.request` | Demander à rejoindre la page |
+| `phoneRhOnboarding.company.requestHint` | Une fois accepté, le logo de l'entreprise s'affiche sur votre profil et vos offres. |
+| `phoneRhOnboarding.company.state.chosen` | Sur Jumanly |
+| `phoneRhOnboarding.company.state.pending` | Demande envoyée |
+| `phoneRhOnboarding.company.state.accepted` | Rattachement accepté |
+| `phoneRhOnboarding.company.state.created` | Page créée par vous |
+| `phoneRhOnboarding.company.waitingTitle` | En attente de validation |
+| `phoneRhOnboarding.company.waitingText` | Votre espace est prêt : vous publierez au nom de l'entreprise dès l'accord. |
+| `phoneRhOnboarding.company.cancel` | Annuler la demande |
+| `phoneRhOnboarding.company.cancelled` | Demande annulée |
+| `phoneRhOnboarding.company.admin` | Vous administrez cette page : vous pourrez inviter votre équipe depuis Compte. |
+| `phoneRhOnboarding.company.other` | Choisir une autre entreprise |
+| `phoneRhOnboarding.company.independentTitle` | Vous recrutez en indépendant·e |
+| `phoneRhOnboarding.company.independentText` | Vos offres s'affichent à votre nom. Vous pourrez rejoindre une entreprise plus tard. |
+| `phoneRhOnboarding.company.independentBack` | Choisir plutôt une entreprise |
+| `phoneRhOnboarding.company.errorChoose` | Choisissez votre entreprise. |
+| `phoneRhOnboarding.company.errorSend` | Envoyez la demande de rattachement, ou choisissez une autre option. |
+| `phoneRhOnboarding.company.unavailable` | Cette entreprise ne peut pas être rejointe pour le moment. |
+| `phoneRhOnboarding.join.title` | Rejoindre {org} |
+| `phoneRhOnboarding.join.text` | L'administrateur reçoit votre nom, votre poste ({job}) et votre e-mail professionnel. |
+| `phoneRhOnboarding.join.message` | Votre message |
+| `phoneRhOnboarding.join.default` | Bonjour, je rejoins l'équipe recrutement de {org}. Pouvez-vous valider mon rattachement ? |
+| `phoneRhOnboarding.join.send` | Envoyer la demande |
+| `phoneRhOnboarding.join.cancel` | Annuler |
+| `phoneRhOnboarding.join.sent` | Demande envoyée à {name} |
+| `phoneRhOnboarding.join.sentAdmin` | Demande envoyée à l'administrateur de la page |
+| `phoneRhOnboarding.create.title` | Créer la page de l'entreprise |
+| `phoneRhOnboarding.create.logo` | Logo |
+| `phoneRhOnboarding.create.logoAria` | Ajouter le logo de l'entreprise |
+| `phoneRhOnboarding.create.logoLater` | Le logo s'ajoute ensuite depuis la page de l'entreprise. |
+| `phoneRhOnboarding.create.name` | Nom de l'entreprise |
+| `phoneRhOnboarding.create.namePlaceholder` | Ex. Kinshasa Logistique |
+| `phoneRhOnboarding.create.sector` | Secteur |
+| `phoneRhOnboarding.create.sectors` | Fintech; Banque; Énergie; Santé; Commerce; Télécoms; ONG; Autre |
+| `phoneRhOnboarding.create.size` | Taille |
+| `phoneRhOnboarding.create.sizes.s1` | 1 à 10 |
+| `phoneRhOnboarding.create.sizes.s2` | 11 à 50 |
+| `phoneRhOnboarding.create.sizes.s3` | 51 à 200 |
+| `phoneRhOnboarding.create.sizes.s4` | 201 à 1 000 |
+| `phoneRhOnboarding.create.sizes.s5` | plus de 1 000 |
+| `phoneRhOnboarding.create.note` | Jumanly vérifie la page sous 48 h. Vous pouvez préparer vos offres dès maintenant. |
+| `phoneRhOnboarding.create.submit` | Créer la page |
+| `phoneRhOnboarding.create.cancel` | Annuler |
+| `phoneRhOnboarding.create.done` | Page « {name} » créée : vous en êtes l'administrateur ou l'administratrice |
+| `phoneRhOnboarding.create.nameError` | Écrivez le nom de l'entreprise. |
+| `phoneRhOnboarding.recruits.title` | Quels profils recrutez-vous ? |
+| `phoneRhOnboarding.recruits.text` | Orbi vous propose ces talents en premier, et votre Fil suit ces domaines. |
+| `phoneRhOnboarding.recruits.count` | {count, plural, =0 {Aucun domaine} one {# domaine} other {# domaines}} |
+| `phoneRhOnboarding.recruits.domains` | Data; Finance; Service client; Tech; Commercial; Marketing; RH; Juridique; Logistique; Santé |
+| `phoneRhOnboarding.recruits.levels` | Niveaux |
+| `phoneRhOnboarding.recruits.levelList` | Stage; Junior; Confirmé; Cadre |
+| `phoneRhOnboarding.recruits.hires` | Recrutements par an |
+| `phoneRhOnboarding.recruits.hire.few` | 1 à 5 |
+| `phoneRhOnboarding.recruits.hire.some` | 6 à 20 |
+| `phoneRhOnboarding.recruits.hire.many` | plus de 20 |
+| `phoneRhOnboarding.recruits.error` | Choisissez au moins un domaine. |
+| `phoneRhOnboarding.profile.title` | Votre profil recruteur |
+| `phoneRhOnboarding.profile.text` | Voici ce que verront les talents. |
+| `phoneRhOnboarding.profile.hiringNow` | Recrute en ce moment |
+| `phoneRhOnboarding.profile.headline` | Votre phrase d'accroche |
+| `phoneRhOnboarding.profile.orbi` | Orbi propose une accroche |
+| `phoneRhOnboarding.profile.badge` | Afficher « Recrute en ce moment » |
+| `phoneRhOnboarding.profile.badgeHint` | Les talents peuvent vous suivre |
+| `phoneRhOnboarding.profile.auto` | Je recrute {what} |
+| `phoneRhOnboarding.profile.autoFor` | Je recrute {what} pour {org} |
+| `phoneRhOnboarding.profile.autoDomains` | en {domains} |
+| `phoneRhOnboarding.profile.autoTalents` | des talents |
+| `phoneRhOnboarding.profile.and` | {a} et {b} |
+| `phoneRhOnboarding.profile.join` | Rejoignez l'équipe {org} : {domains} |
+| `phoneRhOnboarding.profile.reply` | {job} · je réponds à chaque candidature |
+| `phoneRhOnboarding.profile.independent` | Indépendant·e |
+| `phoneRhOnboarding.headline.title` | Votre accroche |
+| `phoneRhOnboarding.headline.from` | Orbi · trois propositions, vous choisissez |
+| `phoneRhOnboarding.notifications.title` | Ne laissez aucun candidat sans réponse |
+| `phoneRhOnboarding.notifications.text` | Une notification pour les nouvelles candidatures, les entretiens et votre équipe. Rien d'autre. |
+| `phoneRhOnboarding.notifications.example1` | 3 nouvelles candidatures pour Analyste de données junior |
+| `phoneRhOnboarding.notifications.example2` | Grâce Mbuyi a confirmé l'entretien de jeudi 10 h |
+| `phoneRhOnboarding.ready.complete` | Profil recruteur complété à {pct} % |
+| `phoneRhOnboarding.ready.title` | Bienvenue, {name} |
+| `phoneRhOnboarding.ready.logoPending` | Le logo de {org} s'affichera dès que l'administrateur aura validé. |
+| `phoneRhOnboarding.ready.logoShown` | Le logo de {org} s'affiche sur votre profil. |
+| `phoneRhOnboarding.ready.independent` | Vous recrutez en indépendant·e. |
+| `phoneRhOnboarding.ready.orbi` | Je peux rédiger votre première offre à partir d'un simple intitulé. |
+| `phoneRhOnboarding.ready.orbiTry` | Essayer |
+| `phoneRhOnboarding.ready.start` | Pour bien démarrer |
+| `phoneRhOnboarding.ready.publish` | Publier une première offre |
+| `phoneRhOnboarding.ready.publishHint` | 5 étapes, Orbi rédige avec vous |
+| `phoneRhOnboarding.ready.invite` | Inviter mon équipe |
+| `phoneRhOnboarding.ready.inviteHint` | Managers et RH, chacun avec son rôle |
+| `phoneRhOnboarding.ready.talents` | Chercher des talents |
+| `phoneRhOnboarding.ready.talentsHint` | Profils visibles en {domains} |
+| `phoneRhOnboarding.ready.talentsAll` | Profils visibles sur Jumanly |
+| `phoneRhOnboarding.ready.edit` | Modifier mes réponses |
+| `phoneRhOnboarding.ready.notifOn` | Vous serez prévenu·e de chaque nouvelle candidature |
+| `phoneRhOnboarding.ready.notifOff` | Notifications désactivées · à changer dans Compte › Paramètres |
+| `phoneRhOnboarding.ready.enter` | Entrer dans Jumanly |
+
+---
+
+### Modèle B recruteur · Fil au téléphone
+
+*Lot M3 (docs/modele-b-recruteur, mobile/captures section 02) : le Fil du recruteur, publier en son nom ou au nom de l'entreprise (seulement pour un membre qui gère les offres), joindre une offre en ligne de l'entreprise ou annoncer un événement.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhFil.asOrg` | Publier au nom de {org} |
+| `phoneRhFil.end` | Vous êtes à jour. Pendant ce temps, |
+| `phoneRhFil.endLink` | cherchez des talents |
+| `phoneRhFil.compose.title` | Nouvelle publication |
+| `phoneRhFil.compose.close` | Fermer |
+| `phoneRhFil.compose.cancel` | Annuler |
+| `phoneRhFil.compose.onBehalf` | au nom de {org} |
+| `phoneRhFil.compose.errorTitle` | Ajoutez un titre avant de publier. |
+| `phoneRhFil.compose.as` | Publier en tant que |
+| `phoneRhFil.compose.asMe` | Votre profil |
+| `phoneRhFil.compose.asOrg` | Page de l'entreprise |
+| `phoneRhFil.compose.seenMe` | Visible par votre réseau et les talents qui suivent {org}. |
+| `phoneRhFil.compose.seenOrg` | Visible sur la page de {org} et dans le Fil de ses abonnés. |
+| `phoneRhFil.compose.type` | Joindre |
+| `phoneRhFil.compose.types.texte` | Rien de plus |
+| `phoneRhFil.compose.types.offre` | Une offre |
+| `phoneRhFil.compose.types.evenement` | Un événement |
+| `phoneRhFil.compose.orbi` | Orbi complète le texte |
+| `phoneRhFil.compose.orbiAsk` | Complète ce début de publication pour le Fil : un titre de 60 caractères au plus, puis un texte d'environ 120 caractères (160 au plus) : « {text} » |
+| `phoneRhFil.compose.orbiAskEmpty` | Que publier dans le Fil pour attirer de bons profils ? |
+| `phoneRhFil.compose.photoError` | Cette photo ne peut pas être ajoutée. Choisissez une image JPEG, PNG ou WebP. |
+| `phoneRhFil.compose.job` | Offre jointe |
+| `phoneRhFil.compose.noJob` | Aucune offre en ligne pour l'instant. |
+| `phoneRhFil.compose.noJobLink` | Publier une offre |
+| `phoneRhFil.compose.eventAt` | Date et heure de l'événement |
+| `phoneRhFil.compose.errorJob` | Choisissez l'offre à joindre. |
+| `phoneRhFil.compose.errorEvent` | Indiquez la date de l'événement. |
+| `phoneRhFil.compose.failed` | La publication n'a pas pu être envoyée. Réessayez. |
+| `phoneRhFil.compose.done` | Publication partagée |
+| `phoneRhFil.compose.submit` | Publier |
+
+### Modèle B recruteur · Offres au téléphone
+
+*Lot M4 (docs/modele-b-recruteur, mobile/captures section 03) : les offres et leurs indicateurs, publier en quatre étapes, partager, clôturer avec le rapport PDF. Candidater reste gratuit.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhOffres.list.line` | {live, plural, =0 {Aucune offre en cours} one {# offre en cours} other {# offres en cours}} · {applications, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} · {unseen, plural, =0 {aucune nouvelle} one {# nouvelle} other {# nouvelles}} |
+| `phoneRhOffres.list.filters` | Filtrer les offres |
+| `phoneRhOffres.list.filter.toutes` | Toutes |
+| `phoneRhOffres.list.filter.encours` | En cours |
+| `phoneRhOffres.list.filter.terminees` | Terminées |
+| `phoneRhOffres.list.empty.toutes` | Aucune offre pour l'instant. Le « + » en haut en crée une en quatre étapes. |
+| `phoneRhOffres.list.empty.encours` | Aucune offre en ligne en ce moment. |
+| `phoneRhOffres.list.empty.terminees` | Aucune offre terminée. |
+| `phoneRhOffres.list.new` | {count, plural, one {# nouvelle} other {# nouvelles}} |
+| `phoneRhOffres.list.online` | {count, plural, =0 {En ligne depuis aujourd'hui} one {En ligne depuis # jour} other {En ligne depuis # jours}} |
+| `phoneRhOffres.list.ended` | Candidatures fermées |
+| `phoneRhOffres.list.notPublished` | Pas encore publiée |
+| `phoneRhOffres.status.published` | En cours |
+| `phoneRhOffres.status.pending_review` | En vérification |
+| `phoneRhOffres.status.draft` | Brouillon |
+| `phoneRhOffres.status.rejected` | Refusée |
+| `phoneRhOffres.status.changes_requested` | À corriger |
+| `phoneRhOffres.status.paused` | En pause |
+| `phoneRhOffres.status.closed` | Terminée |
+| `phoneRhOffres.status.archived` | Archivée |
+| `phoneRhOffres.status.expired` | Terminée |
+| `phoneRhOffres.contract.cdi` | CDI |
+| `phoneRhOffres.contract.cdd` | CDD |
+| `phoneRhOffres.contract.stage` | Stage |
+| `phoneRhOffres.contract.mission` | Mission |
+| `phoneRhOffres.contract.freelance` | Freelance |
+| `phoneRhOffres.contract.alternance` | Alternance |
+| `phoneRhOffres.contract.volontariat` | Volontariat |
+| `phoneRhOffres.remote.onsite` | Sur place |
+| `phoneRhOffres.remote.hybrid` | Hybride |
+| `phoneRhOffres.remote.remote` | Télétravail |
+| `phoneRhOffres.figures.views` | {count, plural, one {vue} other {vues}} |
+| `phoneRhOffres.figures.days` | {count, plural, one {jour en ligne} other {jours en ligne}} |
+| `phoneRhOffres.figures.applications` | {count, plural, one {candidature} other {candidatures}} |
+| `phoneRhOffres.figures.rate` | des vues deviennent candidatures |
+| `phoneRhOffres.figures.unseen` | {count, plural, one {nouvelle à traiter} other {nouvelles à traiter}} |
+| `phoneRhOffres.detail.back` | Offres |
+| `phoneRhOffres.detail.published` | Publiée le {date} |
+| `phoneRhOffres.detail.draft` | Brouillon, pas encore publiée |
+| `phoneRhOffres.detail.online` | {count, plural, =0 {en ligne depuis aujourd'hui} one {en ligne depuis # jour} other {en ligne depuis # jours}} |
+| `phoneRhOffres.detail.left` | {count, plural, one {# jour restant} other {# jours restants}} |
+| `phoneRhOffres.detail.ended` | terminée le {date} |
+| `phoneRhOffres.detail.orbiWaiting` | {count, plural, one {# candidature attend une réponse.} other {# candidatures attendent une réponse.}} |
+| `phoneRhOffres.detail.orbiNone` | Pas encore de candidature. Partager l'offre dans le Fil l'aide à se faire voir. |
+| `phoneRhOffres.detail.orbiDone` | Toutes les candidatures ont été ouvertes. |
+| `phoneRhOffres.detail.why` | Pourquoi ? |
+| `phoneRhOffres.detail.whyText` | Orbi compte les candidatures que personne de l'équipe n'a encore ouvertes. Il ne classe pas les personnes à votre place : c'est vous qui décidez. |
+| `phoneRhOffres.detail.chart` | Candidatures reçues |
+| `phoneRhOffres.detail.period` | Période |
+| `phoneRhOffres.detail.days` | {count} jours |
+| `phoneRhOffres.detail.chartLabel` | {count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} sur les {days} derniers jours |
+| `phoneRhOffres.detail.added` | +{count} |
+| `phoneRhOffres.detail.sources` | D'où viennent les candidats |
+| `phoneRhOffres.detail.see` | {count, plural, one {Voir le candidat} other {Voir les # candidats}} |
+| `phoneRhOffres.source.direct` | L'offre sur Jumanly |
+| `phoneRhOffres.source.invitation` | Vos invitations |
+| `phoneRhOffres.source.talent_search` | Recherche de talents |
+| `phoneRhOffres.candidates.back` | L'offre |
+| `phoneRhOffres.candidates.line` | {count, plural, =0 {Aucun candidat} one {# candidat} other {# candidats}} · {unseen, plural, =0 {aucun nouveau} one {# nouveau} other {# nouveaux}} |
+| `phoneRhOffres.candidates.rule` | Classés par correspondance avec l'offre. Le score ne tient compte ni du nom, ni de l'âge, ni de la photo. Vous décidez. |
+| `phoneRhOffres.candidates.ruleNoScore` | Classés du plus récent au plus ancien. Vous décidez. |
+| `phoneRhOffres.candidates.sort` | Trier dans Candidatures |
+| `phoneRhOffres.published.title` | Votre offre est en ligne |
+| `phoneRhOffres.published.text` | « {title} » apparaît dans Explorer. Orbi la propose aux talents qui correspondent. |
+| `phoneRhOffres.published.reviewTitle` | Votre offre part en vérification |
+| `phoneRhOffres.published.reviewText` | « {title} » sera en ligne dès que Jumanly aura vérifié votre entreprise. Vous recevrez une notification. |
+| `phoneRhOffres.published.copy` | Copier le lien |
+| `phoneRhOffres.published.copied` | Lien copié |
+| `phoneRhOffres.published.offers` | Voir mes offres |
+| `phoneRhOffres.published.see` | Voir l'offre |
+| `phoneRhOffres.published.toFil` | Partager dans le Fil |
+| `phoneRhOffres.menu.open` | Actions de l'offre |
+| `phoneRhOffres.menu.edit` | Modifier l'offre |
+| `phoneRhOffres.menu.editHint` | Reprend les étapes, déjà remplies |
+| `phoneRhOffres.menu.pause` | Mettre en pause |
+| `phoneRhOffres.menu.pauseHint` | Elle disparaît d'Explorer, rien n'est perdu |
+| `phoneRhOffres.menu.resume` | Remettre en ligne |
+| `phoneRhOffres.menu.resumeHint` | Elle revient dans Explorer |
+| `phoneRhOffres.menu.share` | Partager |
+| `phoneRhOffres.menu.shareHint` | Lien, Fil, WhatsApp |
+| `phoneRhOffres.menu.duplicate` | Dupliquer |
+| `phoneRhOffres.menu.duplicateHint` | Une nouvelle offre à partir de celle-ci |
+| `phoneRhOffres.menu.reopen` | Rouvrir l'offre |
+| `phoneRhOffres.menu.reopenHint` | Elle accepte de nouveau les candidatures |
+| `phoneRhOffres.menu.report` | Rapport de l'offre |
+| `phoneRhOffres.menu.reportHint` | Statistiques et sources, en PDF |
+| `phoneRhOffres.menu.close` | Clôturer l'offre |
+| `phoneRhOffres.menu.closeHint` | Fin des candidatures, rapport PDF |
+| `phoneRhOffres.menu.shareTitle` | Partager l'offre |
+| `phoneRhOffres.menu.copy` | Copier le lien |
+| `phoneRhOffres.menu.copied` | Lien copié |
+| `phoneRhOffres.menu.toFil` | Publier dans le Fil |
+| `phoneRhOffres.menu.toFilHint` | Au nom de {org} |
+| `phoneRhOffres.menu.whatsapp` | WhatsApp |
+| `phoneRhOffres.menu.whatsappHint` | Envoyer à un contact |
+| `phoneRhOffres.menu.closeTitle` | Clôturer « {title} » ? |
+| `phoneRhOffres.menu.closeText` | {count, plural, =0 {L'offre ne reçoit plus de candidatures, et le rapport PDF se prépare.} one {Le candidat reçoit un message. Sa candidature reste consultable, et le rapport PDF se prépare.} other {Les # candidats reçoivent un message. Les candidatures restent consultables, et le rapport PDF se prépare.}} |
+| `phoneRhOffres.menu.closeConfirm` | Clôturer l'offre |
+| `phoneRhOffres.menu.closeKeep` | Garder en ligne |
+| `phoneRhOffres.menu.reportTitle` | Offre clôturée, rapport prêt |
+| `phoneRhOffres.menu.reportText` | {views, plural, one {# vue} other {# vues}} · {applications, plural, one {# candidature} other {# candidatures}} · {hired, plural, one {# retenu} other {# retenus}}. Le PDF reprend les statistiques et les sources de la période de l'offre. |
+| `phoneRhOffres.menu.reportDownload` | Télécharger le PDF |
+| `phoneRhOffres.menu.reportLocked` | Le rapport PDF fait partie des outils de recrutement avancés. L'administrateur de l'entreprise peut les activer. |
+| `phoneRhOffres.menu.reportLater` | Plus tard |
+| `phoneRhOffres.publish.title` | Nouvelle offre |
+| `phoneRhOffres.publish.editTitle` | Modifier l'offre |
+| `phoneRhOffres.publish.back` | Retour |
+| `phoneRhOffres.publish.draft` | Brouillon |
+| `phoneRhOffres.publish.progress` | Étape {step} sur 4 |
+| `phoneRhOffres.publish.continue` | Continuer |
+| `phoneRhOffres.publish.publish` | Publier l'offre |
+| `phoneRhOffres.publish.review` | Envoyer en vérification |
+| `phoneRhOffres.publish.steps.1.kicker` | Étape 1 sur 4 · Le poste |
+| `phoneRhOffres.publish.steps.1.title` | Quel poste recrutez-vous ? |
+| `phoneRhOffres.publish.steps.2.kicker` | Étape 2 sur 4 · Les détails |
+| `phoneRhOffres.publish.steps.2.title` | Les détails |
+| `phoneRhOffres.publish.steps.3.kicker` | Étape 3 sur 4 · La présélection |
+| `phoneRhOffres.publish.steps.3.title` | La présélection |
+| `phoneRhOffres.publish.steps.4.kicker` | Étape 4 sur 4 · L'aperçu |
+| `phoneRhOffres.publish.steps.4.title` | Ce que verront les talents |
+| `phoneRhOffres.publish.fields.title` | Intitulé du poste |
+| `phoneRhOffres.publish.fields.titlePlaceholder` | Par exemple : Analyste crédit junior |
+| `phoneRhOffres.publish.fields.description` | Description du poste |
+| `phoneRhOffres.publish.fields.descriptionPlaceholder` | En quelques phrases : l'équipe, les missions, ce que la personne apprendra. |
+| `phoneRhOffres.publish.fields.skills` | Compétences attendues |
+| `phoneRhOffres.publish.fields.skillPlaceholder` | Par exemple : Excel |
+| `phoneRhOffres.publish.fields.addSkill` | Ajouter une compétence |
+| `phoneRhOffres.publish.fields.removeSkill` | Retirer {skill} |
+| `phoneRhOffres.publish.fields.add` | Ajouter |
+| `phoneRhOffres.publish.fields.city` | Ville |
+| `phoneRhOffres.publish.fields.otherCity` | Autre ville |
+| `phoneRhOffres.publish.fields.country` | Pays du poste |
+| `phoneRhOffres.publish.fields.remote` | Mode de travail |
+| `phoneRhOffres.publish.fields.contract` | Contrat |
+| `phoneRhOffres.publish.fields.salary` | Salaire |
+| `phoneRhOffres.publish.fields.salaryShow` | Afficher le salaire |
+| `phoneRhOffres.publish.fields.salaryHidden` | Le salaire ne s'affiche pas |
+| `phoneRhOffres.publish.fields.salaryMin` | Minimum (USD par mois) |
+| `phoneRhOffres.publish.fields.salaryMax` | Maximum (USD par mois) |
+| `phoneRhOffres.publish.fields.salaryHint` | Les offres avec salaire reçoivent plus de candidatures. |
+| `phoneRhOffres.publish.fields.questions` | {count, plural, =0 {Questions aux candidats} one {Questions aux candidats · # choisie} other {Questions aux candidats · # choisies}} |
+| `phoneRhOffres.publish.fields.question` | Votre question |
+| `phoneRhOffres.publish.fields.questionPlaceholder` | Ajouter votre question |
+| `phoneRhOffres.publish.fields.documents` | Documents demandés |
+| `phoneRhOffres.publish.fields.screeningNote` | Aucune réponse n'écarte un candidat : elles vous aident à trier, vous décidez. |
+| `phoneRhOffres.publish.errors.title` | Indiquez l'intitulé du poste (3 caractères au moins). |
+| `phoneRhOffres.publish.errors.description` | Décrivez le poste en quelques phrases. |
+| `phoneRhOffres.publish.errors.skills` | Ajoutez au moins une compétence attendue. |
+| `phoneRhOffres.publish.errors.unknownSkills` | Ces compétences ne sont pas dans le référentiel : {skills}. Choisissez un nom proche. |
+| `phoneRhOffres.publish.errors.forbidden` | Ce texte ne peut pas être publié. Reformulez-le. |
+| `phoneRhOffres.publish.errors.city` | Choisissez la ville du poste. |
+| `phoneRhOffres.publish.errors.country` | Indiquez le pays du poste. |
+| `phoneRhOffres.publish.errors.salary` | Indiquez un minimum et un maximum, le maximum au moins égal au minimum. |
+| `phoneRhOffres.publish.errors.failed` | L'offre n'a pas pu être enregistrée. Réessayez. |
+| `phoneRhOffres.publish.errors.limit` | Vous avez atteint le nombre d'offres en ligne de votre formule. Mettez une offre en pause ou clôturez-en une. |
+| `phoneRhOffres.publish.errors.question` | Écrivez une question de 5 caractères au moins. |
+| `phoneRhOffres.publish.errors.questionsMax` | 5 questions au plus. |
+| `phoneRhOffres.publish.orbi.label` | Orbi peut proposer un texte |
+| `phoneRhOffres.publish.orbi.proposed` | Proposé par Orbi · à relire |
+| `phoneRhOffres.publish.orbi.propose` | Proposer un texte |
+| `phoneRhOffres.publish.orbi.again` | Proposer un autre texte |
+| `phoneRhOffres.publish.orbi.writing` | Orbi écrit… |
+| `phoneRhOffres.publish.orbi.failed` | Orbi n'a pas pu écrire le texte. Écrivez-le vous-même. |
+| `phoneRhOffres.publish.orbi.consent` | Activez l'aide d'Orbi dans les réglages pour qu'il propose un texte. |
+| `phoneRhOffres.publish.orbi.quota` | Les crédits d'Orbi de ce mois sont utilisés. Écrivez le texte vous-même. |
+| `phoneRhOffres.publish.orbi.nothing` | Orbi n'a pas de proposition pour ce poste. Écrivez le texte vous-même. |
+| `phoneRhOffres.publish.contracts.cdi` | CDI |
+| `phoneRhOffres.publish.contracts.cdd` | CDD |
+| `phoneRhOffres.publish.contracts.stage` | Stage |
+| `phoneRhOffres.publish.contracts.freelance` | Freelance |
+| `phoneRhOffres.publish.remotes.onsite` | Sur place |
+| `phoneRhOffres.publish.remotes.hybrid` | Hybride |
+| `phoneRhOffres.publish.remotes.remote` | Télétravail |
+| `phoneRhOffres.publish.documents.cv` | CV |
+| `phoneRhOffres.publish.documents.letter` | Lettre |
+| `phoneRhOffres.publish.documents.diploma` | Diplôme |
+| `phoneRhOffres.publish.documents.portfolio` | Portfolio |
+| `phoneRhOffres.publish.salaryLine` | {min} à {max} USD par mois |
+| `phoneRhOffres.publish.previewLabel` | Aperçu de l'offre |
+| `phoneRhOffres.publish.previewLine` | {count, plural, =0 {Aucune question de présélection} one {# question de présélection} other {# questions de présélection}} · candidater reste gratuit |
+| `phoneRhOffres.publish.applyFree` | Candidater gratuitement |
+| `phoneRhOffres.publish.suggestions.skills` | Avez-vous déjà occupé un poste semblable ? |
+| `phoneRhOffres.publish.suggestions.start` | Quand pouvez-vous commencer ? |
+| `phoneRhOffres.publish.suggestions.city` | Êtes-vous à {city} ou prêt·e à y venir ? |
+| `phoneRhOffres.publish.suggestions.move` | Êtes-vous prêt·e à venir sur le lieu du poste ? |
+| `phoneRhOffres.publish.suggestions.salary` | Quel salaire attendez-vous ? |
+
 
 ---
 
@@ -13984,6 +15343,1622 @@ Conventions :
 - Le rappel « candidater reste gratuit » figure sur chaque écran de ce fichier.
 
 ---
+
+### Modèle B recruteur · Candidatures au téléphone
+
+*Lot M5 (docs/modele-b-recruteur, mobile/captures sections 04 et 05) : les candidatures par étape, le fort potentiel, les entretiens, les décisions, le diagnostic des CV, la fiche de chaque candidat, planifier, évaluer, proposer. Le score classe et s'explique ; il n'écarte personne. Candidater reste gratuit.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhCandidatures.line` | {unseen, plural, =0 {Aucune nouvelle} one {# nouvelle} other {# nouvelles}} · {total, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} · {high} à fort potentiel |
+| `phoneRhCandidatures.results` | {count, plural, one {# résultat} other {# résultats}} |
+| `phoneRhCandidatures.percent` | {score} % |
+| `phoneRhCandidatures.offers` | Offres |
+| `phoneRhCandidatures.allOffers` | Toutes les offres · {count} |
+| `phoneRhCandidatures.offerChip` | {title} · {count} |
+| `phoneRhCandidatures.row.line` | {hasHeadline, select, yes {{headline} · } other {}}{years, plural, =0 {moins d'un an d'expérience} one {# an d'expérience} other {# ans d'expérience}} |
+| `phoneRhCandidatures.row.when` | {job} · {when} |
+| `phoneRhCandidatures.row.new` | Nouvelle candidature |
+| `phoneRhCandidatures.views.label` | Vues des candidatures |
+| `phoneRhCandidatures.views.potentiel` | Fort potentiel |
+| `phoneRhCandidatures.views.toutes` | Toutes |
+| `phoneRhCandidatures.views.entretiens` | Entretiens |
+| `phoneRhCandidatures.views.decisions` | Décisions |
+| `phoneRhCandidatures.diagnostic.card` | Orbi a lu {count, plural, one {# CV} other {# CV}} |
+| `phoneRhCandidatures.diagnostic.cardHint` | Diagnostic de tous les CV, critère par critère |
+| `phoneRhCandidatures.diagnostic.back` | Candidatures |
+| `phoneRhCandidatures.diagnostic.empty` | Aucune offre avec des candidatures pour l'instant. |
+| `phoneRhCandidatures.diagnostic.title` | Diagnostic des CV |
+| `phoneRhCandidatures.diagnostic.line` | {count, plural, one {# CV lu} other {# CV lus}} · {job} |
+| `phoneRhCandidatures.diagnostic.all` | couvrent tous les critères |
+| `phoneRhCandidatures.diagnostic.partial` | en partie |
+| `phoneRhCandidatures.diagnostic.little` | peu |
+| `phoneRhCandidatures.diagnostic.skills` | Compétences présentes dans les CV |
+| `phoneRhCandidatures.diagnostic.of` | {count} sur {total} |
+| `phoneRhCandidatures.diagnostic.missing` | {skill} manque à {count, plural, one {# candidat} other {# candidats}} : un cours Jumanly peut les aider à progresser. |
+| `phoneRhCandidatures.diagnostic.closest` | Les plus proches de l'offre |
+| `phoneRhCandidatures.diagnostic.shortlist` | Présélectionner {name}, encore en « Reçue » |
+| `phoneRhCandidatures.high.rule` | {count, plural, =0 {Aucun profil à 80 % et plus} one {# profil à 80 % et plus} other {# profils à 80 % et plus}} · classés par score, jamais écartés |
+| `phoneRhCandidatures.high.noScore` | Le score de compatibilité n'est pas compris dans votre formule : toutes les candidatures sont dans « Toutes ». |
+| `phoneRhCandidatures.high.empty` | Aucune candidature à 80 % et plus pour l'instant. Les autres sont dans « Toutes », jamais écartées. |
+| `phoneRhCandidatures.high.sub` | {job} · {stage} |
+| `phoneRhCandidatures.notes.skills` | Couvre les compétences requises ({skills} vérifiées) |
+| `phoneRhCandidatures.notes.skillsCount` | Couvre {met} compétences requises sur {total} |
+| `phoneRhCandidatures.notes.experience` | {title} · {company} |
+| `phoneRhCandidatures.notes.city` | À {city}, comme le poste |
+| `phoneRhCandidatures.checks.declared` | Niveau réel sur {skill} (déclaré, non vérifié) |
+| `phoneRhCandidatures.checks.knockout` | {label} |
+| `phoneRhCandidatures.interests` | Ce qui l'intéresse |
+| `phoneRhCandidatures.availability.now` | Immédiate |
+| `phoneRhCandidatures.availability.from` | À partir du {date, date, long} |
+| `phoneRhCandidatures.availability.listening` | À l'écoute |
+| `phoneRhCandidatures.availability.not` | Pas disponible pour l'instant |
+| `phoneRhCandidatures.followedBy` | Suivi par {name} |
+| `phoneRhCandidatures.open` | Ouvrir |
+| `phoneRhCandidatures.phases.label` | Étapes |
+| `phoneRhCandidatures.phases.recue` | Reçue |
+| `phoneRhCandidatures.phases.preselection` | Présélection |
+| `phoneRhCandidatures.phases.entretien` | Entretien |
+| `phoneRhCandidatures.phases.proposition` | Proposition |
+| `phoneRhCandidatures.phases.recrute` | Recruté·e |
+| `phoneRhCandidatures.phases.nonretenu` | Non retenu·e |
+| `phoneRhCandidatures.phases.empty` | Personne à cette étape pour l'instant. |
+| `phoneRhCandidatures.sort.score` | Par score |
+| `phoneRhCandidatures.sort.date` | Par date |
+| `phoneRhCandidatures.select.start` | Sélectionner |
+| `phoneRhCandidatures.select.cancel` | Annuler |
+| `phoneRhCandidatures.select.write` | {count, plural, =0 {Choisissez des candidats} one {Écrire à # candidat} other {Écrire à # candidats}} |
+| `phoneRhCandidatures.interviews.label` | Entretiens |
+| `phoneRhCandidatures.interviews.aujourdhui` | Aujourd'hui · {count} |
+| `phoneRhCandidatures.interviews.avenir` | À venir · {count} |
+| `phoneRhCandidatures.interviews.documenter` | À documenter · {count} |
+| `phoneRhCandidatures.interviews.empty.aujourdhui` | Aucun entretien aujourd'hui. |
+| `phoneRhCandidatures.interviews.empty.avenir` | Aucun entretien à venir. |
+| `phoneRhCandidatures.interviews.empty.documenter` | Tous vos entretiens sont documentés. |
+| `phoneRhCandidatures.interviews.toFix` | À fixer |
+| `phoneRhCandidatures.interviews.mode.video` | Visio |
+| `phoneRhCandidatures.interviews.mode.onsite` | Sur place |
+| `phoneRhCandidatures.interviews.mode.audio` | Appel |
+| `phoneRhCandidatures.interviews.date` | {date} · {job} |
+| `phoneRhCandidatures.interviews.with` | Avec {names} |
+| `phoneRhCandidatures.interviews.document` | Documenter l'entretien |
+| `phoneRhCandidatures.interviews.join` | Rejoindre |
+| `phoneRhCandidatures.interviews.see` | Voir l'entretien |
+| `phoneRhCandidatures.interviews.file` | Fiche |
+| `phoneRhCandidatures.decisions.label` | Décisions |
+| `phoneRhCandidatures.decisions.propositions` | Propositions · {count} |
+| `phoneRhCandidatures.decisions.recrutes` | Recrutés · {count} |
+| `phoneRhCandidatures.decisions.nonretenus` | Non retenus · {count} |
+| `phoneRhCandidatures.decisions.answerAll` | Répondre {count, plural, one {à la personne sans réponse} other {aux # sans réponse}} |
+| `phoneRhCandidatures.decisions.answerAllHint` | Chaque candidat reçoit une réponse, même courte |
+| `phoneRhCandidatures.decisions.empty.propositions` | Aucune proposition en cours. |
+| `phoneRhCandidatures.decisions.empty.recrutes` | Personne n'est encore recruté. |
+| `phoneRhCandidatures.decisions.empty.nonretenus` | Aucun candidat non retenu. |
+| `phoneRhCandidatures.decisions.sent` | Envoyée {date}, en attente de réponse |
+| `phoneRhCandidatures.decisions.hired` | Recruté·e |
+| `phoneRhCandidatures.decisions.waiting` | Sans réponse pour l'instant |
+| `phoneRhCandidatures.decisions.answered` | Réponse envoyée |
+| `phoneRhCandidatures.decisions.rejected` | Non retenu·e |
+| `phoneRhCandidatures.group.sent` | {count, plural, one {Message envoyé à # candidat.} other {Message envoyé à # candidats.}} |
+| `phoneRhCandidatures.group.error` | Le message n'est pas parti. Réessayez. |
+| `phoneRhCandidatures.group.title` | Message à {count, plural, =0 {0 candidat} one {# candidat} other {# candidats}} |
+| `phoneRhCandidatures.group.template` | Modèle |
+| `phoneRhCandidatures.group.templates.entretien` | Invitation à un entretien |
+| `phoneRhCandidatures.group.templates.document` | Demande de document |
+| `phoneRhCandidatures.group.templates.recue` | Candidature bien reçue |
+| `phoneRhCandidatures.group.templates.nonretenu` | Réponse non retenue |
+| `phoneRhCandidatures.group.preview` | Aperçu pour la première personne |
+| `phoneRhCandidatures.group.send` | Envoyer à chacun |
+| `phoneRhCandidatures.group.body.entretien` | Bonjour {prenom}, votre profil nous intéresse pour le poste « {poste} ». Répondez à ce message avec vos disponibilités pour un entretien. {signer}, {entreprise} |
+| `phoneRhCandidatures.group.body.document` | Bonjour {prenom}, pour avancer sur votre candidature au poste « {poste} », pouvez-vous nous envoyer votre diplôme ou une attestation en réponse à ce message ? {signer}, {entreprise} |
+| `phoneRhCandidatures.group.body.recue` | Bonjour {prenom}, nous avons bien reçu votre candidature au poste « {poste} ». Nous la lisons avec attention et revenons vers vous. {signer}, {entreprise} |
+| `phoneRhCandidatures.group.body.nonretenu` | Bonjour {prenom}, merci pour votre candidature au poste « {poste} ». Nous avons choisi un autre profil cette fois. Votre profil reste visible pour nos prochaines offres. {signer}, {entreprise} |
+| `phoneRhCandidatures.file.back` | Candidatures |
+| `phoneRhCandidatures.file.cap` | Cap : {job} |
+| `phoneRhCandidatures.file.years` | {count, plural, =0 {Moins d'un an d'expérience} one {# an d'expérience} other {# ans d'expérience}} |
+| `phoneRhCandidatures.file.source.direct` | reçue {when} via Explorer |
+| `phoneRhCandidatures.file.source.invitation` | reçue {when} sur invitation |
+| `phoneRhCandidatures.file.source.talent_search` | reçue {when} après une proposition |
+| `phoneRhCandidatures.file.slot` | {date}, {time} |
+| `phoneRhCandidatures.file.primary.document` | Documenter l'entretien |
+| `phoneRhCandidatures.file.primary.plan` | Planifier un entretien |
+| `phoneRhCandidatures.file.primary.propose` | Faire une proposition |
+| `phoneRhCandidatures.file.primary.recruit` | Recruter {name} |
+| `phoneRhCandidatures.file.orbi` | Ce qu'Orbi a relevé |
+| `phoneRhCandidatures.file.check` | À vérifier en entretien |
+| `phoneRhCandidatures.file.availability` | Disponibilité : {value} |
+| `phoneRhCandidatures.file.interview` | Entretien |
+| `phoneRhCandidatures.file.write` | Écrire au candidat |
+| `phoneRhCandidatures.file.error` | L'action n'a pas abouti. Réessayez. |
+| `phoneRhCandidatures.file.ok.deplacee` | Étape changée. |
+| `phoneRhCandidatures.file.ok.note` | Note ajoutée. |
+| `phoneRhCandidatures.file.ok.confie` | Dossier confié. |
+| `phoneRhCandidatures.file.ok.decision` | Décision envoyée avec son message. |
+| `phoneRhCandidatures.file.ok.proposition` | Proposition envoyée. |
+| `phoneRhCandidatures.file.ok.document` | Demande de document envoyée. |
+| `phoneRhCandidatures.file.ok.evaluation` | Évaluation enregistrée. |
+| `phoneRhCandidatures.file.ok.entretien` | Invitation envoyée. |
+| `phoneRhCandidatures.cv.months` | {count} mois |
+| `phoneRhCandidatures.cv.years` | {count, plural, one {# an} other {# ans}} |
+| `phoneRhCandidatures.cv.experience` | Expérience |
+| `phoneRhCandidatures.cv.education` | Formation |
+| `phoneRhCandidatures.cv.skills` | Compétences |
+| `phoneRhCandidatures.cv.none` | Rien d'indiqué. |
+| `phoneRhCandidatures.cv.degree` | {degree}, {school} |
+| `phoneRhCandidatures.cv.year` | ({year}) |
+| `phoneRhCandidatures.cv.certificate` | {title} · attestation Jumanly |
+| `phoneRhCandidatures.cv.verified` | vérifiée |
+| `phoneRhCandidatures.cv.declared` | déclarée |
+| `phoneRhCandidatures.answers.none` | Pas de question ni de lettre pour cette offre. |
+| `phoneRhCandidatures.answers.yes` | Oui |
+| `phoneRhCandidatures.answers.no` | Non |
+| `phoneRhCandidatures.answers.empty` | Pas de réponse |
+| `phoneRhCandidatures.answers.letter` | Lettre de motivation |
+| `phoneRhCandidatures.answers.documents` | Documents |
+| `phoneRhCandidatures.answers.pdf` | PDF |
+| `phoneRhCandidatures.answers.cv` | CV.pdf |
+| `phoneRhCandidatures.answers.cvHint` | Le CV tel qu'envoyé |
+| `phoneRhCandidatures.answers.certificateHint` | Vérifiable en ligne |
+| `phoneRhCandidatures.answers.noDocument` | Aucun document joint. |
+| `phoneRhCandidatures.notes_.label` | Note pour l'équipe |
+| `phoneRhCandidatures.notes_.placeholder` | Ajouter une note pour l'équipe |
+| `phoneRhCandidatures.notes_.add` | Ajouter |
+| `phoneRhCandidatures.notes_.rule` | Les notes sont visibles par l'équipe de recrutement, jamais par le candidat. |
+| `phoneRhCandidatures.why.open` | Pourquoi ? |
+| `phoneRhCandidatures.why.none` | Score non calculé |
+| `phoneRhCandidatures.why.title` | Pourquoi {score} % ? |
+| `phoneRhCandidatures.why.band.veryHigh` | Très compatible · calcul fixe, pas une décision |
+| `phoneRhCandidatures.why.band.high` | Compatible · calcul fixe, pas une décision |
+| `phoneRhCandidatures.why.band.partial` | Partiellement compatible · calcul fixe, pas une décision |
+| `phoneRhCandidatures.why.band.low` | Peu compatible · calcul fixe, pas une décision |
+| `phoneRhCandidatures.why.bandShort.veryHigh` | Très compatible |
+| `phoneRhCandidatures.why.bandShort.high` | Compatible |
+| `phoneRhCandidatures.why.bandShort.partial` | Partiellement compatible |
+| `phoneRhCandidatures.why.bandShort.low` | Peu compatible |
+| `phoneRhCandidatures.why.criteria.skills_required` | Compétences requises |
+| `phoneRhCandidatures.why.criteria.skills_preferred` | Compétences souhaitées |
+| `phoneRhCandidatures.why.criteria.experience` | Expérience |
+| `phoneRhCandidatures.why.criteria.education` | Formation |
+| `phoneRhCandidatures.why.criteria.languages` | Langues |
+| `phoneRhCandidatures.why.criteria.location` | Lieu et mode de travail |
+| `phoneRhCandidatures.why.criteria.contract` | Contrat et disponibilité |
+| `phoneRhCandidatures.why.criteria.semantic` | Proximité du profil |
+| `phoneRhCandidatures.why.points` | {points} / {weight} |
+| `phoneRhCandidatures.why.locked` | Le détail critère par critère s'ouvre avec une formule qui comprend le score expliqué. |
+| `phoneRhCandidatures.why.notUsed` | Jamais utilisés : nom, genre, âge, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise. |
+| `phoneRhCandidatures.stage.label` | Étape |
+| `phoneRhCandidatures.stage.change` | Changer d'étape, actuellement {stage} |
+| `phoneRhCandidatures.tabs.label` | Rubriques du dossier |
+| `phoneRhCandidatures.tabs.resume` | Résumé |
+| `phoneRhCandidatures.tabs.cv` | CV |
+| `phoneRhCandidatures.tabs.reponses` | Réponses |
+| `phoneRhCandidatures.tabs.notes` | Notes |
+| `phoneRhCandidatures.tabs.historique` | Historique |
+| `phoneRhCandidatures.menu.open` | Plus d'actions pour {name} |
+| `phoneRhCandidatures.menu.stage` | Changer d'étape |
+| `phoneRhCandidatures.menu.stageHint` | Actuellement : {stage} |
+| `phoneRhCandidatures.menu.assign` | Répartir à un collègue |
+| `phoneRhCandidatures.menu.assignHint` | Suivi par {name} |
+| `phoneRhCandidatures.menu.assignNobody` | Personne ne suit encore ce dossier |
+| `phoneRhCandidatures.menu.plan` | Planifier un entretien |
+| `phoneRhCandidatures.menu.planned` | Déjà prévu : {date} |
+| `phoneRhCandidatures.menu.planHint` | Visio, sur place ou appel |
+| `phoneRhCandidatures.menu.document` | Demander un document |
+| `phoneRhCandidatures.menu.documentHint` | Diplôme, attestation, références |
+| `phoneRhCandidatures.menu.pdf` | Télécharger le PDF |
+| `phoneRhCandidatures.menu.pdfHint` | Fiche, CV, réponses, notes |
+| `phoneRhCandidatures.menu.reject` | Ne pas retenir |
+| `phoneRhCandidatures.menu.rejectHint` | Avec un message bienveillant |
+| `phoneRhCandidatures.assign.title` | Confier {name} à |
+| `phoneRhCandidatures.assign.hint` | La personne choisie suit le dossier et reçoit une notification. |
+| `phoneRhCandidatures.assign.me` | {name} (moi) |
+| `phoneRhCandidatures.assign.follows` | {count, plural, =0 {0 candidat suivi} one {# candidat suivi} other {# candidats suivis}} |
+| `phoneRhCandidatures.pdf.title` | Télécharger en PDF |
+| `phoneRhCandidatures.pdf.content` | Contenu |
+| `phoneRhCandidatures.pdf.parts.fiche` | Fiche et score expliqué |
+| `phoneRhCandidatures.pdf.parts.cv` | CV |
+| `phoneRhCandidatures.pdf.parts.reponses` | Réponses et documents |
+| `phoneRhCandidatures.pdf.parts.notes` | Notes et évaluations |
+| `phoneRhCandidatures.pdf.parts.historique` | Historique des décisions |
+| `phoneRhCandidatures.pdf.rule` | Le téléchargement est enregistré dans le journal de l'entreprise. |
+| `phoneRhCandidatures.pdf.download` | Télécharger |
+| `phoneRhCandidatures.pdf.sections.fiche` | Fiche et score expliqué |
+| `phoneRhCandidatures.pdf.sections.cv` | CV |
+| `phoneRhCandidatures.pdf.sections.reponses` | Réponses et documents |
+| `phoneRhCandidatures.pdf.sections.notes` | Notes et évaluations |
+| `phoneRhCandidatures.pdf.sections.historique` | Historique des décisions |
+| `phoneRhCandidatures.pdf.job` | Candidature : {job} |
+| `phoneRhCandidatures.pdf.score` | Compatibilité : {score} % (calcul fixe, pas une décision) |
+| `phoneRhCandidatures.pdf.criterion` | {name} : {points} / {weight} |
+| `phoneRhCandidatures.pdf.notUsed` | Jamais utilisés : nom, genre, âge, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise. |
+| `phoneRhCandidatures.pdf.criteria.skills_required` | Compétences requises |
+| `phoneRhCandidatures.pdf.criteria.skills_preferred` | Compétences souhaitées |
+| `phoneRhCandidatures.pdf.criteria.experience` | Expérience |
+| `phoneRhCandidatures.pdf.criteria.education` | Formation |
+| `phoneRhCandidatures.pdf.criteria.languages` | Langues |
+| `phoneRhCandidatures.pdf.criteria.location` | Lieu et mode de travail |
+| `phoneRhCandidatures.pdf.criteria.contract` | Contrat et disponibilité |
+| `phoneRhCandidatures.pdf.criteria.semantic` | Proximité du profil |
+| `phoneRhCandidatures.pdf.experience` | {title}, {company} ({from} – {to}) |
+| `phoneRhCandidatures.pdf.now` | aujourd'hui |
+| `phoneRhCandidatures.pdf.education` | {degree}, {school} |
+| `phoneRhCandidatures.pdf.skills` | Compétences : {list} |
+| `phoneRhCandidatures.pdf.verified` | {name} (vérifiée) |
+| `phoneRhCandidatures.pdf.empty` | Rien à signaler. |
+| `phoneRhCandidatures.pdf.letter` | Lettre de motivation |
+| `phoneRhCandidatures.pdf.documents` | Documents joints : {list} |
+| `phoneRhCandidatures.pdf.evaluation` | Évaluation de {name} : {comment} |
+| `phoneRhCandidatures.pdf.documentTitle` | Dossier de candidature · {name} |
+| `phoneRhCandidatures.pdf.footer` | Document confidentiel de {company}, généré par Jumanly. Réservé à l'équipe de recrutement. |
+| `phoneRhCandidatures.reject.title` | Ne pas retenir {name} |
+| `phoneRhCandidatures.reject.reason` | Motif · pour vous seulement |
+| `phoneRhCandidatures.reject.reasons.skills` | Compétences éloignées du poste |
+| `phoneRhCandidatures.reject.reasons.otherCandidate` | Autre candidat plus proche |
+| `phoneRhCandidatures.reject.reasons.other` | Disponibilité incompatible |
+| `phoneRhCandidatures.reject.reasons.positionClosed` | Poste pourvu |
+| `phoneRhCandidatures.reject.messageLabel` | Message envoyé |
+| `phoneRhCandidatures.reject.message` | Bonjour {name}, merci pour votre candidature au poste « {job} ». Nous avons choisi un autre profil cette fois. Votre profil reste visible pour nos prochaines offres. {company} |
+| `phoneRhCandidatures.reject.send` | Envoyer et ne pas retenir |
+| `phoneRhCandidatures.recruit.title` | Recruter {name} |
+| `phoneRhCandidatures.recruit.message` | Bonjour {name}, bonne nouvelle : nous vous retenons pour le poste « {job} ». Nous revenons vers vous très vite pour la suite. {company} |
+| `phoneRhCandidatures.recruit.send` | Envoyer et recruter |
+| `phoneRhCandidatures.document.kinds.diploma` | Diplôme |
+| `phoneRhCandidatures.document.kinds.certificate` | Attestation |
+| `phoneRhCandidatures.document.kinds.references` | Références |
+| `phoneRhCandidatures.document.name` | Document demandé |
+| `phoneRhCandidatures.document.due` | À envoyer avant le |
+| `phoneRhCandidatures.document.note` | Un mot (facultatif) |
+| `phoneRhCandidatures.document.send` | Envoyer la demande |
+| `phoneRhCandidatures.plan.back` | Retour |
+| `phoneRhCandidatures.plan.title` | Entretien avec {name} |
+| `phoneRhCandidatures.plan.day` | Jour |
+| `phoneRhCandidatures.plan.slots` | Créneau · libre pour vous |
+| `phoneRhCandidatures.plan.slotsWith` | Créneau · libres pour {names} et vous |
+| `phoneRhCandidatures.plan.time` | {hours} h {minutes} |
+| `phoneRhCandidatures.plan.full` | Plus de créneau libre ce jour-là : choisissez un autre jour. |
+| `phoneRhCandidatures.plan.how` | Comment |
+| `phoneRhCandidatures.plan.modes.video` | Visio |
+| `phoneRhCandidatures.plan.modes.onsite` | Sur place |
+| `phoneRhCandidatures.plan.modes.audio` | Appel |
+| `phoneRhCandidatures.plan.modesHint.video` | Lien envoyé avec l'invitation |
+| `phoneRhCandidatures.plan.modesHint.onsite` | À l'adresse de l'entreprise |
+| `phoneRhCandidatures.plan.modesHint.audio` | Appel dans l'app |
+| `phoneRhCandidatures.plan.link` | Lien de la visio (facultatif) |
+| `phoneRhCandidatures.plan.address` | Adresse |
+| `phoneRhCandidatures.plan.duration` | Durée |
+| `phoneRhCandidatures.plan.minutes` | {count, plural, =60 {1 h} other {# min}} |
+| `phoneRhCandidatures.plan.with` | Avec |
+| `phoneRhCandidatures.plan.send` | Envoyer l'invitation |
+| `phoneRhCandidatures.evaluation.back` | Retour |
+| `phoneRhCandidatures.evaluation.title` | Entretien de {name} |
+| `phoneRhCandidatures.evaluation.mode.video` | Visio |
+| `phoneRhCandidatures.evaluation.mode.onsite` | Sur place |
+| `phoneRhCandidatures.evaluation.mode.audio` | Appel |
+| `phoneRhCandidatures.evaluation.with` | avec {names} |
+| `phoneRhCandidatures.evaluation.score` | {value} / {max} |
+| `phoneRhCandidatures.evaluation.star` | {value} sur {max} |
+| `phoneRhCandidatures.evaluation.strengths` | Points forts |
+| `phoneRhCandidatures.evaluation.next` | Suite proposée |
+| `phoneRhCandidatures.evaluation.nextSteps.yes` | Poursuivre |
+| `phoneRhCandidatures.evaluation.nextSteps.maybe` | À revoir |
+| `phoneRhCandidatures.evaluation.nextSteps.no` | Ne pas poursuivre |
+| `phoneRhCandidatures.evaluation.save` | Enregistrer l'évaluation |
+| `phoneRhCandidatures.proposal.back` | Retour |
+| `phoneRhCandidatures.proposal.title` | Proposition à {name} |
+| `phoneRhCandidatures.proposal.salary` | Salaire mensuel (USD) |
+| `phoneRhCandidatures.proposal.start` | Date de début |
+| `phoneRhCandidatures.proposal.message` | Message |
+| `phoneRhCandidatures.proposal.default` | Bonjour {name}, toute l'équipe a apprécié nos échanges. Nous avons le plaisir de vous proposer le poste de {job}. Vous trouverez les détails ci-dessous. {company} |
+| `phoneRhCandidatures.proposal.rule` | La personne accepte, refuse ou pose une question depuis Messages. Vous êtes prévenu·e. |
+| `phoneRhCandidatures.proposal.send` | Envoyer la proposition |
+| `phoneRhCandidatures.proposal.error` | Vérifiez le salaire, la date et le message (10 caractères au moins). |
+| `phoneRhCandidatures.proposal.salaryLine` | Salaire mensuel : {amount} |
+| `phoneRhCandidatures.proposal.startLine` | Date de début : {date} |
+| `phoneRhCandidatures.sent.title` | Invitation envoyée |
+| `phoneRhCandidatures.sent.line` | {name} reçoit l'invitation dans Messages et par e-mail. |
+| `phoneRhCandidatures.sent.titleWith` | Entretien avec {name} |
+| `phoneRhCandidatures.sent.confirmed` | Le créneau est confirmé. |
+| `phoneRhCandidatures.sent.pending` | En attente de la réponse du candidat. |
+| `phoneRhCandidatures.sent.when` | {date} · {time} |
+| `phoneRhCandidatures.sent.calendar` | Ajouter à mon agenda |
+| `phoneRhCandidatures.sent.file` | Revenir à la fiche |
+| `phoneRhCandidatures.sent.all` | Voir tous les entretiens |
+| `phoneRhCandidatures.calendar.summary` | Entretien avec {name} · {job} |
+
+---
+
+### Modèle B recruteur · Talents au téléphone
+
+*Lot M6 (docs/modele-b-recruteur, mobile/captures section 06) : découvrir des talents visibles pour ses offres, le vivier, les propositions envoyées, le réseau, et le profil d'un talent vu par le recruteur. Orbi recommande, le recruteur décide. Seuls les talents qui ont rendu leur profil visible apparaissent ; chaque consultation est enregistrée.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhTalents.tabs.label` | Rubriques des talents |
+| `phoneRhTalents.tabs.decouvrir` | Découvrir |
+| `phoneRhTalents.tabs.vivier` | Vivier |
+| `phoneRhTalents.tabs.propositions` | Propositions |
+| `phoneRhTalents.tabs.reseau` | Réseau |
+| `phoneRhTalents.offers.label` | Offres comparées |
+| `phoneRhTalents.search.results` | {count, plural, one {# talent} other {# talents}} |
+| `phoneRhTalents.offers.all` | Toutes mes offres |
+| `phoneRhTalents.discover.line` | {count, plural, =0 {Aucun talent visible} one {# talent visible} other {# talents visibles}} · mis à jour aujourd'hui |
+| `phoneRhTalents.discover.empty` | Aucun talent visible pour ces offres pour l'instant. Cherchez par compétence, métier ou ville, ou publiez une offre avec ses compétences. |
+| `phoneRhTalents.discover.locked` | La recherche de talents n'est pas comprise dans votre formule. Vos candidatures restent complètes. |
+| `phoneRhTalents.discover.lockedPlan` | Disponible dès {plan}. |
+| `phoneRhTalents.discover.seePlans` | Voir les formules |
+| `phoneRhTalents.discover.note` | Classés par le score de compatibilité avec vos offres, calculé de la même façon pour tous. Jamais l'âge, la photo, la nationalité ni la situation familiale. |
+| `phoneRhTalents.card.years` | {years, plural, =0 {débutant·e} one {# an} other {# ans}} |
+| `phoneRhTalents.card.anonymous` | Profil anonyme |
+| `phoneRhTalents.card.inPool` | Dans votre vivier |
+| `phoneRhTalents.card.pending` | Proposition envoyée |
+| `phoneRhTalents.card.seen` | Proposition vue, sans réponse |
+| `phoneRhTalents.card.accepted` | Proposition acceptée |
+| `phoneRhTalents.card.percent` | {score} % |
+| `phoneRhTalents.pools.count` | {count, plural, =0 {Aucun talent} one {# talent} other {# talents}} |
+| `phoneRhTalents.pools.new` | Nouvelle liste |
+| `phoneRhTalents.pools.nameLabel` | Nom de la liste |
+| `phoneRhTalents.pools.namePlaceholder` | Ex. : Finance 2027 |
+| `phoneRhTalents.pools.create` | Créer la liste |
+| `phoneRhTalents.pools.empty` | Aucune liste pour l'instant. Créez-en une, puis ajoutez des talents depuis leur profil. |
+| `phoneRhTalents.pools.notePrivate` | Votre vivier personnel : les talents ne savent pas dans quelle liste ils sont. Le vivier partagé avec l'équipe vient avec {plan}. |
+| `phoneRhTalents.pools.notePrivateNoPlan` | Votre vivier personnel : les talents ne savent pas dans quelle liste ils sont. |
+| `phoneRhTalents.pools.noteShared` | Vos listes et celles partagées avec l'équipe. Les talents ne savent pas dans quelle liste ils sont. |
+| `phoneRhTalents.pools.locked` | Le vivier n'est pas compris dans votre formule. |
+| `phoneRhTalents.pool.back` | Vivier |
+| `phoneRhTalents.pool.private` | visible par vous seul·e |
+| `phoneRhTalents.pool.team` | visible par votre équipe |
+| `phoneRhTalents.pool.org` | visible par toute l'entreprise |
+| `phoneRhTalents.pool.empty` | Cette liste est vide. Ajoutez un talent depuis son profil. |
+| `phoneRhTalents.pool.remove` | Retirer {name} de la liste |
+| `phoneRhTalents.pool.origin.applied` | A candidaté à « {job} » |
+| `phoneRhTalents.pool.origin.contact` | A accepté une proposition |
+| `phoneRhTalents.pool.origin.search` | Trouvé·e par recherche |
+| `phoneRhTalents.pool.options` | Options de la liste |
+| `phoneRhTalents.pool.rename` | Nom de la liste |
+| `phoneRhTalents.pool.renameSave` | Enregistrer le nom |
+| `phoneRhTalents.pool.delete` | Supprimer la liste |
+| `phoneRhTalents.pool.deleteNote` | Les talents ne sont pas prévenus. Leur profil reste dans vos autres listes. |
+| `phoneRhTalents.proposals.intro` | Les offres que vous avez proposées à des talents |
+| `phoneRhTalents.proposals.note` | Quand un talent accepte, vous pouvez échanger avec lui et sa candidature arrive dans Candidatures, comme les autres. Candidater reste gratuit pour lui. |
+| `phoneRhTalents.proposals.empty` | Aucune proposition envoyée pour l'instant. Proposez une offre depuis le profil d'un talent. |
+| `phoneRhTalents.proposals.when` | {job} · {when} |
+| `phoneRhTalents.proposals.noJob` | Sans offre précise |
+| `phoneRhTalents.proposals.state.waiting` | Envoyée, pas encore vue |
+| `phoneRhTalents.proposals.state.seen` | Vue, sans réponse |
+| `phoneRhTalents.proposals.state.accepted` | Acceptée : la conversation est ouverte |
+| `phoneRhTalents.proposals.state.declined` | Déclinée |
+| `phoneRhTalents.proposals.state.expired` | Expirée sans réponse |
+| `phoneRhTalents.proposals.remind` | Relancer |
+| `phoneRhTalents.network.received` | Invitations reçues |
+| `phoneRhTalents.network.accept` | Accepter |
+| `phoneRhTalents.network.ignore` | Ignorer l'invitation de {name} |
+| `phoneRhTalents.network.know` | À connaître |
+| `phoneRhTalents.network.connect` | Se connecter |
+| `phoneRhTalents.network.relations` | Mes relations |
+| `phoneRhTalents.network.filters` | Filtrer mes relations |
+| `phoneRhTalents.network.filter.toutes` | Toutes |
+| `phoneRhTalents.network.filter.talents` | Talents |
+| `phoneRhTalents.network.filter.rh` | Recruteurs et RH |
+| `phoneRhTalents.network.kind.talent` | Talent |
+| `phoneRhTalents.network.kind.rh` | RH |
+| `phoneRhTalents.network.mutual` | {count, plural, one {# relation en commun} other {# relations en commun}} |
+| `phoneRhTalents.network.empty` | Aucune relation pour l'instant. Connectez-vous aux talents et aux recruteurs que vous croisez. |
+| `phoneRhTalents.network.none` | Personne à suggérer pour l'instant. |
+| `phoneRhTalents.network.write` | Écrire à {name} |
+| `phoneRhTalents.profile.back` | Retour |
+| `phoneRhTalents.profile.more` | Plus d'actions pour {name} |
+| `phoneRhTalents.profile.active` | actif·ve {when} |
+| `phoneRhTalents.profile.mobility` | Prêt·e à venir à {city} |
+| `phoneRhTalents.profile.connect` | Se connecter |
+| `phoneRhTalents.profile.connectSent` | Invitation envoyée |
+| `phoneRhTalents.profile.connected` | En relation |
+| `phoneRhTalents.profile.match.haut` | Très compatible |
+| `phoneRhTalents.profile.match.bon` | Compatible |
+| `phoneRhTalents.profile.match.moyen` | À regarder de plus près |
+| `phoneRhTalents.profile.match.with` | avec {job} |
+| `phoneRhTalents.profile.match.none` | Aucune offre en ligne à comparer. |
+| `phoneRhTalents.profile.why` | Pourquoi ? |
+| `phoneRhTalents.profile.proposal` | Proposition {job} · {state} |
+| `phoneRhTalents.profile.tabs.label` | Rubriques du profil |
+| `phoneRhTalents.profile.tabs.profil` | Profil |
+| `phoneRhTalents.profile.tabs.parcours` | Parcours |
+| `phoneRhTalents.profile.tabs.realisations` | Réalisations |
+| `phoneRhTalents.profile.skills` | Compétences |
+| `phoneRhTalents.profile.verified` | Vérifiée |
+| `phoneRhTalents.profile.declared` | Déclarée |
+| `phoneRhTalents.profile.noSkills` | Aucune compétence indiquée. |
+| `phoneRhTalents.profile.interests` | Ce qui l'intéresse |
+| `phoneRhTalents.profile.languages` | Langues |
+| `phoneRhTalents.profile.experience` | Expérience |
+| `phoneRhTalents.profile.expLine` | {company} · {duration} |
+| `phoneRhTalents.profile.expNoCompany` | {duration} |
+| `phoneRhTalents.profile.duration` | {months, plural, =0 {moins d'un mois} one {# mois} other {{years, plural, =0 {# mois} one {# an} other {# ans}}}} |
+| `phoneRhTalents.profile.noExperience` | Aucune expérience indiquée. |
+| `phoneRhTalents.profile.education` | Formation |
+| `phoneRhTalents.profile.eduLine` | {degree}, {school} |
+| `phoneRhTalents.profile.eduYear` | {degree}, {school} ({year}) |
+| `phoneRhTalents.profile.noEducation` | Aucune formation indiquée. |
+| `phoneRhTalents.profile.projects` | Projets |
+| `phoneRhTalents.profile.certificates` | Attestations Jumanly |
+| `phoneRhTalents.profile.certificate` | {course} · {date} |
+| `phoneRhTalents.profile.noWorks` | Aucune réalisation rendue visible. |
+| `phoneRhTalents.profile.summaryOnly` | Résumé du profil : le détail s'ouvre quand la personne candidate ou accepte une proposition. |
+| `phoneRhTalents.profile.logged` | Consultation enregistrée. Jumanly ne montre ni l'âge, ni la photo, ni la nationalité, ni la situation familiale. |
+| `phoneRhTalents.profile.pool` | Ajouter {name} au vivier |
+| `phoneRhTalents.profile.propose` | Proposer une offre |
+| `phoneRhTalents.profile.write` | Écrire à {name} |
+| `phoneRhTalents.profile.seeApplication` | Voir sa candidature |
+| `phoneRhTalents.profile.pending` | Proposition en attente |
+| `phoneRhTalents.profile.blocked` | Trop de profils ouverts en peu de temps : la consultation reprend dans un moment. |
+| `phoneRhTalents.propose.title` | Proposer une offre à {name} |
+| `phoneRhTalents.propose.sub` | La personne choisit de candidater ou non. |
+| `phoneRhTalents.propose.offer` | Offre |
+| `phoneRhTalents.propose.compatible` | {score} % compatible |
+| `phoneRhTalents.propose.later` | Score calculé à l'envoi |
+| `phoneRhTalents.propose.message` | Message |
+| `phoneRhTalents.propose.default` | Bonjour {firstName}, votre profil correspond à notre offre « {job} ». Si elle vous intéresse, vous pouvez candidater en un geste, gratuitement. {sender}, {company} |
+| `phoneRhTalents.propose.send` | Envoyer la proposition |
+| `phoneRhTalents.propose.noOffer` | Publiez une offre pour pouvoir la proposer. |
+| `phoneRhTalents.pool.sheet` | Ajouter {name} au vivier |
+| `phoneRhTalents.pool.people` | {count, plural, =0 {Personne} one {# personne} other {# personnes}} |
+| `phoneRhTalents.pool.newList` | Ou une nouvelle liste |
+| `phoneRhTalents.pool.save` | Enregistrer |
+| `phoneRhTalents.menu.share` | Partager le profil à un collègue |
+| `phoneRhTalents.menu.shareSub` | Votre collègue le reçoit dans ses notifications |
+| `phoneRhTalents.menu.pdf` | Télécharger le profil en PDF |
+| `phoneRhTalents.menu.pdfSub` | Le téléchargement est enregistré |
+| `phoneRhTalents.menu.hide` | Masquer ce profil de mes suggestions |
+| `phoneRhTalents.menu.hideSub` | Il reste visible par recherche |
+| `phoneRhTalents.menu.report` | Signaler ce profil |
+| `phoneRhTalents.menu.reportSub` | L'équipe Jumanly vérifie sous 24 h |
+| `phoneRhTalents.share.title` | Partager le profil |
+| `phoneRhTalents.share.who` | À qui ? |
+| `phoneRhTalents.share.send` | Partager |
+| `phoneRhTalents.share.none` | Aucun collègue dans l'équipe pour l'instant. |
+| `phoneRhTalents.report.title` | Signaler ce profil |
+| `phoneRhTalents.report.note` | La personne ne saura pas qui l'a signalée. L'équipe de modération regarde chaque signalement. |
+| `phoneRhTalents.report.reason.impersonation` | Se fait passer pour quelqu'un d'autre |
+| `phoneRhTalents.report.reason.inappropriate` | Contenu inapproprié |
+| `phoneRhTalents.report.reason.spam` | Indésirable ou publicité |
+| `phoneRhTalents.report.reason.harassment` | Harcèlement ou propos blessants |
+| `phoneRhTalents.report.reason.other` | Autre raison |
+| `phoneRhTalents.report.send` | Envoyer le signalement |
+| `phoneRhTalents.ok.proposee` | Proposition envoyée. La personne a {days} jours pour répondre. |
+| `phoneRhTalents.ok.vivier` | Vivier enregistré. |
+| `phoneRhTalents.ok.masque` | Profil masqué de vos suggestions. |
+| `phoneRhTalents.ok.partage` | Profil partagé. |
+| `phoneRhTalents.ok.signale` | Merci, l'équipe Jumanly vérifie sous 24 h. |
+| `phoneRhTalents.ok.invitation` | Invitation envoyée. |
+| `phoneRhTalents.ok.relation` | Vous êtes maintenant en relation. |
+| `phoneRhTalents.ok.ignoree` | Invitation ignorée. |
+| `phoneRhTalents.ok.liste` | Liste créée. |
+| `phoneRhTalents.ok.retire` | Retiré de la liste. |
+| `phoneRhTalents.ok.renomme` | Liste renommée. |
+| `phoneRhTalents.ok.supprime` | Liste supprimée. |
+| `phoneRhTalents.ok.relance` | Relance envoyée. |
+| `phoneRhTalents.error.quota` | Votre organisation a utilisé ses demandes de mise en relation ce mois-ci. |
+| `phoneRhTalents.error.locked` | Les propositions aux talents ne sont pas comprises dans votre formule. |
+| `phoneRhTalents.error.pending` | Une proposition attend déjà sa réponse. |
+| `phoneRhTalents.error.cooldown` | La personne a décliné récemment : vous pourrez proposer à nouveau plus tard. |
+| `phoneRhTalents.error.blocked` | Cette personne ne reçoit pas de propositions. |
+| `phoneRhTalents.error.connected` | Cette personne a déjà candidaté ou accepté une proposition : écrivez-lui. |
+| `phoneRhTalents.error.invalid` | Le message doit faire au moins {min} caractères. |
+| `phoneRhTalents.error.other` | Ça n'a pas marché. Réessayez dans un instant. |
+| `phoneRhTalents.pdf.title` | Profil de talent |
+| `phoneRhTalents.pdf.footer` | Profil consulté sur Jumanly par {company}. Téléchargement enregistré. |
+
+### Modèle B recruteur · Messages, notifications et Orbi au téléphone
+
+*Lot M7 (docs/modele-b-recruteur, mobile/captures sections 07 et 10) : les conversations avec les candidats, le réseau et l'équipe, les notifications du recruteur et Orbi. Chaque conversation avec un candidat reste liée à sa candidature. Orbi recommande, le recruteur décide : il n'envoie rien tout seul.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhMessages.title` | Messages |
+| `phoneRhMessages.new` | Nouveau message |
+| `phoneRhMessages.search.label` | Chercher dans les messages |
+| `phoneRhMessages.search.placeholder` | Nom, offre, mot du message |
+| `phoneRhMessages.search.cancel` | Annuler |
+| `phoneRhMessages.search.clear` | Effacer la recherche |
+| `phoneRhMessages.search.in` | Chercher dans |
+| `phoneRhMessages.search.scope.tout` | Tout |
+| `phoneRhMessages.search.scope.candidats` | Candidats |
+| `phoneRhMessages.search.scope.reseau` | Réseau |
+| `phoneRhMessages.search.scope.equipe` | Équipe |
+| `phoneRhMessages.search.none` | Aucune conversation ne correspond à « {q} ». |
+| `phoneRhMessages.tabs.label` | Conversations |
+| `phoneRhMessages.tabs.candidats` | Candidats |
+| `phoneRhMessages.tabs.reseau` | Réseau |
+| `phoneRhMessages.tabs.equipe` | Équipe |
+| `phoneRhMessages.tabs.unread` | {count, plural, one {# conversation non lue} other {# conversations non lues}} |
+| `phoneRhMessages.intro.candidats` | Chaque conversation reste liée à la candidature. |
+| `phoneRhMessages.intro.reseau` | Vos relations et les talents qui ont accepté une de vos offres. |
+| `phoneRhMessages.intro.equipe` | Votre équipe de recrutement chez {org}. |
+| `phoneRhMessages.empty.candidats` | Aucune conversation avec un candidat pour l'instant. Écrivez depuis la fiche d'une candidature. |
+| `phoneRhMessages.empty.reseau` | Aucune conversation avec votre réseau pour l'instant. |
+| `phoneRhMessages.empty.equipe` | Aucune conversation avec votre équipe. Appuyez sur + pour écrire à un collègue. |
+| `phoneRhMessages.row.you` | Vous : {text} |
+| `phoneRhMessages.row.unread` | {count, plural, one {# message non lu} other {# messages non lus}} |
+| `phoneRhMessages.row.noMessage` | Pas encore de message |
+| `phoneRhMessages.row.attachment` | Pièce jointe |
+| `phoneRhMessages.context.application` | {job} · {stage} |
+| `phoneRhMessages.context.proposal` | Proposition acceptée · {job} |
+| `phoneRhMessages.context.proposalNoJob` | Proposition acceptée |
+| `phoneRhMessages.context.relation` | Relation · {headline} |
+| `phoneRhMessages.context.relationOnly` | Relation |
+| `phoneRhMessages.role.org_owner` | Administrateur de la page |
+| `phoneRhMessages.role.org_admin` | Administrateur de la page |
+| `phoneRhMessages.role.recruiter` | Recruteur |
+| `phoneRhMessages.role.hiring_manager` | Manager |
+| `phoneRhMessages.role.viewer` | Lecture seule |
+| `phoneRhMessages.role.partner_manager` | Partenaire |
+| `phoneRhMessages.compose.title` | Nouveau message |
+| `phoneRhMessages.compose.note` | À un candidat ou à votre équipe. Pour un talent, passez par « Proposer une offre ». |
+| `phoneRhMessages.compose.candidate` | Candidat·e · {job} |
+| `phoneRhMessages.compose.team` | Équipe · {role} |
+| `phoneRhMessages.compose.empty` | Aucun candidat ni collègue à qui écrire pour l'instant. |
+| `phoneRhMessages.compose.cancel` | Annuler |
+| `phoneRhMessages.thread.back` | Retour aux messages |
+| `phoneRhMessages.thread.more` | Plus d'actions sur la conversation |
+| `phoneRhMessages.thread.open` | Ouvrir |
+| `phoneRhMessages.thread.openLabel` | Ouvrir : {what} |
+| `phoneRhMessages.thread.input` | Votre message |
+| `phoneRhMessages.thread.send` | Envoyer |
+| `phoneRhMessages.thread.empty` | Aucun message pour l'instant. Écrivez le premier. |
+| `phoneRhMessages.thread.readOnly` | Vous pouvez lire cette conversation ; seuls les recruteurs de l'équipe y répondent. |
+| `phoneRhMessages.thread.blocked` | Cette personne ne reçoit plus de messages de votre entreprise. |
+| `phoneRhMessages.thread.left` | Cette personne ne fait plus partie de l'équipe. |
+| `phoneRhMessages.thread.withdrawn` | Message retiré. |
+| `phoneRhMessages.thread.document` | Document demandé : {name} |
+| `phoneRhMessages.thread.file` | Fichier : {name} |
+| `phoneRhMessages.thread.interview` | Entretien · {when} |
+| `phoneRhMessages.thread.interviewPending` | Entretien proposé · en attente du choix du créneau |
+| `phoneRhMessages.thread.interviewState.confirmed` | invitation acceptée |
+| `phoneRhMessages.thread.interviewState.pending` | en attente de réponse |
+| `phoneRhMessages.thread.interviewState.reschedule` | d'autres moments demandés |
+| `phoneRhMessages.thread.interviewState.declined` | invitation déclinée |
+| `phoneRhMessages.thread.interviewState.canceled` | entretien annulé |
+| `phoneRhMessages.thread.interviewState.done` | entretien passé |
+| `phoneRhMessages.thread.interviewState.no_show` | absence à l'entretien |
+| `phoneRhMessages.thread.mode.video` | Visio |
+| `phoneRhMessages.thread.mode.onsite` | Sur place |
+| `phoneRhMessages.thread.mode.audio` | Par appel |
+| `phoneRhMessages.chips.label` | Aides à l'écriture |
+| `phoneRhMessages.chips.orbi` | Orbi propose |
+| `phoneRhMessages.chips.templates` | Modèles |
+| `phoneRhMessages.chips.attach` | Joindre |
+| `phoneRhMessages.orbi.thinking` | Orbi prépare une réponse… |
+| `phoneRhMessages.orbi.ready` | Orbi a préparé une réponse : relisez-la avant de l'envoyer. |
+| `phoneRhMessages.orbi.failed` | Orbi n'a pas pu proposer de réponse. Écrivez la vôtre. |
+| `phoneRhMessages.orbi.noCredits` | Les crédits Orbi de l'entreprise sont utilisés ce mois-ci. |
+| `phoneRhMessages.orbi.locked` | La formule de l'entreprise ne comprend pas les réponses d'Orbi. |
+| `phoneRhMessages.templates.title` | Modèles de messages |
+| `phoneRhMessages.templates.empty` | Aucun modèle pour l'instant. |
+| `phoneRhMessages.templates.manage` | Gérer mes modèles |
+| `phoneRhMessages.templates.where` | Dans Compte · Paramètres |
+| `phoneRhMessages.attach.title` | Joindre |
+| `phoneRhMessages.attach.interview` | Une invitation à un entretien |
+| `phoneRhMessages.attach.interviewLine` | Jour, heure, visio ou sur place |
+| `phoneRhMessages.attach.document` | Une demande de document |
+| `phoneRhMessages.attach.documentLine` | Attestation, diplôme, projets |
+| `phoneRhMessages.attach.file` | Un fichier |
+| `phoneRhMessages.attach.fileLine` | PDF ou image, 4 Mo au plus |
+| `phoneRhMessages.attach.cancel` | Annuler |
+| `phoneRhMessages.attach.sending` | Envoi du fichier… |
+| `phoneRhMessages.document.title` | Demander un document |
+| `phoneRhMessages.document.name` | Document demandé |
+| `phoneRhMessages.document.namePlaceholder` | Par exemple : attestation de travail |
+| `phoneRhMessages.document.due` | À envoyer avant le |
+| `phoneRhMessages.document.note` | Message (facultatif) |
+| `phoneRhMessages.document.send` | Envoyer la demande |
+| `phoneRhMessages.menu.title` | Conversation |
+| `phoneRhMessages.menu.file` | Ouvrir la fiche de la candidature |
+| `phoneRhMessages.menu.profile` | Voir le profil |
+| `phoneRhMessages.menu.mute` | Couper les notifications |
+| `phoneRhMessages.menu.unmute` | Réactiver les notifications |
+| `phoneRhMessages.menu.pin` | Épingler pour l'équipe |
+| `phoneRhMessages.menu.unpin` | Désépingler |
+| `phoneRhMessages.menu.pinLine` | En haut de la liste, pour toute l'équipe. |
+| `phoneRhMessages.menu.hide` | Retirer de la messagerie de l'équipe |
+| `phoneRhMessages.menu.hideLine` | La personne garde tous les messages ; rien n'est effacé. |
+| `phoneRhMessages.ok.document` | Demande de document envoyée. |
+| `phoneRhMessages.ok.file` | Fichier envoyé. |
+| `phoneRhMessages.ok.mute` | Notifications coupées pour cette conversation. |
+| `phoneRhMessages.ok.unmute` | Notifications réactivées. |
+| `phoneRhMessages.ok.pin` | Conversation épinglée en haut de la liste. |
+| `phoneRhMessages.ok.unpin` | Conversation désépinglée. |
+| `phoneRhMessages.ok.hide` | Conversation retirée de la messagerie de l'équipe. |
+| `phoneRhMessages.error.invalid` | Ce message ne peut pas être envoyé. Vérifiez-le et réessayez. |
+| `phoneRhMessages.error.blocked` | Cette personne ne reçoit plus de messages de votre entreprise. |
+| `phoneRhMessages.error.trop` | Trop de messages d'un coup. Attendez un instant. |
+| `phoneRhMessages.error.file` | Ce fichier ne peut pas être envoyé : un PDF ou une image de 4 Mo au plus. |
+| `phoneRhMessages.error.document` | Indiquez le document demandé et une date à venir. |
+| `phoneRhMessages.error.other` | Cela n'a pas fonctionné. Réessayez dans un instant. |
+| `phoneRhNotifs.back` | Retour |
+| `phoneRhNotifs.title` | Notifications |
+| `phoneRhNotifs.readAll` | Tout marquer comme lu |
+| `phoneRhNotifs.settings` | Réglage des notifications |
+| `phoneRhNotifs.tabs.label` | Catégories de notifications |
+| `phoneRhNotifs.tabs.tout` | Tout |
+| `phoneRhNotifs.tabs.candidatures` | Candidatures |
+| `phoneRhNotifs.tabs.entretiens` | Entretiens |
+| `phoneRhNotifs.tabs.reseau` | Réseau |
+| `phoneRhNotifs.unreadCount` | {count, plural, one {# non lue} other {# non lues}} |
+| `phoneRhNotifs.group.today` | Aujourd'hui |
+| `phoneRhNotifs.group.yesterday` | Hier |
+| `phoneRhNotifs.group.thisWeek` | Cette semaine |
+| `phoneRhNotifs.group.earlier` | Plus tôt |
+| `phoneRhNotifs.unread` | Non lue |
+| `phoneRhNotifs.empty` | Rien de nouveau ici. |
+| `phoneRhNotifs.allRead` | Toutes les notifications sont lues. |
+| `phoneRhNotifs.ago.now` | à l'instant |
+| `phoneRhNotifs.ago.minutes` | il y a {count} min |
+| `phoneRhNotifs.ago.hours` | il y a {count} h |
+| `phoneRhNotifs.ago.yesterday` | hier |
+| `phoneRhOrbi.back` | Retour |
+| `phoneRhOrbi.title` | Orbi |
+| `phoneRhOrbi.line` | Assistant de recrutement · {count, plural, one {# crédit} other {# crédits}} |
+| `phoneRhOrbi.lineNoCredits` | Assistant de recrutement |
+| `phoneRhOrbi.clear` | Effacer |
+| `phoneRhOrbi.clearLabel` | Commencer une nouvelle conversation avec Orbi |
+| `phoneRhOrbi.hello` | Bonjour, je suis Orbi. Je vous aide à lire vos candidatures dans un bon ordre, préparer un entretien ou écrire un message. Je propose, vous décidez : je ne rejette personne et je n'envoie rien. |
+| `phoneRhOrbi.alsoAsk` | Vous pouvez aussi demander |
+| `phoneRhOrbi.q1` | Que dois-je faire aujourd'hui ? |
+| `phoneRhOrbi.q2` | Qui recevoir en premier ? |
+| `phoneRhOrbi.q3` | Qui attend une réponse de ma part ? |
+| `phoneRhOrbi.q4` | Des talents à proposer pour mes offres ? |
+| `phoneRhOrbi.input` | Écrire à Orbi |
+| `phoneRhOrbi.placeholder` | Écrire à Orbi… |
+| `phoneRhOrbi.send` | Envoyer |
+| `phoneRhOrbi.thinking` | Orbi réfléchit |
+| `phoneRhOrbi.failed` | Orbi n'a pas pu répondre. Réessayez dans un instant. |
+| `phoneRhOrbi.invalid` | Écrivez au moins deux lettres. |
+| `phoneRhOrbi.decide` | Orbi recommande, vous décidez. |
+| `phoneRhOrbi.full` | Ouvrir la conversation complète |
+| `phoneRhOrbi.fact.waiting.none` | Personne n'attend de réponse de votre part. Bravo. |
+| `phoneRhOrbi.fact.waiting.some` | {count, plural, one {Une personne attend} other {# personnes attendent}} une réponse de votre part : {names}. |
+| `phoneRhOrbi.fact.waiting.action` | Voir les conversations |
+| `phoneRhOrbi.fact.unread.none` | Vous avez tout lu. |
+| `phoneRhOrbi.fact.unread.some` | {count, plural, one {Une conversation non lue} other {# conversations non lues}} : {names}. |
+| `phoneRhOrbi.fact.first.none` | Aucune candidature à recevoir pour l'instant. |
+| `phoneRhOrbi.fact.first.some` | Selon le score de compatibilité, calculé de la même façon pour tous, {count, plural, one {la candidature à regarder en premier est celle-ci} other {voici les # candidatures à regarder en premier}}. Personne n'est écarté. |
+| `phoneRhOrbi.fact.first.locked` | Votre formule ne comprend pas les scores de compatibilité : les candidatures sont dans l'ordre d'arrivée. |
+| `phoneRhOrbi.fact.first.action` | Voir les candidatures |
+| `phoneRhOrbi.fact.firstCard` | {score} % · {job} |
+| `phoneRhOrbi.fact.firstCardNoScore` | {job} |
+| `phoneRhOrbi.fact.propose.none` | Aucun talent visible ne correspond à vos offres pour l'instant. |
+| `phoneRhOrbi.fact.propose.some` | {count, plural, one {Un talent visible pourrait} other {# talents visibles pourraient}} convenir à vos offres. Vous décidez à qui proposer une offre. |
+| `phoneRhOrbi.fact.propose.locked` | Votre formule ne comprend pas la recherche de talents. |
+| `phoneRhOrbi.fact.propose.action` | Ouvrir Talents |
+| `phoneRhOrbi.fact.proposeCard` | {score} % · {job} |
+| `phoneRhOrbi.fact.today.none` | Rien d'urgent aujourd'hui. |
+| `phoneRhOrbi.fact.today.some` | Aujourd'hui : {items}. |
+| `phoneRhOrbi.fact.today.interviews` | {count, plural, one {# entretien} other {# entretiens}} |
+| `phoneRhOrbi.fact.today.waiting` | {count, plural, one {# personne attend} other {# personnes attendent}} une réponse |
+| `phoneRhOrbi.fact.today.fresh` | {count, plural, one {# nouvelle candidature} other {# nouvelles candidatures}} |
+| `phoneRhOrbi.fact.today.action` | Ouvrir les candidatures |
+
+### Modèle B recruteur · Compte, entreprise et changer de profil au téléphone
+
+*Lot M8 (docs/modele-b-recruteur, mobile/captures sections 08, 09 et 11) : le compte ouvert par l'avatar, le profil recruteur, les statistiques, l'équipe, la formule en lecture seule, les réglages, l'aide par e-mail, les pages entreprise et le changement de profil. Aucun numéro de téléphone de Jumanly : l'aide passe par e-mail.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhCompte.title` | Compte |
+| `phoneRhCompte.back` | Fil |
+| `phoneRhCompte.backCompte` | Compte |
+| `phoneRhCompte.notifications` | {count, plural, =0 {Notifications} one {Notifications, # non lue} other {Notifications, # non lues}} |
+| `phoneRhCompte.card.label` | Voir mon profil recruteur |
+| `phoneRhCompte.card.attached` | Rattaché·e à {org} |
+| `phoneRhCompte.card.pending` | Rattachement à {org} en attente |
+| `phoneRhCompte.card.independent` | Recrute en indépendant·e |
+| `phoneRhCompte.switch.title` | Changer de profil |
+| `phoneRhCompte.switch.line` | Recruteur, talent ou entreprise |
+| `phoneRhCompte.switch.note` | Un seul compte, trois façons de se présenter. Chaque profil garde ses messages. |
+| `phoneRhCompte.switch.recruiter` | Profil recruteur · {org} |
+| `phoneRhCompte.switch.current` | Profil actuel |
+| `phoneRhCompte.switch.talentName` | {name} · talent |
+| `phoneRhCompte.switch.talent` | Votre profil de candidat, invisible pour {org} |
+| `phoneRhCompte.switch.companyAdmin` | Agir au nom de l'entreprise : publier, répondre |
+| `phoneRhCompte.switch.companyOther` | Réservé à l'administrateur, {admin} · voir la page |
+| `phoneRhCompte.switch.companyOtherNoAdmin` | Réservé à l'administrateur · voir la page |
+| `phoneRhCompte.switch.otherOrg` | Profil recruteur · {org} |
+| `phoneRhCompte.switch.cancel` | Annuler |
+| `phoneRhCompte.section.activity` | Mon activité |
+| `phoneRhCompte.section.settings` | Réglages |
+| `phoneRhCompte.row.profile` | Mon profil recruteur |
+| `phoneRhCompte.row.profileLine` | Ce que voient les talents |
+| `phoneRhCompte.row.stats` | Mes statistiques |
+| `phoneRhCompte.row.statsLine` | Réponses, délais, entretiens |
+| `phoneRhCompte.row.saved` | Publications enregistrées |
+| `phoneRhCompte.row.savedLine` | {count, plural, =0 {Aucune pour l'instant} one {# publication} other {# publications}} |
+| `phoneRhCompte.row.posts` | Mes publications |
+| `phoneRhCompte.row.postsLine` | Les modifier ou les supprimer, même anciennes |
+| `phoneRhCompte.row.page` | Page de l'entreprise |
+| `phoneRhCompte.row.pageVerified` | Vérifiée · administrée par {admin} |
+| `phoneRhCompte.row.pageVerifiedNoAdmin` | Vérifiée |
+| `phoneRhCompte.row.pageToVerify` | Vérification en cours · administrée par {admin} |
+| `phoneRhCompte.row.pageToVerifyNoAdmin` | Vérification en cours |
+| `phoneRhCompte.row.team` | Équipe de recrutement |
+| `phoneRhCompte.row.teamLine` | {count, plural, one {# personne} other {# personnes}} |
+| `phoneRhCompte.row.plan` | Formule et usage |
+| `phoneRhCompte.row.planLine` | {plan} · gérée par l'administrateur |
+| `phoneRhCompte.row.planLineAdmin` | {plan} · gérée sur ordinateur |
+| `phoneRhCompte.row.notifications` | Notifications |
+| `phoneRhCompte.row.notificationsLine` | Candidatures, entretiens, messages |
+| `phoneRhCompte.row.templates` | Modèles de messages |
+| `phoneRhCompte.row.templatesLine` | Réponses prêtes à relire |
+| `phoneRhCompte.row.privacy` | Confidentialité et données |
+| `phoneRhCompte.row.privacyLine` | Journal des consultations, vos données |
+| `phoneRhCompte.row.language` | Langue |
+| `phoneRhCompte.row.languageLine` | Français |
+| `phoneRhCompte.row.help` | Aide et contact |
+| `phoneRhCompte.row.helpLine` | Par e-mail uniquement |
+| `phoneRhCompte.row.logout` | Se déconnecter |
+| `phoneRhCompte.logout.title` | Se déconnecter ? |
+| `phoneRhCompte.logout.text` | Vos candidatures et messages vous attendent à la prochaine connexion. |
+| `phoneRhCompte.logout.confirm` | Se déconnecter |
+| `phoneRhCompte.logout.cancel` | Annuler |
+| `phoneRhCompte.profile.preview` | Aperçu : ce que voient les talents |
+| `phoneRhCompte.profile.back` | Compte |
+| `phoneRhCompte.profile.at` | {jobTitle} · |
+| `phoneRhCompte.profile.alsoIn` | {city} · recrute aussi à {others} |
+| `phoneRhCompte.profile.hiringNow` | Recrute en ce moment |
+| `phoneRhCompte.profile.noHeadline` | Ajoutez une accroche : les talents savent à qui ils écrivent. |
+| `phoneRhCompte.profile.recruitsFor` | Recrute pour |
+| `phoneRhCompte.profile.offers` | Offres en cours |
+| `phoneRhCompte.profile.offersCount` | {count, plural, =0 {Aucune offre en cours} one {# offre en cours} other {# offres en cours}} |
+| `phoneRhCompte.profile.offerLine` | {city} · {count, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} |
+| `phoneRhCompte.profile.noOffer` | Aucune offre en cours. |
+| `phoneRhCompte.profile.contacts` | Contacts |
+| `phoneRhCompte.profile.contactsFor.nobody` | Votre téléphone n'est visible que par votre équipe. |
+| `phoneRhCompte.profile.contactsFor.interview` | Votre téléphone n'est visible que par les candidats invités en entretien. |
+| `phoneRhCompte.profile.contactsFor.connections` | Votre téléphone est visible par vos relations. |
+| `phoneRhCompte.profile.edit` | Modifier mon profil |
+| `phoneRhCompte.profile.title` | Mon profil |
+| `phoneRhCompte.profile.editHead` | Modifier |
+| `phoneRhCompte.profile.editHiring` | Recrutement |
+| `phoneRhCompte.profile.seeAsOthers` | Voir mon profil comme les autres |
+| `phoneRhCompte.profile.languagesEdit` | Modifier |
+| `phoneRhCompte.follow.title` | Tableau de bord |
+| `phoneRhCompte.follow.offers` | Offres en cours |
+| `phoneRhCompte.follow.received` | Candidatures reçues |
+| `phoneRhCompte.follow.new` | Nouvelles à lire |
+| `phoneRhCompte.follow.stats` | Mes statistiques |
+| `phoneRhCompte.follow.statsHint` | Délai de réponse, entretiens, entonnoir des 30 derniers jours |
+| `phoneRhCompte.edit.title` | Modifier mon profil |
+| `phoneRhCompte.edit.back` | Profil |
+| `phoneRhCompte.edit.headline` | Accroche |
+| `phoneRhCompte.edit.headlinePlaceholder` | Par exemple : je recrute les talents data de l'entreprise et je réponds à chaque candidature. |
+| `phoneRhCompte.edit.orbi` | Orbi propose une accroche |
+| `phoneRhCompte.edit.orbiText` | Je recrute les talents {domains} de {org}. Je réponds à chaque candidature. |
+| `phoneRhCompte.edit.orbiTextNoDomain` | Je recrute pour {org}. Je réponds à chaque candidature. |
+| `phoneRhCompte.edit.orbiNote` | Orbi propose, vous relisez avant d'enregistrer. |
+| `phoneRhCompte.edit.seeking` | Le candidat que je recherche |
+| `phoneRhCompte.edit.seekingPlaceholder` | Ex. : un ou une comptable junior, rigoureux, à l’aise avec Excel, disponible à Kinshasa. |
+| `phoneRhCompte.edit.seekingCount` | {count} / 400 |
+| `phoneRhCompte.edit.hiringNow` | Badge « Recrute en ce moment » |
+| `phoneRhCompte.edit.hiringNowLine` | Les talents vous trouvent plus vite |
+| `phoneRhCompte.edit.contactsFor` | Qui voit votre téléphone |
+| `phoneRhCompte.edit.contacts.interview` | Candidats en entretien |
+| `phoneRhCompte.edit.contacts.nobody` | Équipe seulement |
+| `phoneRhCompte.edit.company` | Entreprise |
+| `phoneRhCompte.edit.companyAccepted` | Rattachement accepté |
+| `phoneRhCompte.edit.companyAcceptedBy` | Rattachement accepté par {admin} |
+| `phoneRhCompte.edit.companyNote` | Pour changer d'entreprise, quittez {org} depuis Confidentialité et données : votre profil et vos messages restent à vous. |
+| `phoneRhCompte.edit.save` | Enregistrer |
+| `phoneRhCompte.edit.saved` | Profil enregistré. |
+| `phoneRhCompte.edit.error` | Vérifiez l'accroche : 280 caractères au plus. |
+| `phoneRhCompte.stats.title` | Mes statistiques |
+| `phoneRhCompte.stats.line` | 30 derniers jours · toutes vos offres |
+| `phoneRhCompte.stats.received` | candidatures reçues · 30 jours |
+| `phoneRhCompte.stats.delay` | délai moyen de première réponse |
+| `phoneRhCompte.stats.delayValue` | {days} j |
+| `phoneRhCompte.stats.delayNone` | – |
+| `phoneRhCompte.stats.percent` | {percent} % |
+| `phoneRhCompte.stats.answered` | candidats ayant reçu une réponse |
+| `phoneRhCompte.stats.interviews` | entretiens menés |
+| `phoneRhCompte.stats.funnel` | Du dépôt à l'embauche |
+| `phoneRhCompte.stats.phase.recue` | Reçues |
+| `phoneRhCompte.stats.phase.preselection` | Présélection |
+| `phoneRhCompte.stats.phase.entretien` | Entretien |
+| `phoneRhCompte.stats.phase.proposition` | Proposition |
+| `phoneRhCompte.stats.phase.recrute` | Recrutées |
+| `phoneRhCompte.stats.waiting` | Les {percent} % sans réponse |
+| `phoneRhCompte.stats.waitingLine` | Répondre depuis Décisions |
+| `phoneRhCompte.stats.note` | Calculé sur les offres que vous voyez, de la même façon pour tous les candidats. |
+| `phoneRhCompte.saved.title` | Publications enregistrées |
+| `phoneRhCompte.saved.empty` | Aucune publication enregistrée. Touchez le signet d'une publication du Fil pour la retrouver ici. |
+| `phoneRhCompte.saved.remove` | Retirer « {title} » des publications enregistrées |
+| `phoneRhCompte.saved.removed` | Publication retirée. |
+| `phoneRhCompte.team.title` | Équipe de recrutement |
+| `phoneRhCompte.team.line` | {org} · {count, plural, one {# personne} other {# personnes}} sur {max} places |
+| `phoneRhCompte.team.lineUnlimited` | {org} · {count, plural, one {# personne} other {# personnes}} |
+| `phoneRhCompte.team.you` | {name} (vous) |
+| `phoneRhCompte.team.follows` | Suit {count, plural, one {# candidature} other {# candidatures}} |
+| `phoneRhCompte.team.files` | {count, plural, =0 {aucun dossier} one {# dossier} other {# dossiers}} |
+| `phoneRhCompte.team.adminLine` | Gère la page, l'équipe et la formule |
+| `phoneRhCompte.team.role.admin` | Administrateur |
+| `phoneRhCompte.team.role.recruiter` | Recruteur |
+| `phoneRhCompte.team.role.manager` | Manager |
+| `phoneRhCompte.team.role.viewer` | Lecture seule |
+| `phoneRhCompte.team.who` | Qui peut faire quoi |
+| `phoneRhCompte.team.whoAdmin` | Page, équipe, formule, toutes les offres |
+| `phoneRhCompte.team.whoRecruiter` | Publie, trie, planifie, répond, publie au nom de l'entreprise |
+| `phoneRhCompte.team.whoManager` | Voit les dossiers répartis, note et évalue |
+| `phoneRhCompte.team.whoViewer` | Lit sans rien modifier |
+| `phoneRhCompte.team.note` | {admin} ajoute ou retire des personnes depuis l'administration, sur ordinateur. |
+| `phoneRhCompte.team.noteNoAdmin` | L'administrateur ajoute ou retire des personnes depuis l'administration, sur ordinateur. |
+| `phoneRhCompte.team.noteAdmin` | Vous ajoutez ou retirez des personnes depuis l'administration, sur ordinateur. |
+| `phoneRhCompte.team.propose` | Proposer un collègue |
+| `phoneRhCompte.team.invite` | Inviter un collègue |
+| `phoneRhCompte.team.sheetText` | {admin} reçoit la demande et l'ajoute depuis l'administration. {seats, plural, =-1 {} =0 {Plus de place dans la formule {plan}.} one {Il reste # place dans la formule {plan}.} other {Il reste # places dans la formule {plan}.}} |
+| `phoneRhCompte.team.sheetTextNoAdmin` | L'administrateur reçoit la demande et l'ajoute depuis l'administration. |
+| `phoneRhCompte.team.sheetTextAdmin` | La personne reçoit une invitation par e-mail. {seats, plural, =-1 {} =0 {Plus de place dans la formule {plan}.} one {Il reste # place dans la formule {plan}.} other {Il reste # places dans la formule {plan}.}} |
+| `phoneRhCompte.team.email` | E-mail professionnel |
+| `phoneRhCompte.team.emailPlaceholder` | prenom.nom@entreprise.com |
+| `phoneRhCompte.team.send` | Envoyer la demande |
+| `phoneRhCompte.team.sendInvite` | Envoyer l'invitation |
+| `phoneRhCompte.team.cancel` | Annuler |
+| `phoneRhCompte.team.ok.proposed` | Demande envoyée à l'administrateur. |
+| `phoneRhCompte.team.ok.invited` | Invitation envoyée. |
+| `phoneRhCompte.team.error.email` | Indiquez une adresse e-mail valide. |
+| `phoneRhCompte.team.error.seats` | Plus de place dans la formule : l'administrateur peut en changer sur ordinateur. |
+| `phoneRhCompte.team.error.member` | Cette personne fait déjà partie de l'équipe. |
+| `phoneRhCompte.team.error.trop` | Trop de demandes d'un coup. Réessayez dans un moment. |
+| `phoneRhCompte.plan.title` | Formule et usage |
+| `phoneRhCompte.plan.of` | Formule de {org} |
+| `phoneRhCompte.plan.price` | {price} USD par mois |
+| `phoneRhCompte.plan.priceFree` | Gratuite |
+| `phoneRhCompte.plan.priceQuote` | Sur devis |
+| `phoneRhCompte.plan.paidUntil` | payée jusqu'au {date} |
+| `phoneRhCompte.plan.managedBy` | Gérée par {admin}, administrateur, sur ordinateur. |
+| `phoneRhCompte.plan.managedByNoAdmin` | Gérée par l'administrateur, sur ordinateur. |
+| `phoneRhCompte.plan.managedByYou` | Vous la gérez depuis l'administration, sur ordinateur. |
+| `phoneRhCompte.plan.usage` | Utilisation ce mois |
+| `phoneRhCompte.plan.seats` | Utilisateurs |
+| `phoneRhCompte.plan.offers` | Offres actives |
+| `phoneRhCompte.plan.searches` | Recherches de talents ce mois |
+| `phoneRhCompte.plan.credits` | Crédits Orbi ce mois |
+| `phoneRhCompte.plan.value` | {used} / {limit} |
+| `phoneRhCompte.plan.valueUnlimited` | {used} · sans limite |
+| `phoneRhCompte.plan.compare` | Comparer |
+| `phoneRhCompte.plan.perMonth` | {price} USD/mois |
+| `phoneRhCompte.plan.current` | Formule actuelle |
+| `phoneRhCompte.plan.lineSeats` | {count, plural, =-1 {Utilisateurs sans limite} one {# utilisateur} other {# utilisateurs}} |
+| `phoneRhCompte.plan.lineOffers` | {count, plural, =-1 {offres sans limite} one {# offre active} other {# offres actives}} |
+| `phoneRhCompte.plan.ask` | Demander {plan} à {admin} |
+| `phoneRhCompte.plan.askNoAdmin` | Demander {plan} à l'administrateur |
+| `phoneRhCompte.plan.asked` | Demande envoyée à l'administrateur. |
+| `phoneRhCompte.plan.adminNote` | Changer de formule se fait sur ordinateur, depuis l'administration de l'entreprise. |
+| `phoneRhCompte.templates.title` | Modèles de messages |
+| `phoneRhCompte.templates.sub` | Utilisés dans Messages et dans les réponses groupées. |
+| `phoneRhCompte.templates.own` | Modèle de {org} |
+| `phoneRhCompte.templates.jumanly` | Texte de Jumanly, à adapter |
+| `phoneRhCompte.templates.decision` | S'envoie depuis l'écran de décision |
+| `phoneRhCompte.templates.note` | Les modèles se créent et se modifient sur ordinateur. Un modèle s'insère dans votre message : rien ne part sans que vous l'envoyiez. |
+| `phoneRhCompte.notifs.title` | Notifications |
+| `phoneRhCompte.notifs.rh.applications` | Nouvelle candidature |
+| `phoneRhCompte.notifs.rh.applicationsLine` | Et les offres qui se terminent |
+| `phoneRhCompte.notifs.rh.interviews` | Entretiens |
+| `phoneRhCompte.notifs.rh.interviewsLine` | Confirmations, reports, annulations |
+| `phoneRhCompte.notifs.messages` | Nouveau message |
+| `phoneRhCompte.notifs.messagesLine` | Candidats et équipe |
+| `phoneRhCompte.notifs.rh.team` | Activité de l'équipe |
+| `phoneRhCompte.notifs.rh.teamLine` | Dossiers confiés, profils partagés, demandes |
+| `phoneRhCompte.notifs.emails` | Par e-mail aussi |
+| `phoneRhCompte.notifs.emailsLine` | Une copie des notifications importantes |
+| `phoneRhCompte.notifs.note` | La sécurité du compte et la modération arrivent toujours. |
+| `phoneRhCompte.notifs.saved` | Réglage enregistré. |
+| `phoneRhCompte.privacy.title` | Confidentialité et données |
+| `phoneRhCompte.privacy.log` | Journal des consultations |
+| `phoneRhCompte.privacy.logText` | Chaque profil que vous ouvrez est enregistré. Les talents savent que {org} a consulté leur profil. |
+| `phoneRhCompte.privacy.logCount` | {count, plural, =0 {Aucun profil consulté ce mois} one {# profil consulté ce mois} other {# profils consultés ce mois}} |
+| `phoneRhCompte.privacy.logOpen` | Voir le journal |
+| `phoneRhCompte.privacy.share` | Ce que vous partagez |
+| `phoneRhCompte.privacy.shareText` | Votre e-mail professionnel est visible des candidats. Votre téléphone se règle dans votre profil. |
+| `phoneRhCompte.privacy.shareLink` | Régler la visibilité |
+| `phoneRhCompte.privacy.data` | Vos données |
+| `phoneRhCompte.privacy.dataLink` | Télécharger mes données |
+| `phoneRhCompte.privacy.leave` | Quitter {org} |
+| `phoneRhCompte.privacy.leaveText` | Le logo disparaît de votre profil. Les candidatures restent à l'entreprise, vos messages personnels restent à vous. |
+| `phoneRhCompte.privacy.leaveLink` | Quitter l'entreprise |
+| `phoneRhCompte.privacy.leaveOwner` | Vous êtes propriétaire de la page : transférez-la à un autre administrateur sur ordinateur avant de partir. |
+| `phoneRhCompte.privacy.leaveConfirmTitle` | Quitter {org} ? |
+| `phoneRhCompte.privacy.leaveConfirmText` | Vous perdez l'accès aux offres et aux candidatures de l'entreprise. Rien n'est effacé ; l'administrateur peut vous inviter à nouveau. |
+| `phoneRhCompte.privacy.leaveConfirm` | Quitter l'entreprise |
+| `phoneRhCompte.privacy.leaveCancel` | Annuler |
+| `phoneRhCompte.privacy.leaveError` | Impossible de quitter l'entreprise pour l'instant. |
+| `phoneRhCompte.language.title` | Langue |
+| `phoneRhCompte.language.fr` | Français |
+| `phoneRhCompte.language.frLine` | Langue actuelle |
+| `phoneRhCompte.language.en` | English |
+| `phoneRhCompte.language.enLine` | Bientôt disponible |
+| `phoneRhCompte.help.title` | Aide et contact |
+| `phoneRhCompte.help.q1` | Comment répondre à tous les candidats non retenus ? |
+| `phoneRhCompte.help.a1` | Dans Candidatures › Décisions, touchez « Répondre aux candidats sans réponse ». Vous relisez le message avant l'envoi ; chacun le reçoit avec son prénom. |
+| `phoneRhCompte.help.q2` | Pourquoi ce score ? |
+| `phoneRhCompte.help.a2` | Le score compare les compétences, l'expérience, la formation, les langues et la localisation demandées dans l'offre. Il est calculé de la même façon pour tous et n'utilise jamais le nom, l'âge, la photo, le genre ou la nationalité. « Pourquoi ? » détaille chaque critère. |
+| `phoneRhCompte.help.q3` | Qui peut voir mes contacts ? |
+| `phoneRhCompte.help.a3` | Votre e-mail professionnel est visible des candidats. Votre téléphone n'est montré qu'aux personnes que vous choisissez dans votre profil. |
+| `phoneRhCompte.help.q4` | Comment changer de formule ? |
+| `phoneRhCompte.help.a4` | L'administrateur de l'entreprise change la formule sur ordinateur. Depuis Formule et usage, vous pouvez lui demander une formule plus grande. |
+| `phoneRhCompte.help.write` | Écrire à l'équipe Jumanly |
+| `phoneRhCompte.help.writeText` | Réponse par e-mail à {email}, sous 24 h ouvrées. |
+| `phoneRhCompte.help.mail` | Écrire à {email} |
+| `phoneRhCompte.help.direct` | Ou directement : {email} |
+| `phoneRhCompte.company.own` | Votre entreprise · administrée par {admin} |
+| `phoneRhCompte.company.ownNoAdmin` | Votre entreprise |
+| `phoneRhCompte.company.ownAdmin` | Vous administrez cette page |
+| `phoneRhCompte.company.publish` | Publier au nom de {org} |
+| `phoneRhCompte.mode.title` | {org} |
+| `phoneRhCompte.mode.line` | Vous agissez au nom de l'entreprise |
+| `phoneRhCompte.mode.back` | Retour au compte |
+| `phoneRhCompte.mode.tabs.label` | Espace de l'entreprise |
+| `phoneRhCompte.mode.tabs.accueil` | Accueil |
+| `phoneRhCompte.mode.tabs.publications` | Publications |
+| `phoneRhCompte.mode.tabs.messages` | Messages |
+| `phoneRhCompte.mode.tabs.offres` | Offres |
+| `phoneRhCompte.mode.joins` | Demandes pour rejoindre l'équipe |
+| `phoneRhCompte.mode.joinsNone` | Aucune demande pour rejoindre l'équipe. |
+| `phoneRhCompte.mode.followers` | {count, plural, one {abonné} other {abonnés}} |
+| `phoneRhCompte.mode.activeOffers` | {count, plural, one {offre active} other {offres actives}} |
+| `phoneRhCompte.mode.applications` | candidatures · 30 jours |
+| `phoneRhCompte.mode.members` | {count, plural, one {membre de l'équipe} other {membres de l'équipe}} |
+| `phoneRhCompte.mode.noPosts` | L'entreprise n'a encore rien publié. |
+| `phoneRhCompte.mode.messagesText` | Les conversations de l'entreprise avec les candidats et les talents. |
+| `phoneRhCompte.mode.messagesOpen` | Ouvrir les messages |
+| `phoneRhCompte.mode.offersText` | Les offres de l'entreprise, leurs candidatures et leurs statistiques. |
+| `phoneRhCompte.mode.offersOpen` | Ouvrir les offres |
+| `phoneRhCompte.mode.adminNote` | L'équipe et la formule se modifient sur ordinateur. |
+| `phoneRhCompte.mode.notAdmin` | Réservé à l'administrateur de la page. |
+| `phoneRhEntreprise.title` | Profil de l'entreprise |
+| `phoneRhEntreprise.cancel` | Annuler |
+| `phoneRhEntreprise.close` | Fermer |
+| `phoneRhEntreprise.save` | Enregistrer |
+| `phoneRhEntreprise.imagesHint` | Touchez la bannière ou le logo pour les changer. Une photo nette, au centre de l'image. |
+| `phoneRhEntreprise.sectorPlaceholder` | Banque, télécoms, santé… |
+| `phoneRhEntreprise.websitePlaceholder` | entreprise.cd |
+| `phoneRhEntreprise.counter` | {count} / 3 000 |
+| `phoneRhEntreprise.bannerSheet` | Bannière |
+| `phoneRhEntreprise.logoSheet` | Logo |
+| `phoneRhEntreprise.removeBanner` | Retirer la bannière |
+| `phoneRhEntreprise.removeLogo` | Retirer le logo |
+| `phoneRhEntreprise.bannerSaved` | Nouvelle bannière en ligne |
+| `phoneRhEntreprise.logoSaved` | Nouveau logo en ligne |
+| `phoneRhEntreprise.imageRemoved` | Image retirée |
+| `phoneRhEntreprise.imageError.image` | Choisissez une image. |
+| `phoneRhEntreprise.imageError.fileType` | Cette image n'est pas lisible : choisissez un PNG, un JPEG ou un WebP. |
+| `phoneRhEntreprise.imageError.fileSize` | Cette image dépasse 4 Mo. |
+| `phoneRhEntreprise.card.edit` | Modifier le profil |
+| `phoneRhEntreprise.card.view` | Voir la page |
+| `phoneRhEntreprise.card.hiring` | Recrute en ce moment |
+| `phoneRhEntreprise.card.verified` | Entreprise vérifiée |
+| `phoneRhEntreprise.card.noAbout` | La présentation n'est pas encore écrite. Ajoutez-la depuis « Modifier le profil ». |
+| `phoneRhEntreprise.card.complete` | Profil rempli à {percent} % |
+| `phoneRhEntreprise.country` | Pays du siège |
+| `phoneRhEntreprise.countryNone` | Non indiqué |
+| `phoneRhEntreprise.cityLabel` | Ville du siège |
+| `phoneRhEntreprise.foundedYear` | Année de création |
+| `phoneRhEntreprise.foundedPlaceholder` | 2018 |
+| `phoneRhEntreprise.sectorHint` | Plusieurs domaines ? Séparez-les par des virgules. |
+| `phoneRhEntreprise.international.label` | Entreprise internationale |
+| `phoneRhEntreprise.international.hint` | La page affiche « International » au lieu du drapeau du siège. |
+| `phoneRhEntreprise.socials` | Réseaux sociaux |
+| `phoneRhEntreprise.socialsHint` | Collez l'adresse de la page de l'entreprise. Seuls les réseaux remplis s'affichent. |
+| `phoneRhEntreprise.social.linkedin` | LinkedIn |
+| `phoneRhEntreprise.social.instagram` | Instagram |
+| `phoneRhEntreprise.social.facebook` | Facebook |
+| `phoneRhEntreprise.social.x` | X |
+| `phoneRhEntreprise.socialPlaceholder.linkedin` | linkedin.com/company/… |
+| `phoneRhEntreprise.socialPlaceholder.instagram` | instagram.com/… |
+| `phoneRhEntreprise.socialPlaceholder.facebook` | facebook.com/… |
+| `phoneRhEntreprise.socialPlaceholder.x` | x.com/… |
+
+### Modèle B · inscription de l'administrateur d'entreprise sur ordinateur
+
+*Étape 3, lot A1 (docs/modele-b-recruteur/web, captures 020 à 029, Web-Acces.dc.html étapes a-*) : formule, compte de l'entreprise, code, rôle, entreprise, logo et bannière, vérification, paiement, invitation de l'équipe, puis « prêt ». À gauche, la scène (étapes 1 à 3) puis l'aperçu en direct de la page entreprise. La fiche « Grâce Mbuyi » de la scène est une illustration manifestement fictive. Sous 768 px, l'écran « À ouvrir sur un ordinateur » remplace le parcours.*
+
+| Clé | Texte |
+|---|---|
+| `adminSignup.seo.title` | Créer l'espace de votre entreprise |
+| `adminSignup.seo.description` | Formule, compte, page entreprise et équipe : l'espace de recrutement de votre entreprise en quelques minutes. |
+| `adminSignup.brand` | jumanly |
+| `adminSignup.home` | Retour à l'accueil de Jumanly |
+| `adminSignup.tagline` | Learn. Grow. Connect. |
+| `adminSignup.accroche` | Prêt à bâtir l'équipe qui fera grandir votre entreprise ? |
+| `adminSignup.scene.label` | Illustration fictive : une candidature expliquée, un entretien, une réponse |
+| `adminSignup.scene.mark` | GM |
+| `adminSignup.scene.name` | Grâce Mbuyi |
+| `adminSignup.scene.job` | Analyste de données |
+| `adminSignup.scene.score` | 93 % |
+| `adminSignup.scene.why` | Pourquoi ? 8 critères, rien de personnel |
+| `adminSignup.scene.interview` | Entretien · vendredi 10 h |
+| `adminSignup.scene.answer` | Chaque candidat reçoit une réponse |
+| `adminSignup.step` | Étape {n} sur {total} |
+| `adminSignup.back` | Étape précédente |
+| `adminSignup.continue` | Continuer |
+| `adminSignup.saving` | Enregistrement… |
+| `adminSignup.close` | Fermer le message |
+| `adminSignup.steps.forfait.title` | Choisissez une formule |
+| `adminSignup.steps.forfait.subtitle` | Commencez gratuitement ou recrutez à plusieurs |
+| `adminSignup.steps.compte.title` | Créer le compte de l'entreprise |
+| `adminSignup.steps.compte.subtitle` | Vous en serez l'administrateur |
+| `adminSignup.steps.code.title` | Confirmez votre e-mail |
+| `adminSignup.steps.code.subtitle` | Un lien de confirmation vient de partir |
+| `adminSignup.steps.role.title` | Votre rôle |
+| `adminSignup.steps.role.subtitle` | Administrateur : équipe, rôles, offres et formule |
+| `adminSignup.steps.entreprise.title` | L'entreprise |
+| `adminSignup.steps.entreprise.subtitle` | Ce que verront les talents sur sa page |
+| `adminSignup.steps.logo.title` | Logo et bannière |
+| `adminSignup.steps.logo.subtitle` | Ils apparaissent sur la page, les offres et les rapports PDF |
+| `adminSignup.steps.verification.title` | Vérification |
+| `adminSignup.steps.verification.subtitle` | Le badge « vérifiée » rassure les talents |
+| `adminSignup.steps.paiement.title` | Paiement |
+| `adminSignup.steps.paiement.subtitle` | Prépayé chaque mois, par Mobile Money ou carte |
+| `adminSignup.steps.equipe.title` | Invitez votre équipe |
+| `adminSignup.steps.equipe.subtitle` | Chacun reçoit un e-mail et choisit son mot de passe |
+| `adminSignup.plan.free` | Gratuit |
+| `adminSignup.plan.monthly` | {price} par mois |
+| `adminSignup.plan.quote` | Sur devis |
+| `adminSignup.plan.users` | {count, plural, one {# utilisateur} other {# utilisateurs}} |
+| `adminSignup.plan.usersMore` | {count} utilisateurs et plus |
+| `adminSignup.plan.jobs` | {count, plural, one {# offre en ligne} other {# offres}} |
+| `adminSignup.plan.extra.company` | ATS avancé · grilles d'évaluation · statistiques · export des rapports |
+| `adminSignup.plan.extra.company_plus` | plusieurs équipes · viviers partagés · rapports consolidés |
+| `adminSignup.plan.extra.company_premium` | filiales · intégrations · accompagnement |
+| `adminSignup.plan.recommended` | Pour recruter en équipe |
+| `adminSignup.plan.applyFree` | Candidater reste gratuit pour tous les talents, quelle que soit votre formule. |
+| `adminSignup.plan.quoteNote` | Company Premium se fait sur devis : écrivez-nous depuis le formulaire, la réponse vient de assistant@jumanly.io. |
+| `adminSignup.plan.quoteLink` | Demander un devis |
+| `adminSignup.account.or` | ou avec votre e-mail |
+| `adminSignup.account.name` | Prénom et nom |
+| `adminSignup.account.org` | Nom de l'entreprise |
+| `adminSignup.account.email` | E-mail professionnel |
+| `adminSignup.account.password` | Mot de passe |
+| `adminSignup.account.passwordPlaceholder` | 10 caractères au moins |
+| `adminSignup.account.terms` | J'accepte les {terms} et la {privacy}, dont l'engagement de répondre à chaque candidature. |
+| `adminSignup.account.termsLink` | conditions d'utilisation |
+| `adminSignup.account.privacyLink` | politique de confidentialité |
+| `adminSignup.account.social` | Votre compte {email} est créé : il reste à nommer l'entreprise. |
+| `adminSignup.account.error.required` | Écrivez votre nom et votre e-mail professionnel |
+| `adminSignup.account.error.org` | Écrivez le nom de l'entreprise |
+| `adminSignup.account.error.terms` | Acceptez les conditions pour continuer |
+| `adminSignup.code.sentTo` | Lien envoyé à {email} |
+| `adminSignup.code.how` | Ouvrez l'e-mail et cliquez sur « Confirmer mon adresse » : vous revenez ici, connecté, pour la suite de l'inscription. |
+| `adminSignup.code.login` | Déjà confirmé ? Se connecter |
+| `adminSignup.code.label` | Code reçu |
+| `adminSignup.code.aria` | Code à 6 chiffres |
+| `adminSignup.code.resend` | Renvoyer le lien |
+| `adminSignup.code.resent` | Nouveau lien envoyé à {email} |
+| `adminSignup.code.error` | Le code compte 6 chiffres |
+| `adminSignup.role.label` | Intitulé de votre poste |
+| `adminSignup.role.placeholder` | Intitulé du poste |
+| `adminSignup.role.card.title` | Vous êtes administrateur |
+| `adminSignup.role.card.l1` | Vous invitez l'équipe et donnez un rôle à chacun |
+| `adminSignup.role.card.l2` | Vous attribuez les tâches et suivez leur avancement |
+| `adminSignup.role.card.l3` | Vous gérez la page, la formule et les factures |
+| `adminSignup.role.card.l4` | Vous seul·e voyez le journal des consultations |
+| `adminSignup.role.note` | Vous recrutez aussi : les offres, l'ATS et l'agenda vous sont ouverts. |
+| `adminSignup.role.error` | Écrivez l'intitulé de votre poste |
+| `adminSignup.company.sector` | Secteur |
+| `adminSignup.company.sectors.fintech` | Fintech |
+| `adminSignup.company.sectors.banque` | Banque |
+| `adminSignup.company.sectors.telecom` | Télécoms |
+| `adminSignup.company.sectors.energie` | Énergie |
+| `adminSignup.company.sectors.ong` | ONG |
+| `adminSignup.company.size` | Taille |
+| `adminSignup.company.sizes.s` | 1 à 50 |
+| `adminSignup.company.sizes.m` | 51 à 200 |
+| `adminSignup.company.sizes.l` | 201 à 1 000 |
+| `adminSignup.company.sizes.xl` | Plus de 1 000 |
+| `adminSignup.company.sizesLong.s` | 1 à 50 personnes |
+| `adminSignup.company.sizesLong.m` | 51 à 200 personnes |
+| `adminSignup.company.sizesLong.l` | 201 à 1 000 personnes |
+| `adminSignup.company.sizesLong.xl` | plus de 1 000 personnes |
+| `adminSignup.company.city` | Ville du siège |
+| `adminSignup.company.cityPlaceholder` | Ville |
+| `adminSignup.company.website` | Site |
+| `adminSignup.company.websitePlaceholder` | Site |
+| `adminSignup.company.about` | À propos |
+| `adminSignup.company.aboutPlaceholder` | Ce que fait l'entreprise, en deux phrases |
+| `adminSignup.company.error.required` | Choisissez le secteur et la taille, puis écrivez la ville du siège |
+| `adminSignup.company.error.website` | Écrivez l'adresse du site, par exemple baobabfintech.cd |
+| `adminSignup.logo.title` | Logo |
+| `adminSignup.logo.hint` | Carré, 400 × 400 px conseillé |
+| `adminSignup.logo.import` | Importer le logo |
+| `adminSignup.logo.change` | Changer le logo |
+| `adminSignup.logo.added` | Logo ajouté |
+| `adminSignup.logo.error.fileType` | Choisissez une image JPEG, PNG ou WebP |
+| `adminSignup.logo.error.fileSize` | L'image dépasse 4 Mo : choisissez-en une plus légère |
+| `adminSignup.logo.error.image` | L'image n'a pas pu être lue : essayez-en une autre |
+| `adminSignup.banner.title` | Bannière |
+| `adminSignup.banner.aria` | Bannière {name} |
+| `adminSignup.banner.themes.sapin` | Sapin |
+| `adminSignup.banner.themes.nuit` | Nuit |
+| `adminSignup.banner.themes.lime` | Lime |
+| `adminSignup.banner.themes.creme` | Crème |
+| `adminSignup.banner.hint` | Ou importez une image de 1 600 × 400 px depuis la page entreprise. |
+| `adminSignup.verif.domain` | E-mail sur le domaine {domain} |
+| `adminSignup.verif.domainHint` | Confirmé par le code reçu |
+| `adminSignup.verif.personal` | Adresse {email} confirmée |
+| `adminSignup.verif.personalHint` | Une adresse sur le domaine de l'entreprise accélère la vérification |
+| `adminSignup.verif.registry` | Registre du commerce ou équivalent |
+| `adminSignup.verif.registryHint` | Facultatif, accélère la vérification |
+| `adminSignup.verif.import` | Importer |
+| `adminSignup.verif.importAria` | Importer le registre du commerce ou un document équivalent |
+| `adminSignup.verif.added` | Ajouté |
+| `adminSignup.verif.addedToast` | Document ajouté : Jumanly le vérifie |
+| `adminSignup.verif.note` | Jumanly vérifie la page ; le badge « vérifiée » apparaît ensuite sur la page et sur chaque offre. Vous pouvez publier dès maintenant. |
+| `adminSignup.verif.error.fileType` | Importez un PDF, ou une photo nette du document en JPEG ou PNG |
+| `adminSignup.verif.error.fileSize` | Le document dépasse 4 Mo : choisissez-en un plus léger |
+| `adminSignup.verif.error.fileCount` | Six documents au plus : retirez-en un depuis la page entreprise |
+| `adminSignup.verif.error.status` | La vérification est déjà décidée : rien à ajouter |
+| `adminSignup.verif.mandate` | Administrateur de la page, inscrit le {date} ({role}) |
+| `adminSignup.verif.registration` | Document joint à l'inscription |
+| `adminSignup.pay.plan` | Formule {plan} |
+| `adminSignup.pay.monthly` | 1 mois prépayé · rappel avant chaque échéance |
+| `adminSignup.pay.method` | Moyen de paiement |
+| `adminSignup.pay.operators.mpesa` | M-Pesa |
+| `adminSignup.pay.operators.orange` | Orange Money |
+| `adminSignup.pay.operators.airtel` | Airtel Money |
+| `adminSignup.pay.operators.carte` | Carte bancaire |
+| `adminSignup.pay.number` | Numéro du compte {operator} qui paie |
+| `adminSignup.pay.numberPlaceholder` | Indicatif puis numéro, par exemple +243… |
+| `adminSignup.pay.cardNote` | Vous saisissez la carte sur la page sécurisée du prestataire : Jumanly ne voit jamais son numéro. |
+| `adminSignup.pay.pay` | Payer {amount} |
+| `adminSignup.pay.later` | Commencer en RH Free et payer plus tard |
+| `adminSignup.pay.freeToast` | Vous commencez en RH Free : passez à Company quand vous voulez |
+| `adminSignup.pay.wait.title` | Confirmez sur votre téléphone |
+| `adminSignup.pay.wait.text` | {operator} vous demande votre code secret. Sans réponse dans 15 minutes, le paiement expire. |
+| `adminSignup.pay.wait.cardTitle` | Terminez le paiement par carte |
+| `adminSignup.pay.wait.cardText` | La page du prestataire s'est ouverte. Cette page se met à jour dès que le paiement est reçu. |
+| `adminSignup.pay.retry` | Réessayer |
+| `adminSignup.pay.confirmed` | J'ai confirmé |
+| `adminSignup.pay.stillPending` | Paiement pas encore reçu : confirmez sur votre téléphone, il apparaît ici tout seul. |
+| `adminSignup.pay.ok.title` | Paiement reçu |
+| `adminSignup.pay.ok.text` | Formule active jusqu'au {date} · facture envoyée par e-mail |
+| `adminSignup.pay.okToast` | Paiement reçu : facture envoyée par e-mail |
+| `adminSignup.pay.free.title` | RH Free : rien à payer |
+| `adminSignup.pay.free.text` | Passez à Company quand votre équipe grandit. |
+| `adminSignup.pay.error.unpaid` | Terminez le paiement, ou commencez en RH Free |
+| `adminSignup.pay.error.number` | Écrivez le numéro Mobile Money qui paie, en commençant par l'indicatif du pays (+243 pour la RD Congo) |
+| `adminSignup.pay.error.failed` | Le paiement n'a pas abouti : vérifiez le solde et le numéro, puis réessayez |
+| `adminSignup.pay.error.expired` | Le paiement a expiré : recommencez |
+| `adminSignup.pay.error.duplicate` | Un paiement attend déjà votre confirmation : validez-le sur votre téléphone ou attendez 15 minutes |
+| `adminSignup.pay.error.unavailable` | Le paiement en ligne n'est pas encore ouvert : commencez en RH Free et payez plus tard |
+| `adminSignup.team.roles.recruiter` | Recruteur |
+| `adminSignup.team.roles.hiring_manager` | Manager |
+| `adminSignup.team.roles.viewer` | Lecteur |
+| `adminSignup.team.remove` | Retirer {email} |
+| `adminSignup.team.emailAria` | E-mail à inviter |
+| `adminSignup.team.placeholder` | prenom.nom@entreprise.cd |
+| `adminSignup.team.add` | Ajouter |
+| `adminSignup.team.seats` | {max, plural, one {# utilisateur} other {# utilisateurs}} au plus dans la formule {plan} · {count} avec vous |
+| `adminSignup.team.send` | Envoyer les invitations |
+| `adminSignup.team.none` | Continuer sans inviter |
+| `adminSignup.team.error.email` | Écrivez une adresse e-mail |
+| `adminSignup.team.error.free` | RH Free compte 1 utilisateur : passez à Company pour inviter votre équipe |
+| `adminSignup.team.error.full` | Plus de place dans la formule {plan} |
+| `adminSignup.team.error.duplicate` | Cette adresse est déjà dans la liste |
+| `adminSignup.team.error.alreadyMember` | {email} fait déjà partie de l'équipe |
+| `adminSignup.team.error.role` | Ce rôle n'est pas ouvert dans votre formule : choisissez Recruteur |
+| `adminSignup.team.error.invalid` | Vérifiez les adresses e-mail de la liste |
+| `adminSignup.ready.title` | L'espace {org} est prêt |
+| `adminSignup.ready.page` | Page entreprise créée |
+| `adminSignup.ready.pagePending` | Page entreprise créée, vérification en cours |
+| `adminSignup.ready.plan` | Formule {plan} active |
+| `adminSignup.ready.invites` | {count, plural, =0 {Aucune invitation envoyée pour l'instant} one {# invitation envoyée} other {# invitations envoyées}} |
+| `adminSignup.ready.enter` | Entrer dans l'espace administrateur |
+| `adminSignup.preview.title` | Aperçu de la page entreprise |
+| `adminSignup.preview.name` | Votre entreprise |
+| `adminSignup.preview.about` | La présentation de l'entreprise apparaîtra ici. |
+| `adminSignup.preview.unverified` | Non vérifiée |
+| `adminSignup.preview.pending` | Vérification en cours |
+| `adminSignup.preview.verified` | Vérifiée |
+| `adminSignup.preview.plan` | Formule {plan} |
+| `adminSignup.preview.invites` | {count, plural, =0 {Aucune invitation} one {# invitation} other {# invitations}} |
+| `desktopOnly.title` | À ouvrir sur un ordinateur |
+| `desktopOnly.text` | L'espace de l'entreprise (équipe, page, formule et factures) se gère sur un ordinateur ou une tablette. |
+| `desktopOnly.signupText` | L'espace d'une entreprise se crée sur un ordinateur. Sur ce téléphone, vous pouvez créer votre compte recruteur et rejoindre votre équipe. |
+| `desktopOnly.copy` | Copier le lien |
+| `desktopOnly.copied` | Lien copié : ouvrez-le sur votre ordinateur |
+| `desktopOnly.recruiter` | Créer un compte recruteur |
+| `desktopOnly.home` | Retour à l'accueil |
+| `desktopOnly.app` | Retour à mon espace |
+
+### Modèle B · Équipe de l'entreprise sur ordinateur
+
+*Étape 3, lot A2 (docs/modele-b-recruteur/web, captures 076 à 078, Web-App.dc.html `qui="joseph"`, vue Équipe) : membres et rôles, droits par membre, tâches (Attribuée → Acceptée → En cours → Terminée), invitations, demandes de rattachement et personnes qui indiquent travailler dans l'entreprise. Réservé aux administrateurs, sur ordinateur et tablette. « Mes tâches » est l'écran du membre à qui une tâche est confiée.*
+
+| Clé | Texte |
+|---|---|
+| `orgTeam.title` | Équipe |
+| `orgTeam.seats` | {plan} · {used, plural, one {# utilisateur} other {# utilisateurs}} sur {max}. |
+| `orgTeam.seatsUnlimited` | {plan} · {used, plural, one {# utilisateur} other {# utilisateurs}}. |
+| `orgTeam.onlyYou` | Vous seul·e attribuez les rôles et les tâches. |
+| `orgTeam.admins` | Les administrateurs attribuent les rôles et les tâches. |
+| `orgTeam.invite` | Inviter un membre |
+| `orgTeam.structure` | Équipes et départements |
+| `orgTeam.assign` | Attribuer une tâche |
+| `orgTeam.close` | Fermer |
+| `orgTeam.cancel` | Annuler |
+| `orgTeam.error` | Cette action n'a pas abouti. Réessayez. |
+| `orgTeam.tabs.aria` | Parties de l'équipe |
+| `orgTeam.tabs.members` | Membres et rôles |
+| `orgTeam.tabs.tasks` | Tâches |
+| `orgTeam.tabs.invitations` | Invitations et demandes |
+| `orgTeam.member.rights` | {count, plural, one {# droit} other {# droits}} sur {total} |
+| `orgTeam.member.tasks` | Tâches |
+| `orgTeam.member.done` | {done} sur {total} {done, plural, =0 {terminée} one {terminée} other {terminées}} |
+| `orgTeam.member.alone` | Vous êtes seul·e dans l'équipe pour l'instant. Invitez un premier membre : il apparaîtra ici avec son rôle et ses tâches. |
+| `orgTeam.roles.org_owner.name` | Propriétaire |
+| `orgTeam.roles.org_owner.text` | Créateur de l'espace : tous les droits |
+| `orgTeam.roles.org_admin.name` | Administrateur |
+| `orgTeam.roles.org_admin.text` | Membres, rôles, offres, rapports et formule |
+| `orgTeam.roles.recruiter.name` | Recruteur |
+| `orgTeam.roles.recruiter.text` | Offres attribuées, ATS, messages, rendez-vous |
+| `orgTeam.roles.hiring_manager.name` | Manager |
+| `orgTeam.roles.hiring_manager.text` | Voit les candidats de ses offres, évalue et commente ; ne publie pas |
+| `orgTeam.roles.viewer.name` | Lecteur |
+| `orgTeam.roles.viewer.text` | Lit les tableaux de bord et les rapports |
+| `orgTeam.role.title` | Rôle de {name} |
+| `orgTeam.role.subtitle` | {line} · ce que {name} peut faire |
+| `orgTeam.role.current` | Rôle : {role} |
+| `orgTeam.role.done` | {name} devient {role} : ses droits sont mis à jour |
+| `orgTeam.role.error` | Ce rôle n'est pas proposé par votre formule. |
+| `orgTeam.role.fixed` | Un administrateur a tous les droits. Seul le propriétaire change son rôle. |
+| `orgTeam.rights.title` | Droits de {name} |
+| `orgTeam.rights.publish` | Publier et modifier les offres |
+| `orgTeam.rights.sort` | Trier les candidatures (ATS) |
+| `orgTeam.rights.interviews` | Planifier et mener les entretiens |
+| `orgTeam.rights.evaluate` | Évaluer les candidats et le diagnostic |
+| `orgTeam.rights.stats` | Voir l'évolution et les statistiques |
+| `orgTeam.rights.page` | Publier au nom de {org} |
+| `orgTeam.rights.note` | « Voir l'évolution » donne accès au tableau de bord et aux statistiques de l'équipe. |
+| `orgTeam.rights.basic` | Votre formule garde les droits de chaque rôle. Ajuster les droits membre par membre demande une formule plus complète, à voir dans Formule et facturation. |
+| `orgTeam.rights.beyond` | Pas avec le rôle {role} |
+| `orgTeam.rights.granted` | Droit accordé à {name} : {right} |
+| `orgTeam.rights.removed` | Droit retiré à {name} : {right} |
+| `orgTeam.remove.button` | Retirer de l'équipe |
+| `orgTeam.remove.title` | Retirer {name} de l'équipe ? |
+| `orgTeam.remove.text` | Sa place se libère. Rien de ce que {name} a écrit n'est effacé : notes, messages et évaluations restent dans les dossiers. |
+| `orgTeam.remove.confirm` | Retirer |
+| `orgTeam.remove.done` | {name} ne fait plus partie de l'équipe |
+| `orgTeam.memberTasks.title` | Tâches de {name} |
+| `orgTeam.memberTasks.empty` | Aucune tâche pour l'instant. |
+| `orgTeam.task.kind.follow` | Suivre un candidat |
+| `orgTeam.task.kind.diagnostic` | Évaluer le diagnostic |
+| `orgTeam.task.kind.interview` | Faire un entretien |
+| `orgTeam.task.status.assigned` | Attribuée |
+| `orgTeam.task.status.accepted` | Acceptée |
+| `orgTeam.task.status.in_progress` | En cours |
+| `orgTeam.task.status.done` | Terminée |
+| `orgTeam.task.line` | {kind} · {candidate} |
+| `orgTeam.task.due` | Échéance {date} |
+| `orgTeam.task.late` | En retard |
+| `orgTeam.task.file` | Fiche |
+| `orgTeam.task.fileAria` | Fiche de {candidate} |
+| `orgTeam.task.remind` | Relancer |
+| `orgTeam.task.remindAria` | Relancer {name} |
+| `orgTeam.task.reminded` | Rappel envoyé à {name} |
+| `orgTeam.task.progress` | Avancement : {status} |
+| `orgTeam.tasks.filters` | Filtrer les tâches |
+| `orgTeam.tasks.all` | Toutes |
+| `orgTeam.tasks.open` | En cours |
+| `orgTeam.tasks.late` | En retard |
+| `orgTeam.tasks.done` | Terminées |
+| `orgTeam.tasks.caption` | Toutes les tâches de l'équipe |
+| `orgTeam.tasks.col.task` | Tâche |
+| `orgTeam.tasks.col.candidate` | Candidat·e |
+| `orgTeam.tasks.col.member` | Membre |
+| `orgTeam.tasks.col.due` | Échéance |
+| `orgTeam.tasks.col.progress` | Avancement |
+| `orgTeam.tasks.col.actions` | Actions |
+| `orgTeam.tasks.empty` | Aucune tâche avec ce filtre. |
+| `orgTeam.tasks.none` | Aucune tâche pour l'instant. Attribuez la première à un membre : il la voit dans « Mes tâches », l'accepte, puis vous suivez chaque étape. |
+| `orgTeam.requests.title` | Demandes à valider |
+| `orgTeam.requests.subtitle` | Rattachement à l'équipe, ou personnes qui indiquent travailler chez {org} |
+| `orgTeam.requests.join` | Demande à rejoindre l'équipe de recrutement · adresse {domain} |
+| `orgTeam.requests.declared` | Indique travailler chez {org} · {title} |
+| `orgTeam.requests.accept` | Accepter |
+| `orgTeam.requests.refuse` | Refuser |
+| `orgTeam.requests.confirm` | Confirmer |
+| `orgTeam.requests.notHere` | Ne travaille pas ici |
+| `orgTeam.requests.acceptAria` | Accepter la demande de {name} |
+| `orgTeam.requests.refuseAria` | Refuser la demande de {name} |
+| `orgTeam.requests.confirmAria` | Confirmer que {name} travaille chez {org} |
+| `orgTeam.requests.notHereAria` | {name} ne travaille pas chez {org} |
+| `orgTeam.requests.empty` | Rien à valider. |
+| `orgTeam.requests.accepted` | {name} rejoint l'équipe comme recruteur. Vous pouvez changer son rôle dans Membres et rôles. |
+| `orgTeam.requests.declined` | Demande refusée : {name} est prévenu·e |
+| `orgTeam.requests.confirmed` | {name} apparaît comme membre confirmé·e sur la page de l'entreprise |
+| `orgTeam.requests.rejected` | {name} est retiré·e des membres de la page |
+| `orgTeam.requests.seats` | Plus de place dans votre formule : libérez une place ou changez de formule pour accepter cette demande. |
+| `orgTeam.invitations.title` | Invitations envoyées |
+| `orgTeam.invitations.invite` | Inviter |
+| `orgTeam.invitations.line` | {role} · envoyée le {date} |
+| `orgTeam.invitations.resend` | Relancer |
+| `orgTeam.invitations.resendAria` | Renvoyer l'invitation à {email} |
+| `orgTeam.invitations.cancel` | Annuler |
+| `orgTeam.invitations.cancelAria` | Annuler l'invitation de {email} |
+| `orgTeam.invitations.resent` | Invitation renvoyée à {email} |
+| `orgTeam.invitations.cancelled` | Invitation annulée : la place se libère |
+| `orgTeam.invitations.empty` | Aucune invitation en attente. |
+| `orgTeam.places.left` | {count, plural, one {Il reste # place} other {Il reste # places}} dans la formule {plan} ({max} utilisateurs) |
+| `orgTeam.places.full` | {max, plural, one {La seule place de la formule {plan} est prise} other {Les # places de la formule {plan} sont prises}} |
+| `orgTeam.places.unlimited` | Utilisateurs illimités dans la formule {plan} |
+| `orgTeam.inviteDialog.title` | Inviter un membre |
+| `orgTeam.inviteDialog.email` | Adresse e-mail |
+| `orgTeam.inviteDialog.placeholder` | prenom.nom@entreprise.cd |
+| `orgTeam.inviteDialog.role` | Rôle |
+| `orgTeam.inviteDialog.send` | Envoyer l'invitation |
+| `orgTeam.inviteDialog.sending` | Envoi… |
+| `orgTeam.inviteDialog.sent` | Invitation envoyée par e-mail à {email} |
+| `orgTeam.inviteDialog.error.invalid` | Écrivez une adresse e-mail valide |
+| `orgTeam.inviteDialog.error.seats` | Plus de place : changez de formule dans Formule et facturation pour inviter davantage de membres |
+| `orgTeam.inviteDialog.error.alreadyMember` | {email} fait déjà partie de l'équipe |
+| `orgTeam.inviteDialog.error.role` | Ce rôle n'est pas proposé par votre formule |
+| `orgTeam.assignDialog.title` | Attribuer une tâche |
+| `orgTeam.assignDialog.who` | À qui |
+| `orgTeam.assignDialog.what` | Quoi |
+| `orgTeam.assignDialog.candidate` | Pour quel candidat |
+| `orgTeam.assignDialog.candidateLine` | {name} · {job} |
+| `orgTeam.assignDialog.due` | Échéance |
+| `orgTeam.assignDialog.note` | La personne la voit dans « Mes tâches », l'accepte, puis vous suivez chaque étape. |
+| `orgTeam.assignDialog.confirm` | Attribuer |
+| `orgTeam.assignDialog.done` | Tâche attribuée à {name} : elle apparaît dans ses « Mes tâches » |
+| `orgTeam.assignDialog.noMember` | Invitez d'abord un membre : une tâche va à un recruteur ou à un manager de l'équipe. |
+| `orgTeam.assignDialog.noCandidate` | Aucune candidature en cours : une tâche porte toujours sur un candidat. |
+| `orgTeam.assignDialog.error.due` | Choisissez une échéance à venir |
+| `myTasks.title` | Mes tâches |
+| `myTasks.intro` | Les tâches que l'administrateur de {org} vous confie. Acceptez-les, puis faites avancer chaque étape : il suit votre avancement. |
+| `myTasks.empty` | Aucune tâche pour l'instant. Quand l'administrateur vous en confie une, elle apparaît ici. |
+| `myTasks.accept` | Accepter |
+| `myTasks.start` | Commencer |
+| `myTasks.finish` | Marquer comme terminée |
+| `myTasks.moved` | Tâche passée à « {status} » |
+| `myTasks.finished` | Tâche terminée : l'administrateur est prévenu |
+
+### Modèle B · Page entreprise sur ordinateur
+
+*Étape 3, lot A3 (docs/modele-b-recruteur/web, captures 081 et 082, Web-App.dc.html `qui="joseph"`, vues Page entreprise et Baobab) : modifier la page, puis la voir comme un talent. Réservé aux administrateurs, sur ordinateur et tablette.*
+
+| Clé | Texte |
+|---|---|
+| `orgPage.title` | Page entreprise |
+| `orgPage.banner.change` | Changer la bannière |
+| `orgPage.logo.change` | Changer le logo |
+| `orgPage.form.aria` | Informations de la page |
+| `orgPage.field.name` | Nom |
+| `orgPage.field.sector` | Secteur |
+| `orgPage.field.size` | Taille |
+| `orgPage.field.sizeNone` | Non indiquée |
+| `orgPage.field.city` | Ville |
+| `orgPage.field.website` | Site |
+| `orgPage.field.description` | À propos |
+| `orgPage.field.descriptionPlaceholder` | Ce que fait l'entreprise, pour qui, et où. |
+| `orgPage.hiring.label` | Badge « Recrute en ce moment » |
+| `orgPage.hiring.hint` | Affiché sur la page et dans Explorer |
+| `orgPage.preview` | Voir la page publique |
+| `orgPage.publish` | Publier les changements |
+| `orgPage.saved` | Les changements sont en ligne |
+| `orgPage.error.name` | Le nom doit compter au moins 2 caractères |
+| `orgPage.error.website` | Cette adresse de site n'est pas valide |
+| `orgPage.error.other` | Une information n'est pas valide : vérifiez le formulaire |
+| `orgPage.error.foundedYear` | L'année de création doit être une année entre 1800 et aujourd'hui |
+| `orgPage.error.socialLinks` | Un lien de réseau n'est pas valide : collez l'adresse de la page sur ce réseau |
+| `orgPage.declared.title` | Membres déclarés |
+| `orgPage.declared.text` | Ces personnes indiquent travailler chez vous. Confirmer est facultatif : sans réponse, « Indiqué par la personne » reste affiché. |
+| `orgPage.declared.line` | Indique travailler chez {org} · {title} |
+| `orgPage.declared.no` | Ne travaille pas ici |
+| `orgPage.declared.yes` | Confirmer |
+| `orgPage.declared.noAria` | {name} ne travaille pas ici |
+| `orgPage.declared.yesAria` | Confirmer {name} |
+| `orgPage.declared.empty` | Personne n'attend de réponse pour le moment. |
+| `orgPage.verification.verified.title` | Entreprise vérifiée |
+| `orgPage.verification.verified.text` | Vérifiée par Jumanly : le badge apparaît sur la page et sur chaque offre. |
+| `orgPage.verification.pending.title` | Vérification en cours |
+| `orgPage.verification.pending.text` | Jumanly étudie votre demande. Le badge apparaîtra sur la page et sur chaque offre. |
+| `orgPage.verification.none.title` | Entreprise non vérifiée |
+| `orgPage.verification.none.text` | Le badge de vérification rassure les candidats : il apparaît sur la page et sur chaque offre. |
+| `orgPage.verification.rejected.title` | Vérification à reprendre |
+| `orgPage.verification.rejected.text` | Jumanly n'a pas pu vérifier l'entreprise. Complétez la demande pour obtenir le badge. |
+| `orgPage.verification.info_requested.title` | Informations demandées |
+| `orgPage.verification.info_requested.text` | Jumanly a besoin d'un complément pour vérifier l'entreprise. Répondez à la demande pour obtenir le badge. |
+| `orgPage.verification.action` | Demander la vérification |
+| `orgPage.verification.follow` | Voir la demande |
+| `orgPage.confirmed.title` | Membres confirmés |
+| `orgPage.confirmed.aria` | {count, plural, one {# membre confirmé} other {# membres confirmés}} |
+| `orgPage.owner.title` | Propriété de la page |
+| `orgPage.owner.text` | Vous êtes propriétaire de la page. Vous pouvez la transmettre à un autre membre : vous restez dans l'équipe. |
+| `orgPage.owner.action` | Transférer la propriété |
+| `orgPage.owner.dialog` | Transférer la propriété |
+| `orgPage.owner.to` | À qui |
+| `orgPage.owner.confirm` | Transférer |
+| `orgPage.owner.cancel` | Annuler |
+| `orgPage.owner.done` | {name} est maintenant propriétaire de la page |
+| `orgPage.owner.alone` | Invitez d'abord un membre pour pouvoir lui transmettre la page. |
+| `orgPage.close` | Fermer |
+| `orgPage.error.generic` | Ce geste n'a pas abouti. Réessayez. |
+| `orgPage.view.back` | Modifier la page |
+| `orgPage.view.hiring` | Recrute en ce moment |
+| `orgPage.view.verified` | Entreprise vérifiée |
+| `orgPage.view.tabs.aria` | Sections de la page |
+| `orgPage.view.tabs.about` | À propos |
+| `orgPage.view.tabs.members` | Membres |
+| `orgPage.view.tabs.offers` | Offres |
+| `orgPage.view.confirmedBy` | Confirmé par {org} |
+| `orgPage.view.declared` | Indiqué par la personne |
+| `orgPage.view.noAbout` | La présentation n'est pas encore écrite. |
+| `orgPage.view.noMembers` | Aucun membre n'est encore affiché. |
+| `orgPage.view.noOffers` | Aucune offre ouverte pour le moment. |
+| `orgPage.view.site` | Site : {site} |
+
+### Modèle B · Formule et facturation sur ordinateur
+
+*Étape 3, lot A4 (docs/modele-b-recruteur/web, capture 083, Web-App.dc.html `qui="joseph"`, vue Formule et facturation) : la formule de l'entreprise, l'usage du mois, le changement de formule et les factures. Réservé aux administrateurs, sur ordinateur et tablette. Prépayé : rien n'est prélevé automatiquement.*
+
+| Clé | Texte |
+|---|---|
+| `orgFormula.title` | Formule et facturation |
+| `orgFormula.error` | L'action n'a pas abouti : rechargez la page et réessayez |
+| `orgFormula.close` | Fermer |
+| `orgFormula.cancel` | Annuler |
+| `orgFormula.current.tag` | Formule actuelle |
+| `orgFormula.current.price` | {plan} · {price} par mois |
+| `orgFormula.current.free` | {plan} · Gratuit |
+| `orgFormula.current.quote` | {plan} · Sur devis |
+| `orgFormula.current.paid` | Prépayée jusqu'au {date} · payée avec {method} |
+| `orgFormula.current.paidNoMethod` | Prépayée jusqu'au {date} |
+| `orgFormula.current.active` | Active jusqu'au {date} |
+| `orgFormula.current.grace` | Échéance passée le {date} : payez avant le {grace} pour garder la formule. |
+| `orgFormula.current.canceled` | La formule s'arrête le {date}, puis retour à {free}. |
+| `orgFormula.current.reminders` | Rappels 7, 3 et 0 jours avant l'échéance. Sans paiement, 3 jours de grâce, puis retour à {free} : aucune donnée n'est perdue. |
+| `orgFormula.current.freeText` | Choisissez une formule ci-dessous pour recruter en équipe. Candidater reste gratuit pour tous les talents, quelle que soit votre formule. |
+| `orgFormula.current.pending` | {plan} prendra le relais le {date}. |
+| `orgFormula.current.renew` | Renouveler maintenant |
+| `orgFormula.usage.title` | Usage ce mois |
+| `orgFormula.usage.seats` | Utilisateurs |
+| `orgFormula.usage.jobs` | Offres en ligne |
+| `orgFormula.usage.search` | Recherches de talents ce mois |
+| `orgFormula.usage.contact` | Demandes de mise en relation |
+| `orgFormula.usage.credits` | Crédits Orbi ce mois |
+| `orgFormula.usage.value` | {used} sur {max} |
+| `orgFormula.usage.unlimited` | {used} · illimité |
+| `orgFormula.change.title` | Changer de formule |
+| `orgFormula.change.monthly` | {price} par mois |
+| `orgFormula.change.quote` | Sur devis |
+| `orgFormula.change.users` | {count, plural, one {# utilisateur} other {# utilisateurs}} |
+| `orgFormula.change.usersMore` | {count} utilisateurs et plus |
+| `orgFormula.change.usersUnlimited` | utilisateurs illimités |
+| `orgFormula.change.jobs` | {count, plural, one {# offre en ligne} other {# offres en ligne}} |
+| `orgFormula.change.jobsUnlimited` | offres illimitées |
+| `orgFormula.change.current` | Votre formule |
+| `orgFormula.change.upgrade` | Passer à {plan} |
+| `orgFormula.change.downgrade` | Passer à {plan} |
+| `orgFormula.change.scheduled` | Prévue le {date} |
+| `orgFormula.change.keep` | Garder {plan} |
+| `orgFormula.change.quoteCta` | Demander un devis |
+| `orgFormula.change.note` | Monter en gamme prend effet tout de suite ; réduire prend effet à la fin de la période payée. |
+| `orgFormula.downgrade.title` | Passer à {plan} |
+| `orgFormula.downgrade.text` | {current} reste active jusqu'au {date}. Ensuite, {plan} prend le relais : vous la payez à l'échéance, avec le rappel habituel. |
+| `orgFormula.downgrade.seats` | {plan} compte {count, plural, one {# utilisateur} other {# utilisateurs}} : votre équipe en compte {used}. Personne n'est retiré, mais les invitations s'arrêtent tant que l'équipe dépasse ce nombre. |
+| `orgFormula.downgrade.confirm` | Passer à {plan} à l'échéance |
+| `orgFormula.downgrade.done` | {plan} prendra le relais le {date} |
+| `orgFormula.downgrade.canceled` | Votre formule reste la même |
+| `orgFormula.pay.renewTitle` | Renouveler {plan} |
+| `orgFormula.pay.upgradeTitle` | Passer à {plan} |
+| `orgFormula.pay.amount` | À payer aujourd'hui |
+| `orgFormula.pay.renewText` | Un mois de plus, jusqu'au {date}. |
+| `orgFormula.pay.upgradeText` | Prend effet tout de suite, pour un mois. |
+| `orgFormula.pay.credit` | Les jours non utilisés de {plan} sont déduits : {credit}. |
+| `orgFormula.pay.error.unavailable` | Le paiement en ligne n'est pas encore ouvert : écrivez à assistant@jumanly.io |
+| `orgFormula.pay.okText` | Formule active jusqu'au {date} · facture envoyée par e-mail |
+| `orgFormula.pay.okNoDate` | Facture envoyée par e-mail |
+| `orgFormula.invoices.title` | Factures |
+| `orgFormula.invoices.number` | Numéro |
+| `orgFormula.invoices.date` | Date |
+| `orgFormula.invoices.amount` | Montant |
+| `orgFormula.invoices.status` | Statut |
+| `orgFormula.invoices.paid` | Payée · {method} |
+| `orgFormula.invoices.download` | Télécharger la facture {number} |
+| `orgFormula.invoices.empty` | Aucune facture pour l'instant : la première arrive avec le premier paiement. |
+| `orgFormula.method.mpesa` | M-Pesa |
+| `orgFormula.method.orange` | Orange Money |
+| `orgFormula.method.airtel` | Airtel Money |
+| `orgFormula.method.mobile_money` | Mobile Money |
+| `orgFormula.method.card` | carte |
+| `orgFormula.method.bank_transfer` | virement |
+| `orgFormula.method.cash` | espèces |
+
+### Modèle B · Journal des consultations sur ordinateur
+
+*Étape 3, lot A5 (docs/modele-b-recruteur/web, capture 084, Web-App.dc.html `qui="joseph"`, vue Journal) : chaque profil consulté, CV ouvert, évaluation ou export de l'équipe. Réservé au propriétaire et aux administrateurs.*
+
+| Clé | Texte |
+|---|---|
+| `orgJournal.title` | Journal des consultations |
+| `orgJournal.intro` | Chaque consultation de profil, ouverture de CV, évaluation ou export est enregistrée automatiquement. Seuls le propriétaire et les administrateurs voient ce journal. |
+| `orgJournal.filters` | Filtrer par membre |
+| `orgJournal.all` | Toute l'équipe |
+| `orgJournal.col.date` | Date |
+| `orgJournal.col.member` | Membre |
+| `orgJournal.col.action` | Action |
+| `orgJournal.col.person` | Personne |
+| `orgJournal.col.object` | Offre ou objet |
+| `orgJournal.col.open` | Ouvrir |
+| `orgJournal.today` | Aujourd'hui · {time} |
+| `orgJournal.yesterday` | Hier · {time} |
+| `orgJournal.other` | {date} · {time} |
+| `orgJournal.kind.profile` | Profil consulté |
+| `orgJournal.kind.profileVisible` | Profil consulté (talent visible) |
+| `orgJournal.kind.cv` | CV ouvert |
+| `orgJournal.kind.dossier` | Dossier exporté en PDF |
+| `orgJournal.kind.talentPdf` | Profil exporté en PDF |
+| `orgJournal.kind.history` | Historique exporté |
+| `orgJournal.kind.scorecard` | Évaluation enregistrée |
+| `orgJournal.kind.report` | Rapport exporté en PDF |
+| `orgJournal.noPerson` | Aucune personne |
+| `orgJournal.anonymous` | Profil anonyme |
+| `orgJournal.object.search` | Recherche de talents |
+| `orgJournal.object.report` | Rapport de recrutement |
+| `orgJournal.formerMember` | Ancien membre |
+| `orgJournal.open` | Ouvrir : {action}, {person} |
+| `orgJournal.empty` | Aucune consultation sur les 90 derniers jours. |
+| `orgJournal.emptyMember` | {name} n'a rien consulté sur les 90 derniers jours. |
+| `orgJournal.note` | Les 90 derniers jours, 100 lignes au plus. |
+
+### Modèle B · Réglages du recrutement sur ordinateur
+
+*Étape 3, lot A5 (docs/modele-b-recruteur/web, captures 085 à 087, Web-App.dc.html `qui="joseph"`, vue Réglages) : étapes de l'ATS des nouvelles offres, modèles de messages et grille d'entretien de l'entreprise. Réservé au propriétaire et aux administrateurs.*
+
+| Clé | Texte |
+|---|---|
+| `orgSettings.title` | Réglages du recrutement |
+| `orgSettings.tabs.aria` | Réglages |
+| `orgSettings.tabs.etapes` | Étapes de l'ATS |
+| `orgSettings.tabs.modeles` | Modèles de messages |
+| `orgSettings.tabs.grille` | Grille d'entretien |
+| `orgSettings.error` | L'action n'a pas abouti : rechargez la page et réessayez |
+| `orgSettings.close` | Fermer |
+| `orgSettings.stages.list` | Étapes des nouvelles offres |
+| `orgSettings.stages.fixed` | Toujours présente |
+| `orgSettings.stages.remove` | Retirer |
+| `orgSettings.stages.removeAria` | Retirer l'étape {name} |
+| `orgSettings.stages.add` | Ajouter « {name} » |
+| `orgSettings.stages.note` | S'applique aux nouvelles offres. La décision (retenu·e ou non) est toujours prise par une personne : Orbi n'écarte personne. |
+| `orgSettings.stages.removed` | « {name} » est retirée des nouvelles offres |
+| `orgSettings.stages.added` | « {name} » est ajoutée aux nouvelles offres |
+| `orgSettings.templates.aria` | Modèles de messages |
+| `orgSettings.templates.kind.convocation` | Inviter à un entretien |
+| `orgSettings.templates.kind.document` | Demander un document |
+| `orgSettings.templates.kind.relance` | Relancer |
+| `orgSettings.templates.kind.refus` | Non retenu, avec conseil |
+| `orgSettings.templates.kind.acceptation` | Proposition d'embauche |
+| `orgSettings.templates.default.convocation` | Bonjour '{prenom}', merci pour votre candidature au poste '{poste}'. Nous aimerions vous rencontrer : choisissez le créneau qui vous convient dans l'invitation. '{signataire}' |
+| `orgSettings.templates.default.document` | Bonjour '{prenom}', pour avancer sur votre candidature au poste '{poste}', pourriez-vous nous envoyer le document demandé ? '{signataire}' |
+| `orgSettings.templates.default.relance` | Bonjour '{prenom}', nous revenons vers vous au sujet du poste '{poste}' chez '{entreprise}'. Votre réponse nous aidera à avancer. '{signataire}' |
+| `orgSettings.templates.default.refus` | Bonjour '{prenom}', merci pour votre candidature au poste '{poste}'. Nous avons retenu des profils plus avancés pour ce poste. Votre profil reste dans notre vivier. '{signataire}' |
+| `orgSettings.templates.default.acceptation` | Bonjour '{prenom}', nous avons le plaisir de vous proposer le poste '{poste}' chez '{entreprise}'. Nous revenons vers vous avec tous les détails. '{signataire}' |
+| `orgSettings.templates.label` | Texte du modèle {name} |
+| `orgSettings.templates.help` | Remplacés à l'envoi : '{prenom}', '{poste}', '{entreprise}', '{signataire}' |
+| `orgSettings.templates.save` | Enregistrer |
+| `orgSettings.templates.saved` | Modèle « {name} » enregistré |
+| `orgSettings.templates.error` | Écrivez le texte du modèle, deux caractères au moins |
+| `orgSettings.grid.list` | Critères de la grille |
+| `orgSettings.grid.remove` | Retirer |
+| `orgSettings.grid.removeAria` | Retirer le critère {name} |
+| `orgSettings.grid.add` | Ajouter |
+| `orgSettings.grid.addLabel` | Ajouter un critère |
+| `orgSettings.grid.note` | Chaque critère est noté de 1 à 4 par l'évaluateur, après l'entretien. |
+| `orgSettings.grid.empty` | Pas encore de grille : chaque offre propose ses compétences requises. Ajoutez vos critères pour toutes les nouvelles évaluations. |
+| `orgSettings.grid.added` | « {name} » est ajouté à la grille |
+| `orgSettings.grid.removed` | « {name} » est retiré de la grille |
+| `orgSettings.grid.error.length` | Écrivez un critère de 2 à 80 caractères |
+| `orgSettings.grid.error.full` | La grille compte déjà 10 critères : retirez-en un d'abord |
+| `orgSettings.grid.error.duplicate` | Ce critère est déjà dans la grille |
+| `orgSettings.grid.locked` | Les grilles d'entretien viennent avec une formule qui les inclut. |
+| `orgSettings.grid.lockedLink` | Voir Formule et facturation |
 
 ### `/tarifs` · Forfaits
 
@@ -15631,6 +18606,14 @@ Conventions :
 | `notifications.item.orgJoinAccepted` | Votre demande pour rejoindre {org} est acceptée. Bienvenue dans l'équipe ! |
 | `notifications.item.orgJoinDeclined` | Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation. |
 | `notifications.item.jobEnding` | {days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}} |
+| `notifications.item.candidateAssigned` | Un collègue vous confie le dossier de {candidate} pour « {jobTitle} ». |
+| `notifications.item.talentShared` | {colleague} vous partage le profil d'un talent. |
+| `notifications.item.teamMessage` | {name} vous a écrit dans Équipe. |
+| `notifications.item.colleagueProposed` | {name} propose d'ajouter {email} à l'équipe de {org}. |
+| `notifications.item.planRequested` | {name} demande la formule {plan} pour l'équipe. |
+| `notifications.item.orgTaskAssigned` | Nouvelle tâche : {kind, select, follow {suivre} diagnostic {évaluer le diagnostic de} interview {faire un entretien avec} other {suivre}} {candidate}. Retrouvez-la dans « Mes tâches ». |
+| `notifications.item.orgTaskReminder` | Rappel : votre tâche « {kind, select, follow {suivre} diagnostic {évaluer le diagnostic de} interview {faire un entretien avec} other {suivre}} {candidate} » attend. |
+| `notifications.item.orgTaskDone` | {name} a terminé sa tâche : {kind, select, follow {suivre} diagnostic {évaluer le diagnostic de} interview {faire un entretien avec} other {suivre}} {candidate}. |
 | `notifications.item.feedReply` | {name} a répondu à votre publication. |
 | `notifications.item.feedMention` | {name} vous a mentionné dans une réponse. |
 | `notifications.item.feedLike` | {name} a aimé votre publication. |
@@ -15808,6 +18791,25 @@ Conventions :
 | `mail.verifyCode.code` | {code} |
 | `mail.verifyCode.p2` | Il est valable {minutes} minutes. Ne le communiquez à personne : l'équipe Jumanly ne vous le demandera jamais. |
 | `mail.verifyCode.p3` | Vous n'êtes pas à l'origine de cette demande ? Ignorez cet e-mail. |
+
+### E-mail · Lien de confirmation de l'adresse (inscription)
+
+| Clé | Texte |
+|---|---|
+| `mail.verifyLink.subject` | Confirmez votre adresse e-mail Jumanly |
+| `mail.verifyLink.preheader` | Un clic et votre espace s'ouvre. |
+| `mail.verifyLink.p1` | Pour terminer votre inscription, confirmez que cette adresse est bien la vôtre. Touchez le bouton ci-dessous, depuis votre téléphone ou votre ordinateur : votre espace Jumanly s'ouvre aussitôt. |
+| `mail.verifyLink.cta` | Confirmer mon adresse |
+| `mail.verifyLink.p2` | Le lien est valable {hours} heures. Ne le transférez à personne. |
+
+### E-mail · Lien de confirmation d'une nouvelle adresse (Paramètres)
+
+| Clé | Texte |
+|---|---|
+| `mail.changeEmail.subject` | Confirmez votre nouvelle adresse e-mail Jumanly |
+| `mail.changeEmail.preheader` | Un clic et cette adresse devient celle de votre compte. |
+| `mail.changeEmail.p1` | Vous avez demandé à utiliser cette adresse pour votre compte Jumanly. Touchez le bouton ci-dessous pour la confirmer : elle remplacera aussitôt l'ancienne. |
+| `mail.changeEmail.cta` | Confirmer ma nouvelle adresse |
 
 ### E-mail · Lien de connexion (lien magique)
 
@@ -16927,7 +19929,9 @@ Conventions :
 | `admin.env.badge` | Administration |
 | `admin.role.platform_admin` | Administrateur de la plateforme |
 | `admin.role.support_agent` | Support |
-| `admin.role.content_editor` | Éditeur de contenus |
+| `admin.role.content_editor` | Responsable formation |
+| `admin.role.career_manager` | Responsable carrière |
+| `admin.role.moderator` | Modération |
 | `admin.role.readOnly` | Accès en lecture seule |
 | `admin.audit.notice` | Toutes les actions d'administration sont enregistrées dans le journal d'audit. |
 | `admin.reason.required` | Indiquez le motif de cette action. Il sera enregistré dans le journal d'audit. |
@@ -16962,7 +19966,9 @@ Conventions :
 | `admin.kit.pager.range` | {from} à {to} sur {total} |
 | `admin.kit.summary` | En résumé |
 | `admin.platformRole.user` | Utilisateur |
-| `admin.platformRole.content_editor` | Éditeur de contenus |
+| `admin.platformRole.content_editor` | Responsable formation |
+| `admin.platformRole.career_manager` | Responsable carrière |
+| `admin.platformRole.moderator` | Modération |
 | `admin.platformRole.support_agent` | Support |
 | `admin.platformRole.platform_admin` | Administrateur |
 | `admin.memberRole.talent` | Talent |
@@ -17143,7 +20149,7 @@ Conventions :
 |---|---|
 | `admin.search.title` | Recherche |
 | `admin.search.label` | Rechercher un compte, une organisation, une offre, une formation ou un forfait |
-| `admin.search.labelEditor` | Rechercher une formation |
+| `admin.search.labelEditor` | Rechercher dans mes rubriques |
 | `admin.search.placeholder` | Nom, e-mail, titre ou identifiant |
 | `admin.search.submit` | Rechercher |
 | `admin.search.hint` | Saisissez au moins 2 caractères. |
@@ -17337,15 +20343,20 @@ Conventions :
 | `admin.users.action.resetPassword` | Envoyer un lien de réinitialisation |
 | `admin.users.action.grantPlan.text` | Attribuer un forfait manuellement |
 | `admin.users.action.grantPlan.until` | Jusqu'au |
-| `admin.users.action.exportData` | Générer l'export de ses données |
-| `admin.users.action.delete.text` | Supprimer le compte |
-| `admin.users.action.delete.confirm` | Supprimer définitivement le compte de {userName} ? Cette action est irréversible. |
+| `admin.users.action.delete.text` | Anonymiser le compte |
+| `admin.users.action.delete.confirm` | Anonymiser le compte de {userName} ? Cette action est irréversible. |
 | `admin.users.suspended` | Compte suspendu. |
 | `admin.users.updated` | Utilisateur mis à jour. |
 | `admin.users.supportReadOnly` | Votre rôle Support permet de consulter les comptes et abonnements, sans les modifier. |
 | `admin.users.search.submit` | Rechercher |
 | `admin.users.empty` | Aucun utilisateur ne correspond à cette recherche. |
 | `admin.users.role.user` | Aucun rôle plateforme |
+| `admin.users.roleHint.user` | Utilise l'application, sans accès à l'administration. |
+| `admin.users.roleHint.content_editor` | Gère les formations (création, leçons, vidéos et liens YouTube, quiz, publication) et les contenus. |
+| `admin.users.roleHint.career_manager` | Gère les conseils et la FAQ, la modération des offres d'emploi, l'IA et le matching. |
+| `admin.users.roleHint.moderator` | Traite les offres signalées ou à vérifier et les signalements. |
+| `admin.users.roleHint.support_agent` | Consulte toute l'administration sans rien modifier. |
+| `admin.users.roleHint.platform_admin` | Tous les droits, y compris le veto d'effacement des comptes. Vérification en deux étapes obligatoire. |
 | `admin.users.action.roles.save` | Enregistrer le rôle |
 | `admin.users.selfProtected` | Vous ne pouvez pas modifier votre propre rôle ni suspendre votre propre compte. |
 | `admin.users.count` | {count, plural, one {# utilisateur} other {# utilisateurs}} |
@@ -17401,7 +20412,7 @@ Conventions :
 | `admin.users.action.verifyEmail.confirm` | Marquer l'adresse {email} comme vérifiée ? Faites-le seulement si vous avez confirmé par un autre moyen qu'elle appartient bien à cette personne. |
 | `admin.users.action.verifyEmail.reason` | Comment l'adresse a été confirmée |
 | `admin.users.action.verifyEmail.submit` | Marquer comme vérifié |
-| `admin.users.action.resendHint` | Un nouveau code est envoyé à l'adresse du compte. |
+| `admin.users.action.resendHint` | Un nouveau lien de confirmation est envoyé à l'adresse du compte. |
 | `admin.users.action.grantPlan.confirm` | Le forfait choisi s'applique tout de suite et s'arrête seul à la date indiquée, sans paiement. Le forfait payé ou la licence de la personne, s'il en a un, n'est pas modifié. |
 | `admin.users.action.grantPlan.plan` | Forfait offert |
 | `admin.users.action.grantPlan.submit` | Offrir le forfait |
@@ -17424,14 +20435,20 @@ Conventions :
 | `admin.users.action.delete.continue` | Continuer |
 | `admin.users.action.delete.reasonShown` | Motif : {reason} |
 | `admin.users.action.delete.typeEmail` | Saisissez l'e-mail du compte pour confirmer ({email}) |
-| `admin.users.action.delete.submit` | Supprimer définitivement |
+| `admin.users.action.delete.submit` | Anonymiser le compte |
 | `admin.users.action.until` | Jusqu'au |
 | `admin.users.action.reason` | Motif |
+| `admin.users.action.erase.text` | Effacer définitivement (veto) |
+| `admin.users.action.erase.confirm` | Effacer pour toujours le compte de {userName} et tous ses documents ? |
+| `admin.users.action.erase.intro` | Droit de veto de l'administrateur : le compte est supprimé avec tout ce qu'il contient (profil, CV, documents, candidatures, publications, messages envoyés, historique). Rien n'est gardé, même anonymisé, sauf les paiements sans nom (obligation comptable) et la ligne du journal. Si la personne possède une entreprise, celle-ci passe à un autre administrateur de l'équipe ; sans équipe, ses offres sont fermées. |
+| `admin.users.action.erase.typeWord` | Écrivez EFFACER pour confirmer |
+| `admin.users.action.erase.submit` | Effacer définitivement |
+| `admin.users.done.erased` | Compte et documents effacés définitivement. |
 | `admin.users.block.self` | Vous ne pouvez pas supprimer votre propre compte. |
 | `admin.users.block.lastAdmin` | C'est le dernier administrateur de la plateforme : nommez-en un autre avant de supprimer ce compte. |
 | `admin.users.block.owner` | Cette personne est propriétaire d'une organisation : la propriété doit être transférée avant la suppression. |
 | `admin.users.block.deleted` | Ce compte est déjà supprimé. |
-| `admin.users.done.codeSent` | Code de vérification envoyé. |
+| `admin.users.done.codeSent` | Lien de confirmation envoyé. |
 | `admin.users.done.resetSent` | Lien de réinitialisation envoyé. |
 | `admin.users.done.verified` | Adresse e-mail marquée comme vérifiée. |
 | `admin.users.done.planGranted` | Forfait offert. |
@@ -17446,7 +20463,7 @@ Conventions :
 | `admin.users.error.quota` | Ce quota n'existe pas dans le forfait de la personne. |
 | `admin.users.error.unlimited` | Ce quota est déjà illimité. |
 | `admin.users.error.grant` | Ce forfait offert n'existe plus. |
-| `admin.users.error.confirm` | L'e-mail saisi ne correspond pas au compte, ou l'envoi a échoué. |
+| `admin.users.error.confirm` | La confirmation saisie ne correspond pas, ou l'envoi a échoué. |
 | `admin.users.error.self` | Vous ne pouvez pas faire cette action sur votre propre compte. |
 | `admin.users.error.lastAdmin` | C'est le dernier administrateur de la plateforme. |
 | `admin.users.error.owner` | Cette personne est propriétaire d'une organisation. |
@@ -17643,6 +20660,13 @@ Conventions :
 | `admin.orgs.done.infoRequested` | Demande de complément envoyée. |
 | `admin.orgs.done.suspended` | Organisation suspendue. |
 | `admin.orgs.done.reactivated` | Organisation réactivée. |
+| `admin.orgs.done.planGranted` | Formule offerte. Elle s'applique tout de suite. |
+| `admin.orgs.error.plan` | Choisissez une formule payante recruteur ou entreprise, et une date de fin dans les deux ans. |
+| `admin.orgs.grant.text` | Offrir une formule |
+| `admin.orgs.grant.confirm` | Offrir une formule à {org} jusqu'à une date, sans paiement ? |
+| `admin.orgs.grant.plan` | Formule |
+| `admin.orgs.grant.until` | Jusqu'au |
+| `admin.orgs.grant.submit` | Offrir la formule |
 | `admin.orgs.error.status` | Cette action n'est plus possible dans l'état actuel de l'organisation. |
 | `admin.orgs.error.reason` | Indiquez un motif (3 caractères au moins). |
 | `admin.orgs.detail.members` | Membres et rôles |
@@ -17981,8 +21005,8 @@ Conventions :
 | `admin.courses.lesson.previewBadge` | Aperçu public |
 | `admin.courses.lesson.video.text` | Vidéo |
 | `admin.courses.lesson.video.upload` | Téléverser la vidéo |
-| `admin.courses.lesson.video.id` | Identifiant de la vidéo |
-| `admin.courses.lesson.video.hint` | Identifiant de la vidéo dans la bibliothèque vidéo. En local, une adresse https directe fonctionne aussi. |
+| `admin.courses.lesson.video.id` | Vidéo : lien YouTube ou identifiant |
+| `admin.courses.lesson.video.hint` | Collez un lien YouTube (youtube.com ou youtu.be) : la vidéo se lit dans Jumanly, sans renvoyer vers YouTube. Sinon, l'identifiant de la vidéo envoyée dans la bibliothèque. |
 | `admin.courses.lesson.subtitles` | Sous-titres |
 | `admin.courses.lesson.resources` | Ressources à télécharger |
 | `admin.courses.lesson.transcript` | Transcription |
@@ -18108,7 +21132,8 @@ Conventions :
 | `admin.courses.video.sending` | Envoi en cours… |
 | `admin.courses.video.done` | Vidéo envoyée. L'encodage commence. |
 | `admin.courses.video.saved` | Vidéo enregistrée pour cette leçon. |
-| `admin.courses.video.state.none` | Aucune vidéo pour l'instant. |
+| `admin.courses.video.state.none` | Aucune vidéo pour l'instant. Envoyez un fichier, ou collez un lien YouTube dans le champ « Vidéo » ci-dessus. |
+| `admin.courses.video.state.youtube` | Vidéo YouTube, lue dans Jumanly. Pour la remplacer, changez le lien ci-dessus ou envoyez un fichier. |
 | `admin.courses.video.state.ready` | Vidéo prête à être lue. |
 | `admin.courses.video.state.processing` | Encodage en cours ({progress} %). |
 | `admin.courses.video.state.failed` | L'encodage a échoué. Envoyez le fichier à nouveau. |
@@ -18578,6 +21603,36 @@ Conventions :
 | `admin.ai.tab.weights` | Poids du matching |
 | `admin.ai.tab.disputes` | Révisions humaines |
 | `admin.ai.tab.audit` | Journal d'audit |
+| `admin.ai.tab.skills` | Compétences |
+| `admin.ai.skills.title` | Compétences et synonymes |
+| `admin.ai.skills.intro` | Le score de matching compare les compétences d'une offre et d'un profil par leur nom et leurs synonymes. Quand une même compétence s'écrit de plusieurs façons (« Excel », « MS Excel »), ajoutez un synonyme ou fusionnez-la dans la bonne compétence : les scores en tiennent compte tout de suite. Seuls des nombres sont affichés, jamais qui détient une compétence. |
+| `admin.ai.skills.filter.custom` | Créées par les membres ({count}) |
+| `admin.ai.skills.filter.all` | Tout le référentiel |
+| `admin.ai.skills.search` | Chercher une compétence |
+| `admin.ai.skills.count` | {shown} sur {total} compétences, les plus utilisées d'abord |
+| `admin.ai.skills.empty` | Aucune compétence ici pour l'instant. |
+| `admin.ai.skills.custom` | Créée par un membre |
+| `admin.ai.skills.usage` | {profiles, plural, =0 {aucun profil} one {# profil} other {# profils}} · {jobs, plural, =0 {aucune offre} one {# offre} other {# offres}} · {courses, plural, =0 {aucune formation} one {# formation} other {# formations}} |
+| `admin.ai.skills.aliases` | Synonymes |
+| `admin.ai.skills.noAlias` | Aucun |
+| `admin.ai.skills.removeAlias` | Retirer le synonyme « {alias} » |
+| `admin.ai.skills.improve` | Améliorer le matching de cette compétence |
+| `admin.ai.skills.reason` | Motif (pour le journal) |
+| `admin.ai.skills.addAlias.title` | Ajouter un synonyme |
+| `admin.ai.skills.addAlias.hint` | Une autre façon d'écrire la même compétence, reconnue par le score. |
+| `admin.ai.skills.addAlias.label` | Synonyme |
+| `admin.ai.skills.addAlias.submit` | Ajouter |
+| `admin.ai.skills.merge.title` | Fusionner dans une autre compétence |
+| `admin.ai.skills.merge.hint` | Les profils, offres et formations passent sur la compétence choisie ; ce nom en devient un synonyme. |
+| `admin.ai.skills.merge.label` | Compétence du référentiel |
+| `admin.ai.skills.merge.submit` | Fusionner |
+| `admin.ai.skills.ok.alias` | Synonyme ajouté. |
+| `admin.ai.skills.ok.aliasRemoved` | Synonyme retiré. |
+| `admin.ai.skills.ok.merged` | Compétences fusionnées. |
+| `admin.ai.skills.error.champs` | Vérifiez les champs : le motif fait au moins 3 caractères. |
+| `admin.ai.skills.error.notFound` | Compétence introuvable. Choisissez un nom de la liste. |
+| `admin.ai.skills.error.same` | Une compétence ne peut pas être fusionnée dans elle-même. |
+| `admin.ai.skills.error.alias` | Ce synonyme existe déjà pour cette compétence. |
 | `admin.ai.usage.byFeature` | Par fonction |
 | `admin.ai.usage.byPlan` | Par forfait |
 | `admin.ai.usage.cost.text` | Coût estimé : {amount} {currency} |
@@ -18836,6 +21891,10 @@ Conventions :
 | `admin.reports.detail.title.message` | Message signalé |
 | `admin.reports.detail.title.conversation` | Conversation signalée |
 | `admin.reports.detail.title.post` | Publication signalée |
+| `admin.reports.detail.title.question` | Question signalée |
+| `admin.reports.detail.title.profile` | Profil signalé |
+| `admin.reports.detail.title.organization` | Organisation signalée |
+| `admin.reports.detail.title.aiSuggestion` | Suggestion IA signalée |
 | `admin.reports.detail.post` | Publication du Fil |
 | `admin.reports.detail.postReply` | Réponse dans le Fil |
 | `admin.reports.detail.postImage` | Avec une photo |

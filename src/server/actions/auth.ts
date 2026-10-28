@@ -21,7 +21,9 @@ import {
 } from "@/server/services/accounts";
 import { allowAttempt, clientIp } from "@/server/rate-limit";
 import { readSignupFlow, writeSignupFlow } from "@/server/signup-flow";
+import { isPhone } from "@/server/view";
 import { reportError } from "@/server/observability";
+import { confirmationCallback } from "@/server/services/signup-confirmation";
 import { withArrival } from "@/lib/app-intro";
 
 export type AuthFormState = {
@@ -102,6 +104,10 @@ export async function signUp(_: AuthFormState, formData: FormData): Promise<Auth
         newsletter: input.newsletter === "on",
         aiConsentAt: now,
         termsAcceptedAt: now,
+        callbackURL: confirmationCallback({
+          plan: (formData.get("plan") as string) || undefined,
+          next: safeNext(formData.get("next")),
+        }),
       },
     });
     userId = result.user.id;
@@ -124,6 +130,7 @@ export async function signUp(_: AuthFormState, formData: FormData): Promise<Auth
     profile: input.profile,
     orgName: input.orgName,
     orgRole: input.orgRole,
+    phone: input.phone === "1",
   });
   await writeSignupFlow({
     profile: input.profile,
@@ -134,84 +141,35 @@ export async function signUp(_: AuthFormState, formData: FormData): Promise<Auth
   redirect("/inscription/verification");
 }
 
-// ─── Sign-up, step 4: verify the e-mail with the 6-digit code ──────
+// ─── Sign-up, step 4: the link sent by e-mail ──────────────────────
+// The link opens /inscription/confirmee signed in (src/app/(auth)/(acces)/inscription/confirmee).
 
-const codeSchema = z
-  .string()
-  .trim()
-  .regex(/^\d{6}$/, "codeIncomplete");
-
-export async function verifyEmail(_: AuthFormState, formData: FormData): Promise<AuthFormState> {
-  const flow = await readSignupFlow();
-  const email = emailField.safeParse(flow.email ?? formData.get("email"));
-  if (!email.success) redirect("/inscription");
-  const otp = codeSchema.safeParse(formData.get("code"));
-  if (!otp.success) return { status: "invalid", errors: { code: "codeIncomplete" } };
-  try {
-    await auth.api.verifyEmailOTP({
-      headers: await headers(),
-      body: { email: email.data, otp: otp.data },
-    });
-  } catch (error) {
-    const reason = code(error);
-    const message = reason.includes("EXPIRED")
-      ? "codeExpired"
-      : reason.includes("TOO_MANY")
-        ? "codeTooManyAttempts"
-        : "codeInvalid";
-    return { status: "invalid", errors: { code: message } };
-  }
-
-  const user = await db.user.findUnique({ where: { email: email.data } });
-  if (user) {
-    const profile = flow.profile ?? "talent";
-    const org = await setupAccount(db, user.id, { profile });
-    const plan = await resolvePlan(
-      db,
-      org ? { type: "organization", id: org.id } : { type: "user", id: user.id },
-    );
-    const welcome =
-      org && (profile === "rh" || profile === "company")
-        ? sendWelcome(user.email, {
-            kind: profile === "company" ? "company" : "recruiter",
-            firstName: user.firstName ?? user.name,
-            plan: plan?.planName ?? "",
-            org: org.name,
-          })
-        : sendWelcome(user.email, {
-            kind: "talent",
-            firstName: user.firstName ?? user.name,
-            plan: plan?.planName ?? "",
-          });
-    await welcome.catch((error) =>
-      reportError(error, { message: "E-mail de bienvenue non envoyé" }),
-    );
-  }
-  // A talent pays a plan chosen on /tarifs after the first questions (« Votre espace est prêt »).
-  const org = flow.profile === "rh" || flow.profile === "company";
-  const paid =
-    org && flow.plan
-      ? await db.plan.findUnique({ where: { code: flow.plan }, select: { priceCents: true } })
-      : null;
-  redirect(paid?.priceCents ? "/inscription/paiement" : withArrival("/app/bienvenue"));
+/** Sends the confirmation link again (or after a sign-in refused for an unconfirmed address). */
+async function sendConfirmationLink(email: string, flow: { plan?: string; next?: string }) {
+  // Without the browser's session: another account signed in there would make Better Auth refuse.
+  await auth.api.sendVerificationEmail({
+    body: { email, callbackURL: confirmationCallback(flow) },
+  });
 }
 
-export async function resendCode(_: AuthFormState): Promise<AuthFormState> {
+export async function resendLink(_: AuthFormState): Promise<AuthFormState> {
   const flow = await readSignupFlow();
   const email = emailField.safeParse(flow.email);
   if (!email.success) redirect("/inscription");
   if (!(await allowAttempt("sendCode", email.data)))
     return { status: "error", error: "resendTooSoon" };
   try {
-    await auth.api.sendVerificationOTP({
-      headers: await headers(),
-      body: { email: email.data, type: "email-verification" },
-    });
+    await sendConfirmationLink(email.data, { plan: flow.plan, next: flow.next });
   } catch {
     return { status: "error", error: "resendTooSoon" };
   }
   return { status: "sent", email: email.data };
 }
+
+const codeSchema = z
+  .string()
+  .trim()
+  .regex(/^\d{6}$/, "codeIncomplete");
 
 // ─── Sign-in ───────────────────────────────────────────────────────
 
@@ -243,6 +201,11 @@ export async function signIn(_: AuthFormState, formData: FormData): Promise<Auth
     const reason = code(error);
     if (reason.includes("EMAIL_NOT_VERIFIED")) {
       await writeSignupFlow({ email: parsed.data.email, next });
+      if (await allowAttempt("sendCode", parsed.data.email)) {
+        await sendConfirmationLink(parsed.data.email, { next }).catch((error) =>
+          reportError(error, { message: "Lien de confirmation non envoyé" }),
+        );
+      }
       redirect("/inscription/verification");
     }
     if (reason.includes("TOO_MANY") || reason.includes("RATE")) {
@@ -341,10 +304,14 @@ export async function signInWithProvider(provider: string, formData: FormData) {
       provider: id,
       callbackURL: withArrival(next ?? "/app"),
       // A new talent goes on to the first questions; an organization still picks its plan.
+      // On a phone, a recruiter goes on to the profile too (Modèle B recruteur, M2).
       newUserCallbackURL:
-        profile === "talent"
+        profile === "talent" || (profile === "rh" && (await isPhone()))
           ? `/inscription/continuer?${signupStep}`
-          : `/inscription/forfait?${signupStep}`,
+          : profile === "company"
+            ? // The administrator names the company at step 2 (Modèle B, étape 3 A1).
+              `/inscription/entreprise?${new URLSearchParams({ etape: "compte", ...(plan ? { forfait: plan.slice(0, 60) } : {}) })}`
+            : `/inscription/forfait?${signupStep}`,
       errorCallbackURL: `/connexion?erreur=${id}`,
     },
   });

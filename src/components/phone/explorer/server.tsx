@@ -6,7 +6,7 @@ import { pickMessages } from "@/i18n/client-messages";
 import { db } from "@/server/db";
 import { explorerHome } from "@/server/services/explore";
 import { initialsOf } from "../fil/data";
-import { explorerWords } from "./data";
+import { explorerWords, homeView } from "./data";
 import { PhoneExplorer } from "./home";
 
 /** The texts the screens of Explorer need in the browser. */
@@ -50,7 +50,6 @@ export async function ExplorerTab({
     }),
   ]);
   const city = profile?.desiredLocations[0] ?? null;
-  const offers = home.offers.map(words.offer);
   // « Populaires à Kinshasa »: the fields and contracts the most offered there (or everywhere).
   const near = home.offers.filter(
     (offer) => !city || offer.city.toLowerCase() === city.toLowerCase(),
@@ -78,12 +77,7 @@ export async function ExplorerTab({
       <PhoneExplorer
         me={{ name: user.name, initials: initialsOf(user.name), image: user.image, city }}
         saved={home.saved}
-        offers={offers}
-        fresh={home.fresh.map(words.offer)}
-        domains={home.domains.map((key) => ({ key, label: words.domain(key) }))}
-        companies={home.companies.map(words.company)}
-        sectors={home.sectors}
-        people={home.people.map(words.person)}
+        lists={homeView(home, words)}
         cities={cities}
         popular={[...new Set(popular)]}
       />

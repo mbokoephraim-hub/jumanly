@@ -34,7 +34,12 @@ describe("Suppression du compte", () => {
         startDate: new Date(),
       },
     });
-    const post = await createPost(db, user.id, { body: "Une nouvelle fictive" }, labels);
+    const post = await createPost(
+      db,
+      user.id,
+      { title: "Titre fictif", body: "Une nouvelle fictive" },
+      labels,
+    );
     const connection = await db.connection.create({
       data: { requesterId: user.id, addresseeId: other.id, status: "accepted" },
     });

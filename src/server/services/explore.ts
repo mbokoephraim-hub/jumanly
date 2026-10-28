@@ -3,15 +3,25 @@
  * that recruit, the people to know, the search across all three, and the pages of a company and
  * of a person. Rules:
  * - the ranking is the deterministic score of part 08; an offer without a score is never hidden;
- * - a person appears only when their profile is visible under their name (`recruiters`), never a
- *   private or anonymous one, and never someone blocked either way;
+ * - every member can be found from sign-up on (Ephraïm 27/10/2026), talents and recruiters alike,
+ *   except a profile set to « Anonyme » (the person chose to hide their name), a suspended or
+ *   deleted account, and someone blocked either way;
  * - the details of a person (about, skills, experience, achievements) show only when their
  *   profile is visible or the two are connected; otherwise their name and title only.
  * No connection or follow data is used for matching.
  */
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { matchesForUser } from "@/server/matching/service";
+import {
+  type ExploreFilters,
+  NO_FILTERS,
+  residenceWhere,
+  salaryWhere,
+  sectorMatches,
+  showsSection,
+} from "./explore-filters";
 import { openJobWhere } from "./jobs";
+import { parseSocialLinks } from "@/lib/social-links";
 
 /** The offers read for the home of Explorer: enough for every chip, ranked afterwards. */
 const HOME_OFFERS = 60;
@@ -76,8 +86,18 @@ export type ExplorePerson = {
   link: "none" | "sent" | "connected";
 };
 
+/**
+ * The members Explorer can show by name: active accounts, with or without a talent profile, except
+ * those who chose « Anonyme ». « Privé » keeps a talent out of the recruiters' pool, not out of
+ * Explorer, where only their name and title show until they connect.
+ */
+export const findablePeopleWhere = {
+  status: "active",
+  NOT: { talentProfile: { is: { visibility: "anonymous" } } },
+} satisfies Prisma.UserWhereInput;
+
 /** Accepted, pending (sent by me or to me) and blocked links of a person, by other person. */
-async function links(db: PrismaClient, userId: string) {
+export async function links(db: PrismaClient, userId: string) {
   const rows = await db.connection.findMany({
     where: {
       status: { in: ["accepted", "pending", "blocked"] },
@@ -131,10 +151,19 @@ function mostFrequent(values: (string | null)[], take: number) {
     .map(([value]) => value);
 }
 
-/** Companies with at least one open offer, the most offers first. */
-export async function hiringCompanies(db: PrismaClient, now = new Date(), take = 20) {
+/** Companies with at least one open offer, the most offers first; only `sectors` when given. */
+export async function hiringCompanies(
+  db: PrismaClient,
+  now = new Date(),
+  take = 20,
+  sectors: string[] | null = null,
+) {
   const rows = await db.organization.findMany({
-    where: { suspendedAt: null, jobs: { some: openJobWhere(now) } },
+    where: {
+      suspendedAt: null,
+      jobs: { some: openJobWhere(now) },
+      ...(sectors ? { sector: { in: sectors } } : {}),
+    },
     select: {
       id: true,
       slug: true,
@@ -144,9 +173,12 @@ export async function hiringCompanies(db: PrismaClient, now = new Date(), take =
       sector: true,
       city: true,
       verifiedAt: true,
+      hiringNow: true,
       _count: { select: { jobs: { where: openJobWhere(now) } } },
     },
   });
+  // « Recrute en ce moment » (étape 3, A3) comes first.
+  const hiring = new Set(rows.filter((row) => row.hiringNow).map((row) => row.id));
   return rows
     .map((row): ExploreCompany => ({
       id: row.id,
@@ -161,6 +193,7 @@ export async function hiringCompanies(db: PrismaClient, now = new Date(), take =
     }))
     .sort(
       (a, b) =>
+        Number(hiring.has(b.id)) - Number(hiring.has(a.id)) ||
         Number(b.verified) - Number(a.verified) ||
         b.offers - a.offers ||
         a.name.localeCompare(b.name, "fr"),
@@ -187,6 +220,7 @@ const personSelect = {
       },
     },
   },
+  recruiterProfile: { select: { jobTitle: true, headline: true } },
 } satisfies Prisma.UserSelect;
 
 type PersonRow = Prisma.UserGetPayload<{ select: typeof personSelect }>;
@@ -194,16 +228,26 @@ type PersonRow = Prisma.UserGetPayload<{ select: typeof personSelect }>;
 function titleOf(row: PersonRow) {
   const profile = row.talentProfile;
   return (
-    profile?.experiences[0]?.title || profile?.headline || profile?.desiredJobTitles[0] || null
+    profile?.experiences[0]?.title ||
+    profile?.headline ||
+    row.recruiterProfile?.jobTitle?.trim() ||
+    row.recruiterProfile?.headline?.trim() ||
+    profile?.desiredJobTitles[0] ||
+    null
   );
 }
 
 /**
- * People to know: profiles visible under their name, never already connected, asked or blocked.
+ * People to know: members Explorer can show, never already connected, asked or blocked.
  * Those with connections in common come first, then the same field of study, then the same city,
  * then the newest members.
  */
-export async function peopleToKnow(db: PrismaClient, userId: string, take = 10) {
+export async function peopleToKnow(
+  db: PrismaClient,
+  userId: string,
+  take = 10,
+  where: Prisma.UserWhereInput = {},
+) {
   const [mine, me] = await Promise.all([
     links(db, userId),
     db.talentProfile.findUnique({
@@ -214,7 +258,7 @@ export async function peopleToKnow(db: PrismaClient, userId: string, take = 10) 
   const rows = await db.user.findMany({
     where: {
       id: { notIn: [userId, ...mine.keys()] },
-      talentProfile: { visibility: "recruiters" },
+      AND: [findablePeopleWhere, where],
     },
     orderBy: { createdAt: "desc" },
     take: 200,
@@ -277,18 +321,57 @@ export async function peopleToKnow(db: PrismaClient, userId: string, take = 10) 
     .map(({ rank: _rank, ...person }) => person);
 }
 
-/** Everything the home of Explorer shows, read at once while the logo plays. */
-export async function explorerHome(db: PrismaClient, userId: string, now = new Date()) {
+/**
+ * The sectors written on companies that belong to the sectors of the filter (« Banque et
+ * microfinance » for « Banque »), or null when no sector is chosen.
+ */
+async function sectorNames(db: PrismaClient, filters: ExploreFilters) {
+  if (filters.sectors.length === 0) return null;
+  const rows = await db.organization.findMany({
+    where: { sector: { not: null } },
+    distinct: ["sector"],
+    select: { sector: true },
+  });
+  return rows
+    .map((row) => row.sector)
+    .filter((sector): sector is string => sectorMatches(sector, filters.sectors));
+}
+
+/** The open offers that meet the filters (contract, salary, sector of the company). */
+function offerWhere(
+  filters: ExploreFilters,
+  sectors: string[] | null,
+  now: Date,
+): Prisma.JobWhereInput {
+  return {
+    ...openJobWhere(now),
+    organization: { suspendedAt: null, ...(sectors ? { sector: { in: sectors } } : {}) },
+    ...(filters.contracts.length > 0 ? { contractType: { in: filters.contracts } } : {}),
+    ...(filters.salary ? { AND: [salaryWhere(filters.salary)] } : {}),
+  };
+}
+
+/**
+ * Everything the home of Explorer shows, read at once while the logo plays; with `filters`, only
+ * what meets them (docs/fil-menu-publication § 3). The filters never touch an application.
+ */
+export async function explorerHome(
+  db: PrismaClient,
+  userId: string,
+  now = new Date(),
+  filters: ExploreFilters = NO_FILTERS,
+) {
+  const sectors = await sectorNames(db, filters);
   const rows = await db.job.findMany({
-    where: { ...openJobWhere(now), organization: { suspendedAt: null } },
+    where: offerWhere(filters, sectors, now),
     orderBy: { publishedAt: "desc" },
     take: HOME_OFFERS,
     select: offerSelect,
   });
   const [offers, companies, people, saved] = await Promise.all([
     ranked(db, userId, rows, now),
-    hiringCompanies(db, now),
-    peopleToKnow(db, userId),
+    hiringCompanies(db, now, 20, sectors),
+    peopleToKnow(db, userId, 10, residenceWhere(filters.residence)),
     db.savedJob.count({ where: { userId, job: openJobWhere(now) } }),
   ]);
   const fresh = offers
@@ -313,6 +396,44 @@ export async function explorerHome(db: PrismaClient, userId: string, now = new D
     people,
     saved,
   };
+}
+
+/**
+ * How many results the filters give, for « Voir N résultats »: the open offers, the companies
+ * that recruit and the people to know that meet them, within the scope chosen.
+ */
+export async function explorerCount(
+  db: PrismaClient,
+  userId: string,
+  filters: ExploreFilters,
+  now = new Date(),
+) {
+  const sectors = await sectorNames(db, filters);
+  const [offers, companies, people] = await Promise.all([
+    showsSection(filters.scope, "offres")
+      ? db.job.count({ where: offerWhere(filters, sectors, now) })
+      : 0,
+    showsSection(filters.scope, "entreprises")
+      ? db.organization.count({
+          where: {
+            suspendedAt: null,
+            jobs: { some: openJobWhere(now) },
+            ...(sectors ? { sector: { in: sectors } } : {}),
+          },
+        })
+      : 0,
+    showsSection(filters.scope, "personnes")
+      ? links(db, userId).then((mine) =>
+          db.user.count({
+            where: {
+              id: { notIn: [userId, ...mine.keys()] },
+              AND: [findablePeopleWhere, residenceWhere(filters.residence)],
+            },
+          }),
+        )
+      : 0,
+  ]);
+  return { offers, companies, people, total: offers + companies + people };
 }
 
 export type ExplorerHome = Awaited<ReturnType<typeof explorerHome>>;
@@ -348,8 +469,9 @@ export const EXPLORE_SCOPES = ["tout", "offres", "entreprises", "personnes", "vi
 export type ExploreScope = (typeof EXPLORE_SCOPES)[number];
 
 /**
- * The search of Explorer, from the first letter: offers (by title, company or skill), companies,
- * people (visible ones only) and cities with open offers. `scope` keeps one group.
+ * The search of Explorer, from the first letter: offers (by title, company or skill), every
+ * company by its name (recruiting or not), people (all members Explorer can show, talents and
+ * recruiters) and cities with open offers. `scope` keeps one group.
  */
 export async function exploreSearch(
   db: PrismaClient,
@@ -389,11 +511,7 @@ export async function exploreSearch(
           select: offerSelect,
         })
       : Promise.resolve([]),
-    want("entreprises")
-      ? hiringCompanies(db, now, 200).then((rows) =>
-          rows.filter((row) => row.name.toLowerCase().includes(text.toLowerCase())).slice(0, 10),
-        )
-      : Promise.resolve([]),
+    want("entreprises") ? searchCompanies(db, text, now) : Promise.resolve([]),
     want("personnes") ? searchVisiblePeople(db, userId, text) : Promise.resolve([]),
     want("villes")
       ? db.job.groupBy({
@@ -413,7 +531,47 @@ export async function exploreSearch(
   };
 }
 
-/** People visible under their name, by name or title, with where we stand with each. */
+/** Every company whose name contains `text`: recruiting now first, then verified, then most offers. */
+async function searchCompanies(db: PrismaClient, text: string, now: Date) {
+  const rows = await db.organization.findMany({
+    where: { suspendedAt: null, name: { contains: text, mode: "insensitive" } },
+    take: 50,
+    select: {
+      id: true,
+      slug: true,
+      name: true,
+      logo: true,
+      banner: true,
+      sector: true,
+      city: true,
+      verifiedAt: true,
+      hiringNow: true,
+      _count: { select: { jobs: { where: openJobWhere(now) } } },
+    },
+  });
+  return rows
+    .sort(
+      (a, b) =>
+        Number(b.hiringNow) - Number(a.hiringNow) ||
+        Number(b.verifiedAt !== null) - Number(a.verifiedAt !== null) ||
+        b._count.jobs - a._count.jobs ||
+        a.name.localeCompare(b.name, "fr"),
+    )
+    .slice(0, 10)
+    .map((row): ExploreCompany => ({
+      id: row.id,
+      slug: row.slug,
+      name: row.name,
+      logo: row.logo,
+      banner: row.banner,
+      sector: row.sector,
+      city: row.city,
+      verified: row.verifiedAt !== null,
+      offers: row._count.jobs,
+    }));
+}
+
+/** Members Explorer can show, by name, title or recruiter post, with where we stand with each. */
 async function searchVisiblePeople(db: PrismaClient, userId: string, text: string) {
   const mine = await links(db, userId);
   const blocked = [...mine.entries()].filter(([, kind]) => kind === "blocked").map(([id]) => id);
@@ -421,8 +579,13 @@ async function searchVisiblePeople(db: PrismaClient, userId: string, text: strin
   const rows = await db.user.findMany({
     where: {
       id: { notIn: [userId, ...blocked] },
-      talentProfile: { visibility: "recruiters" },
-      OR: [{ name: contains }, { talentProfile: { headline: contains } }],
+      ...findablePeopleWhere,
+      OR: [
+        { name: contains },
+        { talentProfile: { is: { headline: contains } } },
+        { recruiterProfile: { is: { jobTitle: contains } } },
+        { recruiterProfile: { is: { headline: contains } } },
+      ],
     },
     orderBy: { name: "asc" },
     take: 10,
@@ -469,11 +632,18 @@ export async function companyPage(
       country: true,
       sector: true,
       size: true,
+      foundedYear: true,
+      international: true,
+      socialLinks: true,
+      hiringNow: true,
+      bannerTheme: true,
       verifiedAt: true,
       createdAt: true,
       _count: { select: { feedFollowers: true } },
+      // « Membres »: the company's recruiters only, each one's page open to everyone (Ephraïm
+      // 27/10/2026); managers, readers and the people who say they work there stay out.
       memberships: {
-        where: { status: "active" },
+        where: { status: "active", role: { in: ["org_owner", "org_admin", "recruiter"] } },
         orderBy: { createdAt: "asc" },
         select: {
           jobTitle: true,
@@ -499,20 +669,22 @@ export async function companyPage(
     links(db, userId),
   ]);
   const offers = await ranked(db, userId, rows, now);
-  // Members: never someone who blocked me or whom I blocked.
+  // Members: never someone who blocked me or whom I blocked. The page's owner first.
+  const rank = { org_owner: 0, org_admin: 1, recruiter: 2 } as Record<string, number>;
   const members = org.memberships
-    .filter((member) => member.user.id !== userId && mine.get(member.user.id) !== "blocked")
+    .filter((member) => mine.get(member.user.id) !== "blocked")
+    .sort((a, b) => (rank[a.role] ?? 3) - (rank[b.role] ?? 3))
     .map((member) => ({
       id: member.user.id,
       name: member.user.name,
       image: member.user.image,
       title: member.jobTitle?.trim() || null,
-      role: member.role,
+      role: member.role as typeof member.role | null,
       link: linkOf(mine.get(member.user.id)),
-      /** Their page opens only when their profile is visible, or for a connection. */
-      visible:
-        member.user.talentProfile?.visibility === "recruiters" ||
-        mine.get(member.user.id) === "connected",
+      /** A recruiter's profile is a professional page, open to every member. */
+      visible: true,
+      declared: false,
+      self: member.user.id === userId,
     }));
   return {
     id: org.id,
@@ -526,6 +698,11 @@ export async function companyPage(
     country: org.country,
     sector: org.sector,
     size: org.size,
+    foundedYear: org.foundedYear,
+    international: org.international,
+    socialLinks: parseSocialLinks(org.socialLinks),
+    hiringNow: org.hiringNow,
+    bannerTheme: org.bannerTheme,
     createdAt: org.createdAt,
     verified: org.verifiedAt !== null,
     followers: org._count.feedFollowers,
@@ -552,140 +729,4 @@ export async function toggleFollowCompany(db: PrismaClient, userId: string, slug
   }
   await db.feedFollow.create({ data: { followerId: userId, organizationId: org.id } });
   return true;
-}
-
-// ─── The page of a person (rangée 10) ─────────────────────────────────────────────────
-
-/**
- * A person as their page shows them. Their details come only when their profile is visible under
- * their name or the two are connected; a private or anonymous profile shows its name only to its
- * connections, and to nobody else (null).
- */
-export async function personPage(db: PrismaClient, viewerId: string, id: string) {
-  const mine = await links(db, viewerId);
-  const link = mine.get(id);
-  if (link === "blocked") return null;
-  const user = await db.user.findUnique({
-    where: { id },
-    select: {
-      id: true,
-      name: true,
-      image: true,
-      emailVerified: true,
-      talentProfile: {
-        select: {
-          visibility: true,
-          banner: true,
-          headline: true,
-          summary: true,
-          desiredJobTitles: true,
-          desiredLocations: true,
-          skills: {
-            orderBy: [{ verified: "desc" }, { level: "desc" }],
-            take: 12,
-            select: { skill: { select: { name: true } } },
-          },
-          experiences: {
-            orderBy: [{ startDate: "desc" }],
-            take: 6,
-            select: {
-              id: true,
-              title: true,
-              company: true,
-              location: true,
-              startDate: true,
-              endDate: true,
-            },
-          },
-          educations: {
-            orderBy: [{ endYear: "desc" }],
-            take: 4,
-            select: { id: true, degree: true, school: true, startYear: true, endYear: true },
-          },
-          documents: {
-            where: { kind: "portfolio_item" },
-            orderBy: { updatedAt: "desc" },
-            take: 12,
-            select: { id: true, title: true, content: true },
-          },
-        },
-      },
-    },
-  });
-  const profile = user?.talentProfile;
-  if (!user || !profile) return null;
-  const connected = link === "connected";
-  const visible = profile.visibility === "recruiters";
-  if (!visible && !connected) return null;
-  const [connections, theirCircle, conversation] = await Promise.all([
-    db.connection.count({
-      where: { status: "accepted", OR: [{ requesterId: id }, { addresseeId: id }] },
-    }),
-    db.connection.findMany({
-      where: { status: "accepted", OR: [{ requesterId: id }, { addresseeId: id }] },
-      select: { requesterId: true, addresseeId: true },
-    }),
-    connected
-      ? db.conversation.findFirst({
-          where: {
-            kind: "peer",
-            connection: {
-              status: "accepted",
-              OR: [
-                { requesterId: viewerId, addresseeId: id },
-                { requesterId: id, addresseeId: viewerId },
-              ],
-            },
-          },
-          select: { id: true },
-        })
-      : null,
-  ]);
-  const myConnections = new Set(
-    [...mine.entries()].filter(([, kind]) => kind === "connected").map(([other]) => other),
-  );
-  const common = theirCircle.filter((row) => {
-    const other = row.requesterId === id ? row.addresseeId : row.requesterId;
-    return other !== viewerId && myConnections.has(other);
-  }).length;
-  const current = profile.experiences.find((experience) => experience.endDate === null);
-  return {
-    id: user.id,
-    name: user.name,
-    image: user.image,
-    banner: profile.banner,
-    verified: user.emailVerified,
-    title: current?.title || profile.headline || profile.desiredJobTitles[0] || null,
-    company: current?.company ?? null,
-    city: profile.desiredLocations[0] ?? null,
-    about: profile.summary?.trim() || null,
-    skills: profile.skills.map((row) => row.skill.name),
-    experiences: profile.experiences,
-    educations: profile.educations,
-    // Only the achievements the person shows on their portfolio.
-    works: profile.documents
-      .map((document) => ({
-        id: document.id,
-        title: document.title,
-        ...workDetails(document.content),
-      }))
-      .filter((work) => work.visible)
-      .map(({ visible: _visible, ...work }) => work),
-    connections,
-    common,
-    link: link === "received" ? ("received" as const) : linkOf(link),
-    conversationId: conversation?.id ?? null,
-  };
-}
-
-export type PersonPage = NonNullable<Awaited<ReturnType<typeof personPage>>>;
-
-/** The first skill and the number of pictures of an achievement (portfolio.ts), if shown. */
-function workDetails(content: Prisma.JsonValue) {
-  const value = content && typeof content === "object" && !Array.isArray(content) ? content : {};
-  const skills = Array.isArray(value.skills)
-    ? value.skills.filter((skill): skill is string => typeof skill === "string")
-    : [];
-  const images = Array.isArray(value.media) ? value.media.length : 0;
-  return { tool: skills[0] ?? null, images, visible: value.visible !== false };
 }

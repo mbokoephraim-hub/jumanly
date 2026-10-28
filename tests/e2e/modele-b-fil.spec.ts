@@ -19,7 +19,7 @@ test.describe("Modèle B · Fil au téléphone", () => {
       "true",
     );
     await tabs.getByRole("tab", { name: "Entreprises" }).click();
-    await expect(fil.getByText("Portes ouvertes", { exact: false })).toBeVisible();
+    await expect(fil.getByText("Portes ouvertes", { exact: false }).first()).toBeVisible();
     await expect(fil.getByText("Badge « Bâtisseuse de communauté »")).toHaveCount(0);
     await tabs.getByRole("tab", { name: "Abonnements" }).click();
     await expect(
@@ -50,9 +50,21 @@ test.describe("Modèle B · Fil au téléphone", () => {
     await report.getByRole("button", { name: "Annuler" }).click();
     await expect(report).toBeHidden();
 
-    // Republier opens its sheet, « Envoyer à une connexion » the list of connections.
-    await baobab.getByRole("button", { name: /^Republier/ }).click();
-    const reshare = page.getByRole("dialog", { name: "Republier" });
+    // The post (docs/fil-menu-publication § 2): a title, its text, and the actions under it.
+    await expect(
+      baobab.getByRole("heading", { name: "Nous recrutons 3 analystes data à Kinshasa" }),
+    ).toBeVisible();
+    // Enregistrer answers at once.
+    const save = baobab.getByRole("button", { name: "Enregistrer", exact: true });
+    await save.click();
+    await expect(save).toHaveAttribute("aria-pressed", "true");
+    await save.click();
+    await expect(save).toHaveAttribute("aria-pressed", "false");
+
+    // Envoyer opens Republier · Citer · « Envoyer à une connexion », then the list of connections.
+    await baobab.getByRole("button", { name: "Envoyer", exact: true }).click();
+    const reshare = page.getByRole("dialog", { name: "Partager" });
+    await expect(reshare.getByRole("button", { name: /^Republier/ })).toBeVisible();
     await reshare.getByRole("button", { name: /Envoyer à une connexion/ }).click();
     const send = page.getByRole("dialog", { name: "Envoyer à" });
     await expect(send.getByRole("button", { name: "Envoyer" }).first()).toBeVisible();
@@ -61,9 +73,13 @@ test.describe("Modèle B · Fil au téléphone", () => {
     await page.keyboard.press("Escape");
     await expect(send).toBeHidden();
 
-    // Répondre opens the post, with its answers and the reply bar; the way back is the Fil.
+    // A photo carries the actions in its notch; Commenter opens the post, with its answers and
+    // the reply bar; the way back is the Fil.
     const patrick = fil.locator("article").filter({ hasText: "Premier jour chez Fleuve Banque" });
-    await patrick.getByRole("link", { name: /^Répondre/ }).click();
+    await expect(
+      patrick.locator(".nb-fil-im .nb-fil-encoche").getByRole("button", { name: /^J'aime/ }),
+    ).toBeVisible();
+    await patrick.getByRole("link", { name: /^Commenter/ }).click();
     await page.waitForURL(/\/app\/fil\/[^/]+$/);
     await expect(page.getByRole("heading", { name: "Publication" })).toBeVisible();
     await expect(
@@ -86,10 +102,19 @@ test.describe("Modèle B · Fil au téléphone", () => {
     const audience = page.getByRole("button", { name: /Qui peut répondre/ });
     await audience.click();
     await expect(audience).toContainText("Mes connexions peuvent répondre");
-    const text = `Une nouvelle du test ${Date.now()}`;
-    await page.getByRole("textbox", { name: /publication/i }).fill(text);
+    // A title first: the button asks for it, the counters and the preview follow the typing.
+    await expect(page.getByRole("button", { name: "Ajoutez un titre", exact: true })).toBeVisible();
+    const title = `Une nouvelle du test ${Date.now()}`;
+    await page.getByRole("textbox", { name: /^Titre/ }).fill(title);
+    await expect(page.getByText(`${title.length}/60`)).toBeVisible();
+    const text = "Un texte fictif, assez court pour le Fil.";
+    await page.getByRole("textbox", { name: /^Texte/ }).fill(text);
+    await expect(page.getByText(`${text.length}/160`)).toBeVisible();
+    await expect(page.getByText("Encore un peu : visez environ 120 caractères.")).toBeVisible();
+    await expect(page.locator(".nb-fil-apercu").getByText(title)).toBeVisible();
     await page.getByRole("button", { name: "Publier", exact: true }).click();
     await page.waitForURL((url) => url.pathname === "/app");
+    await expect(fil.getByRole("heading", { name: title })).toBeVisible();
     await expect(fil.getByText(text)).toBeVisible();
 
     // The bell opens the notifications, with their filters.

@@ -24,18 +24,31 @@ export function PhoneSheet({
   className?: string;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
+  const shown = useRef(open);
   useEffect(() => {
+    shown.current = open;
     const node = dialog.current;
     if (!node) return;
     if (open && !node.open) node.showModal();
     if (!open && node.open) node.close();
   }, [open]);
+  // A page left with its sheet open stays mounted, hidden (cacheComponents): a modal <dialog>
+  // still open there would make the next page inert. Leaving closes it.
+  useEffect(() => {
+    const node = dialog.current;
+    return () => {
+      if (node?.open) node.close();
+    };
+  }, []);
   return (
     <dialog
       ref={dialog}
       className="nb-feuille-dlg"
       aria-label={label}
-      onClose={onClose}
+      // Closed by its owner (another sheet takes its place): nothing to tell.
+      onClose={() => {
+        if (shown.current) onClose();
+      }}
       onCancel={(event) => {
         event.preventDefault();
         onClose();

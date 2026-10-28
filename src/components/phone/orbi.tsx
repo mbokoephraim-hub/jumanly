@@ -6,9 +6,10 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { askOrbiAction } from "@/server/actions/orbi";
 import { orbiFactAction, type OrbiFactAnswer } from "@/server/actions/feed";
 import { FilAvatar } from "./fil/avatar";
-import { ORBI_ASK_EVENT, ORBI_EVENT, type OrbiFact } from "./orbi-bus";
+import { rhOrbiFactAction } from "@/server/actions/phone-rh-orbi";
+import { ORBI_ASK_EVENT, ORBI_EVENT, type OrbiFact, type RhOrbiFact } from "./orbi-bus";
 import { orbiActions, type OrbiReply } from "@/lib/orbi";
-import { keepsBar, rootTab, tabOf, type PhoneTab } from "@/lib/phone-tabs";
+import { keepsBar, rootTab, tabOf, type PhoneTab, type TabSetName } from "@/lib/phone-tabs";
 import { OrbiDisc, PhoneIcon } from "./icon";
 import { PhoneSheet } from "./sheet";
 
@@ -37,7 +38,9 @@ export type OrbiTexts = {
   limits: Record<NonNullable<OrbiReply["limit"]>, string>;
   limitLinks: { consent: string; plans: string };
   actions: Record<string, string>;
-  tabs: Record<PhoneTab, OrbiTabTexts>;
+  tabs: Partial<Record<PhoneTab, OrbiTabTexts>>;
+  /** « Ouvrir la conversation complète » (the recruiter's page Orbi, planche 184). */
+  full?: string;
 };
 
 type Answer = {
@@ -52,6 +55,12 @@ type Answer = {
 const FIL_FACTS: OrbiFact[] = ["digest", "entreprises", "suivre", "ecrire"];
 /** The four questions of Messages, answered from the person's conversations (lot B8). */
 const MESSAGE_FACTS: OrbiFact[] = ["nonlus", "prioritaire", "recruteur", "relire"];
+/** The recruiter's questions answered from the organization's facts (lot M7), by tab and rank. */
+const RH_FACTS: Partial<Record<PhoneTab, (RhOrbiFact | null)[]>> = {
+  candidatures: ["first"],
+  talents: ["propose"],
+  messages: ["waiting", "unread"],
+};
 
 /**
  * Orbi everywhere (brief § 3, planche Identité): the mint disc at the bottom right of each tab,
@@ -59,12 +68,23 @@ const MESSAGE_FACTS: OrbiFact[] = ["nonlus", "prioritaire", "recruteur", "relire
  * questions and « Écrire à Orbi ». The answer comes from Orbi (consent, right and credits checked
  * on the server); Orbi proposes pages, the person decides.
  */
-export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
+export function PhoneOrbi({
+  texts,
+  set = "talent",
+  hrefs = orbiActions,
+  limitHrefs = { consent: "/app/parametres/confidentialite", plans: "/app/abonnement" },
+}: {
+  texts: OrbiTexts;
+  set?: TabSetName;
+  /** The pages Orbi may propose, by key (the talent's, or the recruiter's). */
+  hrefs?: Record<string, string>;
+  limitHrefs?: { consent: string; plans: string };
+}) {
   const pathname = usePathname();
-  const root = rootTab(pathname);
+  const root = rootTab(pathname, set);
   // The pages of a company or a person keep Orbi, without the bubble (planches Entreprise, Personne).
-  const above = root === null && keepsBar(pathname);
-  const tab = root ?? (above ? tabOf(pathname) : null);
+  const above = root === null && keepsBar(pathname, set);
+  const tab = root ?? (above ? tabOf(pathname, set) : null);
   const [open, setOpen] = useState(false);
   const [answer, setAnswer] = useState<Answer | null>(null);
   const [text, setText] = useState("");
@@ -89,7 +109,7 @@ export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- follows the address
     if (tab) setShownTab(tab);
   }, [tab]);
-  const current = texts.tabs[shownTab];
+  const current = texts.tabs[shownTab] ?? { from: texts.title, questions: [] };
 
   const ask = (question: string) => {
     const clean = question.trim();
@@ -110,11 +130,13 @@ export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
     });
   };
 
-  const askFact = (fact: OrbiFact, question: string) => {
+  const askFact = (fact: OrbiFact | { rh: RhOrbiFact }, question: string) => {
     setOpen(true);
     setAnswer({ question, reply: null, error: null, fact: null });
     start(async () => {
-      const result = await orbiFactAction(fact).catch(() => null);
+      const result = await (
+        typeof fact === "string" ? orbiFactAction(fact) : rhOrbiFactAction(fact.rh)
+      ).catch(() => null);
       setAnswer(
         result
           ? { question: result.question, reply: null, error: null, fact: result }
@@ -126,7 +148,13 @@ export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
   /** A question of the sheet: from the facts on the Fil, from Orbi's conversation elsewhere. */
   const choose = (question: string) => {
     const index = current.questions.indexOf(question);
-    if (shownTab === "fil" && index >= 0) askFact(FIL_FACTS[index], question);
+    // The recruiter's questions: from the organization's facts when there are some, otherwise to
+    // Orbi's conversation (organization's credits).
+    if (set === "recruteur") {
+      const fact = index >= 0 ? RH_FACTS[shownTab]?.[index] : null;
+      if (fact) askFact({ rh: fact }, question);
+      else ask(question);
+    } else if (shownTab === "fil" && index >= 0) askFact(FIL_FACTS[index], question);
     // « Pourquoi ce cours pour mon Cap ? » of Formation: from the facts too (lot B7).
     else if (shownTab === "formation" && index === 0) askFact("cours", question);
     else if (shownTab === "messages" && index >= 0) askFact(MESSAGE_FACTS[index], question);
@@ -264,9 +292,7 @@ export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
                     {texts.limits[answer.reply.limit]}{" "}
                     <Link
                       href={
-                        answer.reply.limit === "consent"
-                          ? "/app/parametres/confidentialite"
-                          : "/app/abonnement"
+                        answer.reply.limit === "consent" ? limitHrefs.consent : limitHrefs.plans
                       }
                       onClick={() => setOpen(false)}
                     >
@@ -279,11 +305,11 @@ export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
                 {answer.reply.actions.length > 0 ? (
                   <div className="nb-orbi-liste">
                     {answer.reply.actions
-                      .filter((key): key is keyof typeof orbiActions => key in orbiActions)
+                      .filter((key) => key in hrefs)
                       .map((key) => (
                         <Link
                           key={key}
-                          href={orbiActions[key]}
+                          href={hrefs[key]}
                           className="nb-orbi-lien"
                           onClick={() => setOpen(false)}
                         >
@@ -317,6 +343,11 @@ export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
             ))}
           </div>
         )}
+        {texts.full ? (
+          <Link href="/app/orbi" className="nb-orbi-complet" onClick={() => setOpen(false)}>
+            {texts.full}
+          </Link>
+        ) : null}
         <form
           className="nb-champ nb-orbi-champ"
           onSubmit={(event) => {

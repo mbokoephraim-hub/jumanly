@@ -3973,12 +3973,1029 @@ Quatre corrections d'Ephraïm, détail dans `docs/decisions/2026-10-22-compte-re
 
 - Un talent passe en compte recruteur depuis Paramètres (téléphone) ou Compte (ordinateur).
 - « Supprimer mon compte » efface tout immédiatement ; la même adresse repart de zéro. Paiements et
-  factures gardés sans lien (comptabilité), à confirmer par Ephraïm.
+  factures gardés sans lien (comptabilité), confirmé par Ephraïm le 22/10/2026.
 - Publications du Fil : 220 caractères au plus, compteur visible ; réponses inchangées.
 - « Pour vous » classé par `feed-rank.ts` (offres, nouveaux postes, événements, auteurs actifs,
   commentateurs, bien connectés), plafonné et varié.
 - Tests : `tests/unit/feed-rank.test.ts`, `tests/db/account-deletion.test.ts`, `tests/db/feed.test.ts`,
   `tests/e2e/corrections-compte.spec.ts`.
+
+## Tailles réduites au téléphone : Fil et Carrière (22 octobre 2026)
+
+Demande d'Ephraïm (deux captures) : la photo en haut du Fil passe à 28 px, la taille de la cloche.
+Carrière : photo 64 px (au lieu de 96), boutons Partager et Modifier 34 px, puces Cap et disponibilité
+28 px, onglets Profil · CV · Portfolio · Progression · Candidatures 44 px en 14 px. Le bloc d'identité
+passe au-dessus de la bannière, que la photo plus petite ne dégage plus. Plus aucun cadre vert dans un
+champ de texte quand on écrit (publication, recherche d'Explorer).
+
+## Modèle B recruteur et administrateur déposé (22 octobre 2026)
+
+- Ephraïm a validé l'espace recruteur sur mobile et sur ordinateur, ainsi que l'espace administrateur sur ordinateur.
+- Ils sont déposés dans `docs/modele-b-recruteur/` : brief, prompt, captures avec index, sources `.dc.html`, rapports PDF et générateurs.
+- Ce dépôt remplace les planches recruteur et admin de `docs/refonte-mobile/` et de `docs/refonte-web/`. `CLAUDE.md` et `docs/PLAN-REFONTE-EN-3-ETAPES.md` sont mis à jour.
+
+## Modèle B recruteur mobile · M0, diagnostic (22 octobre 2026)
+
+Demande d'Ephraïm du 22/10/2026 : refaire l'appli recruteur au téléphone (390 px) sur le Modèle B
+(`docs/modele-b-recruteur/`, sections 01 à 11 de `mobile/captures/INDEX.md`). Tablette, ordinateur et
+administration d'entreprise ne bougent pas. Lots M0 à M8, une branche et une PR par lot, puis arrêt
+en attendant la validation.
+
+**Aujourd'hui au téléphone.** Un recruteur (espace Hire actif) reçoit au téléphone la coque
+`RecruiterShell` de l'ancienne refonte (`docs/refonte-mobile`, lots R1 à R6, PR #116 à #123) : en-tête
+avec la pastille de l'organisation (`header.tsx`, `org-sheet.tsx`), barre flottante À traiter · Offres ·
+Orbi · Candidats · Messages (`bottom-bar.tsx`), thème clair ou sombre. Une seule base de code pour les
+trois largeurs : les écrans sont responsives, les règles téléphone vivent dans des `@media (max-width:
+767px)` de `recruiter*.css`. Écrans existants :
+
+| Section Modèle B | Écran existant au téléphone | À faire |
+|---|---|---|
+| 01 Ouverture, inscription | `/decouvrir` et `/inscription` (talent, B2), `/app/hire/bienvenue` et `/app/bienvenue` (premiers pas R, 3 étapes), `org-join.tsx` (demande pour rejoindre) | Refaire : rôle, entreprise, demande de rattachement et logo, pays et contacts, profil recruteur en 7 étapes, notifications, profil prêt |
+| 02 Fil | aucun pour le recruteur (le Fil talent B3 n'est pas dans la coque RH) | Nouveau : Fil du recruteur, publier en son nom ou au nom de l'entreprise |
+| 03 Offres | `/app/hire/offres`, `/app/hire/offres/[id]`, `/nouvelle` (4 étapes), `/modifier`, `/fiche`, fin d'offre (`ending.tsx`) | Refaire : indicateurs, détail et statistiques, menu, partage, clôture, rapport PDF, publication en 5 étapes |
+| 04-05 Candidatures | `/app/hire` (À traiter), `/app/hire/candidats`, `/candidats/[id]` (+ `entretien`, `evaluation`, `decision`, `message`), `/offres/[id]/ats`, `/retenus`, `/reponses`, `/app/hire/entretiens` | Refaire : ATS en onglets (fort potentiel, toutes par étape, entretiens, décisions, non retenus), diagnostic de tous les CV, fiche candidat (résumé, pourquoi, CV, réponses, notes, historique, menu), planifier, évaluer, proposer, réponse groupée |
+| 06 Talents | `/app/hire/talents`, `/talents/[id]`, `/proposer`, `/app/hire/viviers` | Refaire : recherche en deux temps, vivier, propositions, onglet Réseau, profil talent vu par le recruteur |
+| 07 Messages | `/app/messages` et `/app/messages/[id]` (version RH, `thread.tsx`, `thread-composer.tsx`, `inbox.tsx`) | Refaire : catégories Candidats · Réseau · Équipe, nouveau message, modèles, joindre |
+| 08 Compte | `/app/hire/compte`, `/compte/profil`, `/app/hire/modeles`, `/app/hire/rapports`, `/app/parametres`, `/app/abonnement` | Refaire : compte par l'avatar, profil avec logo, statistiques, enregistrées, équipe, formule en lecture seule, réglages, aide par e-mail |
+| 09 Pages entreprise | `/app/entreprises/[slug]`, `/app/personnes/[id]` (talent B4) | Adapter au recruteur : onglets Offres et Membres, « Se connecter à tous », bandeau réseau |
+| 10 Notifications, Orbi | `/app/notifications` (version RH), Orbi en panneau (`OrbiPanel`) | Refaire : notifications par catégorie, Orbi flottant menthe |
+| 11 Changer de profil | feuille « Organisation active » (`org-sheet.tsx`), « Passer à mon espace talent » | Refaire : recruteur, profil talent discret, profil entreprise (administrateur) |
+
+**Choix des adresses au téléphone** (le web garde les siennes) : Fil `/app/hire`, Offres
+`/app/hire/offres`, Candidatures `/app/hire/candidats`, Talents `/app/hire/talents`, Messages
+`/app/messages`. Les cinq onglets restent montés sous les pages, comme pour le talent.
+
+**Ancien design recruteur mobile à supprimer (M8).** Ce qui ne sert qu'au téléphone dans la coque
+`RecruiterShell` : `src/components/recruiter/bottom-bar.tsx`, `header.tsx` (en-tête téléphone),
+la variante téléphone de `org-sheet.tsx`, `recruiterTabs` et `hidesRecruiterTabBar` de
+`src/config/navigation.ts` s'ils ne servent plus, les règles `@media (max-width: 767px)` de
+`src/styles/recruiter*.css`, les textes devenus orphelins, et les e2e `mobile-recruteur*.spec.ts` sur le
+projet mobile (remplacés par les e2e `modele-b-recruteur-*`). Les composants partagés avec la tablette et
+l'ordinateur restent. Les anciennes adresses téléphone (`/app/hire/viviers`, `/app/hire/entretiens`,
+`/app/hire/modeles`…) redirigent au téléphone vers leur écran Modèle B.
+
+**Données.** Rien n'est effacé ; les migrations éventuelles (publication au nom de l'entreprise,
+réseau du recruteur, profil talent discret) sont additives.
+
+## Modèle B recruteur mobile · M1, coque (22 octobre 2026)
+
+Au téléphone, l'espace recruteur passe dans la coque du Modèle B, la même que le talent
+(`PhoneShell`, avec `set="recruteur"`) : fond sombre, barre du bas Fil · Offres · Candidatures ·
+Talents · Messages en icônes seules (compteur lime des nouvelles candidatures, point sur Messages),
+Orbi flottant menthe avec une question par onglet, avatar en haut à droite (logo de l'entreprise
+en badge, « ? » tant que le rattachement n'est pas accepté) qui ouvre le compte, recherche en deux
+temps (options « Rechercher dans » et recherches récentes d'abord, résultats dès la première
+lettre, groupés Offres · Candidats · Entreprises · Personnes, tous filtrés par l'organisation),
+transitions et préchargement du talent (listes Hire préchargées, fiches journalisées jamais).
+
+- `src/lib/phone-tabs.ts` : deux jeux d'onglets (talent, recruteur).
+- `src/components/phone/recruteur/` : tête d'onglet (`RhTab`), recherche, avatar, cloche, « + ».
+- `src/server/services/hire-phone.ts` et `/api/hire/recherche/telephone` : compteurs de la barre et
+  recherche.
+- Les écrans pas encore redessinés (M2 à M8) gardent leur contenu sous la nouvelle tête, rendu
+  lisible dans le cadre sombre (contrastes AA vérifiés avec axe).
+- `mobile-recruteur.spec.ts` (ancienne barre) ne tourne plus sur le projet mobile ; remplacé par
+  `modele-b-recruteur-coque.spec.ts`. Test en base : `tests/db/modele-b-recruteur.test.ts`.
+- Ordinateur et tablette inchangés. Une fenêtre d'ordinateur rétrécie garde pour l'instant l'interface web (bascule à revoir en M8, avec le nettoyage).
+
+## Modèle B recruteur mobile · M2, ouverture et inscription (22 octobre 2026)
+
+Section 01 des captures (001 à 030). Au téléphone, « Je recrute » mène à la bienvenue recruteur
+(trois écrans Publier · Trier · Recruter), puis à l'inscription recruteur : e-mail, mot de passe,
+code, conditions pour les recruteurs en trois points, connexion avec son propre sous-titre. Ensuite
+le profil recruteur en sept étapes, chaque étape enregistrée en avançant :
+
+1. Vous : prénom, nom, photo (feuille appareil photo ou galerie).
+2. Où vous êtes : pays (feuille par régions, avec recherche), ville, autres villes où l'on recrute.
+3. Vos contacts : e-mail professionnel obligatoire (le domaine sert à valider l'entreprise),
+   téléphone facultatif avec indicatif (feuille), WhatsApp, LinkedIn, et qui les voit.
+4. Votre rôle : six rôles, poste tel qu'il s'affichera, avec suggestions.
+5. Votre entreprise : recherche dès la première lettre, fiche de l'entreprise, demande de
+   rattachement avec un message (les administrateurs sont prévenus dans l'appli et par e-mail),
+   demande en attente (annulable), création de la page (la personne l'administre) ou recrutement en
+   indépendant·e. Le logo de l'entreprise ne s'affiche qu'après l'accord.
+6. Ce que vous recrutez : domaines (au moins un), niveaux, recrutements par an.
+7. Votre profil recruteur : aperçu, accroche (Orbi propose trois phrases), « Recrute en ce moment ».
+
+Puis « Ne laissez aucun candidat sans réponse » (notifications) et « Profil prêt » (logo en attente
+ou affiché, premiers pas), et « Entrer dans Jumanly » ouvre le Fil recruteur.
+
+- Base : table `RecruiterProfile` et colonne `OrgJoinRequest.message`, migration additive
+  `20261022153517_recruiter_profile_phone`.
+- `src/server/services/recruiter-onboarding.ts`, `src/server/actions/phone-rh-onboarding.ts`,
+  `src/components/phone/recruteur/onboarding.tsx`, styles dans `src/styles/phone-recruteur.css`.
+- Textes : parties « Modèle B recruteur · ouverture et inscription au téléphone » de
+  `textes/textes-application.md` (`phoneRhAccueil`, `phoneRhOnboarding`).
+- Tests : `tests/db/modele-b-recruteur-inscription.test.ts` (recherche limitée aux entreprises que
+  l'on peut rejoindre, demande, acceptation, annulation, création de page),
+  `tests/e2e/modele-b-recruteur-inscription.spec.ts` (chaque bouton du lot). Captures 390 × 844 :
+  `CAPTURE_DIR=… pnpm test:e2e tests/e2e/modele-b-recruteur-inscription.spec.ts --project=mobile`.
+- Choix notés dans `docs/decisions/2026-10-22-modele-b-recruteur-inscription.md`.
+- Ordinateur et tablette inchangés : l'inscription recruteur web (entreprise et forfait) reste la même.
+
+## Modèle B recruteur mobile · M3, Fil (22 octobre 2026)
+
+Section 02 des captures (031 à 040). Au téléphone, l'onglet Fil du recruteur (`/app/hire`) montre :
+la ligne « Partager une nouvelle, une offre… » avec « Publier », le lien « Publier au nom de
+l'entreprise » (seulement pour un membre qui gère les offres), puis « Pour vous · Abonnements ·
+Entreprises » comme pour un talent. La fin de liste mène à Talents.
+
+- « Nouvelle publication » du recruteur : publier en tant que soi ou que l'entreprise (avec qui la
+  verra), type Texte, Photo, Une offre (une offre en ligne de l'organisation) ou Un événement (date
+  et heure), compteur 220 caractères, « Orbi complète le texte ». Après publication, retour au Fil.
+- Recherche du Fil : Tout, Publications, Personnes, Entreprises ; avec « Tout », « Personnes et
+  entreprises » puis « Publications ». Jamais les offres ni les candidats dans le Fil.
+- « À traiter » n'est plus le premier écran au téléphone ; il le reste sur ordinateur et tablette.
+- Code : `src/components/phone/recruteur/fil.tsx` et `compose.tsx`, `publishingSpace()` dans
+  `src/server/hire-context.ts`, `createPost()` et `searchPosts()` dans `src/server/services/feed.ts`.
+- Textes : partie « Modèle B recruteur · Fil au téléphone » (`phoneRhFil`).
+- Tests : `tests/db/modele-b-recruteur-fil.test.ts` (au nom de l'entreprise seulement si l'on gère
+  les offres, offre d'une autre organisation ou non publiée refusée, événement passé refusé,
+  recherche sans personne bloquée), `tests/e2e/modele-b-recruteur-fil.spec.ts`.
+- Choix notés dans `docs/decisions/2026-10-22-modele-b-recruteur-fil.md`. Aucune migration.
+
+## Modèle B recruteur mobile · M4, Offres (22 octobre 2026)
+
+Section 03 des captures (041 à 056). Au téléphone, l'onglet Offres (`/app/hire/offres`) montre la
+ligne « N offres en cours · X candidatures · Y nouvelles », « Toutes · En cours · Terminées » et une
+carte par offre (statut, nouvelles, vues, jours en ligne, candidatures).
+
+- Détail d'une offre : statut, dates, quatre chiffres, la ligne d'Orbi avec « Pourquoi ? », les
+  candidatures par jour sur 7 ou 30 jours, les sources, « Voir les N candidats ».
+- « ··· » : Modifier, Mettre en pause ou Remettre en ligne, Partager (lien, Fil, WhatsApp),
+  Dupliquer, Rouvrir, Clôturer (confirmation) puis « Offre clôturée, rapport prêt » (PDF).
+- « Nouvelle offre » en quatre étapes, puis « Votre offre est en ligne » (ou en vérification).
+- Code : `src/components/phone/recruteur/offres.tsx`, `offre-actions.tsx`, `publier.tsx`,
+  `src/server/actions/phone-rh-offres.ts` ; branches téléphone des pages `/app/hire/offres`,
+  `/app/hire/offres/[id]`, `/nouvelle` et `/[id]/modifier`. Ordinateur et tablette inchangés.
+- Textes : partie « Modèle B recruteur · Offres au téléphone » (`phoneRhOffres`).
+- Tests : `tests/db/modele-b-recruteur-offres.test.ts` (offres d'une autre organisation jamais
+  listées, ouvertes, modifiées, publiées, clôturées ni classées ; brouillon dans l'organisation),
+  `tests/e2e/modele-b-recruteur-offres.spec.ts` ; `tests/e2e/offer-flow.ts` publie aussi par les
+  étapes du téléphone.
+- Choix notés dans `docs/decisions/2026-10-22-modele-b-recruteur-offres.md`. Aucune migration.
+
+## Modèle B recruteur mobile · M5, Candidatures (22 octobre 2026)
+
+Sections 04 et 05 des captures (057 à 100). Au téléphone, l'onglet Candidatures
+(`/app/hire/candidats`) montre « N nouvelles · X candidatures · Y à fort potentiel », une puce par
+offre, puis quatre vues :
+
+- **Fort potentiel** : la carte d'Orbi vers le diagnostic des CV, puis les profils à 80 % et plus,
+  classés par score, avec ce qu'Orbi a relevé, ce qui intéresse la personne et sa disponibilité.
+  Personne n'est écarté : tout le monde reste dans « Toutes ».
+- **Toutes** : six étapes (Reçue, Présélection, Entretien, Proposition, Recruté·e, Non retenu·e),
+  tri par score ou par date, « Sélectionner » puis « Écrire à N candidats » (quatre modèles, aperçu
+  avec le prénom, envoi à chacun).
+- **Entretiens** : aujourd'hui, à venir, à documenter (Rejoindre, Voir, Documenter, Fiche).
+- **Décisions** : propositions, recrutés, non retenus, et « Répondre aux N sans réponse ».
+- Recherche en deux temps par nom, compétence ou ville, limitée aux candidats de l'entreprise.
+- Diagnostic des CV (`/app/hire/candidats/diagnostic`) lu dans les scores expliqués.
+- Fiche d'un candidat : score avec « Pourquoi ? », étape modifiable, onglets Résumé, CV, Réponses,
+  Notes, Historique ; « ··· » : changer d'étape, répartir à un collègue, planifier, demander un
+  document, télécharger le PDF, ne pas retenir (motif interne et message bienveillant) ; en bas,
+  « Écrire » et l'étape suivante (planifier, documenter, proposer, recruter).
+- Planifier un entretien (jour, créneau libre pour l'équipe choisie, visio, sur place ou appel,
+  durée), « Invitation envoyée » avec le fichier d'agenda ; documenter l'entretien (étoiles par
+  critère, points forts, suite proposée) ; faire une proposition (salaire, date, message).
+- Code : `src/components/phone/recruteur/candidatures.tsx`, `candidatures-client.tsx`,
+  `candidat.tsx`, `candidat-client.tsx`, `candidat-forms.tsx`, `proposition.tsx`, `entretien.tsx` ;
+  `src/server/services/hire-phone-candidatures.ts`, `src/server/actions/phone-rh-candidatures.ts` ;
+  routes `/app/hire/candidats/[id]/dossier` (PDF, journalisé `candidate.pdf`) et
+  `/app/hire/entretiens/[id]/agenda` (.ics). Ordinateur et tablette inchangés.
+- Migration additive `20261022191139_application_assignee` (dossier suivi par un membre).
+- Textes : partie « Modèle B recruteur · Candidatures au téléphone » (`phoneRhCandidatures`).
+- Tests : `tests/db/modele-b-recruteur-candidatures.test.ts` (isolation des candidatures, de la
+  recherche et des entretiens, consultation journalisée, dossier confié à un membre de l'entreprise
+  seulement, proposition sans décision automatique), `tests/e2e/modele-b-recruteur-candidatures.spec.ts`.
+- La fiche garde aussi le résumé par Orbi sur demande, l'annulation d'une décision pendant son
+  délai et la préparation de l'entretien de l'ordinateur ; « Écrire » ouvre la conversation.
+- Les anciens tests téléphone des candidats et du planificateur (`mobile-recruteur-candidats`,
+  test « entretien » de `mobile-recruteur-entretiens`) ne tournent plus que sur ordinateur ; leurs
+  gestes sont repris dans la nouvelle spec. `hire.spec.ts` a une branche téléphone.
+- Choix notés dans `docs/decisions/2026-10-22-modele-b-recruteur-candidatures.md`. La feuille Orbi
+  de l'onglet (planche 083) vient avec Orbi en M7.
+
+## Modèle B recruteur mobile · M6, Talents (25 octobre 2026)
+
+Section 06 des captures (101 à 119). Au téléphone, l'onglet Talents (`/app/hire/talents`) a quatre
+rubriques :
+
+- **Découvrir** : une puce par offre, « N talents visibles », des cartes classées par le score de
+  compatibilité (nom, métier, années, ville, score et offre, « Dans votre vivier » ou l'état de la
+  proposition). Seuls les talents visibles ; jamais les membres de l'entreprise.
+- **Vivier** : les listes, « Nouvelle liste », la note sur le vivier personnel ; une liste
+  (`/app/hire/viviers/[id]`) montre ses talents avec leur score et « Retirer » ; ses options
+  permettent de la renommer ou de la supprimer, comme à l'ordinateur.
+- **Propositions** : chaque offre proposée avec son état (« Envoyée, pas encore vue », « Vue, sans
+  réponse », acceptée…) et « Relancer ».
+- **Réseau** : invitations reçues (Accepter, ×), « À connaître » (Se connecter), mes relations
+  filtrées (Toutes, Talents, Recruteurs et RH).
+- Recherche en deux temps par compétence, métier ou ville.
+- Profil d'un talent (`/app/hire/talents/[id]`) : bannière, nom, métier, ville et dernière
+  activité, mobilité, « Se connecter », score avec « Pourquoi ? », proposition en cours, onglets
+  Profil, Parcours, Réalisations ; en bas, vivier et « Proposer une offre » ; « ··· » : partager à
+  un collègue, PDF (journalisé), masquer de mes suggestions, signaler. Chaque ouverture est
+  journalisée.
+- Code : `src/components/phone/recruteur/talents.tsx`, `talents-client.tsx`, `talent.tsx`,
+  `vivier.tsx` ; `src/server/services/hire-phone-talents.ts`, `src/server/actions/phone-rh-talents.ts` ;
+  route `/app/hire/talents/[id]/pdf`. Ordinateur et tablette inchangés ; au téléphone,
+  `/app/hire/candidats?vue=talents|propositions` et `/app/hire/viviers` mènent à Talents.
+- Migration additive `20261025233814_talent_suggestions_and_proposal_seen`.
+- Textes : partie « Modèle B recruteur · Talents au téléphone » (`phoneRhTalents`).
+- Tests : `tests/db/modele-b-recruteur-talents.test.ts` (talents visibles seulement, jamais les
+  membres de l'entreprise, suggestion masquée par membre, partage dans l'entreprise seulement,
+  « Vue », consultation journalisée, signalement), `tests/e2e/modele-b-recruteur-talents.spec.ts` ;
+  `hire-advanced.spec.ts` suit le nouveau parcours au téléphone, la partie téléphone de l'ancien
+  test « talents » de `mobile-recruteur-entretiens.spec.ts` est réservée à l'ordinateur.
+- Choix notés dans `docs/decisions/2026-10-25-modele-b-recruteur-talents.md`.
+
+## Modèle B recruteur mobile · M7, Messages, notifications et Orbi (26 octobre 2026)
+
+Sections 07 et 10 des captures (120 à 134, 180 à 184). Au téléphone :
+
+- **Messages** (`/app/messages`) : recherche (« Annuler », « Chercher dans » Tout, Candidats,
+  Réseau, Équipe, sans tenir compte des accents), onglets Candidats, Réseau, Équipe avec le nombre
+  de non-lus, lignes avec initiales, heure, offre et étape en vert, aperçu et pastille ; « + »
+  ouvre « Nouveau message » (un candidat ou un collègue).
+- **Conversation** (`/app/messages/[id]`) : la personne et la ligne verte, la carte « Ouvrir »
+  (fiche de la candidature, profil du talent ou de la relation), les bulles, la carte d'un
+  entretien, puis « Orbi propose · Modèles · Joindre » (entretien, document, fichier) et le champ.
+  « ··· » : fiche, couper les notifications, épingler, retirer de la messagerie de l'équipe.
+- **Équipe** (`/app/messages/equipe/[id]`) : conversation entre deux membres, nouvelle table
+  `TeamThread` / `TeamMessage` (migration additive `20261026004024_team_threads`), notification
+  « … vous a écrit dans Équipe. ».
+- **Notifications** (`/app/notifications`) : Retour, « Tout marquer comme lu », réglages ; Tout,
+  Candidatures, Entretiens, Réseau ; Aujourd'hui, Hier, Cette semaine, Plus tôt ; les demandes
+  pour rejoindre l'entreprise et les offres qui se terminent au-dessus.
+- **Orbi** : la feuille de chaque onglet répond aux questions factuelles sans crédit (« Qui attend
+  une réponse de ma part ? », « Résumer mes non-lus », « Qui recevoir en premier ? », « Qui
+  proposer pour mes offres ? ») et mène à « Ouvrir la conversation complète » ; la page `/app/orbi`
+  (planche 184) : crédits, « Effacer », réponses avec leurs boutons, « Vous pouvez aussi
+  demander », champ.
+- Code : `src/components/phone/recruteur/messages*.tsx`, `conversation*.tsx`,
+  `notifications*.tsx`, `orbi*.tsx` ; `src/server/services/hire-phone-messages.ts` ;
+  `src/server/actions/phone-rh-messages.ts`, `phone-rh-orbi.ts`. Ordinateur et tablette inchangés.
+- Textes : partie « Modèle B recruteur · Messages, notifications et Orbi au téléphone »
+  (`phoneRhMessages`, `phoneRhNotifs`, `phoneRhOrbi`).
+- Tests : `tests/db/modele-b-recruteur-messages.test.ts` (listes filtrées par entreprise,
+  conversation d'équipe lue et écrite par ses deux membres seulement, jamais par un talent, un
+  autre collègue ou une autre entreprise, collègue parti), `tests/e2e/modele-b-recruteur-messages.spec.ts`
+  (chaque bouton, captures dans `captures/etape-2-mobile/m7/`) ; branches téléphone ajoutées dans
+  `mobile-recruteur-gerer.spec.ts` et `mobile-recruteur-ats.spec.ts`.
+- Choix notés dans `docs/decisions/2026-10-26-modele-b-recruteur-messages.md`.
+
+## Modèle B recruteur mobile · M8, compte, entreprise et changer de profil (26 octobre 2026)
+
+Sections 08, 09 et 11 des captures (135 à 179, 185 à 192). Au téléphone, l'avatar ouvre Compte :
+
+- **Compte** (`/app/hire/compte`) : retour au Fil, cloche, carte de la personne (poste,
+  « Rattaché·e à … » avec le logo, seulement après l'accord), « Changer de profil », Mon activité
+  (profil recruteur, statistiques, publications enregistrées), l'entreprise (page, équipe, formule
+  et usage), Réglages (notifications, modèles, confidentialité, langue, aide), « Se déconnecter »
+  après confirmation.
+- **Mon profil recruteur** (`/compte/profil`) : l'aperçu que voient les talents (accroche, « Recrute
+  en ce moment », domaines, offres en cours, contacts) ; **Modifier** (`/compte/profil/modifier`) :
+  accroche (Orbi en propose une, relue avant d'enregistrer), badge, qui voit le téléphone,
+  l'entreprise.
+- **Mes statistiques** (`/compte/statistiques`) : 30 jours sur les offres que l'on voit : reçues,
+  délai moyen de première réponse, part ayant reçu une réponse, entretiens, du dépôt à l'embauche,
+  « Les N % sans réponse » vers Décisions.
+- **Publications enregistrées** (`/compte/enregistrees`), le signet les retire.
+- **Équipe** (`/compte/equipe`) : membres, rôles, dossiers suivis, « Qui peut faire quoi » ;
+  « Proposer un collègue » (demande aux administrateurs) ou, pour un administrateur, « Inviter un
+  collègue ».
+- **Formule et usage** (`/compte/formule`) : lecture seule, usage du mois (utilisateurs, offres
+  actives, recherches de talents, crédits Orbi), comparaison, « Demander … à l'administrateur ».
+- **Modèles de messages** (`/app/hire/modeles` au téléphone), **Notifications**
+  (`/compte/notifications`), **Confidentialité et données** (`/compte/confidentialite` : journal
+  des consultations du mois, ce que l'on partage, copie des données, quitter l'entreprise),
+  **Langue** (`/compte/langue`), **Aide et contact** (`/compte/aide`, par e-mail seulement).
+- **Page de l'entreprise** : celle du talent (`/app/entreprises/[slug]`), avec, sur sa propre
+  entreprise, « Votre entreprise · page administrée par … » et « Publier au nom de … ».
+- **Changer de profil** : recruteur, talent (l'espace talent du Modèle B), entreprise ; un
+  administrateur ouvre « Agir au nom de l'entreprise » (`/app/hire/entreprise` : demandes pour
+  rejoindre, chiffres, messages, offres, « Publier au nom de … »).
+- **Nettoyage** : barre du bas de l'ancienne coque supprimée (`bottom-bar.tsx`,
+  `hidesRecruiterTabBar` et ses tests), partie téléphone de l'ancien Compte RH supprimée, textes
+  orphelins retirés ; une fenêtre d'ordinateur rétrécie garde l'interface de l'ordinateur ; `/app/hire/entretiens`,
+  `/app/hire/rapports` et `/app/organisation/equipe` mènent au téléphone vers leurs écrans
+  Modèle B.
+- Code : `src/components/phone/recruteur/compte.tsx`, `compte-client.tsx` ;
+  `src/server/services/hire-phone-account.ts` ; `src/server/actions/phone-rh-compte.ts`. Deux
+  notifications ajoutées (`colleagueProposed`, `planRequested`) et les interrupteurs du recruteur
+  (`rh.*`). Pas de migration.
+- Textes : partie « Modèle B recruteur · Compte, entreprise et changer de profil au téléphone »
+  (`phoneRhCompte`).
+- Tests : `tests/db/modele-b-recruteur-compte.test.ts` (statistiques, équipe et journal des
+  consultations dans la seule organisation, demandes aux seuls administrateurs avec limite,
+  formule jamais changée, quitter sans rien effacer, mode entreprise réservé, interrupteurs
+  séparés), `tests/e2e/modele-b-recruteur-compte.spec.ts` (chaque bouton, captures dans
+  `captures/etape-2-mobile/m8/`) ; `mobile-recruteur-gerer.spec.ts` suit les nouvelles adresses.
+- Choix notés dans `docs/decisions/2026-10-26-modele-b-recruteur-compte.md`.
+
+## Rapport final · étape 2, recruteur au téléphone (Modèle B, M0 à M8) (26 octobre 2026)
+
+L'espace recruteur du téléphone suit maintenant le Modèle B (`docs/modele-b-recruteur/`, sections
+01 à 11 de `mobile/captures/INDEX.md`). La tablette, l'ordinateur et l'administration d'entreprise
+n'ont pas changé. Aucune donnée n'a été effacée et aucune migration n'a été ajoutée.
+
+| Lot | Contenu | PR |
+|---|---|---|
+| M0 | Diagnostic des écrans recruteur au téléphone | #146 |
+| M1 | Coque : barre à cinq, Orbi, avatar, recherche | #147 |
+| M2 | Ouverture, inscription et profil recruteur | #148 |
+| M3 | Fil du recruteur | #149 |
+| M4 | Offres | #150 |
+| M5 | Candidatures (pipeline, fiche, décisions, entretiens) | #152 |
+| M6 | Talents (découverte, recherche, viviers) | #154 |
+| M7 | Messages, notifications et Orbi | PR du lot M7 |
+| M8 | Compte, entreprise, changer de profil, nettoyage | PR du lot M8 |
+
+- **Captures** (390 × 844, prises par les e2e) : dossier partagé `captures/etape-2-mobile/`, un
+  sous-dossier par lot (`m1` à `m8`). Les numéros des fichiers sont ceux de l'INDEX des planches.
+- **Règles d'or vérifiées par les tests en base** : chaque lecture Hire est filtrée par
+  l'organisation active ; chaque consultation de profil est journalisée ; candidater reste gratuit ;
+  les droits sont testés par clés ; le profil discret n'est jamais montré à sa propre entreprise ;
+  le logo de l'entreprise n'apparaît qu'après l'accord du rattachement ; la formule est en lecture
+  seule pour le recruteur ; aucun numéro de téléphone de Jumanly.
+- **Ancien design téléphone supprimé** : barre du bas de l'ancienne coque, `hidesRecruiterTabBar`,
+  partie téléphone de l'ancien Compte RH et textes orphelins (M8). Les anciennes adresses mènent
+  aux écrans Modèle B.
+- **Sécurité** : Next.js est passé en 16.4.2 pendant l'étape (M3), pour corriger des failles
+  signalées par `pnpm audit`.
+- **Non construit**, faute de modèle de données ou d'événement (détails dans `docs/decisions/`) :
+  - la confirmation des « nouveaux membres qui indiquent travailler chez … » (planche 191), où les
+    demandes de rattachement s'affichent à la place ;
+  - la notification « Profil à fort potentiel » ;
+  - la création et la modification des modèles de messages, qui restent sur ordinateur.
+- **À valider par Ephraïm** : l'ensemble de l'étape 2 au téléphone, avant l'étape 3 (entreprise et
+  administration recruteur, web seulement).
+
+## Étape 3 · espace administrateur d'entreprise (Modèle B, ordinateur) · A0, diagnostic (26 octobre 2026)
+
+Référence : `docs/modele-b-recruteur/` (brief § 2 à 6, lots A1 à A6), sections 04 et 06 de
+`web/captures/INDEX.md` (captures 020 à 029 et 074 à 091), sources `web/maquette/Web-Acces.dc.html`
+(étapes `a-*`) et `Web-App.dc.html` (`qui="joseph"`). Elle remplace les planches `admin-1` et
+`admin-2` de `docs/refonte-web/`.
+
+**Le cadre existant.** L'administrateur utilise l'appli du recruteur sur ordinateur
+(`RecruiterShell`, barre latérale `src/components/recruiter/side-nav.tsx`). Son mode sombre est déjà
+proche du Modèle B (fond nuit, lime pour les actions). On y branche la partie ENTREPRISE, réservée
+à `org_owner` et `org_admin`. Les écrans recruteur ne changent pas (voir
+`docs/decisions/2026-10-26-etape-3-cadre.md`).
+
+**Écrans entreprise existants, tous à refaire sur le Modèle B :**
+
+| Existant | Devient | Lot |
+|---|---|---|
+| `/inscription` → `/inscription/forfait`, `/compte`, `/verification`, `/paiement`, puis `/app/bienvenue` (création de l'organisation) | Inscription de l'administrateur en 9 étapes, avec l'aperçu en direct de la page (020 à 029) | A1 |
+| `/app/organisation/equipe` (sièges, tableau des membres, « Qui peut faire quoi ») | Équipe : membres et rôles, droits par membre, tâches, invitations et demandes, membres déclarés (076 à 078) | A2 |
+| `/app/organisation` (carte, chiffres, présentation), `/app/organisation/modifier`, `/verification`, `/structure` | Page entreprise : modifier, aperçu public (081, 082) ; la vérification et la structure (équipes, départements) y sont reprises | A3 |
+| `/app/abonnement`, `/abonnement/formules`, `/abonnement/factures`, `/abonnement/payer` (pour une organisation) | Formule et facturation : jauges, changement de formule, factures, fenêtre de paiement (083) | A4 |
+| `/app/parametres/consultations` (journal de l'organisation ou du membre) | Journal des consultations (084) | A5 |
+| `/app/hire/modeles` (modèles de l'organisation) ; étapes de l'ATS par offre seulement ; aucune grille d'entretien réglable | Réglages : étapes de l'ATS, modèles de messages, grille d'entretien (085 à 087) | A5 |
+
+**Ce qui manque dans les données, avec des migrations additives :**
+- droits ajustés par membre (A2) ;
+- tâches confiées à un membre, avec leur état Attribuée → Acceptée → En cours → Terminée (A2) ;
+- réponse de l'administrateur à un membre déclaré par son expérience (A2) ;
+- étapes de l'ATS et grille d'entretien par défaut de l'organisation (A5).
+
+**À supprimer en A6.** Les pages de l'ancien `/app/organisation` :
+- `page.tsx`, `equipe`, `modifier`, `structure`, `verification` ;
+- `src/components/org/structure-tabs.tsx` ;
+- les parties organisation de `/app/abonnement` ;
+- leurs textes devenus orphelins.
+
+Les anciennes adresses mènent aux nouvelles. Environ 38 liens vers `/app/organisation` sont à
+reprendre.
+
+**Captures du Joseph de la maquette non reprises dans cette étape.** Ce sont des écrans du recruteur
+vus par l'administrateur, qui gardent leurs écrans actuels :
+- l'accueil (074, 075) ;
+- le tableau de bord (079) et Mon espace (080) ;
+- les candidatures (088), l'agenda (089) et les offres (090) de l'équipe ;
+- « agir au nom de l'entreprise » (091).
+
+L'accueil de l'administrateur pourra montrer les demandes en attente, reprises en A2.
+
+### Étape 3 · A1, inscription de l'administrateur d'entreprise (26 octobre 2026)
+
+L'administrateur crée l'espace de son entreprise sur ordinateur, en neuf étapes puis « prêt »,
+sur `/inscription/entreprise?etape=…`. À gauche, la scène des maquettes pour la formule, le compte
+et le code, puis l'aperçu en direct de la page entreprise : nom, secteur, ville, taille,
+présentation, bannière, logo, état de la vérification, formule et invitations.
+
+| Capture | Écran |
+|---|---|
+| 020 | Étape 1 · formule (RH Free, Company, Company Plus, Company Premium sur devis) |
+| 021 | Étape 2 · compte de l'entreprise (Google, Apple, LinkedIn si configurés, ou e-mail) |
+| 022 | Étape 3 · code à 6 chiffres, « Renvoyer le code » |
+| 023 | Étape 4 · rôle de l'administrateur |
+| 024 | Étape 5 · l'entreprise (secteur, taille, ville du siège, site, à propos) |
+| 025 | Étape 6 · logo et bannière |
+| 026 | Étape 7 · vérification (domaine de l'e-mail, registre du commerce) |
+| 027 | Étape 8 · paiement prépayé (M-Pesa, Orange Money, Airtel Money, carte), attente, reçu, ou « RH Free et payer plus tard » |
+| 028 | Étape 9 · invitation de l'équipe (Recruteur, Manager, Lecteur), dans les places de la formule |
+| 029 | Prêt · « Entrer dans l'espace administrateur » |
+
+- Données : migration additive `organization_banner_theme` (couleur de bannière).
+- Sous 768 px ou sur un téléphone : « À ouvrir sur un ordinateur ».
+- `/inscription?profil=company` et `/inscription/forfait?profil=company` mènent au nouveau parcours.
+  L'ancien parcours d'organisation (`/inscription/forfait`, `/app/bienvenue`) ne sert plus qu'au
+  recruteur seul ; ce qui en devient inutile part en A6.
+- Choix simples notés dans `docs/decisions/2026-10-26-etape-3-a1-inscription.md`.
+- Tests : `tests/e2e/web-admin-inscription.spec.ts` (chaque bouton, RH Free, paiement en attente,
+  un manager renvoyé, le téléphone) et `tests/db/admin-entreprise-inscription.test.ts`
+  (organisation seule, places de la formule, vérification).
+- Captures à 1440 × 900 et 1024 × 900 : `/mnt/project-files/captures/etape-3/a1/`.
+
+### Étape 3 · A2, Équipe (26 octobre 2026)
+
+Écran Équipe de l'administrateur (`/app/organisation/equipe`), captures 076 à 078 du Modèle B :
+- **Membres et rôles** : une carte par membre (rôle, droits, tâches terminées), le rôle à changer, six droits par membre dans la limite du rôle et de `org.permissions.level`, les tâches du membre, « Retirer de l'équipe » ;
+- **Tâches** : tableau filtrable (Toutes, En cours, En retard, Terminées), « Fiche » et « Relancer » ;
+- **Invitations et demandes** : demandes de rattachement, personnes qui indiquent travailler dans l'entreprise (« Confirmer » ou « Ne travaille pas ici »), invitations envoyées (« Relancer », « Annuler ») et places restantes ;
+- « Inviter un membre » et « Attribuer une tâche » en fenêtres ; « Mes tâches » (`/app/hire/taches`) pour le membre.
+
+Plomberie : partie ENTREPRISE de la barre latérale (propriétaire et administrateurs), espace recruteur sur ordinateur toujours sombre, « À ouvrir sur un ordinateur » pour `/app/organisation/*` sur téléphone, droits appliqués aux gestes du recruteur (`requireHire(…, droit)`). Migration additive `team_rights_tasks_declared` (`Membership.rights`, `OrgTask`, `OrgDeclaredMember`). Données de démonstration : `prisma/seed/entreprise.ts` (Baobab Fintech, entreprise fictive). Choix : `docs/decisions/2026-10-26-etape-3-a2-equipe.md`.
+
+| Capture | Écran |
+|---|---|
+| 076 | Membres et rôles (`076-equipe`), fenêtre « Attribuer une tâche » (`076b-attribuer`) |
+| 077 | Tâches (`077-equipe-taches`), « Mes tâches » du membre (`077b-mes-taches`) |
+| 078 | Invitations et demandes (`078-equipe-invitations`) |
+
+Captures 1440 et 1024 : `captures/etape-3/a2/` des fichiers du projet. Tests : `tests/db/entreprise-equipe.test.ts` (droits, isolation, tâches, places, membres déclarés), `tests/e2e/web-admin-equipe.spec.ts` (chaque bouton, droit retiré, manager refusé, téléphone). Mis à jour : `web-recruteur-3`, `mobile-recruteur-gerer`, `hire` (la page entreprise ne se modifie plus sur téléphone).
+
+## Étape 3 · A3, Page entreprise (26 octobre 2026)
+
+- `/app/organisation` devient la Page entreprise du Modèle B (capture 081) : bannière et logo
+  (fenêtre sombre, image recadrée au centre par le serveur), nom, secteur, taille, ville, site,
+  à propos, badge « Recrute en ce moment », « Voir la page publique » et « Publier les changements ».
+  À droite : membres déclarés (Confirmer, Ne travaille pas ici), état de la vérification, membres
+  confirmés, et pour le propriétaire seul le transfert de propriété.
+- `/app/organisation/apercu` : la page vue par un talent (capture 082), onglets À propos, Membres
+  (« Confirmé par … » ou « Indiqué par la personne ») et Offres ouvertes.
+- `/app/organisation/modifier` mène à `/app/organisation`.
+- Migration additive `company_page_hiring_now` (`Organization.hiringNow`) ; le badge s'affiche aussi
+  sur `/entreprises/[slug]` et fait passer l'entreprise en tête dans Explorer.
+- Tests : `tests/db/entreprise-page.test.ts` (enregistrement et journal, recruteur et lecteur refusés,
+  isolation, transfert réservé au propriétaire, membres et offres de l'aperçu) ;
+  `tests/e2e/web-admin-page.spec.ts` (chaque bouton, transfert aller-retour, manager refusé,
+  téléphone). Parcours mis à jour : `hire.spec.ts` (bannière et logo), `mobile-recruteur-gerer`,
+  `web-recruteur-3`.
+- Choix : `docs/decisions/2026-10-26-etape-3-a3-page-entreprise.md`.
+
+| Capture | Écran | Fichiers |
+|---|---|---|
+| 081 | Page entreprise · modifier | `/mnt/project-files/captures/etape-3/a3/081-page-entreprise-{1440,1024}.png` |
+| 082 | Page entreprise · vue publique | `/mnt/project-files/captures/etape-3/a3/082-vue-publique-{1440,1024}.png` |
+
+## Étape 3 · A4, Formule et facturation (26 octobre 2026)
+
+- Nouvel écran `/app/organisation/facturation` (capture 083), réservé au propriétaire et aux
+  administrateurs : formule actuelle (prix, période prépayée, moyen de paiement, rappels 7, 3 et
+  0 jours puis 3 jours de grâce et retour à la formule gratuite), « Renouveler maintenant », jauges
+  « Usage ce mois », « Changer de formule » (monter en gamme payé tout de suite avec le crédit des
+  jours non utilisés, réduire programmé à l'échéance et annulable, devis pour la formule sans prix)
+  et le tableau des factures avec leur PDF.
+- Fenêtre de paiement sombre : M-Pesa, Orange Money, Airtel Money ou carte, attente de la
+  confirmation (lue toutes les 3 secondes), « J'ai confirmé », « Réessayer », paiement reçu.
+- Section ENTREPRISE : « Formule et facturation » mène au nouvel écran ; « Page entreprise » n'est
+  plus allumée sur les pages des autres entrées.
+- `reports.export` ouvert à toutes les formules Company (décision du 22/10/2026) : partie 05, seed et
+  migration de données `company_reports_export`.
+- Démo : Baobab Fintech prépaie Company depuis trois mois, avec ses factures et l'usage du mois.
+- Tests : `tests/db/entreprise-facturation.test.ts` (écran et formules, recruteur et lecteur refusés,
+  montée en gamme payée par un administrateur, baisse programmée et journal, isolation des paiements
+  et factures) ; `tests/e2e/web-admin-facturation.spec.ts` (chaque bouton, paiement refusé puis par
+  carte, attente sans réponse, baisse annulée puis programmée puis gardée, téléchargement du PDF,
+  manager refusé y compris sur le PDF, téléphone).
+- Choix : `docs/decisions/2026-10-26-etape-3-a4-formule-facturation.md`.
+
+| Capture | Écran | Fichiers |
+|---|---|---|
+| 083 | Formule et facturation | `/mnt/project-files/captures/etape-3/a4/083-formule-facturation-{1440,1024}.png` |
+
+## Étape 3 · A5, Journal des consultations et Réglages (26 octobre 2026)
+
+- Nouvel écran `/app/organisation/journal` (capture 084), réservé au propriétaire et aux
+  administrateurs : qui a consulté quoi (profil, CV, PDF, évaluation, rapport), filtre par membre,
+  chaque ligne mène à la candidature, au talent ou aux rapports. Les profils anonymes restent anonymes.
+- Nouvel écran `/app/organisation/reglages` (captures 085 à 087) : étapes des nouvelles offres
+  (ajouter, retirer, étapes fixes), cinq modèles de messages de l'entreprise, grille d'entretien
+  commune (10 critères au plus).
+- Migration additive `org_recruiting_settings` (`Organization.pipelineTemplate`,
+  `Organization.scorecardCriteria`). Les nouvelles offres prennent les étapes choisies ; l'évaluation
+  prend la grille de l'offre, sinon celle de l'entreprise, sinon les compétences requises.
+- Chaque évaluation enregistrée est notée au journal d'audit (`scorecard.save`).
+- Démo : huit consultations fictives chez Baobab Fintech et une grille de cinq critères.
+- Tests : `tests/db/entreprise-reglages.test.ts` (journal, isolation, anonymat, étapes, modèles,
+  grille, recruteur et lecteur refusés) ; `tests/e2e/web-admin-reglages.spec.ts` (chaque bouton,
+  manager refusé, téléphone).
+- Choix : `docs/decisions/2026-10-26-etape-3-a5-journal-reglages.md`.
+
+| Capture | Écran | Fichiers |
+|---|---|---|
+| 084 | Journal des consultations | `/mnt/project-files/captures/etape-3/a5/084-journal-{1440,1024}.png` |
+| 085 | Réglages, étapes | `/mnt/project-files/captures/etape-3/a5/085-reglages-etapes-{1440,1024}.png` |
+| 086 | Réglages, modèles de messages | `/mnt/project-files/captures/etape-3/a5/086-reglages-modeles-{1440,1024}.png` |
+| 087 | Réglages, grille d'entretien | `/mnt/project-files/captures/etape-3/a5/087-reglages-grille-{1440,1024}.png` |
+
+## Étape 3 · A6, nettoyage (26 octobre 2026)
+
+- Vérification (`/app/organisation/verification`) et structure (`/app/organisation/structure`,
+  équipes, départements, entités) passées au Modèle B, réservées au propriétaire et aux
+  administrateurs ; « Équipes et départements » s'ouvre depuis Équipe, qui reste allumée dans la
+  barre latérale. `src/components/org/structure-tabs.tsx` supprimé.
+- Anciennes pages : l'abonnement d'une entreprise et le journal de l'équipe mènent, sur ordinateur,
+  à « Formule et facturation » et au Journal des consultations.
+- Aucun lien mort pour un membre qui n'administre pas (menu du compte, tuiles de Compte, anciennes
+  adresses du téléphone ouvertes sur ordinateur).
+- Page entreprise du talent au téléphone : les personnes qui disent y travailler, avec « Indiqué par
+  la personne » ; jamais un profil anonyme, ni chez l'administrateur.
+- Textes orphelins retirés (`rhTeam.*`, `rhOrg.*` sauf `structure`).
+- Tests : `tests/e2e/web-admin-nettoyage.spec.ts` (structure verrouillée puis créée et supprimée par
+  le groupe, vérification, anciennes adresses, manager refusé et sans lien mort, page entreprise du
+  talent au téléphone) avec l'aide `tests/e2e/make-declared.ts` ; test en base ajouté à
+  `tests/db/entreprise-page.test.ts`. Tests ajustés : `hire-advanced`, `mobile-recruteur-gerer`,
+  `web-recruteur-3`.
+- Choix : `docs/decisions/2026-10-26-etape-3-a6-nettoyage.md`.
+
+| Capture | Écran | Fichiers |
+|---|---|---|
+| — | Structure, formule sans le droit | `/mnt/project-files/captures/etape-3/a6/a6-structure-verrou-{1440,1024}.png` |
+| — | Structure, équipes du groupe | `/mnt/project-files/captures/etape-3/a6/a6-structure-equipes-{1440,1024}.png` |
+| — | Vérification | `/mnt/project-files/captures/etape-3/a6/a6-verification-{1440,1024}.png` |
+
+## Rapport final · étape 3, espace administrateur d'entreprise (Modèle B, ordinateur, A0 à A6) (26 octobre 2026)
+
+L'espace de l'entreprise suit maintenant le Modèle B (`docs/modele-b-recruteur/`, sections 04 et 06
+de `web/captures/INDEX.md`), sur ordinateur et tablette ; sous 768 px, « À ouvrir sur un
+ordinateur ». La section ENTREPRISE de la barre latérale (Équipe, Page entreprise, Formule et
+facturation, Journal, Réglages) n'apparaît qu'au propriétaire et aux administrateurs. Les écrans du
+recruteur n'ont pas changé. Aucune donnée n'a été effacée ; les migrations sont additives.
+
+| Lot | Contenu | Captures | PR |
+|---|---|---|---|
+| A0 | Diagnostic | — | #157 |
+| A1 | Inscription de l'administrateur, aperçu en direct de la page | 020 à 029 | #158 |
+| A2 | Équipe : rôles, droits par membre, tâches, invitations, membres déclarés | 076 à 078 | #159 |
+| A3 | Page entreprise : modifier, vue publique, badge « Recrute en ce moment » | 081, 082 | #160 |
+| A4 | Formule et facturation : jauges, changement de formule, paiement, factures | 083 | #161 |
+| A5 | Journal des consultations ; Réglages (étapes, modèles, grille) | 084 à 087 | #162 |
+| A6 | Nettoyage : vérification et structure, anciennes adresses, page entreprise du talent | — | PR du lot A6 |
+
+- **Captures** à 1440 et 1024 px, prises par les e2e : dossier partagé `captures/etape-3/`, un
+  sous-dossier par lot (`a1` à `a6`). Les numéros sont ceux de l'INDEX des planches.
+- **Migrations additives** : `organization_banner_theme` (A1), `team_rights_tasks_declared` (A2),
+  `company_page_hiring_now` (A3), `company_reports_export` (A4, données), `org_recruiting_settings`
+  (A5).
+- **Règles vérifiées par les tests en base** : chaque lecture est filtrée par l'organisation ;
+  recruteur, manager et lecteur sont refusés ; les sièges sont comptés ; chaque consultation de
+  profil est journalisée et lisible par les seuls administrateurs ; un profil anonyme reste anonyme ;
+  les droits sont testés par clés ; `reports.export` est ouvert à toutes les formules Company ;
+  paiement prépayé (M-Pesa, Orange Money, Airtel Money, carte), montée immédiate, baisse à
+  l'échéance ; aucun numéro de téléphone.
+- **Ancien design supprimé** : anciennes pages de `/app/organisation` (accueil, équipe, modifier,
+  remplacées en A2 et A3), `structure-tabs.tsx`, textes orphelins. Les anciennes adresses mènent aux
+  nouveaux écrans.
+- **Captures du Joseph de la maquette non reprises** (écrans du recruteur vus par l'administrateur,
+  qui gardent leurs écrans actuels) : 074, 075, 079, 080, 088 à 091.
+- **Choix notés** dans `docs/decisions/2026-10-26-etape-3-*.md` (noms d'étapes, champs des modèles et
+  échelle de notation existants plutôt que ceux de la maquette, entre autres).
+- **À valider par Ephraïm** : l'ensemble de l'étape 3. Ensuite, comme convenu le 26/10 : les écrans
+  du recruteur sur ordinateur au Modèle B (section 05, `Web-N-*`), en PR séparées.
+
+## Recruteur sur ordinateur (Modèle B) · N0, diagnostic (26 octobre 2026)
+
+Ephraïm a validé l'étape 3 le 26/10 (« Oui c'est bon »). Comme convenu le même jour, les écrans du
+recruteur sur ordinateur passent au Modèle B : section 05 de `docs/modele-b-recruteur/web/captures/INDEX.md`
+(captures 030 à 073, planches `Web-N-*`, prototype `Web-App.dc.html` avec `qui="nadia"`). Les écrans
+de Joseph qui sont ceux du recruteur vus par l'administrateur (074, 075, 079, 080, 088 à 091),
+laissés de côté à l'étape 3, sont repris ici avec eux.
+
+**Le cadre existant.** Sur ordinateur, le recruteur a l'appli de la refonte web (`RecruiterShell`,
+`src/components/recruiter/side-nav.tsx` et `header.tsx`) : barre latérale À traiter · Offres · Orbi
+(carte `Ctrl K`) · Candidats · Messages, puis Agenda · Talents · Rapports, l'organisation active en
+haut, la partie ENTREPRISE de l'étape 3 pour les administrateurs ; en-tête avec recherche, cloche,
+messages et avatar. Le Modèle B demande : Accueil · Fil · Offres · Candidatures · Agenda · Talents ·
+Messages avec leurs pastilles, une partie PILOTAGE (Tableau de bord, Mon espace), Compte et la carte
+« Changer de profil » en bas ; en-tête avec le titre de la page, la recherche, la cloche et « Publier
+une offre » ; Orbi en disque menthe flottant en bas à droite. Tous les écrans sont donc à refaire.
+
+**Écrans des planches → route → lot :**
+
+| Captures | Écran | Route | Lot |
+|---|---|---|---|
+| 030 | Cadre : barre latérale, en-tête, Orbi | toutes les pages recruteur | N1 |
+| 031, 032, 074, 075 | Bienvenue (premier passage), Accueil du jour (rendez-vous, tâches, à traiter, offres) | `/app/hire` | N1 |
+| 033 | Fil, publication de 220 caractères | `/app/fil` (recruteur) | N2 |
+| 034 à 037, 090 | Offres : liste et indicateurs ; offre en onglets aperçu, annonce, équipe et réglages | `/app/hire/offres`, `/app/hire/offres/[id]` | N2 |
+| 038 à 042 | Publier une offre en 5 étapes | `/app/hire/offres/nouvelle` | N2 |
+| 043, 044, 088 | Candidatures en colonnes ou en liste | `/app/hire/candidats` | N3 |
+| 045 à 051 | Fiche candidat en 7 onglets | `/app/hire/candidats/[applicationId]` | N3 |
+| 052 | Évaluer un entretien (5 critères, recommandation) | `/app/hire/candidats/[applicationId]/evaluation` | N3 |
+| 053 à 055, 089 | Agenda semaine, jour, mois, disponibilités | `/app/hire/entretiens` | N4 |
+| 063, 064, 079, 080 | Tableau de bord ; Mon espace (rôle, tâches, rapport PDF) | `/app/hire/rapports`, `/app/hire/taches` | N4 |
+| 056 à 059 | Talents : découvrir, vivier, propositions, réseau | `/app/hire/talents` (les viviers y deviennent un onglet) | N5 |
+| 072, 073 | Page d'une autre entreprise, page de Baobab | `/app/entreprises/[slug]` | N5 |
+| 060 à 062 | Messages, notifications, Orbi en page | `/app/messages`, `/app/notifications`, `/app/orbi` | N6 |
+| 065 à 071, 091 | Compte : profil, changer de profil, formule en lecture, sécurité, notifications, aide, déconnexion | `/app/hire/compte/*` (aujourd'hui au téléphone seulement) | N7 |
+
+**Données.** Les règles et les tables existent déjà (étapes 2 et 3) : tâches `OrgTask`, journal des
+consultations, réglages de l'organisation, profil recruteur, conversations d'équipe, notifications
+`rh.*`. Aucune migration n'est prévue ; s'il en faut une, elle sera additive.
+
+**Ancien design à supprimer en N7** : les composants de la refonte web propres à l'ordinateur dans
+`src/components/recruiter/` qui ne servent plus, les feuilles `recruiter-web*.css` et les parties de
+`recruiter*.css` devenues mortes, les textes orphelins, et les specs `web-recruteur-1` à `4` et
+`hire-wide` réécrites lot par lot. La tablette (768 à 1199 px) garde son rail d'icônes, habillé comme
+l'ordinateur.
+
+**Plan des PR** (une branche `claude/modele-b-web-nN` et une PR par lot, enchaînées et fusionnées
+dès que la CI est verte) : N0 diagnostic, N1 cadre et accueil, N2 Fil et Offres, N3 Candidatures,
+fiche et évaluation, N4 Agenda et pilotage, N5 Talents et pages entreprise, N6 Messages,
+notifications et Orbi, N7 Compte, nettoyage et rapport final, puis arrêt pour la validation
+d'Ephraïm. Chaque lot : captures à 1440 et 1024 dans `captures/etape-2-web/`, un e2e qui touche
+chaque bouton, les tests en base touchés, et le journal.
+
+## Fil, menu, publication · 1/3 : menu en pilule (26 octobre 2026)
+
+Référence : `docs/fil-menu-publication/BRIEF-FIL-MENU-PUBLICATION-CLAUDE-CODE.md` § 1 (validé par Ephraïm le 26/10/2026).
+
+- La barre du bas du téléphone (`src/components/phone/nav.tsx`, styles `src/styles/phone.css`) devient une
+  pilule flottante (64 px, à 12 px des bords et 22 px du bas, fond flouté). Onglets inactifs : ronds 48 px
+  `#203F42`, icône crème. Onglet actif : pilule Lime avec l'icône et le nom en Sapin. La pilule glisse d'un
+  onglet à l'autre (largeur, marges et fond animés, 0,32 à 0,34 s) ; elle bouge dès le toucher, avant
+  l'arrivée de la page. Aucune animation si le téléphone ou le réglage « Réduire les animations » le demande.
+- Libellés du menu : talent Fil · Explorer · Carrière · **Hub** · **Chat** ; recruteur Fil · Offres ·
+  Candidatures · Talents · **Chat**. Les titres des pages et les adresses ne changent pas (la page Messages
+  garde son titre).
+- Compteurs : Chat montre le nombre de conversations non lues (talent et recruteur ; le recruteur avait un
+  simple point), Candidatures le nombre de nouvelles candidatures. Le compteur s'efface sur l'onglet actif.
+- Orbi reste flottant au-dessus du menu, à droite (104 px du bas).
+
+## Fil, menu, publication · 2/3 : publication titre + texte + image à encoche (26 octobre 2026)
+
+Référence : brief `docs/fil-menu-publication/`, § 2.
+
+- Base : `FeedPost.title` (migration `20261026180000_feed_post_title`), obligatoire pour une nouvelle
+  publication, absent pour une réponse ; les anciennes publications s'affichent sans titre.
+- Limites (`src/server/services/feed-limits.ts`) : `FEED_TITLE_MAX = 60`, `FEED_BODY_MAX = 160`
+  (60 + 160 = 220, `FEED_POST_MAX`), schéma Zod `postTextSchema` partagé par le téléphone et le serveur.
+  L'ancienne constante des réponses (2 000) s'appelle maintenant `FEED_REPLY_MAX`.
+- Carte du Fil (`PostCard`) : auteur en haut (avatar 44 px, anneau Lime pour une entreprise vérifiée,
+  ligne métier ou entreprise · ville · heure, « … »), puis titre (2 lignes), texte et image (280 px,
+  coins 30 px) alignés sur le nom. Encoche en bas à gauche : J'aime · Commenter · Envoyer · Enregistrer ;
+  réactions (deux visages + nombre) en bas à droite. Sans image, les actions passent sous le texte.
+  « Envoyer » ouvre la feuille « Partager » (Republier · Citer · Envoyer à une connexion) : republier
+  reste possible sans bouton dédié sur la carte. Le nombre de commentaires remplace l'aperçu de la
+  première réponse.
+- Écran Publier (talent et recruteur) : Titre avec compteur `n/60`, Texte avec compteur `n/160`, jauge et
+  aide (« Encore un peu » sous 90, « Bonne longueur » jusqu'à 150, « Presque au maximum » au-delà),
+  image en tuile (« + » pour en choisir une), aperçu dans le Fil, bouton Publier. Le recruteur garde
+  « Publier en tant que » et « Joindre » une offre ou un événement ; la photo n'est plus un type à part.
+- Démo : les six publications du seed ont un titre.
+- Le Fil n'existe aujourd'hui que sur le téléphone : la carte servira telle quelle au Fil web du
+  recruteur (lot N2 de `docs/decisions/2026-10-26-modele-b-web-recruteur.md`).
+
+## Fil, menu, publication · 3/3 : Explorer, recherche compacte et filtres (26 octobre 2026)
+
+Référence : brief `docs/fil-menu-publication/`, § 3, maquette `Explorer.dc.html`.
+
+- Recherche compacte (44 px, Sapin, liseré et loupe Lime, « Rechercher ») et bouton **Filtres** Lime
+  sur la même ligne, avec la pastille du nombre de filtres actifs ; « Annuler » le remplace pendant une
+  recherche. La rangée Tout · Offres · Entreprises · Personnes sous la recherche est supprimée : la
+  portée se choisit dans la feuille de filtres (« Chercher dans »).
+- Pastilles d'Explorer (domaines, secteurs, types de la recherche) : 32 px, 12,5 px, Lime et texte
+  Sapin quand actives, transparentes sinon ; plus de pastille blanche.
+- Feuille de filtres (`src/components/phone/explorer/filters.tsx`) : monte en 0,42 s sur un voile
+  sombre, poignée, « Effacer », groupes Contrat (CDI · CDD · Stage), Salaire mensuel (4 tranches et
+  barre), Secteur (8), Résidence (RDC · Autre pays · Partout). Les groupes hors portée se replient
+  (hauteur, opacité, glissement), sans animation si l'utilisateur réduit les animations.
+- Filtres côté serveur (`src/server/services/explore-filters.ts`, `explorerHome(…, filters)`,
+  `explorerCount`, action `exploreFilterAction`) : « Voir N résultats » compte les offres, entreprises
+  et personnes de la portée ; « Voir » lit les listes filtrées. Une offre sans salaire n'entre dans
+  aucune tranche. Le secteur des entreprises est un texte libre : il rejoint un secteur du filtre par
+  mots (« Banque et microfinance » → Banque). La résidence est le pays du profil (`User.country`),
+  jamais la nationalité.
+- Aucun filtre par genre, âge ou nationalité (règle d'or 4) ; les filtres ne changent que l'affichage,
+  jamais une candidature (règle d'or 1).
+- Tests : `tests/unit/explore-filters.test.ts`, `tests/db/explore.test.ts` (filtres en base),
+  e2e `modele-b-explorer` (ouvrir, choisir la portée, appliquer CDI, effacer).
+
+## Profil d'une personne : connexion et vue recruteur (26 octobre 2026)
+
+Référence : brief `docs/profil-personne/`, maquette `Profil.dc.html` (réglages `qui`, `vue`, `onglet`,
+`pourquoi`), captures 01 à 07. Remplace la page Personne du Modèle B (l'ancien composant
+`explorer/person.tsx` est supprimé).
+
+- En-tête compact (`src/components/phone/profil/profile.tsx`) : barre Retour · « Profil » ou
+  « Candidat » · Partager · « ··· », bannière 4:1 (image choisie ou motif dans la couleur du domaine,
+  étiquette du domaine), photo 76 px avec l'anneau des 5 premières compétences et le point menthe
+  « Actif maintenant », réseaux 32 px (seulement ceux remplis), nom + badge vérifié ou « Non vérifié »,
+  alias, drapeau (code ISO de `User.country`, sans image externe) + ville + heure locale, bio,
+  pastilles (connexions, domaine, contrat cherché, activité), connexions en commun.
+- Vue connexion : « Se connecter » → « Demande envoyée » → « Connectés » ; « Chat » seulement une fois
+  connectés.
+- Onglets Publications · À propos · Réalisations · Portfolio : pilule Lime qui glisse (0,38 s), collés
+  en haut, contenu qui glisse. Compétences en couleur (couleur stable tirée du nom,
+  `src/lib/profile-colors.ts`), barre des familles (catégorie des compétences), frise des expériences
+  (un point par ligne de `Experience.description`, deux visibles puis « Voir N de plus »),
+  formation, langues (5 traits). Réalisations = projets visibles + attestations montrées sur le
+  profil ; Portfolio = PDF et liens des projets, CV de la candidature (vue recruteur), page publique.
+- Vue recruteur : le candidat s'ouvre sur son profil avec la carte (anneau du score, offre, date,
+  étape, « Pourquoi N % ? », « Avancer », Chat). « Avancer » passe à l'étape suivante (geste du
+  recruteur ; vers « Retenue », la feuille « Recruter » s'ouvre). La feuille « Pourquoi ? » reprend les
+  critères du calcul fixe et la mention « Calculé sans le nom, la photo, l'âge, le genre ni la
+  nationalité… aucune candidature n'est écartée automatiquement ». La consultation reste journalisée
+  (`recordView`).
+- Données : `TalentProfile.handle` (unique), `socialLinks` (validés par Zod, `src/lib/social-links.ts`),
+  `showEmail` (désactivé par défaut) ; « Modifier le profil » permet de les remplir.
+- Tests : `tests/unit/profil-personne.test.ts`, `tests/db/explore.test.ts`, e2e `modele-b-explorer`
+  et `modele-b-recruteur-candidatures`. Décision : `docs/decisions/2026-10-26-profil-personne.md`.
+
+## Carrière v3 : page Carrière et création d'un CV au téléphone (26 octobre 2026)
+
+Référence : brief `docs/carriere-v3/BRIEF-CARRIERE-CLAUDE-CODE.md`, captures 01 à 15 et maquettes
+(validées par Ephraïm le 26/10/2026). Remplace la page Carrière et les écrans CV du Modèle B au téléphone ;
+l'ordinateur garde « CV et documents » et le studio.
+
+- Page Carrière (`src/components/phone/career/home.tsx`, feuille `src/styles/phone-carriere.css`,
+  classes `nb-cr-`) : en-tête Carrière avec recherche et réglages, bannière et photo avec crayons,
+  réseaux, disponibilité (« À l'écoute des offres » / « Pas disponible », changée d'un geste),
+  complétion avec la prochaine action, suggestion de compétence, Modifier · Partager · Voir comme les
+  autres (`/app/personnes/[moi]?apercu=1`), identité repliée au-dessus des onglets, pilule Lime qui
+  glisse sous Profil · CV · Portfolio · Progression · Candidatures. CV avec score, date et menu ;
+  portfolio en grille ; progression en frise ; candidatures avec score, frise d'étapes et entretien.
+- Créer un CV (`/app/career/cv/nouveau?etape=`, `src/components/phone/cv/`, feuille
+  `src/styles/phone-cv.css`, classes `nb-cv-`) : départ (Orbi le prépare, un modèle, un import), choix
+  du modèle (filtres, verrou avec le forfait lu en base, vue en grand), Orbi qui prépare (modèle
+  Moderne, résumé proposé en attente de validation), import d'un PDF, d'un Word ou d'une photo (lue
+  par l'IA seulement si l'IA est prête, consentement, droit et quota vérifiés, journalisée), « Voici
+  ce qu'Orbi a trouvé » (rien n'entre dans le profil sans être coché).
+- Les quatre étapes d'un CV (`/app/career/cv/[id]?etape=modele|contenu|style|apercu`) : contenu
+  (sections glissées ou déplacées au clavier, affichées ou non, résumé écrit ou réécrit par Orbi,
+  gardé ou refusé), mise en forme (le CV change en direct : couleur, police, densité, photo, langue
+  des titres), aperçu (score à règles fixes avec « Pourquoi ? », huit vérifications dont
+  « Corriger » qui reprend seulement ce qui est dans le profil, nom, CV principal, PDF, Word, adapter à
+  une offre).
+- Services : `cvChecks` (`cv-coach.ts`), langues et coordonnées lues à l'import (`cv-import.ts`),
+  `importCvPhoto`, image dans le fournisseur d'IA. Actions : `src/server/actions/cv-flow.ts`.
+- Anciennes adresses au téléphone : `/app/career/cv/modeles` et `/app/profil/import` mènent au nouveau
+  parcours.
+- Tests : `tests/unit/intelligence.test.ts` (vérifications), e2e `carriere-v3`, `mobile-profil-cv`,
+  `intelligence`, `cv-documents`, `modele-b-carriere` mis à jour.
+- Restent à faire : les éditeurs de section (`?partie=`) gardent l'ancien écran ; projets, bénévolat
+  et certificats ne sont pas des sections du CV. Décision : `docs/decisions/2026-10-26-carriere-v3.md`.
+
+## Chat du talent : liste, discussion, menu ··· et appel vidéo (27 octobre 2026)
+
+Le Chat du talent au téléphone refait d'après `docs/chat-v2/` (captures 01 à 13, maquettes
+`Chat*.dc.html`, validées par Ephraïm le 27/10/2026). Remplace l'apparence des écrans Messages du
+Modèle B ; feuille `src/styles/phone-chat.css`, classes `nb-ch-`, textes `phoneChat.*`.
+
+- Liste : « Chat », en ligne maintenant (anneau aux couleurs des compétences, point menthe), carte
+  « Orbi résume » (fonction d'IA `chat_summary`), segment Tout · Connexions · Recruteurs · Entreprises
+  avec pilule Lime glissante et compteurs, demandes de connexion, lignes avec étiquette de rôle,
+  coche « lu », « écrit… » en temps réel, discussions épinglées en tête.
+- Discussion : en-tête flouté (statut en ligne ou « écrit… », appel vidéo, ···), candidature épinglée
+  (offre, étape, score, « Voir »), séparateurs de jour, bulles Lime texte Sapin, carte Entretien
+  (agenda avec rappels, S’entraîner), réponses suggérées par Orbi (un toucher envoie), réactions,
+  « + » Joindre (six tuiles, attestations des formations), Orbi rédige (quatre tons, Envoyer, Autre
+  version), note vocale avec onde.
+- Menu ··· : fiche de la personne, profil, candidature, recherche, médias, notifications,
+  épingler, Signaler (raison, puis signalement à la modération) et Bloquer avec confirmation.
+- Appel vidéo : confirmation, plein écran (chiffré de bout en bout, sa vignette, onde Lime, minuteur
+  menthe, micro, caméra, haut-parleur, raccrocher), « Appel terminé · durée » ; fournisseur factice.
+- Base : migration `20261027060000_chat_v2` (`MessageReaction`, `VideoCall`, `pinnedAt`, `typingAt`).
+  Services `chat.ts`, `chat-summary.ts`, `video-call.ts` ; actions `src/server/actions/chat.ts` ;
+  route `/app/messages/pouls`.
+- Tests : `tests/unit/chat-v2.test.ts`, `tests/db/chat-v2.test.ts`, e2e `chat-v2.spec.ts` (ouvrir,
+  réponse suggérée, réaction, appel) ; `modele-b-messages`, `hire`, `hire-advanced`,
+  `modele-b-plein-ecran` mis à jour.
+- Décisions : `docs/decisions/2026-10-27-chat-v2.md`. Reste à choisir : un vrai fournisseur d'appel
+  vidéo.
+
+## Explorer · corrections d'Ephraïm (27 octobre 2026)
+
+- Avatar de l'en-tête à 28 px, comme dans le Fil et à la taille de l'icône Enregistrées.
+- Rubriques gardées : « Offres pour vous », « Entreprises qui recrutent », « Personnes à connaître » ;
+  « Nouvelles cette semaine » retirée de l'accueil d'Explorer (la page `/app/explorer/nouvelles`
+  reste). Titres de rubrique à 16 px au lieu de 19 px.
+- Fond de l'onglet Explorer : le même que Fil, Carrière et les autres onglets (`--nb-nuit`), au lieu
+  du noir plus profond.
+
+## Onglets du téléphone · un seul en-tête et un seul style d'onglets (27 octobre 2026)
+
+Demande d'Ephraïm : chaque titre de page doit se ressembler (taille, position), les options et les
+couleurs aussi.
+
+- Nouvelle feuille `src/styles/phone-onglets.css` (importée en dernier) et classe `nb-tete-onglet`
+  pour l'en-tête des cinq onglets (Fil, Explorer, Carrière, Hub, Chat) : titre à gauche, 28 px, même
+  hauteur ; à droite, boutons ronds de 44 px (fond surface, liseré fin) et photo de 36 px.
+- Explorer : le titre passe à gauche comme ailleurs ; Enregistrées et la photo sont à droite.
+- Chat : le bouton « Nouveau message » prend la même couleur que les autres boutons ronds.
+- Onglets : Fil et Hub passent des onglets soulignés aux pastilles (comme Carrière et Chat), même
+  hauteur (40 px), même texte (13 px) et mêmes couleurs (Lime et texte Sapin quand choisi).
+- Les anciennes règles d'en-tête propres à chaque écran sont retirées.
+
+## Correctif : Chat sans mise en forme sur jumanly.io (27 octobre 2026)
+
+Après la mise en ligne, un téléphone resté ouvert affichait le nouveau Chat avec l'ancienne
+feuille de style globale (texte brut, onglets collés). Les styles du Chat sont maintenant chargés
+avec ses composants (`parts.tsx`) et non plus par `globals.css`. Vérifié : lint, types, build,
+e2e `chat-v2` et `modele-b-messages` (téléphone), feuille du Chat chargée à part sur
+`/app/messages`.
+
+## Espace recruteur au téléphone · même identité que l'espace talent (27 octobre 2026)
+
+Demande d'Ephraïm : le Fil du recruteur identique à celui des talents, et Offres, Messages, son
+profil et les candidats dans la même identité visuelle.
+
+- En-tête des cinq onglets recruteur : la classe commune `nb-tete-onglet` (titre 28 px à gauche,
+  boutons ronds identiques, « + » de la même couleur que les autres). L'onglet Messages s'intitule
+  « Chat », comme dans la barre.
+- Fil : même ordre et mêmes éléments que chez un talent (onglets en pastilles, puis la ligne
+  « Publier » avec le nom) ; « Publier au nom de… » reste en dessous. La recherche du Fil est
+  retirée, comme chez un talent.
+- Offres, Candidatures, Talents : la loupe devient une barre de recherche visible, au style
+  d'Explorer ; toucher la barre ouvre les mêmes options (« Rechercher dans », recherches récentes).
+- Pastilles : vues de Candidatures et de Talents, onglets Candidats · Réseau · Équipe du Chat, filtres
+  d'offres et choix de portée passent au Lime avec texte Sapin quand ils sont choisis.
+- « Mon profil recruteur » prend la mise en page du profil d'une personne (`docs/profil-personne`) :
+  barre, bannière, photo cerclée, nom, poste et entreprise, puces, sections ; pas de portfolio.
+  La vue candidat (profil d'une personne) était déjà au nouveau style.
+- Vérifié : lint, types, tests (413), tests en base (367), build, e2e recruteur au téléphone
+  (18 sur 18). Captures : `/mnt/project-files/captures/recruteur-harmonise/`.
+- Correctif : `phone-onglets.css` n'est plus importé par `globals.css` mais par les écrans qui
+  l'utilisent (Fil, Explorer, Carrière, Hub, Chat, onglets recruteur, profil recruteur). Comme pour
+  le Chat (#173), un téléphone resté ouvert pendant une mise en ligne gardait l'ancienne feuille
+  globale et ne voyait pas les nouveaux en-têtes.
+
+## Carrière v3 : fin de la création d'un CV (27 octobre 2026)
+
+Demande d'Ephraïm : le PDF téléchargé ne contenait que le haut du CV, « juste le logo ».
+
+- Cause : un CV encore vide (profil vide à sa création) montrait à l'aperçu un CV d'exemple rempli,
+  mais le PDF imprimait le vrai CV, presque vide. Désormais l'aperçu le dit (« l'aperçu montre un
+  exemple »), propose « Reprendre mon profil » ou « Écrire le contenu », et le téléchargement reste
+  fermé tant que le CV est vide. Le PDF est récupéré par le navigateur puis enregistré, avec un
+  message clair en cas d'échec.
+- « Ajouter à mon profil » (Aperçu) : ce que le CV contient et que le profil n'a pas encore
+  (titre, résumé, expériences datées, formations, compétences du référentiel, langues), après une
+  feuille qui montre ce qui sera ajouté. Rien n'est remplacé (`src/server/services/cv-to-profile.ts`).
+- « Terminer » ramène à Carrière (onglet CV). Créer un CV remplace l'adresse au lieu de l'empiler :
+  « Retour » depuis Contenu ne repasse plus par le choix du modèle (qui recréait un CV).
+- Import : « Garder seulement ce CV » garde le CV importé dans « Mes CV » tel qu'il a été lu, sans
+  toucher au profil ; son nom est celui du fichier.
+- « Adapter à une offre » vérifié au téléphone.
+- Tests : `tests/unit/cv-to-profile.test.ts`, e2e `carriere-v3` (CV vide, PDF lu avec pdftotext,
+  ajout au profil, Terminer, import gardé), `mobile-profil-cv`.
+## Carrière · « À propos » et photo vue en grand (27 octobre 2026)
+
+- Demande d'Ephraïm : une présentation (titre + texte de 400 caractères) avant les compétences, et la photo de profil qu'on touche pour l'agrandir devant un fond flouté, la modifier, la recadrer ou revenir aux initiales.
+- Nouveau champ `TalentProfile.aboutTitle` (migration `20261027170000_profile_about_title`) ; le texte reste `summary`. La page « À propos » du téléphone limite le texte à 400 caractères (un texte plus ancien et plus long reste affiché, il faut le raccourcir pour enregistrer). « Modifier le profil » renvoie vers cette page au lieu de garder son propre champ « Bio ».
+- La carte « À propos » s'affiche avant les compétences dans Carrière (onglet Profil) et dans l'onglet « À propos » du profil vu par les autres ; la ligne sous le nom montre désormais le titre professionnel.
+- Photo : `src/components/phone/career/photo-viewer.tsx` (un `<dialog>` dont le fond est flouté), styles dans `src/styles/phone-apropos.css`, importés par les composants.
+- Publié sans attendre la vérification complète, à la demande d'Ephraïm (seuls la compilation et ESLint ont tourné).
+
+
+## Confirmation de l'e-mail par un lien, accueil Talent / Recruteur (27 octobre 2026)
+
+Demande d'Ephraïm : le code à 6 chiffres rendait l'inscription lente ; l'accueil doit toujours
+proposer le type d'utilisateur et « S'inscrire » / « Se connecter ».
+
+- Inscription (talent, recruteur, administrateur d'entreprise) : un e-mail « Confirmer mon
+  adresse » remplace le code. Le lien (valable 24 heures) confirme l'adresse et ouvre Jumanly
+  connecté, sur le téléphone ou l'ordinateur où il est ouvert (`emailVerification` de Better Auth,
+  `src/app/(auth)/(acces)/inscription/confirmee/route.ts`). La suite (premières questions,
+  paiement d'un forfait d'organisation, rôle de l'administrateur) est lue sur le compte, pas sur
+  le cookie d'inscription, pour marcher d'un appareil à l'autre. L'e-mail de bienvenue part une
+  fois, à la confirmation (`src/server/services/signup-confirmation.ts`).
+- Écran « Ouvrez votre boîte mail » : renvoyer le lien, changer d'adresse, « Déjà confirmé ? Se
+  connecter ». Lien expiré : message et nouveau lien. Une connexion avec une adresse non confirmée
+  renvoie un lien. L'administration renvoie aussi un lien.
+- Les codes restent pour « Mot de passe oublié » et la vérification en deux étapes.
+- Sans fournisseur d'e-mail, le journal « [e-mail factice] » affiche le lien en clair.
+- Retouches le même jour (demande d'Ephraïm) : le site public garde ses boutons d'origine ; le
+  choix Talent / Recruteur et « S'inscrire » / « Se connecter » sont sur la page de connexion
+  (téléphone et ordinateur) et sur l'écran Bienvenue du téléphone. Bienvenue : l'image ne couvre
+  plus le texte (colonne, illustration réduite sur les petits écrans) et les trois écrans défilent
+  seuls toutes les 4,5 s, jusqu'à ce qu'on touche un point ou l'image (pas en animations réduites).
+- Tests : `tests/unit/signup-confirmation.test.ts`, e2e d'inscription passés au lien
+  (`openConfirmationLink`), accueil (`foundation`, `modele-b-accueil`).
+## Carrière · importer un CV : trois choix, et lire ses CV dans l'appli (27 octobre 2026)
+
+Demande d'Ephraïm : un CV importé doit pouvoir être gardé, servir à remplir le profil, ou servir à
+créer un autre CV ; un CV de la bibliothèque se lit dans l'appli, se ferme pour revenir à la
+bibliothèque, et se supprime.
+
+- « Voici ce qu'Orbi a trouvé » propose trois choix : « Garder mon CV » (le fichier tel quel dans
+  « Mes CV »), « Remplir mon profil avec ce CV » (Orbi range les groupes cochés dans le profil, le
+  CV est aussi gardé) et « Créer un nouveau CV avec ces informations » (choix du modèle, puis
+  Contenu, Mise en forme, Aperçu ; le PDF est ce CV).
+- Le fichier d'origine est gardé (stockage privé) et sert aussi aux candidatures : le recruteur
+  reçoit le fichier importé.
+- Nouvel écran « Lire » (`/app/career/cv/[id]/lire`) : PDF dessiné page par page, photo, ou mise en
+  page pour un fichier Word et un CV fait sur Jumanly ; Télécharger, Utiliser par défaut pour
+  postuler, Modifier (ou « En faire un CV modifiable »), Supprimer. « Fermer » revient à « Mes CV ».
+  Les cartes de la bibliothèque ouvrent cet écran.
+- Tests e2e `carriere-v3` : les trois choix, lecture du PDF, téléchargement, fermeture, suppression,
+  PDF du nouveau CV.
+
+## Profil du recruteur à l'identité du profil talent, photo agrandie pour les visiteurs (27 octobre 2026)
+
+- Demande d'Ephraïm : un visiteur touche la photo d'un profil et elle s'agrandit devant l'écran flouté, sans pouvoir la modifier. Le profil d'un recruteur reprend l'identité du profil talent, vu par les autres comme par lui-même.
+- La photo agrandie est partagée (`src/components/phone/profil/photo-viewer.tsx`, option `editable`). On ne peut la modifier que sur son propre profil (Carrière, ou « Mon profil » du recruteur).
+- Le profil d'un recruteur s'ouvre à tous les membres sur `/app/personnes/[id]`. Il montre la bannière, la photo à anneau, les réseaux, le nom, le poste chez l'organisation, la bio, le drapeau, les connexions, « Recrute en ce moment », le nombre d'offres en cours et les publications. L'onglet « À propos » contient le titre et le texte, le candidat recherché (nouveau champ `RecruiterProfile.seeking`), l'expérience, la formation et les langues. Il y a aussi un onglet « Réalisations », mais pas de portfolio.
+- « Mon profil » du recruteur (`/app/hire/compte/profil`, téléphone) utilise le même composant `PersonProfile`, avec `own`. Chaque section a son crayon, et l'onglet « Suivi » sert de tableau de bord : offres en cours, candidatures reçues, nouvelles à lire, statistiques, offres et contacts.
+- Décision : les sections personnelles du recruteur (À propos, expérience, formation, langues, réalisations, bannière, réseaux) sont rangées dans un `TalentProfile`, qui reste privé (`visibility = private`). Le recruteur n'apparaît donc jamais dans les recherches de talents, et on réutilise les formulaires de Carrière. « Modifier le profil » cache le titre et la disponibilité du talent pour un recruteur ; ces réglages sont dans « Recrutement ».
+- Limite : ajouter une réalisation suit le droit `portfolio` du compte, comme pour un talent.
+- Publié avec le contrôle rapide seulement (tsc, ESLint, tests en base de l'Explorer), à la demande d'Ephraïm.
+
+## 27/10/2026 · Fil : publications réordonnées, commentaires visibles, modifier et supprimer
+
+- Une publication du Fil (talent, recruteur, entreprise) montre maintenant : l'avatar carré arrondi, le nom, l'heure et la ville ; le titre et le texte sur toute la largeur ; la photo à son format, coins arrondis (comme Instagram, jusqu'au portrait 4:5) ; puis Commenter · J'aime à gauche et Enregistrer à droite. L'encoche sur la photo disparaît. « Partager » passe dans le menu « ··· ».
+- Les deux derniers commentaires s'affichent sous chaque publication, avec « Voir les N commentaires ».
+- L'auteur d'un commentaire peut le modifier ou le supprimer (« ··· » à côté de son nom). L'auteur d'une publication peut la modifier (titre et texte) ou la supprimer, y compris une publication faite au nom de son entreprise. Une publication ou un commentaire modifié affiche « modifié » (nouveau champ `FeedPost.editedAt`).
+- La ville d'une personne vient de `User.city`.
+- Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
+
+## 27/10/2026 · Page d'une entreprise au téléphone, dans l'identité du profil
+
+- Demande d'Ephraïm : la page d'une entreprise (vue par tous et par ses administrateurs) reprend l'identité du profil talent ou recruteur au téléphone.
+- Tête : bannière (image ou couleur choisie à l'inscription), logo carré à coins arrondis, réseaux sociaux (LinkedIn, Instagram, Facebook, X, site), nom et badge vérifié, @identifiant, siège avec son drapeau (« 🇨🇩 Kinshasa, RD Congo ») ou « International », première phrase de la présentation, puces abonnés · offres ouvertes · employés · « Recrute en ce moment ». Boutons : « Suivre » et « Partager » pour un visiteur ; « Modifier » et « Publier » pour un administrateur.
+- Onglets : Publications (ouvert d'abord) · À propos (qui sommes-nous, puis en bref : création et années d'existence, employés, siège, sur Jumanly depuis ; domaines ; liens) · Offres · Membres.
+- Membres : seulement les recruteurs de l'entreprise (responsable de la page, administrateurs, recruteurs), le responsable en premier, chacun cliquable vers son profil par n'importe qui. Les managers, lecteurs et personnes qui se déclarent employées n'y sont plus. Un recruteur sans profil recruteur rempli a quand même sa page (`recruiterBlock`).
+- Nouveaux champs `Organization.foundedYear`, `international`, `socialLinks`, modifiés dans « Profil de l'entreprise » au téléphone avec le pays du siège. Le formulaire de l'ordinateur ne les envoie pas : ils restent tels quels quand il enregistre.
+- Domaines : le champ Secteur, séparé par des virgules.
+- Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
+
+## 27/10/2026 · Compétences libres, niveau des langues, diagnostic lié au métier
+
+- Retours d'une utilisatrice transmis par Ephraïm, quatre points corrigés.
+- Compétences : quand la liste n'a pas la compétence cherchée, on peut l'ajouter telle qu'elle est écrite (feuille « Ajouter des compétences » du téléphone et écran « Ajouter une compétence » de l'ordinateur). Elle est créée dans `Skill` avec la catégorie `custom` (`findOrCreateSkill`), réutilisée si une autre personne tape le même nom, mais jamais proposée dans les recherches des autres.
+- Langues (téléphone) : chaque langue cochée demande son niveau (Débutant, Intermédiaire, Professionnel, Langue maternelle). Plus de « Professionnel » par défaut : on ne peut pas enregistrer sans niveau. « Notions » devient « Débutant » partout ; un ancien « Courant » reste affiché là où il avait été choisi.
+- Diagnostic : nouvelle réponse « Aucun niveau · Je ne connais pas cette compétence » (niveau 0). Elle ne demande pas de preuve, compte 0 point comme « Notions » et n'amène pas la question de suivi « Pouvez-vous le prouver ? ».
+- Diagnostic : les compétences évaluées sont d'abord les compétences clés du métier visé (familles de métiers, `src/server/services/job-families.ts` : social media, marketing digital, communication, data, finance, RH…), puis celles des offres proches. Les mots trop vagues d'un titre (« manager », « assistant », « chargé »…) ne servent plus à trouver les offres proches. Un métier qui ne correspond à rien ne reçoit plus les compétences de toutes les offres (Power BI, SQL…) : le diagnostic évalue les compétences que la personne a citées. Deux compétences ajoutées au référentiel : « Planification éditoriale », « Analyse des performances ».
+- Publié avec le contrôle rapide seulement (tsc, ESLint, compilation), à la demande d'Ephraïm.
+
+## 2026-10-27 · Tout le monde se retrouve dans Explorer
+
+- Recherche d'Explorer (talent et recruteur) : on trouve désormais chaque membre dès son inscription, talents et recruteurs, par son nom, son titre ou son poste de recruteur. Avant, seuls les profils « Visible des recruteurs » apparaissaient, alors que tout nouveau compte est « Privé » par défaut.
+- Choix respectés : un profil « Anonyme » n'apparaît jamais par son nom (le talent a choisi de masquer son nom) ; un compte suspendu ou supprimé n'apparaît pas ; une personne bloquée non plus. « Privé » garde le talent hors du vivier des recruteurs, pas hors d'Explorer : sa page s'ouvre avec seulement son nom, sa photo, son titre et sa ville tant que les deux ne sont pas en relation.
+- Entreprises : la recherche trouve toutes les organisations par leur nom, qu'elles recrutent ou non (avant, seulement celles avec une offre ouverte). Celles qui recrutent passent en premier.
+- « Personnes à connaître », le compteur des filtres et les demandes de mise en relation suivent la même règle.
+- Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
+## 2026-10-27 · Thème clair « Crème doux » de l'appli téléphone
+
+- Paramètres › Apparence (talent et recruteur) : Sombre (par défaut), Clair, ou « Comme mon téléphone ». Choix gardé sur le téléphone (localStorage `jm-theme`), appliqué avant le premier affichage (`phoneThemeScript(true)`) et à chaud (`PhoneThemeRoot`, `<html data-nb-theme>`).
+- Palette claire : fond #F2EDE5, cartes #FBF8F3, texte Sapin #0F3F37, accents Lime avec texte Sapin ; versions foncées des accents pour le texte (contraste AA).
+- Toutes les couleurs écrites en dur des CSS téléphone passent par des jetons (`--nb-t-…`, `--nb-f-…`, `--nb-voile`, `--nb-nuit-rgb`, `--nb-encre`) avec la valeur sombre en repli : le sombre est inchangé. Restent sombres : appel vidéo, caméra, visionneuse, aperçus papier des CV.
+- Pages de connexion : toujours sombres.
+
+## 2026-10-27 · Administration principale au Modèle B (1/5 : identité visuelle)
+
+- `/admin` passe au sombre du Modèle B : fond Nuit, cartes #13282C, texte clair, Lime pour les actions. Les jetons de couleur sont redéfinis sous `.jm-admin-bg` (src/styles/admin.css) au lieu de réécrire chaque page ; les fonds clairs (Lime, Néon, dégradé signature, pastilles claires) gardent le texte Sapin, les fonds Sapin pleins gardent le texte blanc.
+- Les couleurs de badges écrites en dur dans `@theme` (ambre-fond, down-fond, up-texte…) passent par des variables avec la valeur d'origine en repli : rien ne change hors de l'admin.
+- Barre latérale du recruteur sur ordinateur (src/components/admin/side-nav.tsx) : groupes nommés, libellés dès 1200 px, icônes seules de 768 à 1199 px ; compte et « Retour à l'application » en bas. Téléphone : en-tête sombre et pilule flottante sombre.
+- Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
+
+## 2026-10-27 · Administration principale (3/5 : rôles délégués)
+
+- Rôles de l'administration (migration `admin_delegated_roles`) : Responsable formation (`content_editor` : formations, contenus), Responsable carrière (`career_manager`, nouveau : contenus, modération des offres, IA et matching), Modération (`moderator`, nouveau : offres et signalements), Support (lecture seule), Administrateur (tout, veto).
+- Matrice unique dans src/server/auth/roles.ts (`adminAreas`, `canWriteArea`) ; pages et actions vérifient la rubrique (`requireAdminArea`). Suspendre un compte depuis un signalement reste réservé à l'administrateur.
+- Barre latérale, pilule du téléphone et accueil `/admin` suivent les rubriques du rôle. Le lien « Administration » du compte apparaît pour tous ces rôles. Chaque rôle a une description dans la fiche utilisateur.
+- Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
+
+## 2026-10-27 · Administration principale (4/5 : leçons YouTube)
+
+- Dans l'éditeur de leçon, le champ « Vidéo » accepte un lien YouTube (youtube.com, youtu.be, shorts, embed). Il est gardé comme `youtube:<id>` dans `Lesson.videoId` et une leçon texte devient une leçon vidéo (src/lib/youtube.ts).
+- La vidéo se lit dans Jumanly avec le lecteur YouTube « confidentialité renforcée » (`youtube-nocookie.com`, sans suggestions d'autres chaînes) : leçon sur ordinateur, leçon au téléphone, aperçu de l'admin, aperçu public. Aucun lien vers YouTube n'est proposé. CSP : `frame-src https://www.youtube-nocookie.com`.
+- Le suivi de la reprise (minute où l'on s'est arrêté) ne s'applique pas aux vidéos YouTube ; la leçon se termine avec le bouton habituel.
+- Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
+
+## 2026-10-27 · Administration principale (5/5 : outils de matching)
+
+- « IA et matching › Compétences » (src/components/admin/skills-tab.tsx, service src/server/services/skills-admin.ts) : compétences créées par les membres et référentiel complet, les plus utilisées d'abord, avec le nombre de profils, d'offres et de formations (jamais qui).
+- Ajouter ou retirer un synonyme ; fusionner une compétence dans une autre (les profils, offres et formations passent sur la cible, l'ancien nom devient synonyme). Le score compare noms et synonymes : effet immédiat. Chaque action est au journal avec son motif.
+- Ouvert aux administrateurs et aux responsables carrière.
+- Publié avec le contrôle rapide seulement (tsc, ESLint), à la demande d'Ephraïm.
+
+## 2026-10-27 · Plus de bloc gris au chargement
+
+- Demande d'Ephraïm : après un enregistrement ou à l'ouverture d'une page, un écran sombre avec un grand bloc gris arrondi s'affichait.
+- Cause : l'attente de tout l'espace connecté (`src/app/app/layout.tsx`, et `/admin`) montrait un squelette gris de 60 % de l'écran à chaque chargement complet d'une page (ouverture de l'appli, rechargement, retour vers une page chargée à part). Les navigations dans l'appli gardaient déjà la page précédente.
+- Correction : ce bloc est remplacé par la seule barre fine de chargement en haut, sur le fond de l'espace (`src/components/app/shell-loading.tsx`) ; la détection du téléphone se fait en parallèle des autres lectures de l'espace.
+## 2026-10-27 · Changement d'adresse e-mail réparé
+
+- « Changer d'adresse » (Paramètres, talent et recruteur au téléphone) envoie maintenant le lien lui-même au lieu de passer par `auth.api.changeEmail`, qui masquait un envoi échoué et affichait « Lien envoyé » alors que rien ne partait. Même jeton Better Auth (`change-email-verification`), l'adresse change à l'ouverture du lien.
+- E-mail dédié « Confirmez votre nouvelle adresse » (`mail.changeEmail.*`) au lieu du texte d'inscription.
+- En production sans RESEND_API_KEY ni SMTP_HOST, l'application dit clairement que l'envoi d'e-mails n'est pas encore activé (`emailChange.unavailable`).
 
 ## Export des rapports pour Company (22 octobre 2026)
 

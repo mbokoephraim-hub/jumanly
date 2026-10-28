@@ -1,6 +1,11 @@
 import "server-only";
 import { getFormatter, getTranslations } from "next-intl/server";
-import type { ExploreCompany, ExploreOffer, ExplorePerson } from "@/server/services/explore";
+import type {
+  ExploreCompany,
+  ExploreOffer,
+  ExplorePerson,
+  ExplorerHome,
+} from "@/server/services/explore";
 import { initialsOf, shortName, toneOf } from "../fil/data";
 
 /**
@@ -180,3 +185,28 @@ export async function explorerWords(now = new Date()) {
 
   return { t, ago, kind, contract, remote, domain, offer, company, person };
 }
+
+/** The lists of the home of Explorer, in words: the page itself and the filters both use them. */
+export function homeView(
+  home: ExplorerHome,
+  words: Awaited<ReturnType<typeof explorerWords>>,
+): ExplorerHomeView {
+  return {
+    offers: home.offers.map(words.offer),
+    fresh: home.fresh.map(words.offer),
+    domains: home.domains.map((key) => ({ key, label: words.domain(key) })),
+    companies: home.companies.map(words.company),
+    sectors: home.sectors,
+    people: home.people.map(words.person),
+  };
+}
+
+export type ExplorerHomeView = {
+  offers: OfferView[];
+  fresh: OfferView[];
+  /** The chips of « Offres pour vous »: key of the field and its name. */
+  domains: { key: string; label: string }[];
+  companies: CompanyView[];
+  sectors: string[];
+  people: PersonView[];
+};

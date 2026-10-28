@@ -2,14 +2,15 @@
  * Connexions (refonte mobile, lot 6, planche talent-4 « Connexions »): two talents connect when
  * one asks and the other accepts. Only then can they write to each other, in one « peer »
  * conversation. Rules:
- * - a request goes only to a talent whose profile is visible to recruiters under their name, never
- *   to a private or anonymous profile;
+ * - a request goes to any member Explorer can show (Ephraïm 27/10/2026), never to an anonymous
+ *   profile, and the other person decides;
  * - the person who receives a request accepts or ignores it, and the requester is not told;
  * - either side can remove a connection: the conversation stays readable but accepts no message;
  * - blocking stops any new request in both directions; a report reaches the moderation queue.
  * No connection data is used for matching.
  */
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
+import { findablePeopleWhere } from "./explore";
 
 export class ConnectionError extends Error {
   constructor(readonly code: "notFound" | "self" | "blocked") {
@@ -162,7 +163,7 @@ export async function listConnections(db: PrismaClient, userId: string) {
 }
 
 /**
- * People the viewer can ask to connect with: talents visible to recruiters under their name,
+ * People the viewer can ask to connect with: every member Explorer can show (not « Anonyme »),
  * found by name or title. Already connected, asked, or blocked people are left out.
  */
 export async function searchPeople(db: PrismaClient, userId: string, query: string) {
@@ -180,10 +181,10 @@ export async function searchPeople(db: PrismaClient, userId: string, query: stri
   const rows = await db.user.findMany({
     where: {
       id: { notIn: [...excluded] },
-      talentProfile: { visibility: "recruiters" },
+      ...findablePeopleWhere,
       OR: [
         { name: { contains: text, mode: "insensitive" } },
-        { talentProfile: { headline: { contains: text, mode: "insensitive" } } },
+        { talentProfile: { is: { headline: { contains: text, mode: "insensitive" } } } },
       ],
     },
     orderBy: { name: "asc" },
@@ -207,7 +208,7 @@ export async function requestConnection(
 ): Promise<RequestResult> {
   if (userId === otherId) throw new ConnectionError("self");
   const other = await db.user.findFirst({
-    where: { id: otherId, talentProfile: { visibility: "recruiters" } },
+    where: { id: otherId, ...findablePeopleWhere },
     select: { id: true },
   });
   if (!other) throw new ConnectionError("notFound");

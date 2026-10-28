@@ -4,6 +4,7 @@
  * Every write is recorded in `AuditLog` with its reason. Testable without Next.js.
  */
 import { z } from "zod";
+import { eraseAccountByAdmin } from "@/server/services/account-deletion";
 import { Prisma } from "@/generated/prisma/client";
 import type { EntitlementType, PrismaClient } from "@/generated/prisma/client";
 import {
@@ -552,6 +553,33 @@ export async function deleteUser(
   await audit(db, context, "user.delete", input.userId, { reason: input.reason });
 }
 
+export const ERASE_WORD = "EFFACER";
+
+export const eraseUserSchema = z.object({
+  userId: z.string().min(1),
+  reason: reasonField,
+  confirmWord: z.string().trim().max(40),
+});
+
+/**
+ * « Effacer définitivement » (veto of the platform administrator): the account and everything it
+ * holds (profile, CVs, documents, applications, posts, messages) are deleted for good, even an
+ * account already anonymized or the owner of an organization. Only one's own account and the last
+ * administrator are protected. The journal keeps the reason, never the person's data.
+ */
+export async function eraseUserForGood(
+  db: PrismaClient,
+  context: AuditContext & { actorId: string },
+  input: z.infer<typeof eraseUserSchema>,
+) {
+  if (input.confirmWord.toUpperCase() !== ERASE_WORD) throw new AdminUserError("confirm");
+  const { user, block } = await blockFor(db, context.actorId, input.userId);
+  if (!user) throw new AdminUserError("notFound");
+  if (block === "self" || block === "lastAdmin") throw new AdminUserError(block);
+  await eraseAccountByAdmin(db, input.userId);
+  await audit(db, context, "user.erase.veto", input.userId, { reason: input.reason });
+}
+
 /**
  * Deletions asked from Paramètres (30 days of grace): carried out by the hourly job. An owner who
  * still holds an organization keeps their account until they hand it over.
@@ -598,6 +626,8 @@ export type UserState = (typeof USER_STATES)[number];
 export const PLATFORM_ROLES = [
   "user",
   "content_editor",
+  "career_manager",
+  "moderator",
   "support_agent",
   "platform_admin",
 ] as const;

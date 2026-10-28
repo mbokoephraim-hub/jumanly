@@ -1,0 +1,161 @@
+/* ─── Publication du Fil (Ephraïm, 27/10/2026) : avatar carré arrondi, nom, heure et ville ; puis
+   titre et texte sur toute la largeur ; puis la photo à son format (comme Instagram), coins
+   arrondis ; puis Commenter · J'aime à gauche, Enregistrer à droite ; puis les commentaires.
+   Importé par les composants du Fil (jamais par globals.css). ─── */
+.nb-fil-carte .nb-fil-anneau {
+  border-radius: 14px;
+}
+.nb-fil-carte .nb-fil-anneau[data-verifie] .nb-fil-av {
+  border-radius: 11px !important;
+}
+.nb-fil-carte .nb-fil-pb {
+  padding-left: 0;
+  margin-top: 12px;
+}
+.nb-fil-carte .nb-fil-titre {
+  font-size: 18px;
+}
+.nb-fil-carte .nb-fil-pb .nb-fil-texte p {
+  margin-top: 4px;
+}
+.nb-fil-photo {
+  display: block;
+  margin-top: 12px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--nb-surface);
+}
+.nb-fil-photo > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Comme Instagram : la photo garde son format, sans dépasser un portrait 4:5. */
+  max-height: 125vw;
+  object-fit: cover;
+}
+@media (min-width: 640px) {
+  .nb-fil-photo > img {
+    max-height: 640px;
+  }
+}
+.nb-fil-barre-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 8px -10px 0;
+}
+.nb-fil-barre-actions .nb-fil-ab {
+  width: auto;
+  min-width: 44px;
+  padding: 0 10px;
+  gap: 6px;
+  border-radius: 22px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.nb-fil-barre-actions .nb-fil-ab[data-garde] {
+  margin-left: auto;
+  background: none;
+}
+.nb-fil-coms {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+}
+.nb-fil-com {
+  display: flex;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--nb-filet);
+}
+.nb-fil-com[data-compact] {
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 0;
+}
+.nb-fil-com-corps {
+  flex: 1;
+  min-width: 0;
+}
+.nb-fil-com .nb-fil-tete .nb-fil-plus {
+  min-height: 28px;
+}
+.nb-fil-com[data-compact] .nb-fil-tete {
+  font-size: 13.5px;
+}
+.nb-fil-com[data-compact] .nb-fil-rep-texte {
+  font-size: 14px;
+  margin-top: 1px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.nb-fil-com-modif textarea,
+.nb-fil-modif textarea {
+  font: inherit;
+}
+.nb-fil-com-modif textarea {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(var(--nb-voile), 0.16);
+  background: var(--nb-surface);
+  color: var(--nb-texte);
+  font-size: 14.5px;
+  resize: vertical;
+}
+.nb-fil-com-modif > span {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+.nb-fil-com-annuler,
+.nb-fil-com-ok,
+.nb-fil-modif-ok {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.nb-fil-com-annuler {
+  background: var(--nb-haute);
+}
+.nb-fil-com-ok,
+.nb-fil-modif-ok {
+  background: var(--nb-lime);
+  color: var(--nb-encre);
+}
+.nb-fil-modif-t {
+  font-size: 17px;
+  font-weight: 700;
+  padding: 0 4px 10px;
+}
+.nb-fil-modif-boutons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 14px;
+}
+.nb-fil-modif-boutons .nb-annuler {
+  margin-top: 0;
+  flex: 1;
+}
+.nb-fil-modif-ok {
+  flex: 1;
+  height: 50px;
+}
+/* La page d'une publication : la photo à son format, elle aussi. */
+.nb-fil-detail .nb-fil-img {
+  height: auto;
+  max-height: 125vw;
+  border-radius: 18px;
+}
+.nb-fil-mes-aide {
+  padding: 4px 20px 8px;
+  font-size: 13.5px;
+}

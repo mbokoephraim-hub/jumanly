@@ -14,6 +14,8 @@ import { getActiveSpace } from "@/server/hire-context";
 import { getOrbiConversation, listOrbiConversations } from "@/server/services/orbi";
 import { OrbiHistoryAside } from "@/components/talent/orbi-history";
 import { RecruiterOrbi } from "@/components/recruiter/orbi";
+import { RhOrbi } from "@/components/phone/recruteur/orbi";
+import { isPhone } from "@/server/view";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("talentOrbi");
@@ -37,6 +39,16 @@ export default async function OrbiPage({ searchParams }: PageProps<"/app/orbi">)
   if (typeof params.c !== "string") await phoneTalentRedirect(user.id, "/app?orbi=1");
   // In an organization's space: the recruiting assistant (recruteur lot 5, planche `ORB_R`).
   const space = await getActiveSpace(user.id);
+  // On a phone, the recruiter's page of Modèle B (recruteur M7, planche 184).
+  if (space && typeof params.c !== "string" && (await isPhone()))
+    return (
+      <RhOrbi
+        ctx={{ userId: user.id, organizationId: space.organizationId, role: space.role }}
+        question={
+          typeof params.q === "string" ? params.q.trim().slice(0, 500) || undefined : undefined
+        }
+      />
+    );
   if (space)
     return (
       <RecruiterOrbi

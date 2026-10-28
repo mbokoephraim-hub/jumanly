@@ -157,6 +157,14 @@ export function interviewCalendar(input: {
     `SUMMARY:${icsText(input.summary)}`,
     ...(input.description ? [`DESCRIPTION:${icsText(input.description)}`] : []),
     ...(input.location ? [`LOCATION:${icsText(input.location)}`] : []),
+    // Chat v2: two reminders, an hour before and the day before (« ✓ Dans l’agenda »).
+    ...["-PT1H", "-P1D"].flatMap((trigger) => [
+      "BEGIN:VALARM",
+      "ACTION:DISPLAY",
+      `TRIGGER:${trigger}`,
+      `DESCRIPTION:${icsText(input.summary)}`,
+      "END:VALARM",
+    ]),
     "END:VEVENT",
     "END:VCALENDAR",
     "",

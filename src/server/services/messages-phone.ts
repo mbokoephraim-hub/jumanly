@@ -10,6 +10,9 @@
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { ConnectError } from "./connect";
 
+/** « écrit… » lasts this long after the last keystroke (Chat v2). */
+export const TYPING_MS = 6_000;
+
 export const inboxTabs = ["connexions", "recruteurs", "entreprises"] as const;
 export type InboxTab = (typeof inboxTabs)[number];
 
@@ -48,6 +51,12 @@ const personSelect = {
         take: 1,
         select: { title: true, company: true },
       },
+      // The ring around the face (Chat v2): the colours of the first skills.
+      skills: {
+        orderBy: { level: "desc" },
+        take: 5,
+        select: { skill: { select: { name: true } } },
+      },
     },
   },
 } satisfies Prisma.UserSelect;
@@ -67,7 +76,7 @@ const orgSelect = {
 export type InboxOrganization = Prisma.OrganizationGetPayload<{ select: typeof orgSelect }>;
 
 /** The conversations a talent sees from the personal space (Connect's access rule). */
-function talentWhere(userId: string): Prisma.ConversationWhereInput {
+export function talentWhere(userId: string): Prisma.ConversationWhereInput {
   return {
     OR: [
       { talentUserId: userId, kind: { not: "peer" } },
@@ -88,7 +97,15 @@ export function visibleWhere(now: Date, clearedAt: Date | null): Prisma.MessageW
 const conversationInclude = () =>
   ({
     organization: { select: orgSelect },
-    application: { select: { id: true, job: { select: { title: true, slug: true } } } },
+    application: {
+      select: {
+        id: true,
+        status: true,
+        matchScore: true,
+        stage: { select: { kind: true } },
+        job: { select: { title: true, slug: true } },
+      },
+    },
     connection: {
       select: {
         id: true,
@@ -104,6 +121,8 @@ const conversationInclude = () =>
         lastReadAt: true,
         mutedAt: true,
         clearedAt: true,
+        pinnedAt: true,
+        typingAt: true,
         user: { select: { readReceipts: true } },
       },
     },
@@ -143,6 +162,12 @@ export type InboxItem = {
   last: LastMessage | null;
   unread: number;
   muted: boolean;
+  /** « Épingler la discussion » (Chat v2): first in the list. */
+  pinned: boolean;
+  /** The other side typed within a few seconds (« écrit… »). */
+  typing: boolean;
+  /** My last message was read by the other side (both keep read receipts on). */
+  lastRead: boolean;
   jobTitle: string | null;
 };
 
@@ -210,6 +235,25 @@ async function itemOf(
     last,
     unread,
     muted: Boolean(me?.mutedAt),
+    pinned: Boolean(me?.pinnedAt),
+    lastRead: Boolean(
+      last &&
+      last.senderId === userId &&
+      me?.user.readReceipts &&
+      row.participants.some(
+        (participant) =>
+          participant.userId !== userId &&
+          participant.user.readReceipts &&
+          participant.lastReadAt !== null &&
+          participant.lastReadAt >= last.createdAt,
+      ),
+    ),
+    typing: row.participants.some(
+      (participant) =>
+        participant.userId !== userId &&
+        participant.typingAt !== null &&
+        now.getTime() - participant.typingAt.getTime() < TYPING_MS,
+    ),
     jobTitle: row.application?.job.title ?? null,
   };
 }
@@ -225,8 +269,11 @@ export async function phoneInbox(db: PrismaClient, userId: string, now = new Dat
   const items = (await Promise.all(rows.map((row) => itemOf(db, row, userId, now)))).filter(
     (item): item is InboxItem => item !== null,
   );
-  // A conversation without any visible message stays in the list only between connections.
-  return items.filter((item) => item.last !== null || item.tab === "connexions");
+  // A conversation without any visible message stays in the list only between connections; the
+  // pinned ones come first (Chat v2), each group keeping the newest first.
+  return items
+    .filter((item) => item.last !== null || item.tab === "connexions")
+    .sort((a, b) => Number(b.pinned) - Number(a.pinned));
 }
 
 /** Connection requests received, with their word, and organizations asking to talk. */
@@ -245,11 +292,19 @@ export async function phoneRequests(db: PrismaClient, userId: string, now = new 
       select: {
         id: true,
         message: true,
+        seenAt: true,
         organization: { select: orgSelect },
         job: { select: { title: true } },
       },
     }),
   ]);
+  // The company's proposal now reads « Vue » on its side (Modèle B recruteur, M6).
+  const unseen = contacts.filter((row) => !row.seenAt).map((row) => row.id);
+  if (unseen.length > 0)
+    await db.contactRequest.updateMany({
+      where: { id: { in: unseen }, seenAt: null },
+      data: { seenAt: now },
+    });
   return { connections, contacts };
 }
 
@@ -403,6 +458,16 @@ export async function phoneConversation(
     connectionId: connection?.id ?? null,
     jobTitle: row.application?.job.title ?? null,
     jobSlug: row.application?.job.slug ?? null,
+    application: row.application
+      ? {
+          id: row.application.id,
+          status: row.application.status,
+          stage: row.application.stage.kind,
+          score: row.application.matchScore,
+          job: row.application.job.title,
+          organization: row.organization?.name ?? "",
+        }
+      : null,
     ephemeralSeconds: row.kind === "peer" ? row.ephemeralSeconds : null,
     muted: Boolean(me?.mutedAt),
     blocked,

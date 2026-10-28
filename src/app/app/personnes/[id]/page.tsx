@@ -1,125 +1,62 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { notFound, redirect } from "next/navigation";
-import { companyTone, explorerWords } from "@/components/phone/explorer/data";
-import { PhonePerson } from "@/components/phone/explorer/person";
-import { ExplorerTexts } from "@/components/phone/explorer/server";
-import { feedWords, initialsOf, shortName, toneOf } from "@/components/phone/fil/data";
+import { feedWords } from "@/components/phone/fil/data";
 import { sendTargetViews } from "@/components/phone/fil/server";
+import { ConnectionActions, PersonProfile } from "@/components/phone/profil/profile";
+import { profileView, ProfileTexts } from "@/components/phone/profil/server";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { personPage } from "@/server/services/explore";
 import { authorFeed } from "@/server/services/feed";
+import { personProfile } from "@/server/services/person-profile";
 import { isPhone } from "@/server/view";
 
 export const metadata: Metadata = { robots: { index: false } };
 
-/** « @patrick.ilunga »: the name in small letters, without accents, joined by dots. */
-function handleOf(name: string) {
-  return (
-    name
-      .normalize("NFD")
-      .replace(/\p{M}/gu, "")
-      .toLowerCase()
-      .replace(/\(.*?\)/g, "")
-      .trim()
-      .replace(/[^a-z0-9]+/g, ".")
-      .replace(/^\.|\.$/g, "") || "jumanly"
-  );
-}
-
 /**
- * A person's page on the phone (Modèle B, lot B4, planche Personne): who they are, their posts,
- * their profile and their achievements. Only a profile visible under its name, or a connection,
- * opens; a private or anonymous one is not found. On a computer, the space's home.
+ * A person's profile on the phone (docs/profil-personne, validated 26/10/2026, vue connexion):
+ * the compact head, « Se connecter » then « Chat », and « Publications · À propos · Réalisations
+ * · Portfolio ». Only a profile visible under its name, or a connection, opens; a private or
+ * anonymous one is not found. On a computer, the space's home.
  */
-export default async function PersonPage({ params }: PageProps<"/app/personnes/[id]">) {
+export default async function PersonPage({
+  params,
+  searchParams,
+}: PageProps<"/app/personnes/[id]">) {
   const { id } = await params;
   const user = await requireUser(`/app/personnes/${id}`);
   if (!(await isPhone())) redirect("/app");
-  if (id === user.id) redirect("/app/career/cv");
+  // « Voir comme les autres » from Carrière (docs/carriere-v3): one's own profile as a
+  // connection sees it; otherwise one's own space.
+  const self = id === user.id;
+  // A recruiter's own profile is under Compte (Ephraïm 27/10/2026).
+  const home = (await db.recruiterProfile.findUnique({
+    where: { userId: user.id },
+    select: { id: true },
+  }))
+    ? "/app/hire/compte/profil"
+    : "/app/career/cv";
+  if (self && (await searchParams).apercu !== "1") redirect(home);
   const now = new Date();
-  const [person, posts, fil, words, targets] = await Promise.all([
-    personPage(db, user.id, id),
+  const [person, posts, fil, targets, t] = await Promise.all([
+    personProfile(db, user.id, id, self ? "candidate" : "connection"),
     authorFeed(db, user.id, { userId: id }),
     feedWords(user.id, now),
-    explorerWords(now),
     sendTargetViews(user.id),
+    getTranslations("phoneProfile"),
   ]);
   if (!person) notFound();
-  const { t } = words;
-  const company = person.company ? shortName(person.company) : null;
-  const org = company
-    ? await db.organization.findFirst({
-        where: { name: { startsWith: company, mode: "insensitive" }, suspendedAt: null },
-        select: { slug: true },
-      })
-    : null;
-  const year = (date: Date) => String(date.getUTCFullYear());
-  const place = (when: string, where: string | null) =>
-    where ? t("person.whenPlace", { when, place: where }) : when;
+  const view = await profileView(person, { now });
   return (
-    <ExplorerTexts>
-      <PhonePerson
-        person={{
-          id: person.id,
-          name: person.name,
-          initials: initialsOf(person.name),
-          tone: toneOf(person.name, false),
-          image: person.image,
-          banner: person.banner,
-          verified: person.verified,
-          handle: [t("person.handle", { handle: handleOf(person.name) }), person.city]
-            .filter(Boolean)
-            .join(" · "),
-          title: person.title,
-          company: company
-            ? { name: company, href: org ? `/app/entreprises/${org.slug}` : null }
-            : null,
-          connections: person.connections,
-          common: person.common,
-          link: person.link,
-          conversationId: person.conversationId,
-          about: person.about,
-          skills: person.skills,
-          experiences: person.experiences.map((item) => {
-            const name = shortName(item.company);
-            return {
-              id: item.id,
-              initials: initialsOf(name),
-              tone: companyTone(name),
-              title: t("person.role", { title: item.title, place: name }),
-              when: place(
-                item.endDate
-                  ? t("person.years", { start: year(item.startDate), end: year(item.endDate) })
-                  : t("person.since", { year: year(item.startDate) }),
-                item.location,
-              ),
-            };
-          }),
-          educations: person.educations.map((item) => ({
-            id: item.id,
-            initials: initialsOf(item.school),
-            tone: companyTone(item.school),
-            title: t("person.role", { title: item.degree, place: item.school }),
-            when:
-              item.startYear && item.endYear
-                ? t("person.years", { start: String(item.startYear), end: String(item.endYear) })
-                : item.endYear
-                  ? String(item.endYear)
-                  : "",
-          })),
-          works: person.works.map((work, index) => ({
-            id: work.id,
-            title: work.title,
-            tone: index % 5,
-            line: work.tool
-              ? t("person.work", { tool: work.tool, count: work.images })
-              : t("person.workNoTool", { count: work.images }),
-          })),
-        }}
+    <ProfileTexts>
+      <PersonProfile
+        person={view}
         posts={posts.map(fil.post)}
         targets={targets}
+        title={t("titleProfile")}
+        back={self ? home : "/app/jobs"}
+        actions={self ? null : <ConnectionActions person={view} />}
       />
-    </ExplorerTexts>
+    </ProfileTexts>
   );
 }

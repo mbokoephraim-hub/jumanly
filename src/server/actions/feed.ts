@@ -4,6 +4,7 @@ import { refresh } from "next/cache";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { requireUser } from "@/server/auth/session";
+import { publishingSpace } from "@/server/hire-context";
 import { db } from "@/server/db";
 import { reportError } from "@/server/observability";
 import { sendMessage } from "@/server/services/connect";
@@ -11,6 +12,7 @@ import {
   FeedError,
   createPost,
   deletePost,
+  editPost,
   feedDigest,
   freshMatches,
   hiringOrganizations,
@@ -89,6 +91,11 @@ export async function deletePostAction(id: string) {
   return run((userId) => deletePost(db, userId, idOf(id)));
 }
 
+/** « Modifier »: the title and the text of the viewer's post, or the text of their comment. */
+export async function editPostAction(input: { id: string; title?: string; body: string }) {
+  return run((userId) => editPost(db, userId, input));
+}
+
 export async function replyAction(input: { post: string; body: string }) {
   return run((userId) => replyTo(db, userId, input));
 }
@@ -147,15 +154,23 @@ export async function sendPostAction(id: string, conversationId: string) {
 export async function publishAction(input: NewPost) {
   const t = await getTranslations("phoneFil.publish");
   const format = await getFormatter();
-  return run((userId) =>
-    createPost(db, userId, input, {
-      work: t("workDetail"),
-      certificate: (date) =>
-        t("certificateDetail", {
-          date: format.dateTime(date, { day: "numeric", month: "short", year: "numeric" }),
-        }),
-    }),
-  );
+  return run(async (userId) => {
+    // A recruiter's space (Modèle B recruteur, M3): its offers, and its name when allowed.
+    const space = await publishingSpace(userId);
+    return createPost(
+      db,
+      userId,
+      input,
+      {
+        work: t("workDetail"),
+        certificate: (date) =>
+          t("certificateDetail", {
+            date: format.dateTime(date, { day: "numeric", month: "short", year: "numeric" }),
+          }),
+      },
+      space ?? undefined,
+    );
+  });
 }
 
 /** A photo for the post being written (already reduced on the phone). */

@@ -14,8 +14,16 @@ export type GenerateInput<T> = {
   prompt: string;
   schema: z.ZodType<T>;
   maxTokens?: number;
+  /** A picture read with the prompt (« Photographier un CV papier »), never kept. */
+  image?: AiImage;
   /** The deterministic answer: used by the fake provider, and when the model output is rejected. */
   template: () => T;
+};
+
+export type AiImage = {
+  mediaType: "image/jpeg" | "image/png" | "image/webp";
+  /** Base64, without the `data:` prefix. */
+  data: string;
 };
 
 export type GenerateResult<T> = {
@@ -61,7 +69,24 @@ export class AnthropicProvider implements AiProvider {
         max_tokens:
           input.maxTokens ?? (Number(process.env.AI_MAX_TOKENS_DEFAULT) || DEFAULT_MAX_TOKENS),
         system: input.system,
-        messages: [{ role: "user", content: input.prompt }],
+        messages: [
+          {
+            role: "user",
+            content: input.image
+              ? [
+                  {
+                    type: "image",
+                    source: {
+                      type: "base64",
+                      media_type: input.image.mediaType,
+                      data: input.image.data,
+                    },
+                  },
+                  { type: "text", text: input.prompt },
+                ]
+              : input.prompt,
+          },
+        ],
         output_config: { format: zodOutputFormat(input.schema) },
       });
       const usage = {

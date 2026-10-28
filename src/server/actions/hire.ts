@@ -5,6 +5,7 @@ import { updateTag } from "next/cache";
 import { z } from "zod";
 import { onMessageSent } from "@/server/application-events";
 import { db } from "@/server/db";
+import { isPhone } from "@/server/view";
 import { requireHire, setActiveSpace } from "@/server/hire-context";
 import { requireUser } from "@/server/auth/session";
 import { ensureApplicationConversation, sendMessage } from "@/server/services/connect";
@@ -70,7 +71,8 @@ export async function becomeRecruiterAction() {
     redirect("/app/hire");
   }
   if (memberships.length > 0) redirect("/app/acces-refuse?raison=organisation");
-  const org = await setupAccount(db, user.id, { profile: "rh" });
+  // On a phone, the recruiter's profile of Modèle B (M2) names the company at its step 5.
+  const org = await setupAccount(db, user.id, { profile: "rh", phone: await isPhone() });
   if (org) await setActiveSpace(org.id);
   redirect("/app/bienvenue");
 }
@@ -78,17 +80,20 @@ export async function becomeRecruiterAction() {
 // ─── Jobs ─────────────────────────────────────────────────────────────────────
 
 export async function closeJobAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  const { ctx } = await requireHire("/app/hire/offres", "manage", "publish");
   const jobId = id(formData.get("id"));
   await guarded(() => closeJob(db, ctx, jobId), "/app/hire/offres");
   const job = await db.job.findUniqueOrThrow({ where: { id: jobId }, select: { slug: true } });
   refreshPublicJobs(job.slug);
+  // The recruiter's phone comes back to the offer, with its report (Modèle B recruteur, M4).
+  const back = String(formData.get("back") ?? "");
+  if (back === `/app/hire/offres/${jobId}?rapport=1`) redirect(back);
   redirect("/app/hire/offres?onglet=cloturees&ok=fermee");
 }
 
 /** « Rouvrir » a closed job: published again within the active-job limit. */
 export async function reopenJobAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  const { ctx } = await requireHire("/app/hire/offres", "manage", "publish");
   const jobId = id(formData.get("id"));
   const result = await guarded(() => publishJob(db, ctx, jobId), "/app/hire/offres");
   if (result.status === "limit") redirect("/app/hire/offres?onglet=cloturees&erreur=limite");
@@ -101,7 +106,7 @@ export async function reopenJobAction(formData: FormData) {
 }
 
 export async function duplicateJobAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  const { ctx } = await requireHire("/app/hire/offres", "manage", "publish");
   const copy = await guarded(
     () => duplicateJob(db, ctx, id(formData.get("id"))),
     "/app/hire/offres",
@@ -110,7 +115,7 @@ export async function duplicateJobAction(formData: FormData) {
 }
 
 export async function deleteDraftAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  const { ctx } = await requireHire("/app/hire/offres", "manage", "publish");
   await guarded(() => deleteDraft(db, ctx, id(formData.get("id"))), "/app/hire/offres");
   redirect("/app/hire/offres?onglet=brouillons&ok=supprimee");
 }
@@ -118,7 +123,7 @@ export async function deleteDraftAction(formData: FormData) {
 // ─── Candidate file ───────────────────────────────────────────────────────────
 
 export async function addNoteAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire", "evaluate");
+  const { ctx } = await requireHire("/app/hire", "evaluate", "evaluate");
   const applicationId = id(formData.get("application"));
   const mentions = await guarded(
     () => addTeamNote(db, ctx, applicationId, String(formData.get("body") ?? "")),
@@ -171,6 +176,6 @@ export async function requestDocumentAction(formData: FormData) {
 
 /** « Rédiger une première version » and « Améliorer la clarté avec l'IA » on the job form. */
 export async function jobWriterAction(input: JobWriterInput): Promise<JobWriterResult> {
-  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  const { ctx } = await requireHire("/app/hire/offres", "manage", "publish");
   return writeJob(db, ctx, input);
 }

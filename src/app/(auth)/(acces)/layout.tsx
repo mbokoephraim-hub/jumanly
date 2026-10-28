@@ -35,7 +35,14 @@ async function AccessFrame({ children }: { children: React.ReactNode }) {
         <PhoneThemeColor />
         <AppearanceRoot appearance="dark" />
         <NextIntlClientProvider
-          messages={pickMessages(messages, ["access", "auth", "signup", "phoneAccueil", "phone"])}
+          messages={pickMessages(messages, [
+            "access",
+            "auth",
+            "signup",
+            "phoneAccueil",
+            "phoneRhAccueil",
+            "phone",
+          ])}
         >
           <main id="content" className="nb-acces-page">
             {children}

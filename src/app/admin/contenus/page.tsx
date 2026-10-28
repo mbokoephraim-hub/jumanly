@@ -32,7 +32,7 @@ import {
   saveTipAction,
   setFaqItemHiddenAction,
 } from "@/server/actions/contents";
-import { requireCourseEditor } from "@/server/auth/session";
+import { requireAdminArea } from "@/server/auth/session";
 import { db } from "@/server/db";
 import {
   bannerAudiences,
@@ -62,7 +62,7 @@ type Tab = keyof typeof tabs;
  */
 export default async function AdminContents({ searchParams }: PageProps<"/admin/contenus">) {
   const params = await searchParams;
-  if (!(await requireCourseEditor())) notFound();
+  if (!(await requireAdminArea("content"))) notFound();
   const t = await getTranslations("admin.content");
   const one = (key: string) => (typeof params[key] === "string" ? (params[key] as string) : "");
   const tab: Tab =

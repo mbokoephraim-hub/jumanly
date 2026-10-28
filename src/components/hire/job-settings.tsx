@@ -57,7 +57,11 @@ export async function JobSettings({
       : [],
   ]);
   const none = t("assign.none");
-  const criteria = scorecardCriteria(job);
+  const organization = await db.organization.findUnique({
+    where: { id: ctx.organizationId },
+    select: { scorecardCriteria: true },
+  });
+  const criteria = scorecardCriteria(job, organization?.scorecardCriteria);
 
   return (
     <div className="grid gap-4 lg:grid-cols-2">

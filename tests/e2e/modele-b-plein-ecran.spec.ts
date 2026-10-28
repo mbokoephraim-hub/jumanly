@@ -49,6 +49,7 @@ test.describe("Modèle B · plein écran", () => {
   test("un champ de texte n'affiche pas de cadre vert quand on écrit", async ({ page }) => {
     await logIn(page, "grace.ux@jumanly.test");
     await page.goto("/app/messages", { waitUntil: "networkidle" });
+    await page.getByRole("main").getByRole("button", { name: "Rechercher", exact: true }).click();
     const field = page.getByRole("main").locator(".nb-ms-champ input").first();
     await field.click();
     await expect(field).toBeFocused();
@@ -57,5 +58,12 @@ test.describe("Modèle B · plein écran", () => {
       return { outline: s.outlineStyle, shadow: s.boxShadow };
     });
     expect(style).toEqual({ outline: "none", shadow: "none" });
+
+    // Nor the text of a new post in the Fil.
+    await page.goto("/app/fil/publier", { waitUntil: "networkidle" });
+    const text = page.getByRole("textbox", { name: /^Texte/ });
+    await text.click();
+    await expect(text).toBeFocused();
+    expect(await text.evaluate((el) => getComputedStyle(el).outlineStyle)).toBe("none");
   });
 });

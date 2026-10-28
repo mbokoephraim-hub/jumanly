@@ -1,6 +1,6 @@
 import { expect, type Page } from "@playwright/test";
 import { strToU8, zipSync } from "fflate";
-import { codesSince, lastCode } from "./outbox";
+import { codesSince, lastCode, openConfirmationLink } from "./outbox";
 
 /** Demo accounts from prisma/seed/accounts.ts (local and preview only). */
 export const DEMO_PASSWORD = "Demo-Jumanly-2026";
@@ -87,7 +87,7 @@ export const PASSWORD = "kinshasa-2026";
 
 /**
  * A talent's sign-up from a plan chosen on /tarifs (refonte mobile, lot 2): « Continuer avec mon
- * e-mail », the account, then the 6-digit code. Ends on « Compte validé » (/app/bienvenue).
+ * e-mail », the account, then the link of the confirmation e-mail. Ends on « Compte validé » (/app/bienvenue).
  */
 export async function signUpFromPricing(page: Page, planButton: string, email: string) {
   await page.goto("/tarifs");
@@ -151,7 +151,7 @@ export async function signUpWithEmail(page: Page, email: string, name = "Awa Fic
   if (await onPhone(page)) {
     // The tests of the intro play it on the computer; on a phone, Modèle B has the logo alone.
     await skipIntro(page);
-    // Modèle B (planche Accueil): the e-mail, the password, then the code. The name comes at the
+    // Modèle B (planche Accueil): the e-mail, the password, then the confirmation link. The name comes at the
     // first step of the profile.
     await page.getByLabel("Adresse e-mail").fill(email);
     await page.getByRole("button", { name: "Continuer", exact: true }).click();
@@ -160,8 +160,7 @@ export async function signUpWithEmail(page: Page, email: string, name = "Awa Fic
     const sent = Date.now();
     await page.getByRole("button", { name: "Créer mon compte" }).click();
     await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
-    await page.getByLabel("Code à 6 chiffres").fill(await lastCode(email, sent));
-    await page.getByRole("button", { name: "Vérifier" }).click();
+    await openConfirmationLink(page, email, sent);
     await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
     phoneNames.set(page, name);
     return;
@@ -175,8 +174,7 @@ export async function signUpWithEmail(page: Page, email: string, name = "Awa Fic
   const since = Date.now();
   await page.getByRole("button", { name: "Créer mon compte" }).click();
   await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
-  await page.getByLabel("Code à 6 chiffres").fill(await lastCode(email, since));
-  await page.getByRole("button", { name: "Valider" }).click();
+  await openConfirmationLink(page, email, since);
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 }
 
@@ -221,11 +219,12 @@ export async function finishOnboarding(page: Page, place?: { country: string; ci
  * editor is open.
  */
 export async function newCvFromList(page: Page) {
-  // On the phone (Modèle B, lot B5): « Nouveau CV » → « Choisir un modèle », the first one open.
+  // On the phone (docs/carriere-v3): « Nouveau CV » → « Choisir un modèle », the first free one,
+  // « Continuer » opens the CV on Contenu.
   if ((page.viewportSize()?.width ?? 1280) < 768) {
-    await page.goto("/app/career/cv/modeles?nouveau=1");
-    await page.locator(".nb-ca-modeles form button").first().click();
-    await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
+    await page.goto("/app/career/cv/nouveau?etape=modele");
+    await page.getByRole("button", { name: "Continuer" }).click();
+    await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+\?etape=contenu/);
     return new URL(page.url()).pathname.split("/").pop()!;
   }
   await page.goto("/app/career/cv");
@@ -257,5 +256,21 @@ export function fictiveDocx(paragraphs: string[]) {
     name: "cv-fictif.docx",
     mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     buffer: Buffer.from(bytes),
+  };
+}
+
+/** A fictional PDF CV (Ephraïm, 27/10: « Garder mon CV »), one line of text per entry. */
+export async function fictivePdf(lines: string[]) {
+  const { PDFDocument, StandardFonts } = await import("pdf-lib");
+  const pdf = await PDFDocument.create();
+  const font = await pdf.embedFont(StandardFonts.Helvetica);
+  const page = pdf.addPage([595, 842]);
+  lines.forEach((line, index) =>
+    page.drawText(line, { x: 56, y: 780 - index * 22, size: 13, font }),
+  );
+  return {
+    name: "cv-fictif.pdf",
+    mimeType: "application/pdf",
+    buffer: Buffer.from(await pdf.save()),
   };
 }

@@ -5,6 +5,7 @@
  * (handy in local and preview) and every other lesson shows its text instead.
  */
 import { createHash } from "node:crypto";
+import { youtubeIdOf } from "@/lib/youtube";
 
 export type VideoPlayback = {
   /** HLS playlist (.m3u8) or, for the fake adapter, any https video file. */
@@ -12,6 +13,8 @@ export type VideoPlayback = {
   poster?: string;
   /** Low-quality MP4 for very slow connections, when the provider generates one. */
   lowMp4?: string;
+  /** A YouTube lesson: played in the embedded YouTube player instead (`src` is empty). */
+  youtube?: string;
 };
 
 /** A direct upload from the browser to the provider (TUS), signed for one video. */
@@ -41,6 +44,8 @@ export class FakeVideoProvider implements VideoProvider {
   readonly id = "fake";
 
   playback(videoId: string | null) {
+    const youtube = youtubeIdOf(videoId);
+    if (youtube) return { src: "", youtube };
     return videoId && (/^https:\/\/\S+$/.test(videoId) || /^\/medias\/\S+$/.test(videoId))
       ? { src: videoId }
       : null;
@@ -102,6 +107,8 @@ export class BunnyVideoProvider implements VideoProvider {
   }
 
   playback(videoId: string | null) {
+    const youtube = youtubeIdOf(videoId);
+    if (youtube) return { src: "", youtube };
     if (!videoId || !/^[\w-]{8,64}$/.test(videoId)) return null;
     const base = `https://${this.host}/${videoId}`;
     return {

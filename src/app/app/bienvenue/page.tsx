@@ -23,10 +23,12 @@ import {
 } from "@/server/actions/welcome";
 import { db } from "@/server/db";
 import { ownedOrganization } from "@/server/services/accounts";
-import { listCountries, listLocalities } from "@/server/services/places";
+import { listCountries, listDialCountries, listLocalities } from "@/server/services/places";
 import { readSignupFlow } from "@/server/signup-flow";
 import { isPhone } from "@/server/view";
 import { PhoneOnboarding } from "@/components/phone/accueil/onboarding";
+import { PhoneRecruiterOnboarding } from "@/components/phone/recruteur/onboarding";
+import { companyState, searchCompanies } from "@/server/services/recruiter-onboarding";
 import {
   phoneContracts,
   phoneFirstSkills,
@@ -52,6 +54,76 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
   const firstName = user.firstName ?? user.name;
 
   const { etape, seul, erreur, rejoindre } = await searchParams;
+  // A recruiter on a phone (Modèle B recruteur, M2): the seven steps, then « Profil prêt ».
+  const recruiter = await db.recruiterProfile.findUnique({ where: { userId: user.id } });
+  if (recruiter && (await isPhone())) {
+    const [countries, dials, localities, company, near, social] = await Promise.all([
+      listCountries(db),
+      listDialCountries(db),
+      listLocalities(db),
+      companyState(db, user.id),
+      searchCompanies(db, user.id, ""),
+      db.account.findFirst({
+        where: { userId: user.id, providerId: { in: ["google", "apple", "linkedin"] } },
+        select: { providerId: true },
+      }),
+    ]);
+    const dial = new Map(dials.map((row) => [row.code, row.dialCode]));
+    const messages = await getMessages();
+    const tp = await getTranslations("phoneAccueil.profile.name.provider");
+    const free =
+      /@(gmail|googlemail|yahoo|ymail|outlook|hotmail|live|msn|icloud|me|aol|proton|protonmail)\./i;
+    const kinds = ["charge", "rh", "manager", "dirigeant", "cabinet", "independant"] as const;
+    const audiences = ["nobody", "interview", "connections"] as const;
+    const hires = ["few", "some", "many"] as const;
+    return (
+      <NextIntlClientProvider
+        messages={pickMessages(messages, ["phoneRhOnboarding", "phoneAccueil", "common"])}
+      >
+        <PhoneRecruiterOnboarding
+          data={{
+            firstName: user.firstName ?? "",
+            lastName: user.lastName ?? "",
+            provider: social ? tp(social.providerId as "google" | "apple" | "linkedin") : null,
+            image: user.image ?? null,
+            country: user.country ?? "CD",
+            city: user.city ?? "",
+            otherCities: recruiter.otherCities,
+            countries: countries.map(({ code, name }) => ({
+              code,
+              name,
+              dial: dial.get(code) ?? null,
+            })),
+            cities: Object.fromEntries(
+              Object.entries(localities).map(([code, rows]) => [
+                code,
+                rows
+                  .filter((row) => row.kind === "city")
+                  .slice(0, 6)
+                  .map((row) => row.name),
+              ]),
+            ),
+            workEmail: recruiter.workEmail ?? (free.test(user.email) ? "" : user.email),
+            phone: recruiter.phone ?? "",
+            phoneCountry: recruiter.phoneCountry ?? user.country ?? "CD",
+            whatsapp: recruiter.whatsapp,
+            linkedin: recruiter.linkedin ?? "",
+            contactsFor: audiences.find((item) => item === recruiter.contactsFor) ?? "interview",
+            kind: kinds.find((item) => item === recruiter.kind) ?? null,
+            jobTitle: recruiter.jobTitle ?? "",
+            company,
+            near,
+            domains: recruiter.domains,
+            levels: recruiter.levels,
+            hiresPerYear: hires.find((item) => item === recruiter.hiresPerYear) ?? null,
+            headline: recruiter.headline ?? "",
+            hiringNow: recruiter.hiringNow,
+            ready: Boolean(recruiter.completedAt),
+          }}
+        />
+      </NextIntlClientProvider>
+    );
+  }
   // The owner of a new organization: the recruiter's first steps (planche recruteur-3 OBR).
   if (org)
     return (

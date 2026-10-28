@@ -49,6 +49,8 @@ export const aiFeatures = {
   // Modèle B lot B8 · Orbi helps the talent write in a conversation (answer, tone, shorter,
   // spelling, English), one credit of the person per text. Nothing is sent: the person decides.
   message_help: { credits: 1, tier: "fast" },
+  // Chat v2 · « Orbi résume » the unread conversations of the talent, one credit per summary.
+  chat_summary: { credits: 1, tier: "fast" },
 } as const;
 export type AiFeature = keyof typeof aiFeatures;
 
@@ -118,6 +120,7 @@ export async function runAi<T>(
     schema: GenerateInput<T>["schema"];
     template: () => T;
     maxTokens?: number;
+    image?: GenerateInput<T>["image"];
     /** Beyond this delay the call counts as unavailable: credits released, nothing kept. */
     timeoutMs?: number;
     /** Who pays the credits and holds the gate: the person by default, or their organization. */
@@ -169,6 +172,7 @@ export async function runAi<T>(
       schema: input.schema,
       template: input.template,
       maxTokens: input.maxTokens,
+      image: input.image,
     });
     result = input.timeoutMs ? await withTimeout(generation, input.timeoutMs) : await generation;
   } catch (error) {

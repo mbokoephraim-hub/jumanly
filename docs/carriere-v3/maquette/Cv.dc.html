@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Créer un CV</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&amp;family=Inter:wght@400;600;800&amp;family=Lora:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050D10}
+.cv,.cv *{box-sizing:border-box}
+.cv{font-family:"Sora",system-ui,sans-serif;color:#F2EDE5;-webkit-font-smoothing:antialiased}
+.cv h1,.cv h2,.cv p{margin:0}
+.cv button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
+.cv .scroll{position:absolute;left:0;right:0;top:0;bottom:0;overflow-y:auto;scrollbar-width:none;padding-bottom:120px}
+.cv .scroll::-webkit-scrollbar{display:none}
+.cv .rb{width:36px;height:36px;border-radius:50%;background:#13282C;border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:#F2EDE5;flex:none}
+.cv .card{border-radius:20px;background:#13282C;border:1px solid rgba(255,255,255,.06)}
+.cv .h{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:#8FA39E;margin:20px 0 10px;display:flex;align-items:center;justify-content:space-between}
+.cv .h button{letter-spacing:0;font-size:12px;font-weight:700;color:#A6F26B;min-height:28px}
+.cv .pane{animation:paneIn .38s cubic-bezier(.2,.8,.2,1) both}
+@keyframes paneIn{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+.cv .pop{animation:popIn .45s cubic-bezier(.2,.9,.25,1.2) both}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+.cv .sk{display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 11px 0 9px;border-radius:15px;font-size:12px;font-weight:600;border:1px solid}
+.cv .sk i{width:8px;height:8px;border-radius:50%;flex:none}
+.cv .pt{display:flex;gap:9px;font-size:12px;line-height:1.45;color:#DCE6E3;padding:2px 0}
+.cv .pt i{width:6px;height:6px;border-radius:2px;flex:none;margin-top:6px;transform:rotate(45deg)}
+.cv .tag{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:10px;font-size:10.5px;font-weight:700}
+.cv .sw{width:42px;height:24px;border-radius:12px;position:relative;flex:none;transition:background-color .25s}
+.cv .sw i{position:absolute;top:3px;width:18px;height:18px;border-radius:50%;background:#F2EDE5;transition:left .25s}
+.cv .chip{height:34px;padding:0 14px;border-radius:17px;font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.1);transition:background-color .25s,color .25s}
+.cv .go{position:absolute;left:20px;right:20px;bottom:28px;height:52px;border-radius:26px;background:#A6F26B;color:#0F3F37;font-size:15px;font-weight:800;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 12px 30px rgba(0,0,0,.45);z-index:5}
+.cv .fade{position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(rgba(11,26,31,0),#0B1A1F 55%);z-index:4;pointer-events:none}
+.cv .page{background:#FBF8F3;color:#1D2A2C;border-radius:6px;box-shadow:0 14px 34px rgba(0,0,0,.45);overflow:hidden;transition:font-family .2s}
+.cv .ln{display:block;height:4px;border-radius:2px;background:#DCE1DE;margin-top:5px}
+.cv .scan{position:absolute;left:0;right:0;height:36px;background:linear-gradient(rgba(47,211,166,0),rgba(47,211,166,.45));border-bottom:2px solid #2FD3A6;animation:scan 2.2s ease-in-out infinite}
+@keyframes scan{0%{top:-36px}100%{top:100%}}
+.cv .row{animation:rowIn .4s both}
+@keyframes rowIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.cv .pane,.cv .pop,.cv .row,.cv .scan{animation:none}}
+</style>
+</helmet>
+<div class="cv" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #0B1A1F; border-radius: 44px;">
+<div class="scroll">
+
+<!-- Barre du haut -->
+<div style="display: flex; align-items: center; gap: 10px; padding: 48px 20px 0;">
+<button class="rb" aria-label="{{retourT}}" onClick="{{retour}}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{retourD}}"></path></svg></button>
+<div style="flex: 1; min-width: 0;"><h1 style="font-size: 17px; font-weight: 800; letter-spacing: -.01em;">{{titre}}</h1><p style="font-size: 11.5px; color: #8FA39E; margin-top: 1px;">{{sous}}</p></div>
+<sc-if value="{{aEtapes}}" hint-placeholder-val="{{ true }}"><span style="font-size: 12px; font-weight: 700; color: #A6F26B;">{{num}} / 4</span></sc-if>
+</div>
+<sc-if value="{{aEtapes}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; gap: 6px; padding: 14px 20px 0;">
+<sc-for list="{{etapes}}" as="e" hint-placeholder-count="4">
+<button onClick="{{e.go}}" style="flex: 1; min-height: 30px;" aria-label="{{e.t}}"><span style="display: block; height: 4px; border-radius: 2px; background: {{e.c}}; transition: background-color .3s;"></span><span style="display: block; font-size: 10.5px; font-weight: {{e.fw}}; color: {{e.tc}}; margin-top: 6px;">{{e.t}}</span></button>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- 0 · Départ -->
+<sc-if value="{{oDepart}}" hint-placeholder-val="{{ false }}">
+<div class="pane" style="padding: 18px 20px 0;">
+<div style="height: 150px; border-radius: 24px; background: #0F3F37; position: relative; overflow: hidden;">
+<svg viewBox="0 0 350 150" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><g fill="none" stroke="#A6F26B" stroke-width="12" stroke-opacity=".25"><circle cx="330" cy="0" r="60"></circle><circle cx="330" cy="0" r="105"></circle></g></svg>
+<div class="page pop" style="position: absolute; left: 34px; top: 26px; width: 84px; height: 118px; padding: 9px; transform: rotate(-6deg);"><span style="display: block; height: 7px; width: 70%; border-radius: 2px; background: #0F3F37;"></span><span class="ln" style="width: 50%;"></span><span class="ln" style="margin-top: 10px;"></span><span class="ln"></span><span class="ln" style="width: 70%;"></span><span style="display: block; height: 5px; width: 40%; border-radius: 2px; background: #2FD3A6; margin-top: 9px;"></span><span class="ln"></span><span class="ln" style="width: 80%;"></span></div>
+<div class="page pop" style="position: absolute; left: 104px; top: 18px; width: 92px; height: 128px; padding: 10px; animation-delay: .08s;"><span style="display: block; height: 8px; width: 70%; border-radius: 2px; background: #1E4E79;"></span><span class="ln" style="width: 50%;"></span><span class="ln" style="margin-top: 11px;"></span><span class="ln"></span><span class="ln" style="width: 70%;"></span><span style="display: block; height: 5px; width: 40%; border-radius: 2px; background: #F4C463; margin-top: 10px;"></span><span class="ln"></span><span class="ln" style="width: 80%;"></span><span class="ln" style="width: 60%;"></span></div>
+<span style="position: absolute; right: 16px; bottom: 16px; font-size: 12px; font-weight: 700; color: #F2EDE5; max-width: 140px; text-align: right; line-height: 1.35;">Votre profil remplit déjà 80 % du CV</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; margin-top: 16px;">
+<sc-for list="{{departs}}" as="d" hint-placeholder-count="3">
+<button class="card row" onClick="{{d.go}}" style="display: flex; align-items: center; gap: 14px; padding: 16px; min-height: 84px; animation-delay: {{d.dl}}; border-color: {{d.bd}};">
+<span style="width: 48px; height: 48px; border-radius: 16px; background: {{d.bg}}; color: {{d.c}}; display: flex; align-items: center; justify-content: center; flex: none;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{d.ic}}"></path></svg></span>
+<span style="flex: 1; min-width: 0;"><b style="display: flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 700;">{{d.t}}<sc-if value="{{d.reco}}" hint-placeholder-val="{{ false }}"><span class="tag" style="background: #2FD3A6; color: #0B1A1F;">Le plus rapide</span></sc-if></b><span style="display: block; font-size: 12px; color: #9FB3AE; margin-top: 3px; line-height: 1.4;">{{d.d}}</span></span>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg>
+</button>
+</sc-for>
+</div>
+<p style="font-size: 11.5px; color: #8FA39E; text-align: center; margin-top: 16px; line-height: 1.5;">Le CV téléchargé ne porte ni logo ni couleur Jumanly.</p>
+</div>
+</sc-if>
+
+<!-- 1 · Modèle -->
+<sc-if value="{{oModele}}" hint-placeholder-val="{{ false }}">
+<div class="pane" style="padding: 16px 20px 0;">
+<div style="display: flex; gap: 8px;">
+<sc-for list="{{filtres}}" as="f" hint-placeholder-count="4">
+<button class="chip" onClick="{{f.go}}" style="background: {{f.bg}}; color: {{f.fg}}; border-color: {{f.bd}};">{{f.t}}</button>
+</sc-for>
+</div>
+<p style="font-size: 11.5px; color: #8FA39E; margin-top: 12px;">{{modInfo}}</p>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 12px; margin-top: 10px;">
+<sc-for list="{{modeles}}" as="m" hint-placeholder-count="6">
+<button onClick="{{m.go}}" class="pop" style="animation-delay: {{m.dl}}; display: block;" aria-label="{{m.t}}">
+<span style="display: block; position: relative; border-radius: 14px; padding: 3px; background: {{m.ring}}; transition: background-color .25s;">
+<span style="display: block; position: relative; border-radius: 11px; overflow: hidden; aspect-ratio: 600 / 849; background: #FBF8F3;"><img src="{{m.img}}" alt="Modèle {{m.t}}" style="display: block; width: 100%; height: 100%; object-fit: cover; opacity: {{m.op}};">
+<sc-if value="{{m.sel}}" hint-placeholder-val="{{ false }}"><span class="pop" style="position: absolute; right: 8px; top: 8px; width: 26px; height: 26px; border-radius: 50%; background: #A6F26B; color: #0F3F37; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,.25);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span></sc-if>
+<sc-if value="{{m.lock}}" hint-placeholder-val="{{ false }}"><span style="position: absolute; inset: 0; background: rgba(11,26,31,.3); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 12px;"><span style="height: 28px; padding: 0 11px; border-radius: 14px; background: #0B1A1F; color: #F2EDE5; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6.5 10.5h11v9h-11zM8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"></path></svg>Avec Pro</span></span></sc-if>
+</span>
+</span>
+<span style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px; padding: 0 2px;"><b style="font-size: 13px; font-weight: 700;">{{m.t}}</b><span class="tag" style="background: {{m.nbg}}; color: {{m.nfg}};">{{m.n}}</span></span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- 2 · Contenu -->
+<sc-if value="{{oContenu}}" hint-placeholder-val="{{ false }}">
+<div class="pane" style="padding: 16px 20px 0;">
+<div style="display: flex; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 16px; background: rgba(47,211,166,.1); border: 1px solid rgba(47,211,166,.35);">
+<span style="width: 34px; height: 34px; border-radius: 50%; background: #2FD3A6; color: #0B1A1F; display: flex; align-items: center; justify-content: center; flex: none;"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5c.6 4.6 2.9 6.9 7.5 7.5-4.6.6-6.9 2.9-7.5 7.5-.6-4.6-2.9-6.9-7.5-7.5 4.6-.6 6.9-2.9 7.5-7.5z"></path></svg></span>
+<p style="font-size: 12.5px; line-height: 1.45; color: #DCE6E3;"><b style="color: #F2EDE5;">Orbi a tout rempli depuis votre profil.</b> Décochez ce que vous ne voulez pas, touchez un bloc pour le modifier.</p>
+</div>
+
+<div class="h">RÉSUMÉ<button onClick="{{reecrire}}">✦ Réécrire avec Orbi</button></div>
+<div class="card" style="padding: 14px; font-size: 12.5px; line-height: 1.55; color: #DCE6E3;">{{resume}}</div>
+
+<div class="h">SECTIONS DU CV<span style="letter-spacing: 0; font-weight: 600;">glisser pour l’ordre</span></div>
+<div style="display: flex; flex-direction: column; gap: 8px;">
+<sc-for list="{{sections}}" as="s" hint-placeholder-count="6">
+<div class="card row" style="padding: 12px 14px; animation-delay: {{s.dl}}; opacity: {{s.op}}; transition: opacity .25s;">
+<div style="display: flex; align-items: center; gap: 10px;">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="#5E7671" aria-hidden="true"><circle cx="9" cy="6" r="1.6"></circle><circle cx="15" cy="6" r="1.6"></circle><circle cx="9" cy="12" r="1.6"></circle><circle cx="15" cy="12" r="1.6"></circle><circle cx="9" cy="18" r="1.6"></circle><circle cx="15" cy="18" r="1.6"></circle></svg>
+<span style="width: 8px; height: 8px; border-radius: 50%; background: {{s.c}}; flex: none;"></span>
+<b style="flex: 1; font-size: 13.5px; font-weight: 700;">{{s.t}}</b>
+<span style="font-size: 11.5px; color: #8FA39E;">{{s.n}}</span>
+<button class="sw" role="switch" aria-checked="{{s.aria}}" aria-label="{{s.t}}" onClick="{{s.go}}" style="background: {{s.swbg}};"><i style="left: {{s.swl}};"></i></button>
+</div>
+<sc-if value="{{s.aComp}}" hint-placeholder-val="{{ false }}"><div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;"><sc-for list="{{comp}}" as="k" hint-placeholder-count="5"><span class="sk" style="background: {{k.bg}}; border-color: {{k.bd}}; color: #F2EDE5;"><i style="background: {{k.c}};"></i>{{k.t}}</span></sc-for></div></sc-if>
+<sc-if value="{{s.aExp}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 10px; display: flex; flex-direction: column; gap: 10px;"><sc-for list="{{exp}}" as="x" hint-placeholder-count="2"><div style="padding-left: 10px; border-left: 2px solid {{x.c}};"><b style="font-size: 12.5px; font-weight: 700;">{{x.t}}</b><span style="font-size: 11.5px; color: #8FA39E;"> · {{x.e}}</span><sc-for list="{{x.pts}}" as="p" hint-placeholder-count="2"><div class="pt"><i style="background: {{x.c}};"></i>{{p}}</div></sc-for></div></sc-for></div></sc-if>
+</div>
+</sc-for>
+</div>
+<button style="width: 100%; height: 46px; margin-top: 10px; border-radius: 23px; border: 1px dashed rgba(166,242,107,.6); color: #A6F26B; font-size: 13px; font-weight: 700; text-align: center;">+ Section : projets, bénévolat, certificats</button>
+</div>
+</sc-if>
+
+<!-- 3 · Style -->
+<sc-if value="{{oStyle}}" hint-placeholder-val="{{ false }}">
+<div class="pane" style="padding: 16px 20px 0;">
+<div style="height: 300px; border-radius: 24px; background: #13282C; display: flex; align-items: center; justify-content: center; position: relative;">
+<div class="page" style="width: 196px; height: 272px; padding: {{pad}}; font-family: {{police}}; position: relative;">
+<sc-if value="{{photo}}" hint-placeholder-val="{{ true }}"><span style="position: absolute; right: 16px; top: 16px; width: 34px; height: 34px; border-radius: 50%; background: {{coul}}; color: #FBF8F3; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center;">GM</span></sc-if>
+<b style="display: block; font-size: 14px; font-weight: 800; color: {{coul}}; transition: color .25s;">Grâce Mbuyi</b>
+<span style="display: block; font-size: 8px; color: #55656A; margin-top: 2px;">{{poste}}</span>
+<span style="display: block; font-size: 6.5px; color: #55656A; margin-top: 3px;">grace.mbuyi@… · Kinshasa</span>
+<sc-for list="{{blocs}}" as="b" hint-placeholder-count="3">
+<span style="display: block; margin-top: {{gap}};"><b style="display: block; font-size: 7.5px; font-weight: 800; letter-spacing: .08em; color: {{coul}}; border-bottom: 1px solid {{coulL}}; padding-bottom: 2px; transition: color .25s;">{{b.t}}</b>
+<sc-for list="{{b.l}}" as="l" hint-placeholder-count="2"><span style="display: block; font-size: 6.5px; line-height: 1.5; color: #2A383B; margin-top: 3px;">{{l}}</span></sc-for></span>
+</sc-for>
+</div>
+</div>
+<div class="h">COULEUR<span style="letter-spacing: 0; font-weight: 600;">{{coulT}}</span></div>
+<div style="display: flex; gap: 10px; flex-wrap: wrap;">
+<sc-for list="{{couleurs}}" as="c" hint-placeholder-count="8">
+<button onClick="{{c.go}}" aria-label="{{c.t}}" style="width: 34px; height: 34px; border-radius: 50%; padding: 3px; border: 2px solid {{c.ring}}; transition: border-color .2s;"><span style="display: block; width: 100%; height: 100%; border-radius: 50%; background: {{c.c}};"></span></button>
+</sc-for>
+</div>
+<div class="h">POLICE</div>
+<div style="display: flex; gap: 8px;">
+<sc-for list="{{polices}}" as="p" hint-placeholder-count="3">
+<button class="chip" onClick="{{p.go}}" style="font-family: {{p.f}}; background: {{p.bg}}; color: {{p.fg}}; flex: 1;">{{p.t}}</button>
+</sc-for>
+</div>
+<div class="h">DENSITÉ</div>
+<div style="display: flex; gap: 8px;">
+<sc-for list="{{densites}}" as="p" hint-placeholder-count="3">
+<button class="chip" onClick="{{p.go}}" style="background: {{p.bg}}; color: {{p.fg}}; flex: 1;">{{p.t}}</button>
+</sc-for>
+</div>
+<div class="card" style="margin-top: 16px; padding: 4px 14px;">
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 48px;"><span style="font-size: 13px; font-weight: 600;">Photo sur le CV</span><button class="sw" role="switch" aria-checked="{{photoA}}" aria-label="Photo sur le CV" onClick="{{basculePhoto}}" style="background: {{photoBg}};"><i style="left: {{photoL}};"></i></button></div>
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 48px; border-top: 1px solid rgba(255,255,255,.06);"><span style="font-size: 13px; font-weight: 600;">Langue des titres</span><span style="font-size: 12.5px; font-weight: 700; color: #A6F26B;">Français ›</span></div>
+</div>
+</div>
+</sc-if>
+
+<!-- 4 · Aperçu + vérif Orbi -->
+<sc-if value="{{oApercu}}" hint-placeholder-val="{{ false }}">
+<div class="pane" style="padding: 16px 20px 0;">
+<div style="display: flex; gap: 14px; align-items: center;">
+<button onClick="{{voirGrand}}" aria-label="Voir le CV en grand" style="width: 124px; flex: none; border-radius: 8px; overflow: hidden; box-shadow: 0 14px 34px rgba(0,0,0,.45);"><img src="{{tplImg}}" alt="Aperçu du CV" style="display: block; width: 100%;"></button>
+<div style="flex: 1; min-width: 0;">
+<div style="width: 92px; height: 92px; border-radius: 50%; background: conic-gradient(#A6F26B 0 {{scoreP}}, #1B3338 {{scoreP}} 100%); padding: 8px; transition: background .4s;"><div style="width: 100%; height: 100%; border-radius: 50%; background: #0B1A1F; display: flex; flex-direction: column; align-items: center; justify-content: center;"><b style="font-size: 24px; font-weight: 800; line-height: 1;">{{score}}</b><span style="font-size: 10px; color: #8FA39E;">sur 100</span></div></div>
+<p style="font-size: 12.5px; font-weight: 700; margin-top: 10px;">Vérifié par Orbi</p>
+<p style="font-size: 11.5px; color: #8FA39E; line-height: 1.4;">1 page · lisible par les logiciels de recrutement</p>
+</div>
+</div>
+<div class="h">CE QU’ORBI A VÉRIFIÉ<button>Pourquoi ?</button></div>
+<div style="display: flex; flex-direction: column; gap: 8px;">
+<sc-for list="{{verifs}}" as="v" hint-placeholder-count="4">
+<div class="card row" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; animation-delay: {{v.dl}};">
+<span style="width: 26px; height: 26px; border-radius: 50%; background: {{v.bg}}; color: {{v.fg}}; display: flex; align-items: center; justify-content: center; flex: none; font-size: 13px; font-weight: 800;">{{v.i}}</span>
+<span style="flex: 1; font-size: 12.5px; line-height: 1.4; color: #DCE6E3;">{{v.t}}</span>
+<sc-if value="{{v.fix}}" hint-placeholder-val="{{ false }}"><button onClick="{{corriger}}" style="height: 30px; padding: 0 12px; border-radius: 15px; background: #F4C463; color: #3A2A00; font-size: 12px; font-weight: 800;">Corriger</button></sc-if>
+</div>
+</sc-for>
+</div>
+<div class="card" style="margin-top: 14px; padding: 4px 14px;">
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 48px;"><span style="font-size: 13px; font-weight: 600;">Nom du CV</span><span style="font-size: 13px; font-weight: 700;">CV Data 2 ›</span></div>
+<div style="display: flex; align-items: center; justify-content: space-between; min-height: 48px; border-top: 1px solid rgba(255,255,255,.06);"><span style="font-size: 13px; font-weight: 600;">Utiliser par défaut pour postuler</span><button class="sw" role="switch" aria-checked="{{defA}}" aria-label="Utiliser par défaut" onClick="{{basculeDef}}" style="background: {{defBg}};"><i style="left: {{defL}};"></i></button></div>
+</div>
+<div style="display: flex; gap: 8px; margin-top: 12px;">
+<button class="chip" style="flex: 1; height: 44px; background: #13282C;">Word</button>
+<button class="chip" style="flex: 1; height: 44px; background: #13282C;">Adapter à une offre</button>
+</div>
+</div>
+</sc-if>
+
+<!-- Voir un modèle en grand -->
+<sc-if value="{{oVoir}}" hint-placeholder-val="{{ false }}">
+<div class="pane" style="padding: 16px 20px 0;">
+<div style="border-radius: 10px; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,.5);"><img src="{{tplGrand}}" alt="Modèle {{tplNom}} rempli avec le profil de Grâce" style="display: block; width: 100%;"></div>
+<div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px;"><sc-for list="{{tplTags}}" as="t" hint-placeholder-count="3"><span class="tag" style="height: 26px; padding: 0 10px; font-size: 11.5px; background: {{t.bg}}; color: {{t.c}};">{{t.t}}</span></sc-for></div>
+<p style="font-size: 12px; color: #8FA39E; line-height: 1.5; margin-top: 10px;">Exemple rempli. Le vôtre reprend votre profil, et le PDF ne porte ni logo ni couleur Jumanly.</p>
+</div>
+</sc-if>
+
+<!-- Import · choisir -->
+<sc-if value="{{oImport}}" hint-placeholder-val="{{ false }}">
+<div class="pane" style="padding: 18px 20px 0;">
+<button onClick="{{lire}}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 210px; border-radius: 24px; border: 1.5px dashed rgba(124,196,255,.6); background: rgba(124,196,255,.07); text-align: center;">
+<span class="pop" style="width: 60px; height: 60px; border-radius: 20px; background: #7CC4FF; color: #0B1A1F; display: flex; align-items: center; justify-content: center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15.5V4M7.5 8.5 12 4l4.5 4.5M4.5 15v3.5a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5V15"></path></svg></span>
+<b style="font-size: 15px; font-weight: 800; margin-top: 14px;">Choisir mon CV</b>
+<span style="font-size: 12px; color: #9FB3AE; margin-top: 4px;">PDF ou Word, 5 Mo au plus</span>
+</button>
+<button class="card" style="display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px; margin-top: 10px; min-height: 60px;"><span style="width: 36px; height: 36px; border-radius: 12px; background: rgba(244,196,99,.15); color: #F4C463; display: flex; align-items: center; justify-content: center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8.5h3l1.5-2.5h7L17 8.5h3v10H4zM12 10.5a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"></path></svg></span><span style="flex: 1;"><b style="display: block; font-size: 13.5px;">Photographier un CV papier</b><span style="font-size: 11.5px; color: #8FA39E;">Orbi lit la photo</span></span></button>
+<div class="h">RÉCENTS SUR CE TÉLÉPHONE</div>
+<sc-for list="{{fichiers}}" as="f" hint-placeholder-count="2">
+<button onClick="{{lire}}" class="row" style="display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 0; min-height: 56px; animation-delay: {{f.dl}};"><span style="width: 40px; height: 46px; border-radius: 8px; background: {{f.bg}}; color: #0B1A1F; font-size: 10px; font-weight: 800; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px;">{{f.ext}}</span><span style="flex: 1;"><b style="display: block; font-size: 13.5px; font-weight: 600;">{{f.t}}</b><span style="font-size: 11.5px; color: #8FA39E;">{{f.m}}</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></button>
+</sc-for>
+<p style="font-size: 11.5px; color: #8FA39E; line-height: 1.5; margin-top: 10px;">Rien n’est publié sans votre accord. Vous choisissez ce qui entre dans votre profil.</p>
+</div>
+</sc-if>
+
+<!-- Import · Orbi lit -->
+<sc-if value="{{oLecture}}" hint-placeholder-val="{{ false }}">
+<div class="pane" style="padding: 22px 20px 0; display: flex; flex-direction: column; align-items: center;">
+<div style="position: relative; width: 170px; height: 232px;">
+<div class="page" style="position: absolute; inset: 0; padding: 16px;"><span style="display: block; height: 10px; width: 66%; border-radius: 2px; background: #2A383B;"></span><span class="ln" style="width: 46%;"></span><span style="display: block; height: 5px; width: 38%; border-radius: 2px; background: #7A8A8D; margin-top: 18px;"></span><span class="ln"></span><span class="ln"></span><span class="ln" style="width: 72%;"></span><span style="display: block; height: 5px; width: 38%; border-radius: 2px; background: #7A8A8D; margin-top: 14px;"></span><span class="ln"></span><span class="ln" style="width: 84%;"></span><span class="ln"></span><span class="ln" style="width: 58%;"></span><span style="display: block; height: 5px; width: 38%; border-radius: 2px; background: #7A8A8D; margin-top: 14px;"></span><span class="ln" style="width: 64%;"></span><span class="ln" style="width: 50%;"></span><div class="scan"></div></div>
+<span class="pop" style="position: absolute; right: -16px; bottom: -16px; width: 54px; height: 54px; border-radius: 50%; background: #2FD3A6; color: #0B1A1F; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 26px rgba(47,211,166,.4);"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5c.6 4.6 2.9 6.9 7.5 7.5-4.6.6-6.9 2.9-7.5 7.5-.6-4.6-2.9-6.9-7.5-7.5 4.6-.6 6.9-2.9 7.5-7.5z"></path></svg></span>
+</div>
+<p style="font-size: 16px; font-weight: 800; margin-top: 30px; text-align: center;">{{lectureT}}</p>
+<div style="width: 100%; height: 6px; border-radius: 3px; background: #1B3338; margin-top: 14px; overflow: hidden;"><span style="display: block; height: 100%; width: 64%; border-radius: 3px; background: #2FD3A6;"></span></div>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 6px; margin-top: 16px;">
+<sc-for list="{{lus}}" as="l" hint-placeholder-count="4">
+<div class="row" style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: {{l.tc}}; min-height: 30px; animation-delay: {{l.dl}};"><span style="width: 20px; height: 20px; border-radius: 50%; background: {{l.bg}}; color: #0B1A1F; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800;">{{l.i}}</span>{{l.t}}</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- Import · trouvé -->
+<sc-if value="{{oTrouve}}" hint-placeholder-val="{{ false }}">
+<div class="pane" style="padding: 18px 20px 0;">
+<p style="font-size: 13px; color: #9FB3AE; line-height: 1.5;">Décochez ce que vous ne voulez pas reprendre.</p>
+<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+<sc-for list="{{trouves}}" as="t" hint-placeholder-count="5">
+<button onClick="{{t.go}}" class="card row" style="display: flex; align-items: center; gap: 12px; padding: 13px 14px; min-height: 64px; animation-delay: {{t.dl}}; opacity: {{t.op}}; transition: opacity .25s;">
+<span style="width: 24px; height: 24px; border-radius: 7px; background: {{t.cb}}; border: 2px solid {{t.cbd}}; color: #0F3F37; display: flex; align-items: center; justify-content: center; flex: none;"><sc-if value="{{t.on}}" hint-placeholder-val="{{ true }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></sc-if></span>
+<span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 13.5px; font-weight: 700;">{{t.t}}</b><span style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px;"><sc-for list="{{t.d}}" as="x" hint-placeholder-count="2"><span class="tag" style="background: {{x.bg}}; color: {{x.c}};">{{x.t}}</span></sc-for></span></span>
+<span style="font-size: 11px; font-weight: 700; color: {{t.nc}};">{{t.n}}</span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+</div>
+<sc-if value="{{aBouton}}" hint-placeholder-val="{{ true }}"><div class="fade"></div><button class="go" onClick="{{suivant}}">{{boutonT}}</button></sc-if>
+<sc-if value="{{toast}}" hint-placeholder-val="{{ false }}"><div role="status" style="position: absolute; left: 20px; right: 20px; top: 52px; z-index: 30; padding: 12px 14px; border-radius: 14px; background: #F2EDE5; color: #0B1A1F; font-size: 13px; font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,.4);">{{toast}}</div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"etape":{"editor":"enum","options":["depart","modele","voir","contenu","style","apercu","import","lecture","trouve","orbi"],"default":"depart"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.state || {};
+    const pr = this.props || {};
+    const S = (o) => this.setState(o);
+    const flash = (t) => { S({ toast: t }); setTimeout(() => this.setState({ toast: '' }), 1900); };
+    const et = st.et || pr.etape || 'depart';
+    const go = (k) => () => S({ et: k });
+    const COL = { lime: '#A6F26B', menthe: '#2FD3A6', ambre: '#F4C463', ciel: '#7CC4FF', corail: '#FF8A7A', lilas: '#C3A6FF', sable: '#E8D3A6', rose: '#FF9EC7' };
+    const ORDRE = ['modele', 'contenu', 'style', 'apercu'];
+    const NOMS = ['Modèle', 'Contenu', 'Style', 'Aperçu'];
+    const idx = ORDRE.indexOf(et);
+    const etapes = NOMS.map((t, i) => ({ t, c: i <= idx ? '#A6F26B' : '#1B3338', tc: i === idx ? '#F2EDE5' : '#8FA39E', fw: i === idx ? '700' : '500', go: go(ORDRE[i]) }));
+
+    const IC = {
+      modele: 'M5.5 3.5h9l4 4v13h-13zM14.5 3.5v4h4M8.5 11.5h7M8.5 15h7M8.5 18h4',
+      import: 'M12 15.5V4M7.5 8.5 12 4l4.5 4.5M4.5 15v3.5a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5V15',
+      orbi: 'M12 2.5c.6 4.6 2.9 6.9 7.5 7.5-4.6.6-6.9 2.9-7.5 7.5-.6-4.6-2.9-6.9-7.5-7.5 4.6-.6 6.9-2.9 7.5-7.5zM18.5 16.5l.6 2 2 .6-2 .6-.6 2-.6-2-2-.6 2-.6z'
+    };
+    const departs = [
+      ['orbi', 'Orbi le prépare', 'À partir de votre profil et de votre Cap, en 30 secondes', 'menthe', true],
+      ['modele', 'Partir d’un modèle', '15 modèles, votre profil remplit le contenu', 'lime'],
+      ['import', 'Importer mon CV', 'PDF, Word ou photo, Orbi le lit pour vous', 'ciel']
+    ].map(([k, t, d, c, reco], i) => ({ t, d, reco: !!reco, ic: IC[k], c: COL[c], bg: COL[c] + '22', bd: reco ? COL[c] + '66' : 'rgba(255,255,255,.06)', dl: (0.06 * i + 0.1).toFixed(2) + 's', go: go(k === 'import' ? 'import' : k === 'orbi' ? 'orbi' : 'modele') }));
+
+    const filtre = st.filtre || 'tous';
+    const filtres = [['tous', 'Tous · 15'], ['free', 'Gratuits'], ['starter', 'Starter'], ['pro', 'Pro']].map(([k, t]) => { const on = k === filtre; return { t, bg: on ? '#A6F26B' : '#13282C', fg: on ? '#0F3F37' : '#C9D6D2', bd: on ? '#A6F26B' : 'rgba(255,255,255,.1)', go: () => S({ filtre: k }) }; });
+    const B = 'img/';
+    const MOD = [
+      ['Classique', 'free', 'cv-01-classique.jpg', 'sans photo · ATS excellente'], ['Épuré', 'free', 'cv-02-epure.jpg', 'avec photo · ATS excellente'], ['Premier emploi', 'free', 'cv-03-premier-emploi.jpg', 'avec photo · ATS excellente'],
+      ['Moderne', 'free', 'cv-04-moderne.jpg', 'avec photo · ATS très bonne'], ['Colonne', 'free', 'cv-05-colonne.jpg', 'avec photo · ATS très bonne'],
+      ['Exécutif', 'starter', 'cv-06-executif.jpg', 'sans photo · ATS excellente'], ['Bandeau', 'starter', 'cv-07-bandeau.jpg', 'avec photo · ATS très bonne'], ['Contraste', 'starter', 'cv-08-contraste.jpg', 'avec photo · ATS bonne'],
+      ['Parcours', 'starter', 'cv-09-parcours.jpg', 'avec photo · ATS très bonne'], ['Compact', 'starter', 'cv-10-compact.jpg', 'sans photo · ATS excellente'],
+      ['Académique', 'pro', 'cv-11-academique.jpg', 'sans photo · ATS excellente'], ['Créatif', 'pro', 'cv-12-creatif.jpg', 'avec photo · ATS bonne'], ['Tech', 'pro', 'cv-13-tech.jpg', 'sans photo · ATS très bonne'],
+      ['Élégant', 'pro', 'cv-14-elegant.jpg', 'avec photo · ATS très bonne'], ['Visuel', 'pro', 'cv-15-visuel.jpg', 'avec photo · ATS bonne']
+    ];
+    const NIV = { free: ['Gratuit', '#1B3338', '#C9D6D2'], starter: ['Starter', '#A6F26B', '#0F3F37'], pro: ['Pro', '#C3A6FF', '#2A1A55'] };
+    const tpl = st.tpl == null ? 3 : st.tpl;
+    const modeles = MOD.map(([t, n, id], i) => ({ t, img: B + id, n: NIV[n][0], nbg: NIV[n][1], nfg: NIV[n][2], lock: n === 'pro', op: n === 'pro' ? '.8' : '1', sel: i === tpl, ring: i === tpl ? '#A6F26B' : 'transparent', dl: (0.03 * i).toFixed(2) + 's', niv: n, go: () => (n === 'pro' ? flash('Ce modèle est inclus dans Pro') : (i === tpl ? S({ et: 'voir' }) : S({ tpl: i }))) }))
+      .filter((m) => filtre === 'tous' || m.niv === filtre);
+
+    const C = [['SQL', 'ciel'], ['Excel', 'menthe'], ['Statistiques', 'lilas'], ['Python', 'lime'], ['Enquêtes terrain', 'ambre'], ['Visualisation', 'corail']];
+    const comp = C.map(([t, k]) => ({ t, c: COL[k], bg: COL[k] + '1F', bd: COL[k] + '55' }));
+    const exp = [
+      { t: 'Stagiaire data', e: 'Mwinda Énergie', c: '#F4C463', pts: ['Nettoyait chaque semaine les relevés de 120 kits solaires', 'A construit le tableau Excel des pannes par quartier'] },
+      { t: 'Enquêtrice', e: 'INS', c: '#C3A6FF', pts: ['Interrogeait une vingtaine de ménages par jour sur tablette'] }
+    ];
+    const off = st.off || {};
+    const SEC = [['coord', 'Coordonnées', 'nom, e-mail, ville', '#A6F26B'], ['exp', 'Expériences', '2', '#F4C463'], ['comp', 'Compétences', '6', '#7CC4FF'], ['form', 'Formation', '2', '#C3A6FF'], ['lang', 'Langues', '3', '#2FD3A6'], ['real', 'Réalisations', '1', '#FF8A7A']];
+    const sections = SEC.map(([k, t, n, c], i) => { const on = !off[k]; return { t, n, c, dl: (0.05 * i).toFixed(2) + 's', op: on ? '1' : '.5', aria: on ? 'true' : 'false', swbg: on ? '#A6F26B' : '#1B3338', swl: on ? '21px' : '3px', aComp: on && k === 'comp', aExp: on && k === 'exp', go: () => S({ off: { ...off, [k]: on } }) }; });
+    const RES = ['Analyste de données junior. J’ai nettoyé et analysé les relevés de 120 kits solaires et mené des enquêtes ménages à Kinshasa.', 'Analyste de données junior, à l’aise avec SQL, Excel et les enquêtes terrain. J’aide les équipes à décider à partir de chiffres fiables.'];
+    const resume = RES[st.res || 0];
+
+    const COUL = [['Sapin', '#0F3F37'], ['Bleu nuit', '#1E4E79'], ['Ardoise', '#2A383B'], ['Prune', '#5B3FA0'], ['Brique', '#8A2E22'], ['Pétrole', '#14745F'], ['Bordeaux', '#7A1F3D'], ['Bronze', '#7A5A12']];
+    const ci = st.coul == null ? 0 : st.coul;
+    const couleurs = COUL.map(([t, c], i) => ({ t, c, ring: i === ci ? '#A6F26B' : 'transparent', go: () => S({ coul: i }) }));
+    const POL = [['Sora', 'Sora, sans-serif'], ['Inter', 'Inter, sans-serif'], ['Lora', 'Lora, serif']];
+    const pi = st.pol || 0;
+    const polices = POL.map(([t, f], i) => ({ t, f, bg: i === pi ? '#A6F26B' : '#13282C', fg: i === pi ? '#0F3F37' : '#C9D6D2', go: () => S({ pol: i }) }));
+    const DEN = [['Aérée', '20px', '14px'], ['Normale', '16px', '10px'], ['Serrée', '12px', '7px']];
+    const dn = st.den == null ? 1 : st.den;
+    const densites = DEN.map(([t], i) => ({ t, bg: i === dn ? '#A6F26B' : '#13282C', fg: i === dn ? '#0F3F37' : '#C9D6D2', go: () => S({ den: i }) }));
+    const photo = st.photo == null ? true : st.photo;
+    const blocs = [
+      { t: 'EXPÉRIENCES', l: ['Stagiaire data · Mwinda Énergie · 2026', '• Relevés de 120 kits solaires nettoyés chaque semaine', 'Enquêtrice · INS · 2025'] },
+      { t: 'COMPÉTENCES', l: ['SQL · Excel · Statistiques · Python · Enquêtes terrain'] },
+      { t: 'FORMATION', l: ['Licence en statistiques · Université de Kinshasa', 'Excel pour l’analyse · 2026'] }
+    ];
+
+    const fixe = !!st.fixe;
+    const score = fixe ? 91 : 84;
+    const verifs = [
+      ['✓', 'Une seule page, titres clairs', 0], ['✓', 'Chaque expérience commence par un verbe', 0],
+      fixe ? ['✓', 'Résumé avec un chiffre concret', 0] : ['!', 'Ajoutez un chiffre au résumé (ex. 120 kits)', 1],
+      ['✓', 'Lisible par les logiciels de recrutement', 0]
+    ].map(([i, t, f], k) => ({ i, t, fix: !!f, bg: f ? '#F4C463' : '#A6F26B', fg: f ? '#3A2A00' : '#0F3F37', dl: (0.07 * k).toFixed(2) + 's' }));
+    const def = st.def == null ? false : st.def;
+
+    const fichiers = [['CV_Grace_2026.pdf', '240 Ko · hier', 'PDF', '#FF8A7A'], ['CV_ancien.docx', '88 Ko · mars 2025', 'DOC', '#7CC4FF']].map(([t, m, ext, bg], i) => ({ t, m, ext, bg, dl: (0.06 * i).toFixed(2) + 's' }));
+    const orbi = et === 'orbi';
+    const lus = (orbi ? [['Profil et Cap lus', 1], ['Expériences rédigées avec vos points', 1], ['Compétences classées pour Data analyst', 1], ['Mise en page Moderne', 0]] : [['Coordonnées', 1], ['2 expériences', 1], ['Formation', 1], ['Compétences et langues', 0]])
+      .map(([t, ok], i) => ({ t, i: ok ? '✓' : '…', bg: ok ? '#2FD3A6' : '#1B3338', tc: ok ? '#F2EDE5' : '#8FA39E', dl: (0.25 * i).toFixed(2) + 's' }));
+    const tOff = st.tOff || {};
+    const TR = [
+      ['coord', 'Coordonnées', [['Nom', 'sable'], ['E-mail', 'sable'], ['Kinshasa', 'sable']], 'déjà là'],
+      ['exp', '2 expériences', [['Mwinda Énergie', 'ambre'], ['INS', 'lilas']], 'nouveau'],
+      ['form', '1 formation', [['Licence en statistiques', 'lilas']], 'déjà là'],
+      ['comp', '6 compétences', [['SQL', 'ciel'], ['Excel', 'menthe'], ['R', 'rose'], ['Python', 'lime']], '+2 nouvelles'],
+      ['lang', '3 langues', [['Français', 'menthe'], ['Lingala', 'menthe'], ['Anglais', 'menthe']], 'déjà là']
+    ];
+    const trouves = TR.map(([k, t, d, n], i) => { const on = !tOff[k]; return { t, n, nc: n === 'déjà là' ? '#8FA39E' : '#A6F26B', on, op: on ? '1' : '.55', cb: on ? '#A6F26B' : 'transparent', cbd: on ? '#A6F26B' : '#5E7671', dl: (0.06 * i).toFixed(2) + 's', d: d.map(([x, c]) => ({ t: x, c: COL[c], bg: COL[c] + '22' })), go: () => S({ tOff: { ...tOff, [k]: on } }) }; });
+
+    const TIT = {
+      voir: ['Modèle ' + MOD[tpl][0], 'Aperçu avec votre profil'], depart: ['Nouveau CV', 'Comment voulez-vous commencer ?'], modele: ['Choisir un modèle', '15 modèles · Starter : 10 inclus'], contenu: ['Contenu', 'Rempli depuis votre profil'],
+      style: ['Mise en forme', 'L’aperçu change en direct'], apercu: ['Aperçu et vérification', 'Orbi relit avant de télécharger'],
+      import: ['Importer un CV', 'Étape 1 sur 3'], lecture: ['Importer un CV', 'Étape 2 sur 3'], trouve: ['Voici ce qu’Orbi a trouvé', 'Étape 3 sur 3'], orbi: ['Orbi prépare votre CV', 'Vous pourrez tout modifier']
+    };
+    const PREV = { voir: 'modele', modele: 'depart', contenu: 'modele', style: 'contenu', apercu: 'style', import: 'depart', lecture: 'import', trouve: 'import', orbi: 'depart' };
+    const NEXT = { voir: ['Utiliser ce modèle', 'contenu'], modele: ['Continuer', 'contenu'], contenu: ['Continuer', 'style'], style: ['Voir l’aperçu', 'apercu'], apercu: ['Télécharger en PDF', null], trouve: ['Ajouter à mon profil et créer le CV', 'contenu'], orbi: ['Voir le contenu', 'contenu'], lecture: ['Continuer', 'trouve'] };
+    const nx = NEXT[et];
+    return {
+      titre: TIT[et][0], modInfo: 'Touchez pour choisir, touchez encore pour voir en grand.', oVoir: et === 'voir', tplImg: tpl === 3 ? B + 'cv-grand-04.jpg' : B + MOD[tpl][2], tplGrand: tpl === 3 ? B + 'cv-grand-04.jpg' : B + MOD[tpl][2], tplNom: MOD[tpl][0], tplTags: [[NIV[MOD[tpl][1]][0], '#A6F26B'], ...MOD[tpl][3].split(' · ').map((x) => [x, '#7CC4FF'])].map(([t, c]) => ({ t, c, bg: c + '22' })), voirGrand: go('voir'), sous: TIT[et][1], aEtapes: idx >= 0, num: String(idx + 1), etapes,
+      retourT: et === 'depart' ? 'Fermer' : 'Retour', retourD: et === 'depart' ? 'M6 6l12 12M18 6 6 18' : 'M15 18l-6-6 6-6',
+      retour: () => (PREV[et] ? S({ et: PREV[et] }) : flash('Retour à Carrière · CV')),
+      oDepart: et === 'depart', oModele: et === 'modele', oContenu: et === 'contenu', oStyle: et === 'style', oApercu: et === 'apercu', oImport: et === 'import', oLecture: et === 'lecture' || orbi, oTrouve: et === 'trouve',
+      departs, filtres, modeles, comp, exp, sections, resume, reecrire: () => S({ res: ((st.res || 0) + 1) % 2 }),
+      couleurs, coul: COUL[ci][1], coulL: COUL[ci][1] + '44', coulT: COUL[ci][0] + (ci < 3 ? ' · recommandée' : ''), polices, police: POL[pi][1], densites, pad: DEN[dn][1], gap: DEN[dn][2],
+      photo, photoA: photo ? 'true' : 'false', photoBg: photo ? '#A6F26B' : '#1B3338', photoL: photo ? '21px' : '3px', basculePhoto: () => S({ photo: !photo }), blocs, poste: 'Analyste de données junior',
+      score: String(score), scoreP: score + '%', verifs, corriger: () => { S({ fixe: true }); flash('Résumé mis à jour : « 120 kits solaires »'); },
+      defA: def ? 'true' : 'false', defBg: def ? '#A6F26B' : '#1B3338', defL: def ? '21px' : '3px', basculeDef: () => S({ def: !def }),
+      fichiers, lire: go('lecture'), lectureT: orbi ? 'Orbi écrit votre CV…' : 'Orbi lit CV_Grace_2026.pdf…', lus, trouves,
+      aBouton: !!nx, boutonT: nx ? nx[0] : '', suivant: () => (nx && nx[1] ? S({ et: nx[1] }) : flash('CV Data 2 enregistré · PDF téléchargé, sans logo Jumanly')),
+      toast: st.toast || ''
+    };
+  }
+}
+</script>
+</body>
+</html>

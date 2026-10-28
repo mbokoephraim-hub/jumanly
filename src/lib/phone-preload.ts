@@ -17,15 +17,22 @@ const FILES = [
   /^\/app\/career\/documents\/[^/]+\/pdf$/,
   /^\/app\/learn\/attestations\/[^/]+\/[^/]+$/,
   /^\/app\/learn\/[^/]+\/(support|modele-attestation)$/,
+  /^\/app\/hire\/rapports\/export$/,
+  /^\/app\/hire\/entretiens\/[^/]+\/agenda$/,
 ];
 
 /**
  * Pages whose opening is recorded: a conversation is marked as read, a recruiter's look at a
- * profile is logged (CLAUDE.md § 5). Also the spaces of a team, an institution and the admin.
+ * profile is logged (CLAUDE.md § 5). Also the spaces of an institution and of the administration.
  */
 const RECORDED = [
   /^\/app\/messages\/(?!demandes$)[^/]+(\/.*)?$/,
-  /^\/app\/(hire|partenaire|organisation)(\/|$)/,
+  // The recruiter's phone (Modèle B recruteur): its lists load ahead, never a candidate's file,
+  // a talent's profile or an application opened from the ATS.
+  /^\/app\/hire\/candidats\/[^/]+(\/.*)?$/,
+  /^\/app\/hire\/talents\/[^/]+(\/.*)?$/,
+  /^\/app\/hire\/offres\/[^/]+\/ats\/[^/]+(\/.*)?$/,
+  /^\/app\/(partenaire|organisation)(\/|$)/,
 ];
 
 /**

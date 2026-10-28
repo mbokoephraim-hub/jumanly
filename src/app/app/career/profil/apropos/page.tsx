@@ -13,14 +13,18 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("aboutTitle"), robots: { index: false } };
 }
 
-/** « À propos » on the phone (planche Carrière-apropos): the text and Orbi's rewrite. */
+/** « À propos » on the phone (planche Carrière-apropos): a title, the text and Orbi's rewrite. */
 export default async function CareerAboutPage() {
   const user = await requireUser("/app/career/profil/apropos");
   if (!(await isPhone())) redirect("/app/profil?fenetre=modifier");
   const profile = await getFullProfile(db, user.id);
   return (
     <CareerTexts>
-      <AboutForm summary={profile.summary ?? ""} target={profile.targetJob} />
+      <AboutForm
+        title={profile.aboutTitle ?? ""}
+        summary={profile.summary ?? ""}
+        target={profile.targetJob}
+      />
     </CareerTexts>
   );
 }

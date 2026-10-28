@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { documentKind } from "@/components/learn/course-documents";
 import { VideoPlayer } from "@/components/learn/video-player";
+import { YouTubeEmbed } from "@/components/learn/youtube-embed";
 import { BackButton } from "@/components/talent/back-button";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
@@ -815,7 +816,9 @@ export default async function LessonPage({
         <div className="t-aw-col">
           {current.kind === "video" && !locked ? (
             <div className="t-video">
-              {playback ? (
+              {playback?.youtube ? (
+                <YouTubeEmbed id={playback.youtube} title={current.title} />
+              ) : playback ? (
                 <VideoPlayer
                   variant="talent"
                   src={playback.src}

@@ -10,7 +10,7 @@ import { z } from "zod";
 import { Prisma } from "@/generated/prisma/client";
 import type { FeedPostKind, PrismaClient } from "@/generated/prisma/client";
 import { matchesForUser } from "@/server/matching/service";
-import { FEED_POST_MAX } from "./feed-limits";
+import { FEED_POST_MAX, FEED_REPLY_MAX, postTextSchema } from "./feed-limits";
 import { rankFeed, type AuthorSignals } from "./feed-rank";
 import { photoType } from "./profile-photo";
 import { notify } from "./notifications";
@@ -18,9 +18,7 @@ import { notify } from "./notifications";
 export const FEED_TABS = ["pourvous", "abonnements", "entreprises"] as const;
 export type FeedTab = (typeof FEED_TABS)[number];
 
-/** An answer: at most this many characters. */
-export const FEED_BODY_MAX = 2000;
-export { FEED_POST_MAX };
+export { FEED_POST_MAX, FEED_REPLY_MAX };
 /** A photo reduced on the phone stays far below this. */
 export const FEED_IMAGE_MAX = 1_000_000;
 const IMAGE_PREFIX = "/api/fil/image/";
@@ -44,6 +42,7 @@ const personSelect = {
   id: true,
   name: true,
   image: true,
+  city: true,
   talentProfile: {
     select: {
       headline: true,
@@ -65,12 +64,14 @@ const orgSelect = {
   logo: true,
   sector: true,
   city: true,
+  verifiedAt: true,
   _count: { select: { jobs: { where: { status: "published" } } } },
 } satisfies Prisma.OrganizationSelect;
 
 const postSelect = {
   id: true,
   kind: true,
+  title: true,
   body: true,
   imageUrl: true,
   imageAlt: true,
@@ -78,6 +79,7 @@ const postSelect = {
   replyPolicy: true,
   eventAt: true,
   createdAt: true,
+  editedAt: true,
   authorId: true,
   organizationId: true,
   parentId: true,
@@ -120,6 +122,8 @@ export type FeedAuthor = {
   sector: string | null;
   city: string | null;
   offers: number;
+  /** A company verified by Jumanly: a Lime ring around its logo in the Fil. */
+  verified?: boolean;
 };
 
 export type FeedAttachment = {
@@ -134,6 +138,8 @@ export type FeedItem = {
   kind: FeedPostKind;
   type: string;
   author: FeedAuthor;
+  /** Null for the posts published before titles (26/10/2026). */
+  title: string | null;
   body: string;
   imageUrl: string | null;
   imageAlt: string | null;
@@ -151,13 +157,16 @@ export type FeedItem = {
   createdAt: Date;
   likes: number;
   liked: boolean;
+  /** The last two people who liked it: their faces beside the count, on the photo. */
+  likers: { name: string; image: string | null }[];
   replies: number;
   reposts: number;
   reposted: boolean;
   saved: boolean;
   mine: boolean;
-  /** The first answer, shown under the post in the Fil. */
-  firstReply: { name: string; org: boolean; image: string | null; body: string } | null;
+  /** The last two comments, shown under the post in the Fil (oldest first). */
+  comments: FeedReply[];
+  edited: boolean;
   canReply: boolean;
   replyPolicy: string;
 };
@@ -174,6 +183,7 @@ function authorOf(row: PostRow): FeedAuthor {
       sector: row.organization.sector,
       city: row.organization.city,
       offers: row.organization._count.jobs,
+      verified: Boolean(row.organization.verifiedAt),
     };
   }
   const profile = row.author?.talentProfile;
@@ -186,7 +196,7 @@ function authorOf(row: PostRow): FeedAuthor {
       profile?.experiences[0]?.title || profile?.headline || profile?.desiredJobTitles[0] || null,
     company: profile?.experiences[0]?.company ?? null,
     sector: null,
-    city: null,
+    city: row.author?.city ?? null,
     offers: 0,
   };
 }
@@ -235,16 +245,23 @@ async function toItems(
   rows: PostRow[],
   connected: string[],
   now: Date,
+  blocked: string[] = [],
 ): Promise<FeedItem[]> {
   if (rows.length === 0) return [];
   const ids = rows.map((row) => row.id);
   const jobIds = [
     ...new Set(rows.flatMap((row) => (row.job?.status === "published" ? [row.job.id] : []))),
   ];
-  const [likes, reposts, saves, going, firsts, matches] = await Promise.all([
+  const [likes, recentLikes, reposts, saves, going, latest, matches] = await Promise.all([
     db.feedLike.findMany({
       where: { userId: viewerId, postId: { in: ids } },
       select: { postId: true },
+    }),
+    db.feedLike.findMany({
+      where: { postId: { in: ids } },
+      orderBy: { createdAt: "desc" },
+      take: ids.length * 6,
+      select: { postId: true, user: { select: { name: true, image: true } } },
     }),
     db.feedRepost.findMany({
       where: { userId: viewerId, postId: { in: ids } },
@@ -258,22 +275,31 @@ async function toItems(
       where: { userId: viewerId, postId: { in: ids } },
       select: { postId: true },
     }),
-    db.feedPost.findMany({
-      where: { parentId: { in: ids }, hiddenAt: null },
-      orderBy: { createdAt: "asc" },
-      distinct: ["parentId"],
-      select: {
-        parentId: true,
-        body: true,
-        author: { select: { name: true, image: true } },
-        organization: { select: { name: true, logo: true } },
-      },
-    }),
+    // Two comments per post, so that the Fil shows them (one small query per commented post).
+    Promise.all(
+      rows
+        .filter((row) => row._count.replies > 0)
+        .map((row) =>
+          db.feedPost.findMany({
+            where: { parentId: row.id, hiddenAt: null, ...notBlocked(blocked) },
+            orderBy: { createdAt: "desc" },
+            take: 2,
+            select: postSelect,
+          }),
+        ),
+    ),
     jobIds.length > 0 ? matchesForUser(db, viewerId, jobIds, now) : new Map(),
   ]);
   const has = (list: { postId: string }[], id: string) => list.some((row) => row.postId === id);
+  const shownComments = latest.flat();
+  const commentLikes =
+    shownComments.length > 0
+      ? await db.feedLike.findMany({
+          where: { userId: viewerId, postId: { in: shownComments.map((reply) => reply.id) } },
+          select: { postId: true },
+        })
+      : [];
   return rows.map((row) => {
-    const first = firsts.find((reply) => reply.parentId === row.id);
     const match = row.job ? matches.get(row.job.id) : undefined;
     const quoted = row.quoted && !row.quoted.hiddenAt ? row.quoted : null;
     return {
@@ -281,6 +307,7 @@ async function toItems(
       kind: row.kind,
       type: feedTypeOf(row),
       author: authorOf(row),
+      title: row.title,
       body: row.body,
       imageUrl: row.imageUrl,
       imageAlt: row.imageAlt,
@@ -309,19 +336,20 @@ async function toItems(
       createdAt: row.createdAt,
       likes: row._count.likes,
       liked: has(likes, row.id),
+      likers: recentLikes
+        .filter((like) => like.postId === row.id)
+        .slice(0, 2)
+        .map((like) => ({ name: like.user.name, image: like.user.image })),
       replies: row._count.replies,
       reposts: row._count.reposts,
       reposted: has(reposts, row.id),
       saved: has(saves, row.id),
-      mine: row.authorId === viewerId && !row.organizationId,
-      firstReply: first
-        ? {
-            name: first.organization?.name ?? first.author?.name ?? "",
-            org: Boolean(first.organization),
-            image: first.organization?.logo ?? first.author?.image ?? null,
-            body: first.body,
-          }
-        : null,
+      mine: row.authorId === viewerId,
+      comments: shownComments
+        .filter((reply) => reply.parentId === row.id)
+        .reverse()
+        .map((reply) => replyOf(reply, viewerId, commentLikes)),
+      edited: Boolean(row.editedAt),
       canReply: mayReply(row, viewerId, connected),
       replyPolicy: row.replyPolicy,
     };
@@ -377,7 +405,7 @@ export async function listFeed(
     take: tab === "pourvous" ? CANDIDATES : PAGE,
     select: postSelect,
   });
-  if (tab !== "pourvous") return toItems(db, viewerId, rows, connected, now);
+  if (tab !== "pourvous") return toItems(db, viewerId, rows, connected, now, blocked);
   const people = [
     ...new Set(rows.flatMap((row) => (row.authorId && !row.organizationId ? [row.authorId] : []))),
   ];
@@ -401,6 +429,7 @@ export async function listFeed(
     ranked.map((post) => byId.get(post.id)!),
     connected,
     now,
+    blocked,
   );
 }
 
@@ -476,7 +505,25 @@ export type FeedReply = {
   likes: number;
   liked: boolean;
   mine: boolean;
+  edited: boolean;
 };
+
+function notBlocked(blocked: string[]) {
+  return blocked.length > 0 ? { NOT: { authorId: { in: blocked }, organizationId: null } } : {};
+}
+
+function replyOf(reply: PostRow, viewerId: string, liked: { postId: string }[]): FeedReply {
+  return {
+    id: reply.id,
+    author: authorOf(reply),
+    body: reply.body,
+    createdAt: reply.createdAt,
+    likes: reply._count.likes,
+    liked: liked.some((like) => like.postId === reply.id),
+    mine: reply.authorId === viewerId,
+    edited: Boolean(reply.editedAt),
+  };
+}
 
 /** A post and its answers (oldest first), or null when it is not visible to the viewer. */
 export async function getPost(db: PrismaClient, viewerId: string, id: string, now = new Date()) {
@@ -486,13 +533,9 @@ export async function getPost(db: PrismaClient, viewerId: string, id: string, no
     select: postSelect,
   });
   if (!row || (row.authorId && !row.organizationId && blocked.includes(row.authorId))) return null;
-  const [item] = await toItems(db, viewerId, [row], connected, now);
+  const [item] = await toItems(db, viewerId, [row], connected, now, blocked);
   const replies = await db.feedPost.findMany({
-    where: {
-      parentId: id,
-      hiddenAt: null,
-      ...(blocked.length > 0 ? { NOT: { authorId: { in: blocked }, organizationId: null } } : {}),
-    },
+    where: { parentId: id, hiddenAt: null, ...notBlocked(blocked) },
     orderBy: { createdAt: "asc" },
     take: 200,
     select: postSelect,
@@ -503,15 +546,7 @@ export async function getPost(db: PrismaClient, viewerId: string, id: string, no
   });
   return {
     post: item,
-    replies: replies.map((reply): FeedReply => ({
-      id: reply.id,
-      author: authorOf(reply),
-      body: reply.body,
-      createdAt: reply.createdAt,
-      likes: reply._count.likes,
-      liked: liked.some((like) => like.postId === reply.id),
-      mine: reply.authorId === viewerId && !reply.organizationId,
-    })),
+    replies: replies.map((reply) => replyOf(reply, viewerId, liked)),
   };
 }
 
@@ -538,18 +573,23 @@ async function visiblePost(db: PrismaClient, viewerId: string, id: string) {
   return row;
 }
 
-export const newPostSchema = z
-  .object({
-    body: z.string().trim().max(FEED_POST_MAX).default(""),
-    attachment: z.enum(["work", "certificate"]).optional(),
-    attachmentId: z.string().trim().max(60).optional(),
-    quotedId: z.string().trim().max(60).optional(),
-    replyPolicy: z.enum(["everyone", "connections", "nobody"]).default("everyone"),
-    image: z.string().trim().max(60).optional(),
-  })
-  .refine((input) => input.body.length > 0 || input.attachment || input.quotedId || input.image, {
-    message: "empty",
-  });
+/**
+ * A new post: a title (60 characters) and a text (160), docs/fil-menu-publication § 2; then a
+ * photo, an offer, an attachment, a quoted post or an event.
+ */
+export const newPostSchema = postTextSchema.extend({
+  attachment: z.enum(["work", "certificate"]).optional(),
+  attachmentId: z.string().trim().max(60).optional(),
+  quotedId: z.string().trim().max(60).optional(),
+  replyPolicy: z.enum(["everyone", "connections", "nobody"]).default("everyone"),
+  image: z.string().trim().max(60).optional(),
+  /** A recruiter publishes in their own name or in the name of their company (M3). */
+  as: z.enum(["me", "org"]).default("me"),
+  /** « Une offre »: a published offer of the recruiter's organization. */
+  jobId: z.string().trim().max(60).optional(),
+  /** « Un événement »: when it takes place. */
+  eventAt: z.coerce.date().optional(),
+});
 export type NewPost = z.input<typeof newPostSchema>;
 
 /** The career pieces a person may join to a post: their projects and their attestations. */
@@ -588,10 +628,27 @@ export async function createPost(
   userId: string,
   raw: NewPost,
   labels: { work: string; certificate: (date: Date) => string },
+  /**
+   * The recruiter's space (Modèle B recruteur, M3): its offers may be joined, and a member who
+   * manages the offers may publish in its name. Every offer is read inside this organization.
+   */
+  hire?: { organizationId: string; canPublishAsOrg: boolean },
+  now = new Date(),
 ) {
   const parsed = newPostSchema.safeParse(raw);
   if (!parsed.success) throw new FeedError("invalid");
   const input = parsed.data;
+  if (input.as === "org" && !hire?.canPublishAsOrg) throw new FeedError("invalid");
+  if (input.jobId) {
+    if (!hire) throw new FeedError("invalid");
+    const job = await db.job.findFirst({
+      where: { id: input.jobId, organizationId: hire.organizationId, status: "published" },
+      select: { id: true },
+    });
+    if (!job) throw new FeedError("invalid");
+  }
+  if (input.eventAt && input.eventAt.getTime() < now.getTime() - DAY_MS)
+    throw new FeedError("invalid");
   let attachment: FeedAttachment | null = null;
   let kind: FeedPostKind = "post";
   if (input.attachment && input.attachmentId) {
@@ -627,7 +684,11 @@ export async function createPost(
   const post = await db.feedPost.create({
     data: {
       authorId: userId,
-      kind,
+      organizationId: input.as === "org" ? hire!.organizationId : null,
+      kind: input.eventAt ? "event" : kind,
+      eventAt: input.eventAt ?? null,
+      jobId: input.jobId ?? null,
+      title: input.title,
       body: input.body,
       attachment: attachment ?? undefined,
       quotedId: input.quotedId,
@@ -684,7 +745,7 @@ export async function feedImageByToken(db: PrismaClient, token: string) {
 
 export const replySchema = z.object({
   post: z.string().trim().min(1).max(60),
-  body: z.string().trim().min(1).max(FEED_BODY_MAX),
+  body: z.string().trim().min(1).max(FEED_REPLY_MAX),
 });
 
 /**
@@ -824,15 +885,47 @@ export async function setTypeHidden(
   return type;
 }
 
-/** Deletes one of the viewer's own posts or answers, with its answers. */
+/** Deletes one of the viewer's own posts or comments, with its comments. */
 export async function deletePost(db: PrismaClient, userId: string, postId: string) {
-  const { count } = await db.feedPost.deleteMany({
-    where: { id: postId, authorId: userId, organizationId: null },
-  });
+  const { count } = await db.feedPost.deleteMany({ where: { id: postId, authorId: userId } });
   if (count === 0) throw new FeedError("notFound");
 }
 
-/** The connections a post can be sent to (« Envoyer à »), with their conversation. */
+export const editSchema = z.object({
+  id: z.string().trim().min(1).max(60),
+  title: z.string().optional(),
+  body: z.string(),
+});
+
+/**
+ * Changes the title and the text of one of the viewer's own posts, or the text of one of their
+ * comments. The photo, the offer and the rest stay; the post shows « modifié ».
+ */
+export async function editPost(
+  db: PrismaClient,
+  userId: string,
+  raw: z.input<typeof editSchema>,
+  now = new Date(),
+) {
+  const parsed = editSchema.safeParse(raw);
+  if (!parsed.success) throw new FeedError("invalid");
+  const row = await db.feedPost.findFirst({
+    where: { id: parsed.data.id, authorId: userId, hiddenAt: null },
+    select: { id: true, parentId: true },
+  });
+  if (!row) throw new FeedError("notFound");
+  if (row.parentId) {
+    const body = replySchema.shape.body.safeParse(parsed.data.body);
+    if (!body.success) throw new FeedError("invalid");
+    await db.feedPost.update({ where: { id: row.id }, data: { body: body.data, editedAt: now } });
+    return row.id;
+  }
+  const text = postTextSchema.safeParse({ title: parsed.data.title, body: parsed.data.body });
+  if (!text.success) throw new FeedError("invalid");
+  await db.feedPost.update({ where: { id: row.id }, data: { ...text.data, editedAt: now } });
+  return row.id;
+}
+
 export async function sendTargets(db: PrismaClient, userId: string) {
   const rows = await db.connection.findMany({
     where: { status: "accepted", OR: [{ requesterId: userId }, { addresseeId: userId }] },
@@ -1020,12 +1113,26 @@ export async function latestCertificate(db: PrismaClient, userId: string) {
   });
 }
 
+/** Every post a person wrote, in their name or in their company's, most recent first. */
+export async function ownPosts(db: PrismaClient, userId: string, now = new Date(), take = 500) {
+  const rows = await db.feedPost.findMany({
+    where: { parentId: null, authorId: userId, hiddenAt: null },
+    orderBy: { createdAt: "desc" },
+    take,
+    select: postSelect,
+  });
+  const { connected } = await circle(db, userId);
+  return toItems(db, userId, rows, connected, now);
+}
+
 /** The posts of one person (in their own name) or of one organization, most recent first. */
 export async function authorFeed(
   db: PrismaClient,
   viewerId: string,
   author: { userId: string } | { organizationId: string },
   now = new Date(),
+  /** « Mes publications » reaches every post, however old (Ephraïm, 27/10/2026). */
+  take = PAGE,
 ): Promise<FeedItem[]> {
   const { connected, blocked } = await circle(db, viewerId);
   if ("userId" in author && blocked.includes(author.userId)) return [];
@@ -1038,10 +1145,10 @@ export async function authorFeed(
         : { organizationId: author.organizationId }),
     },
     orderBy: { createdAt: "desc" },
-    take: PAGE,
+    take,
     select: postSelect,
   });
-  return toItems(db, viewerId, rows, connected, now);
+  return toItems(db, viewerId, rows, connected, now, blocked);
 }
 
 /** Who a person is, as the Fil shows them (null for someone blocked or unknown). */
@@ -1106,6 +1213,42 @@ export async function organizationAuthor(db: PrismaClient, slug: string, now = n
     sector: org.sector,
     city: org.city,
     offers: org._count.jobs,
+    verified: Boolean(org.verifiedAt),
   };
   return { id: org.id, author, jobs: org.jobs };
+}
+
+/**
+ * « Rechercher dans · Publications » of the recruiter's Fil (Modèle B recruteur, M3): the posts
+ * whose text holds the words, newest first, never a reply, a hidden post or one of a blocked person.
+ */
+export async function searchPosts(db: PrismaClient, viewerId: string, query: string, take = 6) {
+  const words = query.trim().slice(0, 100);
+  if (!words) return [];
+  const { blocked } = await circle(db, viewerId);
+  const rows = await db.feedPost.findMany({
+    where: {
+      parentId: null,
+      hiddenAt: null,
+      OR: [
+        { title: { contains: words, mode: "insensitive" } },
+        { body: { contains: words, mode: "insensitive" } },
+      ],
+      NOT: blocked.length > 0 ? [{ authorId: { in: blocked }, organizationId: null }] : [],
+    },
+    orderBy: { createdAt: "desc" },
+    take,
+    select: {
+      id: true,
+      title: true,
+      body: true,
+      author: { select: { name: true } },
+      organization: { select: { name: true } },
+    },
+  });
+  return rows.map((row) => ({
+    id: row.id,
+    body: row.title ? `${row.title} · ${row.body}`.replace(/ · $/, "") : row.body,
+    by: row.organization?.name ?? row.author?.name ?? "",
+  }));
 }

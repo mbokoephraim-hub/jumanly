@@ -4,7 +4,9 @@ import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { refresh, updateTag } from "next/cache";
 import { z } from "zod";
-import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
+import { canWriteArea, type AdminArea } from "@/server/auth/roles";
+import { PLATFORM_ROLES } from "@/server/services/admin-users";
+import { canWriteAdmin, requireAdmin, requireAdminArea } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { invalidate } from "@/server/entitlements";
 import type { Prisma } from "@/generated/prisma/client";
@@ -35,6 +37,14 @@ async function adminWriter() {
   const admin = await requireAdmin();
   if (!admin) notFound();
   if (!canWriteAdmin(admin)) redirect("/admin?erreur=lecture");
+  return admin;
+}
+
+/** A write in one section: administrators, or the delegated role that holds the section. */
+async function areaWriter(area: AdminArea) {
+  const admin = await requireAdminArea(area);
+  if (!admin) notFound();
+  if (!canWriteArea(admin.platformRole, area)) redirect("/admin?erreur=lecture");
   return admin;
 }
 
@@ -96,7 +106,7 @@ export async function setUserStatus(formData: FormData) {
 export async function setUserRole(formData: FormData) {
   const admin = await adminWriter();
   const input = userActionSchema
-    .extend({ role: z.enum(["user", "content_editor", "support_agent", "platform_admin"]) })
+    .extend({ role: z.enum(PLATFORM_ROLES) })
     .safeParse(Object.fromEntries(formData));
   if (!input.success) redirect("/admin/utilisateurs");
   const { userId, role, back } = input.data;
@@ -219,7 +229,7 @@ export async function moderateJob(formData: FormData) {
     redirect(
       `/admin/offres?id=${encodeURIComponent(jobId)}&action=${formData.get("panel") === "depublier" ? "depublier" : "refuser"}&erreur=motif`,
     );
-  const admin = await adminWriter();
+  const admin = await areaWriter("jobs");
   const job =
     decision === "approve"
       ? await approveJob(db, admin.id, jobId)
@@ -249,7 +259,7 @@ export async function saveWeightsAction(formData: FormData) {
     ...Object.fromEntries(criterionKeys.map((key) => [key, Number(formData.get(key))])),
     note: formData.get("note") ?? "",
   });
-  const admin = await adminWriter();
+  const admin = await areaWriter("ai");
   if (!input.success) redirect("/admin/ia?onglet=poids&erreur=1#poids");
   await saveWeights(db, admin.id, input.data);
   // The public page « Comment fonctionne le matching » shows the active weights (cached).
@@ -265,7 +275,7 @@ export async function resolveDisputeAction(formData: FormData) {
     outcome: formData.get("outcome"),
     resolution: formData.get("resolution") ?? "",
   });
-  const admin = await adminWriter();
+  const admin = await areaWriter("ai");
   if (!input.success) redirect("/admin/ia?onglet=revisions&erreur=1");
   if (input.data.outcome === "confirmed" && !input.data.resolution) {
     redirect("/admin/ia?onglet=revisions&erreur=reponse");

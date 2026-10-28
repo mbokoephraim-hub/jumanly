@@ -1,6 +1,6 @@
 import { expect, test } from "./fixtures";
 import { expectAccessible } from "./a11y";
-import { lastCode } from "./outbox";
+import { openConfirmationLink } from "./outbox";
 import { PASSWORD, testEmail } from "./session";
 
 // Modèle B, lot B2 (docs/modele-b, planche Accueil): Bienvenue, sign-up, sign-in and the first
@@ -24,9 +24,18 @@ test.describe("Modèle B · accueil au téléphone", () => {
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Apprenez ce que les employeurs cherchent",
     );
-    await expectAccessible(page);
 
-    // The three screens: a touch on the picture or on a dot.
+    // The three screens follow one another by themselves (27/10/2026)…
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Un profil qui progresse avec vous",
+      { timeout: 8000 },
+    );
+    // … until a touch on a dot or on the picture, which stops them.
+    await page.getByRole("button", { name: "Écran 1 : Learn" }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Apprenez ce que les employeurs cherchent",
+    );
+    await expectAccessible(page);
     await page.getByRole("button", { name: "Écran suivant" }).click();
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Un profil qui progresse avec vous",
@@ -42,8 +51,21 @@ test.describe("Modèle B · accueil au téléphone", () => {
     await expect(page.locator(".nb-spl-long")).toBeHidden();
     await expect(opening).toHaveCount(0, { timeout: 5000 });
 
-    // « Créer un compte » and « Se connecter », each with a clear way back.
-    await page.getByRole("link", { name: "Créer un compte" }).click();
+    // Talent or recruiter, always offered next to the logo (27/10/2026).
+    const choice = page.getByRole("group", { name: "Vous êtes" });
+    await expect(choice.getByRole("button", { name: "Talent" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    await choice.getByRole("button", { name: "Recruteur" }).click();
+    await expect(page.getByRole("link", { name: "S'inscrire" })).toHaveAttribute(
+      "href",
+      "/inscription?profil=rh",
+    );
+    await choice.getByRole("button", { name: "Talent" }).click();
+
+    // « S'inscrire » and « Se connecter », each with a clear way back.
+    await page.getByRole("link", { name: "S'inscrire" }).click();
     await expect(page).toHaveURL(/\/inscription$/);
     await expect(page.getByRole("heading", { name: "Créer votre compte" })).toBeVisible();
     await expectAccessible(page);
@@ -58,7 +80,7 @@ test.describe("Modèle B · accueil au téléphone", () => {
     await expect(page.getByRole("heading", { name: "Mot de passe oublié" })).toBeVisible();
     await page.getByRole("link", { name: "Retour" }).click();
     await expect(page).toHaveURL(/\/connexion$/);
-    await page.getByRole("link", { name: "Créer un compte" }).click();
+    await page.getByRole("link", { name: "S'inscrire" }).click();
     await expect(page).toHaveURL(/\/inscription$/);
 
     // The conditions in three points, then « J'ai compris ».
@@ -93,10 +115,10 @@ test.describe("Modèle B · accueil au téléphone", () => {
     const sent = Date.now();
     await page.getByRole("button", { name: "Créer mon compte" }).click();
     await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
-    await expect(page.getByRole("heading", { name: "Vérifiez votre boîte mail" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Confirmez votre adresse" })).toBeVisible();
     await expectAccessible(page);
-    await page.getByLabel("Code à 6 chiffres").fill(await lastCode(email, sent));
-    await page.getByRole("button", { name: "Vérifier" }).click();
+    // The link of the e-mail confirms the address and opens the space (27/10/2026).
+    await openConfirmationLink(page, email, sent);
     await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 
     // Step 1: the name, required.

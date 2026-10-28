@@ -5,7 +5,7 @@ import { notFound, redirect } from "next/navigation";
 import { refresh, updateTag } from "next/cache";
 import { getMessages } from "next-intl/server";
 import type { Prisma } from "@/generated/prisma/client";
-import { requireCourseEditor } from "@/server/auth/session";
+import { requireAdminArea } from "@/server/auth/session";
 import { db } from "@/server/db";
 import {
   ContentError,
@@ -21,7 +21,7 @@ import {
 
 /** /admin/contenus: content editors and administrators, each change in the audit log. */
 async function editor() {
-  const user = await requireCourseEditor();
+  const user = await requireAdminArea("content");
   if (!user) notFound();
   return user;
 }

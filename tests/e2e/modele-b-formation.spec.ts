@@ -210,7 +210,7 @@ test.describe("Modèle B · Formation au téléphone", () => {
     });
     await nav.getByRole("link", { name: "Fil", exact: true }).click();
     await page.waitForURL((url) => url.pathname === "/app");
-    await nav.getByRole("link", { name: "Formation", exact: true }).click();
+    await nav.getByRole("link", { name: "Hub", exact: true }).click();
     await page.waitForURL((url) => url.pathname === "/app/learn");
     await expect(page.locator('.nb-fo-continuer[data-test="same"]')).toBeVisible();
 

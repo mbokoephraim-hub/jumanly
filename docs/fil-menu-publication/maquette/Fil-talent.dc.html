@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Fil talent, nouveau menu et publications</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#A6F26B;text-decoration:none}
+.fd,.fd *{box-sizing:border-box}
+.fd{font-family:Sora,system-ui,sans-serif;color:#F2EDE5;-webkit-font-smoothing:antialiased}
+.fd h1,.fd h2,.fd p{margin:0}
+.fd button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
+.fd .sc{position:absolute;inset:0;overflow-y:auto;scrollbar-width:none;padding-bottom:150px}
+.fd .sc::-webkit-scrollbar{display:none}
+.fd .meta{font-size:13px;color:#8FA39E}
+.fd .av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:none}
+/* ---- publication ---- */
+.fd .pub{padding:18px 20px 16px;border-bottom:1px solid rgba(255,255,255,.07)}
+.fd .ph{display:flex;align-items:center;gap:10px}
+.fd .ph .ring{width:44px;height:44px;border-radius:50%;padding:2.5px;flex:none}
+.fd .ph .ring span{width:100%;height:100%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;border:2px solid #0B1A1F}
+.fd .ph b{display:flex;align-items:center;gap:6px;font-size:14.5px;font-weight:700}
+.fd .ph small{display:block;font-size:12.5px;color:#8FA39E;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fd .pdots{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#8FA39E;flex:none}
+.fd .pb{padding-left:54px;margin-top:6px}
+.fd .pt{font-size:20px;font-weight:700;line-height:1.28;letter-spacing:-.01em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.fd .px{font-size:14.5px;line-height:1.5;color:#DCE6E3;margin-top:6px}
+.fd .im{position:relative;height:280px;border-radius:30px;margin-top:14px;background:#13282C center/cover no-repeat;overflow:hidden}
+.fd .im .grad{position:absolute;left:0;right:0;top:0;height:96px;background:linear-gradient(180deg,rgba(5,13,16,.62),rgba(5,13,16,0))}
+.fd .au{position:absolute;left:14px;top:14px;right:56px;display:flex;align-items:center;gap:10px;color:#F2EDE5}
+.fd .au .ring{width:46px;height:46px;border-radius:50%;padding:2.5px;flex:none}
+.fd .au .ring span{width:100%;height:100%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;border:2px solid #0B1A1F}
+.fd .au b{display:flex;align-items:center;gap:6px;font-size:14.5px;font-weight:700;text-shadow:0 1px 6px rgba(0,0,0,.35)}
+.fd .au small{display:block;font-size:12px;color:#E4ECE9;margin-top:1px;text-shadow:0 1px 6px rgba(0,0,0,.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fd .dots{position:absolute;right:12px;top:16px;width:38px;height:38px;border-radius:50%;background:rgba(11,26,31,.55);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;color:#F2EDE5}
+.fd .notch{position:absolute;left:0;bottom:0;width:184px;height:62px;background:#0B1A1F;border-top-right-radius:28px;display:flex;align-items:center;gap:4px;padding:6px 8px 0 0}
+.fd .k1,.fd .k2{position:absolute;width:28px;height:28px;background:radial-gradient(circle at 100% 0,transparent 27.5px,#0B1A1F 28px)}
+.fd .k1{left:0;bottom:62px}.fd .k2{left:184px;bottom:0}
+.fd .ab{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#F2EDE5;flex:none}
+.fd .ab.sv{background:#1B3338}
+.fd .reac{position:absolute;right:8px;bottom:12px;display:flex;align-items:center;gap:4px;height:34px;padding:0 10px 0 4px;border-radius:17px;background:rgba(11,26,31,.6);backdrop-filter:blur(8px);font-size:12.5px;font-weight:600}
+.fd .reac i{width:24px;height:24px;border-radius:50%;margin-right:-10px;border:2px solid #13282C;font-style:normal;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.fd .reac i:last-of-type{margin-right:3px}
+.fd .when{display:block;font-size:12.5px;color:#8FA39E;margin-top:8px}
+/* ---- menu ---- */
+.fd .menu{position:absolute;left:12px;right:12px;bottom:22px;height:64px;border-radius:32px;background:rgba(19,40,44,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.08);box-shadow:0 14px 34px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:space-between;padding:0 8px;z-index:10}
+.fd .it{position:relative;height:48px;min-width:48px;border-radius:24px;display:flex;align-items:center;justify-content:center;gap:0;padding:0 12px;transition:background-color .32s cubic-bezier(.3,.7,.2,1),color .32s,padding .32s cubic-bezier(.3,.7,.2,1)}
+.fd .it .lb{display:inline-block;overflow:hidden;white-space:nowrap;font-size:13px;font-weight:700;transition:max-width .34s cubic-bezier(.3,.7,.2,1),opacity .22s,margin .34s}
+.fd .it .bd{position:absolute;margin:-22px 0 0 22px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#A6F26B;color:#0B1A1F;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center}
+@media (prefers-reduced-motion:reduce){.fd .it,.fd .it .lb{transition:none}}
+.fd .orbi{position:absolute;right:20px;bottom:104px;width:56px;height:56px;border-radius:50%;background:#2FD3A6;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px rgba(47,211,166,.16),0 10px 24px rgba(0,0,0,.4);z-index:9}
+</style>
+</helmet>
+<div class="fd" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #0B1A1F;">
+<sc-if value="{{vFil}}" hint-placeholder-val="{{ true }}">
+<div class="sc">
+<header style="padding: 54px 20px 0; display: flex; align-items: center; gap: 8px;">
+<h1 style="flex: 1; font-size: 28px; font-weight: 700; letter-spacing: -0.02em;">Fil</h1>
+<span style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; position: relative;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15zM10 20.5a2.2 2.2 0 0 0 4 0"/></svg><span style="position: absolute; top: 6px; right: 4px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: #A6F26B; color: #0B1A1F; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;">3</span></span>
+<span class="av" style="width: 36px; height: 36px; background: #A6F26B; color: #0B1A1F;">GM</span>
+</header>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 12px; border-bottom: 1px solid rgba(255,255,255,.08);"><span style="height: 44px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #F2EDE5; position: relative;">Pour vous<i style="position: absolute; left: 28%; right: 28%; bottom: -1px; height: 3px; border-radius: 2px; background: #A6F26B;"></i></span><span style="height: 44px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500; color: #8FA39E; position: relative;">Abonnements</span><span style="height: 44px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500; color: #8FA39E; position: relative;">Entreprises</span></div>
+<a href="Publier.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,.07); color: #F2EDE5;">
+<span class="av" style="background: #A6F26B; color: #0B1A1F;">GM</span>
+<span style="flex: 1;"><b style="display: block; font-size: 14px;">Grâce Mbuyi</b><span style="font-size: 14px; color: #8FA39E;">Un titre, un texte, une image</span></span>
+<span style="height: 36px; padding: 0 16px; border-radius: 999px; background: #A6F26B; color: #0B1A1F; font-size: 13px; font-weight: 700; display: flex; align-items: center;">Publier</span>
+</a>
+
+<article class="pub">
+<div class="ph"><span class="ring" style="background: #A6F26B;"><span style="background: #0F3F37; color: #A6F26B;">BF</span></span><span style="flex: 1; min-width: 0;"><b>Baobab Fintech<svg width="15" height="15" viewBox="0 0 24 24" aria-label="Entreprise vérifiée"><path d="M12 2.5l2.4 1.8 3-.1.9 2.8 2.4 1.8-.9 2.9.9 2.9-2.4 1.8-.9 2.8-3-.1L12 21.5l-2.4-1.8-3 .1-.9-2.8-2.4-1.8.9-2.9-.9-2.9 2.4-1.8.9-2.8 3 .1z" fill="#A6F26B"/><path d="m8.5 12 2.4 2.4 4.6-4.8" fill="none" stroke="#0B1A1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></b><small>Entreprise · Kinshasa · 5 h</small></span><button class="pdots" onClick="{{baobab.menu}}" aria-label="Plus d’options"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button></div>
+<div class="pb">
+<h2 class="pt">Nous recrutons 3 analystes data à Kinshasa</h2>
+<p class="px">Équipe jeune, projets concrets, formation sur place. Candidater est gratuit et chaque dossier reçoit une réponse.</p>
+<div class="im" style="background-image: url('img/illus-baobab.jpg');">
+<div class="reac"><i style="background: #A6F26B; color: #0B1A1F;">GM</i><i style="background: #2B6A5C; color: #F2EDE5;">PI</i><svg width="13" height="13" viewBox="0 0 24 24" fill="#FF6B6B" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg><span style="white-space: nowrap;">{{baobab.n}}</span></div>
+<i class="k1"></i><i class="k2"></i>
+<div class="notch">
+<button class="ab" onClick="{{baobab.like}}" aria-label="J’aime" aria-pressed="{{baobab.on}}" style="color: {{baobab.hc}};"><svg width="25" height="25" viewBox="0 0 24 24" fill="{{baobab.hf}}" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg></button>
+<button class="ab" onClick="{{baobab.com}}" aria-label="Commenter"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"/></svg></button>
+<button class="ab" onClick="{{baobab.env}}" aria-label="Envoyer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3 10.5 13.5M21 3l-6.5 18-4-7.5L3 9.5z"/></svg></button>
+<button class="ab sv" onClick="{{baobab.save}}" aria-label="Enregistrer" style="color: {{baobab.sc}};"><svg width="20" height="20" viewBox="0 0 24 24" fill="{{baobab.sf}}" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 3.5h11v17L12 16.5l-5.5 4z"/></svg></button>
+</div>
+</div>
+<span class="when">14 commentaires · offre dans Offres</span>
+</div>
+</article>
+<article class="pub">
+<div class="ph"><span class="ring" style="background: linear-gradient(135deg,#A6F26B,#2FD3A6);"><span style="background: #A6F26B; color: #0B1A1F;">GM</span></span><span style="flex: 1; min-width: 0;"><b>Grâce Mbuyi</b><small>Vous · 2 h</small></span><button class="pdots" onClick="{{grace.menu}}" aria-label="Plus d’options"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button></div>
+<div class="pb">
+<h2 class="pt">Mon premier tableau de bord Power BI est en ligne</h2>
+<p class="px">Les ventes d’une PME de Kinshasa, mois par mois. Construit après le cours Power BI de Jumanly. Vos retours m’aident à progresser.</p>
+<div class="im" style=""><div style="position: absolute; inset: 0; background: #F2EDE5; padding: 20px 16px 0 16px;">
+<div style="display: flex; gap: 8px; margin-left: 0;">
+<div style="flex: 1; background: #fff; border-radius: 14px; padding: 9px 10px;"><span style="font-size: 10px; color: #5B6F6A;">Chiffre d’affaires</span><b style="display: block; font-size: 14px; white-space: nowrap; color: #0F3F37;">48 200 $</b></div>
+<div style="flex: 1; background: #fff; border-radius: 14px; padding: 9px 10px;"><span style="font-size: 10px; color: #5B6F6A;">Meilleur mois</span><b style="display: block; font-size: 15px; color: #0F3F37;">Mars</b></div>
+<div style="flex: 1; background: #0F3F37; border-radius: 14px; padding: 9px 10px;"><span style="font-size: 10px; color: #CFE8DA;">Stock bas</span><b style="display: block; font-size: 15px; color: #A6F26B;">3</b></div>
+</div>
+<div style="display: flex; align-items: flex-end; gap: 9px; height: 150px; margin: 18px 0 0 110px;">
+<i style="flex: 1; height: 46%; border-radius: 6px; background: #2B6A5C;"></i><i style="flex: 1; height: 62%; border-radius: 6px; background: #2B6A5C;"></i><i style="flex: 1; height: 100%; border-radius: 6px; background: #A6F26B;"></i><i style="flex: 1; height: 72%; border-radius: 6px; background: #2B6A5C;"></i><i style="flex: 1; height: 84%; border-radius: 6px; background: #2B6A5C;"></i><i style="flex: 1; height: 58%; border-radius: 6px; background: #2B6A5C;"></i>
+</div>
+</div>
+<div class="reac"><i style="background: #2B6A5C; color: #F2EDE5;">AK</i><i style="background: #F4C463; color: #0B1A1F;">JK</i><svg width="13" height="13" viewBox="0 0 24 24" fill="#FF6B6B" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg><span style="white-space: nowrap;">{{grace.n}}</span></div>
+<i class="k1"></i><i class="k2"></i>
+<div class="notch">
+<button class="ab" onClick="{{grace.like}}" aria-label="J’aime" aria-pressed="{{grace.on}}" style="color: {{grace.hc}};"><svg width="25" height="25" viewBox="0 0 24 24" fill="{{grace.hf}}" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg></button>
+<button class="ab" onClick="{{grace.com}}" aria-label="Commenter"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"/></svg></button>
+<button class="ab" onClick="{{grace.env}}" aria-label="Envoyer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3 10.5 13.5M21 3l-6.5 18-4-7.5L3 9.5z"/></svg></button>
+<button class="ab sv" onClick="{{grace.save}}" aria-label="Enregistrer" style="color: {{grace.sc}};"><svg width="20" height="20" viewBox="0 0 24 24" fill="{{grace.sf}}" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 3.5h11v17L12 16.5l-5.5 4z"/></svg></button>
+</div>
+</div>
+<span class="when">6 commentaires</span>
+</div>
+</article>
+<article class="pub">
+<div class="ph"><span class="ring" style="background: linear-gradient(135deg,#F4C463,#A6F26B);"><span style="background: #2B6A5C; color: #F2EDE5;">KA</span></span><span style="flex: 1; min-width: 0;"><b>Kofi Asante</b><small>Technicien solaire · Goma · hier</small></span><button class="pdots" onClick="{{kofi.menu}}" aria-label="Plus d’options"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button></div>
+<div class="pb">
+<h2 class="pt">Premier jour chez Kivu Énergie</h2>
+<p class="px">Trois mois de candidatures, deux entretiens manqués, puis un oui. Merci à toutes les personnes qui ont relu mon CV.</p>
+<div class="im" style="background-image: url('img/photo-kofi.jpg');">
+<div class="reac"><i style="background: #A6F26B; color: #0B1A1F;">GM</i><i style="background: #5FE0B8; color: #0B1A1F;">DK</i><svg width="13" height="13" viewBox="0 0 24 24" fill="#FF6B6B" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg><span style="white-space: nowrap;">{{kofi.n}}</span></div>
+<i class="k1"></i><i class="k2"></i>
+<div class="notch">
+<button class="ab" onClick="{{kofi.like}}" aria-label="J’aime" aria-pressed="{{kofi.on}}" style="color: {{kofi.hc}};"><svg width="25" height="25" viewBox="0 0 24 24" fill="{{kofi.hf}}" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg></button>
+<button class="ab" onClick="{{kofi.com}}" aria-label="Commenter"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"/></svg></button>
+<button class="ab" onClick="{{kofi.env}}" aria-label="Envoyer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3 10.5 13.5M21 3l-6.5 18-4-7.5L3 9.5z"/></svg></button>
+<button class="ab sv" onClick="{{kofi.save}}" aria-label="Enregistrer" style="color: {{kofi.sc}};"><svg width="20" height="20" viewBox="0 0 24 24" fill="{{kofi.sf}}" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 3.5h11v17L12 16.5l-5.5 4z"/></svg></button>
+</div>
+</div>
+<span class="when">31 commentaires</span>
+</div>
+</article>
+</div>
+</sc-if>
+<sc-if value="{{vAutre}}" hint-placeholder-val="{{ false }}">
+<div class="sc" style="padding: 54px 20px 0;">
+<h1 style="font-size: 28px; font-weight: 700; letter-spacing: -0.02em;">{{ongletT}}</h1>
+<div style="margin-top: 22px; padding: 18px; border-radius: 22px; background: #13282C;">
+<p style="font-size: 15px; line-height: 1.5;">Le contenu de cet onglet ne change pas. Regardez le menu : l’onglet actif s’est allongé en vert avec son nom, les autres restent des ronds.</p>
+<button onClick="{{retourFil}}" style="margin-top: 14px; height: 44px; padding: 0 18px; border-radius: 22px; background: #A6F26B; color: #0B1A1F; font-weight: 700; font-size: 14px;">Revenir au Fil</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{toastOn}}" hint-placeholder-val="{{ false }}"><div role="status" style="position: absolute; left: 20px; right: 20px; bottom: 100px; z-index: 12; padding: 12px 14px; border-radius: 14px; background: #F2EDE5; color: #0B1A1F; font-size: 13px; font-weight: 600; box-shadow: 0 10px 30px rgba(0,0,0,.4);">{{toast}}</div></sc-if>
+<span class="orbi" aria-label="Orbi"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c.6 4.6 3.4 7.4 9 9-5.6 1.6-8.4 4.4-9 9-.6-4.6-3.4-7.4-9-9 5.6-1.6 8.4-4.4 9-9z" fill="#0B1A1F"/></svg></span>
+<nav class="menu" aria-label="Navigation principale">
+<button class="it" onClick="{{nav.fil.go}}" aria-label="Fil" aria-current="{{nav.fil.cur}}" style="background: {{nav.fil.bg}}; color: {{nav.fil.fg}}; padding: 0 {{nav.fil.pad}};"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span class="lb" style="max-width: {{nav.fil.mw}}; opacity: {{nav.fil.op}}; margin-left: {{nav.fil.ml}};">Fil</span></button>
+<button class="it" onClick="{{nav.explorer.go}}" aria-label="Explorer" aria-current="{{nav.explorer.cur}}" style="background: {{nav.explorer.bg}}; color: {{nav.explorer.fg}}; padding: 0 {{nav.explorer.pad}};"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg><span class="lb" style="max-width: {{nav.explorer.mw}}; opacity: {{nav.explorer.op}}; margin-left: {{nav.explorer.ml}};">Explorer</span></button>
+<button class="it" onClick="{{nav.carriere.go}}" aria-label="Carrière" aria-current="{{nav.carriere.cur}}" style="background: {{nav.carriere.bg}}; color: {{nav.carriere.fg}}; padding: 0 {{nav.carriere.pad}};"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5h6v2M3 12.5h18"/></svg><span class="lb" style="max-width: {{nav.carriere.mw}}; opacity: {{nav.carriere.op}}; margin-left: {{nav.carriere.ml}};">Carrière</span></button>
+<button class="it" onClick="{{nav.formation.go}}" aria-label="Hub" aria-current="{{nav.formation.cur}}" style="background: {{nav.formation.bg}}; color: {{nav.formation.fg}}; padding: 0 {{nav.formation.pad}};"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg><span class="lb" style="max-width: {{nav.formation.mw}}; opacity: {{nav.formation.op}}; margin-left: {{nav.formation.ml}};">Hub</span></button>
+<button class="it" onClick="{{nav.messages.go}}" aria-label="Chat" aria-current="{{nav.messages.cur}}" style="background: {{nav.messages.bg}}; color: {{nav.messages.fg}}; padding: 0 {{nav.messages.pad}};"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"/></svg><span class="lb" style="max-width: {{nav.messages.mw}}; opacity: {{nav.messages.op}}; margin-left: {{nav.messages.ml}};">Chat</span><span class="bd" style="opacity: {{nav.messages.bdo}};">2</span></button>
+</nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview": {"width": 390, "height": 844}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { tab: 'fil', p: {}, toast: '' }; }
+  renderVals() {
+    const navOf = (items, cur, set) => {
+      const o = {};
+      items.forEach(([k]) => {
+        const on = k === cur;
+        o[k] = { go: () => set(k), cur: on ? 'page' : 'false', bg: on ? '#A6F26B' : '#203F42', fg: on ? '#0F3F37' : '#C9D6D2',
+          pad: on ? '16px' : '12px', mw: on ? '120px' : '0px', op: on ? '1' : '0', ml: on ? '8px' : '0px', bdo: on ? '0' : '1' };
+      });
+      return o;
+    };
+    const postOf = (id, n0) => {
+      const p = this.state.p[id] || {};
+      const set = (patch) => this.setState({ p: { ...this.state.p, [id]: { ...p, ...patch } }, toast: patch.t || '' });
+      return { on: p.like ? 'true' : 'false', hc: p.like ? '#FF6B6B' : '#F2EDE5', hf: p.like ? '#FF6B6B' : 'none', n: n0 + (p.like ? 1 : 0),
+        like: () => set({ like: !p.like }), sc: p.save ? '#A6F26B' : '#F2EDE5', sf: p.save ? '#A6F26B' : 'none',
+        save: () => set({ save: !p.save, t: p.save ? 'Retirée des enregistrements' : 'Enregistrée dans Carrière › Enregistrés' }),
+        com: () => set({ t: 'Les commentaires s’ouvrent en feuille, comme aujourd’hui' }),
+        env: () => set({ t: 'Envoyer à une connexion, comme aujourd’hui' }),
+        menu: () => set({ t: 'Options : enregistrer, masquer, signaler' }) };
+    };
+    const L = {"fil": "Fil", "explorer": "Explorer", "carriere": "Carrière", "formation": "Hub", "messages": "Chat"};
+    const tab = this.state.tab;
+    const items = Object.keys(L).map((k) => [k]);
+    return {
+      nav: navOf(items, tab, (k) => this.setState({ tab: k, toast: '' })),
+      vFil: tab === 'fil', vAutre: tab !== 'fil', ongletT: L[tab],
+      retourFil: () => this.setState({ tab: 'fil' }),
+      toast: this.state.toast, toastOn: !!this.state.toast,
+      baobab: postOf('baobab', 126), grace: postOf('grace', 48), kofi: postOf('kofi', 312),
+    };
+  }
+}
+</script>
+</body>
+</html>

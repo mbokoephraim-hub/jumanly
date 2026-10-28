@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { expect, test } from "./fixtures";
@@ -57,7 +57,7 @@ test("compléter mon profil sur téléphone : titre, photo, expérience", async 
   await page.locator('.nb-ca-form input[data-banniere][type="file"]').nth(1).setInputFiles(photo);
   await expect(page.getByText("Bannière mise à jour.")).toBeVisible();
   await page.goto("/app/career/cv");
-  const banner = page.locator('.nb-ca-banniere img[src^="/api/banniere/"]').first();
+  const banner = page.locator('.nb-pf-banniere img[src^="/api/banniere/"]').first();
   const bannerServed = await page.request.get((await banner.getAttribute("src"))!);
   expect(bannerServed.headers()["content-type"]).toBe("image/jpeg");
   await page.goto("/app/career/profil");
@@ -90,38 +90,44 @@ test("compléter mon profil sur téléphone : titre, photo, expérience", async 
 });
 
 test("télécharger mon CV sur téléphone : créer, aperçu, PDF", async ({ page, isMobile }) => {
-  test.skip(!isMobile, "Parcours du téléphone (Modèle B, lot B5).");
+  test.skip(!isMobile, "Parcours du téléphone (docs/carriere-v3).");
   test.setTimeout(150_000);
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("cv-mobile"));
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 
-  // « Nouveau CV » in Carrière → « Choisir un modèle »: a CV from the profile, opened.
-  await page.goto("/app/career/cv");
-  const career = page.locator(".nb-ca").first();
-  await career.getByRole("tab", { name: "CV", exact: true }).click();
-  await page.goto("/app/career/cv/modeles?nouveau=1");
-  await page.locator(".nb-ca-modeles form button").first().click();
-  await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
+  // « Nouveau CV » in Carrière: « Comment voulez-vous commencer ? », then a template.
+  await page.goto("/app/career/cv?onglet=cv");
+  await page.locator(".nb-cr-nouveau").filter({ visible: true }).click();
+  await page.waitForURL("**/app/career/cv/nouveau");
+  await page.getByRole("link", { name: /^Partir d’un modèle/ }).click();
+  await page.waitForURL(/etape=modele/);
+  await page.getByRole("button", { name: "Continuer" }).filter({ visible: true }).click();
+  await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+\?etape=contenu/);
   const id = new URL(page.url()).pathname.split("/").pop()!;
-  const title = (await page.locator(".nb-ca-editeur h1").first().textContent())!.trim();
-  expect(title).not.toBe("");
 
-  // The CV's menu in the tab: « Exporter en PDF ou Word », then « Télécharger ».
-  await page.goto("/app/career/cv");
-  await career.getByRole("tab", { name: "CV", exact: true }).click();
-  await career
-    .getByRole("button", { name: `Actions de « ${title} »` })
-    .first()
+  // Contenu → Mise en forme → Aperçu: « Télécharger en PDF ».
+  await page
+    .getByRole("link", { name: "Continuer", exact: true })
+    .filter({ visible: true })
     .click();
-  await page.getByRole("button", { name: "Exporter en PDF ou Word" }).click();
-  const sheet = page.getByRole("dialog", { name: `Exporter « ${title} »` });
-  await expect(sheet.getByRole("radio", { name: "PDF" })).toHaveAttribute("aria-checked", "true");
-  const href = await sheet.getByRole("link", { name: "Télécharger" }).getAttribute("href");
-  expect(href).toBe(`/app/career/cv/${id}/pdf`);
-  const pdf = await page.request.get(href!);
-  expect(pdf.status()).toBe(200);
+  await page.waitForURL(/etape=style/);
+  await page.getByRole("link", { name: "Voir l’aperçu" }).filter({ visible: true }).click();
+  await page.waitForURL(/etape=apercu/);
+  // A new account has an empty CV: a summary is written first (the PDF is never an empty page).
+  await page.getByRole("link", { name: "Écrire le contenu" }).click();
+  await page.getByRole("button", { name: "Modifier le résumé" }).click();
+  const sheet = page.getByRole("dialog", { name: "Résumé" });
+  await sheet.getByRole("textbox").fill("Analyste junior (fictive) qui aime les chiffres.");
+  await sheet.getByRole("button", { name: "Enregistrer" }).click();
+  await expect(sheet).toBeHidden();
+  await expect(
+    page.getByText("Analyste junior (fictive)").filter({ visible: true }).first(),
+  ).toBeVisible();
+  await page.goto(`/app/career/cv/${id}?etape=apercu`);
+  const download = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Télécharger en PDF" }).click();
   const path = join(mkdtempSync(join(tmpdir(), "cv-mobile-")), "cv.pdf");
-  writeFileSync(path, await pdf.body());
+  await (await download).saveAs(path);
   // The contact e-mail of the fictional account is the only place the word may appear.
   const text = execFileSync("pdftotext", ["-layout", path, "-"]).toString();
   expect(text.replace(/\S+@\S+/g, "")).not.toMatch(/Jumanly/i);

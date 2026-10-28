@@ -5,6 +5,7 @@ import { CareerTexts } from "@/components/phone/career/server";
 import { handleOf } from "@/components/phone/career/data";
 import { HeadForm } from "@/components/phone/career/edit";
 import { initialsOf, toneOf } from "@/components/phone/fil/data";
+import { parseSocialLinks, SOCIAL_KINDS, type SocialKind } from "@/lib/social-links";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { getFullProfile } from "@/server/services/profile";
@@ -22,14 +23,24 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CareerEditPage() {
   const user = await requireUser("/app/career/profil");
   if (!(await isPhone())) redirect("/app/profil?fenetre=modifier");
-  const profile = await getFullProfile(db, user.id);
+  const [profile, recruiter] = await Promise.all([
+    getFullProfile(db, user.id),
+    db.recruiterProfile.findUnique({ where: { userId: user.id }, select: { id: true } }),
+  ]);
   const name = profile.user.name;
+  const socials = parseSocialLinks(profile.socialLinks);
   return (
     <CareerTexts>
       <HeadForm
+        recruiter={recruiter !== null}
         values={{
           name,
-          handle: `@${handleOf(name)}`,
+          handle: profile.handle ?? handleOf(name),
+          handleChosen: profile.handle !== null,
+          socials: Object.fromEntries(
+            SOCIAL_KINDS.map((kind) => [kind, socials[kind] ?? ""]),
+          ) as Record<SocialKind, string>,
+          showEmail: profile.showEmail,
           headline: profile.headline ?? "",
           city: profile.user.city ?? "",
           summary: profile.summary ?? "",

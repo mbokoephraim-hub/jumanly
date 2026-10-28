@@ -1,12 +1,13 @@
 "use server";
 
-import { APIError } from "better-auth/api";
+import { APIError, createEmailVerificationToken } from "better-auth/api";
 import { refresh } from "next/cache";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { passwordProblem } from "@/lib/password";
-import { sendPasswordChanged } from "@/server/account-emails";
+import { passwordProblem, VERIFY_LINK_HOURS } from "@/lib/password";
+import { sendEmailChangeLink, sendPasswordChanged } from "@/server/account-emails";
+import { emailDeliveryAvailable } from "@/server/adapters/email";
 import { auth } from "@/server/auth";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
@@ -16,7 +17,7 @@ import {
   eraseAccount,
   ownedOrganizations,
 } from "@/server/services/account-deletion";
-import { NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
+import { mutedAfter, NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
 
 /**
  * Where each part of the settings lives (planche talent-4 § 8): the list, then one page per
@@ -87,6 +88,51 @@ export async function changePassword(formData: FormData) {
   }
   await sendPasswordChanged(user.email, user.firstName, new Date()).catch(() => undefined);
   back("securite", { ok: "password" });
+}
+
+/**
+ * « Changer d'adresse » (Ephraïm, 27/10/2026): a link goes to the new address; the account's
+ * address changes once it is opened. An address already used answers the same way (nothing leaks).
+ * The link is the one of Better Auth's change of address (verify-email, change-email-verification),
+ * but it is sent here rather than through `auth.api.changeEmail`, which hides a failed sending and
+ * answered « Lien envoyé » when nothing left (Ephraïm, 27/10/2026).
+ */
+export async function changeEmailAction(
+  raw: string,
+): Promise<
+  { ok: true; email: string } | { ok: false; error: "invalid" | "same" | "failed" | "unavailable" }
+> {
+  const parsed = z
+    .email()
+    .max(254)
+    .safeParse(
+      String(raw ?? "")
+        .trim()
+        .toLowerCase(),
+    );
+  const user = await requireUser("/app/parametres");
+  if (!parsed.success) return { ok: false, error: "invalid" };
+  if (parsed.data === user.email.toLowerCase()) return { ok: false, error: "same" };
+  if (!emailDeliveryAvailable()) return { ok: false, error: "unavailable" };
+  if (await db.user.findUnique({ where: { email: parsed.data }, select: { id: true } }))
+    return { ok: true, email: parsed.data };
+  try {
+    const context = await auth.$context;
+    const token = await createEmailVerificationToken(
+      context.secret,
+      user.email,
+      parsed.data,
+      VERIFY_LINK_HOURS * 60 * 60,
+      { requestType: "change-email-verification" },
+    );
+    const callbackURL = encodeURIComponent("/app/parametres?adresse=changee");
+    const url = `${context.baseURL}/verify-email?token=${token}&callbackURL=${callbackURL}`;
+    await sendEmailChangeLink(parsed.data, url, user.firstName);
+  } catch (error) {
+    console.error("[e-mail] Changement d'adresse : le lien n'est pas parti.", error);
+    return { ok: false, error: "failed" };
+  }
+  return { ok: true, email: parsed.data };
 }
 
 export async function revokeSession(formData: FormData) {
@@ -229,7 +275,7 @@ export async function updateNotifications(formData: FormData) {
   await db.user.update({
     where: { id: user.id },
     data: {
-      notificationsMuted: NOTIFICATION_CATEGORIES.filter((category) => !kept.has(category)),
+      notificationsMuted: mutedAfter(user.notificationsMuted, NOTIFICATION_CATEGORIES, kept),
       notificationEmails: parsed.data.emails === "1",
       newsletter: parsed.data.newsletter === "on",
     },

@@ -20,6 +20,8 @@ import {
   removeInterviewQuestionAction,
 } from "@/server/actions/hire-advanced";
 import { db } from "@/server/db";
+import { isPhone } from "@/server/view";
+import { RhInterviewSent } from "@/components/phone/recruteur/entretien";
 import { level } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
 import { applicationMatches } from "@/server/matching/service";
@@ -75,6 +77,35 @@ export default async function InterviewPage({
   const person = application.profile.user;
   const firstName = person.firstName || person.name.split(/\s+/)[0]!;
   const timeZone = interview.timezone || defaultTimeZone();
+  // On the recruiter's phone (Modèle B recruteur M5, planche Recruteur-planifie): « Invitation
+  // envoyée » just after « Envoyer l'invitation ». Later, the page is the preparation.
+  if (one(query.ok) === "envoye" && (await isPhone())) {
+    const others = [interview.organizerId, ...interview.participantIds].filter(
+      (memberId) => memberId !== ctx.userId,
+    );
+    return (
+      <RhInterviewSent
+        interview={{
+          id: interview.id,
+          mode: interview.mode,
+          at: interview.startsAt ?? interview.slots[0] ?? null,
+          confirmed: interview.status === "confirmed",
+          link: interview.link,
+          address: interview.address,
+          timeZone,
+          applicationId: application.id,
+          name: person.name,
+          with: members.filter((member) => others.includes(member.id)).map((member) => member.name),
+        }}
+        sent
+        document={
+          permissions.evaluate &&
+          interview.status !== "pending" &&
+          Boolean(interview.startsAt && interview.startsAt <= now)
+        }
+      />
+    );
+  }
   const day = (date: Date) =>
     format.dateTime(date, { weekday: "long", day: "numeric", month: "long", timeZone });
   const hour = (date: Date) =>

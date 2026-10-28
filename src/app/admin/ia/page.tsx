@@ -1,3 +1,4 @@
+import { SkillsTab } from "@/components/admin/skills-tab";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
@@ -22,7 +23,8 @@ import { criterionText } from "@/components/matching/talent-why";
 import { cx } from "@/lib/cx";
 import { formatDate, formatRelativeDays } from "@/lib/dates";
 import { resolveDisputeAction, saveWeightsAction } from "@/server/actions/admin";
-import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
+import { canWriteArea } from "@/server/auth/roles";
+import { requireAdminArea } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { activeWeights, disputeReasons } from "@/server/matching/service";
 import { criterionKeys } from "@/server/matching/types";
@@ -42,6 +44,7 @@ import { formatUsd } from "@/lib/money";
 const tabs = {
   consommation: "usage",
   poids: "weights",
+  competences: "skills",
   revisions: "disputes",
   journal: "audit",
 } as const;
@@ -75,6 +78,7 @@ const featureText: Record<
   job_writer: "jobDraft",
   learn_coach: "learnCoach",
   orbi_chat: "orbiChat",
+  chat_summary: "orbiChat",
 };
 
 const statusKey = { open: "open", in_review: "inReview" } as const;
@@ -115,11 +119,11 @@ type Usage = Awaited<ReturnType<typeof usageReport>>;
 /** IA et matching (partie 07, partie 08 § 8.10): consumption, weights, human reviews, audit. */
 export default async function AdminAi({ searchParams }: PageProps<"/admin/ia">) {
   const params = await searchParams;
-  const admin = await requireAdmin();
+  const admin = await requireAdminArea("ai");
   if (!admin) notFound();
   const t = await getTranslations();
   const format = await getFormatter();
-  const writable = canWriteAdmin(admin);
+  const writable = canWriteArea(admin.platformRole, "ai");
   const tab: Tab =
     typeof params.onglet === "string" && params.onglet in tabs
       ? (params.onglet as Tab)
@@ -164,6 +168,7 @@ export default async function AdminAi({ searchParams }: PageProps<"/admin/ia">) 
               missing={params.erreur === "reponse"}
             />
           )}
+          {tab === "competences" && <SkillsTab params={params} writable={writable} />}
           {tab === "journal" && <AuditTab />}
         </div>
         <aside className="flex min-w-0 flex-col gap-4">

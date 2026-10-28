@@ -26,6 +26,12 @@ import { pauseJobAction, publishOfferAction, resumeJobAction } from "@/server/ac
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
 import { getOrgJob, HireError, hirePermissions } from "@/server/services/hire";
+import { isPhone } from "@/server/view";
+import {
+  RhOfferCandidates,
+  RhOfferDetail,
+  RhOfferPublished,
+} from "@/components/phone/recruteur/offres";
 import {
   listOffers,
   offerHistory,
@@ -88,10 +94,7 @@ function Section({
  * job sheet, the typed history and the performance. Just published, the confirmation screen
  * (planche `PUBLIE`) comes first. The candidates open from the bar at the bottom.
  */
-export default async function OfferPage({
-  params,
-  searchParams,
-}: PageProps<"/app/hire/offres/[id]">) {
+async function OfferPageContent({ params, searchParams }: PageProps<"/app/hire/offres/[id]">) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const { ctx, space } = await requireHire(`/app/hire/offres/${id}`);
   const t = await getTranslations("hireOffers");
@@ -679,4 +682,60 @@ export default async function OfferPage({
       />
     </div>
   );
+}
+
+/**
+ * On a phone (Modèle B recruteur, lot M4): the offer and its figures (planche
+ * Recruteur-offre-detail), its candidates (`?vue=candidats`), or « Votre offre est en ligne »
+ * right after publication (`?publiee=1`).
+ */
+async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/[id]">) {
+  const [{ id }, query] = await Promise.all([params, searchParams]);
+  const { ctx, space } = await requireHire(`/app/hire/offres/${id}`);
+  const now = new Date();
+  const job = await getOrgJob(db, ctx, id).catch((error) => {
+    if (error instanceof HireError) notFound();
+    throw error;
+  });
+  const permissions = hirePermissions(ctx.role);
+  const published = one(query.publiee);
+  if (published === "1" || published === "verification")
+    return (
+      <RhOfferPublished
+        job={job}
+        review={published === "verification" || job.status === "pending_review"}
+      />
+    );
+  const offers = await listOffers(db, ctx, now);
+  const figures = offers.find((offer) => offer.id === job.id)?.figures ?? {
+    applications: 0,
+    unseen: 0,
+    views: 0,
+    interviews: 0,
+  };
+  if (one(query.vue) === "candidats" && permissions.readApplications)
+    return <RhOfferCandidates ctx={ctx} jobId={job.id} unseen={figures.unseen} />;
+  const ok = (["pause", "reprise"] as const).find((value) => value === one(query.ok));
+  const tl = await getTranslations("hireOffers.list");
+  return (
+    <>
+      {ok && <ToastOnLoad message={tl(`ok.${ok}`)} tone="success" />}
+      <RhOfferDetail
+        ctx={ctx}
+        job={job}
+        figures={figures}
+        org={space.organization.name}
+        manage={permissions.manage}
+        period={one(query.jours) === "30" ? 30 : 7}
+        openReport={one(query.rapport) === "1"}
+        notice={one(query.limite) ? tl("limit") : undefined}
+        now={now}
+      />
+    </>
+  );
+}
+
+export default async function OfferPage(props: PageProps<"/app/hire/offres/[id]">) {
+  if (await isPhone()) return <PhoneOffer {...props} />;
+  return <OfferPageContent {...props} />;
 }

@@ -53,12 +53,12 @@ test("web recruteur 3 : menu du compte, compte, organisation, équipe, abonnemen
   await expect(page).toHaveURL(/\/app\/organisation$/);
   await expect(menu).toBeHidden();
 
-  // 2. Organisation: the card with its two actions, four figures, the presentation.
+  // 2. Page entreprise (étape 3, A3): the page with its fields and its public view.
   await expect(
-    main(page).getByRole("heading", { level: 1, name: "Organisation", exact: true }),
+    main(page).getByRole("heading", { level: 1, name: "Page entreprise", exact: true }),
   ).toBeVisible();
-  await expect(main(page).getByRole("link", { name: "Modifier", exact: true })).toBeVisible();
-  await expect(main(page).getByRole("heading", { name: org, exact: true })).toBeVisible();
+  await expect(main(page).getByRole("link", { name: "Voir la page publique" })).toBeVisible();
+  await expect(main(page).getByLabel("Nom", { exact: true })).toHaveValue(org);
   await noOverflow(page);
   await expectAccessible(page);
 
@@ -82,14 +82,15 @@ test("web recruteur 3 : menu du compte, compte, organisation, équipe, abonnemen
   await noOverflow(page);
   await expectAccessible(page);
 
-  // 4. Équipe: the members in a table, « Inviter » in the head opens the dialog.
+  // 4. Équipe (étape 3, A2): the three tabs, « Inviter un membre » opens the dialog.
   await page.goto("/app/organisation/equipe");
-  const table = main(page).getByRole("table", { name: "Membres de l'équipe" });
-  await expect(table.getByRole("columnheader", { name: "Rôle" })).toBeVisible();
-  await expect(table.getByRole("columnheader", { name: "Offres" })).toBeVisible();
-  await expect(table.getByRole("rowheader", { name: /, vous/ })).toBeVisible();
-  await main(page).getByRole("button", { name: "Inviter", exact: true }).click();
-  const invite = page.getByRole("dialog", { name: "Inviter dans l'équipe" });
+  await expect(main(page).getByRole("heading", { level: 1 })).toHaveText("Équipe");
+  await expect(main(page).getByRole("tab", { name: "Membres et rôles" })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  await main(page).getByRole("button", { name: "Inviter un membre" }).first().click();
+  const invite = page.getByRole("dialog", { name: "Inviter un membre" });
   await expect(invite).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(invite).toBeHidden();
@@ -122,13 +123,15 @@ test("web recruteur 3 : menu du compte, compte, organisation, équipe, abonnemen
     "aria-current",
     "page",
   );
+  // The owner reads the team's journal in the company's space (étape 3, A5 and A6).
   await rubrics.getByRole("link", { name: "Journal des consultations" }).click();
-  await expect(page).toHaveURL(/\/app\/parametres\/consultations$/);
+  await expect(page).toHaveURL(/\/app\/organisation\/journal$/);
   await expect(
-    main(page).getByRole("heading", { level: 2, name: "Journal des consultations" }),
+    main(page).getByRole("heading", { level: 1, name: "Journal des consultations" }),
   ).toBeVisible();
   await noOverflow(page);
   await expectAccessible(page);
+  await page.goto("/app/parametres");
   await rubrics.getByRole("link", { name: "Messagerie et rappels" }).click();
   await expect(page).toHaveURL(/\/app\/parametres\/messagerie$/);
   await expect(main(page).getByRole("switch", { name: /J-3/ })).toBeChecked();

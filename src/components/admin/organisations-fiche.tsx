@@ -422,6 +422,16 @@ export async function OrgCard({
               {t("orgs.revoke.text")}
             </Link>
           )}
+          {organization.type !== "partner" && (
+            <Link
+              href={actionHref("offrir")}
+              scroll={false}
+              className="inline-flex items-center gap-2 text-[13px] font-semibold hover:underline"
+            >
+              <Icon name="portefeuille" className="size-4" />
+              {t("orgs.grant.text")}
+            </Link>
+          )}
           {organization.suspendedAt ? (
             <Link
               href={actionHref("reactiver")}

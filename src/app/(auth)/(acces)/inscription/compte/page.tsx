@@ -56,6 +56,13 @@ async function AccountStep({
     if (!email) redirect(stepHref("/inscription", { forfait: plan?.code, suite: params.suite }));
     return <PhonePasswordPage email={email} plan={plan?.code} next={params.suite} />;
   }
+  // The recruiter's phone sign-up (Modèle B recruteur, M2): same password screen, no plan.
+  if (profile === "rh" && (await isPhone())) {
+    const flow = await readSignupFlow();
+    if (!flow.email || flow.profile !== "rh")
+      redirect(stepHref("/inscription", { profil: "rh", suite: params.suite }));
+    return <PhonePasswordPage email={flow.email} next={params.suite} recruiter />;
+  }
   const back =
     profile === "talent"
       ? stepHref("/inscription", { forfait: plan?.code, suite: params.suite })

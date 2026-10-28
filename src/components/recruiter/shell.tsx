@@ -14,7 +14,6 @@ import { TalentTopBar } from "@/components/talent/web/top-bar";
 import { OrbiPanel } from "@/components/talent/web/orbi-panel";
 import type { AbstractIntlMessages } from "next-intl";
 import { recruiterOrbiActions, recruiterOrbiAides } from "@/server/services/recruiter-orbi";
-import { RecruiterBottomBar } from "./bottom-bar";
 import { RecruiterHeader } from "./header";
 import { OrgMark } from "./org-mark";
 import { OrgSheet, type OrgChoice } from "./org-sheet";
@@ -22,9 +21,10 @@ import { RecruiterSideNav } from "./side-nav";
 
 /**
  * Recruiter space, one code for three widths (docs/refonte-mobile, brief recruteur lot 1;
- * docs/refonte-web, recruteur lot 1). Phone (< 768 px): the head with the active organization and
- * the big title, the page, the floating bar À traiter · Offres · Orbi · Candidats · Messages.
- * Tablet (768 to 1199 px): the 84 px rail and the top bar. Computer (≥ 1200 px): the 232 px
+ * docs/refonte-web, recruteur lot 1). A phone gets the Modèle B (`PhoneShell`,
+ * docs/modele-b-recruteur); a computer window narrowed under 768 px keeps this frame with its
+ * head (organization, bell, avatar). Tablet (768 to 1199 px): the 84 px rail and the top bar.
+ * Computer (≥ 1200 px): the 232 px
  * sidebar with the organization and its menu under the name, and the top bar. The frame is the
  * talent's (`t-cadre`, lot W0): same surfaces, icons, `Ctrl K` and light or dark mode.
  */
@@ -40,6 +40,7 @@ export function RecruiterShell({
   menu,
   orbiTexts,
   brief,
+  company = false,
   children,
 }: {
   account: { name: string; image: string | null; line: string };
@@ -56,6 +57,8 @@ export function RecruiterShell({
   orbiTexts: AbstractIntlMessages;
   /** « Votre journée en bref » at the top of the notifications under the bell, streamed. */
   brief?: ReactNode;
+  /** The member administers the organization: ENTREPRISE in the sidebar (étape 3). */
+  company?: boolean;
   children: ReactNode;
 }) {
   const t = useTranslations("hireShell");
@@ -97,8 +100,18 @@ export function RecruiterShell({
         line={account.line}
         avatar={avatar}
         unreadMessages={unreadMessages}
+        company={company}
         org={{ name: org.name, mark: <OrgMark name={org.name} logo={org.logo} /> }}
         labels={{
+          entreprise: {
+            aria: t("web.entreprise.aria"),
+            title: t("web.entreprise.title"),
+            team: t("web.entreprise.team"),
+            page: t("web.entreprise.page"),
+            billing: t("web.entreprise.billing"),
+            journal: t("web.entreprise.journal"),
+            settings: t("web.entreprise.settings"),
+          },
           aria: t("nav.aria"),
           more: t("web.more"),
           home: t("web.home"),
@@ -173,18 +186,6 @@ export function RecruiterShell({
           </main>
         </div>
       </div>
-      <RecruiterBottomBar
-        unreadMessages={unreadMessages}
-        labels={{
-          aria: t("nav.aria"),
-          messagesBadge: t("nav.messagesBadge", { count: unreadMessages }),
-          today: t("nav.today"),
-          offers: t("nav.offers"),
-          orbi: t("nav.orbi"),
-          candidates: t("nav.candidates"),
-          messages: t("nav.messages"),
-        }}
-      />
       <Suspense fallback={null}>
         <OrbiPanel
           texts={orbiTexts}

@@ -9,7 +9,7 @@ import {
   ensureProfile,
   educationSchema,
   experienceSchema,
-  findSkill,
+  findOrCreateSkill,
   headSchema,
   languageSchema,
   monthToDate,
@@ -161,15 +161,16 @@ export async function deleteEducation(formData: FormData) {
 }
 
 /**
- * « Compétences »: a skill of the reference list, its level and its proof. The proof is one of
- * the person's attestations or projects (`proofRef`), or none (« Déclarée seulement »).
+ * « Compétences »: a skill of the reference list (or typed, when the list has none), its level
+ * and its proof. The proof is one of the person's attestations or projects (`proofRef`), or none
+ * (« Déclarée seulement »).
  */
 export async function saveSkill(formData: FormData) {
   const { user, profile } = await profileOf();
   const parsed = skillSchema.safeParse(fields(formData));
   const q = String(formData.get("q") ?? "").slice(0, 80);
   if (!parsed.success) failed(formData, "invalid", q ? { q } : {});
-  const skill = await findSkill(db, parsed.data.skill);
+  const skill = await findOrCreateSkill(db, parsed.data.skill);
   if (!skill) failed(formData, "unknownSkill", q ? { q } : {});
   const existing = await db.profileSkill.findUnique({
     where: { profileId_skillId: { profileId: profile.id, skillId: skill.id } },

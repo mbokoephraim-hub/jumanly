@@ -1,8 +1,9 @@
 "use client";
 
+import "@/styles/phone-onglets.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition, type ReactNode } from "react";
 import { showToast } from "@/components/motion/toaster";
 import { hidePostTypeAction } from "@/server/actions/feed";
 import { OrbiDisc, PhoneIcon } from "../icon";
@@ -28,6 +29,7 @@ export function PhoneFil({
   lists,
   offersToday,
   targets,
+  recruiter,
 }: {
   me: FilMe;
   unread: number;
@@ -35,6 +37,12 @@ export function PhoneFil({
   /** Offers published this morning that match the person: Orbi's card in « Pour vous ». */
   offersToday: number;
   targets: SendTarget[];
+  /**
+   * The recruiter's Fil (Modèle B recruteur, M3): the tab's head comes from the page, the line to
+   * publish is the talent's, followed by « Publier au nom de… » when they manage the company's
+   * offers; no Orbi card, and the end points to Talents.
+   */
+  recruiter?: { compose: ReactNode; end: { text: string; link: string; href: string } };
 }) {
   const t = useTranslations("phoneFil");
   const [tab, setTab] = useState<FilTab>("pourvous");
@@ -59,14 +67,17 @@ export function PhoneFil({
     });
 
   return (
-    <div className="nb-page nb-fil">
-      <header className="nb-tete nb-fil-haut">
-        <h1>{t("title")}</h1>
-        <FilBell initial={unread} />
-        <Link href="/app/career/cv" className="nb-fil-moi" aria-label={t("account")}>
-          <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={40} />
-        </Link>
-      </header>
+    <div className={recruiter ? "nb-fil nb-rh-fil" : "nb-page nb-fil"}>
+      {recruiter ? null : (
+        <header className="nb-tete-onglet">
+          <h1>{t("title")}</h1>
+          <FilBell initial={unread} />
+          {/* Paramètres beside the bell, in place of the avatar (Ephraïm, 27/10/2026). */}
+          <Link href="/app/parametres" className="nb-rond" aria-label={t("settings")}>
+            <PhoneIcon name="reglages" size={23} />
+          </Link>
+        </header>
+      )}
       <div className="nb-onglets nb-fil-onglets" role="tablist" aria-label={t("tabs")}>
         {FIL_TABS.map((key) => (
           <button
@@ -94,6 +105,7 @@ export function PhoneFil({
           {t("compose.button")}
         </Link>
       </div>
+      {recruiter?.compose}
       <div id="fil-liste" role="tabpanel" aria-labelledby={`fil-${tab}`}>
         {posts.length === 0 ? <p className="nb-vide">{t(`empty.${tab}`)}</p> : null}
         {posts.map((post, index) => (
@@ -110,7 +122,7 @@ export function PhoneFil({
             ) : (
               <PostCard post={post} onSheet={(target, sheet) => setOpen({ post: target, sheet })} />
             )}
-            {tab === "pourvous" && index === 1 && offersToday > 0 ? (
+            {!recruiter && tab === "pourvous" && index === 1 && offersToday > 0 ? (
               <button
                 type="button"
                 className="nb-fil-orbi"
@@ -127,10 +139,16 @@ export function PhoneFil({
           </div>
         ))}
         {posts.length > 0 ? (
-          <p className="nb-fil-fin">
-            {t("end")} <Link href="/app/jobs">{t("endLink")}</Link>
-            {t("endAfter")}
-          </p>
+          recruiter ? (
+            <p className="nb-fil-fin">
+              {recruiter.end.text} <Link href={recruiter.end.href}>{recruiter.end.link}</Link>
+            </p>
+          ) : (
+            <p className="nb-fil-fin">
+              {t("end")} <Link href="/app/jobs">{t("endLink")}</Link>
+              {t("endAfter")}
+            </p>
+          )
         ) : null}
       </div>
       <PostSheets

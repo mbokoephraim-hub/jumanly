@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { FlowHead } from "@/components/talent/flow-head";
-import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
-import { Notice } from "@/components/talent/notice";
 import { cx } from "@/lib/cx";
 import {
   removeVerificationDocumentAction,
@@ -12,7 +9,6 @@ import {
 import { db } from "@/server/db";
 import { can } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
-import { hirePermissions } from "@/server/services/hire";
 import { listPublicPlans, orgPlanFor } from "@/server/services/plans";
 import { VERIFICATION_DAYS } from "@/server/services/verification";
 
@@ -31,20 +27,20 @@ function fileSize(bytes: number) {
 const one = (value: string | string[] | undefined) => (typeof value === "string" ? value : "");
 
 /**
- * Vérifier l'organisation (planche recruteur-3 `VERIF_O`, r3plus): the progress in three steps
+ * Vérifier l'entreprise (étape 3, A6), reached from Page entreprise: the progress in three steps
  * (the legal information, an official document, Jumanly's review), the documents sent, the form
- * when something is missing, and what changes meanwhile: the offers go through validation.
- * Requests and documents stay those of the member's organization (`org.verified_profile`).
+ * when something is missing, and what changes meanwhile. For the owner and the administrators
+ * only, on the Modèle B; requests and documents stay those of the active organization
+ * (`org.verified_profile`). The form posts to the server, so the page needs no script.
  */
 export default async function OrganizationVerificationPage({
   searchParams,
 }: PageProps<"/app/organisation/verification">) {
   const params = await searchParams;
-  const { ctx } = await requireHire("/app/organisation/verification");
+  const { ctx } = await requireHire("/app/organisation/verification", "administer");
   const t = await getTranslations("org.verification");
   const tw = await getTranslations("hireWeb3.verification");
   const tr = await getTranslations("rhVerification");
-  const admin = hirePermissions(ctx.role).administer;
   const subject = { type: "organization" as const, id: ctx.organizationId };
   const [organization, entitled, plans] = await Promise.all([
     db.organization.findUniqueOrThrow({
@@ -69,40 +65,37 @@ export default async function OrganizationVerificationPage({
   const previous = (organization.verificationRequest ?? {}) as Record<string, string>;
   const verified = status === "verified";
   const open = status === "none" || status === "rejected" || status === "info_requested";
-  const steps: { key: string; icon: TalentIconName; done: boolean; line: string; tag?: string }[] =
-    [
-      {
-        key: "legal",
-        icon: "entreprise",
-        done: verified || Boolean(previous.registration),
-        line: verified
-          ? tr("checked")
-          : previous.registration
-            ? tr("legal.done")
-            : tr("legal.todo"),
-      },
-      {
-        key: "document",
-        icon: "document",
-        done: verified || organization.documents.length > 0,
-        line: verified
-          ? tr("checked")
-          : organization.documents.length > 0
-            ? tr("document.done", { count: organization.documents.length })
-            : tr("document.todo"),
-      },
-      {
-        key: "review",
-        icon: verified ? "valider" : "horloge",
-        done: verified,
-        line: verified
-          ? tr("review.done", { date: organization.verifiedAt ?? new Date() })
-          : status === "pending"
-            ? tr("review.pending", { days: VERIFICATION_DAYS })
-            : tr("review.todo"),
-        tag: status === "none" || verified ? undefined : t(`status.${status}`),
-      },
-    ];
+  const steps: {
+    key: "legal" | "document" | "review";
+    done: boolean;
+    line: string;
+    tag?: string;
+  }[] = [
+    {
+      key: "legal",
+      done: verified || Boolean(previous.registration),
+      line: verified ? tr("checked") : previous.registration ? tr("legal.done") : tr("legal.todo"),
+    },
+    {
+      key: "document",
+      done: verified || organization.documents.length > 0,
+      line: verified
+        ? tr("checked")
+        : organization.documents.length > 0
+          ? tr("document.done", { count: organization.documents.length })
+          : tr("document.todo"),
+    },
+    {
+      key: "review",
+      done: verified,
+      line: verified
+        ? tr("review.done", { date: organization.verifiedAt ?? new Date() })
+        : status === "pending"
+          ? tr("review.pending", { days: VERIFICATION_DAYS })
+          : tr("review.todo"),
+      tag: status === "none" || verified ? undefined : t(`status.${status}`),
+    },
+  ];
   const done = steps.filter((step) => step.done).length;
   const errorKey = one(params.erreur);
   const errorText: Record<string, string> = {
@@ -112,27 +105,45 @@ export default async function OrganizationVerificationPage({
     fileCount: t("fileError.fileCount"),
     status: t("fileError.status"),
   };
+  const notice =
+    one(params.ok) === "1"
+      ? t("submitted", { days: VERIFICATION_DAYS })
+      : one(params.ok) === "documentRetire"
+        ? t("documents.removed")
+        : null;
+  const problem =
+    status === "info_requested" && organization.verificationReason
+      ? t("infoRequested", { reason: organization.verificationReason })
+      : status === "rejected" && organization.verificationReason
+        ? t("rejected.reason", { reason: organization.verificationReason })
+        : null;
 
   return (
-    <div className="t-flux t-w4 t-large t-rw3-ver">
-      <div className="t-w4-h">
-        <FlowHead back="/app/organisation" backLabel={tr("back")} title={tr("title")} />
-        <p className="t-w4-web t-w4-sub">{organization.name}</p>
-      </div>
-      {one(params.ok) === "1" && (
-        <Notice tone="ok">{t("submitted", { days: VERIFICATION_DAYS })}</Notice>
+    <div className="ae-app ae-page">
+      <Link href="/app/organisation" className="ae-lien-doux ae-st-retour">
+        {tr("back")}
+      </Link>
+      <h1 className="ae-h1">{tr("title")}</h1>
+      <p className="ae-meta ae-jr-intro">{organization.name}</p>
+      {notice && (
+        <p role="status" className="ae-encadre ae-encadre-lime ae-st-avis">
+          {notice}
+        </p>
       )}
-      {one(params.ok) === "documentRetire" && <Notice tone="ok">{t("documents.removed")}</Notice>}
-      {errorKey && <Notice tone="err">{errorText[errorKey] ?? t("invalid")}</Notice>}
+      {errorKey && (
+        <p role="alert" className="ae-encadre ae-st-avis ae-st-erreur">
+          {errorText[errorKey] ?? t("invalid")}
+        </p>
+      )}
 
-      <div className="t-verre t-r5-verp">
+      <div className="ae-carte ae-vf-tete">
         <span
-          className="t-rc-ring"
+          className="ae-vf-anneau"
           style={{ "--p": Math.round((done / 3) * 100) } as React.CSSProperties}
         >
-          <b>{tr("progress", { done, total: 3 })}</b>
+          {tr("progress", { done, total: 3 })}
         </span>
-        <span className="t-t">
+        <span>
           <b>
             {verified
               ? tr("head.verified")
@@ -142,71 +153,59 @@ export default async function OrganizationVerificationPage({
                   ? tr("head.last")
                   : tr("head.start")}
           </b>
-          <span>{t("subtitle")}</span>
+          <span className="ae-meta ae-st-meta">{t("subtitle")}</span>
         </span>
       </div>
 
-      {status === "info_requested" && organization.verificationReason && (
-        <Notice tone="err">
-          {t("infoRequested", { reason: organization.verificationReason })}
-        </Notice>
-      )}
-      {status === "rejected" && organization.verificationReason && (
-        <Notice tone="err">
-          {t("rejected.reason", { reason: organization.verificationReason })}
-        </Notice>
+      {problem && (
+        <p role="alert" className="ae-encadre ae-st-avis ae-st-erreur">
+          {problem}
+        </p>
       )}
 
-      <ol className="t-verre t-liste t-lignes t-rw3-steps" aria-label={tr("steps")}>
-        {steps.map((step) => (
-          <li key={step.key} className="t-li">
-            <span className={cx("t-cases", step.done ? "t-c3" : "t-c2")} aria-hidden>
-              <TalentIcon name={step.done ? "valider" : step.icon} size="s" />
-            </span>
-            <span className="t-t">
-              <b>{tr(`${step.key}.title` as "legal.title")}</b>
-              <span>{step.line}</span>
-            </span>
-            {step.tag && (
-              <span className={cx("t-tag", verified ? "t-vert" : "t-amb")}>{step.tag}</span>
-            )}
-          </li>
-        ))}
-      </ol>
+      <div className="ae-st-grille">
+        <div>
+          <ol className="ae-carte ae-rg-carte ae-rg-liste" aria-label={tr("steps")}>
+            {steps.map((step, index) => (
+              <li key={step.key} className="ae-vf-etape">
+                <span className={cx("ae-vf-puce", step.done && "ae-vf-puce-ok")} aria-hidden="true">
+                  {step.done ? "✓" : index + 1}
+                </span>
+                <span className="ae-grandit">
+                  <b>{tr(`${step.key}.title`)}</b>
+                  <span className="ae-meta ae-st-meta">{step.line}</span>
+                </span>
+                {step.tag && <span className="ae-tag">{step.tag}</span>}
+              </li>
+            ))}
+          </ol>
 
-      {/* Ordinateur et tablette (planche web recruteur-3 § 3) : le document et le formulaire à
-          gauche, « En attendant » à droite. */}
-      <div className="t-w4-g2e">
-        <div className="t-w4-col">
           {organization.documents.length > 0 && (
-            <section aria-labelledby="r5-ver-docs" className="t-flux t-serre">
-              <h2 id="r5-ver-docs" className="t-ck-t">
+            <section className="ae-carte ae-rg-carte ae-vf-bloc" aria-labelledby="vf-envoyes">
+              <h2 id="vf-envoyes" className="ae-h2">
                 {t("documents.title")}
               </h2>
-              <ul className="t-verre t-liste t-lignes">
+              <ul className="ae-rg-liste">
                 {organization.documents.map((document) => (
-                  <li key={document.id} className="t-li">
-                    <span className="t-cases" aria-hidden>
-                      <TalentIcon name="document" size="s" />
-                    </span>
-                    <span className="t-t">
-                      <b className="t-r5-coupe">{document.name}</b>
-                      <span>
+                  <li key={document.id} className="ae-st-ligne">
+                    <span className="ae-grandit">
+                      <b>{document.name}</b>
+                      <span className="ae-meta ae-st-meta">
                         {t("documents.meta", {
                           size: fileSize(document.size),
                           date: document.createdAt,
                         })}
                       </span>
                     </span>
-                    {admin && !verified && status !== "pending" && (
+                    {!verified && status !== "pending" && (
                       <form action={removeVerificationDocumentAction}>
                         <input type="hidden" name="id" value={document.id} />
                         <button
                           type="submit"
-                          className="t-bi t-press"
+                          className="ae-btn2 ae-btn-s"
                           aria-label={t("documents.remove", { name: document.name })}
                         >
-                          <TalentIcon name="supprimer" size="s" />
+                          {t("documents.removeShort")}
                         </button>
                       </form>
                     )}
@@ -217,91 +216,85 @@ export default async function OrganizationVerificationPage({
           )}
 
           {!entitled ? (
-            <div className="t-verre t-carte">
-              <b>{t("locked", { plan: orgPlanFor(plans, "org.verified_profile") })}</b>
-              {admin && (
-                <Link href="/app/abonnement/formules" className="t-bt t-p t-s t-press">
-                  {tr("plans")}
-                </Link>
-              )}
-            </div>
+            <section className="ae-carte ae-rg-carte ae-vf-bloc">
+              <p>{t("locked", { plan: orgPlanFor(plans, "org.verified_profile") })}</p>
+              <Link href="/app/organisation/facturation" className="ae-btn2 ae-btn-m ae-rg-lien">
+                {tr("plans")}
+              </Link>
+            </section>
           ) : (
-            admin &&
             open && (
-              <section aria-labelledby="r5-ver-form" className="t-flux t-serre">
-                <h2 id="r5-ver-form" className="t-ck-t">
+              <section className="ae-carte ae-rg-carte ae-vf-bloc" aria-labelledby="vf-form">
+                <h2 id="vf-form" className="ae-h2">
                   {t("docs")}
                 </h2>
-                <form action={requestVerificationAction} className="t-flux">
-                  <div className="t-champ">
-                    <label htmlFor="r5-ver-registration">{t("form.registration")}</label>
-                    <span className="t-verre t-saisie">
-                      <input
-                        id="r5-ver-registration"
-                        name="registration"
-                        required
-                        minLength={3}
-                        maxLength={200}
-                        defaultValue={previous.registration ?? ""}
-                      />
-                    </span>
-                  </div>
-                  <div className="t-champ">
-                    <label htmlFor="r5-ver-tax">{t("form.taxId")}</label>
-                    <span className="t-verre t-saisie">
-                      <input
-                        id="r5-ver-tax"
-                        name="taxId"
-                        maxLength={120}
-                        defaultValue={previous.taxId ?? ""}
-                      />
-                    </span>
-                  </div>
-                  <div className="t-champ">
-                    <label htmlFor="r5-ver-domain">{t("form.domainEmail")}</label>
-                    <span className="t-verre t-saisie">
-                      <input
-                        id="r5-ver-domain"
-                        name="domainEmail"
-                        type="email"
-                        maxLength={200}
-                        defaultValue={previous.domainEmail ?? ""}
-                      />
-                    </span>
-                  </div>
-                  <div className="t-champ">
-                    <label htmlFor="r5-ver-mandate">{t("form.mandate")}</label>
-                    <textarea
-                      id="r5-ver-mandate"
-                      name="mandate"
-                      required
-                      minLength={3}
-                      maxLength={500}
-                      rows={3}
-                      defaultValue={previous.mandate ?? ""}
-                      className="t-verre t-zone"
-                      aria-describedby="r5-ver-mandate-h"
-                    />
-                    <p id="r5-ver-mandate-h" className="t-aide">
-                      {t("form.mandateHint")}
-                    </p>
-                  </div>
-                  <div className="t-champ">
-                    <label htmlFor="r5-ver-documents">{t("form.documents")}</label>
-                    <input
-                      id="r5-ver-documents"
-                      name="documents"
-                      type="file"
-                      multiple
-                      accept="application/pdf,image/png,image/jpeg,image/webp"
-                      className="t-r5-fichier"
-                      aria-describedby="r5-ver-documents-h"
-                    />
-                    <p id="r5-ver-documents-h" className="t-aide">
-                      {t("form.documentsHint")}
-                    </p>
-                  </div>
-                  <button type="submit" className="t-bt t-p t-m t-pl t-press">
+                <form action={requestVerificationAction}>
+                  <label htmlFor="vf-registration" className="ae-lab">
+                    {t("form.registration")}
+                  </label>
+                  <input
+                    id="vf-registration"
+                    name="registration"
+                    required
+                    minLength={3}
+                    maxLength={200}
+                    defaultValue={previous.registration ?? ""}
+                    className="ae-in"
+                  />
+                  <label htmlFor="vf-tax" className="ae-lab">
+                    {t("form.taxId")}
+                  </label>
+                  <input
+                    id="vf-tax"
+                    name="taxId"
+                    maxLength={120}
+                    defaultValue={previous.taxId ?? ""}
+                    className="ae-in"
+                  />
+                  <label htmlFor="vf-domain" className="ae-lab">
+                    {t("form.domainEmail")}
+                  </label>
+                  <input
+                    id="vf-domain"
+                    name="domainEmail"
+                    type="email"
+                    maxLength={200}
+                    defaultValue={previous.domainEmail ?? ""}
+                    className="ae-in"
+                  />
+                  <label htmlFor="vf-mandate" className="ae-lab">
+                    {t("form.mandate")}
+                  </label>
+                  <textarea
+                    id="vf-mandate"
+                    name="mandate"
+                    required
+                    minLength={3}
+                    maxLength={500}
+                    rows={3}
+                    defaultValue={previous.mandate ?? ""}
+                    className="ae-ta"
+                    aria-describedby="vf-mandate-h"
+                  />
+                  <p id="vf-mandate-h" className="ae-meta ae-note">
+                    {t("form.mandateHint")}
+                  </p>
+                  <label htmlFor="vf-documents" className="ae-lab">
+                    {t("form.documents")}
+                  </label>
+                  <input
+                    id="vf-documents"
+                    name="documents"
+                    type="file"
+                    multiple
+                    accept="application/pdf,image/png,image/jpeg,image/webp"
+                    className="ae-vf-fichier"
+                    aria-describedby="vf-documents-h"
+                  />
+                  <p id="vf-documents-h" className="ae-meta ae-note">
+                    {t("form.documentsHint")}
+                  </p>
+                  <button type="submit" className="ae-btn ae-btn-m ae-st-creer">
                     {status === "info_requested"
                       ? t("answer")
                       : status === "rejected"
@@ -313,19 +306,13 @@ export default async function OrganizationVerificationPage({
             )
           )}
         </div>
-        <div className="t-w4-col">
-          {!verified && <h2 className="t-ck-t t-w4-web">{tw("meanwhile")}</h2>}
-          {!verified && (
-            <p className="t-gar">
-              <TalentIcon name="offre" size="s" />
-              <span>{tr("meanwhile")}</span>
-            </p>
-          )}
-          <p className="t-gar">
-            <TalentIcon name="message" size="s" />
-            <span>{tr("question")}</span>
-          </p>
-        </div>
+        <aside className="ae-carte ae-rg-carte" aria-labelledby="vf-attente">
+          <h2 id="vf-attente" className="ae-h2">
+            {verified ? tr("head.verified") : tw("meanwhile")}
+          </h2>
+          {!verified && <p className="ae-meta ae-vf-texte">{tr("meanwhile")}</p>}
+          <p className="ae-meta ae-vf-texte">{tr("question")}</p>
+        </aside>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import { costMicroUsd, hasPrice } from "@/server/ai/prices";
 import { emptyCv, type CvContent } from "@/server/services/cv";
-import { acceptable, cvScore, templateSuggestions } from "@/server/services/cv-coach";
+import { acceptable, cvChecks, cvScore, templateSuggestions } from "@/server/services/cv-coach";
 import { stepState, type PlanStep } from "@/server/services/progress-plan";
 
 const cv: CvContent = {
@@ -41,6 +41,31 @@ describe("CV score (rules)", () => {
   it("counts the target skills present in the CV", () => {
     expect(cvScore(cv, ["SQL"]).keywords).toBe(100);
     expect(cvScore(cv, ["Power BI"]).keywords).toBe(0);
+  });
+});
+
+describe("CV checks of the preview (fixed rules)", () => {
+  const checks = (content: CvContent, targets: string[], ats: "excellent" | "good" = "excellent") =>
+    Object.fromEntries(cvChecks(content, targets, { ats }).map((check) => [check.key, check]));
+
+  it("says what is there and what is missing, without guessing", () => {
+    const result = checks(cv, ["SQL", "Excel", "Power BI"]);
+    expect(result.headline!.ok).toBe(true);
+    expect(result.summary!.ok).toBe(false);
+    expect(result.figure!.ok).toBe(true);
+    expect(result.dates!.ok).toBe(true);
+    expect(result.skills!.ok).toBe(false);
+    expect(result.languages!.ok).toBe(false);
+    expect(result.readable!.ok).toBe(true);
+    // Two of three target skills on the CV: enough, and the missing one is named.
+    expect(result.keywords).toEqual({ key: "keywords", ok: true, missing: ["Power BI"] });
+  });
+
+  it("flags a template harder to read for recruiting software, and too few keywords", () => {
+    const result = checks(cv, ["Python", "Power BI", "SQL"], "good");
+    expect(result.readable!.ok).toBe(false);
+    expect(result.keywords!.ok).toBe(false);
+    expect(result.keywords!.missing).toEqual(["Python", "Power BI"]);
   });
 });
 

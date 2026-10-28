@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { exploreSearchAction, type ExploreFound } from "@/server/actions/explore";
 import { PhoneIcon } from "../icon";
 import { CompanyRow, OfferRow, PersonRow } from "./cards";
@@ -45,6 +45,7 @@ export function ExplorerSearch({
   cities,
   popular,
   city,
+  aside,
 }: {
   open: boolean;
   onOpen: () => void;
@@ -52,6 +53,8 @@ export function ExplorerSearch({
   cities: { city: string; offers: number }[];
   popular: string[];
   city: string | null;
+  /** What stands next to the field while no search is open (« Filtres »), « Annuler » after. */
+  aside?: ReactNode;
 }) {
   const t = useTranslations("phoneExplorer");
   const [query, setQuery] = useState("");
@@ -173,7 +176,7 @@ export function ExplorerSearch({
     <>
       <div className="nb-ex-champ">
         <label className="nb-ex-recherche">
-          <PhoneIcon name="recherche" size={20} />
+          <PhoneIcon name="recherche" size={18} stroke={2} />
           <input
             ref={input}
             type="search"
@@ -209,7 +212,9 @@ export function ExplorerSearch({
           <button type="button" className="nb-ex-annuler" data-retour="" onClick={close}>
             {t("search.cancel")}
           </button>
-        ) : null}
+        ) : (
+          aside
+        )}
       </div>
 
       {open ? (

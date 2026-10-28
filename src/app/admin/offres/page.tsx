@@ -25,7 +25,8 @@ import { moderateJob } from "@/server/actions/admin";
 import { requestJobChangesAction } from "@/server/actions/admin-moderation";
 import { AuditHistory } from "@/components/admin/audit";
 import { QueueNav } from "@/components/admin/queue-nav";
-import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
+import { canWriteArea } from "@/server/auth/roles";
+import { requireAdminArea } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { moderationFlags } from "@/server/services/hire";
 import {
@@ -129,13 +130,13 @@ function excerpt(job: {
 /** Job moderation (mockup 07-07, partie 10 § 10.7): flagged at publication, reported, or live. */
 export default async function AdminJobs({ searchParams }: PageProps<"/admin/offres">) {
   const params = await searchParams;
-  const admin = await requireAdmin();
+  const admin = await requireAdminArea("jobs");
   // Content editors see the admin shell, but only the courses.
   if (!admin) notFound();
   const t = await getTranslations("admin.jobs");
   const tContract = await getTranslations("jobs.search.contract");
   const tSensitive = await getTranslations("admin.sensitive");
-  const writable = canWriteAdmin(admin);
+  const writable = canWriteArea(admin.platformRole, "jobs");
   const one = (value: string | string[] | undefined) =>
     typeof value === "string" && value !== "" ? value : undefined;
   const tab: Tab = tabs.find((item) => item === params.onglet) ?? "a-verifier";

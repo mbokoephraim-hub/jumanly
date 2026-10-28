@@ -1,7 +1,8 @@
 "use server";
 
 import { refresh, revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
+import { ABOUT_TEXT_MAX, ABOUT_TITLE_MAX } from "@/lib/profile-about";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { Prisma } from "@/generated/prisma/client";
@@ -10,6 +11,7 @@ import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { connectViewer } from "@/server/hire-context";
 import { reportError } from "@/server/observability";
+import { cleanSocialLinks, handleInput, socialLinksInput } from "@/lib/social-links";
 import { allowAttempt } from "@/server/rate-limit";
 import { withdrawApplication } from "@/server/services/applications";
 import { ConnectError, sendMessage } from "@/server/services/connect";
@@ -17,7 +19,6 @@ import { DEFAULT_TEMPLATE_ID } from "@/features/cv/templates/registry";
 import { rewriteCareerText, type RewriteKind } from "@/server/services/career-phone";
 import { applyTemplate, cvFromProfile, MAX_CVS } from "@/server/services/cv";
 import { improveCvSummary } from "@/server/services/cv-coach";
-import { applyImport, parseImport } from "@/server/services/cv-import";
 import {
   educationSchema,
   ensureProfile,
@@ -25,11 +26,14 @@ import {
   getFullProfile,
   monthToDate,
   parseProfileLanguages,
+  CUSTOM_SKILL_CATEGORY,
+  findOrCreateSkill,
+  languageLevels,
   PROFILE_SKILLS_MAX,
   PROFILE_SUMMARY_MAX,
   refreshCompleteness,
 } from "@/server/services/profile";
-import { NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
+import { mutedAfter, NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
 import {
   deleteProject,
   parseProject,
@@ -52,21 +56,31 @@ import { fileStorage } from "@/server/storage";
  * validates, checks the session and touches only the person's own profile.
  */
 
-const skillIds = z.array(z.string().min(1).max(40)).min(1).max(10);
+const skillIds = z.array(z.string().min(1).max(40)).max(10);
+const typedSkills = z.array(z.string().trim().min(2).max(80)).max(10);
 
 /** « Ajouter » on Orbi's card or in « Ajouter des compétences »: declared skills, level 2. */
-export async function addSuggestedSkillsAction(ids: string[]) {
+export async function addSuggestedSkillsAction(ids: string[], typed: string[] = []) {
   const parsed = skillIds.safeParse(ids);
-  if (!parsed.success) return { ok: false as const, error: "invalid" as const };
+  const names = typedSkills.safeParse(typed);
+  if (!parsed.success || !names.success || parsed.data.length + names.data.length === 0)
+    return { ok: false as const, error: "invalid" as const };
   const user = await requireUser("/app/career/cv");
   const profile = await ensureProfile(db, user.id);
-  const skills = await db.skill.findMany({
+  const listed = await db.skill.findMany({
     where: { id: { in: parsed.data } },
     select: { id: true },
   });
   const count = await db.profileSkill.count({ where: { profileId: profile.id } });
-  if (count + skills.length > PROFILE_SKILLS_MAX)
+  if (count + listed.length + names.data.length > PROFILE_SKILLS_MAX)
     return { ok: false as const, error: "max" as const };
+  // A skill typed outside the list: the same one if it exists, otherwise a new one.
+  const created = [];
+  for (const name of names.data) {
+    const skill = await findOrCreateSkill(db, name);
+    if (skill) created.push({ id: skill.id });
+  }
+  const skills = [...new Map([...listed, ...created].map((skill) => [skill.id, skill])).values()];
   await db.profileSkill.createMany({
     data: skills.map((skill) => ({ profileId: profile.id, skillId: skill.id, level: 2 })),
     skipDuplicates: true,
@@ -106,7 +120,32 @@ const headSchema = z.object({
   city: z.string().trim().min(1).max(120),
   summary: z.string().trim().max(PROFILE_SUMMARY_MAX),
   availability: z.enum(["open", "listening", "not_looking"]),
+  /** docs/profil-personne: the handle (empty = drawn from the name), the networks, the e-mail. */
+  handle: z.union([z.literal(""), handleInput]).optional(),
+  socials: socialLinksInput.optional(),
+  showEmail: z.boolean().optional(),
 });
+
+const availabilitySchema = z.enum(["open", "listening", "not_looking"]);
+
+/**
+ * The availability chip of Carrière (docs/carriere-v3, capture 01): one tap moves it to the next
+ * one (Disponible tout de suite · À l’écoute des offres · Pas disponible).
+ */
+export async function setCareerAvailabilityAction(raw: string): Promise<Result> {
+  const parsed = availabilitySchema.safeParse(raw);
+  if (!parsed.success) return fail("invalid");
+  const { profile } = await mine();
+  await db.talentProfile.update({
+    where: { id: profile.id },
+    data: {
+      availability: parsed.data,
+      availableFrom: parsed.data === "open" ? null : profile.availableFrom,
+    },
+  });
+  refresh();
+  return { ok: true };
+}
 
 /**
  * « Modifier le profil » (planche Carrière-modifier): the displayed name (first word = first name),
@@ -114,41 +153,70 @@ const headSchema = z.object({
  */
 export async function saveCareerHeadAction(raw: z.input<typeof headSchema>): Promise<Result> {
   const parsed = headSchema.safeParse(raw);
-  if (!parsed.success) return fail(parsed.error.issues[0]?.path[0] === "name" ? "name" : "invalid");
+  if (!parsed.success) {
+    const field = parsed.error.issues[0]?.path[0];
+    return fail(
+      field === "name"
+        ? "name"
+        : field === "handle"
+          ? "handle"
+          : field === "socials"
+            ? "socials"
+            : "invalid",
+    );
+  }
   const { user, profile } = await mine();
   const input = parsed.data;
   const [firstName, ...rest] = input.name.split(/\s+/);
-  await db.$transaction([
-    db.user.update({
-      where: { id: user.id },
-      data: {
-        name: input.name,
-        firstName,
-        lastName: rest.join(" ") || null,
-        city: input.city,
-      },
-    }),
-    db.talentProfile.update({
-      where: { id: profile.id },
-      data: {
-        headline: input.headline || null,
-        summary: input.summary || null,
-        availability: input.availability,
-        availableFrom: input.availability === "open" ? null : profile.availableFrom,
-      },
-    }),
-  ]);
+  const done = await db
+    .$transaction([
+      db.user.update({
+        where: { id: user.id },
+        data: {
+          name: input.name,
+          firstName,
+          lastName: rest.join(" ") || null,
+          city: input.city,
+        },
+      }),
+      db.talentProfile.update({
+        where: { id: profile.id },
+        data: {
+          headline: input.headline || null,
+          summary: input.summary || null,
+          availability: input.availability,
+          availableFrom: input.availability === "open" ? null : profile.availableFrom,
+          ...(input.handle === undefined ? {} : { handle: input.handle || null }),
+          ...(input.socials === undefined
+            ? {}
+            : { socialLinks: cleanSocialLinks(input.socials) as Prisma.InputJsonValue }),
+          ...(input.showEmail === undefined ? {} : { showEmail: input.showEmail }),
+        },
+      }),
+    ])
+    .catch((error: unknown) => {
+      // Somebody else already has this handle.
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002")
+        return "taken" as const;
+      throw error;
+    });
+  if (done === "taken") return fail("handleTaken");
   return saved(profile.id);
 }
 
-/** « À propos » (planche Carrière-apropos): the text alone. */
-export async function saveCareerAboutAction(summary: string): Promise<Result> {
-  const parsed = z.string().trim().max(PROFILE_SUMMARY_MAX).safeParse(summary);
-  if (!parsed.success) return fail("invalid");
+/** « À propos » (planche Carrière-apropos): its title and its text, before the skills. */
+export async function saveCareerAboutAction(raw: { title: string; text: string }): Promise<Result> {
+  const parsed = z
+    .object({
+      title: z.string().trim().max(ABOUT_TITLE_MAX),
+      text: z.string().trim().max(ABOUT_TEXT_MAX),
+    })
+    .safeParse(raw);
+  if (!parsed.success) return fail("aboutTooLong");
   const { profile } = await mine();
   await db.talentProfile.update({
     where: { id: profile.id },
-    data: { summary: parsed.data || null },
+    data: { aboutTitle: parsed.data.title || null, summary: parsed.data.text || null },
   });
   return saved(profile.id);
 }
@@ -254,14 +322,15 @@ export async function deleteCareerEducationAction(id: string): Promise<Result> {
 }
 
 const languagesInput = z.object({
-  languages: z.array(z.string().regex(/^[a-z]{2,3}$/)).max(12),
+  languages: z
+    .array(z.object({ code: z.string().regex(/^[a-z]{2,3}$/), level: z.enum(languageLevels) }))
+    .max(12),
   places: z.array(z.string().trim().min(1).max(80)).max(10),
 });
 
 /**
- * « Langues et lieux » (planche Carrière-langues): the languages ticked (a language already
- * there keeps its level, a new one is « professional ») and the places where the person wants
- * to work.
+ * « Langues et lieux » (planche Carrière-langues): the languages ticked, each with the level
+ * the person chose, and the places where the person wants to work.
  */
 export async function saveCareerLanguagesAction(
   raw: z.input<typeof languagesInput>,
@@ -270,9 +339,13 @@ export async function saveCareerLanguagesAction(
   if (!parsed.success) return fail("invalid");
   const { profile } = await mine();
   const before = parseProfileLanguages(profile.languages);
-  const languages = [...new Set(parsed.data.languages)].map(
-    (code) => before.find((item) => item.code === code) ?? { code, level: "professional" as const },
-  );
+  const languages = [
+    ...new Map(parsed.data.languages.map((item) => [item.code, item.level])).entries(),
+  ].map(([code, level]) => {
+    const known = before.find((item) => item.code === code);
+    // The CEFR level stays while the level is unchanged.
+    return known?.level === level ? known : { code, level };
+  });
   await db.talentProfile.update({
     where: { id: profile.id },
     data: { languages, desiredLocations: [...new Set(parsed.data.places)] },
@@ -356,7 +429,11 @@ export async function searchCareerSkillsAction(query: string) {
   if (!parsed.success) return [];
   await requireUser("/app/career/cv");
   return db.skill.findMany({
-    where: { name: { contains: parsed.data, mode: "insensitive" } },
+    // Skills typed by others stay out of the list (reused only when typed again).
+    where: {
+      name: { contains: parsed.data, mode: "insensitive" },
+      category: { not: CUSTOM_SKILL_CATEGORY },
+    },
     select: { id: true, name: true },
     orderBy: { name: "asc" },
     take: 8,
@@ -421,7 +498,7 @@ export async function saveCareerNotificationsAction(
   await db.user.update({
     where: { id: user.id },
     data: {
-      notificationsMuted: NOTIFICATION_CATEGORIES.filter((category) => !kept.has(category)),
+      notificationsMuted: mutedAfter(user.notificationsMuted, NOTIFICATION_CATEGORIES, kept),
       notificationEmails: parsed.data.emails,
     },
   });
@@ -454,32 +531,9 @@ export async function newCareerCvAction(formData: FormData) {
   });
   if (template) await applyTemplate(db, user.id, cv.id, template);
   refresh();
-  if (orbi && (await improveCvSummary(db, user.id, cv.id)) === "done")
-    redirect(`/app/career/cv/${cv.id}?vue=ameliorer`);
-  redirect(`/app/career/cv/${cv.id}`);
-}
-
-/**
- * « Ajouter à mon profil et créer le CV » (planche Carrière-cv-import-ok): only the groups left
- * ticked enter the profile, then a CV is made from it.
- */
-export async function applyCareerImportAction(formData: FormData) {
-  const { user } = await mine();
-  const id = String(formData.get("import") ?? "").slice(0, 60);
-  const chosen = new Set(formData.getAll("groupe").map(String));
-  const pending = await db.aiSuggestion.findFirst({
-    where: { id, userId: user.id, feature: "cv_parse", status: "pending" },
-  });
-  const payload = pending ? parseImport(pending.payload) : null;
-  if (!payload) redirect("/app/profil/import");
-  const all = (group: "experiences" | "educations" | "skills") =>
-    chosen.has(group) ? payload[group].map((_, index) => index) : [];
-  await applyImport(db, user.id, id, {
-    experiences: all("experiences"),
-    educations: all("educations"),
-    skills: all("skills"),
-  });
-  await newCareerCvAction(new FormData());
+  // Orbi's summary waits on Contenu, to keep or refuse (docs/carriere-v3, capture 09).
+  if (orbi) await improveCvSummary(db, user.id, cv.id);
+  redirect(`/app/career/cv/${cv.id}?etape=contenu`, RedirectType.replace);
 }
 
 /**

@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { showToast } from "@/components/motion/toaster";
 import {
   deletePostAction,
+  editPostAction,
   hidePostTypeAction,
   reportPostAction,
   repostAction,
@@ -18,6 +19,7 @@ import { PhoneSheet } from "../sheet";
 import { FilAvatar } from "./avatar";
 import type { PostView } from "./data";
 import type { PostSheet } from "./post";
+import { PostTextFields } from "./post-fields";
 
 export type SendTarget = {
   conversationId: string;
@@ -70,8 +72,23 @@ export function PostSheets({
     alert?: boolean;
     run: () => void;
   };
+  const share: Row = {
+    key: "share",
+    icon: "partager",
+    title: t("menu.share"),
+    sub: t("menu.shareSub"),
+    run: () => onSheet("reshare"),
+  };
   const menu: Row[] = post.mine
     ? [
+        {
+          key: "edit",
+          icon: "modifier",
+          title: t("menu.edit"),
+          sub: t("menu.editSub"),
+          run: () => onSheet("edit"),
+        },
+        share,
         {
           key: "link",
           icon: "lien",
@@ -106,6 +123,7 @@ export function PostSheets({
             router.push(post.author.href);
           },
         },
+        share,
         {
           key: "save",
           icon: "signet",
@@ -182,15 +200,17 @@ export function PostSheets({
     });
 
   const label =
-    sheet === "report"
-      ? t("report.title")
-      : sheet === "send"
-        ? t("send.title")
-        : sheet === "reshare"
-          ? t("repost")
-          : post.mine
-            ? t("menu.mine")
-            : t("menu.title", { name: post.author.name });
+    sheet === "edit"
+      ? t("edit.title")
+      : sheet === "report"
+        ? t("report.title")
+        : sheet === "send"
+          ? t("send.title")
+          : sheet === "reshare"
+            ? t("shareSheet")
+            : post.mine
+              ? t("menu.mine")
+              : t("menu.title", { name: post.author.name });
 
   return (
     <PhoneSheet open={open} onClose={onClose} label={label} closeLabel={tc("close")}>
@@ -215,6 +235,7 @@ export function PostSheets({
           ))}
         </>
       ) : null}
+      {sheet === "edit" ? <EditPost key={post.id} post={post} onDone={onClose} /> : null}
       {sheet === "report" ? (
         <>
           <div className="nb-feuille-titre">
@@ -322,11 +343,61 @@ export function PostSheets({
           </Link>
         </>
       ) : null}
-      {sheet !== "send" ? (
+      {sheet !== "send" && sheet !== "edit" ? (
         <button type="button" className="nb-annuler" onClick={onClose}>
           {tc("cancel")}
         </button>
       ) : null}
     </PhoneSheet>
+  );
+}
+
+/** « Modifier la publication »: its title and its text, with the same counters as Publier. */
+function EditPost({ post, onDone }: { post: PostView; onDone: () => void }) {
+  const t = useTranslations("phoneFil");
+  const tc = useTranslations("phone");
+  const [title, setTitle] = useState(post.title ?? "");
+  const [body, setBody] = useState(post.body);
+  const [pending, start] = useTransition();
+  const save = () => {
+    if (!title.trim()) {
+      showToast({ message: t("edit.empty"), tone: "error" });
+      return;
+    }
+    start(async () => {
+      const result = await editPostAction({ id: post.id, title, body });
+      if (!result.ok) {
+        showToast({ message: t("toast.error"), tone: "error" });
+        return;
+      }
+      onDone();
+      showToast({ message: t("toast.edited") });
+    });
+  };
+  return (
+    <form
+      className="nb-fil-modif"
+      onSubmit={(event) => {
+        event.preventDefault();
+        save();
+      }}
+    >
+      <h2 className="nb-fil-modif-t">{t("edit.title")}</h2>
+      <PostTextFields
+        id={`fil-modif-${post.id}`}
+        title={title}
+        body={body}
+        onTitle={setTitle}
+        onBody={setBody}
+      />
+      <div className="nb-fil-modif-boutons">
+        <button type="button" className="nb-annuler" onClick={onDone}>
+          {tc("cancel")}
+        </button>
+        <button type="submit" className="nb-fil-modif-ok" disabled={pending}>
+          {t("edit.save")}
+        </button>
+      </div>
+    </form>
   );
 }

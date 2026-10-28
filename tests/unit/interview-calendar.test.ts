@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { hidesRecruiterTabBar } from "@/config/navigation";
 import {
   addDays,
   blocksFor,
@@ -145,13 +144,5 @@ describe("recherche de talents", () => {
       "a",
       "b",
     ]);
-  });
-
-  it("garde la barre d'onglets sur l'agenda et les viviers, pas sur un entretien ou un profil", () => {
-    expect(hidesRecruiterTabBar("/app/hire/entretiens")).toBe(false);
-    expect(hidesRecruiterTabBar("/app/hire/viviers")).toBe(false);
-    expect(hidesRecruiterTabBar("/app/hire/entretiens/abc")).toBe(true);
-    expect(hidesRecruiterTabBar("/app/hire/talents/abc")).toBe(true);
-    expect(hidesRecruiterTabBar("/app/hire/candidats/abc/entretien")).toBe(true);
   });
 });

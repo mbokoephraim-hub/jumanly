@@ -32,6 +32,7 @@ import {
 import {
   dateToMonth,
   ensureProfile,
+  CUSTOM_SKILL_CATEGORY,
   normalize,
   PROFILE_SUMMARY_MAX,
 } from "@/server/services/profile";
@@ -511,6 +512,8 @@ export async function SkillScreen({ mode, params }: { mode: ScreenMode; params: 
       ? db.skill.findMany({
           where: {
             OR: [{ name: { contains: q, mode: "insensitive" } }, { aliases: { has: q } }],
+            // Skills typed by others stay out of the list (reused only when typed again).
+            category: { not: CUSTOM_SKILL_CATEGORY },
           },
           orderBy: { name: "asc" },
           take: 8,
@@ -525,7 +528,9 @@ export async function SkillScreen({ mode, params }: { mode: ScreenMode; params: 
   const matches = [...found].sort(
     (a, b) => Number(normalize(b.name) === wanted) - Number(normalize(a.name) === wanted),
   );
-  const chosen = current?.skill.name ?? matches[0]?.name;
+  // Not in the list: the typed name can be added as it is.
+  const typed = q.length >= 2 && !matches.some((skill) => normalize(skill.name) === wanted);
+  const chosen = current?.skill.name ?? matches[0]?.name ?? (typed ? q : undefined);
   const level = Math.min(current?.level ?? 2, 4);
   const proof = current?.proofRef
     ? `${current.proof}:${current.proofRef}`
@@ -601,12 +606,11 @@ export async function SkillScreen({ mode, params }: { mode: ScreenMode; params: 
         {q && <input type="hidden" name="q" value={q} />}
         {current ? (
           <input type="hidden" name="skill" value={current.skill.name} />
-        ) : q && matches.length === 0 ? (
-          <p className="t-vide-t">{t("profil.skills.none", { query: q })}</p>
         ) : (
-          matches.length > 0 && (
+          (matches.length > 0 || typed) && (
             <fieldset className="t-fs">
               <legend className="sr-only">{t("profil.skills.pick")}</legend>
+              {matches.length === 0 && <p className="t-vide-t">{t("profil.skills.notListed")}</p>}
               <div className="t-puces">
                 {matches.map((skill, index) => (
                   <label key={skill.id} className="t-puce t-press">
@@ -621,6 +625,19 @@ export async function SkillScreen({ mode, params }: { mode: ScreenMode; params: 
                     {skill.name}
                   </label>
                 ))}
+                {typed && (
+                  <label className="t-puce t-press">
+                    <input
+                      type="radio"
+                      name="skill"
+                      value={q}
+                      defaultChecked={matches.length === 0}
+                      required
+                    />
+                    <TalentIcon name="valider" size="xs" />
+                    {t("profil.skills.custom", { skill: q })}
+                  </label>
+                )}
               </div>
             </fieldset>
           )

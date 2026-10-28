@@ -19,6 +19,7 @@ import { downgradeSubscription } from "@/server/actions/billing";
 import { outcomeConsentAction } from "@/server/actions/partners";
 import { switchSpace } from "@/server/actions/hire";
 import { requireUser } from "@/server/auth/session";
+import { sendCompanyAdminToBilling } from "@/server/company-billing";
 import { db } from "@/server/db";
 import { resolvePlan, usage, type Subject } from "@/server/entitlements";
 import { effectiveStatus, GRACE_DAYS } from "@/server/entitlements/periods";
@@ -104,6 +105,9 @@ export default async function SubscriptionPage({ searchParams }: PageProps<"/app
   const user = await requireUser("/app/abonnement");
   // The recruiter space shows its organization's plan (recruteur lot 5); a partner keeps its page.
   const space = await getActiveSpace(user.id);
+  // A company's owner and administrators pay in « Formule et facturation » (étape 3, A6); a
+  // return from the payment provider (`?paiement=`) still lands here.
+  if (Object.keys(params).length === 0) await sendCompanyAdminToBilling(space);
   if (space)
     return (
       <RecruiterBilling

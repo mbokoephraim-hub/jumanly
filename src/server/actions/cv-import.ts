@@ -7,15 +7,24 @@ import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { CvFileError, readCvFile } from "@/server/services/cv-file";
 import { applyImport, CV_TEXT_MAX, importCvText, parseImport } from "@/server/services/cv-import";
+import { CV_FILE_TYPES, holdImportedFile } from "@/server/services/cv-original";
+import { fileStorage } from "@/server/storage";
 
 const PATH = "/app/profil/import";
 
 /**
- * Where the import answers: its page, or the « Importer un CV » window of « CV et documents » on a
- * computer (`retour=cv`, planche studio-cv § 1). Only these two places: never an address sent.
+ * Where the import answers: its page, the « Importer un CV » window of « CV et documents » on a
+ * computer (`retour=cv`, planche studio-cv § 1), or « Créer un CV » on the phone
+ * (`retour=nouveau`). Only these places: never an address sent.
  */
 function where(formData: FormData | undefined, params = "") {
-  const fromList = formData?.get("retour") === "cv";
+  const from = formData?.get("retour");
+  // « Créer un CV » on the phone (docs/carriere-v3, captures 13 to 15).
+  if (from === "nouveau") {
+    const step = params === "etape=verification" ? "etape=trouve" : `etape=import&${params}`;
+    return `/app/career/cv/nouveau?${params ? step : "etape=import"}`;
+  }
+  const fromList = from === "cv";
   const base = fromList ? "/app/career/cv?importer=1" : PATH;
   if (!params) return base;
   return `${base}${fromList ? "&" : "?"}${params}`;
@@ -33,8 +42,8 @@ export async function readCvAction(formData: FormData) {
 
 /**
  * Step 1 from a file (planche talent-4 § 6, « Choisir un fichier », « Depuis LinkedIn »): a PDF or
- * a Word document is read on the server and never kept; its text goes through the same reading
- * as a pasted CV.
+ * a Word document is read on the server; its text goes through the same reading as a pasted CV.
+ * From « Nouveau CV » the file waits, to be kept in « Mes CV » if the talent chooses so.
  */
 export async function readCvFileAction(formData: FormData) {
   const user = await requireUser(PATH);
@@ -47,12 +56,19 @@ export async function readCvFileAction(formData: FormData) {
     if (error instanceof CvFileError) redirect(where(formData, `erreur=${error.code}`));
     throw error;
   }
-  await importCvText(db, user.id, read.text, {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  const pending = await importCvText(db, user.id, read.text, {
     name: file.name,
     kind: read.kind,
     pages: read.pages,
     size: file.size,
   });
+  // « Nouveau CV » on the phone offers to keep the file itself (Ephraïm, 27/10): it waits there.
+  if (formData.get("retour") === "nouveau")
+    await holdImportedFile(fileStorage(db), user.id, pending.id, {
+      contentType: CV_FILE_TYPES[read.kind],
+      bytes,
+    });
   refresh();
   redirect(where(formData, "etape=verification"));
 }

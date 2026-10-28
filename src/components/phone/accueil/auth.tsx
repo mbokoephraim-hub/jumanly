@@ -6,14 +6,13 @@ import { useActionState, useEffect, useRef, useState, type ReactNode } from "rea
 import { useTranslations } from "next-intl";
 import { useCountdown, useErrorText } from "@/components/access/forms";
 import { formatWait } from "@/components/access/fields";
-import { CODE_DIGITS, CODE_MINUTES, PASSWORD_MIN } from "@/lib/password";
+import { CODE_DIGITS, PASSWORD_MIN, VERIFY_LINK_HOURS } from "@/lib/password";
 import {
   requestPasswordCode,
-  resendCode,
+  resendLink,
   resendPasswordCode,
   resetPasswordWithCode,
   signIn,
-  verifyEmail,
   type AuthFormState,
 } from "@/server/actions/auth";
 import { phoneSignUp, rememberSignupEmail } from "@/server/actions/phone-access";
@@ -177,10 +176,15 @@ export function SignupEmailForm({
   defaultEmail,
   plan,
   next,
+  recruiter = false,
+  texts,
 }: {
   defaultEmail?: string;
   plan?: string;
   next?: string;
+  /** The recruiter's sign-up (Modèle B recruteur, M2): its placeholder and its example. */
+  recruiter?: boolean;
+  texts?: { placeholder: string; error: string };
 }) {
   const t = useTranslations("phoneAccueil");
   const [state, action, pending] = useActionState(rememberSignupEmail, idle);
@@ -201,6 +205,7 @@ export function SignupEmailForm({
     >
       {plan ? <input type="hidden" name="forfait" value={plan} /> : null}
       {next ? <input type="hidden" name="next" value={next} /> : null}
+      {recruiter ? <input type="hidden" name="profil" value="rh" /> : null}
       <label className="nb-lab" htmlFor="inscription-email">
         {t("signup.email")}
       </label>
@@ -211,7 +216,7 @@ export function SignupEmailForm({
         type="email"
         inputMode="email"
         autoComplete="email"
-        placeholder={t("signup.emailPlaceholder")}
+        placeholder={texts?.placeholder ?? t("signup.emailPlaceholder")}
         value={email}
         onChange={(event) => {
           setEmail(event.target.value);
@@ -220,7 +225,9 @@ export function SignupEmailForm({
         aria-invalid={invalid || undefined}
         aria-describedby={invalid ? "inscription-email-err" : undefined}
       />
-      <FieldError id="inscription-email-err">{invalid ? t("signup.emailError") : null}</FieldError>
+      <FieldError id="inscription-email-err">
+        {invalid ? (texts?.error ?? t("signup.emailError")) : null}
+      </FieldError>
       <button
         type="submit"
         className="nb-bp nb-form-envoi"
@@ -405,64 +412,37 @@ function CodeBoxes({
   );
 }
 
-/** « Vérifiez votre boîte mail » (planche Code): the 6 digits, « Renvoyer le code ». */
-export function SignupCodeForm({ email }: { email: string }) {
+/**
+ * « Confirmez votre adresse » (planche Code, devenue lien le 27/10/2026): the link of the e-mail
+ * confirms the address and opens the space, « Renvoyer le lien ».
+ */
+export function SignupLinkSent({ expired = false }: { expired?: boolean }) {
   const t = useTranslations("phoneAccueil");
   const errorText = useErrorText();
-  const [state, action, pending] = useActionState(verifyEmail, idle);
-  const [resent, resend, resending] = useActionState(resendCode, idle);
+  const [resent, resend, resending] = useActionState(resendLink, idle);
   const [arrival] = useState(() => ({}));
   const wait = useCountdown(resent.status === "sent" ? resent : arrival);
-  const [code, setCode] = useState("");
-  const [error, setError] = useState(false);
-  const serverError = state.errors?.code ? errorText(state.errors.code) : undefined;
   return (
     <>
-      {resent.status === "sent" ? <AccessNotice tone="ok">{t("code.resent")}</AccessNotice> : null}
-      {(state.error ?? resent.error) ? (
-        <AccessNotice tone="err">{errorText(state.error ?? resent.error)}</AccessNotice>
+      {resent.status === "sent" ? (
+        <AccessNotice tone="ok">{t("code.resent")}</AccessNotice>
+      ) : expired ? (
+        <AccessNotice tone="err">{t("code.expired")}</AccessNotice>
       ) : null}
-      <form
-        id="inscription-code"
-        action={action}
-        noValidate
-        className="nb-form"
-        onSubmit={(event) => {
-          if (code.length < CODE_DIGITS) {
-            event.preventDefault();
-            setError(true);
-          }
-        }}
-      >
-        <input type="hidden" name="email" value={email} />
-        <CodeBoxes
-          value={code}
-          onChange={(value) => {
-            setCode(value);
-            setError(false);
-          }}
-          label={t("code.label")}
-          invalid={error || Boolean(serverError)}
-        />
-        <FieldError id="inscription-code-err">{error ? t("code.error") : serverError}</FieldError>
-        <button
-          type="submit"
-          className="nb-bp nb-form-envoi"
-          data-attente={code.length === CODE_DIGITS ? undefined : ""}
-          disabled={pending}
-        >
-          {pending ? t("code.submitting") : t("code.submit")}
-        </button>
-      </form>
-      <form action={resend} className="nb-liens">
+      {resent.error ? <AccessNotice tone="err">{errorText(resent.error)}</AccessNotice> : null}
+      <p className="nb-meta">{t("code.how")}</p>
+      <form id="inscription-lien" action={resend} className="nb-liens">
         <button type="submit" className="nb-lien" disabled={wait > 0 || resending}>
           {wait > 0 ? t("code.resendIn", { time: formatWait(wait) }) : t("code.resend")}
         </button>
         <Link href="/inscription" className="nb-lien" data-creme="">
           {t("code.change")}
         </Link>
+        <Link href="/connexion" className="nb-lien" data-creme="">
+          {t("code.login")}
+        </Link>
       </form>
-      <p className="nb-meta nb-aide">{t("code.help", { minutes: CODE_MINUTES })}</p>
+      <p className="nb-meta nb-aide">{t("code.help", { hours: VERIFY_LINK_HOURS })}</p>
     </>
   );
 }

@@ -15,6 +15,7 @@ export type SearchResults = Record<SearchKind, SearchHit[]>;
 /** The kinds a platform role may search. */
 export function searchKindsFor(role: string): readonly SearchKind[] {
   if (role === "content_editor") return ["courses"];
+  if (role === "career_manager" || role === "moderator") return ["jobs"];
   if (role === "support_agent") return ["users", "organizations", "jobs", "plans"];
   if (role === "platform_admin") return SEARCH_KINDS;
   return [];

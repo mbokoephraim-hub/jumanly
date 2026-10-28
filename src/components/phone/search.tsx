@@ -27,6 +27,7 @@ export function TwoStepSearch({
   options,
   texts,
   className,
+  round = false,
 }: {
   label: string;
   placeholder: string;
@@ -34,6 +35,8 @@ export function TwoStepSearch({
   options: ReactNode;
   texts: { back: string; empty: string; clear: string };
   className?: string;
+  /** A round button with the magnifier only (heads of the recruiter's tabs). */
+  round?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -72,15 +75,27 @@ export function TwoStepSearch({
 
   return (
     <>
-      <button
-        type="button"
-        className={className ? `nb-recherche ${className}` : "nb-recherche"}
-        onClick={() => setOpen(true)}
-        aria-haspopup="dialog"
-      >
-        <PhoneIcon name="recherche" size={18} />
-        <span>{placeholder}</span>
-      </button>
+      {round ? (
+        <button
+          type="button"
+          className={className ? `nb-recherche-rond ${className}` : "nb-recherche-rond"}
+          onClick={() => setOpen(true)}
+          aria-haspopup="dialog"
+          aria-label={label}
+        >
+          <PhoneIcon name="recherche" size={20} stroke={1.8} />
+        </button>
+      ) : (
+        <button
+          type="button"
+          className={className ? `nb-recherche ${className}` : "nb-recherche"}
+          onClick={() => setOpen(true)}
+          aria-haspopup="dialog"
+        >
+          <PhoneIcon name="recherche" size={18} />
+          <span>{placeholder}</span>
+        </button>
+      )}
       {open ? (
         <div className="nb-recherche-ecran" role="dialog" aria-label={label} data-recherche="">
           <div className="nb-recherche-tete">
