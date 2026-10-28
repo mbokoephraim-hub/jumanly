@@ -4996,3 +4996,8 @@ bibliothèque, et se supprime.
 - « Changer d'adresse » (Paramètres, talent et recruteur au téléphone) envoie maintenant le lien lui-même au lieu de passer par `auth.api.changeEmail`, qui masquait un envoi échoué et affichait « Lien envoyé » alors que rien ne partait. Même jeton Better Auth (`change-email-verification`), l'adresse change à l'ouverture du lien.
 - E-mail dédié « Confirmez votre nouvelle adresse » (`mail.changeEmail.*`) au lieu du texte d'inscription.
 - En production sans RESEND_API_KEY ni SMTP_HOST, l'application dit clairement que l'envoi d'e-mails n'est pas encore activé (`emailChange.unavailable`).
+
+## 2026-10-28 · Thème clair : vert foncé à la place du Lime
+
+- À la demande d'Ephraïm (le Lime clair fatiguait les yeux sur le crème), dans le thème clair seulement : les fonds Lime deviennent Sapin (#0F3F37) et le menthe un vert foncé (#0D6B53), avec un texte crème dessus (`--nb-sur-lime`, `--nb-encre`). Les teintes Lime et menthe suivent (`--nb-lime-rgb`, `--nb-menthe-rgb`). Textes gris et filets plus foncés. Le thème sombre ne change pas.
+- Sur un fond Sapin fixe, le texte Lime reste Lime.
