@@ -10,7 +10,7 @@
   border-radius: 22px;
   border: 3px solid var(--nb-nuit);
   background: #0f3f37;
-  color: var(--nb-lime);
+  color: #a6f26b;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,7 +50,7 @@
 }
 .nb-co .nb-pf-st[data-recrute] {
   color: var(--nb-lime-t);
-  border: 1px solid rgba(166, 242, 107, 0.3);
+  border: 1px solid rgba(var(--nb-lime-rgb, 166, 242, 107), 0.3);
 }
 
 .nb-co .nb-pf-bt {
@@ -102,7 +102,7 @@
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  background: rgba(166, 242, 107, 0.12);
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.12);
   color: var(--nb-lime-t);
 }
 .nb-co-fait small {
