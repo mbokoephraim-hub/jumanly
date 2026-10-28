@@ -880,7 +880,7 @@ function HeroVisual({
       </FloatCard>
       <span
         aria-hidden
-        className="jm-pop absolute top-4 right-4 flex items-center gap-2 rounded-pill max-sm:hidden bg-lime py-1.5 pr-3.5 pl-1.5 text-xs font-semibold text-sapin shadow-[0_10px_30px_rgba(11,26,31,0.25)] lg:top-8 lg:right-8"
+        className="jm-pop absolute top-4 right-4 flex items-center gap-2 rounded-pill bg-lime py-1.5 pr-3.5 pl-1.5 text-xs font-semibold text-sapin shadow-[0_10px_30px_rgba(11,26,31,0.25)] max-sm:hidden lg:top-8 lg:right-8"
         style={stagger(2)}
       >
         <span className="flex size-7 items-center justify-center rounded-full bg-nuit text-lime">

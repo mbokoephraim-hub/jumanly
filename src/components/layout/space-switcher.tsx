@@ -62,7 +62,7 @@ export function SpaceSwitcher({
         aria-label={t("spaceSwitcher.aria")}
         className={cx(
           "flex h-10 max-w-[min(13rem,100%)] cursor-pointer list-none items-center gap-2 rounded-pill pr-3.5 pl-[5px] text-[13px] font-semibold [&::-webkit-details-marker]:hidden",
-          tone === "dark" ? "bg-blanc/10 text-blanc" : "bg-blanc text-sapin",
+          tone === "dark" ? "bg-white/10 text-white" : "bg-blanc text-sapin",
         )}
       >
         {current ? (
@@ -71,7 +71,7 @@ export function SpaceSwitcher({
           <span
             className={cx(
               "flex size-[30px] shrink-0 items-center justify-center rounded-full",
-              tone === "dark" ? "bg-blanc/15" : "bg-creme",
+              tone === "dark" ? "bg-white/15" : "bg-creme",
             )}
           >
             <Icon name="profil" className="size-4" />

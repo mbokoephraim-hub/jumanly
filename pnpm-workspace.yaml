@@ -1,19 +1,19 @@
 ignoredBuiltDependencies:
-  - '@parcel/watcher'
-  - '@swc/core'
+  - "@parcel/watcher"
+  - "@swc/core"
   - sharp
   - unrs-resolver
 
 onlyBuiltDependencies:
-  - '@prisma/engines'
+  - "@prisma/engines"
   - esbuild
   - prisma
 
 overrides:
-  '@react-email/ui>next': 16.4.2
-  deepmerge-ts: '>=8.0.0'
-  mysql2: '>=3.23.1'
-  undici: '>=8.12.2'
+  "@react-email/ui>next": 16.4.2
+  deepmerge-ts: ">=8.0.0"
+  mysql2: ">=3.23.1"
+  undici: ">=8.12.2"
 
 patchedDependencies:
   next-intl@4.14.9: patches/next-intl@4.14.9.patch
