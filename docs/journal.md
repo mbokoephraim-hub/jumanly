@@ -5015,3 +5015,7 @@ bibliothèque, et se supprime.
 - Première photo d'Ephraïm dans le héros de l'accueil (`public/photos/accueil-tablette.webp`). Aperçus de l'application en HTML sur talents, recruteurs et entreprises.
 - Contrastes AA vérifiés (tests d'accessibilité du site public au vert).
 - Reste connu, hors de ce travail : un contraste du sélecteur d'espace sur /app/partenaire au téléphone.
+
+## 2026-10-28 · Premier administrateur sans se déconnecter
+
+- Ephraïm n'arrivait pas à devenir administrateur : la promotion par `ADMIN_BOOTSTRAP_EMAIL` ne se faisait qu'à une nouvelle connexion, et une session dure 30 jours. Désormais, ouvrir `/admin` avec une adresse listée et vérifiée suffit (`src/proxy.ts`), toujours journalisé.
