@@ -13,7 +13,7 @@ const FILES = [
   /^\/app\/parametres\/export$/,
   /^\/app\/career\/plan\/rapport$/,
   /^\/app\/career\/diagnostic\/pdf$/,
-  /^\/app\/career\/cv\/[^/]+\/(word|pdf)$/,
+  /^\/app\/career\/cv\/[^/]+\/(word|pdf|fichier)$/,
   /^\/app\/career\/documents\/[^/]+\/pdf$/,
   /^\/app\/learn\/attestations\/[^/]+\/[^/]+$/,
   /^\/app\/learn\/[^/]+\/(support|modele-attestation)$/,
