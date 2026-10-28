@@ -1,7 +1,13 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { buildMessages, extractEntries, isTextFile, splitRow } from "../../scripts/lib/texts";
+import {
+  buildMessages,
+  checkTranslation,
+  extractEntries,
+  isTextFile,
+  splitRow,
+} from "../../scripts/lib/texts";
 
 const root = join(import.meta.dirname, "..", "..");
 
@@ -84,5 +90,42 @@ describe("textes/ du dépôt", () => {
     expect(generated).not.toMatch(/\+\d[\d .-]{7,}\d/); // international format
     expect(generated).not.toMatch(/\b0\d([ .-]?\d{2}){4}\b/); // local 10-digit format
     expect(generated).not.toMatch(/tel:/);
+  });
+});
+
+describe("checkTranslation (textes anglais du site public)", () => {
+  const entry = (key: string, text: string) => ({ key, text, file: "f.md", line: 1 });
+  const french = [
+    entry("a.price", "Dès {price} USD/mois"),
+    entry("a.count", "{count, plural, one {# offre} other {# offres}}"),
+  ];
+
+  it("accepte une traduction qui garde les mêmes variables", () => {
+    expect(
+      checkTranslation(french, [
+        entry("a.price", "From {price} USD/month"),
+        entry("a.count", "{count, plural, one {# offer} other {# offers}}"),
+      ]),
+    ).toEqual([]);
+  });
+
+  it("refuse une clé inconnue en français ou une variable perdue", () => {
+    const errors = checkTranslation(french, [
+      entry("a.unknown", "Hello"),
+      entry("a.price", "From USD/month"),
+    ]);
+    expect(errors).toHaveLength(2);
+  });
+
+  it("les textes anglais livrés sont tous valides", () => {
+    const read = (dir: string) =>
+      readdirSync(join(root, dir))
+        .filter((name) => name.endsWith(".md"))
+        .flatMap((name) => extractEntries(readFileSync(join(root, dir, name), "utf8"), name));
+    const reference = extractEntries(
+      readFileSync(join(root, "textes", "textes-application.md"), "utf8"),
+      "textes-application.md",
+    );
+    expect(checkTranslation(reference, read(join("textes", "en")))).toEqual([]);
   });
 });

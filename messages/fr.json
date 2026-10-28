@@ -85,6 +85,13 @@
     },
     "logo": {
       "label": "Jumanly, retour à l'accueil"
+    },
+    "language": {
+      "label": "Langue du site",
+      "fr": "Français",
+      "en": "English",
+      "frShort": "FR",
+      "enShort": "EN"
     }
   },
   "footer": {
@@ -126,7 +133,8 @@
     },
     "payments": "Paiement par Mobile Money et carte bancaire. Prix en USD.",
     "copyright": "© {year} Jumanly. Tous droits réservés.",
-    "language": "Langue : Français"
+    "language": "Langue : Français",
+    "big": "Learn. Grow. Connect."
   },
   "cookies": {
     "banner": {
@@ -185,7 +193,28 @@
         "badge": "Attestation obtenue",
         "matchTitle": "Analyste de données junior",
         "matchText": "87 % compatible · Pourquoi ?",
-        "matchShort": "87 % compatible"
+        "matchShort": "87 % compatible",
+        "notification": "Nouvelle offre compatible",
+        "notificationText": "Stage · Marketing digital"
+      }
+    },
+    "stats": {
+      "label": "Jumanly en quelques chiffres",
+      "free": {
+        "value": "0 USD",
+        "label": "pour postuler, quel que soit le forfait"
+      },
+      "modules": {
+        "value": "5",
+        "label": "services reliés à votre profil"
+      },
+      "why": {
+        "value": "100 %",
+        "label": "des suggestions avec leur « Pourquoi ? »"
+      },
+      "payment": {
+        "value": "2",
+        "label": "moyens de payer : Mobile Money et carte"
       }
     },
     "audiences": {

@@ -14,7 +14,8 @@ const palettes = [
   "bg-lime text-sapin",
   "bg-sapin text-lime",
   "bg-neon text-sapin",
-  "bg-ia text-neon",
+  // Nuit rather than the AI green: in the dark admin shell, Neon on the light AI green failed contrast.
+  "bg-nuit text-neon",
   "bg-menthe-claire text-sapin",
 ];
 
