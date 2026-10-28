@@ -37,7 +37,7 @@ a.nb-cr-rb {
 }
 .nb-cr-initiales {
   background: var(--nb-lime);
-  color: #0f3f37;
+  color: var(--nb-sur-lime, #0f3f37);
   font-size: 22px;
   font-weight: 800;
 }
@@ -68,7 +68,7 @@ a.nb-cr-rb {
 }
 .nb-cr-so-plus {
   background: transparent;
-  border: 1px dashed rgba(166, 242, 107, 0.6);
+  border: 1px dashed rgba(var(--nb-lime-rgb, 166, 242, 107), 0.6);
   color: var(--nb-lime-t);
 }
 /* Les ronds de 32 px se touchent sur 44 px. */
@@ -178,7 +178,7 @@ a.nb-cr-rb {
   border-radius: 16px;
   border: 0;
   background: var(--nb-lime);
-  color: #0f3f37;
+  color: var(--nb-sur-lime, #0f3f37);
   font-size: 12px;
   font-weight: 800;
   cursor: pointer;
@@ -318,7 +318,7 @@ a.nb-cr-rb {
   transition: color 0.3s;
 }
 .nb-cr-seg button[aria-selected="true"] {
-  color: #0f3f37;
+  color: var(--nb-sur-lime, #0f3f37);
 }
 /* Until the pill is measured (first paint, before hydration), the chosen tab carries the Lime. */
 .nb-cr-seg:not([data-mesure]) button[aria-selected="true"] {
@@ -356,7 +356,7 @@ a.nb-cr-rb {
 }
 .nb-cr-sk-plus {
   border-style: dashed;
-  border-color: rgba(166, 242, 107, 0.6);
+  border-color: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.6);
   color: var(--nb-lime-t);
   background: transparent;
   cursor: pointer;
@@ -401,7 +401,7 @@ a.nb-cr-rb {
   color: var(--nb-lime-t);
 }
 .nb-cr-jumanly {
-  background: rgba(166, 242, 107, 0.14);
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.14);
   color: var(--nb-lime-t);
 }
 
@@ -416,7 +416,7 @@ a.nb-cr-rb {
   padding: 12px;
   margin-bottom: 12px;
   background: linear-gradient(135deg, #0f3f37, var(--nb-surface));
-  border-color: rgba(166, 242, 107, 0.22);
+  border-color: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.22);
 }
 .nb-cr-orbi p {
   flex: 1;
@@ -515,7 +515,7 @@ a.nb-cr-rb {
 }
 .nb-cr-cv-note[data-defaut] {
   background: var(--nb-lime);
-  color: #0f3f37;
+  color: var(--nb-sur-lime, #0f3f37);
 }
 .nb-cr-cv-t,
 .nb-cr-real-t {
@@ -553,7 +553,7 @@ a.nb-cr-rb {
   min-height: 48px;
   margin-top: 12px;
   border-radius: 24px;
-  border: 1px dashed rgba(166, 242, 107, 0.6);
+  border: 1px dashed rgba(var(--nb-lime-rgb, 166, 242, 107), 0.6);
   color: var(--nb-lime-t);
   font-size: 13.5px;
   font-weight: 700;
@@ -597,7 +597,7 @@ a.nb-cr-rb {
   height: 100%;
   min-height: 170px;
   border-radius: 20px;
-  border: 1px dashed rgba(166, 242, 107, 0.6);
+  border: 1px dashed rgba(var(--nb-lime-rgb, 166, 242, 107), 0.6);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -753,7 +753,7 @@ a.nb-cr-rb {
   font-size: 12px;
   font-weight: 800;
   background: #0f3f37;
-  color: var(--nb-lime);
+  color: #a6f26b;
 }
 .nb-cr-logo[data-ton="1"] {
   background: #ffe1a1;
@@ -802,7 +802,7 @@ a.nb-cr-rb {
 }
 .nb-cr-score[data-fort] {
   background: var(--nb-lime);
-  color: #0f3f37;
+  color: var(--nb-sur-lime, #0f3f37);
 }
 .nb-cr-cand .nb-cr-frise {
   margin-top: 12px;
@@ -820,7 +820,7 @@ a.nb-cr-rb {
   margin-top: 10px;
   padding: 8px 10px;
   border-radius: 12px;
-  background: rgba(166, 242, 107, 0.12);
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.12);
   color: var(--nb-t-dff7c6, #dff7c6);
   font-size: 11.5px;
 }

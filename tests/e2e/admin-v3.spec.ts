@@ -2,12 +2,14 @@ import { expect, test } from "./fixtures";
 import { demo, logIn, skipIntro } from "./session";
 
 /**
- * Admin v3 (docs/admin-v3/PLAN.md): the floating column of icons. Every section has an accessible
- * name, the column is shorter than the window (a floating pill, not a full-height bar), and the
- * label shows in a tooltip when the keyboard reaches an icon.
+ * Admin (Modèle B, 27/10/2026): the side bar. Every section has an accessible name, the bar takes
+ * the window's height with its labels at 1440 px, and keeps only the icons at 1024 px.
  */
-test("menu de l'admin en colonne flottante d'icônes", async ({ page, isMobile }) => {
-  test.skip(isMobile, "La colonne s'affiche à partir de 1024 px ; le téléphone garde la pilule.");
+test("menu de l'admin en barre latérale", async ({ page, isMobile }) => {
+  test.skip(
+    isMobile,
+    "La barre latérale s'affiche à partir de 768 px ; le téléphone garde la pilule.",
+  );
   await page.setViewportSize({ width: 1440, height: 900 });
   await logIn(page, demo.admin);
   await page.goto("/admin");
@@ -34,19 +36,22 @@ test("menu de l'admin en colonne flottante d'icônes", async ({ page, isMobile }
     "page",
   );
 
-  const rail = page.locator(".jm-admin-rail");
-  const box = await rail.boundingBox();
+  // Side bar of the Modèle B: full height, labels from 1200 px, icons only below (the label stays
+  // for screen readers and in the title).
+  const side = page.locator(".jm-adm-side");
+  const box = await side.boundingBox();
   expect(box).not.toBeNull();
-  expect(box!.width).toBeLessThan(80);
-  expect(box!.height).toBeLessThan(900 * 0.85);
-  expect(box!.y).toBeGreaterThan(40);
+  expect(box!.width).toBeGreaterThan(200);
+  expect(box!.height).toBeGreaterThan(900 * 0.95);
 
   const users = nav.getByRole("link", { name: "Utilisateurs", exact: true });
-  const tip = users.locator(".jm-admin-tip");
-  await expect(tip).toBeHidden();
-  await users.focus();
-  await expect(tip).toBeVisible();
-  await expect(tip).toHaveText("Utilisateurs");
+  await expect(users.getByText("Utilisateurs")).toBeVisible();
+  await page.setViewportSize({ width: 1024, height: 900 });
+  expect((await side.boundingBox())!.width).toBeLessThan(90);
+  await expect(users).toBeVisible();
+  await expect(users).toHaveAttribute("title", "Utilisateurs");
+  // Visually hidden (1 px, clipped), still read by screen readers.
+  expect((await users.getByText("Utilisateurs").boundingBox())!.width).toBeLessThanOrEqual(1);
 });
 
 test("le menu d'un éditeur de contenus ne montre que ses rubriques", async ({ page, isMobile }) => {

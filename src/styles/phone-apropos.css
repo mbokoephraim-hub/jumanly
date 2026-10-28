@@ -120,7 +120,7 @@
 }
 .nb-pv-initiales {
   background: var(--nb-lime);
-  color: #0f3f37;
+  color: var(--nb-sur-lime, #0f3f37);
   font-size: clamp(56px, 22vw, 96px);
   font-weight: 800;
 }
@@ -317,8 +317,8 @@
   font-size: 12px;
   font-weight: 600;
   color: var(--nb-lime-t);
-  background: rgba(166, 242, 107, 0.12);
-  border: 1px solid rgba(166, 242, 107, 0.35);
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.12);
+  border: 1px solid rgba(var(--nb-lime-rgb, 166, 242, 107), 0.35);
 }
 .nb-pf-h .nb-pf-h-t {
   text-transform: inherit;

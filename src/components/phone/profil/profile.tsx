@@ -58,7 +58,7 @@ export function VerifiedMark({ label, size = 18 }: { label: string; size?: numbe
       <path
         d="m8.2 12.2 2.6 2.6 5-5.2"
         fill="none"
-        stroke="#0F3F37"
+        stroke="var(--nb-sur-lime, #0F3F37)"
         strokeWidth="2.3"
         strokeLinecap="round"
         strokeLinejoin="round"
