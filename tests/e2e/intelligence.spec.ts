@@ -55,8 +55,8 @@ test("score expliqué, import de CV et révision humaine", async ({
   }).toPass({ timeout: 30_000 });
   if (isMobile) {
     await expect(page.getByRole("checkbox", { name: /compétence/ })).toBeChecked();
-    await page.getByRole("button", { name: "Ajouter à mon profil et créer le CV" }).click();
-    await page.waitForURL(/etape=contenu/);
+    await page.getByRole("button", { name: /^Remplir mon profil avec ce CV/ }).click();
+    await page.waitForURL(/importe=profil/);
     await page.goto("/app/career/cv");
     await expect(page.locator(".nb-ca").first()).toContainText("Excel");
   } else {

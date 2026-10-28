@@ -172,7 +172,7 @@ test.describe("Étape 3 · nettoyage, sur ordinateur", () => {
 test.describe("Étape 3 · page entreprise côté talent, au téléphone", () => {
   test.skip(({ isMobile }) => !isMobile, "La page entreprise du talent est celle du téléphone.");
 
-  test("les personnes qui disent y travailler apparaissent, jamais un profil anonyme", async ({
+  test("Membres ne montre que les recruteurs, ni une personne déclarée ni un profil anonyme", async ({
     page,
   }) => {
     test.setTimeout(120_000);
@@ -214,9 +214,13 @@ test.describe("Étape 3 · page entreprise côté talent, au téléphone", () =>
       .getByRole("tablist", { name: "Sections de la page" })
       .getByRole("tab", { name: "Membres" })
       .click();
-    const lea = pile.locator(".nb-ex-pers").filter({ hasText: "Léa Visible" });
-    await expect(lea).toBeVisible();
-    await expect(lea).toContainText("Indiqué par la personne");
+    // Since 27/10/2026 (#188), Membres lists only the company's recruiters: the owner, never a
+    // person who says they work there, nor an anonymous profile.
+    const members = pile.locator(".nb-co-membres");
+    await expect(
+      members.locator(".nb-co-membre").filter({ hasText: "Recruteuse Fictive" }),
+    ).toBeVisible();
+    await expect(members.getByText("Léa Visible")).toHaveCount(0);
     await expect(pile.getByText("Noa Anonyme")).toHaveCount(0);
   });
 });
