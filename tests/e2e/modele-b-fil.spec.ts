@@ -61,10 +61,19 @@ test.describe("Modèle B · Fil au téléphone", () => {
     await save.click();
     await expect(save).toHaveAttribute("aria-pressed", "false");
 
-    // Envoyer opens Republier · Citer · « Envoyer à une connexion », then the list of connections.
-    await baobab.getByRole("button", { name: "Envoyer", exact: true }).click();
+    // « ··· » › Partager (27/10/2026, #183) opens Republier · Citer · « Envoyer à une connexion »,
+    // then the list of connections.
+    await baobab.getByRole("button", { name: "Plus d'options" }).click();
     const reshare = page.getByRole("dialog", { name: "Partager" });
-    await expect(reshare.getByRole("button", { name: /^Republier/ })).toBeVisible();
+    // A touch while the sheet is still rising can be lost: touch again until the sheet answers.
+    await expect(async () => {
+      if (await menu.isVisible()) {
+        await menu.getByRole("button", { name: /^Partager/ }).click({ timeout: 2_000 });
+      }
+      await expect(reshare.getByRole("button", { name: /^Republier/ })).toBeVisible({
+        timeout: 1_000,
+      });
+    }).toPass();
     await reshare.getByRole("button", { name: /Envoyer à une connexion/ }).click();
     const send = page.getByRole("dialog", { name: "Envoyer à" });
     await expect(send.getByRole("button", { name: "Envoyer" }).first()).toBeVisible();
@@ -73,12 +82,10 @@ test.describe("Modèle B · Fil au téléphone", () => {
     await page.keyboard.press("Escape");
     await expect(send).toBeHidden();
 
-    // A photo carries the actions in its notch; Commenter opens the post, with its answers and
-    // the reply bar; the way back is the Fil.
+    // The actions sit under the photo (no notch since #183); Commenter opens the post, with its
+    // answers and the reply bar; the way back is the Fil.
     const patrick = fil.locator("article").filter({ hasText: "Premier jour chez Fleuve Banque" });
-    await expect(
-      patrick.locator(".nb-fil-im .nb-fil-encoche").getByRole("button", { name: /^J'aime/ }),
-    ).toBeVisible();
+    await expect(patrick.getByRole("button", { name: /^J'aime/ })).toBeVisible();
     await patrick.getByRole("link", { name: /^Commenter/ }).click();
     await page.waitForURL(/\/app\/fil\/[^/]+$/);
     await expect(page.getByRole("heading", { name: "Publication" })).toBeVisible();
@@ -115,7 +122,7 @@ test.describe("Modèle B · Fil au téléphone", () => {
     await page.getByRole("button", { name: "Publier", exact: true }).click();
     await page.waitForURL((url) => url.pathname === "/app");
     await expect(fil.getByRole("heading", { name: title })).toBeVisible();
-    await expect(fil.getByText(text)).toBeVisible();
+    await expect(fil.getByText(text).first()).toBeVisible();
 
     // The bell opens the notifications, with their filters.
     await fil.getByRole("link", { name: /^Notifications/ }).click();

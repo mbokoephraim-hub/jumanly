@@ -36,7 +36,8 @@ export default async function PublicLayout({ children, params }: LayoutProps<"/[
       <PublicFooter />
       <NextIntlClientProvider
         locale={locale}
-        messages={pickMessages(messages, ["cookies", "a11y", "common"])}>
+        messages={pickMessages(messages, ["cookies", "a11y", "common"])}
+      >
         <CookieConsent />
       </NextIntlClientProvider>
     </div>

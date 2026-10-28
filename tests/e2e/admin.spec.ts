@@ -133,7 +133,7 @@ test("suspendre, réactiver et changer le rôle d'un compte, puis le lire dans l
 
   // Platform role: Support, then back to no role.
   const roles = page.locator("#utilisateurs-roles");
-  await roles.getByLabel("Support", { exact: true }).check();
+  await roles.getByRole("radio", { name: /^Support/ }).check();
   await roles.getByRole("button", { name: "Enregistrer le rôle" }).click();
   await expect(
     page.getByRole("status").filter({ hasText: "Utilisateur mis à jour" }),
@@ -252,9 +252,7 @@ test("les indicateurs montrent les forfaits utilisés et se complètent avec les
   await expectAccessible(page);
 });
 
-test("vérifier un compte, lui offrir un forfait et des crédits, exporter ses données, le supprimer", async ({
-  page,
-}) => {
+test("vérifier un compte, lui offrir un forfait et des crédits, le supprimer", async ({ page }) => {
   test.setTimeout(150_000);
   const account = makeAccount("fiche", "Compte Fiche Fictif", "unverified");
   await logIn(page, demo.admin);
@@ -292,20 +290,15 @@ test("vérifier un compte, lui offrir un forfait et des crédits, exporter ses d
   await expect(rights.getByText("Ajout manuel")).toBeVisible();
   await expectAccessible(page);
 
-  // Export of the person's data (droit d'accès).
-  const download = page.waitForEvent("download");
-  await card.getByRole("link", { name: "Générer l'export de ses données" }).click();
-  const { readFileSync } = await import("node:fs");
-  const data = JSON.parse(readFileSync(await (await download).path(), "utf8"));
-  expect(data.account.email).toBe(account.email);
-  expect(JSON.stringify(data)).not.toMatch(/password|token/i);
+  // The export of private data was removed (27/10/2026): no link on the card.
+  await expect(card.getByRole("link", { name: "Générer l'export de ses données" })).toHaveCount(0);
 
-  // Deletion in two steps: the reason, then the e-mail typed again.
-  await card.getByRole("link", { name: "Supprimer le compte" }).click();
+  // Anonymization in two steps: the reason, then the e-mail typed again.
+  await card.getByRole("link", { name: "Anonymiser le compte" }).click();
   await page.locator("#utilisateurs-delete-reason").fill("Demande écrite de la personne (fictif)");
   await page.getByRole("button", { name: "Continuer" }).click();
   await page.locator("#utilisateurs-delete-email").fill(account.email);
-  await page.getByRole("button", { name: "Supprimer définitivement" }).click();
+  await page.getByRole("button", { name: "Anonymiser le compte" }).click();
   await done("Compte supprimé et anonymisé.");
   await expect(card.getByText("Compte supprimé", { exact: true })).toBeVisible();
   await expect(card.getByText(account.email)).toHaveCount(0);

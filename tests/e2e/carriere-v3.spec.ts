@@ -193,9 +193,10 @@ test.describe("Carrière v3 · créer un CV au téléphone", () => {
     await page.waitForURL(/\/app\/career\/cv\/[^/?]+\?etape=modele/);
     const id = new URL(page.url()).pathname.split("/").pop()!;
     await page.getByRole("button", { name: /^Gratuits/ }).click();
+    // The CV's template is already chosen: touching it again opens it large, with « Utiliser ».
     await page.locator(".nb-cv-modele:not([data-verrou])").first().click();
     await page
-      .getByRole("button", { name: "Appliquer ce modèle" })
+      .getByRole("button", { name: /^(Appliquer|Utiliser) ce modèle$/ })
       .filter({ visible: true })
       .click();
     await page.waitForURL(/etape=contenu/);

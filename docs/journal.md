@@ -5008,3 +5008,9 @@ bibliothèque, et se supprime.
 - Site bilingue avec sélecteur FR / EN : voir docs/decisions/2026-10-28-site-bilingue.md. 1 753 textes traduits dans `textes/en/`.
 - Les contenus de la base (offres, formations de démonstration, descriptions des forfaits) restent en français sur la version anglaise.
 - Test unitaire `phone-preload` réparé (il échouait déjà sur main).
+
+## 2026-10-28 · CI remise au vert après l'administration Modèle B
+
+- Parcours e2e de l'admin alignés sur #193 à #195 : barre latérale (libellés à 1440 px, icônes seules à 1024 px), rôle « Support » dont le libellé porte maintenant sa description, export des données privées retiré (le test vérifie son absence), suppression devenue « Anonymiser le compte ».
+- Deux défauts de contraste réels sous `.jm-admin-bg` : les initiales sur fond IA (menthe claire en sombre) passent en Sapin, et le sélecteur d'espace en sombre utilise un blanc fixe au lieu du jeton « blanc », redéfini en couleur de carte. Même correction pour les vignettes `bg-[#14745f]` des pages Partenaires et Offres de l'admin.
+- Parcours au téléphone alignés sur les changements du 26 et 27/10 publiés sans e2e : « Paramètres » à la place de l'avatar (Formation, Fil recruteur), « Partager » dans le menu « ··· » d'une publication et plus d'encoche, page d'entreprise ouverte sur Publications et « Membres » réduit aux recruteurs, « Profils consultés » dans les paramètres du recruteur, trois choix après l'import d'un CV, profil du recruteur à l'identité du profil talent. Aucun test retiré.

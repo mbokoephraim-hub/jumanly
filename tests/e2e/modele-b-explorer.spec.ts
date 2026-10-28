@@ -123,7 +123,13 @@ test.describe("Modèle B · Explorer au téléphone", () => {
     // The company's page, its tabs, « Suivre » and the way back.
     await pile.getByRole("link", { name: /Voir la page/ }).click();
     await page.waitForURL("**/app/entreprises/**");
+    // Publications open first (27/10/2026, #188), then À propos · Offres · Membres.
     const tabs = pile.getByRole("tablist", { name: "Sections de la page" });
+    await expect(tabs.getByRole("tab", { name: "Publications" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    await tabs.getByRole("tab", { name: "À propos" }).click();
     await expect(tabs.getByRole("tab", { name: "À propos" })).toHaveAttribute(
       "aria-selected",
       "true",
@@ -131,7 +137,10 @@ test.describe("Modèle B · Explorer au téléphone", () => {
     await tabs.getByRole("tab", { name: /^Offres · / }).click();
     await expect(pile.getByRole("tabpanel").getByRole("link").first()).toBeVisible();
     await tabs.getByRole("tab", { name: "Membres" }).click();
-    await expect(pile.getByRole("searchbox", { name: "Rechercher un membre" })).toBeVisible();
+    // The recruiters of the company (#188); the search shows from five of them.
+    await expect(
+      pile.getByText(/recruteurs? de l’entreprise|Aucun recruteur visible/),
+    ).toBeVisible();
     const follow = pile.getByRole("button", { name: /^(Suivre|Abonné)$/ });
     const followed = await follow.getAttribute("aria-pressed");
     await follow.click();

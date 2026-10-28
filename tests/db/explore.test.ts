@@ -39,10 +39,10 @@ async function person(visibility: "private" | "recruiters" | "anonymous", name =
 }
 
 describe("Explorer", () => {
-  it("ne propose que des profils visibles, jamais une connexion ni un profil bloqué", async () => {
+  it("propose les profils visibles et privés, jamais un anonyme, une connexion ni un profil bloqué", async () => {
     const me = await person("recruiters");
     const visible = await person("recruiters");
-    const hidden = await person("private");
+    const privateOne = await person("private");
     const anonymous = await person("anonymous");
     const friend = await person("recruiters");
     const blocked = await person("recruiters");
@@ -53,8 +53,10 @@ describe("Explorer", () => {
       data: { requesterId: blocked, addresseeId: me, status: "blocked", blockedById: blocked },
     });
     const ids = (await peopleToKnow(db, me, 500)).map((row) => row.id);
+    // Ephraïm 27/10/2026 (#192): every member can be found from sign-up, private ones included.
     expect(ids).toContain(visible);
-    for (const id of [me, hidden, anonymous, friend, blocked]) expect(ids).not.toContain(id);
+    expect(ids).toContain(privateOne);
+    for (const id of [me, anonymous, friend, blocked]) expect(ids).not.toContain(id);
   });
 
   it("met d'abord les personnes qui ont des connexions en commun", async () => {
@@ -72,10 +74,10 @@ describe("Explorer", () => {
     expect(first?.reason).toEqual({ kind: "mutual", count: 1 });
   });
 
-  it("une page de personne privée ne s'ouvre qu'à ses connexions", async () => {
+  it("une page de personne privée ne s'ouvre en entier qu'à ses connexions", async () => {
     const me = await person("recruiters");
     const secret = await person("private");
-    expect(await personProfile(db, me, secret, "connection")).toBeNull();
+    expect((await personProfile(db, me, secret, "connection"))?.about).toBeNull();
     await db.connection.create({
       data: { requesterId: me, addresseeId: secret, status: "accepted", respondedAt: new Date() },
     });
@@ -105,26 +107,34 @@ describe("Explorer", () => {
     expect(second?.email).toMatch(/@/);
   });
 
-  it("un profil bloqué ne s'ouvre pas ; un recruteur voit le profil privé d'un candidat", async () => {
+  it("un profil bloqué ou anonyme ne s'ouvre pas ; un privé s'ouvre réduit ; un recruteur voit le profil privé d'un candidat", async () => {
     const me = await person("recruiters");
     const blocker = await person("recruiters");
     const secret = await person("private");
+    const hidden = await person("anonymous");
     await db.connection.create({
       data: { requesterId: blocker, addresseeId: me, status: "blocked", blockedById: blocker },
     });
     expect(await personProfile(db, me, blocker, "connection")).toBeNull();
-    expect(await personProfile(db, me, secret, "connection")).toBeNull();
+    expect(await personProfile(db, me, hidden, "connection")).toBeNull();
+    // Ephraïm 27/10/2026 (#192): a private profile opens with its name, photo, title and city only.
+    const limited = await personProfile(db, me, secret, "connection");
+    expect(limited?.id).toBe(secret);
+    expect(limited?.headline).toBe("Analyste fictif");
+    expect(limited?.about).toBeNull();
+    expect(limited?.experiences).toEqual([]);
     // The application was checked by the caller (recordView): the profile opens.
     expect((await personProfile(db, me, secret, "candidate"))?.id).toBe(secret);
   });
 
-  it("la recherche trouve une personne visible par son nom, pas une privée", async () => {
+  it("la recherche trouve une personne visible ou privée par son nom, pas une anonyme", async () => {
     const me = await person("recruiters");
     const tag = `Zébulon${Date.now()}`;
     const shown = await person("recruiters", `${tag} Visible`);
-    await person("private", `${tag} Caché`);
+    const privateOne = await person("private", `${tag} Privé`);
+    await person("anonymous", `${tag} Caché`);
     const found = await exploreSearch(db, me, tag, "personnes");
-    expect(found.people.map((row) => row.id)).toEqual([shown]);
+    expect(found.people.map((row) => row.id).sort()).toEqual([shown, privateOne].sort());
     expect(found.offers).toEqual([]);
   });
 
