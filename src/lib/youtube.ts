@@ -48,3 +48,8 @@ export function youtubeWatchUrl(id: string) {
 export function youtubeEmbedUrl(id: string) {
   return `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1&playsinline=1`;
 }
+
+/** The video's own picture, used as the cover of a course published from a YouTube link. */
+export function youtubeThumbnailUrl(id: string) {
+  return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+}

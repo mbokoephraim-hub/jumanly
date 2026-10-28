@@ -2,9 +2,10 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Tag, adminCard } from "@/components/admin/kit";
 import { courseStatusTone } from "@/components/admin/formations-list";
-import { Icon } from "@/components/brand/icon";
+import { Icon, type IconName } from "@/components/brand/icon";
 import { Button, Checkbox, Select, TextArea, TextField } from "@/components/ui";
 import { cx } from "@/lib/cx";
+import { inputClasses } from "@/components/ui/field";
 import { formatDate } from "@/lib/dates";
 import { updateCourseAction } from "@/server/actions/course-admin";
 import { catalogLevelOptions, type AdminCourse } from "@/server/services/course-admin";
@@ -14,6 +15,47 @@ import { editorialLines, listDomains } from "@/server/services/learn-domains";
 
 /** Id of the course form: the attestation switch, in its own card, belongs to it. */
 export const courseFormId = "admin-course-fiche";
+
+/** Large writing fields: bigger text, more line spacing, growing with what is written. */
+const roomy = "text-[15px] leading-[1.65] [field-sizing:content]";
+
+/** Lines of the outcomes list: the saved ones, then empty lines to add more (20 at most). */
+export const OBJECTIVE_ROWS_MAX = 20;
+function objectiveRows(objectives: string[]) {
+  const count = Math.min(OBJECTIVE_ROWS_MAX, Math.max(4, objectives.length + 2));
+  return Array.from({ length: count }, (_, index) => objectives[index] ?? "");
+}
+
+/** A block of the course card: an icon, a title and what it is for, then its fields. */
+function FicheBlock({
+  icon,
+  title,
+  text,
+  children,
+}: {
+  icon: IconName;
+  title: string;
+  text: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="flex flex-col gap-3 rounded-[20px] bg-creme/60 p-4 ring-1 ring-brume/60 ring-inset lg:p-5">
+      <div className="flex items-start gap-3">
+        <span
+          aria-hidden
+          className="grid size-9 shrink-0 place-items-center rounded-[12px] bg-blanc text-sapin"
+        >
+          <Icon name={icon} className="size-[18px]" />
+        </span>
+        <div className="flex min-w-0 flex-col gap-0.5">
+          <h3 className="text-[16px] leading-[22px] font-semibold">{title}</h3>
+          <p className="text-[12.5px] leading-[18px] text-ardoise">{text}</p>
+        </div>
+      </div>
+      {children}
+    </section>
+  );
+}
 
 /** Read-only switch (44 × 26, Sapin with a Lime knob when on), for a value computed elsewhere. */
 export function SwitchMark({ on }: { on: boolean }) {
@@ -200,12 +242,15 @@ export async function CourseFicheCard({
                 maxLength={80}
               />
             </div>
-            <TextField
+            <TextArea
               id="course-summary"
               name="summary"
               label={t("field.summary")}
+              hint={t("fiche.summaryHint")}
               defaultValue={course.summary}
               maxLength={300}
+              rows={3}
+              className={roomy}
             />
             <div className="grid gap-3 sm:grid-cols-2">
               <Select
@@ -344,57 +389,89 @@ export async function CourseFicheCard({
           </>
         ) : (
           <>
-            <div className="grid items-start gap-3 md:grid-cols-2">
+            <FicheBlock
+              icon="doc"
+              title={t("fiche.presentation")}
+              text={t("fiche.presentationText")}
+            >
               <TextArea
                 id="course-description"
                 name="description"
                 label={t("field.description")}
                 defaultValue={course.description}
                 maxLength={5000}
-                rows={3}
+                rows={10}
+                className={cx(roomy, "min-h-64")}
               />
-              <TextArea
-                id="course-objectives"
-                name="objectives"
-                label={t("field.outcomes")}
-                hint={t("field.outcomesHint")}
-                defaultValue={course.objectives.join("\n")}
-                maxLength={3000}
-                rows={3}
-              />
-              <TextField
-                id="course-audience"
-                name="audience"
-                label={t("field.audience")}
-                defaultValue={course.audience}
-                maxLength={500}
-              />
-              <TextField
-                id="course-duration"
-                name="durationMinutes"
-                type="number"
-                min={1}
-                label={t("field.duration")}
-                defaultValue={String(course.durationMinutes)}
-                required
-              />
-              <TextField
-                id="course-job-families"
-                name="jobFamilies"
-                label={t("field.jobFamilies.text")}
-                hint={t("field.jobFamilies.hint")}
-                defaultValue={course.jobFamilies.join(", ")}
-                maxLength={500}
-              />
-              <TextArea
-                id="course-prerequisites"
-                name="prerequisites"
-                label={t("field.prerequisites")}
-                defaultValue={course.prerequisites ?? ""}
-                maxLength={1000}
-                rows={3}
-              />
-            </div>
+            </FicheBlock>
+            <FicheBlock icon="objectif" title={t("field.outcomes")} text={t("fiche.outcomesText")}>
+              <fieldset className="flex flex-col gap-2">
+                <legend className="sr-only">{t("field.outcomes")}</legend>
+                <ol className="flex flex-col gap-2">
+                  {objectiveRows(course.objectives).map((objective, index) => (
+                    <li key={index} className="flex items-center gap-2.5">
+                      <span
+                        aria-hidden
+                        className="grid size-8 shrink-0 place-items-center rounded-full bg-lime-clair text-[13px] font-semibold text-sapin"
+                      >
+                        {index + 1}
+                      </span>
+                      <label htmlFor={`course-objective-${index}`} className="sr-only">
+                        {t("fiche.outcome", { number: index + 1 })}
+                      </label>
+                      <input
+                        id={`course-objective-${index}`}
+                        name="objective"
+                        defaultValue={objective}
+                        maxLength={200}
+                        placeholder={index === 0 ? t("fiche.outcomePlaceholder") : undefined}
+                        className={cx(inputClasses, "h-12 flex-1 text-[15px]")}
+                      />
+                    </li>
+                  ))}
+                </ol>
+                <p className="text-[11.5px] leading-4 text-ardoise">{t("fiche.outcomesHint")}</p>
+              </fieldset>
+            </FicheBlock>
+            <FicheBlock icon="equipe" title={t("fiche.audience")} text={t("fiche.audienceText")}>
+              <div className="grid items-start gap-3 md:grid-cols-2">
+                <TextArea
+                  id="course-audience"
+                  name="audience"
+                  label={t("field.audience")}
+                  defaultValue={course.audience}
+                  maxLength={500}
+                  rows={4}
+                  className={roomy}
+                />
+                <TextArea
+                  id="course-prerequisites"
+                  name="prerequisites"
+                  label={t("field.prerequisites")}
+                  defaultValue={course.prerequisites ?? ""}
+                  maxLength={1000}
+                  rows={4}
+                  className={roomy}
+                />
+                <TextField
+                  id="course-duration"
+                  name="durationMinutes"
+                  type="number"
+                  min={1}
+                  label={t("field.duration")}
+                  defaultValue={String(course.durationMinutes)}
+                  required
+                />
+                <TextField
+                  id="course-job-families"
+                  name="jobFamilies"
+                  label={t("field.jobFamilies.text")}
+                  hint={t("field.jobFamilies.hint")}
+                  defaultValue={course.jobFamilies.join(", ")}
+                  maxLength={500}
+                />
+              </div>
+            </FicheBlock>
             <div className="flex flex-col gap-2">
               {course.skills.length > 0 && (
                 <ul className="flex flex-wrap gap-1.5" aria-label={t("field.skills.text")}>

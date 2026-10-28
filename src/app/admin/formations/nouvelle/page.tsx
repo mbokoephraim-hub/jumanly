@@ -50,6 +50,22 @@ export default async function NewCourse({ searchParams }: PageProps<"/admin/form
         {t("back")}
       </Link>
       {params.erreur === "champs" && <Alert tone="error" title={t("v3.create.invalid")} />}
+      <Link
+        href="/admin/formations/video"
+        className="jm-admin-card jm-admin-card-link flex items-center gap-3.5 rounded-[20px] bg-blanc p-4"
+      >
+        <span
+          aria-hidden
+          className="grid size-11 shrink-0 place-items-center rounded-[14px] bg-lime text-sapin"
+        >
+          <Icon name="play" className="size-5" />
+        </span>
+        <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span className="text-[15px] leading-5 font-semibold">{t("quick.title")}</span>
+          <span className="text-[12.5px] leading-[18px] text-ardoise">{t("quick.shortcut")}</span>
+        </span>
+        <Icon name="chev-r" className="size-4 shrink-0" />
+      </Link>
 
       <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
         <form

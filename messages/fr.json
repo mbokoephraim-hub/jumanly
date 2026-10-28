@@ -25767,6 +25767,60 @@
           "logged": "Chaque téléchargement par l'équipe est journalisé."
         }
       },
+      "quick": {
+        "title": "Publier une vidéo",
+        "subtitle": "Un lien YouTube, un titre et deux phrases : la vidéo est en ligne. Le reste se complète plus tard.",
+        "shortcut": "Le plus rapide : un lien YouTube, un titre et deux phrases, en une seule étape.",
+        "invalid": "Vérifiez ces champs :",
+        "error": {
+          "video": "Le lien doit être un lien YouTube (youtube.com ou youtu.be).",
+          "title": "Le titre doit faire au moins 3 caractères.",
+          "summary": "Le résumé doit faire au moins 10 caractères.",
+          "instructor": "Indiquez le nom du formateur.",
+          "durationMinutes": "La durée va de 1 à 600 minutes."
+        },
+        "link": "Lien de la vidéo YouTube",
+        "linkHint": "Copiez l'adresse de la vidéo sur YouTube. Elle est lue dans Jumanly, sans quitter la page.",
+        "name": "Titre de la formation",
+        "summary": "Résumé",
+        "summaryHint": "Ce que le talent va apprendre, en une ou deux phrases.",
+        "duration": "Durée (minutes)",
+        "more": "Description longue et image (facultatif)",
+        "descriptionHint": "Sans description, le résumé est repris.",
+        "coverHint": "Sans image, celle de la vidéo YouTube sert de couverture. PNG, JPEG ou WebP.",
+        "publishNow": "Publier tout de suite",
+        "publishNowHint": "Décochez pour garder un brouillon.",
+        "submit": "Publier la vidéo",
+        "howTitle": "En 3 gestes",
+        "how": {
+          "link": {
+            "title": "Collez le lien",
+            "text": "Une vidéo YouTube, publique ou non répertoriée."
+          },
+          "words": {
+            "title": "Écrivez le titre et le résumé",
+            "text": "Deux phrases suffisent."
+          },
+          "publish": {
+            "title": "Publiez",
+            "text": "La formation est en ligne avec sa vidéo. Ajoutez quiz et documents quand vous voulez."
+          }
+        },
+        "fullCourse": "Créer plutôt une formation complète",
+        "published": "Vidéo publiée : la formation est en ligne.",
+        "draft": "Formation créée en brouillon. Publiez-la quand elle est prête."
+      },
+      "fiche": {
+        "summaryHint": "Une ou deux phrases, visibles sur la carte de la formation.",
+        "presentation": "Présentation",
+        "presentationText": "Le sujet de la formation, sa démarche et ce qu'elle apporte.",
+        "outcomesText": "Ce que le talent saura faire à la fin, une phrase par ligne.",
+        "outcome": "Objectif {number}",
+        "outcomePlaceholder": "Par exemple : rédiger un CV clair en une page",
+        "outcomesHint": "Laissez vides les lignes en trop. Après l'enregistrement, de nouvelles lignes s'ajoutent.",
+        "audience": "Public et prérequis",
+        "audienceText": "À qui s'adresse la formation, ce qu'il faut savoir avant et combien de temps elle dure."
+      },
       "domains": {
         "link": "Domaines",
         "title": "Domaines du catalogue",

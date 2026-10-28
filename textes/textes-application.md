@@ -21298,6 +21298,46 @@ Conventions :
 | `admin.courses.v3.editor.publication.history` | Historique de la formation |
 | `admin.courses.v3.editor.intro.documents` | Les fichiers PDF de la formation : supports de cours, fiches d'exercices, lectures, modèles et corrigés, et qui peut les télécharger. |
 | `admin.courses.v3.editor.documents.step` | Documents |
+| `admin.courses.quick.title` | Publier une vidéo |
+| `admin.courses.quick.subtitle` | Un lien YouTube, un titre et deux phrases : la vidéo est en ligne. Le reste se complète plus tard. |
+| `admin.courses.quick.shortcut` | Le plus rapide : un lien YouTube, un titre et deux phrases, en une seule étape. |
+| `admin.courses.quick.invalid` | Vérifiez ces champs : |
+| `admin.courses.quick.error.video` | Le lien doit être un lien YouTube (youtube.com ou youtu.be). |
+| `admin.courses.quick.error.title` | Le titre doit faire au moins 3 caractères. |
+| `admin.courses.quick.error.summary` | Le résumé doit faire au moins 10 caractères. |
+| `admin.courses.quick.error.instructor` | Indiquez le nom du formateur. |
+| `admin.courses.quick.error.durationMinutes` | La durée va de 1 à 600 minutes. |
+| `admin.courses.quick.link` | Lien de la vidéo YouTube |
+| `admin.courses.quick.linkHint` | Copiez l'adresse de la vidéo sur YouTube. Elle est lue dans Jumanly, sans quitter la page. |
+| `admin.courses.quick.name` | Titre de la formation |
+| `admin.courses.quick.summary` | Résumé |
+| `admin.courses.quick.summaryHint` | Ce que le talent va apprendre, en une ou deux phrases. |
+| `admin.courses.quick.duration` | Durée (minutes) |
+| `admin.courses.quick.more` | Description longue et image (facultatif) |
+| `admin.courses.quick.descriptionHint` | Sans description, le résumé est repris. |
+| `admin.courses.quick.coverHint` | Sans image, celle de la vidéo YouTube sert de couverture. PNG, JPEG ou WebP. |
+| `admin.courses.quick.publishNow` | Publier tout de suite |
+| `admin.courses.quick.publishNowHint` | Décochez pour garder un brouillon. |
+| `admin.courses.quick.submit` | Publier la vidéo |
+| `admin.courses.quick.howTitle` | En 3 gestes |
+| `admin.courses.quick.how.link.title` | Collez le lien |
+| `admin.courses.quick.how.link.text` | Une vidéo YouTube, publique ou non répertoriée. |
+| `admin.courses.quick.how.words.title` | Écrivez le titre et le résumé |
+| `admin.courses.quick.how.words.text` | Deux phrases suffisent. |
+| `admin.courses.quick.how.publish.title` | Publiez |
+| `admin.courses.quick.how.publish.text` | La formation est en ligne avec sa vidéo. Ajoutez quiz et documents quand vous voulez. |
+| `admin.courses.quick.fullCourse` | Créer plutôt une formation complète |
+| `admin.courses.quick.published` | Vidéo publiée : la formation est en ligne. |
+| `admin.courses.quick.draft` | Formation créée en brouillon. Publiez-la quand elle est prête. |
+| `admin.courses.fiche.summaryHint` | Une ou deux phrases, visibles sur la carte de la formation. |
+| `admin.courses.fiche.presentation` | Présentation |
+| `admin.courses.fiche.presentationText` | Le sujet de la formation, sa démarche et ce qu'elle apporte. |
+| `admin.courses.fiche.outcomesText` | Ce que le talent saura faire à la fin, une phrase par ligne. |
+| `admin.courses.fiche.outcome` | Objectif {number} |
+| `admin.courses.fiche.outcomePlaceholder` | Par exemple : rédiger un CV clair en une page |
+| `admin.courses.fiche.outcomesHint` | Laissez vides les lignes en trop. Après l'enregistrement, de nouvelles lignes s'ajoutent. |
+| `admin.courses.fiche.audience` | Public et prérequis |
+| `admin.courses.fiche.audienceText` | À qui s'adresse la formation, ce qu'il faut savoir avant et combien de temps elle dure. |
 | `admin.courses.v3.editor.documents.title` | Documents PDF |
 | `admin.courses.v3.editor.documents.empty` | Aucun document pour l'instant. Ajoutez un support de cours, une fiche d'exercices ou un corrigé. |
 | `admin.courses.v3.editor.documents.add` | Ajouter un document |
