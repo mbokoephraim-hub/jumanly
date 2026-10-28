@@ -3,7 +3,7 @@
  * database work, called by the admin actions after the role check (content editor or administrator).
  */
 import { z } from "zod";
-import { youtubeIdOf, youtubeVideoId } from "@/lib/youtube";
+import { youtubeIdOf, youtubeThumbnailUrl, youtubeVideoId } from "@/lib/youtube";
 import { editorialLines } from "./learn-domains";
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { slugify } from "./accounts";
@@ -246,6 +246,69 @@ export async function createCourseFromTemplate(
             },
           };
         }),
+      },
+    },
+  });
+}
+
+/**
+ * « Publier une vidéo » (28/10/2026): the short path for one video, in a single form. The link is
+ * a YouTube link; the summary is also the description when no description is written.
+ */
+export const quickVideoSchema = z.object({
+  title: text(160).min(3),
+  video: text(300).refine((value) => youtubeIdOf(value) !== null),
+  summary: text(300).min(10),
+  description: text(5000).default(""),
+  instructor: text(120).min(2),
+  category: text(80).default(""),
+  requiredLevel: z.enum(catalogLevelOptions).default("free"),
+  durationMinutes: z.coerce.number().int().min(1).max(600).default(10),
+  publish: z.literal("on").optional(),
+});
+
+/**
+ * Creates the course of « Publier une vidéo »: one module, one video lesson, the video's picture
+ * as the cover (replaced when a file is sent), no attestation. Not published here: the action
+ * publishes it through `setCourseStatus`, which keeps the usual checks.
+ */
+export async function createVideoCourse(
+  db: PrismaClient,
+  input: z.infer<typeof quickVideoSchema>,
+  moduleTitle: string,
+) {
+  const id = youtubeIdOf(input.video)!;
+  return db.course.create({
+    data: {
+      slug: await uniqueSlug(db, input.title),
+      title: input.title,
+      summary: input.summary,
+      description: input.description || input.summary,
+      objectives: [],
+      audience: "",
+      category: input.category,
+      level: "beginner",
+      language: "fr",
+      durationMinutes: input.durationMinutes,
+      instructor: input.instructor,
+      requiredLevel: input.requiredLevel,
+      certificateEnabled: false,
+      coverUrl: youtubeThumbnailUrl(id),
+      status: "draft",
+      modules: {
+        create: {
+          order: 1,
+          title: moduleTitle,
+          lessons: {
+            create: {
+              order: 1,
+              kind: "video",
+              title: input.title,
+              videoId: youtubeVideoId(id),
+              durationSec: input.durationMinutes * 60,
+            },
+          },
+        },
       },
     },
   });

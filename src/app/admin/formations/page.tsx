@@ -76,6 +76,14 @@ export default async function AdminCourses({ searchParams }: PageProps<"/admin/f
             {t("new")}
           </ButtonLink>
           <ButtonLink
+            href="/admin/formations/video"
+            variant="secondary"
+            icon={<Icon name="play" />}
+            className="w-full sm:w-fit"
+          >
+            {t("quick.title")}
+          </ButtonLink>
+          <ButtonLink
             href="/admin/formations/domaines"
             variant="secondary"
             icon={<Icon name="grid" />}

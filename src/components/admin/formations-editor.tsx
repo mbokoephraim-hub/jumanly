@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { IconTile, Tag, adminCard, adminLabel, adminTitle } from "@/components/admin/kit";
 import { courseStatusTone } from "@/components/admin/formations-list";
 import { ReadinessRing } from "@/components/admin/formations-studio";
-import { Icon } from "@/components/brand/icon";
+import { Icon, type IconName } from "@/components/brand/icon";
 import { Button, ButtonLink, Select, TextField } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { setCourseStatusAction } from "@/server/actions/course-admin";
@@ -33,9 +33,22 @@ const stepName = (t: Translate, step: EditorStep) => {
 export const editorHref = (courseId: string, step: EditorStep, anchor = "") =>
   `/admin/formations/${courseId}?etape=${step}${anchor}`;
 
+/** The icon of each editor step: the step menu shows icons, the name in a bubble (28/10/2026). */
+export const stepIcon: Record<EditorStep, IconName> = {
+  informations: "edit",
+  public: "objectif",
+  programme: "liste",
+  documents: "doc",
+  quiz: "quiz",
+  attestation: "certificat",
+  publication: "partager",
+};
+
 /**
- * The steps of the course editor (Admin v3, étape 4): a column of numbered steps on a computer,
- * a row of pills to scroll on a phone. Each shows whether it is complete.
+ * The steps of the course editor (Admin v3, étape 4; simplified 28/10/2026): a narrow column of
+ * icons on a computer, the name in a bubble on hover or focus, so the editing frame gets the room;
+ * a row of icons to scroll on a phone, the current step with its name. Each shows whether it is
+ * complete.
  */
 export async function EditorStepNav({
   course,
@@ -53,48 +66,57 @@ export async function EditorStepNav({
     step === "documents"
       ? documents > 0
       : (readiness.steps.find((item) => item.step === readinessOf[step])?.done ?? false);
+  const bubble =
+    "pointer-events-none absolute top-1/2 left-[calc(100%+10px)] z-20 hidden -translate-y-1/2 rounded-[10px] bg-sapin px-2.5 py-1.5 text-[12px] font-semibold whitespace-nowrap text-blanc opacity-0 shadow-lg transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 lg:block";
   return (
     <nav
       aria-label={t("v3.editor.nav")}
-      className="jm-admin-card min-w-0 rounded-[24px] bg-blanc p-2 lg:sticky lg:top-4 lg:p-3"
+      className="jm-admin-card min-w-0 rounded-[22px] bg-blanc p-1.5 lg:sticky lg:top-4 lg:w-16 lg:p-2"
     >
-      <Link
-        href="/admin/formations"
-        className="mb-1 hidden items-center gap-1.5 rounded-pill px-2.5 py-2 text-[12.5px] font-semibold text-ardoise hover:bg-creme hover:text-sapin lg:inline-flex"
-      >
-        <Icon name="chev-l" className="size-3.5" />
-        {t("v3.editor.studio")}
-      </Link>
-      <ol className="relative flex gap-1.5 overflow-x-auto lg:flex-col lg:gap-1 lg:overflow-visible">
-        {editorSteps.map((step, index) => {
+      <ol className="relative flex items-center gap-1.5 overflow-x-auto lg:flex-col lg:gap-1.5 lg:overflow-visible">
+        <li className="shrink-0">
+          <Link
+            href="/admin/formations"
+            aria-label={t("v3.editor.studio")}
+            className="group relative grid size-11 place-items-center rounded-[14px] text-ardoise hover:bg-creme hover:text-sapin"
+          >
+            <Icon name="chev-l" className="size-[18px]" />
+            <span aria-hidden className={bubble}>
+              {t("v3.editor.studio")}
+            </span>
+          </Link>
+        </li>
+        <li aria-hidden className="h-6 w-px shrink-0 bg-brume lg:h-px lg:w-8" />
+        {editorSteps.map((step) => {
           const on = step === current;
           const complete = done(step);
+          const name = stepName(t, step);
           return (
             <li key={step} className="shrink-0">
               <Link
                 href={editorHref(course.id, step)}
                 aria-current={on ? "step" : undefined}
                 className={cx(
-                  "relative flex items-center gap-2.5 rounded-pill py-1.5 pr-3.5 pl-1.5 text-[13px] font-semibold whitespace-nowrap lg:rounded-[16px] lg:py-2",
+                  "group relative flex h-11 items-center gap-2 rounded-[14px] text-[13px] font-semibold whitespace-nowrap lg:w-11 lg:justify-center lg:px-0",
                   on
-                    ? "bg-sapin bg-(image:--jm-degrade-rail-h) text-blanc shadow-[0_10px_24px_-14px_rgb(15_63_55/0.8)]"
-                    : "text-sapin hover:bg-creme",
+                    ? "bg-sapin bg-(image:--jm-degrade-rail-h) pr-3.5 pl-3 text-lime shadow-[0_10px_24px_-14px_rgb(15_63_55/0.8)] lg:pr-0 lg:pl-0"
+                    : "w-11 justify-center text-sapin hover:bg-creme",
                 )}
               >
-                <span
-                  aria-hidden
-                  className={cx(
-                    "grid size-7 shrink-0 place-items-center rounded-full text-[12px]",
-                    on
-                      ? "bg-lime text-sapin"
-                      : complete
-                        ? "bg-lime-clair text-sapin"
-                        : "bg-creme text-ardoise",
-                  )}
-                >
-                  {complete && !on ? <Icon name="check" className="size-3.5" /> : index + 1}
+                <Icon name={stepIcon[step]} className="size-5 shrink-0" />
+                {/* On a phone the current step shows its name; elsewhere the bubble does. */}
+                <span className={cx(on ? "text-blanc lg:sr-only" : "sr-only")}>{name}</span>
+                {complete && (
+                  <span
+                    aria-hidden
+                    className="absolute -top-0.5 -right-0.5 grid size-4 place-items-center rounded-full bg-lime text-sapin ring-2 ring-blanc"
+                  >
+                    <Icon name="check" className="size-2.5" />
+                  </span>
+                )}
+                <span aria-hidden className={bubble}>
+                  {name}
                 </span>
-                {stepName(t, step)}
                 <span className="sr-only">
                   {" "}
                   {complete ? t("v2.readiness.done") : t("v2.readiness.todo")}
@@ -108,21 +130,29 @@ export async function EditorStepNav({
   );
 }
 
-/** Title and introduction of the current step, with its position. */
+/** Title and introduction of the current step, with its icon and its position. */
 export async function EditorStepIntro({ step }: { step: EditorStep }) {
   const t = await getTranslations("admin.courses");
   const index = editorSteps.indexOf(step);
   return (
-    <div className="flex flex-col gap-1 px-1">
-      <p className={adminLabel}>
-        {t("v3.editor.position", { number: index + 1, total: editorSteps.length })}
-      </p>
-      <h2 className="text-[22px] leading-7 font-semibold tracking-[-0.02em] lg:text-[26px] lg:leading-8">
-        {stepName(t, step)}
-      </h2>
-      <p className="max-w-[68ch] text-[13px] leading-[19px] text-ardoise">
-        {t(`v3.editor.intro.${step}`)}
-      </p>
+    <div className="flex items-start gap-3 px-1">
+      <span
+        aria-hidden
+        className="grid size-11 shrink-0 place-items-center rounded-[14px] bg-lime-clair text-sapin"
+      >
+        <Icon name={stepIcon[step]} className="size-5" />
+      </span>
+      <div className="flex min-w-0 flex-col gap-0.5">
+        <p className={adminLabel}>
+          {t("v3.editor.position", { number: index + 1, total: editorSteps.length })}
+        </p>
+        <h2 className="text-[22px] leading-7 font-semibold tracking-[-0.02em] lg:text-[24px] lg:leading-8">
+          {stepName(t, step)}
+        </h2>
+        <p className="max-w-[80ch] text-[13px] leading-[19px] text-ardoise">
+          {t(`v3.editor.intro.${step}`)}
+        </p>
+      </div>
     </div>
   );
 }

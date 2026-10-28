@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { AuditHistory } from "@/components/admin/audit";
@@ -86,8 +87,8 @@ export default async function AdminCourse({
       />
       <div
         className={cx(
-          "grid grid-cols-[minmax(0,1fr)] items-start gap-4 lg:grid-cols-[220px_minmax(0,1fr)]",
-          !lesson && "xl:grid-cols-[220px_minmax(0,1fr)_300px]",
+          "grid grid-cols-[minmax(0,1fr)] items-start gap-4 lg:grid-cols-[64px_minmax(0,1fr)]",
+          !lesson && "xl:grid-cols-[64px_minmax(0,1fr)_280px]",
         )}
       >
         <EditorStepNav course={course} current={step} documents={documents.length} />
@@ -95,6 +96,17 @@ export default async function AdminCourse({
           {param("ok") === "creee" && <Alert tone="success" title={t("created")} />}
           {param("ok") === "modele" && <Alert tone="success" title={t("v3.createdFromTemplate")} />}
           {param("ok") === "copie" && <Alert tone="success" title={t("v2.duplicate.done")} />}
+          {param("ok") === "video" && (
+            <Alert tone="success" title={t("quick.published")}>
+              <Link
+                href={`/formations/${course.slug}`}
+                className="font-semibold underline underline-offset-4"
+              >
+                {t("viewPublic")}
+              </Link>
+            </Alert>
+          )}
+          {param("ok") === "video-brouillon" && <Alert tone="success" title={t("quick.draft")} />}
           {(coverError === "fileType" ||
             coverError === "fileSize" ||
             coverError === "notFound") && (

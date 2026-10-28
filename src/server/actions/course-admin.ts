@@ -27,6 +27,7 @@ import {
   courseStatuses,
   createCourse,
   createCourseFromTemplate,
+  createVideoCourse,
   deleteLesson,
   deleteModule,
   deleteQuestion,
@@ -34,6 +35,7 @@ import {
   lessonFormSchema,
   newCourseSchema,
   questionFormSchema,
+  quickVideoSchema,
   quizSettingsSchema,
   isEditorStep,
   moveLesson,
@@ -126,10 +128,53 @@ export async function createCourseFromTemplateAction(formData: FormData) {
   );
 }
 
+/**
+ * « Publier une vidéo » (28/10/2026): title, YouTube link and a few words, then the course is
+ * created and, when asked, published at once. It opens on its « Publication » step.
+ */
+export async function createVideoCourseAction(formData: FormData) {
+  const user = await editor();
+  const parsed = quickVideoSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    const fields = [...new Set(parsed.error.issues.map((issue) => String(issue.path[0])))];
+    redirect(`/admin/formations/video?erreur=${fields.join(",")}`);
+  }
+  const t = await getTranslations("admin.courses.v3.template");
+  const course = await createVideoCourse(db, parsed.data, t("moduleTitle", { index: 1 }));
+  await audit(user.id, "course.create", course.id, { template: "video" });
+  const cover = formData.get("cover");
+  let coverError = "";
+  if (cover instanceof File && cover.size > 0) {
+    try {
+      await saveCover(db, fileStorage(db), course.id, new Uint8Array(await cover.arrayBuffer()));
+      await audit(user.id, "course.cover", course.id);
+    } catch (error) {
+      if (!(error instanceof CourseMediaError)) throw error;
+      coverError = `couverture-${error.code}`;
+    }
+  }
+  let ok = "video-brouillon";
+  if (parsed.data.publish === "on") {
+    const result = await setCourseStatus(db, course.id, "published");
+    if (result.ok) {
+      await audit(user.id, "course.status", course.id, { status: "published" });
+      ok = "video";
+    }
+  }
+  await invalidate(course.id);
+  const query = new URLSearchParams({ etape: "publication", ok });
+  if (coverError) query.set("erreur", coverError);
+  redirect(`/admin/formations/${course.id}?${query}`);
+}
+
 export async function updateCourseAction(formData: FormData) {
   const user = await editor();
   const id = value(formData, "course");
-  const parsed = courseFormSchema.safeParse(Object.fromEntries(formData));
+  const fields: Record<string, FormDataEntryValue> = Object.fromEntries(formData);
+  // « Public et objectifs » sends one field per outcome (28/10/2026): one line each.
+  const outcomes = formData.getAll("objective");
+  if (outcomes.length > 0) fields.objectives = outcomes.map(String).join("\n");
+  const parsed = courseFormSchema.safeParse(fields);
   if (!parsed.success) back(id, { erreur: "fiche" }, "#fiche", stepFrom(formData, "informations"));
   const result = await updateCourse(db, id, parsed.data!);
   // The cover sent with the card (Admin v2, étape 6): resized, then saved on the course.
