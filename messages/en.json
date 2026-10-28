@@ -1202,6 +1202,7 @@
       "reassurance2": "Applying is always free",
       "reassurance3": "Mobile Money and card",
       "imageAlt": "Preview of the Jumanly dashboard on a computer and a phone: course progress, ongoing applications and matching job offers.",
+      "photoAlt": "A smiling man browses Jumanly on a tablet at his desk.",
       "visual": {
         "badge": "Certificate earned",
         "matchTitle": "Junior data analyst",
@@ -2100,6 +2101,28 @@
         "done": "Got it"
       }
     }
+  },
+  "sitePreview": {
+    "pipeline": {
+      "title": "Junior data analyst · 38 applications",
+      "new": "New",
+      "shortlisted": "Shortlisted",
+      "interview": "Interview",
+      "c1": "Esther K.",
+      "c2": "Didier L.",
+      "c3": "Grâce M.",
+      "c4": "Amani K."
+    },
+    "matches": {
+      "title": "Offers that match your profile",
+      "job1": "Junior data analyst",
+      "company1": "Baobab Fintech (fictional) · Kinshasa",
+      "job2": "Digital marketing internship",
+      "company2": "Horizon Demo (fictional) · Dakar",
+      "job3": "Administrative assistant",
+      "company3": "Savane Telecom (fictional) · Abidjan"
+    },
+    "score": "{value}%"
   },
   "pricing": {
     "seo": {

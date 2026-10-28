@@ -6,7 +6,7 @@ import { getTranslations } from "next-intl/server";
 import { AiOrb } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { JobBody } from "@/components/site/job-body";
-import { HeroPanel, Shape, sectionTitle, stagger, wrap } from "@/components/site/marketing";
+import { HeroPanel, sectionTitle, stagger, wrap } from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
 import { CatalogJobCard } from "@/components/site/public-cards";
 import { ShareButton } from "@/components/site/share-button";
@@ -302,10 +302,6 @@ export default async function JobPage({ params }: PageProps<"/[locale]/offres/[s
               data-reveal
               className="relative flex flex-col gap-4 overflow-hidden rounded-[28px] bg-nuit p-6 text-blanc"
             >
-              <Shape
-                name="forme-orbites-lime"
-                className="jm-drift -top-24 -right-24 w-[260px] opacity-[0.12]"
-              />
               <p className="relative flex items-center gap-2.5">
                 <AiOrb size={28} className="jm-pulse" />
                 <span className="text-[11px] font-semibold tracking-[0.12em] text-neon uppercase">

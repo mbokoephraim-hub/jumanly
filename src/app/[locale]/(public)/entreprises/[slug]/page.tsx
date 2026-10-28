@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { Character } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
-import { IconTile, Shape, stagger, wrap } from "@/components/site/marketing";
+import { IconTile, stagger, wrap } from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
 import { CatalogJobCard } from "@/components/site/public-cards";
 import { ButtonLink, CompanyLogo } from "@/components/ui";
@@ -74,16 +73,7 @@ export default async function CompanyPage({ params }: PageProps<"/[locale]/entre
         <div
           data-scene
           className="relative mx-auto h-[180px] max-w-[1400px] overflow-hidden rounded-[32px] bg-sapin lg:h-[300px] lg:rounded-[48px]"
-        >
-          <Shape
-            name="forme-orbites-lime"
-            className="jm-drift -top-[200px] right-10 w-[600px] opacity-[0.12]"
-          />
-          <Shape
-            name="forme-trajectoire-lime"
-            className="jm-float-slow -bottom-10 left-[35%] w-[420px] opacity-90 max-lg:hidden"
-          />
-        </div>
+        ></div>
         <div className={cx(wrap, "relative -mt-12 lg:-mt-[70px]")}>
           <div
             className="jm-rise flex flex-col gap-5 rounded-[28px] bg-blanc px-5 pt-0 pb-6 shadow-[0_20px_50px_rgba(15,63,55,0.12)] lg:flex-row lg:items-end lg:gap-6 lg:rounded-[32px] lg:px-8 lg:py-7"
@@ -199,9 +189,6 @@ function EmptyJobs({ label, cta }: { label: string; cta: string }) {
       data-reveal
       className="flex items-center gap-4 rounded-[24px] bg-blanc px-5 py-5 ring-[1.5px] ring-brume ring-inset"
     >
-      <span className="jm-breathe shrink-0">
-        <Character name="fatou" pose="perplexe" height={90} />
-      </span>
       <div className="flex flex-col items-start gap-2">
         <p className="text-sm leading-[21px]">{label}</p>
         <ButtonLink href="/offres" variant="tertiary" size="sm">

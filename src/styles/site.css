@@ -1,0 +1,103 @@
+/* ─────────────── Site public, Modèle B (28/10/2026) ───────────────
+ * docs/decisions/2026-10-28-site-public.md. Le site prend l'identité du Modèle B
+ * (docs/modele-b-recruteur/web/captures/001-Web-Site.jpg) : fond Nuit, cartes Surface à filet fin,
+ * texte Crème, secondaire Brume, Lime réservé aux actions. Comme pour l'administration
+ * (src/styles/admin.css), les jetons sont redéfinis sous `.jm-site-b` : « papier » et « crème »
+ * deviennent le fond, « blanc » la surface des cartes, « sapin » la couleur du texte. Les fonds
+ * clairs (Lime, Néon, Menthe, Ambre) gardent les jetons d'origine et un texte Sapin (règle d'or 10).
+ */
+.jm-site-b {
+  color-scheme: dark;
+  --jm-papier: #0b1a1f;
+  --jm-creme: #0b1a1f;
+  --jm-blanc: #13282c;
+  --jm-sapin: #f2ede5;
+  --jm-ardoise: #8fa39e;
+  --jm-brume: #24393d;
+  --jm-nuit: #081418;
+  --jm-lime-clair: rgb(166 242 107 / 0.12);
+  --jm-menthe-claire: rgb(47 211 166 / 0.14);
+  --jm-gris-clair: #1b3338;
+  --jm-feuille-fonce: #a6f26b;
+  --jm-corail-fonce: #f08a7c;
+  --jm-ambre-fonce: #f4c463;
+  --jm-ia: #2fd3a6;
+  --jm-up-texte: #a6f26b;
+  --jm-down-fond: rgb(240 138 124 / 0.14);
+  --jm-down-texte: #f08a7c;
+  --jm-ambre-fond: rgb(244 196 99 / 0.14);
+  --jm-ambre-texte: #f4c463;
+  --jm-menthe-texte: #5fe0b8;
+  background: var(--jm-papier);
+  color: var(--jm-sapin);
+}
+/* Fonds clairs : jetons d'origine, texte Sapin. */
+.jm-site-b
+  :is(
+    .bg-lime,
+    .bg-neon,
+    .bg-menthe,
+    .bg-ambre,
+    .bg-feuille,
+    .bg-gradient-signature,
+    .bg-gradient-accent,
+    .jm-light
+  ),
+.jm-site-b :is(.hover\:bg-lime:hover, .checked\:bg-lime:checked) {
+  --jm-creme: #f2ede5;
+  --jm-papier: #f7f6f1;
+  --jm-blanc: #ffffff;
+  --jm-sapin: #0f3f37;
+  --jm-ardoise: #3e524d;
+  --jm-brume: #dce5e1;
+  --jm-nuit: #0b1a1f;
+  --jm-feuille-fonce: #22662f;
+  --jm-corail-fonce: #a3301f;
+  --jm-ambre-fonce: #6e4800;
+  --jm-lime-clair: #e4fad0;
+  --jm-up-texte: #1f7a35;
+  --jm-down-fond: #fbe3df;
+  --jm-down-texte: #b23a2b;
+  --jm-ambre-fond: #fcebc6;
+  --jm-ambre-texte: #8a5a00;
+  --jm-menthe-texte: #0b5e49;
+  color-scheme: light;
+}
+/* Fonds Sapin et Nuit : surfaces hautes, texte blanc. */
+.jm-site-b .bg-sapin {
+  background-color: #1b3338;
+}
+.jm-site-b
+  :is(
+    .bg-sapin,
+    .bg-nuit,
+    .jm-dark,
+    .bg-gradient-ai,
+    .bg-gradient-ia,
+    .bg-gradient-principal,
+    .bg-gradient-profondeur
+  ) {
+  --jm-blanc: #ffffff;
+}
+/* Champs : un peu plus sombres que la carte. */
+.jm-site-b
+  :is(
+    input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"]),
+    textarea,
+    select
+  ).bg-blanc {
+  background-color: #0f2125;
+}
+.jm-site-b :is(input, textarea)::placeholder {
+  color: #7e938e;
+}
+/* Cartes : le filet fin des cartes du Modèle B. */
+.jm-site-b .jm-card {
+  background-color: #13282c;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.07);
+}
+/* Inside a dark panel « blanc » is white text again; a card there stays a Surface card. */
+.jm-site-b :is(.bg-nuit, .bg-sapin, .jm-dark) .bg-blanc {
+  background-color: #13282c;
+  --jm-sapin: #f2ede5;
+}

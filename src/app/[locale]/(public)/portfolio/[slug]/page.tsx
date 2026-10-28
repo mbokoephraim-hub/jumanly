@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Icon, type IconName } from "@/components/brand/icon";
-import { Eyebrow, Shape, stagger, wrap } from "@/components/site/marketing";
+import { Eyebrow, stagger, wrap } from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
 import { ShareButton } from "@/components/site/share-button";
 import { Skeleton } from "@/components/ui";
@@ -41,12 +41,7 @@ export default function PublicPortfolioPage({ params }: PageProps<"/[locale]/por
         <div
           data-scene
           className="relative mx-auto h-[150px] max-w-[1400px] overflow-hidden rounded-[32px] bg-lime-clair lg:h-[320px] lg:rounded-[48px]"
-        >
-          <Shape
-            name="forme-trajectoire-sapin"
-            className="jm-float-slow top-[110px] right-[12%] w-[260px] opacity-90 max-lg:hidden"
-          />
-        </div>
+        ></div>
         <div className={cx(wrap, "relative")}>
           <Suspense fallback={<Skeleton className="mt-8 h-96 rounded-card" />}>
             <Portfolio params={params} />

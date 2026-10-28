@@ -32,7 +32,8 @@ export function SystemHero({
   code: ReactNode;
   title: string;
   body: ReactNode;
-  character: { name: CharacterName; pose: Pose };
+  /** Not on the public site (Modèle B, no illustrated character). */
+  character?: { name: CharacterName; pose: Pose };
   /** Smaller title, inside the application card (mockup 08-02). */
   compact?: boolean;
   /** Search field, actions. */
@@ -54,9 +55,11 @@ export function SystemHero({
         <div className="text-base leading-[26px] text-ardoise lg:text-lg lg:leading-7">{body}</div>
         {children}
       </div>
-      <div className="shrink-0 [&_img]:h-[220px]! lg:[&_img]:h-[380px]!">
-        <Character name={character.name} pose={character.pose} height={380} />
-      </div>
+      {character && (
+        <div className="shrink-0 [&_img]:h-[220px]! lg:[&_img]:h-[380px]!">
+          <Character name={character.name} pose={character.pose} height={380} />
+        </div>
+      )}
     </div>
   );
 }

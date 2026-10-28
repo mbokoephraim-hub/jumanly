@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { Character } from "@/components/brand";
 import { CertificateLookup } from "@/components/learn/certificate-lookup";
 import { Eyebrow, HeroPanel, lead, stagger, wrap } from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
@@ -50,9 +49,6 @@ export default async function CertificateLookupPage({
             <div className="jm-rise" style={stagger(3)}>
               <CertificateLookup />
             </div>
-          </div>
-          <div className="jm-breathe hidden flex-1 justify-end lg:flex">
-            <Character name="kofi" pose="joie" height={260} />
           </div>
         </div>
       </HeroPanel>

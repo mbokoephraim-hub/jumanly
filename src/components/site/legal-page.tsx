@@ -213,7 +213,7 @@ export async function LegalPage({ namespace, current }: { namespace: Namespace; 
         {incomplete && (
           <p
             role="note"
-            className="flex items-center gap-2.5 rounded-[14px] bg-[#FFF1C9] px-4 py-3 text-sm font-medium text-ambre-texte print:hidden"
+            className="jm-light flex items-center gap-2.5 rounded-[14px] bg-[#FFF1C9] px-4 py-3 text-sm font-medium text-ambre-texte print:hidden"
           >
             <Icon name="alerte" className="size-4 shrink-0" />
             {t("legal.validationBanner")}
@@ -314,7 +314,10 @@ function RichText({ text, labelled = false }: { text: string; labelled?: boolean
       {label && <strong className="font-semibold">{label}</strong>}
       {body.split(/(\[[^\]]*\])/).map((part, index) =>
         hasPlaceholder(part) ? (
-          <mark key={index} className="rounded bg-[#FFF1C9] px-1 font-semibold text-ambre-texte">
+          <mark
+            key={index}
+            className="jm-light rounded bg-[#FFF1C9] px-1 font-semibold text-ambre-texte"
+          >
             {part}
           </mark>
         ) : (

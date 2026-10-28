@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element -- product previews are static WebP files already sized */
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Icon, type IconName } from "@/components/brand/icon";
@@ -9,7 +8,6 @@ import {
   IconTile,
   LimeCtaBand,
   MarketingSection,
-  PhotoFrame,
   SectionHead,
   SiteButton,
   SiteHero,
@@ -18,6 +16,7 @@ import {
 import { MotionRoot } from "@/components/site/motion";
 import { PublicPlanCards } from "@/components/site/pricing";
 import { cx } from "@/lib/cx";
+import { PipelinePreview } from "@/components/site/previews";
 import { formatUsd } from "@/lib/money";
 import { pageMetadata } from "@/lib/seo";
 import { signupHref } from "@/lib/signup";
@@ -79,7 +78,7 @@ const avatarTones = [
   "bg-lime text-sapin",
   "bg-neon text-sapin",
   "bg-menthe-claire text-sapin",
-  "bg-feuille-fonce text-blanc",
+  "bg-[#1c3a2c] text-lime",
 ];
 
 function initialsOf(name: string) {
@@ -367,7 +366,6 @@ export default async function CompaniesPage({ params }: PageProps<"/[locale]/ent
       <LimeCtaBand
         title={t("companies.finalCta.title")}
         text={t("companies.finalCta.text")}
-        character={{ name: "diallo", pose: "joie", height: 330, mobileHeight: 250 }}
         actions={
           <>
             <SiteButton href={signup}>{t("companies.finalCta.primary")}</SiteButton>
@@ -403,24 +401,11 @@ function HeroVisual({
 }) {
   return (
     <>
-      <PhotoFrame
-        tone="sapin"
-        character={{ name: "diallo", pose: "telephone", height: 300 }}
-        className="h-[440px] sm:h-[520px] lg:h-[600px] [&>div]:justify-end [&>div]:pr-2"
-      >
-        <div className="jm-float-slow absolute top-24 left-6 lg:top-28 lg:left-10">
-          <img
-            src="/apercus/recruteurs-pipeline.webp"
-            alt={alt}
-            width={700}
-            height={497}
-            fetchPriority="high"
-            className="w-[560px] max-w-none rounded-[20px] shadow-[0_30px_60px_rgba(0,0,0,0.35)] ring-[6px] ring-nuit lg:w-[700px]"
-          />
-        </div>
-      </PhotoFrame>
+      <div className="relative pt-20 pb-24 lg:py-24 lg:pl-8">
+        <PipelinePreview label={alt} className="jm-float-slow" />
+      </div>
       <FloatCard
-        className="jm-pop top-5 left-3 flex items-center gap-2.5 lg:-left-6"
+        className="jm-pop top-2 left-3 flex items-center gap-2.5 lg:top-4 lg:-left-2"
         style={stagger(0)}
       >
         <span className="flex size-9 items-center justify-center rounded-full bg-nuit text-xs font-bold text-lime">
@@ -435,7 +420,7 @@ function HeroVisual({
         </span>
       </FloatCard>
       <FloatCard
-        className="jm-pop bottom-8 left-3 flex items-center gap-2.5 lg:-left-6"
+        className="jm-pop bottom-2 left-3 flex items-center gap-2.5 lg:bottom-4 lg:-left-2"
         style={stagger(1)}
       >
         <span className="flex">

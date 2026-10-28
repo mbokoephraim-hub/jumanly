@@ -4,7 +4,6 @@ import { getTranslations } from "next-intl/server";
 import { Icon, Logo } from "@/components/brand";
 import { footerNavigation, legalNavigation } from "@/config/navigation";
 import { CookieSettingsButton } from "@/components/site/cookie-consent";
-import { Shape } from "@/components/site/marketing";
 import { LanguageSwitch } from "./public-header";
 
 async function currentYear() {
@@ -28,12 +27,8 @@ export async function PublicFooter() {
   const link = "block text-[14px] leading-[32px] text-blanc/80 transition-colors hover:text-lime";
   const heading = "text-[13px] font-semibold text-neon";
   return (
-    <footer className="bg-papier px-2 pb-2 sm:px-3 lg:px-4 lg:pb-3">
-      <div className="relative mx-auto max-w-[1400px] overflow-hidden rounded-[32px] bg-nuit pt-12 pb-6 text-blanc lg:rounded-[48px] lg:pt-20 lg:pb-8">
-        <Shape
-          name="forme-orbites-lime"
-          className="-top-64 -right-64 w-[760px] opacity-[0.07] max-lg:hidden"
-        />
+    <footer className="border-t border-blanc/8 bg-nuit text-blanc">
+      <div className="relative mx-auto max-w-[1400px] overflow-hidden pt-12 pb-6 lg:pt-20 lg:pb-8">
         <div className="relative mx-auto max-w-[1200px] px-5 lg:px-10 xl:px-0">
           <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16">
             <div className="flex max-w-[360px] flex-col gap-5">
@@ -101,7 +96,7 @@ export async function PublicFooter() {
           </div>
           <p
             aria-hidden
-            className="mt-14 bg-gradient-to-r from-lime via-neon to-menthe bg-clip-text text-[15vw] leading-[0.9] font-semibold tracking-[-0.06em] text-transparent select-none lg:mt-20 lg:text-[150px]"
+            className="mt-14 bg-[linear-gradient(90deg,rgb(255_255_255/0.1),rgb(255_255_255/0.05))] bg-clip-text text-[15vw] leading-[0.9] font-semibold tracking-[-0.06em] text-transparent select-none lg:mt-20 lg:text-[150px]"
           >
             {t("footer.big")}
           </p>

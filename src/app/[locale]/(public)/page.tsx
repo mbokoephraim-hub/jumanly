@@ -1,13 +1,10 @@
-/* eslint-disable @next/next/no-img-element -- product previews are static WebP files already sized */
-import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getMessages, getTranslations } from "next-intl/server";
-import { AiOrb, Character } from "@/components/brand";
+import { AiOrb } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import {
   ArrowLink,
-  ButtonDisc,
   Eyebrow,
   FaqAccordion,
   FloatCard,
@@ -15,15 +12,12 @@ import {
   LimeCtaBand,
   MarketingSection,
   PhotoFrame,
-  PoseCycle,
   SectionHead,
-  Shape,
   SiteButton,
   StatRow,
   heroTitle,
   lead,
   sectionTitle,
-  siteButtonClasses,
   stagger,
 } from "@/components/site/marketing";
 import { InstallApp } from "@/components/site/install-app";
@@ -74,20 +68,17 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     {
       key: "talents",
       href: "/talents",
-      frame: "lime",
-      character: { name: "kofi", pose: "joie" },
+      icon: "profil",
     },
     {
       key: "rh",
       href: "/recruteurs",
-      frame: "menthe",
-      character: { name: "nadia", pose: "montre" },
+      icon: "hire",
     },
     {
       key: "companies",
       href: "/entreprises",
-      frame: "sapin",
-      character: { name: "diallo", pose: "salut" },
+      icon: "equipe",
     },
   ] as const;
 
@@ -161,19 +152,11 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       />
       <MotionRoot />
 
-      {/* Hero: a Lime clair panel, the title very large, the app in a picture with its cards */}
-      <section className="bg-papier px-2 pt-2 sm:px-3 lg:px-4 lg:pt-3">
-        <div className="relative mx-auto max-w-[1400px] overflow-hidden rounded-[32px] bg-lime-clair px-5 pt-10 pb-8 text-sapin lg:rounded-[48px] lg:px-14 lg:pt-20 lg:pb-12">
-          <Shape
-            name="forme-orbites-sapin"
-            className="jm-drift -top-56 -left-56 w-[640px] opacity-[0.06]"
-          />
-          <span
-            aria-hidden
-            className="absolute -right-40 -bottom-40 size-[560px] rounded-full bg-lime/50 blur-3xl"
-          />
-          <div className="relative mx-auto flex max-w-[1200px] flex-col gap-10 lg:flex-row lg:items-center lg:gap-14">
-            <div className="flex flex-col gap-6 lg:w-[600px] lg:shrink-0">
+      {/* Hero: on the Nuit page, the title very large, a photo with the cards of a real day */}
+      <section className="bg-papier px-4">
+        <div className="relative mx-auto max-w-[1200px] pt-10 pb-12 lg:pt-20 lg:pb-16">
+          <div className="relative flex flex-col gap-10 lg:flex-row lg:items-center lg:gap-14">
+            <div className="flex flex-col gap-6 lg:w-[560px] lg:shrink-0">
               <div className="jm-rise" style={stagger(0)}>
                 <Eyebrow>{t("home.hero.eyebrow")}</Eyebrow>
               </div>
@@ -187,14 +170,11 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                     {word}
                   </span>
                 ))}
-                <span
-                  className="jm-word inline-block rounded-[0.32em] bg-nuit px-[0.18em] pb-[0.06em] text-lime"
-                  style={stagger(titleWords.length)}
-                >
+                <span className="jm-word inline-block text-lime" style={stagger(titleWords.length)}>
                   {lastWord}
                 </span>
               </h1>
-              <p className={cx(lead, "jm-rise max-w-[540px] text-sapin/85")} style={stagger(3)}>
+              <p className={cx(lead, "jm-rise max-w-[540px] text-ardoise")} style={stagger(3)}>
                 {t("home.hero.subtitle")}
               </p>
               <div className="jm-rise flex flex-col gap-3 sm:flex-row" style={stagger(4)}>
@@ -209,9 +189,9 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                 {(["reassurance1", "reassurance2", "reassurance3"] as const).map((key) => (
                   <li
                     key={key}
-                    className="flex items-center gap-1.5 rounded-pill bg-blanc/70 py-1.5 pr-3 pl-1.5 text-xs leading-[17px] font-semibold"
+                    className="flex items-center gap-1.5 text-[13px] leading-[18px] font-medium text-ardoise"
                   >
-                    <span className="flex size-5 items-center justify-center rounded-full bg-lime">
+                    <span className="flex size-5 items-center justify-center rounded-full bg-lime text-sapin">
                       <Icon name="check" className="size-3" />
                     </span>
                     {t(`home.hero.${key}`)}
@@ -220,16 +200,16 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               </ul>
               <InstallApp
                 id="jm-installer-accueil"
-                buttonClassName="inline-flex items-center gap-3 self-start rounded-pill py-1 pr-4 pl-1 text-left text-sm font-semibold hover:bg-blanc/60"
+                buttonClassName="inline-flex items-center gap-3 self-start rounded-pill py-1 pr-4 pl-1 text-left text-sm font-semibold hover:bg-blanc"
                 dialogClassName={installDialog}
                 trigger={
                   <>
-                    <span className="flex size-10 items-center justify-center rounded-full bg-sapin text-lime">
+                    <span className="flex size-10 items-center justify-center rounded-full bg-blanc text-lime ring-1 ring-sapin/10 ring-inset">
                       <Icon name="telecharger" className="size-5" />
                     </span>
                     <span className="flex flex-col items-start">
                       {t("system.install.button")}
-                      <span className="text-xs font-medium text-sapin/75">
+                      <span className="text-xs font-medium text-ardoise">
                         {t("system.install.text")}
                       </span>
                     </span>
@@ -239,7 +219,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               />
             </div>
             <HeroVisual
-              alt={t("home.hero.imageAlt")}
+              alt={t("home.hero.photoAlt")}
               badge={t("home.hero.visual.badge")}
               matchTitle={t("home.hero.visual.matchTitle")}
               matchText={t("home.hero.visual.matchText")}
@@ -248,7 +228,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               match={matchValue}
             />
           </div>
-          <div className="relative mx-auto mt-10 max-w-[1200px] rounded-[28px] bg-blanc/70 px-2 py-6 lg:mt-16 lg:py-8">
+          <div className="jm-card relative mx-auto mt-12 max-w-[1200px] rounded-[24px] px-2 py-6 lg:mt-16 lg:py-8">
             <h2 className="sr-only">{t("home.stats.label")}</h2>
             <StatRow items={stats} />
           </div>
@@ -270,19 +250,16 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             <li
               key={audience.key}
               data-reveal
-              className="jm-lift group relative flex flex-col overflow-hidden rounded-[32px] bg-blanc p-2 ring-1 ring-sapin/6"
+              className="jm-card jm-lift group relative flex flex-col overflow-hidden rounded-[24px] p-6 lg:p-7"
               style={stagger(index)}
             >
-              <PhotoFrame
-                tone={audience.frame}
-                character={{ ...audience.character, height: 230 }}
-                className="h-[260px]"
-              >
-                <span className="absolute top-4 left-4 inline-flex h-7 items-center rounded-pill bg-blanc px-3 text-xs font-semibold text-sapin">
+              <div className="flex items-center justify-between gap-3">
+                <IconTile icon={audience.icon} size={48} className="bg-[#1c3a2c] text-lime" />
+                <span className="text-xs font-semibold text-neon">
                   {t(`home.audiences.${audience.key}.label`)}
                 </span>
-              </PhotoFrame>
-              <div className="flex flex-1 flex-col gap-3 px-4 pt-5 pb-4 lg:px-5">
+              </div>
+              <div className="flex flex-1 flex-col gap-3 pt-6">
                 <h3 className="text-[22px] leading-7 font-semibold tracking-[-0.025em]">
                   {t(`home.audiences.${audience.key}.title`)}
                 </h3>
@@ -290,28 +267,18 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                   {t(`home.audiences.${audience.key}.text`)}
                 </p>
                 <div className="flex-1" />
-                <Link
-                  href={audience.href}
-                  className={cx(
-                    siteButtonClasses("dark", "md"),
-                    "mt-2 self-start after:absolute after:inset-0",
-                  )}
-                >
+                <ArrowLink href={audience.href} stretched className="mt-2 text-lime">
                   {t(`home.audiences.${audience.key}.cta`)}
-                  <ButtonDisc size="md" />
-                </Link>
+                </ArrowLink>
               </div>
             </li>
           ))}
         </ul>
       </MarketingSection>
 
-      {/* Journey: four numbered steps beside the app on a phone */}
-      <MarketingSection
-        tone="blanc"
-        innerClassName="flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-20"
-      >
-        <div className="flex flex-col gap-8 lg:flex-1">
+      {/* Journey: four numbered steps */}
+      <MarketingSection innerClassName="flex flex-col gap-12">
+        <div className="flex flex-col gap-10">
           <div data-reveal>
             <SectionHead
               eyebrow={t("home.journey.eyebrow")}
@@ -319,19 +286,19 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               text={t("home.journey.subtitle")}
             />
           </div>
-          <ol className="flex flex-col gap-3">
+          <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((step, index) => (
               <li
                 key={step.key}
                 data-reveal
-                className="jm-lift flex gap-4 rounded-[24px] bg-papier p-4 ring-1 ring-sapin/6 lg:p-5"
+                className="jm-card jm-lift flex flex-col gap-4 rounded-[24px] p-6"
                 style={stagger(index)}
               >
                 <span
                   aria-hidden
                   className={cx(
                     "flex size-12 shrink-0 items-center justify-center rounded-full text-[17px] font-semibold",
-                    index === 0 ? "bg-nuit text-lime" : "bg-lime text-sapin",
+                    "bg-[#1c3a2c] text-lime",
                   )}
                 >
                   {String(t(`home.journey.${step.key}.number`)).padStart(2, "0")}
@@ -348,31 +315,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               </li>
             ))}
           </ol>
-        </div>
-        <div data-reveal="zoom" className="lg:w-[460px] lg:shrink-0">
-          <PhotoFrame tone="sapin" className="h-[520px] lg:h-[600px]">
-            <div className="jm-float absolute top-10 left-1/2 -translate-x-1/2">
-              <div className="h-[480px] w-[230px] overflow-hidden rounded-[30px] shadow-[0_30px_60px_rgba(0,0,0,0.45)] ring-[6px] ring-nuit lg:h-[520px] lg:w-[250px]">
-                <img
-                  src="/apercus/talents-tableau-de-bord-mobile.webp"
-                  alt={t("home.hero.imageAlt")}
-                  width={250}
-                  height={541}
-                  loading="lazy"
-                  className="jm-screen w-full max-w-none"
-                  style={{ "--jm-scroll": "-60px" } as CSSProperties}
-                />
-              </div>
-            </div>
-            <FloatCard className="jm-pop bottom-10 left-3 flex items-center gap-2.5 lg:-left-8">
-              <span className="flex size-9 items-center justify-center rounded-full bg-lime">
-                <Icon name="certificat" className="size-[18px]" />
-              </span>
-              <span className="text-[13px] leading-[18px] font-semibold">
-                {t("home.hero.visual.badge")}
-              </span>
-            </FloatCard>
-          </PhotoFrame>
         </div>
       </MarketingSection>
 
@@ -391,18 +333,11 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             name={t("home.modules.learn.name")}
             text={t("home.modules.learn.text")}
             icon="learn"
-            preview="talents-module-learn"
-            className="lg:col-span-2"
-            wide
           />
           <li
             data-reveal
-            className="jm-lift relative flex flex-col gap-4 overflow-hidden rounded-[32px] bg-sapin p-6 text-blanc lg:p-8"
+            className="jm-lift relative flex flex-col gap-4 overflow-hidden rounded-[24px] bg-sapin p-6 text-blanc lg:p-8"
           >
-            <Shape
-              name="forme-orbites-lime"
-              className="jm-drift -right-24 -bottom-24 w-[300px] opacity-20"
-            />
             <AiOrb size={52} className="jm-pulse" />
             <h3 className="text-2xl leading-[30px] font-semibold tracking-[-0.025em]">
               {t("home.modules.intelligence.name")}
@@ -412,26 +347,24 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             </p>
             <div
               aria-hidden
-              className="relative mt-auto flex flex-col gap-2 rounded-[20px] bg-blanc p-4 text-sapin"
+              className="relative mt-auto flex flex-col gap-2 rounded-[18px] bg-nuit p-4 text-blanc"
             >
               <span className="text-sm font-semibold">{t("home.hero.visual.matchTitle")}</span>
-              <span className="h-2 overflow-hidden rounded-pill bg-brume">
+              <span className="h-2 overflow-hidden rounded-pill bg-blanc/12">
                 <span
                   className="jm-fill block h-full rounded-pill bg-lime"
                   style={{ width: `${matchValue}%` }}
                 />
               </span>
-              <span className="text-xs font-semibold text-feuille-fonce">
+              <span className="text-xs font-semibold text-lime">
                 <CountUp text={t("home.hero.visual.matchShort")} />
               </span>
             </div>
             <Link
               href="/comment-fonctionne-le-matching"
-              className="relative inline-flex items-center gap-2 self-start rounded-pill bg-lime py-2 pr-4 pl-2 text-sm font-semibold text-sapin"
+              className="relative inline-flex items-center gap-2 self-start py-2 text-sm font-semibold text-lime underline-offset-4 hover:underline"
             >
-              <span className="flex size-7 items-center justify-center rounded-full bg-nuit text-lime">
-                <Icon name="eye" className="size-4" />
-              </span>
+              <Icon name="eye" className="size-4" />
               {t("common.why")}
             </Link>
           </li>
@@ -439,28 +372,21 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             name={t("home.modules.career.name")}
             text={t("home.modules.career.text")}
             icon="career"
-            preview="talents-module-career"
           />
           <ModuleCard
             name={t("home.modules.jobs.name")}
             text={t("home.modules.jobs.text")}
             icon="jobs"
-            preview="talents-module-jobs"
-            tint
           />
           <ModuleCard
             name={t("home.modules.hire.name")}
             text={t("home.modules.hire.text")}
             icon="hire"
-            preview="accueil-module-hire"
           />
           <ModuleCard
             name={t("home.modules.connect.name")}
             text={t("home.modules.connect.text")}
             icon="connect"
-            preview="talents-module-connect"
-            className="lg:col-span-3"
-            wide
           />
         </ul>
       </MarketingSection>
@@ -537,24 +463,14 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       </MarketingSection>
 
       {/* Plans: a Sapin panel, prices read from the database */}
-      <MarketingSection
-        tone="sapin"
-        background={
-          <Shape
-            name="forme-orbites-lime"
-            className="-bottom-64 -left-64 w-[720px] opacity-[0.08]"
-          />
-        }
-        innerClassName="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16"
-      >
+      <MarketingSection innerClassName="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16">
         <div data-reveal className="flex flex-col gap-6 lg:w-[400px] lg:shrink-0">
           <SectionHead
-            dark
             eyebrow={t("home.pricing.eyebrow")}
             title={t("home.pricing.title")}
             text={t("home.pricing.subtitle")}
           />
-          <p className="flex items-center gap-3 rounded-[20px] bg-blanc/8 px-4 py-3 text-sm leading-5 text-blanc/85 ring-1 ring-blanc/12 ring-inset">
+          <p className="jm-card flex items-center gap-3 rounded-[18px] px-4 py-3 text-sm leading-5 text-ardoise">
             <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-lime text-sapin">
               <Icon name="mobile-money" className="size-[18px]" />
             </span>
@@ -569,36 +485,17 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             <li
               key={family.key}
               data-reveal="zoom"
-              className={cx(
-                "jm-lift flex flex-col gap-3 rounded-[28px] p-6 lg:p-7",
-                index === 0
-                  ? "bg-lime text-sapin"
-                  : "bg-blanc/8 text-blanc ring-1 ring-blanc/12 ring-inset",
-              )}
+              className="jm-card jm-lift flex flex-col gap-3 rounded-[24px] p-6 lg:p-7"
               style={stagger(index)}
             >
-              <IconTile
-                icon={family.icon}
-                size={48}
-                className={index === 0 ? "bg-nuit text-lime" : "bg-lime text-sapin"}
-              />
+              <IconTile icon={family.icon} size={48} className="bg-[#1c3a2c] text-lime" />
               <h3 className="text-base leading-6 font-semibold">
                 {t(`home.pricing.${family.key}.name`)}
               </h3>
-              <p
-                className={cx(
-                  "text-[28px] leading-[34px] font-semibold tracking-[-0.03em]",
-                  index === 0 ? "text-sapin" : "text-lime",
-                )}
-              >
+              <p className="text-[28px] leading-[34px] font-semibold tracking-[-0.03em] text-lime">
                 <CountUp text={family.price} />
               </p>
-              <p
-                className={cx(
-                  "text-sm leading-[22px]",
-                  index === 0 ? "text-sapin/85" : "text-blanc/75",
-                )}
-              >
+              <p className="text-sm leading-[22px] text-ardoise">
                 {t(`home.pricing.${family.key}.text`)}
               </p>
             </li>
@@ -621,10 +518,10 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             <li
               key={key}
               data-reveal
-              className="jm-lift flex flex-col gap-4 rounded-[28px] bg-blanc p-6 ring-1 ring-sapin/6 lg:p-7"
+              className="jm-card jm-lift flex flex-col gap-4 rounded-[24px] p-6 lg:p-7"
               style={stagger(index)}
             >
-              <IconTile icon={icon} className="bg-lime-clair text-sapin" />
+              <IconTile icon={icon} className="bg-[#1c3a2c] text-lime" />
               <h3 className="text-xl leading-[26px] font-semibold tracking-[-0.02em]">
                 {t(`home.trust.${key}.title`)}
               </h3>
@@ -658,9 +555,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           <SiteButton href="/faq" tone="light" className="self-start">
             {t("home.faq.cta")}
           </SiteButton>
-          <span className="hidden lg:block">
-            <PoseCycle name="fatou" poses={["montre", "joie"]} height={240} />
-          </span>
         </div>
         <div data-reveal className="min-w-0 flex-1" style={stagger(1)}>
           <FaqAccordion onWhite items={faqItems(messages, overrides, "home.faq")} />
@@ -671,7 +565,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         spacedTop
         title={t("home.finalCta.title")}
         text={t("home.finalCta.text")}
-        character={{ name: "kofi", pose: "joie", height: 340, mobileHeight: 260 }}
         actions={
           <>
             <SiteButton href={signupHref()}>{t("home.finalCta.primary")}</SiteButton>
@@ -685,57 +578,26 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
   );
 }
 
-/** A card of the modules bento: icon, name, text and a preview of the screen. */
+/** A card of the modules bento: icon, name and text. */
 function ModuleCard({
   name,
   text,
   icon,
-  preview,
   className,
-  wide = false,
-  tint = false,
 }: {
   name: string;
   text: string;
   icon: IconName;
-  preview: string;
   className?: string;
-  /** Text beside the preview from desktop up. */
-  wide?: boolean;
-  /** Lime clair ground instead of white. */
-  tint?: boolean;
 }) {
   return (
     <li
       data-reveal
-      className={cx(
-        "jm-lift flex flex-col gap-4 overflow-hidden rounded-[32px] p-6 text-sapin ring-1 ring-sapin/6 lg:p-8",
-        tint ? "bg-lime-clair" : "bg-blanc",
-        wide && "lg:flex-row lg:items-center lg:gap-10 lg:pr-0 lg:pb-0",
-        className,
-      )}
+      className={cx("jm-card jm-lift flex flex-col gap-3 rounded-[24px] p-6 lg:p-8", className)}
     >
-      <div className={cx("flex flex-col gap-3", wide && "lg:w-[340px] lg:shrink-0 lg:pb-8")}>
-        <IconTile icon={icon} size={52} className="bg-nuit text-lime" />
-        <h3 className="text-2xl leading-[30px] font-semibold tracking-[-0.025em]">{name}</h3>
-        <p className="text-[15px] leading-6 text-ardoise">{text}</p>
-      </div>
-      <div
-        className={cx(
-          "relative mt-auto -mr-6 -mb-6 h-44 overflow-hidden rounded-tl-[22px] bg-papier shadow-[0_-8px_30px_rgba(11,26,31,0.12)] lg:-mr-8 lg:-mb-8 lg:h-52",
-          wide && "lg:mr-0 lg:mb-0 lg:h-64 lg:flex-1",
-        )}
-      >
-        <img
-          src={`/apercus/${preview}.webp`}
-          alt=""
-          width={1350}
-          height={800}
-          loading="lazy"
-          decoding="async"
-          className="jm-pan-shot size-full object-cover object-left-top"
-        />
-      </div>
+      <IconTile icon={icon} size={48} className="bg-[#1c3a2c] text-lime" />
+      <h3 className="pt-2 text-[22px] leading-7 font-semibold tracking-[-0.02em]">{name}</h3>
+      <p className="text-[15px] leading-6 text-ardoise">{text}</p>
     </li>
   );
 }
@@ -805,9 +667,9 @@ function InstallSteps({
 }
 
 /**
- * Hero picture: the app on a phone in a Sapin frame, a character, and the cards of a real day on
- * Jumanly floating over it (a compatible offer with its score, a new offer, a certificate).
- * Decorative labels belong to the illustration, described by the image's alternative text.
+ * Hero picture: a photo of someone using Jumanly, and the cards of a real day on Jumanly floating
+ * over it (a compatible offer with its score, a new offer, a certificate). Decorative labels belong
+ * to the illustration, described by the photo's alternative text.
  */
 function HeroVisual({
   alt,
@@ -828,24 +690,10 @@ function HeroVisual({
 }) {
   return (
     <div className="jm-rise relative min-w-0 flex-1" style={stagger(2)}>
-      <PhotoFrame tone="sapin" className="h-[440px] sm:h-[520px] lg:ml-8 lg:h-[600px]">
-        <div className="jm-float absolute top-8 left-1/2 -translate-x-1/2 lg:top-12 lg:left-[44%]">
-          <div className="h-[400px] w-[190px] overflow-hidden rounded-[28px] shadow-[0_30px_60px_rgba(0,0,0,0.45)] ring-[6px] ring-nuit sm:h-[470px] sm:w-[220px] lg:h-[520px] lg:w-[240px]">
-            <img
-              src="/apercus/accueil-tableau-de-bord-mobile.webp"
-              alt={alt}
-              width={240}
-              height={519}
-              fetchPriority="high"
-              className="jm-screen w-full max-w-none"
-              style={{ "--jm-scroll": "-90px" } as CSSProperties}
-            />
-          </div>
-        </div>
-        <div className="jm-breathe absolute right-0 bottom-0 max-sm:hidden lg:-right-4">
-          <Character name="amani" pose="telephone" height={260} />
-        </div>
-      </PhotoFrame>
+      <PhotoFrame
+        photo={{ src: "accueil-tablette.webp", alt, position: "58% 30%", priority: true }}
+        className="h-[380px] sm:h-[480px] lg:ml-8 lg:h-[560px]"
+      />
       <FloatCard
         className="jm-pop top-6 -left-1 flex w-[230px] flex-col gap-2 sm:w-[260px] lg:top-24 lg:-left-6"
         style={stagger(0)}
@@ -880,10 +728,10 @@ function HeroVisual({
       </FloatCard>
       <span
         aria-hidden
-        className="jm-pop absolute top-4 right-4 flex items-center gap-2 rounded-pill max-sm:hidden bg-lime py-1.5 pr-3.5 pl-1.5 text-xs font-semibold text-sapin shadow-[0_10px_30px_rgba(11,26,31,0.25)] lg:top-8 lg:right-8"
+        className="jm-pop absolute top-4 right-4 flex items-center gap-2 rounded-pill bg-blanc py-1.5 pr-3.5 pl-1.5 text-xs font-semibold text-sapin shadow-[0_10px_30px_rgba(0,0,0,0.35)] ring-1 ring-sapin/10 ring-inset max-sm:hidden lg:top-8 lg:right-8"
         style={stagger(2)}
       >
-        <span className="flex size-7 items-center justify-center rounded-full bg-nuit text-lime">
+        <span className="flex size-7 items-center justify-center rounded-full bg-lime text-sapin">
           <Icon name="certificat" className="size-3.5" />
         </span>
         {badge}

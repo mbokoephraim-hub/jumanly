@@ -9,9 +9,7 @@ import {
   LimeCtaBand,
   MarketingSection,
   PathLine,
-  PoseCycle,
   SectionHead,
-  Shape,
   SiteButton,
   SiteHero,
   stagger,
@@ -73,10 +71,10 @@ const values = [
 
 const launchSteps = ["step1", "step2", "step3"] as const;
 
-const chips: { key: "learn" | "exchange" | "recruit"; icon: IconName; position: string }[] = [
-  { key: "learn", icon: "learn", position: "top-9 left-8" },
-  { key: "exchange", icon: "connect", position: "top-24 left-[236px]" },
-  { key: "recruit", icon: "hire", position: "top-9 right-8" },
+const chips: { key: "learn" | "exchange" | "recruit"; icon: IconName }[] = [
+  { key: "learn", icon: "learn" },
+  { key: "exchange", icon: "connect" },
+  { key: "recruit", icon: "hire" },
 ];
 
 export default async function AboutPage({ params }: PageProps<"/[locale]/a-propos">) {
@@ -93,48 +91,18 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
         eyebrow={t("hero.eyebrow")}
         title={t("hero.title")}
         text={t("hero.text")}
-        visual={
-          <div
-            role="img"
-            aria-label={t("hero.imageAlt")}
-            className="relative h-[360px] overflow-hidden rounded-[32px] bg-sapin xl:h-[600px] xl:rounded-[40px]"
-          >
-            <Shape
-              name="forme-orbites-lime"
-              className="jm-drift -top-[50px] -left-10 w-[220px] opacity-[0.15] xl:w-[380px]"
-            />
-            <div className="absolute inset-x-0 bottom-0 flex items-end justify-center gap-1.5">
-              <span className="xl:hidden">
-                <PoseCycle name="nadia" poses={["salut", "joie"]} height={220} />
-              </span>
-              <span className="xl:hidden">
-                <PoseCycle name="kofi" poses={["joie", "salut"]} height={240} />
-              </span>
-              <span className="hidden xl:block">
-                <PoseCycle name="nadia" poses={["salut", "joie"]} height={360} />
-              </span>
-              <span className="hidden xl:block">
-                <PoseCycle name="kofi" poses={["joie", "salut"]} height={390} />
-              </span>
-              <span className="hidden xl:block">
-                <PoseCycle name="diallo" poses={["montre", "salut"]} height={360} />
-              </span>
-            </div>
-            {chips.map((chip, index) => (
-              <div
+        extra={
+          <ul className="flex flex-wrap gap-2.5">
+            {chips.map((chip) => (
+              <li
                 key={chip.key}
-                aria-hidden
-                className={cx(
-                  "jm-pop absolute z-10 hidden items-center gap-2.5 rounded-md bg-blanc px-4 py-3 text-sapin shadow-[0_18px_40px_rgba(11,26,31,0.35)] xl:flex",
-                  chip.position,
-                )}
-                style={stagger(index)}
+                className="jm-card flex items-center gap-2.5 rounded-pill py-1.5 pr-4 pl-1.5"
               >
-                <IconTile icon={chip.icon} size={34} className="bg-lime text-sapin" />
+                <IconTile icon={chip.icon} size={34} className="bg-[#1c3a2c] text-lime" />
                 <span className="text-[13px] font-semibold">{t(`hero.chips.${chip.key}`)}</span>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         }
       />
 
@@ -168,10 +136,6 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
               )}
               style={stagger(index)}
             >
-              <Shape
-                name={item.arc}
-                className="jm-drift -right-10 -bottom-10 w-[220px] opacity-18"
-              />
               <IconTile icon={item.icon} size={56} className={item.tile} />
               <h2 className={cardTitle}>{t(`${item.key}.title`)}</h2>
               <p className="relative text-[17px] leading-7 opacity-88 lg:text-[19px] lg:leading-[30px]">
@@ -345,7 +309,6 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
       <section aria-hidden className="h-14 bg-papier lg:h-24" />
       <LimeCtaBand
         title={t("cta.title")}
-        character={{ name: "amani", pose: "joie", height: 330, mobileHeight: 240 }}
         actions={
           <>
             <SiteButton href={signupHref()}>{t("cta.primary")}</SiteButton>

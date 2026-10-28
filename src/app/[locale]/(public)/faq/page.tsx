@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { getMessages, getTranslations } from "next-intl/server";
-import { Character } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { FaqSearch, FaqThemes } from "@/components/site/faq-search";
 import {
@@ -83,11 +82,6 @@ export default async function FaqPage({ params }: PageProps<"/[locale]/faq">) {
             />
           </div>
         }
-        visual={
-          <div className="jm-breathe -mb-10 hidden justify-end lg:-mb-16 lg:flex">
-            <Character name="fatou" pose="montre" height={330} />
-          </div>
-        }
       />
 
       {/* Themes and questions */}
@@ -164,7 +158,6 @@ export default async function FaqPage({ params }: PageProps<"/[locale]/faq">) {
         spacedTop
         title={t("cta.title")}
         text={t("cta.text")}
-        character={{ name: "kofi", pose: "joie", height: 330, mobileHeight: 250 }}
         actions={
           <SiteButton href="/contact" icon="message">
             {t("cta.button")}

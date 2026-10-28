@@ -5008,3 +5008,10 @@ bibliothèque, et se supprime.
 - Site bilingue avec sélecteur FR / EN : voir docs/decisions/2026-10-28-site-bilingue.md. 1 753 textes traduits dans `textes/en/`.
 - Les contenus de la base (offres, formations de démonstration, descriptions des forfaits) restent en français sur la version anglaise.
 - Test unitaire `phone-preload` réparé (il échouait déjà sur main).
+
+## 2026-10-28 · Site public : passage au Modèle B sombre et première photo
+
+- Ephraïm trouvait la nouvelle identité trop enfantine : le site public reprend le Modèle B (fond Nuit, cartes Surface, Lime pour les actions, Sora), sans personnages ni formes. Détail : docs/decisions/2026-10-28-site-public.md.
+- Première photo d'Ephraïm dans le héros de l'accueil (`public/photos/accueil-tablette.webp`). Aperçus de l'application en HTML sur talents, recruteurs et entreprises.
+- Contrastes AA vérifiés (tests d'accessibilité du site public au vert).
+- Reste connu, hors de ce travail : un contraste du sélecteur d'espace sur /app/partenaire au téléphone.

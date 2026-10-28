@@ -2,7 +2,6 @@
 
 import { useActionState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
-import { Character } from "@/components/brand";
 import { Icon } from "@/components/brand/icon";
 import { Alert } from "@/components/ui/alert";
 import { Button, ButtonLink } from "@/components/ui/button";
@@ -68,9 +67,6 @@ export function QuoteForm({
         tabIndex={-1}
         className={`${card} flex scroll-mt-24 flex-col items-center gap-4 text-center outline-none`}
       >
-        <span className="jm-pop">
-          <Character name="diallo" pose="joie" height={180} />
-        </span>
         <h2 className="text-2xl leading-[30px] font-semibold tracking-[-0.015em]">
           {t("success.title")}
         </h2>

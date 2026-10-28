@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { Character } from "@/components/brand";
 import { Icon } from "@/components/brand/icon";
 import { FilterPanel } from "@/components/site/filter-panel";
 import {
@@ -78,9 +77,6 @@ export default async function TrainingsPage({
             <Suspense fallback={<SearchBar />}>
               <HeroSearch searchParams={searchParams} />
             </Suspense>
-          </div>
-          <div className="jm-breathe -mb-11 hidden shrink-0 lg:mr-[110px] lg:block">
-            <Character name="amani" pose="montre" height={300} />
           </div>
         </div>
       </HeroPanel>

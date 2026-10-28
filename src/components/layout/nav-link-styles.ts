@@ -13,11 +13,11 @@ const placements = {
     on: "jm-nav-active gap-[7px] bg-lime px-4 text-xs font-semibold text-sapin",
     off: "w-[46px] text-blanc/70 hover:text-blanc",
   },
-  // Floating public header (28/10/2026): pills inside a Papier pill, the current page in Nuit.
+  // Public header, Modèle B (28/10/2026): plain links, the current page in Lime.
   public: {
-    base: "flex h-10 items-center rounded-pill px-4 text-[14px] font-medium whitespace-nowrap transition-colors",
-    on: "bg-nuit text-blanc",
-    off: "text-sapin hover:bg-blanc",
+    base: "flex h-10 items-center rounded-pill px-4 text-[15px] font-medium whitespace-nowrap transition-colors",
+    on: "text-lime",
+    off: "text-sapin hover:text-lime",
   },
   // Floating gradient column of Jumanly Admin (Admin v3): icon only, label in a tooltip.
   rail: {
