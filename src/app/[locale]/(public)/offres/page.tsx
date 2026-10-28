@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { AiOrb, Character } from "@/components/brand";
+import { AiOrb } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { FilterPanel } from "@/components/site/filter-panel";
 import {
@@ -66,9 +66,6 @@ export default async function JobsPage({ params, searchParams }: PageProps<"/[lo
             <p className={cx(lead, "jm-rise max-w-[760px] text-sapin/85")} style={stagger(2)}>
               {t("hero.text")}
             </p>
-          </div>
-          <div className="jm-breathe hidden shrink-0 lg:mr-6 lg:block">
-            <Character name="diallo" pose="telephone" height={220} />
           </div>
         </div>
       </HeroPanel>
@@ -401,9 +398,6 @@ async function Results({
               <SiteButton href={signupHref({ profil: "rh" })} size="md" className="relative">
                 {t("recruiterBanner.cta")}
               </SiteButton>
-              <div className="jm-breathe absolute right-5 -bottom-1 hidden lg:block">
-                <Character name="nadia" pose="montre" height={180} />
-              </div>
             </div>
             <div className="hidden lg:block">{filtersCard}</div>
             <p
@@ -448,8 +442,8 @@ async function SideFilters({ filters }: { filters: Omit<JobFilters, "page"> }) {
               <span
                 aria-hidden
                 className={cx(
-                  "flex size-[18px] shrink-0 items-center justify-center rounded-[5px] text-blanc",
-                  on ? "bg-sapin" : "bg-blanc ring-[1.5px] ring-ardoise ring-inset",
+                  "flex size-[18px] shrink-0 items-center justify-center rounded-[5px]",
+                  on ? "bg-lime text-sapin" : "bg-blanc ring-[1.5px] ring-ardoise ring-inset",
                 )}
               >
                 {on && <Icon name="check" className="size-3" />}
@@ -474,8 +468,8 @@ async function SideFilters({ filters }: { filters: Omit<JobFilters, "page"> }) {
               <span
                 aria-hidden
                 className={cx(
-                  "flex size-5 shrink-0 items-center justify-center rounded-full text-blanc",
-                  on ? "bg-sapin" : "bg-blanc ring-[1.5px] ring-ardoise ring-inset",
+                  "flex size-5 shrink-0 items-center justify-center rounded-full",
+                  on ? "bg-lime text-sapin" : "bg-blanc ring-[1.5px] ring-ardoise ring-inset",
                 )}
               >
                 {on && <Icon name="check" className="size-3" />}

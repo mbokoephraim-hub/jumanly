@@ -2,7 +2,6 @@ import { Suspense, cache } from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getMessages, getTranslations } from "next-intl/server";
-import { Character } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import {
   Eyebrow,
@@ -143,18 +142,9 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
 
       {/* Hero: the family segments and the payment terms, on a Lime clair panel */}
       <HeroPanel className="pt-10 pb-10 lg:pt-[72px] lg:pb-12">
-        <div className="jm-breathe absolute bottom-[-6px] left-[70px] hidden xl:block">
-          <Character name="kofi" pose="salut" height={250} />
-        </div>
-        <div
-          className="jm-breathe absolute right-[70px] bottom-[-6px] hidden xl:block"
-          style={{ animationDelay: "-2s" }}
-        >
-          <Character name="amani" pose="telephone" height={250} />
-        </div>
         <div className="relative mx-auto flex w-full max-w-[1200px] flex-col items-center gap-6 px-4 text-center xl:px-0">
           <span
-            className="jm-rise inline-flex h-8 items-center gap-1.5 rounded-pill bg-lime px-3.5 text-xs font-semibold"
+            className="jm-rise inline-flex h-8 items-center gap-1.5 rounded-pill bg-lime px-3.5 text-xs font-semibold text-sapin"
             style={stagger(0)}
           >
             <Icon name="check" className="size-3.5" />
@@ -237,7 +227,6 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
           {t("pricing.rh.privacyNote")}
         </p>
         <TarifBand
-          tone="lime"
           icon="entreprise"
           title={t("pricing.rh.upsell.title", { seats: rhMaxSeats })}
           text={t("pricing.rh.upsell.text", {
@@ -332,7 +321,7 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
             data-reveal="zoom"
             className="flex w-full flex-col gap-3.5 rounded-[28px] bg-blanc p-6 text-sapin"
           >
-            <span className="inline-flex h-6 items-center self-start rounded-pill bg-neon px-2.5 text-[11px] font-semibold">
+            <span className="inline-flex h-6 items-center self-start rounded-pill bg-neon px-2.5 text-[11px] font-semibold text-sapin">
               {t("pricing.partners.example.title")}
             </span>
             <p className="text-base leading-[26px] font-semibold">
@@ -345,9 +334,6 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
             <p className="text-xs leading-[17px] text-ardoise">
               {t("pricing.partners.example.note")}
             </p>
-          </div>
-          <div className="jm-breathe hidden lg:block lg:pr-6">
-            <Character name="diallo" pose="telephone" height={230} />
           </div>
         </div>
       </MarketingSection>
@@ -383,9 +369,6 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
             <p className="text-[14.5px] leading-[23px] text-ardoise">
               <WithEmail text={t("pricing.faq.more")} />
             </p>
-            <div className="jm-breathe mt-4 hidden self-start lg:block">
-              <Character name="nadia" pose="montre" height={240} />
-            </div>
           </div>
           <div data-reveal className="min-w-0 lg:flex-1">
             <FaqAccordion items={faq} />
@@ -397,7 +380,6 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
       <LimeCtaBand
         title={t("pricing.finalCta.title")}
         text={t("pricing.finalCta.text")}
-        character={{ name: "amani", pose: "joie", height: 300, mobileHeight: 220 }}
         actions={
           <>
             <SiteButton href={signupHref()}>{t("pricing.finalCta.primary")}</SiteButton>

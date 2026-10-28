@@ -18,25 +18,25 @@ export async function PublicHeader() {
   const t = await getTranslations("nav");
   const pages = [...publicNavigation, { key: "about", href: "/a-propos" } as const];
   const itemLink =
-    "flex items-center gap-3 rounded-[14px] px-3 py-2.5 text-[15px] font-medium hover:bg-papier";
+    "flex items-center gap-3 rounded-[14px] px-3 py-2.5 text-[15px] font-medium hover:bg-gris-clair";
   return (
-    <header className="sticky top-0 z-30 px-2 pt-2 sm:px-3 lg:px-4 lg:pt-3">
-      <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-2 rounded-pill bg-blanc/90 pr-2 pl-4 shadow-[0_10px_30px_rgba(11,26,31,0.08)] ring-1 ring-sapin/8 backdrop-blur-xl lg:h-[68px] lg:pl-6">
+    <header className="sticky top-0 z-30 border-b border-sapin/8 bg-papier/90 px-4 backdrop-blur-xl">
+      <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-2 lg:h-[76px]">
         <Link href="/" aria-label={t("logo.label")} className="shrink-0">
           <span className="xl:hidden">
-            <Logo height={26} />
+            <Logo variant="negative" height={26} />
           </span>
           <span className="hidden xl:block">
-            <Logo height={30} />
+            <Logo variant="negative" height={30} />
           </span>
         </Link>
         <nav aria-label={t("menu.label")} className="hidden flex-1 justify-center xl:flex">
-          <ul className="flex items-center gap-1 rounded-pill bg-papier p-1">
+          <ul className="flex items-center gap-1">
             <li className="group relative">
               <button
                 type="button"
                 aria-haspopup="true"
-                className="flex h-10 items-center gap-1.5 rounded-pill px-4 text-[14px] font-medium hover:bg-blanc"
+                className="flex h-10 items-center gap-1.5 rounded-pill px-4 text-[15px] font-medium hover:text-lime"
               >
                 {t("group.solutions")}
                 <Icon
@@ -80,7 +80,7 @@ export async function PublicHeader() {
         <LanguageSwitch className="max-sm:hidden" />
         <Link
           href="/connexion"
-          className="hidden h-11 items-center rounded-pill px-4 text-[14px] font-semibold hover:bg-papier xl:flex"
+          className="hidden h-11 items-center rounded-pill px-5 text-[15px] font-semibold ring-1 ring-sapin/25 ring-inset hover:ring-sapin/50 xl:flex"
         >
           {t("login")}
         </Link>
@@ -89,7 +89,7 @@ export async function PublicHeader() {
         </SiteButton>
         <details className="relative xl:hidden">
           <summary
-            className="flex size-11 cursor-pointer list-none items-center justify-center rounded-full bg-nuit text-lime [&::-webkit-details-marker]:hidden"
+            className="flex size-11 cursor-pointer list-none items-center justify-center rounded-full bg-blanc text-lime ring-1 ring-sapin/10 ring-inset [&::-webkit-details-marker]:hidden"
             aria-label={t("menu.open")}
           >
             <Icon name="menu" className="size-5" />
@@ -150,7 +150,7 @@ export async function LanguageSwitch({
       aria-label={t("label")}
       className={cx(
         "flex items-center rounded-pill p-1",
-        dark ? "bg-blanc/10 ring-1 ring-blanc/15 ring-inset" : "bg-papier",
+        dark ? "bg-blanc/10 ring-1 ring-blanc/15 ring-inset" : "ring-1 ring-sapin/12 ring-inset",
         className,
       )}
     >
@@ -169,10 +169,10 @@ export async function LanguageSwitch({
               active
                 ? dark
                   ? "bg-lime text-sapin"
-                  : "bg-nuit text-blanc"
+                  : "bg-blanc text-sapin"
                 : dark
                   ? "text-blanc/80 hover:text-blanc"
-                  : "text-sapin/80 hover:bg-blanc",
+                  : "text-ardoise hover:text-sapin",
             )}
           >
             {language.short}

@@ -191,6 +191,29 @@ Conventions :
 
 ---
 
+### Global · Aperçus de l'application sur le site
+
+*Cartes d'illustration du site public (Modèle B) : exemples manifestement fictifs, comme la fiche « Grâce Mbuyi ».*
+
+| Clé | Texte |
+|---|---|
+| `sitePreview.pipeline.title` | Analyste de données junior · 38 candidatures |
+| `sitePreview.pipeline.new` | Nouvelles |
+| `sitePreview.pipeline.shortlisted` | Présélection |
+| `sitePreview.pipeline.interview` | Entretien |
+| `sitePreview.pipeline.c1` | Esther K. |
+| `sitePreview.pipeline.c2` | Didier L. |
+| `sitePreview.pipeline.c3` | Grâce M. |
+| `sitePreview.pipeline.c4` | Amani K. |
+| `sitePreview.matches.title` | Offres compatibles avec votre profil |
+| `sitePreview.matches.job1` | Analyste de données junior |
+| `sitePreview.matches.company1` | Baobab Fintech (fictive) · Kinshasa |
+| `sitePreview.matches.job2` | Stage en marketing digital |
+| `sitePreview.matches.company2` | Horizon Démo (fictive) · Dakar |
+| `sitePreview.matches.job3` | Assistant administratif |
+| `sitePreview.matches.company3` | Savane Télécom (fictive) · Abidjan |
+| `sitePreview.score` | {value} % |
+
 ### `/` · Accueil
 
 *Faire comprendre en quelques secondes ce qu'est Jumanly, rassurer (gratuit, explicable, confidentiel) et orienter chaque public vers son parcours.*
@@ -218,6 +241,7 @@ Conventions :
 | `home.hero.reassurance2` | Candidatures toujours gratuites |
 | `home.hero.reassurance3` | Mobile Money et carte |
 | `home.hero.imageAlt` | Aperçu du tableau de bord Jumanly sur ordinateur et sur téléphone : progression des formations, candidatures en cours et offres compatibles. |
+| `home.hero.photoAlt` | Un homme souriant consulte Jumanly sur une tablette à son bureau. |
 | `home.hero.visual.badge` | Attestation obtenue |
 | `home.hero.visual.matchTitle` | Analyste de données junior |
 | `home.hero.visual.matchText` | 87 % compatible · Pourquoi ? |

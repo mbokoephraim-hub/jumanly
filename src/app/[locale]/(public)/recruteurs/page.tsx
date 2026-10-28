@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element -- product previews are static WebP files already sized */
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { AiOrb } from "@/components/brand";
@@ -11,8 +10,6 @@ import {
   IconTile,
   LimeCtaBand,
   MarketingSection,
-  PhoneShot,
-  PhotoFrame,
   SectionHead,
   SiteButton,
   SiteHero,
@@ -23,6 +20,7 @@ import {
 import { CountUp, MotionRoot } from "@/components/site/motion";
 import { PublicPlanCards } from "@/components/site/pricing";
 import { cx } from "@/lib/cx";
+import { PipelinePreview } from "@/components/site/previews";
 import { formatUsd } from "@/lib/money";
 import { pageMetadata } from "@/lib/seo";
 import { signupHref } from "@/lib/signup";
@@ -63,7 +61,7 @@ const avatarTones = [
   "bg-lime text-sapin",
   "bg-neon text-sapin",
   "bg-menthe-claire text-sapin",
-  "bg-feuille-fonce text-blanc",
+  "bg-[#1c3a2c] text-lime",
 ];
 
 export default async function RecruitersPage({ params }: PageProps<"/[locale]/recruteurs">) {
@@ -254,7 +252,6 @@ export default async function RecruitersPage({ params }: PageProps<"/[locale]/re
       <LimeCtaBand
         title={t("recruiters.finalCta.title")}
         text={t("recruiters.finalCta.text")}
-        character={{ name: "nadia", pose: "joie", height: 330, mobileHeight: 250 }}
         actions={<SiteButton href={signup}>{t("recruiters.finalCta.primary")}</SiteButton>}
       />
     </>
@@ -276,27 +273,11 @@ function HeroVisual({
 }) {
   return (
     <>
-      <PhotoFrame
-        tone="sapin"
-        character={{ name: "nadia", pose: "montre", height: 300 }}
-        className="h-[440px] sm:h-[520px] lg:h-[600px] [&>div]:justify-end [&>div]:pr-2"
-      >
-        <div className="jm-float-slow absolute top-14 left-10 max-lg:hidden">
-          <img
-            src="/apercus/recruteurs-pipeline.webp"
-            alt={alt}
-            width={700}
-            height={497}
-            fetchPriority="high"
-            className="w-[700px] max-w-none rounded-[20px] shadow-[0_30px_60px_rgba(0,0,0,0.35)] ring-[6px] ring-nuit"
-          />
-        </div>
-        <div className="jm-float absolute top-8 left-6 lg:hidden">
-          <PhoneShot src="recruteurs-pipeline-mobile" alt={alt} width={200} priority />
-        </div>
-      </PhotoFrame>
+      <div className="relative pt-4 pb-20 lg:py-16 lg:pl-8">
+        <PipelinePreview label={alt} className="jm-float-slow" />
+      </div>
       <FloatCard
-        className="jm-pop bottom-8 left-3 z-2 flex items-center gap-2.5 lg:-left-6"
+        className="jm-pop bottom-2 left-3 z-2 flex items-center gap-2.5 lg:bottom-4 lg:-left-2"
         style={stagger(0)}
       >
         <AiOrb size={28} className="jm-pulse" />

@@ -46,47 +46,30 @@ type ToneStyle = {
   idealIcon: string;
 };
 
+// Modèle B site (docs/modele-b-recruteur/web/captures/002-Web-Site-tarifs.jpg): Surface cards with
+// a hairline, the recommended one outlined in Lime with the only Lime button.
+const plainTone: ToneStyle = {
+  card: "bg-blanc text-sapin ring-1 ring-sapin/10 ring-inset",
+  tile: "bg-[#1c3a2c] text-lime",
+  badge: "bg-neon text-sapin",
+  button: "tertiary",
+  sep: "bg-sapin/10",
+  disc: "bg-[#1c3a2c] text-lime",
+  ideal: "bg-papier",
+  idealIcon: "text-lime",
+};
+
 const tones: Record<CardTone, ToneStyle> = {
-  blanc: {
-    card: "bg-blanc text-sapin ring-[1.5px] ring-brume ring-inset",
-    tile: "bg-creme text-sapin",
-    badge: "bg-neon text-sapin",
-    button: "tertiary",
-    sep: "bg-sapin/12",
-    disc: "bg-lime-clair text-feuille-fonce",
-    ideal: "bg-creme",
-    idealIcon: "text-sapin",
-  },
+  blanc: plainTone,
   sapin: {
-    card: "bg-sapin text-blanc",
-    tile: "bg-lime text-sapin",
+    ...plainTone,
+    card: "bg-blanc text-sapin ring-[1.5px] ring-lime ring-inset",
     badge: "bg-lime text-sapin",
     button: "primary",
-    sep: "bg-blanc/15",
     disc: "bg-lime text-sapin",
-    ideal: "bg-blanc/8",
-    idealIcon: "text-lime",
   },
-  lime: {
-    card: "bg-lime text-sapin",
-    tile: "bg-sapin text-lime",
-    badge: "bg-sapin text-neon",
-    button: "secondary",
-    sep: "bg-sapin/15",
-    disc: "bg-sapin text-lime",
-    ideal: "bg-sapin/8",
-    idealIcon: "text-sapin",
-  },
-  nuit: {
-    card: "bg-nuit text-blanc",
-    tile: "bg-lime text-sapin",
-    badge: "bg-neon text-sapin",
-    button: "primary",
-    sep: "bg-blanc/14",
-    disc: "bg-neon text-sapin",
-    ideal: "bg-blanc/8",
-    idealIcon: "text-lime",
-  },
+  lime: plainTone,
+  nuit: { ...plainTone, card: "bg-nuit text-blanc ring-1 ring-blanc/10 ring-inset" },
 };
 
 /** « Idéal pour : {audience} » with its label in bold, cut from the one text of the card. */
@@ -375,28 +358,26 @@ export async function TarifCompare({
   );
 }
 
-/** Band of a family (partners licence, upsell): tile, title, text and a Sapin button. */
+/** Band of a family (partners licence, upsell): tile, title, text and a button, on a Surface card. */
 export function TarifBand({
   icon,
   title,
   text,
   cta,
   href,
-  tone = "blanc",
 }: {
   icon: IconName;
   title: string;
   text: string;
   cta: string;
   href: string;
-  tone?: "blanc" | "lime";
 }) {
   return (
     <div
       data-reveal
       className={cx(
         "flex flex-col items-start gap-4 rounded-[24px] p-6 sm:flex-row sm:items-center sm:gap-5 sm:px-7 sm:py-[22px]",
-        tone === "lime" ? "bg-lime-clair" : "bg-blanc",
+        "jm-card",
       )}
     >
       <span className="jm-float flex size-[52px] shrink-0 items-center justify-center rounded-[14px] bg-lime text-sapin">

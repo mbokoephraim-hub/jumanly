@@ -181,7 +181,7 @@ export function ContactForm({
       <div>
         <Button
           type="submit"
-          variant="secondary"
+          variant="primary"
           loading={pending}
           size="lg"
           iconAfter={<Icon name="send" />}

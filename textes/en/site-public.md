@@ -165,6 +165,7 @@ brackets are placeholders hidden on the site until they are filled in.
 | `home.hero.reassurance2` | Applying is always free |
 | `home.hero.reassurance3` | Mobile Money and card |
 | `home.hero.imageAlt` | Preview of the Jumanly dashboard on a computer and a phone: course progress, ongoing applications and matching job offers. |
+| `home.hero.photoAlt` | A smiling man browses Jumanly on a tablet at his desk. |
 | `home.hero.visual.badge` | Certificate earned |
 | `home.hero.visual.matchTitle` | Junior data analyst |
 | `home.hero.visual.matchText` | 87% match · Why? |
@@ -753,3 +754,26 @@ brackets are placeholders hidden on the site until they are filled in.
 | `system.404.search` | Or search for what you need: |
 | `system.404.searchPlaceholder` | Search for a course, an offer… |
 | `system.404.pageTitle` | Page not found |
+
+### `sitePreview`
+
+*Illustration cards of the public site.*
+
+| Clé | Texte |
+|---|---|
+| `sitePreview.pipeline.title` | Junior data analyst · 38 applications |
+| `sitePreview.pipeline.new` | New |
+| `sitePreview.pipeline.shortlisted` | Shortlisted |
+| `sitePreview.pipeline.interview` | Interview |
+| `sitePreview.pipeline.c1` | Esther K. |
+| `sitePreview.pipeline.c2` | Didier L. |
+| `sitePreview.pipeline.c3` | Grâce M. |
+| `sitePreview.pipeline.c4` | Amani K. |
+| `sitePreview.matches.title` | Offers that match your profile |
+| `sitePreview.matches.job1` | Junior data analyst |
+| `sitePreview.matches.company1` | Baobab Fintech (fictional) · Kinshasa |
+| `sitePreview.matches.job2` | Digital marketing internship |
+| `sitePreview.matches.company2` | Horizon Demo (fictional) · Dakar |
+| `sitePreview.matches.job3` | Administrative assistant |
+| `sitePreview.matches.company3` | Savane Telecom (fictional) · Abidjan |
+| `sitePreview.score` | {value}% |

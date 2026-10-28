@@ -1,15 +1,15 @@
 /* eslint-disable @next/next/no-img-element -- brand patterns and product previews are static files already sized */
 import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
-import { Character, type CharacterName, type Pose } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { cx } from "@/lib/cx";
 import { keepTogether } from "@/lib/typography";
 
 /**
- * Building blocks of the public site, identity of 28/10/2026 (docs/decisions/2026-10-28-site-public.md):
- * a light and airy page (Papier, Blanc), large rounded panels in Sapin, Nuit or Lime clair laid on
- * it like the cards of the Modèle B app, big tight headings, dark pills ending with a Lime disc.
+ * Building blocks of the public site, Modèle B identity (docs/decisions/2026-10-28-site-public.md,
+ * docs/modele-b-recruteur/web/captures/001-Web-Site.jpg): Nuit page, Surface cards with a hairline,
+ * Crème headings, Lime kept for the actions. The colors come from `.jm-site-b` (src/styles/site.css):
+ * « papier » is the page, « blanc » the cards, « sapin » the text.
  */
 
 export type SectionTone = "creme" | "blanc" | "sapin" | "lime" | "profondeur" | "ia";
@@ -18,10 +18,10 @@ export type SectionTone = "creme" | "blanc" | "sapin" | "lime" | "profondeur" | 
 const sectionTones: Record<SectionTone, string> = {
   creme: "bg-papier text-sapin",
   blanc: "bg-blanc text-sapin",
-  sapin: "bg-sapin text-blanc",
-  lime: "bg-lime-clair text-sapin",
-  profondeur: "bg-nuit text-blanc",
-  ia: "bg-sapin text-blanc",
+  sapin: "bg-nuit text-blanc ring-1 ring-blanc/8 ring-inset",
+  lime: "jm-card text-sapin",
+  profondeur: "bg-nuit text-blanc ring-1 ring-blanc/8 ring-inset",
+  ia: "bg-nuit text-blanc ring-1 ring-blanc/8 ring-inset",
 };
 
 const panelTones: SectionTone[] = ["sapin", "lime", "profondeur", "ia"];
@@ -110,7 +110,7 @@ export function MarketingSection({
       className={cx(
         "relative overflow-hidden py-16 lg:py-28",
         sectionTones[tone],
-        panel && "mx-auto max-w-[1400px] rounded-[32px] lg:rounded-[48px]",
+        panel && "mx-auto max-w-[1232px] rounded-[24px] lg:rounded-[28px]",
         className,
       )}
     >
@@ -122,7 +122,7 @@ export function MarketingSection({
   );
   if (!panel) return block;
   return (
-    <section id={id} className="bg-papier px-2 py-2 sm:px-3 lg:px-4 lg:py-3">
+    <section id={id} className="bg-papier px-4 py-2 lg:py-3">
       {block}
     </section>
   );
@@ -133,16 +133,11 @@ export function Eyebrow({ children, dark = false }: { children: ReactNode; dark?
   return (
     <p
       className={cx(
-        "inline-flex items-center gap-2 self-start rounded-pill py-1.5 pr-3.5 pl-2 text-[13px] leading-[18px] font-semibold",
-        dark
-          ? "bg-blanc/10 text-neon ring-1 ring-blanc/15 ring-inset"
-          : "bg-blanc text-feuille-fonce shadow-[0_1px_0_rgba(15,63,55,0.06)] ring-1 ring-sapin/10 ring-inset",
+        // The small dark-green tag of the Modèle B site, Néon text.
+        "inline-flex items-center self-start rounded-md bg-[#1c3a2c] px-2.5 py-1 text-[13px] leading-[18px] font-medium text-neon",
+        dark && "bg-[#1c3a2c]",
       )}
     >
-      <span
-        aria-hidden
-        className={cx("size-2.5 rounded-full", dark ? "bg-lime" : "bg-lime ring-2 ring-lime/35")}
-      />
       {children}
     </p>
   );
@@ -154,7 +149,7 @@ export const sectionTitle =
 
 /** Very large title of a page (hero). */
 export const heroTitle =
-  "text-[40px] leading-[44px] font-semibold tracking-[-0.045em] sm:text-[52px] sm:leading-[56px] lg:text-[72px] lg:leading-[74px]";
+  "text-[40px] leading-[44px] font-semibold tracking-[-0.04em] sm:text-[50px] sm:leading-[54px] lg:text-[64px] lg:leading-[68px]";
 
 /** Lead paragraph: 16/25 on mobile, 18/29 on desktop. */
 export const lead = "text-base leading-[25px] lg:text-lg lg:leading-[29px]";
@@ -265,18 +260,16 @@ export function NumberDisc({ children, className }: { children: ReactNode; class
 export type SiteButtonTone = "dark" | "lime" | "light" | "onDark";
 
 const siteButtonTones: Record<SiteButtonTone, { pill: string; disc: string }> = {
-  // Nuit pill, white text, Lime disc: the main action on a light background.
-  dark: { pill: "bg-nuit text-blanc hover:bg-sapin", disc: "bg-lime text-sapin" },
-  // Lime pill, Sapin text (never white on Lime), Nuit disc.
-  lime: { pill: "bg-lime text-sapin hover:bg-[#97e85a]", disc: "bg-nuit text-lime" },
-  // White pill with a hairline: a second action on a light background.
+  // The main action: a Lime pill, Sapin text (never white on Lime).
+  dark: { pill: "bg-lime text-sapin hover:bg-[#97e85a]", disc: "bg-sapin text-lime" },
+  lime: { pill: "bg-lime text-sapin hover:bg-[#97e85a]", disc: "bg-sapin text-lime" },
+  // A second action: an outlined pill, Crème text.
   light: {
-    pill: "bg-blanc text-sapin ring-1 ring-sapin/15 ring-inset hover:ring-sapin/40",
-    disc: "bg-sapin text-lime",
+    pill: "bg-transparent text-sapin ring-1 ring-sapin/25 ring-inset hover:ring-sapin/50",
+    disc: "bg-lime text-sapin",
   },
-  // Second action on Sapin or Nuit.
   onDark: {
-    pill: "bg-blanc/10 text-blanc ring-1 ring-blanc/25 ring-inset hover:bg-blanc/16",
+    pill: "bg-transparent text-blanc ring-1 ring-blanc/25 ring-inset hover:ring-blanc/50",
     disc: "bg-lime text-sapin",
   },
 };
@@ -284,8 +277,8 @@ const siteButtonTones: Record<SiteButtonTone, { pill: string; disc: string }> = 
 /** Classes of a site button (also for a <button> or a <summary>). */
 export function siteButtonClasses(tone: SiteButtonTone = "dark", size: "md" | "lg" = "lg") {
   return cx(
-    "group/bouton jm-press inline-flex shrink-0 items-center justify-between gap-3 rounded-pill font-semibold whitespace-nowrap transition-colors",
-    size === "lg" ? "h-[52px] pr-1.5 pl-6 text-[15px]" : "h-11 pr-1 pl-[18px] text-sm",
+    "group/bouton jm-press inline-flex shrink-0 items-center justify-center gap-2 rounded-pill font-semibold whitespace-nowrap transition-colors",
+    size === "lg" ? "h-[50px] px-6 text-[15px]" : "h-11 px-5 text-sm",
     siteButtonTones[tone].pill,
   );
 }
@@ -338,7 +331,7 @@ export function SiteButton({
       className={cx(siteButtonClasses(tone, size), fullWidth && "w-full sm:w-auto", className)}
     >
       {children}
-      <ButtonDisc tone={tone} size={size} icon={icon} />
+      {icon && <Icon name={icon} className="size-[18px]" />}
     </Link>
   );
 }
@@ -403,7 +396,7 @@ export function FloatCard({
     <div
       aria-hidden
       className={cx(
-        "absolute rounded-[20px] bg-blanc p-3.5 text-sapin shadow-[0_18px_40px_rgba(11,26,31,0.18)] ring-1 ring-sapin/5",
+        "absolute rounded-[18px] bg-blanc p-3.5 text-sapin shadow-[0_18px_40px_rgba(0,0,0,0.35)] ring-1 ring-sapin/10 ring-inset",
         className,
       )}
       style={style}
@@ -413,52 +406,37 @@ export function FloatCard({
   );
 }
 
-// Grounds of the pictures: a plain brand color, a large orbit and a soft light, no dotted pattern.
-const frameTones = {
-  lime: { ground: "bg-lime", orbit: "forme-orbites-sapin", opacity: "opacity-[0.08]" },
-  sapin: { ground: "bg-sapin", orbit: "forme-orbites-lime", opacity: "opacity-[0.14]" },
-  nuit: { ground: "bg-nuit", orbit: "forme-orbites-lime", opacity: "opacity-[0.12]" },
-  menthe: { ground: "bg-menthe-claire", orbit: "forme-orbites-sapin", opacity: "opacity-[0.08]" },
-  neon: { ground: "bg-neon", orbit: "forme-orbites-sapin", opacity: "opacity-[0.08]" },
-} as const;
-
 /**
- * The « photo » of a block: a rounded picture with a brand ground, a pattern and a character of
- * the Jumanly cast (or a product preview), with cards floating over it.
+ * The picture of a block: a rounded Surface frame holding a photo (public/photos) or a product
+ * preview, with cards floating over it. No illustrated character on the Modèle B site.
  */
 export function PhotoFrame({
-  tone = "lime",
-  character,
+  photo,
   preview,
   children,
   className,
 }: {
-  tone?: keyof typeof frameTones;
-  character?: { name: CharacterName; pose: Pose; height: number };
-  /** A product preview (public/apercus, without extension) instead of a character. */
+  /** A photo: file in public/photos (with extension) and its description. */
+  photo?: { src: string; alt: string; position?: string; priority?: boolean };
+  /** A product preview (public/apercus, without extension). */
   preview?: string;
   /** Floating cards. */
   children?: ReactNode;
   className?: string;
 }) {
-  const frame = frameTones[tone];
   return (
     <div className={cx("relative", className)}>
-      <div
-        className={cx(
-          "relative flex h-full items-end justify-center overflow-hidden rounded-[32px] lg:rounded-[40px]",
-          frame.ground,
-        )}
-      >
-        <Shape name={frame.orbit} className={cx("-top-1/4 -right-1/3 w-[140%]", frame.opacity)} />
-        <span
-          aria-hidden
-          className="absolute -bottom-24 left-1/2 size-[360px] -translate-x-1/2 rounded-full bg-blanc/25 blur-2xl"
-        />
-        {character && (
-          <span className="jm-breathe relative">
-            <Character name={character.name} pose={character.pose} height={character.height} />
-          </span>
+      <div className="jm-card relative flex h-full items-end justify-center overflow-hidden rounded-[24px] lg:rounded-[28px]">
+        {photo && (
+          <img
+            src={`/photos/${photo.src}`}
+            alt={photo.alt}
+            loading={photo.priority ? undefined : "lazy"}
+            fetchPriority={photo.priority ? "high" : undefined}
+            decoding="async"
+            className="absolute inset-0 size-full object-cover"
+            style={{ objectPosition: photo.position ?? "center" }}
+          />
         )}
         {preview && (
           <img
@@ -468,7 +446,7 @@ export function PhotoFrame({
             height={800}
             loading="lazy"
             decoding="async"
-            className="relative mt-10 ml-10 w-full rounded-tl-[22px] object-cover object-left-top shadow-[0_-10px_40px_rgba(11,26,31,0.25)]"
+            className="relative mt-10 ml-10 w-full rounded-tl-[22px] object-cover object-left-top shadow-[0_-10px_40px_rgba(0,0,0,0.35)]"
           />
         )}
       </div>
@@ -518,52 +496,29 @@ export function FaqAccordion({
   );
 }
 
-/**
- * Closing band: a Lime clair panel with a big title, the actions and a character, on the page
- * background.
- */
+/** Closing band: a Surface panel with a big title and the actions, on the page background. */
 export function LimeCtaBand({
   title,
   text,
   actions,
-  character,
   spacedTop = false,
 }: {
   title: string;
   text?: string;
   actions: ReactNode;
-  character: { name: CharacterName; pose: Pose; height: number; mobileHeight: number };
   /** Space above, when the block before is a panel too. */
   spacedTop?: boolean;
   /** Kept for the pages written before 28/10/2026: the band is the same everywhere now. */
   animated?: boolean;
 }) {
   return (
-    <section className={cx("bg-papier px-2 pb-3 sm:px-3 lg:px-4", spacedTop && "pt-2 lg:pt-3")}>
-      <div className="relative mx-auto flex max-w-[1400px] flex-col gap-6 overflow-hidden rounded-[32px] bg-lime-clair px-6 pt-10 text-sapin lg:min-h-[420px] lg:flex-row lg:items-center lg:rounded-[48px] lg:px-[88px] lg:py-20">
-        <Shape
-          name="forme-orbites-sapin"
-          className="-right-32 -bottom-40 w-[620px] opacity-[0.06] max-lg:hidden"
-        />
-        <div className="relative flex max-w-[660px] flex-col gap-5">
-          <h2 className="text-[32px] leading-[38px] font-semibold tracking-[-0.035em] lg:text-[54px] lg:leading-[58px]">
-            {keepTogether(title)}
-          </h2>
-          {text && <p className="text-lg leading-7 text-sapin/85">{text}</p>}
-          <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:flex-wrap">{actions}</div>
-        </div>
-        <div className="jm-breathe relative -mr-2.5 self-end lg:absolute lg:right-[72px] lg:bottom-0 lg:mr-0">
-          <span className="lg:hidden">
-            <Character
-              name={character.name}
-              pose={character.pose}
-              height={character.mobileHeight}
-            />
-          </span>
-          <span className="hidden lg:block">
-            <Character name={character.name} pose={character.pose} height={character.height} />
-          </span>
-        </div>
+    <section className={cx("bg-papier px-4 pb-4 lg:pb-6", spacedTop && "pt-2 lg:pt-3")}>
+      <div className="jm-card relative mx-auto flex max-w-[1232px] flex-col gap-5 overflow-hidden rounded-[24px] px-6 py-10 text-sapin lg:rounded-[28px] lg:px-16 lg:py-16">
+        <h2 className="max-w-[760px] text-[30px] leading-9 font-semibold tracking-[-0.03em] lg:text-[44px] lg:leading-[50px]">
+          {keepTogether(title)}
+        </h2>
+        {text && <p className="max-w-[640px] text-lg leading-7 text-ardoise">{text}</p>}
+        <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:flex-wrap">{actions}</div>
       </div>
     </section>
   );
@@ -610,28 +565,6 @@ export function ImmersiveBackdrop() {
       <Glow className="-top-48 -left-40 size-[520px] bg-feuille/25" />
       <Glow className="-right-48 -bottom-56 size-[560px] bg-menthe/15" delay={-7} />
     </>
-  );
-}
-
-/** A character alternating two poses while breathing. */
-export function PoseCycle({
-  name,
-  poses: [first, second],
-  height,
-}: {
-  name: CharacterName;
-  poses: readonly [Pose, Pose];
-  height: number;
-}) {
-  return (
-    <span className="jm-breathe relative inline-block">
-      <span className="jm-pose jm-pose-first block">
-        <Character name={name} pose={first} height={height} />
-      </span>
-      <span className="jm-pose absolute inset-x-0 bottom-0 flex justify-center opacity-0">
-        <Character name={name} pose={second} height={height} />
-      </span>
-    </span>
   );
 }
 
@@ -683,16 +616,18 @@ export function PathLine({
   );
 }
 
+// The hero lies on the page itself (no panel). Pages written for a dark hero keep « blanc » as
+// white text through `.jm-dark` (src/styles/site.css).
 const heroTones = {
-  lime: "bg-lime-clair text-sapin",
-  blanc: "bg-blanc text-sapin",
-  sapin: "bg-sapin text-blanc",
-  nuit: "bg-nuit text-blanc",
+  lime: "text-sapin",
+  blanc: "text-sapin",
+  sapin: "jm-dark text-blanc",
+  nuit: "jm-dark text-blanc",
 } as const;
 
 /**
- * Top of a public page: a large rounded panel with the eyebrow, a very large title, the lead, the
- * actions and, beside them, a picture (PhotoFrame, phone screens, floating cards).
+ * Top of a public page, on the Nuit page like the Modèle B site: the tag, a very large Crème title,
+ * the lead, the actions and, beside them, a picture (PhotoFrame, product cards).
  */
 export function SiteHero({
   eyebrow,
@@ -719,28 +654,15 @@ export function SiteHero({
 }) {
   const dark = tone === "sapin" || tone === "nuit";
   return (
-    <section data-scene className="bg-papier px-2 pt-2 sm:px-3 lg:px-4 lg:pt-3">
+    <section data-scene className="bg-papier px-4">
       <div
         className={cx(
-          "relative mx-auto max-w-[1400px] overflow-hidden rounded-[32px] px-5 lg:rounded-[48px] lg:px-14",
-          compact ? "pt-10 pb-10 lg:pt-16 lg:pb-16" : "pt-10 pb-8 lg:pt-20 lg:pb-20",
+          "relative mx-auto max-w-[1200px]",
+          compact ? "pt-10 pb-10 lg:pt-16 lg:pb-14" : "pt-10 pb-12 lg:pt-20 lg:pb-20",
           heroTones[tone],
           className,
         )}
       >
-        <Shape
-          name={dark ? "forme-orbites-lime" : "forme-orbites-sapin"}
-          className={cx(
-            "jm-drift -top-56 -left-56 w-[640px]",
-            dark ? "opacity-[0.1]" : "opacity-[0.06]",
-          )}
-        />
-        {tone === "lime" && (
-          <span
-            aria-hidden
-            className="absolute -right-40 -bottom-40 size-[560px] rounded-full bg-lime/50 blur-3xl"
-          />
-        )}
         <div
           className={cx(
             "relative mx-auto flex max-w-[1200px] flex-col gap-10 lg:flex-row lg:items-center",
@@ -757,7 +679,7 @@ export function SiteHero({
               className={cx(
                 "jm-word",
                 compact
-                  ? "text-[36px] leading-10 font-semibold tracking-[-0.04em] lg:text-[56px] lg:leading-[60px]"
+                  ? "text-[36px] leading-10 font-semibold tracking-[-0.035em] lg:text-[52px] lg:leading-[58px]"
                   : heroTitle,
               )}
               style={stagger(1)}
@@ -769,7 +691,7 @@ export function SiteHero({
                 className={cx(
                   lead,
                   "jm-rise max-w-[620px]",
-                  dark ? "text-blanc/80" : "text-sapin/85",
+                  dark ? "text-blanc/80" : "text-ardoise",
                 )}
                 style={stagger(2)}
               >
@@ -873,7 +795,7 @@ export function CheckChips({ items, dark = false }: { items: string[]; dark?: bo
             "flex items-center gap-1.5 rounded-pill py-1.5 pr-3 pl-1.5 text-xs leading-[17px] font-semibold",
             dark
               ? "bg-blanc/10 text-blanc ring-1 ring-blanc/15 ring-inset"
-              : "bg-blanc/75 text-sapin",
+              : "bg-blanc text-sapin ring-1 ring-sapin/10 ring-inset",
           )}
         >
           <span className="flex size-5 items-center justify-center rounded-full bg-lime text-sapin">
@@ -887,8 +809,8 @@ export function CheckChips({ items, dark = false }: { items: string[]; dark?: bo
 }
 
 /**
- * The rounded panel of a hero, for pages that lay out their own top (catalogs, detail pages): the
- * same frame as SiteHero, with free content inside.
+ * The top of a page that lays out its own hero (catalogs, detail pages): the same ground as
+ * SiteHero, with free content inside.
  */
 export function HeroPanel({
   tone = "lime",
@@ -899,23 +821,9 @@ export function HeroPanel({
   className?: string;
   children: ReactNode;
 }) {
-  const dark = tone === "sapin" || tone === "nuit";
   return (
-    <section data-scene className="bg-papier px-2 pt-2 sm:px-3 lg:px-4 lg:pt-3">
-      <div
-        className={cx(
-          "relative mx-auto max-w-[1400px] overflow-hidden rounded-[32px] lg:rounded-[48px]",
-          heroTones[tone],
-          className,
-        )}
-      >
-        <Shape
-          name={dark ? "forme-orbites-lime" : "forme-orbites-sapin"}
-          className={cx(
-            "jm-drift -top-56 -left-56 w-[640px]",
-            dark ? "opacity-[0.1]" : "opacity-[0.06]",
-          )}
-        />
+    <section data-scene className="bg-papier">
+      <div className={cx("relative mx-auto max-w-[1400px]", heroTones[tone], className)}>
         {children}
       </div>
     </section>

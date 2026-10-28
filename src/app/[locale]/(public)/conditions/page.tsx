@@ -4,7 +4,9 @@ import { LegalPage } from "@/components/site/legal-page";
 import { pageMetadata } from "@/lib/seo";
 import { applySiteLocale } from "@/i18n/site-locale";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/conditions">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/conditions">): Promise<Metadata> {
   await applySiteLocale(params);
   const t = await getTranslations("terms.seo");
   return pageMetadata({ path: "/conditions", title: t("title"), description: t("description") });

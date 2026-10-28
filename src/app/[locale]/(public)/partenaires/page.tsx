@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
-import { Character } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import {
   IconTile,
@@ -9,7 +8,6 @@ import {
   NumberDisc,
   PathLine,
   SectionHead,
-  Shape,
   SiteButton,
   SiteHero,
   stagger,
@@ -150,9 +148,6 @@ export default async function PartnersPage({ params }: PageProps<"/[locale]/part
             data-reveal
             className="relative flex flex-col gap-6 overflow-hidden rounded-[32px] bg-lime-clair px-6 py-8 text-sapin lg:rounded-[48px] lg:px-16 lg:py-14"
           >
-            <div className="jm-breathe absolute top-7 right-14 hidden lg:block">
-              <Character name="amani" pose="joie" height={200} />
-            </div>
             <div className="relative flex flex-col gap-2.5">
               <p className="text-[13px] leading-[18px] font-medium tracking-[0.12em] uppercase">
                 {t("partners.example.title")}
@@ -245,9 +240,6 @@ export default async function PartnersPage({ params }: PageProps<"/[locale]/part
             <Icon name="message" className="size-5" />
             {t("contact.emails.pro.value")}
           </a>
-          <div className="jm-breathe mt-3 hidden self-start lg:block">
-            <Character name="diallo" pose="montre" height={260} />
-          </div>
         </div>
         <div data-reveal="zoom" className="min-w-0 lg:flex-1" style={stagger(1)}>
           <NextIntlClientProvider
@@ -324,7 +316,7 @@ async function HeroVisual() {
     <div className="flex flex-col gap-3.5 rounded-box bg-blanc p-4 text-sapin shadow-[0_30px_60px_rgba(0,0,0,0.3)] lg:p-[22px]">
       <div className="flex items-center justify-between gap-3">
         <span className="flex min-w-0 items-center gap-2.5">
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-[11px] bg-ia text-xs font-bold text-blanc">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-[11px] bg-ia text-xs font-bold text-[#0b1a1f]">
             {t("visual.orgInitials")}
           </span>
           <span className="flex min-w-0 flex-col">
@@ -385,15 +377,8 @@ async function HeroVisual() {
       aria-label={t("imageAlt")}
       className="relative h-[420px] min-w-0 overflow-hidden rounded-[32px] bg-sapin sm:h-[560px] xl:h-[600px] xl:rounded-[40px]"
     >
-      <Shape
-        name="forme-orbites-lime"
-        className="jm-drift -right-40 -bottom-40 w-[560px] opacity-[0.12]"
-      />
       <div className="jm-float-slow absolute top-6 left-4 w-[calc(100%-32px)] max-w-[470px] sm:top-[60px] sm:left-10">
         {dashboard}
-      </div>
-      <div className="jm-breathe absolute -right-5 bottom-0 hidden sm:block">
-        <Character name="fatou" pose="salut" height={320} />
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element -- product previews are static WebP files already sized */
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
@@ -12,8 +11,6 @@ import {
   IconTile,
   LimeCtaBand,
   MarketingSection,
-  PhoneShot,
-  PhotoFrame,
   SectionHead,
   SiteButton,
   SiteHero,
@@ -23,6 +20,7 @@ import {
 import { CountUp, MotionRoot } from "@/components/site/motion";
 import { PublicPlanCards } from "@/components/site/pricing";
 import { cx } from "@/lib/cx";
+import { MatchesPreview } from "@/components/site/previews";
 import { formatUsd } from "@/lib/money";
 import { pageMetadata } from "@/lib/seo";
 import { signupHref } from "@/lib/signup";
@@ -45,12 +43,12 @@ export async function generateMetadata({
 
 type ModuleKey = "learn" | "career" | "jobs" | "connect";
 
-/** Zigzag rows: the picture takes the module's tint, plain, with a large orbit. */
-const modules: { key: ModuleKey; icon: IconName; tint: string }[] = [
-  { key: "learn", icon: "learn", tint: "bg-lime-clair" },
-  { key: "career", icon: "career", tint: "bg-neon/60" },
-  { key: "jobs", icon: "jobs", tint: "bg-menthe-claire" },
-  { key: "connect", icon: "connect", tint: "bg-blanc" },
+/** The four modules, one card each. */
+const modules: { key: ModuleKey; icon: IconName }[] = [
+  { key: "learn", icon: "learn" },
+  { key: "career", icon: "career" },
+  { key: "jobs", icon: "jobs" },
+  { key: "connect", icon: "connect" },
 ];
 
 export default async function TalentsPage({ params }: PageProps<"/[locale]/talents">) {
@@ -98,28 +96,27 @@ export default async function TalentsPage({ params }: PageProps<"/[locale]/talen
         </div>
       </MarketingSection>
 
-      {/* Modules, in zigzag */}
+      {/* Modules: four cards */}
       <MarketingSection
         scene
         className="pt-0 lg:pt-0"
-        innerClassName="flex flex-col gap-14 lg:gap-[88px]"
+        innerClassName="grid gap-4 md:grid-cols-2 lg:gap-5"
       >
         {modules.map((module, index) => (
           <div
             key={module.key}
-            className={cx(
-              "flex flex-col gap-5 lg:items-center lg:gap-[72px]",
-              index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse",
-            )}
+            data-reveal
+            className="jm-card jm-lift flex flex-col gap-4 rounded-[24px] p-6 lg:p-9"
+            style={stagger(index)}
           >
-            <div data-reveal className="flex flex-col gap-4 lg:w-[440px] lg:shrink-0">
-              <span className="inline-flex h-9 items-center gap-2 self-start rounded-pill bg-blanc py-1 pr-4 pl-1 text-[13px] font-semibold text-sapin ring-1 ring-sapin/8">
-                <span className="flex size-7 items-center justify-center rounded-full bg-nuit text-lime">
-                  <Icon name={module.icon} className="size-3.5" />
+            <div className="flex flex-col gap-4">
+              <span className="inline-flex items-center gap-2.5 self-start text-[13px] font-semibold text-neon">
+                <span className="flex size-10 items-center justify-center rounded-full bg-[#1c3a2c] text-lime">
+                  <Icon name={module.icon} className="size-[18px]" />
                 </span>
                 {t(`talents.${module.key}.label`)}
               </span>
-              <h3 className="text-[30px] leading-[36px] font-semibold tracking-[-0.035em] lg:text-[40px] lg:leading-[46px]">
+              <h3 className="text-[26px] leading-8 font-semibold tracking-[-0.03em] lg:text-[30px] lg:leading-9">
                 {t(`talents.${module.key}.title`)}
               </h3>
               <p className="text-base leading-[26px] text-ardoise">
@@ -145,29 +142,6 @@ export default async function TalentsPage({ params }: PageProps<"/[locale]/talen
                   {t("talents.hero.badge")}
                 </p>
               )}
-            </div>
-            <div
-              data-reveal="zoom"
-              className={cx(
-                "jm-lift relative h-[240px] min-w-0 overflow-hidden rounded-[28px] pt-5 pl-5 ring-1 ring-sapin/6 lg:h-[440px] lg:flex-1 lg:rounded-[40px] lg:pt-12 lg:pl-12",
-                module.tint,
-              )}
-              style={stagger(1)}
-            >
-              <span
-                aria-hidden
-                className="absolute -top-24 -right-24 size-[320px] rounded-full border-[40px] border-sapin/5"
-              />
-              <img
-                src={`/apercus/talents-module-${module.key}.webp`}
-                alt={t(`talents.${module.key}.imageAlt`)}
-                width={675}
-                height={400}
-                loading="lazy"
-                decoding="async"
-                className="jm-float-slow relative w-[390px] max-w-none rounded-tl-[16px] shadow-[0_10px_30px_rgba(11,26,31,0.18)] lg:w-[675px] lg:rounded-tl-[22px] lg:shadow-[0_20px_50px_rgba(11,26,31,0.2)]"
-                style={{ animationDelay: `${index * -2}s` }}
-              />
             </div>
           </div>
         ))}
@@ -297,7 +271,6 @@ export default async function TalentsPage({ params }: PageProps<"/[locale]/talen
       <LimeCtaBand
         title={t("talents.finalCta.title")}
         text={t("talents.finalCta.text")}
-        character={{ name: "fatou", pose: "joie", height: 330, mobileHeight: 250 }}
         actions={<SiteButton href={signup}>{t("talents.finalCta.primary")}</SiteButton>}
       />
     </>
@@ -321,23 +294,11 @@ function HeroVisual({
 }) {
   return (
     <>
-      <PhotoFrame
-        tone="sapin"
-        character={{ name: "kofi", pose: "telephone", height: 300 }}
-        className="h-[440px] sm:h-[520px] lg:h-[600px] [&>div]:justify-end [&>div]:pr-2"
-      >
-        <div className="jm-float-slow absolute top-10 left-6 sm:left-14 lg:top-14">
-          <PhoneShot src="talents-tableau-de-bord-mobile" alt={alt} width={200} priority />
-        </div>
-        <div
-          className="jm-float absolute top-28 left-[180px] max-sm:hidden sm:left-[250px] lg:top-36"
-          style={{ animationDelay: "-2s" }}
-        >
-          <PhoneShot src="talents-offre-mobile" width={180} />
-        </div>
-      </PhotoFrame>
+      <div className="relative pt-14 pb-20 lg:py-20 lg:pl-8">
+        <MatchesPreview label={alt} className="jm-float-slow" />
+      </div>
       <FloatCard
-        className="jm-pop top-4 right-3 flex items-center gap-2.5 lg:top-10 lg:-right-4"
+        className="jm-pop top-0 right-3 flex items-center gap-2.5 lg:top-4 lg:-right-4"
         style={stagger(0)}
       >
         <AiOrb size={28} className="jm-pulse" />
@@ -349,10 +310,10 @@ function HeroVisual({
         </div>
       </FloatCard>
       <FloatCard
-        className="jm-pop bottom-8 left-3 flex items-center gap-2.5 bg-lime! lg:-left-6"
+        className="jm-pop bottom-4 left-3 flex items-center gap-2.5 lg:-left-2"
         style={stagger(1)}
       >
-        <span className="flex size-8 items-center justify-center rounded-full bg-nuit text-lime">
+        <span className="flex size-8 items-center justify-center rounded-full bg-lime text-sapin">
           <Icon name="certificat" className="size-4" />
         </span>
         <span className="text-xs leading-[17px] font-semibold">{badge}</span>

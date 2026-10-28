@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { AiOrb, Character } from "@/components/brand";
+import { AiOrb } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import {
   Eyebrow,
@@ -9,7 +9,6 @@ import {
   MarketingSection,
   SiteButton,
   SiteHero,
-  Shape,
   lead,
   sectionTitle,
   stagger,
@@ -56,7 +55,7 @@ const weightRows = [
 /** Bands (partie 08): AI gradient, AI green, Menthe claire, Brume. Never coral. */
 const bands = [
   { band: "veryHigh", className: "bg-gradient-ai text-blanc" },
-  { band: "high", className: "bg-ia text-blanc" },
+  { band: "high", className: "bg-ia text-[#0b1a1f]" },
   { band: "partial", className: "bg-menthe-claire text-sapin" },
   { band: "low", className: "bg-brume text-sapin" },
 ] as const;
@@ -351,9 +350,6 @@ export default async function MatchingPage({
           <Eyebrow>{t("matchingPage.faq.eyebrow")}</Eyebrow>
           <h2 className={sectionTitle}>{t("matchingPage.faq.title")}</h2>
           <p className="text-[15px] leading-6 text-ardoise">{t("matchingPage.contact")}</p>
-          <div className="jm-breathe hidden self-start lg:block">
-            <Character name="diallo" pose="montre" height={240} />
-          </div>
         </div>
         <div data-reveal className="min-w-0 lg:flex-1" style={stagger(1)}>
           <FaqAccordion
@@ -373,10 +369,6 @@ export default async function MatchingPage({
             data-reveal
             className="jm-flow relative flex flex-col items-start gap-6 overflow-hidden rounded-[32px] bg-sapin px-6 py-8 text-blanc lg:flex-row lg:items-center lg:rounded-[48px] lg:px-12 lg:py-10"
           >
-            <Shape
-              name="forme-orbites-lime"
-              className="jm-drift -top-[140px] -right-[120px] w-[420px] opacity-20 brightness-0 invert"
-            />
             <AiOrb size={56} className="jm-pulse relative" />
             <h2 className="relative flex-1 text-[26px] leading-8 font-semibold tracking-[-0.025em] lg:text-[32px] lg:leading-[38px]">
               {t("matchingPage.finalCta.title")}
@@ -384,9 +376,6 @@ export default async function MatchingPage({
             <SiteButton href={signupHref({ profil: "talent" })} tone="lime" className="relative">
               {t("matchingPage.cta")}
             </SiteButton>
-            <div className="jm-breathe relative -mr-2.5 -mb-8 self-end lg:hidden">
-              <Character name="kofi" pose="joie" height={220} />
-            </div>
           </div>
         </div>
       </section>

@@ -2,13 +2,11 @@ import { Suspense, type ReactNode } from "react";
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
-import { Character } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { ContactForm } from "@/components/site/contact-form";
 import {
   Eyebrow,
   IconTile,
-  Shape,
   SiteButton,
   heroTitle,
   lead,
@@ -132,38 +130,23 @@ async function quoteDefaults(): Promise<QuoteDefaults> {
   };
 }
 
-/** Dark hero; the form overlaps its bottom edge. */
-function Hero({
-  eyebrow,
-  title,
-  text,
-  character,
-}: {
-  eyebrow: string;
-  title: string;
-  text: string;
-  character: ReactNode;
-}) {
+/** Hero on the Nuit page; the form follows it. */
+function Hero({ eyebrow, title, text }: { eyebrow: string; title: string; text: string }) {
   return (
-    <section data-scene className="bg-papier px-2 pt-2 sm:px-3 lg:px-4 lg:pt-3">
-      <div className="relative mx-auto max-w-[1400px] overflow-hidden rounded-[32px] bg-sapin px-1 pt-10 pb-[120px] text-blanc lg:rounded-[48px] lg:pt-20 lg:pb-[200px]">
-        <Shape
-          name="forme-orbites-lime"
-          className="jm-drift -top-56 -left-56 w-[640px] opacity-[0.1]"
-        />
+    <section data-scene className="bg-papier">
+      <div className="relative mx-auto max-w-[1400px] px-1 pt-10 pb-[120px] lg:pt-20 lg:pb-[180px]">
         <div className={cx(wrap, "relative flex items-end gap-12")}>
           <div className="flex max-w-[720px] flex-1 flex-col gap-5">
             <div className="jm-rise" style={stagger(0)}>
-              <Eyebrow dark>{eyebrow}</Eyebrow>
+              <Eyebrow>{eyebrow}</Eyebrow>
             </div>
             <h1 className={cx("jm-word", heroTitle)} style={stagger(1)}>
               {keepTogether(title)}
             </h1>
-            <p className={cx(lead, "jm-rise text-blanc/75")} style={stagger(2)}>
+            <p className={cx(lead, "jm-rise text-ardoise")} style={stagger(2)}>
               {text}
             </p>
           </div>
-          <div className="jm-breathe -mb-6 hidden shrink-0 lg:block">{character}</div>
         </div>
       </div>
     </section>
@@ -201,12 +184,7 @@ async function ContactView({ form, aside }: { form: ReactNode; aside: ReactNode 
   const t = await getTranslations("contact");
   return (
     <>
-      <Hero
-        eyebrow={t("hero.eyebrow")}
-        title={t("hero.title")}
-        text={t("hero.text")}
-        character={<Character name="kofi" pose="joie" height={280} />}
-      />
+      <Hero eyebrow={t("hero.eyebrow")} title={t("hero.title")} text={t("hero.text")} />
       <Body form={form} aside={aside} asideWidth="lg:w-[400px]" />
     </>
   );
@@ -228,7 +206,6 @@ async function QuoteView({
         eyebrow={planName ?? t("contact.hero.eyebrow")}
         title={t("quote.hero.title")}
         text={t("quote.hero.text")}
-        character={<Character name="diallo" pose="montre" height={280} />}
       />
       <Body form={form} aside={aside} asideWidth="lg:w-[380px]" />
     </>

@@ -4,7 +4,9 @@ import { LegalPage } from "@/components/site/legal-page";
 import { pageMetadata } from "@/lib/seo";
 import { applySiteLocale } from "@/i18n/site-locale";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/cookies">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/cookies">): Promise<Metadata> {
   await applySiteLocale(params);
   const t = await getTranslations("cookiesPolicy.seo");
   return pageMetadata({ path: "/cookies", title: t("title"), description: t("description") });

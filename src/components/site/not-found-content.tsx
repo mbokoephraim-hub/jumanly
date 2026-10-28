@@ -25,7 +25,7 @@ export function NotFoundContent({
       code={<SystemCode code={t("code")} />}
       title={t("title")}
       body={<p>{body}</p>}
-      character={{ name: "fatou", pose: "perplexe" }}
+      character={app ? { name: "fatou", pose: "perplexe" } : undefined}
       compact={app}
     >
       {!app && (
@@ -55,11 +55,11 @@ export function NotFoundContent({
   );
 }
 
-/** The 404 block of the public site, in a rounded Lime clair panel. */
+/** The 404 block of the public site, on the Nuit page. */
 export function NotFoundSection({ variant }: { variant?: "page" | "job" | "course" }) {
   return (
-    <section className="w-full bg-papier px-2 pt-2 pb-10 sm:px-3 lg:px-4 lg:pt-3 lg:pb-16">
-      <div className="mx-auto max-w-[1400px] rounded-[32px] bg-lime-clair px-4 py-12 lg:rounded-[48px] lg:px-6 lg:py-[100px]">
+    <section className="w-full bg-papier px-4 pb-10 lg:pb-16">
+      <div className="mx-auto max-w-[1400px] py-12 lg:py-[100px]">
         <div className="mx-auto max-w-[1248px]">
           <NotFoundContent variant={variant} />
         </div>

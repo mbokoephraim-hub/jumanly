@@ -25,11 +25,12 @@ import { planForCatalogLevel, type PublicPlan } from "@/server/services/plans";
  */
 
 // Cover tints and patterns, cycled along the list (Learn Lime, Career Néon, Jobs Menthe, Hire Brume).
+// Dark grounds of the Modèle B site (src/styles/site.css), with the dark brand patterns.
 const covers = [
-  { tint: "bg-lime", pattern: "motif-points-clair" },
-  { tint: "bg-neon", pattern: "motif-pastilles-clair" },
-  { tint: "bg-menthe-claire", pattern: "motif-reseau-clair" },
-  { tint: "bg-brume", pattern: "motif-trajectoires-clair" },
+  { tint: "bg-[#1c3a2c]", pattern: "motif-points-sombre" },
+  { tint: "bg-gris-clair", pattern: "motif-pastilles-sombre" },
+  { tint: "bg-[#14322f]", pattern: "motif-reseau-sombre" },
+  { tint: "bg-[#1f3a3f]", pattern: "motif-trajectoires-sombre" },
 ];
 
 // Category icon on the cover: the catalog stores free text, so we match a few keywords.
@@ -84,7 +85,7 @@ export function PublicCourseCard({
       <div
         className={cx(
           "relative h-[150px] overflow-hidden rounded-md",
-          locked ? "bg-[#8aa39c]" : cover.tint,
+          locked ? "bg-gris-clair" : cover.tint,
         )}
       >
         {course.coverUrl ? (
@@ -97,7 +98,7 @@ export function PublicCourseCard({
         ) : (
           <div
             aria-hidden
-            className="absolute inset-0 opacity-80 mix-blend-multiply"
+            className="absolute inset-0 opacity-60"
             style={{
               backgroundImage: `url(/marque/motifs/${cover.pattern}.svg)`,
               backgroundSize: "360px",
@@ -106,7 +107,7 @@ export function PublicCourseCard({
         )}
         <span
           aria-hidden
-          className="absolute bottom-3.5 left-3.5 flex size-[46px] items-center justify-center rounded-sm bg-blanc text-sapin"
+          className="absolute bottom-3.5 left-3.5 flex size-[46px] items-center justify-center rounded-sm bg-nuit text-lime"
         >
           <Icon name={categoryIcon(course.category)} className="size-5" />
         </span>
@@ -193,7 +194,7 @@ function CourseCover({ course, cover }: { course: CourseSummary; cover: (typeof 
       ) : (
         <div
           aria-hidden
-          className="absolute inset-0 opacity-80 mix-blend-multiply transition-transform duration-700 group-hover:scale-110"
+          className="absolute inset-0 opacity-60 transition-transform duration-700 group-hover:scale-110"
           style={{
             backgroundImage: `url(/marque/motifs/${cover.pattern}.svg)`,
             backgroundSize: "360px",
@@ -202,7 +203,7 @@ function CourseCover({ course, cover }: { course: CourseSummary; cover: (typeof 
       )}
       <span
         aria-hidden
-        className="absolute bottom-3.5 left-3.5 flex size-[46px] items-center justify-center rounded-sm bg-blanc text-sapin"
+        className="absolute bottom-3.5 left-3.5 flex size-[46px] items-center justify-center rounded-sm bg-nuit text-lime"
       >
         <Icon name={categoryIcon(course.category)} className="size-5" />
       </span>

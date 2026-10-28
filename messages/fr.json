@@ -171,6 +171,28 @@
       "saved": "Vos choix de cookies sont enregistrés."
     }
   },
+  "sitePreview": {
+    "pipeline": {
+      "title": "Analyste de données junior · 38 candidatures",
+      "new": "Nouvelles",
+      "shortlisted": "Présélection",
+      "interview": "Entretien",
+      "c1": "Esther K.",
+      "c2": "Didier L.",
+      "c3": "Grâce M.",
+      "c4": "Amani K."
+    },
+    "matches": {
+      "title": "Offres compatibles avec votre profil",
+      "job1": "Analyste de données junior",
+      "company1": "Baobab Fintech (fictive) · Kinshasa",
+      "job2": "Stage en marketing digital",
+      "company2": "Horizon Démo (fictive) · Dakar",
+      "job3": "Assistant administratif",
+      "company3": "Savane Télécom (fictive) · Abidjan"
+    },
+    "score": "{value} %"
+  },
   "home": {
     "seo": {
       "title": "Jumanly · Se former, évoluer, recruter. Learn. Grow. Connect.",
@@ -189,6 +211,7 @@
       "reassurance2": "Candidatures toujours gratuites",
       "reassurance3": "Mobile Money et carte",
       "imageAlt": "Aperçu du tableau de bord Jumanly sur ordinateur et sur téléphone : progression des formations, candidatures en cours et offres compatibles.",
+      "photoAlt": "Un homme souriant consulte Jumanly sur une tablette à son bureau.",
       "visual": {
         "badge": "Attestation obtenue",
         "matchTitle": "Analyste de données junior",
