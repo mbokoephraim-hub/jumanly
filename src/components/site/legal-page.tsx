@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getMessages, getTranslations } from "next-intl/server";
 import { Icon, type IconName } from "@/components/brand/icon";
-import { Eyebrow, Pattern, wrap } from "@/components/site/marketing";
+import { Eyebrow, wrap } from "@/components/site/marketing";
 import { cx } from "@/lib/cx";
 import { legalValues, siteCookies } from "@/config/legal";
 import { legalNavigation } from "@/config/navigation";
@@ -74,9 +74,8 @@ export async function LegalPage({ namespace, current }: { namespace: Namespace; 
         <section
           key={key}
           id={key}
-          className="relative scroll-mt-24 overflow-hidden rounded-[24px] bg-lime p-6 lg:p-8"
+          className="relative scroll-mt-24 overflow-hidden rounded-[28px] bg-lime-clair p-6 lg:p-8"
         >
-          <Pattern name="motif-points-lime" size={260} opacity={0.35} />
           <div className="relative flex flex-col gap-4">
             <Heading className="text-lg font-bold">{title}</Heading>
             <ul className="flex flex-col gap-3">
@@ -209,7 +208,7 @@ export async function LegalPage({ namespace, current }: { namespace: Namespace; 
   };
 
   return (
-    <section id="haut" className="bg-creme pb-16 lg:pb-24">
+    <section id="haut" className="bg-papier pb-16 lg:pb-24">
       <div className={cx(wrap, "flex flex-col gap-6 pt-6 lg:pt-8")}>
         {incomplete && (
           <p
@@ -220,10 +219,10 @@ export async function LegalPage({ namespace, current }: { namespace: Namespace; 
             {t("legal.validationBanner")}
           </p>
         )}
-        <header className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <header className="flex flex-col gap-4 rounded-[32px] bg-lime-clair px-6 py-8 lg:flex-row lg:items-end lg:justify-between lg:rounded-[48px] lg:px-12 lg:py-14 print:bg-transparent print:p-0">
           <div className="flex flex-col gap-2">
             <Eyebrow>{t("legal.eyebrow")}</Eyebrow>
-            <h1 className="text-[34px] leading-[1.05] font-bold tracking-tight lg:text-[52px]">
+            <h1 className="text-[36px] leading-[1.05] font-semibold tracking-[-0.04em] lg:text-[64px]">
               {t(`${namespace}.title`)}
             </h1>
             <p className="text-sm text-ardoise">
@@ -238,7 +237,7 @@ export async function LegalPage({ namespace, current }: { namespace: Namespace; 
           <aside className="flex min-w-0 flex-col gap-4 self-start lg:sticky lg:top-24 print:hidden">
             <nav
               aria-label={t("legal.eyebrow")}
-              className="rounded-[20px] bg-blanc p-2 max-lg:overflow-x-auto"
+              className="rounded-[24px] bg-blanc p-2 max-lg:overflow-x-auto"
             >
               <ul className="flex gap-1 lg:flex-col">
                 {legalNavigation.map((link) => (
@@ -246,9 +245,9 @@ export async function LegalPage({ namespace, current }: { namespace: Namespace; 
                     <Link
                       href={link.href}
                       aria-current={link.href === current ? "page" : undefined}
-                      className="flex items-center gap-2.5 rounded-[14px] px-3 py-2.5 text-sm font-medium hover:bg-creme aria-[current=page]:bg-sapin aria-[current=page]:text-blanc"
+                      className="flex items-center gap-2.5 rounded-[14px] px-3 py-2.5 text-sm font-medium hover:bg-papier aria-[current=page]:bg-sapin aria-[current=page]:text-blanc"
                     >
-                      <span className="flex size-7 items-center justify-center rounded-[9px] bg-creme text-sapin">
+                      <span className="flex size-7 items-center justify-center rounded-full bg-papier text-sapin">
                         <Icon name={navIcons[link.key]} className="size-4" />
                       </span>
                       {t(`legal.nav.${link.key}`)}
@@ -271,7 +270,7 @@ export async function LegalPage({ namespace, current }: { namespace: Namespace; 
                       <a
                         href={`#${item.key}`}
                         className={cx(
-                          "block rounded-[10px] px-2 py-1.5 text-[13px] leading-[18px] hover:bg-creme",
+                          "block rounded-[10px] px-2 py-1.5 text-[13px] leading-[18px] hover:bg-papier",
                           item.part ? "mt-2 font-semibold" : "text-sapin/85",
                         )}
                       >

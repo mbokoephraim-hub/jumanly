@@ -8,7 +8,7 @@ import { Icon, type IconName } from "@/components/brand/icon";
 import { VideoPlayer } from "@/components/learn/video-player";
 import { YouTubeEmbed } from "@/components/learn/youtube-embed";
 import { speeds } from "@/components/learn/course-bits";
-import { Glow, IconTile, Pattern, sectionTitle, stagger, wrap } from "@/components/site/marketing";
+import { HeroPanel, IconTile, sectionTitle, stagger, wrap } from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
 import { PublicCourseCard } from "@/components/site/public-cards";
 import { Avatar, ButtonLink } from "@/components/ui";
@@ -133,12 +133,7 @@ export default async function TrainingPage({ params }: PageProps<"/[locale]/form
       <MotionRoot />
 
       {/* Hero: the course on the left, the access card on the right */}
-      <section
-        data-scene
-        className="relative overflow-hidden bg-creme pt-6 pb-12 lg:pt-12 lg:pb-16"
-      >
-        <Glow className="-top-48 -left-40 size-[520px] bg-lime/35" />
-        <Glow className="-right-48 bottom-0 size-[480px] bg-menthe/30" delay={-8} />
+      <HeroPanel className="pt-6 pb-12 lg:pt-12 lg:pb-16">
         <div
           className={cx(wrap, "relative flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-16")}
         >
@@ -227,7 +222,6 @@ export default async function TrainingPage({ params }: PageProps<"/[locale]/form
           >
             {/* Preview screen: leads to the playable preview lower on the page */}
             <div className="relative flex h-[200px] flex-col justify-between overflow-hidden rounded-[22px] bg-sapin p-4 text-blanc lg:h-[220px]">
-              <Pattern name="motif-reseau-sombre" size={260} opacity={0.35} />
               <div className="relative flex flex-wrap gap-2">
                 {preview && (
                   <span className="inline-flex h-[22px] items-center rounded-pill bg-lime px-2.5 text-[10.5px] font-semibold text-sapin">
@@ -273,7 +267,7 @@ export default async function TrainingPage({ params }: PageProps<"/[locale]/form
               </div>
             </div>
             {!isFree && requiredPlan && (
-              <p className="flex items-start gap-3 rounded-[18px] bg-creme p-3.5 text-[13px] leading-5">
+              <p className="flex items-start gap-3 rounded-[18px] bg-blanc p-3.5 text-[13px] leading-5">
                 <IconTile icon="lock" size={34} className="rounded-[12px] bg-sapin text-lime" />
                 {t("training.cta.requiredPlan", { plan: requiredPlan.name })}
               </p>
@@ -292,9 +286,9 @@ export default async function TrainingPage({ params }: PageProps<"/[locale]/form
             </p>
           </aside>
         </div>
-      </section>
+      </HeroPanel>
 
-      <section className="bg-blanc py-12 lg:py-20">
+      <section className="bg-papier py-12 lg:py-20">
         <div className={cx(wrap, "flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16")}>
           <div className="flex min-w-0 flex-1 flex-col gap-10 lg:gap-12">
             <div data-reveal className="flex flex-col gap-3">
@@ -336,7 +330,7 @@ export default async function TrainingPage({ params }: PageProps<"/[locale]/form
               <ol className="flex flex-col gap-3">
                 {course.modules.map((module, index) => (
                   <li key={module.id} data-reveal style={stagger(index % 4)}>
-                    <details open={index < 2} className="group rounded-[20px] bg-creme">
+                    <details open={index < 2} className="group rounded-[20px] bg-blanc">
                       <summary className="flex cursor-pointer list-none items-center gap-4 px-4 py-4 lg:px-5 [&::-webkit-details-marker]:hidden">
                         <span
                           aria-hidden
@@ -406,13 +400,8 @@ export default async function TrainingPage({ params }: PageProps<"/[locale]/form
             {course.certificateEnabled && (
               <div
                 data-reveal
-                className="jm-flow relative flex flex-col gap-6 overflow-hidden rounded-[28px] bg-lime p-6 text-sapin lg:flex-row lg:items-center lg:p-8"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(120deg, #D9FA72 0%, #A6F26B 35%, #7DE36B 60%, #E3F67C 100%)",
-                }}
+                className="relative flex flex-col gap-6 overflow-hidden rounded-[32px] bg-lime-clair p-6 text-sapin lg:flex-row lg:items-center lg:p-8"
               >
-                <Pattern name="motif-trajectoires-lime" size={380} opacity={0.3} />
                 <CertificateSample
                   label={t("training.meta.certificate")}
                   intro={t("training.certificate.sample.intro")}
@@ -438,7 +427,7 @@ export default async function TrainingPage({ params }: PageProps<"/[locale]/form
               <div
                 id="apercu"
                 data-reveal
-                className="flex scroll-mt-24 flex-col gap-3 rounded-[24px] bg-creme p-6"
+                className="flex scroll-mt-24 flex-col gap-3 rounded-[24px] bg-blanc p-6"
               >
                 <h2 className="text-lg font-semibold">{t("training.preview.title")}</h2>
                 <p className="text-[13.5px] leading-5 text-ardoise">{t("training.preview.text")}</p>
@@ -490,17 +479,17 @@ export default async function TrainingPage({ params }: PageProps<"/[locale]/form
               title={t("learn.documents.publicTitle")}
               documents={documents}
               single
-              className="rounded-[24px] bg-creme p-6"
+              className="rounded-[24px] bg-blanc p-6"
             />
             <CoursePdfLinks
               id="course-pdf"
               slug={course.slug}
-              className="rounded-[24px] bg-creme p-6"
+              className="rounded-[24px] bg-blanc p-6"
             />
             {course.instructor && (
               <div
                 data-reveal
-                className="hidden flex-col gap-3 rounded-[24px] bg-creme p-6 lg:flex"
+                className="hidden flex-col gap-3 rounded-[24px] bg-blanc p-6 lg:flex"
               >
                 <p className="flex items-center gap-3">
                   <Avatar name={course.instructor} size="md" />
@@ -516,7 +505,7 @@ export default async function TrainingPage({ params }: PageProps<"/[locale]/form
       </section>
 
       {related.length > 0 && (
-        <section className="bg-creme py-12 lg:py-20">
+        <section className="bg-papier py-12 lg:py-20">
           <div className={cx(wrap, "flex flex-col gap-6 lg:gap-8")}>
             <div data-reveal className="flex items-center justify-between gap-4">
               <h2 className={sectionTitle}>{t("training.related.title")}</h2>

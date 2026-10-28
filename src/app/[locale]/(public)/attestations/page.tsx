@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Character } from "@/components/brand";
 import { CertificateLookup } from "@/components/learn/certificate-lookup";
-import { Eyebrow, Pattern, lead, stagger, wrap } from "@/components/site/marketing";
+import { Eyebrow, HeroPanel, lead, stagger, wrap } from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
 import { cx } from "@/lib/cx";
 import { pageMetadata } from "@/lib/seo";
 import { applySiteLocale } from "@/i18n/site-locale";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/attestations">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/attestations">): Promise<Metadata> {
   await applySiteLocale(params);
   const t = await getTranslations("certificate.verify");
   return pageMetadata({
@@ -19,18 +21,16 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/attestat
 }
 
 /** Verification form (layout of mockup 01-15): the number printed on an attestation leads to its page. */
-export default async function CertificateLookupPage({ params }: PageProps<"/[locale]/attestations">) {
+export default async function CertificateLookupPage({
+  params,
+}: PageProps<"/[locale]/attestations">) {
   await applySiteLocale(params);
   const t = await getTranslations("certificate.verify");
   const learn = await getTranslations("trainings.hero");
   return (
     <>
       <MotionRoot />
-      <section
-        data-scene
-        className="relative overflow-hidden bg-creme pt-10 pb-14 lg:pt-20 lg:pb-28"
-      >
-        <Pattern name="motif-trajectoires-clair" size={460} opacity={0.3} />
+      <HeroPanel className="pt-10 pb-14 lg:pt-20 lg:pb-28">
         <div
           className={cx(wrap, "relative flex flex-col gap-8 lg:flex-row lg:items-end lg:gap-16")}
         >
@@ -55,7 +55,7 @@ export default async function CertificateLookupPage({ params }: PageProps<"/[loc
             <Character name="kofi" pose="joie" height={260} />
           </div>
         </div>
-      </section>
+      </HeroPanel>
     </>
   );
 }

@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Icon, type IconName } from "@/components/brand/icon";
-import { Eyebrow, Pattern, Shape, stagger, wrap } from "@/components/site/marketing";
+import { Eyebrow, Shape, stagger, wrap } from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
 import { ShareButton } from "@/components/site/share-button";
 import { Skeleton } from "@/components/ui";
@@ -36,9 +36,11 @@ export default function PublicPortfolioPage({ params }: PageProps<"/[locale]/por
   return (
     <>
       <MotionRoot />
-      <section className="bg-creme pb-16 lg:pb-24">
-        <div data-scene className="relative h-[150px] overflow-hidden bg-lime lg:h-[320px]">
-          <Pattern name="motif-trajectoires-lime" size={420} opacity={0.6} />
+      <section className="bg-papier px-2 pt-2 pb-16 sm:px-3 lg:px-4 lg:pt-3 lg:pb-24">
+        <div
+          data-scene
+          className="relative mx-auto h-[150px] max-w-[1400px] overflow-hidden rounded-[32px] bg-lime-clair lg:h-[320px] lg:rounded-[48px]"
+        >
           <Shape
             name="forme-trajectoire-sapin"
             className="jm-float-slow top-[110px] right-[12%] w-[260px] opacity-90 max-lg:hidden"
@@ -54,7 +56,11 @@ export default function PublicPortfolioPage({ params }: PageProps<"/[locale]/por
   );
 }
 
-async function Portfolio({ params }: { params: PageProps<"/[locale]/portfolio/[slug]">["params"] }) {
+async function Portfolio({
+  params,
+}: {
+  params: PageProps<"/[locale]/portfolio/[slug]">["params"];
+}) {
   await applySiteLocale(params);
   const { slug } = await params;
   const t = await getTranslations("career.portfolio");
@@ -191,7 +197,6 @@ async function ProjectCard({
           cover.className,
         )}
       >
-        <Pattern name={cover.pattern} size={260} opacity={0.7} />
         <span className="absolute bottom-3.5 left-3.5 flex size-12 items-center justify-center rounded-[14px] bg-blanc text-sapin">
           <Icon name={cover.icon} className="size-5" />
         </span>

@@ -7,21 +7,19 @@ import { Icon, type IconName } from "@/components/brand/icon";
 import {
   Eyebrow,
   FaqAccordion,
-  Glow,
+  HeroPanel,
   IconTile,
   LimeCtaBand,
   MarketingSection,
-  Pattern,
   SectionHead,
   lead,
-  outlineOnLime,
+  SiteButton,
   sectionTitle,
   stagger,
 } from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
 import { OpenOnWide, PricingFamilyNav } from "@/components/site/pricing-nav";
 import { TarifBand, TarifCompare, TarifPlanCards } from "@/components/site/tarifs";
-import { ButtonLink } from "@/components/ui";
 import type { PlanFamily } from "@/generated/prisma/client";
 import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
@@ -37,13 +35,13 @@ import { faqItems } from "@/server/services/contents";
 import { limitOf, lowestPaidPrice, plansOf, type PublicPlan } from "@/server/services/plans";
 import { applySiteLocale } from "@/i18n/site-locale";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/tarifs">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/tarifs">): Promise<Metadata> {
   await applySiteLocale(params);
   const t = await getTranslations("pricing.seo");
   return pageMetadata({ path: "/tarifs", title: t("title"), description: t("description") });
 }
-
-const chevron = <Icon name="chev-r" />;
 
 /** Family anchors (maquette 05-01): #talents #rh #companies #partners. */
 const families = ["talents", "rh", "companies", "partners"] as const;
@@ -143,14 +141,8 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
     <>
       <MotionRoot />
 
-      {/* Hero: Crème lit by brand lights, the family segments and the payment terms */}
-      <section
-        data-scene
-        className="relative overflow-hidden bg-creme pt-10 pb-10 text-sapin lg:pt-[72px] lg:pb-12"
-      >
-        <Pattern name="motif-trajectoires-clair" opacity={0.35} />
-        <Glow className="-top-48 -left-40 size-[520px] bg-lime/20" />
-        <Glow className="top-1/4 -right-48 size-[560px] bg-menthe/15" delay={-7} />
+      {/* Hero: the family segments and the payment terms, on a Lime clair panel */}
+      <HeroPanel className="pt-10 pb-10 lg:pt-[72px] lg:pb-12">
         <div className="jm-breathe absolute bottom-[-6px] left-[70px] hidden xl:block">
           <Character name="kofi" pose="salut" height={250} />
         </div>
@@ -172,16 +164,16 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
             <Eyebrow>{t("pricing.hero.eyebrow")}</Eyebrow>
           </div>
           <h1
-            className="jm-word max-w-[860px] text-[36px] leading-10 font-semibold tracking-[-0.035em] lg:text-[56px] lg:leading-[60px]"
+            className="jm-word max-w-[900px] text-[40px] leading-[44px] font-semibold tracking-[-0.04em] lg:text-[64px] lg:leading-[66px]"
             style={stagger(2)}
           >
             {t("pricing.hero.title")}
           </h1>
-          <p className={cx(lead, "jm-rise max-w-[720px] text-ardoise")} style={stagger(3)}>
+          <p className={cx(lead, "jm-rise max-w-[720px] text-sapin/85")} style={stagger(3)}>
             {t("pricing.hero.subtitle")}
           </p>
           <div className="jm-rise mt-2 flex flex-col items-center gap-2" style={stagger(4)}>
-            <p className="text-[11px] leading-[15px] text-ardoise">{t("pricing.tabs.label")}</p>
+            <p className="text-[11px] leading-[15px] text-sapin/80">{t("pricing.tabs.label")}</p>
             <PricingFamilyNav
               label={t("pricing.tabs.label")}
               families={families.map((id) => ({ id, label: t(`pricing.tabs.${id}`) }))}
@@ -201,7 +193,7 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
             </li>
           </ul>
         </div>
-      </section>
+      </HeroPanel>
 
       {/* Talents */}
       <MarketingSection
@@ -240,7 +232,7 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
       >
         {familyHead(t("pricing.rh.title"), t("pricing.rh.subtitle"))}
         <FamilyCards plans={plans} family="rh" />
-        <p className="flex items-start gap-3 rounded-[18px] bg-creme px-[18px] py-3.5 text-[13px] leading-5">
+        <p className="flex items-start gap-3 rounded-[18px] bg-blanc px-[18px] py-3.5 text-[13px] leading-5">
           <Icon name="lock" className="mt-0.5 size-4 shrink-0" />
           {t("pricing.rh.privacyNote")}
         </p>
@@ -272,9 +264,9 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
             <Icon name="hire" className="mt-px size-[18px] shrink-0" />
             {t("pricing.company.startFree.text")}
           </p>
-          <ButtonLink href={signupHref({ profil: "company" })} variant="tertiary" size="sm">
+          <SiteButton href={signupHref({ profil: "company" })} tone="light" size="md">
             {t("pricing.company.startFree.cta")}
-          </ButtonLink>
+          </SiteButton>
         </div>
         <FamilyCards plans={plans} family="company" />
         <TarifBand
@@ -293,12 +285,6 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
         tone="sapin"
         scene
         className={anchorOffset}
-        background={
-          <>
-            <Pattern name="motif-reseau-sombre" opacity={0.3} />
-            <Glow className="-top-40 -left-32 size-[520px] bg-feuille/30" />
-          </>
-        }
         innerClassName="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16"
       >
         <div data-reveal className="flex flex-col gap-5 lg:flex-1">
@@ -326,12 +312,12 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
             {t("pricing.partners.noOnline")}
           </p>
           <div className="flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href="/partenaires#contact" size="lg" iconAfter={chevron}>
+            <SiteButton href="/partenaires#contact" tone="lime">
               {t("pricing.partners.cta")}
-            </ButtonLink>
-            <ButtonLink href="/partenaires" variant="inverse" size="lg">
+            </SiteButton>
+            <SiteButton href="/partenaires" tone="onDark">
               {t("pricing.partners.ctaSecondary")}
-            </ButtonLink>
+            </SiteButton>
           </div>
           <Link
             href="/activer"
@@ -352,7 +338,7 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
             <p className="text-base leading-[26px] font-semibold">
               {t("pricing.partners.example.text")}
             </p>
-            <p className="rounded-[18px] bg-creme px-4 py-3.5 text-base leading-6 font-semibold">
+            <p className="rounded-[18px] bg-blanc px-4 py-3.5 text-base leading-6 font-semibold">
               {/* Thousands stay on one line (« 15 000 »). */}
               {t("pricing.partners.example.formula").replace(/(\d) (\d)/g, "$1\u00a0$2")}
             </p>
@@ -377,7 +363,7 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
               key={item.key}
               data-reveal
               style={stagger(index)}
-              className="jm-lift flex flex-col gap-3.5 rounded-card bg-creme p-[22px]"
+              className="jm-lift flex flex-col gap-3.5 rounded-[28px] bg-blanc p-[22px]"
             >
               <IconTile icon={item.icon} size={46} className="bg-lime text-sapin" />
               <p className="text-[15px] leading-[22px] font-medium">
@@ -407,24 +393,17 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
         </MarketingSection>
       )}
 
+      <section aria-hidden className="h-14 bg-papier lg:h-24" />
       <LimeCtaBand
-        animated
         title={t("pricing.finalCta.title")}
         text={t("pricing.finalCta.text")}
         character={{ name: "amani", pose: "joie", height: 300, mobileHeight: 220 }}
         actions={
           <>
-            <ButtonLink href={signupHref()} variant="secondary" size="lg" iconAfter={chevron}>
-              {t("pricing.finalCta.primary")}
-            </ButtonLink>
-            <ButtonLink
-              href="/contact?sujet=devis"
-              variant="tertiary"
-              size="lg"
-              className={outlineOnLime}
-            >
+            <SiteButton href={signupHref()}>{t("pricing.finalCta.primary")}</SiteButton>
+            <SiteButton href="/contact?sujet=devis" tone="light">
               {t("pricing.finalCta.secondary")}
-            </ButtonLink>
+            </SiteButton>
           </>
         }
       />

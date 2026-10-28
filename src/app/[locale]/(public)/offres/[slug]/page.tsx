@@ -6,7 +6,7 @@ import { getTranslations } from "next-intl/server";
 import { AiOrb } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { JobBody } from "@/components/site/job-body";
-import { Pattern, Shape, iaFlow, sectionTitle, stagger, wrap } from "@/components/site/marketing";
+import { HeroPanel, Shape, sectionTitle, stagger, wrap } from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
 import { CatalogJobCard } from "@/components/site/public-cards";
 import { ShareButton } from "@/components/site/share-button";
@@ -29,7 +29,9 @@ export async function generateStaticParams() {
   return staticSlugParams(jobSlugs);
 }
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/offres/[slug]">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[locale]/offres/[slug]">): Promise<Metadata> {
   await applySiteLocale(params);
   const { slug } = await params;
   const t = await getTranslations();
@@ -147,11 +149,7 @@ export default async function JobPage({ params }: PageProps<"/[locale]/offres/[s
       <MotionRoot />
 
       {/* Header: company, title, facts and the free application */}
-      <section
-        data-scene
-        className="relative overflow-hidden bg-creme pt-6 pb-10 lg:pt-10 lg:pb-12"
-      >
-        <Pattern name="motif-trajectoires-clair" size={420} opacity={0.5} />
+      <HeroPanel className="pt-6 pb-10 lg:pt-10 lg:pb-12">
         <div
           className={cx(
             wrap,
@@ -292,9 +290,9 @@ export default async function JobPage({ params }: PageProps<"/[locale]/offres/[s
             )}
           </div>
         </div>
-      </section>
+      </HeroPanel>
 
-      <section className="bg-blanc py-12 lg:py-16">
+      <section className="bg-papier py-12 lg:py-16">
         <div className={cx(wrap, "flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-14")}>
           <div className="min-w-0 flex-1">
             <JobBody job={job} />
@@ -302,12 +300,11 @@ export default async function JobPage({ params }: PageProps<"/[locale]/offres/[s
           <aside className="flex flex-col gap-4 lg:sticky lg:top-24 lg:w-[380px] lg:shrink-0">
             <div
               data-reveal
-              className="jm-flow relative flex flex-col gap-4 overflow-hidden rounded-[24px] bg-gradient-ai p-6 text-blanc"
-              style={{ backgroundImage: iaFlow }}
+              className="relative flex flex-col gap-4 overflow-hidden rounded-[28px] bg-nuit p-6 text-blanc"
             >
               <Shape
                 name="forme-orbites-lime"
-                className="jm-drift -top-24 -right-24 w-[260px] opacity-20 brightness-0 invert"
+                className="jm-drift -top-24 -right-24 w-[260px] opacity-[0.12]"
               />
               <p className="relative flex items-center gap-2.5">
                 <AiOrb size={28} className="jm-pulse" />
@@ -365,7 +362,7 @@ export default async function JobPage({ params }: PageProps<"/[locale]/offres/[s
               </Link>
             </div>
             {(job.organization.description || orgFacts) && (
-              <div data-reveal className="flex flex-col gap-3 rounded-[24px] bg-creme p-5">
+              <div data-reveal className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5">
                 <h2 className="text-lg font-semibold">{t("job.company.title", { company })}</h2>
                 <p className="flex items-center gap-3">
                   <CompanyLogo name={company} size="md" className="size-11! rounded-[12px]!" />
@@ -395,7 +392,7 @@ export default async function JobPage({ params }: PageProps<"/[locale]/offres/[s
       </section>
 
       {similar.length > 0 && (
-        <section id="similaires" className="scroll-mt-20 bg-creme py-12 lg:py-20">
+        <section id="similaires" className="scroll-mt-20 bg-papier py-12 lg:py-20">
           <div className={cx(wrap, "flex flex-col gap-6 lg:gap-8")}>
             <h2 data-reveal className={sectionTitle}>
               {t("job.similar.title")}

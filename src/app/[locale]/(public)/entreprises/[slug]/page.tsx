@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Character } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
-import { IconTile, Pattern, Shape, stagger, wrap } from "@/components/site/marketing";
+import { IconTile, Shape, stagger, wrap } from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
 import { CatalogJobCard } from "@/components/site/public-cards";
 import { ButtonLink, CompanyLogo } from "@/components/ui";
@@ -70,15 +70,14 @@ export default async function CompanyPage({ params }: PageProps<"/[locale]/entre
   return (
     <>
       <MotionRoot />
-      <section className="bg-creme pb-10 lg:pb-16">
+      <section className="bg-papier px-2 pt-2 pb-10 sm:px-3 lg:px-4 lg:pt-3 lg:pb-16">
         <div
           data-scene
-          className="relative h-[180px] overflow-hidden bg-gradient-depth lg:h-[300px]"
+          className="relative mx-auto h-[180px] max-w-[1400px] overflow-hidden rounded-[32px] bg-sapin lg:h-[300px] lg:rounded-[48px]"
         >
-          <Pattern name="motif-reseau-sombre" size={460} opacity={0.5} />
           <Shape
-            name="forme-halo-couleur"
-            className="jm-drift -top-[200px] right-10 w-[600px] opacity-50"
+            name="forme-orbites-lime"
+            className="jm-drift -top-[200px] right-10 w-[600px] opacity-[0.12]"
           />
           <Shape
             name="forme-trajectoire-lime"
@@ -132,7 +131,7 @@ export default async function CompanyPage({ params }: PageProps<"/[locale]/entre
               <a
                 href={company.website}
                 rel="noopener noreferrer nofollow"
-                className="inline-flex h-11 items-center gap-2 self-start rounded-pill px-[18px] text-sm font-semibold ring-[1.5px] ring-brume ring-inset hover:bg-creme lg:self-auto"
+                className="inline-flex h-11 items-center gap-2 self-start rounded-pill px-[18px] text-sm font-semibold ring-[1.5px] ring-brume ring-inset hover:bg-papier lg:self-auto"
               >
                 <Icon name="lien" className="size-4" />
                 {t("companyPage.website")}
@@ -142,7 +141,7 @@ export default async function CompanyPage({ params }: PageProps<"/[locale]/entre
         </div>
       </section>
 
-      <section className="bg-creme pb-14 lg:pb-24">
+      <section className="bg-papier pb-14 lg:pb-24">
         <div className={cx(wrap, "flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-14")}>
           <div className="flex min-w-0 flex-1 flex-col gap-10 lg:gap-12">
             {company.description && (
