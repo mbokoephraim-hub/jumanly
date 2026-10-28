@@ -11,13 +11,13 @@ test("espace talent : recherche de l'en-tête et compte derrière l'avatar", asy
 }) => {
   await logIn(page, demo.talentPro);
   if (isMobile) {
-    // Modèle B (lot B9): the search is Explorer's and the profile is Carrière on a phone; the
-    // avatar of Formation opens Carrière, the account is Paramètres.
+    // Modèle B (lot B9): the search is Explorer's and the profile is Carrière on a phone; Formation
+    // shows Paramètres in place of the avatar (#185), the account is Paramètres.
     await page.goto("/app/recherche?q=CV");
     await expect(page).toHaveURL(/\/app\/jobs$/);
     await page.goto("/app/learn");
-    await page.locator(".nb-fo-accueil").getByRole("link", { name: "Mon profil" }).click();
-    await expect(page).toHaveURL(/\/app\/career\/cv$/);
+    await page.locator(".nb-fo-accueil").getByRole("link", { name: "Paramètres" }).click();
+    await expect(page).toHaveURL(/\/app\/parametres$/);
     await page.goto("/app/compte");
     await expect(page).toHaveURL(/\/app\/parametres$/);
     await page.getByRole("button", { name: "Se déconnecter" }).click();

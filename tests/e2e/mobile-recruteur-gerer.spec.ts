@@ -311,11 +311,13 @@ test("abonnement, formules RH, rapports en PDF, paramètres et journal des consu
 
   await page.goto("/app/parametres");
   const settings = main(page);
+  // « Profils consultés » in the recruiter's settings on a phone (#189).
+  const journalLink = isMobile ? "Profils consultés" : /Journal des consultations/;
   await expect(settings.getByRole("heading", { level: 1 })).toHaveText("Paramètres");
-  await expect(settings.getByRole("link", { name: /Journal des consultations/ })).toBeVisible();
+  await expect(settings.getByRole("link", { name: journalLink })).toBeVisible();
   await expectAccessible(page);
   await noOverflow(page, "paramètres");
-  await settings.getByRole("link", { name: /Journal des consultations/ }).click();
+  await settings.getByRole("link", { name: journalLink }).click();
   if (isMobile) {
     await expect(page).toHaveURL(/\/app\/parametres\/consultations$/);
     await expect(main(page).getByText("Aucun profil ouvert pour l'instant.")).toBeVisible();
