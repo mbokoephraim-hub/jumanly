@@ -5147,3 +5147,12 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
   écran ; « Nouvelle lettre » a sa page au téléphone, `/app/career/lettres/nouvelle`).
 - Profil complet : photo agrandie (108 px), nom, bio et « À propos » plus lisibles (15 px).
 - Fusionné sans tests ni vérification CI, à la demande d'Ephraïm (« Pas de test fusionne et publie »).
+
+## 2026-10-29 · Expériences : logo de l'entreprise et réalisations clés
+
+- Demande d'Ephraïm : logo de l'entreprise à côté de chaque expérience (comme LinkedIn) et réalisations présentées en points distincts.
+- Saisie au téléphone : en écrivant le nom, les entreprises qui ont une page sur Jumanly sont proposées avec leur logo ; une fois choisie, l'expérience est liée à sa page (nom cliquable sur le profil). Sinon, la personne peut envoyer le logo (carré, WebP 160 px, `/medias/experiences/…`).
+- Réalisations clés : un champ par réalisation (3 proposés, 8 au plus), monter, descendre, supprimer, ajouter. Elles restent enregistrées une par ligne dans `Experience.description` : le CV, l'import et Orbi les lisent déjà ainsi (aide partagée `src/lib/achievements.ts`).
+- Profil (le sien, celui d'une personne, la vue recruteur) : logo, poste, entreprise cliquable si elle a une page, période, « Réalisations clés » en points (4 visibles, puis « Voir plus »).
+- Les expériences liées à la page d'une entreprise comptent aussi dans ses « membres déclarés ».
+- Non vérifié dans l'appli : Ephraïm a demandé de publier sans essai (lint, types, tests unitaires et build passés). Un logo envoyé puis abandonné (formulaire annulé) reste stocké.

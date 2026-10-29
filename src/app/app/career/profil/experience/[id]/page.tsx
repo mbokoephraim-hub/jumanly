@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { CareerTexts } from "@/components/phone/career/server";
 import { ExperienceForm } from "@/components/phone/career/edit";
 import { requireUser } from "@/server/auth/session";
+import { ACHIEVEMENTS_SUGGESTED, achievementsOf } from "@/lib/achievements";
 import { db } from "@/server/db";
 import { dateToMonth, ensureProfile } from "@/server/services/profile";
 import { isPhone } from "@/server/view";
@@ -18,6 +19,12 @@ export async function generateMetadata(): Promise<Metadata> {
  * « Modifier l'expérience » / « Nouvelle expérience » on the phone (planches Carrière-exp,
  * -exp-new): `nouvelle` opens an empty form.
  */
+/** The points of the form: the saved ones, or 3 empty fields (3 to 4 are advised). */
+function pointsToEdit(description: string) {
+  const points = achievementsOf(description);
+  return points.length > 0 ? points : Array.from({ length: ACHIEVEMENTS_SUGGESTED }, () => "");
+}
+
 export default async function CareerExperiencePage({
   params,
 }: PageProps<"/app/career/profil/experience/[id]">) {
@@ -33,7 +40,10 @@ export default async function CareerExperiencePage({
   const item =
     id === "nouvelle"
       ? null
-      : await db.experience.findFirst({ where: { id, profileId: profile.id } });
+      : await db.experience.findFirst({
+          where: { id, profileId: profile.id },
+          include: { organization: { select: { logo: true } } },
+        });
   if (id !== "nouvelle" && !item) notFound();
   return (
     <CareerTexts>
@@ -48,7 +58,10 @@ export default async function CareerExperiencePage({
             start: dateToMonth(item?.startDate),
             end: dateToMonth(item?.endDate),
             current: item ? item.endDate === null : false,
-            description: item?.description ?? "",
+            organizationId: item?.organizationId ?? null,
+            organizationLogo: item?.organization?.logo ?? null,
+            logo: item?.logo ?? null,
+            achievements: pointsToEdit(item?.description ?? ""),
           }}
         />
       </FreshOnEachVisit>

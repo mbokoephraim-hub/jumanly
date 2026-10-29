@@ -13,10 +13,14 @@ import { PostCard, type PostSheet } from "../fil/post";
 import { PostSheets, type SendTarget } from "../fil/sheets";
 import { PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
+import { ExperienceCompany, ExperienceLogo, ExperiencePoints } from "./experience-head";
 import { PhotoViewer } from "./photo-viewer";
 import { PROFILE_TABS, type ProfileTab, type ProfileView } from "./data";
 
 const REASONS = ["harassment", "impersonation", "spam", "inappropriate", "other"] as const;
+
+/** Réalisations clés shown before « Voir plus » (3 to 4 are advised). */
+const POINTS_SHOWN = 4;
 
 /** The networks' drawings (maquette `Profil.dc.html`, ICS). */
 export const SOCIAL_PATHS = {
@@ -548,7 +552,7 @@ export function PersonProfile({
             ) : (
               person.experiences.map((item, at) => {
                 const all = unfolded.includes(item.id);
-                const points = all ? item.points : item.points.slice(0, 2);
+                const points = all ? item.points : item.points.slice(0, POINTS_SHOWN);
                 return (
                   <div key={item.id} className="nb-pf-xp">
                     {at < person.experiences.length - 1 ? (
@@ -560,29 +564,19 @@ export function PersonProfile({
                         aria-hidden
                       />
                     ) : null}
-                    <span className="nb-pf-lg" style={{ background: item.color }} aria-hidden>
-                      {item.initials}
-                    </span>
+                    <ExperienceLogo item={item} />
                     <div>
                       <h3>
                         {item.title}
                         {item.current ? <span className="nb-pf-tag">{t("current")}</span> : null}
                       </h3>
-                      <p className="nb-pf-xp-ent">
-                        {item.company} · <span style={{ color: item.color }}>{item.type}</span>
-                      </p>
+                      <ExperienceCompany
+                        item={item}
+                        label={t("companyPage", { company: item.company })}
+                      />
                       <p className="nb-pf-xp-d">{item.dates}</p>
-                      {points.length > 0 ? (
-                        <ul className="nb-pf-pts">
-                          {points.map((point, n) => (
-                            <li key={n}>
-                              <i style={{ background: item.color }} aria-hidden />
-                              <span>{point}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      ) : null}
-                      {item.points.length > 2 ? (
+                      <ExperiencePoints item={item} points={points} title={t("achievements")} />
+                      {item.points.length > POINTS_SHOWN ? (
                         <button
                           type="button"
                           className="nb-pf-plus"
@@ -594,7 +588,9 @@ export function PersonProfile({
                             )
                           }
                         >
-                          {all ? t("less") : t("moreLines", { count: item.points.length - 2 })}
+                          {all
+                            ? t("less")
+                            : t("moreLines", { count: item.points.length - POINTS_SHOWN })}
                         </button>
                       ) : null}
                     </div>

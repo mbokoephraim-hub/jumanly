@@ -113,7 +113,16 @@ export async function saveExperience(formData: FormData) {
   };
   const id = String(formData.get("id") ?? "");
   if (id) {
-    await db.experience.updateMany({ where: { id, profileId: profile.id }, data });
+    // A company renamed here is no longer the page chosen on the phone: its logo and link go.
+    const before = await db.experience.findFirst({
+      where: { id, profileId: profile.id },
+      select: { company: true },
+    });
+    const renamed = before !== null && before.company !== input.company;
+    await db.experience.updateMany({
+      where: { id, profileId: profile.id },
+      data: { ...data, ...(renamed ? { organizationId: null } : {}) },
+    });
   } else {
     await db.experience.create({
       data: { ...data, type: input.type, location: input.location || null, profileId: profile.id },

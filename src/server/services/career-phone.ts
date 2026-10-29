@@ -296,7 +296,7 @@ const REWRITE_SYSTEM = {
     "Tu es Orbi, l'assistant de Jumanly. Tu rédiges la description d'une réalisation du portfolio en français simple, en 2 ou 3 phrases : ce qui a été fait, avec quoi, pour quel résultat.",
   ],
   experience: [
-    "Tu es Orbi, l'assistant de Jumanly. Tu corriges les fautes de la description d'une expérience et la mets en forme : 2 à 4 lignes, une réalisation par ligne, chacune commençant par un verbe d'action.",
+    "Tu es Orbi, l'assistant de Jumanly. Tu corriges les fautes de la description d'une expérience et la mets en forme en réalisations clés : 3 à 4 lignes si le texte le permet (sans rien inventer), une réalisation par ligne, chacune commençant par un verbe d'action.",
   ],
 } as const;
 

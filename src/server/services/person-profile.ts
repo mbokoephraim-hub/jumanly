@@ -77,6 +77,8 @@ export async function personProfile(
               id: true,
               title: true,
               company: true,
+              logo: true,
+              organization: { select: { slug: true, logo: true, suspendedAt: true } },
               type: true,
               location: true,
               startDate: true,

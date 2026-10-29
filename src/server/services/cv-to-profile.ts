@@ -1,3 +1,4 @@
+import { achievementsOf, achievementsText } from "@/lib/achievements";
 import type { PrismaClient } from "@/generated/prisma/client";
 import type { CvContent } from "./cv";
 import { emptyCv } from "./cv";
@@ -151,7 +152,7 @@ export async function applyCvIntoProfile(db: PrismaClient, userId: string, conte
           location: item.location || null,
           startDate: monthToDate(item.start),
           endDate: item.end && MONTH.test(item.end) ? monthToDate(item.end) : null,
-          description: item.bullets.join("\n"),
+          description: achievementsText(item.bullets),
         },
       });
     for (const item of plan.educations)
@@ -211,10 +212,7 @@ export function cvFromExtraction(
       location: "",
       start: month(item.start) ?? "",
       end: month(item.end),
-      bullets: item.description
-        .split("\n")
-        .map((line) => line.replace(/^[-•*]\s*/, "").trim())
-        .filter(Boolean),
+      bullets: achievementsOf(item.description),
     })),
     education: read.educations.map((item) => ({
       degree: item.degree,

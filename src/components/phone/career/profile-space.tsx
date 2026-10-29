@@ -16,6 +16,7 @@ import type { PostView } from "../fil/data";
 import { PostCard, type PostSheet } from "../fil/post";
 import { PostSheets, type SendTarget } from "../fil/sheets";
 import { PhoneIcon } from "../icon";
+import { ExperienceCompany, ExperienceLogo, ExperiencePoints } from "../profil/experience-head";
 import { PhotoViewer } from "../profil/photo-viewer";
 import { AboutCard, ringOf, SOCIAL_PATHS, VerifiedMark } from "../profil/profile";
 import { AudienceStats } from "../profil/stats";
@@ -558,28 +559,18 @@ function ProfilePanel({
                   aria-hidden
                 />
               ) : null}
-              <span className="nb-pf-lg" style={{ background: item.color }} aria-hidden>
-                {item.initials}
-              </span>
+              <ExperienceLogo item={item} />
               <div>
                 <h3>
                   {item.title}
                   {item.current ? <span className="nb-pf-tag">{tp("current")}</span> : null}
                 </h3>
-                <p className="nb-pf-xp-ent">
-                  {item.company} · <span style={{ color: item.color }}>{item.type}</span>
-                </p>
+                <ExperienceCompany
+                  item={item}
+                  label={tp("companyPage", { company: item.company })}
+                />
                 <p className="nb-pf-xp-d">{item.dates}</p>
-                {item.points.length > 0 ? (
-                  <ul className="nb-pf-pts">
-                    {item.points.map((point, n) => (
-                      <li key={n}>
-                        <i style={{ background: item.color }} aria-hidden />
-                        <span>{point}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
+                <ExperiencePoints item={item} points={item.points} title={tp("achievements")} />
                 <Link
                   href={href}
                   className="nb-cr-point"

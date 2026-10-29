@@ -58,6 +58,10 @@ export type ProfileView = {
     title: string;
     current: boolean;
     company: string;
+    /** The company's page on Jumanly, when the experience is linked to it. */
+    href: string | null;
+    /** Its logo: the page's, or the one the person sent. */
+    logo: string | null;
     type: string;
     dates: string;
     points: string[];
