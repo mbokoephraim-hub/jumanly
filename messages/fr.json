@@ -10860,6 +10860,25 @@
     "companyPage": "{company}, voir la page de l’entreprise",
     "less": "Voir moins",
     "education": "Formation",
+    "diplomas": "Diplômes",
+    "certificates": "Certificats",
+    "itemVerified": "Vérifié",
+    "verifiedHelp": "Confirmé par un référent",
+    "documentJoined": "Justificatif joint",
+    "openImage": "Voir la photo : {title}",
+    "jumanly": "Jumanly",
+    "training": {
+      "format": {
+        "online": "En ligne",
+        "in_person": "Présentiel",
+        "hybrid": "Hybride"
+      },
+      "length": {
+        "short": "Formation courte",
+        "long": "Formation longue"
+      },
+      "inProgress": "En cours"
+    },
     "languages": "Langues",
     "level": "Niveau {level} sur 5",
     "noPosts": "{name} n’a encore rien publié.",
@@ -10959,6 +10978,8 @@
       "aboutEmpty": "Présentez-vous en quelques lignes : qui vous êtes et ce que vous faites.",
       "seekingEmpty": "Décrivez le candidat que vous cherchez : métier, niveau, qualités.",
       "educationEmpty": "Diplôme, formation ou attestation.",
+      "diplomasEmpty": "Licence, master, doctorat, diplôme de fin des humanités…",
+      "certificatesEmpty": "Formations suivies en ligne ou en présentiel, courtes ou longues.",
       "languagesEmpty": "Ajoutez les langues que vous parlez."
     },
     "recruiter": {
@@ -11417,10 +11438,10 @@
       "managePosts": "Gérer toutes mes publications",
       "worksIntro": "Montrez ce que vous avez fait : un texte, des photos ou un document. Vos réalisations sont visibles sur votre profil.",
       "worksAddText": "Un texte, des photos ou un document PDF",
-      "certificates": "Certifications",
+      "certificates": "Certificats",
       "certificatesAdd": "Se former",
       "certificatesAddLabel": "Se former pour obtenir une attestation",
-      "certificatesEmpty": "Vos attestations Jumanly s’afficheront ici. Suivez une formation pour en obtenir une."
+      "certificatesEmpty": "Vos formations suivies en ligne ou en présentiel, et vos attestations Jumanly."
     },
     "follow": {
       "title": "Mes documents et candidatures",
@@ -11476,6 +11497,13 @@
     "experienceEmpty": "Stage, emploi, bénévolat : tout compte.",
     "education": "Formation",
     "educationEmpty": "Diplôme, formation ou attestation.",
+    "diplomas": "Diplômes",
+    "diplomasEmpty": "Licence, master, doctorat, diplôme de fin des humanités…",
+    "verify": {
+      "ask": "Faire vérifier",
+      "askLabel": "Faire vérifier : {title}",
+      "pending": "Vérification en attente"
+    },
     "attestation": "Attestation Jumanly · {date}",
     "languages": "Langues et lieux",
     "languagesEmpty": "Vos langues et les villes où vous voulez travailler.",
@@ -11807,7 +11835,13 @@
         "missing": "Cet élément n’existe plus.",
         "logoType": "Ce logo n’a pas pu être lu. Essayez une image JPEG ou PNG.",
         "logoSize": "Ce logo est trop lourd : 4 Mo au plus.",
-        "logoMany": "Trop de logos envoyés. Réessayez dans une heure."
+        "logoMany": "Trop de logos envoyés. Réessayez dans une heure.",
+        "imageType": "Cette photo n’a pas pu être lue. Essayez une image JPEG ou PNG.",
+        "imageSize": "Cette photo est trop lourde : 8 Mo au plus.",
+        "referentName": "Indiquez le prénom et le nom du référent.",
+        "referentEmail": "Indiquez une adresse e-mail valide pour le référent.",
+        "referentSelf": "Le référent doit être quelqu’un d’autre que vous.",
+        "referentMany": "Trop de demandes aujourd’hui. Réessayez demain."
       },
       "headTitle": "Modifier le profil",
       "headSaved": "Profil mis à jour.",
@@ -11943,7 +11977,7 @@
       "schoolPlaceholder": "Ex. : Université de Kinshasa",
       "level": "Niveau",
       "educationLevel": {
-        "secondary": "Secondaire",
+        "secondary": "Fin des humanités",
         "vocational": "Professionnel",
         "bachelor": "Licence",
         "master": "Master",
@@ -11957,7 +11991,74 @@
       "educationOrbi": "Vos attestations Jumanly s’ajoutent seules, avec leur lien de vérification.",
       "educationDelete": "Supprimer cette formation",
       "educationDeleteQuestion": "Supprimer cette formation ?",
-      "educationDeleteDetail": "Elle disparaît de votre profil. Vos CV déjà enregistrés ne changent pas."
+      "educationDeleteDetail": "Elle disparaît de votre profil. Vos CV déjà enregistrés ne changent pas.",
+      "diploma": {
+        "edit": "Modifier le diplôme",
+        "new": "Nouveau diplôme",
+        "saved": "Diplôme mis à jour.",
+        "added": "Diplôme ajouté.",
+        "title": "Diplôme",
+        "titlePlaceholder": "Ex. : Licence en statistiques",
+        "school": "École ou université",
+        "schoolPlaceholder": "Ex. : Université de Kinshasa",
+        "image": "Photo du diplôme",
+        "imageHint": "Facultatif. Le recruteur verra « Justificatif joint ». Cachez d’abord votre date de naissance et vos numéros.",
+        "orbi": "Un diplôme se vérifie difficilement en ligne : la photo du document rassure le recruteur, qui peut demander l’original.",
+        "delete": "Supprimer ce diplôme",
+        "deleteQuestion": "Supprimer ce diplôme ?"
+      },
+      "certificate": {
+        "edit": "Modifier le certificat",
+        "new": "Nouveau certificat",
+        "saved": "Certificat mis à jour.",
+        "added": "Certificat ajouté.",
+        "title": "Formation ou certificat",
+        "titlePlaceholder": "Ex. : Gestion de projet",
+        "school": "Organisme",
+        "schoolPlaceholder": "Ex. : Institut, plateforme en ligne",
+        "format": "Format",
+        "formats": {
+          "online": "En ligne",
+          "in_person": "Présentiel",
+          "hybrid": "Hybride"
+        },
+        "length": "Durée",
+        "lengths": {
+          "short": "Formation courte",
+          "long": "Formation longue"
+        },
+        "end": "Obtenu en",
+        "image": "Photo du certificat",
+        "imageHint": "Facultatif. Elle s’affiche à côté du certificat sur votre profil.",
+        "delete": "Supprimer ce certificat",
+        "deleteQuestion": "Supprimer ce certificat ?"
+      },
+      "imageAdd": "Ajouter une photo",
+      "imageChange": "Changer la photo",
+      "reference": {
+        "title": "Faire vérifier",
+        "recommended": "Recommandé",
+        "introExperience": "Les recruteurs font davantage confiance aux expériences vérifiées. Indiquez une personne qui peut confirmer ce poste, un ancien responsable par exemple.",
+        "introCertificate": "Les recruteurs font davantage confiance aux certificats vérifiés. Indiquez une personne de l’organisme qui peut confirmer cette formation.",
+        "add": "Ajouter un référent",
+        "name": "Nom du référent",
+        "namePlaceholder": "Prénom et nom",
+        "email": "Son adresse e-mail",
+        "emailPlaceholder": "nom@entreprise.com",
+        "role": "Son lien avec vous",
+        "rolePlaceholder": "Ex. : Responsable d’équipe (facultatif)",
+        "how": "Nous lui écrivons dès que vous enregistrez. Il confirme en un clic depuis l’e-mail, sans créer de compte. Le badge « Vérifié » s’affiche alors sur votre profil.",
+        "later": "Plus tard",
+        "sent": "Enregistré. Nous avons écrit à {name}.",
+        "pending": "En attente de {name}",
+        "pendingText": "Demande envoyée le {date}. Le lien reste valable 30 jours.",
+        "confirmed": "Vérifié par {name}",
+        "confirmedText": "Confirmé le {date}. Si vous changez le poste, l’entreprise ou les dates, il faudra le refaire vérifier.",
+        "declined": "{name} n’a pas pu confirmer. Vous pouvez demander à quelqu’un d’autre.",
+        "removePending": "Retirer la demande",
+        "removeVerified": "Retirer la vérification",
+        "error": "Ça n’a pas marché. Réessayez dans un instant."
+      }
     },
     "sheets": {
       "close": "Fermer",
@@ -23088,6 +23189,8 @@
       "feedQuote": "{name} a cité votre publication.",
       "connectionRequest": "{name} vous demande en connexion.",
       "connectionAccepted": "{name} a accepté votre demande de connexion : vous pouvez vous écrire.",
+      "referenceConfirmed": "{name} a confirmé « {item} » : le badge Vérifié s’affiche sur votre profil.",
+      "referenceDeclined": "{name} n’a pas pu confirmer « {item} ». Vous pouvez demander à quelqu’un d’autre.",
       "unread": "Non lue"
     }
   },
@@ -23316,6 +23419,14 @@
       "code": "{code}",
       "p2": "Il est valable {minutes} minutes. Ne le communiquez à personne : l'équipe Jumanly ne vous le demandera jamais.",
       "p3": "Vous n'êtes pas à l'origine de cette demande ? Ignorez cet e-mail."
+    },
+    "reference": {
+      "subject": "{name} vous demande de confirmer son parcours",
+      "preheader": "Une confirmation en un clic, sans créer de compte.",
+      "p1": "{name} vous cite comme référent sur Jumanly et vous demande de confirmer ce qui suit. Cela ne prend qu’un instant.",
+      "cta": "Répondre à {name}",
+      "p2": "Ce lien est valable {days} jours.",
+      "p3": "Vous ne connaissez pas {name} ? Ignorez simplement ce message."
     },
     "verifyLink": {
       "subject": "Confirmez votre adresse e-mail Jumanly",
@@ -23786,6 +23897,32 @@
         "cta": "Voir l'offre",
         "note": "Vous choisissez quand recevoir ces rappels dans les paramètres de notification."
       }
+    }
+  },
+  "reference": {
+    "page": {
+      "title": "Confirmer une référence",
+      "invalid": {
+        "title": "Ce lien n’est plus valable.",
+        "text": "La demande a été retirée ou a expiré. Vous n’avez rien d’autre à faire."
+      },
+      "question": "{name} vous cite comme référent",
+      "textExperience": "{name} indique avoir occupé ce poste. Pouvez-vous le confirmer ?",
+      "textCertificate": "{name} indique avoir suivi cette formation. Pouvez-vous le confirmer ?",
+      "job": "Poste",
+      "company": "Entreprise",
+      "period": "Période",
+      "range": "De {start} à {end}",
+      "since": "Depuis {start}",
+      "training": "Formation",
+      "organization": "Organisme",
+      "year": "Obtenu en",
+      "confirm": "Je confirme",
+      "decline": "Je ne peux pas confirmer",
+      "thanks": "Merci, votre réponse est enregistrée",
+      "confirmed": "Le badge « Vérifié » s’affiche maintenant sur le profil de {name}.",
+      "declined": "Nous indiquons à {name} que vous n’avez pas pu confirmer, sans autre détail.",
+      "warning": "Ne confirmez que ce que vous savez exact. Jumanly ne vous crée pas de compte et n’utilise votre adresse que pour cette demande."
     }
   },
   "system": {

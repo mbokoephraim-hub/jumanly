@@ -17,6 +17,7 @@ import { handleFromName as handleFrom, SOCIAL_KINDS } from "@/lib/social-links";
 import type { PersonProfile } from "@/server/services/person-profile";
 import { initialsOf, toneOf } from "../fil/data";
 import type { ProfileView } from "./data";
+import type { EducationRow } from "./education-rows";
 
 const MONTH = 30.44 * 86_400_000;
 const MINUTE = 60_000;
@@ -230,13 +231,27 @@ export async function profileView(
         .filter(Boolean)
         .join(" · "),
       points: achievementsOf(item.description),
+      verified: item.referenceChecks.length > 0,
     };
   });
-  const educations = person.educations.map((item) => ({
+  const educationRow = (item: (typeof person.educations)[number]): EducationRow => ({
     id: item.id,
     title: item.degree,
-    line: [item.school, item.endYear ? String(item.endYear) : null].filter(Boolean).join(" · "),
-  }));
+    line: [
+      item.school,
+      item.format ? t(`training.format.${item.format}`) : null,
+      item.length ? t(`training.length.${item.length}`) : null,
+      item.endYear ? String(item.endYear) : item.startYear ? t("training.inProgress") : null,
+    ]
+      .filter(Boolean)
+      .join(" · "),
+    image: item.image,
+    verified: item.kind === "certificate" && item.referenceChecks.length > 0,
+  });
+  const diplomas = person.educations.filter((item) => item.kind === "diploma").map(educationRow);
+  const certificates = person.educations
+    .filter((item) => item.kind === "certificate")
+    .map(educationRow);
   const languageName = new Intl.DisplayNames(["fr"], { type: "language" });
   const languages = person.languages.map((item) => {
     let name = item.code;
@@ -379,7 +394,8 @@ export async function profileView(
     })),
     experiences,
     experiencesCount: t("experiencesCount", { count: experiences.length }),
-    educations,
+    diplomas,
+    certificates,
     languages,
     works,
     files,

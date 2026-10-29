@@ -13,6 +13,7 @@ import { PostCard, type PostSheet } from "../fil/post";
 import { PostSheets, type SendTarget } from "../fil/sheets";
 import { PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
+import { EducationList, ItemVerifiedMark } from "./education-rows";
 import { ExperienceLogo, ExperienceMeta, ExperiencePoints } from "./experience-head";
 import { PhotoViewer } from "./photo-viewer";
 import { PROFILE_TABS, type ProfileTab, type ProfileView } from "./data";
@@ -174,6 +175,13 @@ export function PersonProfile({
       : ["publications", "apropos", "realisations"]
     : PROFILE_TABS;
   const index = tabs.indexOf(tab);
+  const educationLabels = {
+    verified: t("itemVerified"),
+    verifiedHelp: t("verifiedHelp"),
+    document: t("documentJoined"),
+    jumanly: t("jumanly"),
+    openImage: (title: string) => t("openImage", { title }),
+  };
   const edit = (title: string, href: string | undefined, label?: string) =>
     own && href ? (
       <Link href={href} aria-label={`${label ?? t("own.edit")} : ${title}`}>
@@ -624,6 +632,9 @@ export function PersonProfile({
                         item={item}
                         label={t("companyPage", { company: item.company })}
                       />
+                      {item.verified ? (
+                        <ItemVerifiedMark label={t("itemVerified")} help={t("verifiedHelp")} />
+                      ) : null}
                       <ExperiencePoints item={item} points={points} />
                       {item.points.length > POINTS_SHOWN ? (
                         <button
@@ -648,26 +659,29 @@ export function PersonProfile({
               })
             )}
 
-            {person.educations.length > 0 || own ? (
+            {person.diplomas.length > 0 || own ? (
               <>
                 <h2 className={own ? "nb-pf-h nb-cr-h" : "nb-pf-h"}>
-                  {t("education")}
-                  {edit(t("education"), own?.edits.education, t("own.add"))}
+                  {t("diplomas")}
+                  {edit(t("diplomas"), own?.edits.education, t("own.add"))}
                 </h2>
-                {person.educations.length === 0 ? (
-                  <p className="nb-pf-vide">{t("own.educationEmpty")}</p>
+                {person.diplomas.length === 0 ? (
+                  <p className="nb-pf-vide">{t("own.diplomasEmpty")}</p>
                 ) : null}
-                {person.educations.map((item) => (
-                  <div key={item.id} className="nb-pf-form">
-                    <span aria-hidden>
-                      <PhoneIcon name="formation" size={17} />
-                    </span>
-                    <span>
-                      <b>{item.title}</b>
-                      <small>{item.line}</small>
-                    </span>
-                  </div>
-                ))}
+                <EducationList rows={person.diplomas} labels={educationLabels} />
+              </>
+            ) : null}
+
+            {person.certificates.length > 0 || own ? (
+              <>
+                <h2 className={own ? "nb-pf-h nb-cr-h" : "nb-pf-h"}>
+                  {t("certificates")}
+                  {edit(t("certificates"), own?.edits.certificate, t("own.add"))}
+                </h2>
+                {person.certificates.length === 0 ? (
+                  <p className="nb-pf-vide">{t("own.certificatesEmpty")}</p>
+                ) : null}
+                <EducationList rows={person.certificates} labels={educationLabels} />
               </>
             ) : null}
 
@@ -974,6 +988,7 @@ export type OwnProfile = {
     seeking: string;
     experience: string;
     education: string;
+    certificate: string;
     projects: string;
     /** « Langues et lieux »: its own button and sheet. */
     languages: ReactNode;

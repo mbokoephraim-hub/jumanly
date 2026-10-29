@@ -82,6 +82,9 @@ export const notificationTypes = [
   // Connexions of the Chat (Ephraïm 29/10/2026): a request received, a request accepted.
   "connectionRequest",
   "connectionAccepted",
+  // « Faire vérifier » (Ephraïm 29/10/2026): the referent answered.
+  "referenceConfirmed",
+  "referenceDeclined",
 ] as const;
 export type NotificationType = (typeof notificationTypes)[number];
 

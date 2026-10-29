@@ -8987,6 +8987,19 @@ Conventions :
 | `phoneProfile.companyPage` | {company}, voir la page de l’entreprise |
 | `phoneProfile.less` | Voir moins |
 | `phoneProfile.education` | Formation |
+| `phoneProfile.diplomas` | Diplômes |
+| `phoneProfile.certificates` | Certificats |
+| `phoneProfile.itemVerified` | Vérifié |
+| `phoneProfile.verifiedHelp` | Confirmé par un référent |
+| `phoneProfile.documentJoined` | Justificatif joint |
+| `phoneProfile.openImage` | Voir la photo : {title} |
+| `phoneProfile.jumanly` | Jumanly |
+| `phoneProfile.training.format.online` | En ligne |
+| `phoneProfile.training.format.in_person` | Présentiel |
+| `phoneProfile.training.format.hybrid` | Hybride |
+| `phoneProfile.training.length.short` | Formation courte |
+| `phoneProfile.training.length.long` | Formation longue |
+| `phoneProfile.training.inProgress` | En cours |
 | `phoneProfile.languages` | Langues |
 | `phoneProfile.level` | Niveau {level} sur 5 |
 | `phoneProfile.noPosts` | {name} n’a encore rien publié. |
@@ -9068,6 +9081,8 @@ Conventions :
 | `phoneProfile.own.aboutEmpty` | Présentez-vous en quelques lignes : qui vous êtes et ce que vous faites. |
 | `phoneProfile.own.seekingEmpty` | Décrivez le candidat que vous cherchez : métier, niveau, qualités. |
 | `phoneProfile.own.educationEmpty` | Diplôme, formation ou attestation. |
+| `phoneProfile.own.diplomasEmpty` | Licence, master, doctorat, diplôme de fin des humanités… |
+| `phoneProfile.own.certificatesEmpty` | Formations suivies en ligne ou en présentiel, courtes ou longues. |
 | `phoneProfile.own.languagesEmpty` | Ajoutez les langues que vous parlez. |
 | `phoneProfile.recruiter.seeking` | Candidat recherché |
 | `phoneProfile.recruiter.domains` | Domaines de recrutement |
@@ -9467,10 +9482,10 @@ Conventions :
 | `phoneCareer.me.managePosts` | Gérer toutes mes publications |
 | `phoneCareer.me.worksIntro` | Montrez ce que vous avez fait : un texte, des photos ou un document. Vos réalisations sont visibles sur votre profil. |
 | `phoneCareer.me.worksAddText` | Un texte, des photos ou un document PDF |
-| `phoneCareer.me.certificates` | Certifications |
+| `phoneCareer.me.certificates` | Certificats |
 | `phoneCareer.me.certificatesAdd` | Se former |
 | `phoneCareer.me.certificatesAddLabel` | Se former pour obtenir une attestation |
-| `phoneCareer.me.certificatesEmpty` | Vos attestations Jumanly s’afficheront ici. Suivez une formation pour en obtenir une. |
+| `phoneCareer.me.certificatesEmpty` | Vos formations suivies en ligne ou en présentiel, et vos attestations Jumanly. |
 | `phoneCareer.follow.title` | Mes documents et candidatures |
 | `phoneCareer.follow.cvs` | {count, plural, one {CV} other {CV}} |
 | `phoneCareer.follow.cvScore` | CV principal : {score} % |
@@ -9519,6 +9534,11 @@ Conventions :
 | `phoneCareer.experienceEmpty` | Stage, emploi, bénévolat : tout compte. |
 | `phoneCareer.education` | Formation |
 | `phoneCareer.educationEmpty` | Diplôme, formation ou attestation. |
+| `phoneCareer.diplomas` | Diplômes |
+| `phoneCareer.diplomasEmpty` | Licence, master, doctorat, diplôme de fin des humanités… |
+| `phoneCareer.verify.ask` | Faire vérifier |
+| `phoneCareer.verify.askLabel` | Faire vérifier : {title} |
+| `phoneCareer.verify.pending` | Vérification en attente |
 | `phoneCareer.attestation` | Attestation Jumanly · {date} |
 | `phoneCareer.languages` | Langues et lieux |
 | `phoneCareer.languagesEmpty` | Vos langues et les villes où vous voulez travailler. |
@@ -9772,6 +9792,12 @@ Conventions :
 | `phoneCareer.form.errors.logoType` | Ce logo n’a pas pu être lu. Essayez une image JPEG ou PNG. |
 | `phoneCareer.form.errors.logoSize` | Ce logo est trop lourd : 4 Mo au plus. |
 | `phoneCareer.form.errors.logoMany` | Trop de logos envoyés. Réessayez dans une heure. |
+| `phoneCareer.form.errors.imageType` | Cette photo n’a pas pu être lue. Essayez une image JPEG ou PNG. |
+| `phoneCareer.form.errors.imageSize` | Cette photo est trop lourde : 8 Mo au plus. |
+| `phoneCareer.form.errors.referentName` | Indiquez le prénom et le nom du référent. |
+| `phoneCareer.form.errors.referentEmail` | Indiquez une adresse e-mail valide pour le référent. |
+| `phoneCareer.form.errors.referentSelf` | Le référent doit être quelqu’un d’autre que vous. |
+| `phoneCareer.form.errors.referentMany` | Trop de demandes aujourd’hui. Réessayez demain. |
 | `phoneCareer.form.headTitle` | Modifier le profil |
 | `phoneCareer.form.headSaved` | Profil mis à jour. |
 | `phoneCareer.form.photoChange` | Changer la photo |
@@ -9895,7 +9921,7 @@ Conventions :
 | `phoneCareer.form.school` | École ou organisme |
 | `phoneCareer.form.schoolPlaceholder` | Ex. : Université de Kinshasa |
 | `phoneCareer.form.level` | Niveau |
-| `phoneCareer.form.educationLevel.secondary` | Secondaire |
+| `phoneCareer.form.educationLevel.secondary` | Fin des humanités |
 | `phoneCareer.form.educationLevel.vocational` | Professionnel |
 | `phoneCareer.form.educationLevel.bachelor` | Licence |
 | `phoneCareer.form.educationLevel.master` | Master |
@@ -9909,6 +9935,63 @@ Conventions :
 | `phoneCareer.form.educationDelete` | Supprimer cette formation |
 | `phoneCareer.form.educationDeleteQuestion` | Supprimer cette formation ? |
 | `phoneCareer.form.educationDeleteDetail` | Elle disparaît de votre profil. Vos CV déjà enregistrés ne changent pas. |
+| `phoneCareer.form.diploma.edit` | Modifier le diplôme |
+| `phoneCareer.form.diploma.new` | Nouveau diplôme |
+| `phoneCareer.form.diploma.saved` | Diplôme mis à jour. |
+| `phoneCareer.form.diploma.added` | Diplôme ajouté. |
+| `phoneCareer.form.diploma.title` | Diplôme |
+| `phoneCareer.form.diploma.titlePlaceholder` | Ex. : Licence en statistiques |
+| `phoneCareer.form.diploma.school` | École ou université |
+| `phoneCareer.form.diploma.schoolPlaceholder` | Ex. : Université de Kinshasa |
+| `phoneCareer.form.diploma.image` | Photo du diplôme |
+| `phoneCareer.form.diploma.imageHint` | Facultatif. Le recruteur verra « Justificatif joint ». Cachez d’abord votre date de naissance et vos numéros. |
+| `phoneCareer.form.diploma.orbi` | Un diplôme se vérifie difficilement en ligne : la photo du document rassure le recruteur, qui peut demander l’original. |
+| `phoneCareer.form.diploma.delete` | Supprimer ce diplôme |
+| `phoneCareer.form.diploma.deleteQuestion` | Supprimer ce diplôme ? |
+| `phoneCareer.form.certificate.edit` | Modifier le certificat |
+| `phoneCareer.form.certificate.new` | Nouveau certificat |
+| `phoneCareer.form.certificate.saved` | Certificat mis à jour. |
+| `phoneCareer.form.certificate.added` | Certificat ajouté. |
+| `phoneCareer.form.certificate.title` | Formation ou certificat |
+| `phoneCareer.form.certificate.titlePlaceholder` | Ex. : Gestion de projet |
+| `phoneCareer.form.certificate.school` | Organisme |
+| `phoneCareer.form.certificate.schoolPlaceholder` | Ex. : Institut, plateforme en ligne |
+| `phoneCareer.form.certificate.format` | Format |
+| `phoneCareer.form.certificate.formats.online` | En ligne |
+| `phoneCareer.form.certificate.formats.in_person` | Présentiel |
+| `phoneCareer.form.certificate.formats.hybrid` | Hybride |
+| `phoneCareer.form.certificate.length` | Durée |
+| `phoneCareer.form.certificate.lengths.short` | Formation courte |
+| `phoneCareer.form.certificate.lengths.long` | Formation longue |
+| `phoneCareer.form.certificate.end` | Obtenu en |
+| `phoneCareer.form.certificate.image` | Photo du certificat |
+| `phoneCareer.form.certificate.imageHint` | Facultatif. Elle s’affiche à côté du certificat sur votre profil. |
+| `phoneCareer.form.certificate.delete` | Supprimer ce certificat |
+| `phoneCareer.form.certificate.deleteQuestion` | Supprimer ce certificat ? |
+| `phoneCareer.form.imageAdd` | Ajouter une photo |
+| `phoneCareer.form.imageChange` | Changer la photo |
+| `phoneCareer.form.reference.title` | Faire vérifier |
+| `phoneCareer.form.reference.recommended` | Recommandé |
+| `phoneCareer.form.reference.introExperience` | Les recruteurs font davantage confiance aux expériences vérifiées. Indiquez une personne qui peut confirmer ce poste, un ancien responsable par exemple. |
+| `phoneCareer.form.reference.introCertificate` | Les recruteurs font davantage confiance aux certificats vérifiés. Indiquez une personne de l’organisme qui peut confirmer cette formation. |
+| `phoneCareer.form.reference.add` | Ajouter un référent |
+| `phoneCareer.form.reference.name` | Nom du référent |
+| `phoneCareer.form.reference.namePlaceholder` | Prénom et nom |
+| `phoneCareer.form.reference.email` | Son adresse e-mail |
+| `phoneCareer.form.reference.emailPlaceholder` | nom@entreprise.com |
+| `phoneCareer.form.reference.role` | Son lien avec vous |
+| `phoneCareer.form.reference.rolePlaceholder` | Ex. : Responsable d’équipe (facultatif) |
+| `phoneCareer.form.reference.how` | Nous lui écrivons dès que vous enregistrez. Il confirme en un clic depuis l’e-mail, sans créer de compte. Le badge « Vérifié » s’affiche alors sur votre profil. |
+| `phoneCareer.form.reference.later` | Plus tard |
+| `phoneCareer.form.reference.sent` | Enregistré. Nous avons écrit à {name}. |
+| `phoneCareer.form.reference.pending` | En attente de {name} |
+| `phoneCareer.form.reference.pendingText` | Demande envoyée le {date}. Le lien reste valable 30 jours. |
+| `phoneCareer.form.reference.confirmed` | Vérifié par {name} |
+| `phoneCareer.form.reference.confirmedText` | Confirmé le {date}. Si vous changez le poste, l’entreprise ou les dates, il faudra le refaire vérifier. |
+| `phoneCareer.form.reference.declined` | {name} n’a pas pu confirmer. Vous pouvez demander à quelqu’un d’autre. |
+| `phoneCareer.form.reference.removePending` | Retirer la demande |
+| `phoneCareer.form.reference.removeVerified` | Retirer la vérification |
+| `phoneCareer.form.reference.error` | Ça n’a pas marché. Réessayez dans un instant. |
 | `phoneCareer.sheets.close` | Fermer |
 | `phoneCareer.sheets.error` | Ça n’a pas marché. Réessayez dans un instant. |
 | `phoneCareer.sheets.add` | Ajouter |
@@ -19035,6 +19118,8 @@ Conventions :
 | `notifications.item.feedQuote` | {name} a cité votre publication. |
 | `notifications.item.connectionRequest` | {name} vous demande en connexion. |
 | `notifications.item.connectionAccepted` | {name} a accepté votre demande de connexion : vous pouvez vous écrire. |
+| `notifications.item.referenceConfirmed` | {name} a confirmé « {item} » : le badge Vérifié s’affiche sur votre profil. |
+| `notifications.item.referenceDeclined` | {name} n’a pas pu confirmer « {item} ». Vous pouvez demander à quelqu’un d’autre. |
 | `notifications.item.unread` | Non lue |
 
 ### Notifications · Sur le téléphone et bandeau de message (29/10/2026)
@@ -19229,6 +19314,42 @@ Conventions :
 | `mail.verifyCode.code` | {code} |
 | `mail.verifyCode.p2` | Il est valable {minutes} minutes. Ne le communiquez à personne : l'équipe Jumanly ne vous le demandera jamais. |
 | `mail.verifyCode.p3` | Vous n'êtes pas à l'origine de cette demande ? Ignorez cet e-mail. |
+
+### E-mail · Demande de vérification à un référent (29/10/2026)
+
+| Clé | Texte |
+|---|---|
+| `mail.reference.subject` | {name} vous demande de confirmer son parcours |
+| `mail.reference.preheader` | Une confirmation en un clic, sans créer de compte. |
+| `mail.reference.p1` | {name} vous cite comme référent sur Jumanly et vous demande de confirmer ce qui suit. Cela ne prend qu’un instant. |
+| `mail.reference.cta` | Répondre à {name} |
+| `mail.reference.p2` | Ce lien est valable {days} jours. |
+| `mail.reference.p3` | Vous ne connaissez pas {name} ? Ignorez simplement ce message. |
+
+### `/confirmer-reference/[token]` · Réponse du référent (29/10/2026)
+
+| Clé | Texte |
+|---|---|
+| `reference.page.title` | Confirmer une référence |
+| `reference.page.invalid.title` | Ce lien n’est plus valable. |
+| `reference.page.invalid.text` | La demande a été retirée ou a expiré. Vous n’avez rien d’autre à faire. |
+| `reference.page.question` | {name} vous cite comme référent |
+| `reference.page.textExperience` | {name} indique avoir occupé ce poste. Pouvez-vous le confirmer ? |
+| `reference.page.textCertificate` | {name} indique avoir suivi cette formation. Pouvez-vous le confirmer ? |
+| `reference.page.job` | Poste |
+| `reference.page.company` | Entreprise |
+| `reference.page.period` | Période |
+| `reference.page.range` | De {start} à {end} |
+| `reference.page.since` | Depuis {start} |
+| `reference.page.training` | Formation |
+| `reference.page.organization` | Organisme |
+| `reference.page.year` | Obtenu en |
+| `reference.page.confirm` | Je confirme |
+| `reference.page.decline` | Je ne peux pas confirmer |
+| `reference.page.thanks` | Merci, votre réponse est enregistrée |
+| `reference.page.confirmed` | Le badge « Vérifié » s’affiche maintenant sur le profil de {name}. |
+| `reference.page.declined` | Nous indiquons à {name} que vous n’avez pas pu confirmer, sans autre détail. |
+| `reference.page.warning` | Ne confirmez que ce que vous savez exact. Jumanly ne vous crée pas de compte et n’utilise votre adresse que pour cette demande. |
 
 ### E-mail · Lien de confirmation de l'adresse (inscription)
 

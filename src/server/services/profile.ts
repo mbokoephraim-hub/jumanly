@@ -4,6 +4,7 @@
  */
 import { z } from "zod";
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
+import { referenceCheckSelect } from "./reference-check";
 
 export const PROFILE_SUMMARY_MAX = 1000;
 export const PROFILE_SKILLS_MAX = 40;
@@ -142,9 +143,11 @@ export async function getFullProfile(db: PrismaClient, userId: string) {
       },
       experiences: {
         orderBy: [{ endDate: { sort: "desc", nulls: "first" } }, { startDate: "desc" }],
+        include: { referenceChecks: referenceCheckSelect },
       },
       educations: {
         orderBy: [{ endYear: { sort: "desc", nulls: "first" } }, { startYear: "desc" }],
+        include: { referenceChecks: referenceCheckSelect },
       },
       skills: {
         include: { skill: { select: { name: true, slug: true } } },

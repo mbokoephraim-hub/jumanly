@@ -12,6 +12,8 @@ import { handleFromName } from "@/lib/social-links";
 import { companyTone } from "../explorer/data";
 import { initialsOf, shortName, toneOf } from "../fil/data";
 import type { ProfileView } from "../profil/data";
+import type { EducationRow } from "../profil/education-rows";
+import { referenceState } from "@/server/services/reference-check";
 import { profileView } from "../profil/server";
 
 const fileKind = (type: string) => (type === "docx" ? "docx" : type === "image" ? "image" : "pdf");
@@ -76,7 +78,13 @@ export type CareerView = {
   experiences: CareerEntry[];
   educations: CareerEntry[];
   /** « Formation »: studies and Jumanly attestations (tagged « Jumanly »). */
-  educationRows: { id: string; title: string; line: string; href: string; jumanly: boolean }[];
+  /** « Faire vérifier » of each experience: the state of its last request, when any. */
+  experienceChecks: Record<string, "confirmed" | "pending" | "declined">;
+  educationRows: (EducationRow & {
+    href: string;
+    jumanly: boolean;
+    kind: "diploma" | "certificate";
+  })[];
   places: string[];
   cvs: {
     id: string;
@@ -261,28 +269,38 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
     })),
   ];
   const educationRows: CareerView["educationRows"] = [
-    ...home.profile.educations.map((item) => ({
-      id: item.id,
-      title: item.degree,
-      line: [
-        item.school,
-        item.startYear && item.endYear
-          ? t("when.range", { start: String(item.startYear), end: String(item.endYear) })
-          : item.endYear
-            ? String(item.endYear)
-            : null,
-      ]
-        .filter(Boolean)
-        .join(" · "),
-      href: `/app/career/profil/formation/${item.id}`,
-      jumanly: false,
-    })),
+    ...home.profile.educations.map((item) => {
+      const state = referenceState(item.referenceChecks);
+      return {
+        id: item.id,
+        title: item.degree,
+        line: [
+          item.school,
+          item.startYear && item.endYear
+            ? t("when.range", { start: String(item.startYear), end: String(item.endYear) })
+            : item.endYear
+              ? String(item.endYear)
+              : null,
+        ]
+          .filter(Boolean)
+          .join(" · "),
+        href: `/app/career/profil/formation/${item.id}`,
+        jumanly: false,
+        kind: item.kind,
+        image: item.image,
+        verified: item.kind === "certificate" && state?.status === "confirmed",
+      };
+    }),
     ...home.attestations.map((item) => ({
       id: item.id,
       title: item.title,
       line: t("attestation", { date: format.dateTime(item.issuedAt, { dateStyle: "medium" }) }),
       href: `/app/learn/attestations/${item.id}`,
       jumanly: true,
+      kind: "certificate" as const,
+      image: null,
+      // An attestation of Jumanly carries its own check (its number and its public page).
+      verified: false,
     })),
   ];
   const places = [
@@ -625,6 +643,12 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
         ? { text: firstMissing.title, href: firstMissing.href }
         : { text: home.percent >= 100 ? t("completion.done") : null, href: null },
     educationRows,
+    experienceChecks: Object.fromEntries(
+      home.profile.experiences.flatMap((item) => {
+        const state = referenceState(item.referenceChecks);
+        return state ? [[item.id, state.status]] : [];
+      }),
+    ),
     name,
     initials: initialsOf(name),
     tone: toneOf(name, false),

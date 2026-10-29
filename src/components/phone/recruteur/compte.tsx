@@ -259,6 +259,7 @@ export async function RhProfileScreen({ ctx, query }: { ctx: HireContext; query:
             seeking: "/app/hire/compte/profil/modifier#recherche",
             experience: "/app/career/profil/experience/nouvelle",
             education: "/app/career/profil/formation/nouvelle",
+            certificate: "/app/career/profil/formation/nouvelle?type=certificat",
             projects: "/app/career/portfolio/nouvelle",
             languages: (
               <OwnLanguages

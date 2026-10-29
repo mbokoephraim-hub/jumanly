@@ -12,6 +12,7 @@ const disallow = [
   "/impression",
   "/inscription",
   "/connexion",
+  "/confirmer-reference",
 ];
 
 /**

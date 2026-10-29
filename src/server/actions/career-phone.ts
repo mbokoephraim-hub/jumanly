@@ -60,6 +60,21 @@ import {
   type CompanySuggestion,
 } from "@/server/services/experience-company";
 import { ACHIEVEMENT_MAX, ACHIEVEMENTS_MAX, achievementsText } from "@/lib/achievements";
+import {
+  EducationImageError,
+  isOwnEducationImage,
+  removeEducationImage,
+  saveEducationImage,
+} from "@/server/services/education-image";
+import {
+  cancelReferenceCheck,
+  createReferenceCheck,
+  outdateReferenceChecks,
+  ReferenceCheckError,
+  referentSchema,
+  type ReferenceTarget,
+} from "@/server/services/reference-check";
+import { sendReferenceRequest } from "@/server/reference-emails";
 
 /**
  * Carrière on the phone (Modèle B, lot B5): the quick changes made from the tab itself. Each one
@@ -234,6 +249,71 @@ export async function saveCareerAboutAction(raw: { title: string; text: string }
   return saved(profile.id);
 }
 
+/** « Faire vérifier » filled in the form: the referent asked once the item is saved. */
+const referentInput = z
+  .object({ name: z.string().max(200), email: z.string().max(200), role: z.string().max(200) })
+  .nullable()
+  .optional();
+
+/** The referent typed, checked; null when the block is left empty. */
+function referentOf(raw: z.infer<typeof referentInput>) {
+  if (!raw || (!raw.name.trim() && !raw.email.trim())) return { ok: true as const, referent: null };
+  const parsed = referentSchema.safeParse(raw);
+  if (!parsed.success) {
+    const field = String(parsed.error.issues[0]?.path[0] ?? "name");
+    return { ok: false as const, error: field === "email" ? "referentEmail" : "referentName" };
+  }
+  return { ok: true as const, referent: parsed.data };
+}
+
+const personName = (user: { firstName: string | null; lastName: string | null; name: string }) =>
+  [user.firstName, user.lastName].filter(Boolean).join(" ") || user.name;
+
+/** Before saving: the referent may be asked (not the person, not too many requests a day). */
+async function referentRefused(
+  user: Awaited<ReturnType<typeof mine>>["user"],
+  referent: z.infer<typeof referentSchema> | null,
+): Promise<Result | null> {
+  if (!referent) return null;
+  if (referent.email === user.email.trim().toLowerCase()) return fail("referentSelf");
+  if (!(await allowAttempt("referenceCheck", user.id))) return fail("referentMany");
+  return null;
+}
+
+/**
+ * Once the item is saved: records the request and sends the e-mail to the referent. A request
+ * already running (a form opened twice) is left as it is; a sending failure is logged, the request
+ * stays and the person can withdraw it and ask again.
+ */
+async function askReferent(
+  user: Awaited<ReturnType<typeof mine>>["user"],
+  profileId: string,
+  target: ReferenceTarget,
+  referent: z.infer<typeof referentSchema>,
+  item: { title: string; meta: string },
+) {
+  try {
+    const { token } = await createReferenceCheck(db, {
+      profileId,
+      ownerEmail: user.email,
+      target,
+      referent,
+    });
+    await sendReferenceRequest({
+      to: referent.email,
+      referentName: referent.name,
+      personName: personName(user),
+      title: item.title,
+      meta: item.meta,
+      token,
+    }).catch((error) => reportError(error, { message: "E-mail au référent non envoyé" }));
+  } catch (error) {
+    if (!(error instanceof ReferenceCheckError)) throw error;
+  }
+}
+
+const yearOf = (date: Date) => String(date.getUTCFullYear());
+
 const experienceInput = z.object({
   id: z.string().max(40).optional(),
   title: z.string(),
@@ -246,6 +326,7 @@ const experienceInput = z.object({
   end: z.string(),
   current: z.boolean(),
   achievements: z.array(z.string().max(ACHIEVEMENT_MAX)).max(ACHIEVEMENTS_MAX),
+  referent: referentInput,
 });
 
 /**
@@ -258,7 +339,17 @@ export async function saveCareerExperienceAction(
 ): Promise<Result> {
   const shape = experienceInput.safeParse(raw);
   if (!shape.success) return fail("invalid");
-  const { id, current, organizationId, logo, achievements, ...rest } = shape.data;
+  const {
+    id,
+    current,
+    organizationId,
+    logo,
+    achievements,
+    referent: rawReferent,
+    ...rest
+  } = shape.data;
+  const asked = referentOf(rawReferent);
+  if (!asked.ok) return fail(asked.error);
   const parsed = experienceSchema.safeParse({
     ...rest,
     description: achievementsText(achievements),
@@ -268,7 +359,9 @@ export async function saveCareerExperienceAction(
     const issue = parsed.error.issues[0];
     return fail(issue?.message === "endBeforeStart" ? "endBeforeStart" : String(issue?.path[0]));
   }
-  const { profile } = await mine();
+  const { profile, user } = await mine();
+  const refused = await referentRefused(user, asked.referent);
+  if (refused) return refused;
   const input = parsed.data;
   const company = organizationId ? await linkableCompany(db, organizationId) : null;
   if (organizationId && !company) return fail("company");
@@ -284,18 +377,37 @@ export async function saveCareerExperienceAction(
     endDate: input.current || !input.end ? null : monthToDate(input.end),
     description: input.description,
   };
+  let experienceId = id;
   if (id) {
     const before = await db.experience.findFirst({
       where: { id, profileId: profile.id },
-      select: { logo: true },
+      select: { logo: true, title: true, company: true, startDate: true, endDate: true },
     });
     if (!before) return fail("missing");
     await db.experience.update({ where: { id }, data });
     if (before.logo && before.logo !== ownLogo)
       await removeExperienceLogo(fileStorage(db), profile.id, before.logo);
+    // What the referent confirmed changed: the « Vérifié » badge no longer holds.
+    const changed =
+      before.title !== data.title ||
+      before.company !== data.company ||
+      before.startDate.getTime() !== data.startDate.getTime() ||
+      (before.endDate?.getTime() ?? null) !== (data.endDate?.getTime() ?? null);
+    if (changed) await outdateReferenceChecks(db, { experienceId: id });
   } else {
-    await db.experience.create({ data: { ...data, profileId: profile.id } });
+    const created = await db.experience.create({
+      data: { ...data, profileId: profile.id },
+      select: { id: true },
+    });
+    experienceId = created.id;
   }
+  if (asked.referent && experienceId)
+    await askReferent(user, profile.id, { experienceId }, asked.referent, {
+      title: `${data.title} · ${data.company}`,
+      meta: [yearOf(data.startDate), data.endDate ? yearOf(data.endDate) : null, data.location]
+        .filter(Boolean)
+        .join(" · "),
+    });
   return saved(profile.id);
 }
 
@@ -340,51 +452,125 @@ export async function deleteCareerExperienceAction(id: string): Promise<Result> 
 
 const educationInput = z.object({
   id: z.string().max(40).optional(),
+  kind: z.enum(["diploma", "certificate"]),
   degree: z.string(),
   school: z.string(),
   level: z.string(),
   field: z.string(),
   startYear: z.string(),
   endYear: z.string(),
+  format: z.enum(["online", "in_person", "hybrid"]).nullable(),
+  length: z.enum(["short", "long"]).nullable(),
+  image: z.string().max(300).nullable(),
+  referent: referentInput,
 });
 
-/** « Modifier la formation » (planche Carrière-formation): an empty end = in progress. */
+/**
+ * « Diplôme » / « Certificat » (demande d'Ephraïm du 29/10/2026): an empty end = in progress. A
+ * certificate says how and how long the training was followed, and can be confirmed by a referent;
+ * both can carry a photo of the document.
+ */
 export async function saveCareerEducationAction(
   raw: z.input<typeof educationInput>,
 ): Promise<Result> {
   const shape = educationInput.safeParse(raw);
   if (!shape.success) return fail("invalid");
-  const { id, ...rest } = shape.data;
+  const { id, kind, format, length, image, referent: rawReferent, ...rest } = shape.data;
+  const certificate = kind === "certificate";
+  const asked = certificate ? referentOf(rawReferent) : { ok: true as const, referent: null };
+  if (!asked.ok) return fail(asked.error);
   const parsed = educationSchema.safeParse({
     ...rest,
+    ...(certificate ? { level: "none" } : {}),
     ...(rest.endYear.trim() ? {} : { inProgress: "on" }),
   });
   if (!parsed.success) {
     const issue = parsed.error.issues[0];
     return fail(issue?.message === "endBeforeStart" ? "endBeforeStart" : String(issue?.path[0]));
   }
-  const { profile } = await mine();
+  const { profile, user } = await mine();
+  const refused = await referentRefused(user, asked.referent);
+  if (refused) return refused;
   const input = parsed.data;
+  const ownImage = image && isOwnEducationImage(profile.id, image) ? image : null;
   const data = {
+    kind,
     degree: input.degree,
     level: input.level,
     field: input.field || null,
     school: input.school,
     startYear: typeof input.startYear === "number" ? input.startYear : null,
     endYear: input.inProgress || typeof input.endYear !== "number" ? null : input.endYear,
+    format: certificate ? format : null,
+    length: certificate ? length : null,
+    image: ownImage,
   };
+  let educationId = id;
   if (id) {
-    const done = await db.education.updateMany({ where: { id, profileId: profile.id }, data });
-    if (done.count === 0) return fail("missing");
+    const before = await db.education.findFirst({
+      where: { id, profileId: profile.id },
+      select: { kind: true, degree: true, school: true, image: true },
+    });
+    if (!before) return fail("missing");
+    await db.education.update({ where: { id }, data });
+    if (before.image && before.image !== ownImage)
+      await removeEducationImage(fileStorage(db), profile.id, before.image);
+    // What the referent confirmed changed: the « Vérifié » badge no longer holds.
+    if (before.kind !== kind || before.degree !== data.degree || before.school !== data.school)
+      await outdateReferenceChecks(db, { educationId: id });
   } else {
-    await db.education.create({ data: { ...data, profileId: profile.id } });
+    const created = await db.education.create({
+      data: { ...data, profileId: profile.id },
+      select: { id: true },
+    });
+    educationId = created.id;
   }
+  if (asked.referent && educationId)
+    await askReferent(user, profile.id, { educationId }, asked.referent, {
+      title: `${data.degree} · ${data.school}`,
+      meta: data.endYear ? String(data.endYear) : "",
+    });
   return saved(profile.id);
+}
+
+/** « Ajouter une photo » of a certificate or of a diploma. */
+export async function uploadEducationImageAction(
+  formData: FormData,
+): Promise<{ ok: true; image: string } | { ok: false; error: string }> {
+  const file = formData.get("image");
+  if (!(file instanceof File) || file.size === 0) return { ok: false, error: "imageType" };
+  const { profile, user } = await mine();
+  if (!(await allowAttempt("educationImage", user.id))) return { ok: false, error: "logoMany" };
+  try {
+    const image = await saveEducationImage(
+      fileStorage(db),
+      profile.id,
+      new Uint8Array(await file.arrayBuffer()),
+    );
+    return { ok: true, image };
+  } catch (error) {
+    if (error instanceof EducationImageError)
+      return { ok: false, error: error.code === "fileSize" ? "imageSize" : "imageType" };
+    throw error;
+  }
 }
 
 export async function deleteCareerEducationAction(id: string): Promise<Result> {
   const { profile } = await mine();
+  const before = await db.education.findFirst({
+    where: { id: String(id), profileId: profile.id },
+    select: { image: true },
+  });
   await db.education.deleteMany({ where: { id: String(id), profileId: profile.id } });
+  if (before?.image) await removeEducationImage(fileStorage(db), profile.id, before.image);
+  return saved(profile.id);
+}
+
+/** « Retirer la demande » / « Retirer la vérification » on an experience or a certificate. */
+export async function cancelReferenceCheckAction(id: string): Promise<Result> {
+  const { profile } = await mine();
+  const done = await cancelReferenceCheck(db, profile.id, String(id).slice(0, 40));
+  if (!done) return fail("missing");
   return saved(profile.id);
 }
 

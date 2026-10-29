@@ -21,6 +21,13 @@ import {
 import { ACHIEVEMENTS_MAX, achievementsOf, achievementsText } from "@/lib/achievements";
 import { PhoneBack } from "../back";
 import { AchievementsField, CompanyField, type CompanyValue } from "./experience-fields";
+import {
+  DocumentImageField,
+  NO_REFERENT,
+  ReferentField,
+  type ReferenceStateValue,
+  type ReferentValue,
+} from "./verification-fields";
 import { BannerField } from "./banner";
 import { FilAvatar } from "../fil/avatar";
 import { OrbiDisc, PhoneIcon } from "../icon";
@@ -121,7 +128,8 @@ function Chips<T extends string>({
 }: {
   label: string;
   options: { value: T; text: string }[];
-  value: T;
+  /** null: none chosen yet (optional choices). */
+  value: T | null;
   onChange: (value: T) => void;
 }) {
   return (
@@ -751,20 +759,31 @@ const EXPERIENCE_TYPES = ["internship", "job", "freelance", "volunteer", "entrep
 export function ExperienceForm({ values }: { values: ExperienceValues }) {
   const t = useTranslations("phoneCareer.form");
   const [form, setForm] = useState(values);
+  const [referent, setReferent] = useState<ReferentValue>(NO_REFERENT);
   const { pending, error, save } = useSave();
   const set = (patch: Partial<ExperienceValues>) => setForm((before) => ({ ...before, ...patch }));
   const editing = values.id !== null;
   const errorOf = (field: string) => (error === field ? t("errors.required") : null);
+  const asking = Boolean(referent.name.trim() || referent.email.trim());
   return (
     <FormPage
       title={editing ? t("experienceEdit") : t("experienceNew")}
       pending={pending}
-      onSave={() =>
+      onSave={() => {
         save(
-          () => saveCareerExperienceAction({ ...form, id: form.id ?? undefined }),
-          editing ? t("experienceSaved") : t("experienceAdded"),
-        )
-      }
+          () =>
+            saveCareerExperienceAction({
+              ...form,
+              id: form.id ?? undefined,
+              referent: asking ? referent : null,
+            }),
+          asking
+            ? t("reference.sent", { name: referent.name.trim() })
+            : editing
+              ? t("experienceSaved")
+              : t("experienceAdded"),
+        );
+      }}
     >
       <Field label={t("job")} error={errorOf("title")}>
         {(id) => (
@@ -856,6 +875,13 @@ export function ExperienceForm({ values }: { values: ExperienceValues }) {
         button={t("improve")}
         onUse={(text) => set({ achievements: achievementsOf(text).slice(0, ACHIEVEMENTS_MAX) })}
       />
+      <ReferentField
+        state={values.reference}
+        value={referent}
+        onChange={setReferent}
+        intro={t("reference.introExperience")}
+        errors={referentErrors(error, t)}
+      />
       {values.id ? (
         <DeleteButton
           label={t("experienceDelete")}
@@ -868,17 +894,34 @@ export function ExperienceForm({ values }: { values: ExperienceValues }) {
   );
 }
 
+/** The referent's fields in error, from the save's answer. */
+function referentErrors(error: string | null, t: ReturnType<typeof useTranslations>) {
+  return {
+    name: error === "referentName" ? t("errors.referentName") : null,
+    email:
+      error === "referentEmail" || error === "referentSelf"
+        ? t(error === "referentSelf" ? "errors.referentSelf" : "errors.referentEmail")
+        : null,
+  };
+}
+
 export type EducationValues = {
   id: string | null;
+  kind: "diploma" | "certificate";
   degree: string;
   school: string;
   level: "none" | "secondary" | "vocational" | "bachelor" | "master" | "doctorate";
   field: string;
   startYear: string;
   endYear: string;
+  format: "online" | "in_person" | "hybrid" | null;
+  length: "short" | "long" | null;
+  image: string | null;
+  /** « Faire vérifier » (certificates): the last request to a referent. */
+  reference: ReferenceStateValue;
 };
 
-const EDUCATION_LEVELS = [
+const DIPLOMA_LEVELS = [
   "secondary",
   "vocational",
   "bachelor",
@@ -886,58 +929,101 @@ const EDUCATION_LEVELS = [
   "doctorate",
   "none",
 ] as const;
+const TRAINING_FORMATS = ["online", "in_person", "hybrid"] as const;
+const TRAINING_LENGTHS = ["short", "long"] as const;
 
-/** « Modifier la formation » (planche Carrière-formation): an empty end means « en cours ». */
+/**
+ * « Diplôme » or « Certificat » (demande d'Ephraïm du 29/10/2026): a diploma is academic (fin des
+ * humanités, licence, master, doctorat…) and can carry a photo, shown as « Justificatif joint »;
+ * a certificate is a training followed online or in person, short or long, with its photo and a
+ * referent who can confirm it. An empty end means « en cours ».
+ */
 export function EducationForm({ values }: { values: EducationValues }) {
   const t = useTranslations("phoneCareer.form");
   const [form, setForm] = useState(values);
+  const [referent, setReferent] = useState<ReferentValue>(NO_REFERENT);
   const { pending, error, save } = useSave();
   const set = (patch: Partial<EducationValues>) => setForm((before) => ({ ...before, ...patch }));
   const editing = values.id !== null;
+  const certificate = form.kind === "certificate";
   const errorOf = (field: string) => (error === field ? t("errors.required") : null);
+  const asking = certificate && Boolean(referent.name.trim() || referent.email.trim());
+  const k = certificate ? "certificate" : "diploma";
   return (
     <FormPage
-      title={editing ? t("educationEdit") : t("educationNew")}
+      title={editing ? t(`${k}.edit`) : t(`${k}.new`)}
       pending={pending}
-      onSave={() =>
+      onSave={() => {
         save(
-          () => saveCareerEducationAction({ ...form, id: form.id ?? undefined }),
-          editing ? t("educationSaved") : t("educationAdded"),
-        )
-      }
+          () =>
+            saveCareerEducationAction({
+              ...form,
+              id: form.id ?? undefined,
+              referent: asking ? referent : null,
+            }),
+          asking
+            ? t("reference.sent", { name: referent.name.trim() })
+            : editing
+              ? t(`${k}.saved`)
+              : t(`${k}.added`),
+        );
+      }}
     >
-      <Field label={t("degree")} error={errorOf("degree")}>
+      <Field label={t(`${k}.title`)} error={errorOf("degree")}>
         {(id) => (
           <input
             id={id}
             className="nb-ca-in"
             value={form.degree}
             onChange={(event) => set({ degree: event.target.value })}
-            placeholder={t("degreePlaceholder")}
+            placeholder={t(`${k}.titlePlaceholder`)}
             maxLength={160}
             required
           />
         )}
       </Field>
-      <Field label={t("school")} error={errorOf("school")}>
+      <Field label={t(`${k}.school`)} error={errorOf("school")}>
         {(id) => (
           <input
             id={id}
             className="nb-ca-in"
             value={form.school}
             onChange={(event) => set({ school: event.target.value })}
-            placeholder={t("schoolPlaceholder")}
+            placeholder={t(`${k}.schoolPlaceholder`)}
             maxLength={160}
             required
           />
         )}
       </Field>
-      <Chips
-        label={t("level")}
-        value={form.level}
-        onChange={(level) => set({ level })}
-        options={EDUCATION_LEVELS.map((value) => ({ value, text: t(`educationLevel.${value}`) }))}
-      />
+      {certificate ? (
+        <>
+          <Chips
+            label={t("certificate.format")}
+            value={form.format}
+            onChange={(format) => set({ format })}
+            options={TRAINING_FORMATS.map((value) => ({
+              value,
+              text: t(`certificate.formats.${value}`),
+            }))}
+          />
+          <Chips
+            label={t("certificate.length")}
+            value={form.length}
+            onChange={(length) => set({ length })}
+            options={TRAINING_LENGTHS.map((value) => ({
+              value,
+              text: t(`certificate.lengths.${value}`),
+            }))}
+          />
+        </>
+      ) : (
+        <Chips
+          label={t("level")}
+          value={form.level}
+          onChange={(level) => set({ level })}
+          options={DIPLOMA_LEVELS.map((value) => ({ value, text: t(`educationLevel.${value}`) }))}
+        />
+      )}
       <div className="nb-ca-deux">
         <Field label={t("start")} error={errorOf("startYear")}>
           {(id) => (
@@ -954,7 +1040,7 @@ export function EducationForm({ values }: { values: EducationValues }) {
           )}
         </Field>
         <Field
-          label={t("end")}
+          label={certificate ? t("certificate.end") : t("end")}
           error={error === "endBeforeStart" ? t("errors.endBeforeStart") : errorOf("endYear")}
         >
           {(id) => (
@@ -983,16 +1069,31 @@ export function EducationForm({ values }: { values: EducationValues }) {
           />
         )}
       </Field>
+      <DocumentImageField
+        label={t(`${k}.image`)}
+        hint={t(`${k}.imageHint`)}
+        image={form.image}
+        onChange={(image) => set({ image })}
+      />
+      {certificate ? (
+        <ReferentField
+          state={values.reference}
+          value={referent}
+          onChange={setReferent}
+          intro={t("reference.introCertificate")}
+          errors={referentErrors(error, t)}
+        />
+      ) : null}
       <div className="nb-ca-ob">
         <div className="nb-ca-ob-h">
           <OrbiDisc size={34} />
-          <span>{t("educationOrbi")}</span>
+          <span>{certificate ? t("educationOrbi") : t("diploma.orbi")}</span>
         </div>
       </div>
       {values.id ? (
         <DeleteButton
-          label={t("educationDelete")}
-          question={t("educationDeleteQuestion")}
+          label={t(`${k}.delete`)}
+          question={t(`${k}.deleteQuestion`)}
           detail={t("educationDeleteDetail")}
           onConfirm={() => deleteCareerEducationAction(values.id!)}
         />
