@@ -171,6 +171,8 @@ export type FeedItem = {
     skills: string[];
     /** Applications still accepted. */
     open: boolean;
+    /** « Candidatures jusqu'au … » (ISO date), when the recruiter set one. */
+    closesAt: string | null;
   } | null;
   attachment: FeedAttachment | null;
   /**
@@ -369,6 +371,7 @@ async function toItems(
                     },
               skills: row.job.skills.map((item) => item.skill.name),
               open: row.job.closesAt === null || row.job.closesAt > now,
+              closesAt: row.job.closesAt ? row.job.closesAt.toISOString() : null,
             }
           : null,
       attachment: attachmentOf(row.attachment),

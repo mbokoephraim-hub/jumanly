@@ -82,6 +82,7 @@ export const jobSheetSelect = {
   openings: true,
   experienceMin: true,
   educationLevelMin: true,
+  educationLevels: true,
   languagesRequired: true,
   salaryMin: true,
   salaryMax: true,
@@ -150,6 +151,7 @@ export async function drawJobSheet(
     openings: number;
     experienceMin: number;
     educationLevelMin: string | null;
+    educationLevels: string[];
     languagesRequired: Parameters<typeof parseLanguages>[0];
     salaryMin: number | null;
     salaryMax: number | null;
@@ -196,7 +198,11 @@ export async function drawJobSheet(
     remote: words.remote(job.remote),
     openings: words.openings(job.openings),
     experience: words.experience(job.experienceMin),
-    education: job.educationLevelMin ? words.education(job.educationLevelMin) : null,
+    education: job.educationLevels.length
+      ? job.educationLevels.map(words.education).join(" / ")
+      : job.educationLevelMin
+        ? words.education(job.educationLevelMin)
+        : null,
     closesAt: job.closesAt ? words.date(job.closesAt) : null,
     about: (job.companyAbout ?? job.organization.description ?? "").trim(),
     description: job.description.trim(),

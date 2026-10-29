@@ -75,6 +75,7 @@ function OfferPoster({ job }: { job: NonNullable<PostView["job"]> }) {
         <b>{job.title}</b>
         <span className="nb-fil-affiche-l">{job.line}</span>
         {job.salary ? <span className="nb-fil-affiche-s">{job.salary}</span> : null}
+        {job.closes ? <span className="nb-fil-affiche-l">{job.closes}</span> : null}
         {job.skills.length > 0 ? (
           <span className="nb-fil-affiche-c">
             {job.skills.map((name) => (
