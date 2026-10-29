@@ -11,7 +11,7 @@ import { likePostAction, participateAction, savePostAction } from "@/server/acti
 import { PhoneIcon } from "../icon";
 import { FilAvatar } from "./avatar";
 import { FilComment } from "./comments";
-import type { PostView } from "./data";
+import type { PostView, PosterView } from "./data";
 import { QuotedCard } from "./share";
 
 export type PostSheet = "menu" | "report" | "reshare" | "note" | "share" | "edit";
@@ -62,6 +62,31 @@ export function PostMedia({
 }
 
 /**
+ * The poster of an offer (Fil, 29/10/2026): kicker, title, line, salary, closing date, skills and
+ * score. `ton` paints it in another gradient (« Offres pour vous » of Explorer).
+ */
+export function OfferPosterCard({ job, ton }: { job: PosterView; ton?: number }) {
+  const t = useTranslations("phoneFil");
+  return (
+    <Link href={job.href} className="nb-fil-affiche" data-ton={ton}>
+      <span className="nb-fil-affiche-k">{t("poster.kicker")}</span>
+      <b>{job.title}</b>
+      <span className="nb-fil-affiche-l">{job.line}</span>
+      {job.salary ? <span className="nb-fil-affiche-s">{job.salary}</span> : null}
+      {job.closes ? <span className="nb-fil-affiche-l">{job.closes}</span> : null}
+      {job.skills.length > 0 ? (
+        <span className="nb-fil-affiche-c">
+          {job.skills.map((name) => (
+            <i key={name}>{name}</i>
+          ))}
+        </span>
+      ) : null}
+      {job.score ? <span className="nb-fil-score nb-fil-affiche-score">{job.score}</span> : null}
+    </Link>
+  );
+}
+
+/**
  * An offer in the Fil (publication d'offre étape par étape, 29/10/2026): a poster drawn by Jumanly
  * in place of a photo (kind, title, place, salary, first skills, the reader's score), then
  * « Postuler », « Voir l'offre » and the job sheet in PDF.
@@ -70,21 +95,7 @@ function OfferPoster({ job }: { job: NonNullable<PostView["job"]> }) {
   const t = useTranslations("phoneFil");
   return (
     <div className="nb-fil-offre-bloc">
-      <Link href={job.href} className="nb-fil-affiche">
-        <span className="nb-fil-affiche-k">{t("poster.kicker")}</span>
-        <b>{job.title}</b>
-        <span className="nb-fil-affiche-l">{job.line}</span>
-        {job.salary ? <span className="nb-fil-affiche-s">{job.salary}</span> : null}
-        {job.closes ? <span className="nb-fil-affiche-l">{job.closes}</span> : null}
-        {job.skills.length > 0 ? (
-          <span className="nb-fil-affiche-c">
-            {job.skills.map((name) => (
-              <i key={name}>{name}</i>
-            ))}
-          </span>
-        ) : null}
-        {job.score ? <span className="nb-fil-score nb-fil-affiche-score">{job.score}</span> : null}
-      </Link>
+      <OfferPosterCard job={job} />
       <div className="nb-fil-affiche-bt">
         {job.applyHref ? (
           <Link href={job.applyHref} data-p="">

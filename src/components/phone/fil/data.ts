@@ -323,3 +323,9 @@ export async function feedWords(viewerId: string, now = new Date()) {
 
   return { t, format, ago, stamp, author, post, reply };
 }
+
+/** What the offer poster shows (Fil, and « Offres pour vous » of Explorer). */
+export type PosterView = Pick<
+  NonNullable<PostView["job"]>,
+  "href" | "title" | "line" | "score" | "salary" | "skills" | "closes"
+>;

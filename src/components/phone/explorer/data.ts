@@ -6,7 +6,7 @@ import type {
   ExplorePerson,
   ExplorerHome,
 } from "@/server/services/explore";
-import { initialsOf, shortName, toneOf } from "../fil/data";
+import { initialsOf, shortName, toneOf, type PosterView } from "../fil/data";
 
 /**
  * What the screens of Explorer show (Modèle B, lot B4), every word written on the server so that
@@ -32,6 +32,8 @@ export type OfferView = {
   score: number | null;
   domain: string | null;
   sector: string | null;
+  /** The offer drawn as a poster, as in the Fil (« Offres pour vous », 29/10/2026). */
+  poster: PosterView;
 };
 
 export type CompanyView = {
@@ -125,6 +127,23 @@ export async function explorerWords(now = new Date()) {
       score: row.score,
       domain: row.domain,
       sector: row.organization.sector,
+      poster: {
+        href: `/app/jobs/${row.slug}`,
+        title: row.title,
+        line: t("list.offerLine", { company, city: row.city, kind: kind(row) }),
+        score: row.score === null ? null : tf("score", { score: row.score }),
+        salary:
+          row.salaryMin === null
+            ? null
+            : row.salaryMax === null || row.salaryMax === row.salaryMin
+              ? tf("offerSalaryFrom", { min: Math.round(row.salaryMin / 100) })
+              : tf("offerSalary", {
+                  min: Math.round(row.salaryMin / 100),
+                  max: Math.round(row.salaryMax / 100),
+                }),
+        skills: row.skills.map((item) => item.skill.name),
+        closes: row.closesAt ? tf("poster.closesAt", { date: row.closesAt }) : null,
+      },
     };
   };
 
