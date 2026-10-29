@@ -23,6 +23,7 @@ const WARM_PATHS = [
   "/app",
   "/app/jobs",
   "/app/learn",
+  "/app/career/cv",
   "/app/suivi",
   "/app/compte",
   "/app/profil",

@@ -5088,3 +5088,12 @@ Demande d'Ephraïm du 29/10/2026 (partie administration seulement).
   remonte en haut et les affiche d'un toucher.
 - Toucher « Fil » dans le menu quand le Fil est déjà en haut le rafraîchit aussi (sinon il remonte en haut).
 - Non vérifié en e2e (consigne d'Ephraïm du 27/10 : pas de vérification) ; types et lint passés.
+
+## 2026-10-29 · Onglets instantanés et appli gardée sur le téléphone (demande d'Ephraïm)
+
+Passer d'un onglet du talent à l'autre ne demande plus rien au serveur (l'onglet est déjà là) : instantané,
+même sans connexion. Tous les onglets se mettent à jour ensemble en arrière-plan (retour dans l'appli,
+réseau revenu, toutes les 10 min) ; le préchargement démarre pendant le logo. Le service worker garde plus
+de pages, les images, et montre la copie gardée quand le réseau traîne ; l'appli demande au téléphone de
+garder son stockage. Détail et limites : `docs/decisions/2026-10-29-onglets-instantanes-hors-ligne.md`.
+Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au serveur échoue).
