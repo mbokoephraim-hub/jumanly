@@ -26,6 +26,8 @@ import {
 } from "@/server/actions/cv-flow";
 import type { CvContent } from "@/server/services/cv";
 import { PROFILE_PALETTE } from "@/lib/profile-colors";
+import { ACHIEVEMENTS_SUGGESTED } from "@/lib/achievements";
+import { AchievementsField } from "../career/experience-fields";
 import { PhoneIcon } from "../icon";
 import { CvFrame } from "./frame";
 import { OrbiSpark } from "./marks";
@@ -91,6 +93,9 @@ function withShown(content: CvContent, block: Block, on: boolean): CvContent {
  * fills in above while the talent types; changes are saved on this CV only (the profile stays
  * as it is), then « Continuer » opens the preview.
  */
+
+/** Réalisations of one experience on a CV (12 were allowed before, one per line). */
+const CV_BULLETS_MAX = 12;
 export function CvFormStep({
   cvId,
   initial,
@@ -597,21 +602,12 @@ export function CvFormStep({
                     />
                     {t("form.current")}
                   </label>
-                  {field(
-                    `cvf-xp-${index}-puces`,
-                    t("form.bullets"),
-                    <textarea
-                      id={`cvf-xp-${index}-puces`}
-                      rows={4}
-                      value={item.bullets.join("\n")}
-                      onChange={(event) =>
-                        setAt("experiences", index, {
-                          bullets: event.target.value.split("\n").slice(0, 12),
-                        })
-                      }
-                    />,
-                    t("form.bulletsHint"),
-                  )}
+                  <AchievementsField
+                    inCv
+                    max={CV_BULLETS_MAX}
+                    points={item.bullets}
+                    onChange={(bullets) => setAt("experiences", index, { bullets })}
+                  />
                 </div>
               </fieldset>
             ))}
@@ -621,7 +617,15 @@ export function CvFormStep({
                 onClick={() =>
                   set("experiences", [
                     ...latest.current.experiences,
-                    { title: "", company: "", location: "", start: "", end: null, bullets: [] },
+                    {
+                      title: "",
+                      company: "",
+                      location: "",
+                      start: "",
+                      end: null,
+                      // 3 empty réalisations to fill, as in the profile (3 to 4 advised).
+                      bullets: Array.from({ length: ACHIEVEMENTS_SUGGESTED }, () => ""),
+                    },
                   ])
                 }
               />

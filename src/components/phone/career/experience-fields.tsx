@@ -250,9 +250,14 @@ function LogoPicker({
 export function AchievementsField({
   points,
   onChange,
+  max = ACHIEVEMENTS_MAX,
+  inCv = false,
 }: {
   points: string[];
   onChange: (points: string[]) => void;
+  max?: number;
+  /** In the CV form (« Mes informations »): its field layout instead of the profile's. */
+  inCv?: boolean;
 }) {
   const t = useTranslations("phoneCareer.form");
   const id = useId();
@@ -278,7 +283,10 @@ export function AchievementsField({
   };
   const filled = points.filter((point) => point.trim()).length;
   return (
-    <div className="nb-ca-ch nb-xp-pts">
+    <div
+      className={inCv ? "nb-cvf-champ nb-xp-pts" : "nb-ca-ch nb-xp-pts"}
+      data-large={inCv ? "" : undefined}
+    >
       <span id={`${id}-t`}>{t("achievements")}</span>
       <p className="nb-xp-aide" id={`${id}-a`}>
         {t("achievementsHint")}
@@ -304,7 +312,7 @@ export function AchievementsField({
                 onKeyDown={(event) => {
                   if (event.key !== "Enter") return;
                   event.preventDefault();
-                  if (points.length < ACHIEVEMENTS_MAX) {
+                  if (points.length < max) {
                     const next = [...points];
                     next.splice(at + 1, 0, "");
                     onChange(next);
@@ -344,7 +352,7 @@ export function AchievementsField({
           );
         })}
       </ol>
-      {points.length < ACHIEVEMENTS_MAX ? (
+      {points.length < max ? (
         <button
           type="button"
           className="nb-xp-ajout"
@@ -357,7 +365,7 @@ export function AchievementsField({
           {t("achievementAdd")}
         </button>
       ) : (
-        <p className="nb-xp-aide">{t("achievementsMax", { max: ACHIEVEMENTS_MAX })}</p>
+        <p className="nb-xp-aide">{t("achievementsMax", { max })}</p>
       )}
       <p className="nb-meta nb-xp-compte" aria-live="polite">
         {t("achievementsCount", { count: filled })}
