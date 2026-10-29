@@ -3,8 +3,10 @@ import { expect, test } from "./fixtures";
 import { logIn } from "./session";
 
 // Modèle B, lot B6 (docs/modele-b, rangées 114 à 133): the interview practice on the phone.
-// Amani (amani.ux@, Free) has the 5-minute trial and an application with an interview; talent.pro@
-// has the oral and the written sessions in their plan. Sessions use the month's quota: reseed
+// The simulation is kept for people who applied with a plan that includes it (29/10/2026).
+// Amani (amani.ux@, Starter) has the written sessions, the 5-minute trial of the spoken one and an
+// application with an interview; Jean-Pierre (jeanpierre.ux@, Pro) has an application and the
+// oral and the written sessions in their plan; grace.ux@ (Free) sees the reserved screen. Sessions use the month's quota: reseed
 // before running again.
 
 /** No dictation and no voice in the test browser; a silent microphone that always answers. */
@@ -90,7 +92,7 @@ test.describe("Modèle B · Simulation d'entretien au téléphone", () => {
   }) => {
     test.setTimeout(150_000);
     await quietPhone(page);
-    await logIn(page, "talent.pro@jumanly.test");
+    await logIn(page, "jeanpierre.ux@jumanly.test");
     await page.goto("/app/career/entretiens/nouveau");
     const settings = page.locator(".nb-iv-reglages");
     await expect(settings.getByRole("radio", { name: /^À l’oral/ })).toHaveAttribute(
@@ -197,7 +199,7 @@ test.describe("Modèle B · Simulation d'entretien au téléphone", () => {
 
   test("par écrit : la question, un indice, la réponse et le bilan", async ({ page }) => {
     test.setTimeout(120_000);
-    await logIn(page, "talent.pro@jumanly.test");
+    await logIn(page, "jeanpierre.ux@jumanly.test");
     await page.goto("/app/career/entretiens/nouveau");
     const settings = page.locator(".nb-iv-reglages");
     await settings.getByRole("radio", { name: /^Par écrit/ }).click();
@@ -231,6 +233,16 @@ test.describe("Modèle B · Simulation d'entretien au téléphone", () => {
     await expect(report.getByText("Longueur", { exact: true })).toBeVisible();
     await report.getByRole("link", { name: "Fermer et revenir" }).click();
     await page.waitForURL((url) => !url.pathname.startsWith("/app/career/entretiens/"));
+  });
+
+  test("réservée : candidature et formule qui inclut les simulations", async ({ page }) => {
+    await logIn(page, "grace.ux@jumanly.test");
+    await page.goto("/app/career/entretiens/nouveau");
+    const screen = page.locator(".nb-iv-reglages");
+    await expect(screen.getByRole("heading", { name: "Simulation d’entretien" })).toBeVisible();
+    await expect(screen.getByText("Avoir candidaté à une offre")).toBeVisible();
+    await expect(screen.getByRole("link", { name: "Voir les formules" })).toBeVisible();
+    await expect(screen.getByText("Postuler reste gratuit, toujours.")).toBeVisible();
   });
 
   test("depuis une candidature : aller-retour sans écran vide", async ({ page }) => {

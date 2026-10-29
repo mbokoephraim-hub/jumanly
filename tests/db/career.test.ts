@@ -16,6 +16,7 @@ import {
   discardInterview,
   getInterview,
   InterviewError,
+  interviewAccess,
   questionCount,
   startInterview,
   type InterviewSetup,
@@ -45,8 +46,31 @@ afterAll(async () => {
 });
 beforeEach(() => invalidate());
 
-/** A talent on the cheapest talent plan whose entitlement `key` has `value` (never a plan name). */
-async function talent(entitlement?: { key: string; value: string }, consent = true) {
+/** One application to a published demo offer: the simulation is kept for people who applied. */
+async function apply(userId: string) {
+  const profile = await db.talentProfile.upsert({
+    where: { userId },
+    update: {},
+    create: { userId, headline: "Chargé de clientèle" },
+  });
+  const job = await db.job.findFirstOrThrow({
+    where: { status: "published", stages: { some: {} } },
+    select: { id: true, stages: { orderBy: { order: "asc" }, take: 1, select: { id: true } } },
+  });
+  await db.application.create({
+    data: { jobId: job.id, profileId: profile.id, stageId: job.stages[0]!.id },
+  });
+}
+
+/**
+ * A talent on the cheapest talent plan whose entitlement `key` has `value` (never a plan name),
+ * who applied to an offer for the interview simulations unless `applied` is false.
+ */
+async function talent(
+  entitlement?: { key: string; value: string },
+  consent = true,
+  applied = entitlement?.key.startsWith("career.interview.") ?? false,
+) {
   const user = await newUser();
   users.push(user.id);
   await db.user.update({
@@ -74,6 +98,7 @@ async function talent(entitlement?: { key: string; value: string }, consent = tr
       },
     });
   }
+  if (applied) await apply(user.id);
   return user;
 }
 
@@ -105,11 +130,24 @@ const textQuota = (userId: string) =>
   usage(db, { type: "user", id: userId }, "career.interview.text.monthly");
 
 describe("simulations d'entretien (E10, partie 08 § 8.9)", () => {
-  it("sans simulation dans le forfait : verrou, rien n'est consommé", async () => {
+  it("sans simulation dans le forfait : réservé, rien n'est consommé", async () => {
     const user = await talent({ key: "career.interview.text.monthly", value: "0" });
     await expect(startInterview(db, user.id, setup(), bank)).rejects.toMatchObject({
-      code: "entitlement",
+      code: "reserved",
     });
+    expect((await interviewAccess(db, user.id)).applied).toBe(true);
+  });
+
+  it("sans candidature : réservé, même avec les simulations dans le forfait", async () => {
+    const user = await talent({ key: "career.interview.text.monthly", value: "3" }, true, false);
+    const access = await interviewAccess(db, user.id);
+    expect(access).toMatchObject({ applied: false, plan: true, open: false });
+    await expect(startInterview(db, user.id, setup(), bank)).rejects.toMatchObject({
+      code: "reserved",
+    });
+    expect((await textQuota(user.id)).used).toBe(0);
+    await apply(user.id);
+    expect((await interviewAccess(db, user.id)).open).toBe(true);
   });
 
   it("sans consentement à l'IA : aucune séance, aucun quota utilisé", async () => {
@@ -184,9 +222,12 @@ describe("simulations au téléphone : essai, annulation, reprise (Modèle B, lo
     level: "easy",
     durationMinutes: minutes,
   });
-  /** A talent whose plan has no voice session but one trial (read from the plans, never named). */
+  /**
+   * A talent whose plan has written sessions but no spoken one, and maybe one trial (read from
+   * the plans, never named): the trial only opens a mode the plan lacks.
+   */
   async function trialTalent() {
-    const user = await talent({ key: "career.interview.voice.monthly", value: "0" });
+    const user = await talent({ key: "career.interview.text.monthly", value: "3" });
     const trial = await trialUsage(user.id);
     return { user, trial };
   }

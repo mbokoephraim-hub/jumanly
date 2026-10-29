@@ -4,6 +4,7 @@ import type { PrismaClient } from "@/generated/prisma/client";
 import { AiError, runAi } from "@/server/ai";
 import { resolvePlan } from "@/server/entitlements";
 import { talentAttestations } from "./attestations";
+import { careerTraining } from "./career-training";
 import { listApplications, talentStatus, type TalentApplicationStatus } from "./applications";
 import { stageFor, type Stage, stages } from "./diagnostic-scoring";
 import { isJobOpen, openJobWhere } from "./jobs";
@@ -187,6 +188,13 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
     .filter((row) => row.interviewAt)
     .sort((a, b) => a.interviewAt!.getTime() - b.interviewAt!.getTime())[0];
 
+  const training = await careerTraining(
+    db,
+    userId,
+    { applications: rows, ownedSkillIds: owned },
+    now,
+  );
+
   const primary = cvs.find((cv) => cv.isPrimary) ?? cvs[0] ?? null;
   const adapt =
     primary && savedJob && !cvs.some((cv) => cv.adaptedForJobId === savedJob.job.id)
@@ -263,6 +271,8 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
       applications: applications.length,
       upcoming: upcoming ? { id: upcoming.id, at: upcoming.interviewAt! } : null,
     },
+    /** « Mes entraînements »: what to prepare and the follow-up of the simulations. */
+    training,
     applications: rows,
     activeApplications: active.length,
   };
