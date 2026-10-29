@@ -8,16 +8,24 @@
  *   device, and shown when there is no connection. The talent space also asks for its main pages
  *   once per session (message « warm »), so they open offline even if not visited yet.
  *   Payment and tester pages are never kept.
+ *   On a slow network (29/10/2026, « comme WhatsApp ») a kept page is shown after 3.5 s of waiting;
+ *   the network answer, when it comes, is kept and the screen is told (« page-updated »), which
+ *   reads it again in the background.
+ * - Pictures of the site and of the space (photos, banners, posts): kept on the device and shown at
+ *   once, refreshed in the background (300 at most).
  * - Built files (/_next/static, hashed names): cache first.
- * - Signing out empties the kept pages (the next person on the device sees nothing).
- * - Nothing is ever sent from the cache when the network answers (opening page aside).
+ * - Signing out empties the kept pages and pictures (the next person on the device sees nothing).
  */
 const VERSION = "jm-v2";
 const PAGES = `${VERSION}-pages`;
 const STATIC = `${VERSION}-static`;
 const OFFLINE_URL = "/hors-ligne";
 const LAUNCH_URL = "/demarrage";
-const MAX_PAGES = 60;
+const PICTURES = `${VERSION}-pictures`;
+const MAX_PAGES = 150;
+const MAX_PICTURES = 300;
+/** How long a page may take before the copy kept on the device is shown instead. */
+const SLOW_MS = 3500;
 // Pictures of the offline page (mockup 08-05), stored with it.
 const OFFLINE_ASSETS = [
   "/marque/jumanly-logo-principal.svg",
@@ -59,12 +67,10 @@ function kept(url) {
   );
 }
 
-async function trimPages() {
-  const cache = await caches.open(PAGES);
+async function trim(name, max) {
+  const cache = await caches.open(name);
   const keys = await cache.keys();
-  await Promise.all(
-    keys.slice(0, Math.max(0, keys.length - MAX_PAGES)).map((key) => cache.delete(key)),
-  );
+  await Promise.all(keys.slice(0, Math.max(0, keys.length - max)).map((key) => cache.delete(key)));
 }
 
 /** Keeps a page that loaded; forgets it when it now sends elsewhere (signed out, no access). */
@@ -74,7 +80,7 @@ async function keep(request, response) {
   else {
     await cache.delete(request, { ignoreVary: true });
     await cache.put(request, response.clone());
-    await trimPages();
+    await trim(PAGES, MAX_PAGES);
   }
 }
 
@@ -85,12 +91,40 @@ async function stored(request) {
   return caches.match(request, { cacheName: PAGES, ignoreVary: true, ignoreSearch: true });
 }
 
-async function page(request) {
+/** Tells the screens that a page shown from the device has come from the network. */
+async function tellUpdated(url) {
+  const clients = await self.clients.matchAll({ type: "window" });
+  for (const client of clients) client.postMessage({ type: "page-updated", path: url.pathname });
+}
+
+async function page(request, event) {
   const url = new URL(request.url);
-  try {
-    const response = await fetch(request);
+  const network = fetch(request).then(async (response) => {
     if (kept(url)) await keep(request, response);
     return response;
+  });
+  try {
+    if (kept(url)) {
+      // Only the very same page: another tab or filter would show the wrong screen.
+      const copy = await caches.match(request, { cacheName: PAGES, ignoreVary: true });
+      if (copy) {
+        let late = false;
+        const slow = new Promise((resolve) =>
+          setTimeout(() => {
+            late = true;
+            resolve(copy);
+          }, SLOW_MS),
+        );
+        const answer = await Promise.race([network, slow]);
+        if (late) {
+          event.waitUntil(
+            network.then((response) => response.ok && tellUpdated(url)).catch(() => undefined),
+          );
+        }
+        return answer;
+      }
+    }
+    return await network;
   } catch (error) {
     if (kept(url)) {
       const copy = await stored(request);
@@ -126,6 +160,26 @@ async function builtFile(request) {
   return response;
 }
 
+/** A picture: the kept copy at once, the network one kept for next time. */
+async function picture(request, event) {
+  const cache = await caches.open(PICTURES);
+  const copy = await cache.match(request);
+  const fresh = fetch(request)
+    .then(async (response) => {
+      if (response.ok && response.type === "basic") {
+        await cache.put(request, response.clone());
+        await trim(PICTURES, MAX_PICTURES);
+      }
+      return response;
+    })
+    .catch(() => null);
+  if (copy) {
+    event.waitUntil(fresh);
+    return copy;
+  }
+  return (await fresh) || Response.error();
+}
+
 /** The main pages of the space, asked once per session so they open offline. */
 async function warm(paths) {
   const started = session;
@@ -158,11 +212,12 @@ self.addEventListener("fetch", (event) => {
   // Sign-out ends on /connexion?deconnecte=1, as a page or as an in-app navigation.
   if (url.searchParams.has("deconnecte")) {
     session += 1;
-    event.waitUntil(caches.delete(PAGES));
+    event.waitUntil(Promise.all([caches.delete(PAGES), caches.delete(PICTURES)]));
   }
   if (request.mode === "navigate") {
     if (url.pathname === LAUNCH_URL) event.respondWith(launch(request, event));
-    else event.respondWith(page(request));
+    else event.respondWith(page(request, event));
   } else if (url.pathname.startsWith("/_next/static/") || OFFLINE_ASSETS.includes(url.pathname))
     event.respondWith(builtFile(request));
+  else if (request.destination === "image") event.respondWith(picture(request, event));
 });
