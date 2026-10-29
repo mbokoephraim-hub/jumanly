@@ -277,8 +277,29 @@ export async function notify(
   );
 }
 
+/**
+ * The count of the bell: exactly the lines the list shows (Ephraïm 29/10/2026: once the list is
+ * read, the bell must not stay lit). Same types, and one « Nouveau message » per conversation.
+ */
 export async function unreadNotifications(db: PrismaClient, userId: string) {
-  return db.notification.count({ where: { userId, readAt: null } });
+  const unread = await db.notification.findMany({
+    where: { userId, readAt: null, type: { in: [...notificationTypes] } },
+    orderBy: { createdAt: "desc" },
+    select: { type: true, href: true },
+    take: 100,
+  });
+  return distinctConversations(unread).length;
+}
+
+/** The older « Nouveau message » of a conversation that already has a newer one are left out. */
+function distinctConversations<T extends { type: string; href: string | null }>(items: T[]) {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    if (item.type !== "newMessage" || !item.href) return true;
+    if (seen.has(item.href)) return false;
+    seen.add(item.href);
+    return true;
+  });
 }
 
 /**
@@ -288,17 +309,11 @@ export async function unreadNotifications(db: PrismaClient, userId: string) {
  */
 export async function listNotifications(db: PrismaClient, userId: string) {
   const unread = await db.notification.findMany({
-    where: { userId, readAt: null },
+    where: { userId, readAt: null, type: { in: [...notificationTypes] } },
     orderBy: { createdAt: "desc" },
     take: 100,
   });
-  const seen = new Set<string>();
-  return unread.filter((item) => {
-    if (item.type !== "newMessage" || !item.href) return true;
-    if (seen.has(item.href)) return false;
-    seen.add(item.href);
-    return true;
-  });
+  return distinctConversations(unread);
 }
 
 /** Opening a conversation reads its notifications (« Nouveau message », document requested). */
@@ -370,9 +385,25 @@ export async function latestNotifications(db: PrismaClient, userId: string, take
   });
 }
 
+/**
+ * Reads one notification, or all of them. A « Nouveau message » read from the list also reads the
+ * older ones of its conversation, which the list did not show: nothing is left lit behind it.
+ */
 export async function markNotificationsRead(db: PrismaClient, userId: string, id?: string) {
+  const one = id
+    ? await db.notification.findFirst({ where: { id, userId }, select: { type: true, href: true } })
+    : null;
+  if (id && !one) return;
   await db.notification.updateMany({
-    where: { userId, readAt: null, ...(id ? { id } : {}) },
+    where: {
+      userId,
+      readAt: null,
+      ...(one?.type === "newMessage" && one.href
+        ? { OR: [{ id }, { type: "newMessage", href: one.href }] }
+        : id
+          ? { id }
+          : {}),
+    },
     data: { readAt: new Date() },
   });
 }

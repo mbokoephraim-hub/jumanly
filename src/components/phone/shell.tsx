@@ -1,5 +1,6 @@
 import { Suspense, type ReactNode } from "react";
-import { getTranslations } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
 import { AppMotionRoot } from "@/components/motion/app-motion-root";
 import { MessageBannerHost } from "@/components/motion/message-banner-host";
 import { Toaster } from "@/components/motion/toaster";
@@ -22,6 +23,7 @@ import { PhoneMeProvider } from "./me";
 import { PushPrompt } from "./push-prompt";
 import { PhoneThemeRoot } from "./theme-root";
 import { PhoneNav } from "./nav";
+import { PhonePullRefresh } from "./pull-refresh";
 import { Opening } from "./opening";
 import { openingScript } from "./opening-script";
 import { PhoneOrbi, type OrbiTexts } from "./orbi";
@@ -47,7 +49,8 @@ export async function PhoneShell({
   reduceMotion: boolean;
   /** The talent's interface, or the recruiter's (docs/modele-b-recruteur, lot M1). */
   set?: TabSetName;
-  /** Counts on the menu: unread conversations on Chat, new applications on Candidatures. */
+  /** Counts on the menu: unread conversations on Chat, new applications on Candidatures (the
+   * others, new since the last visit, come from the phone). */
   badges?: { candidatures?: number; messages: number };
   /** The tabs already drawn for the phone, kept mounted (each lot adds its own). */
   tabs: Partial<Record<PhoneTab, ReactNode>>;
@@ -59,6 +62,7 @@ export async function PhoneShell({
   const tBrand = await getTranslations("common");
   const tRh = await getTranslations("phoneRh");
   const tRhOrbi = await getTranslations("rhOrbi.chat");
+  const messages = await getMessages();
   const recruiter = set === "recruteur";
   const recruiterTabTexts = (tab: RecruiterTab) => ({
     bubble: tRh(`orbi.${tab}.bubble`),
@@ -82,15 +86,6 @@ export async function PhoneShell({
     if (!recruiter) return t(`nav.${tab}` as "nav.fil");
     if (tab === "messages") return tRh("nav.chat");
     return tRh(`nav.${tab as RecruiterTab}`);
-  };
-  const navLabel = (tab: PhoneTab) => {
-    if (tab === "candidatures" && badges?.candidatures)
-      return tRh("nav.candidaturesNew", { count: badges.candidatures });
-    if (tab === "messages" && badges?.messages)
-      return recruiter
-        ? tRh("nav.messagesUnread", { count: badges.messages })
-        : t("nav.messagesUnread", { count: badges.messages });
-    return navName(tab);
   };
   const orbi: OrbiTexts = {
     open: t("orbi.open"),
@@ -176,15 +171,18 @@ export async function PhoneShell({
           </div>
         </PhoneStack>
       </PhoneMeProvider>
-      <PhoneNav
-        aria={t("nav.aria")}
-        set={set}
-        labels={Object.fromEntries(tabsOf(set).map((tab) => [tab, navLabel(tab)]))}
-        names={Object.fromEntries(tabsOf(set).map((tab) => [tab, navName(tab)]))}
-        badges={
-          badges ? { candidatures: badges.candidatures, messages: badges.messages } : undefined
-        }
-      />
+      {/* The menu's counts follow on the phone; their names come with them (« Chat, 3 … »). */}
+      <NextIntlClientProvider
+        messages={{ phone: { nav: messages.phone.nav }, phoneRh: { nav: messages.phoneRh.nav } }}
+      >
+        <PhoneNav
+          aria={t("nav.aria")}
+          set={set}
+          names={Object.fromEntries(tabsOf(set).map((tab) => [tab, navName(tab)]))}
+          badges={badges}
+        />
+      </NextIntlClientProvider>
+      <PhonePullRefresh loading={t("refresh.loading")} />
       <Suspense fallback={null}>
         <PhoneOrbi
           texts={orbi}

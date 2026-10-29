@@ -9708,7 +9708,14 @@
       "carriere": "Carrière",
       "formation": "Hub",
       "messages": "Chat",
-      "messagesUnread": "Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}}"
+      "messagesUnread": "Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}}",
+      "filNew": "Fil, {count, plural, one {# nouvelle publication} other {# nouvelles publications}}",
+      "explorerNew": "Explorer, {count, plural, one {# nouvelle offre} other {# nouvelles offres}}",
+      "carriereNew": "Carrière, {count, plural, one {# nouvelle sur vos candidatures} other {# nouvelles sur vos candidatures}}",
+      "many": "5+"
+    },
+    "refresh": {
+      "loading": "Actualisation…"
     },
     "back": "Retour",
     "close": "Fermer",
@@ -18419,7 +18426,8 @@
       "messages": "Chat",
       "candidaturesNew": "Candidatures, {count, plural, one {# nouvelle} other {# nouvelles}}",
       "chat": "Chat",
-      "messagesUnread": "Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}}"
+      "messagesUnread": "Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}}",
+      "filNew": "Fil, {count, plural, one {# nouvelle publication} other {# nouvelles publications}}"
     },
     "head": {
       "account": "Mon compte",
