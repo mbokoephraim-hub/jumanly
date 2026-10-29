@@ -10,7 +10,7 @@
   align-items: center;
   gap: 8px;
   min-height: 0;
-  padding: calc(var(--nb-haut) + 24px) 20px 12px;
+  padding: calc(var(--nb-haut) + 6px) 20px 12px;
 }
 .nb-app .nb-tete-onglet h1 {
   flex: 1;

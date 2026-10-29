@@ -10,7 +10,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: calc(var(--nb-haut) + 34px) 20px 0;
+  padding: calc(var(--nb-haut) + 8px) 20px 0;
 }
 .nb-cv-retour {
   flex: none;

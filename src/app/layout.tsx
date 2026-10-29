@@ -37,6 +37,9 @@ export const viewport: Viewport = {
   // The page runs under the status bar and the home indicator of the phone: the background covers
   // the whole screen, each fixed bar keeps clear of them with env(safe-area-inset-*).
   viewportFit: "cover",
+  // The keyboard shrinks the page instead of covering it: a conversation keeps its head (the
+  // person's name) at the top and its writing bar just above the keys (Ephraïm, 29/10/2026).
+  interactiveWidget: "resizes-content",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {

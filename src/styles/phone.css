@@ -27,7 +27,7 @@
   --nb-filet: rgba(var(--nb-voile), 0.07);
   --nb-filet-fort: rgba(var(--nb-voile), 0.12);
   --nb-courbe: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --nb-haut: calc(14px + env(safe-area-inset-top));
+  --nb-haut: calc(6px + env(safe-area-inset-top));
   --nb-bas: max(22px, env(safe-area-inset-bottom));
   --nb-nav: calc(64px + var(--nb-bas));
   font-family: var(--font-sora), "Sora", system-ui, sans-serif;
@@ -431,6 +431,21 @@ html[data-nb-reduit]::view-transition-old(nb-pile) {
 }
 .nb-nav[hidden] {
   display: none;
+}
+/* While the keyboard is open (a text field has the focus and the page is shrunk above the keys),
+   the menu and Orbi step aside so that they do not cover what is being written. */
+@media (max-height: 560px) {
+  html:has(
+      .nb-app
+        :is(
+          textarea,
+          [contenteditable="true"],
+          input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"])
+        ):focus
+    )
+    :is(.nb-nav, .nb-orbi-fab) {
+    display: none;
+  }
 }
 /* Pages d'une entreprise ou d'une personne : la barre et Orbi restent au-dessus de la page. */
 .nb-nav[data-dessus],
@@ -5437,7 +5452,7 @@ section + section .nb-ex-sec {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: calc(var(--nb-haut) + 18px) 20px 0;
+  padding: calc(var(--nb-haut) + 6px) 20px 0;
 }
 .nb-ca-sur {
   font-size: 13px;
@@ -7586,7 +7601,7 @@ input:checked + .nb-ca-radio::after {
   background: var(--nb-nuit);
 }
 .nb-iv-tete {
-  padding: calc(var(--nb-haut) + 26px) 20px 0;
+  padding: calc(var(--nb-haut) + 8px) 20px 0;
 }
 .nb-iv-progression {
   display: flex;
@@ -8912,7 +8927,7 @@ input:checked + .nb-ca-radio::after {
 
 /* ─── Messages (lot B8, planches Messages*) ─── */
 .nb-ms-tete {
-  padding: calc(var(--nb-haut) + 40px) 10px 8px 16px;
+  padding: calc(var(--nb-haut) + 8px) 10px 8px 16px;
 }
 .nb-ms-cherche {
   display: flex;
