@@ -11410,7 +11410,7 @@
     "me": {
       "title": "Mon profil",
       "open": "Ouvrir mon profil, {name}",
-      "complete": "Votre profil est complété à {percent} %",
+      "complete": "Profil complété à {percent} %",
       "publish": "Publier dans le Fil",
       "noPosts": "Vous n’avez encore rien publié. Partagez une réussite, une question ou une réalisation.",
       "managePosts": "Gérer toutes mes publications",
