@@ -10158,6 +10158,10 @@
       "registeredToast": "Inscrite. Rappel la veille dans vos notifications.",
       "canceledToast": "Participation annulée"
     },
+    "refresh": {
+      "pill": "{count, plural, one {# nouvelle publication} other {# nouvelles publications}}",
+      "loading": "Actualisation du Fil…"
+    },
     "masked": "Publication masquée. Vous en verrez moins comme celle-ci.",
     "maskedUndo": "Annuler",
     "orbiCard": {

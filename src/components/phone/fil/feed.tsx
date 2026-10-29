@@ -11,6 +11,7 @@ import { askOrbiFrom } from "../orbi-bus";
 import { FilAvatar } from "./avatar";
 import type { PostView } from "./data";
 import { PostCard, type PostSheet } from "./post";
+import { FilRefresh } from "./refresh";
 import { PostSheets, type SendTarget } from "./sheets";
 
 export const FIL_TABS = ["pourvous", "abonnements", "entreprises"] as const;
@@ -30,6 +31,7 @@ export function PhoneFil({
   offersToday,
   targets,
   recruiter,
+  loadedAt,
 }: {
   me: FilMe;
   unread: number;
@@ -43,6 +45,8 @@ export function PhoneFil({
    * offers; no Orbi card, and the end points to Talents.
    */
   recruiter?: { compose: ReactNode; end: { text: string; link: string; href: string } };
+  /** When the server read these lists (ISO): « Nouvelles publications » counts from there. */
+  loadedAt: string;
 }) {
   const t = useTranslations("phoneFil");
   const [tab, setTab] = useState<FilTab>("pourvous");
@@ -68,6 +72,7 @@ export function PhoneFil({
 
   return (
     <div className={recruiter ? "nb-fil nb-rh-fil" : "nb-page nb-fil"}>
+      <FilRefresh loadedAt={loadedAt} />
       {recruiter ? null : (
         <header className="nb-tete-onglet">
           <h1>{t("title")}</h1>
