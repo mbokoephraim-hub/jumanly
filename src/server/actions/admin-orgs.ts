@@ -7,6 +7,8 @@ import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { mailOrgNotice } from "@/server/hire-emails";
 import {
+  deleteOrganization,
+  deleteOrgSchema,
   grantOrgPlan,
   grantOrgPlanSchema,
   infoRequestSchema,
@@ -120,4 +122,29 @@ export async function grantOrgPlanAction(formData: FormData) {
   const input = grantOrgPlanSchema.safeParse(Object.fromEntries(formData));
   if (!input.success) redirect(withParam(backOf(formData), "erreur", "reason"));
   await run(formData, "planGranted", () => grantOrgPlan(db, context, input.data));
+}
+
+/**
+ * « Supprimer l'entreprise » (29/10/2026): justification and the word SUPPRIMER typed on its own
+ * screen. The members keep their accounts and are told by e-mail.
+ */
+export async function deleteOrganizationAction(formData: FormData) {
+  const context = await writer();
+  const input = deleteOrgSchema.safeParse(Object.fromEntries(formData));
+  if (!input.success) redirect(withParam(backOf(formData), "erreur", "reason"));
+  const members = await db.membership.findMany({
+    where: { organizationId: input.data.organizationId, status: "active" },
+    select: { user: { select: { email: true, firstName: true } } },
+  });
+  let name = "";
+  try {
+    ({ name } = await deleteOrganization(db, context, input.data));
+  } catch (error) {
+    if (error instanceof OrgAdminError) redirect(withParam(backOf(formData), "erreur", error.code));
+    throw error;
+  }
+  for (const { user } of members)
+    await mailOrgNotice(user, { org: name, kind: "deleted", reason: input.data.reason });
+  updateTag("jobs");
+  redirect(`${PAGE}?ok=deleted&org=${encodeURIComponent(name)}`);
 }

@@ -120,6 +120,33 @@ export async function markEmailVerified(
   await audit(db, context, "user.email.verify", userId, { reason });
 }
 
+/**
+ * « Désactiver la double authentification » when the person lost the phone holding their codes
+ * (29/10/2026): the 2FA secret is removed, the person signs in with the password and may turn it
+ * on again from Paramètres. Their sessions are closed. Never on one's own account.
+ */
+export async function resetTwoFactor(
+  db: PrismaClient,
+  context: AuditContext & { actorId: string },
+  userId: string,
+  reason: string,
+) {
+  if (userId === context.actorId) throw new AdminUserError("self");
+  const user = await db.user.findUnique({
+    where: { id: userId },
+    select: { status: true, twoFactorEnabled: true },
+  });
+  if (!user) throw new AdminUserError("notFound");
+  if (user.status === "deleted") throw new AdminUserError("deleted");
+  if (!user.twoFactorEnabled) throw new AdminUserError("confirm");
+  await db.$transaction([
+    db.twoFactor.deleteMany({ where: { userId } }),
+    db.user.update({ where: { id: userId }, data: { twoFactorEnabled: false } }),
+    db.session.deleteMany({ where: { userId } }),
+  ]);
+  await audit(db, context, "user.2fa.reset", userId, { reason });
+}
+
 // ─── Droits et quotas ─────────────────────────────────────────────
 
 /** Where a right comes from: the plan paid, a partner licence, a plan given by hand, the free plan, or an extra. */

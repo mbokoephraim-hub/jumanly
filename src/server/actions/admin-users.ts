@@ -20,6 +20,7 @@ import {
   markEmailVerified,
   removeOverride,
   removeOverrideSchema,
+  resetTwoFactor,
   revokePlan,
   revokePlanSchema,
 } from "@/server/services/admin-users";
@@ -127,6 +128,18 @@ export async function sendResetLinkAction(formData: FormData) {
       data: { ...context, action: "user.password.reset", targetType: "user", targetId: user.id },
     });
   });
+}
+
+/** « Désactiver la double authentification » (phone lost), with a reason. */
+export async function resetTwoFactorAction(formData: FormData) {
+  const { context } = await writer();
+  const input = userOnly
+    .extend({ reason: z.string().trim().min(3).max(500) })
+    .safeParse(Object.fromEntries(formData));
+  if (!input.success) invalid(formData);
+  await run(formData, "twoFactorReset", () =>
+    resetTwoFactor(db, context, input.data.userId, input.data.reason),
+  );
 }
 
 export async function verifyEmailAction(formData: FormData) {

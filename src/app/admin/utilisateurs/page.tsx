@@ -28,6 +28,7 @@ import {
   UserCard,
   userState,
 } from "@/components/admin/utilisateurs-fiche";
+import { UserOverviewPanels } from "@/components/admin/user-overview";
 import { UserPanels } from "@/components/admin/user-panels";
 import { UserRights } from "@/components/admin/user-rights";
 import { Alert, Button, ButtonLink } from "@/components/ui";
@@ -37,7 +38,9 @@ import { setUserRole, setUserStatus } from "@/server/actions/admin";
 import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { resolvePlan } from "@/server/entitlements";
+import { userOverview } from "@/server/services/admin-user-overview";
 import {
+  accountCheck,
   grantedPlans,
   PLATFORM_ROLES,
   readUserFilters,
@@ -53,6 +56,7 @@ function one(value: string | string[] | undefined) {
 }
 const DONE = [
   "codeSent",
+  "twoFactorReset",
   "resetSent",
   "verified",
   "planGranted",
@@ -114,48 +118,6 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
   });
   const chosenPlan = plans.find((plan) => plan.code === planCode);
 
-  const where = await userListWhere(db, userFilters, now);
-
-  const [count, users, countries, totals] = await Promise.all([
-    db.user.count({ where }),
-    db.user.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
-      include: {
-        talentProfile: { select: { id: true } },
-        memberships: { where: { status: "active" }, select: { role: true } },
-      },
-    }),
-    db.user.groupBy({
-      by: ["country"],
-      where: { country: { not: null } },
-      orderBy: { country: "asc" },
-    }),
-    Promise.all([
-      db.user.count({ where: { status: { not: "deleted" } } }),
-      db.user.count({
-        where: { status: "active", emailVerified: true, deletionScheduledAt: null },
-      }),
-      db.user.count({
-        where: { status: "active", emailVerified: false, deletionScheduledAt: null },
-      }),
-      db.user.count({ where: { status: "suspended" } }),
-    ]),
-  ]);
-  const [totalUsers, activeUsers, unverifiedUsers, suspendedUsers] = totals;
-  const [userPlans, lastSessions] = await Promise.all([
-    Promise.all(users.map((user) => resolvePlan(db, { type: "user", id: user.id }))),
-    db.session.groupBy({
-      by: ["userId"],
-      where: { userId: { in: users.map((user) => user.id) } },
-      _max: { updatedAt: true },
-    }),
-  ]);
-  const lastActive = new Map(lastSessions.map((row) => [row.userId, row._max.updatedAt]));
-  const regions = new Intl.DisplayNames(["fr-FR"], { type: "region" });
-
   const fiche = ficheId ? await db.user.findUnique({ where: { id: ficheId } }) : null;
   const ficheHref = fiche ? href({ fiche: fiche.id }) : href({});
   const canAct = writable && fiche !== null && fiche.id !== admin.id && fiche.status !== "deleted";
@@ -168,20 +130,11 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
     fiche && fiche.status !== "deleted"
       ? await Promise.all([userRights(db, fiche.id, now), grantedPlans(db, fiche.id, now)])
       : [null, []];
+  const [overview, check] = fiche
+    ? await Promise.all([userOverview(db, fiche.id, now), accountCheck(db, fiche.id)])
+    : [null, null];
   const done = DONE.find((value) => value === params.ok);
   const error = ERRORS.find((value) => value === params.erreur);
-
-  // Roles in words (« Talent », « Recruteur », « Administrateur »), the platform role first.
-  const roleList = (user: (typeof users)[number]) =>
-    user.status === "deleted"
-      ? []
-      : [
-          ...(user.platformRole === "user" ? [] : [t(`platformRole.${user.platformRole}`)]),
-          ...(user.talentProfile ? [t("memberRole.talent")] : []),
-          ...[...new Set(user.memberships.map((membership) => membership.role))].map((value) =>
-            t(`memberRole.${value}`),
-          ),
-        ];
 
   const ficheBlock = fiche ? (
     <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
@@ -223,6 +176,16 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
             actorId={admin.id}
             rights={rights}
             granted={granted}
+          />
+        )}
+        {overview && (
+          <UserOverviewPanels
+            user={fiche}
+            overview={overview}
+            check={check}
+            back={ficheHref}
+            canAct={canAct}
+            twoFactorHref={actionHref("2fa")}
           />
         )}
         {rights && (
@@ -316,6 +279,197 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
     </div>
   ) : null;
 
+  // « Supprimer définitivement » and « Anonymiser » open their own screen (Ephraïm, 29/10/2026).
+  const deleting = fiche && (action === "effacer" ? canErase : action === "supprimer" && canAct);
+  const backLink = (target: string, label: string) => (
+    <Link
+      href={target}
+      className="inline-flex items-center gap-1.5 font-semibold text-sapin hover:underline"
+    >
+      <Icon name="chev-l" className="size-3.5" />
+      {label}
+    </Link>
+  );
+
+  if (fiche && deleting) {
+    const owned = await db.membership.findMany({
+      where: { userId: fiche.id, role: "org_owner", status: "active" },
+      select: {
+        organization: {
+          select: {
+            id: true,
+            name: true,
+            _count: { select: { jobs: true } },
+            memberships: {
+              where: { status: "active", userId: { not: fiche.id } },
+              orderBy: { createdAt: "asc" },
+              select: { role: true, user: { select: { name: true } } },
+            },
+          },
+        },
+      },
+    });
+    const erase = action === "effacer";
+    return (
+      <>
+        <AdminPageHeader
+          eyebrow={backLink(ficheHref, t("users.erase.back"))}
+          title={t(erase ? "users.erase.title" : "users.erase.anonymizeTitle", {
+            userName: displayName(t, fiche),
+          })}
+          subtitle={t(erase ? "users.erase.subtitle" : "users.action.delete.intro")}
+        />
+        {error && <Alert tone="error" title={t(`users.error.${error}`)} />}
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
+          <div className="flex min-w-0 flex-1 flex-col gap-4">
+            <UserPanels
+              user={fiche}
+              action={action}
+              params={params}
+              ficheHref={ficheHref}
+              actorId={admin.id}
+              rights={rights}
+              granted={granted}
+            />
+          </div>
+          {erase && (
+            <section
+              aria-labelledby="utilisateurs-effacer-bilan"
+              className="jm-admin-card flex flex-col gap-3 rounded-[24px] bg-blanc px-5 py-5 lg:w-[400px] lg:shrink-0 lg:px-[22px]"
+            >
+              <h2
+                id="utilisateurs-effacer-bilan"
+                className="text-[16px] leading-[22px] font-semibold"
+              >
+                {t("users.erase.whatHappens")}
+              </h2>
+              <ul className="flex flex-col gap-2 text-[12.5px] leading-[18px]">
+                <li className="flex items-start gap-2.5">
+                  <Icon name="fermer" className="mt-px size-4 shrink-0 text-corail-fonce" />
+                  {t("users.erase.gone")}
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <Icon name="doc" className="mt-px size-4 shrink-0" />
+                  {t("users.erase.kept")}
+                </li>
+                {overview && overview.payments.length > 0 && (
+                  <li className="flex items-start gap-2.5">
+                    <Icon name="mobile-money" className="mt-px size-4 shrink-0" />
+                    {t("users.erase.payments", { count: overview.payments.length })}
+                  </li>
+                )}
+              </ul>
+              {owned.length > 0 && (
+                <>
+                  <h3 className="border-t border-brume pt-3 text-[13px] font-semibold">
+                    {t("users.erase.companies")}
+                  </h3>
+                  <ul className="flex flex-col gap-2 text-[12.5px] leading-[18px]">
+                    {owned.map(({ organization }) => {
+                      const heir =
+                        organization.memberships.find((row) => row.role === "org_admin") ??
+                        organization.memberships[0];
+                      return (
+                        <li key={organization.id} className="flex items-start gap-2.5">
+                          <Icon name="entreprise" className="mt-px size-4 shrink-0" />
+                          <span>
+                            <strong className="font-semibold">{organization.name}</strong>
+                            {" · "}
+                            {heir
+                              ? t("users.erase.companyHeir", { name: heir.user.name })
+                              : organization._count.jobs > 0
+                                ? t("users.erase.companyClosed")
+                                : t("users.erase.companyGone")}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </>
+              )}
+            </section>
+          )}
+        </div>
+        <AuditNotice />
+      </>
+    );
+  }
+
+  if (fiche) {
+    return (
+      <>
+        <AdminPageHeader
+          eyebrow={backLink(href({}), t("users.overview.back"))}
+          title={displayName(t, fiche)}
+          subtitle={t("users.overview.subtitle")}
+        />
+        {params.ok && (
+          <AdminDone
+            title={done ? t(`users.done.${done}`) : t("users.updated")}
+            journal={{ type: "user", id: fiche.id }}
+          />
+        )}
+        {params.erreur === "soi" && <Alert tone="error" title={t("users.selfProtected")} />}
+        {error && <Alert tone="error" title={t(`users.error.${error}`)} />}
+        {ficheBlock}
+      </>
+    );
+  }
+
+  const where = await userListWhere(db, userFilters, now);
+
+  const [count, users, countries, totals] = await Promise.all([
+    db.user.count({ where }),
+    db.user.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+      include: {
+        talentProfile: { select: { id: true } },
+        memberships: { where: { status: "active" }, select: { role: true } },
+      },
+    }),
+    db.user.groupBy({
+      by: ["country"],
+      where: { country: { not: null } },
+      orderBy: { country: "asc" },
+    }),
+    Promise.all([
+      db.user.count({ where: { status: { not: "deleted" } } }),
+      db.user.count({
+        where: { status: "active", emailVerified: true, deletionScheduledAt: null },
+      }),
+      db.user.count({
+        where: { status: "active", emailVerified: false, deletionScheduledAt: null },
+      }),
+      db.user.count({ where: { status: "suspended" } }),
+    ]),
+  ]);
+  const [totalUsers, activeUsers, unverifiedUsers, suspendedUsers] = totals;
+  const [userPlans, lastSessions] = await Promise.all([
+    Promise.all(users.map((user) => resolvePlan(db, { type: "user", id: user.id }))),
+    db.session.groupBy({
+      by: ["userId"],
+      where: { userId: { in: users.map((user) => user.id) } },
+      _max: { updatedAt: true },
+    }),
+  ]);
+  const lastActive = new Map(lastSessions.map((row) => [row.userId, row._max.updatedAt]));
+  const regions = new Intl.DisplayNames(["fr-FR"], { type: "region" });
+
+  // Roles in words (« Talent », « Recruteur », « Administrateur »), the platform role first.
+  const roleList = (user: (typeof users)[number]) =>
+    user.status === "deleted"
+      ? []
+      : [
+          ...(user.platformRole === "user" ? [] : [t(`platformRole.${user.platformRole}`)]),
+          ...(user.talentProfile ? [t("memberRole.talent")] : []),
+          ...[...new Set(user.memberships.map((membership) => membership.role))].map((value) =>
+            t(`memberRole.${value}`),
+          ),
+        ];
+
   return (
     <>
       <AdminPageHeader
@@ -357,12 +511,7 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
           },
         ]}
       />
-      {params.ok && (
-        <AdminDone
-          title={done ? t(`users.done.${done}`) : t("users.updated")}
-          journal={fiche ? { type: "user", id: fiche.id } : undefined}
-        />
-      )}
+      {params.ok && <AdminDone title={done ? t(`users.done.${done}`) : t("users.updated")} />}
       {params.erreur === "soi" && <Alert tone="error" title={t("users.selfProtected")} />}
       {error && <Alert tone="error" title={t(`users.error.${error}`)} />}
 
@@ -436,8 +585,6 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
           ]}
         />
       </AdminFilterBar>
-
-      {fiche && ficheBlock}
 
       {users.length === 0 ? (
         <AdminEmpty
@@ -524,14 +671,10 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
               <tbody>
                 {users.map((user, index) => {
                   const plan = userPlans[index];
-                  const current = user.id === fiche?.id;
                   const seen = lastActive.get(user.id);
                   const stateOf = userState(user);
                   return (
-                    <tr
-                      key={user.id}
-                      className={cx("border-t border-brume", current && "bg-creme/50")}
-                    >
+                    <tr key={user.id} className="border-t border-brume">
                       {writable && (
                         <td className="py-3.5 pl-[18px]">
                           {user.status !== "deleted" && (
@@ -548,12 +691,8 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
                       )}
                       <td className={cx("py-3.5 pr-1.5", writable ? "pl-1.5" : "pl-[18px]")}>
                         <Link
-                          href={`${href({ fiche: user.id })}#utilisateurs-fiche`}
-                          aria-current={current ? "true" : undefined}
-                          className={cx(
-                            "flex items-center gap-2.5 font-semibold hover:underline",
-                            current && "underline",
-                          )}
+                          href={href({ fiche: user.id })}
+                          className="flex items-center gap-2.5 font-semibold hover:underline"
                         >
                           <Initials name={displayName(t, user)} size={30} />
                           <span className="min-w-0 whitespace-nowrap">{displayName(t, user)}</span>
@@ -637,11 +776,7 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
               const stateOf = userState(user);
               return (
                 <li key={user.id} className="border-brume not-first:border-t">
-                  <Link
-                    href={`${href({ fiche: user.id })}#utilisateurs-fiche`}
-                    aria-current={user.id === fiche?.id ? "true" : undefined}
-                    className="flex items-center gap-3 py-3"
-                  >
+                  <Link href={href({ fiche: user.id })} className="flex items-center gap-3 py-3">
                     <Initials name={displayName(t, user)} size={38} />
                     <span className="flex min-w-0 flex-1 flex-col">
                       <span className="truncate text-[13.5px] leading-[18px] font-semibold">

@@ -5,10 +5,8 @@ import { Icon, type IconName } from "@/components/brand/icon";
 import { adminLabel, Initials, Tag, type TagTone } from "@/components/admin/kit";
 import { formatShortDate } from "@/lib/dates";
 import { cx } from "@/lib/cx";
-import { formatUsd } from "@/lib/money";
-import { paymentMethodKey } from "@/lib/payment-method";
 import { setUserStatus } from "@/server/actions/admin";
-import { resendVerificationAction, sendResetLinkAction } from "@/server/actions/admin-users";
+import { resendVerificationAction } from "@/server/actions/admin-users";
 import { db } from "@/server/db";
 import { parseLimit, resolvePlan, usage } from "@/server/entitlements";
 import { accountCheck, userState, type UserState } from "@/server/services/admin-users";
@@ -139,49 +137,24 @@ export async function UserCard({
   eraseHref?: string;
   className?: string;
 }) {
-  const [t, tc, tq] = await Promise.all([
-    getTranslations("admin"),
-    getTranslations("common"),
-    getTranslations("quota.name"),
-  ]);
+  const [t, tq] = await Promise.all([getTranslations("admin"), getTranslations("quota.name")]);
   const subject = { type: "user" as const, id: user.id };
-  const [plan, memberships, lastSession, profile, coursesInProgress, certificates, check] =
-    await Promise.all([
-      resolvePlan(db, subject, now),
-      db.membership.findMany({
-        where: { userId: user.id, status: "active" },
-        select: { role: true, organization: { select: { name: true } } },
-        orderBy: { createdAt: "asc" },
-      }),
-      db.session.findFirst({
-        where: { userId: user.id },
-        orderBy: { updatedAt: "desc" },
-        select: { updatedAt: true },
-      }),
-      db.talentProfile.findUnique({
-        where: { userId: user.id },
-        select: { _count: { select: { applications: true } } },
-      }),
-      db.enrollment.count({ where: { userId: user.id, completedAt: null } }),
-      db.certificate.count({ where: { enrollment: { userId: user.id }, revokedAt: null } }),
-      accountCheck(db, user.id),
-    ]);
+  const [plan, memberships, lastSession, profile, check] = await Promise.all([
+    resolvePlan(db, subject, now),
+    db.membership.findMany({
+      where: { userId: user.id, status: "active" },
+      select: { role: true, organization: { select: { name: true } } },
+      orderBy: { createdAt: "asc" },
+    }),
+    db.session.findFirst({
+      where: { userId: user.id },
+      orderBy: { updatedAt: "desc" },
+      select: { updatedAt: true },
+    }),
+    db.talentProfile.findUnique({ where: { userId: user.id }, select: { id: true } }),
+    accountCheck(db, user.id),
+  ]);
   const deleted = user.status === "deleted";
-  const subscription = plan?.subscriptionId
-    ? await db.subscription.findUnique({
-        where: { id: plan.subscriptionId },
-        select: {
-          currentPeriodEnd: true,
-          source: true,
-          payments: {
-            where: { status: { in: ["succeeded", "refunded"] } },
-            orderBy: { createdAt: "desc" },
-            take: 1,
-            select: { method: true },
-          },
-        },
-      })
-    : null;
   const gauges = plan
     ? await Promise.all(
         quotas
@@ -211,16 +184,6 @@ export async function UserCard({
       t(`memberRole.${role}`),
     ),
   ].join(", ");
-  const payment = subscription?.payments[0];
-  const method =
-    subscription?.source === "license"
-      ? t("subscriptions.status.sponsored")
-      : subscription?.source === "admin"
-        ? t("subscriptions.payments.method.manual")
-        : payment
-          ? t(`subscriptions.payments.method.${paymentMethodKey[payment.method]}`)
-          : null;
-
   return (
     <aside
       id="utilisateurs-fiche"
@@ -320,30 +283,6 @@ export async function UserCard({
         </Block>
       )}
 
-      {plan && !deleted && (
-        <Block title={t("users.detail.subscription")}>
-          <dl className="flex flex-col gap-2">
-            <Row label={t("users.col.plan")}>
-              {plan.priceCents
-                ? t("users.detail.planPrice", {
-                    plan: plan.planName,
-                    price: formatUsd(plan.priceCents),
-                  })
-                : plan.planName}
-            </Row>
-            <Row label={t("users.col.status")}>
-              {subscription && plan.status !== "free"
-                ? t("users.detail.until", {
-                    status: t(`subscriptions.status.${plan.status}`),
-                    date: formatShortDate(subscription.currentPeriodEnd),
-                  })
-                : `${tc("free")} · ${t("users.detail.noEnd")}`}
-            </Row>
-            {method && <Row label={t("users.detail.method")}>{method}</Row>}
-          </dl>
-        </Block>
-      )}
-
       <Block title={t("users.detail.memberships")}>
         {memberships.length === 0 ? (
           <p className="text-[11px] leading-[15px] text-ardoise">
@@ -401,33 +340,6 @@ export async function UserCard({
         )}
       </Block>
 
-      <Block title={t("users.detail.activity")}>
-        <dl className="flex flex-col gap-2">
-          <Row label={t("users.detail.applications")}>{profile?._count.applications ?? 0}</Row>
-          <Row label={t("users.detail.coursesInProgress")}>{coursesInProgress}</Row>
-          <Row label={t("users.detail.certificates")}>{certificates}</Row>
-        </dl>
-        {check && check.certificates.length > 0 && (
-          <ul aria-label={t("users.detail.certificateList")} className="flex flex-col gap-1.5 pt-1">
-            {check.certificates.map((certificate) => (
-              <li
-                key={certificate.id}
-                className="flex items-center gap-2 text-[12px] leading-[17px]"
-              >
-                <Icon name="certificat" className="size-3.5 shrink-0" />
-                <span className="min-w-0 flex-1 truncate">
-                  {t("users.detail.certificateLine", {
-                    course: certificate.course,
-                    date: formatShortDate(certificate.issuedAt),
-                  })}
-                </span>
-                {certificate.revoked && <Tag tone="error">{t("users.detail.revoked")}</Tag>}
-              </li>
-            ))}
-          </ul>
-        )}
-      </Block>
-
       <p className="flex items-start gap-2.5 rounded-[14px] bg-creme px-3 py-2.5 text-[11px] leading-4">
         <Icon name="lock" className="mt-px size-3.5 shrink-0" />
         {t("users.detail.privateNote")}
@@ -452,18 +364,6 @@ export async function UserCard({
                   {t("users.action.verifyEmail.text")}
                 </ActionLink>
               </>
-            )}
-            {check?.methods.includes("credential") && (
-              <li>
-                <form action={sendResetLinkAction}>
-                  <input type="hidden" name="userId" value={user.id} />
-                  <input type="hidden" name="back" value={back} />
-                  <button type="submit" className={actionLine}>
-                    <Icon name="lock" className="size-4 shrink-0" />
-                    {t("users.action.resetPassword")}
-                  </button>
-                </form>
-              </li>
             )}
             <ActionLink href={actionHref("forfait")} icon="portefeuille">
               {t("users.action.grantPlan.text")}

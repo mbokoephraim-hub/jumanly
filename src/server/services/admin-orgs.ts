@@ -8,6 +8,7 @@ import { z } from "zod";
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { invalidate, usage } from "@/server/entitlements";
 import { sniffDocumentType, type FileStorage } from "@/server/storage";
+import { eraseSubject } from "./account-deletion";
 import { hirePermissions, type HireContext } from "./hire";
 import { notify } from "./notifications";
 
@@ -415,4 +416,107 @@ export async function grantOrgPlan(
     reason: input.reason,
   });
   return subscription;
+}
+
+// ─── Supprimer une entreprise (29/10/2026) ───────────────────────
+
+export const DELETE_ORG_WORD = "SUPPRIMER";
+
+export const deleteOrgSchema = z.object({
+  organizationId: z.string().min(1),
+  reason: z.string().trim().min(3).max(1000),
+  confirmWord: z.string().trim().max(40),
+});
+
+/** What goes with the organization, shown on the deletion screen before confirming. */
+export async function organizationDeletionPreview(db: PrismaClient, organizationId: string) {
+  const [members, jobs, applications, entities, payments] = await Promise.all([
+    db.membership.findMany({
+      where: { organizationId, status: { in: ["active", "suspended"] } },
+      orderBy: { createdAt: "asc" },
+      select: { role: true, user: { select: { id: true, name: true } } },
+    }),
+    db.job.count({ where: { organizationId } }),
+    db.application.count({ where: { job: { organizationId } } }),
+    db.organization.count({ where: { parentId: organizationId } }),
+    db.payment.count({ where: { subjectType: "organization", subjectId: organizationId } }),
+  ]);
+  return { members, jobs, applications, entities, payments };
+}
+
+/**
+ * « Supprimer l'entreprise » (Ephraïm, 29/10/2026): the company disappears with its page, offers,
+ * applications received, team, posts and history. The accounts of its members, its administrator
+ * first, stay whole: they only lose their place in the company. The candidates are told the offer
+ * is no longer available; the payments stay, without link to the company (accounting). Partner
+ * institutions are not deleted here.
+ */
+export async function deleteOrganization(
+  db: PrismaClient,
+  context: AuditContext & { actorId: string },
+  input: z.infer<typeof deleteOrgSchema>,
+) {
+  if (input.confirmWord.toUpperCase() !== DELETE_ORG_WORD) throw new OrgAdminError("reason");
+  const organization = await db.organization.findUnique({
+    where: { id: input.organizationId },
+    select: {
+      id: true,
+      name: true,
+      type: true,
+      memberships: { where: { status: { in: ["active", "suspended"] } }, select: { userId: true } },
+    },
+  });
+  if (!organization || organization.type === "partner") throw new OrgAdminError("notFound");
+  const jobs = await db.job.findMany({
+    where: { organizationId: organization.id },
+    select: { id: true, title: true, status: true },
+  });
+  const jobIds = jobs.map((job) => job.id);
+  const applications = jobIds.length
+    ? await db.application.findMany({
+        where: { jobId: { in: jobIds }, status: "active" },
+        select: { jobId: true, profile: { select: { userId: true } } },
+      })
+    : [];
+  const memberIds = organization.memberships.map((membership) => membership.userId);
+
+  await db.$transaction(async (tx) => {
+    await eraseSubject(tx, "organization", organization.id);
+    // Entities of a group become companies of their own.
+    await tx.organization.updateMany({
+      where: { parentId: organization.id },
+      data: { parentId: null },
+    });
+    // Applications first: their stage would otherwise hold the job back.
+    await tx.application.deleteMany({ where: { jobId: { in: jobIds } } });
+    await tx.job.deleteMany({ where: { id: { in: jobIds } } });
+    await tx.organization.delete({ where: { id: organization.id } });
+  });
+  invalidate({ type: "organization", id: organization.id });
+  for (const userId of memberIds) invalidate({ type: "user", id: userId });
+  await audit(db, context, "org.delete", organization.id, {
+    reason: input.reason,
+    name: organization.name,
+    jobs: jobIds.length,
+    members: memberIds.length,
+  });
+  await notify(db, {
+    userIds: memberIds,
+    type: "orgDeleted",
+    payload: { org: organization.name },
+    href: "/app",
+  });
+  for (const job of jobs) {
+    const userIds = applications
+      .filter((application) => application.jobId === job.id)
+      .map((application) => application.profile.userId);
+    if (userIds.length)
+      await notify(db, {
+        userIds,
+        type: "jobUnavailable",
+        payload: { job: job.title, org: organization.name },
+        href: "/app/suivi",
+      });
+  }
+  return { name: organization.name, jobs: jobIds.length, members: memberIds.length };
 }
