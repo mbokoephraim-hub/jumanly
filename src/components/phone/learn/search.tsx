@@ -245,7 +245,11 @@ export function FormationSearch({
                 <section aria-label={t("resume")}>
                   <h2 className="nb-ex-groupe">{t("resume")}</h2>
                   <Link href={current.href} className="nb-fo-ligne" data-nu="">
-                    <CourseSquare initials={current.initials} tone={current.tone} />
+                    <CourseSquare
+                      initials={current.initials}
+                      tone={current.tone}
+                      cover={current.cover}
+                    />
                     <span className="nb-fo-ligne-t">
                       <b>{current.title}</b>
                       <small className="nb-meta">{current.lesson}</small>

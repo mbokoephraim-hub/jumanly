@@ -61,6 +61,8 @@ export async function PhoneCourseScreen({ user, slug }: { user: Me; slug: string
       course.skills.map((item) => item.skill.name),
     ),
     tone: courseTone(course.slug),
+    cover: course.coverUrl,
+    about: course.description.trim() || course.summary.trim() || null,
     source: t("course.source", { domain: course.domain?.name ?? course.category }),
     tags: [
       t("course.lessons", { count: lessons.length }),
@@ -242,6 +244,14 @@ export async function PhoneLessonScreen({
         }
       : null,
     lead: current.kind === "video" ? null : (outline.brief ?? paragraphs[0] ?? null),
+    // Under the video: what the admin wrote for the lesson, else the course's description.
+    about:
+      current.kind === "video"
+        ? [outline.brief, ...paragraphs].filter(Boolean).join("\n\n").trim() ||
+          course.description.trim() ||
+          course.summary.trim() ||
+          null
+        : null,
     takeaways: outline.takeaways.length > 0 ? outline.takeaways : outline.steps.map((s) => s.title),
     check: publicCheck(lessonCheck(current.content)),
     kind: current.kind,

@@ -42,6 +42,8 @@ export type LessonView = {
     resume: VideoResume | null;
   } | null;
   lead: string | null;
+  /** A video lesson: its text, or the course's description, under the video. */
+  about: string | null;
   takeaways: string[];
   check: { question: string; options: string[] } | null;
   kind: "video" | "text" | "exercise" | "quiz" | "resource";
@@ -241,6 +243,15 @@ export function PhoneLesson({ view }: { view: LessonView }) {
         <p className="nb-meta nb-fo-sous">{view.line}</p>
         {view.lead ? <p className="nb-fo-texte">{view.lead}</p> : null}
       </div>
+
+      {view.about ? (
+        <section className="nb-fo-bloc" aria-labelledby="fo-apropos">
+          <h2 id="fo-apropos">{t("lesson.about")}</h2>
+          <p className="nb-fo-texte" data-paragraphes="">
+            {view.about}
+          </p>
+        </section>
+      ) : null}
 
       {view.takeaways.length > 0 ? (
         <section className="nb-fo-bloc" aria-labelledby="fo-retenir">

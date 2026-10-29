@@ -16,6 +16,9 @@ export type CourseView = {
   title: string;
   initials: string;
   tone: number;
+  cover: string | null;
+  /** What the admin wrote about the course (its description, or its summary). */
+  about: string | null;
   /** « Data · Jumanly Formation ». */
   source: string;
   /** « 8 leçons », « 1 h 10 », « Débutant ». */
@@ -117,7 +120,7 @@ export function PhoneCourse({ view }: { view: CourseView }) {
         </button>
       </header>
 
-      <CourseBanner initials={view.initials} tone={view.tone} />
+      <CourseBanner initials={view.initials} tone={view.tone} cover={view.cover} />
       <div className="nb-fo-bloc">
         <span className="nb-meta">{view.source}</span>
         <h1 className="nb-fo-titre">{view.title}</h1>
@@ -140,6 +143,14 @@ export function PhoneCourse({ view }: { view: CourseView }) {
           </div>
         ) : null}
       </div>
+      {view.about ? (
+        <section className="nb-fo-bloc" aria-labelledby="fo-apropos">
+          <h2 id="fo-apropos">{t("course.about")}</h2>
+          <p className="nb-fo-texte" data-paragraphes="">
+            {view.about}
+          </p>
+        </section>
+      ) : null}
       {view.outcomes.length > 0 ? (
         <section className="nb-fo-bloc" aria-labelledby="fo-saurez">
           <h2 id="fo-saurez">{t("course.outcomes")}</h2>
@@ -273,7 +284,7 @@ export function PhoneCourse({ view }: { view: CourseView }) {
           closeLabel={t("close")}
           className="nb-fo-premium"
         >
-          <CourseSquare initials={view.initials} tone={view.tone} size={48} />
+          <CourseSquare initials={view.initials} tone={view.tone} cover={view.cover} size={48} />
           <b>{view.premium.title}</b>
           <p>{view.premium.text}</p>
           <Link href="/app/abonnement" className="nb-bouton" data-plein="" data-large="">

@@ -24,6 +24,8 @@ export type CourseRow = {
   href: string;
   initials: string;
   tone: number;
+  /** The cover the admin chose (an image), shown in place of the initials. */
+  cover: string | null;
   title: string;
   sub: string;
   /** « 25 % », « Terminé », « Gratuit », « Pro ». */
@@ -38,6 +40,7 @@ export type CourseCard = {
   href: string;
   initials: string;
   tone: number;
+  cover: string | null;
   title: string;
   line: string;
   level: string;
@@ -53,6 +56,7 @@ export type FormationView = {
     slug: string;
     initials: string;
     tone: number;
+    cover: string | null;
     title: string;
     line: string;
     lesson: string;
@@ -117,6 +121,7 @@ export async function formationView(
     href: `/app/learn/${course.slug}`,
     initials: courseMark(course.title, course.skills),
     tone: courseTone(course.slug),
+    cover: course.coverUrl,
     title: course.title,
     line: t("cardLine", { count: course.lessons, duration: duration(course.minutes) }),
     level: level(course.level),
@@ -131,6 +136,7 @@ export async function formationView(
       href: `/app/learn/${course.slug}`,
       initials: courseMark(course.title),
       tone: courseTone(course.slug),
+      cover: course.coverUrl,
       title: course.title,
       sub: course.finished
         ? course.completedAt
@@ -153,6 +159,7 @@ export async function formationView(
       slug: current.slug,
       initials: courseMark(current.title),
       tone: courseTone(current.slug),
+      cover: current.coverUrl,
       title: current.title,
       lesson: t("lessonOf", { n: Math.max(1, n), count }),
       line: t("continueLine", {
@@ -219,6 +226,7 @@ export async function formationView(
       href: `/app/learn/${course.slug}`,
       initials: courseMark(course.title, course.skills),
       tone: courseTone(course.slug),
+      cover: course.coverUrl,
       title: course.title,
       sub: t("cardLine", { count: course.lessons, duration: duration(course.minutes) }),
       state: price(course.requiredLevel),
@@ -256,6 +264,7 @@ export async function foundView(found: FormationFound, plans: PublicPlan[]): Pro
         href: `/app/learn/${course.slug}`,
         initials: courseMark(course.title, course.skills),
         tone: courseTone(course.slug),
+        cover: course.coverUrl,
         title: course.title,
         sub: course.finished
           ? t("finishedNoDate")

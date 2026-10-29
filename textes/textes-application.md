@@ -10807,6 +10807,7 @@ Conventions :
 | `phoneLearn.course.source` | {domain} · Jumanly Formation |
 | `phoneLearn.course.lessons` | {count, plural, one {# leçon} other {# leçons}} |
 | `phoneLearn.course.progress` | {done, plural, one {# leçon} other {# leçons}} sur {count} terminées |
+| `phoneLearn.course.about` | À propos de la formation |
 | `phoneLearn.course.outcomes` | Vous saurez |
 | `phoneLearn.course.programme` | Programme |
 | `phoneLearn.course.lockedLine` | {duration} · {plan} |
@@ -10837,6 +10838,7 @@ Conventions :
 | `phoneLearn.lesson.play` | Lire la vidéo |
 | `phoneLearn.lesson.start` | 0:00 |
 | `phoneLearn.lesson.lineCaptions` | {duration} · sous-titres en français |
+| `phoneLearn.lesson.about` | À propos de cette leçon |
 | `phoneLearn.lesson.takeaways` | À retenir |
 | `phoneLearn.lesson.quick` | Question rapide |
 | `phoneLearn.lesson.right` | Bonne réponse. |
