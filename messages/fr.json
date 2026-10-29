@@ -10857,7 +10857,6 @@
     "years": "{count, plural, one {# an} other {# ans}}",
     "months": "{count} mois",
     "moreLines": "Voir {count} de plus",
-    "achievements": "Réalisations clés",
     "companyPage": "{company}, voir la page de l’entreprise",
     "less": "Voir moins",
     "education": "Formation",
@@ -11412,7 +11411,7 @@
     "me": {
       "title": "Mon profil",
       "open": "Ouvrir mon profil, {name}",
-      "complete": "Votre profil est complété à {percent} %",
+      "complete": "Profil complété à {percent} %",
       "publish": "Publier dans le Fil",
       "noPosts": "Vous n’avez encore rien publié. Partagez une réussite, une question ou une réalisation.",
       "managePosts": "Gérer toutes mes publications",

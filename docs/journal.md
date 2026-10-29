@@ -5180,6 +5180,12 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - Chat : la publication envoyée devient une carte (auteur, photo, titre, texte, « Voir la publication ») relue en base à chaque affichage ; une publication retirée affiche « Cette publication n'est plus disponible ». Le texte du message garde le lien pour l'ordinateur et la liste.
 - Non vérifié dans l'appli : Ephraïm a demandé de publier sans longs essais (types, lint, tests unitaires et build passés). Sur ordinateur, `/app/fil/{id}` renvoie encore vers `/app` (pas de Fil talent sur ordinateur).
 
+## 2026-10-29 · Cartes d'expérience allégées, en-tête des formulaires en icônes
+
+- Demande d'Ephraïm (captures) : sur chaque expérience, le nom de l'entreprise passe en majuscules ; le badge « Actuel » et le titre « Réalisations clés » disparaissent ; le type et la période tiennent sur une ligne (« Emploi · oct. 2026 – aujourd'hui · 1 mois · Kinshasa »), « aujourd'hui » suffit à dire que le poste est actuel.
+- En-tête des formulaires du profil au téléphone : une croix à la place d'« Annuler », une coche sur fond Lime à la place d'« Enregistrer » (noms gardés pour les lecteurs d'écran), le titre a plus de place.
+- Publié sans essai dans l'appli, à la demande d'Ephraïm (lint, types et build passés).
+
 
 ## 2026-10-29 · Badges d'abonnement et haut du profil
 

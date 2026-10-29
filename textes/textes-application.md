@@ -8984,7 +8984,6 @@ Conventions :
 | `phoneProfile.years` | {count, plural, one {# an} other {# ans}} |
 | `phoneProfile.months` | {count} mois |
 | `phoneProfile.moreLines` | Voir {count} de plus |
-| `phoneProfile.achievements` | Réalisations clés |
 | `phoneProfile.companyPage` | {company}, voir la page de l’entreprise |
 | `phoneProfile.less` | Voir moins |
 | `phoneProfile.education` | Formation |
@@ -9462,7 +9461,7 @@ Conventions :
 | `phoneCareer.tab.documents` | Mes documents |
 | `phoneCareer.me.title` | Mon profil |
 | `phoneCareer.me.open` | Ouvrir mon profil, {name} |
-| `phoneCareer.me.complete` | Votre profil est complété à {percent} % |
+| `phoneCareer.me.complete` | Profil complété à {percent} % |
 | `phoneCareer.me.publish` | Publier dans le Fil |
 | `phoneCareer.me.noPosts` | Vous n’avez encore rien publié. Partagez une réussite, une question ou une réalisation. |
 | `phoneCareer.me.managePosts` | Gérer toutes mes publications |

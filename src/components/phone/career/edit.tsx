@@ -63,10 +63,18 @@ export function FormPage({
   return (
     <div className="nb-page nb-ca-form">
       <header className="nb-ca-form-barre">
-        <PhoneBack fallback={back} label={t("cancel")} text={t("cancel")} />
+        {/* Icons rather than words, so a long title keeps its room (Ephraïm, 29/10/2026). */}
+        <PhoneBack fallback={back} label={t("cancel")} icon="fermer" />
         <h1>{title}</h1>
-        <button type="button" className="nb-ca-ok" onClick={onSave} disabled={pending}>
-          {t("save")}
+        <button
+          type="button"
+          className="nb-ca-ok"
+          onClick={onSave}
+          disabled={pending}
+          aria-label={t("save")}
+          aria-busy={pending}
+        >
+          <PhoneIcon name="coche" size={20} strong />
         </button>
       </header>
       <form

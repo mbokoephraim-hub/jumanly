@@ -16,7 +16,7 @@ import type { PostView } from "../fil/data";
 import { PostCard, type PostSheet } from "../fil/post";
 import { PostSheets, type SendTarget } from "../fil/sheets";
 import { PhoneIcon } from "../icon";
-import { ExperienceCompany, ExperienceLogo, ExperiencePoints } from "../profil/experience-head";
+import { ExperienceLogo, ExperienceMeta, ExperiencePoints } from "../profil/experience-head";
 import { PhotoViewer } from "../profil/photo-viewer";
 import { AboutCard, PlanMark, ringOf, SOCIAL_PATHS, VerifiedMark } from "../profil/profile";
 import { AudienceStats } from "../profil/stats";
@@ -564,16 +564,9 @@ function ProfilePanel({
               ) : null}
               <ExperienceLogo item={item} />
               <div>
-                <h3>
-                  {item.title}
-                  {item.current ? <span className="nb-pf-tag">{tp("current")}</span> : null}
-                </h3>
-                <ExperienceCompany
-                  item={item}
-                  label={tp("companyPage", { company: item.company })}
-                />
-                <p className="nb-pf-xp-d">{item.dates}</p>
-                <ExperiencePoints item={item} points={item.points} title={tp("achievements")} />
+                <h3>{item.title}</h3>
+                <ExperienceMeta item={item} label={tp("companyPage", { company: item.company })} />
+                <ExperiencePoints item={item} points={item.points} />
                 <Link
                   href={href}
                   className="nb-cr-point"

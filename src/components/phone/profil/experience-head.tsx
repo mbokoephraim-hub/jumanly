@@ -20,44 +20,41 @@ export function ExperienceLogo({ item }: { item: Experience }) {
   );
 }
 
-/** « The Growth Lab · Emploi »: the name opens the company's page when it has one. */
-export function ExperienceCompany({ item, label }: { item: Experience; label: string }) {
+/**
+ * « THE GROWTH LAB », then « Emploi · mai 2026 – aujourd'hui · 6 mois · Kinshasa »: the company
+ * in capitals (its name opens its page when it has one), the type and the period on one line;
+ * « aujourd'hui » already says the position is current (Ephraïm, 29/10/2026).
+ */
+export function ExperienceMeta({ item, label }: { item: Experience; label: string }) {
   return (
-    <p className="nb-pf-xp-ent">
-      {item.href ? (
-        <Link href={item.href} aria-label={label}>
-          {item.company}
-        </Link>
-      ) : (
-        item.company
-      )}{" "}
-      · <span style={{ color: item.color }}>{item.type}</span>
-    </p>
+    <>
+      <p className="nb-pf-xp-ent">
+        {item.href ? (
+          <Link href={item.href} aria-label={label}>
+            {item.company}
+          </Link>
+        ) : (
+          item.company
+        )}
+      </p>
+      <p className="nb-pf-xp-d">
+        <span style={{ color: item.color }}>{item.type}</span> · {item.dates}
+      </p>
+    </>
   );
 }
 
-/** « Réalisations clés »: one point per line, with a small diamond of the company's colour. */
-export function ExperiencePoints({
-  item,
-  points,
-  title,
-}: {
-  item: Experience;
-  points: string[];
-  title: string;
-}) {
+/** The réalisations clés: one point per line, with a small mark of the company's colour. */
+export function ExperiencePoints({ item, points }: { item: Experience; points: string[] }) {
   if (points.length === 0) return null;
   return (
-    <>
-      <p className="nb-pf-rk">{title}</p>
-      <ul className="nb-pf-pts">
-        {points.map((point, n) => (
-          <li key={n}>
-            <i style={{ background: item.color }} aria-hidden />
-            <span>{point}</span>
-          </li>
-        ))}
-      </ul>
-    </>
+    <ul className="nb-pf-pts">
+      {points.map((point, n) => (
+        <li key={n}>
+          <i style={{ background: item.color }} aria-hidden />
+          <span>{point}</span>
+        </li>
+      ))}
+    </ul>
   );
 }

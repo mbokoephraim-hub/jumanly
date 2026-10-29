@@ -245,6 +245,15 @@
   height: 100%;
   object-fit: contain;
 }
+/* The company in capitals, so it stands apart from the position (Ephraïm, 29/10/2026). */
+.nb-pf .nb-pf-xp-ent {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.nb-pf .nb-pf-xp-d > span {
+  font-weight: 700;
+}
 .nb-pf-xp-ent a {
   font-weight: 700;
   color: var(--nb-creme);
@@ -254,17 +263,6 @@
 }
 .nb-pf-xp-ent a:hover {
   text-decoration-color: currentColor;
-}
-.nb-pf-rk {
-  margin-top: 10px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--nb-brume);
-}
-.nb-pf-rk + .nb-pf-pts {
-  margin-top: 4px;
 }
 .nb-pf-pts li + li {
   margin-top: 2px;

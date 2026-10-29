@@ -13,7 +13,7 @@ import { PostCard, type PostSheet } from "../fil/post";
 import { PostSheets, type SendTarget } from "../fil/sheets";
 import { PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
-import { ExperienceCompany, ExperienceLogo, ExperiencePoints } from "./experience-head";
+import { ExperienceLogo, ExperienceMeta, ExperiencePoints } from "./experience-head";
 import { PhotoViewer } from "./photo-viewer";
 import { PROFILE_TABS, type ProfileTab, type ProfileView } from "./data";
 
@@ -619,16 +619,12 @@ export function PersonProfile({
                     ) : null}
                     <ExperienceLogo item={item} />
                     <div>
-                      <h3>
-                        {item.title}
-                        {item.current ? <span className="nb-pf-tag">{t("current")}</span> : null}
-                      </h3>
-                      <ExperienceCompany
+                      <h3>{item.title}</h3>
+                      <ExperienceMeta
                         item={item}
                         label={t("companyPage", { company: item.company })}
                       />
-                      <p className="nb-pf-xp-d">{item.dates}</p>
-                      <ExperiencePoints item={item} points={points} title={t("achievements")} />
+                      <ExperiencePoints item={item} points={points} />
                       {item.points.length > POINTS_SHOWN ? (
                         <button
                           type="button"
