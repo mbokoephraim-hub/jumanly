@@ -67,7 +67,6 @@ export function PhoneCourse({ view }: { view: CourseView }) {
       }
       setSaved(result.value);
       if (fromMenu) close();
-      showToast({ message: result.value ? t("course.savedToast") : t("course.unsavedToast") });
     });
 
   /** « Commencer », a lesson of the programme: enroll when needed, then the lesson. */

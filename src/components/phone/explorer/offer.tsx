@@ -79,7 +79,6 @@ export function PhoneOffer({ offer }: { offer: PhoneOfferView }) {
         return;
       }
       setSaved(next);
-      showToast({ message: next ? t("offer.savedToast") : t("offer.unsavedToast") });
     });
 
   return (

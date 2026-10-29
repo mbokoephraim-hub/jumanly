@@ -1089,12 +1089,12 @@ html[data-nb-reduit]::view-transition-old(nb-pile) {
   flex: 1;
 }
 
-/* ─── Toasts : en haut, crème ─── */
+/* ─── Toasts : petite pilule crème en haut, discrète (2 à 3 secondes) ─── */
 .nb-app .jm-toast {
   background: var(--nb-creme);
   color: var(--nb-nuit);
-  font-weight: 600;
-  box-shadow: 0 16px 30px -10px rgba(0, 0, 0, 0.7);
+  font-weight: 500;
+  box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.6);
 }
 .nb-app .jm-toast :where(span, a) {
   color: inherit;

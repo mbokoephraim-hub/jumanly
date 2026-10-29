@@ -144,11 +144,8 @@ export function PhoneConnexions({ view, asked }: { view: ConnexionsView; asked: 
     act(id, async () => {
       const result = await connectAction(id);
       if (!result.ok) return null;
-      if (result.value === "accepted") {
-        showToast({ message: t("acceptedToast", { name: who.first }) });
-        return { kind: "accepted", conversationId: "" };
-      }
-      showToast({ message: t("sentToast", { name: who.first }) });
+      // The row's button shows the new state : no toast.
+      if (result.value === "accepted") return { kind: "accepted", conversationId: "" };
       return { kind: "sent" };
     });
   };

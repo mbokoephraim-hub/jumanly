@@ -194,7 +194,6 @@ export function PhoneCamera({
             disabled={!live}
             onClick={() => {
               setFacing(facing === "environment" ? "user" : "environment");
-              showToast({ message: facing === "environment" ? t("front") : t("back") });
             }}
           >
             <PhoneIcon name="echanger" size={24} stroke={1.8} />

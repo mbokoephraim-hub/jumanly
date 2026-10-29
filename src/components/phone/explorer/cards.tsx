@@ -249,13 +249,8 @@ export function ConnectButton({
           }
           const next = result.value === "accepted" ? "connected" : "sent";
           setLink(next);
+          // The button itself now reads « Demande envoyée » / « Connectés » : no toast.
           onLink?.(next);
-          showToast({
-            message:
-              next === "connected"
-                ? t("connectAccepted", { name: person.name })
-                : t("connectSent", { name: person.name }),
-          });
         })
       }
     >

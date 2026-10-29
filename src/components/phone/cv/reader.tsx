@@ -79,7 +79,6 @@ export function CvReader({
       const result = await setCvPrimaryAction(cvId, !isPrimary);
       if (!result.ok) return showToast({ message: t("error"), tone: "error" });
       setPrimary(!isPrimary);
-      showToast({ message: isPrimary ? t("primaryOff") : t("primaryOn") });
     });
 
   return (

@@ -87,11 +87,7 @@ function EventRow({ id, event }: { id: string; event: NonNullable<PostView["even
             const going = !shown.going;
             set({ going, participants: shown.participants + (going ? 1 : -1) });
             const result = await participateAction(id);
-            showToast({
-              message: result.ok
-                ? t(result.value ? "event.registeredToast" : "event.canceledToast")
-                : t("toast.error"),
-            });
+            if (!result.ok) showToast({ message: t("toast.error"), tone: "error" });
           })
         }
       >
