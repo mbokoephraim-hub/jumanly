@@ -8686,6 +8686,34 @@ input:checked + .nb-ca-radio::after {
 .nb-fo-progres {
   margin-top: 14px;
 }
+/* The cover the admin chose, filling the banner, the tile or the square of a course. */
+.nb-fo-couv {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.nb-fo-carre[data-couv] {
+  position: relative;
+  overflow: hidden;
+}
+.nb-fo-banniere[data-couv] {
+  height: auto;
+  aspect-ratio: 16 / 9;
+  max-height: 260px;
+}
+.nb-fo-tuile-haut[data-couv] {
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+.nb-fo-continuer-haut:has(.nb-fo-couv) {
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+.nb-fo-texte[data-paragraphes] {
+  white-space: pre-line;
+}
 .nb-fo-points li {
   display: flex;
   gap: 10px;

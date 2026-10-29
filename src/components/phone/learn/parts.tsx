@@ -1,26 +1,36 @@
 "use client";
+/* eslint-disable @next/next/no-img-element -- course covers are uploaded files or YouTube thumbnails */
 
 import Link from "next/link";
 import type { CourseRow } from "./data";
 
-/** The square of a course, in its colour (« BI », « SQL »). */
+/** The cover the admin chose, filling its frame (the colour and initials stay underneath). */
+export function CourseCover({ src }: { src: string | null | undefined }) {
+  if (!src) return null;
+  return <img src={src} alt="" className="nb-fo-couv" loading="lazy" decoding="async" />;
+}
+
+/** The square of a course: its cover, or its initials in its colour (« BI », « SQL »). */
 export function CourseSquare({
   initials,
   tone,
+  cover = null,
   size = 48,
 }: {
   initials: string;
   tone: number;
+  cover?: string | null;
   size?: number;
 }) {
   return (
     <span
       className="nb-fo-carre"
       data-ton={tone}
+      data-couv={cover ? "" : undefined}
       style={{ width: size, height: size, fontSize: size >= 48 ? 15 : 13 }}
       aria-hidden
     >
-      {initials}
+      {cover ? <CourseCover src={cover} /> : initials}
     </span>
   );
 }
@@ -29,7 +39,7 @@ export function CourseSquare({
 export function CourseLine({ row }: { row: CourseRow }) {
   return (
     <Link href={row.href} className="nb-fo-ligne">
-      <CourseSquare initials={row.initials} tone={row.tone} />
+      <CourseSquare initials={row.initials} tone={row.tone} cover={row.cover} />
       <span className="nb-fo-ligne-t">
         <b>{row.title}</b>
         <small className="nb-meta">{row.sub}</small>
@@ -71,8 +81,25 @@ export function CourseArt({ play = false }: { play?: boolean }) {
   );
 }
 
-/** The banner of a course: its colour, two rings and its square in white (planche Formation). */
-export function CourseBanner({ initials, tone }: { initials: string; tone: number }) {
+/**
+ * The banner of a course: its cover when the admin gave one, otherwise its colour, two rings and
+ * its square in white (planche Formation).
+ */
+export function CourseBanner({
+  initials,
+  tone,
+  cover = null,
+}: {
+  initials: string;
+  tone: number;
+  cover?: string | null;
+}) {
+  if (cover)
+    return (
+      <div className="nb-fo-banniere" data-ton={tone} data-couv="" aria-hidden>
+        <CourseCover src={cover} />
+      </div>
+    );
   return (
     <div className="nb-fo-banniere" data-ton={tone} aria-hidden>
       <svg viewBox="0 0 272 126" preserveAspectRatio="xMidYMid slice">

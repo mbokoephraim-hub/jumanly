@@ -9,7 +9,7 @@ import { OrbiDisc, PhoneIcon } from "../icon";
 import { MeAvatar } from "../me";
 import { askOrbiFrom } from "../orbi-bus";
 import type { CourseCard, FormationView } from "./data";
-import { CourseArt, CourseLine } from "./parts";
+import { CourseArt, CourseCover, CourseLine } from "./parts";
 import { FormationSearch } from "./search";
 
 const TABS = ["pour-vous", "mes-cours", "attestations"] as const;
@@ -24,14 +24,25 @@ function CourseTile({ course }: { course: CourseCard }) {
   const t = useTranslations("phoneLearn");
   return (
     <Link href={course.href} className="nb-fo-tuile">
-      <span className="nb-fo-tuile-haut" data-ton={course.tone} aria-hidden>
-        <svg viewBox="0 0 272 126" preserveAspectRatio="xMidYMid slice">
-          <g fill="none" stroke="#FFFFFF" strokeOpacity=".2" strokeWidth="22">
-            <circle cx="20" cy="63" r="62" />
-            <circle cx="252" cy="63" r="62" />
-          </g>
-        </svg>
-        <span>{course.initials}</span>
+      <span
+        className="nb-fo-tuile-haut"
+        data-ton={course.tone}
+        data-couv={course.cover ? "" : undefined}
+        aria-hidden
+      >
+        {course.cover ? (
+          <CourseCover src={course.cover} />
+        ) : (
+          <>
+            <svg viewBox="0 0 272 126" preserveAspectRatio="xMidYMid slice">
+              <g fill="none" stroke="#FFFFFF" strokeOpacity=".2" strokeWidth="22">
+                <circle cx="20" cy="63" r="62" />
+                <circle cx="252" cy="63" r="62" />
+              </g>
+            </svg>
+            <span>{course.initials}</span>
+          </>
+        )}
       </span>
       <span className="nb-fo-tuile-bas">
         <b>{course.title}</b>
@@ -120,7 +131,11 @@ export function PhoneFormation({ view }: { view: FormationView }) {
                 {view.current ? (
                   <Link href={view.current.href} className="nb-fo-continuer">
                     <span className="nb-fo-continuer-haut" data-ton={view.current.tone}>
-                      <CourseArt play />
+                      {view.current.cover ? (
+                        <CourseCover src={view.current.cover} />
+                      ) : (
+                        <CourseArt play />
+                      )}
                       <span className="nb-fo-lire" aria-hidden>
                         <PhoneIcon name="lecture" size={20} />
                       </span>

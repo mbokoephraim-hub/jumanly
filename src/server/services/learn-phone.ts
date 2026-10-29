@@ -104,6 +104,7 @@ const courseCard = {
   slug: true,
   title: true,
   category: true,
+  coverUrl: true,
   level: true,
   durationMinutes: true,
   requiredLevel: true,
@@ -119,6 +120,7 @@ const cardOf = (row: CardRow, open: boolean) => ({
   slug: row.slug,
   title: row.title,
   category: row.category,
+  coverUrl: row.coverUrl,
   domain: row.domain?.name ?? null,
   level: row.level,
   minutes: row.durationMinutes,
@@ -232,8 +234,25 @@ export async function formationHome(db: PrismaClient, userId: string, now = new 
     where: { slug: { in: picks.map((pick) => pick.slug) }, status: "published" },
     select: courseCard,
   });
-  const order = [...gapSlugs, ...picks.map((pick) => pick.slug)];
-  const forOffers = [...new Map([...gapRows, ...pickRows].map((row) => [row.slug, row])).values()]
+  // Then the latest published courses, so the tab never opens on an empty catalogue.
+  const known = new Set([...gapRows, ...pickRows].map((row) => row.slug));
+  const latestRows =
+    known.size < 10
+      ? await db.course.findMany({
+          where: { status: "published", slug: { notIn: [...known, ...taken] } },
+          orderBy: { publishedAt: "desc" },
+          take: 10,
+          select: courseCard,
+        })
+      : [];
+  const order = [
+    ...gapSlugs,
+    ...picks.map((pick) => pick.slug),
+    ...latestRows.map((row) => row.slug),
+  ];
+  const forOffers = [
+    ...new Map([...gapRows, ...pickRows, ...latestRows].map((row) => [row.slug, row])).values(),
+  ]
     .filter((row) => !taken.has(row.slug))
     .sort((a, b) => order.indexOf(a.slug) - order.indexOf(b.slug))
     .slice(0, 10)
