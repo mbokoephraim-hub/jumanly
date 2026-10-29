@@ -13350,7 +13350,67 @@
       "short": "{seconds} s",
       "long": "{minutes} min {seconds} s",
       "hours": "{hours} h {minutes} min"
-    }
+    },
+    "connexions": "{count, plural, =0 {Connexions} one {Connexions, # demande en attente} other {Connexions, # demandes en attente}}"
+  },
+  "phoneCx": {
+    "title": "Connexions",
+    "back": "Retour",
+    "error": "Cela n’a pas fonctionné. Réessayez dans un instant.",
+    "hero": {
+      "title": "Votre réseau",
+      "count": "{count, plural, =0 {Pas encore de connexion} one {# connexion} other {# connexions}}",
+      "pending": "{count, plural, one {# demande à traiter} other {# demandes à traiter}}",
+      "sent": "{count, plural, one {# demande envoyée} other {# demandes envoyées}}"
+    },
+    "tabs": "Trier les connexions",
+    "tab": {
+      "demandes": "Demandes",
+      "suggestions": "Suggestions",
+      "reseau": "Mes connexions"
+    },
+    "mutual": "{rest, plural, =0 {{name} en commun} one {{name} et # autre en commun} other {{name} et # autres en commun}}",
+    "field": "Compétences proches des vôtres",
+    "quoted": "« {text} »",
+    "profile": "Voir le profil de {name}",
+    "accept": "Accepter",
+    "refuse": "Refuser",
+    "acceptLabel": "Accepter la demande de {name}",
+    "refuseLabel": "Refuser la demande de {name}",
+    "accepted": "Vous êtes connectés : {name} est maintenant dans votre Chat.",
+    "acceptedToast": "{name} est maintenant dans vos connexions.",
+    "write": "Écrire à {name}",
+    "refused": "Demande refusée. {name} n’est pas prévenu·e.",
+    "none": {
+      "title": "Aucune demande en attente",
+      "text": "Quand quelqu’un vous demande en connexion, vous le voyez ici et dans vos notifications."
+    },
+    "sentTitle": "Demandes envoyées",
+    "waiting": "En attente · {ago}",
+    "withdraw": "Annuler",
+    "withdrawLabel": "Annuler la demande envoyée à {name}",
+    "withdrawn": "Demande annulée",
+    "maybe": "Vous les connaissez peut-être",
+    "seeAll": "Tout voir",
+    "suggest": {
+      "sub": "D’abord les personnes connectées à vos connexions, puis celles qui partagent vos compétences.",
+      "none": "Pas encore de suggestion. Connectez-vous à quelques personnes depuis Explorer : leurs connexions apparaîtront ici."
+    },
+    "connect": "Se connecter",
+    "connectLabel": "Se connecter avec {name}",
+    "sentOk": "Demande envoyée",
+    "connected": "Connectés",
+    "sentToast": "Demande envoyée à {name}.",
+    "hide": "Ne plus proposer {name}",
+    "explore": "Trouver des personnes dans Explorer",
+    "orbi": "Orbi propose, vous décidez : personne ne reçoit de demande tant que vous ne touchez pas « Se connecter ».",
+    "network": {
+      "search": "Rechercher une connexion",
+      "since": "Connectés {ago}",
+      "none": "Pas encore de connexion. Acceptez une demande ou connectez-vous à une suggestion.",
+      "noMatch": "Aucune connexion ne correspond à « {q} »."
+    },
+    "note": "Une fois connectés, vous pouvez vous écrire dans le Chat. Refuser ou annuler ne prévient personne."
   },
   "hireShell": {
     "skip": "Aller au contenu principal",
@@ -22836,6 +22896,8 @@
       "feedLike": "{name} a aimé votre publication.",
       "feedRepost": "{name} a republié votre publication.",
       "feedQuote": "{name} a cité votre publication.",
+      "connectionRequest": "{name} vous demande en connexion.",
+      "connectionAccepted": "{name} a accepté votre demande de connexion : vous pouvez vous écrire.",
       "unread": "Non lue"
     }
   },

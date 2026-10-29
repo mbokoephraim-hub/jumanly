@@ -5069,3 +5069,9 @@ Demande d'Ephraïm du 29/10/2026 (partie administration seulement).
 - Vérifié : types, lint, tests, build, e2e `accounts` et `connexion-v2` (inscription, connexion,
   déconnexion, mot de passe oublié). Cinq tests en base `explore` et `entreprise-page` échouent déjà sur
   main, sans lien avec cette mise à jour.
+
+## 2026-10-29 · Connexions dans le Chat (demande d'Ephraïm)
+
+- Icône Connexions à côté de la loupe et du crayon du Chat, avec le nombre de demandes en attente.
+- Page `/app/messages/connexions` (remplace `/app/messages/demandes`, qui y renvoie) : Demandes (accepter, refuser sans prévenir, demandes envoyées à annuler), Suggestions (connexions de mes connexions, puis compétences partagées ; masquables), Mes connexions (recherche, écrire).
+- Notifications `connectionRequest` et `connectionAccepted` ; le pouls du Chat change à chaque nouvelle demande.

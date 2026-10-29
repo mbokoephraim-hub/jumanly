@@ -92,8 +92,8 @@ test("recherche de talents et mise en relation acceptée", async ({
   if (isMobile) {
     // On a phone (Modèle B, lot B8): the request waits in « Demandes de connexion ».
     await page.getByRole("link", { name: /^Demandes de connexion/ }).click();
-    await page.waitForURL("**/app/messages/demandes");
-    const card = page.locator(".nb-ms-demande").filter({ hasText: "Groupe Démo" }).first();
+    await page.waitForURL("**/app/messages/connexions");
+    const card = page.locator(".nb-cx-carte").filter({ hasText: "Groupe Démo" }).first();
     await expect(card).toBeVisible();
     await expectAccessible(page);
     await card.getByRole("button", { name: "Accepter" }).click();
