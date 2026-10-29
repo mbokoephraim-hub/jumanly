@@ -861,13 +861,8 @@ export function ConnectionActions({ person }: { person: ProfileView }) {
         return;
       }
       const next = result.value === "accepted" || link === "received" ? "connected" : "sent";
+      // The button itself now reads « Demande envoyée » / « Connectés » : no toast.
       setLink(next);
-      showToast({
-        message:
-          next === "connected"
-            ? t("connectAccepted", { name: person.first })
-            : t("connectSent", { name: person.first }),
-      });
     });
   return (
     <div className="nb-pf-actions">

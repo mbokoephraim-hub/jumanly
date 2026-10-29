@@ -64,8 +64,7 @@ export function ProjectDetail({ project }: { project: ProjectView }) {
     setFeatured(on);
     start(async () => {
       const result = await featureCareerProjectAction(project.id, on).catch(() => null);
-      if (result?.ok) showToast({ message: on ? t("featuredOn") : t("featuredOff") });
-      else {
+      if (!result?.ok) {
         setFeatured(!on);
         showToast({ message: t("error"), tone: "error" });
       }

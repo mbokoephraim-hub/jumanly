@@ -5097,3 +5097,9 @@ réseau revenu, toutes les 10 min) ; le préchargement démarre pendant le logo.
 de pages, les images, et montre la copie gardée quand le réseau traîne ; l'appli demande au téléphone de
 garder son stockage. Détail et limites : `docs/decisions/2026-10-29-onglets-instantanes-hors-ligne.md`.
 Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au serveur échoue).
+
+## 2026-10-29 · Messages de confirmation plus discrets
+
+- Les toasts de l'espace connecté deviennent une petite pilule d'une ligne (13 px, petite coche), sans croix ni barre de temps : 2,5 s (4,5 s pour une erreur ou un « Annuler »), un toucher les ferme. Le second texte (« detail ») n'est plus affiché.
+- Plus de toast quand le bouton montre déjà le résultat : « Se connecter » (Explorer, profil, Connexions), enregistrer une offre ou une formation, participer à un évènement, mettre un projet en avant, CV principal, changer de caméra. Les erreurs restent signalées.
+- Administration d'entreprise : toast plus petit, 3 s.

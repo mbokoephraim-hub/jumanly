@@ -153,7 +153,7 @@ export function Toast({
   label: string;
 }) {
   useEffect(() => {
-    const timer = window.setTimeout(onClose, 6000);
+    const timer = window.setTimeout(onClose, 3000);
     return () => window.clearTimeout(timer);
   }, [text, onClose]);
   return (

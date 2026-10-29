@@ -12,14 +12,15 @@ export type ToastInput = {
   href?: string;
   /** A short action inside the toast (« Annuler » after a move). */
   action?: { label: string; run: () => void };
-  /** Second line, smaller (« Le candidat a été informé… »). */
+  /** Second line: no longer shown, toasts stay one short line. */
   detail?: string;
 };
 type Shown = ToastInput & { id: number };
 
 const EVENT = "jm:toast";
-/** How long a toast stays, unless the pointer rests on it. */
-const DURATION_MS = 6000;
+/** How long a toast stays: short and discreet, a bit longer for an error or an « Annuler ». */
+const DURATION_MS = 2500;
+const LONG_MS = 4500;
 
 /** Shows a toast from anywhere in the signed-in space. */
 export function showToast(toast: ToastInput) {
@@ -94,7 +95,8 @@ function ToastItem({
   onDone: () => void;
 }) {
   const [paused, setPaused] = useState(false);
-  const left = useRef(DURATION_MS);
+  const tone = toast.tone ?? "success";
+  const left = useRef(tone === "error" || toast.action ? LONG_MS : DURATION_MS);
   const started = useRef(0);
 
   useEffect(() => {
@@ -107,26 +109,22 @@ function ToastItem({
     };
   }, [paused, onDone]);
 
-  const tone = toast.tone ?? "success";
   const body = (
     <>
       <span
         aria-hidden
         className={cx(
-          "jm-toast-icon flex size-[26px] shrink-0 items-center justify-center rounded-full",
+          "jm-toast-icon flex size-4 shrink-0 items-center justify-center rounded-full",
           tone === "error" ? "bg-corail text-blanc" : "bg-lime text-sapin",
         )}
       >
-        <Icon name={icons[tone]} className="size-3.5" />
+        <Icon name={icons[tone]} className="size-2.5" />
       </span>
-      <span className="flex flex-1 flex-col py-1.5 text-sm leading-5">
-        {toast.message}
-        {toast.detail && (
-          <span className="text-[11.5px] leading-4 text-blanc/70">{toast.detail}</span>
-        )}
-      </span>
+      <span className="line-clamp-2 min-w-0 text-[13px] leading-[18px]">{toast.message}</span>
     </>
   );
+  /* A small discreet pill (docs/modele-b): one short line, no close cross, no time bar; a tap
+     closes it (or follows its link). */
   return (
     <div
       role="status"
@@ -134,15 +132,21 @@ function ToastItem({
       onPointerLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
-      data-paused={paused ? "" : undefined}
-      className="jm-toast pointer-events-auto relative flex w-full max-w-md items-center gap-3 overflow-hidden rounded-[16px] bg-sapin py-2 pr-2 pl-[18px] text-blanc shadow-float"
+      className="jm-toast pointer-events-auto flex max-w-[min(100%,340px)] items-center gap-2 rounded-full bg-sapin py-1.5 pr-3 pl-2 text-blanc shadow-float"
     >
       {toast.href ? (
-        <Link href={toast.href} onClick={onDone} className="flex flex-1 items-center gap-3">
+        <Link href={toast.href} onClick={onDone} className="flex min-w-0 items-center gap-2">
           {body}
         </Link>
       ) : (
-        <span className="flex flex-1 items-center gap-3">{body}</span>
+        <button
+          type="button"
+          onClick={onDone}
+          title={closeLabel}
+          className="flex min-w-0 items-center gap-2 text-left"
+        >
+          {body}
+        </button>
       )}
       {toast.action && (
         <button
@@ -151,24 +155,11 @@ function ToastItem({
             toast.action!.run();
             onDone();
           }}
-          className="shrink-0 rounded-pill px-3 py-2 text-sm font-semibold text-lime hover:bg-blanc/10"
+          className="shrink-0 rounded-pill px-2 py-0.5 text-[13px] font-semibold text-lime hover:bg-blanc/10"
         >
           {toast.action.label}
         </button>
       )}
-      <button
-        type="button"
-        onClick={onDone}
-        aria-label={closeLabel}
-        className="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-blanc/10"
-      >
-        <Icon name="fermer" className="size-5" />
-      </button>
-      <span
-        aria-hidden
-        className="jm-toast-time absolute inset-x-0 bottom-0 h-0.5 origin-left bg-lime"
-        style={{ animationDuration: `${DURATION_MS}ms` }}
-      />
     </div>
   );
 }
