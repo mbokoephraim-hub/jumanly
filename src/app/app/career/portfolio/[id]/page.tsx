@@ -44,6 +44,11 @@ export default async function CareerProjectPage({
   const photos = (project?.files ?? []).flatMap((file, index) =>
     file.type.startsWith("image/") ? [{ key: file.key, src: `/api/projets/${id}/${index}` }] : [],
   );
+  const documents = (project?.files ?? []).flatMap((file, index) =>
+    file.type.startsWith("image/")
+      ? []
+      : [{ key: file.key, name: file.name, href: `/api/projets/${id}/${index}` }],
+  );
   if (editing)
     return (
       <CareerTexts>
@@ -58,9 +63,7 @@ export default async function CareerProjectPage({
               skills: project?.skills ?? [],
               visible: project?.visible ?? false,
               photos,
-              others: (project?.files ?? [])
-                .filter((file) => !file.type.startsWith("image/"))
-                .map((file) => file.key),
+              documents: documents.map(({ key, name }) => ({ key, name })),
             }}
           />
         </FreshOnEachVisit>
@@ -89,6 +92,7 @@ export default async function CareerProjectPage({
           photos: photos.map((photo) => photo.src),
           link: project!.link,
           featured: project!.visible,
+          documents: documents.map(({ name, href }) => ({ name, href })),
         }}
       />
     </CareerTexts>

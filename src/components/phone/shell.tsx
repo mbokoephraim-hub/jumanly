@@ -16,7 +16,9 @@ import {
 } from "@/lib/phone-tabs";
 import { recruiterOrbiActions } from "@/server/services/recruiter-orbi";
 import { phoneThemeScript } from "@/lib/phone-theme";
+import { initials } from "@/components/ui/avatar";
 import { PhoneArrivals } from "./arrivals";
+import { PhoneMeProvider } from "./me";
 import { PushPrompt } from "./push-prompt";
 import { PhoneThemeRoot } from "./theme-root";
 import { PhoneNav } from "./nav";
@@ -156,15 +158,24 @@ export async function PhoneShell({
           restored: tShell("offline.restored"),
         }}
       />
-      <PhoneStack tabs={tabs} set={set} reduce={reduceMotion}>
-        <div id={OFFLINE_SLOT_ID} role="status" className="empty:hidden" />
-        {/* A Modèle B page (`.nb-page`) takes the whole screen; a screen without a mockup of its
+      <PhoneMeProvider
+        me={{
+          initials: initials(account.name),
+          image: account.image,
+          href: recruiter ? "/app/hire/compte/profil" : "/app/profil",
+          label: t("me"),
+        }}
+      >
+        <PhoneStack tabs={tabs} set={set} reduce={reduceMotion}>
+          <div id={OFFLINE_SLOT_ID} role="status" className="empty:hidden" />
+          {/* A Modèle B page (`.nb-page`) takes the whole screen; a screen without a mockup of its
             own (diagnostic, LinkedIn, security…) keeps its content, in the colours of the Modèle B
             and under its own head (lot B9). */}
-        <div className={recruiter ? "t-app t-rh nb-cadre" : "t-app nb-cadre"}>
-          <div className="t-colonne t-contenu">{children}</div>
-        </div>
-      </PhoneStack>
+          <div className={recruiter ? "t-app t-rh nb-cadre" : "t-app nb-cadre"}>
+            <div className="t-colonne t-contenu">{children}</div>
+          </div>
+        </PhoneStack>
+      </PhoneMeProvider>
       <PhoneNav
         aria={t("nav.aria")}
         set={set}

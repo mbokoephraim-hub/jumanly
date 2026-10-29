@@ -21,6 +21,7 @@ import { openConnectionAction, searchMessagesAction } from "@/server/actions/mes
 import type { ChatSummary } from "@/server/services/chat-summary";
 import { FilAvatar } from "../fil/avatar";
 import { PhoneIcon, type PhoneIconName } from "../icon";
+import { MeAvatar } from "../me";
 import { PhoneSheet } from "../sheet";
 import { useChatPulse } from "./live";
 import { ReadMark, Spark, Typing, WhoAvatar, WhoName } from "./parts";
@@ -561,6 +562,7 @@ export function PhoneMessages({ view, push }: { view: InboxView; push?: ReactNod
               <path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4" />
             </svg>
           </button>
+          <MeAvatar />
         </div>
       </header>
       {/* « Recevoir vos messages sur ce téléphone » (29/10/2026). */}

@@ -14,6 +14,7 @@ import { formatDate } from "@/lib/dates";
 import { formatUsd } from "@/lib/money";
 import { rhRequestPlanAction, rhSaveProfileAction } from "@/server/actions/phone-rh-compte";
 import { db } from "@/server/db";
+import { audienceStats } from "@/server/services/audience";
 import { authorFeed } from "@/server/services/feed";
 import { recruiterBarCounts } from "@/server/services/hire-phone";
 import { personProfile } from "@/server/services/person-profile";
@@ -36,6 +37,7 @@ import { PhoneIcon } from "../icon";
 import { feedWords } from "../fil/data";
 import { sendTargetViews } from "../fil/server";
 import { PersonProfile } from "../profil/profile";
+import { AudienceStats } from "../profil/stats";
 import { profileView, ProfileTexts } from "../profil/server";
 import { languageLabel } from "../career/data";
 import { sizeKeyOf } from "@/server/services/admin-signup";
@@ -214,6 +216,7 @@ export async function RhProfileScreen({ ctx, query }: { ctx: HireContext; query:
     recruiterBarCounts(db, ctx),
     ensureProfile(db, ctx.userId),
   ]);
+  const audience = await audienceStats(db, ctx.userId, now);
   if (!person) notFound();
   const view = await profileView(person, { now });
   const known = parseProfileLanguages(talent.languages);
@@ -283,9 +286,13 @@ export async function RhProfileScreen({ ctx, query }: { ctx: HireContext; query:
               />
             ),
           },
+          account: { href: "/app/hire/compte", label: t("profile.account") },
+          stats: <AudienceStats figures={audience} />,
           suivi: (
             <>
-              <h2 className="nb-pf-h">{t("follow.title")}</h2>
+              <h2 className="nb-pf-h" data-loin="">
+                {t("follow.title")}
+              </h2>
               <ul className="nb-rs-tuiles">
                 {tiles.map((tile) => (
                   <li key={tile.label}>

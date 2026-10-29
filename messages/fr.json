@@ -9712,6 +9712,7 @@
     },
     "back": "Retour",
     "close": "Fermer",
+    "me": "Mon profil",
     "cancel": "Annuler",
     "toasts": "Messages de confirmation",
     "search": {
@@ -10804,7 +10805,7 @@
       "apropos": "À propos",
       "realisations": "Réalisations",
       "portfolio": "Portfolio",
-      "suivi": "Suivi"
+      "statistiques": "Statistiques"
     },
     "skills": "Compétences",
     "skillsCount": "{count, plural, =0 {Aucune compétence} one {# compétence} other {# compétences}}",
@@ -10888,6 +10889,32 @@
       "failed": "Une erreur est survenue. Réessayez."
     },
     "photoOpen": "Voir la photo de profil en grand",
+    "stats": {
+      "title": "Statistiques de votre profil",
+      "period": "Période",
+      "days": "{days} jours",
+      "new": "Nouveau",
+      "same": "Stable",
+      "up": "+{percent} %",
+      "down": "−{percent} %",
+      "visits": {
+        "label": "Visites du profil",
+        "hint": "Personnes venues voir votre profil"
+      },
+      "views": {
+        "label": "Vues des publications",
+        "hint": "Personnes qui ont ouvert une de vos publications"
+      },
+      "impressions": {
+        "label": "Impressions",
+        "hint": "Fois où vos publications sont apparues dans un Fil"
+      },
+      "chart": "Visites du profil",
+      "perDay": "par jour",
+      "perWeek": "par semaine",
+      "chartLabel": "{count, plural, one {# visite} other {# visites}} sur {days} jours",
+      "note": "Chaque personne compte une fois par jour. Jumanly ne montre jamais qui a vu votre profil."
+    },
     "own": {
       "edit": "Modifier",
       "add": "Ajouter",
@@ -11343,7 +11370,63 @@
       "cv": "CV",
       "portfolio": "Portfolio",
       "progression": "Progression",
-      "candidatures": "Candidatures"
+      "candidatures": "Candidatures",
+      "documents": "Mes documents"
+    },
+    "me": {
+      "title": "Mon profil",
+      "open": "Ouvrir mon profil, {name}",
+      "complete": "Votre profil est complété à {percent} %",
+      "publish": "Publier dans le Fil",
+      "noPosts": "Vous n’avez encore rien publié. Partagez une réussite, une question ou une réalisation.",
+      "managePosts": "Gérer toutes mes publications",
+      "worksIntro": "Montrez ce que vous avez fait : un texte, des photos ou un document. Vos réalisations sont visibles sur votre profil.",
+      "worksAddText": "Un texte, des photos ou un document PDF",
+      "certificates": "Certifications",
+      "certificatesAdd": "Se former",
+      "certificatesAddLabel": "Se former pour obtenir une attestation",
+      "certificatesEmpty": "Vos attestations Jumanly s’afficheront ici. Suivez une formation pour en obtenir une."
+    },
+    "follow": {
+      "title": "Mes documents et candidatures",
+      "cvs": "{count, plural, one {CV} other {CV}}",
+      "cvScore": "CV principal : {score} %",
+      "cvFile": "CV importé, prêt à envoyer",
+      "cvNone": "Créez votre premier CV",
+      "letters": "{count, plural, one {Lettre} other {Lettres}}",
+      "lettersReady": "À adapter à chaque offre",
+      "lettersNone": "Orbi peut vous aider",
+      "works": "{count, plural, one {Réalisation} other {Réalisations}}",
+      "worksFeatured": "{count, plural, =0 {Aucune mise en avant} one {# mise en avant} other {# mises en avant}}",
+      "worksNone": "Montrez votre travail",
+      "active": "{count, plural, one {Candidature en cours} other {Candidatures en cours}}",
+      "interviews": "{count, plural, one {# entretien prévu} other {# entretiens prévus}}",
+      "applied": "{count, plural, one {# envoyée au total} other {# envoyées au total}}",
+      "noneYet": "Postuler est gratuit"
+    },
+    "apps": {
+      "which": "Afficher",
+      "sent": "Envoyées · {count}",
+      "saved": "Enregistrées · {count}",
+      "savedEmpty": "Aucune offre enregistrée. Touchez le signet d’une offre pour la retrouver ici.",
+      "savedLine": "{company} · {city}",
+      "savedOpen": "Toujours ouverte · touchez pour postuler",
+      "savedClosed": "Offre fermée",
+      "firstTitle": "Trouvez votre toute première opportunité",
+      "firstCta": "Explorer les offres",
+      "hint": "Touchez une candidature pour suivre son avancée, la compléter ou la retirer."
+    },
+    "docs": {
+      "cv": "CV",
+      "portfolio": "Portfolio",
+      "portfolioOn": "Votre portfolio est en ligne",
+      "portfolioOff": "Votre portfolio n’est pas encore publié",
+      "portfolioCount": "{count, plural, =0 {Aucune réalisation} one {# réalisation} other {# réalisations}}",
+      "portfolioSee": "Voir mon portfolio",
+      "portfolioManage": "Mes réalisations",
+      "letters": "Lettres de motivation",
+      "lettersEmpty": "Aucune lettre pour l’instant. Orbi peut en rédiger une à partir de votre profil et d’une offre.",
+      "letterNew": "Nouvelle lettre"
     },
     "suggestion": "{count, plural, one {Ajoutez {skill} à vos compétences : une offre ouverte le demande.} other {Ajoutez {skill} à vos compétences : # offres ouvertes le demandent.}}",
     "suggestionAdd": "Ajouter",
@@ -12045,6 +12128,10 @@
       "photoRemove": "Retirer la photo {n}",
       "photoError": "Cette photo n’a pas pu être lue. Essayez-en une autre.",
       "photosHint": "Vérifiez qu’aucun numéro ni code personnel n’apparaît sur vos photos avant d’enregistrer.",
+      "documents": "Documents (PDF)",
+      "documentAdd": "Joindre un document PDF",
+      "documentRemove": "Retirer {name}",
+      "documentsHint": "Un rapport, une attestation, une présentation : deux documents au plus, 4 Mo en tout avec les photos.",
       "title": "Titre",
       "titlePlaceholder": "Ex. : Tableau de bord des ventes",
       "description": "Description",
@@ -18270,6 +18357,7 @@
     },
     "head": {
       "account": "Mon compte",
+      "profile": "Mon profil",
       "settings": "Paramètres",
       "notifications": "{count, plural, =0 {Notifications} one {Notifications, # nouvelle} other {Notifications, # nouvelles}}",
       "newOffer": "Publier une offre"
@@ -19946,6 +20034,7 @@
       "editHead": "Modifier",
       "editHiring": "Recrutement",
       "seeAsOthers": "Voir mon profil comme les autres",
+      "account": "Mon compte",
       "languagesEdit": "Modifier"
     },
     "follow": {

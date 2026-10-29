@@ -35,6 +35,9 @@ import {
 const DOCUMENTS = "/app/career/documents";
 /** « Lettres » of « CV et documents » (planche talent-4 § 6): where letters are listed and made. */
 const LETTERS = "/app/career/cv?vue=lettres";
+/** On a phone, « Nouvelle lettre » has its own page (Carrière › Mes documents, 29/10/2026). */
+const lettersOf = (formData: FormData) =>
+  formData.get("retour") === "telephone" ? "/app/career/lettres/nouvelle?de=telephone" : LETTERS;
 const id = (value: FormDataEntryValue | null) => String(value ?? "").slice(0, 60);
 
 /** The documents by rules, in the texts' words (used when the model is not available). */
@@ -84,11 +87,12 @@ async function documentTemplate() {
 }
 
 export async function generateDocumentAction(formData: FormData) {
+  const letters = lettersOf(formData);
   const parsed = generateSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) redirect(`${LETTERS}&erreur=input`);
+  if (!parsed.success) redirect(`${letters}&erreur=input`);
   const user = await requireUser(DOCUMENTS);
   const result = await generateDocument(db, user.id, parsed.data, await documentTemplate());
-  if (!result.ok) redirect(`${LETTERS}&ia=${result.code}`);
+  if (!result.ok) redirect(`${letters}&ia=${result.code}`);
   redirect(`${DOCUMENTS}/${result.id}?ok=cree`);
 }
 
@@ -98,15 +102,16 @@ const proofreadSchema = z.object({
 });
 
 export async function proofreadAction(formData: FormData) {
+  const letters = lettersOf(formData);
   const parsed = proofreadSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) redirect(`${LETTERS}&erreur=input`);
+  if (!parsed.success) redirect(`${letters}&erreur=input`);
   const user = await requireUser(DOCUMENTS);
   const t = await getTranslations("career.documents.type");
   const result = await proofread(db, user.id, {
     title: parsed.data.title || t("proofread"),
     text: parsed.data.text,
   });
-  if (!result.ok) redirect(`${LETTERS}&ia=${result.code}`);
+  if (!result.ok) redirect(`${letters}&ia=${result.code}`);
   redirect(`${DOCUMENTS}/${result.id}`);
 }
 

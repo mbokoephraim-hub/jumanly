@@ -7,6 +7,7 @@ import { useEffect, useRef, useState, useTransition, type ReactNode } from "reac
 import { showToast } from "@/components/motion/toaster";
 import { hidePostTypeAction } from "@/server/actions/feed";
 import { OrbiDisc, PhoneIcon } from "../icon";
+import { MeAvatar } from "../me";
 import { askOrbiFrom } from "../orbi-bus";
 import { FilAvatar } from "./avatar";
 import type { PostView } from "./data";
@@ -81,6 +82,8 @@ export function PhoneFil({
           <Link href="/app/parametres" className="nb-rond" aria-label={t("settings")}>
             <PhoneIcon name="reglages" size={23} />
           </Link>
+          {/* The person's round, on every tab (Ephraïm, 29/10/2026): it opens their profile. */}
+          <MeAvatar />
         </header>
       )}
       <div className="nb-onglets nb-fil-onglets" role="tablist" aria-label={t("tabs")}>

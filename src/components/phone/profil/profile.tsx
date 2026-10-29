@@ -95,7 +95,7 @@ export function PersonProfile({
   /** « ··· »: the recruiter's menu; the profile's own (share, report) when left out. */
   more?: { label: string; onOpen: () => void };
   initialTab?: ProfileTab;
-  /** One's own recruiter profile: the pencils of each section, the photo to change, « Suivi ». */
+  /** One's own recruiter profile: the pencils of each section, the photo to change, « Statistiques ». */
   own?: OwnProfile;
 }) {
   const t = useTranslations("phoneProfile");
@@ -110,10 +110,10 @@ export function PersonProfile({
   const [pending, start] = useTransition();
   const [photoOpen, setPhotoOpen] = useState(false);
   const shown = posts.filter((post) => !gone.includes(post.id));
-  // A recruiter has no portfolio; on their own profile, « Suivi » (their dashboard) instead.
+  // A recruiter has no portfolio; on their own profile, « Statistiques » (and their dashboard).
   const tabs: readonly ProfileTab[] = person.recruiter
     ? own
-      ? ["publications", "apropos", "realisations", "suivi"]
+      ? ["publications", "apropos", "realisations", "statistiques"]
       : ["publications", "apropos", "realisations"]
     : PROFILE_TABS;
   const index = tabs.indexOf(tab);
@@ -168,14 +168,20 @@ export function PersonProfile({
               <path d="M12 15V4M7.5 8.5 12 4l4.5 4.5M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5" />
             </svg>
           </button>
-          <button
-            type="button"
-            className="nb-pf-rb"
-            aria-label={more?.label ?? t("more")}
-            onClick={more ? more.onOpen : () => setMenu("menu")}
-          >
-            <PhoneIcon name="plusOptions" size={17} />
-          </button>
+          {own ? (
+            <Link href={own.account.href} className="nb-pf-rb" aria-label={own.account.label}>
+              <PhoneIcon name="reglages" size={18} />
+            </Link>
+          ) : (
+            <button
+              type="button"
+              className="nb-pf-rb"
+              aria-label={more?.label ?? t("more")}
+              onClick={more ? more.onOpen : () => setMenu("menu")}
+            >
+              <PhoneIcon name="plusOptions" size={17} />
+            </button>
+          )}
         </span>
       </header>
 
@@ -218,7 +224,7 @@ export function PersonProfile({
                   image={null}
                   tone={person.tone}
                   org={false}
-                  size={64}
+                  size={92}
                 />
               </span>
             )}
@@ -671,7 +677,12 @@ export function PersonProfile({
             {edit(t("tab.realisations"), own.edits.projects, t("own.add"))}
           </h2>
         ) : null}
-        {tab === "suivi" ? own?.suivi : null}
+        {tab === "statistiques" ? (
+          <>
+            {own?.stats}
+            {own?.suivi}
+          </>
+        ) : null}
 
         {tab === "realisations" ? (
           person.works.length === 0 ? (
@@ -922,6 +933,9 @@ export type OwnProfile = {
     /** « Langues et lieux »: its own button and sheet. */
     languages: ReactNode;
   };
-  /** « Suivi »: the recruiter's dashboard. */
+  /** « Statistiques »: who came to the profile and the posts, then the recruiter's dashboard. */
+  stats: ReactNode;
   suivi: ReactNode;
+  /** The round at the top right in place of « ··· »: the account. */
+  account: { href: string; label: string };
 };

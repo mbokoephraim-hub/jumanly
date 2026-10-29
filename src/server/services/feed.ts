@@ -10,6 +10,7 @@ import { z } from "zod";
 import { Prisma } from "@/generated/prisma/client";
 import type { FeedPostKind, PrismaClient } from "@/generated/prisma/client";
 import { matchesForUser } from "@/server/matching/service";
+import { recordAudience, recordImpressions } from "./audience";
 import { FEED_POST_MAX, FEED_REPLY_MAX, postTextSchema } from "./feed-limits";
 import { rankFeed, type AuthorSignals } from "./feed-rank";
 import { photoType } from "./profile-photo";
@@ -436,7 +437,10 @@ export async function listFeed(
     take: tab === "pourvous" ? CANDIDATES : PAGE,
     select: postSelect,
   });
-  if (tab !== "pourvous") return toItems(db, viewerId, rows, connected, now, blocked);
+  if (tab !== "pourvous") {
+    await recordImpressions(db, viewerId, rows);
+    return toItems(db, viewerId, rows, connected, now, blocked);
+  }
   const people = [
     ...new Set(rows.flatMap((row) => (row.authorId && !row.organizationId ? [row.authorId] : []))),
   ];
@@ -454,14 +458,9 @@ export async function listFeed(
     now,
   ).slice(0, PAGE);
   const byId = new Map(rows.map((row) => [row.id, row]));
-  return toItems(
-    db,
-    viewerId,
-    ranked.map((post) => byId.get(post.id)!),
-    connected,
-    now,
-    blocked,
-  );
+  const shown = ranked.map((post) => byId.get(post.id)!);
+  await recordImpressions(db, viewerId, shown);
+  return toItems(db, viewerId, shown, connected, now, blocked);
 }
 
 /**
@@ -564,6 +563,13 @@ export async function getPost(db: PrismaClient, viewerId: string, id: string, no
     select: postSelect,
   });
   if (!row || (row.authorId && !row.organizationId && blocked.includes(row.authorId))) return null;
+  if (row.authorId && !row.organizationId)
+    await recordAudience(
+      db,
+      viewerId,
+      [{ kind: "post_view", ownerId: row.authorId, targetId: row.id }],
+      now,
+    );
   const [item] = await toItems(db, viewerId, [row], connected, now, blocked);
   const replies = await db.feedPost.findMany({
     where: { parentId: id, hiddenAt: null, ...notBlocked(blocked) },

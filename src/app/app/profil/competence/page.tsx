@@ -18,7 +18,7 @@ export default async function SkillPage({ searchParams }: PageProps<"/app/profil
   // Modèle B (B5, B9): skills are added from the CV of Carrière on a phone.
   if (Object.keys(params).length === 0) {
     const user = await requireUser("/app/profil/competence");
-    await phoneTalentRedirect(user.id, "/app/career/cv?ajouter=competences");
+    await phoneTalentRedirect(user.id, "/app/profil?ajouter=competences");
   }
   return <SkillScreen mode="page" params={params} />;
 }

@@ -15,3 +15,10 @@ export async function phoneTalentRedirect(userId: string, target: string) {
   if (space || partner) return;
   redirect(target);
 }
+
+/** A talent on a phone: the screens of the Modèle B, not the former pages (recruiters keep theirs). */
+export async function isPhoneTalent(userId: string) {
+  if (!(await isPhone())) return false;
+  const [space, partner] = await Promise.all([getActiveSpace(userId), getPartnerSpace(userId)]);
+  return !space && !partner;
+}

@@ -362,7 +362,7 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
   const steps: Step[] = [];
   if (home.suggestion)
     steps.push(
-      step("skill", "/app/career/cv?ajouter=competences", {
+      step("skill", "/app/profil?ajouter=competences", {
         skill: home.suggestion.name,
         count: home.suggestion.count,
       }),
@@ -381,7 +381,7 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
     summary: step("about", "/app/career/profil/apropos"),
     experience: step("experience", "/app/career/profil/experience/nouvelle"),
     education: step("education", "/app/career/profil/formation/nouvelle"),
-    languages: step("languages", "/app/career/cv?ajouter=langues"),
+    languages: step("languages", "/app/profil?ajouter=langues"),
   };
   for (const key of home.missing) if (missing[key]) steps.push(missing[key]!);
   if (home.applications.length === 0) steps.push(step("apply", "/app/jobs"));
@@ -506,7 +506,7 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
       initials: initialsOf(skill.name),
       title: skill.name,
       kind: t("kind.skill"),
-      href: "/app/career/cv",
+      href: "/app/profil",
     })),
     ...(home.profile.summary
       ? [
@@ -526,7 +526,7 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
       initials: "EX",
       title: item.title,
       kind: t("kind.experienceWhen", { when: item.when }),
-      href: item.href ?? "/app/career/cv",
+      href: item.href ?? "/app/profil",
     })),
     ...home.profile.educations.map((item) => ({
       id: `f-${item.id}`,
@@ -550,7 +550,7 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
       initials: "LA",
       title: languageLabel(language.code),
       kind: t("kind.language"),
-      href: "/app/career/cv?ajouter=langues",
+      href: "/app/profil?ajouter=langues",
     })),
     ...cvs.map((cv) => ({
       id: `c-${cv.id}`,

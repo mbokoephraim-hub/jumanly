@@ -2,7 +2,7 @@ import type { SocialKind } from "@/lib/social-links";
 
 /** The tabs of a person's profile (docs/profil-personne § Onglets), in the order of the segment. */
 export const PROFILE_TABS = ["publications", "apropos", "realisations", "portfolio"] as const;
-export type ProfileTab = (typeof PROFILE_TABS)[number] | "suivi";
+export type ProfileTab = (typeof PROFILE_TABS)[number] | "statistiques";
 
 /**
  * A person's profile as the phone shows it (docs/profil-personne, maquette `Profil.dc.html`):

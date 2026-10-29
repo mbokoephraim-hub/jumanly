@@ -889,6 +889,7 @@ model User {
   feedHiddenTypes      FeedHiddenType[]
   feedEvents           FeedEventParticipant[]
   feedImages           FeedImage[]
+  audience             AudienceEvent[]
   quizAttempts         QuizAttempt[]
   lessonNotes          LessonNote[]
   exerciseSubmissions  ExerciseSubmission[]
@@ -2831,4 +2832,27 @@ model OrgDeclaredMember {
   respondedAt    DateTime             @default(now())
 
   @@unique([organizationId, experienceId])
+}
+
+/// What a person's profile and posts drew (Mon profil › Statistiques, demande d'Ephraïm du
+/// 29/10/2026): one row per viewer, per day and per profile or post, so a page shown twice the
+/// same day counts once. Nothing names the viewer to the owner: only totals are read.
+enum AudienceKind {
+  profile_visit
+  post_view
+  post_impression
+}
+
+model AudienceEvent {
+  kind     AudienceKind
+  /// The person whose profile or post it is.
+  ownerId  String
+  owner    User         @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  /// The profile (the owner's id) or the post.
+  targetId String
+  viewerId String
+  day      DateTime     @db.Date
+
+  @@id([kind, targetId, viewerId, day])
+  @@index([ownerId, kind, day])
 }
