@@ -244,6 +244,7 @@ export async function PhoneLessonScreen({
         }
       : null,
     lead: current.kind === "video" ? null : (outline.brief ?? paragraphs[0] ?? null),
+    cover: course.coverUrl,
     // Under the video: what the admin wrote for the lesson, else the course's description.
     about:
       current.kind === "video"

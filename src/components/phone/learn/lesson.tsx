@@ -17,6 +17,7 @@ import { PhoneBack } from "../back";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { askOrbi } from "../orbi-bus";
 import { PhoneSheet } from "../sheet";
+import { CourseCover } from "./parts";
 
 export type LessonView = {
   id: string;
@@ -42,6 +43,8 @@ export type LessonView = {
     resume: VideoResume | null;
   } | null;
   lead: string | null;
+  /** The course's cover, shown over the video until it plays. */
+  cover: string | null;
   /** A video lesson: its text, or the course's description, under the video. */
   about: string | null;
   takeaways: string[];
@@ -186,9 +189,25 @@ export function PhoneLesson({ view }: { view: LessonView }) {
       </span>
 
       {view.video?.youtube ? (
-        <div className="nb-fo-video">
-          <YouTubeEmbed id={view.video.youtube} title={view.title} />
-        </div>
+        view.cover && !playing ? (
+          <button
+            type="button"
+            className="nb-fo-ecran"
+            data-ton={view.tone}
+            data-couv=""
+            aria-label={t("lesson.play")}
+            onClick={() => setPlaying(true)}
+          >
+            <CourseCover src={view.cover} />
+            <span className="nb-fo-play" aria-hidden>
+              <PhoneIcon name="lecture" size={26} />
+            </span>
+          </button>
+        ) : (
+          <div className="nb-fo-video">
+            <YouTubeEmbed id={view.video.youtube} title={view.title} autoplay={playing} />
+          </div>
+        )
       ) : view.video ? (
         playing ? (
           <div className="nb-fo-video" ref={videoBox}>
@@ -219,7 +238,7 @@ export function PhoneLesson({ view }: { view: LessonView }) {
               });
             }}
           >
-            <LessonArt />
+            {view.cover ? <CourseCover src={view.cover} /> : <LessonArt />}
             <span className="nb-fo-play" aria-hidden>
               <PhoneIcon name="lecture" size={26} />
             </span>
