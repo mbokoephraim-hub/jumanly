@@ -10855,7 +10855,6 @@
     "years": "{count, plural, one {# an} other {# ans}}",
     "months": "{count} mois",
     "moreLines": "Voir {count} de plus",
-    "achievements": "Réalisations clés",
     "companyPage": "{company}, voir la page de l’entreprise",
     "less": "Voir moins",
     "education": "Formation",

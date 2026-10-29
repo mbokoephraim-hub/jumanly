@@ -5988,7 +5988,7 @@ section + section .nb-ex-sec {
 }
 .nb-ca-form-barre {
   display: grid;
-  grid-template-columns: 96px 1fr 96px;
+  grid-template-columns: 56px 1fr 56px;
   align-items: center;
   padding: var(--nb-haut) 4px 6px;
   min-height: calc(var(--nb-haut) + 50px);
@@ -6011,16 +6011,23 @@ section + section .nb-ex-sec {
   font-weight: 400;
   color: var(--nb-creme);
 }
-.nb-ca-form-barre .nb-retour svg {
-  display: none;
+.nb-ca-form-barre .nb-retour {
+  justify-self: start;
+  width: 44px;
+  height: 44px;
+  justify-content: center;
 }
 .nb-ca-ok {
   justify-self: end;
-  height: 44px;
-  padding: 0 12px;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--nb-lime-t);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--nb-lime);
+  color: var(--nb-sur-lime, #0b1a1f);
 }
 .nb-ca-ok:disabled {
   opacity: 0.5;
