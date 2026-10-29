@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import messages from "../../messages/fr.json";
 import { NavigationFeedback } from "@/components/motion/navigation-feedback";
+import { SheetGestures } from "@/components/motion/sheet-gestures";
 import { ServiceWorker } from "@/components/site/service-worker";
 import { installScript } from "@/lib/install-prompt";
 import { launchScript } from "@/lib/launch-splash";
@@ -63,6 +64,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: installScript }} />
         <RootIntlProvider locale="fr" messages={texts} timeZone="UTC">
           <NavigationFeedback label={loading.aria} />
+          <SheetGestures />
           {children}
           <ServiceWorker enabled={process.env.NODE_ENV === "production"} />
         </RootIntlProvider>
