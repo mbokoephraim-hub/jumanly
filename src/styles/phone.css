@@ -5996,7 +5996,8 @@ section + section .nb-ex-sec {
   position: sticky;
   top: 0;
   z-index: 4;
-  background: rgba(var(--nb-nuit-rgb), 0.96);
+  /* Opaque: the fields scrolled under it must not show through the title (29/10/2026). */
+  background: rgb(var(--nb-nuit-rgb));
 }
 .nb-ca-form-barre h1 {
   text-align: center;
@@ -6420,6 +6421,11 @@ input:checked + .nb-ca-radio::after {
 }
 .nb-ca-aide {
   margin-top: 8px;
+  /* Same side margins as the fields (.nb-ca-ch), so no hint touches the screen edge. */
+  padding: 0 20px;
+}
+.nb-ca-ch .nb-ca-aide {
+  padding: 0;
 }
 .nb-ca-formules {
   display: flex;

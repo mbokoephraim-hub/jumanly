@@ -958,6 +958,7 @@ button.nb-pf-rb,
 /* « Modifier le profil » : réseaux et e-mail public. */
 .nb-ca-sous {
   margin: 22px 0 4px;
+  padding: 0 20px;
   font-size: 13px;
   font-weight: 700;
   color: var(--nb-creme);
