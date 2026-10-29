@@ -5058,3 +5058,14 @@ Demande d'Ephraïm du 29/10/2026 (partie administration seulement).
   (notification `orgDeleted` et e-mail) ; les candidats reçoivent « offre plus disponible » ; les paiements
   restent sans lien ; les entités d'un groupe deviennent indépendantes. Pas pour les partenaires.
 - À décider plus tard : changer l'adresse e-mail d'un compte dont la personne a perdu l'accès à sa boîte.
+
+## 2026-10-29 · Mise à jour de sécurité (better-auth, nodemailer, fast-uri)
+
+- `pnpm audit` signalait 12 failles, dont une critique et une grave dans better-auth < 1.7.7 (usurpation
+  de compte via le proxy OAuth, GHSA-r4xp-prcw-77qf) : le contrôle « Dépendances et secrets » échouait.
+- better-auth 1.7.5 → 1.7.14, nodemailer 10.1.2 → 10.3.0, fast-uri forcé en >= 3.1.9 (dépendance de
+  Prisma, `overrides` de `pnpm-workspace.yaml`). Reste une faille basse dans deepmerge (via react-email,
+  sans version corrigée publiée), sans effet sur le contrôle (seuil « high »).
+- Vérifié : types, lint, tests, build, e2e `accounts` et `connexion-v2` (inscription, connexion,
+  déconnexion, mot de passe oublié). Cinq tests en base `explore` et `entreprise-page` échouent déjà sur
+  main, sans lien avec cette mise à jour.

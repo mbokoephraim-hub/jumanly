@@ -27,8 +27,7 @@ export async function proxy(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/admin")) {
     const session = await auth.api.getSession({ headers: request.headers });
     const user = session?.user as
-      | { id: string; email: string; emailVerified: boolean; platformRole?: string }
-      | undefined;
+      { id: string; email: string; emailVerified: boolean; platformRole?: string } | undefined;
     let role = user?.platformRole ?? "";
     if (user && (await bootstrapAdminIfListed(db, { ...user, platformRole: role }))) {
       role = "platform_admin";
