@@ -24,13 +24,14 @@ import { PhoneBack } from "../back";
 import { PhoneIcon } from "../icon";
 import { AttachSheets, useSendError, type AttachSheet } from "./attach";
 import { MessageBubble, type Open } from "./bubble";
-import { CallConfirm, VideoCall, VideoGlyph } from "./call";
+import { AudioGlyph, CallConfirm, VideoCall, VideoGlyph } from "./call";
 import { PhoneCamera } from "./camera";
 import { useChatPulse, useTypingPing } from "./live";
-import { VOICE_MAX_SECONDS, clock, voiceType } from "./media";
+import { VOICE_BITS_PER_SECOND, VOICE_MAX_SECONDS, clock, voiceType } from "./media";
 import { ChatMenu, useMute, type MenuSheet } from "./menu";
 import { OrbiHelp } from "./orbi-help";
 import { Spark, Typing, WhoAvatar, WhoName } from "./parts";
+import type { CallMode } from "./rtc";
 import type { MessageView, ThreadView } from "./types";
 import { MediaViewer } from "./viewer";
 
@@ -42,8 +43,15 @@ const WAVE = Array.from({ length: 26 }, (_, index) => ({
   delay: `${((index % 6) * 0.11).toFixed(2)}s`,
 }));
 
-/** The voice note being recorded: the time, the bars, delete and send. */
-function useVoice(conversationId: string) {
+/** A voice note leaving the phone: shown at once in the conversation, before the server answers. */
+type Sending = { kind: "text"; text: string } | { kind: "voice"; src: string; seconds: number };
+
+/**
+ * The voice note being recorded: the time, the bars, delete and send. Recorded light (speech at
+ * 24 kb/s, about 3 Ko a second) so that it leaves quickly on a slow network, and shown in the
+ * conversation as soon as « Envoyer » is touched.
+ */
+function useVoice(conversationId: string, showSending: (sending: Sending) => void) {
   const t = useTranslations("phoneMsg");
   const sendError = useSendError();
   const [recording, setRecording] = useState<Recording | null>(null);
@@ -71,7 +79,10 @@ function useVoice(conversationId: string) {
     }
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const recorder = new MediaRecorder(stream, type ? { mimeType: type } : undefined);
+      const recorder = new MediaRecorder(stream, {
+        ...(type ? { mimeType: type } : {}),
+        audioBitsPerSecond: VOICE_BITS_PER_SECOND,
+      });
       const chunks: Blob[] = [];
       recorder.ondataavailable = (event) => {
         if (event.data.size) chunks.push(event.data);
@@ -97,12 +108,16 @@ function useVoice(conversationId: string) {
       }
       const blob = new Blob(current.chunks, { type: current.recorder.mimeType || "audio/webm" });
       start(async () => {
+        const src = URL.createObjectURL(blob);
+        showSending({ kind: "voice", src, seconds: elapsed });
         const form = new FormData();
         form.set("conversation", conversationId);
         form.set("seconds", String(elapsed));
         form.set("voice", blob, "note");
         const result = await sendVoiceAction(form).catch(() => null);
         if (!result?.ok) sendError(result);
+        // The note read with the page takes its place; the copy on the phone is let go.
+        setTimeout(() => URL.revokeObjectURL(src), 60_000);
       });
     };
     current.recorder.stop();
@@ -152,8 +167,8 @@ export function PhoneThread({ view }: { view: ThreadView }) {
   const [menu, setMenu] = useState<MenuSheet>(null);
   const [helping, setHelping] = useState(false);
   const [camera, setCamera] = useState(false);
-  const [asking, setAsking] = useState(false);
-  const [calling, setCalling] = useState(false);
+  const [asking, setAsking] = useState<CallMode | null>(null);
+  const [calling, setCalling] = useState<CallMode | null>(null);
   const [open, setOpen] = useState<Open | null>(null);
   const [searching, setSearching] = useState(false);
   const [rq, setRq] = useState("");
@@ -163,16 +178,15 @@ export function PhoneThread({ view }: { view: ThreadView }) {
   const [used, setUsed] = useState<string[]>([]);
   const [, startSend] = useTransition();
   const [pendingBlock, startBlock] = useTransition();
-  const voice = useVoice(view.id);
   const mute = useMute(view);
   const ping = useTypingPing(view.id);
-  const live = useChatPulse({ conversationId: view.id, every: 3_000, active: !calling });
+  const live = useChatPulse({ conversationId: view.id, every: 3_000, active: calling === null });
   // The messages read with the page; the ones arriving after rise gently.
   const [seen] = useState(() => new Set(view.messages.map((message) => message.id)));
 
   const [messages, addOptimistic] = useOptimistic(
     view.messages,
-    (current: MessageView[], text: string) => [
+    (current: MessageView[], sending: Sending) => [
       ...current,
       {
         id: `envoi-${current.length}`,
@@ -181,14 +195,23 @@ export function PhoneThread({ view }: { view: ThreadView }) {
         time: tm("sending"),
         ephemeral: view.ephemeral !== null,
         read: false,
-        words: text,
+        words: sending.kind === "text" ? sending.text : "",
         day: current.at(-1)?.day ?? "",
         reactions: null,
         reactable: false,
-        bubble: { kind: "text" as const, text },
+        bubble:
+          sending.kind === "text"
+            ? { kind: "text" as const, text: sending.text }
+            : {
+                kind: "voice" as const,
+                src: sending.src,
+                seconds: sending.seconds,
+                duration: clock(sending.seconds),
+              },
       },
     ],
   );
+  const voice = useVoice(view.id, addOptimistic);
 
   // The suggestions are read again with the page: the ones already sent go away until then.
   useEffect(() => {
@@ -240,7 +263,7 @@ export function PhoneThread({ view }: { view: ThreadView }) {
     if (!text) return;
     setPicking(null);
     startSend(async () => {
-      addOptimistic(text);
+      addOptimistic({ kind: "text", text });
       const result = await sendTextAction(view.id, text).catch(() => null);
       if (!result?.ok) {
         onFail?.();
@@ -340,14 +363,24 @@ export function PhoneThread({ view }: { view: ThreadView }) {
               </span>
             )}
             {view.canCall && !view.blockedByMe ? (
-              <button
-                type="button"
-                className="nb-ch-rb"
-                aria-label={t("call.button", { name: who.first })}
-                onClick={() => setAsking(true)}
-              >
-                <VideoGlyph />
-              </button>
+              <>
+                <button
+                  type="button"
+                  className="nb-ch-rb"
+                  aria-label={t("call.buttonAudio", { name: who.first })}
+                  onClick={() => setAsking("audio")}
+                >
+                  <AudioGlyph />
+                </button>
+                <button
+                  type="button"
+                  className="nb-ch-rb"
+                  aria-label={t("call.button", { name: who.first })}
+                  onClick={() => setAsking("video")}
+                >
+                  <VideoGlyph />
+                </button>
+              </>
             ) : null}
             <button
               type="button"
@@ -618,7 +651,6 @@ export function PhoneThread({ view }: { view: ThreadView }) {
                   type="button"
                   className="nb-ch-envoyer"
                   aria-label={tm("compose.voice")}
-                  disabled={voice.pending}
                   onClick={() => void voice.begin()}
                 >
                   <svg
@@ -674,15 +706,16 @@ export function PhoneThread({ view }: { view: ThreadView }) {
       />
       <CallConfirm
         view={view}
-        open={asking}
+        open={asking !== null}
+        mode={asking ?? "video"}
         online={online}
-        onClose={() => setAsking(false)}
+        onClose={() => setAsking(null)}
         onCall={() => {
-          setAsking(false);
-          setCalling(true);
+          setCalling(asking ?? "video");
+          setAsking(null);
         }}
       />
-      {calling ? <VideoCall view={view} onEnd={() => setCalling(false)} /> : null}
+      {calling ? <VideoCall view={view} mode={calling} onEnd={() => setCalling(null)} /> : null}
       {camera ? (
         <PhoneCamera
           conversationId={view.id}
