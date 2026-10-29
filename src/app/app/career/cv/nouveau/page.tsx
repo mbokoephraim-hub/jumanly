@@ -1,3 +1,4 @@
+import { FreshOnEachVisit } from "@/components/phone/fresh-visit";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
@@ -44,17 +45,19 @@ export default async function NewCvPage({ searchParams }: PageProps<"/app/career
       choices.find((choice) => choice.id === asked) ?? choices.find((c) => !c.lockedBy)!;
     return (
       <CvTexts>
-        <CvTemplatePicker
-          choices={choices}
-          filters={filters}
-          sub={sub}
-          initial={initial.id}
-          action={startCvFromTemplateAction}
-          cvId={null}
-          back="/app/career/cv/nouveau"
-          steps={await stepsOf("modele", null)}
-          error={query.erreur === "modele" ? t("phoneCv.template.lockedError") : null}
-        />
+        <FreshOnEachVisit>
+          <CvTemplatePicker
+            choices={choices}
+            filters={filters}
+            sub={sub}
+            initial={initial.id}
+            action={startCvFromTemplateAction}
+            cvId={null}
+            back="/app/career/cv/nouveau"
+            steps={await stepsOf("modele", null)}
+            error={query.erreur === "modele" ? t("phoneCv.template.lockedError") : null}
+          />
+        </FreshOnEachVisit>
       </CvTexts>
     );
   }
@@ -81,7 +84,9 @@ export default async function NewCvPage({ searchParams }: PageProps<"/app/career
     ];
     return (
       <CvTexts>
-        <CvOrbiPrepare key={owned?.id ?? "nouveau"} done={owned?.id ?? null} lines={lines} />
+        <FreshOnEachVisit>
+          <CvOrbiPrepare key={owned?.id ?? "nouveau"} done={owned?.id ?? null} lines={lines} />
+        </FreshOnEachVisit>
       </CvTexts>
     );
   }
@@ -96,7 +101,9 @@ export default async function NewCvPage({ searchParams }: PageProps<"/app/career
     if (!pending || !read) redirect("/app/career/cv/nouveau?etape=import");
     return (
       <CvTexts>
-        <CvFound importId={pending.id} read={read} profile={await getFullProfile(db, user.id)} />
+        <FreshOnEachVisit>
+          <CvFound importId={pending.id} read={read} profile={await getFullProfile(db, user.id)} />
+        </FreshOnEachVisit>
       </CvTexts>
     );
   }
@@ -107,22 +114,24 @@ export default async function NewCvPage({ searchParams }: PageProps<"/app/career
     const format = await getFormatter();
     return (
       <CvTexts>
-        <CvImport
-          key={error ?? "choisir"}
-          max={megabytes}
-          error={error ? dynamic(t)(`phoneCv.import.error.${error}`, { max: megabytes }) : null}
-          last={
-            pending && read
-              ? {
-                  name: read.file?.name ?? t("phoneCv.import.pasted"),
-                  kind: read.file?.kind ?? null,
-                  when: t("phoneCv.import.lastWhen", {
-                    when: format.relativeTime(pending.createdAt),
-                  }),
-                }
-              : null
-          }
-        />
+        <FreshOnEachVisit>
+          <CvImport
+            key={error ?? "choisir"}
+            max={megabytes}
+            error={error ? dynamic(t)(`phoneCv.import.error.${error}`, { max: megabytes }) : null}
+            last={
+              pending && read
+                ? {
+                    name: read.file?.name ?? t("phoneCv.import.pasted"),
+                    kind: read.file?.kind ?? null,
+                    when: t("phoneCv.import.lastWhen", {
+                      when: format.relativeTime(pending.createdAt),
+                    }),
+                  }
+                : null
+            }
+          />
+        </FreshOnEachVisit>
       </CvTexts>
     );
   }
@@ -133,10 +142,12 @@ export default async function NewCvPage({ searchParams }: PageProps<"/app/career
   });
   return (
     <CvTexts>
-      <CvStart
-        percent={profile?.completeness ?? 0}
-        error={query.erreur === "limite" ? t("phoneCv.start.limit") : null}
-      />
+      <FreshOnEachVisit>
+        <CvStart
+          percent={profile?.completeness ?? 0}
+          error={query.erreur === "limite" ? t("phoneCv.start.limit") : null}
+        />
+      </FreshOnEachVisit>
     </CvTexts>
   );
 }

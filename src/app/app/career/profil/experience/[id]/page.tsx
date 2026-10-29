@@ -1,3 +1,4 @@
+import { FreshOnEachVisit } from "@/components/phone/fresh-visit";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -36,19 +37,21 @@ export default async function CareerExperiencePage({
   if (id !== "nouvelle" && !item) notFound();
   return (
     <CareerTexts>
-      <ExperienceForm
-        values={{
-          id: item?.id ?? null,
-          title: item?.title ?? "",
-          company: item?.company ?? "",
-          location: item?.location ?? "",
-          type: item?.type ?? "job",
-          start: dateToMonth(item?.startDate),
-          end: dateToMonth(item?.endDate),
-          current: item ? item.endDate === null : false,
-          description: item?.description ?? "",
-        }}
-      />
+      <FreshOnEachVisit>
+        <ExperienceForm
+          values={{
+            id: item?.id ?? null,
+            title: item?.title ?? "",
+            company: item?.company ?? "",
+            location: item?.location ?? "",
+            type: item?.type ?? "job",
+            start: dateToMonth(item?.startDate),
+            end: dateToMonth(item?.endDate),
+            current: item ? item.endDate === null : false,
+            description: item?.description ?? "",
+          }}
+        />
+      </FreshOnEachVisit>
     </CareerTexts>
   );
 }

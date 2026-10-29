@@ -1,3 +1,4 @@
+import { FreshOnEachVisit } from "@/components/phone/fresh-visit";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
@@ -38,7 +39,9 @@ export default async function PracticeBriefingPage({
   if (await isPhone())
     return (
       <InterviewTexts>
-        <PhonePracticeSetup view={await setupView(user.id, query)} />
+        <FreshOnEachVisit>
+          <PhonePracticeSetup view={await setupView(user.id, query)} />
+        </FreshOnEachVisit>
       </InterviewTexts>
     );
   const t = await getTranslations();
@@ -104,14 +107,16 @@ export default async function PracticeBriefingPage({
   // Without an offer: « Nouvel entraînement » (planche talent-4 § 5 bis).
   if (!job)
     return (
-      <NewPractice
-        userId={user.id}
-        jobTitle={profile?.headline ?? ""}
-        mode={mode}
-        type={typeof query.type === "string" ? query.type : null}
-        fromOffer={query.source === "offre"}
-        error={error ?? null}
-      />
+      <FreshOnEachVisit>
+        <NewPractice
+          userId={user.id}
+          jobTitle={profile?.headline ?? ""}
+          mode={mode}
+          type={typeof query.type === "string" ? query.type : null}
+          fromOffer={query.source === "offre"}
+          error={error ?? null}
+        />
+      </FreshOnEachVisit>
     );
 
   return (

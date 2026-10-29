@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FreshOnEachVisit } from "@/components/phone/fresh-visit";
 import { notFound, redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { ProjectDetail, ProjectForm } from "@/components/phone/career/portfolio";
@@ -46,21 +47,23 @@ export default async function CareerProjectPage({
   if (editing)
     return (
       <CareerTexts>
-        <ProjectForm
-          key={project?.id ?? "nouvelle"}
-          values={{
-            id: project?.id ?? null,
-            title: project?.title ?? "",
-            context: project ? projectText(project) : "",
-            link: project?.link ?? "",
-            skills: project?.skills ?? [],
-            visible: project?.visible ?? false,
-            photos,
-            others: (project?.files ?? [])
-              .filter((file) => !file.type.startsWith("image/"))
-              .map((file) => file.key),
-          }}
-        />
+        <FreshOnEachVisit>
+          <ProjectForm
+            key={project?.id ?? "nouvelle"}
+            values={{
+              id: project?.id ?? null,
+              title: project?.title ?? "",
+              context: project ? projectText(project) : "",
+              link: project?.link ?? "",
+              skills: project?.skills ?? [],
+              visible: project?.visible ?? false,
+              photos,
+              others: (project?.files ?? [])
+                .filter((file) => !file.type.startsWith("image/"))
+                .map((file) => file.key),
+            }}
+          />
+        </FreshOnEachVisit>
       </CareerTexts>
     );
 
