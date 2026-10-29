@@ -5111,3 +5111,7 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - Les toasts de l'espace connecté deviennent une petite pilule d'une ligne (13 px, petite coche), sans croix ni barre de temps : 2,5 s (4,5 s pour une erreur ou un « Annuler »), un toucher les ferme. Le second texte (« detail ») n'est plus affiché.
 - Plus de toast quand le bouton montre déjà le résultat : « Se connecter » (Explorer, profil, Connexions), enregistrer une offre ou une formation, participer à un évènement, mettre un projet en avant, CV principal, changer de caméra. Les erreurs restent signalées.
 - Administration d'entreprise : toast plus petit, 3 s.
+
+## 2026-10-29 · « Télécharger en PDF » d'un CV réparé en production
+
+- Le bouton du téléphone (et du studio) appelle `/app/career/cv/[id]/pdf` ; cette route n'embarquait pas Chromium (`@sparticuz/chromium/bin`) sur Vercel, d'où « Le PDF n'a pas pu être créé ». Ajoutée à `outputFileTracingIncludes` dans `next.config.ts`, comme les autres routes d'export.
