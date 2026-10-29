@@ -98,7 +98,7 @@ test("recherche de talents et mise en relation acceptée", async ({
     await expectAccessible(page);
     await card.getByRole("button", { name: "Accepter" }).click();
     await card.getByRole("link", { name: /^Écrire à / }).click();
-    await expect(page).toHaveURL(/\/app\/messages\/[^/?]+$/);
+    await expect(page).toHaveURL(/\/app\/messages\/[^/?]+\?de=connexions$/);
     await expect(page.locator(".nb-ch-conv")).toBeVisible();
   } else {
     const request = page.getByRole("button", { name: /Groupe Démo.*souhaite échanger avec vous/ });

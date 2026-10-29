@@ -24,7 +24,7 @@ type Tab = (typeof TABS)[number];
 
 /** What became of a request, a suggestion or a sent request on this screen. */
 type Done =
-  | { kind: "accepted"; conversationId: string }
+  | { kind: "accepted"; conversationId: string; closed?: boolean }
   | { kind: "refused" }
   | { kind: "sent" }
   | { kind: "withdrawn" };
@@ -151,7 +151,7 @@ export function PhoneConnexions({ view, asked }: { view: ConnexionsView; asked: 
   };
   const write = (connectionId: string, conversationId: string | null) => {
     if (conversationId) {
-      router.push(`/app/messages/${conversationId}`);
+      router.replace(`/app/messages/${conversationId}?de=connexions`);
       return;
     }
     start(async () => {
@@ -160,7 +160,7 @@ export function PhoneConnexions({ view, asked }: { view: ConnexionsView; asked: 
         showToast({ message: t("error"), tone: "error" });
         return;
       }
-      router.push(`/app/messages/${result.value}`);
+      router.replace(`/app/messages/${result.value}?de=connexions`);
     });
   };
   const hide = (personId: string) => {
@@ -350,12 +350,29 @@ export function PhoneConnexions({ view, asked }: { view: ConnexionsView; asked: 
                             <PhoneIcon name="coche" size={16} stroke={2.4} />
                             {t("accepted", { name: request.who.first })}
                           </p>
-                          <Link
-                            href={`/app/messages/${state.conversationId}`}
-                            className="nb-cx-oui"
-                          >
-                            {t("write", { name: request.who.first })}
-                          </Link>
+                          {state.closed ? null : (
+                            <div className="nb-cx-choix">
+                              <Link
+                                href={`/app/messages/${state.conversationId}?de=connexions`}
+                                replace
+                                className="nb-cx-oui"
+                              >
+                                {t("write", { name: request.who.first })}
+                              </Link>
+                              <button
+                                type="button"
+                                className="nb-cx-non"
+                                onClick={() =>
+                                  setDone((current) => ({
+                                    ...current,
+                                    [request.id]: { ...state, closed: true },
+                                  }))
+                                }
+                              >
+                                {t("later")}
+                              </button>
+                            </div>
+                          )}
                         </div>
                       ) : (
                         <p className="nb-cx-refus">{t("refused", { name: request.who.first })}</p>
@@ -408,7 +425,8 @@ export function PhoneConnexions({ view, asked }: { view: ConnexionsView; asked: 
                         ) : state.kind === "accepted" ? (
                           <div className="nb-cx-ok">
                             <Link
-                              href={`/app/messages/${state.conversationId}`}
+                              href={`/app/messages/${state.conversationId}?de=connexions`}
+                              replace
                               className="nb-cx-oui"
                             >
                               {t("write", { name: request.who.name })}

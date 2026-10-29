@@ -13406,6 +13406,7 @@
     "accepted": "Vous êtes connectés : {name} est maintenant dans votre Chat.",
     "acceptedToast": "{name} est maintenant dans vos connexions.",
     "write": "Écrire à {name}",
+    "later": "Plus tard",
     "refused": "Demande refusée. {name} n’est pas prévenu·e.",
     "none": {
       "title": "Aucune demande en attente",
