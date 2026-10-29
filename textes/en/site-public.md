@@ -74,6 +74,8 @@ brackets are placeholders hidden on the site until they are filled in.
 | `nav.group.solutions` | Solutions |
 | `nav.group.discover` | Discover |
 | `nav.signup` | Create an account |
+| `nav.waitlist` | Join the waitlist |
+| `nav.waitlistShort` | Waitlist |
 | `nav.goToApp` | My space |
 | `nav.menu.open` | Open the menu |
 | `nav.menu.close` | Close the menu |
@@ -777,3 +779,89 @@ brackets are placeholders hidden on the site until they are filled in.
 | `sitePreview.matches.job3` | Administrative assistant |
 | `sitePreview.matches.company3` | Savane Telecom (fictional) · Abidjan |
 | `sitePreview.score` | {value}% |
+
+### `waitlist`
+
+| Clé | Texte |
+|---|---|
+| `waitlist.seo.title` | Waitlist |
+| `waitlist.seo.description` | Jumanly opens soon. Join the waitlist to be told first, by e-mail, as soon as we open. |
+| `waitlist.hero.eyebrow` | Waitlist |
+| `waitlist.hero.title` | Be among the first on Jumanly |
+| `waitlist.hero.text` | The platform opens very soon. Leave us your details: you will be told first, by e-mail, as soon as we open. |
+| `waitlist.perks.title` | Why join now |
+| `waitlist.perks.early.title` | Early access |
+| `waitlist.perks.early.text` | You get your invitation before we open to the public. |
+| `waitlist.perks.news.title` | News, not spam |
+| `waitlist.perks.news.text` | One e-mail when we open and the important news, nothing more. |
+| `waitlist.perks.free.title` | Applying stays free |
+| `waitlist.perks.free.text` | On Jumanly, applying for a job will always be free. |
+| `waitlist.form.title` | Join the waitlist |
+| `waitlist.form.text` | Less than a minute. Fields marked with an asterisk are required. |
+| `waitlist.form.profile.legend` | You are… |
+| `waitlist.form.profile.talent.label` | Talent |
+| `waitlist.form.profile.talent.text` | I want to learn and find a job |
+| `waitlist.form.profile.recruiter.label` | Recruiter |
+| `waitlist.form.profile.recruiter.text` | I hire for my company or my clients |
+| `waitlist.form.profile.company.label` | Company |
+| `waitlist.form.profile.company.text` | I want to equip my whole HR team |
+| `waitlist.form.profile.partner.label` | Institution |
+| `waitlist.form.profile.partner.text` | School, NGO, public programme or funder |
+| `waitlist.form.firstName.label` | First name |
+| `waitlist.form.lastName.label` | Last name |
+| `waitlist.form.optional` | Optional |
+| `waitlist.form.email.label` | E-mail address |
+| `waitlist.form.email.placeholder` | you@example.com |
+| `waitlist.form.email.help` | We will only write to this address. |
+| `waitlist.form.country.label` | Country |
+| `waitlist.form.country.placeholder` | Choose your country |
+| `waitlist.form.city.label` | City |
+| `waitlist.form.organization.label` | Company |
+| `waitlist.form.institution.label` | Institution |
+| `waitlist.form.consent` | I agree to receive e-mails from Jumanly about the opening of the platform. I can unsubscribe at any time. |
+| `waitlist.form.privacyLink` | Read the privacy policy |
+| `waitlist.form.honeypot` | Leave this field empty |
+| `waitlist.form.submit` | Join the waitlist |
+| `waitlist.form.pending` | Joining… |
+| `waitlist.form.error.required` | This field is required. |
+| `waitlist.form.error.email` | Enter a valid e-mail address. |
+| `waitlist.form.error.profile` | Choose your profile. |
+| `waitlist.form.error.consent` | Tick the box to continue. |
+| `waitlist.form.error.rateLimit` | Too many attempts. Try again in a few minutes. |
+| `waitlist.form.error.failed` | Your request could not be saved. Try again in a moment. |
+| `waitlist.success.title` | Done, {firstName}: your spot is saved! |
+| `waitlist.success.titleNoName` | Done: your spot is saved! |
+| `waitlist.success.text` | A confirmation e-mail is on its way to {email}. Remember to check your spam folder. |
+| `waitlist.success.noMail` | We will write to {email} as soon as Jumanly opens. |
+| `waitlist.success.already` | You had already joined with {email}: we have updated your details. |
+| `waitlist.success.cta` | Back to home |
+
+### `mail` (waitlist e-mail)
+
+| Clé | Texte |
+|---|---|
+| `mail.common.signature` | The Jumanly team |
+| `mail.common.footer.tagline` | Learn. Grow. Connect. |
+| `mail.common.footer.developedBy` | A platform developed by The Growth Lab |
+| `mail.common.footer.contact` | A question? Write to us: assistant@jumanly.io · infojumanly@gmail.com |
+| `mail.common.footer.legal` | Privacy · Terms of use |
+| `mail.waitlist.subject` | Your spot on Jumanly is saved |
+| `mail.waitlist.preheader` | Thank you for joining us. We will let you know as soon as we open. |
+| `mail.waitlist.badge` | Waitlist |
+| `mail.waitlist.title` | Welcome to the list, {firstName}. |
+| `mail.waitlist.intro` | Thank you for joining Jumanly. You are among the first people who will be invited to discover the platform to learn, build a career and hire. |
+| `mail.waitlist.summary.title` | Your details |
+| `mail.waitlist.summary.profile` | Profile |
+| `mail.waitlist.summary.country` | Country |
+| `mail.waitlist.summary.email` | E-mail |
+| `mail.waitlist.steps.title` | What happens next? |
+| `mail.waitlist.steps.1.title` | We are getting ready to open |
+| `mail.waitlist.steps.1.text` | Courses, profiles, jobs and hiring: the team is putting the finishing touches to the platform. |
+| `mail.waitlist.steps.2.title` | You get your invitation |
+| `mail.waitlist.steps.2.text` | An e-mail with your access lands in this inbox, before we open to the public. |
+| `mail.waitlist.steps.3.title` | You create your account |
+| `mail.waitlist.steps.3.text` | It only takes a few minutes. And applying always stays free. |
+| `mail.waitlist.cta` | Discover Jumanly |
+| `mail.waitlist.closing` | Until then, a question? Just reply to this e-mail or write to us at assistant@jumanly.io. |
+| `mail.waitlist.footer.reason` | You are receiving this e-mail because {email} joined the waitlist on jumanly.io. |
+| `mail.waitlist.footer.notYou` | Did not sign up? Just ignore this e-mail. |

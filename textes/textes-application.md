@@ -109,6 +109,8 @@ Conventions :
 | `nav.group.discover` | Découvrir |
 | `nav.login` | Se connecter |
 | `nav.signup` | Créer un compte |
+| `nav.waitlist` | Rejoindre la liste d'attente |
+| `nav.waitlistShort` | Liste d'attente |
 | `nav.goToApp` | Mon espace |
 | `nav.menu.open` | Ouvrir le menu |
 | `nav.menu.close` | Fermer le menu |
@@ -1223,6 +1225,66 @@ Nombre de questions : 28, réparties en 8 thèmes.
 
 Note d'intégration : le sujet « Demande de devis Company Premium » affiche les champs `contact.form.quote.*` et `contact.form.organization` devient obligatoire. Le lien `/contact?sujet=devis` présélectionne ce sujet. Les messages au sujet professionnel (devis, recrutement, partenaires, presse) sont routés vers assistant@jumanly.io, les autres vers infojumanly@gmail.com.
 
+
+### `/liste-attente` · Liste d'attente
+
+*Tant que les inscriptions sont fermées au public, permettre à chacun de réserver sa place et d'être prévenu par e-mail à l'ouverture.*
+
+| Clé | Texte |
+|---|---|
+| `waitlist.seo.title` | Liste d'attente |
+| `waitlist.seo.description` | Jumanly ouvre bientôt. Rejoignez la liste d'attente pour être prévenu en priorité, par e-mail, dès l'ouverture. |
+| `waitlist.hero.eyebrow` | Liste d'attente |
+| `waitlist.hero.title` | Soyez parmi les premiers sur Jumanly |
+| `waitlist.hero.text` | La plateforme ouvre très bientôt. Laissez-nous vos coordonnées : vous serez prévenu en priorité, par e-mail, dès l'ouverture. |
+| `waitlist.perks.title` | Pourquoi s'inscrire maintenant |
+| `waitlist.perks.early.title` | Un accès en avant-première |
+| `waitlist.perks.early.text` | Vous recevez votre invitation avant l'ouverture au public. |
+| `waitlist.perks.news.title` | Des nouvelles, pas de spam |
+| `waitlist.perks.news.text` | Un e-mail à l'ouverture et les nouvelles importantes, rien de plus. |
+| `waitlist.perks.free.title` | Candidater reste gratuit |
+| `waitlist.perks.free.text` | Sur Jumanly, candidater à une offre sera toujours gratuit. |
+| `waitlist.form.title` | Rejoindre la liste d'attente |
+| `waitlist.form.text` | Moins d'une minute. Les champs marqués d'un astérisque sont obligatoires. |
+| `waitlist.form.profile.legend` | Vous êtes… |
+| `waitlist.form.profile.talent.label` | Talent |
+| `waitlist.form.profile.talent.text` | Je veux me former et trouver un emploi |
+| `waitlist.form.profile.recruiter.label` | Recruteur |
+| `waitlist.form.profile.recruiter.text` | Je recrute pour mon entreprise ou mes clients |
+| `waitlist.form.profile.company.label` | Entreprise |
+| `waitlist.form.profile.company.text` | Je veux équiper toute mon équipe RH |
+| `waitlist.form.profile.partner.label` | Institution |
+| `waitlist.form.profile.partner.text` | École, ONG, programme public ou bailleur |
+| `waitlist.form.firstName.label` | Prénom |
+| `waitlist.form.lastName.label` | Nom |
+| `waitlist.form.optional` | Facultatif |
+| `waitlist.form.email.label` | Adresse e-mail |
+| `waitlist.form.email.placeholder` | vous@exemple.com |
+| `waitlist.form.email.help` | Nous vous écrirons uniquement à cette adresse. |
+| `waitlist.form.country.label` | Pays |
+| `waitlist.form.country.placeholder` | Choisissez votre pays |
+| `waitlist.form.city.label` | Ville |
+| `waitlist.form.organization.label` | Entreprise |
+| `waitlist.form.institution.label` | Institution |
+| `waitlist.form.consent` | J'accepte de recevoir les e-mails de Jumanly sur l'ouverture de la plateforme. Je peux me désinscrire à tout moment. |
+| `waitlist.form.privacyLink` | Lire la politique de confidentialité |
+| `waitlist.form.honeypot` | Ne pas remplir ce champ |
+| `waitlist.form.submit` | Rejoindre la liste d'attente |
+| `waitlist.form.pending` | Inscription en cours… |
+| `waitlist.form.error.required` | Ce champ est obligatoire. |
+| `waitlist.form.error.email` | Saisissez une adresse e-mail valide. |
+| `waitlist.form.error.profile` | Choisissez votre profil. |
+| `waitlist.form.error.consent` | Cochez la case pour continuer. |
+| `waitlist.form.error.rateLimit` | Trop de tentatives. Réessayez dans quelques minutes. |
+| `waitlist.form.error.failed` | Votre inscription n'a pas pu être enregistrée. Réessayez dans un instant. |
+| `waitlist.success.title` | C'est fait, {firstName} : votre place est réservée ! |
+| `waitlist.success.titleNoName` | C'est fait : votre place est réservée ! |
+| `waitlist.success.text` | Un e-mail de confirmation vient de partir vers {email}. Pensez à regarder dans vos courriers indésirables. |
+| `waitlist.success.noMail` | Nous vous écrirons à {email} dès l'ouverture de Jumanly. |
+| `waitlist.success.already` | Vous étiez déjà inscrit avec {email} : nous avons mis vos informations à jour. |
+| `waitlist.success.cta` | Revenir à l'accueil |
+
+Note d'intégration : tant que `NEXT_PUBLIC_SIGNUP_OPEN` ne vaut pas `1`, tous les boutons « Créer un compte » du site mènent ici (`joinHref`). Les pages `/inscription` et `/connexion` restent accessibles par lien direct.
 
 ---
 
@@ -20064,6 +20126,33 @@ Conventions :
 | `mail.rh6.ending.cta` | Voir l'offre |
 | `mail.rh6.ending.note` | Vous choisissez quand recevoir ces rappels dans les paramètres de notification. |
 
+### E-mail · Liste d'attente
+
+| Clé | Texte |
+|---|---|
+| `mail.waitlist.subject` | Votre place sur Jumanly est réservée |
+| `mail.waitlist.preheader` | Merci de nous avoir rejoints. Nous vous prévenons dès l'ouverture. |
+| `mail.waitlist.badge` | Liste d'attente |
+| `mail.waitlist.title` | Bienvenue sur la liste, {firstName}. |
+| `mail.waitlist.intro` | Merci d'avoir rejoint Jumanly. Vous faites partie des premières personnes qui seront invitées à découvrir la plateforme pour se former, construire sa carrière et recruter. |
+| `mail.waitlist.summary.title` | Votre inscription |
+| `mail.waitlist.summary.profile` | Profil |
+| `mail.waitlist.summary.country` | Pays |
+| `mail.waitlist.summary.email` | E-mail |
+| `mail.waitlist.steps.title` | Et maintenant ? |
+| `mail.waitlist.steps.1.title` | Nous préparons l'ouverture |
+| `mail.waitlist.steps.1.text` | Formations, profils, offres et recrutement : l'équipe met la dernière main à la plateforme. |
+| `mail.waitlist.steps.2.title` | Vous recevez votre invitation |
+| `mail.waitlist.steps.2.text` | Un e-mail avec votre accès arrive dans cette boîte, avant l'ouverture au public. |
+| `mail.waitlist.steps.3.title` | Vous créez votre compte |
+| `mail.waitlist.steps.3.text` | Quelques minutes suffisent. Et candidater reste toujours gratuit. |
+| `mail.waitlist.cta` | Découvrir Jumanly |
+| `mail.waitlist.closing` | D'ici là, une question ? Répondez simplement à cet e-mail ou écrivez-nous à assistant@jumanly.io. |
+| `mail.waitlist.footer.reason` | Vous recevez cet e-mail parce que l'adresse {email} a rejoint la liste d'attente sur jumanly.io. |
+| `mail.waitlist.footer.notYou` | Vous n'êtes pas à l'origine de cette inscription ? Ignorez simplement cet e-mail. |
+
+---
+
 ## Partie 08 · Textes système
 
 Textes transverses, communs à toute l'application et aux pages publiques : erreurs, pages d'erreur, maintenance, hors ligne, session, validation, états vides, chargement, confirmations, toasts, téléversement, dates, accessibilité et signalement.
@@ -22913,6 +23002,40 @@ Conventions :
 | `admin.reports.nav.prev` | Signalement précédent |
 | `admin.reports.nav.next` | Signalement suivant |
 
+
+---
+
+### `/admin/liste-attente` · Liste d'attente
+
+| Clé | Texte |
+|---|---|
+| `admin.nav.waitlist` | Liste d'attente |
+| `admin.waitlist.title` | Liste d'attente |
+| `admin.waitlist.subtitle` | Les personnes inscrites depuis le site public, en attendant l'ouverture des inscriptions. Les plus récentes en premier. |
+| `admin.waitlist.stats.total` | inscrits |
+| `admin.waitlist.export` | Exporter en CSV |
+| `admin.waitlist.filter` | Filtrer par profil |
+| `admin.waitlist.all` | Tous |
+| `admin.waitlist.empty` | Personne n'est encore inscrit. |
+| `admin.waitlist.col.name` | Nom |
+| `admin.waitlist.col.firstName` | Prénom |
+| `admin.waitlist.col.lastName` | Nom |
+| `admin.waitlist.col.email` | E-mail |
+| `admin.waitlist.col.profile` | Profil |
+| `admin.waitlist.col.place` | Lieu |
+| `admin.waitlist.col.country` | Pays |
+| `admin.waitlist.col.city` | Ville |
+| `admin.waitlist.col.organization` | Organisation |
+| `admin.waitlist.col.language` | Langue |
+| `admin.waitlist.col.date` | Inscription |
+| `admin.waitlist.col.mail` | E-mail de confirmation |
+| `admin.waitlist.mailSent` | Envoyé |
+| `admin.waitlist.mailPending` | Pas encore |
+| `admin.waitlist.mailOff` | Les e-mails ne partent pas encore : ajoutez RESEND_API_KEY ou les réglages SMTP dans Vercel. Les inscriptions sont bien enregistrées et pourront recevoir leur e-mail ensuite. |
+| `admin.waitlist.pending` | {count, plural, one {# personne attend} other {# personnes attendent}} encore son e-mail de confirmation. |
+| `admin.waitlist.sendPending` | Envoyer les e-mails en attente |
+| `admin.waitlist.sent` | {count, plural, =0 {Aucun e-mail envoyé.} one {# e-mail envoyé.} other {# e-mails envoyés.}} |
+| `admin.waitlist.more` | Seules les {count} inscriptions les plus récentes sont affichées : l'export CSV contient toute la liste. |
 
 ---
 

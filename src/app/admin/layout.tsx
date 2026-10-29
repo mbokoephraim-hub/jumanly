@@ -78,10 +78,14 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
     // The costs and revenue page belongs to the dashboard's group.
     if (group === "steer" && !editorOnly)
       links.push({ href: "/admin/indicateurs/couts", label: t("nav.costs"), icon: "portefeuille" });
+    // The waitlist of the public site sits with the accounts.
+    if (group === "accounts" && areas.includes("users"))
+      links.push({ href: "/admin/liste-attente", label: t("nav.waitlist"), icon: "liste" });
     return {
       match: [
         ...items.map((link) => link.href),
         ...(group === "steer" ? ["/admin/indicateurs"] : []),
+        ...(group === "accounts" ? ["/admin/liste-attente"] : []),
       ],
       label: t("nav.section", { group: t(`nav.group.${group}`) }),
       links,
@@ -124,9 +128,21 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
           label={t("nav.title")}
           groups={groups.map((group) => ({
             label: t(`nav.group.${group}`),
-            items: visible
-              .filter((link) => link.group === group)
-              .map((link) => ({ ...link, label: t(`nav.${link.key}`) })),
+            items: [
+              ...visible
+                .filter((link) => link.group === group)
+                .map((link) => ({ ...link, label: t(`nav.${link.key}`) })),
+              ...(group === "accounts" && areas.includes("users")
+                ? [
+                    {
+                      key: "waitlist",
+                      href: "/admin/liste-attente",
+                      icon: "liste" as const,
+                      label: t("nav.waitlist"),
+                    },
+                  ]
+                : []),
+            ],
           }))}
         />
         <div className="mt-auto flex flex-col gap-1.5">

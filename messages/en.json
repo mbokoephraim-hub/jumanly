@@ -1089,6 +1089,8 @@
       "discover": "Discover"
     },
     "signup": "Create an account",
+    "waitlist": "Join the waitlist",
+    "waitlistShort": "Waitlist",
     "goToApp": "My space",
     "menu": {
       "open": "Open the menu",
@@ -2123,6 +2125,146 @@
       "company3": "Savane Telecom (fictional) · Abidjan"
     },
     "score": "{value}%"
+  },
+  "waitlist": {
+    "seo": {
+      "title": "Waitlist",
+      "description": "Jumanly opens soon. Join the waitlist to be told first, by e-mail, as soon as we open."
+    },
+    "hero": {
+      "eyebrow": "Waitlist",
+      "title": "Be among the first on Jumanly",
+      "text": "The platform opens very soon. Leave us your details: you will be told first, by e-mail, as soon as we open."
+    },
+    "perks": {
+      "title": "Why join now",
+      "early": {
+        "title": "Early access",
+        "text": "You get your invitation before we open to the public."
+      },
+      "news": {
+        "title": "News, not spam",
+        "text": "One e-mail when we open and the important news, nothing more."
+      },
+      "free": {
+        "title": "Applying stays free",
+        "text": "On Jumanly, applying for a job will always be free."
+      }
+    },
+    "form": {
+      "title": "Join the waitlist",
+      "text": "Less than a minute. Fields marked with an asterisk are required.",
+      "profile": {
+        "legend": "You are…",
+        "talent": {
+          "label": "Talent",
+          "text": "I want to learn and find a job"
+        },
+        "recruiter": {
+          "label": "Recruiter",
+          "text": "I hire for my company or my clients"
+        },
+        "company": {
+          "label": "Company",
+          "text": "I want to equip my whole HR team"
+        },
+        "partner": {
+          "label": "Institution",
+          "text": "School, NGO, public programme or funder"
+        }
+      },
+      "firstName": {
+        "label": "First name"
+      },
+      "lastName": {
+        "label": "Last name"
+      },
+      "optional": "Optional",
+      "email": {
+        "label": "E-mail address",
+        "placeholder": "you@example.com",
+        "help": "We will only write to this address."
+      },
+      "country": {
+        "label": "Country",
+        "placeholder": "Choose your country"
+      },
+      "city": {
+        "label": "City"
+      },
+      "organization": {
+        "label": "Company"
+      },
+      "institution": {
+        "label": "Institution"
+      },
+      "consent": "I agree to receive e-mails from Jumanly about the opening of the platform. I can unsubscribe at any time.",
+      "privacyLink": "Read the privacy policy",
+      "honeypot": "Leave this field empty",
+      "submit": "Join the waitlist",
+      "pending": "Joining…",
+      "error": {
+        "required": "This field is required.",
+        "email": "Enter a valid e-mail address.",
+        "profile": "Choose your profile.",
+        "consent": "Tick the box to continue.",
+        "rateLimit": "Too many attempts. Try again in a few minutes.",
+        "failed": "Your request could not be saved. Try again in a moment."
+      }
+    },
+    "success": {
+      "title": "Done, {firstName}: your spot is saved!",
+      "titleNoName": "Done: your spot is saved!",
+      "text": "A confirmation e-mail is on its way to {email}. Remember to check your spam folder.",
+      "noMail": "We will write to {email} as soon as Jumanly opens.",
+      "already": "You had already joined with {email}: we have updated your details.",
+      "cta": "Back to home"
+    }
+  },
+  "mail": {
+    "common": {
+      "signature": "The Jumanly team",
+      "footer": {
+        "tagline": "Learn. Grow. Connect.",
+        "developedBy": "A platform developed by The Growth Lab",
+        "contact": "A question? Write to us: assistant@jumanly.io · infojumanly@gmail.com",
+        "legal": "Privacy · Terms of use"
+      }
+    },
+    "waitlist": {
+      "subject": "Your spot on Jumanly is saved",
+      "preheader": "Thank you for joining us. We will let you know as soon as we open.",
+      "badge": "Waitlist",
+      "title": "Welcome to the list, {firstName}.",
+      "intro": "Thank you for joining Jumanly. You are among the first people who will be invited to discover the platform to learn, build a career and hire.",
+      "summary": {
+        "title": "Your details",
+        "profile": "Profile",
+        "country": "Country",
+        "email": "E-mail"
+      },
+      "steps": {
+        "1": {
+          "title": "We are getting ready to open",
+          "text": "Courses, profiles, jobs and hiring: the team is putting the finishing touches to the platform."
+        },
+        "2": {
+          "title": "You get your invitation",
+          "text": "An e-mail with your access lands in this inbox, before we open to the public."
+        },
+        "3": {
+          "title": "You create your account",
+          "text": "It only takes a few minutes. And applying always stays free."
+        },
+        "title": "What happens next?"
+      },
+      "cta": "Discover Jumanly",
+      "closing": "Until then, a question? Just reply to this e-mail or write to us at assistant@jumanly.io.",
+      "footer": {
+        "reason": "You are receiving this e-mail because {email} joined the waitlist on jumanly.io.",
+        "notYou": "Did not sign up? Just ignore this e-mail."
+      }
+    }
   },
   "pricing": {
     "seo": {

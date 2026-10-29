@@ -17,7 +17,7 @@ import {
 import { MotionRoot } from "@/components/site/motion";
 import { cx } from "@/lib/cx";
 import { pageMetadata } from "@/lib/seo";
-import { signupHref } from "@/lib/signup";
+import { joinHref } from "@/lib/signup";
 import { applySiteLocale } from "@/i18n/site-locale";
 
 export async function generateMetadata({
@@ -311,7 +311,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]/a-propo
         title={t("cta.title")}
         actions={
           <>
-            <SiteButton href={signupHref()}>{t("cta.primary")}</SiteButton>
+            <SiteButton href={joinHref()}>{t("cta.primary")}</SiteButton>
             <SiteButton href="/contact" tone="light" icon="message">
               {t("cta.secondary")}
             </SiteButton>

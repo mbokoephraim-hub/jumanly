@@ -3,7 +3,7 @@
  * database: this file never names a plan (CLAUDE.md § 2). It only reads entitlement keys.
  */
 import type { PlanFamily, PrismaClient } from "@/generated/prisma/client";
-import { signupHref } from "@/lib/signup";
+import { joinHref } from "@/lib/signup";
 
 export type PublicPlan = {
   code: string;
@@ -79,7 +79,7 @@ export function levelOf(plan: PublicPlan, key: string): string {
 export function planCtaHref(plan: PublicPlan): string {
   if (plan.family === "partner") return "/partenaires#contact";
   if (!plan.isPurchasable && plan.priceCents === null) return "/contact?sujet=devis";
-  return signupHref({ profil: plan.family, forfait: plan.code });
+  return joinHref({ profil: plan.family, forfait: plan.code });
 }
 
 /** Catalog levels in increasing order (entitlement `learn.catalog.level`, Course.requiredLevel). */

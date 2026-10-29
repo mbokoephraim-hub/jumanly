@@ -5,38 +5,42 @@ import { publicNavigation, solutionsNavigation } from "@/config/navigation";
 import { Icon, Logo } from "@/components/brand";
 import { SiteButton } from "@/components/site/marketing";
 import { cx } from "@/lib/cx";
+import { signupOpen } from "@/lib/signup";
 import { NavLink } from "./nav-link";
+import { PublicMobileMenu } from "./public-mobile-menu";
 import { navLinkClasses } from "./nav-link-styles";
 
 /**
- * Public header (identity of 28/10/2026): a white pill floating at the top of the page, like the
- * menu of the Modèle B app. Logo, « Solutions » (the four audiences), the catalogs and pricing,
- * the language switch, « Se connecter » and « Créer un compte » in Lime. On phones: logo, the Lime
- * pill and a round menu button (native <details>, no JavaScript).
+ * Public header (29/10/2026): a glass pill floating away from the edges of the page, outlined by a
+ * slowly turning Sapin → Lime gradient. Logo, « Solutions » (the four audiences), the catalogs and
+ * pricing, the language switch with its flags and the main action in Lime: « Rejoindre la liste
+ * d'attente » while sign-up is closed (src/lib/signup.ts), « Se connecter » and « Créer un compte »
+ * once it opens. On phones and tablets: logo, the action and the round menu button
+ * (PublicMobileMenu), whose three lines turn into a back arrow.
  */
 export async function PublicHeader() {
   const t = await getTranslations("nav");
   const pages = [...publicNavigation, { key: "about", href: "/a-propos" } as const];
   const itemLink =
-    "flex items-center gap-3 rounded-[14px] px-3 py-2.5 text-[15px] font-medium hover:bg-gris-clair";
+    "jm-menu-item flex items-center gap-3 rounded-[16px] px-3.5 py-3 text-[16px] font-medium transition-colors hover:bg-[rgb(255_255_255/0.07)]";
   return (
-    <header className="sticky top-0 z-30 border-b border-sapin/8 bg-papier/90 px-4 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 max-w-[1200px] items-center gap-2 lg:h-[76px]">
-        <Link href="/" aria-label={t("logo.label")} className="shrink-0">
+    <header className="sticky top-0 z-40 px-3 pt-3 sm:px-5 sm:pt-4">
+      <div className="jm-glass-pill jm-glass-edge mx-auto flex h-[60px] max-w-[1200px] items-center gap-2 pr-2 pl-4 lg:h-[68px] lg:pl-6">
+        <Link href="/" aria-label={t("logo.label")} className="jm-logo-hover shrink-0">
           <span className="xl:hidden">
-            <Logo variant="negative" height={26} />
+            <Logo variant="negative" height={24} />
           </span>
           <span className="hidden xl:block">
-            <Logo variant="negative" height={30} />
+            <Logo variant="negative" height={28} />
           </span>
         </Link>
         <nav aria-label={t("menu.label")} className="hidden flex-1 justify-center xl:flex">
-          <ul className="flex items-center gap-1">
+          <ul className="flex items-center gap-0.5">
             <li className="group relative">
               <button
                 type="button"
                 aria-haspopup="true"
-                className="flex h-10 items-center gap-1.5 rounded-pill px-4 text-[15px] font-medium hover:text-lime"
+                className="jm-top-link flex h-10 items-center gap-1.5 rounded-pill px-4 text-[15px] font-medium"
               >
                 {t("group.solutions")}
                 <Icon
@@ -45,12 +49,18 @@ export async function PublicHeader() {
                 />
               </button>
               {/* Opens on hover and on keyboard focus: no script needed. */}
-              <div className="invisible absolute top-full left-0 pt-2 opacity-0 transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
-                <ul className="flex w-64 flex-col gap-0.5 rounded-[22px] bg-blanc p-2 shadow-menu ring-1 ring-sapin/8">
+              <div className="invisible absolute top-full left-0 translate-y-1 pt-3 opacity-0 transition-all duration-300 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                <ul className="jm-glass-edge jm-glass-panel flex w-64 flex-col gap-0.5 rounded-[24px] p-2">
                   {solutionsNavigation.map((link) => (
                     <li key={link.key}>
-                      <Link href={link.href} className={itemLink}>
-                        <span aria-hidden className="size-2 rounded-full bg-lime" />
+                      <Link
+                        href={link.href}
+                        className="flex items-center gap-3 rounded-[16px] px-3 py-2.5 text-[15px] font-medium transition-colors hover:bg-[rgb(255_255_255/0.07)] hover:text-lime"
+                      >
+                        <span
+                          aria-hidden
+                          className="size-2 rounded-full bg-lime shadow-[0_0_10px_#a6f26b]"
+                        />
                         {t(link.key)}
                       </Link>
                     </li>
@@ -62,14 +72,17 @@ export async function PublicHeader() {
             <Suspense
               fallback={pages.map((link) => (
                 <li key={link.key}>
-                  <Link href={link.href} className={navLinkClasses("public", false)}>
+                  <Link
+                    href={link.href}
+                    className={cx(navLinkClasses("public", false), "jm-top-link")}
+                  >
                     <span>{t(link.key)}</span>
                   </Link>
                 </li>
               ))}
             >
               {pages.map((link) => (
-                <li key={link.key}>
+                <li key={link.key} className="jm-top-link">
                   <NavLink href={link.href} label={t(link.key)} placement="public" />
                 </li>
               ))}
@@ -77,66 +90,98 @@ export async function PublicHeader() {
           </ul>
         </nav>
         <div className="flex-1 xl:hidden" />
-        <LanguageSwitch className="max-sm:hidden" />
-        <Link
-          href="/connexion"
-          className="hidden h-11 items-center rounded-pill px-5 text-[15px] font-semibold ring-1 ring-sapin/25 ring-inset hover:ring-sapin/50 xl:flex"
+        <LanguageSwitch idPrefix="haut" className="max-sm:hidden" />
+        {signupOpen ? (
+          <>
+            <Link
+              href="/connexion"
+              className="hidden h-11 items-center rounded-pill px-5 text-[15px] font-semibold ring-1 ring-sapin/25 ring-inset hover:ring-sapin/50 xl:flex"
+            >
+              {t("login")}
+            </Link>
+            <SiteButton
+              href="/inscription"
+              tone="lime"
+              size="md"
+              className="jm-cta-glow max-sm:hidden"
+            >
+              {t("signup")}
+            </SiteButton>
+          </>
+        ) : (
+          <SiteButton
+            href="/liste-attente"
+            tone="lime"
+            size="md"
+            className="jm-cta-glow h-10 px-4 max-[379px]:hidden lg:h-11 lg:px-5"
+          >
+            <span className="lg:hidden">{t("waitlistShort")}</span>
+            <span className="max-lg:hidden">{t("waitlist")}</span>
+          </SiteButton>
+        )}
+        <PublicMobileMenu
+          openLabel={t("menu.open")}
+          closeLabel={t("menu.close")}
+          menuLabel={t("menu.label")}
         >
-          {t("login")}
-        </Link>
-        <SiteButton href="/inscription" tone="lime" size="md" className="max-sm:hidden">
-          {t("signup")}
-        </SiteButton>
-        <details className="relative xl:hidden">
-          <summary
-            className="flex size-11 cursor-pointer list-none items-center justify-center rounded-full bg-blanc text-lime ring-1 ring-sapin/10 ring-inset [&::-webkit-details-marker]:hidden"
-            aria-label={t("menu.open")}
-          >
-            <Icon name="menu" className="size-5" />
-          </summary>
-          <nav
-            aria-label={t("menu.label")}
-            className="absolute right-0 mt-3 flex max-h-[calc(100dvh-6rem)] w-[min(20rem,calc(100vw-1rem))] flex-col gap-0.5 overflow-y-auto rounded-[28px] bg-blanc p-3 shadow-menu ring-1 ring-sapin/8"
-          >
-            <p className="px-3 pt-1 pb-1 text-lab text-feuille-fonce">{t("group.solutions")}</p>
-            {solutionsNavigation.map((link) => (
-              <Link key={link.key} href={link.href} className={itemLink}>
-                <span aria-hidden className="size-2 rounded-full bg-lime" />
-                {t(link.key)}
-              </Link>
-            ))}
-            <p className="px-3 pt-3 pb-1 text-lab text-feuille-fonce">{t("group.discover")}</p>
-            {pages.map((link) => (
-              <Link key={link.key} href={link.href} className={itemLink}>
-                <span aria-hidden className="size-2 rounded-full bg-sapin/25" />
-                {t(link.key)}
-              </Link>
-            ))}
-            <div className="mt-2 flex flex-col gap-2 border-t border-sapin/10 pt-3">
-              <LanguageSwitch className="self-start sm:hidden" />
-              <SiteButton href="/inscription" tone="lime" size="md" fullWidth>
-                {t("signup")}
+          <p className="jm-menu-item px-3.5 pt-1 pb-1 text-lab text-feuille-fonce">
+            {t("group.solutions")}
+          </p>
+          {solutionsNavigation.map((link) => (
+            <Link key={link.key} href={link.href} className={itemLink}>
+              <span aria-hidden className="size-2 rounded-full bg-lime shadow-[0_0_10px_#a6f26b]" />
+              {t(link.key)}
+            </Link>
+          ))}
+          <p className="jm-menu-item px-3.5 pt-3 pb-1 text-lab text-feuille-fonce">
+            {t("group.discover")}
+          </p>
+          {pages.map((link) => (
+            <Link key={link.key} href={link.href} className={itemLink}>
+              <span aria-hidden className="size-2 rounded-full bg-sapin/30" />
+              {t(link.key)}
+            </Link>
+          ))}
+          <div className="jm-menu-item mt-2 flex flex-col gap-2.5 border-t border-sapin/10 pt-3.5">
+            <LanguageSwitch idPrefix="menu" className="self-start" />
+            {signupOpen ? (
+              <>
+                <SiteButton href="/inscription" tone="lime" size="md" fullWidth>
+                  {t("signup")}
+                </SiteButton>
+                <SiteButton href="/connexion" tone="light" size="md" fullWidth>
+                  {t("login")}
+                </SiteButton>
+              </>
+            ) : (
+              <SiteButton
+                href="/liste-attente"
+                tone="lime"
+                size="md"
+                className="jm-cta-glow w-full"
+              >
+                {t("waitlist")}
               </SiteButton>
-              <SiteButton href="/connexion" tone="light" size="md" fullWidth>
-                {t("login")}
-              </SiteButton>
-            </div>
-          </nav>
-        </details>
+            )}
+          </div>
+        </PublicMobileMenu>
       </div>
     </header>
   );
 }
 
 /**
- * « FR | EN »: each language is a link to /langue, which keeps the choice and comes back to the
- * page being read (no JavaScript).
+ * « FR | EN » with the small flags of France and the United Kingdom: each language is a link to
+ * /langue, which keeps the choice and comes back to the page being read (no JavaScript).
  */
 export async function LanguageSwitch({
   dark = false,
+  idPrefix = "pied",
   className,
 }: {
   dark?: boolean;
+  /** Keeps the flags' SVG ids unique when the switch shows twice on a page. */
+  idPrefix?: string;
   className?: string;
 }) {
   const t = await getTranslations("nav.language");
@@ -149,8 +194,10 @@ export async function LanguageSwitch({
     <nav
       aria-label={t("label")}
       className={cx(
-        "flex items-center rounded-pill p-1",
-        dark ? "bg-blanc/10 ring-1 ring-blanc/15 ring-inset" : "ring-1 ring-sapin/12 ring-inset",
+        "flex items-center gap-0.5 rounded-pill p-1",
+        dark
+          ? "bg-blanc/10 ring-1 ring-blanc/15 ring-inset"
+          : "bg-[rgb(255_255_255/0.04)] ring-1 ring-sapin/12 ring-inset",
         className,
       )}
     >
@@ -165,20 +212,55 @@ export async function LanguageSwitch({
             aria-label={language.name}
             aria-current={active ? "true" : undefined}
             className={cx(
-              "flex h-9 min-w-10 items-center justify-center rounded-pill px-2.5 text-[13px] font-semibold transition-colors",
+              "jm-flag-link flex h-9 items-center justify-center gap-1.5 rounded-pill pr-3 pl-1.5 text-[13px] font-semibold transition-all",
               active
-                ? dark
-                  ? "bg-lime text-sapin"
-                  : "bg-blanc text-sapin"
+                ? "bg-lime text-[#0f3f37] shadow-[0_0_16px_rgb(166_242_107/0.45)]"
                 : dark
-                  ? "text-blanc/80 hover:text-blanc"
-                  : "text-ardoise hover:text-sapin",
+                  ? "text-blanc/80 hover:bg-blanc/10 hover:text-blanc"
+                  : "text-ardoise hover:bg-[rgb(255_255_255/0.07)] hover:text-sapin",
             )}
           >
+            <Flag code={language.code} id={`${idPrefix}-${language.code}`} />
             {language.short}
           </a>
         );
       })}
     </nav>
+  );
+}
+
+/** A round flag, drawn inline (flag emojis do not show on Windows). */
+function Flag({ code, id }: { code: "fr" | "en"; id: string }) {
+  return (
+    <svg
+      aria-hidden
+      viewBox={code === "fr" ? "0 0 3 2" : "0 0 60 30"}
+      preserveAspectRatio="xMidYMid slice"
+      className="jm-flag size-[22px] shrink-0 rounded-full ring-1 ring-black/15"
+    >
+      {code === "fr" ? (
+        <>
+          <rect width="1" height="2" fill="#002654" />
+          <rect x="1" width="1" height="2" fill="#FFFFFF" />
+          <rect x="2" width="1" height="2" fill="#CE1126" />
+        </>
+      ) : (
+        <>
+          <clipPath id={`${id}-t`}>
+            <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z" />
+          </clipPath>
+          <rect width="60" height="30" fill="#012169" />
+          <path d="M0,0 L60,30 M60,0 L0,30" stroke="#FFFFFF" strokeWidth="6" />
+          <path
+            d="M0,0 L60,30 M60,0 L0,30"
+            clipPath={`url(#${id}-t)`}
+            stroke="#C8102E"
+            strokeWidth="4"
+          />
+          <path d="M30,0 v30 M0,15 h60" stroke="#FFFFFF" strokeWidth="10" />
+          <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" strokeWidth="6" />
+        </>
+      )}
+    </svg>
   );
 }

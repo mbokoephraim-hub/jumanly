@@ -16,7 +16,7 @@ import {
 import { CountUp, MotionRoot } from "@/components/site/motion";
 import { cx } from "@/lib/cx";
 import { pageMetadata } from "@/lib/seo";
-import { signupHref } from "@/lib/signup";
+import { joinHref } from "@/lib/signup";
 import { getMatchingWeights } from "@/server/queries/public";
 import { applySiteLocale } from "@/i18n/site-locale";
 
@@ -373,7 +373,7 @@ export default async function MatchingPage({
             <h2 className="relative flex-1 text-[26px] leading-8 font-semibold tracking-[-0.025em] lg:text-[32px] lg:leading-[38px]">
               {t("matchingPage.finalCta.title")}
             </h2>
-            <SiteButton href={signupHref({ profil: "talent" })} tone="lime" className="relative">
+            <SiteButton href={joinHref({ profil: "talent" })} tone="lime" className="relative">
               {t("matchingPage.cta")}
             </SiteButton>
           </div>

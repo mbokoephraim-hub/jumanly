@@ -783,6 +783,38 @@ model CourseSkill {
   @@id([courseId, skillId])
 }
 
+// ─── Liste d'attente (site public, avant l'ouverture des inscriptions) ───
+
+enum WaitlistProfile {
+  talent
+  recruiter
+  company
+  partner
+}
+
+/// Someone who joined the waitlist from /liste-attente. One row per address: joining again updates it.
+model WaitlistEntry {
+  id           String          @id @default(cuid(2))
+  /// Lower-case address.
+  email        String          @unique
+  firstName    String
+  lastName     String?
+  profile      WaitlistProfile
+  /// Country name as chosen in the form.
+  country      String
+  city         String?
+  organization String?
+  /// Language of the site when joining ("fr" or "en"): the confirmation e-mail uses it.
+  locale       String          @default("fr")
+  /// Set once the confirmation e-mail has left.
+  emailSentAt  DateTime?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  @@index([createdAt])
+  @@index([profile])
+}
+
 // ─── Formulaire de contact ──────────────────────────────────────
 
 model ContactMessage {

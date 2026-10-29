@@ -22,6 +22,9 @@ export const authLimits = {
   educationImage: { window: 60 * 60, max: 20 },
   referenceCheck: { window: 24 * 60 * 60, max: 10 },
   referenceAnswer: { window: 60 * 60, max: 30 },
+  // Public waitlist: a few tries per address, more per IP (an office or a cybercafé shares one).
+  waitlist: { window: 60 * 60, max: 5 },
+  waitlistIp: { window: 60 * 60, max: 30 },
 } as const;
 
 /** The visitor's address as given by the hosting proxy, or null when unknown. */

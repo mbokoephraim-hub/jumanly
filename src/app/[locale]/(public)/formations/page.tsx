@@ -19,7 +19,7 @@ import { PublicCourseCard } from "@/components/site/public-cards";
 import { ButtonLink, EmptyState, Skeleton } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { pageMetadata } from "@/lib/seo";
-import { signupHref } from "@/lib/signup";
+import { joinHref } from "@/lib/signup";
 import { getCourseSearch, getPublicPlans } from "@/server/queries/public";
 import {
   accessFilters,
@@ -216,7 +216,7 @@ async function Results({
       <EmptyState
         title={t("emptyCatalog.title")}
         description={t("emptyCatalog.text")}
-        action={<ButtonLink href={signupHref({ profil: "talent" })}>{nav("signup")}</ButtonLink>}
+        action={<ButtonLink href={joinHref({ profil: "talent" })}>{nav("signup")}</ButtonLink>}
       />
     );
   }

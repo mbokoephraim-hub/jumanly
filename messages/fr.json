@@ -77,6 +77,8 @@
     },
     "login": "Se connecter",
     "signup": "Créer un compte",
+    "waitlist": "Rejoindre la liste d'attente",
+    "waitlistShort": "Liste d'attente",
     "goToApp": "Mon espace",
     "menu": {
       "open": "Ouvrir le menu",
@@ -1551,6 +1553,101 @@
     "success": {
       "title": "Merci, votre message est envoyé",
       "text": "Nous vous répondons par e-mail à l'adresse {email}. Pensez à vérifier vos courriers indésirables.",
+      "cta": "Revenir à l'accueil"
+    }
+  },
+  "waitlist": {
+    "seo": {
+      "title": "Liste d'attente",
+      "description": "Jumanly ouvre bientôt. Rejoignez la liste d'attente pour être prévenu en priorité, par e-mail, dès l'ouverture."
+    },
+    "hero": {
+      "eyebrow": "Liste d'attente",
+      "title": "Soyez parmi les premiers sur Jumanly",
+      "text": "La plateforme ouvre très bientôt. Laissez-nous vos coordonnées : vous serez prévenu en priorité, par e-mail, dès l'ouverture."
+    },
+    "perks": {
+      "title": "Pourquoi s'inscrire maintenant",
+      "early": {
+        "title": "Un accès en avant-première",
+        "text": "Vous recevez votre invitation avant l'ouverture au public."
+      },
+      "news": {
+        "title": "Des nouvelles, pas de spam",
+        "text": "Un e-mail à l'ouverture et les nouvelles importantes, rien de plus."
+      },
+      "free": {
+        "title": "Candidater reste gratuit",
+        "text": "Sur Jumanly, candidater à une offre sera toujours gratuit."
+      }
+    },
+    "form": {
+      "title": "Rejoindre la liste d'attente",
+      "text": "Moins d'une minute. Les champs marqués d'un astérisque sont obligatoires.",
+      "profile": {
+        "legend": "Vous êtes…",
+        "talent": {
+          "label": "Talent",
+          "text": "Je veux me former et trouver un emploi"
+        },
+        "recruiter": {
+          "label": "Recruteur",
+          "text": "Je recrute pour mon entreprise ou mes clients"
+        },
+        "company": {
+          "label": "Entreprise",
+          "text": "Je veux équiper toute mon équipe RH"
+        },
+        "partner": {
+          "label": "Institution",
+          "text": "École, ONG, programme public ou bailleur"
+        }
+      },
+      "firstName": {
+        "label": "Prénom"
+      },
+      "lastName": {
+        "label": "Nom"
+      },
+      "optional": "Facultatif",
+      "email": {
+        "label": "Adresse e-mail",
+        "placeholder": "vous@exemple.com",
+        "help": "Nous vous écrirons uniquement à cette adresse."
+      },
+      "country": {
+        "label": "Pays",
+        "placeholder": "Choisissez votre pays"
+      },
+      "city": {
+        "label": "Ville"
+      },
+      "organization": {
+        "label": "Entreprise"
+      },
+      "institution": {
+        "label": "Institution"
+      },
+      "consent": "J'accepte de recevoir les e-mails de Jumanly sur l'ouverture de la plateforme. Je peux me désinscrire à tout moment.",
+      "privacyLink": "Lire la politique de confidentialité",
+      "honeypot": "Ne pas remplir ce champ",
+      "submit": "Rejoindre la liste d'attente",
+      "pending": "Inscription en cours…",
+      "error": {
+        "required": "Ce champ est obligatoire.",
+        "email": "Saisissez une adresse e-mail valide.",
+        "profile": "Choisissez votre profil.",
+        "consent": "Cochez la case pour continuer.",
+        "rateLimit": "Trop de tentatives. Réessayez dans quelques minutes.",
+        "failed": "Votre inscription n'a pas pu être enregistrée. Réessayez dans un instant."
+      }
+    },
+    "success": {
+      "title": "C'est fait, {firstName} : votre place est réservée !",
+      "titleNoName": "C'est fait : votre place est réservée !",
+      "text": "Un e-mail de confirmation vient de partir vers {email}. Pensez à regarder dans vos courriers indésirables.",
+      "noMail": "Nous vous écrirons à {email} dès l'ouverture de Jumanly.",
+      "already": "Vous étiez déjà inscrit avec {email} : nous avons mis vos informations à jour.",
       "cta": "Revenir à l'accueil"
     }
   },
@@ -24215,6 +24312,40 @@
         "cta": "Voir l'offre",
         "note": "Vous choisissez quand recevoir ces rappels dans les paramètres de notification."
       }
+    },
+    "waitlist": {
+      "subject": "Votre place sur Jumanly est réservée",
+      "preheader": "Merci de nous avoir rejoints. Nous vous prévenons dès l'ouverture.",
+      "badge": "Liste d'attente",
+      "title": "Bienvenue sur la liste, {firstName}.",
+      "intro": "Merci d'avoir rejoint Jumanly. Vous faites partie des premières personnes qui seront invitées à découvrir la plateforme pour se former, construire sa carrière et recruter.",
+      "summary": {
+        "title": "Votre inscription",
+        "profile": "Profil",
+        "country": "Pays",
+        "email": "E-mail"
+      },
+      "steps": {
+        "1": {
+          "title": "Nous préparons l'ouverture",
+          "text": "Formations, profils, offres et recrutement : l'équipe met la dernière main à la plateforme."
+        },
+        "2": {
+          "title": "Vous recevez votre invitation",
+          "text": "Un e-mail avec votre accès arrive dans cette boîte, avant l'ouverture au public."
+        },
+        "3": {
+          "title": "Vous créez votre compte",
+          "text": "Quelques minutes suffisent. Et candidater reste toujours gratuit."
+        },
+        "title": "Et maintenant ?"
+      },
+      "cta": "Découvrir Jumanly",
+      "closing": "D'ici là, une question ? Répondez simplement à cet e-mail ou écrivez-nous à assistant@jumanly.io.",
+      "footer": {
+        "reason": "Vous recevez cet e-mail parce que l'adresse {email} a rejoint la liste d'attente sur jumanly.io.",
+        "notYou": "Vous n'êtes pas à l'origine de cette inscription ? Ignorez simplement cet e-mail."
+      }
     }
   },
   "reference": {
@@ -24966,7 +25097,8 @@
         "control": "Modération et contrôle"
       },
       "costs": "Coûts et revenus",
-      "section": "Rubriques de « {group} »"
+      "section": "Rubriques de « {group} »",
+      "waitlist": "Liste d'attente"
     },
     "env": {
       "badge": "Administration"
@@ -27636,6 +27768,38 @@
         "prev": "Signalement précédent",
         "next": "Signalement suivant"
       }
+    },
+    "waitlist": {
+      "title": "Liste d'attente",
+      "subtitle": "Les personnes inscrites depuis le site public, en attendant l'ouverture des inscriptions. Les plus récentes en premier.",
+      "stats": {
+        "total": "inscrits"
+      },
+      "export": "Exporter en CSV",
+      "filter": "Filtrer par profil",
+      "all": "Tous",
+      "empty": "Personne n'est encore inscrit.",
+      "col": {
+        "name": "Nom",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "email": "E-mail",
+        "profile": "Profil",
+        "place": "Lieu",
+        "country": "Pays",
+        "city": "Ville",
+        "organization": "Organisation",
+        "language": "Langue",
+        "date": "Inscription",
+        "mail": "E-mail de confirmation"
+      },
+      "mailSent": "Envoyé",
+      "mailPending": "Pas encore",
+      "mailOff": "Les e-mails ne partent pas encore : ajoutez RESEND_API_KEY ou les réglages SMTP dans Vercel. Les inscriptions sont bien enregistrées et pourront recevoir leur e-mail ensuite.",
+      "pending": "{count, plural, one {# personne attend} other {# personnes attendent}} encore son e-mail de confirmation.",
+      "sendPending": "Envoyer les e-mails en attente",
+      "sent": "{count, plural, =0 {Aucun e-mail envoyé.} one {# e-mail envoyé.} other {# e-mails envoyés.}}",
+      "more": "Seules les {count} inscriptions les plus récentes sont affichées : l'export CSV contient toute la liste."
     }
   },
   "legal": {
