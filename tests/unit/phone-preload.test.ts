@@ -54,6 +54,7 @@ describe("préchargement au téléphone", () => {
     expect(preloadPath("/app/notifications", "/app")).toBeNull();
     expect(preloadPath("/app/messages", "/app")).toBeNull();
     expect(preloadPath("/app/messages/demandes", "/app")).toBeNull();
+    expect(preloadPath("/app/messages/connexions", "/app")).toBeNull();
     expect(preloadPath("/app/suivi", "/app")).toBeNull();
     expect(preloadPath("/app/jobs/offre-1?postuler=1", "/app")).toBeNull();
     expect(preloadPath("/app/jobs/offre-1/postuler", "/app")).toBeNull();

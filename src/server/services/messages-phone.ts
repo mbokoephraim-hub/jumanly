@@ -31,7 +31,7 @@ const kindsOfType: Record<SearchType, Prisma.MessageWhereInput> = {
   rdv: { kind: { in: ["slot", "invitation"] } },
 };
 
-const personSelect = {
+export const personSelect = {
   id: true,
   name: true,
   firstName: true,

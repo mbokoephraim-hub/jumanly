@@ -361,23 +361,19 @@ async function toItems(
  * most recent first, « Abonnements » (people and organizations followed, connections, and the
  * viewer's own posts) and « Entreprises ».
  */
-export async function listFeed(
+/** The top-level posts a viewer may see in the Fil: not hidden, no blocked author, no masked type. */
+async function visiblePosts(
   db: PrismaClient,
   viewerId: string,
-  tab: FeedTab,
-  now = new Date(),
-): Promise<FeedItem[]> {
-  const [{ connected, blocked }, hidden, follows] = await Promise.all([
-    circle(db, viewerId),
-    db.feedHiddenType.findMany({ where: { userId: viewerId }, select: { type: true } }),
-    db.feedFollow.findMany({
-      where: { followerId: viewerId },
-      select: { userId: true, organizationId: true },
-    }),
-  ]);
+  blocked: string[],
+): Promise<Prisma.FeedPostWhereInput> {
+  const hidden = await db.feedHiddenType.findMany({
+    where: { userId: viewerId },
+    select: { type: true },
+  });
   const hiddenTypes = hidden.map((row) => row.type);
   const hiddenKinds = hiddenTypes.filter((type): type is FeedPostKind => type !== "company");
-  const where: Prisma.FeedPostWhereInput = {
+  return {
     parentId: null,
     hiddenAt: null,
     NOT: [
@@ -386,6 +382,41 @@ export async function listFeed(
       ...(hiddenKinds.length > 0 ? [{ kind: { in: hiddenKinds }, organizationId: null }] : []),
     ],
   };
+}
+
+/**
+ * The posts published by others since the Fil was shown (« Nouvelles publications »): the pill
+ * that brings them asks every minute, so this only counts, without ranking.
+ */
+export async function newPostsSince(db: PrismaClient, viewerId: string, since: Date) {
+  const { blocked } = await circle(db, viewerId);
+  const where = await visiblePosts(db, viewerId, blocked);
+  return db.feedPost.count({
+    where: {
+      ...where,
+      createdAt: { gt: since },
+      NOT: [
+        ...(where.NOT as Prisma.FeedPostWhereInput[]),
+        { authorId: viewerId, organizationId: null },
+      ],
+    },
+  });
+}
+
+export async function listFeed(
+  db: PrismaClient,
+  viewerId: string,
+  tab: FeedTab,
+  now = new Date(),
+): Promise<FeedItem[]> {
+  const [{ connected, blocked }, follows] = await Promise.all([
+    circle(db, viewerId),
+    db.feedFollow.findMany({
+      where: { followerId: viewerId },
+      select: { userId: true, organizationId: true },
+    }),
+  ]);
+  const where = await visiblePosts(db, viewerId, blocked);
   if (tab === "entreprises") where.organizationId = { not: null };
   if (tab === "abonnements") {
     const people = [
@@ -1002,6 +1033,8 @@ export const phoneNotificationFilters = {
     "feedLike",
     "feedRepost",
     "feedQuote",
+    "connectionRequest",
+    "connectionAccepted",
   ],
 } as const;
 export type PhoneNotificationFilter = keyof typeof phoneNotificationFilters;

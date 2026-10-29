@@ -16,7 +16,12 @@ import {
   sendMessage,
   type SentMessage,
 } from "@/server/services/connect";
-import { acceptConnection, ConnectionError, ignoreConnection } from "@/server/services/connections";
+import {
+  acceptConnection,
+  ConnectionError,
+  ignoreConnection,
+  removeConnection,
+} from "@/server/services/connections";
 import { sendDocument, sendSlot } from "@/server/services/conversation-attachments";
 import { helpModes, messageHelp, type HelpResult } from "@/server/services/message-help";
 import {
@@ -296,7 +301,7 @@ export async function blockPhoneAction(conversationId: string, blocked: boolean)
 export async function acceptRequestAction(connectionId: string): Promise<MsgResult<string>> {
   const parsed = idSchema.safeParse(connectionId);
   if (!parsed.success) return { ok: false, error: "invalid" };
-  const user = await requireUser(`${PAGE}/demandes`);
+  const user = await requireUser(`${PAGE}/connexions`);
   try {
     const conversationId = await acceptConnection(db, user.id, parsed.data);
     refresh();
@@ -310,13 +315,27 @@ export async function acceptRequestAction(connectionId: string): Promise<MsgResu
 export async function ignoreRequestAction(connectionId: string): Promise<MsgResult> {
   const parsed = idSchema.safeParse(connectionId);
   if (!parsed.success) return { ok: false, error: "invalid" };
-  const user = await requireUser(`${PAGE}/demandes`);
+  const user = await requireUser(`${PAGE}/connexions`);
   try {
     await ignoreConnection(db, user.id, parsed.data);
     refresh();
     return { ok: true, value: null };
   } catch (error) {
     return fail(error, "ignorer");
+  }
+}
+
+/** « Annuler » a request I sent (Connexions of the Chat): the person is not told. */
+export async function withdrawRequestAction(connectionId: string): Promise<MsgResult> {
+  const parsed = idSchema.safeParse(connectionId);
+  if (!parsed.success) return { ok: false, error: "invalid" };
+  const user = await requireUser(`${PAGE}/connexions`);
+  try {
+    await removeConnection(db, user.id, parsed.data);
+    refresh();
+    return { ok: true, value: null };
+  } catch (error) {
+    return fail(error, "annuler");
   }
 }
 
@@ -327,7 +346,7 @@ export async function respondOrgRequestAction(
 ): Promise<MsgResult<string | null>> {
   const parsed = idSchema.safeParse(requestId);
   if (!parsed.success) return { ok: false, error: "invalid" };
-  const user = await requireUser(`${PAGE}/demandes`);
+  const user = await requireUser(`${PAGE}/connexions`);
   try {
     const result = await respondContactRequest(
       db,

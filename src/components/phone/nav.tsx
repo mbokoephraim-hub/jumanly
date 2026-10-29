@@ -72,7 +72,10 @@ export function PhoneNav({
               const layer =
                 document.querySelector(`[data-onglet-couche="${tab}"]`) ??
                 document.getElementById("content");
-              layer?.scrollTo({ top: 0, behavior: "smooth" });
+              // Already at the top: the tab is read again (the Fil brings its new posts).
+              if (layer && layer.scrollTop <= 0)
+                window.dispatchEvent(new CustomEvent("jm:onglet-haut", { detail: { tab } }));
+              else layer?.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
             <PhoneIcon name={tab} size={22} stroke={2} />

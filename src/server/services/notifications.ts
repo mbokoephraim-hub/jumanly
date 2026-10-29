@@ -78,6 +78,9 @@ export const notificationTypes = [
   "feedLike",
   "feedRepost",
   "feedQuote",
+  // Connexions of the Chat (Ephraïm 29/10/2026): a request received, a request accepted.
+  "connectionRequest",
+  "connectionAccepted",
 ] as const;
 export type NotificationType = (typeof notificationTypes)[number];
 
@@ -86,6 +89,7 @@ export const importantNotificationTypes: readonly NotificationType[] = [
   "interviewInvite",
   "newMessage",
   "contactRequest",
+  "connectionRequest",
   "documentRequest",
   "orgInvite",
   "paymentSucceeded",
@@ -123,6 +127,8 @@ export const notificationCategories = {
     "feedLike",
     "feedRepost",
     "feedQuote",
+    "connectionRequest",
+    "connectionAccepted",
   ],
   learning: ["certificateIssued", "diagnosticReady", "diagnosticReminder"],
   billing: [

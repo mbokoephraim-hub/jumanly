@@ -43,6 +43,8 @@ const categoryOf: Record<NotificationType, Category> = {
   feedLike: "messages",
   feedRepost: "messages",
   feedQuote: "messages",
+  connectionRequest: "messages",
+  connectionAccepted: "messages",
   documentRequest: "messages",
   mention: "messages",
   certificateIssued: "learn",
