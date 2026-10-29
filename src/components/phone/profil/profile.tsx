@@ -259,7 +259,7 @@ export function PersonProfile({
             <circle cx="44" cy="70" r="5" fill="var(--nb-lime)" />
           </svg>
         )}
-        {person.domain ? <span className="nb-pf-banniere-t">{person.domain}</span> : null}
+        {person.bannerTitle ? <span className="nb-pf-banniere-t">{person.bannerTitle}</span> : null}
       </div>
 
       <div className="nb-pf-photo-l">

@@ -5194,3 +5194,11 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - Recruteur : « Modifier mon profil » propose « Bio affichée sur mon profil » : mon accroche de recruteur ou ma bio de talent (`RecruiterProfile.bioSource`, migration `recruiter_bio_source`).
 - Le pourcentage du cercle « Profil complété » est plus petit pour que « 100 % » tienne.
 - Publié sans essai dans l'appli, à la demande d'Ephraïm.
+
+
+## 2026-10-29 · Bannière du profil = titre professionnel
+
+- Demande d'Ephraïm : le Cap choisi à l'inscription (`targetJob`, ex. « Social manager ») ne doit plus figer la bannière. La bannière affiche d'abord le **titre professionnel** (`headline`), puis le Cap s'il n'y a pas de titre (sur « Mon profil » et sur le profil vu par les autres ; un recruteur garde son entreprise).
+- « Modifier le profil » (talent) : « Titre professionnel » (ce que voient recruteurs, connexions et offres où l'on candidate), puis « Mon Cap » désormais modifiable, puis la ville, puis « À propos » (la bio du profil). Une phrase rappelle que chaque CV a son propre titre et sa bio de candidature.
+- Dans le CV : « Titre sur ce CV » et « Bio de candidature » ; changer l'un ou l'autre ne touche pas au profil.
+- Publié sans essai dans l'appli, à la demande d'Ephraïm.

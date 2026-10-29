@@ -26,10 +26,10 @@ test("compléter mon profil sur téléphone : titre, photo, expérience", async 
   await expect(page).toHaveURL(/\/app\/career\/profil$/);
   await expect(page.getByRole("navigation", { name: "Navigation principale" })).toBeHidden();
   const form = page.locator(".nb-ca-form");
-  await form.getByLabel("Titre").fill("Analyste de données");
+  await form.getByLabel("Titre professionnel").fill("Analyste de données");
   await form.getByLabel("Ville").fill("Kinshasa");
   // The form keeps what was typed once it answers (hydrated).
-  await expect(form.getByLabel("Titre")).toHaveValue("Analyste de données");
+  await expect(form.getByLabel("Titre professionnel")).toHaveValue("Analyste de données");
   await form.getByRole("button", { name: "Enregistrer" }).click();
   await expect(page.getByText("Profil mis à jour.")).toBeVisible();
 

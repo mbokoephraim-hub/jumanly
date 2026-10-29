@@ -127,6 +127,8 @@ const nameSchema = z
 const headSchema = z.object({
   name: nameSchema,
   headline: z.string().trim().max(120),
+  /** The Cap (`targetJob`); left out by a recruiter's own form. */
+  cap: z.string().trim().max(120).optional(),
   city: z.string().trim().min(1).max(120),
   summary: z.string().trim().max(PROFILE_SUMMARY_MAX),
   availability: z.enum(["open", "listening", "not_looking"]),
@@ -159,7 +161,7 @@ export async function setCareerAvailabilityAction(raw: string): Promise<Result> 
 
 /**
  * « Modifier le profil » (planche Carrière-modifier): the displayed name (first word = first name),
- * the title, the city, the bio and the availability.
+ * the professional title, the Cap, the city, the bio and the availability.
  */
 export async function saveCareerHeadAction(raw: z.input<typeof headSchema>): Promise<Result> {
   const parsed = headSchema.safeParse(raw);
@@ -193,6 +195,7 @@ export async function saveCareerHeadAction(raw: z.input<typeof headSchema>): Pro
         where: { id: profile.id },
         data: {
           headline: input.headline || null,
+          ...(input.cap === undefined ? {} : { targetJob: input.cap || null }),
           summary: input.summary || null,
           availability: input.availability,
           availableFrom: input.availability === "open" ? null : profile.availableFrom,

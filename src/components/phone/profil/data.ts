@@ -20,6 +20,8 @@ export type ProfileView = {
   bannerColor: { background: string; motif: string };
   /** The small label at the bottom right of the banner (the person's field). */
   domain: string | null;
+  /** Text of the banner: the professional title, else the Cap, else the domain. */
+  bannerTitle: string | null;
   /** The ring around the photo: the colours of the first five skills. */
   ring: string[];
   online: boolean;

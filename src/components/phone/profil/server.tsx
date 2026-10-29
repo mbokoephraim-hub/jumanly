@@ -352,6 +352,9 @@ export async function profileView(
     banner: person.banner,
     bannerColor: { background: BANNER_GROUND[bannerKey], motif: PROFILE_PALETTE[bannerKey] },
     domain,
+    // The banner shows the professional title first, then the Cap (Ephraïm 29/10/2026); a
+    // recruiter keeps the organization.
+    bannerTitle: recruiter ? domain : person.headline?.trim() || person.cap || domain,
     ring: skills.slice(0, 5).map((skill) => skill.color),
     online: elapsed !== null && elapsed >= 0 && elapsed < 5 * MINUTE,
     socials,

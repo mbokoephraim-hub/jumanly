@@ -64,6 +64,8 @@ export type CareerView = {
   banner: string | null;
   /** « @grace.mbuyi · Analyste de données junior · Kinshasa ». */
   handle: string;
+  /** Professional title (`headline`): shown first in the banner, before the Cap. */
+  title: string | null;
   cap: string | null;
   availability: string;
   percent: number;
@@ -629,6 +631,7 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
     image: home.user.image,
     banner: home.profile.banner,
     handle: handleText,
+    title: home.profile.headline?.trim() || null,
     cap: home.profile.targetJob,
     availability: t(`availability.${home.profile.availability}`),
     percent: home.percent,

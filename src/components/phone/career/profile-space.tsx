@@ -160,7 +160,8 @@ export function PhoneMyProfile({
           <Svg d={PEN} size={14} />
         </Link>
         <span className="nb-pf-banniere-t">
-          {view.cap ? t("cap", { job: view.cap }) : t("noCap")}
+          {/* The professional title first, the Cap of the sign-up otherwise (Ephraïm 29/10/2026). */}
+          {view.title ?? (view.cap ? t("cap", { job: view.cap }) : t("noCap"))}
         </span>
       </div>
 

@@ -9233,7 +9233,7 @@ Conventions :
 | `phoneCv.content.summary` | Résumé |
 | `phoneCv.content.summaryEdit` | Modifier le résumé |
 | `phoneCv.content.summaryEmpty` | Pas encore de résumé. Écrivez deux ou trois phrases, ou laissez Orbi les proposer. |
-| `phoneCv.content.summaryHint` | Deux ou trois phrases : ce que vous savez faire, avec un chiffre concret, et ce que vous cherchez. |
+| `phoneCv.content.summaryHint` | Deux ou trois phrases pour ce CV : ce que vous savez faire, avec un chiffre concret, et ce que vous cherchez. Elle ne change pas la bio de votre profil. |
 | `phoneCv.content.rewrite` | Réécrire avec Orbi |
 | `phoneCv.content.proposal` | Proposition d’Orbi |
 | `phoneCv.content.keep` | Garder |
@@ -9362,7 +9362,7 @@ Conventions :
 | `phoneCv.form.block.languages` | Langues |
 | `phoneCv.form.block.references` | Références |
 | `phoneCv.form.name` | Nom complet |
-| `phoneCv.form.headline` | Titre professionnel |
+| `phoneCv.form.headline` | Titre sur ce CV |
 | `phoneCv.form.headlinePlaceholder` | Par exemple : Analyste de données junior |
 | `phoneCv.form.email` | E-mail |
 | `phoneCv.form.showEmail` | Afficher mon e-mail sur ce CV |
@@ -9371,7 +9371,7 @@ Conventions :
 | `phoneCv.form.city` | Ville |
 | `phoneCv.form.country` | Pays |
 | `phoneCv.form.none` | Aucun |
-| `phoneCv.form.summary` | Votre profil en quelques phrases |
+| `phoneCv.form.summary` | Bio de candidature |
 | `phoneCv.form.achievementsHint` | Une réalisation par ligne, avec un résultat concret si possible. |
 | `phoneCv.form.achievement` | Réalisation {n} |
 | `phoneCv.form.achievementPlaceholder` | Par exemple : tableau de bord des ventes utilisé par 3 agences |
@@ -9446,7 +9446,7 @@ Conventions :
 | `phoneCareer.photo` | Photo de profil de {name} |
 | `phoneCareer.handle` | @{handle} |
 | `phoneCareer.cap` | Cap · {job} |
-| `phoneCareer.noCap` | Choisir mon Cap |
+| `phoneCareer.noCap` | Ajouter mon titre professionnel |
 | `phoneCareer.availability.open` | Disponible tout de suite |
 | `phoneCareer.availability.listening` | À l’écoute des offres |
 | `phoneCareer.availability.not_looking` | Pas disponible |
@@ -9807,8 +9807,12 @@ Conventions :
 | `phoneCareer.form.socialPlaceholder.facebook` | facebook.com/votre-nom |
 | `phoneCareer.form.socialPlaceholder.website` | votre-site.com |
 | `phoneCareer.form.showEmail` | Afficher mon e-mail sur mon profil |
-| `phoneCareer.form.headline` | Titre |
-| `phoneCareer.form.headlinePlaceholder` | Ex. : Analyste de données junior |
+| `phoneCareer.form.headline` | Titre professionnel |
+| `phoneCareer.form.headlinePlaceholder` | Ex. : Social manager |
+| `phoneCareer.form.headlineHint` | Il s’affiche dans votre bannière et sous votre nom : c’est ce que voient les recruteurs, vos connexions et les offres où vous candidatez. |
+| `phoneCareer.form.cap` | Mon Cap |
+| `phoneCareer.form.capPlaceholder` | Ex. : Responsable marketing digital |
+| `phoneCareer.form.capHint` | Le métier vers lequel vous allez. Choisi à l’inscription, il change quand votre projet évolue. La bannière l’affiche tant que vous n’avez pas de titre professionnel. |
 | `phoneCareer.form.city` | Ville |
 | `phoneCareer.form.improve` | Améliorer |
 | `phoneCareer.form.availability` | Disponibilité |
@@ -9817,7 +9821,8 @@ Conventions :
 | `phoneCareer.form.availabilityOption.not_looking` | Pas en recherche |
 | `phoneCareer.form.accountSettings` | Paramètres du compte |
 | `phoneCareer.form.aboutTitle` | À propos |
-| `phoneCareer.form.aboutHint` | Un titre et quelques lignes sur vous |
+| `phoneCareer.form.aboutHint` | Votre bio : un titre et quelques lignes sur vous |
+| `phoneCareer.form.cvHint` | Chaque CV a son propre titre et sa bio de candidature : les changer dans un CV ne touche pas à votre profil. |
 | `phoneCareer.form.aboutHeading` | Titre |
 | `phoneCareer.form.aboutHeadingPlaceholder` | Ex. : Ce que je fais |
 | `phoneCareer.form.aboutLabel` | Votre texte |
