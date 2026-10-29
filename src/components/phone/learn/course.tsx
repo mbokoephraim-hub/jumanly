@@ -108,7 +108,7 @@ export function PhoneCourse({ view }: { view: CourseView }) {
   return (
     <div className="nb-page nb-fo nb-fo-cours">
       <header className="nb-barre nb-ex-barre">
-        <PhoneBack fallback="/app/learn" label={t("title")} text={t("title")} />
+        <PhoneBack fallback="/app/learn" label={t("title")} text={t("title")} history={false} />
         <span className="nb-ex-vide-h" />
         <button
           type="button"
