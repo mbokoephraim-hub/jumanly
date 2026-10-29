@@ -1,6 +1,5 @@
 import { afterAll, describe, expect, it } from "vitest";
 import {
-  authorSignals,
   createPost,
   deletePost,
   FeedError,
@@ -66,21 +65,27 @@ describe("Fil", () => {
     expect(reply).toBeTruthy();
   });
 
-  it("compte ce que fait un auteur pour « Pour vous » : réponses, jours actifs, connexions", async () => {
+  it("montre la publication la plus récente en premier dans « Pour vous »", async () => {
     const author = await person();
-    const friend = await person();
-    const post = await createPost(
+    const reader = await person();
+    const old = await createPost(
       db,
-      friend,
+      author,
+      { title: "Offre fictive", body: "Une offre d'emploi fictive en CDI" },
+      labels,
+    );
+    await db.feedPost.update({
+      where: { id: old },
+      data: { createdAt: new Date(Date.now() - 3_600_000) },
+    });
+    const fresh = await createPost(
+      db,
+      await person(),
       { title: "Titre fictif", body: "Une nouvelle fictive" },
       labels,
     );
-    await replyTo(db, author, { post, body: "Bravo" });
-    await db.connection.create({
-      data: { requesterId: friend, addresseeId: author, status: "accepted" },
-    });
-    const signals = (await authorSignals(db, [author])).get(author);
-    expect(signals).toEqual({ replies: 1, activeDays: 1, connections: 1, hiredHere: false });
+    const ids = (await listFeed(db, reader, "pourvous")).map((item) => item.id);
+    expect(ids.indexOf(fresh)).toBeLessThan(ids.indexOf(old));
   });
 
   it("refuse une publication sans titre", async () => {
