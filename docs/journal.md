@@ -5212,6 +5212,13 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - Diplômes : pas de badge « Vérifié » (voir `docs/decisions/2026-10-29-verification-diplomes.md`) ; une photo jointe s'affiche « Justificatif joint ».
 - Publié sans essai dans l'appli, à la demande d'Ephraïm. Pas encore sur ordinateur (le profil web garde l'ancien formulaire, les nouvelles lignes y sont des diplômes par défaut). Sans e-mail configuré en production, la demande au référent est enregistrée mais l'e-mail ne part pas.
 
+## 2026-10-29 · Publication d'offre étape par étape, fiche de poste PDF, affiche dans le Fil
+
+- Téléphone recruteur : « Nouvelle offre » en 10 étapes (poste, compétences techniques et comportementales une par une, exigences, responsabilités et profil point par point, salaire affiché ou masqué, entreprise avec « À propos » repris ou réécrit et logo, questions, analyse d'Orbi gratuite et déterministe, publication avec titre du Fil et choix de la fiche).
+- Fiche de poste dessinée par react-pdf (sans navigateur) : logo de l'entreprise à gauche, logo Jumanly à droite, Sora, fond guilloché, cachet « Original » et numéro d'authentification vérifiable sur `/fiches/<numéro>`. Le recruteur peut joindre son propre PDF à la place.
+- Le Fil montre une affiche d'offre (sans photo) avec Postuler · Voir l'offre · PDF ; la publication part à la mise en ligne (ou à la validation par Jumanly).
+- Migration `20261030090000_job_wizard_sheet` (JobSkill.kind, Job.companyAbout, feedTitle, feedText, sheetCode).
+- Fusionné sans attendre les vérifications, à la demande d'Ephraïm ; tests e2e de l'assistant réécrits mais non lancés.
 ## Fil : les nouvelles publications d'abord (29 octobre 2026)
 
 - Demande d'Ephraïm : après un rafraîchissement, la publication qui vient d'être faite doit passer devant toutes les autres. « Pour vous » n'est plus classé par `feed-rank.ts` (retiré avec son test) : comme « Abonnements » et « Entreprises », il montre les publications de la plus récente à la plus ancienne, republications rangées à leur date. Voir `docs/decisions/2026-10-29-fil-plus-recent-d-abord.md`.

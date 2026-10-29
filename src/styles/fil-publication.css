@@ -160,3 +160,94 @@
   padding: 4px 20px 8px;
   font-size: 13.5px;
 }
+
+/* An offer in the Fil (publication d'offre étape par étape, 29/10/2026): the poster drawn by
+   Jumanly in place of a photo, then « Postuler · Voir l'offre · PDF ». */
+.nb-fil-offre-bloc {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+.nb-fil-affiche {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  padding: 18px 16px;
+  border-radius: 18px;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(166, 242, 107, 0.35), transparent 55%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 9px),
+    linear-gradient(135deg, #0f3f37 0%, #14745f 62%, #1fa98a 100%);
+}
+.nb-fil-affiche-k {
+  justify-self: start;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #a6f26b;
+  color: #0f3f37;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.nb-fil-affiche b {
+  padding-right: 52px;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.nb-fil-affiche-l {
+  font-size: 13.5px;
+  color: #d8ece5;
+}
+.nb-fil-affiche-s {
+  justify-self: start;
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.14);
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.nb-fil-affiche-c {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.nb-fil-affiche-c i {
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(166, 242, 107, 0.6);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+}
+.nb-fil-affiche-score {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+}
+.nb-fil-affiche-bt {
+  display: flex;
+  gap: 6px;
+}
+.nb-fil-affiche-bt > * {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 42px;
+  border-radius: 999px;
+  border: 1px solid var(--nb-filet-fort);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--nb-creme);
+}
+.nb-fil-affiche-bt > [data-p] {
+  flex: 1.3;
+  background: var(--nb-lime);
+  border-color: var(--nb-lime);
+  color: var(--nb-nuit);
+}

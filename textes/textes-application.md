@@ -15821,6 +15821,246 @@ Conventions :
 | `phoneRhOffres.publish.suggestions.move` | Êtes-vous prêt·e à venir sur le lieu du poste ? |
 | `phoneRhOffres.publish.suggestions.salary` | Quel salaire attendez-vous ? |
 
+### Publication d'offre étape par étape · assistant au téléphone (29/10/2026)
+
+| Clé | Texte |
+|---|---|
+| `phoneRhOffres.wizard.progress` | Étape {step} sur {total} |
+| `phoneRhOffres.wizard.kicker` | Étape {step} sur {total} · {name} |
+| `phoneRhOffres.wizard.steps.1.name` | Le poste |
+| `phoneRhOffres.wizard.steps.1.title` | Quel poste recrutez-vous ? |
+| `phoneRhOffres.wizard.steps.1.help` | L'intitulé et une description en quelques phrases : l'équipe, la mission, ce que la personne apprendra. |
+| `phoneRhOffres.wizard.steps.2.name` | Les compétences |
+| `phoneRhOffres.wizard.steps.2.title` | Les compétences recherchées |
+| `phoneRhOffres.wizard.steps.2.help` | Ajoutez-les une par une. Orbi s'en sert pour proposer l'offre aux bons talents. |
+| `phoneRhOffres.wizard.steps.3.name` | Les exigences |
+| `phoneRhOffres.wizard.steps.3.title` | Les exigences du poste |
+| `phoneRhOffres.wizard.steps.3.help` | Le lieu, le type de contrat, le nombre de personnes, le niveau d'études et les langues. |
+| `phoneRhOffres.wizard.steps.4.name` | Les responsabilités |
+| `phoneRhOffres.wizard.steps.4.title` | Les principales responsabilités |
+| `phoneRhOffres.wizard.steps.4.help` | Une responsabilité par point, en commençant par un verbe : « Analyser les demandes de crédit ». |
+| `phoneRhOffres.wizard.steps.5.name` | Le profil |
+| `phoneRhOffres.wizard.steps.5.title` | Le profil recherché |
+| `phoneRhOffres.wizard.steps.5.help` | L'expérience attendue, puis les exigences du profil, point par point. |
+| `phoneRhOffres.wizard.steps.6.name` | Le salaire |
+| `phoneRhOffres.wizard.steps.6.title` | La fourchette salariale |
+| `phoneRhOffres.wizard.steps.6.help` | Indiquez le salaire mensuel proposé, en USD. Vous pouvez choisir de ne pas l'afficher. |
+| `phoneRhOffres.wizard.steps.7.name` | L'entreprise |
+| `phoneRhOffres.wizard.steps.7.title` | Présentez votre entreprise |
+| `phoneRhOffres.wizard.steps.7.help` | Le logo et quelques lignes sur l'entreprise : ils apparaissent sur l'offre et sur la fiche de poste. |
+| `phoneRhOffres.wizard.steps.8.name` | Les questions |
+| `phoneRhOffres.wizard.steps.8.title` | Les questions aux candidats |
+| `phoneRhOffres.wizard.steps.8.help` | Facultatif : quelques questions et les documents souhaités. Aucune réponse n'empêche de postuler. |
+| `phoneRhOffres.wizard.steps.9.name` | L'analyse d'Orbi |
+| `phoneRhOffres.wizard.steps.9.title` | Orbi a relu votre offre |
+| `phoneRhOffres.wizard.steps.9.help` | Ses conseils pour une offre claire et attirante. Vous décidez de ce que vous changez. |
+| `phoneRhOffres.wizard.steps.10.name` | La publication |
+| `phoneRhOffres.wizard.steps.10.title` | Publier l'offre |
+| `phoneRhOffres.wizard.steps.10.help` | Écrivez le titre de la publication dans le Fil et choisissez la fiche de poste que les talents téléchargeront. |
+| `phoneRhOffres.wizard.contract` | Type d'emploi |
+| `phoneRhOffres.wizard.contracts.cdi` | CDI |
+| `phoneRhOffres.wizard.contracts.cdd` | CDD |
+| `phoneRhOffres.wizard.contracts.stage` | Stage |
+| `phoneRhOffres.wizard.contracts.freelance` | Freelance ou mission |
+| `phoneRhOffres.wizard.contracts.alternance` | Alternance |
+| `phoneRhOffres.wizard.contracts.volontariat` | Volontariat |
+| `phoneRhOffres.wizard.hard` | Compétences techniques · {count}/{max} |
+| `phoneRhOffres.wizard.hardHelp` | Les savoir-faire du métier : un logiciel, une méthode, une langue de programmation… |
+| `phoneRhOffres.wizard.hardPlaceholder` | Par exemple : Microsoft Excel |
+| `phoneRhOffres.wizard.addHard` | Ajouter une compétence technique |
+| `phoneRhOffres.wizard.soft` | Compétences comportementales · {count}/{max} |
+| `phoneRhOffres.wizard.softHelp` | La façon de travailler : touchez une suggestion ou écrivez la vôtre. |
+| `phoneRhOffres.wizard.softPlaceholder` | Par exemple : Rigueur |
+| `phoneRhOffres.wizard.addSoft` | Ajouter une compétence comportementale |
+| `phoneRhOffres.wizard.addTyped` | Ajouter « {skill} » |
+| `phoneRhOffres.wizard.removeSkill` | Retirer {skill} |
+| `phoneRhOffres.wizard.skillsMax` | {count} compétences au plus. Retirez-en une pour en ajouter une autre. |
+| `phoneRhOffres.wizard.softSuggestions.1` | Communication |
+| `phoneRhOffres.wizard.softSuggestions.2` | Travail en équipe |
+| `phoneRhOffres.wizard.softSuggestions.3` | Rigueur |
+| `phoneRhOffres.wizard.softSuggestions.4` | Autonomie |
+| `phoneRhOffres.wizard.softSuggestions.5` | Sens de l'organisation |
+| `phoneRhOffres.wizard.softSuggestions.6` | Esprit d'initiative |
+| `phoneRhOffres.wizard.softSuggestions.7` | Adaptabilité |
+| `phoneRhOffres.wizard.softSuggestions.8` | Gestion du stress |
+| `phoneRhOffres.wizard.softSuggestions.9` | Leadership |
+| `phoneRhOffres.wizard.softSuggestions.10` | Sens du service client |
+| `phoneRhOffres.wizard.openings` | Nombre de personnes recherchées |
+| `phoneRhOffres.wizard.openingsValue` | {count, plural, one {# personne} other {# personnes}} |
+| `phoneRhOffres.wizard.education` | Niveau d'études demandé |
+| `phoneRhOffres.wizard.educationLevels.none` | Aucun diplôme exigé |
+| `phoneRhOffres.wizard.educationLevels.secondary` | Diplôme d'État |
+| `phoneRhOffres.wizard.educationLevels.vocational` | Formation professionnelle |
+| `phoneRhOffres.wizard.educationLevels.bachelor` | Licence |
+| `phoneRhOffres.wizard.educationLevels.master` | Master |
+| `phoneRhOffres.wizard.educationLevels.doctorate` | Doctorat |
+| `phoneRhOffres.wizard.languages` | Langues demandées |
+| `phoneRhOffres.wizard.languagePick` | Choisir une langue |
+| `phoneRhOffres.wizard.levelPick` | Choisir le niveau |
+| `phoneRhOffres.wizard.levelFor` | Niveau attendu en {language} |
+| `phoneRhOffres.wizard.removeLanguage` | Retirer {language} |
+| `phoneRhOffres.wizard.responsibilities` | {count, plural, =0 {Responsabilités} one {Responsabilités · # point} other {Responsabilités · # points}} |
+| `phoneRhOffres.wizard.responsibilityPlaceholder` | Responsabilité n° {number} |
+| `phoneRhOffres.wizard.addResponsibility` | Ajouter une responsabilité |
+| `phoneRhOffres.wizard.removePoint` | Retirer le point {number} |
+| `phoneRhOffres.wizard.experience` | Années d'expérience demandées |
+| `phoneRhOffres.wizard.experienceValue` | {years, plural, =0 {Débutant accepté} one {# an au moins} other {# ans au moins}} |
+| `phoneRhOffres.wizard.requirements` | {count, plural, =0 {Exigences du profil} one {Exigences du profil · # point} other {Exigences du profil · # points}} |
+| `phoneRhOffres.wizard.requirementPlaceholder` | Par exemple : Une première expérience en banque |
+| `phoneRhOffres.wizard.addRequirement` | Ajouter une exigence |
+| `phoneRhOffres.wizard.requirementsNote` | Jamais d'âge, de genre, d'origine, de religion, de situation familiale ni de photo : ces critères sont interdits. |
+| `phoneRhOffres.wizard.salaryWhy` | Par souci de transparence, nous vous conseillons d'afficher le salaire : les talents savent tout de suite si l'offre leur correspond, et vous recevez plus de candidatures. |
+| `phoneRhOffres.wizard.salaryHiddenNote` | Le salaire restera caché sur l'offre et sur la fiche de poste. |
+| `phoneRhOffres.wizard.logoReady` | Ce logo apparaît sur l'offre et sur la fiche de poste. |
+| `phoneRhOffres.wizard.logoNone` | Sans logo, les initiales de l'entreprise s'affichent. |
+| `phoneRhOffres.wizard.logoAdd` | Ajouter le logo |
+| `phoneRhOffres.wizard.logoChange` | Changer le logo |
+| `phoneRhOffres.wizard.logoSending` | Envoi du logo… |
+| `phoneRhOffres.wizard.logoHint` | Image carrée au format PNG de préférence, 4 Mo au plus. |
+| `phoneRhOffres.wizard.logoAdmin` | Un administrateur de l'entreprise peut ajouter le logo depuis la page de l'entreprise. |
+| `phoneRhOffres.wizard.about` | Présentation de l'entreprise |
+| `phoneRhOffres.wizard.aboutImport` | Reprendre l'« À propos » de l'entreprise |
+| `phoneRhOffres.wizard.aboutNone` | Votre entreprise n'a pas encore d'« À propos » : écrivez quelques lignes ici. |
+| `phoneRhOffres.wizard.aboutPlaceholder` | Qui vous êtes, ce que vous faites, pourquoi vous rejoindre. |
+| `phoneRhOffres.wizard.aboutCount` | {count}/{max} caractères |
+| `phoneRhOffres.wizard.analyze` | Lancer l'analyse d'Orbi |
+| `phoneRhOffres.wizard.analysisScore` | Votre offre est complète à {score} % |
+| `phoneRhOffres.wizard.analysisLine` | Lecture gratuite, sans crédit d'Orbi |
+| `phoneRhOffres.wizard.analysisNote` | Orbi recommande, vous décidez : vous pouvez publier même si tout n'est pas vert. |
+| `phoneRhOffres.wizard.checkFix` | Compléter à l'étape {step} › |
+| `phoneRhOffres.wizard.checks.description.ok` | La description donne envie d'en savoir plus. |
+| `phoneRhOffres.wizard.checks.description.advice` | Développez la description : 3 à 5 phrases aident les talents à se projeter. |
+| `phoneRhOffres.wizard.checks.hardSkills.ok` | Les compétences techniques sont précises. |
+| `phoneRhOffres.wizard.checks.hardSkills.advice` | Ajoutez au moins 3 compétences techniques : Orbi trouvera de meilleurs profils. |
+| `phoneRhOffres.wizard.checks.softSkills.ok` | Les compétences comportementales sont indiquées. |
+| `phoneRhOffres.wizard.checks.softSkills.advice` | Ajoutez 2 compétences comportementales, comme la rigueur ou le travail en équipe. |
+| `phoneRhOffres.wizard.checks.languages.ok` | Les langues demandées sont claires. |
+| `phoneRhOffres.wizard.checks.languages.advice` | Précisez les langues demandées et leur niveau. |
+| `phoneRhOffres.wizard.checks.responsibilities.ok` | Les responsabilités sont bien détaillées. |
+| `phoneRhOffres.wizard.checks.responsibilities.advice` | Listez au moins 3 responsabilités, une par point. |
+| `phoneRhOffres.wizard.checks.requirements.ok` | Le profil recherché est clair. |
+| `phoneRhOffres.wizard.checks.requirements.advice` | Ajoutez au moins 2 exigences du profil. |
+| `phoneRhOffres.wizard.checks.salary.ok` | Le salaire est affiché : bravo pour la transparence. |
+| `phoneRhOffres.wizard.checks.salary.advice` | Le salaire est caché. Les offres avec salaire reçoivent plus de candidatures. |
+| `phoneRhOffres.wizard.checks.company.ok` | L'entreprise est bien présentée. |
+| `phoneRhOffres.wizard.checks.company.advice` | Présentez l'entreprise en quelques lignes : les talents veulent savoir qui recrute. |
+| `phoneRhOffres.wizard.checks.wording.ok` | Aucun critère interdit ni demande de paiement. |
+| `phoneRhOffres.wizard.checks.wording.warning` | Un mot de l'offre sera vérifié par Jumanly avant la mise en ligne. Relisez la description et les points. |
+| `phoneRhOffres.wizard.toFil` | Publier aussi dans le Fil |
+| `phoneRhOffres.wizard.toFilLine` | Une publication au nom de l'entreprise, avec l'affiche de l'offre |
+| `phoneRhOffres.wizard.feedHelp` | Un titre court et accrocheur, comme toute publication du Fil : 60 caractères au plus, sans majuscules partout ni émojis en rafale. |
+| `phoneRhOffres.wizard.feedTitleDefault` | On recrute : {title} |
+| `phoneRhOffres.wizard.feedTextDefault` | {org} cherche {count, plural, one {# personne} other {# personnes}} à {city}. Candidature gratuite sur Jumanly. |
+| `phoneRhOffres.wizard.feedPreview` | Aperçu de la publication dans le Fil |
+| `phoneRhOffres.wizard.feedNow` | à l'instant |
+| `phoneRhOffres.wizard.posterKicker` | Offre d'emploi |
+| `phoneRhOffres.wizard.posterApply` | Postuler |
+| `phoneRhOffres.wizard.posterSee` | Voir l'offre |
+| `phoneRhOffres.wizard.posterPdf` | PDF |
+| `phoneRhOffres.wizard.sheet` | Fiche de poste à télécharger |
+| `phoneRhOffres.wizard.sheetJumanly` | Générer la fiche Jumanly |
+| `phoneRhOffres.wizard.sheetJumanlyLine` | Créée à partir de l'offre, à vos couleurs, avec le cachet et un numéro d'authentification |
+| `phoneRhOffres.wizard.sheetOwn` | Joindre mon propre PDF |
+| `phoneRhOffres.wizard.sheetOwnLine` | Votre fiche en PDF, 4 Mo au plus |
+| `phoneRhOffres.wizard.sheetSending` | Vérification du fichier… |
+| `phoneRhOffres.wizard.sheetDownload` | Télécharger la fiche Jumanly |
+| `phoneRhOffres.wizard.sheetOpenOwn` | Ouvrir mon PDF |
+| `phoneRhOffres.wizard.sheetNote` | Les talents pourront télécharger cette fiche depuis l'offre et depuis le Fil. |
+| `phoneRhOffres.wizard.sheetErrors.type` | Ce fichier n'est pas un PDF. |
+| `phoneRhOffres.wizard.sheetErrors.size` | Le PDF dépasse 4 Mo. |
+| `phoneRhOffres.wizard.sheetErrors.active` | Ce PDF contient du contenu actif (script, formulaire) : enregistrez-le de nouveau en PDF simple. |
+| `phoneRhOffres.wizard.sheetErrors.encrypted` | Ce PDF est protégé par un mot de passe. |
+| `phoneRhOffres.wizard.sheetErrors.unreadable` | Ce PDF ne peut pas être lu. |
+| `phoneRhOffres.wizard.sheetErrors.invalid` | Le PDF n'a pas pu être ajouté. Réessayez. |
+| `phoneRhOffres.wizard.orbiPoints` | Orbi a aussi proposé des responsabilités et un profil : vous les relirez aux étapes 4 et 5. |
+| `phoneRhOffres.wizard.errors.hard` | Ajoutez au moins une compétence technique. |
+| `phoneRhOffres.wizard.errors.responsibilities` | Ajoutez au moins une responsabilité. |
+| `phoneRhOffres.wizard.errors.point` | Écrivez quelques mots (3 caractères au moins). |
+| `phoneRhOffres.wizard.errors.points` | 12 points au plus. |
+| `phoneRhOffres.wizard.errors.feedTitle` | Écrivez le titre de la publication, ou ne publiez pas dans le Fil. |
+| `phoneRhOffres.wizard.errors.logo` | Le logo n'a pas pu être ajouté : choisissez une image PNG ou JPEG de 4 Mo au plus. |
+| `phoneFil.offerSalary` | {min} à {max} USD par mois |
+| `phoneFil.offerSalaryFrom` | À partir de {min} USD par mois |
+| `phoneFil.poster.kicker` | Offre d'emploi |
+| `phoneFil.poster.apply` | Postuler |
+| `phoneFil.poster.see` | Voir l'offre |
+| `phoneFil.poster.pdf` | PDF |
+| `phoneExplorer.offer.hardSkills` | Compétences techniques |
+| `phoneExplorer.offer.softSkills` | Compétences comportementales |
+| `phoneExplorer.offer.sheet` | Fiche de poste |
+| `phoneExplorer.offer.sheetLine` | PDF à télécharger, à garder ou à partager |
+| `phoneExplorer.offer.sheetDownload` | Télécharger |
+
+### Fiche de poste en PDF et vérification (29/10/2026)
+
+| Clé | Texte |
+|---|---|
+| `jobSheet.kind` | Fiche de poste |
+| `jobSheet.facts.contract` | Contrat |
+| `jobSheet.facts.place` | Lieu |
+| `jobSheet.facts.remote` | Mode de travail |
+| `jobSheet.facts.openings` | Postes à pourvoir |
+| `jobSheet.facts.experience` | Expérience |
+| `jobSheet.facts.education` | Niveau d'études |
+| `jobSheet.facts.closesAt` | Date limite |
+| `jobSheet.company` | L'entreprise |
+| `jobSheet.post` | Le poste |
+| `jobSheet.responsibilities` | Principales responsabilités |
+| `jobSheet.hardSkills` | Compétences techniques |
+| `jobSheet.softSkills` | Compétences comportementales |
+| `jobSheet.profile` | Profil recherché |
+| `jobSheet.languages` | Langues |
+| `jobSheet.salary` | Salaire |
+| `jobSheet.salaryPeriod` | par mois |
+| `jobSheet.salaryRange` | {min} à {max} USD |
+| `jobSheet.salaryFrom` | Dès {min} USD |
+| `jobSheet.applyTitle` | Candidatez gratuitement sur Jumanly |
+| `jobSheet.applyText` | Scannez le code ou ouvrez le lien : votre profil, votre CV et vos réponses partent en une fois. |
+| `jobSheet.applyFree` | Candidater · gratuit |
+| `jobSheet.seal` | ORIGINAL |
+| `jobSheet.sealCenter` | JUMANLY |
+| `jobSheet.codeLabel` | N° d'authentification |
+| `jobSheet.verify` | Vérifiez l'authenticité de cette fiche sur |
+| `jobSheet.issued` | Fiche émise par Jumanly le {date} pour {org}. |
+| `jobSheet.microtext` | JUMANLY DOCUMENT ORIGINAL |
+| `jobSheet.footer` | jumanly.io · assistant@jumanly.io · Learn. Grow. Connect. |
+| `jobSheet.page` | Page {page} sur {total} |
+| `jobSheet.contract.cdi` | CDI |
+| `jobSheet.contract.cdd` | CDD |
+| `jobSheet.contract.stage` | Stage |
+| `jobSheet.contract.mission` | Mission |
+| `jobSheet.contract.freelance` | Freelance |
+| `jobSheet.contract.alternance` | Alternance |
+| `jobSheet.contract.volontariat` | Volontariat |
+| `jobSheet.remote.onsite` | Sur place |
+| `jobSheet.remote.hybrid` | Hybride |
+| `jobSheet.remote.remote` | Télétravail |
+| `jobSheet.education.none` | Aucun diplôme exigé |
+| `jobSheet.education.secondary` | Diplôme d'État |
+| `jobSheet.education.vocational` | Formation professionnelle |
+| `jobSheet.education.bachelor` | Licence |
+| `jobSheet.education.master` | Master |
+| `jobSheet.education.doctorate` | Doctorat |
+| `jobSheet.experience` | {years, plural, =0 {Débutant accepté} one {# an au moins} other {# ans au moins}} |
+| `jobSheet.openings` | {count, plural, one {# personne} other {# personnes}} |
+| `jobSheet.check.title` | Vérifier une fiche de poste |
+| `jobSheet.check.seo` | Vérifiez qu'une fiche de poste a bien été émise par Jumanly. |
+| `jobSheet.check.authenticTitle` | Fiche authentique |
+| `jobSheet.check.authenticText` | Cette fiche de poste a bien été émise par Jumanly pour l'offre ci-dessous, toujours ouverte. |
+| `jobSheet.check.overTitle` | Fiche authentique, offre terminée |
+| `jobSheet.check.overText` | Cette fiche a bien été émise par Jumanly, mais l'offre n'accepte plus de candidatures. |
+| `jobSheet.check.unknownTitle` | Numéro inconnu. |
+| `jobSheet.check.unknownText` | Aucune fiche de Jumanly ne porte ce numéro. Vérifiez la saisie, ou méfiez-vous de ce document. |
+| `jobSheet.check.offer` | Offre |
+| `jobSheet.check.company` | Entreprise |
+| `jobSheet.check.companyVerified` | {name} · vérifiée par Jumanly |
+| `jobSheet.check.place` | Lieu |
+| `jobSheet.check.published` | Publiée le |
+| `jobSheet.check.closes` | Date limite |
+| `jobSheet.check.number` | Numéro |
+| `jobSheet.check.see` | Voir l'offre |
+| `jobSheet.check.warning` | Candidater sur Jumanly est toujours gratuit. Si l'on vous demande de payer pour postuler, signalez-le à assistant@jumanly.io. |
+
 
 ---
 

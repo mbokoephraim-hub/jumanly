@@ -92,6 +92,15 @@ const postSelect = {
       contractType: true,
       remote: true,
       status: true,
+      salaryMin: true,
+      salaryMax: true,
+      closesAt: true,
+      skills: {
+        where: { kind: "hard" },
+        orderBy: { weight: "desc" },
+        take: 3,
+        select: { skill: { select: { name: true } } },
+      },
     },
   },
   quoted: {
@@ -156,6 +165,12 @@ export type FeedItem = {
     contractType: string;
     remote: string;
     score: number | null;
+    /** USD per month (the offer's poster in the Fil), when the recruiter shows it. */
+    salary: { min: number; max: number | null } | null;
+    /** Its first technical skills. */
+    skills: string[];
+    /** Applications still accepted. */
+    open: boolean;
   } | null;
   attachment: FeedAttachment | null;
   /**
@@ -345,6 +360,15 @@ async function toItems(
               contractType: row.job.contractType,
               remote: row.job.remote,
               score: match?.state === "ok" ? match.explanation.score : null,
+              salary:
+                row.job.salaryMin === null
+                  ? null
+                  : {
+                      min: Math.round(row.job.salaryMin / 100),
+                      max: row.job.salaryMax === null ? null : Math.round(row.job.salaryMax / 100),
+                    },
+              skills: row.job.skills.map((item) => item.skill.name),
+              open: row.job.closesAt === null || row.job.closesAt > now,
             }
           : null,
       attachment: attachmentOf(row.attachment),
