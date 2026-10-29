@@ -5219,3 +5219,6 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - Le Fil montre une affiche d'offre (sans photo) avec Postuler · Voir l'offre · PDF ; la publication part à la mise en ligne (ou à la validation par Jumanly).
 - Migration `20261030090000_job_wizard_sheet` (JobSkill.kind, Job.companyAbout, feedTitle, feedText, sheetCode).
 - Fusionné sans attendre les vérifications, à la demande d'Ephraïm ; tests e2e de l'assistant réécrits mais non lancés.
+## Fil : les nouvelles publications d'abord (29 octobre 2026)
+
+- Demande d'Ephraïm : après un rafraîchissement, la publication qui vient d'être faite doit passer devant toutes les autres. « Pour vous » n'est plus classé par `feed-rank.ts` (retiré avec son test) : comme « Abonnements » et « Entreprises », il montre les publications de la plus récente à la plus ancienne, republications rangées à leur date. Voir `docs/decisions/2026-10-29-fil-plus-recent-d-abord.md`.

@@ -2,8 +2,8 @@
  * Le Fil (Modèle B, lot B3, docs/modele-b rangées 05-06): posts of people and organizations,
  * answers, J'aime, Republier, Citer, Enregistrer, « Ne plus voir ce type de publication »,
  * events and reports. Every post is visible to every signed-in talent; a blocked connection
- * hides each other's posts. « Pour vous » puts professional posts forward (feed-rank.ts, Ephraïm's
- * request of 22/10/2026); the two other tabs stay the most recent first.
+ * hides each other's posts. Every tab shows the most recent first (Ephraïm, 29/10/2026: a post
+ * just published must come before all the others once the Fil is refreshed).
  */
 import { randomBytes } from "node:crypto";
 import { z } from "zod";
@@ -12,7 +12,6 @@ import type { FeedPostKind, PrismaClient } from "@/generated/prisma/client";
 import { matchesForUser } from "@/server/matching/service";
 import { recordAudience, recordImpressions } from "./audience";
 import { FEED_POST_MAX, FEED_REPLY_MAX, FEED_TITLE_MAX, postTextSchema } from "./feed-limits";
-import { rankFeed, type AuthorSignals } from "./feed-rank";
 import { photoType } from "./profile-photo";
 import { notify } from "./notifications";
 
@@ -24,8 +23,6 @@ export { FEED_POST_MAX, FEED_REPLY_MAX };
 export const FEED_IMAGE_MAX = 1_000_000;
 const IMAGE_PREFIX = "/api/fil/image/";
 const PAGE = 30;
-/** « Pour vous » chooses its page among this many recent posts. */
-const CANDIDATES = 200;
 const DAY_MS = 86_400_000;
 
 export class FeedError extends Error {
@@ -478,24 +475,15 @@ async function repostItems(
 const shownAt = (item: FeedItem) => (item.repostedBy?.at ?? item.createdAt).getTime();
 
 /**
- * Puts the reposts among the posts, once each (a post already in the list is not repeated):
- * by date, or, in a ranked list, one every three posts.
+ * Puts the reposts among the posts by date, once each (a post already in the list is not repeated).
  */
-function withReposts(items: FeedItem[], reposts: FeedItem[], ranked = false): FeedItem[] {
+function withReposts(items: FeedItem[], reposts: FeedItem[]): FeedItem[] {
   const present = new Set(items.map((item) => item.id));
   const extra = reposts.filter((item) => !present.has(item.id));
   if (extra.length === 0) return items;
-  if (!ranked) return [...items, ...extra].sort((a, b) => shownAt(b) - shownAt(a));
-  const result = [...items];
-  extra.forEach((item, index) => result.splice(Math.min(result.length, 2 + index * 4), 0, item));
-  return result;
+  return [...items, ...extra].sort((a, b) => shownAt(b) - shownAt(a));
 }
 
-/**
- * One tab of the Fil: « Pour vous » (everything, professional posts first, feed-rank.ts), then,
- * most recent first, « Abonnements » (people and organizations followed, connections, and the
- * viewer's own posts) and « Entreprises ».
- */
 /** The top-level posts a viewer may see in the Fil: not hidden, no blocked author, no masked type. */
 async function visiblePosts(
   db: PrismaClient,
@@ -538,6 +526,10 @@ export async function newPostsSince(db: PrismaClient, viewerId: string, since: D
   });
 }
 
+/**
+ * One tab of the Fil, most recent first: « Pour vous » (everything), « Abonnements » (people and
+ * organizations followed, connections, and the viewer's own posts) and « Entreprises ».
+ */
 export async function listFeed(
   db: PrismaClient,
   viewerId: string,
@@ -568,7 +560,7 @@ export async function listFeed(
   const rows = await db.feedPost.findMany({
     where,
     orderBy: { createdAt: "desc" },
-    take: tab === "pourvous" ? CANDIDATES : PAGE,
+    take: PAGE,
     select: postSelect,
   });
   const followed = follows.flatMap((row) => (row.userId ? [row.userId] : []));
@@ -586,102 +578,12 @@ export async function listFeed(
       now,
       blocked,
     );
-  if (tab !== "pourvous") {
-    await recordImpressions(db, viewerId, rows);
-    const [items, shared] = await Promise.all([
-      toItems(db, viewerId, rows, connected, now, blocked),
-      reposts(),
-    ]);
-    return withReposts(items, shared).slice(0, PAGE + 10);
-  }
-  const people = [
-    ...new Set(rows.flatMap((row) => (row.authorId && !row.organizationId ? [row.authorId] : []))),
-  ];
-  const authors = await authorSignals(db, people, now);
-  const ranked = rankFeed(
-    rows.map((row) => ({
-      ...row,
-      hasJob: row.job !== null,
-      likes: row._count.likes,
-      replies: row._count.replies,
-      reposts: row._count.reposts + row._count.quotes,
-    })),
-    authors,
-    viewerId,
-    now,
-  ).slice(0, PAGE);
-  const byId = new Map(rows.map((row) => [row.id, row]));
-  const shown = ranked.map((post) => byId.get(post.id)!);
-  await recordImpressions(db, viewerId, shown);
+  await recordImpressions(db, viewerId, rows);
   const [items, shared] = await Promise.all([
-    toItems(db, viewerId, shown, connected, now, blocked),
+    toItems(db, viewerId, rows, connected, now, blocked),
     reposts(),
   ]);
-  return withReposts(items, shared, true);
-}
-
-/**
- * What the authors of « Pour vous » did on Jumanly (feed-rank.ts): answers and active days over
- * 30 days, accepted connections, a job obtained through an application in the last 120 days.
- */
-export async function authorSignals(
-  db: PrismaClient,
-  people: string[],
-  now = new Date(),
-): Promise<Map<string, AuthorSignals>> {
-  const result = new Map<string, AuthorSignals>();
-  if (people.length === 0) return result;
-  const since = new Date(now.getTime() - 30 * DAY_MS);
-  const [replies, days, requested, received, hired] = await Promise.all([
-    db.feedPost.groupBy({
-      by: ["authorId"],
-      where: {
-        authorId: { in: people },
-        organizationId: null,
-        parentId: { not: null },
-        createdAt: { gte: since },
-      },
-      _count: { _all: true },
-    }),
-    db.$queryRaw<{ id: string; days: bigint }[]>`
-      SELECT id, COUNT(DISTINCT day) AS days FROM (
-        SELECT "authorId" AS id, date_trunc('day', "createdAt") AS day FROM "FeedPost"
-        WHERE "authorId" IN (${Prisma.join(people)}) AND "createdAt" >= ${since}
-        UNION
-        SELECT "userId" AS id, date_trunc('day', "createdAt") AS day FROM "FeedLike"
-        WHERE "userId" IN (${Prisma.join(people)}) AND "createdAt" >= ${since}
-      ) AS activity GROUP BY id`,
-    db.connection.groupBy({
-      by: ["requesterId"],
-      where: { requesterId: { in: people }, status: "accepted" },
-      _count: { _all: true },
-    }),
-    db.connection.groupBy({
-      by: ["addresseeId"],
-      where: { addresseeId: { in: people }, status: "accepted" },
-      _count: { _all: true },
-    }),
-    db.application.findMany({
-      where: {
-        status: "hired",
-        updatedAt: { gte: new Date(now.getTime() - 120 * DAY_MS) },
-        profile: { userId: { in: people } },
-      },
-      select: { profile: { select: { userId: true } } },
-    }),
-  ]);
-  const hiredHere = new Set(hired.map((row) => row.profile.userId));
-  for (const id of people) {
-    result.set(id, {
-      replies: replies.find((row) => row.authorId === id)?._count._all ?? 0,
-      activeDays: Number(days.find((row) => row.id === id)?.days ?? 0),
-      connections:
-        (requested.find((row) => row.requesterId === id)?._count._all ?? 0) +
-        (received.find((row) => row.addresseeId === id)?._count._all ?? 0),
-      hiredHere: hiredHere.has(id),
-    });
-  }
-  return result;
+  return withReposts(items, shared).slice(0, PAGE + 10);
 }
 
 export type FeedReply = {
