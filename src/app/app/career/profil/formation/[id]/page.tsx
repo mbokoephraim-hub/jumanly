@@ -1,3 +1,4 @@
+import { FreshOnEachVisit } from "@/components/phone/fresh-visit";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -29,17 +30,19 @@ export default async function CareerEducationPage({
   const year = (value: number | null | undefined) => (value ? String(value) : "");
   return (
     <CareerTexts>
-      <EducationForm
-        values={{
-          id: item?.id ?? null,
-          degree: item?.degree ?? "",
-          school: item?.school ?? "",
-          level: item?.level ?? "bachelor",
-          field: item?.field ?? "",
-          startYear: year(item?.startYear),
-          endYear: year(item?.endYear),
-        }}
-      />
+      <FreshOnEachVisit>
+        <EducationForm
+          values={{
+            id: item?.id ?? null,
+            degree: item?.degree ?? "",
+            school: item?.school ?? "",
+            level: item?.level ?? "bachelor",
+            field: item?.field ?? "",
+            startYear: year(item?.startYear),
+            endYear: year(item?.endYear),
+          }}
+        />
+      </FreshOnEachVisit>
     </CareerTexts>
   );
 }

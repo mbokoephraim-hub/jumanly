@@ -1,3 +1,4 @@
+import { FreshOnEachVisit } from "@/components/phone/fresh-visit";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -39,15 +40,21 @@ export default async function EditOfferPage({
   if (await isPhone())
     return (
       <RhOffresTexts>
-        <PhoneRecruiterPublish
-          key={job.id}
-          data={await rhPublishData(ctx, user.id, job.id, Number(query.etape) || 1)}
-        />
+        <FreshOnEachVisit>
+          <PhoneRecruiterPublish
+            key={job.id}
+            data={await rhPublishData(ctx, user.id, job.id, Number(query.etape) || 1)}
+          />
+        </FreshOnEachVisit>
       </RhOffresTexts>
     );
   const org = await db.organization.findUniqueOrThrow({
     where: { id: ctx.organizationId },
     select: { name: true, banner: true, logo: true },
   });
-  return <JobFlow ctx={ctx} org={org} job={job} step={jobStepOf(query.etape)} query={query} />;
+  return (
+    <FreshOnEachVisit>
+      <JobFlow ctx={ctx} org={org} job={job} step={jobStepOf(query.etape)} query={query} />
+    </FreshOnEachVisit>
+  );
 }

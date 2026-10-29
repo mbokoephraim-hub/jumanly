@@ -1,3 +1,4 @@
+import { FreshOnEachVisit } from "@/components/phone/fresh-visit";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -20,11 +21,13 @@ export default async function CareerAboutPage() {
   const profile = await getFullProfile(db, user.id);
   return (
     <CareerTexts>
-      <AboutForm
-        title={profile.aboutTitle ?? ""}
-        summary={profile.summary ?? ""}
-        target={profile.targetJob}
-      />
+      <FreshOnEachVisit>
+        <AboutForm
+          title={profile.aboutTitle ?? ""}
+          summary={profile.summary ?? ""}
+          target={profile.targetJob}
+        />
+      </FreshOnEachVisit>
     </CareerTexts>
   );
 }

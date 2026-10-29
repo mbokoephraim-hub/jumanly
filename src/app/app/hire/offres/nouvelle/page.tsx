@@ -1,3 +1,4 @@
+import { FreshOnEachVisit } from "@/components/phone/fresh-visit";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JobFlow, type FlowQuery } from "@/components/recruiter/job-flow";
@@ -30,12 +31,18 @@ export default async function NewOfferPage({
   if (await isPhone())
     return (
       <RhOffresTexts>
-        <PhoneRecruiterPublish data={await rhPublishData(ctx, user.id, null, 1)} />
+        <FreshOnEachVisit>
+          <PhoneRecruiterPublish data={await rhPublishData(ctx, user.id, null, 1)} />
+        </FreshOnEachVisit>
       </RhOffresTexts>
     );
   const org = await db.organization.findUniqueOrThrow({
     where: { id: ctx.organizationId },
     select: { name: true, banner: true, logo: true },
   });
-  return <JobFlow ctx={ctx} org={org} job={null} step="poste" query={query} />;
+  return (
+    <FreshOnEachVisit>
+      <JobFlow ctx={ctx} org={org} job={null} step="poste" query={query} />
+    </FreshOnEachVisit>
+  );
 }
