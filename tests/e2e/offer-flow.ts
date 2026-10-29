@@ -70,9 +70,17 @@ export async function wizardReady(page: Page) {
   );
 }
 
+/** « Continuer » on the phone's steps, then the heading of the next step. */
+export async function nextStep(page: Page, heading: string, button = "Continuer") {
+  const wizard = page.locator(".nb-rh-offre-pub").filter({ visible: true });
+  await wizard.getByRole("button", { name: button, exact: true }).click();
+  await expect(wizard.getByRole("heading", { name: heading })).toBeVisible();
+}
+
 /**
- * The same offer on a phone (planches Recruteur-publier-1 to -4): the post, its text and its
- * skill, then where and how, then the pre-selection, up to the preview.
+ * The same offer on a phone, step by step (publication d'offre, 29/10/2026): the post, the
+ * skills, the requirements, the responsibilities, the profile, the salary, the company, the
+ * questions and Orbi's reading, up to « Publier l'offre ».
  */
 async function fillPhoneOffer(page: Page, offer: OfferInput) {
   await page.goto("/app/hire/offres/nouvelle");
@@ -80,36 +88,38 @@ async function fillPhoneOffer(page: Page, offer: OfferInput) {
   const wizard = page.locator(".nb-rh-offre-pub").filter({ visible: true });
   await wizard.getByLabel("Intitulé du poste").fill(offer.title);
   await wizard.getByLabel("Description du poste").fill(offer.description);
-  await wizard.getByLabel("Ajouter une compétence").fill(offer.skill);
-  await wizard.getByLabel("Ajouter une compétence").press("Enter");
-  await expect(wizard.locator(".nb-rh-puces")).toContainText(offer.skill);
-  await wizard.getByRole("button", { name: "Continuer" }).click();
-  await expect(wizard.getByRole("heading", { name: "Les détails" })).toBeVisible();
+  await nextStep(page, "Les compétences recherchées");
+  await wizard.getByLabel("Ajouter une compétence technique").fill(offer.skill);
+  await wizard.getByLabel("Ajouter une compétence technique").press("Enter");
+  await expect(wizard.locator(".nb-rh-puces").first()).toContainText(offer.skill);
+  await nextStep(page, "Les exigences du poste");
   await wizard.getByLabel("Autre ville").fill(offer.city ?? "Abidjan");
-  const country = wizard.getByLabel("Pays du poste");
-  if (await country.isVisible()) await country.fill(offer.country ?? "Côte d'Ivoire");
+  await wizard.getByLabel("Pays du poste").fill(offer.country ?? "Côte d'Ivoire");
+  await nextStep(page, "Les principales responsabilités");
+  await expect(page).toHaveURL(/\/modifier\?etape=4/);
+  for (const item of offer.responsibilities.length ? offer.responsibilities : [offer.title]) {
+    const field = wizard.getByPlaceholder(/^Responsabilité n°/);
+    await field.fill(item);
+    await field.press("Enter");
+    await expect(wizard.locator(".nb-oe-points")).toContainText(item);
+  }
+  await nextStep(page, "Le profil recherché");
+  await nextStep(page, "La fourchette salariale");
+  const salary = wizard.getByRole("switch", { name: "Afficher le salaire" });
   if (offer.salary) {
-    await wizard.getByRole("switch", { name: "Afficher le salaire" }).click();
+    if ((await salary.getAttribute("aria-checked")) !== "true") await salary.click();
     await wizard.getByLabel("Minimum (USD par mois)").fill(offer.salary[0]);
     await wizard.getByLabel("Maximum (USD par mois)").fill(offer.salary[1]);
-  }
-  await wizard.getByRole("button", { name: "Continuer" }).click();
-  await expect(page).toHaveURL(/\/modifier\?etape=3/);
-  // The address now names the saved draft: let the page settle before typing.
-  await page.waitForLoadState("networkidle");
-  await wizardReady(page);
+  } else if ((await salary.getAttribute("aria-checked")) === "true") await salary.click();
+  await nextStep(page, "Présentez votre entreprise");
+  await nextStep(page, "Les questions aux candidats");
   if (offer.question) {
-    // Typed while the page settles, the question can be lost: type it again.
-    await expect(async () => {
-      await wizard.getByLabel("Votre question").fill(offer.question!);
-      await wizard.getByLabel("Votre question").press("Enter");
-      await expect(wizard.getByRole("checkbox", { name: offer.question })).toBeChecked({
-        timeout: 2_000,
-      });
-    }).toPass({ timeout: 20_000 });
+    await wizard.getByLabel("Votre question").fill(offer.question);
+    await wizard.getByLabel("Votre question").press("Enter");
+    await expect(wizard.getByRole("checkbox", { name: offer.question })).toBeChecked();
   }
-  await wizard.getByRole("button", { name: "Continuer" }).click();
-  await expect(page).toHaveURL(/\/modifier\?etape=4/);
+  await nextStep(page, "Orbi a relu votre offre", "Lancer l'analyse d'Orbi");
+  await nextStep(page, "Publier l'offre");
   return page.url().split("/modifier")[0]!;
 }
 

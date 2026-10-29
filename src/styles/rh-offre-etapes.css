@@ -1,0 +1,416 @@
+/* « Nouvelle offre » étape par étape (publication d'offre, 29/10/2026): imported by the screen. */
+
+.nb-oe-etapes {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 10px 16px 0;
+}
+.nb-oe-etapes li {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--nb-brume);
+  border: 1px solid var(--nb-filet-fort);
+}
+.nb-oe-etapes li[data-etat="fait"] {
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.18);
+  border-color: transparent;
+  color: var(--nb-lime-t);
+}
+.nb-oe-etapes li[data-etat="ici"] {
+  background: var(--nb-lime);
+  border-color: var(--nb-lime);
+  color: var(--nb-nuit);
+}
+.nb-oe-aide {
+  margin: -10px 0 16px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.nb-oe-sous {
+  margin: -4px 0 10px;
+  font-size: 13.5px;
+}
+.nb-oe-points ol {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.nb-oe-points li {
+  display: grid;
+  grid-template-columns: 28px 1fr 36px;
+  align-items: start;
+  gap: 10px;
+  padding: 12px 6px 12px 12px;
+  border-radius: 16px;
+  background: var(--nb-carte);
+  border: 1px solid var(--nb-filet-fort);
+}
+.nb-oe-num {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+  font-size: 13px;
+  font-weight: 800;
+}
+.nb-oe-point {
+  padding-top: 4px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--nb-creme);
+}
+.nb-oe-points li button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  color: var(--nb-brume);
+}
+.nb-oe-ajout {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+}
+.nb-oe-ajout textarea {
+  width: 100%;
+  resize: none;
+  background: transparent;
+  font-size: 15.5px;
+  line-height: 1.45;
+  color: var(--nb-creme);
+  outline: none;
+}
+.nb-oe-ajout button {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+  font-size: 14px;
+  font-weight: 700;
+}
+.nb-oe-comp {
+  margin-bottom: 18px;
+}
+.nb-oe-comp[data-ton="soft"] .nb-rh-puces li {
+  background: transparent;
+  color: var(--nb-creme);
+  border: 1px solid var(--nb-lime-t);
+}
+.nb-oe-comp[data-ton="soft"] .nb-rh-puces button {
+  color: var(--nb-creme);
+}
+.nb-oe-cherche {
+  margin-bottom: 8px;
+}
+.nb-oe-sugg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.nb-oe-libre {
+  border-style: dashed;
+}
+.nb-oe-deux {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+.nb-oe-compteur {
+  display: inline-grid;
+  grid-template-columns: 48px minmax(140px, auto) 48px;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+}
+.nb-oe-compteur button {
+  height: 48px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--nb-lime-t);
+}
+.nb-oe-compteur button:disabled {
+  opacity: 0.35;
+}
+.nb-oe-compteur output {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--nb-creme);
+}
+.nb-oe-langue {
+  display: grid;
+  gap: 10px;
+}
+.nb-oe-niveaux {
+  display: grid;
+  gap: 6px;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--nb-carte);
+}
+.nb-oe-transparence {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(166, 242, 107, 0.1);
+  color: var(--nb-creme);
+  font-size: 14px;
+  line-height: 1.45;
+}
+.nb-oe-transparence svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--nb-lime-t);
+}
+.nb-oe-ent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.nb-oe-ent > span:last-child {
+  display: grid;
+  gap: 2px;
+}
+.nb-oe-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  font-size: 20px;
+}
+.nb-oe-bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 4px;
+}
+.nb-oe-reprendre {
+  margin-bottom: 8px;
+}
+.nb-oe-zone {
+  padding: 12px;
+}
+.nb-oe-zone textarea {
+  width: 100%;
+  min-height: 130px;
+  resize: vertical;
+  background: transparent;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--nb-creme);
+  outline: none;
+}
+.nb-oe-score {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: var(--nb-carte);
+  border: 1px solid var(--nb-filet-fort);
+}
+.nb-oe-score > span {
+  display: grid;
+  gap: 2px;
+}
+.nb-oe-score b {
+  font-size: 17px;
+}
+.nb-oe-points-orbi {
+  display: grid;
+  gap: 2px;
+  margin-top: 12px;
+}
+.nb-oe-points-orbi li {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--nb-filet);
+  font-size: 14.5px;
+  line-height: 1.4;
+}
+.nb-oe-points-orbi li > span:last-child {
+  display: grid;
+  gap: 2px;
+}
+.nb-oe-points-orbi b {
+  font-weight: 600;
+  color: var(--nb-creme);
+}
+.nb-oe-marque {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+}
+[data-etat="advice"] .nb-oe-marque {
+  background: var(--nb-ambre);
+}
+[data-etat="warning"] .nb-oe-marque {
+  background: var(--nb-corail);
+}
+.nb-oe-lien {
+  justify-self: start;
+  min-height: 32px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--nb-lime-t);
+}
+.nb-oe-fiches {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.nb-oe-fiches .nb-rh-pub-carte > span:last-child {
+  display: grid;
+  gap: 2px;
+}
+
+/* The offer's card in the Fil: the poster drawn by Jumanly (no photo), then three actions. */
+.nb-oe-carte {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 22px;
+  background: var(--nb-carte);
+  border: 1px solid var(--nb-filet-fort);
+}
+.nb-oe-carte-h {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nb-oe-carte-h > span:last-child {
+  display: grid;
+}
+.nb-oe-carte-t {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--nb-creme);
+}
+.nb-oe-carte-x {
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--nb-gris);
+}
+.nb-oe-affiche {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  padding: 18px 16px;
+  border-radius: 18px;
+  overflow: hidden;
+  color: #fff;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(166, 242, 107, 0.35), transparent 55%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 9px),
+    linear-gradient(135deg, #0f3f37 0%, #14745f 62%, #1fa98a 100%);
+}
+.nb-oe-affiche-k {
+  justify-self: start;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #a6f26b;
+  color: #0f3f37;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.nb-oe-affiche b {
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.nb-oe-affiche-l {
+  font-size: 13.5px;
+  color: #d8ece5;
+}
+.nb-oe-affiche-s {
+  justify-self: start;
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.14);
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.nb-oe-affiche-c {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.nb-oe-affiche-c i {
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(166, 242, 107, 0.6);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+}
+.nb-oe-carte-bt {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 6px;
+}
+.nb-oe-carte-bt > * {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--nb-filet-fort);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--nb-creme);
+}
+.nb-oe-carte-bt > [data-p] {
+  background: var(--nb-lime);
+  border-color: var(--nb-lime);
+  color: var(--nb-nuit);
+}
+.nb-oe-moins {
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  vertical-align: middle;
+}
+.nb-oe-compteur button {
+  display: grid;
+  place-items: center;
+}
+.nb-oe-sugg .nb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}

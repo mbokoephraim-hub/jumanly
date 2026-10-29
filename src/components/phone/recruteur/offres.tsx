@@ -9,7 +9,9 @@ import { publicJobUrl } from "@/components/recruiter/offers";
 import { db } from "@/server/db";
 import { can } from "@/server/entitlements";
 import type { HireContext } from "@/server/services/hire";
-import { getOrgJob, isOrgVerified } from "@/server/services/hire";
+import { getOrgJob, hirePermissions, isOrgVerified } from "@/server/services/hire";
+import { cefrLevels, educationLevels, offerLanguages } from "@/server/services/job-wizard";
+import { parseLanguages } from "@/server/services/jobs";
 import { atsBoard } from "@/server/services/hire-ats";
 import { requestedDocumentKinds, type OfferRow } from "@/server/services/hire-offers";
 import { screeningQuestionsOf } from "@/server/services/screening";
@@ -23,7 +25,9 @@ const DAY = 86_400_000;
 export async function RhOffresTexts({ children }: { children: ReactNode }) {
   const messages = await getMessages();
   return (
-    <NextIntlClientProvider messages={pickMessages(messages, ["phoneRhOffres", "phone"])}>
+    <NextIntlClientProvider
+      messages={pickMessages(messages, ["phoneRhOffres", "phone", "phoneFil"])}
+    >
       {children}
     </NextIntlClientProvider>
   );
@@ -530,7 +534,14 @@ export async function rhPublishData(
     jobId ? getOrgJob(db, ctx, jobId) : null,
     db.organization.findUniqueOrThrow({
       where: { id: ctx.organizationId },
-      select: { name: true, logo: true, city: true, country: true, sector: true },
+      select: {
+        name: true,
+        logo: true,
+        city: true,
+        country: true,
+        sector: true,
+        description: true,
+      },
     }),
     db.recruiterProfile.findUnique({ where: { userId }, select: { otherCities: true } }),
     db.user.findUnique({ where: { id: userId }, select: { city: true, country: true } }),
@@ -545,28 +556,48 @@ export async function rhPublishData(
   ].slice(0, 6);
   const dollars = (cents: number | null | undefined) =>
     cents === null || cents === undefined ? "" : String(Math.round(cents / 100));
+  const skills = job?.skills ?? [];
+  const levels = new Set<string>(cefrLevels);
   const draft: RhOfferDraft = {
     id: job?.id ?? null,
+    slug: job?.slug ?? null,
     title: job?.title ?? "",
     description: job?.description ?? "",
-    skills: (job?.skills ?? [])
-      .filter((item) => item.importance === "required")
-      .map((item) => item.skill.name),
+    hardSkills: skills.filter((item) => item.kind !== "soft").map((item) => item.skill.name),
+    softSkills: skills.filter((item) => item.kind === "soft").map((item) => item.skill.name),
+    languages: parseLanguages(job?.languagesRequired ?? [])
+      .filter((item) => levels.has(item.level))
+      .map((item) => ({
+        code: item.code,
+        level: item.level as RhOfferDraft["languages"][0]["level"],
+      })),
+    education: (educationLevels as readonly string[]).includes(job?.educationLevelMin ?? "")
+      ? (job!.educationLevelMin as RhOfferDraft["education"])
+      : "",
     city: job?.city ?? "",
     country: job?.country || org.country || user?.country || "",
     remote: (job?.remote as RhOfferDraft["remote"]) ?? "onsite",
     contract: PHONE_CONTRACTS.includes(job?.contractType ?? "")
       ? (job!.contractType as RhOfferDraft["contract"])
       : "cdi",
+    openings: job?.openings ?? 1,
+    responsibilities: job?.responsibilities ?? [],
+    experience: job?.experienceMin ?? 0,
+    requirements: job?.requirements ?? [],
     salaryMin: dollars(job?.salaryMin),
     salaryMax: dollars(job?.salaryMax),
+    companyAbout: job?.companyAbout ?? "",
+    feedTitle: job?.feedTitle ?? "",
+    feedText: job?.feedText ?? "",
     questions: screeningQuestionsOf(job?.screeningQuestions).map((question) => question.text),
     documents: (job?.requestedDocuments ?? ["cv"]).filter(
       (kind): kind is RhOfferDraft["documents"][number] =>
         (requestedDocumentKinds as readonly string[]).includes(kind),
     ),
+    sheetName: job?.jobSheetName ?? null,
   };
   const place = draft.city || cities[0] || "";
+  const languageNames = new Intl.DisplayNames(["fr"], { type: "language" });
   return {
     draft,
     cities,
@@ -576,6 +607,10 @@ export async function rhPublishData(
       place ? t("suggestions.city", { city: place }) : t("suggestions.move"),
       t("suggestions.salary"),
     ],
+    languages: offerLanguages.map((code) => {
+      const name = languageNames.of(code) ?? code;
+      return { code, name: name.charAt(0).toLocaleUpperCase("fr") + name.slice(1) };
+    }),
     org: {
       name: org.name,
       initials: org.name
@@ -586,9 +621,11 @@ export async function rhPublishData(
         .join(""),
       logo: org.logo,
       line: [org.city, org.sector].filter(Boolean).join(" · "),
+      about: org.description ?? "",
+      canEditLogo: hirePermissions(ctx.role).administer,
     },
     verified,
     editing: Boolean(job),
-    step: Math.min(4, Math.max(1, Math.trunc(step) || 1)),
+    step: Math.min(10, Math.max(1, Math.trunc(step) || 1)),
   };
 }

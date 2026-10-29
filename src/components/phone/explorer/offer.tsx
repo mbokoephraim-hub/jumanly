@@ -1,5 +1,6 @@
 "use client";
 
+import "@/styles/offre-fiche.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
@@ -34,6 +35,11 @@ export type PhoneOfferView = {
     | { state: "incomplete" };
   missions: string[];
   expect: string[];
+  /** Technical then behavioural skills the offer asks for. */
+  hardSkills: string[];
+  softSkills: string[];
+  /** « Télécharger la fiche de poste »: the recruiter's PDF, or the sheet drawn by Jumanly. */
+  sheetHref: string;
   about: string | null;
   benefits: string[];
   saved: boolean;
@@ -166,6 +172,42 @@ export function PhoneOffer({ offer }: { offer: PhoneOfferView }) {
       {offer.benefits.length > 0 ? (
         <List title={t("offer.benefits")} items={offer.benefits} />
       ) : null}
+
+      {offer.hardSkills.length > 0 || offer.softSkills.length > 0 ? (
+        <div className="nb-ex-bloc">
+          {offer.hardSkills.length > 0 ? (
+            <>
+              <h2 className="nb-ex-h3">{t("offer.hardSkills")}</h2>
+              <div className="nb-ex-pis nb-ex-comp">
+                {offer.hardSkills.map((name) => (
+                  <span key={name}>{name}</span>
+                ))}
+              </div>
+            </>
+          ) : null}
+          {offer.softSkills.length > 0 ? (
+            <>
+              <h2 className="nb-ex-h3">{t("offer.softSkills")}</h2>
+              <div className="nb-ex-pis nb-ex-comp">
+                {offer.softSkills.map((name) => (
+                  <span key={name}>{name}</span>
+                ))}
+              </div>
+            </>
+          ) : null}
+        </div>
+      ) : null}
+
+      <a href={offer.sheetHref} className="nb-ex-bloc nb-ex-offre-ent" download>
+        <span className="nb-ex-fiche" aria-hidden>
+          <PhoneIcon name="document" size={22} />
+        </span>
+        <span>
+          <b>{t("offer.sheet")}</b>
+          <span className="nb-meta">{t("offer.sheetLine")}</span>
+        </span>
+        <span className="nb-ex-lien">{t("offer.sheetDownload")}</span>
+      </a>
 
       <Link href={offer.companyHref} className="nb-ex-bloc nb-ex-offre-ent">
         <CompanyMark initials={offer.initials} logo={offer.logo} tone={offer.tone} size={44} />

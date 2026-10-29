@@ -1,0 +1,13 @@
+/* The offer on the talent's phone: skills and « Fiche de poste » (29/10/2026). */
+.nb-ex-fiche {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+}
+.nb-ex-comp {
+  margin-bottom: 12px;
+}

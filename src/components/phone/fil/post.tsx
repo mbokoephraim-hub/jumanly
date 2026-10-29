@@ -53,19 +53,50 @@ export function PostMedia({
           loading="lazy"
         />
       ) : null}
-      {post.job ? (
-        <Link href={post.job.href} className="nb-fil-offre">
-          <span>
-            <b>{post.job.title}</b>
-            <small>{post.job.line}</small>
-          </span>
-          {post.job.score ? <span className="nb-fil-score">{post.job.score}</span> : null}
-        </Link>
-      ) : null}
+      {post.job ? <OfferPoster job={post.job} /> : null}
       {post.attachment ? <Attachment value={post.attachment} /> : null}
       {post.quoted ? <QuotedCard quoted={post.quoted} link /> : null}
       {post.event ? <EventRow id={post.id} event={post.event} /> : null}
     </>
+  );
+}
+
+/**
+ * An offer in the Fil (publication d'offre étape par étape, 29/10/2026): a poster drawn by Jumanly
+ * in place of a photo (kind, title, place, salary, first skills, the reader's score), then
+ * « Postuler », « Voir l'offre » and the job sheet in PDF.
+ */
+function OfferPoster({ job }: { job: NonNullable<PostView["job"]> }) {
+  const t = useTranslations("phoneFil");
+  return (
+    <div className="nb-fil-offre-bloc">
+      <Link href={job.href} className="nb-fil-affiche">
+        <span className="nb-fil-affiche-k">{t("poster.kicker")}</span>
+        <b>{job.title}</b>
+        <span className="nb-fil-affiche-l">{job.line}</span>
+        {job.salary ? <span className="nb-fil-affiche-s">{job.salary}</span> : null}
+        {job.skills.length > 0 ? (
+          <span className="nb-fil-affiche-c">
+            {job.skills.map((name) => (
+              <i key={name}>{name}</i>
+            ))}
+          </span>
+        ) : null}
+        {job.score ? <span className="nb-fil-score nb-fil-affiche-score">{job.score}</span> : null}
+      </Link>
+      <div className="nb-fil-affiche-bt">
+        {job.applyHref ? (
+          <Link href={job.applyHref} data-p="">
+            {t("poster.apply")}
+          </Link>
+        ) : null}
+        <Link href={job.href}>{t("poster.see")}</Link>
+        <a href={job.sheetHref} download>
+          <PhoneIcon name="document" size={16} />
+          {t("poster.pdf")}
+        </a>
+      </div>
+    </div>
   );
 }
 

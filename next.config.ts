@@ -25,6 +25,11 @@ const nextConfig: NextConfig = {
     "/app/jobs/candidatures/[id]/cv": ["./node_modules/@sparticuz/chromium/bin/**"],
     "/app/hire/candidats/[applicationId]/cv": ["./node_modules/@sparticuz/chromium/bin/**"],
     "/app/messages/[id]/document/[messageId]": ["./node_modules/@sparticuz/chromium/bin/**"],
+    // Job sheet drawn by Jumanly (react-pdf, no browser): the Sora font and the logo it reads.
+    "/api/offres/[slug]/fiche": [
+      "./public/fonts/cv/Sora-*.ttf",
+      "./public/marque/jumanly-logo-principal.svg",
+    ],
     // Attestation (refonte mobile, lot 5): Chromium for the PDF and the image, the font and the
     // logo read by the drawing.
     "/app/learn/attestations/[id]/[format]": [
