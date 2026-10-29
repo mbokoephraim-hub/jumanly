@@ -4,6 +4,12 @@ import { PhoneIcon } from "../icon";
 
 export const CV_STEPS = ["modele", "contenu", "style", "apercu"] as const;
 export type CvStep = (typeof CV_STEPS)[number];
+/**
+ * The steps shown in the bar (Ephraïm, 29/10): Modèle, Mes informations, Aperçu. « Style »
+ * (colours and font) opens from the preview and counts as part of it.
+ */
+export const CV_BAR_STEPS = ["modele", "contenu", "apercu"] as const;
+export const barStepOf = (step: CvStep) => (step === "style" ? "apercu" : step);
 
 /**
  * The frame of « Créer un CV » (docs/carriere-v3, captures 06 to 15): full screen, without the
@@ -35,7 +41,7 @@ export function CvFrame({
   children: ReactNode;
   className?: string;
 }) {
-  const index = steps ? CV_STEPS.indexOf(steps.current) : -1;
+  const index = steps ? CV_BAR_STEPS.indexOf(barStepOf(steps.current)) : -1;
   const icon = <PhoneIcon name={back.close ? "fermer" : "retour"} size={20} stroke={2} />;
   return (
     <div className={`nb-page nb-cv${className ? ` ${className}` : ""}`}>
@@ -67,7 +73,7 @@ export function CvFrame({
       {steps ? (
         <nav className="nb-cv-etapes" aria-label={steps.label}>
           <ol>
-            {CV_STEPS.map((step, position) => {
+            {CV_BAR_STEPS.map((step, position) => {
               const href = steps.hrefs[step];
               const inner = (
                 <>

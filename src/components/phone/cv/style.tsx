@@ -69,7 +69,7 @@ export function CvStyleStep({
     <CvFrame
       title={t("style.title")}
       sub={t("style.sub")}
-      back={{ href: `/app/career/cv/${cvId}?etape=contenu`, label: t("back") }}
+      back={{ href: `/app/career/cv/${cvId}?etape=apercu`, label: t("back") }}
       steps={steps}
       bottom={
         <Link

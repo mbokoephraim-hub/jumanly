@@ -19,6 +19,8 @@ import {
   setCareerAvailabilityAction,
 } from "@/server/actions/career-phone";
 import { deleteCv, duplicateCv, setPrimaryCv } from "@/server/actions/cv";
+import { deleteCvsAction, renameCvAction, setCvColorAction } from "@/server/actions/cv-flow";
+import { PROFILE_COLORS, PROFILE_PALETTE, type ProfileColor } from "@/lib/profile-colors";
 import { FilAvatar } from "../fil/avatar";
 import { PhoneIcon } from "../icon";
 import { PhotoViewer } from "../profil/photo-viewer";
@@ -837,9 +839,39 @@ function CvPanel({
   onMenu: (cv: CareerView["cvs"][number]) => void;
 }) {
   const t = useTranslations("phoneCareer");
+  const [selecting, setSelecting] = useState(false);
+  const [chosen, setChosen] = useState<Set<string>>(new Set());
+  const [confirm, setConfirm] = useState(false);
+  const [pending, start] = useTransition();
+  // CVs gone from the server leave the selection.
+  const ids = view.cvs.map((cv) => cv.id);
+  const selected = ids.filter((id) => chosen.has(id));
+  const all = selected.length === ids.length && ids.length > 0;
+  const toggle = (id: string) =>
+    setChosen((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  const stop = () => {
+    setSelecting(false);
+    setChosen(new Set());
+    setConfirm(false);
+  };
+  const remove = () =>
+    start(async () => {
+      const result = await deleteCvsAction(selected).catch(() => null);
+      if (!result?.ok) {
+        showToast({ message: t("form.error"), tone: "error" });
+        return;
+      }
+      showToast({ message: t("cv.select.deleted", { count: result.count }) });
+      stop();
+    });
   return (
     <div className="nb-cr-pad">
-      {view.adapt ? (
+      {view.adapt && !selecting ? (
         <div className="nb-cr-carte nb-cr-orbi">
           <OrbiStar />
           <p>{view.adapt.text}</p>
@@ -849,14 +881,33 @@ function CvPanel({
         </div>
       ) : null}
       {view.cvs.length > 0 ? (
-        <ul className="nb-cr-grille">
-          {view.cvs.map((cv, at) => (
-            <li
-              key={cv.id}
-              className="nb-cr-carte nb-cr-cv"
-              style={{ animationDelay: `${at * 0.08}s` }}
-            >
-              <Link href={`${cv.href}/lire`} className="nb-cr-cv-l">
+        <div className="nb-cr-cv-barre">
+          {selecting ? (
+            <>
+              <b role="status">{t("cv.select.count", { count: selected.length })}</b>
+              <button type="button" onClick={() => setChosen(all ? new Set() : new Set(ids))}>
+                {all ? t("cv.select.none") : t("cv.select.all")}
+              </button>
+              <button type="button" onClick={stop}>
+                {t("cancel")}
+              </button>
+            </>
+          ) : (
+            <>
+              <b>{t("cv.library", { count: view.cvs.length })}</b>
+              <button type="button" onClick={() => setSelecting(true)}>
+                {t("cv.select.start")}
+              </button>
+            </>
+          )}
+        </div>
+      ) : null}
+      {view.cvs.length > 0 ? (
+        <ul className="nb-cr-grille" data-selection={selecting ? "" : undefined}>
+          {view.cvs.map((cv, at) => {
+            const isChosen = chosen.has(cv.id);
+            const page = (
+              <>
                 <span
                   className="nb-cr-cv-page"
                   style={{ "--accent": cv.color } as CSSProperties}
@@ -879,27 +930,113 @@ function CvPanel({
                       : t("cv.score", { score: cv.score })}
                 </em>
                 <span className="nb-cr-cv-t">
-                  <b>{cv.title}</b>
+                  <b>
+                    {cv.tag ? <i className="nb-cr-cv-pastille" aria-hidden /> : null}
+                    {cv.title}
+                  </b>
                   <small>{cv.meta}</small>
                 </span>
-              </Link>
-              <button
-                type="button"
-                className="nb-cr-cv-plus"
-                aria-label={t("cv.more", { title: cv.title })}
-                onClick={() => onMenu(cv)}
+              </>
+            );
+            return (
+              <li
+                key={cv.id}
+                className="nb-cr-carte nb-cr-cv"
+                data-choisi={isChosen ? "" : undefined}
+                data-teinte={cv.tag ? "" : undefined}
+                style={
+                  {
+                    animationDelay: `${at * 0.08}s`,
+                    "--teinte": cv.tag?.hex,
+                  } as CSSProperties
+                }
               >
-                <PhoneIcon name="plusOptions" size={18} />
-              </button>
-            </li>
-          ))}
+                {selecting ? (
+                  <button
+                    type="button"
+                    className="nb-cr-cv-l"
+                    role="checkbox"
+                    aria-checked={isChosen}
+                    aria-label={cv.title}
+                    onClick={() => toggle(cv.id)}
+                  >
+                    {page}
+                    <span className="nb-cr-cv-coche" aria-hidden>
+                      {isChosen ? <PhoneIcon name="coche" size={14} stroke={3} /> : null}
+                    </span>
+                  </button>
+                ) : (
+                  <>
+                    <Link href={`${cv.href}/lire`} className="nb-cr-cv-l">
+                      {page}
+                    </Link>
+                    <button
+                      type="button"
+                      className="nb-cr-cv-plus"
+                      aria-label={t("cv.more", { title: cv.title })}
+                      onClick={() => onMenu(cv)}
+                    >
+                      <PhoneIcon name="plusOptions" size={18} />
+                    </button>
+                  </>
+                )}
+              </li>
+            );
+          })}
         </ul>
       ) : (
         <p className="nb-pf-vide nb-cr-vide-cv">{t("cv.empty")}</p>
       )}
-      <Link href="/app/career/cv/nouveau" className="nb-cr-nouveau">
-        {t("cv.newLong")}
-      </Link>
+      {selecting ? (
+        <div className="nb-cr-cv-actions">
+          <button
+            type="button"
+            className="nb-bouton"
+            data-large=""
+            data-plein-rouge=""
+            disabled={selected.length === 0 || pending}
+            onClick={() => setConfirm(true)}
+          >
+            {t("cv.select.delete", { count: selected.length })}
+          </button>
+        </div>
+      ) : (
+        <Link href="/app/career/cv/nouveau" className="nb-cr-nouveau">
+          {t("cv.newLong")}
+        </Link>
+      )}
+      <PhoneSheet
+        open={confirm}
+        onClose={() => setConfirm(false)}
+        label={t("cv.select.deleteQuestion", { count: selected.length })}
+        closeLabel={t("close")}
+      >
+        <b className="nb-ex-feuille-t">
+          {t("cv.select.deleteQuestion", { count: selected.length })}
+        </b>
+        <p className="nb-meta nb-ca-feuille-d">{t("cv.menu.deleteText")}</p>
+        <div className="nb-ca-feuille-b">
+          <button
+            type="button"
+            className="nb-bouton"
+            data-large=""
+            data-plein-rouge=""
+            disabled={pending}
+            onClick={remove}
+          >
+            {t("cv.select.delete", { count: selected.length })}
+          </button>
+          <button
+            type="button"
+            className="nb-bouton"
+            data-large=""
+            data-contour=""
+            onClick={() => setConfirm(false)}
+          >
+            {t("cancel")}
+          </button>
+        </div>
+      </PhoneSheet>
     </div>
   );
 }
@@ -907,10 +1044,29 @@ function CvPanel({
 function CvMenu({ cv, onClose }: { cv: CareerView["cvs"][number] | null; onClose: () => void }) {
   const t = useTranslations("phoneCareer");
   const [confirm, setConfirm] = useState(false);
+  const [naming, setNaming] = useState<string | null>(null);
+  const [pending, start] = useTransition();
   const close = () => {
     setConfirm(false);
+    setNaming(null);
     onClose();
   };
+  const fail = () => showToast({ message: t("form.error"), tone: "error" });
+  const rename = (title: string) =>
+    cv &&
+    start(async () => {
+      const result = await renameCvAction(cv.id, title).catch(() => null);
+      if (!result?.ok) return fail();
+      showToast({ message: t("cv.menu.renamed") });
+      close();
+    });
+  const paint = (color: ProfileColor | null) =>
+    cv &&
+    start(async () => {
+      const result = await setCvColorAction(cv.id, color).catch(() => null);
+      if (!result?.ok) return fail();
+      close();
+    });
   return (
     <PhoneSheet
       open={cv !== null}
@@ -918,7 +1074,45 @@ function CvMenu({ cv, onClose }: { cv: CareerView["cvs"][number] | null; onClose
       label={cv?.title ?? t("cv.new")}
       closeLabel={t("close")}
     >
-      {cv && confirm ? (
+      {cv && naming !== null ? (
+        <form
+          className="nb-cr-cv-nom"
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (naming.trim()) rename(naming.trim());
+          }}
+        >
+          <label htmlFor="cr-cv-nom" className="nb-ex-feuille-t">
+            {t("cv.menu.rename")}
+          </label>
+          <input
+            id="cr-cv-nom"
+            value={naming}
+            maxLength={80}
+            required
+            autoFocus
+            onChange={(event) => setNaming(event.target.value)}
+          />
+          <span className="nb-cr-cv-idees">
+            {[t("cv.menu.namePrimary"), t("cv.menu.nameSecond"), t("cv.menu.nameThird")].map(
+              (idea) => (
+                <button key={idea} type="button" onClick={() => setNaming(idea)}>
+                  {idea}
+                </button>
+              ),
+            )}
+          </span>
+          <button
+            type="submit"
+            className="nb-bouton"
+            data-large=""
+            data-plein=""
+            disabled={pending || !naming.trim()}
+          >
+            {t("cv.menu.renameSave")}
+          </button>
+        </form>
+      ) : cv && confirm ? (
         <>
           <b className="nb-ex-feuille-t">{t("cv.menu.deleteQuestion", { title: cv.title })}</b>
           <p className="nb-meta nb-ca-feuille-d">{t("cv.menu.deleteText")}</p>
@@ -942,6 +1136,31 @@ function CvMenu({ cv, onClose }: { cv: CareerView["cvs"][number] | null; onClose
       ) : cv ? (
         <>
           <b className="nb-ex-feuille-t">{cv.title}</b>
+          <div className="nb-cr-cv-teintes" role="group" aria-label={t("cv.menu.color")}>
+            <span>{t("cv.menu.color")}</span>
+            <button
+              type="button"
+              aria-pressed={cv.tag === null}
+              aria-label={t("cv.menu.colorNone")}
+              data-aucune=""
+              disabled={pending}
+              onClick={() => paint(null)}
+            />
+            {PROFILE_COLORS.map((color) => (
+              <button
+                key={color}
+                type="button"
+                aria-pressed={cv.tag?.key === color}
+                aria-label={t(`cv.menu.colors.${color}`)}
+                style={{ background: PROFILE_PALETTE[color] }}
+                disabled={pending}
+                onClick={() => paint(color)}
+              />
+            ))}
+          </div>
+          <button type="button" className="nb-opt nb-fil-opt" onClick={() => setNaming(cv.title)}>
+            {t("cv.menu.rename")}
+          </button>
           <Link href={`${cv.href}/lire`} className="nb-opt nb-fil-opt">
             {t("cv.menu.read")}
           </Link>
@@ -985,7 +1204,7 @@ function CvMenu({ cv, onClose }: { cv: CareerView["cvs"][number] | null; onClose
               <input type="hidden" name="id" value={cv.id} />
               <input type="hidden" name="retour" value="liste" />
               <button type="submit" className="nb-opt nb-fil-opt">
-                {t("cv.menu.primary")}
+                {t("cv.menu.primaryLong")}
               </button>
             </form>
           ) : null}

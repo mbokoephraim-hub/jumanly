@@ -4,32 +4,23 @@ import { getTranslations } from "next-intl/server";
 import { previewData } from "@/features/cv/document";
 import { cvColors, cvFonts } from "@/features/cv/render/palette";
 import { cvSourceOf } from "@/features/cv/source";
-import { blockLayout } from "@/features/cv/style";
 import { dynamic } from "@/i18n/dynamic";
 import { languageName } from "@/lib/dates";
-import { PROFILE_PALETTE, colorOf } from "@/lib/profile-colors";
 import { setCvTemplateStepAction } from "@/server/actions/cv-flow";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { cvSectionIds } from "@/server/services/cv";
-import { cvChecks, cvScore, pendingSuggestions, targetSkillsFor } from "@/server/services/cv-coach";
-import { CvContentStep, type ContentSection } from "./content";
+import { cvChecks, cvScore, targetSkillsFor } from "@/server/services/cv-coach";
+import { listProjects } from "@/server/services/portfolio";
+import { profileLanguageCodes } from "@/server/services/profile-view";
+import { countryOptions } from "@/config/countries";
+import { cvTextLabelData } from "@/features/cv/labels";
+import { CvFormStep } from "./form";
 import { stepsOf, templateChoices } from "./data";
 import type { CvStep } from "./frame";
 import { CvPreviewStep, type PreviewCheck } from "./preview";
 import { CvStyleStep } from "./style";
 import { CvTemplatePicker } from "./templates";
 import { CvTexts } from "./texts";
-
-/** The colours of the sections on Contenu (maquette Cv.dc.html). */
-const SECTION_COLORS = {
-  experience: PROFILE_PALETTE.ambre,
-  skills: PROFILE_PALETTE.ciel,
-  education: PROFILE_PALETTE.lilas,
-  languages: PROFILE_PALETTE.menthe,
-} as const;
-type Section = keyof typeof SECTION_COLORS;
-const isSection = (key: string): key is Section => key in SECTION_COLORS;
 
 /** The fonts offered on the phone (capture 10): a sans, a neutral one, a serif. */
 const PHONE_FONTS = ["sora", "inter", "lora"] as const;
@@ -92,76 +83,28 @@ export async function PhoneCvSteps({
   const { template, style, content } = source;
 
   if (step === "contenu") {
-    const visible = new Map(content.sections.map((section) => [section.id, section.visible]));
-    const order = blockLayout(template, style, cvSectionIds).map((block) => block.type);
-    const sections: ContentSection[] = order.filter(isSection).map((key) => {
-      const base = {
-        key,
-        name: d(`docs.section.${key}`),
-        visible: visible.get(key) ?? true,
-        color: SECTION_COLORS[key],
-        href: `${editor}?partie=${key}`,
-      };
-      switch (key) {
-        case "experience":
-          return {
-            ...base,
-            count: content.experiences.length,
-            experiences: content.experiences.map((item) => ({
-              title: item.title,
-              company: item.company,
-              color: PROFILE_PALETTE[colorOf(item.company || item.title)],
-              bullets: item.bullets,
-            })),
-          };
-        case "skills":
-          return {
-            ...base,
-            count: content.skills.length,
-            chips: content.skills.map((skill) => ({
-              text: skill.name,
-              color: PROFILE_PALETTE[colorOf(skill.name)],
-            })),
-          };
-        case "education":
-          return {
-            ...base,
-            count: content.education.length,
-            lines: content.education.map((item) =>
-              [item.degree, item.school].filter(Boolean).join(" · "),
-            ),
-          };
-        case "languages":
-          return {
-            ...base,
-            count: content.languages.length,
-            chips: content.languages.map((item) => ({
-              text: label(item.code),
-              color: PROFILE_PALETTE.menthe,
-            })),
-          };
-      }
-    });
-    const pending = await pendingSuggestions(db, user.id, cv.id);
-    const summary = pending.find((item) => item.payload.target.section === "summary");
-    const info = content.info;
+    const [labels, projects] = await Promise.all([
+      cvTextLabelData(style.titlesLanguage),
+      listProjects(db, cv.profileId),
+    ]);
     return (
       <CvTexts>
-        <CvContentStep
+        <CvFormStep
           key={cv.updatedAt.toISOString()}
           cvId={cv.id}
-          summary={content.summary}
-          suggestion={
-            summary?.payload.after ? { id: summary.id, text: summary.payload.after } : null
-          }
-          contact={{
-            line: [info.name, info.showEmail ? info.email : null, info.city]
+          initial={content}
+          fromProfile={{
+            achievements: projects
+              .map((project) => project.title.trim())
               .filter(Boolean)
-              .join(" · "),
-            href: `${editor}?partie=info`,
+              .slice(0, 6),
           }}
-          sections={sections}
-          order={order}
+          labels={labels}
+          template={template}
+          style={style}
+          photoUrl={source.photoUrl}
+          languages={profileLanguageCodes.map((code) => ({ value: code, label: label(code) }))}
+          countries={countryOptions("code")}
           steps={steps}
         />
       </CvTexts>
@@ -206,8 +149,8 @@ export async function PhoneCvSteps({
   const fixes: Record<string, PreviewCheck["fix"]> = {
     headline: { kind: "action" },
     summary: { kind: "link", href: `${editor}?etape=contenu` },
-    figure: { kind: "link", href: `${editor}?partie=experience` },
-    dates: { kind: "link", href: `${editor}?partie=experience` },
+    figure: { kind: "link", href: `${editor}?etape=contenu` },
+    dates: { kind: "link", href: `${editor}?etape=contenu` },
     skills: { kind: "action" },
     keywords: { kind: "action" },
     languages: { kind: "action" },

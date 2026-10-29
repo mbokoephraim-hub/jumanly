@@ -6475,6 +6475,8 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `cv.languageLevels.en.basic` | Basic |
 | `cv.present.fr` | aujourd'hui |
 | `cv.present.en` | present |
+| `cv.references.fr` | Références |
+| `cv.references.en` | References |
 | `cv.colors.encre` | Encre |
 | `cv.colors.marine` | Marine |
 | `cv.colors.petrole` | Pétrole |
@@ -9032,7 +9034,7 @@ Conventions :
 | `phoneCv.steps.label` | Étapes du CV |
 | `phoneCv.steps.count` | {step} / {all} |
 | `phoneCv.steps.modele` | Modèle |
-| `phoneCv.steps.contenu` | Contenu |
+| `phoneCv.steps.contenu` | Mes informations |
 | `phoneCv.steps.style` | Style |
 | `phoneCv.steps.apercu` | Aperçu |
 | `phoneCv.start.title` | Nouveau CV |
@@ -9275,6 +9277,86 @@ Conventions :
 | `phoneCv.preview.addConfirm` | Ajouter à mon profil |
 | `phoneCv.preview.added` | {count, plural, one {Un élément ajouté à votre profil.} other {# éléments ajoutés à votre profil.}} |
 | `phoneCv.preview.finish` | Terminer |
+| `phoneCv.form.title` | Mes informations |
+| `phoneCv.form.sub` | Reprises de votre profil, à modifier si besoin |
+| `phoneCv.form.orbiTitle` | Tout est déjà rempli depuis votre profil. |
+| `phoneCv.form.orbiText` | Touchez un bloc pour le modifier : le CV se remplit sous vos yeux. Vos changements restent sur ce CV, votre profil ne bouge pas. |
+| `phoneCv.form.refill` | Reprendre mon profil |
+| `phoneCv.form.live` | Aperçu en direct |
+| `phoneCv.form.larger` | Agrandir |
+| `phoneCv.form.smaller` | Réduire |
+| `phoneCv.form.status.saved` | Enregistré |
+| `phoneCv.form.status.saving` | Enregistrement… |
+| `phoneCv.form.status.waiting` | Modifié |
+| `phoneCv.form.status.error` | Non enregistré |
+| `phoneCv.form.saveError` | Vos changements n’ont pas pu être enregistrés. Vérifiez votre connexion et réessayez. |
+| `phoneCv.form.next` | Continuer vers l’aperçu |
+| `phoneCv.form.edit` | Modifier |
+| `phoneCv.form.close` | Fermer |
+| `phoneCv.form.written` | Écrit |
+| `phoneCv.form.toWrite` | À compléter |
+| `phoneCv.form.count` | {count, plural, =0 {Vide} one {# élément} other {# éléments}} |
+| `phoneCv.form.profileStays` | Ce que vous changez ici ne modifie que ce CV. Pour changer votre profil, ouvrez l’onglet Profil. |
+| `phoneCv.form.block.identity` | Nom, titre et contacts |
+| `phoneCv.form.block.summary` | Profil professionnel |
+| `phoneCv.form.block.achievements` | Réalisations |
+| `phoneCv.form.block.skills` | Compétences |
+| `phoneCv.form.block.experience` | Expériences |
+| `phoneCv.form.block.education` | Formation |
+| `phoneCv.form.block.languages` | Langues |
+| `phoneCv.form.block.references` | Références |
+| `phoneCv.form.name` | Nom complet |
+| `phoneCv.form.headline` | Titre professionnel |
+| `phoneCv.form.headlinePlaceholder` | Par exemple : Analyste de données junior |
+| `phoneCv.form.email` | E-mail |
+| `phoneCv.form.showEmail` | Afficher mon e-mail sur ce CV |
+| `phoneCv.form.phone` | Téléphone (facultatif) |
+| `phoneCv.form.phoneHint` | Laissé vide, il n’apparaît pas sur le CV. |
+| `phoneCv.form.city` | Ville |
+| `phoneCv.form.country` | Pays |
+| `phoneCv.form.none` | Aucun |
+| `phoneCv.form.summary` | Votre profil en quelques phrases |
+| `phoneCv.form.achievementsHint` | Une réalisation par ligne, avec un résultat concret si possible. |
+| `phoneCv.form.achievement` | Réalisation {n} |
+| `phoneCv.form.achievementPlaceholder` | Par exemple : tableau de bord des ventes utilisé par 3 agences |
+| `phoneCv.form.addAchievement` | Ajouter une réalisation |
+| `phoneCv.form.skillLevel` | Niveau en {name} |
+| `phoneCv.form.skillNew` | Nouvelle compétence |
+| `phoneCv.form.add` | Ajouter |
+| `phoneCv.form.remove` | Retirer |
+| `phoneCv.form.removeNamed` | Retirer {name} |
+| `phoneCv.form.experienceNew` | Nouvelle expérience |
+| `phoneCv.form.jobTitle` | Poste |
+| `phoneCv.form.company` | Organisation |
+| `phoneCv.form.place` | Lieu |
+| `phoneCv.form.start` | Début |
+| `phoneCv.form.end` | Fin |
+| `phoneCv.form.current` | J’y travaille encore |
+| `phoneCv.form.bullets` | Missions et résultats |
+| `phoneCv.form.bulletsHint` | Une ligne par point. Un chiffre rend le résultat plus parlant. |
+| `phoneCv.form.addExperience` | Ajouter une expérience |
+| `phoneCv.form.educationNew` | Nouvelle formation |
+| `phoneCv.form.degree` | Diplôme ou formation |
+| `phoneCv.form.school` | École ou organisme |
+| `phoneCv.form.startYear` | Année de début |
+| `phoneCv.form.endYear` | Année de fin |
+| `phoneCv.form.addEducation` | Ajouter une formation |
+| `phoneCv.form.language` | Langue {n} |
+| `phoneCv.form.languageLevel` | Niveau de la langue {n} |
+| `phoneCv.form.addLanguage` | Ajouter une langue |
+| `phoneCv.form.referencesHint` | Une personne qui peut parler de votre travail. Demandez-lui son accord avant de l’indiquer. |
+| `phoneCv.form.referenceNew` | Nouvelle référence |
+| `phoneCv.form.referenceName` | Nom |
+| `phoneCv.form.referenceRole` | Poste et organisation |
+| `phoneCv.form.referenceRolePlaceholder` | Par exemple : Responsable RH, Banque du Fleuve |
+| `phoneCv.form.referenceContact` | Contact |
+| `phoneCv.form.referenceContactHint` | Son e-mail, ou « Sur demande ». |
+| `phoneCv.form.addReference` | Ajouter une référence |
+| `phoneCv.preview.save` | Enregistrer |
+| `phoneCv.preview.savedButton` | Enregistré ✓ |
+| `phoneCv.preview.savedIn` | « {title} » est enregistré dans votre bibliothèque de CV. |
+| `phoneCv.preview.style` | Couleurs et police |
+| `phoneCv.preview.styleValue` | Changer › |
 | `phoneCv.preview.saved` | Votre CV est enregistré dans « Mes CV ». |
 | `phoneCv.preview.autosave` | Chaque changement est enregistré tout seul : revenir en arrière ne perd rien. |
 | `phoneCv.check.headline.ok` | Un titre clair sous votre nom |
@@ -9847,6 +9929,31 @@ Conventions :
 | `phoneCareer.billing.backCareer` | Retour à Carrière |
 | `phoneCareer.cv.menu.deleteQuestion` | Supprimer « {title} » ? |
 | `phoneCareer.cv.menu.deleteText` | Ce CV disparaît. Les candidatures déjà envoyées gardent leur copie. |
+| `phoneCareer.cv.library` | {count, plural, one {Mon CV} other {Mes # CV}} |
+| `phoneCareer.cv.select.start` | Sélectionner |
+| `phoneCareer.cv.select.count` | {count, plural, =0 {Aucun CV choisi} one {# CV choisi} other {# CV choisis}} |
+| `phoneCareer.cv.select.all` | Tout choisir |
+| `phoneCareer.cv.select.none` | Tout retirer |
+| `phoneCareer.cv.select.delete` | {count, plural, =0 {Supprimer} one {Supprimer ce CV} other {Supprimer ces # CV}} |
+| `phoneCareer.cv.select.deleteQuestion` | {count, plural, one {Supprimer ce CV ?} other {Supprimer ces # CV ?}} |
+| `phoneCareer.cv.select.deleted` | {count, plural, one {CV supprimé.} other {# CV supprimés.}} |
+| `phoneCareer.cv.menu.rename` | Renommer |
+| `phoneCareer.cv.menu.renameSave` | Enregistrer le nom |
+| `phoneCareer.cv.menu.renamed` | Nom du CV changé. |
+| `phoneCareer.cv.menu.namePrimary` | CV principal |
+| `phoneCareer.cv.menu.nameSecond` | CV candidatures spontanées |
+| `phoneCareer.cv.menu.nameThird` | CV stage |
+| `phoneCareer.cv.menu.primaryLong` | Utiliser par défaut pour postuler |
+| `phoneCareer.cv.menu.color` | Couleur |
+| `phoneCareer.cv.menu.colorNone` | Sans couleur |
+| `phoneCareer.cv.menu.colors.lime` | Vert lime |
+| `phoneCareer.cv.menu.colors.menthe` | Menthe |
+| `phoneCareer.cv.menu.colors.ambre` | Ambre |
+| `phoneCareer.cv.menu.colors.ciel` | Bleu ciel |
+| `phoneCareer.cv.menu.colors.corail` | Corail |
+| `phoneCareer.cv.menu.colors.lilas` | Lilas |
+| `phoneCareer.cv.menu.colors.sable` | Sable |
+| `phoneCareer.cv.menu.colors.rose` | Rose |
 | `phoneCareer.cvEdit.back` | CV |
 | `phoneCareer.cvEdit.export` | Exporter |
 | `phoneCareer.cvEdit.close` | Fermer |

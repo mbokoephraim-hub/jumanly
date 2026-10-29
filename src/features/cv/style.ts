@@ -87,7 +87,10 @@ export function blockLayout(
   style: CvStyle,
   present: readonly CvBlockType[],
 ): { type: CvBlockType; zone: "main" | "side" }[] {
-  const order = style.sectionOrder ?? template.order;
+  const order = [...(style.sectionOrder ?? template.order)];
+  // « Réalisations » follow the profile when the template does not place them (Ephraïm, 29/10).
+  if (!order.includes("highlights") && order.includes("summary"))
+    order.splice(order.indexOf("summary") + 1, 0, "highlights");
   const known = new Set<CvBlockType>(order);
   // Blocks the template does not plan go at the end of the main column (§ 2, point 2).
   const ordered = [...order, ...present.filter((type) => !known.has(type))].filter((type) =>

@@ -7,6 +7,7 @@ import { z } from "zod";
 import { cvFonts, type CvFontCode } from "@/features/cv/render/palette";
 import { cvDensities, cvTitleLanguages } from "@/features/cv/style";
 import { DEFAULT_TEMPLATE_ID, findTemplate } from "@/features/cv/templates/registry";
+import { PROFILE_COLORS } from "@/lib/profile-colors";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import {
@@ -14,6 +15,7 @@ import {
   canUseTemplate,
   cvFromProfile,
   isEmptyCv,
+  cvContentInputSchema,
   cvSectionIds,
   MAX_CVS,
   parseCv,
@@ -86,6 +88,69 @@ async function newCv(userId: string, profileId: string) {
       content: cvFromProfile(await getFullProfile(db, userId)),
     },
   });
+}
+
+/**
+ * « Mes informations » (Ephraïm, 29/10): the whole form, saved while the talent types and on
+ * « Continuer ». The CV only; the profile stays as it is.
+ */
+export async function saveCvContentAction(cvId: string, raw: unknown): Promise<Result> {
+  const parsed = cvContentInputSchema.safeParse(raw);
+  if (!parsed.success) return { ok: false, error: "invalid" };
+  const { profile } = await owner();
+  const cv = await ownedCv(profile.id, cvId);
+  if (!cv || cv.fileKey) return { ok: false, error: "missing" };
+  const content: CvContent = {
+    ...parsed.data,
+    achievements: parsed.data.achievements.filter(Boolean),
+    references: parsed.data.references.filter((item) => item.name),
+  };
+  await saveContent(cv.id, content);
+  return { ok: true };
+}
+
+/** « Couleur » in the menu ··· of a CV (Ephraïm, 29/10): a colour of the profile palette, or none. */
+export async function setCvColorAction(cvId: string, color: string | null): Promise<Result> {
+  const parsed = z.enum(PROFILE_COLORS).nullable().safeParse(color);
+  if (!parsed.success) return { ok: false, error: "invalid" };
+  const { profile } = await owner();
+  const cv = await ownedCv(profile.id, cvId);
+  if (!cv) return { ok: false, error: "missing" };
+  await db.document.update({
+    where: { id: cv.id },
+    data: { colorTag: parsed.data, updatedAt: cv.updatedAt },
+  });
+  refresh();
+  return { ok: true };
+}
+
+/**
+ * « Supprimer » on the CVs selected in the library (Ephraïm, 29/10): each one goes with its
+ * imported file; copies sent with applications stay. A CV by default is replaced by the most
+ * recent one left.
+ */
+export async function deleteCvsAction(
+  ids: string[],
+): Promise<{ ok: true; count: number } | { ok: false; error: string }> {
+  const parsed = z.array(id).min(1).max(MAX_CVS).safeParse(ids);
+  if (!parsed.success) return { ok: false, error: "invalid" };
+  const { profile } = await owner();
+  const cvs = await db.document.findMany({
+    where: { id: { in: parsed.data }, profileId: profile.id, kind: "cv" },
+  });
+  if (cvs.length === 0) return { ok: false, error: "missing" };
+  await db.document.deleteMany({ where: { id: { in: cvs.map((cv) => cv.id) } } });
+  const storage = fileStorage(db);
+  for (const cv of cvs) if (cv.fileKey) await storage.remove(cv.fileKey);
+  if (cvs.some((cv) => cv.isPrimary)) {
+    const next = await db.document.findFirst({
+      where: { profileId: profile.id, kind: "cv" },
+      orderBy: { updatedAt: "desc" },
+    });
+    if (next) await db.document.update({ where: { id: next.id }, data: { isPrimary: true } });
+  }
+  refresh();
+  return { ok: true, count: cvs.length };
 }
 
 /** « Continuer » or « Utiliser ce modèle » (captures 07, 08): the CV in that template, then Contenu. */

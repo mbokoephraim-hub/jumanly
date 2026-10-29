@@ -117,6 +117,7 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
         isPrimary: true,
         updatedAt: true,
         fileType: true,
+        colorTag: true,
         adaptedForJobId: true,
         content: true,
         style: true,
@@ -250,6 +251,8 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
       style: cv.style,
       /** An imported CV kept as its file (pdf, docx, image), null for a CV made in Jumanly. */
       fileType: cv.fileType,
+      /** The colour the talent gave it in the library, or null. */
+      colorTag: cv.colorTag,
       /** The CV's score out of 100 (fixed rules, partie 08 § 8.9), with its « Pourquoi ? ». */
       score: cvScore(parseCv(cv.content), targets.skills).total,
     })),

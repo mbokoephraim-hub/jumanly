@@ -854,6 +854,138 @@ a.nb-cr-rb {
   transition: none;
 }
 
+/* Bibliothèque de CV (Ephraïm, 29/10) : sélection de plusieurs CV, couleur de repère, nom. */
+.nb-cr-cv-barre {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 44px;
+  margin-bottom: 6px;
+}
+.nb-cr-cv-barre b {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 800;
+}
+.nb-cr-cv-barre button {
+  min-height: 40px;
+  padding: 0 4px;
+  background: none;
+  border: 0;
+  color: var(--nb-lime-t);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.nb-cr-cv[data-teinte] {
+  border-color: color-mix(in srgb, var(--teinte) 70%, transparent);
+  box-shadow: inset 0 3px 0 var(--teinte);
+}
+.nb-cr-cv-pastille {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--teinte);
+  vertical-align: 1px;
+}
+button.nb-cr-cv-l {
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.nb-cr-cv-coche {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 2px solid #55656a;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--nb-sur-lime, #0f3f37);
+}
+.nb-cr-cv[data-choisi] {
+  border-color: var(--nb-lime);
+  box-shadow: 0 0 0 2px var(--nb-lime);
+}
+.nb-cr-cv[data-choisi] .nb-cr-cv-coche {
+  border-color: var(--nb-lime);
+  background: var(--nb-lime);
+}
+.nb-cr-cv-actions {
+  margin-top: 14px;
+}
+.nb-cr-cv-nom {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.nb-cr-cv-nom input {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border-radius: 14px;
+  background: var(--nb-haute);
+  border: 1px solid rgba(var(--nb-voile), 0.1);
+  color: var(--nb-creme);
+  font: inherit;
+  font-size: 15px;
+}
+.nb-cr-cv-idees {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.nb-cr-cv-idees button {
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--nb-haute);
+  border: 0;
+  color: var(--nb-creme);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.nb-cr-cv-teintes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0 14px;
+}
+.nb-cr-cv-teintes span {
+  width: 100%;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--nb-brume);
+}
+.nb-cr-cv-teintes button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+.nb-cr-cv-teintes button[data-aucune] {
+  background: linear-gradient(135deg, transparent 45%, var(--nb-brume) 45% 55%, transparent 55%);
+  border-color: rgba(var(--nb-voile), 0.3);
+}
+.nb-cr-cv-teintes button[aria-pressed="true"] {
+  box-shadow:
+    0 0 0 2px var(--nb-nuit),
+    0 0 0 4px var(--nb-creme);
+}
 /* « Mes entraînements » (Progression, demande du 29/10/2026). */
 .nb-cr .nb-cr-entr-s {
   margin: 16px 0 8px;

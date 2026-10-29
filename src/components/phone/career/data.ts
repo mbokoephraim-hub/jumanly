@@ -3,7 +3,7 @@ import QRCode from "qrcode";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { accentHex } from "@/features/cv/render/palette";
 import { languageName } from "@/lib/dates";
-import { colorOf, PROFILE_PALETTE } from "@/lib/profile-colors";
+import { colorOf, PROFILE_PALETTE, type ProfileColor } from "@/lib/profile-colors";
 import { profileLanguageCodes } from "@/server/services/profile-view";
 import { siteUrl } from "@/lib/seo";
 import type { CareerHome } from "@/server/services/career-phone";
@@ -89,6 +89,8 @@ export type CareerView = {
     color: string;
     /** An imported CV kept as its file: read and saved as it is, not edited. */
     file: boolean;
+    /** The colour the talent gave it in the library (Ephraïm, 29/10). */
+    tag: { key: ProfileColor; hex: string } | null;
   }[];
   adapt: { text: string; href: string } | null;
   projects: {
@@ -321,6 +323,13 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
       score: cv.score,
       color: accentOf(cv.style),
       file: Boolean(cv.fileType),
+      tag:
+        cv.colorTag && cv.colorTag in PROFILE_PALETTE
+          ? {
+              key: cv.colorTag as ProfileColor,
+              hex: PROFILE_PALETTE[cv.colorTag as ProfileColor],
+            }
+          : null,
     };
   });
 

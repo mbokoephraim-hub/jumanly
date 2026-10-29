@@ -13,6 +13,8 @@ export type CvLanguageLevel = "native" | "fluent" | "professional" | "intermedia
 export type CvTextLabels = {
   language: "fr" | "en";
   titles: Record<CvBlockType, string>;
+  /** « Références », printed as the last block (Ephraïm, 29/10). */
+  references: string;
   /** Skill levels 1 to 4 (same scale as ProfileSkill). */
   levels: Record<1 | 2 | 3 | 4, string>;
   languageLevels: Record<CvLanguageLevel, string>;
@@ -66,6 +68,15 @@ export function documentFromCv(
       type: "summary",
       title: titles.summary,
       text: content.summary.trim(),
+    });
+  }
+  const achievements = content.achievements.map((line) => line.trim()).filter(Boolean);
+  if (!content.hiddenExtras.includes("achievements") && achievements.length > 0) {
+    blocks.push({
+      id: "highlights",
+      type: "highlights",
+      title: titles.highlights,
+      bullets: achievements,
     });
   }
   if (visible.has("experience") && content.experiences.length > 0) {
@@ -130,6 +141,21 @@ export function documentFromCv(
           dots: dotsOf[code] ?? 2,
         };
       }),
+    });
+  }
+  const references = content.references.filter((item) => item.name.trim());
+  if (!content.hiddenExtras.includes("references") && references.length > 0) {
+    // Printed as a block of items (« custom »): every template already lays them out.
+    blocks.push({
+      id: "references",
+      type: "custom",
+      title: labels.references,
+      items: references.map((item, index) => ({
+        id: `references-${index}`,
+        title: item.name.trim(),
+        subtitle: item.role.trim() || undefined,
+        text: item.contact.trim() || undefined,
+      })),
     });
   }
   const { firstName, lastName } = splitName(content.info.name);
