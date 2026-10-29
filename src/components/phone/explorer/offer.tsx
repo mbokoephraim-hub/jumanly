@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { showToast } from "@/components/motion/toaster";
-import { applyFromSheetAction } from "@/server/actions/explore";
+import { applyFromSheetAction, tailorForApplicationAction } from "@/server/actions/explore";
 import { setJobSavedAction } from "@/server/actions/jobs";
 import { PhoneBack } from "../back";
 import { OrbiDisc, PhoneIcon } from "../icon";
@@ -23,7 +23,12 @@ export type PhoneOfferView = {
   logo: string | null;
   /** « Entreprise vérifiée · il y a 2 j », or « Publiée il y a 2 j ». */
   line: string;
-  chips: string[];
+  /** City (with the seat's flag), contract, experience and salary: one row, each with its icon. */
+  facts: { kind: "city" | "contract" | "level" | "salary"; text: string; flag?: string }[];
+  /** « En bref »: studies, languages, openings, closing date, as the recruiter set them. */
+  details: { label: string; value: string }[];
+  /** The company's few lines written for this offer. */
+  companyAbout: string | null;
   match:
     | {
         state: "ok";
@@ -49,8 +54,8 @@ export type PhoneOfferView = {
   /** Screening questions: the sheet then leads to the full form, which asks them. */
   questions: number;
   cvs: { id: string; title: string; line: string; adapted: boolean }[];
-  /** « Orbi adapte ce CV à l'offre »: the CV editor, which proposes the changes. */
-  adaptHref: string | null;
+  /** « Orbi adapte ce CV à l'offre », done inside the sheet: the offer's id, null when unknown. */
+  jobId: string | null;
 };
 
 /**
@@ -106,12 +111,71 @@ export function PhoneOffer({ offer }: { offer: PhoneOfferView }) {
           </span>
         </div>
         <h1 className="nb-ex-offre-t">{offer.title}</h1>
-        <div className="nb-ex-pis">
-          {offer.chips.map((chip) => (
-            <span key={chip}>{chip}</span>
+        <ul className="nb-ex-faits" aria-label={t("offer.facts")}>
+          {offer.facts.map((fact) => (
+            <li key={fact.kind} data-sorte={fact.kind}>
+              {fact.flag ? (
+                <span aria-hidden>{fact.flag}</span>
+              ) : fact.kind !== "salary" ? (
+                <PhoneIcon name={FACT_ICONS[fact.kind]} size={15} stroke={2} />
+              ) : null}
+              {fact.text}
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
+
+      {offer.about ? (
+        <div className="nb-ex-bloc">
+          <h2 className="nb-ex-h3">{t("offer.about")}</h2>
+          <p className="nb-ex-texte">{offer.about}</p>
+        </div>
+      ) : null}
+      {offer.details.length > 0 ? (
+        <div className="nb-ex-bloc">
+          <h2 className="nb-ex-h3">{t("offer.brief")}</h2>
+          <dl className="nb-ex-bref">
+            {offer.details.map((item) => (
+              <div key={item.label}>
+                <dt>{item.label}</dt>
+                <dd>{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      ) : null}
+      {offer.missions.length > 0 ? (
+        <List title={t("offer.missions")} items={offer.missions} />
+      ) : null}
+      {offer.expect.length > 0 ? <List title={t("offer.expect")} items={offer.expect} /> : null}
+      {offer.benefits.length > 0 ? (
+        <List title={t("offer.benefits")} items={offer.benefits} />
+      ) : null}
+
+      {offer.hardSkills.length > 0 || offer.softSkills.length > 0 ? (
+        <div className="nb-ex-bloc">
+          {offer.hardSkills.length > 0 ? (
+            <>
+              <h2 className="nb-ex-h3">{t("offer.hardSkills")}</h2>
+              <div className="nb-ex-pis nb-ex-comp">
+                {offer.hardSkills.map((name) => (
+                  <span key={name}>{name}</span>
+                ))}
+              </div>
+            </>
+          ) : null}
+          {offer.softSkills.length > 0 ? (
+            <>
+              <h2 className="nb-ex-h3">{t("offer.softSkills")}</h2>
+              <div className="nb-ex-pis nb-ex-comp">
+                {offer.softSkills.map((name) => (
+                  <span key={name}>{name}</span>
+                ))}
+              </div>
+            </>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="nb-ex-bloc">
         <div className="nb-ex-pourquoi">
@@ -160,41 +224,10 @@ export function PhoneOffer({ offer }: { offer: PhoneOfferView }) {
         </div>
       </div>
 
-      {offer.missions.length > 0 ? (
-        <List title={t("offer.missions")} items={offer.missions} />
-      ) : offer.about ? (
+      {offer.companyAbout ? (
         <div className="nb-ex-bloc">
-          <h2 className="nb-ex-h3">{t("offer.about")}</h2>
-          <p className="nb-ex-texte">{offer.about}</p>
-        </div>
-      ) : null}
-      {offer.expect.length > 0 ? <List title={t("offer.expect")} items={offer.expect} /> : null}
-      {offer.benefits.length > 0 ? (
-        <List title={t("offer.benefits")} items={offer.benefits} />
-      ) : null}
-
-      {offer.hardSkills.length > 0 || offer.softSkills.length > 0 ? (
-        <div className="nb-ex-bloc">
-          {offer.hardSkills.length > 0 ? (
-            <>
-              <h2 className="nb-ex-h3">{t("offer.hardSkills")}</h2>
-              <div className="nb-ex-pis nb-ex-comp">
-                {offer.hardSkills.map((name) => (
-                  <span key={name}>{name}</span>
-                ))}
-              </div>
-            </>
-          ) : null}
-          {offer.softSkills.length > 0 ? (
-            <>
-              <h2 className="nb-ex-h3">{t("offer.softSkills")}</h2>
-              <div className="nb-ex-pis nb-ex-comp">
-                {offer.softSkills.map((name) => (
-                  <span key={name}>{name}</span>
-                ))}
-              </div>
-            </>
-          ) : null}
+          <h2 className="nb-ex-h3">{t("offer.companyAbout", { company: offer.company })}</h2>
+          <p className="nb-ex-texte">{offer.companyAbout}</p>
         </div>
       ) : null}
 
@@ -255,6 +288,12 @@ export function PhoneOffer({ offer }: { offer: PhoneOfferView }) {
   );
 }
 
+const FACT_ICONS = {
+  city: "drapeau",
+  contract: "offres",
+  level: "horloge",
+} as const;
+
 function List({ title, items }: { title: string; items: string[] }) {
   return (
     <div className="nb-ex-bloc">
@@ -281,10 +320,44 @@ function ApplySheet({
   onApplied: () => void;
 }) {
   const t = useTranslations("phoneExplorer");
+  const [cvs, setCvs] = useState(offer.cvs);
   const [cv, setCv] = useState(offer.cvs[0]?.id ?? "");
   const [note, setNote] = useState("");
   const [done, setDone] = useState(false);
   const [sending, start] = useTransition();
+  const [adapting, startAdapt] = useTransition();
+  const [adaptedNow, setAdaptedNow] = useState(false);
+  const chosen = cvs.find((item) => item.id === cv);
+
+  // The talent stays in the application: the copy joins the list, chosen (Ephraïm, 29/10/2026).
+  const adapt = () =>
+    startAdapt(async () => {
+      if (!offer.jobId || !cv) return;
+      const result = await tailorForApplicationAction({ cv, job: offer.jobId }).catch(() => null);
+      if (!result?.ok) {
+        const code = result?.error;
+        showToast({
+          message:
+            code === "entitlement"
+              ? t("apply.adaptError.entitlement")
+              : code === "quota"
+                ? t("apply.adaptError.quota")
+                : code === "consent"
+                  ? t("apply.adaptError.consent")
+                  : code === "limit"
+                    ? t("apply.adaptError.limit")
+                    : t("apply.adaptError.other"),
+          tone: "error",
+        });
+        return;
+      }
+      setCvs((before) => [
+        { id: result.value.id, title: result.value.title, line: "", adapted: true },
+        ...before,
+      ]);
+      setCv(result.value.id);
+      setAdaptedNow(true);
+    });
 
   const send = () =>
     start(async () => {
@@ -306,7 +379,7 @@ function ApplySheet({
       onClose={onClose}
       label={done ? t("apply.done") : t("apply.title", { company: offer.company })}
       closeLabel={t("apply.close")}
-      className="nb-ex-feuille"
+      className="nb-ex-feuille nb-ex-postuler-f"
     >
       {done ? (
         <div className="nb-ex-envoye" role="status">
@@ -333,7 +406,7 @@ function ApplySheet({
           <span className="nb-meta">{offer.title}</span>
           <p className="nb-ex-etiquette">{t("apply.cv")}</p>
           <div className="nb-ex-cvs" role="radiogroup" aria-label={t("apply.cv")}>
-            {offer.cvs.length === 0 ? (
+            {cvs.length === 0 ? (
               <p className="nb-meta">
                 {t("apply.noCv")}{" "}
                 <Link href="/app/career/cv" className="nb-ex-lien">
@@ -342,7 +415,7 @@ function ApplySheet({
               </p>
             ) : null}
             {[
-              ...offer.cvs,
+              ...cvs,
               {
                 id: "",
                 title: t("apply.profileOnly"),
@@ -366,20 +439,29 @@ function ApplySheet({
               </button>
             ))}
           </div>
-          {offer.adaptHref && cv ? (
-            <Link
-              href={`${offer.adaptHref.replace("{cv}", cv)}`}
+          {offer.jobId && chosen && !chosen.adapted ? (
+            <button
+              type="button"
               className="nb-ex-adapter"
               data-orbi=""
+              onClick={adapt}
+              disabled={adapting}
+              aria-busy={adapting}
             >
-              {t("apply.adapt")}
-            </Link>
+              {adapting ? t("apply.adapting") : t("apply.adapt")}
+              <small className="nb-meta">{t("apply.adaptHonest")}</small>
+            </button>
+          ) : null}
+          {adaptedNow ? (
+            <p className="nb-ex-note" role="status">
+              {t("apply.adaptDone")}
+            </p>
           ) : null}
           {offer.questions > 0 ? (
             <>
               <p className="nb-ex-note">{t("apply.questions", { count: offer.questions })}</p>
               <Link
-                href={`/app/jobs/${offer.slug}/postuler`}
+                href={`/app/jobs/${offer.slug}/postuler${cv ? `?cv=${encodeURIComponent(cv)}` : ""}`}
                 className="nb-bouton"
                 data-plein=""
                 data-large=""

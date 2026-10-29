@@ -8836,7 +8836,14 @@ Conventions :
 | `phoneExplorer.offer.optedOut` | Vous avez désactivé le calcul de compatibilité. |
 | `phoneExplorer.offer.missions` | Vos missions |
 | `phoneExplorer.offer.expect` | Ce qu’on attend |
-| `phoneExplorer.offer.about` | L’offre |
+| `phoneExplorer.offer.about` | Description du poste |
+| `phoneExplorer.offer.facts` | L’offre en un coup d’œil |
+| `phoneExplorer.offer.brief` | En bref |
+| `phoneExplorer.offer.education` | Niveau d’études |
+| `phoneExplorer.offer.languages` | Langues |
+| `phoneExplorer.offer.openings` | Postes à pourvoir |
+| `phoneExplorer.offer.closes` | Candidatures jusqu’au |
+| `phoneExplorer.offer.companyAbout` | À propos de {company} |
 | `phoneExplorer.offer.benefits` | Ce qu’on offre |
 | `phoneExplorer.offer.companyPage` | Voir la page › |
 | `phoneExplorer.offer.save` | Enregistrer |
@@ -8858,6 +8865,14 @@ Conventions :
 | `phoneExplorer.apply.cvLine` | Modèle {template} · {when} |
 | `phoneExplorer.apply.adapt` | Orbi adapte ce CV à l’offre |
 | `phoneExplorer.apply.adapted` | Adapté à cette offre |
+| `phoneExplorer.apply.adapting` | Orbi adapte votre CV… |
+| `phoneExplorer.apply.adaptHonest` | Il met en avant ce que votre CV montre déjà, sans rien inventer. |
+| `phoneExplorer.apply.adaptDone` | Votre CV adapté est choisi pour cette candidature : vous pouvez continuer. |
+| `phoneExplorer.apply.adaptError.entitlement` | Adapter un CV à une offre fait partie des formules payantes. |
+| `phoneExplorer.apply.adaptError.quota` | Vos crédits Orbi du mois sont épuisés. |
+| `phoneExplorer.apply.adaptError.consent` | Activez Orbi dans Paramètres pour qu’il adapte votre CV. |
+| `phoneExplorer.apply.adaptError.limit` | Vous avez atteint le nombre maximum de CV : supprimez-en un dans Carrière. |
+| `phoneExplorer.apply.adaptError.other` | Orbi n’a pas pu adapter votre CV. Réessayez dans un instant. |
 | `phoneExplorer.apply.note` | Un mot au recruteur |
 | `phoneExplorer.apply.notePlaceholder` | Facultatif |
 | `phoneExplorer.apply.send` | Envoyer ma candidature |

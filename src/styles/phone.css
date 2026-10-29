@@ -4825,6 +4825,65 @@ section + section .nb-ex-sec {
   align-items: center;
   white-space: nowrap;
 }
+/* The offer's facts in one row (Ephraïm, 29/10/2026): city with its flag, contract, experience,
+   salary, each in its colour; the row scrolls sideways rather than wrapping. */
+.nb-ex-faits {
+  display: flex;
+  gap: 8px;
+  margin: 14px -20px 0;
+  padding: 0 20px 2px;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nb-ex-faits::-webkit-scrollbar {
+  display: none;
+}
+.nb-ex-faits li {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: rgba(47, 211, 166, 0.12);
+  color: var(--nb-menthe-claire-t, var(--nb-creme));
+}
+.nb-ex-faits li[data-sorte="contract"] {
+  background: rgba(124, 196, 255, 0.14);
+  color: var(--nb-creme);
+}
+.nb-ex-faits li[data-sorte="level"] {
+  background: rgba(195, 166, 255, 0.16);
+  color: var(--nb-creme);
+}
+.nb-ex-faits li[data-sorte="salary"] {
+  background: var(--nb-lime);
+  color: var(--nb-encre);
+}
+.nb-ex-bref {
+  display: grid;
+  gap: 10px;
+  margin: 10px 0 0;
+}
+.nb-ex-bref div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+}
+.nb-ex-bref dt {
+  color: var(--nb-brume);
+}
+.nb-ex-bref dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+}
 .nb-ex-pourquoi {
   border-radius: 20px;
   padding: 16px;
@@ -5006,7 +5065,16 @@ section + section .nb-ex-sec {
   background: var(--nb-haute);
   color: var(--nb-brume);
 }
-/* Feuille Postuler */
+/* Feuille Postuler: inside the screen's margins, scrolled when long, the button never cut. */
+.nb-feuille.nb-ex-feuille.nb-ex-postuler-f {
+  height: auto;
+  padding: 10px 20px calc(18px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.nb-ex-postuler-f .nb-ex-feuille-t {
+  margin-top: 8px;
+}
 .nb-ex-feuille-t {
   display: block;
   font-size: 19px;
@@ -5073,6 +5141,16 @@ section + section .nb-ex-sec {
   font-size: 13.5px;
   color: var(--nb-menthe-claire-t);
   font-weight: 600;
+  text-align: left;
+}
+.nb-ex-adapter small {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 400;
+}
+.nb-ex-adapter[aria-busy="true"] {
+  opacity: 0.7;
 }
 .nb-ex-note {
   font-size: 13.5px;

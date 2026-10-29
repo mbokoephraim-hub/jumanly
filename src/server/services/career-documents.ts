@@ -712,7 +712,17 @@ async function tailorCopy(
     if (error instanceof AiError) return { ok: false, code: error.code };
     throw error;
   }
-  const kept = proposals.filter((proposal) => acceptable(base, proposal));
+  // Honest by construction (Ephraïm, 29/10/2026): a rewrite never names a skill the offer asks for
+  // that the person's CV does not show anywhere, whatever the model wrote.
+  const absent = offerGap(content, job.skills).absent.map(fold);
+  const kept = proposals.filter(
+    (proposal) =>
+      acceptable(base, proposal) &&
+      !absent.some(
+        (skill) =>
+          fold(proposal.after ?? "").includes(skill) && !fold(proposal.before).includes(skill),
+      ),
+  );
   const document = await db.document.create({
     data: {
       profileId: input.source.profileId,
