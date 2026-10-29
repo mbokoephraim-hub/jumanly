@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "./fixtures";
 import { expectAccessible } from "./a11y";
 import { capture, CAPTURE_VIEWPORT } from "./captures";
-import { wizardReady } from "./offer-flow";
+import { nextStep, wizardReady } from "./offer-flow";
 import { logIn } from "./session";
 
 // Modèle B recruteur, lot M4 (docs/modele-b-recruteur, mobile/captures section 03): the offers and
@@ -153,7 +153,7 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
     await expect(orbi).toBeHidden();
   });
 
-  test("publier une offre en quatre étapes, la partager, la mettre en pause puis la clôturer", async ({
+  test("publier une offre étape par étape, la partager, la mettre en pause puis la clôturer", async ({
     page,
   }) => {
     test.setTimeout(180_000);
@@ -162,11 +162,11 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
     await page.goto("/app/hire/offres/nouvelle");
     await wizardReady(page);
 
-    // 1 · The post, its text and its skills.
+    // 1 · The post and its text.
     await expect(
       wizard(page).getByRole("heading", { name: "Quel poste recrutez-vous ?" }),
     ).toBeVisible();
-    await expect(wizard(page).getByText("Étape 1 sur 4 · Le poste")).toBeVisible();
+    await expect(wizard(page).getByText("Étape 1 sur 10 · Le poste")).toBeVisible();
     await wizard(page).getByRole("button", { name: "Continuer" }).click();
     await expect(
       page.getByRole("alert").filter({ hasText: "Indiquez l'intitulé du poste" }),
@@ -175,7 +175,7 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
     await wizard(page).getByRole("button", { name: "Proposer un texte" }).click();
     await expect(
       wizard(page)
-        .getByText(/Orbi (n'a pas|a besoin)|Activez l'aide|Proposé par Orbi/)
+        .getByText(/Orbi (n'a pas|a besoin|a aussi)|Activez l'aide|crédits d'Orbi/)
         .first(),
     ).toBeVisible();
     await wizard(page)
@@ -183,60 +183,111 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
       .fill(
         "Baobab Fintech recrute une personne pour analyser les demandes de crédit, préparer les dossiers et proposer des améliorations.",
       );
-    await wizard(page).getByLabel("Ajouter une compétence").fill("Excel");
-    await wizard(page).getByRole("button", { name: "Ajouter", exact: true }).first().click();
-    await expect(wizard(page).locator(".nb-rh-puces")).toContainText("Excel");
     await capture(page, "051-publier-1");
-    await wizard(page).getByRole("button", { name: "Continuer" }).click();
+    await nextStep(page, "Les compétences recherchées");
 
-    // 2 · Where and how.
-    await expect(wizard(page).getByRole("heading", { name: "Les détails" })).toBeVisible();
+    // 2 · Technical skills (from the list or typed), behavioural ones (suggestions).
+    await wizard(page).getByLabel("Ajouter une compétence technique").fill("Excel");
+    await wizard(page).getByLabel("Ajouter une compétence technique").press("Enter");
+    await expect(wizard(page).locator(".nb-rh-puces").first()).toContainText("Excel");
+    await wizard(page).getByRole("button", { name: "Rigueur" }).click();
+    await expect(wizard(page).locator('[data-ton="soft"] .nb-rh-puces')).toContainText("Rigueur");
+    await capture(page, "052-publier-2");
+    await nextStep(page, "Les exigences du poste");
+
+    // 3 · Where, how, how many, studies and languages.
     const cities = wizard(page).getByRole("radiogroup", { name: "Ville" });
     if ((await cities.getByRole("radio").count()) > 0)
       await cities.getByRole("radio").first().click();
     else await wizard(page).getByLabel("Autre ville").fill("Kinshasa");
     const country = wizard(page).getByLabel("Pays du poste");
-    if (await country.isVisible()) await country.fill("RD Congo");
+    if (!(await country.inputValue())) await country.fill("RD Congo");
     await wizard(page)
       .getByRole("radiogroup", { name: "Mode de travail" })
       .getByRole("radio", { name: "Hybride" })
       .click();
     await wizard(page)
-      .getByRole("radiogroup", { name: "Contrat" })
+      .getByRole("radiogroup", { name: "Type d'emploi" })
       .getByRole("radio", { name: "CDI" })
       .click();
-    await wizard(page).getByRole("switch", { name: "Afficher le salaire" }).click();
+    await wizard(page).getByRole("button", { name: "Nombre de personnes recherchées +" }).click();
+    await expect(wizard(page)).toContainText("2 personnes");
+    await wizard(page)
+      .getByRole("radiogroup", { name: "Niveau d'études demandé" })
+      .getByRole("radio", { name: "Licence" })
+      .click();
+    await wizard(page)
+      .getByRole("radiogroup", { name: "Choisir une langue" })
+      .getByRole("radio", { name: "Français" })
+      .click();
+    await wizard(page)
+      .getByRole("group", { name: "Choisir le niveau" })
+      .getByRole("button", { name: "C1" })
+      .click();
+    await expect(wizard(page)).toContainText("Français · C1");
+    await nextStep(page, "Les principales responsabilités");
+    await expect(page).toHaveURL(/\/app\/hire\/offres\/[^/]+\/modifier\?etape=4/);
+
+    // 4 · Responsibilities, point by point.
+    for (const item of [
+      "Analyser les demandes de crédit des PME",
+      "Préparer les dossiers du comité",
+    ]) {
+      const field = wizard(page).getByPlaceholder(/^Responsabilité n°/);
+      await field.fill(item);
+      await field.press("Enter");
+      await expect(wizard(page).locator(".nb-oe-points")).toContainText(item);
+    }
+    await nextStep(page, "Le profil recherché");
+
+    // 5 · Experience and the profile's requirements.
+    await wizard(page).getByRole("button", { name: "Années d'expérience demandées +" }).click();
+    await expect(wizard(page)).toContainText("1 an au moins");
+    await wizard(page)
+      .getByPlaceholder(/Une première expérience/)
+      .fill("Aisance avec les chiffres");
+    await wizard(page).getByRole("button", { name: "Ajouter une exigence" }).click();
+    await nextStep(page, "La fourchette salariale");
+
+    // 6 · The salary, shown for transparency (it can be hidden).
+    await expect(wizard(page).getByRole("switch", { name: "Afficher le salaire" })).toBeChecked();
     await wizard(page).getByLabel("Minimum (USD par mois)").fill("600");
     await wizard(page).getByLabel("Maximum (USD par mois)").fill("900");
     await expect(wizard(page)).toContainText("600 à 900 USD par mois");
-    await capture(page, "052-publier-2");
-    await wizard(page).getByRole("button", { name: "Continuer" }).click();
-    await expect(page).toHaveURL(/\/app\/hire\/offres\/[^/]+\/modifier\?etape=3/);
-    await page.waitForLoadState("networkidle");
-    await wizardReady(page);
+    await nextStep(page, "Présentez votre entreprise");
 
-    // 3 · The pre-selection: questions are never a condition to apply.
-    await expect(wizard(page).getByRole("heading", { name: "La présélection" })).toBeVisible();
+    // 7 · The company's text, then 8 · the questions (never a condition to apply).
+    await wizard(page)
+      .getByLabel("Présentation de l'entreprise")
+      .fill("Baobab Fintech (exemple fictif) finance les petites entreprises de la région.");
+    await nextStep(page, "Les questions aux candidats");
     await wizard(page).getByRole("checkbox", { name: "Quand pouvez-vous commencer ?" }).click();
     await wizard(page).getByLabel("Votre question").fill("Avez-vous déjà utilisé Excel ?");
     await wizard(page).getByLabel("Votre question").press("Enter");
     await expect(
       wizard(page).getByRole("checkbox", { name: "Avez-vous déjà utilisé Excel ?" }),
     ).toBeChecked();
-    await expect(wizard(page).getByText("Questions aux candidats · 2 choisies")).toBeVisible();
     await wizard(page).getByRole("button", { name: "Lettre" }).click();
-    await expect(wizard(page)).toContainText("Aucune réponse n'écarte un candidat");
     await capture(page, "053-publier-3");
-    await wizard(page).getByRole("button", { name: "Continuer" }).click();
+    await nextStep(page, "Orbi a relu votre offre", "Lancer l'analyse d'Orbi");
 
-    // 4 · What talents will see.
+    // 9 · Orbi's reading: advice only.
+    await expect(wizard(page)).toContainText(/Votre offre est complète à \d+ %/);
+    await expect(wizard(page)).toContainText("Le salaire est affiché");
+    await nextStep(page, "Publier l'offre");
+
+    // 10 · The Fil post (title proposed), the card, the job sheet.
+    await expect(wizard(page).getByLabel("Titre")).toHaveValue(
+      `On recrute : ${title}`.slice(0, 60),
+    );
+    const card = wizard(page).getByRole("article", {
+      name: "Aperçu de la publication dans le Fil",
+    });
+    await expect(card).toContainText(title);
+    await expect(card).toContainText("600 à 900 USD par mois");
     await expect(
-      wizard(page).getByRole("heading", { name: "Ce que verront les talents" }),
-    ).toBeVisible();
-    const preview = wizard(page).getByRole("article", { name: "Aperçu de l'offre" });
-    await expect(preview.getByRole("heading", { name: title })).toBeVisible();
-    await expect(preview).toContainText("Candidater gratuitement");
-    await expect(preview).toContainText("600 à 900 USD par mois");
+      wizard(page).getByRole("link", { name: "Télécharger la fiche Jumanly" }),
+    ).toHaveAttribute("href", /\/api\/offres\/[^/]+\/fiche\?jumanly=1$/);
     await capture(page, "054-publier-4");
     await expectAccessible(page);
     await wizard(page)

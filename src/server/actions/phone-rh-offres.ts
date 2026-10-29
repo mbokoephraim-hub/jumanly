@@ -5,7 +5,19 @@ import { z } from "zod";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
 import { getOrgJob, HireError, publishJob } from "@/server/services/hire";
-import { requestedDocumentKinds, saveJobStep } from "@/server/services/hire-offers";
+import {
+  attachJobSheet,
+  JobSheetError,
+  removeJobSheet,
+  requestedDocumentKinds,
+  saveJobStep,
+} from "@/server/services/hire-offers";
+import {
+  analyzeOffer,
+  postOfferToFeed,
+  saveOfferWizard,
+  type OfferWizardInput,
+} from "@/server/services/job-wizard";
 import { screeningQuestionsOf } from "@/server/services/screening";
 
 /**
@@ -136,20 +148,114 @@ export async function rhSaveScreeningAction(
 /** Step 4, « Publier l'offre »: within `jobs.active.max`; an unverified company goes to review. */
 export async function rhPublishOfferAction(
   jobId: string,
-): Promise<{ ok: true; review: boolean } | { ok: false; error: string }> {
+  toFil = false,
+): Promise<{ ok: true; review: boolean; posted: boolean } | { ok: false; error: string }> {
   const id = z.string().trim().min(1).max(60).safeParse(jobId);
   if (!id.success) return { ok: false, error: "invalid" };
   const { ctx } = await requireHire(OFFERS, "manage", "publish");
   try {
+    // « Publier aussi dans le Fil » off: no post now, nor at the approval.
+    if (!toFil)
+      await getOrgJob(db, ctx, id.data).then((job) =>
+        db.job.update({ where: { id: job.id }, data: { feedTitle: null } }),
+      );
     const result = await publishJob(db, ctx, id.data);
     if (result.status === "limit") return { ok: false, error: "limit" };
     if (result.status === "incomplete") return { ok: false, error: result.missing };
     const job = await db.job.findUniqueOrThrow({ where: { id: id.data }, select: { slug: true } });
+    const post = toFil ? await postOfferToFeed(db, id.data) : null;
     updateTag("jobs");
     updateTag(`job:${job.slug}`);
-    return { ok: true, review: result.status !== "published" };
+    return { ok: true, review: result.status !== "published", posted: Boolean(post) };
   } catch (error) {
     if (error instanceof HireError) return { ok: false, error: "invalid" };
     throw error;
   }
+}
+
+// ─── Publication étape par étape (29/10/2026) ───────────────────────────────────────────────────
+
+/** Every step saves the whole offer (the draft exists from the first « Continuer » with a place). */
+export async function rhSaveOfferWizardAction(
+  raw: OfferWizardInput,
+): Promise<RhOfferResult & { slug?: string }> {
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
+  try {
+    const result = await saveOfferWizard(db, ctx, raw);
+    if (result.ok) {
+      const job = await db.job.findUniqueOrThrow({
+        where: { id: result.jobId },
+        select: { slug: true, status: true },
+      });
+      if (job.status === "published" || job.status === "paused") {
+        updateTag("jobs");
+        updateTag(`job:${job.slug}`);
+      }
+    }
+    return result;
+  } catch (error) {
+    if (error instanceof HireError) return { ok: false, error: "invalid" };
+    throw error;
+  }
+}
+
+/** « L'analyse d'Orbi »: what is complete, what would help, what Jumanly checks. Free. */
+export async function rhAnalyzeOfferAction(raw: Parameters<typeof analyzeOffer>[0]) {
+  await requireHire(OFFERS, "manage", "publish");
+  const input = z
+    .object({
+      title: z.string().max(120),
+      description: z.string().max(8000),
+      hardSkills: z.array(z.string().max(80)).max(20),
+      softSkills: z.array(z.string().max(80)).max(20),
+      responsibilities: z.array(z.string().max(300)).max(20),
+      requirements: z.array(z.string().max(300)).max(20),
+      languages: z.array(z.unknown()).max(10),
+      salaryShown: z.boolean(),
+      companyAbout: z.string().max(1500),
+      feedTitle: z.string().max(120),
+    })
+    .safeParse(raw);
+  if (!input.success) return null;
+  return analyzeOffer(input.data);
+}
+
+/** « Joindre mon propre PDF »: checked (type, size, no active content), then kept on the offer. */
+export async function rhAttachSheetAction(
+  formData: FormData,
+): Promise<{ ok: true; name: string } | { ok: false; error: string }> {
+  const jobId = String(formData.get("jobId") ?? "").slice(0, 60);
+  const file = formData.get("sheet");
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
+  if (!jobId || !(file instanceof File) || file.size === 0) return { ok: false, error: "type" };
+  try {
+    await attachJobSheet(db, ctx, jobId, {
+      name: file.name,
+      bytes: new Uint8Array(await file.arrayBuffer()),
+    });
+  } catch (error) {
+    if (error instanceof JobSheetError) return { ok: false, error: error.code };
+    if (error instanceof HireError) return { ok: false, error: "invalid" };
+    throw error;
+  }
+  const job = await db.job.findUniqueOrThrow({
+    where: { id: jobId },
+    select: { jobSheetName: true, slug: true },
+  });
+  updateTag(`job:${job.slug}`);
+  return { ok: true, name: job.jobSheetName ?? "fiche.pdf" };
+}
+
+/** « Utiliser la fiche Jumanly »: the PDF joined is removed, talents get the drawn sheet. */
+export async function rhRemoveSheetAction(jobId: string) {
+  const id = z.string().trim().min(1).max(60).safeParse(jobId);
+  if (!id.success) return { ok: false as const };
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
+  try {
+    await removeJobSheet(db, ctx, id.data);
+  } catch (error) {
+    if (error instanceof HireError) return { ok: false as const };
+    throw error;
+  }
+  return { ok: true as const };
 }

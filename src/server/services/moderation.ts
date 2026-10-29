@@ -4,6 +4,7 @@
  */
 import { z } from "zod";
 import type { PrismaClient } from "@/generated/prisma/client";
+import { postOfferToFeed } from "./job-feed-post";
 
 export const reportReasons = [
   "scam",
@@ -219,6 +220,8 @@ export async function approveJob(
       organizationId: job.organizationId,
     },
   });
+  // « Publier aussi dans le Fil »: the post waited for the approval.
+  await postOfferToFeed(db, job.id);
   return job;
 }
 

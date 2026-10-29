@@ -10439,6 +10439,14 @@
       "title": "Mes publications",
       "hint": "Toutes vos publications, même anciennes. Touchez « ··· » pour en modifier ou en supprimer une.",
       "write": "Écrire une publication"
+    },
+    "offerSalary": "{min} à {max} USD par mois",
+    "offerSalaryFrom": "À partir de {min} USD par mois",
+    "poster": {
+      "kicker": "Offre d'emploi",
+      "apply": "Postuler",
+      "see": "Voir l'offre",
+      "pdf": "PDF"
     }
   },
   "phoneExplorer": {
@@ -10691,7 +10699,12 @@
       "applied": "Candidature envoyée",
       "appliedOpen": "Voir ma candidature",
       "closed": "Offre fermée",
-      "free": "Postuler est gratuit, toujours."
+      "free": "Postuler est gratuit, toujours.",
+      "hardSkills": "Compétences techniques",
+      "softSkills": "Compétences comportementales",
+      "sheet": "Fiche de poste",
+      "sheetLine": "PDF à télécharger, à garder ou à partager",
+      "sheetDownload": "Télécharger"
     },
     "apply": {
       "title": "Postuler chez {company}",
@@ -19230,6 +19243,291 @@
         "move": "Êtes-vous prêt·e à venir sur le lieu du poste ?",
         "salary": "Quel salaire attendez-vous ?"
       }
+    },
+    "wizard": {
+      "progress": "Étape {step} sur {total}",
+      "kicker": "Étape {step} sur {total} · {name}",
+      "steps": {
+        "1": {
+          "name": "Le poste",
+          "title": "Quel poste recrutez-vous ?",
+          "help": "L'intitulé et une description en quelques phrases : l'équipe, la mission, ce que la personne apprendra."
+        },
+        "2": {
+          "name": "Les compétences",
+          "title": "Les compétences recherchées",
+          "help": "Ajoutez-les une par une. Orbi s'en sert pour proposer l'offre aux bons talents."
+        },
+        "3": {
+          "name": "Les exigences",
+          "title": "Les exigences du poste",
+          "help": "Le lieu, le type de contrat, le nombre de personnes, le niveau d'études et les langues."
+        },
+        "4": {
+          "name": "Les responsabilités",
+          "title": "Les principales responsabilités",
+          "help": "Une responsabilité par point, en commençant par un verbe : « Analyser les demandes de crédit »."
+        },
+        "5": {
+          "name": "Le profil",
+          "title": "Le profil recherché",
+          "help": "L'expérience attendue, puis les exigences du profil, point par point."
+        },
+        "6": {
+          "name": "Le salaire",
+          "title": "La fourchette salariale",
+          "help": "Indiquez le salaire mensuel proposé, en USD. Vous pouvez choisir de ne pas l'afficher."
+        },
+        "7": {
+          "name": "L'entreprise",
+          "title": "Présentez votre entreprise",
+          "help": "Le logo et quelques lignes sur l'entreprise : ils apparaissent sur l'offre et sur la fiche de poste."
+        },
+        "8": {
+          "name": "Les questions",
+          "title": "Les questions aux candidats",
+          "help": "Facultatif : quelques questions et les documents souhaités. Aucune réponse n'empêche de postuler."
+        },
+        "9": {
+          "name": "L'analyse d'Orbi",
+          "title": "Orbi a relu votre offre",
+          "help": "Ses conseils pour une offre claire et attirante. Vous décidez de ce que vous changez."
+        },
+        "10": {
+          "name": "La publication",
+          "title": "Publier l'offre",
+          "help": "Écrivez le titre de la publication dans le Fil et choisissez la fiche de poste que les talents téléchargeront."
+        }
+      },
+      "contract": "Type d'emploi",
+      "contracts": {
+        "cdi": "CDI",
+        "cdd": "CDD",
+        "stage": "Stage",
+        "freelance": "Freelance ou mission",
+        "alternance": "Alternance",
+        "volontariat": "Volontariat"
+      },
+      "hard": "Compétences techniques · {count}/{max}",
+      "hardHelp": "Les savoir-faire du métier : un logiciel, une méthode, une langue de programmation…",
+      "hardPlaceholder": "Par exemple : Microsoft Excel",
+      "addHard": "Ajouter une compétence technique",
+      "soft": "Compétences comportementales · {count}/{max}",
+      "softHelp": "La façon de travailler : touchez une suggestion ou écrivez la vôtre.",
+      "softPlaceholder": "Par exemple : Rigueur",
+      "addSoft": "Ajouter une compétence comportementale",
+      "addTyped": "Ajouter « {skill} »",
+      "removeSkill": "Retirer {skill}",
+      "skillsMax": "{count} compétences au plus. Retirez-en une pour en ajouter une autre.",
+      "softSuggestions": {
+        "1": "Communication",
+        "2": "Travail en équipe",
+        "3": "Rigueur",
+        "4": "Autonomie",
+        "5": "Sens de l'organisation",
+        "6": "Esprit d'initiative",
+        "7": "Adaptabilité",
+        "8": "Gestion du stress",
+        "9": "Leadership",
+        "10": "Sens du service client"
+      },
+      "openings": "Nombre de personnes recherchées",
+      "openingsValue": "{count, plural, one {# personne} other {# personnes}}",
+      "education": "Niveau d'études demandé",
+      "educationLevels": {
+        "none": "Aucun diplôme exigé",
+        "secondary": "Diplôme d'État",
+        "vocational": "Formation professionnelle",
+        "bachelor": "Licence",
+        "master": "Master",
+        "doctorate": "Doctorat"
+      },
+      "languages": "Langues demandées",
+      "languagePick": "Choisir une langue",
+      "levelPick": "Choisir le niveau",
+      "levelFor": "Niveau attendu en {language}",
+      "removeLanguage": "Retirer {language}",
+      "responsibilities": "{count, plural, =0 {Responsabilités} one {Responsabilités · # point} other {Responsabilités · # points}}",
+      "responsibilityPlaceholder": "Responsabilité n° {number}",
+      "addResponsibility": "Ajouter une responsabilité",
+      "removePoint": "Retirer le point {number}",
+      "experience": "Années d'expérience demandées",
+      "experienceValue": "{years, plural, =0 {Débutant accepté} one {# an au moins} other {# ans au moins}}",
+      "requirements": "{count, plural, =0 {Exigences du profil} one {Exigences du profil · # point} other {Exigences du profil · # points}}",
+      "requirementPlaceholder": "Par exemple : Une première expérience en banque",
+      "addRequirement": "Ajouter une exigence",
+      "requirementsNote": "Jamais d'âge, de genre, d'origine, de religion, de situation familiale ni de photo : ces critères sont interdits.",
+      "salaryWhy": "Par souci de transparence, nous vous conseillons d'afficher le salaire : les talents savent tout de suite si l'offre leur correspond, et vous recevez plus de candidatures.",
+      "salaryHiddenNote": "Le salaire restera caché sur l'offre et sur la fiche de poste.",
+      "logoReady": "Ce logo apparaît sur l'offre et sur la fiche de poste.",
+      "logoNone": "Sans logo, les initiales de l'entreprise s'affichent.",
+      "logoAdd": "Ajouter le logo",
+      "logoChange": "Changer le logo",
+      "logoSending": "Envoi du logo…",
+      "logoHint": "Image carrée au format PNG de préférence, 4 Mo au plus.",
+      "logoAdmin": "Un administrateur de l'entreprise peut ajouter le logo depuis la page de l'entreprise.",
+      "about": "Présentation de l'entreprise",
+      "aboutImport": "Reprendre l'« À propos » de l'entreprise",
+      "aboutNone": "Votre entreprise n'a pas encore d'« À propos » : écrivez quelques lignes ici.",
+      "aboutPlaceholder": "Qui vous êtes, ce que vous faites, pourquoi vous rejoindre.",
+      "aboutCount": "{count}/{max} caractères",
+      "analyze": "Lancer l'analyse d'Orbi",
+      "analysisScore": "Votre offre est complète à {score} %",
+      "analysisLine": "Lecture gratuite, sans crédit d'Orbi",
+      "analysisNote": "Orbi recommande, vous décidez : vous pouvez publier même si tout n'est pas vert.",
+      "checkFix": "Compléter à l'étape {step} ›",
+      "checks": {
+        "description": {
+          "ok": "La description donne envie d'en savoir plus.",
+          "advice": "Développez la description : 3 à 5 phrases aident les talents à se projeter."
+        },
+        "hardSkills": {
+          "ok": "Les compétences techniques sont précises.",
+          "advice": "Ajoutez au moins 3 compétences techniques : Orbi trouvera de meilleurs profils."
+        },
+        "softSkills": {
+          "ok": "Les compétences comportementales sont indiquées.",
+          "advice": "Ajoutez 2 compétences comportementales, comme la rigueur ou le travail en équipe."
+        },
+        "languages": {
+          "ok": "Les langues demandées sont claires.",
+          "advice": "Précisez les langues demandées et leur niveau."
+        },
+        "responsibilities": {
+          "ok": "Les responsabilités sont bien détaillées.",
+          "advice": "Listez au moins 3 responsabilités, une par point."
+        },
+        "requirements": {
+          "ok": "Le profil recherché est clair.",
+          "advice": "Ajoutez au moins 2 exigences du profil."
+        },
+        "salary": {
+          "ok": "Le salaire est affiché : bravo pour la transparence.",
+          "advice": "Le salaire est caché. Les offres avec salaire reçoivent plus de candidatures."
+        },
+        "company": {
+          "ok": "L'entreprise est bien présentée.",
+          "advice": "Présentez l'entreprise en quelques lignes : les talents veulent savoir qui recrute."
+        },
+        "wording": {
+          "ok": "Aucun critère interdit ni demande de paiement.",
+          "warning": "Un mot de l'offre sera vérifié par Jumanly avant la mise en ligne. Relisez la description et les points."
+        }
+      },
+      "toFil": "Publier aussi dans le Fil",
+      "toFilLine": "Une publication au nom de l'entreprise, avec l'affiche de l'offre",
+      "feedHelp": "Un titre court et accrocheur, comme toute publication du Fil : 60 caractères au plus, sans majuscules partout ni émojis en rafale.",
+      "feedTitleDefault": "On recrute : {title}",
+      "feedTextDefault": "{org} cherche {count, plural, one {# personne} other {# personnes}} à {city}. Candidature gratuite sur Jumanly.",
+      "feedPreview": "Aperçu de la publication dans le Fil",
+      "feedNow": "à l'instant",
+      "posterKicker": "Offre d'emploi",
+      "posterApply": "Postuler",
+      "posterSee": "Voir l'offre",
+      "posterPdf": "PDF",
+      "sheet": "Fiche de poste à télécharger",
+      "sheetJumanly": "Générer la fiche Jumanly",
+      "sheetJumanlyLine": "Créée à partir de l'offre, à vos couleurs, avec le cachet et un numéro d'authentification",
+      "sheetOwn": "Joindre mon propre PDF",
+      "sheetOwnLine": "Votre fiche en PDF, 4 Mo au plus",
+      "sheetSending": "Vérification du fichier…",
+      "sheetDownload": "Télécharger la fiche Jumanly",
+      "sheetOpenOwn": "Ouvrir mon PDF",
+      "sheetNote": "Les talents pourront télécharger cette fiche depuis l'offre et depuis le Fil.",
+      "sheetErrors": {
+        "type": "Ce fichier n'est pas un PDF.",
+        "size": "Le PDF dépasse 4 Mo.",
+        "active": "Ce PDF contient du contenu actif (script, formulaire) : enregistrez-le de nouveau en PDF simple.",
+        "encrypted": "Ce PDF est protégé par un mot de passe.",
+        "unreadable": "Ce PDF ne peut pas être lu.",
+        "invalid": "Le PDF n'a pas pu être ajouté. Réessayez."
+      },
+      "orbiPoints": "Orbi a aussi proposé des responsabilités et un profil : vous les relirez aux étapes 4 et 5.",
+      "errors": {
+        "hard": "Ajoutez au moins une compétence technique.",
+        "responsibilities": "Ajoutez au moins une responsabilité.",
+        "point": "Écrivez quelques mots (3 caractères au moins).",
+        "points": "12 points au plus.",
+        "feedTitle": "Écrivez le titre de la publication, ou ne publiez pas dans le Fil.",
+        "logo": "Le logo n'a pas pu être ajouté : choisissez une image PNG ou JPEG de 4 Mo au plus."
+      }
+    }
+  },
+  "jobSheet": {
+    "kind": "Fiche de poste",
+    "facts": {
+      "contract": "Contrat",
+      "place": "Lieu",
+      "remote": "Mode de travail",
+      "openings": "Postes à pourvoir",
+      "experience": "Expérience",
+      "education": "Niveau d'études",
+      "closesAt": "Date limite"
+    },
+    "company": "L'entreprise",
+    "post": "Le poste",
+    "responsibilities": "Principales responsabilités",
+    "hardSkills": "Compétences techniques",
+    "softSkills": "Compétences comportementales",
+    "profile": "Profil recherché",
+    "languages": "Langues",
+    "salary": "Salaire",
+    "salaryPeriod": "par mois",
+    "salaryRange": "{min} à {max} USD",
+    "salaryFrom": "Dès {min} USD",
+    "applyTitle": "Candidatez gratuitement sur Jumanly",
+    "applyText": "Scannez le code ou ouvrez le lien : votre profil, votre CV et vos réponses partent en une fois.",
+    "applyFree": "Candidater · gratuit",
+    "seal": "ORIGINAL",
+    "sealCenter": "JUMANLY",
+    "codeLabel": "N° d'authentification",
+    "verify": "Vérifiez l'authenticité de cette fiche sur",
+    "issued": "Fiche émise par Jumanly le {date} pour {org}.",
+    "microtext": "JUMANLY DOCUMENT ORIGINAL",
+    "footer": "jumanly.io · assistant@jumanly.io · Learn. Grow. Connect.",
+    "page": "Page {page} sur {total}",
+    "contract": {
+      "cdi": "CDI",
+      "cdd": "CDD",
+      "stage": "Stage",
+      "mission": "Mission",
+      "freelance": "Freelance",
+      "alternance": "Alternance",
+      "volontariat": "Volontariat"
+    },
+    "remote": {
+      "onsite": "Sur place",
+      "hybrid": "Hybride",
+      "remote": "Télétravail"
+    },
+    "education": {
+      "none": "Aucun diplôme exigé",
+      "secondary": "Diplôme d'État",
+      "vocational": "Formation professionnelle",
+      "bachelor": "Licence",
+      "master": "Master",
+      "doctorate": "Doctorat"
+    },
+    "experience": "{years, plural, =0 {Débutant accepté} one {# an au moins} other {# ans au moins}}",
+    "openings": "{count, plural, one {# personne} other {# personnes}}",
+    "check": {
+      "title": "Vérifier une fiche de poste",
+      "seo": "Vérifiez qu'une fiche de poste a bien été émise par Jumanly.",
+      "authenticTitle": "Fiche authentique",
+      "authenticText": "Cette fiche de poste a bien été émise par Jumanly pour l'offre ci-dessous, toujours ouverte.",
+      "overTitle": "Fiche authentique, offre terminée",
+      "overText": "Cette fiche a bien été émise par Jumanly, mais l'offre n'accepte plus de candidatures.",
+      "unknownTitle": "Numéro inconnu.",
+      "unknownText": "Aucune fiche de Jumanly ne porte ce numéro. Vérifiez la saisie, ou méfiez-vous de ce document.",
+      "offer": "Offre",
+      "company": "Entreprise",
+      "companyVerified": "{name} · vérifiée par Jumanly",
+      "place": "Lieu",
+      "published": "Publiée le",
+      "closes": "Date limite",
+      "number": "Numéro",
+      "see": "Voir l'offre",
+      "warning": "Candidater sur Jumanly est toujours gratuit. Si l'on vous demande de payer pour postuler, signalez-le à assistant@jumanly.io."
     }
   },
   "phoneRhCandidatures": {

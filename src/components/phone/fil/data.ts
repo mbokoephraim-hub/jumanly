@@ -38,7 +38,17 @@ export type PostView = {
   title: string | null;
   body: string;
   image: { src: string; alt: string } | null;
-  job: { href: string; title: string; line: string; score: string | null } | null;
+  job: {
+    href: string;
+    title: string;
+    line: string;
+    score: string | null;
+    /** The offer's poster (no photo): salary, first skills, then Postuler · Voir · PDF. */
+    salary: string | null;
+    skills: string[];
+    applyHref: string | null;
+    sheetHref: string;
+  } | null;
   attachment: { mark: string; title: string; detail: string; tone: string } | null;
   /** « Republier avec une note »: the original post, with its author, under the note. */
   quoted: {
@@ -216,6 +226,14 @@ export async function feedWords(viewerId: string, now = new Date()) {
               remote: remote(item.job.remote),
             }),
             score: item.job.score === null ? null : t("score", { score: item.job.score }),
+            salary: item.job.salary
+              ? item.job.salary.max === null || item.job.salary.max === item.job.salary.min
+                ? t("offerSalaryFrom", { min: item.job.salary.min })
+                : t("offerSalary", { min: item.job.salary.min, max: item.job.salary.max })
+              : null,
+            skills: item.job.skills,
+            applyHref: item.job.open ? `/app/jobs/${item.job.slug}/postuler` : null,
+            sheetHref: `/api/offres/${item.job.slug}/fiche`,
           }
         : null,
       attachment: item.attachment
