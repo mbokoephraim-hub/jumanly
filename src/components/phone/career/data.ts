@@ -6,7 +6,7 @@ import { languageName } from "@/lib/dates";
 import { colorOf, PROFILE_PALETTE, type ProfileColor } from "@/lib/profile-colors";
 import { profileLanguageCodes } from "@/server/services/profile-view";
 import { siteUrl } from "@/lib/seo";
-import type { CareerHome } from "@/server/services/career-phone";
+import type { CareerHome, PlanTier } from "@/server/services/career-phone";
 import type { ProfileLanguage } from "@/server/services/profile";
 import { handleFromName } from "@/lib/social-links";
 import { companyTone } from "../explorer/data";
@@ -46,8 +46,10 @@ const TILE_GROUNDS = ["#0F3F37", "#1E4E79", "#3B2C66", "#5A3D0B", "#6B2A22"] as 
 export type CareerView = {
   /** The head, the person's own profile as others see it (docs/carriere-v3, captures 01). */
   person: ProfileView;
-  /** The name of the person's plan, in the cream tag after the name. */
+  /** The name of the person's plan: the label of its icon after the name. */
   planTag: string | null;
+  /** The paid level of the plan (1 to 3), one icon each; 0 (free) shows none. */
+  planTier: PlanTier;
   /** « CDI, Stage »: the contracts the person looks for. */
   contracts: string | null;
   availabilityKey: Availability;
@@ -602,6 +604,7 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
   return {
     person,
     planTag: home.plan,
+    planTier: home.planTier,
     contracts:
       home.profile.desiredContracts.length > 0
         ? home.profile.desiredContracts.slice(0, 3).map(contract).join(", ")

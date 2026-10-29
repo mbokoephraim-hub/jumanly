@@ -5185,3 +5185,12 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - Demande d'Ephraïm (captures) : sur chaque expérience, le nom de l'entreprise passe en majuscules ; le badge « Actuel » et le titre « Réalisations clés » disparaissent ; le type et la période tiennent sur une ligne (« Emploi · oct. 2026 – aujourd'hui · 1 mois · Kinshasa »), « aujourd'hui » suffit à dire que le poste est actuel.
 - En-tête des formulaires du profil au téléphone : une croix à la place d'« Annuler », une coche sur fond Lime à la place d'« Enregistrer » (noms gardés pour les lecteurs d'écran), le titre a plus de place.
 - Publié sans essai dans l'appli, à la demande d'Ephraïm (lint, types et build passés).
+
+
+## 2026-10-29 · Badges d'abonnement et haut du profil
+
+- La pastille « Premium » à côté du nom disparaît. Une petite icône sans texte montre le niveau payant : étincelle bleue (1er niveau payant), éclair violet (2e), couronne dorée (3e) ; rien pour la formule gratuite. Le niveau se lit au prix parmi les formules publiques payantes de la même famille (`planTier`), sans nom de forfait dans le code. L'icône garde le nom de la formule pour les lecteurs d'écran. Visible seulement sur « Mon profil », comme l'ancienne pastille (rien dans la vue des autres, pour ne pas distinguer les profils Free).
+- Sous la bio : « N abonnés » (personnes qui suivent dans le Fil) remplace « N connexions », puis l'entreprise ou le domaine, puis la disponibilité, sur une seule ligne aux textes réduits (ce qui ne tient pas glisse sur le côté). Même ligne sur le profil vu par les autres.
+- Recruteur : « Modifier mon profil » propose « Bio affichée sur mon profil » : mon accroche de recruteur ou ma bio de talent (`RecruiterProfile.bioSource`, migration `recruiter_bio_source`).
+- Le pourcentage du cercle « Profil complété » est plus petit pour que « 100 % » tienne.
+- Publié sans essai dans l'appli, à la demande d'Ephraïm.

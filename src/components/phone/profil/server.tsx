@@ -361,6 +361,7 @@ export async function profileView(
     bio: recruiter?.headline ?? person.headline,
     about: person.about ? { title: person.aboutTitle, text: person.about } : null,
     connections: person.connections,
+    followers: person.followers,
     contract: person.contract
       ? tl(`preferences.contract.${person.contract}` as "preferences.contract.cdi")
       : null,

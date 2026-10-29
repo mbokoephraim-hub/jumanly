@@ -8947,6 +8947,8 @@ Conventions :
 | `phoneProfile.time` | {hour} h {minute} |
 | `phoneProfile.timeLine` | · {time} |
 | `phoneProfile.connections` | {count, plural, one {<b>#</b> connexion} other {<b>#</b> connexions}} |
+| `phoneProfile.followers` | {count, plural, one {<b>#</b> abonné} other {<b>#</b> abonnés}} |
+| `phoneProfile.planMark` | Formule {plan} |
 | `phoneProfile.seeks` | Cherche : <b>{contract}</b> |
 | `phoneProfile.activity.now` | Actif maintenant |
 | `phoneProfile.activity.minutes` | Actif il y a {count} min |
@@ -16535,6 +16537,9 @@ Conventions :
 | `phoneRhCompte.edit.orbiText` | Je recrute les talents {domains} de {org}. Je réponds à chaque candidature. |
 | `phoneRhCompte.edit.orbiTextNoDomain` | Je recrute pour {org}. Je réponds à chaque candidature. |
 | `phoneRhCompte.edit.orbiNote` | Orbi propose, vous relisez avant d'enregistrer. |
+| `phoneRhCompte.edit.bioSource` | Bio affichée sur mon profil |
+| `phoneRhCompte.edit.bio.recruiter` | Mon accroche de recruteur |
+| `phoneRhCompte.edit.bio.talent` | Ma bio de talent |
 | `phoneRhCompte.edit.seeking` | Le candidat que je recherche |
 | `phoneRhCompte.edit.seekingPlaceholder` | Ex. : un ou une comptable junior, rigoureux, à l’aise avec Excel, disponible à Kinshasa. |
 | `phoneRhCompte.edit.seekingCount` | {count} / 400 |

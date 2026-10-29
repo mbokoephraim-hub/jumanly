@@ -360,6 +360,7 @@ export async function RhProfileEditScreen({ ctx, query }: { ctx: HireContext; qu
         orbi={orbi}
         initial={{
           headline: data.headline ?? "",
+          bioSource: data.bioSource,
           hiringNow: data.hiringNow,
           contactsFor: data.contactsFor,
           seeking: data.seeking,

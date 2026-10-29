@@ -18,7 +18,7 @@ import { PostSheets, type SendTarget } from "../fil/sheets";
 import { PhoneIcon } from "../icon";
 import { ExperienceLogo, ExperienceMeta, ExperiencePoints } from "../profil/experience-head";
 import { PhotoViewer } from "../profil/photo-viewer";
-import { AboutCard, ringOf, SOCIAL_PATHS, VerifiedMark } from "../profil/profile";
+import { AboutCard, PlanMark, ringOf, SOCIAL_PATHS, VerifiedMark } from "../profil/profile";
 import { AudienceStats } from "../profil/stats";
 import type { Availability, CareerView } from "./data";
 import { CAMERA, EYE, Heading, PEN, PLUS, Ring, Segment, SHARE, Svg, tint } from "./kit";
@@ -222,7 +222,9 @@ export function PhoneMyProfile({
         <h2 className="nb-cr-nom">
           {view.name}
           {person.verified ? <VerifiedMark label={tp("verified")} /> : null}
-          {view.planTag ? <span className="nb-pf-tag nb-cr-formule">{view.planTag}</span> : null}
+          {view.planTag ? (
+            <PlanMark tier={view.planTier} label={tp("planMark", { plan: view.planTag })} />
+          ) : null}
         </h2>
         <p className="nb-pf-alias">{person.handle}</p>
         {person.place ? (
@@ -236,30 +238,22 @@ export function PhoneMyProfile({
           </p>
         ) : null}
         {person.bio ? <p className="nb-pf-bio">{person.bio}</p> : null}
-        <div className="nb-pf-chips">
+        {/* « N abonnés · entreprise · disponibilité » on one compact line (Ephraïm 29/10/2026). */}
+        <div className="nb-pf-chips" data-ligne="">
           <span className="nb-pf-st">
             <Svg
               d="M9 4.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM2.5 19.5c.8-3.3 3.4-5 6.5-5s5.7 1.7 6.5 5M16 4.8a3.4 3.4 0 0 1 0 6.4M18.5 14.6c1.6.8 2.6 2.4 3 4.9"
-              size={13}
+              size={12}
             />
-            {tp.rich("connections", {
-              count: person.connections,
+            {tp.rich("followers", {
+              count: person.followers,
               b: (chunks) => <b>{chunks}</b>,
             })}
           </span>
           {person.domain ? (
             <span className="nb-pf-st" data-ambre="">
-              <Svg d="M3.5 8.5h17v11h-17zM8.5 8.5V5.5h7v3" size={13} />
+              <Svg d="M3.5 8.5h17v11h-17zM8.5 8.5V5.5h7v3" size={12} />
               {person.domain}
-            </span>
-          ) : null}
-          {view.contracts ? (
-            <span className="nb-pf-st" data-ciel="">
-              <Svg
-                d="M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM15.5 8.5l-2 5-5 2 2-5z"
-                size={13}
-              />
-              {tp.rich("seeks", { contract: view.contracts, b: (chunks) => <b>{chunks}</b> })}
             </span>
           ) : null}
           <button
@@ -271,6 +265,15 @@ export function PhoneMyProfile({
             <i style={{ background: AVAILABILITY_COLOR[availability] }} aria-hidden />
             {availabilityLabel}
           </button>
+          {view.contracts ? (
+            <span className="nb-pf-st" data-ciel="">
+              <Svg
+                d="M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM15.5 8.5l-2 5-5 2 2-5z"
+                size={12}
+              />
+              {tp.rich("seeks", { contract: view.contracts, b: (chunks) => <b>{chunks}</b> })}
+            </span>
+          ) : null}
         </div>
 
         <div className="nb-cr-carte nb-cr-complet">

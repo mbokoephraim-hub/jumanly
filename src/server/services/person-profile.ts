@@ -114,7 +114,7 @@ export async function personProfile(
     !connected &&
     viewerId !== userId;
 
-  const [circle, conversation, seen, certificates, level] = await Promise.all([
+  const [circle, conversation, seen, certificates, level, followers] = await Promise.all([
     db.connection.findMany({
       where: { status: "accepted", OR: [{ requesterId: userId }, { addresseeId: userId }] },
       select: { requesterId: true, addresseeId: true },
@@ -142,6 +142,8 @@ export async function personProfile(
       select: { id: true, code: true, courseTitle: true, skills: true },
     }),
     portfolioLevel(db, userId),
+    // « N abonnés » under the bio (Ephraïm 29/10/2026): who follows the person in the Fil.
+    db.feedFollow.count({ where: { userId } }),
   ]);
   const myConnections = new Set(
     [...mine.entries()].filter(([, kind]) => kind === "connected").map(([other]) => other),
@@ -185,6 +187,7 @@ export async function personProfile(
     contract: profile.desiredContracts[0] ?? null,
     lastSeen: seen,
     connections: circle.length,
+    followers,
     common: {
       count: commonIds.length,
       people: commonPeople.map((person) => ({
@@ -237,6 +240,7 @@ async function recruiterBlock(db: PrismaClient, userId: string) {
       select: {
         jobTitle: true,
         headline: true,
+        bioSource: true,
         hiringNow: true,
         seeking: true,
         domains: true,
@@ -270,7 +274,8 @@ async function recruiterBlock(db: PrismaClient, userId: string) {
     : 0;
   return {
     jobTitle: membership?.jobTitle?.trim() || profile?.jobTitle?.trim() || null,
-    headline: profile?.headline?.trim() || null,
+    // « Bio de mon compte talent » leaves the headline of the talent profile (Ephraïm 29/10/2026).
+    headline: profile?.bioSource === "talent" ? null : profile?.headline?.trim() || null,
     hiringNow: profile?.hiringNow ?? false,
     seeking: profile?.seeking?.trim() || null,
     domains: profile?.domains ?? [],
