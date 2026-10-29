@@ -72,6 +72,80 @@ const cvContentSchema = z.object({
     z.object({ code: z.string(), level: z.string(), cefr: z.string().optional() }),
   ),
   sections: z.array(z.object({ id: z.enum(cvSectionIds), visible: z.boolean() })),
+  /** « Réalisations » (Ephraïm, 29/10): one line each, printed as the template's key achievements. */
+  achievements: z.array(z.string()).default([]),
+  /** « Références » (Ephraïm, 29/10): people who can speak about the talent, printed last. */
+  references: z
+    .array(z.object({ name: z.string(), role: z.string(), contact: z.string() }))
+    .default([]),
+  /** The blocks added on 29/10 that the talent chose not to print. */
+  hiddenExtras: z.array(z.enum(["achievements", "references"])).default([]),
+});
+
+/** What the form « Mes informations » sends back: the whole content, bounded. */
+export const cvContentInputSchema = z.object({
+  info: z.object({
+    name: z.string().trim().max(120),
+    headline: z.string().trim().max(160),
+    email: z.string().trim().max(200),
+    city: z.string().trim().max(120),
+    country: z.string().trim().max(120),
+    showEmail: z.boolean(),
+    phone: z.string().trim().max(40),
+  }),
+  summary: z.string().trim().max(1500),
+  experiences: z
+    .array(
+      z.object({
+        title: z.string().trim().max(160),
+        company: z.string().trim().max(160),
+        location: z.string().trim().max(120),
+        start: z.string().regex(/^(\d{4}-\d{2})?$/),
+        end: z
+          .string()
+          .regex(/^\d{4}-\d{2}$/)
+          .nullable(),
+        bullets: z.array(z.string().trim().max(400)).max(12),
+      }),
+    )
+    .max(20),
+  education: z
+    .array(
+      z.object({
+        degree: z.string().trim().max(160),
+        school: z.string().trim().max(160),
+        field: z.string().trim().max(160),
+        startYear: z.number().int().min(1950).max(2100).nullable(),
+        endYear: z.number().int().min(1950).max(2100).nullable(),
+      }),
+    )
+    .max(15),
+  skills: z
+    .array(
+      z.object({ name: z.string().trim().min(1).max(80), level: z.number().int().min(1).max(4) }),
+    )
+    .max(40),
+  languages: z
+    .array(
+      z.object({
+        code: z.string().trim().min(1).max(40),
+        level: z.string().max(20),
+        cefr: z.string().max(4).optional(),
+      }),
+    )
+    .max(12),
+  sections: z.array(z.object({ id: z.enum(cvSectionIds), visible: z.boolean() })),
+  achievements: z.array(z.string().trim().max(300)).max(12),
+  references: z
+    .array(
+      z.object({
+        name: z.string().trim().max(120),
+        role: z.string().trim().max(160),
+        contact: z.string().trim().max(160),
+      }),
+    )
+    .max(6),
+  hiddenExtras: z.array(z.enum(["achievements", "references"])),
 });
 
 export type CvContent = z.infer<typeof cvContentSchema>;
@@ -95,6 +169,9 @@ export const emptyCv: CvContent = {
   skills: [],
   languages: [],
   sections: cvSectionIds.map((id) => ({ id, visible: true })),
+  achievements: [],
+  references: [],
+  hiddenExtras: [],
 };
 
 export function parseCv(value: Prisma.JsonValue): CvContent {
@@ -150,6 +227,9 @@ export function cvFromProfile(profile: FullProfile, previous?: CvContent): CvCon
     skills: profile.skills.map((entry) => ({ name: entry.skill.name, level: entry.level })),
     languages: parseProfileLanguages(profile.languages),
     sections: previous?.sections ?? emptyCv.sections,
+    achievements: previous?.achievements ?? [],
+    references: previous?.references ?? [],
+    hiddenExtras: previous?.hiddenExtras ?? [],
   };
 }
 

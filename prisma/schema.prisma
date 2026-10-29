@@ -1311,6 +1311,9 @@ model Document {
   /// Pages counted at the last export.
   pageCount       Int?
   isPrimary       Boolean       @default(false)
+  /// A colour the talent gives a CV to tell it apart in the library (Ephraïm, 29/10): a key of
+  /// PROFILE_PALETTE (src/lib/profile-colors.ts), null for none.
+  colorTag        String?
   /// Offer a CV was adapted to (« Adapter mon CV à cette offre »): proposed first when applying.
   /// A plain id, not a relation: the CV stays if the offer goes.
   adaptedForJobId String?

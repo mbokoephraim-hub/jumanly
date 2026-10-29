@@ -42,6 +42,7 @@ function labels(language: "fr" | "en"): CvTextLabels {
     levels: cv.levels[language] as CvTextLabels["levels"],
     languageLevels: cv.languageLevels[language],
     present: cv.present[language],
+    references: cv.references[language],
     month: (value) => value,
     languageName: (code) => code.toUpperCase(),
     location: (city, country) => [city, country].filter(Boolean).join(", "),

@@ -5019,3 +5019,11 @@ bibliothèque, et se supprime.
 ## 2026-10-28 · Premier administrateur sans se déconnecter
 
 - Ephraïm n'arrivait pas à devenir administrateur : la promotion par `ADMIN_BOOTSTRAP_EMAIL` ne se faisait qu'à une nouvelle connexion, et une session dure 30 jours. Désormais, ouvrir `/admin` avec une adresse listée et vérifiée suffit (`src/proxy.ts`), toujours journalisé.
+
+## 2026-10-29 · Créer un CV : « Mes informations », aperçu, bibliothèque
+
+- Demande d'Ephraïm : après le modèle, une étape « Mes informations » en blocs déjà remplis depuis le profil (nom, titre et contacts ; profil professionnel ; réalisations ; compétences ; expériences ; formation ; langues ; références), modifiables sur place, avec l'aperçu du CV qui se remplit en direct. Enregistrement automatique sur ce CV seulement (le profil ne change pas), puis « Continuer vers l'aperçu ».
+- Barre d'étapes : Modèle · Mes informations · Aperçu. « Couleurs et police » s'ouvre depuis l'aperçu. L'aperçu a « Enregistrer », « Télécharger en PDF » (même rendu Chromium que l'aperçu, couleurs et mise en page comprises) et « Terminer ».
+- Nouveaux blocs du CV : `achievements` (imprimées comme « Réalisations clés », juste après le profil si le modèle ne les place pas) et `references` (bloc « Références », en fin de CV). Les réalisations sont proposées depuis le portfolio tant que le CV n'en a pas.
+- Bibliothèque de CV (onglet CV de Carrière) : « Sélectionner » pour choisir plusieurs CV (ou tous) et les supprimer d'un coup ; menu ··· avec couleur de repère (`Document.colorTag`, migration `20261029090000_cv_color_tag`), « Renommer » (idées : CV principal, CV stage…), « Utiliser par défaut pour postuler », supprimer.
+- Hors de ce travail : l'éditeur de CV sur ordinateur n'édite pas encore réalisations et références (elles s'impriment quand même).

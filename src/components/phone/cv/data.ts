@@ -8,7 +8,7 @@ import { db } from "@/server/db";
 import { resolvePlan } from "@/server/entitlements";
 import { templatesAccess, TEMPLATES_ACCESS_KEY } from "@/server/services/cv";
 import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
-import { CV_STEPS, type CvStep } from "./frame";
+import { barStepOf, CV_BAR_STEPS, CV_STEPS, type CvStep } from "./frame";
 
 export type TemplateLevel = "free" | "starter" | "pro";
 
@@ -74,7 +74,7 @@ export async function templateChoices(userId: string) {
   };
 }
 
-/** The four steps of a CV, each one opening its own screen. */
+/** The steps of a CV, each one opening its own screen. */
 export async function stepsOf(current: CvStep, cvId: string | null) {
   const t = await getTranslations("phoneCv.steps");
   const hrefs = Object.fromEntries(
@@ -85,6 +85,9 @@ export async function stepsOf(current: CvStep, cvId: string | null) {
     hrefs,
     names: Object.fromEntries(CV_STEPS.map((step) => [step, t(step)])) as Record<CvStep, string>,
     label: t("label"),
-    count: t("count", { step: CV_STEPS.indexOf(current) + 1, all: CV_STEPS.length }),
+    count: t("count", {
+      step: CV_BAR_STEPS.indexOf(barStepOf(current)) + 1,
+      all: CV_BAR_STEPS.length,
+    }),
   };
 }

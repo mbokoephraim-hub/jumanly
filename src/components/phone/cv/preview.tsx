@@ -98,6 +98,7 @@ export function CvPreviewStep({
   const [explaining, setExplaining] = useState(false);
   const [name, setName] = useState(title);
   const [preparing, setPreparing] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [adding, setAdding] = useState<{ counts: AddCounts; total: number } | null>(null);
 
   const fail = (message = t("error")) => showToast({ message, tone: "error" });
@@ -145,6 +146,11 @@ export function CvPreviewStep({
       showToast({ message: t("preview.added", { count: result.added }) });
       router.refresh();
     });
+  // Everything is already kept on the server: « Enregistrer » says so and names the CV.
+  const keep = () => {
+    setSaved(true);
+    showToast({ message: t("preview.savedIn", { title }) });
+  };
   const finish = () => {
     showToast({ message: t("preview.saved") });
     router.replace("/app/career/cv?onglet=cv");
@@ -155,21 +161,35 @@ export function CvPreviewStep({
     <CvFrame
       title={t("preview.title")}
       sub={t("preview.sub")}
-      back={{ href: `/app/career/cv/${cvId}?etape=style`, label: t("back") }}
+      back={{ href: `/app/career/cv/${cvId}?etape=contenu`, label: t("back") }}
       steps={steps}
       bottom={
         <div className="nb-cv-fin">
-          <button
-            type="button"
-            className="nb-bouton nb-cv-principal"
-            data-plein=""
-            data-large=""
-            disabled={empty || preparing}
-            aria-busy={preparing}
-            onClick={download}
-          >
-            {empty ? t("preview.pdfEmpty") : preparing ? t("preview.preparing") : t("preview.pdf")}
-          </button>
+          <div className="nb-cv-deux nb-cv-fin-deux">
+            <button
+              type="button"
+              className="nb-bouton"
+              data-contour=""
+              disabled={empty || saved}
+              onClick={keep}
+            >
+              {saved ? t("preview.savedButton") : t("preview.save")}
+            </button>
+            <button
+              type="button"
+              className="nb-bouton nb-cv-principal"
+              data-plein=""
+              disabled={empty || preparing}
+              aria-busy={preparing}
+              onClick={download}
+            >
+              {empty
+                ? t("preview.pdfEmpty")
+                : preparing
+                  ? t("preview.preparing")
+                  : t("preview.pdf")}
+            </button>
+          </div>
           <button type="button" className="nb-bouton" data-contour="" onClick={finish}>
             {t("preview.finish")}
           </button>
@@ -255,6 +275,10 @@ export function CvPreviewStep({
       </ul>
 
       <div className="nb-cv-reglages">
+        <Link href={`/app/career/cv/${cvId}?etape=style`} className="nb-cv-reglage">
+          <span>{t("preview.style")}</span>
+          <b>{t("preview.styleValue")}</b>
+        </Link>
         <button type="button" className="nb-cv-reglage" onClick={() => setNaming(true)}>
           <span>{t("preview.name")}</span>
           <b>{t("preview.nameValue", { title })}</b>
