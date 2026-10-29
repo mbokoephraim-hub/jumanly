@@ -1002,6 +1002,8 @@ export const phoneNotificationFilters = {
     "feedLike",
     "feedRepost",
     "feedQuote",
+    "connectionRequest",
+    "connectionAccepted",
   ],
 } as const;
 export type PhoneNotificationFilter = keyof typeof phoneNotificationFilters;

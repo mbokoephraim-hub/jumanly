@@ -2,6 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element -- photos of the conversations: small, already reduced */
 import "@/styles/phone-onglets.css";
+import "@/styles/phone-connexions.css";
 import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -357,7 +358,7 @@ export function PhoneMessages({ view }: { view: InboxView }) {
   const askedQuery = root ? params.get("q") : null;
   useEffect(() => {
     if (askedFilter === "demandes") {
-      router.replace("/app/messages/demandes");
+      router.replace("/app/messages/connexions");
       return;
     }
     if (askedQuery) {
@@ -488,6 +489,29 @@ export function PhoneMessages({ view }: { view: InboxView }) {
       <header className="nb-tete-onglet">
         <h1>{tc("title")}</h1>
         <div>
+          <Link
+            href="/app/messages/connexions"
+            className="nb-ch-rb nb-ch-cx"
+            aria-label={tc("connexions", { count: pending.length })}
+            data-attente={pending.length ? "" : undefined}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
+            >
+              <circle cx="9" cy="8" r="3.5" />
+              <path d="M2.5 20c.6-3.6 3.3-5.8 6.5-5.8 1.6 0 3 .5 4.1 1.4" />
+              <path d="M18 13v7M14.5 16.5h7" />
+            </svg>
+            {pending.length ? <span className="nb-ch-cx-n">{fmtCount(pending.length)}</span> : null}
+          </Link>
           <button
             type="button"
             className="nb-ch-rb"
@@ -598,7 +622,7 @@ export function PhoneMessages({ view }: { view: InboxView }) {
           </div>
           <div id="ch-panneau" role="tabpanel" aria-labelledby={`ch-${tab}`}>
             {(tab === "tout" || tab === "connexions") && pending.length ? (
-              <Link href="/app/messages/demandes" className="nb-ch-ligne nb-ch-demandes">
+              <Link href="/app/messages/connexions" className="nb-ch-ligne nb-ch-demandes">
                 <span className="nb-ch-pile" aria-hidden>
                   {pending.slice(0, 2).map((who) => (
                     <FilAvatar

@@ -151,7 +151,7 @@ export async function chatPulse(
   conversationId: string | null,
   now = new Date(),
 ): Promise<ChatPulse> {
-  const [me, conversations] = await Promise.all([
+  const [me, conversations, requests] = await Promise.all([
     db.user.findUnique({ where: { id: userId }, select: { showPresence: true } }),
     db.conversation.findMany({
       where: talentWhere(userId),
@@ -170,6 +170,8 @@ export async function chatPulse(
         },
       },
     }),
+    // A connection request received changes the version too: the Chat's icon shows it at once.
+    db.connection.count({ where: { addresseeId: userId, status: "pending" } }),
     touchPresence(db, userId, now),
   ]);
   const typing: string[] = [];
@@ -211,7 +213,7 @@ export async function chatPulse(
   return {
     typing: [...new Set(typing)],
     online: [...online],
-    version: `${conversations.length}:${latest}${detail}`,
+    version: `${conversations.length}:${latest}:${requests}${detail}`,
   };
 }
 

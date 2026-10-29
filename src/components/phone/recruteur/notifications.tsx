@@ -43,6 +43,8 @@ const TAB_OF: Partial<Record<string, RhNotifTab>> = {
   feedLike: "reseau",
   feedRepost: "reseau",
   feedQuote: "reseau",
+  connectionRequest: "reseau",
+  connectionAccepted: "reseau",
 };
 
 /** The member's notifications, grouped as on the planches: today, yesterday, this week, earlier. */

@@ -11089,6 +11089,61 @@ Conventions :
 | `phoneChat.duration.long` | {minutes} min {seconds} s |
 | `phoneChat.duration.hours` | {hours} h {minutes} min |
 
+### Connexions du Chat
+
+*Demandé par Ephraïm le 29/10/2026 : l’icône Connexions à côté du crayon et de la loupe du Chat, avec le nombre de demandes en attente ; la page des demandes reçues (accepter ou refuser), des demandes envoyées, des suggestions (les personnes connectées à vos connexions, puis celles qui partagent vos compétences) et de mes connexions. Une demande reçue et une demande acceptée arrivent dans les notifications.*
+
+| Clé | Texte |
+|---|---|
+| `phoneChat.connexions` | {count, plural, =0 {Connexions} one {Connexions, # demande en attente} other {Connexions, # demandes en attente}} |
+| `phoneCx.title` | Connexions |
+| `phoneCx.back` | Retour |
+| `phoneCx.error` | Cela n’a pas fonctionné. Réessayez dans un instant. |
+| `phoneCx.hero.title` | Votre réseau |
+| `phoneCx.hero.count` | {count, plural, =0 {Pas encore de connexion} one {# connexion} other {# connexions}} |
+| `phoneCx.hero.pending` | {count, plural, one {# demande à traiter} other {# demandes à traiter}} |
+| `phoneCx.hero.sent` | {count, plural, one {# demande envoyée} other {# demandes envoyées}} |
+| `phoneCx.tabs` | Trier les connexions |
+| `phoneCx.tab.demandes` | Demandes |
+| `phoneCx.tab.suggestions` | Suggestions |
+| `phoneCx.tab.reseau` | Mes connexions |
+| `phoneCx.mutual` | {rest, plural, =0 {{name} en commun} one {{name} et # autre en commun} other {{name} et # autres en commun}} |
+| `phoneCx.field` | Compétences proches des vôtres |
+| `phoneCx.quoted` | « {text} » |
+| `phoneCx.profile` | Voir le profil de {name} |
+| `phoneCx.accept` | Accepter |
+| `phoneCx.refuse` | Refuser |
+| `phoneCx.acceptLabel` | Accepter la demande de {name} |
+| `phoneCx.refuseLabel` | Refuser la demande de {name} |
+| `phoneCx.accepted` | Vous êtes connectés : {name} est maintenant dans votre Chat. |
+| `phoneCx.acceptedToast` | {name} est maintenant dans vos connexions. |
+| `phoneCx.write` | Écrire à {name} |
+| `phoneCx.refused` | Demande refusée. {name} n’est pas prévenu·e. |
+| `phoneCx.none.title` | Aucune demande en attente |
+| `phoneCx.none.text` | Quand quelqu’un vous demande en connexion, vous le voyez ici et dans vos notifications. |
+| `phoneCx.sentTitle` | Demandes envoyées |
+| `phoneCx.waiting` | En attente · {ago} |
+| `phoneCx.withdraw` | Annuler |
+| `phoneCx.withdrawLabel` | Annuler la demande envoyée à {name} |
+| `phoneCx.withdrawn` | Demande annulée |
+| `phoneCx.maybe` | Vous les connaissez peut-être |
+| `phoneCx.seeAll` | Tout voir |
+| `phoneCx.suggest.sub` | D’abord les personnes connectées à vos connexions, puis celles qui partagent vos compétences. |
+| `phoneCx.suggest.none` | Pas encore de suggestion. Connectez-vous à quelques personnes depuis Explorer : leurs connexions apparaîtront ici. |
+| `phoneCx.connect` | Se connecter |
+| `phoneCx.connectLabel` | Se connecter avec {name} |
+| `phoneCx.sentOk` | Demande envoyée |
+| `phoneCx.connected` | Connectés |
+| `phoneCx.sentToast` | Demande envoyée à {name}. |
+| `phoneCx.hide` | Ne plus proposer {name} |
+| `phoneCx.explore` | Trouver des personnes dans Explorer |
+| `phoneCx.orbi` | Orbi propose, vous décidez : personne ne reçoit de demande tant que vous ne touchez pas « Se connecter ». |
+| `phoneCx.network.search` | Rechercher une connexion |
+| `phoneCx.network.since` | Connectés {ago} |
+| `phoneCx.network.none` | Pas encore de connexion. Acceptez une demande ou connectez-vous à une suggestion. |
+| `phoneCx.network.noMatch` | Aucune connexion ne correspond à « {q} ». |
+| `phoneCx.note` | Une fois connectés, vous pouvez vous écrire dans le Chat. Refuser ou annuler ne prévient personne. |
+
 ### Refonte recruteur · Cadre mobile (lot 1)
 
 *Coquille de l'espace recruteur (docs/refonte-mobile/BRIEF-RECRUTEUR, lot 1) : organisation active, barre du bas À traiter · Offres · Orbi · Candidats · Messages, Compte RH, premiers pas.*
@@ -18814,6 +18869,8 @@ Conventions :
 | `notifications.item.feedLike` | {name} a aimé votre publication. |
 | `notifications.item.feedRepost` | {name} a republié votre publication. |
 | `notifications.item.feedQuote` | {name} a cité votre publication. |
+| `notifications.item.connectionRequest` | {name} vous demande en connexion. |
+| `notifications.item.connectionAccepted` | {name} a accepté votre demande de connexion : vous pouvez vous écrire. |
 | `notifications.item.unread` | Non lue |
 
 ### Notifications · Talent (par événement)

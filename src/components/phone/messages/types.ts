@@ -202,3 +202,19 @@ export type FoundMessage = {
   text: string;
   photo: string | null;
 };
+
+/** « Awa et 2 autres connexions en commun », with up to three faces. */
+export type MutualView = {
+  count: number;
+  text: string;
+  faces: { key: string; who: WhoView }[];
+};
+
+/** The page « Connexions » of the Chat (Ephraïm 29/10/2026). */
+export type ConnexionsView = {
+  received: (RequestView & { ago: string; mutual: MutualView })[];
+  orgRequests: OrgRequestView[];
+  sent: { id: string; who: WhoView; ago: string }[];
+  connections: (ConnectionView & { since: string; mutual: MutualView })[];
+  suggestions: { who: WhoView; mutual: MutualView; reason: "mutual" | "field" }[];
+};
