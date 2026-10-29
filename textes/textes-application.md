@@ -8009,6 +8009,11 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phone.nav.formation` | Hub |
 | `phone.nav.messages` | Chat |
 | `phone.nav.messagesUnread` | Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}} |
+| `phone.nav.filNew` | Fil, {count, plural, one {# nouvelle publication} other {# nouvelles publications}} |
+| `phone.nav.explorerNew` | Explorer, {count, plural, one {# nouvelle offre} other {# nouvelles offres}} |
+| `phone.nav.carriereNew` | Carrière, {count, plural, one {# nouvelle sur vos candidatures} other {# nouvelles sur vos candidatures}} |
+| `phone.nav.many` | 5+ |
+| `phone.refresh.loading` | Actualisation… |
 | `phone.back` | Retour |
 | `phone.close` | Fermer |
 | `phone.me` | Mon profil |
@@ -15173,6 +15178,7 @@ Conventions :
 | `phoneRh.nav.candidaturesNew` | Candidatures, {count, plural, one {# nouvelle} other {# nouvelles}} |
 | `phoneRh.nav.chat` | Chat |
 | `phoneRh.nav.messagesUnread` | Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}} |
+| `phoneRh.nav.filNew` | Fil, {count, plural, one {# nouvelle publication} other {# nouvelles publications}} |
 | `phoneRh.head.account` | Mon compte |
 | `phoneRh.head.profile` | Mon profil |
 | `phoneRh.head.settings` | Paramètres |

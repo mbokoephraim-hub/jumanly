@@ -2,6 +2,7 @@
 
 import "@/styles/phone-onglets.css";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useTransition, type ReactNode } from "react";
 import { showToast } from "@/components/motion/toaster";
@@ -191,6 +192,16 @@ function FilBell({ initial }: { initial: number }) {
     setKnown(initial);
     setUnread(initial);
   }
+
+  // Back on the Fil after reading the notifications: the count is asked again at once, not in a
+  // minute (Ephraïm 29/10/2026: the bell stayed lit over an empty list).
+  const pathname = usePathname();
+  const back = useRef(pathname);
+  useEffect(() => {
+    if (back.current === pathname) return;
+    back.current = pathname;
+    window.dispatchEvent(new Event("jm:notifications-lues"));
+  }, [pathname]);
 
   useEffect(() => {
     const load = async () => {
