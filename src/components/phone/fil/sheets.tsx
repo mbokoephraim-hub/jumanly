@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { showToast } from "@/components/motion/toaster";
+import { FEED_BODY_MAX } from "@/server/services/feed-limits";
 import {
   deletePostAction,
   editPostAction,
@@ -12,17 +12,18 @@ import {
   reportPostAction,
   repostAction,
   savePostAction,
-  sendPostAction,
 } from "@/server/actions/feed";
 import { PhoneIcon, type phoneIcons } from "../icon";
 import { PhoneSheet } from "../sheet";
-import { FilAvatar } from "./avatar";
 import type { PostView } from "./data";
 import type { PostSheet } from "./post";
 import { PostTextFields } from "./post-fields";
+import { NoteBody, ShareBody } from "./share";
 
 export type SendTarget = {
   conversationId: string;
+  /** Already writes with the person: shown first. */
+  talked: boolean;
   name: string;
   initials: string;
   image: string | null;
@@ -34,8 +35,8 @@ const REASONS = ["scam", "harassment", "misinformation", "inappropriate", "other
 
 /**
  * The sheets of a post (planche Fil, rangée 06): ··· (voir le profil, enregistrer, copier le lien,
- * ne plus voir ce type de publication, signaler), the reasons of a report, Republier · Citer ·
- * Envoyer, and « Envoyer à » one of the person's connections.
+ * ne plus voir ce type de publication, signaler), the reasons of a report, « Republier » (directly
+ * or with a note, like LinkedIn) and « Partager » (to connections or elsewhere, like Instagram).
  */
 export function PostSheets({
   post,
@@ -77,7 +78,7 @@ export function PostSheets({
     icon: "partager",
     title: t("menu.share"),
     sub: t("menu.shareSub"),
-    run: () => onSheet("reshare"),
+    run: () => onSheet("share"),
   };
   const menu: Row[] = post.mine
     ? [
@@ -191,29 +192,29 @@ export function PostSheets({
       showToast({ message: t(result.value ? "toast.reposted" : "toast.unreposted") });
     });
 
-  const send = (target: SendTarget) =>
-    act(async () => {
-      const result = await sendPostAction(post.id, target.conversationId);
-      onClose();
-      if (!result.ok) return failed();
-      showToast({ message: t("toast.sentTo", { name: target.name.split(" ")[0] ?? target.name }) });
-    });
-
   const label =
     sheet === "edit"
       ? t("edit.title")
       : sheet === "report"
         ? t("report.title")
-        : sheet === "send"
-          ? t("send.title")
-          : sheet === "reshare"
-            ? t("shareSheet")
-            : post.mine
-              ? t("menu.mine")
-              : t("menu.title", { name: post.author.name });
+        : sheet === "share"
+          ? t("shareTo.title")
+          : sheet === "note"
+            ? t("note.title")
+            : sheet === "reshare"
+              ? t("reshare.title")
+              : post.mine
+                ? t("menu.mine")
+                : t("menu.title", { name: post.author.name });
 
   return (
-    <PhoneSheet open={open} onClose={onClose} label={label} closeLabel={tc("close")}>
+    <PhoneSheet
+      open={open}
+      onClose={onClose}
+      label={label}
+      closeLabel={tc("close")}
+      className={sheet === "share" ? "nb-feuille-mi nb-pt-feuille" : undefined}
+    >
       {sheet === "menu" ? (
         <>
           <p className="nb-meta nb-fil-feuille-t">{label}</p>
@@ -270,6 +271,7 @@ export function PostSheets({
       ) : null}
       {sheet === "reshare" ? (
         <>
+          <p className="nb-meta nb-fil-feuille-t">{t("reshare.title")}</p>
           <button type="button" className="nb-opt nb-fil-opt" onClick={reshare} disabled={pending}>
             <PhoneIcon name="republier" size={22} />
             <span>
@@ -277,73 +279,22 @@ export function PostSheets({
               <small>{post.reposted ? t("reshare.undoSub") : t("reshare.doSub")}</small>
             </span>
           </button>
-          <Link
-            href={`/app/fil/publier?citer=${post.id}`}
-            className="nb-opt nb-fil-opt"
-            onClick={onClose}
-          >
-            <PhoneIcon name="citer" size={22} />
+          <button type="button" className="nb-opt nb-fil-opt" onClick={() => onSheet("note")}>
+            <PhoneIcon name="modifier" size={22} />
             <span>
               {t("reshare.quote")}
               <small>{t("reshare.quoteSub")}</small>
             </span>
-          </Link>
-          <button type="button" className="nb-opt nb-fil-opt" onClick={() => onSheet("send")}>
-            <PhoneIcon name="repondre" size={22} />
-            <span>
-              {t("reshare.send")}
-              <small>{t("reshare.sendSub")}</small>
-            </span>
           </button>
         </>
       ) : null}
-      {sheet === "send" ? (
-        <>
-          <div className="nb-feuille-titre">
-            <button
-              type="button"
-              className="nb-retour"
-              aria-label={tc("back")}
-              data-retour=""
-              onClick={() => onSheet("reshare")}
-            >
-              <PhoneIcon name="retour" size={20} stroke={2} />
-            </button>
-            <h2>{t("send.title")}</h2>
-          </div>
-          {targets.length === 0 ? (
-            <p className="nb-meta nb-fil-feuille-t">{t("send.none")}</p>
-          ) : null}
-          {targets.map((target) => (
-            <div key={target.conversationId} className="nb-opt nb-fil-opt nb-fil-envoi">
-              <FilAvatar
-                initials={target.initials}
-                image={target.image}
-                tone={target.tone}
-                org={false}
-                size={44}
-              />
-              <span>
-                {target.name}
-                <small>{target.line}</small>
-              </span>
-              <button
-                type="button"
-                className="nb-fil-envoyer"
-                onClick={() => send(target)}
-                disabled={pending}
-                aria-label={t("send.to", { name: target.name })}
-              >
-                {t("send.button")}
-              </button>
-            </div>
-          ))}
-          <Link href="/app/messages" className="nb-fil-ouvrir" onClick={onClose}>
-            {t("send.open")}
-          </Link>
-        </>
+      {sheet === "note" ? (
+        <NoteBody key={post.id} post={post} onBack={() => onSheet("reshare")} onDone={onClose} />
       ) : null}
-      {sheet !== "send" && sheet !== "edit" ? (
+      {sheet === "share" ? (
+        <ShareBody key={post.id} post={post} targets={targets} onClose={onClose} />
+      ) : null}
+      {sheet === "menu" || sheet === "report" || sheet === "reshare" ? (
         <button type="button" className="nb-annuler" onClick={onClose}>
           {tc("cancel")}
         </button>
@@ -359,13 +310,15 @@ function EditPost({ post, onDone }: { post: PostView; onDone: () => void }) {
   const [title, setTitle] = useState(post.title ?? "");
   const [body, setBody] = useState(post.body);
   const [pending, start] = useTransition();
+  // The note of a repost has no title: its text only.
+  const note = Boolean(post.quoted && !post.title);
   const save = () => {
-    if (!title.trim()) {
-      showToast({ message: t("edit.empty"), tone: "error" });
+    if (note ? !body.trim() : !title.trim()) {
+      showToast({ message: t(note ? "note.empty" : "edit.empty"), tone: "error" });
       return;
     }
     start(async () => {
-      const result = await editPostAction({ id: post.id, title, body });
+      const result = await editPostAction({ id: post.id, title: note ? "" : title, body });
       if (!result.ok) {
         showToast({ message: t("toast.error"), tone: "error" });
         return;
@@ -382,14 +335,30 @@ function EditPost({ post, onDone }: { post: PostView; onDone: () => void }) {
         save();
       }}
     >
-      <h2 className="nb-fil-modif-t">{t("edit.title")}</h2>
-      <PostTextFields
-        id={`fil-modif-${post.id}`}
-        title={title}
-        body={body}
-        onTitle={setTitle}
-        onBody={setBody}
-      />
+      <h2 className="nb-fil-modif-t">{note ? t("edit.noteTitle") : t("edit.title")}</h2>
+      {note ? (
+        <>
+          <label className="sr-only" htmlFor={`fil-modif-${post.id}-note`}>
+            {t("note.label")}
+          </label>
+          <textarea
+            id={`fil-modif-${post.id}-note`}
+            className="nb-fil-champ"
+            value={body}
+            onChange={(event) => setBody(event.target.value)}
+            maxLength={FEED_BODY_MAX}
+            rows={4}
+          />
+        </>
+      ) : (
+        <PostTextFields
+          id={`fil-modif-${post.id}`}
+          title={title}
+          body={body}
+          onTitle={setTitle}
+          onBody={setBody}
+        />
+      )}
       <div className="nb-fil-modif-boutons">
         <button type="button" className="nb-annuler" onClick={onDone}>
           {tc("cancel")}

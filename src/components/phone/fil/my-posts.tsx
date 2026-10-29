@@ -28,7 +28,7 @@ export function MyPosts({ posts, targets }: { posts: PostView[]; targets: SendTa
       ) : null}
       {shown.map((post) => (
         <PostCard
-          key={post.id}
+          key={post.key}
           post={post}
           from="mes-publications"
           onSheet={(target, sheet) => setOpen({ post: target, sheet })}

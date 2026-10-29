@@ -1,6 +1,7 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element -- photos of a conversation, served privately */
+import "@/styles/fil-partage.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
@@ -158,6 +159,31 @@ function Content({
             </Link>
           ) : null}
         </span>
+      );
+    case "post":
+      if (bubble.gone) return <p className="nb-ms-texte nb-ms-post-parti">{bubble.text}</p>;
+      return (
+        <Link href={bubble.href} className="nb-ms-post" aria-label={bubble.label}>
+          <span className="nb-ms-post-h">
+            <FilAvatar
+              initials={bubble.initials}
+              image={bubble.image}
+              tone={bubble.tone}
+              org={bubble.org}
+              size={28}
+              square
+            />
+            <b>{bubble.name}</b>
+          </span>
+          {bubble.photo ? (
+            <img src={bubble.photo.src} alt={bubble.photo.alt} loading="lazy" />
+          ) : null}
+          <span className="nb-ms-post-c">
+            {bubble.title ? <b>{bubble.title}</b> : null}
+            {bubble.body ? <span>{bubble.body}</span> : null}
+            <span className="nb-ms-post-v">{t("seePost")}</span>
+          </span>
+        </Link>
       );
     case "org":
       return (

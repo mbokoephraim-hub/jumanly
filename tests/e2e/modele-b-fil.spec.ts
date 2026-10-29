@@ -61,17 +61,22 @@ test.describe("Modèle B · Fil au téléphone", () => {
     await save.click();
     await expect(save).toHaveAttribute("aria-pressed", "false");
 
-    // Envoyer opens Republier · Citer · « Envoyer à une connexion », then the list of connections.
-    await baobab.getByRole("button", { name: "Envoyer", exact: true }).click();
-    const reshare = page.getByRole("dialog", { name: "Partager" });
-    await expect(reshare.getByRole("button", { name: /^Republier/ })).toBeVisible();
-    await reshare.getByRole("button", { name: /Envoyer à une connexion/ }).click();
-    const send = page.getByRole("dialog", { name: "Envoyer à" });
-    await expect(send.getByRole("button", { name: "Envoyer" }).first()).toBeVisible();
-    await expect(send.getByRole("link", { name: "Ouvrir Messages" })).toBeVisible();
-    // With many connections the sheet covers the veil: Échap closes it.
+    // Republier offers to repost directly or with a note (like LinkedIn).
+    await baobab.getByRole("button", { name: /^Republier/ }).click();
+    const reshare = page.getByRole("dialog", { name: "Republier" });
+    await expect(reshare.getByRole("button", { name: /^Republier/ }).first()).toBeVisible();
+    await expect(reshare.getByRole("button", { name: /Republier avec une note/ })).toBeVisible();
     await page.keyboard.press("Escape");
-    await expect(send).toBeHidden();
+    await expect(reshare).toBeHidden();
+
+    // Partager: search, the connections to choose, and the ways to share elsewhere.
+    await baobab.getByRole("button", { name: "Partager", exact: true }).click();
+    const share = page.getByRole("dialog", { name: "Partager" });
+    await expect(share.getByRole("searchbox", { name: "Rechercher une connexion" })).toBeVisible();
+    await expect(share.getByRole("button", { name: "Copier le lien" })).toBeVisible();
+    await expect(share.getByRole("button", { name: "WhatsApp" })).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(share).toBeHidden();
 
     // A photo carries the actions in its notch; Commenter opens the post, with its answers and
     // the reply bar; the way back is the Fil.

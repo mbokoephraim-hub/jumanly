@@ -117,7 +117,7 @@ export function PhoneFil({
       <div id="fil-liste" role="tabpanel" aria-labelledby={`fil-${tab}`}>
         {posts.length === 0 ? <p className="nb-vide">{t(`empty.${tab}`)}</p> : null}
         {posts.map((post, index) => (
-          <div key={post.id}>
+          <div key={post.key}>
             {masked[post.id] !== undefined || Object.values(masked).includes(post.type) ? (
               masked[post.id] !== undefined ? (
                 <div className="nb-fil-masque">

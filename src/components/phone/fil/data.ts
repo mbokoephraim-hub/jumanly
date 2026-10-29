@@ -26,6 +26,8 @@ export type AuthorView = {
 
 export type PostView = {
   id: string;
+  /** Unique in a list: a post and someone's repost of it are two lines. */
+  key: string;
   href: string;
   type: string;
   author: AuthorView;
@@ -38,7 +40,17 @@ export type PostView = {
   image: { src: string; alt: string } | null;
   job: { href: string; title: string; line: string; score: string | null } | null;
   attachment: { mark: string; title: string; detail: string; tone: string } | null;
-  quoted: { href: string; name: string; body: string } | null;
+  /** « Republier avec une note »: the original post, with its author, under the note. */
+  quoted: {
+    id: string;
+    href: string;
+    name: string;
+    author: AuthorView;
+    ago: string;
+    title: string | null;
+    body: string;
+    image: { src: string; alt: string } | null;
+  } | null;
   event: { participants: number; going: boolean } | null;
   likes: number;
   liked: boolean;
@@ -47,6 +59,8 @@ export type PostView = {
   replies: number;
   reposts: number;
   reposted: boolean;
+  /** « Republier » without a note: « Grace a republié » above the original author. */
+  repostedBy: { name: string; href: string; mine: boolean; ago: string } | null;
   saved: boolean;
   mine: boolean;
   canReply: boolean;
@@ -177,8 +191,10 @@ export async function feedWords(viewerId: string, now = new Date()) {
         : value;
     const remote = (value: string) =>
       t.has(`remote.${value}` as "remote.hybrid") ? t(`remote.${value}` as "remote.hybrid") : value;
+    const quotedAuthor = item.quoted ? author(item.quoted.author) : null;
     return {
       id: item.id,
+      key: item.repostedBy ? `${item.id}-r-${item.repostedBy.id}` : item.id,
       href: `/app/fil/${item.id}`,
       type: item.type,
       author: view,
@@ -213,13 +229,24 @@ export async function feedWords(viewerId: string, now = new Date()) {
             tone: item.attachment.type,
           }
         : null,
-      quoted: item.quoted
-        ? {
-            href: `/app/fil/${item.quoted.id}`,
-            name: shortName(item.quoted.name),
-            body: item.quoted.body,
-          }
-        : null,
+      quoted:
+        item.quoted && quotedAuthor
+          ? {
+              id: item.quoted.id,
+              href: `/app/fil/${item.quoted.id}`,
+              name: shortName(item.quoted.name),
+              author: quotedAuthor,
+              ago: ago(item.quoted.createdAt),
+              title: item.quoted.title,
+              body: item.quoted.body,
+              image: item.quoted.imageUrl
+                ? {
+                    src: item.quoted.imageUrl,
+                    alt: item.quoted.imageAlt ?? t("publish.photoAlt", { name: quotedAuthor.name }),
+                  }
+                : null,
+            }
+          : null,
       event: item.event ? { participants: item.event.participants, going: item.event.going } : null,
       likes: item.likes,
       liked: item.liked,
@@ -231,6 +258,17 @@ export async function feedWords(viewerId: string, now = new Date()) {
       replies: item.replies,
       reposts: item.reposts,
       reposted: item.reposted,
+      repostedBy: item.repostedBy
+        ? {
+            name: item.repostedBy.name,
+            href:
+              item.repostedBy.id === viewerId
+                ? "/app/career/cv"
+                : `/app/personnes/${item.repostedBy.id}`,
+            mine: item.repostedBy.id === viewerId,
+            ago: ago(item.repostedBy.at),
+          }
+        : null,
       saved: item.saved,
       mine: item.mine,
       canReply: item.canReply,

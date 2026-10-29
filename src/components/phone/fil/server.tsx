@@ -56,6 +56,7 @@ export async function sendTargetViews(userId: string): Promise<SendTarget[]> {
   const { t } = await feedWords(userId);
   return (await sendTargets(db, userId)).map((target) => ({
     conversationId: target.conversationId,
+    talked: target.talked,
     name: target.name,
     initials: initialsOf(target.name),
     image: target.image,

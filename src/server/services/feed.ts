@@ -11,7 +11,7 @@ import { Prisma } from "@/generated/prisma/client";
 import type { FeedPostKind, PrismaClient } from "@/generated/prisma/client";
 import { matchesForUser } from "@/server/matching/service";
 import { recordAudience, recordImpressions } from "./audience";
-import { FEED_POST_MAX, FEED_REPLY_MAX, postTextSchema } from "./feed-limits";
+import { FEED_POST_MAX, FEED_REPLY_MAX, FEED_TITLE_MAX, postTextSchema } from "./feed-limits";
 import { rankFeed, type AuthorSignals } from "./feed-rank";
 import { photoType } from "./profile-photo";
 import { notify } from "./notifications";
@@ -100,13 +100,21 @@ const postSelect = {
   quoted: {
     select: {
       id: true,
+      title: true,
       body: true,
+      imageUrl: true,
+      imageAlt: true,
       hiddenAt: true,
-      author: { select: { name: true } },
-      organization: { select: { name: true } },
+      createdAt: true,
+      authorId: true,
+      organizationId: true,
+      author: { select: personSelect },
+      organization: { select: orgSelect },
     },
   },
-  _count: { select: { likes: true, reposts: true, replies: true, participants: true } },
+  _count: {
+    select: { likes: true, reposts: true, quotes: true, replies: true, participants: true },
+  },
 } satisfies Prisma.FeedPostSelect;
 
 type PostRow = Prisma.FeedPostGetPayload<{ select: typeof postSelect }>;
@@ -153,7 +161,20 @@ export type FeedItem = {
     score: number | null;
   } | null;
   attachment: FeedAttachment | null;
-  quoted: { id: string; name: string; body: string } | null;
+  /**
+   * « Republier avec une note »: the original post under the note, with its author, so that the
+   * content always keeps its attribution.
+   */
+  quoted: {
+    id: string;
+    name: string;
+    author: FeedAuthor;
+    title: string | null;
+    body: string;
+    imageUrl: string | null;
+    imageAlt: string | null;
+    createdAt: Date;
+  } | null;
   event: { at: Date; participants: number; going: boolean } | null;
   createdAt: Date;
   likes: number;
@@ -161,8 +182,14 @@ export type FeedItem = {
   /** The last two people who liked it: their faces beside the count, on the photo. */
   likers: { name: string; image: string | null }[];
   replies: number;
+  /** Reposts and reposts with a note. */
   reposts: number;
   reposted: boolean;
+  /**
+   * « Republier » without a note (like LinkedIn): the original post, shown in the Fil and on the
+   * profile of the person who reposted it, with « X a republié » above its author.
+   */
+  repostedBy: { id: string; name: string; at: Date } | null;
   saved: boolean;
   mine: boolean;
   /** The last two comments, shown under the post in the Fil (oldest first). */
@@ -172,7 +199,7 @@ export type FeedItem = {
   replyPolicy: string;
 };
 
-function authorOf(row: PostRow): FeedAuthor {
+function authorOf(row: Pick<PostRow, "author" | "organization">): FeedAuthor {
   if (row.organization) {
     return {
       kind: "org",
@@ -328,7 +355,12 @@ async function toItems(
         ? {
             id: quoted.id,
             name: quoted.organization?.name ?? quoted.author?.name ?? "",
+            author: authorOf(quoted),
+            title: quoted.title,
             body: quoted.body,
+            imageUrl: quoted.imageUrl,
+            imageAlt: quoted.imageAlt,
+            createdAt: quoted.createdAt,
           }
         : null,
       event: row.eventAt
@@ -342,8 +374,9 @@ async function toItems(
         .slice(0, 2)
         .map((like) => ({ name: like.user.name, image: like.user.image })),
       replies: row._count.replies,
-      reposts: row._count.reposts,
+      reposts: row._count.reposts + row._count.quotes,
       reposted: has(reposts, row.id),
+      repostedBy: null,
       saved: has(saves, row.id),
       mine: row.authorId === viewerId,
       comments: shownComments
@@ -355,6 +388,83 @@ async function toItems(
       replyPolicy: row.replyPolicy,
     };
   });
+}
+
+/** How far back a repost still comes up in the Fil. */
+const REPOST_DAYS = 30;
+
+/**
+ * The posts some people reposted without a note (« Republier »), each one as the original post
+ * with who reposted it and when: the latest repost of a post only.
+ */
+async function repostItems(
+  db: PrismaClient,
+  viewerId: string,
+  people: string[],
+  postWhere: Prisma.FeedPostWhereInput,
+  connected: string[],
+  now: Date,
+  blocked: string[],
+  take = 20,
+  /** A profile keeps its reposts longer than the Fil. */
+  days = REPOST_DAYS,
+): Promise<FeedItem[]> {
+  if (people.length === 0) return [];
+  const rows = await db.feedRepost.findMany({
+    where: {
+      userId: { in: people },
+      createdAt: { gte: new Date(now.getTime() - days * DAY_MS) },
+      post: postWhere,
+    },
+    orderBy: { createdAt: "desc" },
+    take: take * 2,
+    select: {
+      createdAt: true,
+      user: { select: { id: true, name: true } },
+      post: { select: postSelect },
+    },
+  });
+  const seen = new Set<string>();
+  const latest = rows
+    .filter((row) => {
+      if (seen.has(row.post.id)) return false;
+      seen.add(row.post.id);
+      return true;
+    })
+    .slice(0, take);
+  const items = await toItems(
+    db,
+    viewerId,
+    latest.map((row) => row.post),
+    connected,
+    now,
+    blocked,
+  );
+  return items.map((item, index) => ({
+    ...item,
+    repostedBy: {
+      id: latest[index]!.user.id,
+      name: latest[index]!.user.name,
+      at: latest[index]!.createdAt,
+    },
+  }));
+}
+
+/** When an item came into a list: its repost, or its publication. */
+const shownAt = (item: FeedItem) => (item.repostedBy?.at ?? item.createdAt).getTime();
+
+/**
+ * Puts the reposts among the posts, once each (a post already in the list is not repeated):
+ * by date, or, in a ranked list, one every three posts.
+ */
+function withReposts(items: FeedItem[], reposts: FeedItem[], ranked = false): FeedItem[] {
+  const present = new Set(items.map((item) => item.id));
+  const extra = reposts.filter((item) => !present.has(item.id));
+  if (extra.length === 0) return items;
+  if (!ranked) return [...items, ...extra].sort((a, b) => shownAt(b) - shownAt(a));
+  const result = [...items];
+  extra.forEach((item, index) => result.splice(Math.min(result.length, 2 + index * 4), 0, item));
+  return result;
 }
 
 /**
@@ -437,9 +547,28 @@ export async function listFeed(
     take: tab === "pourvous" ? CANDIDATES : PAGE,
     select: postSelect,
   });
+  const followed = follows.flatMap((row) => (row.userId ? [row.userId] : []));
+  const reposters =
+    tab === "entreprises"
+      ? []
+      : [...new Set([...(tab === "abonnements" ? [viewerId] : []), ...connected, ...followed])];
+  const reposts = () =>
+    repostItems(
+      db,
+      viewerId,
+      reposters,
+      { ...where, organizationId: undefined, OR: undefined },
+      connected,
+      now,
+      blocked,
+    );
   if (tab !== "pourvous") {
     await recordImpressions(db, viewerId, rows);
-    return toItems(db, viewerId, rows, connected, now, blocked);
+    const [items, shared] = await Promise.all([
+      toItems(db, viewerId, rows, connected, now, blocked),
+      reposts(),
+    ]);
+    return withReposts(items, shared).slice(0, PAGE + 10);
   }
   const people = [
     ...new Set(rows.flatMap((row) => (row.authorId && !row.organizationId ? [row.authorId] : []))),
@@ -451,7 +580,7 @@ export async function listFeed(
       hasJob: row.job !== null,
       likes: row._count.likes,
       replies: row._count.replies,
-      reposts: row._count.reposts,
+      reposts: row._count.reposts + row._count.quotes,
     })),
     authors,
     viewerId,
@@ -460,7 +589,11 @@ export async function listFeed(
   const byId = new Map(rows.map((row) => [row.id, row]));
   const shown = ranked.map((post) => byId.get(post.id)!);
   await recordImpressions(db, viewerId, shown);
-  return toItems(db, viewerId, shown, connected, now, blocked);
+  const [items, shared] = await Promise.all([
+    toItems(db, viewerId, shown, connected, now, blocked),
+    reposts(),
+  ]);
+  return withReposts(items, shared, true);
 }
 
 /**
@@ -614,19 +747,23 @@ async function visiblePost(db: PrismaClient, viewerId: string, id: string) {
  * A new post: a title (60 characters) and a text (160), docs/fil-menu-publication § 2; then a
  * photo, an offer, an attachment, a quoted post or an event.
  */
-export const newPostSchema = postTextSchema.extend({
-  attachment: z.enum(["work", "certificate"]).optional(),
-  attachmentId: z.string().trim().max(60).optional(),
-  quotedId: z.string().trim().max(60).optional(),
-  replyPolicy: z.enum(["everyone", "connections", "nobody"]).default("everyone"),
-  image: z.string().trim().max(60).optional(),
-  /** A recruiter publishes in their own name or in the name of their company (M3). */
-  as: z.enum(["me", "org"]).default("me"),
-  /** « Une offre »: a published offer of the recruiter's organization. */
-  jobId: z.string().trim().max(60).optional(),
-  /** « Un événement »: when it takes place. */
-  eventAt: z.coerce.date().optional(),
-});
+export const newPostSchema = postTextSchema
+  .extend({
+    /** « Republier avec une note » carries a note only, without a title. */
+    title: z.string().trim().max(FEED_TITLE_MAX).default(""),
+    attachment: z.enum(["work", "certificate"]).optional(),
+    attachmentId: z.string().trim().max(60).optional(),
+    quotedId: z.string().trim().max(60).optional(),
+    replyPolicy: z.enum(["everyone", "connections", "nobody"]).default("everyone"),
+    image: z.string().trim().max(60).optional(),
+    /** A recruiter publishes in their own name or in the name of their company (M3). */
+    as: z.enum(["me", "org"]).default("me"),
+    /** « Une offre »: a published offer of the recruiter's organization. */
+    jobId: z.string().trim().max(60).optional(),
+    /** « Un événement »: when it takes place. */
+    eventAt: z.coerce.date().optional(),
+  })
+  .refine((post) => post.title.length > 0 || (post.quotedId && post.body.length > 0));
 export type NewPost = z.input<typeof newPostSchema>;
 
 /** The career pieces a person may join to a post: their projects and their attestations. */
@@ -725,7 +862,7 @@ export async function createPost(
       kind: input.eventAt ? "event" : kind,
       eventAt: input.eventAt ?? null,
       jobId: input.jobId ?? null,
-      title: input.title,
+      title: input.title || null,
       body: input.body,
       attachment: attachment ?? undefined,
       quotedId: input.quotedId,
@@ -958,9 +1095,16 @@ export async function editPost(
   if (!parsed.success) throw new FeedError("invalid");
   const row = await db.feedPost.findFirst({
     where: { id: parsed.data.id, authorId: userId, hiddenAt: null },
-    select: { id: true, parentId: true },
+    select: { id: true, parentId: true, quotedId: true, title: true },
   });
   if (!row) throw new FeedError("notFound");
+  if (row.quotedId && !row.title && !parsed.data.title?.trim()) {
+    // The note of a repost: its text only, never empty.
+    const note = postTextSchema.shape.body.safeParse(parsed.data.body);
+    if (!note.success || !note.data) throw new FeedError("invalid");
+    await db.feedPost.update({ where: { id: row.id }, data: { body: note.data, editedAt: now } });
+    return row.id;
+  }
   if (row.parentId) {
     const body = replySchema.shape.body.safeParse(parsed.data.body);
     if (!body.success) throw new FeedError("invalid");
@@ -973,24 +1117,36 @@ export async function editPost(
   return row.id;
 }
 
+/**
+ * Who a post can be sent to (« Partager »): the people the viewer already writes to first, most
+ * recent conversation first, then their other connections, newest first.
+ */
 export async function sendTargets(db: PrismaClient, userId: string) {
   const rows = await db.connection.findMany({
     where: { status: "accepted", OR: [{ requesterId: userId }, { addresseeId: userId }] },
     orderBy: { respondedAt: "desc" },
-    take: 30,
+    take: 60,
     select: {
       requesterId: true,
+      respondedAt: true,
       requester: { select: personSelect },
       addressee: { select: personSelect },
-      conversation: { select: { id: true, lastMessageAt: true } },
+      conversation: {
+        select: { id: true, lastMessageAt: true, _count: { select: { messages: true } } },
+      },
     },
   });
+  const talked = (row: (typeof rows)[number]) => (row.conversation?._count.messages ?? 0) > 0;
   return rows
     .filter((row) => row.conversation)
-    .sort(
-      (a, b) =>
-        (b.conversation?.lastMessageAt.getTime() ?? 0) -
-        (a.conversation?.lastMessageAt.getTime() ?? 0),
+    .sort((a, b) =>
+      talked(a) !== talked(b)
+        ? talked(a)
+          ? -1
+          : 1
+        : talked(a)
+          ? b.conversation!.lastMessageAt.getTime() - a.conversation!.lastMessageAt.getTime()
+          : (b.respondedAt?.getTime() ?? 0) - (a.respondedAt?.getTime() ?? 0),
     )
     .map((row) => {
       const other = row.requesterId === userId ? row.addressee : row.requester;
@@ -1000,6 +1156,7 @@ export async function sendTargets(db: PrismaClient, userId: string) {
         userId: other.id,
         name: other.name,
         image: other.image,
+        talked: talked(row),
         title:
           profile?.experiences[0]?.title ||
           profile?.headline ||
@@ -1170,8 +1327,17 @@ export async function ownPosts(db: PrismaClient, userId: string, now = new Date(
     take,
     select: postSelect,
   });
-  const { connected } = await circle(db, userId);
-  return toItems(db, userId, rows, connected, now);
+  const { connected, blocked } = await circle(db, userId);
+  const [items, shared] = await Promise.all([
+    toItems(db, userId, rows, connected, now),
+    repostItems(db, userId, [userId], repostedWhere(blocked), connected, now, blocked, 50, 3650),
+  ]);
+  return withReposts(items, shared);
+}
+
+/** The posts a profile may show as reposted: visible, top-level, no blocked author. */
+function repostedWhere(blocked: string[]): Prisma.FeedPostWhereInput {
+  return { parentId: null, hiddenAt: null, ...notBlocked(blocked) };
 }
 
 /** The posts of one person (in their own name) or of one organization, most recent first. */
@@ -1197,7 +1363,23 @@ export async function authorFeed(
     take,
     select: postSelect,
   });
-  return toItems(db, viewerId, rows, connected, now, blocked);
+  if (!("userId" in author)) return toItems(db, viewerId, rows, connected, now, blocked);
+  // « Republier »: the posts the person reposted show on their profile too (like LinkedIn).
+  const [items, shared] = await Promise.all([
+    toItems(db, viewerId, rows, connected, now, blocked),
+    repostItems(
+      db,
+      viewerId,
+      [author.userId],
+      repostedWhere(blocked),
+      connected,
+      now,
+      blocked,
+      20,
+      3650,
+    ),
+  ]);
+  return withReposts(items, shared);
 }
 
 /** Who a person is, as the Fil shows them (null for someone blocked or unknown). */

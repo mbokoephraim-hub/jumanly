@@ -2,6 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element -- photos of the Fil: small, already reduced */
 import "@/styles/fil-publication.css";
+import "@/styles/fil-partage.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useOptimistic, useTransition } from "react";
@@ -11,8 +12,9 @@ import { PhoneIcon } from "../icon";
 import { FilAvatar } from "./avatar";
 import { FilComment } from "./comments";
 import type { PostView } from "./data";
+import { QuotedCard } from "./share";
 
-export type PostSheet = "menu" | "report" | "reshare" | "send" | "edit";
+export type PostSheet = "menu" | "report" | "reshare" | "note" | "share" | "edit";
 
 /** The tag line of an attachment: a work of the portfolio, or an attestation. */
 export function Attachment({ value }: { value: NonNullable<PostView["attachment"]> }) {
@@ -61,12 +63,7 @@ export function PostMedia({
         </Link>
       ) : null}
       {post.attachment ? <Attachment value={post.attachment} /> : null}
-      {post.quoted ? (
-        <Link href={post.quoted.href} className="nb-fil-cite">
-          <b>{post.quoted.name}</b>
-          <span>{post.quoted.body}</span>
-        </Link>
-      ) : null}
+      {post.quoted ? <QuotedCard quoted={post.quoted} link /> : null}
       {post.event ? <EventRow id={post.id} event={post.event} /> : null}
     </>
   );
@@ -98,14 +95,16 @@ function EventRow({ id, event }: { id: string; event: NonNullable<PostView["even
   );
 }
 
-/** J'aime · Répondre · Republier, with their counts. */
+/** J'aime · Répondre · Republier · Partager, with their counts. */
 export function PostActions({
   post,
   onReshare,
+  onShare,
   replyHref,
 }: {
   post: PostView;
   onReshare: () => void;
+  onShare: () => void;
   /** Where « Répondre » leads (the publication); on its own page, the field below. */
   replyHref?: string;
 }) {
@@ -151,12 +150,26 @@ export function PostActions({
         <PhoneIcon name="republier" size={20} />
         <span aria-hidden>{post.reposts}</span>
       </button>
+      <button type="button" onClick={onShare} aria-haspopup="dialog" aria-label={t("shareSheet")}>
+        <PhoneIcon name="partager" size={19} />
+      </button>
     </div>
   );
 }
 
-/** Commenter · J'aime on the left, Enregistrer on the right, under the photo or the text. */
-function CardActions({ post, href }: { post: PostView; href: string }) {
+/**
+ * J'aime · Commenter · Republier · Partager on the left (Ephraïm, 29/10/2026), Enregistrer on the
+ * right, under the photo or the text.
+ */
+function CardActions({
+  post,
+  href,
+  onSheet,
+}: {
+  post: PostView;
+  href: string;
+  onSheet: (sheet: PostSheet) => void;
+}) {
   const t = useTranslations("phoneFil");
   const [shown, set] = useOptimistic({
     liked: post.liked,
@@ -182,14 +195,6 @@ function CardActions({ post, href }: { post: PostView; href: string }) {
     });
   return (
     <div className="nb-fil-barre-actions">
-      <Link
-        href={href}
-        className="nb-fil-ab"
-        aria-label={t("commentCount", { count: post.replies })}
-      >
-        <PhoneIcon name="repondre" size={22} stroke={1.9} />
-        {post.replies > 0 ? <span aria-hidden>{post.replies}</span> : null}
-      </Link>
       <button
         type="button"
         className="nb-fil-ab"
@@ -205,6 +210,34 @@ function CardActions({ post, href }: { post: PostView; href: string }) {
           fill={shown.liked ? "currentColor" : undefined}
         />
         {shown.likes > 0 ? <span aria-hidden>{shown.likes}</span> : null}
+      </button>
+      <Link
+        href={href}
+        className="nb-fil-ab"
+        aria-label={t("commentCount", { count: post.replies })}
+      >
+        <PhoneIcon name="repondre" size={22} stroke={1.9} />
+        {post.replies > 0 ? <span aria-hidden>{post.replies}</span> : null}
+      </Link>
+      <button
+        type="button"
+        className="nb-fil-ab"
+        onClick={() => onSheet("reshare")}
+        aria-haspopup="dialog"
+        aria-label={t("repostCount", { count: post.reposts })}
+        data-on={post.reposted ? "" : undefined}
+      >
+        <PhoneIcon name="republier" size={23} stroke={1.9} />
+        {post.reposts > 0 ? <span aria-hidden>{post.reposts}</span> : null}
+      </button>
+      <button
+        type="button"
+        className="nb-fil-ab"
+        onClick={() => onSheet("share")}
+        aria-haspopup="dialog"
+        aria-label={t("shareSheet")}
+      >
+        <PhoneIcon name="partager" size={21} stroke={1.9} />
       </button>
       <button
         type="button"
@@ -248,7 +281,18 @@ export function PostCard({
     .filter(Boolean)
     .join(" · ");
   return (
-    <article className="nb-fil-post nb-fil-carte" aria-labelledby={`p-${post.id}`}>
+    <article className="nb-fil-post nb-fil-carte" aria-labelledby={`p-${post.key}`}>
+      {post.repostedBy ? (
+        <Link href={post.repostedBy.href} className="nb-pt-republie">
+          <PhoneIcon name="republier" size={15} stroke={2} />
+          <span>
+            {post.repostedBy.mine
+              ? t("repostedByMe")
+              : t("repostedBy", { name: post.repostedBy.name })}
+          </span>
+          <small>· {post.repostedBy.ago}</small>
+        </Link>
+      ) : null}
       <div className="nb-fil-ph">
         <Link
           href={post.author.href}
@@ -260,7 +304,7 @@ export function PostCard({
           <FilAvatar {...post.author} size={post.author.verified ? 39 : 44} square />
         </Link>
         <span className="nb-fil-qui">
-          <Link href={post.author.href} id={`p-${post.id}`} className="nb-fil-nom">
+          <Link href={post.author.href} id={`p-${post.key}`} className="nb-fil-nom">
             {post.author.name}
             {post.author.verified ? (
               <svg width="15" height="15" viewBox="0 0 24 24" role="img" aria-label={t("verified")}>
@@ -308,7 +352,7 @@ export function PostCard({
             <img src={post.image.src} alt={post.image.alt} loading="lazy" />
           </Link>
         ) : null}
-        <CardActions post={post} href={href} />
+        <CardActions post={post} href={href} onSheet={(sheet) => onSheet(post, sheet)} />
         {post.comments.length > 0 ? (
           <ul className="nb-fil-coms">
             {post.comments.map((reply) => (

@@ -346,7 +346,7 @@ export function PhoneMyProfile({
               <>
                 {shown.map((post) => (
                   <PostCard
-                    key={post.id}
+                    key={post.key}
                     post={post}
                     onSheet={(target, kind) => setOpen({ post: target, sheet: kind })}
                   />

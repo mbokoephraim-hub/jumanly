@@ -123,10 +123,12 @@ export function SheetGestures() {
       }, ms);
     };
 
-    // A long sheet opens at the half state; one with a field to type in opens whole.
+    // A long sheet opens at the half state; one with a field to type in opens whole, unless it
+    // asks for the half (`.nb-feuille-mi`: « Partager », whose search field waits for a touch).
     const opened = (dialog: HTMLDialogElement) => {
       const panel = dialog.matches(PANEL) ? dialog : dialog.querySelector<HTMLElement>(PANEL);
-      if (!panel || !draggable(panel) || panel.querySelector(TYPING)) return;
+      if (!panel || !draggable(panel)) return;
+      if (panel.querySelector(TYPING) && !panel.matches(".nb-feuille-mi")) return;
       const stops = sheetStops(fullHeight(panel), window.innerHeight);
       if (stops.length > 1) place(panel, stops[0], stops);
     };
