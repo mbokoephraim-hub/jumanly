@@ -1570,6 +1570,87 @@
   color: #3a0e08;
 }
 
+/* ─── Appel réel : image de l'autre, ma caméra, appel entrant (2026-10-29) ─────────────────── */
+
+.nb-ch-hote {
+  display: contents;
+}
+.nb-ch-hote > .nb-ch-appel {
+  z-index: 1000;
+}
+.nb-ch-appel-v {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+.nb-ch-appel-v[hidden] {
+  display: none;
+}
+.nb-ch-appel[data-video] .nb-ch-appel-o,
+.nb-ch-appel[data-video] .nb-ch-appel-av {
+  display: none;
+}
+.nb-ch-appel[data-video] .nb-ch-appel-qui {
+  top: calc(var(--nb-haut) + 86px);
+  align-items: flex-start;
+  text-align: left;
+  right: 132px;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+}
+.nb-ch-appel[data-video] .nb-ch-appel-qui > b {
+  font-size: 20px;
+  margin-top: 0;
+}
+.nb-ch-moi-v {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+.nb-ch-entrant-b {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: max(48px, env(safe-area-inset-bottom));
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.nb-ch-entrant-b button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  background: none;
+  color: var(--nb-creme);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  min-height: 44px;
+}
+.nb-ch-entrant-b button > span {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--nb-menthe);
+  color: var(--nb-encre);
+}
+.nb-ch-entrant-b button:last-child > span {
+  background: var(--nb-lime);
+  color: var(--nb-sur-lime, #0f3f37);
+}
+.nb-ch-entrant-b .nb-ch-entrant-non > span {
+  background: #ff8a7a;
+  color: #3a0e08;
+}
+
 /* ─── Moins de mouvement ───────────────────────────────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {

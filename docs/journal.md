@@ -5097,3 +5097,11 @@ réseau revenu, toutes les 10 min) ; le préchargement démarre pendant le logo.
 de pages, les images, et montre la copie gardée quand le réseau traîne ; l'appli demande au téléphone de
 garder son stockage. Détail et limites : `docs/decisions/2026-10-29-onglets-instantanes-hors-ligne.md`.
 Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au serveur échoue).
+## 2026-10-29 · Appels réels audio et vidéo, vocaux plus rapides
+
+- Chat : bouton « Appeler en audio » à côté de la vidéo ; appel entrant dans tout l'espace connecté (talent,
+  recruteur, téléphone ou ordinateur) avec Refuser / Audio / Vidéo ; vrais son et image de téléphone à
+  téléphone (WebRTC), caméra activable pendant l'appel. Ligne « Appel audio · durée » ou « Appel vidéo · durée ».
+- Vocaux : affichage immédiat, fichier plus léger, notifications et e-mails envoyés après la réponse.
+- Essai à deux navigateurs (talent → recruteur, vidéo puis caméra coupée) : image 640×480 et son des deux côtés.
+- Reste à faire côté Ephraïm : un relais TURN pour les réseaux mobiles difficiles (docs/decisions/2026-10-29-appels-reels.md).

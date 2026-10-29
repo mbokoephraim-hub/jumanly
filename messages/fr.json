@@ -13348,7 +13348,29 @@
       "failed": "L’appel n’a pas pu démarrer. Réessayez dans un instant.",
       "context": "Entretien · {job}",
       "line": "Appel vidéo · {duration}",
-      "lineMissed": "Appel vidéo sans réponse"
+      "lineMissed": "Appel vidéo sans réponse",
+      "buttonAudio": "Appeler {name} en audio",
+      "askAudio": "Souhaitez-vous appeler {name} en audio ?",
+      "labelAudio": "Appel audio avec {name}",
+      "lineAudio": "Appel audio · {duration}",
+      "lineMissedAudio": "Appel audio sans réponse",
+      "connecting": "Connexion",
+      "declined": "{name} n’a pas répondu.",
+      "denied": "Autorisez le micro (et la caméra pour la vidéo) dans votre navigateur pour appeler.",
+      "unsupported": "Ce navigateur ne permet pas d’appeler. Essayez avec Chrome, Safari ou Firefox à jour.",
+      "lost": "La connexion a été coupée. Vérifiez votre réseau et rappelez.",
+      "theirImage": "Image de {name}",
+      "incoming": {
+        "title": "{name} vous appelle",
+        "video": "Appel vidéo entrant",
+        "audio": "Appel audio entrant",
+        "note": "Répondez en audio ou en vidéo. L’appel n’est pas enregistré.",
+        "refuse": "Refuser",
+        "acceptAudio": "Accepter en audio",
+        "acceptVideo": "Accepter en vidéo",
+        "audioShort": "Audio",
+        "videoShort": "Vidéo"
+      }
     },
     "duration": {
       "short": "{seconds} s",

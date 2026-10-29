@@ -12,7 +12,15 @@ import {
   phoneConversation,
   phoneInbox,
 } from "@/server/services/messages-phone";
-import { answerCall, endCall, startCall } from "@/server/services/video-call";
+import {
+  acceptCall,
+  answerCall,
+  callState,
+  endCall,
+  incomingCall,
+  startCall,
+} from "@/server/services/video-call";
+import { FakeVideoCallProvider, WebRtcVideoCallProvider } from "@/server/adapters/video-call";
 import { cleanup, db, newUser } from "./helpers";
 
 // Chat v2 (docs/chat-v2): reactions, pinning, « écrit… » and the video call, in the database.
@@ -22,6 +30,8 @@ afterAll(async () => {
   await cleanup(users);
   await db.$disconnect();
 });
+
+const fake = new FakeVideoCallProvider();
 
 async function pair() {
   const [a, b] = await Promise.all([newUser(), newUser()]);
@@ -89,7 +99,7 @@ describe("Chat v2", () => {
   it("l'appel vidéo laisse une ligne avec sa durée, sans rien enregistrer d'autre", async () => {
     const { a, b, id } = await pair();
     const start = new Date();
-    const call = await startCall(db, a, id, { now: start });
+    const call = await startCall(db, a, id, { now: start, provider: fake });
     expect(call.autoAnswerMs).not.toBeNull();
     await answerCall(db, a, call.callId, new Date(start.getTime() + 3_000));
     const seconds = await endCall(
@@ -109,16 +119,75 @@ describe("Chat v2", () => {
     expect(await endCall(db, a, call.callId, () => "x")).toBe(60);
   });
 
-  it("un appel sans réponse est noté, et personne d'autre ne peut le raccrocher", async () => {
+  it("un appel sans réponse est noté, et seuls ses deux côtés peuvent le raccrocher", async () => {
     const { a, b, id } = await pair();
-    const call = await startCall(db, a, id);
-    await expect(endCall(db, b, call.callId, () => "x")).rejects.toMatchObject({
+    const call = await startCall(db, a, id, { provider: fake });
+    const stranger = (await pair()).a;
+    await expect(endCall(db, stranger, call.callId, () => "x")).rejects.toMatchObject({
       code: "notFound",
     });
-    expect(await endCall(db, a, call.callId, () => "Appel vidéo sans réponse")).toBeNull();
+    expect(await endCall(db, b, call.callId, () => "Appel vidéo sans réponse")).toBeNull();
     expect((await db.videoCall.findUniqueOrThrow({ where: { id: call.callId } })).status).toBe(
       "missed",
     );
+  });
+
+  it("un vrai appel sonne chez l'autre, qui répond en audio ; la ligne le dit", async () => {
+    const { a, b, id } = await pair();
+    const webrtc = new WebRtcVideoCallProvider();
+    const start = new Date();
+    const call = await startCall(db, a, id, {
+      now: start,
+      provider: webrtc,
+      mode: "video",
+      offer: "offre-sdp-fictive",
+    });
+    expect(call.autoAnswerMs).toBeNull();
+    // Without its description, a real call does not start.
+    await expect(startCall(db, a, id, { provider: webrtc })).rejects.toMatchObject({
+      code: "invalid",
+    });
+    const again = await startCall(db, a, id, {
+      now: start,
+      provider: webrtc,
+      mode: "video",
+      offer: "offre-sdp-fictive",
+    });
+    const ringing = await incomingCall(db, b, new Date(start.getTime() + 2_000));
+    expect(ringing?.id).toBe(again.callId);
+    expect(ringing?.mode).toBe("video");
+    expect(ringing?.offer).toBe("offre-sdp-fictive");
+    expect(await incomingCall(db, a, start)).toBeNull();
+    // The caller cannot answer for the other side.
+    await expect(
+      acceptCall(db, a, again.callId, { mode: "audio", answer: "x" }),
+    ).rejects.toMatchObject({ code: "notFound" });
+    await acceptCall(
+      db,
+      b,
+      again.callId,
+      { mode: "audio", answer: "reponse-sdp-fictive" },
+      new Date(start.getTime() + 4_000),
+    );
+    const seen = await callState(db, a, again.callId);
+    expect(seen).toMatchObject({ status: "active", answerMode: "audio" });
+    expect(seen.answer).toBe("reponse-sdp-fictive");
+    expect((await callState(db, b, again.callId)).answer).toBeNull();
+    expect(await incomingCall(db, b, new Date(start.getTime() + 5_000))).toBeNull();
+    const seconds = await endCall(db, b, again.callId, (spoken, mode) => `${mode} · ${spoken} s`, {
+      now: new Date(start.getTime() + 34_000),
+      provider: webrtc,
+    });
+    expect(seconds).toBe(30);
+    // The descriptions are wiped; the other side hanging up after changes nothing.
+    const row = await db.videoCall.findUniqueOrThrow({ where: { id: again.callId } });
+    expect(row).toMatchObject({ status: "ended", offer: null, answer: null });
+    expect(await endCall(db, a, again.callId, () => "y")).toBe(30);
+    const lines = (await phoneConversation(db, a, id)).messages.filter(
+      (message) => message.kind === "system",
+    );
+    expect(lines.at(-1)?.body).toBe("audio · 30 s");
+    expect(lines.filter((line) => line.body === "y")).toHaveLength(0);
   });
 
   it("pas d'appel dans une discussion bloquée", async () => {
@@ -127,6 +196,8 @@ describe("Chat v2", () => {
       where: { requesterId: a, addresseeId: b },
       data: { status: "blocked", blockedById: b },
     });
-    await expect(startCall(db, a, id)).rejects.toMatchObject({ code: "blocked" });
+    await expect(startCall(db, a, id, { provider: fake })).rejects.toMatchObject({
+      code: "blocked",
+    });
   });
 });
