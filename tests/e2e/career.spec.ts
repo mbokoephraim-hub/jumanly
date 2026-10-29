@@ -7,7 +7,8 @@ import { demo, logIn } from "./session";
 test("simulation d'entretien écrite, de la préparation au retour", async ({ page, isMobile }) => {
   test.skip(isMobile, "Une simulation du mois par exécution suffit.");
   test.setTimeout(120_000);
-  await logIn(page, demo.talentStarter);
+  // The simulation is kept for people who applied with a plan that includes it: Amani (Starter).
+  await logIn(page, "amani.ux@jumanly.test");
   // Lot 7: the former Career home is gone; the practice opens from Compte.
   await page.goto("/app/compte");
   await page.getByRole("link", { name: /S.entraîner aux entretiens/ }).click();

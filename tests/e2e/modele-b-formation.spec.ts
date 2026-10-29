@@ -68,7 +68,10 @@ test.describe("Modèle B · Formation au téléphone", () => {
     await tab.getByRole("tab", { name: "Pour vous" }).click();
     await tab.getByRole("link", { name: /^Répéter avec Orbi/ }).click();
     await page.waitForURL("**/app/career/entretiens/nouveau?**depuis=formation**");
-    await expect(page.getByRole("heading", { name: "S’entraîner pour l’entretien" })).toBeVisible();
+    // The settings, or the reserved screen without an application and a plan (29/10/2026).
+    await expect(
+      page.getByRole("heading", { name: /S’entraîner pour l’entretien|Simulation d’entretien/ }),
+    ).toBeVisible();
   });
 
   test("un cours et une leçon : programme, question rapide, leçon suivante", async ({ page }) => {

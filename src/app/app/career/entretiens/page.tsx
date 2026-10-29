@@ -26,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: { absolute: t("seo") }, robots: { index: false } };
 }
 
-const errors = ["consent", "entitlement", "quota", "invalid"] as const;
+const errors = ["reserved", "consent", "entitlement", "quota", "invalid"] as const;
 
 const tiles: { key: "offer" | "job" | "classic" | "voice"; icon: TalentIconName; href: string }[] =
   [

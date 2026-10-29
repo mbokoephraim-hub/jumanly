@@ -3995,6 +3995,7 @@
     "applyFree": "Postuler et passer vos entretiens restent gratuits.",
     "plans": "Voir les formules",
     "error": {
+      "reserved": "La simulation d'entretien est réservée aux personnes qui ont candidaté à une offre, avec une formule qui inclut les simulations.",
       "consent": "Les simulations utilisent l'IA. Activez-la dans vos paramètres de confidentialité pour commencer.",
       "entitlement": "Ce format de simulation n'est pas inclus dans votre formule.",
       "quota": "Vous avez utilisé toutes les simulations de ce format ce mois-ci.",
@@ -11369,6 +11370,52 @@
         "course": "Un cours court pour progresser"
       }
     },
+    "training": {
+      "title": "Mes entraînements",
+      "sim": {
+        "title": "Simulation d’entretien avec Orbi",
+        "open": "Entraînez-vous sur l’offre à laquelle vous avez candidaté, puis suivez vos progrès d’une simulation à l’autre.",
+        "start": "S’entraîner",
+        "reserved": "Réservée aux personnes qui ont candidaté à une offre, avec une formule qui inclut les simulations.",
+        "applied": "Avoir candidaté à une offre",
+        "appliedCta": "Voir les offres",
+        "plan": "{plan, select, none {Une formule avec les simulations} other {Une formule avec les simulations, dès {plan}}}",
+        "planCta": "Voir les formules",
+        "done": "Fait",
+        "free": "Postuler reste gratuit, toujours."
+      },
+      "prepare": "À préparer",
+      "reservedTag": "Réservé",
+      "prep": {
+        "interview": "Préparer l’entretien : {title}",
+        "interviewText": "{company} · une simulation guidée par l’offre",
+        "interviewDate": "{company} · entretien le {date}",
+        "criterion": "Travailler : {criterion}",
+        "criterionText": {
+          "clarity": "Des phrases courtes, une idée par phrase ({score}/100 à la dernière simulation)",
+          "examples": "Un exemple chiffré par réponse : situation, action, résultat ({score}/100 à la dernière simulation)",
+          "relevance": "Reprenez les mots de l’offre et les compétences demandées ({score}/100 à la dernière simulation)",
+          "ease": "Parlez posément, sans « euh », en respirant entre les idées ({score}/100 à la dernière simulation)",
+          "length": "Une à deux minutes par réponse, ni trop court ni trop long ({score}/100 à la dernière simulation)"
+        },
+        "skill": "Renforcer : {skill}",
+        "skillText": "Demandé par « {job} » · un cours pour s’y mettre",
+        "apply": "Candidater à une offre",
+        "applyText": "Orbi vous préparera ensuite à l’entretien"
+      },
+      "followTitle": "Mon suivi",
+      "follow": {
+        "count": "{count, plural, one {# simulation terminée} other {# simulations terminées}}",
+        "last": "Dernière note",
+        "up": "+{points} depuis la première",
+        "down": "{points} depuis la première",
+        "same": "Comme la première",
+        "why": "Notes calculées par des règles fixes à partir de vos réponses. Elles mesurent vos réponses, jamais vos chances, et ne sont jamais montrées à un recruteur.",
+        "report": "Revoir le dernier bilan",
+        "all": "Toutes mes simulations",
+        "empty": "Vos notes apparaîtront ici après votre première simulation."
+      }
+    },
     "applications": {
       "sent": "{company} · envoyée le {date}",
       "status": {
@@ -12049,9 +12096,20 @@
       "consent": "Pour qu’Orbi prépare les questions, autorisez l’assistance IA dans vos paramètres.",
       "consentCta": "Ouvrir les paramètres",
       "quota": "Vos simulations du mois sont utilisées. Elles reviennent le {date}.",
+      "reserved": "La simulation d’entretien est réservée aux personnes qui ont candidaté à une offre, avec une formule qui inclut les simulations.",
       "entitlement": "Cette simulation n’est pas incluse dans votre formule.",
       "invalid": "Indiquez le poste visé (2 caractères au moins).",
       "network": "Orbi n’a pas pu préparer les questions. Vérifiez la connexion et réessayez."
+    },
+    "reserved": {
+      "title": "Simulation d’entretien",
+      "text": "Elle est réservée aux personnes qui ont candidaté à une offre, avec une formule qui inclut les simulations. Orbi vous prépare alors sur l’offre et suit vos progrès d’une simulation à l’autre.",
+      "applied": "Avoir candidaté à une offre",
+      "appliedCta": "Voir les offres",
+      "plan": "{plan, select, none {Une formule avec les simulations} other {Une formule avec les simulations, dès {plan}}}",
+      "planCta": "Voir les formules",
+      "done": "Fait",
+      "free": "Postuler reste gratuit, toujours."
     },
     "dl": {
       "back": "Réglages",

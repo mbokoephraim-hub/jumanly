@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const durationText = { 10: "quick", 20: "standard", 30: "full" } as const;
-const errors = ["consent", "entitlement", "quota", "invalid"] as const;
+const errors = ["reserved", "consent", "entitlement", "quota", "invalid"] as const;
 
 /**
  * « S'entraîner » (planche talent-2 § 4, briefing): what to know about the company and the offer,
