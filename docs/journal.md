@@ -5069,3 +5069,12 @@ Demande d'Ephraïm du 29/10/2026 (partie administration seulement).
 - Vérifié : types, lint, tests, build, e2e `accounts` et `connexion-v2` (inscription, connexion,
   déconnexion, mot de passe oublié). Cinq tests en base `explore` et `entreprise-page` échouent déjà sur
   main, sans lien avec cette mise à jour.
+
+## 2026-10-29 · Appels réels audio et vidéo, vocaux plus rapides
+
+- Chat : bouton « Appeler en audio » à côté de la vidéo ; appel entrant dans tout l'espace connecté (talent,
+  recruteur, téléphone ou ordinateur) avec Refuser / Audio / Vidéo ; vrais son et image de téléphone à
+  téléphone (WebRTC), caméra activable pendant l'appel. Ligne « Appel audio · durée » ou « Appel vidéo · durée ».
+- Vocaux : affichage immédiat, fichier plus léger, notifications et e-mails envoyés après la réponse.
+- Essai à deux navigateurs (talent → recruteur, vidéo puis caméra coupée) : image 640×480 et son des deux côtés.
+- Reste à faire côté Ephraïm : un relais TURN pour les réseaux mobiles difficiles (docs/decisions/2026-10-29-appels-reels.md).

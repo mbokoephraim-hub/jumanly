@@ -35,6 +35,9 @@ export function voiceType() {
 
 export const VOICE_MAX_SECONDS = 300;
 
+/** Speech in Opus stays clear at 24 kb/s: a minute weighs about 180 Ko instead of 1 Mo. */
+export const VOICE_BITS_PER_SECOND = 24_000;
+
 /** « 0:07 ». */
 export const clock = (seconds: number) =>
   `${Math.floor(seconds / 60)}:${String(Math.floor(seconds) % 60).padStart(2, "0")}`;

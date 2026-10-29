@@ -19,6 +19,7 @@ const FILES = [
   /^\/app\/learn\/[^/]+\/(support|modele-attestation)$/,
   /^\/app\/hire\/rapports\/export$/,
   /^\/app\/hire\/entretiens\/[^/]+\/agenda$/,
+  /^\/app\/appels$/,
 ];
 
 /**

@@ -873,6 +873,7 @@ model User {
   participations       ConversationParticipant[]
   messageReactions     MessageReaction[]
   videoCalls           VideoCall[]
+  incomingCalls        VideoCall[]                @relation("VideoCallCallee")
   connectionsSent      Connection[]              @relation("ConnectionRequester")
   connectionsReceived  Connection[]              @relation("ConnectionAddressee")
   enrollments          Enrollment[]
@@ -1758,23 +1759,35 @@ enum VideoCallStatus {
   missed
 }
 
-/// A video call of a conversation (Chat v2): only between connections, or with the recruiter of an
-/// application. Nothing of the call itself is recorded: only who called, when and how long.
+/// A call of a conversation (Chat v2), in audio or in video: only between connections, or with the
+/// recruiter of an application. Nothing of the call itself is recorded: only who called whom, when,
+/// how and how long. The two phones talk directly (WebRTC); the server only passes their
+/// descriptions (`offer`, `answer`) while it rings, and forgets them when the call ends.
 model VideoCall {
   id             String          @id @default(cuid(2))
   conversationId String
   conversation   Conversation    @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   callerId       String
   caller         User            @relation(fields: [callerId], references: [id], onDelete: Cascade)
+  /// Who is called (the other talent, or the recruiter of the application).
+  calleeId       String?
+  callee         User?           @relation("VideoCallCallee", fields: [calleeId], references: [id], onDelete: Cascade)
   status         VideoCallStatus @default(ringing)
-  /// The video provider (`VIDEO_PROVIDER`, « fake » by default) and its room.
+  /// « audio » or « video », as the caller chose; `answerMode` as the person called accepted it.
+  mode           String          @default("video")
+  answerMode     String?
+  /// The call provider (`VIDEO_CALL_PROVIDER`: « webrtc », or « fake » in local) and its room.
   provider       String
   roomId         String
+  /// The connection descriptions of the two phones (SDP), kept only until the call ends.
+  offer          String?
+  answer         String?
   answeredAt     DateTime?
   endedAt        DateTime?
   createdAt      DateTime        @default(now())
 
   @@index([conversationId, createdAt])
+  @@index([calleeId, status])
 }
 
 model Notification {

@@ -1,6 +1,7 @@
 "use server";
 
 import { refresh } from "next/cache";
+import { after } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import type { MessageKind, Prisma } from "@/generated/prisma/client";
@@ -77,7 +78,10 @@ async function send(
   if (!(await allowAttempt("message", user.id))) return { ok: false, error: "tooMany" };
   try {
     const sent = await build(user.id);
-    await onMessageSent({ ...sent, senderName: user.name }).catch((error) => reportError(error));
+    // The notifications and e-mails leave after the answer: the message shows at once.
+    after(() =>
+      onMessageSent({ ...sent, senderName: user.name }).catch((error) => reportError(error)),
+    );
   } catch (error) {
     return fail(error, what);
   }
