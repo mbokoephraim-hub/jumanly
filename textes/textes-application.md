@@ -8982,7 +8982,6 @@ Conventions :
 | `phoneProfile.years` | {count, plural, one {# an} other {# ans}} |
 | `phoneProfile.months` | {count} mois |
 | `phoneProfile.moreLines` | Voir {count} de plus |
-| `phoneProfile.achievements` | Réalisations clés |
 | `phoneProfile.companyPage` | {company}, voir la page de l’entreprise |
 | `phoneProfile.less` | Voir moins |
 | `phoneProfile.education` | Formation |

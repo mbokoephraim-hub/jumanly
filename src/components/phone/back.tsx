@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { PhoneIcon } from "./icon";
+import { PhoneIcon, type PhoneIconName } from "./icon";
 import { pagesSeen } from "./pages-seen";
 
 /**
@@ -15,12 +15,15 @@ export function PhoneBack({
   label,
   text,
   history = true,
+  icon = "retour",
 }: {
   fallback: string;
   label: string;
   /** A word beside the chevron (« Fil »), as on some screens of the mockup. */
   text?: string;
   history?: boolean;
+  /** The drawing: the chevron, or the cross of « Annuler » on a form. */
+  icon?: PhoneIconName;
 }) {
   const router = useRouter();
   return (
@@ -36,7 +39,7 @@ export function PhoneBack({
         router.back();
       }}
     >
-      <PhoneIcon name="retour" size={22} stroke={2} />
+      <PhoneIcon name={icon} size={22} stroke={2} />
       {text ? <span>{text}</span> : null}
     </Link>
   );
