@@ -22,6 +22,7 @@ import { Opening } from "./opening";
 import { openingScript } from "./opening-script";
 import { PhoneOrbi, type OrbiTexts } from "./orbi";
 import { PhonePreload } from "./preload";
+import { PhoneFreshness } from "./fresh";
 import { PhoneStack } from "./stack";
 import { ViewSync } from "./view-sync";
 
@@ -141,6 +142,7 @@ export async function PhoneShell({
       <Toaster label={t("toasts")} closeLabel={t("close")} placement="top" />
       <PhoneArrivals />
       <PhonePreload />
+      <PhoneFreshness set={set} />
       <OfflineDrafts
         scope={account.id}
         labels={{

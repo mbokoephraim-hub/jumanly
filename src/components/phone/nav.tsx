@@ -14,6 +14,24 @@ import {
 } from "@/lib/phone-tabs";
 import { PhoneIcon } from "./icon";
 
+/** The tab's title in the browser, as the server last gave it for that address. */
+const titles = new Map<string, string>();
+
+/**
+ * Talent tabs: the five are drawn by the layout and their first screens are empty pages
+ * (`return null` on a phone). Going from one to another therefore needs nothing from the server:
+ * the address changes on the phone itself, the tab already there shows at once, even offline
+ * (Ephraïm, 29/10/2026: « passer du Fil à Explorer prend quelques secondes »). The recruiter's tabs
+ * are real pages, so they keep the usual navigation.
+ */
+function switchTab(from: string, to: string, name: string | undefined) {
+  titles.set(from, document.title);
+  window.history.pushState(null, "", to);
+  const brand = document.title.includes(" · ") ? document.title.split(" · ").pop() : null;
+  const title = titles.get(to) ?? (name && brand ? `${name} · ${brand}` : null);
+  if (title) document.title = title;
+}
+
 /**
  * The pill menu (docs/fil-menu-publication, § 1): a floating bar, round icons for the inactive
  * tabs, the active one stretched in Lime with its name (Fil · Explorer · Carrière · Hub · Chat for
@@ -65,6 +83,12 @@ export function PhoneNav({
             aria-current={active ? "page" : undefined}
             onClick={(event) => {
               if (root !== tab) {
+                // From the first screen of a talent tab, the tab touched is shown at once.
+                if (set === "talent" && root !== null && !event.metaKey && !event.ctrlKey) {
+                  event.preventDefault();
+                  switchTab(pathname, rootOf(tab, set), names[tab]);
+                  return;
+                }
                 setPressed({ tab, from: pathname });
                 return;
               }

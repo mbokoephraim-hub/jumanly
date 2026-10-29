@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { PrefetchKind } from "next/dist/client/components/router-reducer/router-reducer-types";
 import { PRELOAD_MAX, preloadAllowed, preloadPath } from "@/lib/phone-preload";
+import { REFRESHED_EVENT } from "./fresh";
 
 type Connection = { saveData?: boolean; effectiveType?: string };
 
@@ -88,9 +89,9 @@ export function PhonePreload() {
       idle(next);
     };
 
-    // After the opening logo and the screen's own loading; again when links appear (a list loaded,
-    // a sheet opened), at most once a second.
-    timer = window.setTimeout(run, 1200);
+    // While the opening logo shows (29/10/2026: « pendant le logo, l'appli télécharge déjà toutes
+    // les pages »); again when links appear (a list loaded, a sheet opened), at most once a second.
+    timer = window.setTimeout(run, 300);
     const observer = new MutationObserver(() => {
       window.clearTimeout(timer);
       timer = window.setTimeout(run, 1000);
@@ -99,6 +100,14 @@ export function PhonePreload() {
     const refresh = window.setInterval(() => {
       if (document.visibilityState === "visible") run(true);
     }, FRESH_MS + 1000);
+    // The tabs were read again (src/components/phone/fresh.tsx): what was loaded ahead was dropped
+    // with them, it is loaded again.
+    const onRefreshed = () => {
+      asked.clear();
+      window.clearTimeout(timer);
+      timer = window.setTimeout(run, 1500);
+    };
+    window.addEventListener(REFRESHED_EVENT, onRefreshed);
     const restore = dropPreloadedAfterRefresh();
     const root = document.querySelector(".nb-app");
     if (root) observer.observe(root, { childList: true, subtree: true });
@@ -107,6 +116,7 @@ export function PhonePreload() {
       window.clearTimeout(timer);
       window.clearInterval(refresh);
       restore();
+      window.removeEventListener(REFRESHED_EVENT, onRefreshed);
       observer.disconnect();
     };
   }, [pathname, router]);
