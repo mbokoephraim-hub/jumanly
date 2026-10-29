@@ -464,11 +464,11 @@ export async function savedOffers(db: PrismaClient, userId: string, now = new Da
   const open = (job: { status: string; closesAt: Date | null }) =>
     job.status === "published" && (job.closesAt === null || job.closesAt > now);
   return rows
-    .map(({ job: { status, closesAt, ...job } }) => {
+    .map(({ job: { status, ...job } }) => {
       const match = matches.get(job.id);
       return {
         ...job,
-        open: open({ status, closesAt }),
+        open: open({ status, closesAt: job.closesAt }),
         score: match?.state === "ok" ? Math.round(match.explanation.score) : null,
       };
     })
