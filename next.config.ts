@@ -19,6 +19,9 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium", "playwright-core"],
   outputFileTracingIncludes: {
     "/api/cv/[documentId]/export": ["./node_modules/@sparticuz/chromium/bin/**"],
+    // « Télécharger en PDF » of the phone and of the studio (Ephraïm, 29/10: it failed in
+    // production because Chromium was not shipped with this route).
+    "/app/career/cv/[id]/pdf": ["./node_modules/@sparticuz/chromium/bin/**"],
     "/app/jobs/candidatures/[id]/cv": ["./node_modules/@sparticuz/chromium/bin/**"],
     "/app/hire/candidats/[applicationId]/cv": ["./node_modules/@sparticuz/chromium/bin/**"],
     "/app/messages/[id]/document/[messageId]": ["./node_modules/@sparticuz/chromium/bin/**"],
