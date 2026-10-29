@@ -24,7 +24,7 @@ import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
 import { withoutPlaceholders } from "@/lib/placeholders";
 import { pageMetadata } from "@/lib/seo";
-import { signupHref } from "@/lib/signup";
+import { joinHref } from "@/lib/signup";
 import { getCurrentUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { resolvePlan } from "@/server/entitlements";
@@ -253,7 +253,7 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
             <Icon name="hire" className="mt-px size-[18px] shrink-0" />
             {t("pricing.company.startFree.text")}
           </p>
-          <SiteButton href={signupHref({ profil: "company" })} tone="light" size="md">
+          <SiteButton href={joinHref({ profil: "company" })} tone="light" size="md">
             {t("pricing.company.startFree.cta")}
           </SiteButton>
         </div>
@@ -382,7 +382,7 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
         text={t("pricing.finalCta.text")}
         actions={
           <>
-            <SiteButton href={signupHref()}>{t("pricing.finalCta.primary")}</SiteButton>
+            <SiteButton href={joinHref()}>{t("pricing.finalCta.primary")}</SiteButton>
             <SiteButton href="/contact?sujet=devis" tone="light">
               {t("pricing.finalCta.secondary")}
             </SiteButton>

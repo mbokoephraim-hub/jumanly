@@ -16,7 +16,7 @@ import { cx } from "@/lib/cx";
 import { languageName } from "@/lib/dates";
 import { durationParts } from "@/lib/format";
 import { courseJsonLd, jsonLdScript, pageMetadata } from "@/lib/seo";
-import { signupHref } from "@/lib/signup";
+import { joinHref } from "@/lib/signup";
 import { videoProvider } from "@/server/adapters/video";
 import {
   getCourse,
@@ -82,7 +82,7 @@ export default async function TrainingPage({ params }: PageProps<"/[locale]/form
   const lessons = course.modules.flatMap((module) => module.lessons);
   const duration = durationParts(course.durationMinutes);
   const durationText = t(`ui.duration.${duration.key}`, duration.values);
-  const startHref = signupHref({
+  const startHref = joinHref({
     profil: "talent",
     forfait: requiredPlan?.code,
     suite: `/app/learn/${course.slug}`,

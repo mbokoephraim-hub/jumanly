@@ -27,7 +27,7 @@ import { buttonClasses } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
 import { withoutPlaceholders } from "@/lib/placeholders";
-import { signupHref } from "@/lib/signup";
+import { joinHref, signupOpen } from "@/lib/signup";
 import {
   getContentOverrides,
   getFeaturedCourses,
@@ -178,7 +178,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                 {t("home.hero.subtitle")}
               </p>
               <div className="jm-rise flex flex-col gap-3 sm:flex-row" style={stagger(4)}>
-                <SiteButton href={signupHref({ profil: "talent" })}>
+                <SiteButton href={joinHref({ profil: "talent" })}>
                   {t("home.hero.ctaPrimary")}
                 </SiteButton>
                 <SiteButton href="/recruteurs" tone="light">
@@ -456,7 +456,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           <p className="rounded-[28px] bg-blanc p-6 text-ardoise">{t("home.jobs.empty")}</p>
         )}
         <div className="lg:flex lg:justify-center">
-          <ArrowLink href={signupHref({ profil: "rh" })} className="text-feuille-fonce">
+          <ArrowLink href={joinHref({ profil: "rh" })} className="text-feuille-fonce">
             {t("home.jobs.recruiterCta")}
           </ArrowLink>
         </div>
@@ -567,10 +567,12 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         text={t("home.finalCta.text")}
         actions={
           <>
-            <SiteButton href={signupHref()}>{t("home.finalCta.primary")}</SiteButton>
-            <SiteButton href="/connexion" tone="light">
-              {t("home.finalCta.secondary")}
-            </SiteButton>
+            <SiteButton href={joinHref()}>{t("home.finalCta.primary")}</SiteButton>
+            {signupOpen && (
+              <SiteButton href="/connexion" tone="light">
+                {t("home.finalCta.secondary")}
+              </SiteButton>
+            )}
           </>
         }
       />

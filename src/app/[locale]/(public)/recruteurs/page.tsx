@@ -23,7 +23,7 @@ import { cx } from "@/lib/cx";
 import { PipelinePreview } from "@/components/site/previews";
 import { formatUsd } from "@/lib/money";
 import { pageMetadata } from "@/lib/seo";
-import { signupHref } from "@/lib/signup";
+import { joinHref } from "@/lib/signup";
 import { getPublicPlans } from "@/server/queries/public";
 import { lowestPaidPrice } from "@/server/services/plans";
 import { applySiteLocale } from "@/i18n/site-locale";
@@ -69,7 +69,7 @@ export default async function RecruitersPage({ params }: PageProps<"/[locale]/re
   const t = await getTranslations();
   const plans = await getPublicPlans();
   const companyFrom = lowestPaidPrice(plans, "company");
-  const signup = signupHref({ profil: "rh" });
+  const signup = joinHref({ profil: "rh" });
 
   return (
     <>

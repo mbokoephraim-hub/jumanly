@@ -21,6 +21,7 @@ export const publicSitePaths = [
   "/cookies",
   "/entreprises/:path*",
   "/faq",
+  "/liste-attente",
   "/formations/:path*",
   "/mentions-legales",
   "/offres/:path*",

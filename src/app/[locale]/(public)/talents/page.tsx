@@ -23,7 +23,7 @@ import { cx } from "@/lib/cx";
 import { MatchesPreview } from "@/components/site/previews";
 import { formatUsd } from "@/lib/money";
 import { pageMetadata } from "@/lib/seo";
-import { signupHref } from "@/lib/signup";
+import { joinHref } from "@/lib/signup";
 import { getPublicPlans } from "@/server/queries/public";
 import { lowestPaidPrice } from "@/server/services/plans";
 import { applySiteLocale } from "@/i18n/site-locale";
@@ -55,7 +55,7 @@ export default async function TalentsPage({ params }: PageProps<"/[locale]/talen
   await applySiteLocale(params);
   const t = await getTranslations();
   const plans = await getPublicPlans();
-  const signup = signupHref({ profil: "talent" });
+  const signup = joinHref({ profil: "talent" });
 
   return (
     <>

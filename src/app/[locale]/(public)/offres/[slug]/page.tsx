@@ -15,7 +15,7 @@ import { cx } from "@/lib/cx";
 import { formatDate } from "@/lib/dates";
 import { formatUsd } from "@/lib/money";
 import { pageMetadata, siteUrl } from "@/lib/seo";
-import { loginHref, signupHref } from "@/lib/signup";
+import { joinHref, loginHref, memberHref } from "@/lib/signup";
 import { getJob, getSitemapEntries, staticSlugParams } from "@/server/queries/public";
 import { contractFilterOf, remoteFilterOf } from "@/server/services/jobs";
 import { applySiteLocale } from "@/i18n/site-locale";
@@ -78,7 +78,7 @@ export default async function JobPage({ params }: PageProps<"/[locale]/offres/[s
       : job.salaryMin !== null
         ? t("ui.salary.from", { min: formatUsd(job.salaryMin) })
         : null;
-  const applyHref = signupHref({ profil: "talent", suite: `/app/jobs/${job.slug}` });
+  const applyHref = joinHref({ profil: "talent", suite: `/app/jobs/${job.slug}` });
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -258,7 +258,7 @@ export default async function JobPage({ params }: PageProps<"/[locale]/offres/[s
                 </ButtonLink>
                 <div className="flex gap-2.5">
                   <ButtonLink
-                    href={signupHref({ profil: "talent", suite: `/offres/${job.slug}` })}
+                    href={joinHref({ profil: "talent", suite: `/offres/${job.slug}` })}
                     variant="tertiary"
                     icon={<Icon name="favori" className="size-4" />}
                     className={ghost}
@@ -326,7 +326,7 @@ export default async function JobPage({ params }: PageProps<"/[locale]/offres/[s
               </p>
               <div className="relative flex items-center justify-between gap-3">
                 <ButtonLink
-                  href={loginHref(`/app/jobs/${job.slug}`)}
+                  href={memberHref(`/app/jobs/${job.slug}`)}
                   size="sm"
                   className="h-10 px-4"
                 >

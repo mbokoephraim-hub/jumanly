@@ -19,7 +19,7 @@ import { cx } from "@/lib/cx";
 import { PipelinePreview } from "@/components/site/previews";
 import { formatUsd } from "@/lib/money";
 import { pageMetadata } from "@/lib/seo";
-import { signupHref } from "@/lib/signup";
+import { joinHref } from "@/lib/signup";
 import { getPublicPlans } from "@/server/queries/public";
 import { lowestPaidPrice, plansOf } from "@/server/services/plans";
 import { applySiteLocale } from "@/i18n/site-locale";
@@ -94,7 +94,7 @@ export default async function CompaniesPage({ params }: PageProps<"/[locale]/ent
   await applySiteLocale(params);
   const t = await getTranslations();
   const plans = await getPublicPlans();
-  const signup = signupHref({ profil: "company" });
+  const signup = joinHref({ profil: "company" });
   // The plan tag of the members illustration: the recommended Company plan, read from the database.
   const featuredPlan = plansOf(plans, "company").find((plan) => plan.recommended);
 

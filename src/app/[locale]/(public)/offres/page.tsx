@@ -20,7 +20,7 @@ import { CatalogJobCard } from "@/components/site/public-cards";
 import { ButtonLink, EmptyState, Skeleton } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { pageMetadata } from "@/lib/seo";
-import { loginHref, signupHref } from "@/lib/signup";
+import { joinHref, memberHref } from "@/lib/signup";
 import { getJobSearch } from "@/server/queries/public";
 import {
   contractFilters,
@@ -186,7 +186,7 @@ async function Results({
             title={t("emptyAll.title")}
             description={t("emptyAll.text")}
             action={
-              <ButtonLink href={signupHref({ profil: "talent" })}>{t("emptyAll.cta")}</ButtonLink>
+              <ButtonLink href={joinHref({ profil: "talent" })}>{t("emptyAll.cta")}</ButtonLink>
             }
           />
         </div>
@@ -343,7 +343,7 @@ async function Results({
                 <AiOrb size={32} className="jm-pulse shrink-0 sm:hidden" />
                 {t("matchHint.text")}
               </p>
-              <SiteButton href={loginHref("/app/jobs")} tone="lime" size="md">
+              <SiteButton href={memberHref("/app/jobs")} tone="lime" size="md">
                 {t("matchHint.cta")}
               </SiteButton>
             </div>
@@ -395,7 +395,7 @@ async function Results({
               <p className="relative max-w-[260px] text-[15px] leading-[22px]">
                 {t("recruiterBanner.text")}
               </p>
-              <SiteButton href={signupHref({ profil: "rh" })} size="md" className="relative">
+              <SiteButton href={joinHref({ profil: "rh" })} size="md" className="relative">
                 {t("recruiterBanner.cta")}
               </SiteButton>
             </div>
