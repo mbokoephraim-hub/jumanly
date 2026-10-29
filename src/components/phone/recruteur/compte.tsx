@@ -288,7 +288,11 @@ export async function RhProfileScreen({ ctx, query }: { ctx: HireContext; query:
             ),
           },
           account: { href: "/app/hire/compte", label: t("profile.account") },
-          stats: <AudienceStats figures={audience} />,
+          stats: (
+            <div className="nb-cr-pad">
+              <AudienceStats figures={audience} />
+            </div>
+          ),
           suivi: (
             <>
               <h2 className="nb-pf-h" data-loin="">
