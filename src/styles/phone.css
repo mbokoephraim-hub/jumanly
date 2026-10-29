@@ -3520,7 +3520,7 @@ html[data-nb-decouvert] .nb-spl-halo {
   overflow-wrap: anywhere;
 }
 .nb-fil-grand-titre + .nb-fil-grand-texte {
-  margin-top: 8px;
+  margin-top: 12px;
 }
 .nb-fil-grand-texte {
   font-size: 17px;
@@ -3818,7 +3818,7 @@ html[data-nb-decouvert] .nb-spl-halo {
 .nb-fil-apercu-texte {
   font-size: 14.5px;
   line-height: 1.5;
-  margin-top: 6px;
+  margin-top: 10px;
   color: var(--nb-t-dce6e3, #dce6e3);
   overflow-wrap: anywhere;
 }

@@ -16,7 +16,8 @@
   font-size: 18px;
 }
 .nb-fil-carte .nb-fil-pb .nb-fil-texte p {
-  margin-top: 4px;
+  /* Un peu d’air sous le titre pour qu’on le reconnaisse (Ephraïm, 29/10/2026). */
+  margin-top: 10px;
 }
 .nb-fil-photo {
   display: block;
