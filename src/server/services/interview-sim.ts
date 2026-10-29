@@ -46,7 +46,7 @@ export const questionCount = (minutes: number) => Math.max(3, Math.round(minutes
 
 export class InterviewError extends Error {
   constructor(
-    readonly code: "entitlement" | "quota" | "consent" | "invalid" | "notFound",
+    readonly code: "reserved" | "entitlement" | "quota" | "consent" | "invalid" | "notFound",
     readonly resetsAt?: Date,
   ) {
     super(`Interview ${code}`);
@@ -346,6 +346,22 @@ export async function interviewAllowance(
   };
 }
 
+/**
+ * Who may start a simulation (demande d'Ephraïm du 29/10/2026): someone who applied to an offer
+ * (an application not withdrawn) AND whose plan includes simulations (the written or spoken quota
+ * above zero, read from the plans, never named). The trial only opens a mode the plan lacks.
+ */
+export async function interviewAccess(db: PrismaClient, userId: string, now = new Date()) {
+  const subject: Subject = { type: "user", id: userId };
+  const [text, voice, applied] = await Promise.all([
+    usage(db, subject, quotaKey("text"), now),
+    usage(db, subject, quotaKey("voice"), now),
+    db.application.count({ where: { profile: { userId }, status: { not: "withdrawn" } } }),
+  ]);
+  const plan = text.limit !== 0 || voice.limit !== 0;
+  return { applied: applied > 0, plan, open: applied > 0 && plan };
+}
+
 /** Options of a session started on the phone (lot B6). */
 export type StartOptions = {
   /** One hint per question of the bank, same order. */
@@ -374,6 +390,7 @@ export async function startInterview(
   const subject: Subject = { type: "user", id: userId };
   const readiness = await aiReadiness(db, userId, "interview_questions");
   if (readiness === "consent") throw new InterviewError("consent");
+  if (!(await interviewAccess(db, userId, now)).open) throw new InterviewError("reserved");
   const allowance = await interviewAllowance(db, userId, input.mode, now);
   let key = quotaKey(input.mode);
   if (!allowance.included) {

@@ -409,6 +409,8 @@ const talents: Talent[] = [
   // and the file of the recruiter redesign (lot 3, planches recruteur-2). All fictional.
   {
     email: "amani.ux@jumanly.test",
+    // Starter: the written simulations, and the 5-minute trial of the spoken one (e2e B6).
+    plan: "talent_starter",
     firstName: "Amani",
     city: "Kinshasa",
     headline: "Analyste de données",

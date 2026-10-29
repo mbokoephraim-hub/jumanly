@@ -3385,6 +3385,7 @@ Conventions :
 | `entrain.locked.text` | Écrites dès {text}, à l'oral dès {voice}. |
 | `entrain.applyFree` | Postuler et passer vos entretiens restent gratuits. |
 | `entrain.plans` | Voir les formules |
+| `entrain.error.reserved` | La simulation d'entretien est réservée aux personnes qui ont candidaté à une offre, avec une formule qui inclut les simulations. |
 | `entrain.error.consent` | Les simulations utilisent l'IA. Activez-la dans vos paramètres de confidentialité pour commencer. |
 | `entrain.error.entitlement` | Ce format de simulation n'est pas inclus dans votre formule. |
 | `entrain.error.quota` | Vous avez utilisé toutes les simulations de ce format ce mois-ci. |
@@ -9397,6 +9398,42 @@ Conventions :
 | `phoneCareer.progression.step.languages` | Ajouter mes langues |
 | `phoneCareer.progression.step.apply` | Postuler à une offre |
 | `phoneCareer.progression.step.course` | Suivre un cours |
+| `phoneCareer.training.title` | Mes entraînements |
+| `phoneCareer.training.sim.title` | Simulation d’entretien avec Orbi |
+| `phoneCareer.training.sim.open` | Entraînez-vous sur l’offre à laquelle vous avez candidaté, puis suivez vos progrès d’une simulation à l’autre. |
+| `phoneCareer.training.sim.start` | S’entraîner |
+| `phoneCareer.training.sim.reserved` | Réservée aux personnes qui ont candidaté à une offre, avec une formule qui inclut les simulations. |
+| `phoneCareer.training.sim.applied` | Avoir candidaté à une offre |
+| `phoneCareer.training.sim.appliedCta` | Voir les offres |
+| `phoneCareer.training.sim.plan` | {plan, select, none {Une formule avec les simulations} other {Une formule avec les simulations, dès {plan}}} |
+| `phoneCareer.training.sim.planCta` | Voir les formules |
+| `phoneCareer.training.sim.done` | Fait |
+| `phoneCareer.training.sim.free` | Postuler reste gratuit, toujours. |
+| `phoneCareer.training.prepare` | À préparer |
+| `phoneCareer.training.reservedTag` | Réservé |
+| `phoneCareer.training.prep.interview` | Préparer l’entretien : {title} |
+| `phoneCareer.training.prep.interviewText` | {company} · une simulation guidée par l’offre |
+| `phoneCareer.training.prep.interviewDate` | {company} · entretien le {date} |
+| `phoneCareer.training.prep.criterion` | Travailler : {criterion} |
+| `phoneCareer.training.prep.criterionText.clarity` | Des phrases courtes, une idée par phrase ({score}/100 à la dernière simulation) |
+| `phoneCareer.training.prep.criterionText.examples` | Un exemple chiffré par réponse : situation, action, résultat ({score}/100 à la dernière simulation) |
+| `phoneCareer.training.prep.criterionText.relevance` | Reprenez les mots de l’offre et les compétences demandées ({score}/100 à la dernière simulation) |
+| `phoneCareer.training.prep.criterionText.ease` | Parlez posément, sans « euh », en respirant entre les idées ({score}/100 à la dernière simulation) |
+| `phoneCareer.training.prep.criterionText.length` | Une à deux minutes par réponse, ni trop court ni trop long ({score}/100 à la dernière simulation) |
+| `phoneCareer.training.prep.skill` | Renforcer : {skill} |
+| `phoneCareer.training.prep.skillText` | Demandé par « {job} » · un cours pour s’y mettre |
+| `phoneCareer.training.prep.apply` | Candidater à une offre |
+| `phoneCareer.training.prep.applyText` | Orbi vous préparera ensuite à l’entretien |
+| `phoneCareer.training.followTitle` | Mon suivi |
+| `phoneCareer.training.follow.count` | {count, plural, one {# simulation terminée} other {# simulations terminées}} |
+| `phoneCareer.training.follow.last` | Dernière note |
+| `phoneCareer.training.follow.up` | +{points} depuis la première |
+| `phoneCareer.training.follow.down` | {points} depuis la première |
+| `phoneCareer.training.follow.same` | Comme la première |
+| `phoneCareer.training.follow.why` | Notes calculées par des règles fixes à partir de vos réponses. Elles mesurent vos réponses, jamais vos chances, et ne sont jamais montrées à un recruteur. |
+| `phoneCareer.training.follow.report` | Revoir le dernier bilan |
+| `phoneCareer.training.follow.all` | Toutes mes simulations |
+| `phoneCareer.training.follow.empty` | Vos notes apparaîtront ici après votre première simulation. |
 | `phoneCareer.applications.sent` | {company} · envoyée le {date} |
 | `phoneCareer.applications.status.sent` | Envoyée |
 | `phoneCareer.applications.status.viewed` | Vue |
@@ -10006,6 +10043,15 @@ Conventions :
 | `phoneInterview.error.consent` | Pour qu’Orbi prépare les questions, autorisez l’assistance IA dans vos paramètres. |
 | `phoneInterview.error.consentCta` | Ouvrir les paramètres |
 | `phoneInterview.error.quota` | Vos simulations du mois sont utilisées. Elles reviennent le {date}. |
+| `phoneInterview.reserved.title` | Simulation d’entretien |
+| `phoneInterview.reserved.text` | Elle est réservée aux personnes qui ont candidaté à une offre, avec une formule qui inclut les simulations. Orbi vous prépare alors sur l’offre et suit vos progrès d’une simulation à l’autre. |
+| `phoneInterview.reserved.applied` | Avoir candidaté à une offre |
+| `phoneInterview.reserved.appliedCta` | Voir les offres |
+| `phoneInterview.reserved.plan` | {plan, select, none {Une formule avec les simulations} other {Une formule avec les simulations, dès {plan}}} |
+| `phoneInterview.reserved.planCta` | Voir les formules |
+| `phoneInterview.reserved.done` | Fait |
+| `phoneInterview.reserved.free` | Postuler reste gratuit, toujours. |
+| `phoneInterview.error.reserved` | La simulation d’entretien est réservée aux personnes qui ont candidaté à une offre, avec une formule qui inclut les simulations. |
 | `phoneInterview.error.entitlement` | Cette simulation n’est pas incluse dans votre formule. |
 | `phoneInterview.error.invalid` | Indiquez le poste visé (2 caractères au moins). |
 | `phoneInterview.error.network` | Orbi n’a pas pu préparer les questions. Vérifiez la connexion et réessayez. |

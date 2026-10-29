@@ -5020,6 +5020,14 @@ bibliothèque, et se supprime.
 
 - Ephraïm n'arrivait pas à devenir administrateur : la promotion par `ADMIN_BOOTSTRAP_EMAIL` ne se faisait qu'à une nouvelle connexion, et une session dure 30 jours. Désormais, ouvrir `/admin` avec une adresse listée et vérifiée suffit (`src/proxy.ts`), toujours journalisé.
 
+## 2026-10-29 · Carrière › Progression : « Mes entraînements »
+
+- Demande d'Ephraïm : dans Progression, un bloc « Mes entraînements » avec ce qu'il faut améliorer (préparations proposées) et la simulation d'entretien, réservée à ceux qui ont candidaté **et** dont la formule inclut les simulations (Starter, Pro et au-delà), avec un suivi d'une simulation à l'autre.
+- Service `src/server/services/career-training.ts` : préparations (les candidatures à préparer, entretien prévu d'abord ; le critère le plus faible du dernier bilan ; une compétence demandée par une offre et absente du profil → un cours) et suivi (nombre de simulations, dernière note, écart depuis la première, notes par critère).
+- `interviewAccess()` dans `interview-sim.ts` : candidature non retirée + quota écrit ou oral au-dessus de zéro (droits, jamais un nom de forfait). `startInterview` renvoie `reserved` sinon ; l'écran des réglages au téléphone affiche alors ce qui manque (« Voir les offres », « Voir les formules »). L'essai de 5 minutes n'ouvre plus que l'oral pour Starter.
+- Démo : Amani (amani.ux@) passe en Starter ; les e2e de simulation utilisent Amani et Jean-Pierre (Pro, avec candidature). Note dans `docs/specifications.md` partie 05.
+- Non vérifié (Ephraïm ne veut plus de vérifications) : e2e et capture.
+
 ## 2026-10-29 · Admin : fiche utilisateur à part, suppression justifiée, suppression d'une entreprise
 
 Demande d'Ephraïm du 29/10/2026 (partie administration seulement).

@@ -639,6 +639,8 @@ Une institution (banque, université, fondation, entreprise, agence de coopérat
 | `reports.progress.detailed` | — | — | — | ✓ |
 | `support.priority` | — | — | — | ✓ |
 
+**Simulation d'entretien (décision d'Ephraïm du 29/10/2026)** : elle est réservée aux personnes qui ont **candidaté à une offre** (une candidature non retirée) **et** dont la formule inclut les simulations (`career.interview.text.monthly` ou `career.interview.voice.monthly` au-dessus de zéro, aujourd'hui Starter et au-delà). L'essai de 5 minutes n'ouvre plus qu'un mode que la formule n'inclut pas (l'oral pour Starter). Candidater reste gratuit pour tous. Carrière › Progression › « Mes entraînements » montre ce qui manque, les préparations proposées et le suivi des notes d'une simulation à l'autre.
+
 Le diagnostic simplifié et les conseils généraux du plan Free sont fournis **sans appel à l'IA** (règles et contenus statiques), pour que le gratuit ne coûte presque rien.
 
 #### 3.2 RH et Companies

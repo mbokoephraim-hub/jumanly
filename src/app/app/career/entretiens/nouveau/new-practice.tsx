@@ -41,7 +41,7 @@ export async function NewPractice({
   type: string | null;
   /** « Sur une offre »: the saved offers and applications to choose from. */
   fromOffer: boolean;
-  error: "consent" | "entitlement" | "quota" | "invalid" | null;
+  error: "reserved" | "consent" | "entitlement" | "quota" | "invalid" | null;
 }) {
   const t = await getTranslations();
   const [text, voice, plans, jobs] = await Promise.all([
