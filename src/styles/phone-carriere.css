@@ -86,10 +86,6 @@ a.nb-cr-rb {
   flex-wrap: wrap;
   gap: 7px;
 }
-.nb-cr-formule {
-  background: var(--nb-creme);
-  color: var(--nb-nuit);
-}
 .nb-cr-vide a {
   color: var(--nb-brume);
   text-decoration: underline;
@@ -150,6 +146,11 @@ a.nb-cr-rb {
   font-size: 12px;
   font-weight: 800;
   white-space: nowrap;
+}
+/* « 100 % » fits in the ring (Ephraïm 29/10/2026). */
+.nb-cr-complet .nb-cr-anneau > span {
+  font-size: 10px;
+  letter-spacing: -0.02em;
 }
 .nb-cr-complet-t {
   flex: 1;

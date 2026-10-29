@@ -139,6 +139,7 @@ export async function rhRecruiterProfile(db: PrismaClient, ctx: HireContext) {
     city: user.city ?? organization.city ?? null,
     otherCities: profile?.otherCities ?? [],
     headline: profile?.headline?.trim() || null,
+    bioSource: (profile?.bioSource === "talent" ? "talent" : "recruiter") as RhBioSource,
     hiringNow: profile?.hiringNow ?? true,
     seeking: profile?.seeking ?? "",
     domains: profile?.domains ?? [],
@@ -159,8 +160,12 @@ export async function rhRecruiterProfile(db: PrismaClient, ctx: HireContext) {
 export const RH_CONTACTS_FOR = ["interview", "nobody"] as const;
 export type RhContactsFor = "interview" | "nobody" | "connections";
 
+export type RhBioSource = "recruiter" | "talent";
+
 export const rhProfileEditSchema = z.object({
   headline: z.string().trim().max(280),
+  /** The bio shown on the profile: the recruiter's hook or the talent's (Ephraïm 29/10/2026). */
+  bioSource: z.enum(["recruiter", "talent"]).default("recruiter"),
   hiringNow: z.boolean(),
   contactsFor: z.enum(["interview", "nobody", "connections"]),
   /** « Le candidat que je recherche » (Ephraïm 27/10/2026). */

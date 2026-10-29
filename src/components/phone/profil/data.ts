@@ -32,6 +32,8 @@ export type ProfileView = {
   /** « À propos », before the skills: a title and up to 400 characters on who they are. */
   about: { title: string | null; text: string } | null;
   connections: number;
+  /** « N abonnés » under the bio (Ephraïm 29/10/2026). */
+  followers: number;
   /** A recruiter's profile (Ephraïm 27/10/2026): no portfolio, the post and the hiring. */
   recruiter: {
     post: string | null;

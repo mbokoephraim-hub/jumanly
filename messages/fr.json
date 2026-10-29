@@ -10813,6 +10813,8 @@
     "time": "{hour} h {minute}",
     "timeLine": "· {time}",
     "connections": "{count, plural, one {<b>#</b> connexion} other {<b>#</b> connexions}}",
+    "followers": "{count, plural, one {<b>#</b> abonné} other {<b>#</b> abonnés}}",
+    "planMark": "Formule {plan}",
     "seeks": "Cherche : <b>{contract}</b>",
     "activity": {
       "now": "Actif maintenant",
@@ -20114,6 +20116,11 @@
       "orbiText": "Je recrute les talents {domains} de {org}. Je réponds à chaque candidature.",
       "orbiTextNoDomain": "Je recrute pour {org}. Je réponds à chaque candidature.",
       "orbiNote": "Orbi propose, vous relisez avant d'enregistrer.",
+      "bioSource": "Bio affichée sur mon profil",
+      "bio": {
+        "recruiter": "Mon accroche de recruteur",
+        "talent": "Ma bio de talent"
+      },
       "seeking": "Le candidat que je recherche",
       "seekingPlaceholder": "Ex. : un ou une comptable junior, rigoureux, à l’aise avec Excel, disponible à Kinshasa.",
       "seekingCount": "{count} / 400",

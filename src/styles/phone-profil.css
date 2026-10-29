@@ -218,6 +218,29 @@ button.nb-pf-rb,
   color: var(--nb-t-c9d6d2, #c9d6d2);
   white-space: nowrap;
 }
+/* « N abonnés · entreprise · disponibilité » on one line, smaller (Ephraïm 29/10/2026): what
+   does not fit slides sideways. */
+.nb-pf-chips[data-ligne] {
+  flex-wrap: nowrap;
+  gap: 5px;
+  margin-top: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nb-pf-chips[data-ligne]::-webkit-scrollbar {
+  display: none;
+}
+.nb-pf-chips[data-ligne] .nb-pf-st {
+  flex: none;
+  gap: 4px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 12px;
+  font-size: 10.5px;
+}
+.nb-pf-formule {
+  flex: none;
+}
 .nb-pf-st b {
   color: var(--nb-creme);
   font-weight: 700;

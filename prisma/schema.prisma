@@ -2719,6 +2719,9 @@ model RecruiterProfile {
   domains                String[]  @default([])
   levels                 String[]  @default([])
   hiresPerYear           String?
+  /// Which bio the profile shows (Ephraïm 29/10/2026): "recruiter" (`headline`) or "talent"
+  /// (the talent profile's headline).
+  bioSource              String    @default("recruiter")
   /// « Je recrute en indépendant·e »: offers show under the person's name.
   independent            Boolean   @default(false)
   /// The space opened under the person's own name while a request to join waits (or for an

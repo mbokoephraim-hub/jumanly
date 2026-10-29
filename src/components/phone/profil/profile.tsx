@@ -72,6 +72,59 @@ export function VerifiedMark({ label, size = 18 }: { label: string; size?: numbe
 }
 
 /**
+ * The mark of a paid plan after the name (Ephraïm 29/10/2026): no word, one icon per level, none
+ * for a free plan. 1: a sky spark, 2: a mint bolt, 3: a gold crown.
+ */
+export function PlanMark({
+  tier,
+  label,
+  size = 18,
+}: {
+  tier: 0 | 1 | 2 | 3;
+  label: string;
+  size?: number;
+}) {
+  if (tier === 0) return null;
+  return (
+    <svg
+      className="nb-pf-formule"
+      data-niveau={tier}
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      role="img"
+      aria-label={label}
+    >
+      <title>{label}</title>
+      {tier === 1 ? (
+        <>
+          <circle cx="12" cy="12" r="10.5" fill="#1E4E79" />
+          <path
+            d="M12 5.5l1.6 4.9 4.9 1.6-4.9 1.6-1.6 4.9-1.6-4.9-4.9-1.6 4.9-1.6z"
+            fill="#7CC4FF"
+          />
+        </>
+      ) : tier === 2 ? (
+        <>
+          <path d="M12 1.8l8.9 5.1v10.2L12 22.2l-8.9-5.1V6.9z" fill="#2E2557" />
+          <path d="M13.2 5.5 7.8 13h3.8l-1 5.5 5.6-7.6h-3.9z" fill="#B9A6FF" />
+        </>
+      ) : (
+        <>
+          <circle cx="12" cy="12" r="10.5" fill="#F2C230" />
+          <path
+            d="M6.5 15.8 5.6 8.6l3.6 2.8L12 6.6l2.8 4.8 3.6-2.8-.9 7.2z"
+            fill="#5A3D0B"
+            strokeLinejoin="round"
+          />
+          <path d="M7 17.6h10" stroke="#5A3D0B" strokeWidth="1.6" strokeLinecap="round" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+/**
  * The profile of a person on the phone (docs/profil-personne, maquette `Profil.dc.html`): the
  * compact head (banner 4:1, photo with its ring, networks, name, handle, flag and local time,
  * bio, chips, connections in common), then `actions` (« Se connecter » and « Chat », or the
@@ -305,7 +358,7 @@ export function PersonProfile({
           </p>
         ) : null}
         {person.bio ? <p className="nb-pf-bio">{person.bio}</p> : null}
-        <div className="nb-pf-chips">
+        <div className="nb-pf-chips" data-ligne="">
           <span className="nb-pf-st">
             <svg
               width="13"
@@ -320,7 +373,7 @@ export function PersonProfile({
               <circle cx="9" cy="8" r="3.5" />
               <path d="M2.5 19.5c.8-3.3 3.4-5 6.5-5s5.7 1.7 6.5 5M16 4.8a3.4 3.4 0 0 1 0 6.4M18.5 14.6c1.6.8 2.6 2.4 3 4.9" />
             </svg>
-            {t.rich("connections", { count: person.connections, b: (chunks) => <b>{chunks}</b> })}
+            {t.rich("followers", { count: person.followers, b: (chunks) => <b>{chunks}</b> })}
           </span>
           {person.domain ? (
             <span className="nb-pf-st">

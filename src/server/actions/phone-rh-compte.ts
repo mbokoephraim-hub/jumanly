@@ -30,6 +30,7 @@ export async function rhSaveProfileAction(formData: FormData) {
   const { ctx } = await requireHire(`${COMPTE}/profil/modifier`);
   const saved = await saveRhProfile(db, ctx, {
     headline: String(formData.get("headline") ?? ""),
+    bioSource: String(formData.get("bioSource") ?? "recruiter"),
     hiringNow: formData.get("hiringNow") === "on",
     contactsFor: String(formData.get("contactsFor") ?? "interview"),
     seeking: String(formData.get("seeking") ?? ""),

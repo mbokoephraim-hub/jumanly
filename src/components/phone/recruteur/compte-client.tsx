@@ -274,7 +274,13 @@ export function RhProfileEdit({
   action,
   error,
 }: {
-  initial: { headline: string; hiringNow: boolean; contactsFor: string; seeking: string };
+  initial: {
+    headline: string;
+    bioSource: "recruiter" | "talent";
+    hiringNow: boolean;
+    contactsFor: string;
+    seeking: string;
+  };
   /** Orbi's hook, written from the profile's domains (deterministic, no credit). */
   orbi: string;
   company: ReactNode;
@@ -283,6 +289,7 @@ export function RhProfileEdit({
 }) {
   const t = useTranslations("phoneRhCompte.edit");
   const [headline, setHeadline] = useState(initial.headline);
+  const [bio, setBio] = useState(initial.bioSource);
   const [hiring, setHiring] = useState(initial.hiringNow);
   const [seeking, setSeeking] = useState(initial.seeking);
   const [contacts, setContacts] = useState(
@@ -312,6 +319,25 @@ export function RhProfileEdit({
         {t("orbi")}
       </button>
       <p className="nb-rc-note">{t("orbiNote")}</p>
+      {/* The bio of the profile: this hook or the talent profile's (Ephraïm 29/10/2026). */}
+      <p className="nb-rc-label" id="rc-bio">
+        {t("bioSource")}
+      </p>
+      <div className="nb-rc-chips" role="radiogroup" aria-labelledby="rc-bio">
+        {(["recruiter", "talent"] as const).map((key) => (
+          <button
+            key={key}
+            type="button"
+            role="radio"
+            aria-checked={bio === key}
+            className="nb-rc-chip"
+            onClick={() => setBio(key)}
+          >
+            {t(`bio.${key}`)}
+          </button>
+        ))}
+      </div>
+      <input type="hidden" name="bioSource" value={bio} />
       <label className="nb-rc-champ" id="recherche">
         <span>{t("seeking")}</span>
         <textarea

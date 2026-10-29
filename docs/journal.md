@@ -5179,3 +5179,12 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - Partage ailleurs : Copier le lien, WhatsApp (wa.me), LinkedIn (share-offsite), Instagram (menu de partage du téléphone, sinon lien copié à coller), Autres applis (menu natif, sinon lien copié). Le lien `/app/fil/{id}` est réservé aux personnes connectées qui peuvent voir la publication.
 - Chat : la publication envoyée devient une carte (auteur, photo, titre, texte, « Voir la publication ») relue en base à chaque affichage ; une publication retirée affiche « Cette publication n'est plus disponible ». Le texte du message garde le lien pour l'ordinateur et la liste.
 - Non vérifié dans l'appli : Ephraïm a demandé de publier sans longs essais (types, lint, tests unitaires et build passés). Sur ordinateur, `/app/fil/{id}` renvoie encore vers `/app` (pas de Fil talent sur ordinateur).
+
+
+## 2026-10-29 · Badges d'abonnement et haut du profil
+
+- La pastille « Premium » à côté du nom disparaît. Une petite icône sans texte montre le niveau payant : étincelle bleue (1er niveau payant), éclair violet (2e), couronne dorée (3e) ; rien pour la formule gratuite. Le niveau se lit au prix parmi les formules publiques payantes de la même famille (`planTier`), sans nom de forfait dans le code. L'icône garde le nom de la formule pour les lecteurs d'écran. Visible seulement sur « Mon profil », comme l'ancienne pastille (rien dans la vue des autres, pour ne pas distinguer les profils Free).
+- Sous la bio : « N abonnés » (personnes qui suivent dans le Fil) remplace « N connexions », puis l'entreprise ou le domaine, puis la disponibilité, sur une seule ligne aux textes réduits (ce qui ne tient pas glisse sur le côté). Même ligne sur le profil vu par les autres.
+- Recruteur : « Modifier mon profil » propose « Bio affichée sur mon profil » : mon accroche de recruteur ou ma bio de talent (`RecruiterProfile.bioSource`, migration `recruiter_bio_source`).
+- Le pourcentage du cercle « Profil complété » est plus petit pour que « 100 % » tienne.
+- Publié sans essai dans l'appli, à la demande d'Ephraïm.
