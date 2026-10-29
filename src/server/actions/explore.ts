@@ -1,12 +1,14 @@
 "use server";
 
 import { refresh } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { onApplicationCreated } from "@/server/application-events";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { reportError } from "@/server/observability";
 import { applyToJob } from "@/server/services/applications";
+import { tailorCv } from "@/server/services/career-documents";
 import { ConnectionError, requestConnection } from "@/server/services/connections";
 import { createReport } from "@/server/services/moderation";
 import {
@@ -186,6 +188,42 @@ export async function applyFromSheetAction(input: {
   } catch (error) {
     void reportError(error, { message: "Explorer · candidature" });
     return { ok: false, error: "failed" };
+  }
+}
+
+/**
+ * « Orbi adapte ce CV à l'offre » inside the sheet Postuler (Ephraïm, 29/10/2026): the copy is
+ * made here and the talent stays in the application, the copy chosen. Orbi only puts forward
+ * what the CV already shows (`tailorCv`, `career.cv.tailor` checked in `runAi`). Applying stays
+ * free: only the adaptation is a paid feature.
+ */
+export async function tailorForApplicationAction(input: {
+  cv: string;
+  job: string;
+}): Promise<ExploreResult<{ id: string; title: string; suggestions: number }>> {
+  const cv = idSchema.safeParse(input.cv);
+  const job = idSchema.safeParse(input.job);
+  if (!cv.success || !job.success) return { ok: false, error: "invalid" };
+  const user = await requireUser(PAGE);
+  const t = await getTranslations("career.cv.tailor");
+  try {
+    const result = await tailorCv(db, user.id, {
+      cvId: cv.data,
+      jobId: job.data,
+      title: (jobTitle) => t("name", { jobTitle }),
+    });
+    if (!result.ok) return { ok: false, error: result.code };
+    return {
+      ok: true,
+      value: {
+        id: result.id,
+        title: t("name", { jobTitle: result.jobTitle }),
+        suggestions: result.suggestions,
+      },
+    };
+  } catch (error) {
+    void reportError(error, { message: "Explorer · adapter le CV" });
+    return { ok: false, error: "unavailable" };
   }
 }
 

@@ -33,13 +33,20 @@ import {
 } from "@/server/matching/service";
 import { getJob } from "@/server/queries/public";
 import { getApplicationDraft } from "@/server/services/application-draft";
-import { contractFilterOf, parseCriteria, remoteFilterOf } from "@/server/services/jobs";
+import {
+  contractFilterOf,
+  parseCriteria,
+  parseLanguages,
+  remoteFilterOf,
+} from "@/server/services/jobs";
 import { reportReasons } from "@/server/services/moderation";
 import { companyTone, explorerWords } from "@/components/phone/explorer/data";
 import { PhoneOffer, type PhoneOfferView } from "@/components/phone/explorer/offer";
 import { ExplorerTexts } from "@/components/phone/explorer/server";
 import { initialsOf, shortName } from "@/components/phone/fil/data";
 import { isPhone } from "@/server/view";
+import { languageLabel } from "@/components/phone/career/data";
+import { flagOf } from "@/lib/countries";
 
 export async function generateMetadata({
   params,
@@ -235,12 +242,45 @@ export default async function TalentJobPage({
       line: job.organization.verifiedAt
         ? tx("offer.verifiedAgo", { ago })
         : tx("offer.ago", { ago }),
-      chips: [
-        job.city,
-        words.kind(job),
-        tx(`offer.level.${level}`),
-        ...(job.salaryMin !== null || job.salaryMax !== null ? [tx("offer.salary")] : []),
+      // Everything the recruiter wrote, first (Ephraïm, 29/10/2026): one row of chips with their
+      // icon, the seat's flag, and the salary itself rather than « Salaire affiché ».
+      facts: [
+        { kind: "city", text: job.city, flag: flagOf(job.country) },
+        { kind: "contract", text: words.kind(job) },
+        { kind: "level", text: tx(`offer.level.${level}`) },
+        ...(job.salaryMin !== null || job.salaryMax !== null
+          ? [{ kind: "salary" as const, text: salaryText(d, job) }]
+          : []),
       ],
+      details: [
+        ...(job.educationLevels.length > 0
+          ? [
+              {
+                label: tx("offer.education"),
+                value: job.educationLevels
+                  .map((key) => d(`phoneRhOffres.wizard.educationLevels.${key}`))
+                  .join(", "),
+              },
+            ]
+          : []),
+        ...(parseLanguages(job.languagesRequired).length > 0
+          ? [
+              {
+                label: tx("offer.languages"),
+                value: parseLanguages(job.languagesRequired)
+                  .map((item) =>
+                    item.level
+                      ? `${languageLabel(item.code)} (${item.level})`
+                      : languageLabel(item.code),
+                  )
+                  .join(", "),
+              },
+            ]
+          : []),
+        { label: tx("offer.openings"), value: String(job.openings) },
+        ...(job.closesAt ? [{ label: tx("offer.closes"), value: formatDate(job.closesAt) }] : []),
+      ],
+      companyAbout: job.companyAbout || null,
       match: ok
         ? {
             state: "ok",
@@ -285,7 +325,7 @@ export default async function TalentJobPage({
             when: words.ago(cv.updatedAt),
           }),
         })),
-      adaptHref: jobRow ? `/app/career/cv/{cv}?adapter=${jobRow.id}` : null,
+      jobId: jobRow?.id ?? null,
     };
     return (
       <ExplorerTexts>

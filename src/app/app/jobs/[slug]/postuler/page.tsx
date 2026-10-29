@@ -166,9 +166,13 @@ export default async function ApplyPage({
   const cvs = [...(profile?.documents ?? [])].sort(
     (a, b) => Number(b.adaptedForJobId === jobRow.id) - Number(a.adaptedForJobId === jobRow.id),
   );
-  const chosenCv = draft?.profileOnly
-    ? null
-    : (cvs.find((cv) => cv.id === draft?.cvDocumentId) ?? cvs[0] ?? null);
+  // The CV chosen in the sheet Postuler (adapted by Orbi, maybe) comes along as ?cv=.
+  const fromSheet = typeof query.cv === "string" ? cvs.find((cv) => cv.id === query.cv) : undefined;
+  const chosenCv =
+    fromSheet ??
+    (draft?.profileOnly
+      ? null
+      : (cvs.find((cv) => cv.id === draft?.cvDocumentId) ?? cvs[0] ?? null));
   const letter = draft?.coverLetter ?? "";
   const questions = screeningQuestionsOf(job.screeningQuestions);
   const answers = new Map(

@@ -124,10 +124,18 @@ export function PhoneCompanyProfile({ data }: { data: PhoneCompanyProfileData })
   return (
     <div className="nb-page nb-ca-form nb-ep">
       <header className="nb-ca-form-barre">
-        <PhoneBack fallback="/app/hire/entreprise" label={t("cancel")} text={t("cancel")} />
+        {/* Icons rather than words, as on « Modifier le profil » (Ephraïm, 29/10/2026). */}
+        <PhoneBack fallback="/app/hire/entreprise" label={t("cancel")} icon="fermer" />
         <h1>{t("title")}</h1>
-        <button type="button" className="nb-ca-ok" onClick={save} disabled={pending}>
-          {t("save")}
+        <button
+          type="button"
+          className="nb-ca-ok"
+          onClick={save}
+          disabled={pending}
+          aria-label={t("save")}
+          aria-busy={pending}
+        >
+          <PhoneIcon name="coche" size={20} strong />
         </button>
       </header>
 
