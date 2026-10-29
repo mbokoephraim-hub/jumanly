@@ -5030,11 +5030,11 @@ section + section .nb-ex-sec {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 6;
+  z-index: 20;
   padding: 12px 20px max(16px, env(safe-area-inset-bottom));
-  background: rgba(var(--nb-nuit-rgb), 0.98);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  /* Fond plein : le texte de la page ne doit jamais se voir sous les boutons. */
+  background: var(--nb-nuit);
+  isolation: isolate;
   border-top: 1px solid rgba(var(--nb-voile), 0.08);
   display: flex;
   gap: 10px;
@@ -8640,7 +8640,7 @@ input:checked + .nb-ca-radio::after {
 /* Cours, leçon, attestation */
 .nb-fo-cours,
 .nb-fo-lecon-p {
-  padding-bottom: 120px;
+  padding-bottom: calc(132px + env(safe-area-inset-bottom));
 }
 .nb-fo-plus {
   font-size: 18px;
