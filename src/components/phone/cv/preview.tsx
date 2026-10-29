@@ -165,6 +165,17 @@ export function CvPreviewStep({
       steps={steps}
       bottom={
         <div className="nb-cv-fin">
+          <button
+            type="button"
+            className="nb-bouton nb-cv-principal"
+            data-plein=""
+            data-large=""
+            disabled={empty || preparing}
+            aria-busy={preparing}
+            onClick={download}
+          >
+            {empty ? t("preview.pdfEmpty") : preparing ? t("preview.preparing") : t("preview.pdf")}
+          </button>
           <div className="nb-cv-deux nb-cv-fin-deux">
             <button
               type="button"
@@ -175,24 +186,10 @@ export function CvPreviewStep({
             >
               {saved ? t("preview.savedButton") : t("preview.save")}
             </button>
-            <button
-              type="button"
-              className="nb-bouton nb-cv-principal"
-              data-plein=""
-              disabled={empty || preparing}
-              aria-busy={preparing}
-              onClick={download}
-            >
-              {empty
-                ? t("preview.pdfEmpty")
-                : preparing
-                  ? t("preview.preparing")
-                  : t("preview.pdf")}
+            <button type="button" className="nb-bouton" data-contour="" onClick={finish}>
+              {t("preview.finish")}
             </button>
           </div>
-          <button type="button" className="nb-bouton" data-contour="" onClick={finish}>
-            {t("preview.finish")}
-          </button>
         </div>
       }
     >

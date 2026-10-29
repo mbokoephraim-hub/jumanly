@@ -258,7 +258,10 @@ export function isEmptyCv(content: CvContent) {
     !content.summary &&
     content.experiences.length === 0 &&
     content.education.length === 0 &&
-    content.skills.length === 0
+    content.skills.length === 0 &&
+    content.languages.length === 0 &&
+    !content.achievements.some((line) => line.trim()) &&
+    !content.references.some((item) => item.name.trim())
   );
 }
 

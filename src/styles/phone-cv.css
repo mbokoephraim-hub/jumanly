@@ -1353,7 +1353,7 @@ button.nb-cv-depart {
 
 /* Fin du parcours (Ephraïm, 27/10) : télécharger, puis Terminer ; CV vide ; ajouter au profil. */
 .nb-cv:has(.nb-cv-fin) {
-  padding-bottom: calc(150px + var(--nb-bas));
+  padding-bottom: calc(176px + var(--nb-bas));
 }
 .nb-cv-fin {
   display: flex;
@@ -1564,7 +1564,7 @@ button.nb-cv-depart {
   cursor: pointer;
 }
 .nb-cvf-page {
-  max-height: 210px;
+  max-height: 180px;
   overflow: hidden;
   overflow-y: hidden;
   border-radius: 10px;
