@@ -181,6 +181,37 @@
     repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 9px),
     linear-gradient(135deg, #0f3f37 0%, #14745f 62%, #1fa98a 100%);
 }
+/* Same poster, other gradients (« Offres pour vous » of Explorer): one colour per offer. */
+.nb-fil-affiche[data-ton="1"] {
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(232, 180, 255, 0.35), transparent 55%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 9px),
+    linear-gradient(135deg, #2e1a47 0%, #5b3486 62%, #8a56c2 100%);
+}
+.nb-fil-affiche[data-ton="2"] {
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(140, 210, 255, 0.35), transparent 55%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 9px),
+    linear-gradient(135deg, #0f2a4a 0%, #1d4f8a 62%, #2f7fc4 100%);
+}
+.nb-fil-affiche[data-ton="3"] {
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(255, 214, 140, 0.35), transparent 55%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 9px),
+    linear-gradient(135deg, #4a2a0f 0%, #8a4f1d 62%, #c27a2f 100%);
+}
+.nb-fil-affiche[data-ton="4"] {
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(255, 170, 170, 0.35), transparent 55%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0 2px, transparent 2px 9px),
+    linear-gradient(135deg, #4a0f22 0%, #8a1d42 62%, #c2406a 100%);
+}
+.nb-ex-affiches .nb-fil-affiche {
+  flex: 0 0 auto;
+  width: min(300px, 82vw);
+  align-content: start;
+  scroll-snap-align: start;
+}
 .nb-fil-affiche-k {
   justify-self: start;
   padding: 3px 9px;

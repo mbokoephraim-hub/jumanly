@@ -11,7 +11,8 @@ import {
   showsSection,
 } from "@/server/services/explore-filters";
 import { MeAvatar } from "../me";
-import { CompanyCard, OfferCard, PersonRow, SavedLink } from "./cards";
+import { OfferPosterCard } from "../fil/post";
+import { CompanyCard, PersonRow, SavedLink } from "./cards";
 import type { ExplorerHomeView } from "./data";
 import { FiltersButton, FiltersSheet } from "./filters";
 import { ExplorerSearch } from "./search";
@@ -103,9 +104,9 @@ export function PhoneExplorer({
               {forYou.length === 0 ? (
                 <p className="nb-ex-vide">{t("noOffers")}</p>
               ) : (
-                <div className="nb-ex-rangee nb-ex-cartes">
-                  {forYou.map((offer) => (
-                    <OfferCard key={offer.id} offer={offer} />
+                <div className="nb-ex-rangee nb-ex-cartes nb-ex-affiches">
+                  {forYou.map((offer, index) => (
+                    <OfferPosterCard key={offer.id} job={offer.poster} ton={index % 5} />
                   ))}
                 </div>
               )}

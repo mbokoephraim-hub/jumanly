@@ -105,38 +105,6 @@ function Rings({
   );
 }
 
-/** A big offer card of the carousels: the cover with the logo, the title, the company, the chips. */
-export function OfferCard({ offer }: { offer: OfferView }) {
-  const t = useTranslations("phoneExplorer");
-  return (
-    <Link href={offer.href} className="nb-ex-carte">
-      <span className="nb-ex-couv" data-ton={offer.tone}>
-        <Rings width={272} height={126} r={62} stroke={22} />
-        <CompanyMark
-          initials={offer.initials}
-          logo={offer.logo}
-          tone={offer.tone}
-          size={92}
-          white
-        />
-      </span>
-      <span className="nb-ex-carte-corps">
-        <b className="nb-ex-carte-t">{offer.title}</b>
-        <span className="nb-ex-carte-e">
-          {offer.company}
-          {offer.verified ? <Verified label={t("verified")} /> : null}
-        </span>
-        <span className="nb-ex-ville">{offer.city}</span>
-        <span className="nb-ex-puces">
-          <span>{offer.kind}</span>
-          {offer.ago ? <span>{offer.ago}</span> : null}
-          <Score score={offer.score} />
-        </span>
-      </span>
-    </Link>
-  );
-}
-
 /** A company card of « Entreprises qui recrutent »: a tall picture, or its colour and its mark. */
 export function CompanyCard({ company }: { company: CompanyView }) {
   const t = useTranslations("phoneExplorer");

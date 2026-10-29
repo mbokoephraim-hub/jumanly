@@ -38,6 +38,16 @@ const offerSelect = {
   remote: true,
   city: true,
   publishedAt: true,
+  /** For the poster of « Offres pour vous » (the same as in the Fil). */
+  salaryMin: true,
+  salaryMax: true,
+  closesAt: true,
+  skills: {
+    where: { kind: "hard" },
+    orderBy: { weight: "desc" },
+    take: 3,
+    select: { skill: { select: { name: true } } },
+  },
   organization: {
     select: {
       slug: true,
@@ -443,7 +453,7 @@ export async function savedOffers(db: PrismaClient, userId: string, now = new Da
   const rows = await db.savedJob.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
-    select: { job: { select: { ...offerSelect, status: true, closesAt: true } } },
+    select: { job: { select: { ...offerSelect, status: true } } },
   });
   const matches = await matchesForUser(
     db,
@@ -454,11 +464,11 @@ export async function savedOffers(db: PrismaClient, userId: string, now = new Da
   const open = (job: { status: string; closesAt: Date | null }) =>
     job.status === "published" && (job.closesAt === null || job.closesAt > now);
   return rows
-    .map(({ job: { status, closesAt, ...job } }) => {
+    .map(({ job: { status, ...job } }) => {
       const match = matches.get(job.id);
       return {
         ...job,
-        open: open({ status, closesAt }),
+        open: open({ status, closesAt: job.closesAt }),
         score: match?.state === "ok" ? Math.round(match.explanation.score) : null,
       };
     })

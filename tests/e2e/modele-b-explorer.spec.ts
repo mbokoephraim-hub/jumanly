@@ -187,7 +187,7 @@ test.describe("Modèle B · Explorer au téléphone", () => {
     await logIn(page, "grace.ux@jumanly.test");
     await page.goto("/app/jobs");
     const nav = page.getByRole("navigation", { name: "Navigation principale" });
-    const card = page.locator(".nb-ex .nb-ex-carte").first();
+    const card = page.locator(".nb-ex .nb-fil-affiche").first();
     await expect(card).toBeVisible();
     await card.evaluate((node) => {
       (node as HTMLElement).dataset.test = "same";
@@ -196,7 +196,7 @@ test.describe("Modèle B · Explorer au téléphone", () => {
     await page.waitForURL((url) => url.pathname === "/app");
     await nav.getByRole("link", { name: "Explorer", exact: true }).click();
     await page.waitForURL("**/app/jobs");
-    await expect(page.locator('.nb-ex .nb-ex-carte[data-test="same"]')).toBeVisible();
+    await expect(page.locator('.nb-ex .nb-fil-affiche[data-test="same"]')).toBeVisible();
 
     // An offer opened from Explorer covers it, and « Explorer » brings it back as it was.
     await card.click();
@@ -204,6 +204,6 @@ test.describe("Modèle B · Explorer au téléphone", () => {
     await expect(page.locator(".nb-ex-offre")).toBeVisible();
     await page.getByRole("link", { name: "Explorer" }).first().click();
     await page.waitForURL("**/app/jobs");
-    await expect(page.locator('.nb-ex .nb-ex-carte[data-test="same"]')).toBeVisible();
+    await expect(page.locator('.nb-ex .nb-fil-affiche[data-test="same"]')).toBeVisible();
   });
 });
