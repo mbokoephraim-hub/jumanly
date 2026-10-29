@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
-import { usePathname } from "next/navigation";
 import { BodyPortal } from "./body-portal";
 
 /**
  * Menu of the public header on phones and tablets (29/10/2026): the round button turns its three
  * lines into a back arrow, the page behind blurs and the menu floats in below the header. Closes
- * with the arrow, a tap outside, Échap, or any link.
+ * with the arrow, a tap outside, Échap, or any link (no usePathname: it would block the
+ * prerender of the public pages).
  */
 export function PublicMobileMenu({
   openLabel,
@@ -21,13 +21,6 @@ export function PublicMobileMenu({
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
-  const [shownFor, setShownFor] = useState(pathname);
-  // A new page closes the menu.
-  if (shownFor !== pathname) {
-    setShownFor(pathname);
-    setOpen(false);
-  }
 
   useEffect(() => {
     if (!open) return;
