@@ -5156,3 +5156,11 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - Profil (le sien, celui d'une personne, la vue recruteur) : logo, poste, entreprise cliquable si elle a une page, période, « Réalisations clés » en points (4 visibles, puis « Voir plus »).
 - Les expériences liées à la page d'une entreprise comptent aussi dans ses « membres déclarés ».
 - Non vérifié dans l'appli : Ephraïm a demandé de publier sans essai (lint, types, tests unitaires et build passés). Un logo envoyé puis abandonné (formulaire annulé) reste stocké.
+
+## 2026-10-29 · Fenêtres du bas glissables (comme Instagram)
+
+- Demande d'Ephraïm : les feuilles du bas suivent le doigt, trois états (fermée, mi-hauteur, étendue).
+- Un seul contrôleur global, `src/components/motion/sheet-gestures.tsx` (monté dans le layout racine), agit sur toutes les feuilles du téléphone (`.nb-feuille` de `PhoneSheet` et `.t-sheet` de `Sheet`) sans toucher à leur design ni à leur contenu ; il n'agit que là où la poignée est visible (donc pas sur ordinateur).
+- Une feuille plus haute que 60 % de l'écran s'ouvre à 52 % ; glisser vers le haut l'étend à sa hauteur d'origine, vers le bas la ramène à mi-hauteur puis la ferme. Une feuille courte garde sa hauteur (deux états). Une feuille avec un champ de saisie s'ouvre entière.
+- Le glissement part de la bande du haut (poignée + titre) ou du contenu revenu en haut de son défilement. Un geste rapide passe à l'état suivant. Toucher le voile, « Fermer » et Échap ferment toujours.
+- Règles d'arrêt dans `src/lib/sheet-drag.ts` (tests `tests/unit/sheet-drag.test.ts`). Non vérifié sur un vrai téléphone avant fusion (choix d'Ephraïm : pas de vérification).
