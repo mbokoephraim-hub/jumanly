@@ -45,8 +45,8 @@ export function youtubeWatchUrl(id: string) {
 }
 
 /** The privacy-enhanced embed, without suggestions from other channels at the end. */
-export function youtubeEmbedUrl(id: string) {
-  return `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1&playsinline=1`;
+export function youtubeEmbedUrl(id: string, autoplay = false) {
+  return `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1&playsinline=1${autoplay ? "&autoplay=1" : ""}`;
 }
 
 /** The video's own picture, used as the cover of a course published from a YouTube link. */

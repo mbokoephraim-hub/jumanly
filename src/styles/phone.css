@@ -8711,6 +8711,10 @@ input:checked + .nb-ca-radio::after {
   height: auto;
   aspect-ratio: 16 / 9;
 }
+.nb-fo-ecran[data-couv] {
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
 .nb-fo-texte[data-paragraphes] {
   white-space: pre-line;
 }
