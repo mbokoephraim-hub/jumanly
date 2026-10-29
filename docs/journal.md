@@ -5156,3 +5156,9 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - Profil (le sien, celui d'une personne, la vue recruteur) : logo, poste, entreprise cliquable si elle a une page, période, « Réalisations clés » en points (4 visibles, puis « Voir plus »).
 - Les expériences liées à la page d'une entreprise comptent aussi dans ses « membres déclarés ».
 - Non vérifié dans l'appli : Ephraïm a demandé de publier sans essai (lint, types, tests unitaires et build passés). Un logo envoyé puis abandonné (formulaire annulé) reste stocké.
+
+## 2026-10-29 · Éditeur de CV : une réalisation par champ
+
+- Dans « Mes informations » (CV au téléphone), les missions et résultats d'une expérience se saisissent comme dans le profil : un champ par réalisation, monter, descendre, supprimer, ajouter (12 au plus sur un CV). Une nouvelle expérience s'ouvre sur 3 champs vides.
+- Les champs laissés vides ne s'impriment pas et ne comptent pas dans l'analyse du CV.
+- Publié sans essai dans l'appli, à la demande d'Ephraïm (lint, types, tests unitaires et build passés).

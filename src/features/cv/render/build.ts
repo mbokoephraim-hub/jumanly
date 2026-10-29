@@ -92,7 +92,8 @@ export function documentFromCv(
           experience.start ? labels.month(experience.start) : undefined,
           experience.end ? labels.month(experience.end) : labels.present,
         ),
-        bullets: experience.bullets.length > 0 ? experience.bullets : undefined,
+        // Réalisations left empty in the form are not printed.
+        bullets: filled(experience.bullets),
       })),
     });
   }
@@ -314,4 +315,10 @@ export function documentFromExample(example: ExampleCv, labels: CvTextLabels): C
     photoUrl: info.photo ? EXAMPLE_PHOTO : undefined,
     blocks,
   };
+}
+
+/** The points that hold text, or nothing when none does. */
+function filled(points: string[]) {
+  const kept = points.map((point) => point.trim()).filter(Boolean);
+  return kept.length > 0 ? kept : undefined;
 }
