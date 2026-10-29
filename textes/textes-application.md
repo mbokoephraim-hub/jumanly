@@ -9387,8 +9387,6 @@ Conventions :
 | `phoneCv.form.start` | Début |
 | `phoneCv.form.end` | Fin |
 | `phoneCv.form.current` | J’y travaille encore |
-| `phoneCv.form.bullets` | Missions et résultats |
-| `phoneCv.form.bulletsHint` | Une ligne par point. Un chiffre rend le résultat plus parlant. |
 | `phoneCv.form.addExperience` | Ajouter une expérience |
 | `phoneCv.form.educationNew` | Nouvelle formation |
 | `phoneCv.form.degree` | Diplôme ou formation |

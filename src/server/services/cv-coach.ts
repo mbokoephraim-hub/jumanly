@@ -47,7 +47,9 @@ export function cvScore(content: CvContent, targetSkills: string[]): CvScore {
     content.languages.length > 0,
   ];
   const ats = Math.round((100 * checks.filter(Boolean).length) / checks.length);
-  const bullets = content.experiences.flatMap((item) => item.bullets);
+  const bullets = content.experiences
+    .flatMap((item) => item.bullets)
+    .filter((bullet) => bullet.trim());
   const impact =
     bullets.length === 0 ? 0 : Math.round((100 * bullets.filter(hasDigit).length) / bullets.length);
   const text = cvText(content);
