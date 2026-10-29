@@ -5202,3 +5202,12 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - « Modifier le profil » (talent) : « Titre professionnel » (ce que voient recruteurs, connexions et offres où l'on candidate), puis « Mon Cap » désormais modifiable, puis la ville, puis « À propos » (la bio du profil). Une phrase rappelle que chaque CV a son propre titre et sa bio de candidature.
 - Dans le CV : « Titre sur ce CV » et « Bio de candidature » ; changer l'un ou l'autre ne touche pas au profil.
 - Publié sans essai dans l'appli, à la demande d'Ephraïm.
+
+
+## 2026-10-29 · Diplômes et certificats, vérification par un référent
+
+- Demande d'Ephraïm : « Formation » devient **Diplômes** (formation académique : fin des humanités, licence, master, doctorat…) et **Certificats** (formations en ligne, en présentiel ou hybrides, courtes ou longues). `Education.kind` (diploma / certificate, les anciennes lignes deviennent des diplômes), `format`, `length`, `image` ; migration `diplomas_certificates_reference_checks`. Les certificats ont le niveau « none » : le score de matching (niveau d'études le plus haut) ne change pas.
+- Photo du document (diplôme ou certificat) : WebP 1600 px au plus, sans métadonnées, adresse impossible à deviner (`/medias/formations/…`), ouverte en grand d'un toucher. Le formulaire du diplôme rappelle de cacher date de naissance et numéros.
+- **Faire vérifier** (expériences et certificats, toujours proposé, jamais obligatoire) : nom, e-mail et lien du référent dans le formulaire ; l'e-mail part à l'enregistrement (`ReferenceCheck`, seul le hachage du jeton est gardé, lien valable 30 jours). Le référent ouvre `/confirmer-reference/[jeton]` (sans compte, non indexée) et touche « Je confirme » ou « Je ne peux pas confirmer » ; la personne reçoit une notification. Une confirmation donne le badge « Vérifié » sur le profil (vue connexion et vue recruteur). Changer le poste, l'entreprise ou les dates (titre ou organisme d'un certificat) retire la vérification. On ne peut pas se citer soi-même ; 10 demandes par jour au plus.
+- Diplômes : pas de badge « Vérifié » (voir `docs/decisions/2026-10-29-verification-diplomes.md`) ; une photo jointe s'affiche « Justificatif joint ».
+- Publié sans essai dans l'appli, à la demande d'Ephraïm. Pas encore sur ordinateur (le profil web garde l'ancien formulaire, les nouvelles lignes y sont des diplômes par défaut). Sans e-mail configuré en production, la demande au référent est enregistrée mais l'e-mail ne part pas.

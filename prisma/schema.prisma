@@ -1221,6 +1221,7 @@ model TalentProfile {
   skills                 ProfileSkill[]
   experiences            Experience[]
   educations             Education[]
+  referenceChecks        ReferenceCheck[]
   documents              Document[]
   applications           Application[]
   /// Public portfolio (`career.portfolio.level`), at /portfolio/[slug] when published.
@@ -1250,26 +1251,27 @@ enum ExperienceType {
 }
 
 model Experience {
-  id             String              @id @default(cuid(2))
-  profileId      String
-  profile        TalentProfile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  title          String
-  company        String
+  id              String              @id @default(cuid(2))
+  profileId       String
+  profile         TalentProfile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  title           String
+  company         String
   /// The company's page on Jumanly, chosen among the suggestions while typing its name (demande
   /// d'Ephraïm du 29/10/2026): its logo and a link to its page. Unlinked when the page goes away.
-  organizationId String?
-  organization   Organization?       @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  organizationId  String?
+  organization    Organization?       @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   /// Logo sent by the person for a company without a page (`/medias/experiences/…`, 160 px WebP).
-  logo           String?
-  type           ExperienceType      @default(job)
-  location       String?
-  startDate      DateTime
+  logo            String?
+  type            ExperienceType      @default(job)
+  location        String?
+  startDate       DateTime
   /// null = current position.
-  endDate        DateTime?
+  endDate         DateTime?
   /// Réalisations clés: one achievement per line, in the person's order.
-  description    String              @default("")
-  createdAt      DateTime            @default(now())
-  declaredAt     OrgDeclaredMember[]
+  description     String              @default("")
+  createdAt       DateTime            @default(now())
+  declaredAt      OrgDeclaredMember[]
+  referenceChecks ReferenceCheck[]
 
   @@index([profileId])
   @@index([organizationId])
@@ -1284,20 +1286,84 @@ enum EducationLevel {
   doctorate
 }
 
+/// « Diplômes » and « Certificats » of the profile (demande d'Ephraïm du 29/10/2026).
+enum EducationKind {
+  /// Academic: fin des humanités, licence, master, doctorat…
+  diploma
+  /// A training followed, online or in person, short or long.
+  certificate
+}
+
+enum TrainingFormat {
+  online
+  in_person
+  hybrid
+}
+
+enum TrainingLength {
+  short
+  long
+}
+
 model Education {
-  id        String         @id @default(cuid(2))
-  profileId String
-  profile   TalentProfile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  degree    String
-  level     EducationLevel
-  field     String?
-  school    String
-  startYear Int?
+  id              String           @id @default(cuid(2))
+  profileId       String
+  profile         TalentProfile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  kind            EducationKind    @default(diploma)
+  degree          String
+  level           EducationLevel
+  field           String?
+  school          String
+  startYear       Int?
   /// null = in progress.
-  endYear   Int?
-  createdAt DateTime       @default(now())
+  endYear         Int?
+  /// Certificates: how and how long the training was followed.
+  format          TrainingFormat?
+  length          TrainingLength?
+  /// Photo of the certificate or of the diploma sent by the person (`/medias/formations/…`, WebP).
+  /// For a diploma it is shown as « Justificatif joint », never as « Vérifié ».
+  image           String?
+  createdAt       DateTime         @default(now())
+  referenceChecks ReferenceCheck[]
 
   @@index([profileId])
+}
+
+enum ReferenceCheckStatus {
+  pending
+  confirmed
+  declined
+  /// Withdrawn by the person, or the item changed after the answer.
+  cancelled
+}
+
+/**
+ * « Faire vérifier » (demande d'Ephraïm du 29/10/2026): a referent named by the person (a former
+ * manager, the training organization) gets an e-mail and confirms an experience or a certificate
+ * in one click. A confirmed check gives the item its « Vérifié » badge. Only the hash of the link's
+ * token is kept.
+ */
+model ReferenceCheck {
+  id            String               @id @default(cuid(2))
+  profileId     String
+  profile       TalentProfile        @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  experienceId  String?
+  experience    Experience?          @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+  educationId   String?
+  education     Education?           @relation(fields: [educationId], references: [id], onDelete: Cascade)
+  referentName  String
+  referentEmail String
+  /// What links the referent to the person (« Responsable d'équipe »), optional.
+  referentRole  String?
+  tokenHash     String               @unique
+  status        ReferenceCheckStatus @default(pending)
+  expiresAt     DateTime
+  respondedAt   DateTime?
+  createdAt     DateTime             @default(now())
+
+  @@index([profileId])
+  @@index([experienceId])
+  @@index([educationId])
 }
 
 enum DocumentKind {

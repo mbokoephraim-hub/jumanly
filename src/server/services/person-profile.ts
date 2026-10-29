@@ -5,6 +5,13 @@ import { lastActive } from "./hire-phone-talents";
 import { parseProject, portfolioLevel } from "./portfolio";
 import { ensureProfile, parseProfileLanguages } from "./profile";
 
+/** A confirmation by a referent (« Faire vérifier »): what gives an item its « Vérifié » badge. */
+const CONFIRMED_CHECK = {
+  where: { status: "confirmed" },
+  take: 1,
+  select: { respondedAt: true },
+} as const;
+
 /**
  * Everything the profile of a person shows (docs/profil-personne): who, the networks they chose,
  * their numbers, their skills, experiences, studies, languages, achievements and files.
@@ -85,12 +92,24 @@ export async function personProfile(
               startDate: true,
               endDate: true,
               description: true,
+              referenceChecks: CONFIRMED_CHECK,
             },
           },
           educations: {
-            orderBy: [{ endYear: "desc" }],
-            take: 4,
-            select: { id: true, degree: true, school: true, startYear: true, endYear: true },
+            orderBy: [{ endYear: { sort: "desc", nulls: "first" } }, { startYear: "desc" }],
+            take: 12,
+            select: {
+              id: true,
+              kind: true,
+              degree: true,
+              school: true,
+              startYear: true,
+              endYear: true,
+              format: true,
+              length: true,
+              image: true,
+              referenceChecks: CONFIRMED_CHECK,
+            },
           },
           documents: {
             where: { kind: "portfolio_item" },

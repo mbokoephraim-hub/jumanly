@@ -45,6 +45,8 @@ const categoryOf: Record<NotificationType, Category> = {
   feedQuote: "messages",
   connectionRequest: "messages",
   connectionAccepted: "messages",
+  referenceConfirmed: "account",
+  referenceDeclined: "account",
   documentRequest: "messages",
   mention: "messages",
   certificateIssued: "learn",

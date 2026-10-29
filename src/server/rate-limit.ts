@@ -19,6 +19,9 @@ export const authLimits = {
   message: { window: 5 * 60, max: 30 },
   talentSearch: { window: 10 * 60, max: 60 },
   experienceLogo: { window: 60 * 60, max: 20 },
+  educationImage: { window: 60 * 60, max: 20 },
+  referenceCheck: { window: 24 * 60 * 60, max: 10 },
+  referenceAnswer: { window: 60 * 60, max: 30 },
 } as const;
 
 /** The visitor's address as given by the hosting proxy, or null when unknown. */

@@ -1,3 +1,4 @@
+import type { EducationRow } from "./education-rows";
 import type { SocialKind } from "@/lib/social-links";
 
 /** The tabs of a person's profile (docs/profil-personne § Onglets), in the order of the segment. */
@@ -69,9 +70,13 @@ export type ProfileView = {
     type: string;
     dates: string;
     points: string[];
+    /** Confirmed by a referent (« Faire vérifier »). */
+    verified: boolean;
   }[];
   experiencesCount: string;
-  educations: { id: string; title: string; line: string }[];
+  /** « Diplômes » then « Certificats » (demande d'Ephraïm du 29/10/2026). */
+  diplomas: EducationRow[];
+  certificates: EducationRow[];
   languages: { name: string; level: number; label: string }[];
   works: {
     id: string;

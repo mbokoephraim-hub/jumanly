@@ -24,6 +24,7 @@ import type { Availability, CareerView } from "./data";
 import { CAMERA, EYE, Heading, PEN, PLUS, Ring, Segment, SHARE, Svg, tint } from "./kit";
 import { ShareSheet } from "./share";
 import { LanguagesSheet, SkillsSheet } from "./sheets";
+import { EducationList, ItemVerifiedMark } from "../profil/education-rows";
 
 type Sheet = "share" | "competences" | "langues";
 
@@ -433,9 +434,17 @@ function ProfilePanel({
   const person = view.person;
   const add = t("add");
   const modify = t("modify");
-  // « Études » then « Certifications » (Ephraïm, 29/10/2026): the attestations earned on Jumanly.
-  const studies = view.educationRows.filter((item) => !item.jumanly);
-  const certificates = view.educationRows.filter((item) => item.jumanly);
+  // « Diplômes » then « Certificats » (Ephraïm, 29/10/2026): the certificates the person added,
+  // then the attestations earned on Jumanly.
+  const diplomas = view.educationRows.filter((item) => item.kind === "diploma");
+  const certificates = view.educationRows.filter((item) => item.kind === "certificate");
+  const educationLabels = {
+    verified: tp("itemVerified"),
+    verifiedHelp: tp("verifiedHelp"),
+    document: tp("documentJoined"),
+    jumanly: t("jumanly"),
+    openImage: (title: string) => tp("openImage", { title }),
+  };
   return (
     <>
       <Heading
@@ -567,6 +576,19 @@ function ProfilePanel({
               <div>
                 <h3>{item.title}</h3>
                 <ExperienceMeta item={item} label={tp("companyPage", { company: item.company })} />
+                {view.experienceChecks[item.id] === "confirmed" ? (
+                  <ItemVerifiedMark label={tp("itemVerified")} help={tp("verifiedHelp")} />
+                ) : view.experienceChecks[item.id] === "pending" ? (
+                  <span className="nb-vf-doc">{t("verify.pending")}</span>
+                ) : (
+                  <Link
+                    href={href}
+                    className="nb-vf-ask"
+                    aria-label={t("verify.askLabel", { title: item.title })}
+                  >
+                    {t("verify.ask")}
+                  </Link>
+                )}
                 <ExperiencePoints item={item} points={item.points} />
                 <Link
                   href={href}
@@ -590,53 +612,31 @@ function ProfilePanel({
       )}
 
       <Heading
-        title={t("education")}
+        title={t("diplomas")}
         action={{
           label: add,
-          aria: `${add} : ${t("education")}`,
+          aria: `${add} : ${t("diplomas")}`,
           href: "/app/career/profil/formation/nouvelle",
         }}
       />
-      {studies.length === 0 ? (
-        <p className="nb-pf-vide">{t("educationEmpty")}</p>
+      {diplomas.length === 0 ? (
+        <p className="nb-pf-vide">{t("diplomasEmpty")}</p>
       ) : (
-        studies.map((item) => (
-          <Link key={item.id} href={item.href} className="nb-pf-form nb-cr-form">
-            <span aria-hidden data-jumanly={item.jumanly ? "" : undefined}>
-              <PhoneIcon name="formation" size={17} />
-            </span>
-            <span>
-              <b>{item.title}</b>
-              <small>{item.line}</small>
-            </span>
-            {item.jumanly ? <span className="nb-pf-tag nb-cr-jumanly">{t("jumanly")}</span> : null}
-          </Link>
-        ))
+        <EducationList rows={diplomas} labels={educationLabels} />
       )}
 
       <Heading
         title={t("me.certificates")}
         action={{
-          label: t("me.certificatesAdd"),
-          aria: t("me.certificatesAddLabel"),
-          href: "/app/learn",
+          label: add,
+          aria: `${add} : ${t("me.certificates")}`,
+          href: "/app/career/profil/formation/nouvelle?type=certificat",
         }}
       />
       {certificates.length === 0 ? (
         <p className="nb-pf-vide">{t("me.certificatesEmpty")}</p>
       ) : (
-        certificates.map((item) => (
-          <Link key={item.id} href={item.href} className="nb-pf-form nb-cr-form">
-            <span aria-hidden data-jumanly="">
-              <PhoneIcon name="formation" size={17} />
-            </span>
-            <span>
-              <b>{item.title}</b>
-              <small>{item.line}</small>
-            </span>
-            <span className="nb-pf-tag nb-cr-jumanly">{t("jumanly")}</span>
-          </Link>
-        ))
+        <EducationList rows={certificates} labels={educationLabels} />
       )}
 
       <Heading
