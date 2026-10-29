@@ -461,7 +461,7 @@
   background: rgba(var(--nb-nuit-rgb), 0.92);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  padding: calc(var(--nb-haut) + 32px) 14px 10px;
+  padding: calc(var(--nb-haut) + 6px) 14px 10px;
   border-bottom: 1px solid rgba(var(--nb-voile), 0.05);
 }
 .nb-ch-tete-c .nb-ms-conv-h {
