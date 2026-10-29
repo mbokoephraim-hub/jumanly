@@ -39,6 +39,70 @@ const STEP_MS = 700;
  * the 5-minute trial is offered once a month. Then Orbi prepares the questions.
  */
 export function PhonePracticeSetup({ view }: { view: SetupView }) {
+  if (view.reserved) return <PhonePracticeReserved view={view} reserved={view.reserved} />;
+  return <PhonePracticeSettings view={view} />;
+}
+
+/**
+ * The simulation is kept for people who applied to an offer with a plan that includes it
+ * (demande d'Ephraïm du 29/10/2026): what is done, what is missing, and that applying stays free.
+ */
+function PhonePracticeReserved({
+  view,
+  reserved,
+}: {
+  view: SetupView;
+  reserved: NonNullable<SetupView["reserved"]>;
+}) {
+  const t = useTranslations("phoneInterview");
+  return (
+    <div className="nb-page nb-iv nb-iv-reglages" data-ecran="">
+      <div className="nb-iv-barre" data-entre="">
+        <PhoneBack
+          fallback={view.origin.backHref}
+          label={view.origin.backLabel}
+          text={view.origin.backLabel}
+        />
+      </div>
+      <div className="nb-iv-corps nb-cr">
+        <h1 className="nb-h1">{t("reserved.title")}</h1>
+        <div className="nb-cr-carte nb-cr-sim nb-iv-reserve">
+          <span className="nb-cr-sim-i" aria-hidden>
+            <PhoneIcon name="cadenas" size={20} />
+          </span>
+          <div className="nb-cr-sim-t">
+            <small>{t("reserved.text")}</small>
+          </div>
+          <ul className="nb-cr-sim-c">
+            <li data-fait={reserved.applied ? "" : undefined}>
+              <span aria-hidden>
+                {reserved.applied ? <PhoneIcon name="coche" size={14} /> : null}
+              </span>
+              <span>{t("reserved.applied")}</span>
+              {reserved.applied ? (
+                <em>{t("reserved.done")}</em>
+              ) : (
+                <Link href="/app/jobs">{t("reserved.appliedCta")}</Link>
+              )}
+            </li>
+            <li data-fait={reserved.plan ? "" : undefined}>
+              <span aria-hidden>{reserved.plan ? <PhoneIcon name="coche" size={14} /> : null}</span>
+              <span>{t("reserved.plan", { plan: reserved.planName ?? "none" })}</span>
+              {reserved.plan ? (
+                <em>{t("reserved.done")}</em>
+              ) : (
+                <Link href="/app/abonnement/formules">{t("reserved.planCta")}</Link>
+              )}
+            </li>
+            <li className="nb-cr-sim-gratuit">{t("reserved.free")}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PhonePracticeSettings({ view }: { view: SetupView }) {
   const t = useTranslations("phoneInterview");
   const format = useFormatter();
   const router = useRouter();
@@ -307,7 +371,7 @@ export function PhonePracticeSetup({ view }: { view: SetupView }) {
                   }),
                 })
               : t(
-                  `error.${(["consent", "invalid", "quota"].includes(problem.code) ? problem.code : "network") as "network"}`,
+                  `error.${(["consent", "invalid", "quota", "reserved"].includes(problem.code) ? problem.code : "network") as "network"}`,
                 )}
             {problem.code === "consent" ? (
               <>

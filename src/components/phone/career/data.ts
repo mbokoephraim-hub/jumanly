@@ -118,6 +118,22 @@ export type CareerView = {
     coursesPercent: number;
     steps: { text: string; title: string; detail: string; href: string }[];
   };
+  /** « Mes entraînements » (demande du 29/10/2026): preparations and the simulations' follow-up. */
+  training: {
+    open: boolean;
+    applied: boolean;
+    plan: boolean;
+    planName: string | null;
+    start: string;
+    preparations: { key: string; title: string; detail: string; href: string; locked: boolean }[];
+    followUp: {
+      count: string;
+      last: number;
+      change: string | null;
+      criteria: { key: string; label: string; score: number }[];
+      report: string;
+    } | null;
+  };
   applications: {
     id: string;
     href: string;
@@ -161,6 +177,7 @@ export function languageLabel(code: string) {
 /** Everything the Carrière tab writes, on the server, from the person's own data. */
 export async function careerView(home: CareerHome, now = new Date()): Promise<CareerView> {
   const t = await getTranslations("phoneCareer");
+  const tp = await getTranslations("phoneInterview");
   const tc = await getTranslations("career.cv.template.name");
   const format = await getFormatter();
   const month = (date: Date) => format.dateTime(date, { month: "long", year: "numeric" });
@@ -372,6 +389,52 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
   const stages = ["discovery", "building", "ready", "competitive"] as const;
   const stageIndex = home.progression.stage ? stages.indexOf(home.progression.stage) : -1;
   const nextSteps = steps.slice(0, 3);
+
+  // « Mes entraînements »: the simulation opens on the application to prepare.
+  const training = home.training;
+  const simHref = (applicationId: string | null) =>
+    `/app/career/entretiens/nouveau${applicationId ? `?candidature=${applicationId}` : ""}`;
+  const criterionLabel = (key: string) =>
+    tp(`report.criterion.${key}` as "report.criterion.clarity");
+  const preparations: CareerView["training"]["preparations"] = training.preparations.map((item) => {
+    if (item.kind === "interview")
+      return {
+        key: `i-${item.applicationId}`,
+        title: t("training.prep.interview", { title: item.title }),
+        detail: item.at
+          ? t("training.prep.interviewDate", {
+              company: shortName(item.company),
+              date: format.dateTime(item.at, { weekday: "long", day: "numeric", month: "short" }),
+            })
+          : t("training.prep.interviewText", { company: shortName(item.company) }),
+        href: simHref(item.applicationId),
+        locked: !training.access.open,
+      };
+    if (item.kind === "criterion")
+      return {
+        key: `c-${item.criterion}`,
+        title: t("training.prep.criterion", { criterion: criterionLabel(item.criterion) }),
+        detail: t(`training.prep.criterionText.${item.criterion}`, { score: item.score }),
+        href: simHref(item.applicationId),
+        locked: !training.access.open,
+      };
+    return {
+      key: `s-${item.skill}`,
+      title: t("training.prep.skill", { skill: item.skill }),
+      detail: t("training.prep.skillText", { job: item.job }),
+      href: `/app/learn/rechercher?q=${encodeURIComponent(item.skill)}`,
+      locked: false,
+    };
+  });
+  if (!training.access.applied)
+    preparations.unshift({
+      key: "apply",
+      title: t("training.prep.apply"),
+      detail: t("training.prep.applyText"),
+      href: "/app/jobs",
+      locked: false,
+    });
+  const followUp = training.followUp;
 
   const applications = home.applications.map((row) => {
     const company = shortName(row.company);
@@ -613,6 +676,34 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
           ? 0
           : Math.round((100 * home.progression.courses.done) / home.progression.courses.all),
       steps: nextSteps,
+    },
+    training: {
+      open: training.access.open,
+      applied: training.access.applied,
+      plan: training.access.plan,
+      planName: training.access.planName,
+      start: simHref(training.applicationId),
+      preparations,
+      followUp: followUp
+        ? {
+            count: t("training.follow.count", { count: followUp.count }),
+            last: followUp.last,
+            change:
+              followUp.change === null
+                ? null
+                : followUp.change > 0
+                  ? t("training.follow.up", { points: followUp.change })
+                  : followUp.change < 0
+                    ? t("training.follow.down", { points: followUp.change })
+                    : t("training.follow.same"),
+            criteria: followUp.criteria.map((item) => ({
+              key: item.key,
+              label: criterionLabel(item.key),
+              score: item.score,
+            })),
+            report: `/app/career/entretiens/${followUp.lastId}?depuis=historique`,
+          }
+        : null,
     },
     applications,
     share: {

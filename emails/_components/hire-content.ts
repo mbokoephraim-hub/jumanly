@@ -298,13 +298,18 @@ export function orgVerificationEmail(
 /** Admin v2, étape 4: complement asked, suspension and reactivation of an organization. */
 export function orgNoticeEmail(
   firstName: string | null | undefined,
-  input: { org: string; kind: "infoRequested" | "suspended" | "reactivated"; reason: string },
+  input: {
+    org: string;
+    kind: "infoRequested" | "suspended" | "reactivated" | "deleted";
+    reason: string;
+  },
 ): HireEmail {
   const key = (
     {
       infoRequested: "mail.orgVerificationInfo",
       suspended: "mail.orgSuspended",
       reactivated: "mail.orgReactivated",
+      deleted: "mail.orgDeleted",
     } as const
   )[input.kind];
   const values = { org: input.org, reason: input.reason };

@@ -20,7 +20,11 @@ export class AccountDeletionError extends Error {
 type Tx = Prisma.TransactionClient;
 
 /** Rows keyed by a subject (no foreign key): plans, counters, overrides, billing details. */
-async function eraseSubject(tx: Tx, subjectType: "user" | "organization", subjectId: string) {
+export async function eraseSubject(
+  tx: Tx,
+  subjectType: "user" | "organization",
+  subjectId: string,
+) {
   const subscriptions = await tx.subscription.findMany({
     where: { subjectType, subjectId },
     select: { id: true },

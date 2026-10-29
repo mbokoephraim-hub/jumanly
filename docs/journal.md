@@ -5027,3 +5027,34 @@ bibliothèque, et se supprime.
 - Nouveaux blocs du CV : `achievements` (imprimées comme « Réalisations clés », juste après le profil si le modèle ne les place pas) et `references` (bloc « Références », en fin de CV). Les réalisations sont proposées depuis le portfolio tant que le CV n'en a pas.
 - Bibliothèque de CV (onglet CV de Carrière) : « Sélectionner » pour choisir plusieurs CV (ou tous) et les supprimer d'un coup ; menu ··· avec couleur de repère (`Document.colorTag`, migration `20261029090000_cv_color_tag`), « Renommer » (idées : CV principal, CV stage…), « Utiliser par défaut pour postuler », supprimer.
 - Hors de ce travail : l'éditeur de CV sur ordinateur n'édite pas encore réalisations et références (elles s'impriment quand même).
+## 2026-10-29 · Carrière › Progression : « Mes entraînements »
+
+- Demande d'Ephraïm : dans Progression, un bloc « Mes entraînements » avec ce qu'il faut améliorer (préparations proposées) et la simulation d'entretien, réservée à ceux qui ont candidaté **et** dont la formule inclut les simulations (Starter, Pro et au-delà), avec un suivi d'une simulation à l'autre.
+- Service `src/server/services/career-training.ts` : préparations (les candidatures à préparer, entretien prévu d'abord ; le critère le plus faible du dernier bilan ; une compétence demandée par une offre et absente du profil → un cours) et suivi (nombre de simulations, dernière note, écart depuis la première, notes par critère).
+- `interviewAccess()` dans `interview-sim.ts` : candidature non retirée + quota écrit ou oral au-dessus de zéro (droits, jamais un nom de forfait). `startInterview` renvoie `reserved` sinon ; l'écran des réglages au téléphone affiche alors ce qui manque (« Voir les offres », « Voir les formules »). L'essai de 5 minutes n'ouvre plus que l'oral pour Starter.
+- Démo : Amani (amani.ux@) passe en Starter ; les e2e de simulation utilisent Amani et Jean-Pierre (Pro, avec candidature). Note dans `docs/specifications.md` partie 05.
+- Non vérifié (Ephraïm ne veut plus de vérifications) : e2e et capture.
+
+## 2026-10-29 · Admin : fiche utilisateur à part, suppression justifiée, suppression d'une entreprise
+
+Demande d'Ephraïm du 29/10/2026 (partie administration seulement).
+
+- **Fiche utilisateur** : cliquer sur une personne dans `/admin/utilisateurs` ouvre un écran qui ne montre
+  qu'elle (`?fiche=<id>`, la liste disparaît, lien « Tous les utilisateurs » pour revenir). Colonne
+  principale (`src/components/admin/user-overview.tsx`, données `src/server/services/admin-user-overview.ts`) :
+  alertes (suspension et motif, e-mail non vérifié, suppression demandée, paiement échoué, délai de grâce,
+  fin d'abonnement sous 7 jours, résiliation, signalements ouverts), abonnement avec sa date de fin et les
+  jours restants, paiements, activités (connexions, candidatures, formations, attestations, publications),
+  plaintes (signalements envoyés, contestations de score) et signalements sur la personne, mot de passe et
+  connexion. Toujours rien des messages privés, CV ou documents.
+- **Aide à la connexion** : lien de réinitialisation du mot de passe (la personne choisit elle-même son mot
+  de passe, l'admin ne le voit jamais) et « Désactiver la double authentification » quand le téléphone est
+  perdu (motif obligatoire, sessions fermées, journal `user.2fa.reset`).
+- **Supprimer définitivement** ouvre son propre écran (`&action=effacer`) : justification, ce qui sera
+  supprimé ou gardé, sort de ses entreprises, puis le mot EFFACER. « Anonymiser » a aussi son écran.
+- **Supprimer une entreprise** (`/admin/organisations?fiche=<id>&action=supprimer`, service
+  `deleteOrganization`) : justification et mot SUPPRIMER. Page, offres, candidatures reçues, équipe,
+  publications partent ; les comptes des membres, administrateur compris, restent ouverts et sont prévenus
+  (notification `orgDeleted` et e-mail) ; les candidats reçoivent « offre plus disponible » ; les paiements
+  restent sans lien ; les entités d'un groupe deviennent indépendantes. Pas pour les partenaires.
+- À décider plus tard : changer l'adresse e-mail d'un compte dont la personne a perdu l'accès à sa boîte.

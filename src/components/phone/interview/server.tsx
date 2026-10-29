@@ -8,6 +8,7 @@ import { db } from "@/server/db";
 import { phoneHistory, phonePracticeSetup, sessionScore } from "@/server/services/interview-phone";
 import { GOOD_SCORE } from "@/server/services/interview-score";
 import {
+  interviewAccess,
   pace,
   phoneDurations,
   phoneFocuses,
@@ -106,7 +107,11 @@ export async function setupView(userId: string, query: Query): Promise<SetupView
   const initialMode = mode ?? "voice";
   const focus = phoneFocuses.find((item) => item === query.sujet) ?? "experiences";
   const included = setup.modes[initialMode].included;
+  const access = await interviewAccess(db, userId);
   return {
+    reserved: access.open
+      ? null
+      : { applied: access.applied, plan: access.plan, planName: setup.modes.text.plan },
     origin,
     job: setup.job
       ? {

@@ -41,6 +41,7 @@ export const notificationTypes = [
   "orgVerificationInfo",
   "orgSuspended",
   "orgReactivated",
+  "orgDeleted",
   "jobUnavailable",
   "abnormalUsage",
   "licenseActivated",

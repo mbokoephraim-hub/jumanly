@@ -9,6 +9,7 @@ import {
   eraseUserAction,
   grantPlanAction,
   removeOverrideAction,
+  resetTwoFactorAction,
   revokePlanAction,
   verifyEmailAction,
 } from "@/server/actions/admin-users";
@@ -42,7 +43,13 @@ export async function UserPanels({
   rights,
   granted,
 }: {
-  user: { id: string; name: string; email: string; emailVerified: boolean };
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    emailVerified: boolean;
+    twoFactorEnabled: boolean;
+  };
   action: string;
   params: Record<string, string | string[] | undefined>;
   ficheHref: string;
@@ -97,6 +104,27 @@ export async function UserPanels({
           <div className="flex flex-wrap justify-end gap-2">
             {cancel}
             <Button type="submit">{t("users.action.verifyEmail.submit")}</Button>
+          </div>
+        </form>
+      </SensitivePanel>
+    );
+  }
+
+  if (action === "2fa" && user.twoFactorEnabled) {
+    panel = (
+      <SensitivePanel
+        title={t("users.overview.twoFactorReset")}
+        text={t("users.overview.twoFactorConfirm", { userName: user.name })}
+        closeHref={ficheHref}
+      >
+        <form action={resetTwoFactorAction} className="flex flex-col gap-3.5">
+          {hidden}
+          <ReasonField id="utilisateurs-2fa-reason" maxLength={500} />
+          <div className="flex flex-wrap justify-end gap-2">
+            {cancel}
+            <Button type="submit" variant="danger">
+              {t("users.overview.twoFactorSubmit")}
+            </Button>
           </div>
         </form>
       </SensitivePanel>
@@ -325,7 +353,12 @@ export async function UserPanels({
         ) : (
           <form action={eraseUserAction} className="flex flex-col gap-3.5">
             {hidden}
-            <ReasonField id="utilisateurs-erase-reason" maxLength={500} />
+            <ReasonField
+              id="utilisateurs-erase-reason"
+              label={t("users.erase.justification")}
+              rows={4}
+              maxLength={500}
+            />
             <TextField
               id="utilisateurs-erase-word"
               name="confirmWord"

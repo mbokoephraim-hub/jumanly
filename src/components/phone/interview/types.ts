@@ -27,6 +27,8 @@ export type SetupView = {
   jobTitle: string;
   plan: string | null;
   modes: { text: ModeAccess; voice: ModeAccess };
+  /** Not open yet (no application, or no simulation in the plan): what is missing. */
+  reserved: { applied: boolean; plan: boolean; planName: string | null } | null;
   initial: { mode: "text" | "voice"; focus: PhoneFocus; minutes: number; tone: "easy" | "hard" };
 };
 

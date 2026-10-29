@@ -1356,7 +1356,138 @@ function ProgressionPanel({ view }: { view: CareerView }) {
           </ol>
         </>
       ) : null}
+      <TrainingBlock training={view.training} />
     </div>
+  );
+}
+
+/**
+ * « Mes entraînements » (demande d'Ephraïm du 29/10/2026): the interview simulation, kept for
+ * people who applied with a plan that includes it, what to prepare, and the follow-up of the marks.
+ */
+function TrainingBlock({ training }: { training: CareerView["training"] }) {
+  const t = useTranslations("phoneCareer");
+  const follow = training.followUp;
+  return (
+    <section className="nb-cr-entr" aria-labelledby="nb-cr-entr-h">
+      <h2 id="nb-cr-entr-h" className="nb-pf-h nb-cr-h0">
+        {t("training.title")}
+      </h2>
+      <div className="nb-cr-carte nb-cr-sim" data-ouvert={training.open ? "" : undefined}>
+        <span className="nb-cr-sim-i" aria-hidden>
+          <PhoneIcon name={training.open ? "micro" : "cadenas"} size={20} />
+        </span>
+        <div className="nb-cr-sim-t">
+          <b>{t("training.sim.title")}</b>
+          <small>{training.open ? t("training.sim.open") : t("training.sim.reserved")}</small>
+        </div>
+        {training.open ? (
+          <Link href={training.start} className="nb-bouton" data-plein="">
+            {t("training.sim.start")}
+          </Link>
+        ) : (
+          <ul className="nb-cr-sim-c">
+            <li data-fait={training.applied ? "" : undefined}>
+              <span aria-hidden>
+                {training.applied ? <PhoneIcon name="coche" size={14} /> : null}
+              </span>
+              <span>{t("training.sim.applied")}</span>
+              {training.applied ? (
+                <em>{t("training.sim.done")}</em>
+              ) : (
+                <Link href="/app/jobs">{t("training.sim.appliedCta")}</Link>
+              )}
+            </li>
+            <li data-fait={training.plan ? "" : undefined}>
+              <span aria-hidden>{training.plan ? <PhoneIcon name="coche" size={14} /> : null}</span>
+              <span>{t("training.sim.plan", { plan: training.planName ?? "none" })}</span>
+              {training.plan ? (
+                <em>{t("training.sim.done")}</em>
+              ) : (
+                <Link href="/app/abonnement/formules">{t("training.sim.planCta")}</Link>
+              )}
+            </li>
+            <li className="nb-cr-sim-gratuit">{t("training.sim.free")}</li>
+          </ul>
+        )}
+      </div>
+
+      {training.preparations.length > 0 ? (
+        <>
+          <p className="nb-cr-sur nb-cr-entr-s">{t("training.prepare")}</p>
+          <ol className="nb-cr-etapes">
+            {training.preparations.map((item, index) => {
+              const color = STEP_COLORS[index % STEP_COLORS.length]!;
+              return (
+                <li key={item.key}>
+                  <Link href={item.href}>
+                    <span
+                      className="nb-cr-num"
+                      style={{ background: tint(color, "33"), color }}
+                      aria-hidden
+                    >
+                      <PhoneIcon name={item.locked ? "cadenas" : "idee"} size={17} />
+                    </span>
+                    <span className="nb-cr-etape-t">
+                      <b>{item.title}</b>
+                      <small>{item.detail}</small>
+                    </span>
+                    {item.locked ? (
+                      <em className="nb-cr-verrou">{t("training.reservedTag")}</em>
+                    ) : (
+                      <PhoneIcon name="chevron" size={16} />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+        </>
+      ) : null}
+
+      <p className="nb-cr-sur nb-cr-entr-s">{t("training.followTitle")}</p>
+      {follow ? (
+        <div className="nb-cr-carte nb-cr-suivi">
+          <div className="nb-cr-suivi-h">
+            <Ring
+              percent={follow.last}
+              color={follow.last >= 70 ? "var(--nb-lime)" : "#F4C463"}
+              size={56}
+            >
+              {follow.last}
+            </Ring>
+            <span>
+              <small>{t("training.follow.last")}</small>
+              <b>{follow.count}</b>
+              {follow.change ? <em>{follow.change}</em> : null}
+            </span>
+          </div>
+          <ul className="nb-cr-suivi-c">
+            {follow.criteria.map((item) => (
+              <li key={item.key}>
+                <span>{item.label}</span>
+                <span className="nb-cr-suivi-b" aria-hidden>
+                  <i
+                    style={{
+                      width: `${item.score}%`,
+                      background: item.score >= 70 ? "var(--nb-lime)" : "#F4C463",
+                    }}
+                  />
+                </span>
+                <b>{item.score}</b>
+              </li>
+            ))}
+          </ul>
+          <p className="nb-cr-suivi-p">{t("training.follow.why")}</p>
+          <div className="nb-cr-suivi-l">
+            <Link href={follow.report}>{t("training.follow.report")}</Link>
+            <Link href="/app/career/entretiens">{t("training.follow.all")}</Link>
+          </div>
+        </div>
+      ) : (
+        <p className="nb-cr-carte nb-cr-suivi nb-cr-suivi-vide">{t("training.follow.empty")}</p>
+      )}
+    </section>
   );
 }
 

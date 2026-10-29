@@ -986,3 +986,182 @@ button.nb-cr-cv-l {
     0 0 0 2px var(--nb-nuit),
     0 0 0 4px var(--nb-creme);
 }
+/* « Mes entraînements » (Progression, demande du 29/10/2026). */
+.nb-cr .nb-cr-entr-s {
+  margin: 16px 0 8px;
+}
+.nb-cr-sim {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+}
+.nb-cr-sim-i {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--nb-haute);
+  color: var(--nb-brume);
+}
+.nb-cr-sim[data-ouvert] .nb-cr-sim-i {
+  background: var(--nb-lime);
+  color: var(--nb-sur-lime, #0f3f37);
+}
+.nb-cr-sim-t {
+  flex: 1;
+  min-width: 0;
+}
+.nb-cr-sim-t b {
+  display: block;
+  font-size: 14px;
+  font-weight: 800;
+}
+.nb-cr-sim-t small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--nb-t-9fb3ae, #9fb3ae);
+}
+.nb-cr-sim > .nb-bouton {
+  width: 100%;
+}
+.nb-cr-sim-c {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12.5px;
+}
+.nb-cr-sim-c li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nb-cr-sim-c li > span:first-child {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(var(--nb-voile), 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nb-cr-sim-c li[data-fait] > span:first-child {
+  border: 0;
+  background: var(--nb-lime);
+  color: var(--nb-sur-lime, #0f3f37);
+}
+.nb-cr-sim-c li > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+.nb-cr-sim-c a {
+  flex: none;
+  font-weight: 700;
+  color: var(--nb-lime-t, var(--nb-lime));
+}
+.nb-cr-sim-c em {
+  flex: none;
+  font-style: normal;
+  font-size: 11.5px;
+  color: var(--nb-brume);
+}
+.nb-cr-sim-c .nb-cr-sim-gratuit {
+  font-size: 11.5px;
+  color: var(--nb-brume);
+}
+.nb-cr-verrou {
+  flex: none;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-style: normal;
+  font-size: 10.5px;
+  font-weight: 700;
+  background: var(--nb-haute);
+  color: var(--nb-brume);
+}
+.nb-cr-suivi {
+  padding: 14px;
+}
+.nb-cr-suivi-h {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.nb-cr-suivi-h > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.nb-cr-suivi-h small {
+  font-size: 11px;
+  color: var(--nb-brume);
+}
+.nb-cr-suivi-h b {
+  font-size: 14px;
+  font-weight: 800;
+}
+.nb-cr-suivi-h em {
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--nb-lime-t, var(--nb-lime));
+}
+.nb-cr-suivi-c {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+}
+.nb-cr-suivi-c li {
+  display: grid;
+  grid-template-columns: 7.5em 1fr 2em;
+  align-items: center;
+  gap: 10px;
+}
+.nb-cr-suivi-c b {
+  text-align: right;
+}
+.nb-cr-suivi-b {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--nb-haute);
+  overflow: hidden;
+}
+.nb-cr-suivi-b i {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+}
+.nb-cr .nb-cr-suivi-p {
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--nb-brume);
+}
+.nb-cr-suivi-l {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 10px;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+.nb-cr-suivi-l a {
+  color: var(--nb-lime-t, var(--nb-lime));
+}
+.nb-cr .nb-cr-suivi-vide {
+  font-size: 12px;
+  color: var(--nb-brume);
+}

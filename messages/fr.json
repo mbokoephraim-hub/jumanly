@@ -3995,6 +3995,7 @@
     "applyFree": "Postuler et passer vos entretiens restent gratuits.",
     "plans": "Voir les formules",
     "error": {
+      "reserved": "La simulation d'entretien est réservée aux personnes qui ont candidaté à une offre, avec une formule qui inclut les simulations.",
       "consent": "Les simulations utilisent l'IA. Activez-la dans vos paramètres de confidentialité pour commencer.",
       "entitlement": "Ce format de simulation n'est pas inclus dans votre formule.",
       "quota": "Vous avez utilisé toutes les simulations de ce format ce mois-ci.",
@@ -11488,6 +11489,52 @@
         "course": "Un cours court pour progresser"
       }
     },
+    "training": {
+      "title": "Mes entraînements",
+      "sim": {
+        "title": "Simulation d’entretien avec Orbi",
+        "open": "Entraînez-vous sur l’offre à laquelle vous avez candidaté, puis suivez vos progrès d’une simulation à l’autre.",
+        "start": "S’entraîner",
+        "reserved": "Réservée aux personnes qui ont candidaté à une offre, avec une formule qui inclut les simulations.",
+        "applied": "Avoir candidaté à une offre",
+        "appliedCta": "Voir les offres",
+        "plan": "{plan, select, none {Une formule avec les simulations} other {Une formule avec les simulations, dès {plan}}}",
+        "planCta": "Voir les formules",
+        "done": "Fait",
+        "free": "Postuler reste gratuit, toujours."
+      },
+      "prepare": "À préparer",
+      "reservedTag": "Réservé",
+      "prep": {
+        "interview": "Préparer l’entretien : {title}",
+        "interviewText": "{company} · une simulation guidée par l’offre",
+        "interviewDate": "{company} · entretien le {date}",
+        "criterion": "Travailler : {criterion}",
+        "criterionText": {
+          "clarity": "Des phrases courtes, une idée par phrase ({score}/100 à la dernière simulation)",
+          "examples": "Un exemple chiffré par réponse : situation, action, résultat ({score}/100 à la dernière simulation)",
+          "relevance": "Reprenez les mots de l’offre et les compétences demandées ({score}/100 à la dernière simulation)",
+          "ease": "Parlez posément, sans « euh », en respirant entre les idées ({score}/100 à la dernière simulation)",
+          "length": "Une à deux minutes par réponse, ni trop court ni trop long ({score}/100 à la dernière simulation)"
+        },
+        "skill": "Renforcer : {skill}",
+        "skillText": "Demandé par « {job} » · un cours pour s’y mettre",
+        "apply": "Candidater à une offre",
+        "applyText": "Orbi vous préparera ensuite à l’entretien"
+      },
+      "followTitle": "Mon suivi",
+      "follow": {
+        "count": "{count, plural, one {# simulation terminée} other {# simulations terminées}}",
+        "last": "Dernière note",
+        "up": "+{points} depuis la première",
+        "down": "{points} depuis la première",
+        "same": "Comme la première",
+        "why": "Notes calculées par des règles fixes à partir de vos réponses. Elles mesurent vos réponses, jamais vos chances, et ne sont jamais montrées à un recruteur.",
+        "report": "Revoir le dernier bilan",
+        "all": "Toutes mes simulations",
+        "empty": "Vos notes apparaîtront ici après votre première simulation."
+      }
+    },
     "applications": {
       "sent": "{company} · envoyée le {date}",
       "status": {
@@ -12168,9 +12215,20 @@
       "consent": "Pour qu’Orbi prépare les questions, autorisez l’assistance IA dans vos paramètres.",
       "consentCta": "Ouvrir les paramètres",
       "quota": "Vos simulations du mois sont utilisées. Elles reviennent le {date}.",
+      "reserved": "La simulation d’entretien est réservée aux personnes qui ont candidaté à une offre, avec une formule qui inclut les simulations.",
       "entitlement": "Cette simulation n’est pas incluse dans votre formule.",
       "invalid": "Indiquez le poste visé (2 caractères au moins).",
       "network": "Orbi n’a pas pu préparer les questions. Vérifiez la connexion et réessayez."
+    },
+    "reserved": {
+      "title": "Simulation d’entretien",
+      "text": "Elle est réservée aux personnes qui ont candidaté à une offre, avec une formule qui inclut les simulations. Orbi vous prépare alors sur l’offre et suit vos progrès d’une simulation à l’autre.",
+      "applied": "Avoir candidaté à une offre",
+      "appliedCta": "Voir les offres",
+      "plan": "{plan, select, none {Une formule avec les simulations} other {Une formule avec les simulations, dès {plan}}}",
+      "planCta": "Voir les formules",
+      "done": "Fait",
+      "free": "Postuler reste gratuit, toujours."
     },
     "dl": {
       "back": "Réglages",
@@ -22748,6 +22806,7 @@
       "orgVerificationInfo": "Jumanly a besoin d'un complément pour vérifier {org}.",
       "orgSuspended": "{org} a été suspendue par Jumanly. Écrivez à assistant@jumanly.io pour en savoir plus.",
       "orgReactivated": "{org} est de nouveau active.",
+      "orgDeleted": "{org} a été supprimée par Jumanly. Votre compte reste ouvert. Écrivez à assistant@jumanly.io pour en savoir plus.",
       "jobUnavailable": "L'offre « {job} » de {org} n'est plus disponible. Votre candidature reste dans votre suivi.",
       "abnormalUsage": "Usage inhabituel : {count} profils consultés en une heure par un membre de {org}. Accès suspendu une heure.",
       "licenseActivated": "Votre licence {plan} offerte par {sponsorName} est active jusqu'au {date}.",
@@ -23134,6 +23193,13 @@
       "p1": "Jumanly a réactivé {org}.",
       "p2": "Les offres fermées par la suspension sont republiées si leur date limite n'est pas passée.",
       "cta": "Ouvrir mon espace recrutement"
+    },
+    "orgDeleted": {
+      "subject": "{org} est supprimée de Jumanly",
+      "preheader": "Votre compte personnel reste ouvert.",
+      "p1": "Jumanly a supprimé {org}. Motif : {reason}",
+      "p2": "Les offres et l'espace recrutement de l'entreprise ne sont plus disponibles. Votre compte personnel reste ouvert. Pour en parler, écrivez à assistant@jumanly.io.",
+      "cta": "Ouvrir Jumanly"
     },
     "moderationWarning": {
       "subject": "Avertissement de la modération Jumanly",
@@ -24292,6 +24358,7 @@
         "org_verification_info": "a demandé un complément",
         "org_suspend": "a suspendu l'organisation",
         "org_unsuspend": "a réactivé l'organisation",
+        "org_delete": "a supprimé l'organisation",
         "plan_update": "a modifié le forfait",
         "plan_create": "a créé le forfait",
         "plan_duplicate": "a dupliqué un forfait",
@@ -24377,7 +24444,9 @@
         "user_quota_remove": "a retiré un ajout de crédits",
         "user_export": "a exporté les données du compte",
         "user_export_list": "a exporté la liste des utilisateurs",
-        "user_delete": "a supprimé le compte"
+        "user_delete": "a supprimé le compte",
+        "user_erase_veto": "a supprimé définitivement le compte",
+        "user_2fa_reset": "a désactivé la double authentification"
       },
       "target": {
         "message": "Message",
@@ -24730,11 +24799,11 @@
         "until": "Jusqu'au",
         "reason": "Motif",
         "erase": {
-          "text": "Effacer définitivement (veto)",
+          "text": "Supprimer définitivement",
           "confirm": "Effacer pour toujours le compte de {userName} et tous ses documents ?",
           "intro": "Droit de veto de l'administrateur : le compte est supprimé avec tout ce qu'il contient (profil, CV, documents, candidatures, publications, messages envoyés, historique). Rien n'est gardé, même anonymisé, sauf les paiements sans nom (obligation comptable) et la ligne du journal. Si la personne possède une entreprise, celle-ci passe à un autre administrateur de l'équipe ; sans équipe, ses offres sont fermées.",
           "typeWord": "Écrivez EFFACER pour confirmer",
-          "submit": "Effacer définitivement"
+          "submit": "Supprimer définitivement"
         }
       },
       "suspended": "Compte suspendu.",
@@ -24768,6 +24837,102 @@
         "twoFactor": "Double authentification",
         "twoFactorShort": "2FA"
       },
+      "overview": {
+        "back": "Tous les utilisateurs",
+        "subtitle": "Ce que fait la personne sur Jumanly, ses paiements, son abonnement, ses plaintes et les alertes. Ses messages privés, CV et documents restent invisibles.",
+        "alerts": "Alertes",
+        "alertCount": "{count, plural, one {# alerte} other {# alertes}}",
+        "noAlertTag": "Rien à signaler",
+        "noAlert": "Aucune alerte sur ce compte.",
+        "alert": {
+          "suspended": "Compte suspendu.",
+          "suspendedReason": "Compte suspendu. Motif : {reason}",
+          "emailUnverified": "L'adresse e-mail n'est pas encore vérifiée.",
+          "deletionScheduled": "La personne a demandé la suppression de son compte, prévue le {date}.",
+          "paymentFailed": "Un paiement a échoué le {date}.",
+          "pastDue": "Abonnement en délai de grâce : le dernier renouvellement n'est pas payé.",
+          "endingSoon": "L'abonnement se termine le {date} ({days, plural, =0 {aujourd'hui} one {dans # jour} other {dans # jours}}).",
+          "canceling": "Abonnement résilié : il s'arrête le {date}, puis retour au forfait gratuit.",
+          "reported": "{count, plural, one {# signalement ouvert} other {# signalements ouverts}} sur son profil ou ses contenus."
+        },
+        "subscription": "Abonnement et paiements",
+        "endsOn": "Fin de l'abonnement",
+        "endsToday": "Se termine aujourd'hui",
+        "daysLeft": "{count, plural, one {Encore # jour} other {Encore # jours}}",
+        "since": "Début de la période",
+        "origin": "Origine",
+        "source": {
+          "self": "Payé par la personne",
+          "admin": "Offert par Jumanly",
+          "license": "Licence d'un partenaire"
+        },
+        "after": "Ensuite",
+        "afterRenew": "Renouvellement à payer",
+        "afterFree": "Retour au forfait gratuit",
+        "afterPlan": "Passage au forfait {plan}",
+        "noSubscription": "Forfait gratuit, sans date de fin.",
+        "noSubscriptionDeleted": "Compte supprimé : plus d'abonnement.",
+        "payments": "Paiements",
+        "paidTotal": "{amount} USD payés au total",
+        "amount": "{amount} USD",
+        "activity": "Activités",
+        "count": {
+          "applications": "Candidatures",
+          "courses": "Formations en cours",
+          "certificates": "Attestations",
+          "posts": "Publications"
+        },
+        "recent": "Activités récentes",
+        "noActivity": "Aucune activité pour l'instant.",
+        "event": {
+          "signInPlain": "Connexion à Jumanly",
+          "application": "Candidature : {label}",
+          "applicationPlain": "Candidature",
+          "course": "Formation commencée : {label}",
+          "coursePlain": "Formation commencée",
+          "courseDone": "Formation terminée : {label}",
+          "courseDonePlain": "Formation terminée",
+          "certificate": "Attestation obtenue : {label}",
+          "certificatePlain": "Attestation obtenue",
+          "post": "Publication sur le Fil : {label}",
+          "postPlain": "Publication sur le Fil",
+          "signIn": "Connexion à Jumanly"
+        },
+        "complaints": "Plaintes et signalements",
+        "allReports": "Tous les signalements",
+        "filed": "Ses plaintes",
+        "noFiled": "Aucune plainte ni contestation envoyée.",
+        "reportLine": "Signalement · {type} · {reason}",
+        "disputeLine": "Contestation d'un score · {reason}",
+        "reportStatus": {
+          "open": "Ouvert",
+          "in_progress": "En cours",
+          "closed": "Clôturé"
+        },
+        "about": "Signalements sur la personne",
+        "noAbout": "Personne n'a signalé son profil ou ses contenus.",
+        "signIn": "Mot de passe et connexion",
+        "passwordHelp": "La personne a oublié son mot de passe ? Envoyez-lui un lien de réinitialisation : elle choisit elle-même un nouveau mot de passe. Jumanly ne voit jamais les mots de passe.",
+        "passwordSocial": "La personne se connecte sans mot de passe Jumanly (Google, LinkedIn, Apple ou lien par e-mail). Elle peut en créer un avec « Mot de passe oublié » sur la page de connexion.",
+        "twoFactorReset": "Désactiver la double authentification",
+        "twoFactorConfirm": "{userName} a perdu le téléphone qui reçoit ses codes ? La double authentification est désactivée et ses sessions sont fermées. La personne se reconnecte avec son mot de passe et pourra la réactiver dans Paramètres.",
+        "twoFactorSubmit": "Désactiver"
+      },
+      "erase": {
+        "back": "Retour à la fiche",
+        "title": "Supprimer définitivement le compte de {userName}",
+        "anonymizeTitle": "Anonymiser le compte de {userName}",
+        "subtitle": "Cette action est irréversible. Indiquez pourquoi le compte est supprimé : la justification est enregistrée dans le journal.",
+        "justification": "Justification de la suppression",
+        "whatHappens": "Ce qui va se passer",
+        "gone": "Supprimés : profil, CV, documents, candidatures, publications, messages envoyés et historique.",
+        "kept": "Gardée : la ligne du journal avec votre justification, sans données personnelles.",
+        "payments": "{count, plural, one {# paiement reste} other {# paiements restent}} dans la comptabilité, sans lien avec la personne.",
+        "companies": "Ses entreprises",
+        "companyHeir": "passe à {name}",
+        "companyClosed": "reste sans propriétaire, ses offres sont fermées",
+        "companyGone": "supprimée avec le compte (aucune offre ni équipe)"
+      },
       "method": {
         "credential": "Mot de passe",
         "google": "Google",
@@ -24777,6 +24942,7 @@
       },
       "done": {
         "erased": "Compte et documents effacés définitivement.",
+        "twoFactorReset": "Double authentification désactivée. La personne se reconnecte avec son mot de passe.",
         "codeSent": "Lien de confirmation envoyé.",
         "resetSent": "Lien de réinitialisation envoyé.",
         "verified": "Adresse e-mail marquée comme vérifiée.",
@@ -25021,6 +25187,24 @@
         "suspended": "Organisation suspendue.",
         "reactivated": "Organisation réactivée.",
         "planGranted": "Formule offerte. Elle s'applique tout de suite."
+      },
+      "delete": {
+        "text": "Supprimer l'entreprise",
+        "back": "Retour à la fiche",
+        "title": "Supprimer {org}",
+        "subtitle": "L'entreprise disparaît de Jumanly. Les comptes de ses membres, son administrateur compris, restent ouverts.",
+        "confirm": "Supprimer {org} pour toujours ? Cette action est irréversible.",
+        "justification": "Justification de la suppression",
+        "typeWord": "Écrivez SUPPRIMER pour confirmer",
+        "submit": "Supprimer l'entreprise",
+        "error": "Indiquez une justification (3 caractères au moins) et écrivez SUPPRIMER.",
+        "whatHappens": "Ce qui va se passer",
+        "gone": "Supprimés : la page, l'équipe, les publications, {jobs, plural, =0 {aucune offre} one {# offre} other {# offres}} et {applications, plural, =0 {aucune candidature} one {# candidature reçue} other {# candidatures reçues}}. Les candidats sont prévenus.",
+        "accountsKept": "Les comptes des membres restent ouverts : ils perdent seulement leur place dans l'entreprise et sont prévenus par e-mail.",
+        "entities": "{count, plural, one {# entité du groupe devient} other {# entités du groupe deviennent}} indépendante(s).",
+        "payments": "{count, plural, one {# paiement reste} other {# paiements restent}} dans la comptabilité, sans lien avec l'entreprise.",
+        "members": "Membres (comptes conservés)",
+        "done": "{org} est supprimée. Les comptes de ses membres restent ouverts."
       },
       "error": {
         "plan": "Choisissez une formule payante recruteur ou entreprise, et une date de fin dans les deux ans.",
