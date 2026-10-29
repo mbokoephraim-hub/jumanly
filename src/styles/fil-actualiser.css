@@ -1,0 +1,86 @@
+/* ─── Rafraîchir le Fil (Ephraïm, 29/10/2026) : le disque qui descend avec le doigt en haut du
+   Fil, et la pilule « Nouvelles publications ». ─── */
+.nb-fil-actu {
+  position: relative;
+  height: 0;
+}
+.nb-fil-actu-disque {
+  position: fixed;
+  top: calc(var(--nb-haut) + 8px);
+  left: 50%;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--nb-haute);
+  border: 1px solid var(--nb-filet-fort);
+  color: var(--nb-brume);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  pointer-events: none;
+  transition:
+    transform 0.28s var(--nb-courbe),
+    opacity 0.28s var(--nb-courbe),
+    color 0.2s;
+}
+/* While the finger holds it, the disc follows without delay. */
+.nb-fil-actu-disque[data-tire] {
+  transition: color 0.2s;
+}
+.nb-fil-actu-disque[data-pret],
+.nb-fil-actu-disque[data-tourne] {
+  color: var(--nb-lime-t);
+}
+.nb-fil-actu-disque > span {
+  display: grid;
+}
+.nb-fil-actu-disque[data-tourne] > span {
+  animation: nb-fil-actu-tour 0.8s linear infinite;
+}
+@keyframes nb-fil-actu-tour {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.nb-fil-actu-pilule {
+  position: fixed;
+  top: calc(var(--nb-haut) + 66px);
+  left: 50%;
+  z-index: 6;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 16px 0 12px;
+  border-radius: 999px;
+  background: var(--nb-lime);
+  color: var(--nb-sur-lime, #0f3f37);
+  font-size: 13.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
+  animation: nb-fil-actu-arrivee 0.36s var(--nb-courbe);
+}
+@keyframes nb-fil-actu-arrivee {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -12px);
+  }
+}
+[data-nb-reduit] .nb-fil-actu-disque,
+[data-nb-reduit] .nb-fil-actu-pilule {
+  animation: none;
+  transition: opacity 0.2s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-fil-actu-disque,
+  .nb-fil-actu-pilule {
+    animation: none;
+    transition: opacity 0.2s;
+  }
+  .nb-fil-actu-disque[data-tourne] > span {
+    animation-duration: 1.6s;
+  }
+}

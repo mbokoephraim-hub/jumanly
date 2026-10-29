@@ -58,6 +58,7 @@ export async function RhFil({
         }}
         offersToday={0}
         targets={targets}
+        loadedAt={now.toISOString()}
         recruiter={{
           compose,
           end: { text: t("end"), link: t("endLink"), href: "/app/hire/talents" },

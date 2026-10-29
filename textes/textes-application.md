@@ -8377,6 +8377,8 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.event.participants` | {count, plural, one {# participant} other {# participants}} |
 | `phoneFil.event.registeredToast` | Inscrite. Rappel la veille dans vos notifications. |
 | `phoneFil.event.canceledToast` | Participation annulée |
+| `phoneFil.refresh.pill` | {count, plural, one {# nouvelle publication} other {# nouvelles publications}} |
+| `phoneFil.refresh.loading` | Actualisation du Fil… |
 | `phoneFil.masked` | Publication masquée. Vous en verrez moins comme celle-ci. |
 | `phoneFil.maskedUndo` | Annuler |
 | `phoneFil.orbiCard.title` | Orbi |

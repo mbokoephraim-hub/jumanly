@@ -5075,3 +5075,16 @@ Demande d'Ephraïm du 29/10/2026 (partie administration seulement).
 - Icône Connexions à côté de la loupe et du crayon du Chat, avec le nombre de demandes en attente.
 - Page `/app/messages/connexions` (remplace `/app/messages/demandes`, qui y renvoie) : Demandes (accepter, refuser sans prévenir, demandes envoyées à annuler), Suggestions (connexions de mes connexions, puis compétences partagées ; masquables), Mes connexions (recherche, écrire).
 - Notifications `connectionRequest` et `connectionAccepted` ; le pouls du Chat change à chaque nouvelle demande.
+## 2026-10-29 · Rafraîchir le Fil en tirant
+
+- Demande d'Ephraïm : au téléphone, connecté, on doit pouvoir rafraîchir le Fil d'un geste, très simplement,
+  pour voir les nouvelles publications.
+- En haut du Fil (talent et recruteur), tirer vers le bas fait descendre un disque qui tourne avec le doigt ;
+  le lâcher passé le repère relit le Fil (`router.refresh()`), le disque tourne jusqu'à l'arrivée
+  (`src/components/phone/fil/refresh.tsx`, styles `src/styles/fil-actualiser.css`).
+- Chaque minute, et quand l'appli revient au premier plan, le Fil demande combien de publications d'autres
+  personnes sont arrivées depuis son affichage (`/api/fil/nouveautes`, service `newPostsSince`, mêmes
+  exclusions que le Fil : masquées, bloquées, types cachés). Une pilule Lime « N nouvelles publications »
+  remonte en haut et les affiche d'un toucher.
+- Toucher « Fil » dans le menu quand le Fil est déjà en haut le rafraîchit aussi (sinon il remonte en haut).
+- Non vérifié en e2e (consigne d'Ephraïm du 27/10 : pas de vérification) ; types et lint passés.

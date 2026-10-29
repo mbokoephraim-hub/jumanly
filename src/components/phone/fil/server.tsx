@@ -96,6 +96,7 @@ export async function FilTab({
         }}
         offersToday={fresh.length}
         targets={targets}
+        loadedAt={now.toISOString()}
       />
     </FilTexts>
   );
