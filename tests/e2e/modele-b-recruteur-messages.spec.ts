@@ -288,16 +288,18 @@ test.describe("Modèle B recruteur · Messages, notifications et Orbi au télép
     ).toBeVisible();
     await capture(page, "182-notifications-reseau");
     await notifTabs.getByRole("tab", { name: /^Tout/ }).click();
-    await page.getByRole("button", { name: "Tout marquer comme lu" }).click();
-    await expect(seen(page, "Toutes les notifications sont lues.")).toBeVisible();
-    await expect(page.getByRole("button", { name: "Tout marquer comme lu" })).toBeDisabled();
-    await closeToast(page);
     await expect(page.getByRole("link", { name: "Réglage des notifications" })).toHaveAttribute(
       "href",
       "/app/parametres/notifications",
     );
+    // Read, a notification leaves the list at once (Ephraïm 29/10/2026).
     await page.getByRole("button", { name: /Nouvelle candidature de Grâce Fictive/ }).click();
     await expect(page).toHaveURL(/\/app\/hire\/candidats\//);
+    await page.goto("/app/notifications");
+    await expect(page.getByText(/a confirmé son entretien/).first()).toBeVisible();
+    await page.getByRole("button", { name: "Tout marquer comme lu" }).click();
+    await expect(seen(page, "Rien de nouveau ici.")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Tout marquer comme lu" })).toBeDisabled();
 
     // « Retirer de la messagerie de l'équipe »: out of the list, nothing deleted.
     await page.goto(`/app/messages/${conversationId}`);

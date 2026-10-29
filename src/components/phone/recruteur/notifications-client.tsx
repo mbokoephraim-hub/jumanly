@@ -1,10 +1,10 @@
 "use client";
+/* eslint-disable @next/next/no-img-element -- small photos of people, already reduced */
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition, type ReactNode } from "react";
-import { showToast } from "@/components/motion/toaster";
 import {
   markAllNotificationsReadInPlace,
   markNotificationsReadAction,
@@ -27,6 +27,8 @@ export type RhNotifRow = {
   unread: boolean;
   /** The person's initials, or none for what Jumanly says. */
   initials: string | null;
+  /** Their photo, when they have one. */
+  image: string | null;
   tint: string;
 };
 
@@ -40,10 +42,12 @@ export function RhNotifications({ rows, top }: { rows: RhNotifRow[]; top?: React
   const t = useTranslations("phoneRhNotifs");
   const router = useRouter();
   const [tab, setTab] = useState<Tab>("tout");
-  const [allRead, setAllRead] = useState(false);
+  // Read here: the line leaves the list at once (Ephraïm 29/10/2026), before its page opens.
+  const [gone, setGone] = useState<ReadonlySet<string>>(new Set());
   const [pending, start] = useTransition();
-  const isUnread = (row: RhNotifRow) => row.unread && !allRead;
-  const inTab = (key: Tab) => rows.filter((row) => key === "tout" || row.tab === key);
+  const isUnread = (row: RhNotifRow) => row.unread;
+  const left = rows.filter((row) => !gone.has(row.id));
+  const inTab = (key: Tab) => left.filter((row) => key === "tout" || row.tab === key);
   const unread = (key: Tab) => inTab(key).filter(isUnread).length;
   const groups = GROUPS.map((key) => ({
     key,
@@ -61,8 +65,7 @@ export function RhNotifications({ rows, top }: { rows: RhNotifRow[]; top?: React
           onClick={() =>
             start(async () => {
               await markAllNotificationsReadInPlace();
-              setAllRead(true);
-              showToast({ message: t("allRead") });
+              setGone(new Set(rows.map((row) => row.id)));
               router.refresh();
             })
           }
@@ -104,7 +107,10 @@ export function RhNotifications({ rows, top }: { rows: RhNotifRow[]; top?: React
             <ul className="nb-rm-liste">
               {group.items.map((row) => (
                 <li key={row.id}>
-                  <form action={markNotificationsReadAction}>
+                  <form
+                    action={markNotificationsReadAction}
+                    onSubmit={() => setGone((ids) => new Set(ids).add(row.id))}
+                  >
                     <input type="hidden" name="id" value={row.id} />
                     <input type="hidden" name="href" value={row.href} />
                     <button
@@ -112,7 +118,11 @@ export function RhNotifications({ rows, top }: { rows: RhNotifRow[]; top?: React
                       className="nb-rn-ligne"
                       data-non-lu={isUnread(row) ? "" : undefined}
                     >
-                      {row.initials ? (
+                      {row.image ? (
+                        <span className="nb-rh-ini nb-rn-photo" aria-hidden>
+                          <img src={row.image} alt="" width={44} height={44} />
+                        </span>
+                      ) : row.initials ? (
                         <span className="nb-rh-ini" data-teinte={row.tint} aria-hidden>
                           {row.initials}
                         </span>

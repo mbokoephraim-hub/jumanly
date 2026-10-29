@@ -254,7 +254,7 @@ async function tell(
 ) {
   const from = await db.user.findUnique({ where: { id: fromId }, select: { name: true } });
   if (!from) return;
-  await notify(db, { userIds: [toId], type, payload: { name: from.name }, href });
+  await notify(db, { userIds: [toId], type, payload: { name: from.name }, href, actorId: fromId });
 }
 
 /** Accepts a request I received; the conversation between us opens (or reopens). */

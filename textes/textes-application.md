@@ -8547,6 +8547,8 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.notifs.ago.yesterday` | Hier |
 | `phoneFil.notifs.empty` | Rien dans cette catégorie pour l'instant. |
 | `phoneFil.notifs.newDot` | Non lue |
+| `phoneFil.notifs.newMessage` | vous a envoyé un message. |
+| `phoneFil.notifs.newMessageJob` | vous a écrit au sujet de « {jobTitle} ». |
 | `phoneFil.orbi.digest` | {count, plural, =0 {Rien de nouveau depuis hier. Les offres d'Explorer vous attendent.} one {Une nouveauté aujourd'hui : {names}.} other {# nouveautés aujourd'hui : {names}.}} |
 | `phoneFil.orbi.digestTitle` | Résumer les nouveautés du jour |
 | `phoneFil.orbi.digestPost` | {name} a publié |
@@ -18830,6 +18832,7 @@ Conventions :
 | `notifications.item.statusChange` | Votre candidature à « {jobTitle} » chez {company} est passée à l'étape « {stage} » |
 | `notifications.item.notSelected` | {company} n'a pas retenu votre candidature à « {jobTitle} » |
 | `notifications.item.newMessage` | Nouveau message de {senderName} · {jobTitle} |
+| `notifications.item.newMessageDirect` | Nouveau message de {senderName} |
 | `notifications.item.documentRequest` | {company} vous demande un document : {documentName} |
 | `notifications.item.orgInvite` | {inviterName} vous invite à rejoindre {org} |
 | `notifications.item.jobApproved` | Votre offre « {jobTitle} » a été validée et publiée |
@@ -18895,6 +18898,28 @@ Conventions :
 | `notifications.item.connectionRequest` | {name} vous demande en connexion. |
 | `notifications.item.connectionAccepted` | {name} a accepté votre demande de connexion : vous pouvez vous écrire. |
 | `notifications.item.unread` | Non lue |
+
+### Notifications · Sur le téléphone et bandeau de message (29/10/2026)
+
+*Demande d'Ephraïm : voir un nouveau message même hors de l'application, et un bandeau avec la photo de la personne quand on est ailleurs dans l'application. Comme les e-mails, on dit qui a écrit, jamais quoi.*
+
+| Clé | Texte |
+|---|---|
+| `push.newMessage.title` | Nouveau message de {senderName} |
+| `push.newMessage.body` | Touchez pour lire et répondre. |
+| `push.newMessage.job` | Au sujet de « {jobTitle} ». Touchez pour lire et répondre. |
+| `messageBanner.title` | Nouveau message de {name} |
+| `messageBanner.line` | Touchez pour lire et répondre |
+| `messageBanner.region` | Nouveaux messages |
+| `messageBanner.close` | Fermer |
+| `pushPrompt.title` | Recevoir vos messages sur ce téléphone |
+| `pushPrompt.text` | Une notification s'affiche quand on vous écrit, même quand Jumanly est fermé. |
+| `pushPrompt.yes` | Activer |
+| `pushPrompt.later` | Plus tard |
+| `pushPrompt.done` | Notifications activées sur cet appareil. |
+| `pushPrompt.blocked` | Les notifications sont bloquées pour Jumanly : autorisez-les dans les réglages du navigateur. |
+| `pushPrompt.ios` | Sur iPhone : ajoutez d'abord Jumanly à l'écran d'accueil (Partager, puis « Sur l'écran d'accueil »), et ouvrez-le depuis son icône. |
+| `pushPrompt.failed` | Impossible d'activer les notifications sur cet appareil pour le moment. |
 
 ### Notifications · Talent (par événement)
 

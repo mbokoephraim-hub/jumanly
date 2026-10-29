@@ -6,11 +6,13 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { TOP_BAR_SLOT_ID } from "@/lib/top-bar";
 import { cx } from "@/lib/cx";
 import { OFFER_FILTERS_ID, offerFilterKeys } from "@/lib/offer-filters";
+import { showMessageBanner } from "@/components/motion/message-banner";
 import { showToast } from "@/components/motion/toaster";
 import { BackButton, parentPath, useCountPages } from "./back-button";
 import { TalentIcon } from "./icon";
 
-const POLL_MS = 60_000;
+/** Often enough for a new message to show while the person is elsewhere in the app. */
+const POLL_MS = 20_000;
 
 export type HeaderLabels = {
   notifications: { zero: string; one: string; other: string };
@@ -267,7 +269,24 @@ export function useUnread(initial: number, media?: string) {
         const arrived = data.items.filter(
           (item) => item.unread && item.important && item.createdAt > seen.current!,
         );
-        for (const item of arrived.slice(0, 2))
+        // A new message: a banner with the photo of the person who wrote (Ephraïm 29/10/2026),
+        // except in that conversation or the list of the Chat, which already show it.
+        const here = window.location.pathname;
+        const message = arrived.find(
+          (item) =>
+            item.type === "newMessage" &&
+            item.actor &&
+            item.href !== here &&
+            here !== "/app/messages",
+        );
+        if (message)
+          showMessageBanner({
+            id: message.id,
+            name: message.actor!.name,
+            image: message.actor!.image,
+            href: message.href ?? "/app/messages",
+          });
+        for (const item of arrived.filter((item) => item.type !== "newMessage").slice(0, 2))
           showToast({ message: item.text, href: item.href ?? undefined, tone: "info" });
       }
       const newest = data.items[0]?.createdAt ?? "";
@@ -291,7 +310,10 @@ export function useUnread(initial: number, media?: string) {
 }
 
 type ArrivedItem = {
+  id: string;
+  type: string;
   text: string;
+  actor: { name: string; image: string | null } | null;
   href: string | null;
   createdAt: string;
   unread: boolean;

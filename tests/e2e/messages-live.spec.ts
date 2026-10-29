@@ -47,8 +47,9 @@ test("la cloche signale l'arrivée d'une notification, puis tout se marque comme
   }
   await expect(page).toHaveURL(/\/app\/notifications$/);
   // Planche talent-2 § 5: a short title and its line, the new one lit.
-  const item = page.getByRole("button", { name: /^Nouveau message/ });
-  await expect(item).toContainText("Horizon Démo · Poste fictif");
+  // Phone: the name first, beside the photo (Ephraïm 29/10/2026).
+  const item = page.getByRole("button", { name: web ? /^Nouveau message/ : /^Horizon Démo/ });
+  await expect(item).toContainText(web ? "Horizon Démo · Poste fictif" : "« Poste fictif »");
   await expectAccessible(page);
   await page.getByRole("button", { name: "Tout marquer comme lu" }).click();
   await page.goto("/app");

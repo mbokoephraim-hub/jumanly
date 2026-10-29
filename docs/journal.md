@@ -5115,3 +5115,16 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 ## 2026-10-29 · « Télécharger en PDF » d'un CV réparé en production
 
 - Le bouton du téléphone (et du studio) appelle `/app/career/cv/[id]/pdf` ; cette route n'embarquait pas Chromium (`@sparticuz/chromium/bin`) sur Vercel, d'où « Le PDF n'a pas pu être créé ». Ajoutée à `outputFileTracingIncludes` dans `next.config.ts`, comme les autres routes d'export.
+
+## 2026-10-29 · Notifications des messages (demande d'Ephraïm)
+
+- Hors de l'application : notification du téléphone « Nouveau message de … » avec la photo de la personne (Web Push).
+  Chaque appareil dit oui une fois (carte « Recevoir vos messages sur ce téléphone » dans Chat et Notifications) ;
+  un toucher ouvre la conversation. Aussi pour une demande de connexion, une invitation à un entretien, etc.
+  Sur iPhone : seulement une fois Jumanly ajouté à l'écran d'accueil.
+- Dans l'application (Fil, Explorer…) : bandeau en haut « Nouveau message de … » avec la photo, 5 s, un toucher
+  ouvre la conversation ; pas dans la conversation elle-même ni dans la liste du Chat.
+- Liste des notifications : la photo de la personne (message, connexion, J'aime…), une seule ligne par
+  conversation, et une notification lue (ou « Tout marquer comme lu ») disparaît aussitôt. Ouvrir une
+  conversation lit ses notifications.
+- Détail et choix : `docs/decisions/2026-10-29-notifications-telephone.md`. Test : `tests/db/notifications-messages.test.ts`.

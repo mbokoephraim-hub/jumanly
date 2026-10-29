@@ -14,7 +14,10 @@
  * - Pictures of the site and of the space (photos, banners, posts): kept on the device and shown at
  *   once, refreshed in the background (300 at most).
  * - Built files (/_next/static, hashed names): cache first.
- * - Signing out empties the kept pages and pictures (the next person on the device sees nothing).
+ * - Signing out empties the kept pages and pictures (the next person on the device sees nothing),
+ *   and stops the notifications of this device.
+ * - Notifications outside the app (Web Push, 29/10/2026): « Nouveau message de … » with the photo
+ *   of the person who wrote; a touch opens the conversation (or brings the open app to it).
  */
 const VERSION = "jm-v2";
 const PAGES = `${VERSION}-pages`;
@@ -212,7 +215,16 @@ self.addEventListener("fetch", (event) => {
   // Sign-out ends on /connexion?deconnecte=1, as a page or as an in-app navigation.
   if (url.searchParams.has("deconnecte")) {
     session += 1;
-    event.waitUntil(Promise.all([caches.delete(PAGES), caches.delete(PICTURES)]));
+    event.waitUntil(
+      Promise.all([
+        caches.delete(PAGES),
+        caches.delete(PICTURES),
+        self.registration.pushManager
+          .getSubscription()
+          .then((subscription) => subscription && subscription.unsubscribe())
+          .catch(() => undefined),
+      ]),
+    );
   }
   if (request.mode === "navigate") {
     if (url.pathname === LAUNCH_URL) event.respondWith(launch(request, event));
@@ -220,4 +232,38 @@ self.addEventListener("fetch", (event) => {
   } else if (url.pathname.startsWith("/_next/static/") || OFFLINE_ASSETS.includes(url.pathname))
     event.respondWith(builtFile(request));
   else if (request.destination === "image") event.respondWith(picture(request, event));
+});
+
+self.addEventListener("push", (event) => {
+  let data = {};
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch {
+    data = { title: "Jumanly", body: event.data ? event.data.text() : "" };
+  }
+  const options = {
+    body: data.body || "",
+    icon: data.icon || "/marque/jumanly-favicon-192.png",
+    data: { url: data.url || "/app/notifications" },
+  };
+  if (data.tag) {
+    options.tag = data.tag;
+    options.renotify = true;
+  }
+  event.waitUntil(self.registration.showNotification(data.title || "Jumanly", options));
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const url = new URL(event.notification.data?.url || "/app", self.location.origin).href;
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((windows) => {
+      const open = windows.find((client) => new URL(client.url).origin === self.location.origin);
+      if (!open) return self.clients.openWindow(url);
+      return open
+        .navigate(url)
+        .then((client) => (client || open).focus())
+        .catch(() => self.clients.openWindow(url));
+    }),
+  );
 });

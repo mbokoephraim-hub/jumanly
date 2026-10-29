@@ -10368,7 +10368,9 @@
         "yesterday": "Hier"
       },
       "empty": "Rien dans cette catégorie pour l'instant.",
-      "newDot": "Non lue"
+      "newDot": "Non lue",
+      "newMessage": "vous a envoyé un message.",
+      "newMessageJob": "vous a écrit au sujet de « {jobTitle} »."
     },
     "orbi": {
       "digest": "{count, plural, =0 {Rien de nouveau depuis hier. Les offres d'Explorer vous attendent.} one {Une nouveauté aujourd'hui : {names}.} other {# nouveautés aujourd'hui : {names}.}}",
@@ -22861,6 +22863,7 @@
       "statusChange": "Votre candidature à « {jobTitle} » chez {company} est passée à l'étape « {stage} »",
       "notSelected": "{company} n'a pas retenu votre candidature à « {jobTitle} »",
       "newMessage": "Nouveau message de {senderName} · {jobTitle}",
+      "newMessageDirect": "Nouveau message de {senderName}",
       "documentRequest": "{company} vous demande un document : {documentName}",
       "orgInvite": "{inviterName} vous invite à rejoindre {org}",
       "jobApproved": "Votre offre « {jobTitle} » a été validée et publiée",
@@ -22927,6 +22930,29 @@
       "connectionAccepted": "{name} a accepté votre demande de connexion : vous pouvez vous écrire.",
       "unread": "Non lue"
     }
+  },
+  "push": {
+    "newMessage": {
+      "title": "Nouveau message de {senderName}",
+      "body": "Touchez pour lire et répondre.",
+      "job": "Au sujet de « {jobTitle} ». Touchez pour lire et répondre."
+    }
+  },
+  "messageBanner": {
+    "title": "Nouveau message de {name}",
+    "line": "Touchez pour lire et répondre",
+    "region": "Nouveaux messages",
+    "close": "Fermer"
+  },
+  "pushPrompt": {
+    "title": "Recevoir vos messages sur ce téléphone",
+    "text": "Une notification s'affiche quand on vous écrit, même quand Jumanly est fermé.",
+    "yes": "Activer",
+    "later": "Plus tard",
+    "done": "Notifications activées sur cet appareil.",
+    "blocked": "Les notifications sont bloquées pour Jumanly : autorisez-les dans les réglages du navigateur.",
+    "ios": "Sur iPhone : ajoutez d'abord Jumanly à l'écran d'accueil (Partager, puis « Sur l'écran d'accueil »), et ouvrez-le depuis son icône.",
+    "failed": "Impossible d'activer les notifications sur cet appareil pour le moment."
   },
   "notif": {
     "talent": {

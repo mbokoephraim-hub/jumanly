@@ -1,6 +1,7 @@
 import { Suspense, type ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { AppMotionRoot } from "@/components/motion/app-motion-root";
+import { MessageBannerHost } from "@/components/motion/message-banner-host";
 import { Toaster } from "@/components/motion/toaster";
 import { OfflineDrafts } from "@/components/talent/offline-drafts";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
@@ -16,6 +17,7 @@ import {
 import { recruiterOrbiActions } from "@/server/services/recruiter-orbi";
 import { phoneThemeScript } from "@/lib/phone-theme";
 import { PhoneArrivals } from "./arrivals";
+import { PushPrompt } from "./push-prompt";
 import { PhoneThemeRoot } from "./theme-root";
 import { PhoneNav } from "./nav";
 import { Opening } from "./opening";
@@ -140,7 +142,10 @@ export async function PhoneShell({
       <ViewSync view="phone" />
       <AppMotionRoot reduce={reduceMotion} />
       <Toaster label={t("toasts")} closeLabel={t("close")} placement="top" />
+      <MessageBannerHost />
       <PhoneArrivals />
+      {/* A device that allowed the notifications stays subscribed for the person signed in. */}
+      <PushPrompt place="silent" />
       <PhonePreload />
       <PhoneFreshness set={set} />
       <OfflineDrafts

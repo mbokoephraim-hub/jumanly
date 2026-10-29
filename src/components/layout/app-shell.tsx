@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { NotificationBell, type BellLabels } from "@/components/app/notification-bell";
+import { MessageBannerHost } from "@/components/motion/message-banner-host";
 import { Toaster } from "@/components/motion/toaster";
 import { AppIntroGate } from "@/components/app/app-intro-gate";
 import type { IntroData } from "@/components/app/app-intro";
@@ -105,6 +106,7 @@ export function AppShell({
     >
       <AppMotionRoot reduce={reduceMotion} />
       <Toaster label={tt("region.aria")} closeLabel={tt("close")} />
+      <MessageBannerHost />
       {intro && (
         <Suspense fallback={null}>
           <AppIntroGate data={intro} reduce={reduceMotion} />

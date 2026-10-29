@@ -3,7 +3,7 @@
 import "@/styles/phone-onglets.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useRef, useState } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { rhOpenTeamAction } from "@/server/actions/phone-rh-messages";
 import { PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
@@ -67,7 +67,18 @@ function Row({ row }: { row: RhListRow }) {
  * count, the line of each list, the conversations; the field searches the names, the offers and
  * the last words, in the scope chosen under it.
  */
-export function RhMessagesList({ rows, tab, org }: { rows: RhListRow[]; tab: Tab; org: string }) {
+export function RhMessagesList({
+  rows,
+  tab,
+  org,
+  push,
+}: {
+  rows: RhListRow[];
+  tab: Tab;
+  org: string;
+  /** « Recevoir vos messages sur ce téléphone » (29/10/2026). */
+  push?: ReactNode;
+}) {
   const t = useTranslations("phoneRhMessages");
   const [current, setCurrent] = useState<Tab>(tab);
   const [searching, setSearching] = useState(false);
@@ -147,6 +158,7 @@ export function RhMessagesList({ rows, tab, org }: { rows: RhListRow[]; tab: Tab
         </>
       ) : (
         <>
+          {push}
           <div className="nb-rm-onglets" role="tablist" aria-label={t("tabs.label")}>
             {TABS.map((key) => (
               <button

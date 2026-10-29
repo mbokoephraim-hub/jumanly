@@ -2,9 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useState, useTransition } from "react";
+import { useState, useTransition, type ReactNode } from "react";
 import Link from "next/link";
-import { showToast } from "@/components/motion/toaster";
 import {
   markAllNotificationsReadInPlace,
   markNotificationsReadAction,
@@ -34,14 +33,16 @@ export type NotifRow = {
  * · Réseau », how many are unread and « Tout marquer comme lu », then today, this week, earlier.
  * A touch marks the line read and opens its page.
  */
-export function PhoneNotifications({ rows }: { rows: NotifRow[] }) {
+export function PhoneNotifications({ rows, push }: { rows: NotifRow[]; push?: ReactNode }) {
   const t = useTranslations("phoneFil");
   const router = useRouter();
   const [filter, setFilter] = useState<NotifFilter>("tout");
-  const [allRead, setAllRead] = useState(false);
+  // Read here: the line leaves the list at once (Ephraïm 29/10/2026), before its page opens.
+  const [gone, setGone] = useState<ReadonlySet<string>>(new Set());
   const [pending, start] = useTransition();
-  const unread = allRead ? 0 : rows.filter((row) => row.unread).length;
-  const shown = rows.filter((row) => filter === "tout" || row.filter === filter);
+  const left = rows.filter((row) => !gone.has(row.id));
+  const unread = left.filter((row) => row.unread).length;
+  const shown = left.filter((row) => filter === "tout" || row.filter === filter);
   const groups = (["today", "thisWeek", "earlier"] as const)
     .map((key) => ({ key, items: shown.filter((row) => row.group === key) }))
     .filter((group) => group.items.length > 0);
@@ -59,6 +60,8 @@ export function PhoneNotifications({ rows }: { rows: NotifRow[] }) {
           <PhoneIcon name="reglages" size={22} />
         </Link>
       </header>
+      {/* « Recevoir vos messages sur ce téléphone » (29/10/2026). */}
+      {push}
       <div className="nb-chips nb-fil-filtres" role="group" aria-label={t("notifs.filters")}>
         {NOTIF_FILTERS.map((key) => (
           <button
@@ -80,8 +83,7 @@ export function PhoneNotifications({ rows }: { rows: NotifRow[] }) {
           onClick={() =>
             start(async () => {
               await markAllNotificationsReadInPlace();
-              setAllRead(true);
-              showToast({ message: t("notifs.markedAll") });
+              setGone(new Set(rows.map((row) => row.id)));
               router.refresh();
             })
           }
@@ -96,9 +98,13 @@ export function PhoneNotifications({ rows }: { rows: NotifRow[] }) {
             {t(`notifs.group.${group.key}`)}
           </h2>
           {group.items.map((row) => {
-            const isUnread = row.unread && !allRead;
+            const isUnread = row.unread;
             return (
-              <form key={row.id} action={markNotificationsReadAction}>
+              <form
+                key={row.id}
+                action={markNotificationsReadAction}
+                onSubmit={() => setGone((ids) => new Set(ids).add(row.id))}
+              >
                 <input type="hidden" name="id" value={row.id} />
                 <input type="hidden" name="href" value={row.href} />
                 <button

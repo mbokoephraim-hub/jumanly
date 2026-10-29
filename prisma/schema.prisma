@@ -870,6 +870,7 @@ model User {
   contactRequestsSent  ContactRequest[]
   interviewsOrganized  Interview[]
   notifications        Notification[]
+  pushSubscriptions    PushSubscription[]
   participations       ConversationParticipant[]
   messageReactions     MessageReaction[]
   videoCalls           VideoCall[]
@@ -1802,6 +1803,28 @@ model Notification {
   createdAt DateTime  @default(now())
 
   @@index([userId, readAt, createdAt])
+}
+
+/// A phone or a browser that receives the notifications even outside the app (Web Push,
+/// Ephraïm 29/10/2026). One line per device; a device that no longer answers is removed.
+model PushSubscription {
+  id        String   @id @default(cuid(2))
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+/// Keys the platform makes for itself once and keeps (the Web Push key pair when VAPID_PUBLIC_KEY
+/// and VAPID_PRIVATE_KEY are not set): nothing to configure by hand.
+model PlatformKey {
+  name      String   @id
+  value     Json
+  createdAt DateTime @default(now())
 }
 
 enum ReportStatus {

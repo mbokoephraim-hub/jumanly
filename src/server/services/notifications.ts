@@ -3,6 +3,7 @@
  * text needs; the text itself comes from the translations when it is displayed.
  */
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
+import { pushNotification } from "./push";
 
 export const notificationTypes = [
   "newApplication",
@@ -216,6 +217,14 @@ export function categoryOf(type: NotificationType): NotificationCategory | null 
   );
 }
 
+/**
+ * The key of a notification's text under `notifications.item`: a message outside any application
+ * says only who wrote (« Nouveau message de Sublime »), without a dangling « · ».
+ */
+export function notificationKey(type: string, values: Record<string, string>) {
+  return type === "newMessage" && !values.jobTitle ? "newMessageDirect" : type;
+}
+
 /** Values of a notification's text, from its stored payload. */
 export function notificationValues(payload: unknown): Record<string, string> {
   return Object.fromEntries(
@@ -233,9 +242,12 @@ export async function notify(
     type: NotificationType;
     payload: Prisma.InputJsonObject;
     href: string;
+    /** Who did it: their photo shows beside the notification (Ephraïm 29/10/2026). */
+    actorId?: string;
   },
 ) {
   if (input.userIds.length === 0) return;
+  const payload = input.actorId ? { ...input.payload, actorId: input.actorId } : input.payload;
   let userIds = [...new Set(input.userIds)];
   // A category the person turned off (Paramètres › Notifications) creates nothing for them.
   const categories = [categoryOf(input.type), recruiterCategoryOf(input.type)].filter(
@@ -250,26 +262,103 @@ export async function notify(
     userIds = userIds.filter((id) => !off.has(id));
     if (userIds.length === 0) return;
   }
+  // One line per conversation (Ephraïm 29/10/2026): a new message replaces the unread one of the
+  // same conversation instead of piling « Nouveau message de … » up.
+  if (input.type === "newMessage")
+    await db.notification.deleteMany({
+      where: { userId: { in: userIds }, type: "newMessage", href: input.href, readAt: null },
+    });
   await db.notification.createMany({
-    data: userIds.map((userId) => ({
-      userId,
-      type: input.type,
-      payload: input.payload,
-      href: input.href,
-    })),
+    data: userIds.map((userId) => ({ userId, type: input.type, payload, href: input.href })),
   });
+  // Also on the phone, outside the app, for what matters (a message, a request…).
+  await pushNotification(db, { userIds, type: input.type, payload, href: input.href }).catch(
+    (error) => console.error("[push]", error),
+  );
 }
 
 export async function unreadNotifications(db: PrismaClient, userId: string) {
   return db.notification.count({ where: { userId, readAt: null } });
 }
 
-export async function listNotifications(db: PrismaClient, userId: string, unreadOnly = false) {
-  return db.notification.findMany({
-    where: { userId, ...(unreadOnly ? { readAt: null } : {}) },
+/**
+ * The notifications still to read (Ephraïm 29/10/2026: once read, or « Tout marquer comme lu »,
+ * a notification leaves the list at once), the newest first; the older « Nouveau message » of a
+ * conversation that already has a newer one are left out.
+ */
+export async function listNotifications(db: PrismaClient, userId: string) {
+  const unread = await db.notification.findMany({
+    where: { userId, readAt: null },
     orderBy: { createdAt: "desc" },
     take: 100,
   });
+  const seen = new Set<string>();
+  return unread.filter((item) => {
+    if (item.type !== "newMessage" || !item.href) return true;
+    if (seen.has(item.href)) return false;
+    seen.add(item.href);
+    return true;
+  });
+}
+
+/** Opening a conversation reads its notifications (« Nouveau message », document requested). */
+export async function markConversationNotificationsRead(
+  db: PrismaClient,
+  userId: string,
+  conversationId: string,
+) {
+  await db.notification.updateMany({
+    where: { userId, readAt: null, href: `/app/messages/${conversationId}` },
+    data: { readAt: new Date() },
+  });
+}
+
+/**
+ * The person beside each notification, for their photo: who did it (`actorId`), or for a message
+ * written before it was stored, the other person of the conversation.
+ */
+export async function notificationActors(
+  db: PrismaClient,
+  userId: string,
+  items: { id: string; type: string; payload: unknown; href: string | null }[],
+) {
+  const actorOf = new Map<string, string>();
+  const conversationOf = new Map<string, string>();
+  for (const item of items) {
+    const actorId = notificationValues(item.payload).actorId;
+    if (actorId) actorOf.set(item.id, actorId);
+    else if (item.href?.startsWith("/app/messages/")) {
+      const conversationId = item.href.slice("/app/messages/".length).split(/[/?#]/)[0];
+      if (conversationId) conversationOf.set(item.id, conversationId);
+    }
+  }
+  if (conversationOf.size > 0) {
+    const others = await db.conversationParticipant.findMany({
+      where: {
+        conversationId: { in: [...new Set(conversationOf.values())] },
+        userId: { not: userId },
+      },
+      select: { conversationId: true, userId: true },
+    });
+    const byConversation = new Map(others.map((other) => [other.conversationId, other.userId]));
+    for (const [id, conversationId] of conversationOf) {
+      const other = byConversation.get(conversationId);
+      if (other) actorOf.set(id, other);
+    }
+  }
+  const people = actorOf.size
+    ? await db.user.findMany({
+        where: { id: { in: [...new Set(actorOf.values())] } },
+        select: { id: true, name: true, image: true },
+      })
+    : [];
+  const byId = new Map(people.map((person) => [person.id, person]));
+  return new Map(
+    [...actorOf].flatMap(([id, actorId]) => {
+      const person = byId.get(actorId);
+      return person ? [[id, person] as const] : [];
+    }),
+  );
 }
 
 /** The latest notifications, for the bell's panel. */

@@ -6,7 +6,15 @@ import "@/styles/phone-connexions.css";
 import Link from "next/link";
 import { useFormatter, useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, useTransition } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+  type ReactNode,
+} from "react";
 import { showToast } from "@/components/motion/toaster";
 import { chatSummaryAction } from "@/server/actions/chat";
 import { openConnectionAction, searchMessagesAction } from "@/server/actions/messages-phone";
@@ -330,7 +338,7 @@ function OrbiSummary({ count }: { count: number }) {
  * like the other tabs. A talent writes only to their connections and to the recruiters of their
  * applications.
  */
-export function PhoneMessages({ view }: { view: InboxView }) {
+export function PhoneMessages({ view, push }: { view: InboxView; push?: ReactNode }) {
   const t = useTranslations("phoneMsg");
   const tc = useTranslations("phoneChat");
   const format = useFormatter();
@@ -555,6 +563,8 @@ export function PhoneMessages({ view }: { view: InboxView }) {
           </button>
         </div>
       </header>
+      {/* « Recevoir vos messages sur ce téléphone » (29/10/2026). */}
+      {push}
 
       {searching ? (
         <div className="nb-ms-cherche">

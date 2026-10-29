@@ -14,6 +14,8 @@ import {
 } from "@/server/services/feed";
 import {
   listNotifications,
+  notificationActors,
+  notificationKey,
   notificationTypes,
   notificationValues,
   unreadNotifications,
@@ -111,6 +113,8 @@ export async function notificationRows(userId: string, now = new Date()): Promis
   const all = (await listNotifications(db, userId)).filter((item) =>
     (notificationTypes as readonly string[]).includes(item.type),
   );
+  // The photo of the person who wrote, liked, asked… (Ephraïm 29/10/2026).
+  const actors = await notificationActors(db, userId, all);
   const today = new Date(now);
   today.setHours(0, 0, 0, 0);
   const DAY = 86_400_000;
@@ -120,7 +124,12 @@ export async function notificationRows(userId: string, now = new Date()): Promis
     ) ?? null;
   return all.map((item) => {
     const values = notificationValues(item.payload);
-    const text = d(`notifications.item.${item.type}`, values);
+    const actor = actors.get(item.id) ?? null;
+    // « Sublime Koyi vous a envoyé un message. »: the name first, in bold, beside the photo.
+    const text =
+      item.type === "newMessage" && values.senderName
+        ? `${values.senderName} ${values.jobTitle ? tf("newMessageJob", values) : tf("newMessage")}`
+        : d(`notifications.item.${notificationKey(item.type, values)}`, values);
     const candidate = [
       values.name,
       values.company,
@@ -148,7 +157,7 @@ export async function notificationRows(userId: string, now = new Date()): Promis
                   })()
                 : format.dateTime(item.createdAt, { day: "numeric", month: "short" });
     const href = item.href ?? "/app/notifications";
-    const org = Boolean(values.company || values.org) && !values.name;
+    const org = !actor && Boolean(values.company || values.org) && !values.name;
     return {
       id: item.id,
       href: href.startsWith("/app/fil/") ? `${href}?de=notifs` : href,
@@ -163,7 +172,9 @@ export async function notificationRows(userId: string, now = new Date()): Promis
       what: candidate ? text.slice(candidate.length) : text,
       ago,
       unread: !item.readAt,
-      avatar: who ? { initials: initialsOf(who), tone: toneOf(who, org), org, image: null } : null,
+      avatar: who
+        ? { initials: initialsOf(who), tone: toneOf(who, org), org, image: actor?.image ?? null }
+        : null,
     };
   });
 }
