@@ -751,6 +751,8 @@ export type ExperienceValues = {
 } & Omit<CompanyValue, "company"> & {
     /** Réalisations clés, one field each (empty fields are dropped on save). */
     achievements: string[];
+    /** « Faire vérifier »: the last request to a referent. */
+    reference: ReferenceStateValue;
   };
 
 const EXPERIENCE_TYPES = ["internship", "job", "freelance", "volunteer", "entrepreneur"] as const;
