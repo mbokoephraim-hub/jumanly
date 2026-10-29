@@ -1140,6 +1140,13 @@ html[data-nb-reduit]::view-transition-old(nb-pile) {
 .nb-pile[data-racine] .nb-cadre > .t-colonne {
   padding-bottom: 24px;
 }
+/* « Postuler est toujours gratuit » above the bottom bar: a solid badge, readable over the cards. */
+.nb-cadre .t-barre-p .t-gratuit {
+  background: var(--nb-surface);
+  border: 1px solid var(--nb-filet);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
 .nb-cadre .t-tete-f {
   position: sticky;
   top: 0;
@@ -1160,11 +1167,13 @@ html[data-nb-reduit]::view-transition-old(nb-pile) {
   box-shadow: none;
   color: var(--nb-creme);
 }
-.nb-cadre:has(.nb-page) {
+/* Only the page on screen counts: a Modèle B page kept hidden in the DOM (an earlier route,
+   `display: none`) must not take the margins of the page shown (Ephraïm, 29/10/2026). */
+.nb-cadre:has(.nb-page:not([style*="none"], [style*="none"] *)) {
   background: none;
   min-height: 0;
 }
-.nb-cadre:has(.nb-page) > .t-colonne {
+.nb-cadre:has(.nb-page:not([style*="none"], [style*="none"] *)) > .t-colonne {
   max-width: none;
   padding: 0;
   gap: 0;
