@@ -380,8 +380,8 @@ export async function myTasks(db: PrismaClient, ctx: HireContext, now = new Date
 // ─── Membres déclarés ───────────────────────────────────────────────────────────
 
 /**
- * People whose current experience names the organization, who let recruiters see their profile,
- * who are not members yet. With their answer when an administrator gave one.
+ * People whose current experience names the organization (or was linked to its page), who let
+ * recruiters see their profile, who are not members yet. With their answer when one was given.
  */
 async function declaredCandidates(db: PrismaClient, organizationId: string) {
   const org = await db.organization.findUniqueOrThrow({
@@ -398,7 +398,7 @@ async function declaredCandidates(db: PrismaClient, organizationId: string) {
   const experiences = await db.experience.findMany({
     where: {
       endDate: null,
-      company: { contains: word, mode: "insensitive" },
+      OR: [{ organizationId }, { company: { contains: word, mode: "insensitive" } }],
       // Only a profile shown to recruiters: an anonymous one keeps its name hidden (étape 3, A6).
       profile: {
         visibility: "recruiters",
@@ -413,6 +413,7 @@ async function declaredCandidates(db: PrismaClient, organizationId: string) {
       id: true,
       title: true,
       company: true,
+      organizationId: true,
       profile: { select: { user: { select: { id: true, name: true, image: true } } } },
       declaredAt: {
         where: { organizationId },
@@ -421,7 +422,11 @@ async function declaredCandidates(db: PrismaClient, organizationId: string) {
     },
   });
   return experiences
-    .filter((experience) => normalizeOrgName(experience.company) === name)
+    .filter(
+      (experience) =>
+        experience.organizationId === organizationId ||
+        normalizeOrgName(experience.company) === name,
+    )
     .map((experience) => ({
       experienceId: experience.id,
       userId: experience.profile.user.id,

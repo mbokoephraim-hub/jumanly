@@ -160,6 +160,8 @@ model Organization {
   joinRequests            OrgJoinRequest[]
   tasks                   OrgTask[]
   declaredMembers         OrgDeclaredMember[]
+  /// Experiences of people linked to the company's page (logo and link on their profile).
+  experiences             Experience[]
   /// Suspended by a Jumanly administrator: jobs hidden, Hire closed to its members.
   suspendedAt             DateTime?
   suspensionReason        String?
@@ -874,7 +876,7 @@ model User {
   participations       ConversationParticipant[]
   messageReactions     MessageReaction[]
   videoCalls           VideoCall[]
-  incomingCalls        VideoCall[]                @relation("VideoCallCallee")
+  incomingCalls        VideoCall[]               @relation("VideoCallCallee")
   connectionsSent      Connection[]              @relation("ConnectionRequester")
   connectionsReceived  Connection[]              @relation("ConnectionAddressee")
   enrollments          Enrollment[]
@@ -1248,22 +1250,29 @@ enum ExperienceType {
 }
 
 model Experience {
-  id          String              @id @default(cuid(2))
-  profileId   String
-  profile     TalentProfile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  title       String
-  company     String
-  type        ExperienceType      @default(job)
-  location    String?
-  startDate   DateTime
+  id             String              @id @default(cuid(2))
+  profileId      String
+  profile        TalentProfile       @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  title          String
+  company        String
+  /// The company's page on Jumanly, chosen among the suggestions while typing its name (demande
+  /// d'Ephraïm du 29/10/2026): its logo and a link to its page. Unlinked when the page goes away.
+  organizationId String?
+  organization   Organization?       @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  /// Logo sent by the person for a company without a page (`/medias/experiences/…`, 160 px WebP).
+  logo           String?
+  type           ExperienceType      @default(job)
+  location       String?
+  startDate      DateTime
   /// null = current position.
-  endDate     DateTime?
-  /// One achievement per line.
-  description String              @default("")
-  createdAt   DateTime            @default(now())
-  declaredAt  OrgDeclaredMember[]
+  endDate        DateTime?
+  /// Réalisations clés: one achievement per line, in the person's order.
+  description    String              @default("")
+  createdAt      DateTime            @default(now())
+  declaredAt     OrgDeclaredMember[]
 
   @@index([profileId])
+  @@index([organizationId])
 }
 
 enum EducationLevel {

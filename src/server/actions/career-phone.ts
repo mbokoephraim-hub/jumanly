@@ -50,6 +50,16 @@ import {
   savePhoto,
 } from "@/server/services/profile-photo";
 import { fileStorage } from "@/server/storage";
+import {
+  ExperienceLogoError,
+  isOwnExperienceLogo,
+  linkableCompany,
+  removeExperienceLogo,
+  saveExperienceLogo,
+  suggestCompanies,
+  type CompanySuggestion,
+} from "@/server/services/experience-company";
+import { ACHIEVEMENT_MAX, ACHIEVEMENTS_MAX, achievementsText } from "@/lib/achievements";
 
 /**
  * Carrière on the phone (Modèle B, lot B5): the quick changes made from the tab itself. Each one
@@ -225,31 +235,46 @@ const experienceInput = z.object({
   id: z.string().max(40).optional(),
   title: z.string(),
   company: z.string(),
+  organizationId: z.string().max(40).nullable(),
+  logo: z.string().max(300).nullable(),
   location: z.string(),
   type: z.string(),
   start: z.string(),
   end: z.string(),
   current: z.boolean(),
-  description: z.string(),
+  achievements: z.array(z.string().max(ACHIEVEMENT_MAX)).max(ACHIEVEMENTS_MAX),
 });
 
-/** « Modifier l'expérience » / « Nouvelle expérience » (planches Carrière-exp, -exp-new). */
+/**
+ * « Modifier l'expérience » / « Nouvelle expérience » (planches Carrière-exp, -exp-new): the
+ * company chosen among the suggestions gives its name and its logo; otherwise the name typed and
+ * the logo the person sent. The réalisations clés are saved one per line.
+ */
 export async function saveCareerExperienceAction(
   raw: z.input<typeof experienceInput>,
 ): Promise<Result> {
   const shape = experienceInput.safeParse(raw);
   if (!shape.success) return fail("invalid");
-  const { id, current, ...rest } = shape.data;
-  const parsed = experienceSchema.safeParse({ ...rest, ...(current ? { current: "on" } : {}) });
+  const { id, current, organizationId, logo, achievements, ...rest } = shape.data;
+  const parsed = experienceSchema.safeParse({
+    ...rest,
+    description: achievementsText(achievements),
+    ...(current ? { current: "on" } : {}),
+  });
   if (!parsed.success) {
     const issue = parsed.error.issues[0];
     return fail(issue?.message === "endBeforeStart" ? "endBeforeStart" : String(issue?.path[0]));
   }
   const { profile } = await mine();
   const input = parsed.data;
+  const company = organizationId ? await linkableCompany(db, organizationId) : null;
+  if (organizationId && !company) return fail("company");
+  const ownLogo = !company && logo && isOwnExperienceLogo(profile.id, logo) ? logo : null;
   const data = {
     title: input.title,
-    company: input.company,
+    company: company?.name ?? input.company,
+    organizationId: company?.id ?? null,
+    logo: ownLogo,
     type: input.type,
     location: input.location || null,
     startDate: monthToDate(input.start),
@@ -257,17 +282,56 @@ export async function saveCareerExperienceAction(
     description: input.description,
   };
   if (id) {
-    const done = await db.experience.updateMany({ where: { id, profileId: profile.id }, data });
-    if (done.count === 0) return fail("missing");
+    const before = await db.experience.findFirst({
+      where: { id, profileId: profile.id },
+      select: { logo: true },
+    });
+    if (!before) return fail("missing");
+    await db.experience.update({ where: { id }, data });
+    if (before.logo && before.logo !== ownLogo)
+      await removeExperienceLogo(fileStorage(db), profile.id, before.logo);
   } else {
     await db.experience.create({ data: { ...data, profileId: profile.id } });
   }
   return saved(profile.id);
 }
 
+/** The companies with a page whose name holds what is typed in « Entreprise ». */
+export async function suggestCompaniesAction(typed: string): Promise<CompanySuggestion[]> {
+  await mine();
+  return suggestCompanies(db, String(typed));
+}
+
+/** « Ajouter le logo »: a company without a page gets the image the person sends. */
+export async function uploadExperienceLogoAction(
+  formData: FormData,
+): Promise<{ ok: true; logo: string } | { ok: false; error: string }> {
+  const file = formData.get("logo");
+  if (!(file instanceof File) || file.size === 0) return { ok: false, error: "logoType" };
+  const { profile, user } = await mine();
+  if (!(await allowAttempt("experienceLogo", user.id))) return { ok: false, error: "logoMany" };
+  try {
+    const logo = await saveExperienceLogo(
+      fileStorage(db),
+      profile.id,
+      new Uint8Array(await file.arrayBuffer()),
+    );
+    return { ok: true, logo };
+  } catch (error) {
+    if (error instanceof ExperienceLogoError)
+      return { ok: false, error: error.code === "fileSize" ? "logoSize" : "logoType" };
+    throw error;
+  }
+}
+
 export async function deleteCareerExperienceAction(id: string): Promise<Result> {
   const { profile } = await mine();
+  const before = await db.experience.findFirst({
+    where: { id: String(id), profileId: profile.id },
+    select: { logo: true },
+  });
   await db.experience.deleteMany({ where: { id: String(id), profileId: profile.id } });
+  if (before?.logo) await removeExperienceLogo(fileStorage(db), profile.id, before.logo);
   return saved(profile.id);
 }
 

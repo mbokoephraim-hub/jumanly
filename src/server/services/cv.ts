@@ -5,6 +5,7 @@
  * names a plan.
  */
 import { z } from "zod";
+import { achievementsOf } from "@/lib/achievements";
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { level, type Subject } from "@/server/entitlements";
 import { accentHex, isHexColor } from "@/features/cv/render/palette";
@@ -212,10 +213,7 @@ export function cvFromProfile(profile: FullProfile, previous?: CvContent): CvCon
       location: experience.location ?? "",
       start: month(experience.startDate),
       end: experience.endDate ? month(experience.endDate) : null,
-      bullets: experience.description
-        .split("\n")
-        .map((line) => line.replace(/^[-•*]\s*/, "").trim())
-        .filter(Boolean),
+      bullets: achievementsOf(experience.description),
     })),
     education: profile.educations.map((education) => ({
       degree: education.degree,

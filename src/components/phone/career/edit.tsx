@@ -18,7 +18,9 @@ import {
   saveCareerHeadAction,
   saveCareerPhotoAction,
 } from "@/server/actions/career-phone";
+import { ACHIEVEMENTS_MAX, achievementsOf, achievementsText } from "@/lib/achievements";
 import { PhoneBack } from "../back";
+import { AchievementsField, CompanyField, type CompanyValue } from "./experience-fields";
 import { BannerField } from "./banner";
 import { FilAvatar } from "../fil/avatar";
 import { OrbiDisc, PhoneIcon } from "../icon";
@@ -700,8 +702,10 @@ export type ExperienceValues = {
   start: string;
   end: string;
   current: boolean;
-  description: string;
-};
+} & Omit<CompanyValue, "company"> & {
+    /** Réalisations clés, one field each (empty fields are dropped on save). */
+    achievements: string[];
+  };
 
 const EXPERIENCE_TYPES = ["internship", "job", "freelance", "volunteer", "entrepreneur"] as const;
 
@@ -737,19 +741,11 @@ export function ExperienceForm({ values }: { values: ExperienceValues }) {
           />
         )}
       </Field>
-      <Field label={t("company")} error={errorOf("company")}>
-        {(id) => (
-          <input
-            id={id}
-            className="nb-ca-in"
-            value={form.company}
-            onChange={(event) => set({ company: event.target.value })}
-            placeholder={t("companyPlaceholder")}
-            maxLength={120}
-            required
-          />
-        )}
-      </Field>
+      <CompanyField
+        value={form}
+        onChange={set}
+        error={error === "company" ? t("errors.company") : null}
+      />
       <Field label={t("place")}>
         {(id) => (
           <input
@@ -810,25 +806,17 @@ export function ExperienceForm({ values }: { values: ExperienceValues }) {
           <span />
         </button>
       </div>
-      <Field label={t("done")}>
-        {(id) => (
-          <textarea
-            id={id}
-            className="nb-ca-in"
-            value={form.description}
-            onChange={(event) => set({ description: event.target.value })}
-            maxLength={3000}
-            rows={5}
-          />
-        )}
-      </Field>
+      <AchievementsField
+        points={form.achievements}
+        onChange={(achievements) => set({ achievements })}
+      />
       <OrbiRewrite
         kind="experience"
-        text={form.description}
+        text={achievementsText(form.achievements)}
         title={form.title}
         hint={editing ? t("experienceOrbi") : t("experienceOrbiNew")}
         button={t("improve")}
-        onUse={(description) => set({ description })}
+        onUse={(text) => set({ achievements: achievementsOf(text).slice(0, ACHIEVEMENTS_MAX) })}
       />
       {values.id ? (
         <DeleteButton

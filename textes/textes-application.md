@@ -8952,6 +8952,8 @@ Conventions :
 | `phoneProfile.years` | {count, plural, one {# an} other {# ans}} |
 | `phoneProfile.months` | {count} mois |
 | `phoneProfile.moreLines` | Voir {count} de plus |
+| `phoneProfile.achievements` | Réalisations clés |
+| `phoneProfile.companyPage` | {company}, voir la page de l’entreprise |
 | `phoneProfile.less` | Voir moins |
 | `phoneProfile.education` | Formation |
 | `phoneProfile.languages` | Langues |
@@ -9738,6 +9740,9 @@ Conventions :
 | `phoneCareer.form.errors.startYear` | Écrivez une année, par exemple 2022. |
 | `phoneCareer.form.errors.endYear` | Écrivez une année, par exemple 2026. |
 | `phoneCareer.form.errors.missing` | Cet élément n’existe plus. |
+| `phoneCareer.form.errors.logoType` | Ce logo n’a pas pu être lu. Essayez une image JPEG ou PNG. |
+| `phoneCareer.form.errors.logoSize` | Ce logo est trop lourd : 4 Mo au plus. |
+| `phoneCareer.form.errors.logoMany` | Trop de logos envoyés. Réessayez dans une heure. |
 | `phoneCareer.form.headTitle` | Modifier le profil |
 | `phoneCareer.form.headSaved` | Profil mis à jour. |
 | `phoneCareer.form.photoChange` | Changer la photo |
@@ -9810,7 +9815,17 @@ Conventions :
 | `phoneCareer.form.job` | Poste |
 | `phoneCareer.form.jobPlaceholder` | Ex. : Analyste de données |
 | `phoneCareer.form.company` | Entreprise |
-| `phoneCareer.form.companyPlaceholder` | Nom de l’entreprise |
+| `phoneCareer.form.companyPlaceholder` | Commencez à écrire son nom |
+| `phoneCareer.form.companySuggestions` | Entreprises sur Jumanly |
+| `phoneCareer.form.companyPage` | Page Jumanly : logo et lien ajoutés |
+| `phoneCareer.form.companyChange` | Changer |
+| `phoneCareer.form.companyChangeLabel` | Changer d’entreprise (actuellement {company}) |
+| `phoneCareer.form.logo` | Logo de l’entreprise |
+| `phoneCareer.form.logoHint` | Pas encore de page sur Jumanly ? Ajoutez son logo : il s’affichera à côté de l’expérience. |
+| `phoneCareer.form.logoAdd` | Ajouter le logo |
+| `phoneCareer.form.logoChange` | Changer le logo |
+| `phoneCareer.form.logoRemove` | Retirer |
+| `phoneCareer.form.logoSending` | Envoi… |
 | `phoneCareer.form.place` | Lieu |
 | `phoneCareer.form.placePlaceholder` | Ville, pays |
 | `phoneCareer.form.type` | Type |
@@ -9822,9 +9837,18 @@ Conventions :
 | `phoneCareer.form.start` | Début |
 | `phoneCareer.form.end` | Fin |
 | `phoneCareer.form.current` | J’y travaille encore |
-| `phoneCareer.form.done` | Ce que vous avez fait |
+| `phoneCareer.form.achievements` | Réalisations clés |
+| `phoneCareer.form.achievementsHint` | Idéalement 3 à 4, une par champ. Commencez par un verbe d’action et donnez un résultat quand vous le pouvez. |
+| `phoneCareer.form.achievementLabel` | Réalisation {n} |
+| `phoneCareer.form.achievementPlaceholder` | Réalisation {n}, ex. : Coordonné la formation de 40 jeunes |
+| `phoneCareer.form.achievementAdd` | Ajouter une réalisation |
+| `phoneCareer.form.achievementUp` | Monter la réalisation {n} |
+| `phoneCareer.form.achievementDown` | Descendre la réalisation {n} |
+| `phoneCareer.form.achievementRemove` | Supprimer la réalisation {n} |
+| `phoneCareer.form.achievementsMax` | {max} réalisations au plus. |
+| `phoneCareer.form.achievementsCount` | {count, plural, =0 {Aucune réalisation remplie} one {# réalisation remplie} other {# réalisations remplies}} |
 | `phoneCareer.form.experienceOrbi` | Orbi corrige les fautes et met vos résultats en valeur. |
-| `phoneCareer.form.experienceOrbiNew` | Décrivez en vrac, Orbi met en forme. |
+| `phoneCareer.form.experienceOrbiNew` | Écrivez en vrac, Orbi en fait des réalisations claires. |
 | `phoneCareer.form.experienceDelete` | Supprimer cette expérience |
 | `phoneCareer.form.experienceDeleteQuestion` | Supprimer cette expérience ? |
 | `phoneCareer.form.experienceDeleteDetail` | Elle disparaît de votre profil. Vos CV déjà enregistrés ne changent pas. |

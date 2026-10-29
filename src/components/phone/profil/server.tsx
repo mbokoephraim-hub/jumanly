@@ -1,4 +1,5 @@
 import "server-only";
+import { achievementsOf } from "@/lib/achievements";
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
 import type { Messages } from "next-intl";
@@ -69,14 +70,6 @@ export function distinctColors(names: string[]): ProfileColor[] {
     used.add(color);
     return color;
   });
-}
-
-/** « Étudie environ 25 dossiers… »: one line of the description, without its bullet. */
-export function pointsOf(description: string) {
-  return description
-    .split(/\r?\n/)
-    .map((line) => line.replace(/^\s*[-•*·–]\s*/, "").trim())
-    .filter(Boolean);
 }
 
 /**
@@ -224,11 +217,19 @@ export async function profileView(
       title: item.title,
       current: item.endDate === null,
       company: item.company,
+      // The company's page when it has one on Jumanly (a suspended one is not linked).
+      href:
+        item.organization && !item.organization.suspendedAt
+          ? `/app/entreprises/${item.organization.slug}`
+          : null,
+      logo:
+        (item.organization && !item.organization.suspendedAt ? item.organization.logo : null) ??
+        item.logo,
       type: tx(item.type),
       dates: [span, duration(item.startDate, item.endDate), item.location]
         .filter(Boolean)
         .join(" · "),
-      points: pointsOf(item.description),
+      points: achievementsOf(item.description),
     };
   });
   const educations = person.educations.map((item) => ({
