@@ -125,11 +125,13 @@ async function fillPhoneOffer(page: Page, offer: OfferInput) {
 
 /** Publishes the offer from « Vérifier et publier »; returns its detail page and its slug. */
 export async function publishFilledOffer(page: Page, label: "Publier" | "Envoyer en validation") {
-  const name = onPhone()
-    ? label === "Publier"
-      ? "Publier l'offre"
-      : "Envoyer en vérification"
-    : label;
+  // The phone asks for the ONEM authorization before publishing (29/10/2026); offers publish at once.
+  if (onPhone())
+    await page
+      .getByRole("radio", { name: "Oui, je détiens l'autorisation de l'ONEM" })
+      .filter({ visible: true })
+      .click();
+  const name = onPhone() ? "Publier l'offre" : label;
   await page.getByRole("button", { name, exact: true }).filter({ visible: true }).click();
   await expect(page).toHaveURL(/\/app\/hire\/offres\/[^/?]+\?publiee=(1|verification)/);
   const detailUrl = page.url().split("?")[0]!;

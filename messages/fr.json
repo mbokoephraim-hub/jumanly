@@ -10446,7 +10446,8 @@
       "kicker": "Offre d'emploi",
       "apply": "Postuler",
       "see": "Voir l'offre",
-      "pdf": "PDF"
+      "pdf": "PDF",
+      "closesAt": "Candidatures jusqu'au {date, date, long}"
     }
   },
   "phoneExplorer": {
@@ -19333,7 +19334,7 @@
       },
       "openings": "Nombre de personnes recherchées",
       "openingsValue": "{count, plural, one {# personne} other {# personnes}}",
-      "education": "Niveau d'études demandé",
+      "education": "Niveaux d'études acceptés",
       "educationLevels": {
         "none": "Aucun diplôme exigé",
         "secondary": "Diplôme d'État",
@@ -19342,6 +19343,10 @@
         "master": "Master",
         "doctorate": "Doctorat"
       },
+      "educationHelp": "Choisissez un ou plusieurs niveaux : par exemple Licence et Master.",
+      "closesAt": "Date de clôture des candidatures",
+      "closesAtHelp": "Après cette date, l'offre n'accepte plus de candidatures. Laissez vide pour la garder ouverte.",
+      "posterClosesAt": "Candidatures jusqu'au {date, date, long}",
       "languages": "Langues demandées",
       "languagePick": "Choisir une langue",
       "levelPick": "Choisir le niveau",
@@ -19434,6 +19439,10 @@
       "sheetDownload": "Télécharger la fiche Jumanly",
       "sheetOpenOwn": "Ouvrir mon PDF",
       "sheetNote": "Les talents pourront télécharger cette fiche depuis l'offre et depuis le Fil.",
+      "onem": "Détenez-vous l'autorisation de l'ONEM ?",
+      "onemHelp": "L'ONEM autorise les employeurs à publier des offres et à recruter en RDC. Cette réponse rassure les talents.",
+      "onemYes": "Oui, je détiens l'autorisation de l'ONEM",
+      "onemNo": "Pas encore",
       "sheetErrors": {
         "type": "Ce fichier n'est pas un PDF.",
         "size": "Le PDF dépasse 4 Mo.",
@@ -19449,7 +19458,10 @@
         "point": "Écrivez quelques mots (3 caractères au moins).",
         "points": "12 points au plus.",
         "feedTitle": "Écrivez le titre de la publication, ou ne publiez pas dans le Fil.",
-        "logo": "Le logo n'a pas pu être ajouté : choisissez une image PNG ou JPEG de 4 Mo au plus."
+        "logo": "Le logo n'a pas pu être ajouté : choisissez une image PNG ou JPEG de 4 Mo au plus.",
+        "closesAt": "Choisissez une date de clôture à venir.",
+        "onem": "Répondez à la question sur l'autorisation de l'ONEM avant de publier.",
+        "onemNo": "L'offre ne peut être publiée qu'avec l'autorisation de l'ONEM. Gardez-la en brouillon en attendant."
       }
     }
   },

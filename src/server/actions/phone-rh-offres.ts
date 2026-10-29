@@ -149,11 +149,17 @@ export async function rhSaveScreeningAction(
 export async function rhPublishOfferAction(
   jobId: string,
   toFil = false,
+  onem = false,
 ): Promise<{ ok: true; review: boolean; posted: boolean } | { ok: false; error: string }> {
   const id = z.string().trim().min(1).max(60).safeParse(jobId);
   if (!id.success) return { ok: false, error: "invalid" };
+  // « Détenez-vous l'autorisation de l'ONEM ? »: asked before every publication (RDC, 29/10/2026).
+  if (!onem) return { ok: false, error: "onem" };
   const { ctx } = await requireHire(OFFERS, "manage", "publish");
   try {
+    await getOrgJob(db, ctx, id.data).then((job) =>
+      db.job.update({ where: { id: job.id }, data: { onemConfirmedAt: new Date() } }),
+    );
     // « Publier aussi dans le Fil » off: no post now, nor at the approval.
     if (!toFil)
       await getOrgJob(db, ctx, id.data).then((job) =>

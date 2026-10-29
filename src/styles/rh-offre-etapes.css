@@ -33,7 +33,7 @@
   line-height: 1.45;
 }
 .nb-oe-sous {
-  margin: -4px 0 10px;
+  margin: 0 0 10px;
   font-size: 13.5px;
 }
 .nb-oe-points ol {
@@ -76,13 +76,32 @@
   border-radius: 999px;
   color: var(--nb-brume);
 }
+.nb-oe-ajout,
+.nb-oe-zone {
+  /* A box that grows with its text (the search field it reuses is 50 px high, one line). */
+  height: auto;
+  min-height: 0;
+  border-radius: 20px;
+  align-items: stretch;
+}
 .nb-oe-ajout {
   display: grid;
-  gap: 8px;
-  padding: 10px 12px;
+  gap: 10px;
+  padding: 12px 14px;
+}
+.nb-oe-ajout textarea,
+.nb-oe-zone textarea {
+  flex: none;
+  display: block;
+  min-width: 0;
+}
+.nb-oe-ajout textarea::placeholder,
+.nb-oe-zone textarea::placeholder {
+  color: var(--nb-t-6f8580, #6f8580);
 }
 .nb-oe-ajout textarea {
   width: 100%;
+  min-height: 48px;
   resize: none;
   background: transparent;
   font-size: 15.5px;
@@ -209,11 +228,11 @@
   margin-bottom: 8px;
 }
 .nb-oe-zone {
-  padding: 12px;
+  padding: 14px 16px;
 }
 .nb-oe-zone textarea {
   width: 100%;
-  min-height: 130px;
+  min-height: 260px;
   resize: vertical;
   background: transparent;
   font-size: 15px;
@@ -413,4 +432,12 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
+}
+
+.nb-oe-carte-h .nb-meta {
+  font-size: 12.5px;
+}
+.nb-oe-carte-h b {
+  font-size: 15px;
+  line-height: 1.25;
 }

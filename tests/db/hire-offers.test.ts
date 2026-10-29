@@ -160,12 +160,12 @@ describe("formulaire en 4 étapes", () => {
     ).toMatchObject({ ok: false, error: "forbidden", field: "questions" });
   });
 
-  it("une organisation non vérifiée publie « En validation »", async () => {
+  it("une organisation non vérifiée publie aussitôt (décision du 29/10/2026)", async () => {
     const ctx = await recruiter({ verified: false });
     const jobId = await offer(ctx);
-    expect(await publishJob(db, ctx, jobId)).toMatchObject({ status: "pending_review" });
+    expect(await publishJob(db, ctx, jobId)).toMatchObject({ status: "published" });
     const rows = await listOffers(db, ctx);
-    expect(rows.find((row) => row.id === jobId)).toMatchObject({ tab: "actives", color: "c4" });
+    expect(rows.find((row) => row.id === jobId)).toMatchObject({ tab: "actives" });
   });
 
   it("une offre sans description ni compétence indispensable n'est pas publiée", async () => {

@@ -571,9 +571,15 @@ export async function rhPublishData(
         code: item.code,
         level: item.level as RhOfferDraft["languages"][0]["level"],
       })),
-    education: (educationLevels as readonly string[]).includes(job?.educationLevelMin ?? "")
-      ? (job!.educationLevelMin as RhOfferDraft["education"])
-      : "",
+    educations: educationLevels.filter((level) =>
+      (job?.educationLevels.length
+        ? job.educationLevels
+        : job?.educationLevelMin
+          ? [job.educationLevelMin]
+          : []
+      ).includes(level),
+    ),
+    closesAt: job?.closesAt ? job.closesAt.toISOString().slice(0, 10) : "",
     city: job?.city ?? "",
     country: job?.country || org.country || user?.country || "",
     remote: (job?.remote as RhOfferDraft["remote"]) ?? "onsite",

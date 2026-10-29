@@ -15887,13 +15887,17 @@ Conventions :
 | `phoneRhOffres.wizard.softSuggestions.10` | Sens du service client |
 | `phoneRhOffres.wizard.openings` | Nombre de personnes recherchées |
 | `phoneRhOffres.wizard.openingsValue` | {count, plural, one {# personne} other {# personnes}} |
-| `phoneRhOffres.wizard.education` | Niveau d'études demandé |
+| `phoneRhOffres.wizard.education` | Niveaux d'études acceptés |
 | `phoneRhOffres.wizard.educationLevels.none` | Aucun diplôme exigé |
 | `phoneRhOffres.wizard.educationLevels.secondary` | Diplôme d'État |
 | `phoneRhOffres.wizard.educationLevels.vocational` | Formation professionnelle |
 | `phoneRhOffres.wizard.educationLevels.bachelor` | Licence |
 | `phoneRhOffres.wizard.educationLevels.master` | Master |
 | `phoneRhOffres.wizard.educationLevels.doctorate` | Doctorat |
+| `phoneRhOffres.wizard.educationHelp` | Choisissez un ou plusieurs niveaux : par exemple Licence et Master. |
+| `phoneRhOffres.wizard.closesAt` | Date de clôture des candidatures |
+| `phoneRhOffres.wizard.closesAtHelp` | Après cette date, l'offre n'accepte plus de candidatures. Laissez vide pour la garder ouverte. |
+| `phoneRhOffres.wizard.posterClosesAt` | Candidatures jusqu'au {date, date, long} |
 | `phoneRhOffres.wizard.languages` | Langues demandées |
 | `phoneRhOffres.wizard.languagePick` | Choisir une langue |
 | `phoneRhOffres.wizard.levelPick` | Choisir le niveau |
@@ -15966,6 +15970,10 @@ Conventions :
 | `phoneRhOffres.wizard.sheetDownload` | Télécharger la fiche Jumanly |
 | `phoneRhOffres.wizard.sheetOpenOwn` | Ouvrir mon PDF |
 | `phoneRhOffres.wizard.sheetNote` | Les talents pourront télécharger cette fiche depuis l'offre et depuis le Fil. |
+| `phoneRhOffres.wizard.onem` | Détenez-vous l'autorisation de l'ONEM ? |
+| `phoneRhOffres.wizard.onemHelp` | L'ONEM autorise les employeurs à publier des offres et à recruter en RDC. Cette réponse rassure les talents. |
+| `phoneRhOffres.wizard.onemYes` | Oui, je détiens l'autorisation de l'ONEM |
+| `phoneRhOffres.wizard.onemNo` | Pas encore |
 | `phoneRhOffres.wizard.sheetErrors.type` | Ce fichier n'est pas un PDF. |
 | `phoneRhOffres.wizard.sheetErrors.size` | Le PDF dépasse 4 Mo. |
 | `phoneRhOffres.wizard.sheetErrors.active` | Ce PDF contient du contenu actif (script, formulaire) : enregistrez-le de nouveau en PDF simple. |
@@ -15979,12 +15987,16 @@ Conventions :
 | `phoneRhOffres.wizard.errors.points` | 12 points au plus. |
 | `phoneRhOffres.wizard.errors.feedTitle` | Écrivez le titre de la publication, ou ne publiez pas dans le Fil. |
 | `phoneRhOffres.wizard.errors.logo` | Le logo n'a pas pu être ajouté : choisissez une image PNG ou JPEG de 4 Mo au plus. |
+| `phoneRhOffres.wizard.errors.closesAt` | Choisissez une date de clôture à venir. |
+| `phoneRhOffres.wizard.errors.onem` | Répondez à la question sur l'autorisation de l'ONEM avant de publier. |
+| `phoneRhOffres.wizard.errors.onemNo` | L'offre ne peut être publiée qu'avec l'autorisation de l'ONEM. Gardez-la en brouillon en attendant. |
 | `phoneFil.offerSalary` | {min} à {max} USD par mois |
 | `phoneFil.offerSalaryFrom` | À partir de {min} USD par mois |
 | `phoneFil.poster.kicker` | Offre d'emploi |
 | `phoneFil.poster.apply` | Postuler |
 | `phoneFil.poster.see` | Voir l'offre |
 | `phoneFil.poster.pdf` | PDF |
+| `phoneFil.poster.closesAt` | Candidatures jusqu'au {date, date, long} |
 | `phoneExplorer.offer.hardSkills` | Compétences techniques |
 | `phoneExplorer.offer.softSkills` | Compétences comportementales |
 | `phoneExplorer.offer.sheet` | Fiche de poste |

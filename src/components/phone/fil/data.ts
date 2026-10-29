@@ -46,6 +46,8 @@ export type PostView = {
     /** The offer's poster (no photo): salary, first skills, then Postuler · Voir · PDF. */
     salary: string | null;
     skills: string[];
+    /** « Candidatures jusqu'au 30 novembre 2026 ». */
+    closes: string | null;
     applyHref: string | null;
     sheetHref: string;
   } | null;
@@ -232,6 +234,9 @@ export async function feedWords(viewerId: string, now = new Date()) {
                 : t("offerSalary", { min: item.job.salary.min, max: item.job.salary.max })
               : null,
             skills: item.job.skills,
+            closes: item.job.closesAt
+              ? t("poster.closesAt", { date: new Date(item.job.closesAt) })
+              : null,
             applyHref: item.job.open ? `/app/jobs/${item.job.slug}/postuler` : null,
             sheetHref: `/api/offres/${item.job.slug}/fiche`,
           }

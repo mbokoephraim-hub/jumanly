@@ -18,6 +18,7 @@ import {
   type RhOfferResult,
 } from "@/server/actions/phone-rh-offres";
 import { FEED_BODY_MAX, FEED_TITLE_MAX } from "@/server/services/feed-limits";
+import { FilAvatar } from "../fil/avatar";
 import { PostTextFields } from "../fil/post-fields";
 import { OrbiDisc, PhoneIcon } from "../icon";
 
@@ -39,7 +40,7 @@ const PLACE_STEP = 3;
 type Remote = (typeof REMOTES)[number];
 type Contract = "cdi" | "cdd" | "stage" | "mission" | "freelance" | "alternance" | "volontariat";
 type Document = (typeof DOCUMENTS)[number];
-type Education = "" | (typeof EDUCATION)[number];
+type Education = (typeof EDUCATION)[number];
 type Level = (typeof LEVELS)[number];
 type Language = { code: string; level: Level };
 type Analysis = NonNullable<Awaited<ReturnType<typeof rhAnalyzeOfferAction>>>;
@@ -52,7 +53,10 @@ export type RhOfferDraft = {
   hardSkills: string[];
   softSkills: string[];
   languages: Language[];
-  education: Education;
+  /** Several levels can be accepted (« Licence ou Master »). */
+  educations: Education[];
+  /** « Date limite de candidature » (YYYY-MM-DD), or "". */
+  closesAt: string;
   city: string;
   country: string;
   remote: Remote;
@@ -97,6 +101,11 @@ export type RhPublishData = {
   /** The step reopened (a draft at `?etape=`). */
   step: number;
 };
+
+/** Today, as a date field writes it (YYYY-MM-DD). */
+function today() {
+  return new Date().toISOString().slice(0, 10);
+}
 
 /** Points one by one (« Ajouter une responsabilité »): numbered, removable, in order. */
 function PointList({
@@ -338,7 +347,9 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
   const [softSkills, setSoftSkills] = useState(d.softSkills);
   const [languages, setLanguages] = useState<Language[]>(d.languages);
   const [language, setLanguage] = useState("");
-  const [education, setEducation] = useState<Education>(d.education);
+  const [educations, setEducations] = useState<Education[]>(d.educations);
+  const [closesAt, setClosesAt] = useState(d.closesAt);
+  const [onem, setOnem] = useState<"yes" | "no" | null>(null);
   const [city, setCity] = useState(d.city || data.cities[0] || "");
   const [otherCity, setOtherCity] = useState(d.city && !data.cities.includes(d.city) ? d.city : "");
   const [country, setCountry] = useState(d.country);
@@ -385,6 +396,7 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
     else if (result.field === "city") setError(t("errors.city"));
     else if (result.field === "title") setError(t("errors.title"));
     else if (result.field === "salaryMax") setError(t("errors.salary"));
+    else if (result.field === "closesAt") setError(w("errors.closesAt"));
     else setError(t("errors.failed"));
   };
 
@@ -395,7 +407,8 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
     hardSkills,
     softSkills,
     languages,
-    education,
+    educations,
+    closesAt,
     city: place,
     country: country.trim(),
     remote,
@@ -448,7 +461,9 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
       (!salaryMin || !salaryMax || Number(salaryMax) < Number(salaryMin))
     )
       return t("errors.salary");
+    if (at === 3 && closesAt && closesAt < today()) return w("errors.closesAt");
     if (at === 10 && toFil && !feedTitle.trim()) return w("errors.feedTitle");
+    if (at === 10 && onem !== "yes") return w(onem === "no" ? "errors.onemNo" : "errors.onem");
     return null;
   };
 
@@ -490,7 +505,7 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
         setAnalysis(result);
       }
       if (step < STEPS) return goTo(step + 1, id);
-      const result = await rhPublishOfferAction(id, toFil);
+      const result = await rhPublishOfferAction(id, toFil, onem === "yes");
       if (!result.ok) {
         setError(
           result.error === "limit"
@@ -865,18 +880,40 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
               label={w("openings")}
               text={w("openingsValue", { count: openings })}
             />
+            <p className="nb-rh-pub-label">
+              <label htmlFor="oe-cloture">{w("closesAt")}</label>
+            </p>
+            <div className="nb-champ nb-rh-champ">
+              <input
+                id="oe-cloture"
+                type="date"
+                value={closesAt}
+                min={today()}
+                onChange={(event) => {
+                  setClosesAt(event.target.value);
+                  setError(null);
+                }}
+              />
+            </div>
+            <p className="nb-meta nb-rh-pub-note">{w("closesAtHelp")}</p>
             <p className="nb-rh-pub-label" id="oe-etudes">
               {w("education")}
             </p>
-            <div role="radiogroup" aria-labelledby="oe-etudes" className="nb-rh-pub-types">
+            <p className="nb-meta nb-oe-sous">{w("educationHelp")}</p>
+            <div role="group" aria-labelledby="oe-etudes" className="nb-rh-pub-types">
               {EDUCATION.map((key) => (
                 <button
                   key={key}
                   type="button"
-                  role="radio"
                   className="nb-chip"
-                  aria-checked={education === key}
-                  onClick={() => setEducation(education === key ? "" : key)}
+                  aria-pressed={educations.includes(key)}
+                  onClick={() =>
+                    setEducations(
+                      educations.includes(key)
+                        ? educations.filter((item) => item !== key)
+                        : [...educations, key],
+                    )
+                  }
                 >
                   {w(`educationLevels.${key}`)}
                 </button>
@@ -1103,7 +1140,7 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
                 onChange={(event) => setCompanyAbout(event.target.value)}
                 aria-label={w("about")}
                 placeholder={w("aboutPlaceholder")}
-                rows={6}
+                rows={10}
                 maxLength={1500}
               />
             </div>
@@ -1242,14 +1279,14 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
                 />
                 <article className="nb-oe-carte" aria-label={w("feedPreview")}>
                   <div className="nb-oe-carte-h">
-                    <span className="nb-rh-org-logo" aria-hidden>
-                      {logo ? (
-                        // eslint-disable-next-line @next/next/no-img-element -- a 40 px logo
-                        <img src={logo} alt="" />
-                      ) : (
-                        data.org.initials
-                      )}
-                    </span>
+                    <FilAvatar
+                      initials={data.org.initials}
+                      image={logo}
+                      tone={0}
+                      org
+                      size={40}
+                      square
+                    />
                     <span>
                       <b>{data.org.name}</b>
                       <span className="nb-meta">{w("feedNow")}</span>
@@ -1264,6 +1301,11 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
                       {[place, contractLabel(contract), t(`remotes.${remote}`)].join(" · ")}
                     </span>
                     {salaryLine ? <span className="nb-oe-affiche-s">{salaryLine}</span> : null}
+                    {closesAt ? (
+                      <span className="nb-oe-affiche-l">
+                        {w("posterClosesAt", { date: new Date(`${closesAt}T12:00:00Z`) })}
+                      </span>
+                    ) : null}
                     <span className="nb-oe-affiche-c">
                       {hardSkills.slice(0, 3).map((name) => (
                         <i key={name}>{name}</i>
@@ -1334,6 +1376,32 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
               </a>
             ) : null}
             <p className="nb-meta nb-rh-pub-note">{w("sheetNote")}</p>
+
+            <p className="nb-rh-pub-label" id="oe-onem">
+              {w("onem")}
+            </p>
+            <p className="nb-meta nb-oe-sous">{w("onemHelp")}</p>
+            <div className="nb-oe-fiches" role="radiogroup" aria-labelledby="oe-onem">
+              {(["yes", "no"] as const).map((answer) => (
+                <button
+                  key={answer}
+                  type="button"
+                  role="radio"
+                  aria-checked={onem === answer}
+                  className="nb-rh-pub-carte"
+                  onClick={() => {
+                    setOnem(answer);
+                    setError(null);
+                  }}
+                >
+                  <span className="nb-rh-pub-point" aria-hidden />
+                  <span>
+                    <b>{w(answer === "yes" ? "onemYes" : "onemNo")}</b>
+                  </span>
+                </button>
+              ))}
+            </div>
+            {onem === "no" ? <p className="nb-meta nb-rh-pub-note">{w("errors.onemNo")}</p> : null}
           </>
         ) : null}
       </div>
@@ -1344,13 +1412,7 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
           </p>
         ) : null}
         <button type="button" className="nb-bp" aria-disabled={pending || undefined} onClick={next}>
-          {step === 8
-            ? w("analyze")
-            : step < STEPS
-              ? t("continue")
-              : data.verified
-                ? t("publish")
-                : t("review")}
+          {step === 8 ? w("analyze") : step < STEPS ? t("continue") : t("publish")}
         </button>
       </div>
     </div>

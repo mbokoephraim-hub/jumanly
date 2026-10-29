@@ -345,10 +345,10 @@ export async function publishJob(
   const flags = moderationFlags(job);
   // A job sent back for correction returns to a moderator, flagged or not (Admin v2, étape 7).
   const resubmitted = job.status === "changes_requested";
-  // Brief recruteur § 2.11: the jobs of an organization Jumanly has not verified yet go through
-  // « En validation » first; a verified organization publishes at once.
-  const verified = await isOrgVerified(db, ctx.organizationId);
-  const status = flags.length > 0 || resubmitted || !verified ? "pending_review" : "published";
+  // Decision of the owner (29/10/2026): an offer is published at once, verified company or not.
+  // Only an offer whose wording raises a flag (fees asked to the talent, contact outside Jumanly…)
+  // or that a moderator sent back for correction goes to a moderator first.
+  const status = flags.length > 0 || resubmitted ? "pending_review" : "published";
   const stages = await ensureStages(db, job.id);
   await db.job.update({
     where: { id: job.id },

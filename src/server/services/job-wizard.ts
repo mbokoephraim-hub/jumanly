@@ -52,7 +52,10 @@ export const offerWizardSchema = z.object({
   languages: z
     .array(z.object({ code: z.string().regex(/^[a-z]{2}$/), level: z.enum(cefrLevels) }))
     .max(LANGUAGES_MAX),
-  education: z.union([z.literal(""), z.enum(educationLevels)]),
+  /** Several levels can be accepted (« Licence ou Master »). */
+  educations: z.array(z.enum(educationLevels)).max(educationLevels.length),
+  /** « Date limite de candidature », a day to come (YYYY-MM-DD), or none. */
+  closesAt: z.union([z.literal(""), z.string().regex(/^\d{4}-\d{2}-\d{2}$/)]),
   city: z.string().trim().max(120),
   country: z.string().trim().max(80),
   remote: z.enum(["onsite", "hybrid", "remote"]),
@@ -90,6 +93,10 @@ export async function saveOfferWizard(
     ...input.softSkills,
   ];
   if (texts.some(isProtectedCriterion)) return { ok: false, error: "forbidden", field: "text" };
+  const closesAt = input.closesAt ? new Date(`${input.closesAt}T23:59:59.000Z`) : null;
+  if (closesAt && (Number.isNaN(closesAt.getTime()) || closesAt.getTime() < Date.now()))
+    return { ok: false, error: "invalid", field: "closesAt" };
+  const educations = educationLevels.filter((level) => input.educations.includes(level));
   const job = input.jobId ? await getOrgJob(db, ctx, input.jobId) : null;
   const poste = await saveJobStep(
     db,
@@ -140,7 +147,10 @@ export async function saveOfferWizard(
     where: { id: poste.jobId },
     data: {
       languagesRequired: input.languages,
-      educationLevelMin: input.education || null,
+      educationLevels: educations,
+      // The matching reads the lowest level accepted.
+      educationLevelMin: educations[0] ?? null,
+      closesAt,
       companyAbout: input.companyAbout || null,
       feedTitle: input.feedTitle || null,
       feedText: input.feedText || null,

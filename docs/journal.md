@@ -5222,3 +5222,12 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 ## Fil : les nouvelles publications d'abord (29 octobre 2026)
 
 - Demande d'Ephraïm : après un rafraîchissement, la publication qui vient d'être faite doit passer devant toutes les autres. « Pour vous » n'est plus classé par `feed-rank.ts` (retiré avec son test) : comme « Abonnements » et « Entreprises », il montre les publications de la plus récente à la plus ancienne, republications rangées à leur date. Voir `docs/decisions/2026-10-29-fil-plus-recent-d-abord.md`.
+
+## 2026-10-29 · Nouvelle offre : retours d'Ephraïm
+
+- Champs « Ajouter une responsabilité », « Ajouter une exigence » et présentation de l'entreprise : le cadre grandit avec le texte (il était bloqué à une ligne, d'où les textes chevauchés). La présentation affiche environ 10 lignes.
+- Niveaux d'études : plusieurs au choix (`Job.educationLevels`) ; le matching lit le plus bas (`educationLevelMin`). La fiche PDF les montre tous.
+- Date de clôture des candidatures à l'étape 3 ; elle apparaît sur l'affiche du Fil et dans l'aperçu.
+- Aperçu de la publication : logo petit, nom et date, comme l'auteur d'une publication du Fil.
+- Question ONEM avant de publier (« Détenez-vous l'autorisation de l'ONEM ? ») : obligatoire, réponse « Oui » enregistrée dans `Job.onemConfirmedAt` ; « Pas encore » garde l'offre en brouillon.
+- Publication directe : une entreprise non vérifiée publie aussitôt (décision d'Ephraïm). Restent en vérification seulement les offres dont le texte déclenche un signal (frais demandés au talent, contact hors Jumanly…) et celles renvoyées en correction par un modérateur, pour protéger les talents des arnaques.
