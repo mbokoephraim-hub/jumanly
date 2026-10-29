@@ -659,7 +659,7 @@ export function PersonProfile({
           ) : (
             shown.map((post) => (
               <PostCard
-                key={post.id}
+                key={post.key}
                 post={post}
                 onSheet={(target, sheet) => setOpen({ post: target, sheet })}
               />

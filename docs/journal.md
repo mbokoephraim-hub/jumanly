@@ -5169,3 +5169,13 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - Dans « Mes informations » (CV au téléphone), les missions et résultats d'une expérience se saisissent comme dans le profil : un champ par réalisation, monter, descendre, supprimer, ajouter (12 au plus sur un CV). Une nouvelle expérience s'ouvre sur 3 champs vides.
 - Les champs laissés vides ne s'impriment pas et ne comptent pas dans l'analyse du CV.
 - Publié sans essai dans l'appli, à la demande d'Ephraïm (lint, types, tests unitaires et build passés).
+
+
+## 2026-10-29 · Partager et Republier les publications du Fil
+
+- Demande d'Ephraïm : quatre actions sous chaque publication (J'aime, Commenter, Republier, Partager), Enregistrer reste à droite.
+- Republier (comme LinkedIn) : « Republier » directement (`FeedRepost`, déjà en base) ou « Republier avec une note » (une publication sans titre qui cite l'originale, `quotedId`). Une republication directe apparaît dans le Fil des connexions et des abonnés (Pour vous, Abonnements ; 30 jours) et sur le profil de la personne, avec « X a republié » au-dessus de l'auteur d'origine, jamais comme une nouvelle publication. Sous une note, la publication d'origine garde son auteur (photo, nom, heure), son titre, son texte et sa photo. Le compteur additionne les deux formes.
+- Partager (inspiré d'Instagram, aux couleurs de Jumanly) : fenêtre du bas qui s'ouvre à mi-hauteur (classe `.nb-feuille-mi`, qui garde la mi-hauteur malgré le champ de recherche ; toucher la recherche l'étend), recherche sans accents, bouton « Toutes mes connexions », grille de photos et noms (colonnes selon la largeur, défilement), sélection multiple, message facultatif, « Envoyer ». Ordre : les personnes avec qui la discussion a déjà des messages (la plus récente d'abord), puis les autres connexions.
+- Partage ailleurs : Copier le lien, WhatsApp (wa.me), LinkedIn (share-offsite), Instagram (menu de partage du téléphone, sinon lien copié à coller), Autres applis (menu natif, sinon lien copié). Le lien `/app/fil/{id}` est réservé aux personnes connectées qui peuvent voir la publication.
+- Chat : la publication envoyée devient une carte (auteur, photo, titre, texte, « Voir la publication ») relue en base à chaque affichage ; une publication retirée affiche « Cette publication n'est plus disponible ». Le texte du message garde le lien pour l'ordinateur et la liste.
+- Non vérifié dans l'appli : Ephraïm a demandé de publier sans longs essais (types, lint, tests unitaires et build passés). Sur ordinateur, `/app/fil/{id}` renvoie encore vers `/app` (pas de Fil talent sur ordinateur).

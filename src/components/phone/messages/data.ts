@@ -22,6 +22,8 @@ const DAY = 86_400_000;
 
 type Payload = {
   link?: string;
+  /** A post of the Fil shared from « Partager »: its id (the name is its author's). */
+  post?: string;
   files?: { key?: string; width?: number; height?: number }[];
   hd?: boolean;
   key?: string;
@@ -196,6 +198,9 @@ export async function messageWords(viewer: { showPresence: boolean }, now = new 
       case "organization":
         text = t("preview.org", { name: shortName(payload.name ?? last.body) });
         break;
+      case "text":
+        text = payload.post && payload.name ? t("preview.post", { name: payload.name }) : last.body;
+        break;
       case "file":
         text = t("preview.doc", {
           name:
@@ -318,53 +323,73 @@ export async function messageViews(
     const value = payloadOf(message.payload).userId;
     return message.kind === "contact" && value ? [value] : [];
   });
+  const postIds = conversation.messages.flatMap((message) => {
+    const value = payloadOf(message.payload).post;
+    return message.kind === "text" && typeof value === "string" ? [value] : [];
+  });
   const decisions = conversation.messages.filter((message) => message.kind === "decision");
   const lastDecision = decisions.at(-1);
   const signerIds = [
     ...new Set(decisions.flatMap((message) => (message.senderId ? [message.senderId] : []))),
   ];
-  const [interviews, people, signers, similar, tc, ts, th, tch, reactions] = await Promise.all([
-    interviewIds.length
-      ? db.interview.findMany({
-          where: { id: { in: interviewIds } },
-          select: {
-            id: true,
-            status: true,
-            startsAt: true,
-            slots: true,
-            timezone: true,
-            mode: true,
-            address: true,
-            link: true,
-            durationMinutes: true,
-          },
-        })
-      : Promise.resolve([]),
-    contactIds.length
-      ? db.user.findMany({ where: { id: { in: contactIds } }, select: { id: true, image: true } })
-      : Promise.resolve([]),
-    signerIds.length
-      ? db.user.findMany({ where: { id: { in: signerIds } }, select: { id: true, name: true } })
-      : Promise.resolve([]),
-    // After a « no », the jobs close to the one applied to (as on the computer).
-    lastDecision && payloadOf(lastDecision.payload).outcome !== "hired" && conversation.jobSlug
-      ? db.job
-          .findUnique({
-            where: { slug: conversation.jobSlug },
-            select: { slug: true, contractType: true, country: true },
+  const [interviews, people, signers, similar, tc, ts, th, tch, reactions, posts] =
+    await Promise.all([
+      interviewIds.length
+        ? db.interview.findMany({
+            where: { id: { in: interviewIds } },
+            select: {
+              id: true,
+              status: true,
+              startsAt: true,
+              slots: true,
+              timezone: true,
+              mode: true,
+              address: true,
+              link: true,
+              durationMinutes: true,
+            },
           })
-          .then((job) => (job ? similarJobs(db, job, 3) : []))
-      : Promise.resolve([]),
-    getTranslations("connect.decision"),
-    getTranslations("suivi.similar"),
-    getTranslations(),
-    getTranslations("phoneChat"),
-    reactionsOf(
-      db,
-      conversation.messages.map((message) => message.id),
-      userId,
-    ),
-  ]);
+        : Promise.resolve([]),
+      contactIds.length
+        ? db.user.findMany({ where: { id: { in: contactIds } }, select: { id: true, image: true } })
+        : Promise.resolve([]),
+      signerIds.length
+        ? db.user.findMany({ where: { id: { in: signerIds } }, select: { id: true, name: true } })
+        : Promise.resolve([]),
+      // After a « no », the jobs close to the one applied to (as on the computer).
+      lastDecision && payloadOf(lastDecision.payload).outcome !== "hired" && conversation.jobSlug
+        ? db.job
+            .findUnique({
+              where: { slug: conversation.jobSlug },
+              select: { slug: true, contractType: true, country: true },
+            })
+            .then((job) => (job ? similarJobs(db, job, 3) : []))
+        : Promise.resolve([]),
+      getTranslations("connect.decision"),
+      getTranslations("suivi.similar"),
+      getTranslations(),
+      getTranslations("phoneChat"),
+      reactionsOf(
+        db,
+        conversation.messages.map((message) => message.id),
+        userId,
+      ),
+      // The posts shared from the Fil, read again: a post taken down or deleted is not shown.
+      postIds.length
+        ? db.feedPost.findMany({
+            where: { id: { in: postIds }, hiddenAt: null },
+            select: {
+              id: true,
+              title: true,
+              body: true,
+              imageUrl: true,
+              imageAlt: true,
+              author: { select: { name: true, image: true } },
+              organization: { select: { name: true, logo: true } },
+            },
+          })
+        : Promise.resolve([]),
+    ]);
   /** « Jeudi 29 octobre · 10 h », in the time zone of the interview. */
   const interviewTitle = (date: Date, timeZone?: string) => {
     const zone = timeZone ? { timeZone } : {};
@@ -551,6 +576,26 @@ export async function messageViews(
           text: t("bubble.docRequest", { name: payload.name ?? message.body }),
         };
       default: {
+        if (payload.post) {
+          const post = posts.find((row) => row.id === payload.post);
+          if (!post) return { kind: "post", gone: true, text: t("bubble.postGone") };
+          const org = Boolean(post.organization);
+          const name = shortName(post.organization?.name ?? post.author?.name ?? "");
+          return {
+            kind: "post",
+            gone: false,
+            href: `/app/fil/${post.id}`,
+            name,
+            label: t("bubble.postOf", { name }),
+            initials: initialsOf(name),
+            image: post.organization?.logo ?? post.author?.image ?? null,
+            tone: toneOf(name, org),
+            org,
+            title: post.title,
+            body: post.body,
+            photo: post.imageUrl ? { src: post.imageUrl, alt: post.imageAlt ?? "" } : null,
+          };
+        }
         if (payload.link && /^https?:\/\//i.test(payload.link)) {
           const inside = insideHref(payload.link);
           return {
@@ -590,11 +635,15 @@ export async function messageViews(
             ? `${bubble.name} ${"line" in bubble ? bubble.line : ""}`
             : bubble.kind === "link"
               ? `${bubble.title} ${bubble.display}`
-              : bubble.kind === "event"
-                ? `${bubble.label} ${bubble.title} ${bubble.meta}`
-                : bubble.kind === "interview"
-                  ? `${bubble.title} ${bubble.meta}`
-                  : "";
+              : bubble.kind === "post"
+                ? bubble.gone
+                  ? bubble.text
+                  : `${bubble.name} ${bubble.title ?? ""} ${bubble.body}`
+                : bubble.kind === "event"
+                  ? `${bubble.label} ${bubble.title} ${bubble.meta}`
+                  : bubble.kind === "interview"
+                    ? `${bubble.title} ${bubble.meta}`
+                    : "";
     return {
       id: message.id,
       mine: message.senderId === userId,

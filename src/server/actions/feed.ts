@@ -122,32 +122,43 @@ export async function reportPostAction(id: string, reason: keyof typeof reasons)
   return { ok: true as const, value: result };
 }
 
-/** « Envoyer à une connexion »: the link of the post, in the conversation with that person. */
-export async function sendPostAction(id: string, conversationId: string) {
+/**
+ * « Partager » › « Envoyer »: the post, as a card that opens it, in the conversation with each
+ * chosen connection, and the person's word after it when they wrote one.
+ */
+export async function sharePostAction(id: string, conversationIds: string[], note = "") {
   const user = await requireUser(PAGE);
   const post = postId.safeParse(id);
-  const conversation = postId.safeParse(conversationId);
-  if (!post.success || !conversation.success) return { ok: false as const, error: "invalid" };
+  const chosen = z.array(postId).min(1).max(20).safeParse(conversationIds);
+  const word = z.string().trim().max(500).safeParse(note);
+  if (!post.success || !chosen.success || !word.success)
+    return { ok: false as const, error: "invalid" };
   const targets = await sendTargets(db, user.id);
-  const target = targets.find((item) => item.conversationId === conversation.data);
+  const picked = targets.filter((item) => chosen.data.includes(item.conversationId));
   const row = await db.feedPost.findFirst({
-    where: { id: post.data, hiddenAt: null },
+    where: { id: post.data, hiddenAt: null, parentId: null },
     select: { author: { select: { name: true } }, organization: { select: { name: true } } },
   });
-  if (!target || !row) return { ok: false as const, error: "notFound" };
+  if (picked.length === 0 || !row) return { ok: false as const, error: "notFound" };
   const t = await getTranslations("phoneFil.send");
-  try {
-    await sendMessage(db, { userId: user.id }, target.conversationId, {
-      body: t("message", {
-        name: row.organization?.name ?? row.author?.name ?? "",
-        link: `/app/fil/${post.data}`,
-      }),
-    });
-  } catch (error) {
-    void reportError(error, { message: "Fil · envoyer" });
-    return { ok: false as const, error: "failed" };
+  const name = shortName(row.organization?.name ?? row.author?.name ?? "");
+  const body = t("message", { name, link: `/app/fil/${post.data}` });
+  let sent = 0;
+  for (const target of picked) {
+    try {
+      await sendMessage(db, { userId: user.id }, target.conversationId, {
+        body,
+        payload: { post: post.data, name },
+      });
+      if (word.data)
+        await sendMessage(db, { userId: user.id }, target.conversationId, { body: word.data });
+      sent += 1;
+    } catch (error) {
+      void reportError(error, { message: "Fil · partager" });
+    }
   }
-  return { ok: true as const, value: target.name };
+  if (sent === 0) return { ok: false as const, error: "failed" };
+  return { ok: true as const, value: sent };
 }
 
 /** Publishes a post; returns its id. */

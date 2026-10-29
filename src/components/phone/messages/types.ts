@@ -86,6 +86,22 @@ export type Bubble =
       bounce: { title: string; text: string; href: string; cta: string } | null;
     }
   | { kind: "text"; text: string }
+  /** A post of the Fil sent from « Partager »: a card that opens it. */
+  | { kind: "post"; gone: true; text: string }
+  | {
+      kind: "post";
+      gone: false;
+      href: string;
+      name: string;
+      label: string;
+      initials: string;
+      image: string | null;
+      tone: number;
+      org: boolean;
+      title: string | null;
+      body: string;
+      photo: { src: string; alt: string } | null;
+    }
   | { kind: "photos"; photos: PhotoView[]; hd: boolean }
   | { kind: "doc"; name: string; meta: string; ext: string; href: string }
   | {

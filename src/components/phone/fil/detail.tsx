@@ -105,7 +105,11 @@ export function PostDetail({
         {post.body ? <p className="nb-fil-grand-texte">{post.body}</p> : null}
         <PostMedia post={post} big />
         <p className="nb-meta nb-fil-date">{post.stamp}</p>
-        <PostActions post={post} onReshare={() => setSheet("reshare")} />
+        <PostActions
+          post={post}
+          onReshare={() => setSheet("reshare")}
+          onShare={() => setSheet("share")}
+        />
       </article>
       {replies.length === 0 ? <p className="nb-vide">{t("detail.noReplies")}</p> : null}
       <ul className="nb-fil-reponses">

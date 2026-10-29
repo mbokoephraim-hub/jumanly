@@ -10228,7 +10228,7 @@
       "edit": "Modifier la publication",
       "editSub": "Le titre et le texte",
       "share": "Partager",
-      "shareSub": "Republier, citer ou envoyer"
+      "shareSub": "À vos connexions, ou dans une autre application"
     },
     "toast": {
       "saved": "Publication enregistrée",
@@ -10240,12 +10240,14 @@
       "unreposted": "Republication annulée",
       "sentTo": "Envoyée à {name}",
       "error": "Cela n'a pas fonctionné. Réessayez dans un instant.",
-      "edited": "Publication modifiée"
+      "edited": "Publication modifiée",
+      "noted": "Republiée avec votre note"
     },
     "edit": {
       "title": "Modifier la publication",
       "save": "Enregistrer",
-      "empty": "Le titre ne peut pas être vide."
+      "empty": "Le titre ne peut pas être vide.",
+      "noteTitle": "Modifier votre note"
     },
     "edited": "modifié",
     "seeComments": "{count, plural, one {Voir le commentaire} other {Voir les # commentaires}}",
@@ -10275,13 +10277,14 @@
     },
     "reshare": {
       "do": "Republier",
-      "doSub": "Sur votre profil, sans commentaire",
+      "doSub": "Dans le Fil et sur votre profil, sans commentaire",
       "undo": "Annuler la republication",
       "undoSub": "Elle quitte votre profil",
-      "quote": "Citer",
-      "quoteSub": "Ajouter votre avis au-dessus",
+      "quote": "Republier avec une note",
+      "quoteSub": "Votre avis au-dessus de la publication",
       "send": "Envoyer à une connexion",
-      "sendSub": "Dans Messages"
+      "sendSub": "Dans Messages",
+      "title": "Republier"
     },
     "send": {
       "title": "Envoyer à",
@@ -10290,6 +10293,37 @@
       "open": "Ouvrir Messages",
       "none": "Vous n'avez pas encore de connexion. Ajoutez-en depuis Messages.",
       "message": "Je te partage cette publication de {name} : {link}"
+    },
+    "repostedBy": "{name} a republié",
+    "repostedByMe": "Vous avez republié",
+    "quotedLabel": "Publication de {name}",
+    "note": {
+      "title": "Republier avec une note",
+      "label": "Votre note",
+      "placeholder": "Qu'en pensez-vous ? Votre note s'affiche au-dessus de la publication.",
+      "publish": "Republier",
+      "empty": "Écrivez d'abord votre note.",
+      "counter": "{count}/{max}"
+    },
+    "shareTo": {
+      "title": "Partager",
+      "search": "Rechercher une connexion",
+      "network": "Toutes mes connexions",
+      "pick": "Choisir {name}",
+      "none": "Aucune connexion ne correspond à « {query} ».",
+      "empty": "Vos connexions s'afficheront ici. Ajoutez-en depuis Chat.",
+      "note": "Écrire un message…",
+      "noteLabel": "Message joint à la publication",
+      "send": "{count, plural, one {Envoyer} other {Envoyer à # personnes}}",
+      "sent": "{count, plural, one {Envoyée} other {Envoyée à # personnes}}",
+      "outside": "Partager ailleurs",
+      "copy": "Copier le lien",
+      "whatsapp": "WhatsApp",
+      "linkedin": "LinkedIn",
+      "instagram": "Instagram",
+      "other": "Autres applis",
+      "instagramHint": "Lien copié : collez-le dans Instagram.",
+      "text": "{title} · à lire sur Jumanly"
     },
     "publish": {
       "title": "Nouvelle publication",
@@ -12887,6 +12921,7 @@
       "voice": "Note vocale · {duration}",
       "contact": "Contact · {name}",
       "org": "Organisation · {name}",
+      "post": "Publication · {name}",
       "doc": "Document · {name}",
       "event": "{label} · {when}",
       "hired": "Candidature retenue",
@@ -12984,6 +13019,9 @@
       "seePhotos": "Voir les photos",
       "seeProfile": "Voir le profil",
       "seePage": "Voir la page",
+      "seePost": "Voir la publication",
+      "postOf": "Publication de {name}",
+      "postGone": "Cette publication n'est plus disponible.",
       "play": "Écouter la note vocale",
       "pause": "Mettre en pause",
       "read": "· Lu",

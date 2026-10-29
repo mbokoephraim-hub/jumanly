@@ -1,0 +1,404 @@
+/* ─── Partager et Republier (Ephraïm, 29/10/2026) : la fenêtre « Partager » inspirée d'Instagram
+   (recherche, grille des connexions, envoi, partage ailleurs), la note d'une republication au-dessus
+   de la publication d'origine, « X a republié » au-dessus de son auteur, et la publication envoyée
+   dans le chat. Aux couleurs de Jumanly. Importé par les composants (jamais par globals.css). ─── */
+
+.nb-fil-barre-actions .nb-fil-ab {
+  padding: 0 8px;
+}
+
+/* « Grace a republié » au-dessus de l'auteur d'origine. */
+.nb-pt-republie {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--nb-brume);
+}
+.nb-pt-republie svg {
+  color: var(--nb-lime-t);
+  flex: none;
+}
+.nb-pt-republie small {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* La publication d'origine sous une note : son auteur d'abord. */
+.nb-pt-cite {
+  display: block;
+  margin-top: 12px;
+  padding: 12px 14px 14px;
+  border-radius: 18px;
+  border: 1px solid var(--nb-filet-fort);
+  background: rgba(var(--nb-voile), 0.03);
+  color: var(--nb-texte);
+}
+.nb-pt-cite-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.nb-pt-cite-h b {
+  font-size: 13.5px;
+  font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-pt-cite-h small {
+  flex: none;
+  font-size: 12px;
+  color: var(--nb-brume);
+}
+.nb-pt-cite-t {
+  display: block;
+  margin-top: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.nb-pt-cite-c {
+  display: -webkit-box;
+  margin-top: 4px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--nb-gris);
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.nb-pt-cite > img {
+  display: block;
+  width: 100%;
+  max-height: 260px;
+  object-fit: cover;
+  margin-top: 10px;
+  border-radius: 12px;
+}
+
+/* La fenêtre « Partager » : haute, elle s'ouvre à mi-hauteur (SheetGestures). */
+.nb-feuille.nb-pt-feuille {
+  display: flex;
+  flex-direction: column;
+  height: 88dvh;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+.nb-pt {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.nb-pt-tete {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+.nb-pt-recherche {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border-radius: 22px;
+  background: var(--nb-haute);
+  color: var(--nb-brume);
+}
+.nb-pt-recherche input {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  font: inherit;
+  font-size: 15px;
+  color: var(--nb-texte);
+}
+.nb-pt-recherche input::placeholder {
+  color: var(--nb-brume);
+}
+.nb-pt-recherche input::-webkit-search-cancel-button {
+  filter: grayscale(1);
+}
+.nb-pt-recherche:focus-within {
+  box-shadow: 0 0 0 2px rgba(var(--nb-voile), 0.14);
+}
+.nb-pt-reseau {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--nb-haute);
+  color: var(--nb-texte);
+}
+
+.nb-pt-zone {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: 0 -20px;
+  padding: 18px 14px 12px;
+}
+.nb-pt-vide {
+  padding: 24px 8px;
+  text-align: center;
+}
+/* Autant de colonnes que la largeur le permet (3 sur un petit téléphone, 4 ou plus ailleurs). */
+.nb-pt-grille {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+  row-gap: 18px;
+  column-gap: 4px;
+}
+.nb-pt-personne {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 2px;
+  border: 0;
+  background: none;
+  color: var(--nb-texte);
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.nb-pt-photo {
+  position: relative;
+  display: block;
+  border-radius: 50%;
+  transition: transform 0.18s var(--nb-courbe);
+}
+.nb-pt-photo .nb-fil-av {
+  border-radius: 50% !important;
+  box-shadow: 0 0 0 0 transparent;
+  transition: box-shadow 0.18s var(--nb-courbe);
+}
+.nb-pt-personne:active .nb-pt-photo {
+  transform: scale(0.94);
+}
+.nb-pt-personne[aria-pressed="true"] .nb-fil-av {
+  box-shadow:
+    0 0 0 2px var(--nb-surface),
+    0 0 0 4px var(--nb-lime);
+}
+.nb-pt-coche {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--nb-lime);
+  color: var(--nb-encre);
+  border: 2px solid var(--nb-surface);
+  transform: scale(0);
+  transition: transform 0.2s var(--nb-courbe);
+}
+.nb-pt-personne[aria-pressed="true"] .nb-pt-coche {
+  transform: scale(1);
+}
+.nb-pt-nom {
+  display: -webkit-box;
+  max-width: 100%;
+  font-size: 12.5px;
+  line-height: 1.25;
+  text-align: center;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* En bas : partager ailleurs, ou envoyer aux personnes choisies. */
+.nb-pt-ailleurs,
+.nb-pt-envoi {
+  flex: none;
+  margin: 0 -20px;
+  padding: 12px 20px max(16px, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--nb-filet);
+  background: var(--nb-surface);
+}
+.nb-pt-ailleurs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  animation: nbPtMonte 0.22s var(--nb-courbe);
+}
+.nb-pt-ailleurs::-webkit-scrollbar {
+  display: none;
+}
+.nb-pt-ailleurs button {
+  flex: none;
+  width: 74px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--nb-texte);
+  font: inherit;
+  font-size: 11.5px;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+}
+.nb-pt-rond {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--nb-haute);
+  color: var(--nb-texte);
+  transition: transform 0.18s var(--nb-courbe);
+}
+.nb-pt-ailleurs button:active .nb-pt-rond {
+  transform: scale(0.92);
+}
+.nb-pt-ailleurs [data-cle="copy"] .nb-pt-rond {
+  background: var(--nb-lime);
+  color: var(--nb-encre);
+}
+.nb-pt-envoi {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: nbPtMonte 0.22s var(--nb-courbe);
+}
+.nb-pt-mot {
+  height: 44px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--nb-haute);
+  color: var(--nb-texte);
+  font: inherit;
+  font-size: 15px;
+}
+.nb-pt-mot::placeholder {
+  color: var(--nb-brume);
+}
+.nb-pt-envoyer {
+  height: 48px;
+  border: 0;
+  border-radius: 24px;
+  background: var(--nb-lime);
+  color: var(--nb-encre);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.nb-pt-envoyer:disabled {
+  opacity: 0.6;
+}
+@keyframes nbPtMonte {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* « Republier avec une note ». */
+.nb-pt-note .nb-fil-champ {
+  margin-top: 6px;
+}
+.nb-pt-note .nb-pt-cite {
+  margin-bottom: 16px;
+}
+
+/* La publication envoyée dans le chat : une carte qui l'ouvre. */
+.nb-ch-bulle[data-type="post"] {
+  padding: 4px;
+}
+.nb-ms-post {
+  display: block;
+  width: 240px;
+  max-width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(var(--nb-voile), 0.05);
+  color: inherit;
+}
+.nb-ms-post-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px 8px;
+}
+.nb-ms-post-h b {
+  font-size: 13.5px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-ms-post > img {
+  display: block;
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+}
+.nb-ms-post-c {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 12px 10px;
+}
+.nb-ms-post-c > b {
+  font-size: 14px;
+  line-height: 1.3;
+}
+.nb-ms-post-c > span:not(.nb-ms-post-v) {
+  display: -webkit-box;
+  font-size: 13px;
+  line-height: 1.4;
+  opacity: 0.85;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.nb-ms-post-v {
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nb-lime-t);
+}
+.nb-ms-post-parti {
+  font-style: italic;
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nb-pt-ailleurs,
+  .nb-pt-envoi {
+    animation: none;
+  }
+  .nb-pt-photo,
+  .nb-pt-coche,
+  .nb-pt-rond {
+    transition: none;
+  }
+}

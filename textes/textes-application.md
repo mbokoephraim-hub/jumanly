@@ -8442,7 +8442,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.menu.edit` | Modifier la publication |
 | `phoneFil.menu.editSub` | Le titre et le texte |
 | `phoneFil.menu.share` | Partager |
-| `phoneFil.menu.shareSub` | Republier, citer ou envoyer |
+| `phoneFil.menu.shareSub` | À vos connexions, ou dans une autre application |
 | `phoneFil.edit.title` | Modifier la publication |
 | `phoneFil.edit.save` | Enregistrer |
 | `phoneFil.edit.empty` | Le titre ne peut pas être vide. |
@@ -8469,11 +8469,11 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.report.done` | Merci. Notre équipe vérifie sous 24 h. |
 | `phoneFil.report.already` | Vous avez déjà signalé cette publication. Notre équipe vérifie. |
 | `phoneFil.reshare.do` | Republier |
-| `phoneFil.reshare.doSub` | Sur votre profil, sans commentaire |
+| `phoneFil.reshare.doSub` | Dans le Fil et sur votre profil, sans commentaire |
 | `phoneFil.reshare.undo` | Annuler la republication |
 | `phoneFil.reshare.undoSub` | Elle quitte votre profil |
-| `phoneFil.reshare.quote` | Citer |
-| `phoneFil.reshare.quoteSub` | Ajouter votre avis au-dessus |
+| `phoneFil.reshare.quote` | Republier avec une note |
+| `phoneFil.reshare.quoteSub` | Votre avis au-dessus de la publication |
 | `phoneFil.reshare.send` | Envoyer à une connexion |
 | `phoneFil.reshare.sendSub` | Dans Messages |
 | `phoneFil.send.title` | Envoyer à |
@@ -8482,6 +8482,36 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.send.open` | Ouvrir Messages |
 | `phoneFil.send.none` | Vous n'avez pas encore de connexion. Ajoutez-en depuis Messages. |
 | `phoneFil.send.message` | Je te partage cette publication de {name} : {link} |
+| `phoneFil.reshare.title` | Republier |
+| `phoneFil.repostedBy` | {name} a republié |
+| `phoneFil.repostedByMe` | Vous avez republié |
+| `phoneFil.quotedLabel` | Publication de {name} |
+| `phoneFil.note.title` | Republier avec une note |
+| `phoneFil.note.label` | Votre note |
+| `phoneFil.note.placeholder` | Qu'en pensez-vous ? Votre note s'affiche au-dessus de la publication. |
+| `phoneFil.note.publish` | Republier |
+| `phoneFil.note.empty` | Écrivez d'abord votre note. |
+| `phoneFil.note.counter` | {count}/{max} |
+| `phoneFil.toast.noted` | Republiée avec votre note |
+| `phoneFil.edit.noteTitle` | Modifier votre note |
+| `phoneFil.shareTo.title` | Partager |
+| `phoneFil.shareTo.search` | Rechercher une connexion |
+| `phoneFil.shareTo.network` | Toutes mes connexions |
+| `phoneFil.shareTo.pick` | Choisir {name} |
+| `phoneFil.shareTo.none` | Aucune connexion ne correspond à « {query} ». |
+| `phoneFil.shareTo.empty` | Vos connexions s'afficheront ici. Ajoutez-en depuis Chat. |
+| `phoneFil.shareTo.note` | Écrire un message… |
+| `phoneFil.shareTo.noteLabel` | Message joint à la publication |
+| `phoneFil.shareTo.send` | {count, plural, one {Envoyer} other {Envoyer à # personnes}} |
+| `phoneFil.shareTo.sent` | {count, plural, one {Envoyée} other {Envoyée à # personnes}} |
+| `phoneFil.shareTo.outside` | Partager ailleurs |
+| `phoneFil.shareTo.copy` | Copier le lien |
+| `phoneFil.shareTo.whatsapp` | WhatsApp |
+| `phoneFil.shareTo.linkedin` | LinkedIn |
+| `phoneFil.shareTo.instagram` | Instagram |
+| `phoneFil.shareTo.other` | Autres applis |
+| `phoneFil.shareTo.instagramHint` | Lien copié : collez-le dans Instagram. |
+| `phoneFil.shareTo.text` | {title} · à lire sur Jumanly |
 | `phoneFil.publish.title` | Nouvelle publication |
 | `phoneFil.publish.cancel` | Annuler |
 | `phoneFil.publish.placeholder` | Quelques mots pour en dire plus |
@@ -10730,6 +10760,7 @@ Conventions :
 | `phoneMsg.preview.voice` | Note vocale · {duration} |
 | `phoneMsg.preview.contact` | Contact · {name} |
 | `phoneMsg.preview.org` | Organisation · {name} |
+| `phoneMsg.preview.post` | Publication · {name} |
 | `phoneMsg.preview.doc` | Document · {name} |
 | `phoneMsg.preview.event` | {label} · {when} |
 | `phoneMsg.preview.hired` | Candidature retenue |
@@ -10807,6 +10838,9 @@ Conventions :
 | `phoneMsg.bubble.seePhotos` | Voir les photos |
 | `phoneMsg.bubble.seeProfile` | Voir le profil |
 | `phoneMsg.bubble.seePage` | Voir la page |
+| `phoneMsg.bubble.seePost` | Voir la publication |
+| `phoneMsg.bubble.postOf` | Publication de {name} |
+| `phoneMsg.bubble.postGone` | Cette publication n'est plus disponible. |
 | `phoneMsg.bubble.play` | Écouter la note vocale |
 | `phoneMsg.bubble.pause` | Mettre en pause |
 | `phoneMsg.bubble.read` | · Lu |
