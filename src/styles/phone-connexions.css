@@ -366,9 +366,9 @@
 .nb-cx-envoye {
   margin-top: auto;
   width: 100%;
-  min-height: 40px;
+  min-height: 34px;
   padding: 0 10px;
-  font-size: 13px;
+  font-size: 12.5px;
   white-space: nowrap;
 }
 .nb-cx-sug .nb-cx-commun + .nb-cx-connecter,
