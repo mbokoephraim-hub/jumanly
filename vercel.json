@@ -2,5 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "pnpm run build:hostinger",
   "regions": ["fra1"],
-  "crons": [{ "path": "/api/jobs/billing", "schedule": "0 * * * *" }]
+  "crons": [{ "path": "/api/jobs/billing", "schedule": "0 * * * *" }],
+  "git": { "deploymentEnabled": { "main": true, "claude/**": false } }
 }

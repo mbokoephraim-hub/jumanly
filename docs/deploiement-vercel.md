@@ -109,3 +109,7 @@ Apple (Services → Sign In with Apple for Email Communication) le domaine d'env
 - Vercel : `jumanly.io` sur Production, `www.jumanly.io` redirigé (308) vers `jumanly.io`.
 - Hostinger (zone DNS de `jumanly.io`) : `A @ 216.198.79.1` et `CNAME www` vers la valeur donnée
   par Vercel. Aucun enregistrement MX pour l'instant : le domaine ne reçoit pas d'e-mails.
+
+## Aperçus automatiques coupés (29/10/2026)
+
+Vercel ne construit plus d'aperçu pour les branches `claude/…` (`git.deploymentEnabled` dans `vercel.json`) : seule `main` est construite, pour le site. Les constructions ne se font qu'une à la fois sur le compte ; sans les aperçus, la file d'attente est environ deux fois plus courte. Pour retrouver les aperçus, retirer la ligne `"claude/**": false`.
