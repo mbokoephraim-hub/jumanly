@@ -5019,3 +5019,27 @@ bibliothèque, et se supprime.
 ## 2026-10-28 · Premier administrateur sans se déconnecter
 
 - Ephraïm n'arrivait pas à devenir administrateur : la promotion par `ADMIN_BOOTSTRAP_EMAIL` ne se faisait qu'à une nouvelle connexion, et une session dure 30 jours. Désormais, ouvrir `/admin` avec une adresse listée et vérifiée suffit (`src/proxy.ts`), toujours journalisé.
+
+## 2026-10-29 · Admin : fiche utilisateur à part, suppression justifiée, suppression d'une entreprise
+
+Demande d'Ephraïm du 29/10/2026 (partie administration seulement).
+
+- **Fiche utilisateur** : cliquer sur une personne dans `/admin/utilisateurs` ouvre un écran qui ne montre
+  qu'elle (`?fiche=<id>`, la liste disparaît, lien « Tous les utilisateurs » pour revenir). Colonne
+  principale (`src/components/admin/user-overview.tsx`, données `src/server/services/admin-user-overview.ts`) :
+  alertes (suspension et motif, e-mail non vérifié, suppression demandée, paiement échoué, délai de grâce,
+  fin d'abonnement sous 7 jours, résiliation, signalements ouverts), abonnement avec sa date de fin et les
+  jours restants, paiements, activités (connexions, candidatures, formations, attestations, publications),
+  plaintes (signalements envoyés, contestations de score) et signalements sur la personne, mot de passe et
+  connexion. Toujours rien des messages privés, CV ou documents.
+- **Aide à la connexion** : lien de réinitialisation du mot de passe (la personne choisit elle-même son mot
+  de passe, l'admin ne le voit jamais) et « Désactiver la double authentification » quand le téléphone est
+  perdu (motif obligatoire, sessions fermées, journal `user.2fa.reset`).
+- **Supprimer définitivement** ouvre son propre écran (`&action=effacer`) : justification, ce qui sera
+  supprimé ou gardé, sort de ses entreprises, puis le mot EFFACER. « Anonymiser » a aussi son écran.
+- **Supprimer une entreprise** (`/admin/organisations?fiche=<id>&action=supprimer`, service
+  `deleteOrganization`) : justification et mot SUPPRIMER. Page, offres, candidatures reçues, équipe,
+  publications partent ; les comptes des membres, administrateur compris, restent ouverts et sont prévenus
+  (notification `orgDeleted` et e-mail) ; les candidats reçoivent « offre plus disponible » ; les paiements
+  restent sans lien ; les entités d'un groupe deviennent indépendantes. Pas pour les partenaires.
+- À décider plus tard : changer l'adresse e-mail d'un compte dont la personne a perdu l'accès à sa boîte.

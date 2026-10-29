@@ -133,7 +133,7 @@ test("suspendre, réactiver et changer le rôle d'un compte, puis le lire dans l
 
   // Platform role: Support, then back to no role.
   const roles = page.locator("#utilisateurs-roles");
-  await roles.getByLabel("Support", { exact: true }).check();
+  await roles.getByRole("radio", { name: /^Support / }).check();
   await roles.getByRole("button", { name: "Enregistrer le rôle" }).click();
   await expect(
     page.getByRole("status").filter({ hasText: "Utilisateur mis à jour" }),
@@ -252,7 +252,7 @@ test("les indicateurs montrent les forfaits utilisés et se complètent avec les
   await expectAccessible(page);
 });
 
-test("vérifier un compte, lui offrir un forfait et des crédits, exporter ses données, le supprimer", async ({
+test("vérifier un compte, lui offrir un forfait et des crédits, le supprimer définitivement", async ({
   page,
 }) => {
   test.setTimeout(150_000);
@@ -261,6 +261,17 @@ test("vérifier un compte, lui offrir un forfait et des crédits, exporter ses d
   await page.goto(`/admin/utilisateurs?fiche=${account.id}`);
   const card = page.locator("#utilisateurs-fiche");
   await expect(card.getByText("Non vérifié", { exact: true })).toBeVisible();
+  // One screen about the person: alerts, subscription and payments, activity, complaints, sign-in.
+  await expectTitle(page, "Compte Fiche Fictif");
+  for (const heading of [
+    "Alertes",
+    "Abonnement et paiements",
+    "Activités",
+    "Plaintes et signalements",
+    "Mot de passe et connexion",
+  ])
+    await expect(page.getByRole("heading", { name: heading, level: 2 })).toBeVisible();
+  await expect(page.getByText("L'adresse e-mail n'est pas encore vérifiée.")).toBeVisible();
   const done = (text: string) =>
     expect(page.getByRole("status").filter({ hasText: text })).toBeVisible();
 
@@ -292,26 +303,15 @@ test("vérifier un compte, lui offrir un forfait et des crédits, exporter ses d
   await expect(rights.getByText("Ajout manuel")).toBeVisible();
   await expectAccessible(page);
 
-  // Export of the person's data (droit d'accès).
-  const download = page.waitForEvent("download");
-  await card.getByRole("link", { name: "Générer l'export de ses données" }).click();
-  const { readFileSync } = await import("node:fs");
-  const data = JSON.parse(readFileSync(await (await download).path(), "utf8"));
-  expect(data.account.email).toBe(account.email);
-  expect(JSON.stringify(data)).not.toMatch(/password|token/i);
-
-  // Deletion in two steps: the reason, then the e-mail typed again.
-  await card.getByRole("link", { name: "Supprimer le compte" }).click();
-  await page.locator("#utilisateurs-delete-reason").fill("Demande écrite de la personne (fictif)");
-  await page.getByRole("button", { name: "Continuer" }).click();
-  await page.locator("#utilisateurs-delete-email").fill(account.email);
+  // « Supprimer définitivement » opens its own screen: a justification, then EFFACER.
+  await card.getByRole("link", { name: "Supprimer définitivement" }).click();
+  await expectTitle(page, "Supprimer définitivement le compte de Compte Fiche Fictif");
+  await expect(page.getByRole("heading", { name: "Ce qui va se passer" })).toBeVisible();
+  await page.locator("#utilisateurs-erase-reason").fill("Demande écrite de la personne (fictif)");
+  await page.locator("#utilisateurs-erase-word").fill("EFFACER");
   await page.getByRole("button", { name: "Supprimer définitivement" }).click();
-  await done("Compte supprimé et anonymisé.");
-  await expect(card.getByText("Compte supprimé", { exact: true })).toBeVisible();
-  await expect(card.getByText(account.email)).toHaveCount(0);
-  const history = page.getByRole("region", { name: "Historique" });
-  await expect(history.getByText("a supprimé le compte")).toBeVisible();
-  await expect(history.getByText("a offert un forfait")).toBeVisible();
+  await done("Compte et documents effacés définitivement.");
+  await expectTitle(page, "Utilisateurs");
 });
 
 test("la liste des utilisateurs s'exporte en CSV", async ({ page }) => {

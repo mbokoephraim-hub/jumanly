@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { afterAll, describe, expect, it } from "vitest";
 import { limit, resolvePlan } from "@/server/entitlements";
+import { userOverview } from "@/server/services/admin-user-overview";
 import { applyToJob } from "@/server/services/applications";
 import {
   addCredits,
@@ -12,6 +13,7 @@ import {
   purgeScheduledDeletions,
   readUserFilters,
   removeOverride,
+  resetTwoFactor,
   revokePlan,
   userListWhere,
   userRights,
@@ -51,6 +53,75 @@ describe("vérifier un utilisateur (Admin v2, étape 3)", () => {
       where: { targetId: user.id, action: "user.email.verify" },
     });
     expect(log?.metadata).toMatchObject({ reason: "Confirmé par e-mail fictif" });
+  });
+});
+
+describe("fiche utilisateur (29/10/2026)", () => {
+  it("montre l'abonnement, les paiements, les plaintes et les alertes", async () => {
+    const user = await person();
+    const plan = await db.plan.findFirstOrThrow({
+      where: { family: "talent", active: true, priceCents: { gt: 0 } },
+    });
+    const now = new Date();
+    const subscription = await db.subscription.create({
+      data: {
+        subjectType: "user",
+        subjectId: user.id,
+        planId: plan.id,
+        status: "active",
+        currentPeriodStart: new Date(now.getTime() - 25 * DAY),
+        currentPeriodEnd: new Date(now.getTime() + 5 * DAY),
+      },
+    });
+    await db.payment.create({
+      data: {
+        subscriptionId: subscription.id,
+        subjectType: "user",
+        subjectId: user.id,
+        planId: plan.id,
+        provider: "fake",
+        method: "mobile_money",
+        amountCents: plan.priceCents ?? 0,
+        status: "succeeded",
+        providerRef: `test-${randomUUID()}`,
+        idempotencyKey: `test-${randomUUID()}`,
+        periodStart: subscription.currentPeriodStart,
+        periodEnd: subscription.currentPeriodEnd,
+        paidAt: subscription.currentPeriodStart,
+      },
+    });
+    await db.report.create({
+      data: { reporterId: user.id, targetType: "job", targetId: "job-fictif", reason: "scam" },
+    });
+    const overview = await userOverview(db, user.id, now);
+    expect(overview?.subscription?.daysLeft).toBe(5);
+    expect(overview?.payments).toHaveLength(1);
+    expect(overview?.paidTotalCents).toBe(plan.priceCents);
+    expect(overview?.complaints.reports).toHaveLength(1);
+    expect(overview?.alerts.map((alert) => alert.kind)).toContain("endingSoon");
+
+    await db.report.deleteMany({ where: { reporterId: user.id } });
+    await db.payment.deleteMany({ where: { subjectId: user.id } });
+    await db.subscription.deleteMany({ where: { subjectId: user.id } });
+  });
+
+  it("désactive la double authentification d'un compte qui a perdu son téléphone", async () => {
+    const admin = await person();
+    const user = await person();
+    await expect(
+      resetTwoFactor(db, { actorId: admin.id }, user.id, "Téléphone perdu (fictif)"),
+    ).rejects.toThrow(AdminUserError);
+    await db.user.update({ where: { id: user.id }, data: { twoFactorEnabled: true } });
+    await db.twoFactor.create({ data: { userId: user.id, secret: "x", backupCodes: "x" } });
+    await resetTwoFactor(db, { actorId: admin.id }, user.id, "Téléphone perdu (fictif)");
+    expect((await db.user.findUnique({ where: { id: user.id } }))?.twoFactorEnabled).toBe(false);
+    expect(await db.twoFactor.count({ where: { userId: user.id } })).toBe(0);
+    expect(
+      await db.auditLog.count({ where: { targetId: user.id, action: "user.2fa.reset" } }),
+    ).toBe(1);
+    await expect(resetTwoFactor(db, { actorId: admin.id }, admin.id, "Soi-même")).rejects.toThrow(
+      AdminUserError,
+    );
   });
 });
 

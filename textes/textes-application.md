@@ -18631,6 +18631,7 @@ Conventions :
 | `notifications.item.orgVerificationInfo` | Jumanly a besoin d'un complément pour vérifier {org}. |
 | `notifications.item.orgSuspended` | {org} a été suspendue par Jumanly. Écrivez à assistant@jumanly.io pour en savoir plus. |
 | `notifications.item.orgReactivated` | {org} est de nouveau active. |
+| `notifications.item.orgDeleted` | {org} a été supprimée par Jumanly. Votre compte reste ouvert. Écrivez à assistant@jumanly.io pour en savoir plus. |
 | `notifications.item.jobUnavailable` | L'offre « {job} » de {org} n'est plus disponible. Votre candidature reste dans votre suivi. |
 | `notifications.item.abnormalUsage` | Usage inhabituel : {count} profils consultés en une heure par un membre de {org}. Accès suspendu une heure. |
 | `notifications.item.licenseActivated` | Votre licence {plan} offerte par {sponsorName} est active jusqu'au {date}. |
@@ -18995,6 +18996,11 @@ Conventions :
 | `mail.orgReactivated.p1` | Jumanly a réactivé {org}. |
 | `mail.orgReactivated.p2` | Les offres fermées par la suspension sont republiées si leur date limite n'est pas passée. |
 | `mail.orgReactivated.cta` | Ouvrir mon espace recrutement |
+| `mail.orgDeleted.subject` | {org} est supprimée de Jumanly |
+| `mail.orgDeleted.preheader` | Votre compte personnel reste ouvert. |
+| `mail.orgDeleted.p1` | Jumanly a supprimé {org}. Motif : {reason} |
+| `mail.orgDeleted.p2` | Les offres et l'espace recrutement de l'entreprise ne sont plus disponibles. Votre compte personnel reste ouvert. Pour en parler, écrivez à assistant@jumanly.io. |
+| `mail.orgDeleted.cta` | Ouvrir Jumanly |
 | `mail.moderationWarning.subject` | Avertissement de la modération Jumanly |
 | `mail.moderationWarning.preheader` | Un contenu que vous avez publié ne respecte pas les règles de Jumanly. |
 | `mail.moderationWarning.p1` | Après un signalement, la modération de Jumanly a constaté qu'un contenu que vous avez publié ne respecte pas les règles de la plateforme. Motif : {reason} |
@@ -20073,6 +20079,7 @@ Conventions :
 | `admin.journal.action.org_verification_info` | a demandé un complément |
 | `admin.journal.action.org_suspend` | a suspendu l'organisation |
 | `admin.journal.action.org_unsuspend` | a réactivé l'organisation |
+| `admin.journal.action.org_delete` | a supprimé l'organisation |
 | `admin.journal.action.plan_update` | a modifié le forfait |
 | `admin.journal.action.plan_create` | a créé le forfait |
 | `admin.journal.action.plan_duplicate` | a dupliqué un forfait |
@@ -20444,6 +20451,88 @@ Conventions :
 | `admin.users.detail.noCertificate` | Aucune attestation pour l'instant. |
 | `admin.users.detail.certificateLine` | {course} · {date} |
 | `admin.users.detail.revoked` | Retirée |
+| `admin.users.overview.back` | Tous les utilisateurs |
+| `admin.users.overview.subtitle` | Ce que fait la personne sur Jumanly, ses paiements, son abonnement, ses plaintes et les alertes. Ses messages privés, CV et documents restent invisibles. |
+| `admin.users.overview.alerts` | Alertes |
+| `admin.users.overview.alertCount` | {count, plural, one {# alerte} other {# alertes}} |
+| `admin.users.overview.noAlertTag` | Rien à signaler |
+| `admin.users.overview.noAlert` | Aucune alerte sur ce compte. |
+| `admin.users.overview.alert.suspended` | Compte suspendu. |
+| `admin.users.overview.alert.suspendedReason` | Compte suspendu. Motif : {reason} |
+| `admin.users.overview.alert.emailUnverified` | L'adresse e-mail n'est pas encore vérifiée. |
+| `admin.users.overview.alert.deletionScheduled` | La personne a demandé la suppression de son compte, prévue le {date}. |
+| `admin.users.overview.alert.paymentFailed` | Un paiement a échoué le {date}. |
+| `admin.users.overview.alert.pastDue` | Abonnement en délai de grâce : le dernier renouvellement n'est pas payé. |
+| `admin.users.overview.alert.endingSoon` | L'abonnement se termine le {date} ({days, plural, =0 {aujourd'hui} one {dans # jour} other {dans # jours}}). |
+| `admin.users.overview.alert.canceling` | Abonnement résilié : il s'arrête le {date}, puis retour au forfait gratuit. |
+| `admin.users.overview.alert.reported` | {count, plural, one {# signalement ouvert} other {# signalements ouverts}} sur son profil ou ses contenus. |
+| `admin.users.overview.subscription` | Abonnement et paiements |
+| `admin.users.overview.endsOn` | Fin de l'abonnement |
+| `admin.users.overview.endsToday` | Se termine aujourd'hui |
+| `admin.users.overview.daysLeft` | {count, plural, one {Encore # jour} other {Encore # jours}} |
+| `admin.users.overview.since` | Début de la période |
+| `admin.users.overview.origin` | Origine |
+| `admin.users.overview.source.self` | Payé par la personne |
+| `admin.users.overview.source.admin` | Offert par Jumanly |
+| `admin.users.overview.source.license` | Licence d'un partenaire |
+| `admin.users.overview.after` | Ensuite |
+| `admin.users.overview.afterRenew` | Renouvellement à payer |
+| `admin.users.overview.afterFree` | Retour au forfait gratuit |
+| `admin.users.overview.afterPlan` | Passage au forfait {plan} |
+| `admin.users.overview.noSubscription` | Forfait gratuit, sans date de fin. |
+| `admin.users.overview.noSubscriptionDeleted` | Compte supprimé : plus d'abonnement. |
+| `admin.users.overview.payments` | Paiements |
+| `admin.users.overview.paidTotal` | {amount} USD payés au total |
+| `admin.users.overview.amount` | {amount} USD |
+| `admin.users.overview.activity` | Activités |
+| `admin.users.overview.count.applications` | Candidatures |
+| `admin.users.overview.count.courses` | Formations en cours |
+| `admin.users.overview.count.certificates` | Attestations |
+| `admin.users.overview.count.posts` | Publications |
+| `admin.users.overview.recent` | Activités récentes |
+| `admin.users.overview.noActivity` | Aucune activité pour l'instant. |
+| `admin.users.overview.event.signInPlain` | Connexion à Jumanly |
+| `admin.users.overview.event.application` | Candidature : {label} |
+| `admin.users.overview.event.applicationPlain` | Candidature |
+| `admin.users.overview.event.course` | Formation commencée : {label} |
+| `admin.users.overview.event.coursePlain` | Formation commencée |
+| `admin.users.overview.event.courseDone` | Formation terminée : {label} |
+| `admin.users.overview.event.courseDonePlain` | Formation terminée |
+| `admin.users.overview.event.certificate` | Attestation obtenue : {label} |
+| `admin.users.overview.event.certificatePlain` | Attestation obtenue |
+| `admin.users.overview.event.post` | Publication sur le Fil : {label} |
+| `admin.users.overview.event.postPlain` | Publication sur le Fil |
+| `admin.users.overview.event.signIn` | Connexion à Jumanly |
+| `admin.users.overview.complaints` | Plaintes et signalements |
+| `admin.users.overview.allReports` | Tous les signalements |
+| `admin.users.overview.filed` | Ses plaintes |
+| `admin.users.overview.noFiled` | Aucune plainte ni contestation envoyée. |
+| `admin.users.overview.reportLine` | Signalement · {type} · {reason} |
+| `admin.users.overview.disputeLine` | Contestation d'un score · {reason} |
+| `admin.users.overview.reportStatus.open` | Ouvert |
+| `admin.users.overview.reportStatus.in_progress` | En cours |
+| `admin.users.overview.reportStatus.closed` | Clôturé |
+| `admin.users.overview.about` | Signalements sur la personne |
+| `admin.users.overview.noAbout` | Personne n'a signalé son profil ou ses contenus. |
+| `admin.users.overview.signIn` | Mot de passe et connexion |
+| `admin.users.overview.passwordHelp` | La personne a oublié son mot de passe ? Envoyez-lui un lien de réinitialisation : elle choisit elle-même un nouveau mot de passe. Jumanly ne voit jamais les mots de passe. |
+| `admin.users.overview.passwordSocial` | La personne se connecte sans mot de passe Jumanly (Google, LinkedIn, Apple ou lien par e-mail). Elle peut en créer un avec « Mot de passe oublié » sur la page de connexion. |
+| `admin.users.overview.twoFactorReset` | Désactiver la double authentification |
+| `admin.users.overview.twoFactorConfirm` | {userName} a perdu le téléphone qui reçoit ses codes ? La double authentification est désactivée et ses sessions sont fermées. La personne se reconnecte avec son mot de passe et pourra la réactiver dans Paramètres. |
+| `admin.users.overview.twoFactorSubmit` | Désactiver |
+| `admin.users.erase.back` | Retour à la fiche |
+| `admin.users.erase.title` | Supprimer définitivement le compte de {userName} |
+| `admin.users.erase.anonymizeTitle` | Anonymiser le compte de {userName} |
+| `admin.users.erase.subtitle` | Cette action est irréversible. Indiquez pourquoi le compte est supprimé : la justification est enregistrée dans le journal. |
+| `admin.users.erase.justification` | Justification de la suppression |
+| `admin.users.erase.whatHappens` | Ce qui va se passer |
+| `admin.users.erase.gone` | Supprimés : profil, CV, documents, candidatures, publications, messages envoyés et historique. |
+| `admin.users.erase.kept` | Gardée : la ligne du journal avec votre justification, sans données personnelles. |
+| `admin.users.erase.payments` | {count, plural, one {# paiement reste} other {# paiements restent}} dans la comptabilité, sans lien avec la personne. |
+| `admin.users.erase.companies` | Ses entreprises |
+| `admin.users.erase.companyHeir` | passe à {name} |
+| `admin.users.erase.companyClosed` | reste sans propriétaire, ses offres sont fermées |
+| `admin.users.erase.companyGone` | supprimée avec le compte (aucune offre ni équipe) |
 | `admin.users.method.credential` | Mot de passe |
 | `admin.users.method.google` | Google |
 | `admin.users.method.linkedin` | LinkedIn |
@@ -20479,12 +20568,13 @@ Conventions :
 | `admin.users.action.delete.submit` | Anonymiser le compte |
 | `admin.users.action.until` | Jusqu'au |
 | `admin.users.action.reason` | Motif |
-| `admin.users.action.erase.text` | Effacer définitivement (veto) |
+| `admin.users.action.erase.text` | Supprimer définitivement |
 | `admin.users.action.erase.confirm` | Effacer pour toujours le compte de {userName} et tous ses documents ? |
 | `admin.users.action.erase.intro` | Droit de veto de l'administrateur : le compte est supprimé avec tout ce qu'il contient (profil, CV, documents, candidatures, publications, messages envoyés, historique). Rien n'est gardé, même anonymisé, sauf les paiements sans nom (obligation comptable) et la ligne du journal. Si la personne possède une entreprise, celle-ci passe à un autre administrateur de l'équipe ; sans équipe, ses offres sont fermées. |
 | `admin.users.action.erase.typeWord` | Écrivez EFFACER pour confirmer |
-| `admin.users.action.erase.submit` | Effacer définitivement |
+| `admin.users.action.erase.submit` | Supprimer définitivement |
 | `admin.users.done.erased` | Compte et documents effacés définitivement. |
+| `admin.users.done.twoFactorReset` | Double authentification désactivée. La personne se reconnecte avec son mot de passe. |
 | `admin.users.block.self` | Vous ne pouvez pas supprimer votre propre compte. |
 | `admin.users.block.lastAdmin` | C'est le dernier administrateur de la plateforme : nommez-en un autre avant de supprimer ce compte. |
 | `admin.users.block.owner` | Cette personne est propriétaire d'une organisation : la propriété doit être transférée avant la suppression. |
@@ -20617,6 +20707,8 @@ Conventions :
 | `admin.journal.action.user_export` | a exporté les données du compte |
 | `admin.journal.action.user_export_list` | a exporté la liste des utilisateurs |
 | `admin.journal.action.user_delete` | a supprimé le compte |
+| `admin.journal.action.user_erase_veto` | a supprimé définitivement le compte |
+| `admin.journal.action.user_2fa_reset` | a désactivé la double authentification |
 | `admin.journal.reason.scheduled` | Suppression demandée par la personne (délai de 30 jours écoulé) |
 
 ### `/admin/organisations` · Organisations et vérification
@@ -20702,6 +20794,22 @@ Conventions :
 | `admin.orgs.done.suspended` | Organisation suspendue. |
 | `admin.orgs.done.reactivated` | Organisation réactivée. |
 | `admin.orgs.done.planGranted` | Formule offerte. Elle s'applique tout de suite. |
+| `admin.orgs.delete.text` | Supprimer l'entreprise |
+| `admin.orgs.delete.back` | Retour à la fiche |
+| `admin.orgs.delete.title` | Supprimer {org} |
+| `admin.orgs.delete.subtitle` | L'entreprise disparaît de Jumanly. Les comptes de ses membres, son administrateur compris, restent ouverts. |
+| `admin.orgs.delete.confirm` | Supprimer {org} pour toujours ? Cette action est irréversible. |
+| `admin.orgs.delete.justification` | Justification de la suppression |
+| `admin.orgs.delete.typeWord` | Écrivez SUPPRIMER pour confirmer |
+| `admin.orgs.delete.submit` | Supprimer l'entreprise |
+| `admin.orgs.delete.error` | Indiquez une justification (3 caractères au moins) et écrivez SUPPRIMER. |
+| `admin.orgs.delete.whatHappens` | Ce qui va se passer |
+| `admin.orgs.delete.gone` | Supprimés : la page, l'équipe, les publications, {jobs, plural, =0 {aucune offre} one {# offre} other {# offres}} et {applications, plural, =0 {aucune candidature} one {# candidature reçue} other {# candidatures reçues}}. Les candidats sont prévenus. |
+| `admin.orgs.delete.accountsKept` | Les comptes des membres restent ouverts : ils perdent seulement leur place dans l'entreprise et sont prévenus par e-mail. |
+| `admin.orgs.delete.entities` | {count, plural, one {# entité du groupe devient} other {# entités du groupe deviennent}} indépendante(s). |
+| `admin.orgs.delete.payments` | {count, plural, one {# paiement reste} other {# paiements restent}} dans la comptabilité, sans lien avec l'entreprise. |
+| `admin.orgs.delete.members` | Membres (comptes conservés) |
+| `admin.orgs.delete.done` | {org} est supprimée. Les comptes de ses membres restent ouverts. |
 | `admin.orgs.error.plan` | Choisissez une formule payante recruteur ou entreprise, et une date de fin dans les deux ans. |
 | `admin.orgs.grant.text` | Offrir une formule |
 | `admin.orgs.grant.confirm` | Offrir une formule à {org} jusqu'à une date, sans paiement ? |

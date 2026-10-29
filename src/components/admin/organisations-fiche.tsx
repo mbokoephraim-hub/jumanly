@@ -451,6 +451,15 @@ export async function OrgCard({
               {t("orgs.suspend.text")}
             </Link>
           )}
+          {organization.type !== "partner" && (
+            <Link
+              href={actionHref("supprimer")}
+              className="inline-flex items-center gap-2 text-[13px] font-semibold text-corail-fonce hover:underline"
+            >
+              <Icon name="fermer" className="size-4" />
+              {t("orgs.delete.text")}
+            </Link>
+          )}
         </nav>
       )}
     </aside>

@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { afterAll, describe, expect, it } from "vitest";
 import {
   addVerificationDocuments,
+  deleteOrganization,
   openDocument,
   OrgAdminError,
   organizationDetail,
@@ -197,5 +198,52 @@ describe("suspension d'une organisation", () => {
     expect(
       (await db.organization.findUniqueOrThrow({ where: { id: org.id } })).suspendedAt,
     ).toBeNull();
+  });
+});
+
+describe("suppression d'une entreprise (29/10/2026)", () => {
+  it("supprime l'entreprise, ses offres et candidatures, garde les comptes de ses membres", async () => {
+    const { owner, org } = await ownedOrganization();
+    const admin = await newUser();
+    users.push(admin.id);
+    const open = await job(org.id);
+    const talent = await newUser();
+    users.push(talent.id);
+    const profile = await db.talentProfile.create({ data: { userId: talent.id } });
+    const stage = await db.pipelineStage.create({
+      data: { jobId: open.id, name: "Reçue", order: 0, kind: "new" },
+    });
+    await db.application.create({
+      data: { jobId: open.id, profileId: profile.id, stageId: stage.id },
+    });
+
+    // Without the word SUPPRIMER, nothing happens.
+    await expect(
+      deleteOrganization(
+        db,
+        { actorId: admin.id },
+        { organizationId: org.id, reason: "Entreprise fictive", confirmWord: "oui" },
+      ),
+    ).rejects.toThrow(OrgAdminError);
+
+    const result = await deleteOrganization(
+      db,
+      { actorId: admin.id },
+      { organizationId: org.id, reason: "Entreprise fictive", confirmWord: "supprimer" },
+    );
+    expect(result.jobs).toBe(1);
+    expect(await db.organization.findUnique({ where: { id: org.id } })).toBeNull();
+    expect(await db.job.count({ where: { id: open.id } })).toBe(0);
+    expect(await db.application.count({ where: { profileId: profile.id } })).toBe(0);
+    // The administrator of the company keeps their account, without the company.
+    expect(await db.user.findUnique({ where: { id: owner.id } })).not.toBeNull();
+    expect(await db.membership.count({ where: { userId: owner.id } })).toBe(0);
+    expect(await db.notification.count({ where: { userId: owner.id, type: "orgDeleted" } })).toBe(
+      1,
+    );
+    expect(
+      await db.notification.count({ where: { userId: talent.id, type: "jobUnavailable" } }),
+    ).toBe(1);
+    expect(await db.auditLog.count({ where: { targetId: org.id, action: "org.delete" } })).toBe(1);
   });
 });

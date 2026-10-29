@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { AuditHistory } from "@/components/admin/audit";
+import { Icon } from "@/components/brand/icon";
 import {
   AdminDone,
   AdminFilterBar,
@@ -21,11 +22,17 @@ import { Alert, Button, ButtonLink, Select, TextArea, TextField } from "@/compon
 import { cx } from "@/lib/cx";
 import { decideVerificationAction } from "@/server/actions/admin";
 import {
+  deleteOrganizationAction,
   grantOrgPlanAction,
   reactivateOrganizationAction,
   suspendOrganizationAction,
 } from "@/server/actions/admin-orgs";
-import { grantableOrgPlans, organizationDetail } from "@/server/services/admin-orgs";
+import {
+  DELETE_ORG_WORD,
+  grantableOrgPlans,
+  organizationDeletionPreview,
+  organizationDetail,
+} from "@/server/services/admin-orgs";
 import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { GRACE_DAYS, resolvePlan } from "@/server/entitlements";
@@ -192,9 +199,126 @@ export default async function AdminOrganizations({
       partenaires: t("orgs.tab.partners"),
     })[id];
 
+  // « Supprimer l'entreprise » opens its own screen (Ephraïm, 29/10/2026): the justification,
+  // what goes with it, and the accounts of its members that stay.
+  if (fiche && canAct && fiche.type !== "partner" && action === "supprimer") {
+    const preview = await organizationDeletionPreview(db, fiche.id);
+    return (
+      <>
+        <AdminPageHeader
+          eyebrow={
+            <Link
+              href={ficheHref}
+              className="inline-flex items-center gap-1.5 font-semibold text-sapin hover:underline"
+            >
+              <Icon name="chev-l" className="size-3.5" />
+              {t("orgs.delete.back")}
+            </Link>
+          }
+          title={t("orgs.delete.title", { org: fiche.name })}
+          subtitle={t("orgs.delete.subtitle")}
+        />
+        {errorKey && (
+          <Alert
+            tone="error"
+            title={t(errorKey === "reason" ? "orgs.delete.error" : "orgs.error.status")}
+          />
+        )}
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
+          <div className="flex min-w-0 flex-1 flex-col gap-4">
+            <SensitivePanel
+              title={t("orgs.delete.text")}
+              text={t("orgs.delete.confirm", { org: fiche.name })}
+              closeHref={ficheHref}
+            >
+              <form action={deleteOrganizationAction} className="flex flex-col gap-3.5">
+                <input type="hidden" name="organizationId" value={fiche.id} />
+                <input type="hidden" name="back" value={`${ficheHref}&action=supprimer`} />
+                <ReasonField
+                  id="organisations-delete-reason"
+                  label={t("orgs.delete.justification")}
+                  rows={4}
+                  maxLength={1000}
+                />
+                <TextField
+                  id="organisations-delete-word"
+                  name="confirmWord"
+                  required
+                  autoComplete="off"
+                  placeholder={DELETE_ORG_WORD}
+                  label={t("orgs.delete.typeWord")}
+                />
+                <div className="flex flex-wrap justify-end gap-2">
+                  <ButtonLink href={ficheHref} scroll={false} variant="tertiary">
+                    {tc("cancel")}
+                  </ButtonLink>
+                  <Button type="submit" variant="danger">
+                    {t("orgs.delete.submit")}
+                  </Button>
+                </div>
+              </form>
+            </SensitivePanel>
+          </div>
+          <section
+            aria-labelledby="organisations-supprimer-bilan"
+            className="jm-admin-card flex flex-col gap-3 rounded-[24px] bg-blanc px-5 py-5 lg:w-[400px] lg:shrink-0 lg:px-[22px]"
+          >
+            <h2
+              id="organisations-supprimer-bilan"
+              className="text-[16px] leading-[22px] font-semibold"
+            >
+              {t("orgs.delete.whatHappens")}
+            </h2>
+            <ul className="flex flex-col gap-2 text-[12.5px] leading-[18px]">
+              <li className="flex items-start gap-2.5">
+                <Icon name="fermer" className="mt-px size-4 shrink-0 text-corail-fonce" />
+                {t("orgs.delete.gone", { jobs: preview.jobs, applications: preview.applications })}
+              </li>
+              <li className="flex items-start gap-2.5">
+                <Icon name="profil" className="mt-px size-4 shrink-0" />
+                {t("orgs.delete.accountsKept")}
+              </li>
+              {preview.entities > 0 && (
+                <li className="flex items-start gap-2.5">
+                  <Icon name="entreprise" className="mt-px size-4 shrink-0" />
+                  {t("orgs.delete.entities", { count: preview.entities })}
+                </li>
+              )}
+              {preview.payments > 0 && (
+                <li className="flex items-start gap-2.5">
+                  <Icon name="mobile-money" className="mt-px size-4 shrink-0" />
+                  {t("orgs.delete.payments", { count: preview.payments })}
+                </li>
+              )}
+            </ul>
+            {preview.members.length > 0 && (
+              <>
+                <h3 className="border-t border-brume pt-3 text-[13px] font-semibold">
+                  {t("orgs.delete.members")}
+                </h3>
+                <ul className="flex flex-col gap-1.5 text-[12.5px] leading-[18px]">
+                  {preview.members.map((member) => (
+                    <li key={member.user.id} className="flex items-center justify-between gap-3">
+                      <span className="min-w-0 truncate font-medium">{member.user.name}</span>
+                      <span className="shrink-0 text-ardoise">
+                        {t(`memberRole.${member.role}`)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </section>
+        </div>
+        <AuditNotice />
+      </>
+    );
+  }
+
   return (
     <>
       <AdminPageHeader title={t("orgs.title")} />
+      {params.ok === "deleted" && <AdminDone title={t("orgs.delete.done", { org: okOrg })} />}
       {params.ok === "verifiee" && (
         <AdminDone
           title={t("orgs.verify.approved", { org: okOrg })}
