@@ -344,6 +344,8 @@ export type HeadValues = {
   socials: Record<SocialKind, string>;
   showEmail: boolean;
   headline: string;
+  /** The Cap (`targetJob`): chosen at sign-up, changed here when the project moves. */
+  cap: string;
   city: string;
   summary: string;
   availability: "open" | "listening" | "not_looking";
@@ -408,6 +410,7 @@ export function HeadForm({
             saveCareerHeadAction({
               name: form.name,
               headline: form.headline,
+              ...(recruiter ? {} : { cap: form.cap }),
               city: form.city,
               summary: form.summary,
               availability: form.availability,
@@ -489,9 +492,35 @@ export function HeadForm({
               onChange={(event) => set({ headline: event.target.value })}
               placeholder={t("headlinePlaceholder")}
               maxLength={120}
+              aria-describedby="ca-titre-aide"
             />
           )}
         </Field>
+      )}
+      {recruiter ? null : (
+        <p id="ca-titre-aide" className="nb-meta nb-ca-aide">
+          {t("headlineHint")}
+        </p>
+      )}
+      {recruiter ? null : (
+        <Field label={t("cap")}>
+          {(id) => (
+            <input
+              id={id}
+              className="nb-ca-in"
+              value={form.cap}
+              onChange={(event) => set({ cap: event.target.value })}
+              placeholder={t("capPlaceholder")}
+              maxLength={120}
+              aria-describedby="ca-cap-aide"
+            />
+          )}
+        </Field>
+      )}
+      {recruiter ? null : (
+        <p id="ca-cap-aide" className="nb-meta nb-ca-aide">
+          {t("capHint")}
+        </p>
       )}
       <Field label={t("city")}>
         {(id) => (
@@ -514,6 +543,7 @@ export function HeadForm({
         </span>
         <PhoneIcon name="chevron" size={18} />
       </Link>
+      {recruiter ? null : <p className="nb-meta nb-ca-aide">{t("cvHint")}</p>}
       {recruiter ? null : (
         <Chips
           label={t("availability")}

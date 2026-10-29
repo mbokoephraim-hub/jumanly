@@ -42,6 +42,7 @@ export default async function CareerEditPage() {
           ) as Record<SocialKind, string>,
           showEmail: profile.showEmail,
           headline: profile.headline ?? "",
+          cap: profile.targetJob ?? "",
           city: profile.user.city ?? "",
           summary: profile.summary ?? "",
           availability: profile.availability,

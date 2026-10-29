@@ -61,7 +61,7 @@ test.describe("Carrière v3 · créer un CV au téléphone", () => {
     await section.click();
     await expect(section).toHaveAttribute("aria-checked", before ?? "true");
     await page.getByRole("button", { name: /^Profil professionnel/ }).click();
-    await page.getByLabel("Votre profil en quelques phrases").fill(SUMMARY);
+    await page.getByLabel("Bio de candidature").fill(SUMMARY);
     await expect(page.locator(".nb-cvf-page .cv-pages").getByText(SUMMARY)).toBeVisible();
     await expectAccessible(page);
     await page.getByRole("button", { name: "Continuer vers l’aperçu" }).click();
