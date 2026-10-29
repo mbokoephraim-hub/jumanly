@@ -16,6 +16,7 @@ import {
   phoneRequests,
   type PhoneConversation,
 } from "@/server/services/messages-phone";
+import { connectionsHub } from "@/server/services/connections-hub";
 import { callAllowed } from "@/server/services/video-call";
 import { initialsOf, shortName } from "../fil/data";
 import {
@@ -28,7 +29,7 @@ import {
 } from "./data";
 import { PhoneMessages } from "./inbox";
 import { PhoneThread } from "./thread";
-import type { InboxView, ThreadView } from "./types";
+import type { ConnexionsView, InboxView, MutualView, ThreadView } from "./types";
 
 type Viewer = { id: string; showPresence: boolean };
 
@@ -36,7 +37,9 @@ type Viewer = { id: string; showPresence: boolean };
 export async function MessagesTexts({ children }: { children: ReactNode }) {
   const messages = await getMessages();
   return (
-    <NextIntlClientProvider messages={pickMessages(messages, ["phoneMsg", "phoneChat", "phone"])}>
+    <NextIntlClientProvider
+      messages={pickMessages(messages, ["phoneMsg", "phoneChat", "phoneCx", "phone"])}
+    >
       {children}
     </NextIntlClientProvider>
   );
@@ -68,6 +71,65 @@ export async function inboxView(user: Viewer, now = new Date()): Promise<InboxVi
       who: words.ofOrganization(row.organization),
       note: row.message,
       job: row.job?.title ?? null,
+    })),
+  };
+}
+
+/**
+ * « Connexions » of the Chat (Ephraïm 29/10/2026): the requests, the suggestions and my
+ * connections, worded for the phone.
+ */
+export async function connexionsView(user: Viewer, now = new Date()): Promise<ConnexionsView> {
+  const [hub, requests, words, format, t] = await Promise.all([
+    connectionsHub(db, user.id),
+    phoneRequests(db, user.id, now),
+    messageWords(user, now),
+    getFormatter(),
+    getTranslations("phoneCx"),
+  ]);
+  const ago = (date: Date) => format.relativeTime(date, now);
+  const mutual = (ids: string[]): MutualView => {
+    const known = ids.flatMap((id) => {
+      const person = hub.people.get(id);
+      return person ? [{ key: id, who: words.ofPerson(person, null) }] : [];
+    });
+    const first = known[0];
+    return {
+      count: known.length,
+      text: first ? t("mutual", { name: first.who.first, rest: known.length - 1 }) : "",
+      faces: known.slice(0, 3),
+    };
+  };
+  return {
+    received: hub.received.map((row) => ({
+      id: row.id,
+      who: words.ofPerson(row.person, null),
+      note: row.note,
+      ago: ago(row.at),
+      mutual: mutual(row.mutual),
+    })),
+    orgRequests: requests.contacts.map((row) => ({
+      id: row.id,
+      who: words.ofOrganization(row.organization),
+      note: row.message,
+      job: row.job?.title ?? null,
+    })),
+    sent: hub.sent.map((row) => ({
+      id: row.id,
+      who: words.ofPerson(row.person, null),
+      ago: ago(row.at),
+    })),
+    connections: hub.connections.map((row) => ({
+      connectionId: row.connectionId,
+      conversationId: row.conversationId,
+      who: words.ofPerson(row.person, null),
+      since: ago(row.since),
+      mutual: mutual(row.mutual),
+    })),
+    suggestions: hub.suggestions.map((row) => ({
+      who: words.ofPerson(row.person, null),
+      mutual: mutual(row.mutual),
+      reason: row.reason,
     })),
   };
 }

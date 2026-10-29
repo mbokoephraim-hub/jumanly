@@ -58,7 +58,9 @@ export default async function ConnectionsPage({
   // Modèle B (B8, B9): connections and their requests are in Messages on a phone.
   await phoneTalentRedirect(
     user.id,
-    one(params.onglet) === "demandes" ? "/app/messages/demandes" : "/app/messages",
+    one(params.onglet) === "demandes"
+      ? "/app/messages/connexions?onglet=demandes"
+      : "/app/messages/connexions?onglet=reseau",
   );
   const t = await getTranslations();
   const tab = one(params.onglet) === "demandes" ? "demandes" : "connexions";

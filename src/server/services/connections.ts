@@ -6,11 +6,14 @@
  *   profile, and the other person decides;
  * - the person who receives a request accepts or ignores it, and the requester is not told;
  * - either side can remove a connection: the conversation stays readable but accepts no message;
- * - blocking stops any new request in both directions; a report reaches the moderation queue.
+ * - blocking stops any new request in both directions; a report reaches the moderation queue;
+ * - a new request reaches the other person's bell, and an accepted one the requester's (Ephraïm
+ *   29/10/2026, « Connexions » of the Chat).
  * No connection data is used for matching.
  */
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { findablePeopleWhere } from "./explore";
+import { notify } from "./notifications";
 
 export class ConnectionError extends Error {
   constructor(readonly code: "notFound" | "self" | "blocked") {
@@ -232,12 +235,26 @@ export async function requestConnection(
         respondedAt: null,
       },
     });
-    return "sent";
+  } else {
+    await db.connection.create({
+      data: { requesterId: userId, addresseeId: otherId, createdAt: now },
+    });
   }
-  await db.connection.create({
-    data: { requesterId: userId, addresseeId: otherId, createdAt: now },
-  });
+  await tell(db, userId, otherId, "connectionRequest", "/app/messages/connexions");
   return "sent";
+}
+
+/** The bell of `to`: « {name} vous demande en connexion », « {name} a accepté… ». */
+async function tell(
+  db: PrismaClient,
+  fromId: string,
+  toId: string,
+  type: "connectionRequest" | "connectionAccepted",
+  href: string,
+) {
+  const from = await db.user.findUnique({ where: { id: fromId }, select: { name: true } });
+  if (!from) return;
+  await notify(db, { userIds: [toId], type, payload: { name: from.name }, href });
 }
 
 /** Accepts a request I received; the conversation between us opens (or reopens). */
@@ -258,7 +275,16 @@ export async function acceptConnection(
   const conversation = await db.conversation.findUnique({
     where: { connectionId: connection.id },
   });
-  if (conversation) return conversation.id;
+  const id = conversation?.id ?? (await openPeerConversation(db, connection, now));
+  await tell(db, userId, connection.requesterId, "connectionAccepted", `/app/messages/${id}`);
+  return id;
+}
+
+async function openPeerConversation(
+  db: PrismaClient,
+  connection: { id: string; requesterId: string; addresseeId: string },
+  now: Date,
+) {
   const created = await db.conversation.create({
     data: {
       kind: "peer",

@@ -26,7 +26,7 @@ const FILES = [
  * profile is logged (CLAUDE.md § 5). Also the spaces of an institution and of the administration.
  */
 const RECORDED = [
-  /^\/app\/messages\/(?!demandes$)[^/]+(\/.*)?$/,
+  /^\/app\/messages\/(?!(demandes|connexions)$)[^/]+(\/.*)?$/,
   // The recruiter's phone (Modèle B recruteur): its lists load ahead, never a candidate's file,
   // a talent's profile or an application opened from the ATS.
   /^\/app\/hire\/candidats\/[^/]+(\/.*)?$/,

@@ -158,17 +158,21 @@ test.describe("Modèle B · Messages au téléphone", () => {
     await expect(conv.getByText("Baobab Fintech cherche une analyste junior")).toBeVisible();
   });
 
-  test("les demandes : accepter puis écrire, ignorer sans prévenir", async ({ page }) => {
+  test("les connexions : l'icône du Chat, accepter puis écrire, refuser sans prévenir", async ({
+    page,
+  }) => {
     // Sarah's requests (seed `messages.ts`): Grâce's are used by other journeys at the same time.
     await logIn(page, "sarah.fil@jumanly.test");
-    await page.goto("/app/messages/demandes");
-    const requests = page.locator(".nb-ms-dem");
+    await page.goto("/app/messages");
+    await page.getByRole("link", { name: /^Connexions, \d+ demandes? en attente/ }).click();
+    await page.waitForURL("**/app/messages/connexions");
+    const requests = page.locator(".nb-cx");
     await expect(requests.getByText("« On a suivi le même cours SQL ! »")).toBeVisible();
-    const daniel = requests.locator(".nb-ms-demande").filter({ hasText: "Daniel Ilunga" });
-    const fatou = requests.locator(".nb-ms-demande").filter({ hasText: "Fatou Ndiaye" });
-    await fatou.getByRole("button", { name: "Ignorer" }).click();
-    await expect(fatou.getByText("Demande ignorée. Fatou n’est pas prévenu·e.")).toBeVisible();
-    await daniel.getByRole("button", { name: "Accepter" }).click();
+    const daniel = requests.locator(".nb-cx-carte").filter({ hasText: "Daniel Ilunga" });
+    const fatou = requests.locator(".nb-cx-carte").filter({ hasText: "Fatou Ndiaye" });
+    await fatou.getByRole("button", { name: "Refuser la demande de Fatou Ndiaye" }).click();
+    await expect(fatou.getByText("Demande refusée. Fatou n’est pas prévenu·e.")).toBeVisible();
+    await daniel.getByRole("button", { name: "Accepter la demande de Daniel Ilunga" }).click();
     await daniel.getByRole("link", { name: "Écrire à Daniel" }).click();
     await page.waitForURL(/\/app\/messages\/[^/?]+$/);
     await expect(page.locator(".nb-ch-conv").getByText("Daniel Ilunga").first()).toBeVisible();
