@@ -11140,6 +11140,7 @@ Conventions :
 | `phoneCx.accepted` | Vous êtes connectés : {name} est maintenant dans votre Chat. |
 | `phoneCx.acceptedToast` | {name} est maintenant dans vos connexions. |
 | `phoneCx.write` | Écrire à {name} |
+| `phoneCx.later` | Plus tard |
 | `phoneCx.refused` | Demande refusée. {name} n’est pas prévenu·e. |
 | `phoneCx.none.title` | Aucune demande en attente |
 | `phoneCx.none.text` | Quand quelqu’un vous demande en connexion, vous le voyez ici et dans vos notifications. |

@@ -336,7 +336,12 @@ export function PhoneThread({ view }: { view: ThreadView }) {
       {!searching ? (
         <div className="nb-ch-tete-c">
           <header className="nb-ch-conv-h">
-            <PhoneBack fallback="/app/messages" label={tm("back")} />
+            {/* Opened from « Connexions » (Ephraïm 29/10/2026): « Retour » goes to the Chat list. */}
+            <PhoneBack
+              fallback="/app/messages"
+              label={tm("back")}
+              history={params.get("de") !== "connexions"}
+            />
             {who.href ? (
               <Link
                 href={who.href}

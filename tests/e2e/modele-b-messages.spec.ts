@@ -174,8 +174,12 @@ test.describe("Modèle B · Messages au téléphone", () => {
     await expect(fatou.getByText("Demande refusée. Fatou n’est pas prévenu·e.")).toBeVisible();
     await daniel.getByRole("button", { name: "Accepter la demande de Daniel Ilunga" }).click();
     await daniel.getByRole("link", { name: "Écrire à Daniel" }).click();
-    await page.waitForURL(/\/app\/messages\/[^/?]+$/);
-    await expect(page.locator(".nb-ch-conv").getByText("Daniel Ilunga").first()).toBeVisible();
+    await page.waitForURL(/\/app\/messages\/[^/?]+\?de=connexions$/);
+    const conv = page.locator(".nb-ch-conv");
+    await expect(conv.getByText("Daniel Ilunga").first()).toBeVisible();
+    // Leaving the conversation goes to the Chat list, not back to « Connexions ».
+    await conv.getByRole("link", { name: "Retour" }).click();
+    await page.waitForURL((url) => url.pathname === "/app/messages");
   });
 
   test("Messages reste monté : aller-retour sans écran vide", async ({ page }) => {
