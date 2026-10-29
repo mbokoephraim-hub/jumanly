@@ -105,10 +105,9 @@ async function jobSheetWords(): Promise<JobSheetWords> {
       page: (page, total) => t("page", { page, total }),
     },
     issued: (org) => t("issued", { date: today, org }),
-    contract: (key) => (t.has(`contract.${key}`) ? t(`contract.${key}` as "contract.cdi") : key),
-    remote: (key) => (t.has(`remote.${key}`) ? t(`remote.${key}` as "remote.onsite") : key),
-    education: (key) =>
-      t.has(`education.${key}`) ? t(`education.${key}` as "education.bachelor") : key,
+    contract: (key) => (t.has(`contract.${key}` as never) ? t(`contract.${key}` as never) : key),
+    remote: (key) => (t.has(`remote.${key}` as never) ? t(`remote.${key}` as never) : key),
+    education: (key) => (t.has(`education.${key}` as never) ? t(`education.${key}` as never) : key),
     experience: (years) => t("experience", { years }),
     openings: (count) => t("openings", { count }),
     salary: (min, max) =>
