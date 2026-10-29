@@ -5128,3 +5128,22 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
   conversation, et une notification lue (ou « Tout marquer comme lu ») disparaît aussitôt. Ouvrir une
   conversation lit ses notifications.
 - Détail et choix : `docs/decisions/2026-10-29-notifications-telephone.md`. Test : `tests/db/notifications-messages.test.ts`.
+
+## 2026-10-29 · « Mon profil » séparé de Carrière (demande d'Ephraïm)
+
+- Une photo ronde (taille des boutons ronds) en haut de chaque onglet du téléphone (Fil, Explorer, Chat,
+  Formation ; recruteur : tous ses onglets, Fil compris) ouvre « Mon profil » : `/app/profil` pour un talent,
+  `/app/hire/compte/profil` pour un recruteur (le compte est à un toucher, en haut à droite du profil).
+- « Mon profil » du talent : la tête de Carrière (bannière, photo, réseaux, bio, disponibilité, profil complété,
+  Modifier · Partager · Voir comme les autres), puis Publications · À propos (présentation, compétences,
+  expériences, études, certifications Jumanly, langues) · Réalisations (texte, photos, et désormais un ou deux
+  PDF) · Statistiques (visites du profil, vues des publications, impressions dans le Fil, sur 7, 30 ou 90 jours).
+- Statistiques : table `AudienceEvent` (une ligne par personne, jour et profil ou publication ; ses propres
+  visites ne comptent pas ; jamais le nom des visiteurs). Le préchargement n'ouvre plus les profils ni les
+  publications, pour ne pas compter de fausses visites.
+- Carrière : la personne en haut à gauche (photo, nom, « Votre profil est complété à … % »), puis Progression
+  (même contenu + « Mes documents et candidatures ») · Candidatures (Envoyées / Enregistrées, état vide
+  « Trouvez votre toute première opportunité ») · Mes documents (CV, Portfolio, Lettres de motivation sur un
+  écran ; « Nouvelle lettre » a sa page au téléphone, `/app/career/lettres/nouvelle`).
+- Profil complet : photo agrandie (108 px), nom, bio et « À propos » plus lisibles (15 px).
+- Fusionné sans tests ni vérification CI, à la demande d'Ephraïm (« Pas de test fusionne et publie »).

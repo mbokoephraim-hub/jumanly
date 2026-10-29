@@ -20,6 +20,7 @@ import { level, limit } from "@/server/entitlements";
 import { ensureStages } from "./applications";
 import { slugify } from "./accounts";
 import { findSkill } from "./profile";
+import { recordProfileVisit } from "./audience";
 import { notify } from "./notifications";
 
 export type HireContext = { userId: string; organizationId: string; role: MembershipRole };
@@ -560,6 +561,11 @@ export async function recordView(
       metadata: { applicationId },
     },
   });
+  const owner = await db.talentProfile.findUnique({
+    where: { id: application.profileId },
+    select: { userId: true },
+  });
+  if (owner) await recordProfileVisit(db, ctx.userId, owner.userId);
   if (!application.viewedAt) {
     const updated = await db.application.update({
       where: { id: application.id },

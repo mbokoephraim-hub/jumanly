@@ -116,7 +116,7 @@ export function CvReader({
             {notice.kind === "profil" ? (
               <>
                 {" "}
-                <Link href="/app/career/cv?onglet=profil">{t("seeProfile")}</Link>
+                <Link href="/app/profil">{t("seeProfile")}</Link>
               </>
             ) : null}
           </span>

@@ -21,7 +21,8 @@ const SCOPES: Record<RecruiterTab, string[]> = {
 };
 
 /**
- * The recruiter's avatar at the top right of each tab (brief § 2, Logos): it opens the account;
+ * The recruiter's avatar at the top right of each tab (brief § 2, Logos): it opens their profile
+ * (Ephraïm, 29/10/2026; the account is one tap further, at the top of the profile);
  * in its corner, the logo of the company (or its initials), shown only once the person belongs to
  * it — a membership is only created when the administrator accepted the request.
  */
@@ -35,7 +36,7 @@ export async function RhAvatar() {
       })
     : null;
   return (
-    <Link href="/app/hire/compte" className="nb-rh-moi" aria-label={t("account")}>
+    <Link href="/app/hire/compte/profil" className="nb-rh-moi" aria-label={t("profile")}>
       <span>
         {user.image ? (
           // eslint-disable-next-line @next/next/no-img-element -- a 36 px picture

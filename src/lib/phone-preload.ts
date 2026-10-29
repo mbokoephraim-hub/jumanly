@@ -34,6 +34,9 @@ const RECORDED = [
   /^\/app\/hire\/talents\/[^/]+(\/.*)?$/,
   /^\/app\/hire\/offres\/[^/]+\/ats\/[^/]+(\/.*)?$/,
   /^\/app\/(partenaire|organisation)(\/|$)/,
+  // A person's profile and a post count a visit and a view (Mon profil › Statistiques).
+  /^\/app\/personnes\/[^/]+$/,
+  /^\/app\/fil\/(?!(publier|mes-publications)$)[^/]+$/,
 ];
 
 /**

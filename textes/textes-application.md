@@ -8011,6 +8011,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phone.nav.messagesUnread` | Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}} |
 | `phone.back` | Retour |
 | `phone.close` | Fermer |
+| `phone.me` | Mon profil |
 | `phone.cancel` | Annuler |
 | `phone.toasts` | Messages de confirmation |
 | `phone.search.back` | Fermer la recherche |
@@ -9009,7 +9010,25 @@ Conventions :
 | `phoneProfile.photoViewer.error` | Cette photo n’a pas pu être enregistrée. Essayez une image JPEG ou PNG de moins de 5 Mo. |
 | `phoneProfile.photoViewer.failed` | Une erreur est survenue. Réessayez. |
 | `phoneProfile.photoOpen` | Voir la photo de profil en grand |
-| `phoneProfile.tab.suivi` | Suivi |
+| `phoneProfile.tab.statistiques` | Statistiques |
+| `phoneProfile.stats.title` | Statistiques de votre profil |
+| `phoneProfile.stats.period` | Période |
+| `phoneProfile.stats.days` | {days} jours |
+| `phoneProfile.stats.new` | Nouveau |
+| `phoneProfile.stats.same` | Stable |
+| `phoneProfile.stats.up` | +{percent} % |
+| `phoneProfile.stats.down` | −{percent} % |
+| `phoneProfile.stats.visits.label` | Visites du profil |
+| `phoneProfile.stats.visits.hint` | Personnes venues voir votre profil |
+| `phoneProfile.stats.views.label` | Vues des publications |
+| `phoneProfile.stats.views.hint` | Personnes qui ont ouvert une de vos publications |
+| `phoneProfile.stats.impressions.label` | Impressions |
+| `phoneProfile.stats.impressions.hint` | Fois où vos publications sont apparues dans un Fil |
+| `phoneProfile.stats.chart` | Visites du profil |
+| `phoneProfile.stats.perDay` | par jour |
+| `phoneProfile.stats.perWeek` | par semaine |
+| `phoneProfile.stats.chartLabel` | {count, plural, one {# visite} other {# visites}} sur {days} jours |
+| `phoneProfile.stats.note` | Chaque personne compte une fois par jour. Jumanly ne montre jamais qui a vu votre profil. |
 | `phoneProfile.own.edit` | Modifier |
 | `phoneProfile.own.add` | Ajouter |
 | `phoneProfile.own.about` | À propos |
@@ -9408,6 +9427,54 @@ Conventions :
 | `phoneCareer.tab.portfolio` | Portfolio |
 | `phoneCareer.tab.progression` | Progression |
 | `phoneCareer.tab.candidatures` | Candidatures |
+| `phoneCareer.tab.documents` | Mes documents |
+| `phoneCareer.me.title` | Mon profil |
+| `phoneCareer.me.open` | Ouvrir mon profil, {name} |
+| `phoneCareer.me.complete` | Votre profil est complété à {percent} % |
+| `phoneCareer.me.publish` | Publier dans le Fil |
+| `phoneCareer.me.noPosts` | Vous n’avez encore rien publié. Partagez une réussite, une question ou une réalisation. |
+| `phoneCareer.me.managePosts` | Gérer toutes mes publications |
+| `phoneCareer.me.worksIntro` | Montrez ce que vous avez fait : un texte, des photos ou un document. Vos réalisations sont visibles sur votre profil. |
+| `phoneCareer.me.worksAddText` | Un texte, des photos ou un document PDF |
+| `phoneCareer.me.certificates` | Certifications |
+| `phoneCareer.me.certificatesAdd` | Se former |
+| `phoneCareer.me.certificatesAddLabel` | Se former pour obtenir une attestation |
+| `phoneCareer.me.certificatesEmpty` | Vos attestations Jumanly s’afficheront ici. Suivez une formation pour en obtenir une. |
+| `phoneCareer.follow.title` | Mes documents et candidatures |
+| `phoneCareer.follow.cvs` | {count, plural, one {CV} other {CV}} |
+| `phoneCareer.follow.cvScore` | CV principal : {score} % |
+| `phoneCareer.follow.cvFile` | CV importé, prêt à envoyer |
+| `phoneCareer.follow.cvNone` | Créez votre premier CV |
+| `phoneCareer.follow.letters` | {count, plural, one {Lettre} other {Lettres}} |
+| `phoneCareer.follow.lettersReady` | À adapter à chaque offre |
+| `phoneCareer.follow.lettersNone` | Orbi peut vous aider |
+| `phoneCareer.follow.works` | {count, plural, one {Réalisation} other {Réalisations}} |
+| `phoneCareer.follow.worksFeatured` | {count, plural, =0 {Aucune mise en avant} one {# mise en avant} other {# mises en avant}} |
+| `phoneCareer.follow.worksNone` | Montrez votre travail |
+| `phoneCareer.follow.active` | {count, plural, one {Candidature en cours} other {Candidatures en cours}} |
+| `phoneCareer.follow.interviews` | {count, plural, one {# entretien prévu} other {# entretiens prévus}} |
+| `phoneCareer.follow.applied` | {count, plural, one {# envoyée au total} other {# envoyées au total}} |
+| `phoneCareer.follow.noneYet` | Postuler est gratuit |
+| `phoneCareer.apps.which` | Afficher |
+| `phoneCareer.apps.sent` | Envoyées · {count} |
+| `phoneCareer.apps.saved` | Enregistrées · {count} |
+| `phoneCareer.apps.savedEmpty` | Aucune offre enregistrée. Touchez le signet d’une offre pour la retrouver ici. |
+| `phoneCareer.apps.savedLine` | {company} · {city} |
+| `phoneCareer.apps.savedOpen` | Toujours ouverte · touchez pour postuler |
+| `phoneCareer.apps.savedClosed` | Offre fermée |
+| `phoneCareer.apps.firstTitle` | Trouvez votre toute première opportunité |
+| `phoneCareer.apps.firstCta` | Explorer les offres |
+| `phoneCareer.apps.hint` | Touchez une candidature pour suivre son avancée, la compléter ou la retirer. |
+| `phoneCareer.docs.cv` | CV |
+| `phoneCareer.docs.portfolio` | Portfolio |
+| `phoneCareer.docs.portfolioOn` | Votre portfolio est en ligne |
+| `phoneCareer.docs.portfolioOff` | Votre portfolio n’est pas encore publié |
+| `phoneCareer.docs.portfolioCount` | {count, plural, =0 {Aucune réalisation} one {# réalisation} other {# réalisations}} |
+| `phoneCareer.docs.portfolioSee` | Voir mon portfolio |
+| `phoneCareer.docs.portfolioManage` | Mes réalisations |
+| `phoneCareer.docs.letters` | Lettres de motivation |
+| `phoneCareer.docs.lettersEmpty` | Aucune lettre pour l’instant. Orbi peut en rédiger une à partir de votre profil et d’une offre. |
+| `phoneCareer.docs.letterNew` | Nouvelle lettre |
 | `phoneCareer.suggestion` | {count, plural, one {Ajoutez {skill} à vos compétences : une offre ouverte le demande.} other {Ajoutez {skill} à vos compétences : # offres ouvertes le demandent.}} |
 | `phoneCareer.suggestionAdd` | Ajouter |
 | `phoneCareer.suggestionAdded` | {skill} est ajouté à vos compétences. |
@@ -10015,6 +10082,10 @@ Conventions :
 | `phoneCareer.project.photoRemove` | Retirer la photo {n} |
 | `phoneCareer.project.photoError` | Cette photo n’a pas pu être lue. Essayez-en une autre. |
 | `phoneCareer.project.photosHint` | Vérifiez qu’aucun numéro ni code personnel n’apparaît sur vos photos avant d’enregistrer. |
+| `phoneCareer.project.documents` | Documents (PDF) |
+| `phoneCareer.project.documentAdd` | Joindre un document PDF |
+| `phoneCareer.project.documentRemove` | Retirer {name} |
+| `phoneCareer.project.documentsHint` | Un rapport, une attestation, une présentation : deux documents au plus, 4 Mo en tout avec les photos. |
 | `phoneCareer.project.title` | Titre |
 | `phoneCareer.project.titlePlaceholder` | Ex. : Tableau de bord des ventes |
 | `phoneCareer.project.description` | Description |
@@ -15041,6 +15112,7 @@ Conventions :
 | `phoneRh.nav.chat` | Chat |
 | `phoneRh.nav.messagesUnread` | Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}} |
 | `phoneRh.head.account` | Mon compte |
+| `phoneRh.head.profile` | Mon profil |
 | `phoneRh.head.settings` | Paramètres |
 | `phoneRh.head.notifications` | {count, plural, =0 {Notifications} one {Notifications, # nouvelle} other {Notifications, # nouvelles}} |
 | `phoneRh.head.newOffer` | Publier une offre |
@@ -16392,6 +16464,7 @@ Conventions :
 | `phoneRhCompte.profile.editHead` | Modifier |
 | `phoneRhCompte.profile.editHiring` | Recrutement |
 | `phoneRhCompte.profile.seeAsOthers` | Voir mon profil comme les autres |
+| `phoneRhCompte.profile.account` | Mon compte |
 | `phoneRhCompte.profile.languagesEdit` | Modifier |
 | `phoneRhCompte.follow.title` | Tableau de bord |
 | `phoneRhCompte.follow.offers` | Offres en cours |

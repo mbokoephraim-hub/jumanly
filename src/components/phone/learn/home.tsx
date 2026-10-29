@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { OrbiDisc, PhoneIcon } from "../icon";
+import { MeAvatar } from "../me";
 import { askOrbiFrom } from "../orbi-bus";
 import type { CourseCard, FormationView } from "./data";
 import { CourseArt, CourseLine } from "./parts";
@@ -80,6 +81,7 @@ export function PhoneFormation({ view }: { view: FormationView }) {
         <Link href="/app/parametres" className="nb-rond" aria-label={t("settings")}>
           <PhoneIcon name="reglages" size={23} />
         </Link>
+        <MeAvatar />
       </header>
 
       <FormationSearch

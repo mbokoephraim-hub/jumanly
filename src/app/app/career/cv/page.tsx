@@ -12,6 +12,7 @@ import { ImportDrop } from "@/components/talent/cv/import-file";
 import { importGroups } from "@/components/talent/cv/import-groups";
 import { OrbiLimit, orbiLimitCode } from "@/components/talent/cv/orbi-limit";
 import { LetterMenu } from "@/components/talent/cv/letter-menu";
+import { LetterCreateForm, LetterProofreadForm } from "@/components/talent/cv/letter-form";
 import { PdfButton } from "@/components/talent/cv/pdf-button";
 import { OrbiCvCard } from "@/components/talent/cv/studio/orbi-card";
 import { CvPage } from "@/components/talent/cv/studio/preview";
@@ -23,25 +24,22 @@ import { splitName } from "@/features/cv/render/build";
 import { templateOf } from "@/features/cv/templates/registry";
 import { dynamic } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
-import { generateDocumentAction, proofreadAction } from "@/server/actions/career-documents";
 import { createCv, deleteCv, duplicateCv, setPrimaryCv } from "@/server/actions/cv";
 import {
   applyCvImportAction,
   cancelCvImportAction,
   readCvFileAction,
 } from "@/server/actions/cv-import";
-import { aiFeatures, AI_CREDITS_KEY } from "@/server/ai";
+import { AI_CREDITS_KEY } from "@/server/ai";
 import { requireUser } from "@/server/auth/session";
 import { isPhone } from "@/server/view";
 import { db } from "@/server/db";
 import { usage } from "@/server/entitlements";
 import {
   aiState,
-  documentTypes,
   DOCUMENTS_GATE,
   listDocuments,
   parseDocument,
-  PROOFREAD_MAX,
   tailorOffers,
 } from "@/server/services/career-documents";
 import { MAX_CVS, parseCv } from "@/server/services/cv";
@@ -502,65 +500,7 @@ export default async function CvAndDocumentsPage({ searchParams }: PageProps<"/a
         openParam="nouvelle"
         defaultOpen={params.nouvelle === "1"}
       >
-        {generate.state !== "ready" ? (
-          <OrbiLimit code={generate.state} plan={plan} />
-        ) : (
-          <form action={generateDocumentAction} className="t-flux">
-            <p className="t-ss">{t("docs.letters.create.lead")}</p>
-            <div className="t-champ">
-              <label htmlFor="lettre-type">{t("docs.letters.create.type")}</label>
-              <select id="lettre-type" name="type" defaultValue="letter">
-                {documentTypes.map((type) => (
-                  <option key={type} value={type}>
-                    {d(`docs.letters.type.${type}`)}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="t-champ">
-              <label htmlFor="lettre-offre">{t("docs.letters.create.offer")}</label>
-              <select id="lettre-offre" name="jobId" defaultValue="">
-                <option value="">{t("docs.letters.create.noOffer")}</option>
-                {offers.map((offer) => (
-                  <option key={offer.id} value={offer.id}>
-                    {[offer.title, offer.company].join(" · ")}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <fieldset className="t-champ">
-              <legend className="t-lab-c">{t("docs.letters.create.tone")}</legend>
-              <div className="t-puces">
-                {(["formal", "warm", "direct"] as const).map((tone) => (
-                  <label key={tone} className="t-puce t-press">
-                    <input
-                      type="radio"
-                      name="tone"
-                      value={tone}
-                      defaultChecked={tone === "formal"}
-                      className="sr-only"
-                    />
-                    {t(`docs.letters.create.tones.${tone}`)}
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-            <div className="t-champ">
-              <label htmlFor="lettre-points">{t("docs.letters.create.points")}</label>
-              <textarea id="lettre-points" name="points" maxLength={600} rows={3} />
-            </div>
-            <p className="t-gar">
-              <TalentIcon name="cadenas" size="s" />
-              {t("docs.letters.create.note", {
-                count: aiFeatures.career_document.credits,
-              })}
-            </p>
-            <button type="submit" className="t-bt t-p t-pl t-press">
-              <OrbiMark size={20} />
-              {t("docs.letters.create.submit")}
-            </button>
-          </form>
-        )}
+        <LetterCreateForm state={generate.state} plan={plan} offers={offers} />
         {check.state === "ready" && (
           <SheetButton target="lettre-relire" className="t-lien-m t-press">
             <TalentIcon name="modifier" size="s" />
@@ -570,22 +510,7 @@ export default async function CvAndDocumentsPage({ searchParams }: PageProps<"/a
       </Sheet>
       {check.state === "ready" && (
         <Sheet id="lettre-relire" title={t("docs.letters.proofread.title")} closeLabel={close}>
-          <form action={proofreadAction} className="t-flux">
-            <p className="t-ss">{t("docs.letters.proofread.lead")}</p>
-            <div className="t-champ">
-              <label htmlFor="relire-titre">{t("docs.letters.proofread.name")}</label>
-              <span className="t-verre t-saisie">
-                <input id="relire-titre" name="title" maxLength={120} />
-              </span>
-            </div>
-            <div className="t-champ">
-              <label htmlFor="relire-texte">{t("docs.letters.proofread.text")}</label>
-              <textarea id="relire-texte" name="text" required maxLength={PROOFREAD_MAX} rows={8} />
-            </div>
-            <button type="submit" className="t-bt t-p t-pl t-press">
-              {t("docs.letters.proofread.submit", { count: aiFeatures.proofread.credits })}
-            </button>
-          </form>
+          <LetterProofreadForm />
         </Sheet>
       )}
 

@@ -18,6 +18,7 @@ import { matchesForUser } from "@/server/matching/service";
 import { educationRanks } from "@/server/matching/normalize";
 import type { MatchExplanation } from "@/server/matching/types";
 import { hirePermissions, HireError, remoteModes, type HireContext } from "./hire";
+import { recordProfileVisit } from "./audience";
 import { notify } from "./notifications";
 
 const orgSubject = (ctx: HireContext) => ({
@@ -489,6 +490,11 @@ export async function viewTalentProfile(
       metadata: { source: "talent_search" },
     },
   });
+  const owner = await db.talentProfile.findUnique({
+    where: { id: profile.id },
+    select: { userId: true },
+  });
+  if (owner) await recordProfileVisit(db, ctx.userId, owner.userId);
   const last = await db.contactRequest.findFirst({
     where: { organizationId: ctx.organizationId, profileId: profile.id },
     orderBy: { createdAt: "desc" },

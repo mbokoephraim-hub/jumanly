@@ -38,7 +38,7 @@ a.nb-cr-rb {
 .nb-cr-initiales {
   background: var(--nb-lime);
   color: var(--nb-sur-lime, #0f3f37);
-  font-size: 22px;
+  font-size: 32px;
   font-weight: 800;
 }
 .nb-cr-appareil {
@@ -78,7 +78,7 @@ a.nb-cr-rb {
   inset: -6px -3px;
 }
 .nb-cr .nb-cr-nom {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.01em;
   display: flex;
@@ -1164,4 +1164,428 @@ button.nb-cr-cv-l {
 .nb-cr .nb-cr-suivi-vide {
   font-size: 12px;
   color: var(--nb-brume);
+}
+
+/* ─── Carrière and « Mon profil » (demande d'Ephraïm du 29/10/2026) ─────────────────────────── */
+
+/* The head of Carrière: the person's round (as large as the round buttons), their name and how
+   complete their profile is; it stays at the top with the tabs. */
+.nb-cr-collant {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--nb-nuit);
+}
+.nb-cr-collant .nb-pf-onglets {
+  position: static;
+  padding-top: 4px;
+}
+.nb-app .nb-cr-tete {
+  padding-bottom: 8px;
+}
+.nb-cr-moi {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 24px;
+}
+.nb-cr-moi > .nb-av {
+  flex: none;
+  box-shadow:
+    0 0 0 2px var(--nb-nuit),
+    0 0 0 3.5px var(--nb-lime);
+}
+.nb-cr-moi-t {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.nb-cr-moi-t b {
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-cr-moi-t small {
+  font-size: 12.5px;
+  color: var(--nb-brume);
+}
+.nb-cr-moi-barre {
+  display: block;
+  width: 120px;
+  max-width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--nb-haute);
+  overflow: hidden;
+}
+.nb-cr-moi-barre > span {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--nb-lime);
+}
+.nb-app .nb-tete-moi .nb-av {
+  box-shadow: 0 0 0 1px rgba(var(--nb-voile), 0.14);
+}
+
+/* Progression › « Mes documents et candidatures »: four tiles in two columns. */
+.nb-cr-suivi-doc ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nb-cr-suivi-doc li > * {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 8px;
+  row-gap: 2px;
+  padding: 12px;
+  text-align: left;
+  color: inherit;
+  text-decoration: none;
+  font: inherit;
+}
+.nb-cr-suivi-doc i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.nb-cr-suivi-doc b {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.nb-cr-suivi-doc span {
+  grid-column: 1 / -1;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.nb-cr-suivi-doc small {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--nb-brume);
+}
+
+/* Candidatures › « Envoyées · Enregistrées ». */
+.nb-cr-filtre,
+.nb-st-periodes {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.nb-cr-filtre button,
+.nb-st-periodes button {
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(var(--nb-voile), 0.12);
+  background: var(--nb-surface);
+  color: var(--nb-creme);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
+.nb-cr-filtre button[aria-pressed="true"],
+.nb-st-periodes button[aria-pressed="true"] {
+  background: var(--nb-lime);
+  border-color: var(--nb-lime);
+  color: var(--nb-sur-lime, #0f3f37);
+}
+.nb-cr-premiere {
+  align-items: center;
+  text-align: center;
+  padding: 28px 12px 8px;
+}
+.nb-cr-premiere > b {
+  font-size: 18px;
+  font-weight: 800;
+}
+.nb-cr-premiere-i {
+  width: 56px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.14);
+  color: var(--nb-lime-t);
+}
+
+/* Mes documents: CV, Portfolio, Lettres de motivation. */
+.nb-cr .nb-doc-h {
+  margin-bottom: 4px;
+}
+.nb-doc-port,
+.nb-doc-lettre {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+.nb-doc-i {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--nb-haute);
+  color: var(--nb-brume);
+}
+.nb-doc-i[data-on] {
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.16);
+  color: var(--nb-lime-t);
+}
+.nb-doc-i[data-lettre] {
+  background: rgba(244, 196, 99, 0.16);
+  color: #f4c463;
+}
+.nb-doc-t {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.nb-doc-t b {
+  font-size: 14px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-doc-t small {
+  font-size: 12px;
+  color: var(--nb-brume);
+}
+.nb-doc-bts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.nb-doc-lettres {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* « Mon profil »: a line of explanation, the posts, the link to all of them. */
+.nb-moi-intro {
+  margin: 0 0 12px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--nb-brume);
+}
+.nb-pf-pane > .nb-moi-intro {
+  padding: 8px 20px 0;
+  margin-bottom: 0;
+}
+.nb-moi-pubs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 8px 0 0;
+}
+.nb-moi-pubs > .nb-cr-nouveau {
+  width: auto;
+  margin: 0 20px;
+}
+.nb-moi-pubs > .nb-pf-vide {
+  margin: 0 20px;
+}
+.nb-moi-lien {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 20px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--nb-surface);
+  color: var(--nb-creme);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Statistiques: the period, three tiles, the visits as bars. */
+.nb-st .nb-pf-h {
+  margin: 4px 0 10px;
+}
+.nb-st-tuiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nb-st-tuile {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 12px 10px;
+  border-radius: 18px;
+  background: var(--nb-surface);
+  border: 1px solid rgba(var(--nb-voile), 0.06);
+}
+.nb-st-tuile > i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.nb-st-tuile > b {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.nb-st-tuile > span {
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.nb-st-tuile > small {
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--nb-brume);
+}
+.nb-st-tuile > em {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+  background: var(--nb-haute);
+  color: var(--nb-brume);
+}
+.nb-st-tuile > em[data-sens="haut"] {
+  background: rgba(47, 211, 166, 0.16);
+  color: var(--nb-menthe);
+}
+.nb-st-tuile > em[data-sens="bas"] {
+  background: rgba(255, 138, 122, 0.16);
+  color: #ff8a7a;
+}
+.nb-st-courbe {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--nb-surface);
+  border: 1px solid rgba(var(--nb-voile), 0.06);
+}
+.nb-st-courbe p {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0 0 10px;
+  font-size: 13px;
+}
+.nb-st-courbe small {
+  color: var(--nb-brume);
+}
+.nb-st-barres {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 96px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nb-st-barres[data-serre] {
+  gap: 2px;
+}
+.nb-st-barres li {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+.nb-st-barres span {
+  width: 100%;
+  border-radius: 4px 4px 2px 2px;
+  background: var(--nb-lime);
+}
+.nb-st-barres span[data-vide] {
+  background: var(--nb-haute);
+}
+.nb-st-note {
+  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--nb-brume);
+}
+
+/* A réalisation's documents (PDF): in the form, to remove; on the detail, to open. */
+.nb-ca-docs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+}
+.nb-ca-docs a,
+.nb-ca-docs li > span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 12px;
+  border-radius: 14px;
+  background: var(--nb-surface);
+  border: 1px solid rgba(var(--nb-voile), 0.08);
+  color: var(--nb-creme);
+  text-decoration: none;
+  font-size: 13.5px;
+}
+.nb-ca-docs a > span,
+.nb-ca-docs li > span > span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-ca-docs button {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--nb-haute);
+  color: var(--nb-creme);
+}
+.nb-ca-projet-corps .nb-ca-docs {
+  margin-top: 14px;
+}
+.nb-ca-doc-ajout {
+  margin-top: 0;
+  cursor: pointer;
 }

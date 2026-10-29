@@ -26,8 +26,8 @@ import { pagesSeen } from "../pages-seen";
 import { PhoneSheet } from "../sheet";
 import { SOCIAL_KINDS, type SocialKind } from "@/lib/social-links";
 
-/** Where a form of the profile goes back to when it was opened directly. */
-const CAREER = "/app/career/cv";
+/** Where a form of the profile goes back to when it was opened directly: « Mon profil ». */
+const CAREER = "/app/profil";
 
 type Result = { ok: true } | { ok: false; error: string };
 

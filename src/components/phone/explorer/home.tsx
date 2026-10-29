@@ -10,7 +10,7 @@ import {
   activeFilters,
   showsSection,
 } from "@/server/services/explore-filters";
-import { FilAvatar } from "../fil/avatar";
+import { MeAvatar } from "../me";
 import { CompanyCard, OfferCard, PersonRow, SavedLink } from "./cards";
 import type { ExplorerHomeView } from "./data";
 import { FiltersButton, FiltersSheet } from "./filters";
@@ -63,9 +63,7 @@ export function PhoneExplorer({
       <header className="nb-tete-onglet">
         <h1>{t("title")}</h1>
         <SavedLink count={saved} />
-        <Link href="/app/career/cv" className="nb-tete-moi" aria-label={t("account")}>
-          <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={36} />
-        </Link>
+        <MeAvatar />
       </header>
 
       <ExplorerSearch

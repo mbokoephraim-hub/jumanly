@@ -8,6 +8,7 @@ import { profileView, ProfileTexts } from "@/components/phone/profil/server";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { authorFeed } from "@/server/services/feed";
+import { recordProfileVisit } from "@/server/services/audience";
 import { personProfile } from "@/server/services/person-profile";
 import { isPhone } from "@/server/view";
 
@@ -46,6 +47,7 @@ export default async function PersonPage({
     getTranslations("phoneProfile"),
   ]);
   if (!person) notFound();
+  if (!self) await recordProfileVisit(db, user.id, id);
   const view = await profileView(person, { now });
   return (
     <ProfileTexts>

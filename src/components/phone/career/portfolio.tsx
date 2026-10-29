@@ -17,9 +17,11 @@ import { PhoneSheet } from "../sheet";
 import { Field, FormPage, OrbiRewrite, useLeave } from "./edit";
 
 /** Where a page of the portfolio goes back to when it was opened directly. */
-const PORTFOLIO = "/app/career/cv?onglet=portfolio";
+const PORTFOLIO = "/app/profil?onglet=realisations";
 /** « Photos (3 au plus) » (planche Carrière-real-ajout). */
 const PHOTOS_MAX = 3;
+/** Documents (PDF) joined to a project: the files of a project stay at 6 in all. */
+const DOCUMENTS_MAX = 2;
 
 /** The drawing of a project without a photo, as on the tiles of the tab. */
 function Drawing() {
@@ -45,6 +47,8 @@ export type ProjectView = {
   photos: string[];
   link: string | null;
   featured: boolean;
+  /** Documents (PDF) joined to the project, to open. */
+  documents: { name: string; href: string }[];
 };
 
 /**
@@ -121,6 +125,19 @@ export function ProjectDetail({ project }: { project: ProjectView }) {
               </span>
             ))}
           </div>
+        ) : null}
+        {project.documents.length > 0 ? (
+          <ul className="nb-ca-docs" aria-label={t("documents")}>
+            {project.documents.map((file) => (
+              <li key={file.href}>
+                <a href={file.href} target="_blank" rel="noopener noreferrer">
+                  <PhoneIcon name="document" size={18} />
+                  <span>{file.name}</span>
+                  <PhoneIcon name="chevron" size={16} />
+                </a>
+              </li>
+            ))}
+          </ul>
         ) : null}
       </div>
       <div className="nb-ca-it" data-ligne="">
@@ -200,9 +217,9 @@ export type ProjectValues = {
   link: string;
   skills: string[];
   visible: boolean;
-  /** Photos already saved (their key and address) and other files kept as they are. */
+  /** Photos already saved (their key and address) and the documents (PDF) already joined. */
   photos: { key: string; src: string }[];
-  others: string[];
+  documents: { key: string; name: string }[];
 };
 
 type Added = { file: File; preview: string };
@@ -222,6 +239,8 @@ export function ProjectForm({ values }: { values: ProjectValues }) {
   const [link, setLink] = useState(values.link);
   const [kept, setKept] = useState(values.photos);
   const [added, setAdded] = useState<Added[]>([]);
+  const [keptDocs, setKeptDocs] = useState(values.documents);
+  const [addedDocs, setAddedDocs] = useState<File[]>([]);
   const [share, setShare] = useState(!editing);
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
@@ -265,8 +284,9 @@ export function ProjectForm({ values }: { values: ProjectValues }) {
       form.set("visible", values.visible ? "1" : "0");
       for (const skill of values.skills) form.append("skills", skill);
       for (const photo of kept) form.append("keep", photo.key);
-      for (const key of values.others) form.append("keep", key);
+      for (const file of keptDocs) form.append("keep", file.key);
       for (const item of added) form.append("files", item.file);
+      for (const file of addedDocs) form.append("files", file);
       const result = await saveCareerProjectAction(form).catch(() => null);
       if (!result?.ok) {
         const code = result?.error ?? "error";
@@ -339,6 +359,52 @@ export function ProjectForm({ values }: { values: ProjectValues }) {
           ) : null}
         </div>
         <p className="nb-meta">{t("photosHint")}</p>
+      </div>
+      {/* A document to read (Ephraïm, 29/10/2026): a report, a certificate, a deck, in PDF. */}
+      <div className="nb-ca-ch">
+        <span>{t("documents")}</span>
+        {keptDocs.length + addedDocs.length > 0 ? (
+          <ul className="nb-ca-docs">
+            {[
+              ...keptDocs.map((file) => ({ id: file.key, name: file.name, kept: true })),
+              ...addedDocs.map((file, n) => ({ id: `n-${n}`, name: file.name, kept: false })),
+            ].map((file) => (
+              <li key={file.id}>
+                <span>
+                  <PhoneIcon name="document" size={18} />
+                  <span>{file.name}</span>
+                  <button
+                    type="button"
+                    aria-label={t("documentRemove", { name: file.name })}
+                    onClick={() =>
+                      file.kept
+                        ? setKeptDocs((before) => before.filter((item) => item.key !== file.id))
+                        : setAddedDocs((before) => before.filter((_, n) => `n-${n}` !== file.id))
+                    }
+                  >
+                    <PhoneIcon name="fermer" size={14} />
+                  </button>
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+        {keptDocs.length + addedDocs.length < DOCUMENTS_MAX ? (
+          <label className="nb-cr-nouveau nb-ca-doc-ajout">
+            {t("documentAdd")}
+            <input
+              type="file"
+              accept="application/pdf"
+              hidden
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+                if (file) setAddedDocs((before) => [...before, file]);
+                event.target.value = "";
+              }}
+            />
+          </label>
+        ) : null}
+        <p className="nb-meta">{t("documentsHint")}</p>
       </div>
       <Field label={t("title")} error={error === "title" ? t("errors.title") : null}>
         {(id) => (

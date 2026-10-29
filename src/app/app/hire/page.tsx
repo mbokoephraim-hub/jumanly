@@ -460,7 +460,17 @@ export default async function HireTodayPage() {
   if (await isPhone()) {
     const { user } = await requireHire("/app/hire");
     return (
-      <RhTab tab="fil" actions={<RhBell />} avatar={<RhSettings />} legacy={false} noSearch>
+      <RhTab
+        tab="fil"
+        actions={
+          <>
+            <RhBell />
+            <RhSettings />
+          </>
+        }
+        legacy={false}
+        noSearch
+      >
         <RhFil user={{ id: user.id, name: user.name, image: user.image ?? null }} />
       </RhTab>
     );

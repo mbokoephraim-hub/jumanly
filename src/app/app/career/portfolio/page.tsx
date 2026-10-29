@@ -8,6 +8,6 @@ import { phoneTalentRedirect } from "@/server/phone-routes";
  */
 export default async function FormerPortfolioPage() {
   const user = await requireUser("/app/career/portfolio");
-  await phoneTalentRedirect(user.id, "/app/career/cv?onglet=portfolio");
+  await phoneTalentRedirect(user.id, "/app/profil?onglet=realisations");
   redirect("/app/profil?section=projets#projets");
 }
