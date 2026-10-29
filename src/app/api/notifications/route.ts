@@ -5,6 +5,8 @@ import { db } from "@/server/db";
 import {
   importantNotificationTypes,
   latestNotifications,
+  notificationActors,
+  notificationKey,
   notificationValues,
   unreadNotifications,
   type NotificationType,
@@ -24,12 +26,29 @@ export async function GET() {
     getFormatter(),
   ]);
   const now = new Date();
+  // The person who wrote: the banner of a new message shows their name and photo.
+  const actors = await notificationActors(
+    db,
+    user.id,
+    latest.filter((item) => item.type === "newMessage" && !item.readAt),
+  );
+  const actorOf = (item: (typeof latest)[number]) => {
+    const person = actors.get(item.id);
+    if (person) return { name: person.name, image: person.image };
+    const senderName = notificationValues(item.payload).senderName;
+    return item.type === "newMessage" && senderName ? { name: senderName, image: null } : null;
+  };
   return NextResponse.json(
     {
       unread,
       items: latest.map((item) => ({
         id: item.id,
-        text: t(`item.${item.type as NotificationType}`, notificationValues(item.payload)),
+        type: item.type,
+        text: t(
+          `item.${notificationKey(item.type, notificationValues(item.payload)) as NotificationType}`,
+          notificationValues(item.payload),
+        ),
+        actor: actorOf(item),
         href: item.href,
         when: format.relativeTime(item.createdAt, now),
         createdAt: item.createdAt.toISOString(),

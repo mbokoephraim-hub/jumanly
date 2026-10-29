@@ -157,6 +157,8 @@ export async function deliverDueDecisionMails(now = new Date()) {
 /** A message was sent: each recipient is told who wrote, never what. */
 export async function onMessageSent(input: {
   conversationId: string;
+  /** The message sent: its sender's photo shows beside the notification. */
+  messageId?: string;
   recipients: string[];
   fromOrganization: boolean;
   senderName: string;
@@ -172,6 +174,10 @@ export async function onMessageSent(input: {
   const company = conversation.organization?.name ?? "";
   const jobTitle = conversation.application?.job.title ?? "";
   const href = `/app/messages/${conversation.id}`;
+  const actorId = input.messageId
+    ? ((await db.message.findUnique({ where: { id: input.messageId }, select: { senderId: true } }))
+        ?.senderId ?? undefined)
+    : undefined;
   const people = await db.user.findMany({
     where: { id: { in: input.recipients } },
     select: { id: true, email: true, firstName: true },
@@ -182,6 +188,7 @@ export async function onMessageSent(input: {
       type: "documentRequest",
       payload: { company, documentName: input.documentRequest.name },
       href,
+      actorId,
     });
     await Promise.all(
       people.map((person) =>
@@ -201,6 +208,7 @@ export async function onMessageSent(input: {
     type: "newMessage",
     payload: { senderName: input.senderName, company, jobTitle },
     href,
+    actorId,
   });
   await Promise.all(
     people.map((person) =>

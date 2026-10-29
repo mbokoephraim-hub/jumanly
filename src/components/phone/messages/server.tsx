@@ -2,6 +2,8 @@ import "server-only";
 import { clockParts } from "@/lib/clock-parts";
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
+import { PushPrompt } from "../push-prompt";
+import { pushLabels } from "../push-prompt-texts";
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { pickMessages } from "@/i18n/client-messages";
@@ -142,7 +144,7 @@ export async function MessagesTab({ user }: { user: Viewer }) {
   const view = await inboxView(user);
   return (
     <MessagesTexts>
-      <PhoneMessages view={view} />
+      <PhoneMessages view={view} push={<PushPrompt place="chat" labels={await pushLabels()} />} />
     </MessagesTexts>
   );
 }

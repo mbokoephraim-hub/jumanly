@@ -9,7 +9,7 @@
  */
 import type { MessageKind, Prisma, PrismaClient } from "@/generated/prisma/client";
 import { hirePermissions, type HireContext } from "./hire";
-import { hiringTeam } from "./notifications";
+import { hiringTeam, markConversationNotificationsRead } from "./notifications";
 
 export type Viewer = { userId: string; hire?: HireContext | null };
 
@@ -145,6 +145,8 @@ export async function markRead(
     update: { lastReadAt: now },
     create: { conversationId, userId: viewer.userId, lastReadAt: now },
   });
+  // What was read here leaves the notifications too.
+  await markConversationNotificationsRead(db, viewer.userId, conversationId);
 }
 
 export type SentMessage = {

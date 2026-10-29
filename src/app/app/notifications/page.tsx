@@ -19,6 +19,8 @@ import { hireToday } from "@/server/services/hire-today";
 import { isPhone } from "@/server/view";
 import { PhoneNotifications } from "@/components/phone/fil/notifications";
 import { FilTexts, notificationRows } from "@/components/phone/fil/server";
+import { PushPrompt } from "@/components/phone/push-prompt";
+import { pushLabels } from "@/components/phone/push-prompt-texts";
 import { RhMessagesTexts } from "@/components/phone/recruteur/messages";
 import { RhNotificationsScreen } from "@/components/phone/recruteur/notifications";
 
@@ -54,7 +56,10 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
   if (!space && !partner && (await isPhone()))
     return (
       <FilTexts>
-        <PhoneNotifications rows={await notificationRows(user.id)} />
+        <PhoneNotifications
+          rows={await notificationRows(user.id)}
+          push={<PushPrompt labels={await pushLabels()} />}
+        />
       </FilTexts>
     );
 

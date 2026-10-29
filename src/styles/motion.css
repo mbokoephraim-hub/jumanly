@@ -834,6 +834,10 @@
   .jm-toast {
     animation: jm-toast-in 0.4s var(--jm-rebond) both;
   }
+  /* Bandeau d'un nouveau message (29/10/2026) : il descend du haut, comme un toast. */
+  .jm-message-banner {
+    animation: jm-toast-in 0.4s var(--jm-rebond) both;
+  }
   .jm-toast-icon {
     animation: jm-pop-in 0.35s var(--jm-rebond) 0.15s both;
   }

@@ -206,6 +206,7 @@ export async function sendGroupReply(
       type: "newMessage",
       payload: { senderName: input.signer, company: input.company, jobTitle: job.title },
       href: `/app/messages/${conversation.id}`,
+      actorId: ctx.userId,
     });
   }
   await db.auditLog.create({

@@ -2,6 +2,8 @@ import "server-only";
 import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
+import { PushPrompt } from "../push-prompt";
+import { pushLabels } from "../push-prompt-texts";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { pickMessages } from "@/i18n/client-messages";
 import { db } from "@/server/db";
@@ -112,7 +114,12 @@ export async function RhMessages({
   return (
     <>
       {hidden ? <ToastOnLoad message={t("ok.hide")} tone="success" /> : null}
-      <RhMessagesList rows={list} tab={chosen} org={organization?.name ?? ""} />
+      <RhMessagesList
+        rows={list}
+        tab={chosen}
+        org={organization?.name ?? ""}
+        push={<PushPrompt place="chat" labels={await pushLabels()} />}
+      />
     </>
   );
 }

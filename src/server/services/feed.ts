@@ -740,6 +740,7 @@ export async function createPost(
         type: "feedQuote",
         payload: { name: await nameOf(db, userId) },
         href: `/app/fil/${post.id}`,
+        actorId: userId,
       });
   }
   return post.id;
@@ -797,7 +798,13 @@ export async function replyTo(db: PrismaClient, userId: string, raw: z.input<typ
   const name = await nameOf(db, userId);
   const href = `/app/fil/${post.id}`;
   if (post.authorId && !post.organizationId && post.authorId !== userId)
-    await notify(db, { userIds: [post.authorId], type: "feedReply", payload: { name }, href });
+    await notify(db, {
+      userIds: [post.authorId],
+      type: "feedReply",
+      payload: { name },
+      href,
+      actorId: userId,
+    });
   const others = await db.feedPost.findMany({
     where: { parentId: post.id, organizationId: null, authorId: { not: userId } },
     distinct: ["authorId"],
@@ -814,6 +821,7 @@ export async function replyTo(db: PrismaClient, userId: string, raw: z.input<typ
       type: "feedMention",
       payload: { name },
       href,
+      actorId: userId,
     });
   return reply.id;
 }
@@ -845,6 +853,7 @@ export async function toggleLike(db: PrismaClient, userId: string, postId: strin
         type: "feedLike",
         payload: { name: await nameOf(db, userId), by: userId },
         href,
+        actorId: userId,
       });
   }
   return true;
@@ -866,6 +875,7 @@ export async function toggleRepost(db: PrismaClient, userId: string, postId: str
       type: "feedRepost",
       payload: { name: await nameOf(db, userId) },
       href: `/app/fil/${post.id}`,
+      actorId: userId,
     });
   return true;
 }

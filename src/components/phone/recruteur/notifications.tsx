@@ -1,5 +1,7 @@
 import "server-only";
 import { getFormatter, getTranslations } from "next-intl/server";
+import { PushPrompt } from "../push-prompt";
+import { pushLabels } from "../push-prompt-texts";
 import { dynamic } from "@/i18n/dynamic";
 import { EndingOffers } from "@/components/recruiter/ending";
 import { JoinRequestsCard } from "@/components/recruiter/org-join";
@@ -7,6 +9,8 @@ import { db } from "@/server/db";
 import type { HireContext } from "@/server/services/hire";
 import {
   listNotifications,
+  notificationActors,
+  notificationKey,
   notificationTypes,
   notificationValues,
 } from "@/server/services/notifications";
@@ -56,13 +60,16 @@ export async function rhNotificationRows(userId: string, now = new Date()): Prom
   const all = (await listNotifications(db, userId)).filter((item) =>
     (notificationTypes as readonly string[]).includes(item.type),
   );
+  // The photo of the person who wrote, asked, shared… (Ephraïm 29/10/2026).
+  const actors = await notificationActors(db, userId, all);
   const today = new Date(now);
   today.setHours(0, 0, 0, 0);
   const DAY = 86_400_000;
   return all.map((item) => {
     const values = notificationValues(item.payload);
-    const text = d(`notifications.item.${item.type}`, values);
-    const who = [
+    const text = d(`notifications.item.${notificationKey(item.type, values)}`, values);
+    const actor = actors.get(item.id) ?? null;
+    const named = [
       values.name,
       values.candidateName,
       values.senderName,
@@ -72,6 +79,7 @@ export async function rhNotificationRows(userId: string, now = new Date()): Prom
     ]
       .filter(Boolean)
       .find((name) => text.startsWith(name));
+    const who = named ?? actor?.name ?? null;
     const spent = now.getTime() - item.createdAt.getTime();
     const at = item.createdAt.getTime();
     const group: RhNotifRow["group"] =
@@ -103,6 +111,7 @@ export async function rhNotificationRows(userId: string, now = new Date()): Prom
       ago,
       unread: !item.readAt,
       initials: who ? initialsOf(who) : null,
+      image: actor?.image ?? null,
       tint: tintOf(who ?? item.type),
     };
   });
@@ -125,6 +134,7 @@ export async function RhNotificationsScreen({
       rows={await rhNotificationRows(ctx.userId)}
       top={
         <>
+          <PushPrompt labels={await pushLabels()} />
           <JoinRequestsCard ctx={ctx} answer={answer("demande")} />
           <EndingOffers ctx={ctx} answer={answer("fin")} />
         </>

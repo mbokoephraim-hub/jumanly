@@ -1,0 +1,30 @@
+/* Recevoir ses messages sur le téléphone, même hors de l'application (29/10/2026). */
+.nb-push {
+  margin: 4px 16px 12px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: var(--nb-carte);
+  border: 1px solid var(--nb-filet-fort);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.nb-push b {
+  font-size: 15px;
+  line-height: 20px;
+}
+.nb-push p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--nb-gris);
+}
+.nb-push-actions {
+  display: flex;
+  gap: 8px;
+}
+.nb-push-actions .nb-bouton {
+  height: 40px;
+  padding: 0 18px;
+  font-size: 14px;
+}

@@ -314,6 +314,7 @@ export async function sendTeamMessage(
     type: "teamMessage",
     payload: { name: senderName },
     href: `/app/messages/equipe/${thread.id}`,
+    actorId: ctx.userId,
   });
 }
 

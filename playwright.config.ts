@@ -35,6 +35,8 @@ export default defineConfig({
       BETTER_AUTH_SECRET:
         process.env.BETTER_AUTH_SECRET || "secret-de-test-e2e-uniquement-0123456789abcdef",
       EMAIL_OUTBOX_FILE: OUTBOX_FILE,
+      // Notifications of the phone outside the app: kept in memory, never sent.
+      PUSH_PROVIDER: "fake",
       // Les tests créent beaucoup de comptes depuis la même machine.
       AUTH_RATE_LIMIT: "off",
       // Jumanly Intelligence answers with its templates, without calling a model.

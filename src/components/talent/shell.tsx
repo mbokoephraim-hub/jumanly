@@ -3,6 +3,7 @@ import { useTranslations } from "next-intl";
 import { AppIntroGate } from "@/components/app/app-intro-gate";
 import type { IntroData } from "@/components/app/app-intro";
 import { AppMotionRoot } from "@/components/motion/app-motion-root";
+import { MessageBannerHost } from "@/components/motion/message-banner-host";
 import { Toaster } from "@/components/motion/toaster";
 import { initials } from "@/components/ui/avatar";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
@@ -79,6 +80,7 @@ export function TalentShell({
       <ViewSync view="wide" />
       <AppMotionRoot reduce={reduceMotion} />
       <Toaster label={tt("region.aria")} closeLabel={tt("close")} placement="bottom" />
+      <MessageBannerHost />
       <Suspense fallback={null}>
         <AppIntroGate data={intro} reduce={reduceMotion} />
       </Suspense>
