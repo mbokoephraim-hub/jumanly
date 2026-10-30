@@ -865,3 +865,98 @@ brackets are placeholders hidden on the site until they are filled in.
 | `mail.waitlist.closing` | Until then, a question? Just reply to this e-mail or write to us at assistant@jumanly.io. |
 | `mail.waitlist.footer.reason` | You are receiving this e-mail because {email} joined the waitlist on jumanly.io. |
 | `mail.waitlist.footer.notYou` | Did not sign up? Just ignore this e-mail. |
+
+### `testSurvey` (end-of-test questionnaire)
+
+| Clé | Texte |
+|---|---|
+| `testSurvey.seo.title` | Your feedback on Jumanly |
+| `testSurvey.hero.eyebrow` | Platform test |
+| `testSurvey.hero.title` | Tell us about your Jumanly test |
+| `testSurvey.hero.text` | Five minutes is enough. Your ratings and comments directly shape the next improvements before we open. |
+| `testSurvey.form.title` | Thank you {firstName}, over to you |
+| `testSurvey.form.text` | Questions marked with an asterisk are required. Be candid: that is what helps us most. |
+| `testSurvey.form.submit` | Send my answers |
+| `testSurvey.form.pending` | Sending… |
+| `testSurvey.sections.ratings` | Your ratings |
+| `testSurvey.sections.usage` | How you used it |
+| `testSurvey.sections.comments` | Your comments |
+| `testSurvey.questions.overall` | Overall, how was your experience? |
+| `testSurvey.questions.ease` | Is Jumanly easy to use? |
+| `testSurvey.questions.design` | What do you think of the look (colours, screens, readability)? |
+| `testSurvey.questions.usefulness` | Is Jumanly useful for your career or your hiring? |
+| `testSurvey.questions.speed` | Do pages open fast enough, even on a slow connection? |
+| `testSurvey.questions.recommend` | Would you recommend Jumanly to a friend or colleague? |
+| `testSurvey.questions.areas` | Which parts did you use? |
+| `testSurvey.questions.device` | Which device did you mostly test on? |
+| `testSurvey.questions.liked` | What you liked |
+| `testSurvey.questions.problems` | Problems you ran into |
+| `testSurvey.questions.improvements` | What to improve first |
+| `testSurvey.questions.comments` | Anything else to tell us? |
+| `testSurvey.hints.liked` | A feature, a screen, a detail you enjoyed. |
+| `testSurvey.hints.problems` | A button that does not work, a slow page, an unclear text: tell us where and what happened. |
+| `testSurvey.hints.improvements` | What is missing or what you would change first. |
+| `testSurvey.hints.comments` | An idea, a suggestion, a message for the team. |
+| `testSurvey.scale.low` | Not at all |
+| `testSurvey.scale.high` | Completely |
+| `testSurvey.scale.recommendLow` | Not at all likely |
+| `testSurvey.scale.recommendHigh` | Very likely |
+| `testSurvey.areas.feed` | Feed |
+| `testSurvey.areas.explore` | Explore |
+| `testSurvey.areas.career` | Career and CV |
+| `testSurvey.areas.learn` | Courses |
+| `testSurvey.areas.messages` | Messages |
+| `testSurvey.areas.jobs` | Jobs and applications |
+| `testSurvey.areas.hire` | Hiring |
+| `testSurvey.areas.orbi` | Orbi (AI) |
+| `testSurvey.devices.phone` | Phone |
+| `testSurvey.devices.computer` | Computer |
+| `testSurvey.devices.tablet` | Tablet |
+| `testSurvey.error.summary` | Some answers are missing: check the questions marked in red. |
+| `testSurvey.error.rating` | Choose a rating. |
+| `testSurvey.error.required` | This answer is required. |
+| `testSurvey.error.tooLong` | 2,000 characters at most. |
+| `testSurvey.error.rateLimit` | Too many attempts. Try again in a few minutes. |
+| `testSurvey.error.failed` | Your answers could not be saved. Try again in a moment. |
+| `testSurvey.done.title` | Thank you {firstName}, we got it! |
+| `testSurvey.done.text` | Your answers go straight to the Jumanly team. We will keep you posted on the improvements they lead to. |
+| `testSurvey.done.alreadyTitle` | Thank you {firstName}, you have already answered |
+| `testSurvey.done.alreadyText` | This questionnaire has already been filled in. To add something, write to us at assistant@jumanly.io. |
+| `testSurvey.done.cta` | Back to home |
+| `testSurvey.unknown.title` | This questionnaire link is not valid |
+| `testSurvey.unknown.text` | Check that you opened the full link received by e-mail, or write to us at assistant@jumanly.io. |
+
+### `mail` (platform test e-mails)
+
+| Clé | Texte |
+|---|---|
+| `mail.test.invite.subject` | Your access to test Jumanly |
+| `mail.test.invite.preheader` | You are among the first testers: create your account and tell us what you think. |
+| `mail.test.invite.badge` | Tester |
+| `mail.test.invite.title` | {firstName}, Jumanly opens its doors to you. |
+| `mail.test.invite.intro` | You are among the first people invited to test the platform for {days} days, before it opens to the public. |
+| `mail.test.invite.steps.title` | How the test works |
+| `mail.test.invite.steps.1.title` | Create your account |
+| `mail.test.invite.steps.1.text` | With the button below, using this address: {email}. |
+| `mail.test.invite.steps.2.title` | Use Jumanly until {date} |
+| `mail.test.invite.steps.2.text` | Take a course, complete your profile, explore jobs or post one: use the platform as you would every day. |
+| `mail.test.invite.steps.3.title` | Share your feedback |
+| `mail.test.invite.steps.3.text` | At the end of the test, a short questionnaire lands in this inbox: your ratings, what worked, what to improve. |
+| `mail.test.invite.cta` | Create my account |
+| `mail.test.invite.closing` | A problem during the test? Just reply to this e-mail or write to us at assistant@jumanly.io. |
+| `mail.test.survey.subject` | Your feedback on Jumanly: 5 minutes |
+| `mail.test.survey.preheader` | Your test is over. Tell us what worked and what to improve. |
+| `mail.test.survey.badge` | Questionnaire |
+| `mail.test.survey.title` | Thank you for testing Jumanly, {firstName}. |
+| `mail.test.survey.intro` | Your test period is ending. Your feedback goes straight to the team and decides the next improvements. |
+| `mail.test.survey.steps.title` | What we ask you |
+| `mail.test.survey.steps.1.title` | Your ratings |
+| `mail.test.survey.steps.1.text` | Experience, ease, look, usefulness and speed, from 1 to 5. |
+| `mail.test.survey.steps.2.title` | What you used |
+| `mail.test.survey.steps.2.text` | The parts of the platform you tried and your device. |
+| `mail.test.survey.steps.3.title` | Your comments |
+| `mail.test.survey.steps.3.text` | What you liked, the problems you ran into and what to improve. |
+| `mail.test.survey.cta` | Answer the questionnaire |
+| `mail.test.survey.closing` | Thank you for your time: every answer counts. |
+| `mail.test.linkHelp` | Button not working? Copy this link: |
+| `mail.test.footer.reason` | You are receiving this e-mail because {email} is on the jumanly.io waitlist and was invited to test the platform. |

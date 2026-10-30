@@ -1651,6 +1651,99 @@
       "cta": "Revenir à l'accueil"
     }
   },
+  "testSurvey": {
+    "seo": {
+      "title": "Votre avis sur Jumanly"
+    },
+    "hero": {
+      "eyebrow": "Test de la plateforme",
+      "title": "Racontez-nous votre test de Jumanly",
+      "text": "Cinq minutes suffisent. Vos notes et vos commentaires décident directement des prochaines améliorations avant l'ouverture."
+    },
+    "form": {
+      "title": "Merci {firstName}, à vous la parole",
+      "text": "Les questions marquées d'un astérisque sont obligatoires. Soyez franc : c'est ce qui nous aide le plus.",
+      "submit": "Envoyer mes réponses",
+      "pending": "Envoi…"
+    },
+    "sections": {
+      "ratings": "Vos notes",
+      "usage": "Votre utilisation",
+      "comments": "Vos commentaires"
+    },
+    "questions": {
+      "overall": "Dans l'ensemble, comment s'est passée votre expérience ?",
+      "ease": "Jumanly est-il facile à utiliser ?",
+      "design": "Que pensez-vous de l'apparence (couleurs, écrans, lisibilité) ?",
+      "usefulness": "Jumanly vous est-il utile pour votre carrière ou vos recrutements ?",
+      "speed": "Les pages s'ouvrent-elles assez vite, même avec une connexion lente ?",
+      "recommend": "Recommanderiez-vous Jumanly à un proche ou un collègue ?",
+      "areas": "Quelles parties avez-vous utilisées ?",
+      "device": "Sur quel appareil avez-vous surtout testé ?",
+      "liked": "Ce que vous avez aimé",
+      "problems": "Les problèmes rencontrés",
+      "improvements": "Ce qu'il faut améliorer en priorité",
+      "comments": "Autre chose à nous dire ?"
+    },
+    "hints": {
+      "liked": "Une fonction, un écran, un détail qui vous a plu.",
+      "problems": "Un bouton qui ne marche pas, une page lente, un texte peu clair : dites-nous où et ce qui s'est passé.",
+      "improvements": "Ce qui manque ou ce que vous changeriez en premier.",
+      "comments": "Une idée, une suggestion, un message pour l'équipe."
+    },
+    "scale": {
+      "low": "Pas du tout",
+      "high": "Tout à fait",
+      "recommendLow": "Pas du tout probable",
+      "recommendHigh": "Très probable"
+    },
+    "areas": {
+      "feed": "Fil",
+      "explore": "Explorer",
+      "career": "Carrière et CV",
+      "learn": "Formations",
+      "messages": "Messages",
+      "jobs": "Offres et candidatures",
+      "hire": "Recrutement",
+      "orbi": "Orbi (IA)"
+    },
+    "devices": {
+      "phone": "Téléphone",
+      "computer": "Ordinateur",
+      "tablet": "Tablette"
+    },
+    "short": {
+      "overall": "Expérience",
+      "ease": "Facilité",
+      "design": "Apparence",
+      "usefulness": "Utilité",
+      "speed": "Rapidité",
+      "recommend": "Recommandation",
+      "liked": "Aimé",
+      "problems": "Problèmes",
+      "improvements": "À améliorer",
+      "comments": "Commentaires"
+    },
+    "error": {
+      "summary": "Il manque des réponses : vérifiez les questions signalées en rouge.",
+      "rating": "Choisissez une note.",
+      "required": "Cette réponse est obligatoire.",
+      "tooLong": "2 000 caractères au maximum.",
+      "rateLimit": "Trop de tentatives. Réessayez dans quelques minutes.",
+      "failed": "Vos réponses n'ont pas pu être enregistrées. Réessayez dans un instant."
+    },
+    "done": {
+      "title": "Merci {firstName}, c'est bien reçu !",
+      "text": "Vos réponses arrivent directement à l'équipe Jumanly. Nous vous tiendrons au courant des améliorations qu'elles ont permises.",
+      "alreadyTitle": "Merci {firstName}, vous avez déjà répondu",
+      "alreadyText": "Ce questionnaire a déjà été rempli. Pour ajouter quelque chose, écrivez-nous à assistant@jumanly.io.",
+      "cta": "Revenir à l'accueil"
+    },
+    "unknown": {
+      "title": "Ce lien de questionnaire n'est pas valable",
+      "text": "Vérifiez que vous avez ouvert le lien complet reçu par e-mail, ou écrivez-nous à assistant@jumanly.io."
+    }
+  },
   "auth": {
     "layout": {
       "tagline": "Learn. Grow. Connect.",
@@ -24385,6 +24478,60 @@
         "notYou": "Vous n'êtes pas à l'origine de cette inscription ? Ignorez simplement cet e-mail."
       }
     },
+    "test": {
+      "invite": {
+        "subject": "Votre accès pour tester Jumanly",
+        "preheader": "Vous faites partie des premiers testeurs : créez votre compte et donnez-nous votre avis.",
+        "badge": "Testeur",
+        "title": "{firstName}, Jumanly vous ouvre ses portes.",
+        "intro": "Vous faites partie des premières personnes invitées à tester la plateforme pendant {days} jours, avant son ouverture au public.",
+        "steps": {
+          "1": {
+            "title": "Créez votre compte",
+            "text": "Avec le bouton ci-dessous, en utilisant cette adresse : {email}."
+          },
+          "2": {
+            "title": "Utilisez Jumanly jusqu'au {date}",
+            "text": "Formez-vous, complétez votre profil, explorez les offres ou publiez-en une : utilisez la plateforme comme au quotidien."
+          },
+          "3": {
+            "title": "Partagez votre avis",
+            "text": "À la fin du test, un court questionnaire arrive dans cette boîte : vos notes, ce qui a marché, ce qu'il faut améliorer."
+          },
+          "title": "Comment se déroule le test"
+        },
+        "cta": "Créer mon compte",
+        "closing": "Un souci pendant le test ? Répondez simplement à cet e-mail ou écrivez-nous à assistant@jumanly.io."
+      },
+      "survey": {
+        "subject": "Votre avis sur Jumanly : 5 minutes",
+        "preheader": "Votre test est terminé. Dites-nous ce qui a marché et ce qu'il faut améliorer.",
+        "badge": "Questionnaire",
+        "title": "Merci d'avoir testé Jumanly, {firstName}.",
+        "intro": "Votre période de test se termine. Vos retours vont directement à l'équipe et décident des prochaines améliorations.",
+        "steps": {
+          "1": {
+            "title": "Vos notes",
+            "text": "Expérience, facilité, apparence, utilité et rapidité, de 1 à 5."
+          },
+          "2": {
+            "title": "Ce que vous avez utilisé",
+            "text": "Les parties de la plateforme testées et votre appareil."
+          },
+          "3": {
+            "title": "Vos commentaires",
+            "text": "Ce que vous avez aimé, les problèmes rencontrés et ce qu'il faut améliorer."
+          },
+          "title": "Ce que nous vous demandons"
+        },
+        "cta": "Répondre au questionnaire",
+        "closing": "Merci pour votre temps : chaque réponse compte."
+      },
+      "linkHelp": "Le bouton ne s'ouvre pas ? Copiez ce lien :",
+      "footer": {
+        "reason": "Vous recevez cet e-mail parce que l'adresse {email} est inscrite sur la liste d'attente de jumanly.io et a été invitée à tester la plateforme."
+      }
+    },
     "companyNotice": {
       "from": "{company} via Jumanly",
       "signature": "L'équipe {company}",
@@ -27903,7 +28050,8 @@
         "organization": "Organisation",
         "language": "Langue",
         "date": "Inscription",
-        "mail": "E-mail de confirmation"
+        "mail": "E-mail de confirmation",
+        "test": "Test"
       },
       "mailSent": "Envoyé",
       "mailPending": "Pas encore",
@@ -27911,7 +28059,76 @@
       "pending": "{count, plural, one {# personne attend} other {# personnes attendent}} encore son e-mail de confirmation.",
       "sendPending": "Envoyer les e-mails en attente",
       "sent": "{count, plural, =0 {Aucun e-mail envoyé.} one {# e-mail envoyé.} other {# e-mails envoyés.}}",
-      "more": "Seules les {count} inscriptions les plus récentes sont affichées : l'export CSV contient toute la liste."
+      "more": "Seules les {count} inscriptions les plus récentes sont affichées : l'export CSV contient toute la liste.",
+      "tabs": {
+        "label": "Sections de la liste d'attente",
+        "inscrits": "Inscrits",
+        "statistiques": "Statistiques",
+        "retoursCount": "Questionnaires ({count})"
+      },
+      "test": {
+        "howTitle": "Organiser un test",
+        "how": {
+          "1": "Cochez les personnes à inviter, choisissez la durée du test et cliquez sur « Inviter à tester » : elles reçoivent le lien d'inscription caché.",
+          "2": "Elles créent leur compte avec la même adresse et utilisent Jumanly pendant la durée choisie.",
+          "3": "À la fin, le questionnaire part tout seul. Les réponses arrivent dans l'onglet « Questionnaires »."
+        },
+        "filter": "Filtrer par étape du test",
+        "allStates": "Toutes les étapes",
+        "status": {
+          "waiting": "Pas encore invité",
+          "invited": "Test en cours",
+          "surveyed": "Questionnaire envoyé",
+          "answered": "A répondu"
+        },
+        "account": "Compte créé",
+        "until": "jusqu'au {date}",
+        "select": "Sélection",
+        "selectOne": "Sélectionner {name}",
+        "selectAll": "Tout sélectionner",
+        "selectedCount": "# sélectionné(s)",
+        "duration": "Durée du test",
+        "days": "{count} jours",
+        "invite": "Inviter à tester",
+        "sendSurvey": "Envoyer le questionnaire maintenant",
+        "noneSelected": "Cochez au moins une personne dans la liste.",
+        "invited": "{count, plural, =0 {Aucune invitation envoyée.} one {# invitation envoyée avec le lien d'inscription.} other {# invitations envoyées avec le lien d'inscription.}}",
+        "surveyed": "{count, plural, =0 {Aucun questionnaire envoyé : seules les personnes invitées qui n'ont pas encore répondu le reçoivent.} one {# questionnaire envoyé.} other {# questionnaires envoyés.}}"
+      },
+      "statsTab": {
+        "total": "Inscrits au total",
+        "last7": "Ces 7 derniers jours",
+        "trend": "{value} par rapport aux 7 jours d'avant",
+        "invited": "Invités à tester",
+        "answered": "Questionnaires reçus",
+        "weekly": "Nouveaux inscrits par semaine",
+        "weekItem": "Semaine du {date} : {count}",
+        "weeklyHelp": "Les 12 dernières semaines, du lundi au dimanche.",
+        "profiles": "Profils",
+        "countries": "Pays les plus représentés",
+        "funnelTitle": "Avancement du test",
+        "funnel": {
+          "total": "Inscrits",
+          "invited": "Invités à tester",
+          "accounts": "Comptes créés",
+          "surveyed": "Questionnaires envoyés",
+          "answered": "Réponses reçues"
+        },
+        "funnelHelp": "Un compte est compté quand il a été créé avec l'adresse inscrite sur la liste."
+      },
+      "feedback": {
+        "emptyTitle": "Aucune réponse pour l'instant",
+        "emptyText": "Invitez des personnes depuis l'onglet « Inscrits ». Le questionnaire leur est envoyé à la fin de leur test.",
+        "count": "Réponses",
+        "average": "Note moyenne",
+        "nps": "Score de recommandation",
+        "npsHelp": "Score de recommandation : part des notes 9 et 10 moins part des notes 0 à 6, de -100 à +100.",
+        "ratingsTitle": "Notes moyennes",
+        "areasTitle": "Parties utilisées",
+        "devicesTitle": "Appareils",
+        "answersTitle": "Toutes les réponses",
+        "outOf": "{value} / {max}"
+      }
     }
   },
   "legal": {

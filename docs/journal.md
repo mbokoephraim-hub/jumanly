@@ -5244,6 +5244,15 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - « Entraînez-vous avec Orbi » devient une grande carte mise en avant (bouton « Commencer l'entraînement »), « Préparer avec Orbi » juste dessous.
 - « Ma candidature » : tuiles (CV envoyé, écrire au recruteur), « Retirer ma candidature » discret en bas. Animations coupées si le mouvement est réduit.
 
+## 2026-10-30 · Liste d'attente : test organisé et questionnaire
+
+- `/admin/liste-attente` a trois onglets : « Inscrits », « Statistiques », « Questionnaires ».
+- Statistiques : total, 7 derniers jours comparés aux 7 d'avant, inscrits par semaine (12 semaines), profils, pays les plus représentés, avancement du test (inscrits → invités → comptes créés → questionnaires envoyés → réponses). Un compte est compté quand il a été créé avec l'adresse de la liste.
+- Inscrits : cases à cocher, « Tout sélectionner », filtre par étape du test, durée (7, 14, 21 ou 30 jours) et « Inviter à tester » : e-mail avec le lien d'inscription caché (`/inscription?profil=…`). « Envoyer le questionnaire maintenant » n'attend pas la fin du test. 200 personnes au plus par clic, actions journalisées.
+- À la fin de la période, la tâche horaire (`/api/jobs/billing`) envoie le questionnaire. Lien personnel `/questionnaire-test/<jeton>` (site public, FR/EN, jamais indexé, une réponse par lien) : 5 notes de 1 à 5, recommandation de 0 à 10, parties utilisées, appareil, aimé, problèmes, améliorations (obligatoire), commentaires.
+- Questionnaires : moyennes, score de recommandation, parties utilisées, appareils, puis chaque réponse en entier.
+- Tables : colonnes de test sur `WaitlistEntry`, nouvelle table `TestFeedback` (migration `20261030150000_waitlist_test`).
+
 ## 2026-10-30 · Accusé de réception automatique et annonce « candidature retenue »
 
 - Demande d'Ephraïm : dès qu'une candidature arrive, le candidat reçoit, sans clic du recruteur, un accusé de réception au nom de l'entreprise (reçue, sera étudiée, l'entreprise reviendra vers lui) : un message dans la conversation de la candidature et un e-mail. Il remplace l'ancien e-mail « Candidature envoyée » de Jumanly.

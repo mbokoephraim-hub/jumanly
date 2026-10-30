@@ -2264,6 +2264,141 @@
         "reason": "You are receiving this e-mail because {email} joined the waitlist on jumanly.io.",
         "notYou": "Did not sign up? Just ignore this e-mail."
       }
+    },
+    "test": {
+      "invite": {
+        "subject": "Your access to test Jumanly",
+        "preheader": "You are among the first testers: create your account and tell us what you think.",
+        "badge": "Tester",
+        "title": "{firstName}, Jumanly opens its doors to you.",
+        "intro": "You are among the first people invited to test the platform for {days} days, before it opens to the public.",
+        "steps": {
+          "1": {
+            "title": "Create your account",
+            "text": "With the button below, using this address: {email}."
+          },
+          "2": {
+            "title": "Use Jumanly until {date}",
+            "text": "Take a course, complete your profile, explore jobs or post one: use the platform as you would every day."
+          },
+          "3": {
+            "title": "Share your feedback",
+            "text": "At the end of the test, a short questionnaire lands in this inbox: your ratings, what worked, what to improve."
+          },
+          "title": "How the test works"
+        },
+        "cta": "Create my account",
+        "closing": "A problem during the test? Just reply to this e-mail or write to us at assistant@jumanly.io."
+      },
+      "survey": {
+        "subject": "Your feedback on Jumanly: 5 minutes",
+        "preheader": "Your test is over. Tell us what worked and what to improve.",
+        "badge": "Questionnaire",
+        "title": "Thank you for testing Jumanly, {firstName}.",
+        "intro": "Your test period is ending. Your feedback goes straight to the team and decides the next improvements.",
+        "steps": {
+          "1": {
+            "title": "Your ratings",
+            "text": "Experience, ease, look, usefulness and speed, from 1 to 5."
+          },
+          "2": {
+            "title": "What you used",
+            "text": "The parts of the platform you tried and your device."
+          },
+          "3": {
+            "title": "Your comments",
+            "text": "What you liked, the problems you ran into and what to improve."
+          },
+          "title": "What we ask you"
+        },
+        "cta": "Answer the questionnaire",
+        "closing": "Thank you for your time: every answer counts."
+      },
+      "linkHelp": "Button not working? Copy this link:",
+      "footer": {
+        "reason": "You are receiving this e-mail because {email} is on the jumanly.io waitlist and was invited to test the platform."
+      }
+    }
+  },
+  "testSurvey": {
+    "seo": {
+      "title": "Your feedback on Jumanly"
+    },
+    "hero": {
+      "eyebrow": "Platform test",
+      "title": "Tell us about your Jumanly test",
+      "text": "Five minutes is enough. Your ratings and comments directly shape the next improvements before we open."
+    },
+    "form": {
+      "title": "Thank you {firstName}, over to you",
+      "text": "Questions marked with an asterisk are required. Be candid: that is what helps us most.",
+      "submit": "Send my answers",
+      "pending": "Sending…"
+    },
+    "sections": {
+      "ratings": "Your ratings",
+      "usage": "How you used it",
+      "comments": "Your comments"
+    },
+    "questions": {
+      "overall": "Overall, how was your experience?",
+      "ease": "Is Jumanly easy to use?",
+      "design": "What do you think of the look (colours, screens, readability)?",
+      "usefulness": "Is Jumanly useful for your career or your hiring?",
+      "speed": "Do pages open fast enough, even on a slow connection?",
+      "recommend": "Would you recommend Jumanly to a friend or colleague?",
+      "areas": "Which parts did you use?",
+      "device": "Which device did you mostly test on?",
+      "liked": "What you liked",
+      "problems": "Problems you ran into",
+      "improvements": "What to improve first",
+      "comments": "Anything else to tell us?"
+    },
+    "hints": {
+      "liked": "A feature, a screen, a detail you enjoyed.",
+      "problems": "A button that does not work, a slow page, an unclear text: tell us where and what happened.",
+      "improvements": "What is missing or what you would change first.",
+      "comments": "An idea, a suggestion, a message for the team."
+    },
+    "scale": {
+      "low": "Not at all",
+      "high": "Completely",
+      "recommendLow": "Not at all likely",
+      "recommendHigh": "Very likely"
+    },
+    "areas": {
+      "feed": "Feed",
+      "explore": "Explore",
+      "career": "Career and CV",
+      "learn": "Courses",
+      "messages": "Messages",
+      "jobs": "Jobs and applications",
+      "hire": "Hiring",
+      "orbi": "Orbi (AI)"
+    },
+    "devices": {
+      "phone": "Phone",
+      "computer": "Computer",
+      "tablet": "Tablet"
+    },
+    "error": {
+      "summary": "Some answers are missing: check the questions marked in red.",
+      "rating": "Choose a rating.",
+      "required": "This answer is required.",
+      "tooLong": "2,000 characters at most.",
+      "rateLimit": "Too many attempts. Try again in a few minutes.",
+      "failed": "Your answers could not be saved. Try again in a moment."
+    },
+    "done": {
+      "title": "Thank you {firstName}, we got it!",
+      "text": "Your answers go straight to the Jumanly team. We will keep you posted on the improvements they lead to.",
+      "alreadyTitle": "Thank you {firstName}, you have already answered",
+      "alreadyText": "This questionnaire has already been filled in. To add something, write to us at assistant@jumanly.io.",
+      "cta": "Back to home"
+    },
+    "unknown": {
+      "title": "This questionnaire link is not valid",
+      "text": "Check that you opened the full link received by e-mail, or write to us at assistant@jumanly.io."
     }
   },
   "pricing": {

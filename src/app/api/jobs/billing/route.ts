@@ -7,6 +7,7 @@ import { runDiagnosticReminders } from "@/server/services/diagnostic-store";
 import { purgeScheduledDeletions } from "@/server/services/admin-users";
 import { deliverDueDecisionMails } from "@/server/application-events";
 import { runHireJobs } from "@/server/hire-jobs";
+import { sendDueTestSurveys } from "@/server/waitlist-test-email";
 
 function matches(given: Buffer, secret: string | undefined) {
   if (!secret) return false;
@@ -35,12 +36,15 @@ export async function POST(request: Request) {
   const decisionMails = await deliverDueDecisionMails();
   // Recruiter lot 6: scheduled ATS analyses, end-of-offer reminders, expired join requests.
   const hire = await runHireJobs();
+  // Platform test: the questionnaire once a tester's period is over.
+  const testSurveys = await sendDueTestSurveys();
   return NextResponse.json({
     ...report,
     diagnosticReminders,
     deletedAccounts,
     decisionMails,
     hire,
+    testSurveys,
   });
 }
 

@@ -808,11 +808,48 @@ model WaitlistEntry {
   locale       String          @default("fr")
   /// Set once the confirmation e-mail has left.
   emailSentAt  DateTime?
+  /// Test of the platform (30/10/2026): last invitation sent with the hidden sign-up link.
+  invitedAt    DateTime?
+  inviteCount  Int             @default(0)
+  /// End of the test period: the questionnaire leaves on its own after this date (hourly job).
+  testEndsAt   DateTime?
+  /// Secret part of the questionnaire link (`/questionnaire-test/<token>`), set at the invitation.
+  surveyToken  String?         @unique
+  surveySentAt DateTime?
+  feedback     TestFeedback?
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
 
   @@index([createdAt])
   @@index([profile])
+  @@index([testEndsAt])
+}
+
+/// Answers to the end-of-test questionnaire (30/10/2026): one per invited person, read in the admin.
+model TestFeedback {
+  id           String        @id @default(cuid(2))
+  entryId      String        @unique
+  entry        WaitlistEntry @relation(fields: [entryId], references: [id], onDelete: Cascade)
+  /// Ratings from 1 to 5.
+  overall      Int
+  ease         Int
+  design       Int
+  usefulness   Int
+  speed        Int
+  /// « Recommanderiez-vous Jumanly ? » from 0 to 10.
+  recommend    Int
+  /// Parts of the platform tried (keys of `testAreas`).
+  areas        String[]
+  /// phone, computer or tablet.
+  device       String
+  liked        String?
+  problems     String?
+  improvements String
+  comments     String?
+  locale       String        @default("fr")
+  createdAt    DateTime      @default(now())
+
+  @@index([createdAt])
 }
 
 // ─── Formulaire de contact ──────────────────────────────────────
