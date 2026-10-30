@@ -4,7 +4,13 @@ import { cx } from "@/lib/cx";
 import { formatDateTime, formatDayMonth } from "@/lib/dates";
 import { db } from "@/server/db";
 import { waitlistProfiles } from "@/server/services/waitlist";
-import { testFeedbackSummary, testRatings, waitlistStats } from "@/server/services/waitlist-test";
+import {
+  testAreas,
+  testDevices,
+  testFeedbackSummary,
+  testRatings,
+  waitlistStats,
+} from "@/server/services/waitlist-test";
 
 /**
  * Tabs « Statistiques » and « Questionnaires » of /admin/liste-attente (30/10/2026). Plain bars in
@@ -49,7 +55,7 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
 export async function WaitlistStatistics() {
   const [t, stats] = await Promise.all([getTranslations(), waitlistStats(db)]);
   const s = (key: string, values?: Record<string, string | number>) =>
-    t(`admin.waitlist.statsTab.${key}`, values);
+    t(`admin.waitlist.statsTab.${key}` as Parameters<typeof t>[0], values);
   const trend = stats.last7 - stats.previous7;
   const maxWeek = Math.max(1, ...stats.weekly.map((week) => week.count));
   const funnel = (["total", "invited", "accounts", "surveyed", "answered"] as const).map((key) => ({
@@ -162,7 +168,7 @@ function Stars({ value }: { value: number }) {
 export async function WaitlistFeedback() {
   const [t, summary] = await Promise.all([getTranslations(), testFeedbackSummary(db)]);
   const f = (key: string, values?: Record<string, string | number>) =>
-    t(`admin.waitlist.feedback.${key}`, values);
+    t(`admin.waitlist.feedback.${key}` as Parameters<typeof t>[0], values);
   if (summary.count === 0) {
     return (
       <AdminEmpty
@@ -237,7 +243,9 @@ export async function WaitlistFeedback() {
               <Tag tone={answer.entry.profile === "talent" ? "success" : "neon"}>
                 {t(`waitlist.form.profile.${answer.entry.profile}.label`)}
               </Tag>
-              <Tag tone="outline">{t(`testSurvey.devices.${answer.device}`)}</Tag>
+              <Tag tone="outline">
+                {t(`testSurvey.devices.${answer.device as (typeof testDevices)[number]}`)}
+              </Tag>
               <span className="text-[12.5px] text-ardoise">
                 {answer.entry.country} · {formatDateTime(answer.createdAt)}
               </span>
@@ -269,7 +277,7 @@ export async function WaitlistFeedback() {
               <div className="flex flex-wrap gap-1.5">
                 {answer.areas.map((area) => (
                   <Tag key={area} tone="neutral">
-                    {t(`testSurvey.areas.${area}`)}
+                    {t(`testSurvey.areas.${area as (typeof testAreas)[number]}`)}
                   </Tag>
                 ))}
               </div>

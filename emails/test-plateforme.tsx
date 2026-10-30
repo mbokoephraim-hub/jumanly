@@ -53,7 +53,6 @@ export default function TestEmail({
   endDate,
 }: TestEmailProps) {
   const t = translatorFor(locale);
-  const k = (key: string) => `mail.test.${kind}.${key}`;
   const [privacy, terms] = t("mail.common.footer.legal").split(" · ");
   const steps = [1, 2, 3] as const;
   const values = { firstName, email, days, date: endDate };
@@ -68,7 +67,7 @@ export default function TestEmail({
         <meta name="color-scheme" content="dark" />
         <meta name="supported-color-schemes" content="dark" />
       </Head>
-      <Preview>{t(k("preheader"), values)}</Preview>
+      <Preview>{t(`mail.test.${kind}.preheader`, values)}</Preview>
       <Body style={{ backgroundColor: nuit, fontFamily: font, margin: 0, padding: "24px 0" }}>
         <Container style={{ width: "100%", maxWidth: 600, backgroundColor: nuit }}>
           <Section style={{ padding: "0 16px" }}>
@@ -105,7 +104,7 @@ export default function TestEmail({
                       textTransform: "uppercase",
                     }}
                   >
-                    {t(k("badge"))}
+                    {t(`mail.test.${kind}.badge`)}
                   </Text>
                 </Column>
               </Row>
@@ -120,7 +119,7 @@ export default function TestEmail({
                   letterSpacing: "-0.02em",
                 }}
               >
-                {t(k("title"), values)}
+                {t(`mail.test.${kind}.title`, values)}
               </Text>
               <Text
                 style={{
@@ -131,7 +130,7 @@ export default function TestEmail({
                   maxWidth: 460,
                 }}
               >
-                {t(k("intro"), values)}
+                {t(`mail.test.${kind}.intro`, values)}
               </Text>
             </Section>
           </Section>
@@ -155,7 +154,7 @@ export default function TestEmail({
                   letterSpacing: "-0.01em",
                 }}
               >
-                {t(k("steps.title"))}
+                {t(`mail.test.${kind}.steps.title`)}
               </Text>
               {steps.map((step) => (
                 <Row key={step} style={{ margin: "0 0 16px" }}>
@@ -188,10 +187,10 @@ export default function TestEmail({
                         fontWeight: 600,
                       }}
                     >
-                      {t(k(`steps.${step}.title`), values)}
+                      {t(`mail.test.${kind}.steps.${step}.title`, values)}
                     </Text>
                     <Text style={{ ...text, color: brume, fontSize: 13.5, lineHeight: "20px" }}>
-                      {t(k(`steps.${step}.text`), values)}
+                      {t(`mail.test.${kind}.steps.${step}.text`, values)}
                     </Text>
                   </Column>
                 </Row>
@@ -213,7 +212,7 @@ export default function TestEmail({
                 fontWeight: 700,
               }}
             >
-              {t(k("cta"))}
+              {t(`mail.test.${kind}.cta`)}
             </Button>
             <Text
               style={{
@@ -230,7 +229,7 @@ export default function TestEmail({
               </Link>
             </Text>
             <Text style={{ ...text, margin: "22px 0 4px", fontSize: 15, lineHeight: "24px" }}>
-              {t(k("closing"))}
+              {t(`mail.test.${kind}.closing`)}
             </Text>
             <Text style={{ ...text, fontSize: 15, lineHeight: "24px", fontWeight: 600 }}>
               {t("mail.common.signature")}
