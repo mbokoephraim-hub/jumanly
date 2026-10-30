@@ -5231,3 +5231,8 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - Aperçu de la publication : logo petit, nom et date, comme l'auteur d'une publication du Fil.
 - Question ONEM avant de publier (« Détenez-vous l'autorisation de l'ONEM ? ») : obligatoire, réponse « Oui » enregistrée dans `Job.onemConfirmedAt` ; « Pas encore » garde l'offre en brouillon.
 - Publication directe : une entreprise non vérifiée publie aussitôt (décision d'Ephraïm). Restent en vérification seulement les offres dont le texte déclenche un signal (frais demandés au talent, contact hors Jumanly…) et celles renvoyées en correction par un modérateur, pour protéger les talents des arnaques.
+
+## 2026-10-30 · Carrière (téléphone) : Candidatures d'abord, documents en rangées
+
+- La page Carrière s'ouvre sur « Candidatures », au centre ; Progression à gauche, Mes documents à droite, par les onglets ou en glissant le doigt sur la page.
+- Mes documents : chaque section (Mes CV, Lettres de motivation, Portfolio) est une rangée de cartes qui défile à l'horizontale ; le portfolio montre sa carte d'état puis ses réalisations.

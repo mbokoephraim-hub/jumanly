@@ -1599,3 +1599,82 @@ button.nb-cr-cv-l {
   margin-top: 0;
   cursor: pointer;
 }
+
+/* Carrière opens on « Candidatures »; a sideways swipe on the page changes the tab, so the panel
+   fills the screen even when it is short (Ephraïm, 30/10/2026). */
+.nb-cr-glisse {
+  min-height: 60vh;
+  touch-action: pan-y;
+}
+
+/* Mes documents: each section is one row of cards that scrolls sideways (Ephraïm, 30/10/2026). */
+.nb-doc-rangee {
+  display: flex;
+  gap: 10px;
+  margin: 0 -20px;
+  padding: 2px 20px 6px;
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 20px;
+  scrollbar-width: none;
+  touch-action: pan-x pan-y;
+}
+.nb-doc-rangee::-webkit-scrollbar {
+  display: none;
+}
+.nb-doc-rangee > li {
+  flex: 0 0 148px;
+  min-width: 0;
+  scroll-snap-align: start;
+}
+.nb-doc-rangee > .nb-doc-case {
+  flex-basis: 196px;
+  display: flex;
+}
+.nb-doc-rangee > .nb-doc-case[data-large] {
+  flex-basis: 236px;
+}
+.nb-doc-case > .nb-cr-carte {
+  flex: 1;
+  min-width: 0;
+}
+.nb-doc-rangee .nb-doc-lettre,
+.nb-doc-rangee .nb-doc-port {
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 128px;
+}
+.nb-doc-rangee .nb-doc-t {
+  flex: none;
+  width: 100%;
+}
+.nb-doc-rangee .nb-doc-t small {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.nb-doc-projet {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+  color: inherit;
+  text-decoration: none;
+}
+.nb-doc-projet-img {
+  display: block;
+  height: 82px;
+  background: var(--fond, var(--nb-haute));
+}
+.nb-doc-projet-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.nb-doc-projet .nb-doc-t {
+  padding: 10px 11px 12px;
+}

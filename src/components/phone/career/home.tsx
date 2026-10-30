@@ -4,7 +4,14 @@ import "@/styles/phone-onglets.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition, type CSSProperties } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+  type CSSProperties,
+  type TouchEvent,
+} from "react";
 import { showToast } from "@/components/motion/toaster";
 import { deleteCv, duplicateCv, setPrimaryCv } from "@/server/actions/cv";
 import { deleteCvsAction, renameCvAction, setCvColorAction } from "@/server/actions/cv-flow";
@@ -59,7 +66,30 @@ export function PhoneCareer({
   portfolio: string | null;
 }) {
   const t = useTranslations("phoneCareer");
-  const [tab, setTab] = useState<Tab>("progression");
+  // « Candidatures » opens first, in the middle: Progression on its left, Mes documents on its
+  // right, reached by a tap on the tabs or a swipe (Ephraïm, 30/10/2026).
+  const [tab, setTab] = useState<Tab>("candidatures");
+  const swipe = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+    const touch = event.touches[0];
+    // A row that scrolls sideways keeps its own swipe.
+    const inRow = (event.target as HTMLElement).closest("[data-rangee]");
+    swipe.current = touch && !inRow ? { x: touch.clientX, y: touch.clientY } : null;
+  };
+  const onTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
+    const start = swipe.current;
+    const touch = event.changedTouches[0];
+    swipe.current = null;
+    if (!start || !touch) return;
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    const next = TABS[TABS.indexOf(tab) + (dx < 0 ? 1 : -1)];
+    if (next) {
+      setTab(next);
+      window.scrollTo({ top: 0 });
+    }
+  };
   const [searching, setSearching] = useState(false);
   const [cvMenu, setCvMenu] = useState<CareerView["cvs"][number] | null>(null);
   const params = useSearchParams();
@@ -179,8 +209,10 @@ export function PhoneCareer({
             id="car-panneau"
             role="tabpanel"
             aria-labelledby={`car-${tab}`}
-            className="nb-pf-pane"
+            className="nb-pf-pane nb-cr-glisse"
             key={tab}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
           >
             {tab === "progression" ? (
               <ProgressionPanel view={view} letters={letters} onTab={setTab} />
@@ -628,8 +660,8 @@ function ApplicationsPanel({ view, saved }: { view: CareerView; saved: SavedOffe
 }
 
 /**
- * « Mes documents » (Ephraïm, 29/10/2026): the CVs, the portfolio and the cover letters on one
- * screen, one section after the other.
+ * « Mes documents » (Ephraïm, 29/10/2026): the CVs, the cover letters and the portfolio on one
+ * screen. Each section is a row of cards that scrolls sideways (Ephraïm, 30/10/2026).
  */
 function DocumentsPanel({
   view,
@@ -652,20 +684,74 @@ function DocumentsPanel({
         <CvPanel view={view} onMenu={onMenu} />
       </section>
 
+      <section aria-labelledby="nb-doc-lettres">
+        <h2 id="nb-doc-lettres" className="nb-pf-h nb-cr-h nb-doc-h" data-loin="">
+          {t("docs.letters")}
+        </h2>
+        <div className="nb-cr-pad">
+          {letters.length === 0 ? (
+            <p className="nb-pf-vide">{t("docs.lettersEmpty")}</p>
+          ) : (
+            <ul className="nb-doc-rangee" data-rangee="">
+              {letters.map((letter) => (
+                <li key={letter.id} className="nb-doc-case">
+                  <Link href={letter.href} className="nb-cr-carte nb-doc-lettre">
+                    <span className="nb-doc-i" data-lettre="" aria-hidden>
+                      <PhoneIcon name="document" size={19} />
+                    </span>
+                    <span className="nb-doc-t">
+                      <b>{letter.title}</b>
+                      <small>{letter.line}</small>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+          <Link href="/app/career/lettres/nouvelle" className="nb-cr-nouveau">
+            {t("docs.letterNew")}
+          </Link>
+        </div>
+      </section>
+
       <section aria-labelledby="nb-doc-port">
         <h2 id="nb-doc-port" className="nb-pf-h nb-cr-h nb-doc-h" data-loin="">
           {t("docs.portfolio")}
         </h2>
         <div className="nb-cr-pad">
-          <div className="nb-cr-carte nb-doc-port">
-            <span className="nb-doc-i" data-on={portfolio ? "" : undefined} aria-hidden>
-              <PhoneIcon name="lien" size={19} />
-            </span>
-            <span className="nb-doc-t">
-              <b>{portfolio ? t("docs.portfolioOn") : t("docs.portfolioOff")}</b>
-              <small>{t("docs.portfolioCount", { count: view.projects.length })}</small>
-            </span>
-          </div>
+          <ul className="nb-doc-rangee" data-rangee="">
+            <li className="nb-doc-case" data-large="">
+              <div className="nb-cr-carte nb-doc-port">
+                <span className="nb-doc-i" data-on={portfolio ? "" : undefined} aria-hidden>
+                  <PhoneIcon name="lien" size={19} />
+                </span>
+                <span className="nb-doc-t">
+                  <b>{portfolio ? t("docs.portfolioOn") : t("docs.portfolioOff")}</b>
+                  <small>{t("docs.portfolioCount", { count: view.projects.length })}</small>
+                </span>
+              </div>
+            </li>
+            {view.projects.map((project) => (
+              <li key={project.id} className="nb-doc-case">
+                <Link
+                  href={project.href}
+                  className="nb-cr-carte nb-doc-projet"
+                  style={{ "--fond": project.ground } as CSSProperties}
+                >
+                  <span className="nb-doc-projet-img" aria-hidden>
+                    {project.cover ? (
+                      // eslint-disable-next-line @next/next/no-img-element -- stored picture
+                      <img src={project.cover} alt="" loading="lazy" />
+                    ) : null}
+                  </span>
+                  <span className="nb-doc-t">
+                    <b>{project.title}</b>
+                    <small>{project.line}</small>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
           <div className="nb-doc-bts">
             {portfolio ? (
               <a href={portfolio} className="nb-bouton" data-contour="">
@@ -676,37 +762,6 @@ function DocumentsPanel({
               {t("docs.portfolioManage")}
             </Link>
           </div>
-        </div>
-      </section>
-
-      <section aria-labelledby="nb-doc-lettres">
-        <h2 id="nb-doc-lettres" className="nb-pf-h nb-cr-h nb-doc-h" data-loin="">
-          {t("docs.letters")}
-        </h2>
-        <div className="nb-cr-pad">
-          {letters.length === 0 ? (
-            <p className="nb-pf-vide">{t("docs.lettersEmpty")}</p>
-          ) : (
-            <ul className="nb-doc-lettres">
-              {letters.map((letter) => (
-                <li key={letter.id}>
-                  <Link href={letter.href} className="nb-cr-carte nb-doc-lettre">
-                    <span className="nb-doc-i" data-lettre="" aria-hidden>
-                      <PhoneIcon name="document" size={19} />
-                    </span>
-                    <span className="nb-doc-t">
-                      <b>{letter.title}</b>
-                      <small>{letter.line}</small>
-                    </span>
-                    <PhoneIcon name="chevron" size={16} />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-          <Link href="/app/career/lettres/nouvelle" className="nb-cr-nouveau">
-            {t("docs.letterNew")}
-          </Link>
         </div>
       </section>
     </>
@@ -785,7 +840,7 @@ function CvPanel({
         </div>
       ) : null}
       {view.cvs.length > 0 ? (
-        <ul className="nb-cr-grille" data-selection={selecting ? "" : undefined}>
+        <ul className="nb-doc-rangee" data-rangee="" data-selection={selecting ? "" : undefined}>
           {view.cvs.map((cv, at) => {
             const isChosen = chosen.has(cv.id);
             const page = (
