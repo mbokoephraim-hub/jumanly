@@ -4,12 +4,13 @@
  */
 import "server-only";
 import { db } from "@/server/db";
+import { postCompanyNotice } from "@/server/services/company-notice";
 import { ensureApplicationConversation } from "@/server/services/connect";
 import { claimDueDecisionMails } from "@/server/services/hire-candidates";
 import { claimDueGroupMails } from "@/server/services/hire-group-replies";
 import { hiringTeam, notify } from "@/server/services/notifications";
+import { mailCompanyNotice } from "./company-notice-email";
 import {
-  mailApplicationSent,
   mailDocumentRequest,
   mailNewApplication,
   mailNewMessage,
@@ -39,7 +40,10 @@ async function applicationDetails(applicationId: string) {
   });
 }
 
-/** A talent applied: the hiring team is told, the talent gets a receipt. */
+/**
+ * A talent applied: the hiring team is told; the talent gets the company's acknowledgement, by
+ * itself, in the conversation and by e-mail (Ephraïm 30/10/2026: no click from the recruiter).
+ */
 export async function onApplicationCreated(applicationId: string) {
   const application = await applicationDetails(applicationId);
   await ensureApplicationConversation(db, applicationId);
@@ -61,11 +65,9 @@ export async function onApplicationCreated(applicationId: string) {
         href,
       }),
     ),
-    mailApplicationSent(talent, {
-      jobTitle: application.job.title,
-      company: application.job.organization.name,
-      date: application.createdAt,
-    }),
+    postCompanyNotice(db, applicationId, "received", null).then(
+      (notice) => notice && mailCompanyNotice("received", notice),
+    ),
   ]);
 }
 

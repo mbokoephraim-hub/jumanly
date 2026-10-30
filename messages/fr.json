@@ -16328,7 +16328,13 @@
       "excluded": "Le nom, le genre, l'âge, la photo, la nationalité, l'origine et l'adresse ne comptent pas. Votre consultation est enregistrée.",
       "file": "Dossier",
       "keep": "Ajouter aux retenus",
-      "remove": "Retirer des retenus"
+      "remove": "Retirer des retenus",
+      "notice": {
+        "title": "{firstName} n'est pas encore prévenu·e",
+        "text": "Un clic : un message dans sa messagerie Jumanly et un e-mail, au nom de {company}, lui annoncent que sa candidature est retenue.",
+        "cta": "Prévenir {firstName}",
+        "done": "{firstName} est prévenu·e : message et e-mail envoyés"
+      }
     },
     "shortlist": {
       "seo": "Liste des retenus",
@@ -16355,7 +16361,14 @@
       "prepare": "Préparer",
       "others": "{count, plural, one {# autre personne attend une réponse. Je peux préparer un message respectueux : vous le relisez avant l'envoi.} other {# autres personnes attendent une réponse. Je peux préparer un message respectueux : vous le relisez avant l'envoi.}}",
       "slots": "Créneaux",
-      "inform": "{count, plural, one {Informer la personne} other {Informer les #}}"
+      "inform": "{count, plural, one {Informer la personne} other {Informer les #}}",
+      "notice": {
+        "title": "{count, plural, one {# personne retenue n'est pas encore prévenue} other {# personnes retenues ne sont pas encore prévenues}}",
+        "text": "En un clic, chacune reçoit un message dans sa messagerie Jumanly et un e-mail, au nom de {company}, lui annonçant que sa candidature est retenue pour la suite.",
+        "cta": "{count, plural, one {Prévenir la personne} other {Prévenir les #}}",
+        "done": "{count, plural, one {# personne prévenue : message et e-mail envoyés} other {# personnes prévenues : messages et e-mails envoyés}}",
+        "informed": "Prévenu·e"
+      }
     }
   },
   "rhThread6": {
@@ -24518,6 +24531,69 @@
       "footer": {
         "reason": "Vous recevez cet e-mail parce que l'adresse {email} est inscrite sur la liste d'attente de jumanly.io et a été invitée à tester la plateforme."
       }
+    },
+    "companyNotice": {
+      "from": "{company} via Jumanly",
+      "signature": "L'équipe {company}",
+      "job": {
+        "title": "Votre candidature",
+        "post": "Poste",
+        "company": "Entreprise",
+        "date": "Envoyée le"
+      },
+      "footer": {
+        "reason": "Vous recevez cet e-mail parce que vous avez candidaté sur Jumanly avec l'adresse {email}. Candidater reste toujours gratuit."
+      },
+      "received": {
+        "subject": "{company} a bien reçu votre candidature · {jobTitle}",
+        "preheader": "Votre candidature sera étudiée avec attention. {company} reviendra vers vous.",
+        "badge": "Candidature reçue",
+        "title": "Merci {firstName}, votre candidature est bien arrivée.",
+        "titleNoName": "Merci, votre candidature est bien arrivée.",
+        "intro": "{company} a bien reçu votre candidature au poste {jobTitle}. L'équipe va l'étudier avec attention et reviendra vers vous.",
+        "steps": {
+          "1": {
+            "title": "Votre dossier est étudié",
+            "text": "L'équipe de {company} lit chaque candidature. Une personne décide, jamais un robot."
+          },
+          "2": {
+            "title": "{company} revient vers vous",
+            "text": "Dans votre messagerie Jumanly, et par e-mail, quelle que soit la réponse."
+          },
+          "3": {
+            "title": "Vous suivez tout en direct",
+            "text": "L'avancement de votre candidature s'affiche dans Carrière, onglet Candidatures."
+          },
+          "title": "Et maintenant ?"
+        },
+        "cta": "Suivre ma candidature",
+        "closing": "Merci encore pour votre intérêt. À très vite."
+      },
+      "retained": {
+        "subject": "Bonne nouvelle : votre candidature est retenue · {jobTitle}",
+        "preheader": "{company} a retenu votre candidature pour la suite du recrutement.",
+        "badge": "Candidature retenue",
+        "title": "Bonne nouvelle {firstName}, vous êtes retenu·e.",
+        "titleNoName": "Bonne nouvelle, vous êtes retenu·e.",
+        "intro": "{company} a retenu votre candidature au poste {jobTitle} pour la suite du recrutement.",
+        "steps": {
+          "1": {
+            "title": "Gardez un œil sur vos messages",
+            "text": "{company} vous écrit très vite dans votre messagerie Jumanly."
+          },
+          "2": {
+            "title": "Choisissez un créneau",
+            "text": "Si un entretien vous est proposé, choisissez l'horaire qui vous convient."
+          },
+          "3": {
+            "title": "Préparez-vous",
+            "text": "Relisez l'offre et entraînez-vous avec Orbi dans Carrière."
+          },
+          "title": "La suite"
+        },
+        "cta": "Ouvrir la conversation",
+        "closing": "Félicitations, et à très vite."
+      }
     }
   },
   "reference": {
@@ -24545,6 +24621,17 @@
       "declined": "Nous indiquons à {name} que vous n’avez pas pu confirmer, sans autre détail.",
       "warning": "Ne confirmez que ce que vous savez exact. Jumanly ne vous crée pas de compte et n’utilise votre adresse que pour cette demande."
     }
+  },
+  "companyNotice": {
+    "greeting": "Bonjour {firstName},",
+    "received": {
+      "message": "Nous avons bien reçu votre candidature au poste {jobTitle}. Merci de l'intérêt que vous portez à {company}. Notre équipe va l'étudier avec attention et nous reviendrons vers vous dès que possible, ici même."
+    },
+    "retained": {
+      "message": "Bonne nouvelle : votre candidature au poste {jobTitle} est retenue pour la suite du recrutement. Nous reviendrons très vite vers vous, ici même, pour vous présenter la prochaine étape."
+    },
+    "signature": "L'équipe {company}",
+    "noName": "Bonjour,"
   },
   "system": {
     "403": {

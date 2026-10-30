@@ -4,7 +4,6 @@
  */
 import "server-only";
 import {
-  applicationSentEmail,
   contactAcceptedEmail,
   contactRequestedEmail,
   interviewConfirmedEmail,
@@ -36,11 +35,6 @@ const deliver = (to: string, email: HireEmail) =>
 
 export const mailNewApplication = (to: Person, input: Parameters<typeof newApplicationEmail>[1]) =>
   deliver(to.email, newApplicationEmail(to.firstName, input));
-
-export const mailApplicationSent = (
-  to: Person,
-  input: Parameters<typeof applicationSentEmail>[1],
-) => deliver(to.email, applicationSentEmail(to.firstName, input));
 
 export const mailStatusChange = (to: Person, input: Parameters<typeof statusChangeEmail>[1]) =>
   deliver(to.email, statusChangeEmail(to.firstName, input));

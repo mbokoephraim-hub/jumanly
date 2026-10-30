@@ -4,9 +4,11 @@ import { after } from "next/server";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { deliverDueDecisionMails } from "@/server/application-events";
+import { mailCompanyNotice } from "@/server/company-notice-email";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
 import { reportError } from "@/server/observability";
+import { informRetained } from "@/server/services/company-notice";
 import { analyzeApplication } from "@/server/services/cv-analysis";
 import { HireError } from "@/server/services/hire";
 import {
@@ -95,6 +97,24 @@ export async function shortlistAction(formData: FormData) {
   const count = await guarded(() => shortlist(db, ctx, jobId, ids), "/app/hire/offres");
   if (back.startsWith(`${atsOf(jobId)}/`)) redirect(`${back}?ok=retenue`);
   redirect(`/app/hire/offres/${jobId}/retenus?ajout=${count}`);
+}
+
+/**
+ * « Prévenir » (Ephraïm 30/10/2026): in one click, the retained not told yet (all of the offer, or
+ * the one of the file) get the company's « Candidature retenue », as a message and by e-mail.
+ */
+export async function informRetainedAction(formData: FormData) {
+  const { ctx } = await requireHire("/app/hire/offres", "manage", "sort");
+  const jobId = id(formData.get("job"));
+  const ids = formData.getAll("ids").map(id).filter(Boolean);
+  const back = String(formData.get("back") ?? "");
+  const sent = await guarded(
+    () => informRetained(db, ctx, jobId, ids.length > 0 ? ids : undefined),
+    "/app/hire/offres",
+  );
+  await Promise.all(sent.map((notice) => mailCompanyNotice("retained", notice)));
+  if (back.startsWith(`${atsOf(jobId)}/`)) redirect(`${back}?ok=prevenue`);
+  redirect(`/app/hire/offres/${jobId}/retenus?prevenus=${sent.length}`);
 }
 
 /** « Retirer de la liste » in the list of the retained. */

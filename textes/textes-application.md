@@ -13448,6 +13448,15 @@ Conventions :
 | `hireAts.shortlist.others` | {count, plural, one {# autre personne attend une réponse. Je peux préparer un message respectueux : vous le relisez avant l'envoi.} other {# autres personnes attendent une réponse. Je peux préparer un message respectueux : vous le relisez avant l'envoi.}} |
 | `hireAts.shortlist.slots` | Créneaux |
 | `hireAts.shortlist.inform` | {count, plural, one {Informer la personne} other {Informer les #}} |
+| `hireAts.shortlist.notice.title` | {count, plural, one {# personne retenue n'est pas encore prévenue} other {# personnes retenues ne sont pas encore prévenues}} |
+| `hireAts.shortlist.notice.text` | En un clic, chacune reçoit un message dans sa messagerie Jumanly et un e-mail, au nom de {company}, lui annonçant que sa candidature est retenue pour la suite. |
+| `hireAts.shortlist.notice.cta` | {count, plural, one {Prévenir la personne} other {Prévenir les #}} |
+| `hireAts.shortlist.notice.done` | {count, plural, one {# personne prévenue : message et e-mail envoyés} other {# personnes prévenues : messages et e-mails envoyés}} |
+| `hireAts.shortlist.notice.informed` | Prévenu·e |
+| `hireAts.profile.notice.title` | {firstName} n'est pas encore prévenu·e |
+| `hireAts.profile.notice.text` | Un clic : un message dans sa messagerie Jumanly et un e-mail, au nom de {company}, lui annoncent que sa candidature est retenue. |
+| `hireAts.profile.notice.cta` | Prévenir {firstName} |
+| `hireAts.profile.notice.done` | {firstName} est prévenu·e : message et e-mail envoyés |
 | `rhThread6.online` | En ligne |
 | `rhThread6.receipt.delivered` | Distribué |
 | `rhThread6.receipt.read` | Lu |
@@ -20280,6 +20289,55 @@ Conventions :
 | `mail.test.survey.closing` | Merci pour votre temps : chaque réponse compte. |
 | `mail.test.linkHelp` | Le bouton ne s'ouvre pas ? Copiez ce lien : |
 | `mail.test.footer.reason` | Vous recevez cet e-mail parce que l'adresse {email} est inscrite sur la liste d'attente de jumanly.io et a été invitée à tester la plateforme. |
+
+### Messages de l'entreprise · Accusé de réception et candidature retenue
+
+*Envoyés au nom de l'entreprise, dans la conversation de la candidature (messagerie Jumanly) et par e-mail. L'accusé de réception part tout seul dès l'envoi de la candidature ; l'annonce « retenue » part quand un membre de l'équipe clique sur « Prévenir » dans la liste des retenus.*
+
+| Clé | Texte |
+|---|---|
+| `companyNotice.greeting` | Bonjour {firstName}, |
+| `companyNotice.received.message` | Nous avons bien reçu votre candidature au poste {jobTitle}. Merci de l'intérêt que vous portez à {company}. Notre équipe va l'étudier avec attention et nous reviendrons vers vous dès que possible, ici même. |
+| `companyNotice.retained.message` | Bonne nouvelle : votre candidature au poste {jobTitle} est retenue pour la suite du recrutement. Nous reviendrons très vite vers vous, ici même, pour vous présenter la prochaine étape. |
+| `companyNotice.signature` | L'équipe {company} |
+| `companyNotice.noName` | Bonjour, |
+| `mail.companyNotice.from` | {company} via Jumanly |
+| `mail.companyNotice.signature` | L'équipe {company} |
+| `mail.companyNotice.job.title` | Votre candidature |
+| `mail.companyNotice.job.post` | Poste |
+| `mail.companyNotice.job.company` | Entreprise |
+| `mail.companyNotice.job.date` | Envoyée le |
+| `mail.companyNotice.footer.reason` | Vous recevez cet e-mail parce que vous avez candidaté sur Jumanly avec l'adresse {email}. Candidater reste toujours gratuit. |
+| `mail.companyNotice.received.subject` | {company} a bien reçu votre candidature · {jobTitle} |
+| `mail.companyNotice.received.preheader` | Votre candidature sera étudiée avec attention. {company} reviendra vers vous. |
+| `mail.companyNotice.received.badge` | Candidature reçue |
+| `mail.companyNotice.received.title` | Merci {firstName}, votre candidature est bien arrivée. |
+| `mail.companyNotice.received.titleNoName` | Merci, votre candidature est bien arrivée. |
+| `mail.companyNotice.received.intro` | {company} a bien reçu votre candidature au poste {jobTitle}. L'équipe va l'étudier avec attention et reviendra vers vous. |
+| `mail.companyNotice.received.steps.title` | Et maintenant ? |
+| `mail.companyNotice.received.steps.1.title` | Votre dossier est étudié |
+| `mail.companyNotice.received.steps.1.text` | L'équipe de {company} lit chaque candidature. Une personne décide, jamais un robot. |
+| `mail.companyNotice.received.steps.2.title` | {company} revient vers vous |
+| `mail.companyNotice.received.steps.2.text` | Dans votre messagerie Jumanly, et par e-mail, quelle que soit la réponse. |
+| `mail.companyNotice.received.steps.3.title` | Vous suivez tout en direct |
+| `mail.companyNotice.received.steps.3.text` | L'avancement de votre candidature s'affiche dans Carrière, onglet Candidatures. |
+| `mail.companyNotice.received.cta` | Suivre ma candidature |
+| `mail.companyNotice.received.closing` | Merci encore pour votre intérêt. À très vite. |
+| `mail.companyNotice.retained.subject` | Bonne nouvelle : votre candidature est retenue · {jobTitle} |
+| `mail.companyNotice.retained.preheader` | {company} a retenu votre candidature pour la suite du recrutement. |
+| `mail.companyNotice.retained.badge` | Candidature retenue |
+| `mail.companyNotice.retained.title` | Bonne nouvelle {firstName}, vous êtes retenu·e. |
+| `mail.companyNotice.retained.titleNoName` | Bonne nouvelle, vous êtes retenu·e. |
+| `mail.companyNotice.retained.intro` | {company} a retenu votre candidature au poste {jobTitle} pour la suite du recrutement. |
+| `mail.companyNotice.retained.steps.title` | La suite |
+| `mail.companyNotice.retained.steps.1.title` | Gardez un œil sur vos messages |
+| `mail.companyNotice.retained.steps.1.text` | {company} vous écrit très vite dans votre messagerie Jumanly. |
+| `mail.companyNotice.retained.steps.2.title` | Choisissez un créneau |
+| `mail.companyNotice.retained.steps.2.text` | Si un entretien vous est proposé, choisissez l'horaire qui vous convient. |
+| `mail.companyNotice.retained.steps.3.title` | Préparez-vous |
+| `mail.companyNotice.retained.steps.3.text` | Relisez l'offre et entraînez-vous avec Orbi dans Carrière. |
+| `mail.companyNotice.retained.cta` | Ouvrir la conversation |
+| `mail.companyNotice.retained.closing` | Félicitations, et à très vite. |
 
 ---
 
