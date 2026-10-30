@@ -5243,3 +5243,11 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - « Où en est-elle » : jauge qui se remplit, « Étape N sur 4 », étape en cours qui pulse doucement.
 - « Entraînez-vous avec Orbi » devient une grande carte mise en avant (bouton « Commencer l'entraînement »), « Préparer avec Orbi » juste dessous.
 - « Ma candidature » : tuiles (CV envoyé, écrire au recruteur), « Retirer ma candidature » discret en bas. Animations coupées si le mouvement est réduit.
+
+## 2026-10-30 · Accusé de réception automatique et annonce « candidature retenue »
+
+- Demande d'Ephraïm : dès qu'une candidature arrive, le candidat reçoit, sans clic du recruteur, un accusé de réception au nom de l'entreprise (reçue, sera étudiée, l'entreprise reviendra vers lui) : un message dans la conversation de la candidature et un e-mail. Il remplace l'ancien e-mail « Candidature envoyée » de Jumanly.
+- Quand un recruteur retient des candidats (Liste des retenus), une carte « N personnes retenues ne sont pas encore prévenues » propose « Prévenir les N » : en un clic, chacune reçoit le message « Candidature retenue » et l'e-mail. Même carte sur la fiche d'un candidat retenu (« Prévenir {prénom} »). Chaque lettre ne part qu'une fois (événements `acknowledged` et `retained_informed` dans l'historique de la candidature).
+- Les deux e-mails reprennent l'identité de l'e-mail de liste d'attente (sombre, dégradé Sapin → Lime, Sora) : `emails/entreprise-candidature.tsx`. Ils partent sous le nom « {entreprise} via Jumanly », depuis l'adresse de Jumanly.
+- Les messages sont écrits sans auteur (au nom de l'équipe) ; un candidat qui a bloqué l'organisation ne reçoit rien.
+- Service `src/server/services/company-notice.ts`, test `tests/unit/company-notice.test.ts`. Fusionné sans attendre la CI, à la demande d'Ephraïm.

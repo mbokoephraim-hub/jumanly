@@ -13,7 +13,16 @@ export type OutgoingEmail = {
   text: string;
   html?: string;
   replyTo?: string;
+  /** Name shown as the sender (« Cabinet Exemple via Jumanly »); the address stays Jumanly's. */
+  fromName?: string;
 };
+
+/** The configured sender with another display name: `Jumanly <a@b>` → `"X via Jumanly" <a@b>`. */
+export function senderWithName(from: string, name?: string) {
+  if (!name) return from;
+  const address = /<([^>]+)>/.exec(from)?.[1] ?? from.trim();
+  return `"${name.replace(/["\\\r\n<>]/g, "")}" <${address}>`;
+}
 
 export interface EmailSender {
   readonly id: "fake" | "resend" | "smtp";
@@ -48,7 +57,7 @@ export class ResendEmailSender implements EmailSender {
       method: "POST",
       headers: { Authorization: `Bearer ${this.apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: this.from,
+        from: senderWithName(this.from, email.fromName),
         to: [email.to],
         subject: email.subject,
         text: email.text,
@@ -89,7 +98,7 @@ export class SmtpEmailSender implements EmailSender {
 
   async send(email: OutgoingEmail) {
     await this.transport.sendMail({
-      from: this.from,
+      from: senderWithName(this.from, email.fromName),
       to: email.to,
       subject: email.subject,
       text: email.text,
