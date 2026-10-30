@@ -373,7 +373,7 @@ export async function suiviApplication(db: PrismaClient, userId: string, id: str
           title: true,
           status: true,
           closesAt: true,
-          organization: { select: { name: true, logo: true } },
+          organization: { select: { name: true, logo: true, slug: true } },
         },
       },
       interviews: {

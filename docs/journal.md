@@ -5236,3 +5236,10 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 
 - La page Carrière s'ouvre sur « Candidatures », au centre ; Progression à gauche, Mes documents à droite, par les onglets ou en glissant le doigt sur la page.
 - Mes documents : chaque section (Mes CV, Lettres de motivation, Portfolio) est une rangée de cartes qui défile à l'horizontale ; le portfolio montre sa carte d'état puis ses réalisations.
+
+## 2026-10-30 · Candidature (téléphone) : page de l'entreprise et design vivant
+
+- Le logo de l'entreprise s'affiche (liste des candidatures et écran Candidature) ; un toucher sur le logo, le nom ou la puce ouvre la page de l'entreprise.
+- « Où en est-elle » : jauge qui se remplit, « Étape N sur 4 », étape en cours qui pulse doucement.
+- « Entraînez-vous avec Orbi » devient une grande carte mise en avant (bouton « Commencer l'entraînement »), « Préparer avec Orbi » juste dessous.
+- « Ma candidature » : tuiles (CV envoyé, écrire au recruteur), « Retirer ma candidature » discret en bas. Animations coupées si le mouvement est réduit.

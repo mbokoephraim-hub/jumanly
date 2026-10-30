@@ -611,7 +611,12 @@ function ApplicationsPanel({ view, saved }: { view: CareerView; saved: SavedOffe
                 <Link href={row.href} className="nb-cr-carte nb-cr-cand">
                   <span className="nb-cr-cand-h">
                     <span className="nb-cr-logo" data-ton={row.tone} aria-hidden>
-                      {row.initials}
+                      {row.logo ? (
+                        // eslint-disable-next-line @next/next/no-img-element -- a company logo
+                        <img src={row.logo} alt="" />
+                      ) : (
+                        row.initials
+                      )}
                     </span>
                     <span className="nb-cr-cand-t">
                       <b>{row.title}</b>
