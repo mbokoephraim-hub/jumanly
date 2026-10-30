@@ -10353,6 +10353,12 @@ Conventions :
 | `phoneCareer.application.prepare` | Préparer avec Orbi |
 | `phoneCareer.application.practice` | S’entraîner avec Orbi |
 | `phoneCareer.application.practiceKinds` | Écrit ou oral |
+| `phoneCareer.application.companyPage` | Voir la page de {company} |
+| `phoneCareer.application.stepCount` | Étape {n} sur 4 |
+| `phoneCareer.application.practiceTitle` | Entraînez-vous avec Orbi |
+| `phoneCareer.application.practiceText` | Orbi joue le recruteur de {company} et vous pose les questions de ce poste. Vous arrivez à l’entretien plus serein. |
+| `phoneCareer.application.practiceGo` | Commencer l’entraînement |
+| `phoneCareer.application.mine` | Ma candidature |
 | `phoneCareer.application.cv` | CV envoyé |
 | `phoneCareer.application.writeTo` | Écrire à {name} |
 | `phoneCareer.application.writeTeam` | Écrire à l’équipe de recrutement |

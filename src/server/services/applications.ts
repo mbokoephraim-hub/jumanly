@@ -280,7 +280,7 @@ export async function listApplications(db: PrismaClient, userId: string) {
           closesAt: true,
           contractType: true,
           remote: true,
-          organization: { select: { name: true } },
+          organization: { select: { name: true, logo: true } },
           // Steps the recruiter defined, for the tracker of « Mes candidatures ».
           stages: { select: { kind: true, name: true, order: true }, orderBy: { order: "asc" } },
         },

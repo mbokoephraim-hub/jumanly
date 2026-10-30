@@ -195,6 +195,7 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
       id: application.id,
       title: application.job.title,
       company: application.job.organization.name,
+      logo: application.job.organization.logo,
       jobSlug: application.job.slug,
       createdAt: application.createdAt,
       viewedAt: application.viewedAt,

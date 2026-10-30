@@ -1,9 +1,10 @@
 "use client";
 
+import "@/styles/phone-candidature.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useState, useTransition } from "react";
+import { useState, useTransition, type CSSProperties } from "react";
 import { showToast } from "@/components/motion/toaster";
 import {
   sendCareerMessageAction,
@@ -22,6 +23,11 @@ export type ApplicationView = {
   title: string;
   company: string;
   initials: string;
+  logo: string | null;
+  /** The company's page (« Voir la page de Jumanly »). */
+  companyHref: string;
+  /** 1 to 4: the step reached, for « Étape 3 sur 4 ». */
+  step: number;
   line: string;
   offer: string;
   steps: { label: string; detail: string; state: "done" | "current" | "next" }[];
@@ -66,38 +72,102 @@ export function PhoneApplication({ view }: { view: ApplicationView }) {
   };
 
   return (
-    <div className="nb-page nb-ca-form nb-ca-candidature">
+    <div className="nb-page nb-ca-form nb-ca-candidature nb-cd">
       <header className="nb-ca-form-barre" data-retour-texte="">
         <PhoneBack fallback={APPLICATIONS} label={t("back")} text={t("back")} />
         <h1>{t("title")}</h1>
         <span />
       </header>
-      <div className="nb-ca-cand-tete">
-        <span className="nb-ca-cand-logo" aria-hidden>
-          {view.initials}
-        </span>
+      {/* The offer and its company: a tap on the logo or the name opens the company's page. */}
+      <div className="nb-ca-cand-tete nb-cd-tete">
+        <Link
+          href={view.companyHref}
+          className="nb-ca-cand-logo nb-cd-logo"
+          aria-label={t("companyPage", { company: view.company })}
+        >
+          {view.logo ? (
+            // eslint-disable-next-line @next/next/no-img-element -- a company logo
+            <img src={view.logo} alt="" />
+          ) : (
+            view.initials
+          )}
+        </Link>
         <span>
           <b>{view.title}</b>
-          <small className="nb-meta">{view.line}</small>
+          <Link href={view.companyHref} className="nb-cd-co">
+            {view.line}
+            <PhoneIcon name="chevron" size={13} />
+          </Link>
         </span>
-        <Link href={view.offer} className="nb-ca-cand-offre">
+      </div>
+      <div className="nb-cd-liens">
+        <Link href={view.offer} className="nb-cd-puce">
+          <PhoneIcon name="offres" size={15} />
           {t("offer")}
-          <PhoneIcon name="chevron" size={14} />
+        </Link>
+        <Link href={view.companyHref} className="nb-cd-puce">
+          <PhoneIcon name="organisation" size={15} />
+          {view.company}
         </Link>
       </div>
-      <section className="nb-ca-cand-suivi" aria-labelledby="cand-ou">
-        <p id="cand-ou" className="nb-meta">
-          {t("where")}
+
+      {/* Where it stands: a bar that fills up to the step reached, then the four steps. */}
+      <section
+        className="nb-ca-cand-suivi nb-cd-suivi"
+        aria-labelledby="cand-ou"
+        style={{ "--fait": `${(view.step / 4) * 100}%` } as CSSProperties}
+      >
+        <p className="nb-cd-suivi-h">
+          <span id="cand-ou">{t("where")}</span>
+          <em>{t("stepCount", { n: view.step })}</em>
         </p>
+        <span className="nb-cd-jauge" aria-hidden>
+          <span />
+        </span>
         <ol>
-          {view.steps.map((step) => (
-            <li key={step.label} data-etat={step.state}>
+          {view.steps.map((step, index) => (
+            <li
+              key={step.label}
+              data-etat={step.state}
+              style={{ animationDelay: `${0.1 + index * 0.08}s` }}
+              aria-current={step.state === "current" ? "step" : undefined}
+            >
               <b>{step.label}</b>
               <small>{step.detail}</small>
             </li>
           ))}
         </ol>
       </section>
+
+      {/* « S'entraîner avec Orbi », the option people should try (Ephraïm, 30/10/2026). */}
+      {view.active ? (
+        <section className="nb-cd-orbi" aria-labelledby="cand-orbi">
+          <span className="nb-cd-orbi-lueur" aria-hidden />
+          <div className="nb-cd-orbi-t">
+            <OrbiDisc size={48} />
+            <span>
+              <b id="cand-orbi">{t("practiceTitle")}</b>
+              <em>{t("practiceKinds")}</em>
+            </span>
+          </div>
+          <p>{t("practiceText", { company: view.company })}</p>
+          <Link
+            href={view.practice}
+            className="nb-bouton nb-cd-orbi-go"
+            data-plein=""
+            data-large=""
+          >
+            {t("practiceGo")}
+            <PhoneIcon name="fleche" size={17} />
+          </Link>
+          {view.interview ? null : (
+            <button type="button" className="nb-cd-orbi-prep" onClick={() => setSheet("orbi")}>
+              <PhoneIcon name="idee" size={16} />
+              {t("prepare")}
+            </button>
+          )}
+        </section>
+      ) : null}
       {view.interview ? (
         <section className="nb-ca-cand-ent" aria-labelledby="cand-ent">
           <p id="cand-ent" className="nb-ca-cand-k">
@@ -131,47 +201,53 @@ export function PhoneApplication({ view }: { view: ApplicationView }) {
           </div>
         </section>
       ) : null}
-      <div className="nb-ca-cand-lignes">
-        <Link href={view.practice} className="nb-ca-it" data-ligne="">
-          <span>{t("practice")}</span>
-          <small data-lime="">{t("practiceKinds")}</small>
-          <PhoneIcon name="chevron" size={18} />
-        </Link>
-        {view.interview ? null : (
-          <button type="button" className="nb-ca-it" data-ligne="" onClick={() => setSheet("orbi")}>
-            <span>{t("prepare")}</span>
-            <PhoneIcon name="chevron" size={18} />
-          </button>
-        )}
-        {view.cv ? (
-          <a href={view.cv.href} className="nb-ca-it" data-ligne="">
-            <span>{t("cv")}</span>
-            <small>{view.cv.title}</small>
-            <PhoneIcon name="chevron" size={18} />
-          </a>
-        ) : null}
-        {view.write ? (
-          <button
-            type="button"
-            className="nb-ca-it"
-            data-ligne=""
-            onClick={() => setSheet("write")}
-          >
-            <span>{view.write.label}</span>
-            <PhoneIcon name="chevron" size={18} />
-          </button>
-        ) : null}
+      <section className="nb-cd-mine" aria-labelledby="cand-mine">
+        <h2 id="cand-mine" className="nb-cd-mine-h">
+          {t("mine")}
+        </h2>
+        <div className="nb-cd-tuiles">
+          {view.cv ? (
+            <a href={view.cv.href} className="nb-cd-tuile">
+              <span className="nb-cd-tuile-i" data-cv="" aria-hidden>
+                <PhoneIcon name="cv" size={18} />
+              </span>
+              <span>
+                <b>{t("cv")}</b>
+                <small>{view.cv.title}</small>
+              </span>
+              <PhoneIcon name="chevron" size={16} />
+            </a>
+          ) : null}
+          {view.write ? (
+            <button type="button" className="nb-cd-tuile" onClick={() => setSheet("write")}>
+              <span className="nb-cd-tuile-i" data-ecrire="" aria-hidden>
+                <PhoneIcon name="messages" size={18} />
+              </span>
+              <span>
+                <b>{view.write.label}</b>
+              </span>
+              <PhoneIcon name="chevron" size={16} />
+            </button>
+          ) : null}
+          {view.active ? null : (
+            <Link href={view.practice} className="nb-cd-tuile">
+              <span className="nb-cd-tuile-i" aria-hidden>
+                <OrbiDisc size={22} />
+              </span>
+              <span>
+                <b>{t("practice")}</b>
+                <small>{t("practiceKinds")}</small>
+              </span>
+              <PhoneIcon name="chevron" size={16} />
+            </Link>
+          )}
+        </div>
         {view.active ? (
-          <button
-            type="button"
-            className="nb-ca-it nb-ca-sortir"
-            data-ligne=""
-            onClick={() => setSheet("withdraw")}
-          >
+          <button type="button" className="nb-cd-retirer" onClick={() => setSheet("withdraw")}>
             {t("withdraw")}
           </button>
         ) : null}
-      </div>
+      </section>
 
       <PhoneSheet
         open={sheet === "orbi"}

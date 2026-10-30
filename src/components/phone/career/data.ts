@@ -152,6 +152,8 @@ export type CareerView = {
     title: string;
     line: string;
     initials: string;
+    /** The company's logo, when it has one. */
+    logo: string | null;
     tone: number;
     status: string;
     strong: boolean;
@@ -486,6 +488,7 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
         date: format.dateTime(row.createdAt, { day: "numeric", month: "short" }),
       }),
       initials: initialsOf(company),
+      logo: row.logo,
       tone: companyTone(company),
       status: t(`applications.status.${row.status}`),
       strong,

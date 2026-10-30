@@ -1,0 +1,352 @@
+/* « Candidature » au téléphone, version vivante (Ephraïm, 30/10/2026) : la page de l'entreprise à
+   portée de doigt, une jauge qui se remplit, « S'entraîner avec Orbi » mis en avant, puis
+   « Ma candidature » en tuiles. */
+.nb-cd {
+  padding-bottom: 32px;
+}
+.nb-cd-tete {
+  border-bottom: 0;
+  padding-bottom: 10px;
+  animation: nb-cd-monte 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.nb-cd-logo {
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+.nb-cd-logo:active {
+  transform: scale(0.94);
+}
+.nb-cd-logo img,
+.nb-cr-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+.nb-cr-logo {
+  overflow: hidden;
+}
+.nb-cd-co {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 4px;
+  min-height: 28px;
+  font-size: 13.5px;
+  color: var(--nb-brume);
+}
+.nb-cd-co:active {
+  color: var(--nb-lime-t);
+}
+.nb-cd-liens {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid rgba(var(--nb-voile), 0.08);
+  animation: nb-cd-monte 0.4s 0.05s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.nb-cd-puce {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 18px;
+  background: var(--nb-haute);
+  color: var(--nb-creme);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.nb-cd-puce svg {
+  color: var(--nb-lime-t);
+}
+
+/* Où en est-elle : jauge + frise, l'étape en cours bat doucement. */
+.nb-cd-suivi {
+  margin: 14px 16px 0;
+  padding: 16px 16px 4px;
+  border-radius: 20px;
+  background: var(--nb-surface);
+  border: 1px solid rgba(var(--nb-voile), 0.08);
+  animation: nb-cd-monte 0.45s 0.08s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.nb-cd-suivi-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--nb-brume);
+}
+.nb-cd-suivi-h em {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.14);
+  color: var(--nb-lime-t);
+}
+.nb-cd-jauge {
+  display: block;
+  height: 8px;
+  margin: 12px 0 16px;
+  border-radius: 4px;
+  background: var(--nb-haute);
+  overflow: hidden;
+}
+.nb-cd-jauge span {
+  display: block;
+  height: 100%;
+  width: var(--fait);
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--nb-menthe), var(--nb-lime));
+  animation: nb-cd-remplit 1s 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.nb-cd-suivi ol {
+  margin-top: 0;
+}
+.nb-cd-suivi li {
+  animation: nb-cd-monte 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.nb-cd-suivi li[data-etat="done"]::after {
+  background: var(--nb-lime);
+}
+.nb-cd-suivi li[data-etat="done"]::before {
+  background: var(--nb-lime);
+  box-shadow: inset 0 0 0 4px var(--nb-surface);
+  border: 2px solid var(--nb-lime);
+  box-sizing: border-box;
+}
+.nb-cd-suivi li[data-etat="current"]::before {
+  animation: nb-cd-bat 1.8s ease-in-out infinite;
+}
+
+/* S'entraîner avec Orbi : la carte qui attire l'œil. */
+.nb-cd-orbi {
+  position: relative;
+  overflow: hidden;
+  margin: 16px 16px 0;
+  padding: 18px;
+  border-radius: 22px;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--nb-menthe) 38%, var(--nb-surface)),
+    var(--nb-surface) 70%
+  );
+  border: 1px solid color-mix(in srgb, var(--nb-menthe) 45%, transparent);
+  animation: nb-cd-monte 0.5s 0.16s cubic-bezier(0.2, 0.9, 0.25, 1.15) both;
+}
+.nb-cd-orbi-lueur {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--nb-lime) 35%, transparent),
+    transparent 70%
+  );
+  animation: nb-cd-lueur 4s ease-in-out infinite;
+  pointer-events: none;
+}
+.nb-cd-orbi > * {
+  position: relative;
+}
+.nb-cd-orbi-t {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nb-cd-orbi-t b {
+  display: block;
+  font-size: 18px;
+  line-height: 1.25;
+}
+.nb-cd-orbi-t em {
+  display: inline-block;
+  margin-top: 4px;
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--nb-lime-t);
+}
+.nb-cd-orbi > p {
+  margin: 12px 0 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--nb-creme);
+  opacity: 0.88;
+}
+.nb-cd-orbi-go {
+  gap: 8px;
+  font-weight: 700;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--nb-lime) 30%, transparent);
+}
+.nb-cd-orbi-go svg {
+  transition: transform 0.2s;
+}
+.nb-cd-orbi-go:active svg {
+  transform: translateX(4px);
+}
+.nb-cd-orbi-prep {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 8px;
+  background: none;
+  border: 0;
+  color: var(--nb-creme);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.nb-cd-orbi-prep svg {
+  color: var(--nb-lime-t);
+}
+
+/* Ma candidature : tuiles. */
+.nb-cd-mine {
+  margin: 22px 16px 0;
+  animation: nb-cd-monte 0.45s 0.24s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.nb-cd-mine-h {
+  margin: 0 0 10px 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--nb-brume);
+}
+.nb-cd-tuiles {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.nb-cd-tuile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 60px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: var(--nb-surface);
+  border: 1px solid rgba(var(--nb-voile), 0.08);
+  color: var(--nb-creme);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.nb-cd-tuile:active {
+  transform: scale(0.98);
+}
+.nb-cd-tuile > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+.nb-cd-tuile b {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+}
+.nb-cd-tuile small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--nb-brume);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-cd-tuile > svg {
+  color: var(--nb-brume);
+}
+.nb-cd-tuile-i {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--nb-haute);
+  color: var(--nb-creme);
+}
+.nb-cd-tuile-i[data-cv] {
+  background: rgba(124, 196, 255, 0.16);
+  color: #7cc4ff;
+}
+.nb-cd-tuile-i[data-ecrire] {
+  background: rgba(var(--nb-lime-rgb, 166, 242, 107), 0.14);
+  color: var(--nb-lime-t);
+}
+.nb-cd-retirer {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 18px;
+  background: none;
+  border: 0;
+  color: var(--nb-corail-t);
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@keyframes nb-cd-monte {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes nb-cd-remplit {
+  from {
+    width: 0;
+  }
+}
+@keyframes nb-cd-bat {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--nb-lime) 55%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 7px color-mix(in srgb, var(--nb-lime) 0%, transparent);
+  }
+}
+@keyframes nb-cd-lueur {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-16px, 14px) scale(1.12);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nb-cd *,
+  .nb-cd-tete,
+  .nb-cd-liens {
+    animation: none !important;
+  }
+}
+.nb-app[data-reduit] .nb-cd *,
+.nb-app[data-reduit] .nb-cd-tete,
+.nb-app[data-reduit] .nb-cd-liens {
+  animation: none !important;
+}
