@@ -73,6 +73,14 @@ brackets are placeholders hidden on the site until they are filled in.
 | `nav.contact` | Contact |
 | `nav.group.solutions` | Solutions |
 | `nav.group.discover` | Discover |
+| `nav.desc.talents` | Learn, grow your profile and apply for free. |
+| `nav.desc.recruiters` | Post your jobs and find the right people, with an explained score. |
+| `nav.desc.companies` | Hire as a team and follow your candidates on one board. |
+| `nav.desc.partners` | Give Jumanly to your members and follow their progress. |
+| `nav.desc.trainings` | Short learning paths and certificates to share. |
+| `nav.desc.jobs` | The latest jobs, open to every profile. |
+| `nav.desc.pricing` | Simple plans in USD, Mobile Money and card. |
+| `nav.desc.about` | Our mission and the team behind Jumanly. |
 | `nav.signup` | Create an account |
 | `nav.waitlist` | Join the waitlist |
 | `nav.waitlistShort` | Waitlist |

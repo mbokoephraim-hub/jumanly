@@ -1,8 +1,9 @@
-import { Suspense } from "react";
+import { Fragment, Suspense } from "react";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { publicNavigation, solutionsNavigation } from "@/config/navigation";
 import { Icon, Logo } from "@/components/brand";
+import { MenuArt } from "@/components/site/menu-art";
 import { SiteButton } from "@/components/site/marketing";
 import { cx } from "@/lib/cx";
 import { signupOpen } from "@/lib/signup";
@@ -21,8 +22,10 @@ import { navLinkClasses } from "./nav-link-styles";
 export async function PublicHeader() {
   const t = await getTranslations("nav");
   const pages = [...publicNavigation, { key: "about", href: "/a-propos" } as const];
-  const itemLink =
-    "jm-menu-item flex items-center gap-3 rounded-[16px] px-3.5 py-3 text-[16px] font-medium transition-colors hover:bg-[rgb(255_255_255/0.07)]";
+  const groups = [
+    { key: "solutions", links: solutionsNavigation },
+    { key: "discover", links: pages },
+  ] as const;
   return (
     <header className="sticky top-0 z-40 px-3 pt-3 sm:px-5 sm:pt-4">
       <div className="jm-glass-pill jm-glass-edge mx-auto flex h-[60px] max-w-[1200px] items-center gap-2 pr-2 pl-4 lg:h-[68px] lg:pl-6">
@@ -50,19 +53,15 @@ export async function PublicHeader() {
               </button>
               {/* Opens on hover and on keyboard focus: no script needed. */}
               <div className="invisible absolute top-full left-0 translate-y-1 pt-3 opacity-0 transition-all duration-300 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                <ul className="jm-glass-edge jm-glass-panel flex w-64 flex-col gap-0.5 rounded-[24px] p-2">
+                <ul className="jm-light jm-menu-sheet grid w-[620px] grid-cols-2 gap-1 rounded-[28px] p-3">
                   {solutionsNavigation.map((link) => (
                     <li key={link.key}>
-                      <Link
+                      <MenuEntry
                         href={link.href}
-                        className="flex items-center gap-3 rounded-[16px] px-3 py-2.5 text-[15px] font-medium transition-colors hover:bg-[rgb(255_255_255/0.07)] hover:text-lime"
-                      >
-                        <span
-                          aria-hidden
-                          className="size-2 rounded-full bg-lime shadow-[0_0_10px_#a6f26b]"
-                        />
-                        {t(link.key)}
-                      </Link>
+                        art={link.key}
+                        title={t(link.key)}
+                        text={t(`desc.${link.key}`)}
+                      />
                     </li>
                   ))}
                 </ul>
@@ -124,23 +123,27 @@ export async function PublicHeader() {
           closeLabel={t("menu.close")}
           menuLabel={t("menu.label")}
         >
-          <p className="jm-menu-item px-3.5 pt-1 pb-1 text-lab text-feuille-fonce">
-            {t("group.solutions")}
-          </p>
-          {solutionsNavigation.map((link) => (
-            <Link key={link.key} href={link.href} className={itemLink}>
-              <span aria-hidden className="size-2 rounded-full bg-lime shadow-[0_0_10px_#a6f26b]" />
-              {t(link.key)}
-            </Link>
-          ))}
-          <p className="jm-menu-item px-3.5 pt-3 pb-1 text-lab text-feuille-fonce">
-            {t("group.discover")}
-          </p>
-          {pages.map((link) => (
-            <Link key={link.key} href={link.href} className={itemLink}>
-              <span aria-hidden className="size-2 rounded-full bg-sapin/30" />
-              {t(link.key)}
-            </Link>
+          {groups.map((group, index) => (
+            <Fragment key={group.key}>
+              <p
+                className={cx(
+                  "jm-menu-item px-3 pb-1 text-[12px] font-semibold tracking-[0.08em] text-ardoise uppercase",
+                  index === 0 ? "pt-1" : "mt-2 border-t border-sapin/10 pt-4",
+                )}
+              >
+                {t(`group.${group.key}`)}
+              </p>
+              {group.links.map((link) => (
+                <MenuEntry
+                  key={link.key}
+                  href={link.href}
+                  art={link.key}
+                  title={t(link.key)}
+                  text={t(`desc.${link.key}`)}
+                  className="jm-menu-item"
+                />
+              ))}
+            </Fragment>
           ))}
           <div className="jm-menu-item mt-2 flex flex-col gap-2.5 border-t border-sapin/10 pt-3.5">
             <LanguageSwitch idPrefix="menu" className="self-start" />
@@ -167,6 +170,37 @@ export async function PublicHeader() {
         </PublicMobileMenu>
       </div>
     </header>
+  );
+}
+
+/** An entry of the menus: the colored drawing, the title and one line on what the page offers. */
+function MenuEntry({
+  href,
+  art,
+  title,
+  text,
+  className,
+}: {
+  href: string;
+  art: Parameters<typeof MenuArt>[0]["name"];
+  title: string;
+  text: string;
+  className?: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className={cx(
+        "jm-menu-entry group/entry flex items-start gap-3.5 rounded-[20px] p-2.5 transition-colors hover:bg-[#f2ede5]",
+        className,
+      )}
+    >
+      <MenuArt name={art} />
+      <span className="flex min-w-0 flex-col gap-0.5 pt-0.5">
+        <span className="text-[16px] leading-6 font-semibold text-sapin">{title}</span>
+        <span className="text-[14px] leading-5 text-ardoise">{text}</span>
+      </span>
+    </Link>
   );
 }
 

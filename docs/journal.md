@@ -5260,3 +5260,10 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - Les deux e-mails reprennent l'identité de l'e-mail de liste d'attente (sombre, dégradé Sapin → Lime, Sora) : `emails/entreprise-candidature.tsx`. Ils partent sous le nom « {entreprise} via Jumanly », depuis l'adresse de Jumanly.
 - Les messages sont écrits sans auteur (au nom de l'équipe) ; un candidat qui a bloqué l'organisation ne reçoit rien.
 - Service `src/server/services/company-notice.ts`, test `tests/unit/company-notice.test.ts`. Fusionné sans attendre la CI, à la demande d'Ephraïm.
+
+## 2026-10-30 · Menu illustré et nouvel accueil du site public
+
+- Demande d'Ephraïm (captures d'un autre site, à titre d'inspiration) : un menu où chaque entrée a une petite image colorée, plus vivant que « tout noir », et un écran d'accueil dans une grande carte en dégradé.
+- Menu : sur téléphone, le panneau qui s'ouvre sous la barre est maintenant clair (crème) ; chaque entrée a une tuile pastel avec un petit dessin à deux couleurs, son titre et une ligne d'explication, groupées « Solutions » (Talents, Recruteurs, Entreprises, Partenaires) et « Découvrir » (Formations, Offres, Tarifs, À propos). Sur ordinateur, « Solutions » ouvre une feuille crème à deux colonnes. Dessins : `src/components/site/menu-art.tsx` (décoratifs). Textes `nav.desc.*` (FR et EN). La barre flottante en verre, le flou et la flèche retour sont gardés.
+- Accueil : grande carte arrondie (dégradé Sapin → Nuit éclairé de halos Lime, Menthe, Lilas et Corail qui bougent lentement), titre centré avec « Connect. » en dégradé Lime → Menthe, sous-titre centré, boutons, puis deux cartes colorées empilées (« Formations », « Offres d'emploi ») derrière la photo. Classes `.jm-hero-card`, `.jm-hero-highlight`, `.jm-stack-*` dans `src/styles/site.css`.
+- Captures : `/mnt/project-files/captures/menu-accueil-2026-10-30/`.

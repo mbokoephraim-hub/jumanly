@@ -107,6 +107,14 @@ Conventions :
 | `nav.contact` | Contact |
 | `nav.group.solutions` | Solutions |
 | `nav.group.discover` | Découvrir |
+| `nav.desc.talents` | Formez-vous, enrichissez votre profil et candidatez gratuitement. |
+| `nav.desc.recruiters` | Publiez vos offres et trouvez les bons profils, avec un score expliqué. |
+| `nav.desc.companies` | Recrutez en équipe et suivez vos candidats sur un seul tableau. |
+| `nav.desc.partners` | Offrez Jumanly à vos membres et suivez leurs progrès. |
+| `nav.desc.trainings` | Des parcours courts et des attestations à partager. |
+| `nav.desc.jobs` | Les offres du moment, ouvertes à tous les profils. |
+| `nav.desc.pricing` | Des formules simples en USD, Mobile Money et carte. |
+| `nav.desc.about` | Notre mission et l'équipe derrière Jumanly. |
 | `nav.login` | Se connecter |
 | `nav.signup` | Créer un compte |
 | `nav.waitlist` | Rejoindre la liste d'attente |

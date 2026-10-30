@@ -152,82 +152,99 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       />
       <MotionRoot />
 
-      {/* Hero: on the Nuit page, the title very large, a photo with the cards of a real day */}
-      <section className="bg-papier px-4">
-        <div className="relative mx-auto max-w-[1200px] pt-10 pb-12 lg:pt-20 lg:pb-16">
-          <div className="relative flex flex-col gap-10 lg:flex-row lg:items-center lg:gap-14">
-            <div className="flex flex-col gap-6 lg:w-[560px] lg:shrink-0">
-              <div className="jm-rise" style={stagger(0)}>
-                <Eyebrow>{t("home.hero.eyebrow")}</Eyebrow>
-              </div>
-              <h1 className={heroTitle}>
-                {titleWords.map((word, index) => (
-                  <span
-                    key={word}
-                    className="jm-word mr-[0.22em] inline-block"
-                    style={stagger(index)}
-                  >
-                    {word}
-                  </span>
-                ))}
-                <span className="jm-word inline-block text-lime" style={stagger(titleWords.length)}>
-                  {lastWord}
-                </span>
-              </h1>
-              <p className={cx(lead, "jm-rise max-w-[540px] text-ardoise")} style={stagger(3)}>
-                {t("home.hero.subtitle")}
-              </p>
-              <div className="jm-rise flex flex-col gap-3 sm:flex-row" style={stagger(4)}>
-                <SiteButton href={joinHref({ profil: "talent" })}>
-                  {t("home.hero.ctaPrimary")}
-                </SiteButton>
-                <SiteButton href="/recruteurs" tone="light">
-                  {t("home.hero.ctaSecondary")}
-                </SiteButton>
-              </div>
-              <ul className="jm-rise flex flex-wrap gap-2" style={stagger(5)}>
-                {(["reassurance1", "reassurance2", "reassurance3"] as const).map((key) => (
-                  <li
-                    key={key}
-                    className="flex items-center gap-1.5 text-[13px] leading-[18px] font-medium text-ardoise"
-                  >
-                    <span className="flex size-5 items-center justify-center rounded-full bg-lime text-sapin">
-                      <Icon name="check" className="size-3" />
-                    </span>
-                    {t(`home.hero.${key}`)}
-                  </li>
-                ))}
-              </ul>
-              <InstallApp
-                id="jm-installer-accueil"
-                buttonClassName="inline-flex items-center gap-3 self-start rounded-pill py-1 pr-4 pl-1 text-left text-sm font-semibold hover:bg-blanc"
-                dialogClassName={installDialog}
-                trigger={
-                  <>
-                    <span className="flex size-10 items-center justify-center rounded-full bg-blanc text-lime ring-1 ring-sapin/10 ring-inset">
-                      <Icon name="telecharger" className="size-5" />
-                    </span>
-                    <span className="flex flex-col items-start">
-                      {t("system.install.button")}
-                      <span className="text-xs font-medium text-ardoise">
-                        {t("system.install.text")}
-                      </span>
-                    </span>
-                  </>
-                }
-                steps={<InstallSteps t={tInstall} id="jm-installer-accueil" />}
-              />
+      {/* Hero (30/10/2026): a big rounded card in the brand gradient, the title centered with its
+          last word in color, then colored cards stacked behind the photo of a real day. */}
+      <section className="px-3 pt-2 sm:px-5 lg:pt-4">
+        <div className="jm-hero-card relative mx-auto max-w-[1240px] overflow-hidden rounded-[32px] px-5 pt-12 sm:px-8 lg:rounded-[44px] lg:pt-20">
+          <div className="relative mx-auto flex max-w-[860px] flex-col items-center gap-6 text-center">
+            <div className="jm-rise" style={stagger(0)}>
+              <Eyebrow>{t("home.hero.eyebrow")}</Eyebrow>
             </div>
-            <HeroVisual
-              alt={t("home.hero.photoAlt")}
-              badge={t("home.hero.visual.badge")}
-              matchTitle={t("home.hero.visual.matchTitle")}
-              matchText={t("home.hero.visual.matchText")}
-              notification={t("home.hero.visual.notification")}
-              notificationText={t("home.hero.visual.notificationText")}
-              match={matchValue}
+            <h1 className={cx(heroTitle, "jm-hero-title text-[#fbf9f4]")}>
+              {titleWords.map((word, index) => (
+                <span
+                  key={word}
+                  className="jm-word mr-[0.22em] inline-block"
+                  style={stagger(index)}
+                >
+                  {word}
+                </span>
+              ))}
+              <span
+                className="jm-word jm-hero-highlight inline-block"
+                style={stagger(titleWords.length)}
+              >
+                {lastWord}
+              </span>
+            </h1>
+            <p className={cx(lead, "jm-rise max-w-[620px] text-[#d9e6e1]")} style={stagger(3)}>
+              {t("home.hero.subtitle")}
+            </p>
+            <div
+              className="jm-rise flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row"
+              style={stagger(4)}
+            >
+              <SiteButton href={joinHref({ profil: "talent" })} tone="lime" className="jm-cta-glow">
+                {t("home.hero.ctaPrimary")}
+              </SiteButton>
+              <SiteButton href="/recruteurs" tone="light">
+                {t("home.hero.ctaSecondary")}
+              </SiteButton>
+            </div>
+            <ul
+              className="jm-rise flex flex-wrap justify-center gap-x-4 gap-y-2"
+              style={stagger(5)}
+            >
+              {(["reassurance1", "reassurance2", "reassurance3"] as const).map((key) => (
+                <li
+                  key={key}
+                  className="flex items-center gap-1.5 text-[13px] leading-[18px] font-medium text-[#d9e6e1]"
+                >
+                  <span className="flex size-5 items-center justify-center rounded-full bg-lime text-sapin">
+                    <Icon name="check" className="size-3" />
+                  </span>
+                  {t(`home.hero.${key}`)}
+                </li>
+              ))}
+            </ul>
+            <InstallApp
+              id="jm-installer-accueil"
+              buttonClassName="inline-flex items-center gap-3 rounded-pill py-1 pr-4 pl-1 text-left text-sm font-semibold text-[#fbf9f4] hover:bg-[rgb(255_255_255/0.08)]"
+              dialogClassName={installDialog}
+              trigger={
+                <>
+                  <span className="flex size-10 items-center justify-center rounded-full bg-[rgb(255_255_255/0.1)] text-lime ring-1 ring-[rgb(255_255_255/0.18)] ring-inset">
+                    <Icon name="telecharger" className="size-5" />
+                  </span>
+                  <span className="flex flex-col items-start">
+                    {t("system.install.button")}
+                    <span className="text-xs font-medium text-[#b9cbc5]">
+                      {t("system.install.text")}
+                    </span>
+                  </span>
+                </>
+              }
+              steps={<InstallSteps t={tInstall} id="jm-installer-accueil" />}
             />
           </div>
+          <HeroVisual
+            alt={t("home.hero.photoAlt")}
+            badge={t("home.hero.visual.badge")}
+            matchTitle={t("home.hero.visual.matchTitle")}
+            matchText={t("home.hero.visual.matchText")}
+            notification={t("home.hero.visual.notification")}
+            notificationText={t("home.hero.visual.notificationText")}
+            match={matchValue}
+            stack={[
+              { label: t("nav.trainings"), icon: "learn" },
+              { label: t("nav.jobs"), icon: "jobs" },
+            ]}
+          />
+        </div>
+      </section>
+
+      <section className="bg-papier px-4">
+        <div className="relative mx-auto max-w-[1200px] pb-12 lg:pb-16">
           <div className="jm-card relative mx-auto mt-12 max-w-[1200px] rounded-[24px] px-2 py-6 lg:mt-16 lg:py-8">
             <h2 className="sr-only">{t("home.stats.label")}</h2>
             <StatRow items={stats} />
@@ -681,6 +698,7 @@ function HeroVisual({
   notification,
   notificationText,
   match,
+  stack,
 }: {
   alt: string;
   badge: string;
@@ -689,15 +707,31 @@ function HeroVisual({
   notification: string;
   notificationText: string;
   match: number;
+  /** The colored cards peeking out behind the photo, from the back to the front. */
+  stack: { label: string; icon: IconName }[];
 }) {
   return (
-    <div className="jm-rise relative min-w-0 flex-1" style={stagger(2)}>
+    <div className="jm-rise relative mx-auto mt-12 max-w-[980px] lg:mt-16" style={stagger(2)}>
+      <div aria-hidden className="flex flex-col items-center">
+        {stack.map((card, index) => (
+          <div
+            key={card.label}
+            className={cx(
+              "jm-stack-card flex h-16 items-start justify-center gap-2 rounded-t-[24px] pt-2 text-[14px] leading-5 font-semibold text-[#0f3f37] lg:h-[72px] lg:rounded-t-[28px] lg:pt-2.5 lg:text-[15px]",
+              index === 0 ? "jm-stack-warm w-[78%]" : "jm-stack-cool -mt-8 w-[89%] lg:-mt-9",
+            )}
+          >
+            <Icon name={card.icon} className="size-[18px]" />
+            {card.label}
+          </div>
+        ))}
+      </div>
       <PhotoFrame
         photo={{ src: "accueil-tablette.webp", alt, position: "58% 30%", priority: true }}
-        className="h-[380px] sm:h-[480px] lg:ml-8 lg:h-[560px]"
+        className="-mt-8 -mb-8 h-[380px] sm:h-[460px] lg:-mt-9 lg:h-[540px]"
       />
       <FloatCard
-        className="jm-pop top-6 -left-1 flex w-[230px] flex-col gap-2 sm:w-[260px] lg:top-24 lg:-left-6"
+        className="jm-pop top-24 -left-1 flex w-[230px] flex-col gap-2 sm:w-[260px] lg:top-40 lg:-left-6"
         style={stagger(0)}
       >
         <div className="flex items-center gap-2.5">
@@ -730,7 +764,7 @@ function HeroVisual({
       </FloatCard>
       <span
         aria-hidden
-        className="jm-pop absolute top-4 right-4 flex items-center gap-2 rounded-pill bg-blanc py-1.5 pr-3.5 pl-1.5 text-xs font-semibold text-sapin shadow-[0_10px_30px_rgba(0,0,0,0.35)] ring-1 ring-sapin/10 ring-inset max-sm:hidden lg:top-8 lg:right-8"
+        className="jm-pop absolute top-24 right-4 flex items-center gap-2 rounded-pill bg-blanc py-1.5 pr-3.5 pl-1.5 text-xs font-semibold text-sapin shadow-[0_10px_30px_rgba(0,0,0,0.35)] ring-1 ring-sapin/10 ring-inset max-sm:hidden lg:top-28 lg:right-8"
         style={stagger(2)}
       >
         <span className="flex size-7 items-center justify-center rounded-full bg-lime text-sapin">
