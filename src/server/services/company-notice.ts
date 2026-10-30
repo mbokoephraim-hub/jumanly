@@ -25,10 +25,11 @@ export function companyNoticeBody(
   input: { firstName?: string | null; jobTitle: string; company: string },
 ) {
   const firstName = input.firstName?.trim();
+  const values = { jobTitle: input.jobTitle, company: input.company };
   return [
     firstName ? t("companyNotice.greeting", { firstName }) : t("companyNotice.noName"),
-    t(`companyNotice.${variant}.message`, input),
-    t("companyNotice.signature", input),
+    t(`companyNotice.${variant}.message`, values),
+    t("companyNotice.signature", values),
   ].join("\n\n");
 }
 
