@@ -1088,6 +1088,16 @@
       "solutions": "Solutions",
       "discover": "Discover"
     },
+    "desc": {
+      "talents": "Learn, grow your profile and apply for free.",
+      "recruiters": "Post your jobs and find the right people, with an explained score.",
+      "companies": "Hire as a team and follow your candidates on one board.",
+      "partners": "Give Jumanly to your members and follow their progress.",
+      "trainings": "Short learning paths and certificates to share.",
+      "jobs": "The latest jobs, open to every profile.",
+      "pricing": "Simple plans in USD, Mobile Money and card.",
+      "about": "Our mission and the team behind Jumanly."
+    },
     "signup": "Create an account",
     "waitlist": "Join the waitlist",
     "waitlistShort": "Waitlist",
