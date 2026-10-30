@@ -13,6 +13,14 @@ import { keepTogether } from "@/lib/typography";
 import { db } from "@/server/db";
 import { surveyEntry } from "@/server/services/waitlist-test";
 
+/**
+ * Personal links are not known at build time: one placeholder token lets Next.js check the static
+ * shell (as for /offres/[slug]); real tokens render on request.
+ */
+export function generateStaticParams() {
+  return [{ token: "aucun" }];
+}
+
 export async function generateMetadata({
   params,
 }: PageProps<"/[locale]/questionnaire-test/[token]">): Promise<Metadata> {
