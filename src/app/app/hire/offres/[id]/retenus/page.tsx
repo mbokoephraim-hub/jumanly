@@ -8,9 +8,10 @@ import { OfferHead, OfferTabs, SectionTitle } from "@/components/recruiter/ats-w
 import { OfferSheets, OrbiLine } from "@/components/recruiter/offers";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
-import { unshortlistAction } from "@/server/actions/hire-ats";
+import { informRetainedAction, unshortlistAction } from "@/server/actions/hire-ats";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
+import { retainedToInform } from "@/server/services/company-notice";
 import { HireError, hirePermissions } from "@/server/services/hire";
 import { listOffers } from "@/server/services/hire-offers";
 import { atsBoard } from "@/server/services/hire-ats";
@@ -60,7 +61,15 @@ export default async function ShortlistPage({
       })
     ).map((user) => [user.id, (user.firstName || user.name).split(/\s+/)[0] ?? ""]),
   );
+  // Retained but not told yet: « Prévenir » sends them the company's letter in one click.
+  const [toInform, company] = await Promise.all([
+    retainedToInform(db, job.id).then((ids) => new Set(ids)),
+    db.organization
+      .findUnique({ where: { id: job.organizationId }, select: { name: true } })
+      .then((org) => org?.name ?? ""),
+  ]);
   const added = Number(one(query.ajout) ?? "");
+  const informed = Number(one(query.prevenus) ?? "");
   const ats = `/app/hire/offres/${job.id}/ats`;
   const figures = (await listOffers(db, ctx)).find((item) => item.id === job.id)?.figures ?? {
     applications: board.rows.length,
@@ -78,6 +87,9 @@ export default async function ShortlistPage({
         <ToastOnLoad message={t("added", { count: added })} />
       )}
       {one(query.ok) === "retiree" && <ToastOnLoad message={t("removed")} />}
+      {Number.isFinite(informed) && informed > 0 && (
+        <ToastOnLoad message={t("notice.done", { count: informed })} />
+      )}
       <FlowHead
         back={ats}
         backLabel={t("back")}
@@ -144,6 +156,21 @@ export default async function ShortlistPage({
             </div>
           </div>
 
+          {permissions.manage && toInform.size > 0 && (
+            <form action={informRetainedAction} className="t-verre t-rc-vide">
+              <input type="hidden" name="job" value={job.id} />
+              <span className="t-rc-rond" aria-hidden>
+                <TalentIcon name="message" />
+              </span>
+              <b>{t("notice.title", { count: toInform.size })}</b>
+              <span>{t("notice.text", { company })}</span>
+              <button type="submit" className="t-bt t-p t-s t-press">
+                <TalentIcon name="message" size="s" />
+                {t("notice.cta", { count: toInform.size })}
+              </button>
+            </form>
+          )}
+
           {kept.length === 0 ? (
             <div className="t-verre t-rc-vide">
               <span className="t-rc-rond" aria-hidden>
@@ -177,7 +204,9 @@ export default async function ShortlistPage({
                           .join(" · ")}
                       </span>
                     </div>
-                    <span className="t-r6-ret">{t("badge")}</span>
+                    <span className="t-r6-ret">
+                      {toInform.has(row.id) ? t("badge") : t("notice.informed")}
+                    </span>
                     {permissions.manage && (
                       <form action={unshortlistAction}>
                         <input type="hidden" name="job" value={job.id} />

@@ -14,6 +14,7 @@ import { cx } from "@/lib/cx";
 import { formatDayMonth } from "@/lib/dates";
 import {
   analyzeForOfferAction,
+  informRetainedAction,
   shortlistAction,
   unshortlistAction,
 } from "@/server/actions/hire-ats";
@@ -21,6 +22,7 @@ import { db } from "@/server/db";
 import { level } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
 import { applicationMatches } from "@/server/matching/service";
+import { noticeEvents } from "@/server/services/company-notice";
 import { analysisReadiness, type AnalysisPoint } from "@/server/services/cv-analysis";
 import { HireError, hirePermissions, recordView } from "@/server/services/hire";
 import { profileForOffer } from "@/server/services/hire-ats";
@@ -110,11 +112,31 @@ export default async function AtsProfilePage({
       </form>
     );
   const canKeep = permissions.manage && application.status === "active";
+  // Kept but not told yet: « Prévenir » sends the company's letter, message and e-mail.
+  const notice =
+    canKeep && shortlisted
+      ? await db.applicationEvent
+          .findFirst({
+            where: { applicationId: application.id, type: noticeEvents.retained },
+            select: { id: true },
+          })
+          .then(async (done) =>
+            done
+              ? null
+              : ((
+                  await db.organization.findUnique({
+                    where: { id: job.organizationId },
+                    select: { name: true },
+                  })
+                )?.name ?? ""),
+          )
+      : null;
 
   return (
     <div className="t-flux t-r6 t-large t-rw-a4 t-rw-pf">
       {one(query.ok) === "retenue" && <ToastOnLoad message={t("ok.shortlisted")} />}
       {one(query.ok) === "analyse" && <ToastOnLoad message={t("ok.analysed")} />}
+      {one(query.ok) === "prevenue" && <ToastOnLoad message={t("notice.done", { firstName })} />}
       <FlowHead back={base} backLabel={t("back")} title={t("title")} />
       <OfferHead job={job} />
       <OfferTabs jobId={job.id} current="ats" applications={applications} shortlisted={kept} />
@@ -139,6 +161,23 @@ export default async function AtsProfilePage({
               />
             )}
           </div>
+
+          {notice !== null && (
+            <form action={informRetainedAction} className="t-verre t-rc-vide">
+              <input type="hidden" name="job" value={id} />
+              <input type="hidden" name="ids" value={application.id} />
+              <input type="hidden" name="back" value={`${base}/${application.id}`} />
+              <span className="t-rc-rond" aria-hidden>
+                <TalentIcon name="message" />
+              </span>
+              <b>{t("notice.title", { firstName })}</b>
+              <span>{t("notice.text", { company: notice })}</span>
+              <button type="submit" className="t-bt t-p t-s t-press">
+                <TalentIcon name="message" size="s" />
+                {t("notice.cta", { firstName })}
+              </button>
+            </form>
+          )}
 
           <section className="t-r6-pqo" aria-labelledby="ats-syn-t">
             <div className="t-h">
