@@ -13,6 +13,7 @@ const disallow = [
   "/inscription",
   "/connexion",
   "/confirmer-reference",
+  "/questionnaire-test",
 ];
 
 /**

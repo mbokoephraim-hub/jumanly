@@ -27,6 +27,7 @@ export const publicSitePaths = [
   "/offres/:path*",
   "/partenaires",
   "/portfolio/:path*",
+  "/questionnaire-test/:path*",
   "/recruteurs",
   "/talents",
   "/tarifs",

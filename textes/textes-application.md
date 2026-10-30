@@ -1286,6 +1286,78 @@ Note d'intégration : le sujet « Demande de devis Company Premium » affiche le
 
 Note d'intégration : tant que `NEXT_PUBLIC_SIGNUP_OPEN` ne vaut pas `1`, tous les boutons « Créer un compte » du site mènent ici (`joinHref`). Les pages `/inscription` et `/connexion` restent accessibles par lien direct.
 
+### `/questionnaire-test/[token]` · Questionnaire de fin de test
+
+| Clé | Texte |
+|---|---|
+| `testSurvey.seo.title` | Votre avis sur Jumanly |
+| `testSurvey.hero.eyebrow` | Test de la plateforme |
+| `testSurvey.hero.title` | Racontez-nous votre test de Jumanly |
+| `testSurvey.hero.text` | Cinq minutes suffisent. Vos notes et vos commentaires décident directement des prochaines améliorations avant l'ouverture. |
+| `testSurvey.form.title` | Merci {firstName}, à vous la parole |
+| `testSurvey.form.text` | Les questions marquées d'un astérisque sont obligatoires. Soyez franc : c'est ce qui nous aide le plus. |
+| `testSurvey.form.submit` | Envoyer mes réponses |
+| `testSurvey.form.pending` | Envoi… |
+| `testSurvey.sections.ratings` | Vos notes |
+| `testSurvey.sections.usage` | Votre utilisation |
+| `testSurvey.sections.comments` | Vos commentaires |
+| `testSurvey.questions.overall` | Dans l'ensemble, comment s'est passée votre expérience ? |
+| `testSurvey.questions.ease` | Jumanly est-il facile à utiliser ? |
+| `testSurvey.questions.design` | Que pensez-vous de l'apparence (couleurs, écrans, lisibilité) ? |
+| `testSurvey.questions.usefulness` | Jumanly vous est-il utile pour votre carrière ou vos recrutements ? |
+| `testSurvey.questions.speed` | Les pages s'ouvrent-elles assez vite, même avec une connexion lente ? |
+| `testSurvey.questions.recommend` | Recommanderiez-vous Jumanly à un proche ou un collègue ? |
+| `testSurvey.questions.areas` | Quelles parties avez-vous utilisées ? |
+| `testSurvey.questions.device` | Sur quel appareil avez-vous surtout testé ? |
+| `testSurvey.questions.liked` | Ce que vous avez aimé |
+| `testSurvey.questions.problems` | Les problèmes rencontrés |
+| `testSurvey.questions.improvements` | Ce qu'il faut améliorer en priorité |
+| `testSurvey.questions.comments` | Autre chose à nous dire ? |
+| `testSurvey.hints.liked` | Une fonction, un écran, un détail qui vous a plu. |
+| `testSurvey.hints.problems` | Un bouton qui ne marche pas, une page lente, un texte peu clair : dites-nous où et ce qui s'est passé. |
+| `testSurvey.hints.improvements` | Ce qui manque ou ce que vous changeriez en premier. |
+| `testSurvey.hints.comments` | Une idée, une suggestion, un message pour l'équipe. |
+| `testSurvey.scale.low` | Pas du tout |
+| `testSurvey.scale.high` | Tout à fait |
+| `testSurvey.scale.recommendLow` | Pas du tout probable |
+| `testSurvey.scale.recommendHigh` | Très probable |
+| `testSurvey.areas.feed` | Fil |
+| `testSurvey.areas.explore` | Explorer |
+| `testSurvey.areas.career` | Carrière et CV |
+| `testSurvey.areas.learn` | Formations |
+| `testSurvey.areas.messages` | Messages |
+| `testSurvey.areas.jobs` | Offres et candidatures |
+| `testSurvey.areas.hire` | Recrutement |
+| `testSurvey.areas.orbi` | Orbi (IA) |
+| `testSurvey.devices.phone` | Téléphone |
+| `testSurvey.devices.computer` | Ordinateur |
+| `testSurvey.devices.tablet` | Tablette |
+| `testSurvey.short.overall` | Expérience |
+| `testSurvey.short.ease` | Facilité |
+| `testSurvey.short.design` | Apparence |
+| `testSurvey.short.usefulness` | Utilité |
+| `testSurvey.short.speed` | Rapidité |
+| `testSurvey.short.recommend` | Recommandation |
+| `testSurvey.short.liked` | Aimé |
+| `testSurvey.short.problems` | Problèmes |
+| `testSurvey.short.improvements` | À améliorer |
+| `testSurvey.short.comments` | Commentaires |
+| `testSurvey.error.summary` | Il manque des réponses : vérifiez les questions signalées en rouge. |
+| `testSurvey.error.rating` | Choisissez une note. |
+| `testSurvey.error.required` | Cette réponse est obligatoire. |
+| `testSurvey.error.tooLong` | 2 000 caractères au maximum. |
+| `testSurvey.error.rateLimit` | Trop de tentatives. Réessayez dans quelques minutes. |
+| `testSurvey.error.failed` | Vos réponses n'ont pas pu être enregistrées. Réessayez dans un instant. |
+| `testSurvey.done.title` | Merci {firstName}, c'est bien reçu ! |
+| `testSurvey.done.text` | Vos réponses arrivent directement à l'équipe Jumanly. Nous vous tiendrons au courant des améliorations qu'elles ont permises. |
+| `testSurvey.done.alreadyTitle` | Merci {firstName}, vous avez déjà répondu |
+| `testSurvey.done.alreadyText` | Ce questionnaire a déjà été rempli. Pour ajouter quelque chose, écrivez-nous à assistant@jumanly.io. |
+| `testSurvey.done.cta` | Revenir à l'accueil |
+| `testSurvey.unknown.title` | Ce lien de questionnaire n'est pas valable |
+| `testSurvey.unknown.text` | Vérifiez que vous avez ouvert le lien complet reçu par e-mail, ou écrivez-nous à assistant@jumanly.io. |
+
+Note d'intégration : le lien personnel (`surveyToken`) est créé à l'invitation au test. Une seule réponse par lien ; la page n'est jamais indexée.
+
 ---
 
 ## Partie 02 · Inscription et connexion
@@ -20174,6 +20246,41 @@ Conventions :
 | `mail.waitlist.footer.reason` | Vous recevez cet e-mail parce que l'adresse {email} a rejoint la liste d'attente sur jumanly.io. |
 | `mail.waitlist.footer.notYou` | Vous n'êtes pas à l'origine de cette inscription ? Ignorez simplement cet e-mail. |
 
+### E-mails · Test de la plateforme
+
+| Clé | Texte |
+|---|---|
+| `mail.test.invite.subject` | Votre accès pour tester Jumanly |
+| `mail.test.invite.preheader` | Vous faites partie des premiers testeurs : créez votre compte et donnez-nous votre avis. |
+| `mail.test.invite.badge` | Testeur |
+| `mail.test.invite.title` | {firstName}, Jumanly vous ouvre ses portes. |
+| `mail.test.invite.intro` | Vous faites partie des premières personnes invitées à tester la plateforme pendant {days} jours, avant son ouverture au public. |
+| `mail.test.invite.steps.title` | Comment se déroule le test |
+| `mail.test.invite.steps.1.title` | Créez votre compte |
+| `mail.test.invite.steps.1.text` | Avec le bouton ci-dessous, en utilisant cette adresse : {email}. |
+| `mail.test.invite.steps.2.title` | Utilisez Jumanly jusqu'au {date} |
+| `mail.test.invite.steps.2.text` | Formez-vous, complétez votre profil, explorez les offres ou publiez-en une : utilisez la plateforme comme au quotidien. |
+| `mail.test.invite.steps.3.title` | Partagez votre avis |
+| `mail.test.invite.steps.3.text` | À la fin du test, un court questionnaire arrive dans cette boîte : vos notes, ce qui a marché, ce qu'il faut améliorer. |
+| `mail.test.invite.cta` | Créer mon compte |
+| `mail.test.invite.closing` | Un souci pendant le test ? Répondez simplement à cet e-mail ou écrivez-nous à assistant@jumanly.io. |
+| `mail.test.survey.subject` | Votre avis sur Jumanly : 5 minutes |
+| `mail.test.survey.preheader` | Votre test est terminé. Dites-nous ce qui a marché et ce qu'il faut améliorer. |
+| `mail.test.survey.badge` | Questionnaire |
+| `mail.test.survey.title` | Merci d'avoir testé Jumanly, {firstName}. |
+| `mail.test.survey.intro` | Votre période de test se termine. Vos retours vont directement à l'équipe et décident des prochaines améliorations. |
+| `mail.test.survey.steps.title` | Ce que nous vous demandons |
+| `mail.test.survey.steps.1.title` | Vos notes |
+| `mail.test.survey.steps.1.text` | Expérience, facilité, apparence, utilité et rapidité, de 1 à 5. |
+| `mail.test.survey.steps.2.title` | Ce que vous avez utilisé |
+| `mail.test.survey.steps.2.text` | Les parties de la plateforme testées et votre appareil. |
+| `mail.test.survey.steps.3.title` | Vos commentaires |
+| `mail.test.survey.steps.3.text` | Ce que vous avez aimé, les problèmes rencontrés et ce qu'il faut améliorer. |
+| `mail.test.survey.cta` | Répondre au questionnaire |
+| `mail.test.survey.closing` | Merci pour votre temps : chaque réponse compte. |
+| `mail.test.linkHelp` | Le bouton ne s'ouvre pas ? Copiez ce lien : |
+| `mail.test.footer.reason` | Vous recevez cet e-mail parce que l'adresse {email} est inscrite sur la liste d'attente de jumanly.io et a été invitée à tester la plateforme. |
+
 ---
 
 ## Partie 08 · Textes système
@@ -23059,6 +23166,62 @@ Conventions :
 | `admin.waitlist.sendPending` | Envoyer les e-mails en attente |
 | `admin.waitlist.sent` | {count, plural, =0 {Aucun e-mail envoyé.} one {# e-mail envoyé.} other {# e-mails envoyés.}} |
 | `admin.waitlist.more` | Seules les {count} inscriptions les plus récentes sont affichées : l'export CSV contient toute la liste. |
+| `admin.waitlist.col.test` | Test |
+| `admin.waitlist.tabs.label` | Sections de la liste d'attente |
+| `admin.waitlist.tabs.inscrits` | Inscrits |
+| `admin.waitlist.tabs.statistiques` | Statistiques |
+| `admin.waitlist.tabs.retoursCount` | Questionnaires ({count}) |
+| `admin.waitlist.test.howTitle` | Organiser un test |
+| `admin.waitlist.test.how.1` | Cochez les personnes à inviter, choisissez la durée du test et cliquez sur « Inviter à tester » : elles reçoivent le lien d'inscription caché. |
+| `admin.waitlist.test.how.2` | Elles créent leur compte avec la même adresse et utilisent Jumanly pendant la durée choisie. |
+| `admin.waitlist.test.how.3` | À la fin, le questionnaire part tout seul. Les réponses arrivent dans l'onglet « Questionnaires ». |
+| `admin.waitlist.test.filter` | Filtrer par étape du test |
+| `admin.waitlist.test.allStates` | Toutes les étapes |
+| `admin.waitlist.test.status.waiting` | Pas encore invité |
+| `admin.waitlist.test.status.invited` | Test en cours |
+| `admin.waitlist.test.status.surveyed` | Questionnaire envoyé |
+| `admin.waitlist.test.status.answered` | A répondu |
+| `admin.waitlist.test.account` | Compte créé |
+| `admin.waitlist.test.until` | jusqu'au {date} |
+| `admin.waitlist.test.select` | Sélection |
+| `admin.waitlist.test.selectOne` | Sélectionner {name} |
+| `admin.waitlist.test.selectAll` | Tout sélectionner |
+| `admin.waitlist.test.selectedCount` | # sélectionné(s) |
+| `admin.waitlist.test.duration` | Durée du test |
+| `admin.waitlist.test.days` | {count} jours |
+| `admin.waitlist.test.invite` | Inviter à tester |
+| `admin.waitlist.test.sendSurvey` | Envoyer le questionnaire maintenant |
+| `admin.waitlist.test.noneSelected` | Cochez au moins une personne dans la liste. |
+| `admin.waitlist.test.invited` | {count, plural, =0 {Aucune invitation envoyée.} one {# invitation envoyée avec le lien d'inscription.} other {# invitations envoyées avec le lien d'inscription.}} |
+| `admin.waitlist.test.surveyed` | {count, plural, =0 {Aucun questionnaire envoyé : seules les personnes invitées qui n'ont pas encore répondu le reçoivent.} one {# questionnaire envoyé.} other {# questionnaires envoyés.}} |
+| `admin.waitlist.statsTab.total` | Inscrits au total |
+| `admin.waitlist.statsTab.last7` | Ces 7 derniers jours |
+| `admin.waitlist.statsTab.trend` | {value} par rapport aux 7 jours d'avant |
+| `admin.waitlist.statsTab.invited` | Invités à tester |
+| `admin.waitlist.statsTab.answered` | Questionnaires reçus |
+| `admin.waitlist.statsTab.weekly` | Nouveaux inscrits par semaine |
+| `admin.waitlist.statsTab.weekItem` | Semaine du {date} : {count} |
+| `admin.waitlist.statsTab.weeklyHelp` | Les 12 dernières semaines, du lundi au dimanche. |
+| `admin.waitlist.statsTab.profiles` | Profils |
+| `admin.waitlist.statsTab.countries` | Pays les plus représentés |
+| `admin.waitlist.statsTab.funnelTitle` | Avancement du test |
+| `admin.waitlist.statsTab.funnel.total` | Inscrits |
+| `admin.waitlist.statsTab.funnel.invited` | Invités à tester |
+| `admin.waitlist.statsTab.funnel.accounts` | Comptes créés |
+| `admin.waitlist.statsTab.funnel.surveyed` | Questionnaires envoyés |
+| `admin.waitlist.statsTab.funnel.answered` | Réponses reçues |
+| `admin.waitlist.statsTab.funnelHelp` | Un compte est compté quand il a été créé avec l'adresse inscrite sur la liste. |
+| `admin.waitlist.feedback.emptyTitle` | Aucune réponse pour l'instant |
+| `admin.waitlist.feedback.emptyText` | Invitez des personnes depuis l'onglet « Inscrits ». Le questionnaire leur est envoyé à la fin de leur test. |
+| `admin.waitlist.feedback.count` | Réponses |
+| `admin.waitlist.feedback.average` | Note moyenne |
+| `admin.waitlist.feedback.nps` | Score de recommandation |
+| `admin.waitlist.feedback.npsHelp` | Score de recommandation : part des notes 9 et 10 moins part des notes 0 à 6, de -100 à +100. |
+| `admin.waitlist.feedback.ratingsTitle` | Notes moyennes |
+| `admin.waitlist.feedback.areasTitle` | Parties utilisées |
+| `admin.waitlist.feedback.devicesTitle` | Appareils |
+| `admin.waitlist.feedback.answersTitle` | Toutes les réponses |
+| `admin.waitlist.feedback.outOf` | {value} / {max} |
 
 ---
 
