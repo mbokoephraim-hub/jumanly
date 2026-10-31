@@ -12616,6 +12616,28 @@
       "error": "Cela n’a pas marché. Réessayez dans un instant."
     }
   },
+  "phoneLetter": {
+    "write": {
+      "title": "Rédiger avec Orbi",
+      "orbi": "Orbi rédige à partir de votre profil et de l’offre. Vous relisez et modifiez avant tout envoi.",
+      "offer": "Pour quelle offre voulez-vous écrire la lettre ?",
+      "offerHint": "Touchez pour choisir parmi vos candidatures et vos offres enregistrées.",
+      "noOffer": "Sans offre précise",
+      "tone": "Ton de la lettre",
+      "points": "À mettre en avant (facultatif)",
+      "pointsHint": "Dites à Orbi ce qu’il doit souligner.",
+      "pointsExample": "Ex. : 3 ans au service client, anglais courant, j’aime travailler en équipe."
+    },
+    "or": "ou",
+    "check": {
+      "title": "Écrire et faire relire par Orbi",
+      "lead": "Écrivez ou collez votre lettre : Orbi propose des corrections, vous gardez celles que vous voulez.",
+      "name": "Titre (facultatif)",
+      "nameExample": "Ex. : Lettre pour le poste de comptable",
+      "text": "Votre lettre",
+      "textExample": "Ex. : Madame, Monsieur, je vous écris pour le poste de… Touchez ici pour écrire ou coller votre texte."
+    }
+  },
   "phoneInterview": {
     "seo": "Simulation d’entretien",
     "back": {

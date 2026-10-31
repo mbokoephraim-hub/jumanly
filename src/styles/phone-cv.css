@@ -1829,3 +1829,278 @@ button.nb-cv-depart {
 .nb-app[data-reduit] .nb-cvf-bloc {
   animation: none;
 }
+
+/* « Nouvelle lettre » au téléphone (Ephraïm, 31/10/2026) : deux blocs séparés, le message d'Orbi
+   encadré, l'offre dans un menu déroulant visible, des zones d'écriture encadrées avec un exemple,
+   et « Rédiger avec Orbi » en dégradé. */
+.nb-lt {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.nb-lt-bloc {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 22px;
+  background: var(--nb-surface);
+  border: 1px solid var(--nb-filet-fort);
+}
+.nb-lt-bloc[data-orbi] {
+  border-color: rgba(var(--nb-menthe-rgb, 47, 211, 166), 0.4);
+}
+.nb-lt-h {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--nb-creme);
+}
+.nb-lt-num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--nb-haute);
+  border: 1px solid var(--nb-filet-fort);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--nb-creme);
+}
+.nb-lt-bloc[data-orbi] .nb-lt-num {
+  background: var(--nb-menthe);
+  border-color: transparent;
+  color: var(--nb-encre);
+}
+.nb-lt-bulle {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 18px 18px 18px 6px;
+  background: linear-gradient(135deg, var(--nb-f-10362f, #10362f), var(--nb-haute));
+  border: 1.5px solid rgba(var(--nb-menthe-rgb, 47, 211, 166), 0.55);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--nb-texte);
+}
+.nb-lt-bulle > :first-child {
+  flex: none;
+}
+.nb-lt-lead {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--nb-gris);
+}
+.nb-lt-f {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.nb-lt-champ {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.nb-lt-champ > label,
+.nb-lt-champ > legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  margin-bottom: 7px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--nb-creme);
+}
+.nb-lt-champ > label {
+  margin-bottom: 0;
+}
+.nb-lt-champ > small {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--nb-brume);
+}
+/* Le menu déroulant de l'offre : un vrai champ encadré, avec sa flèche. */
+.nb-lt-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  border-radius: 16px;
+  background: var(--nb-haute);
+  border: 1.5px solid rgba(var(--nb-menthe-rgb, 47, 211, 166), 0.55);
+  color: var(--nb-menthe-claire-t);
+}
+.nb-lt-menu select {
+  appearance: none;
+  width: 100%;
+  min-width: 0;
+  min-height: 50px;
+  padding: 0 44px 0 14px;
+  border: 0;
+  border-radius: 16px;
+  background: none;
+  color: var(--nb-creme);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color-scheme: dark;
+  text-overflow: ellipsis;
+}
+html[data-nb-theme="clair"] .nb-lt-menu select,
+html[data-nb-theme="clair"] .nb-lt-zone {
+  color-scheme: light;
+}
+.nb-lt-menu > svg {
+  position: absolute;
+  right: 14px;
+  pointer-events: none;
+}
+.nb-lt-menu:focus-within {
+  outline: 2px solid var(--nb-lime-t);
+  outline-offset: 2px;
+}
+.nb-lt-menu select:focus-visible {
+  outline: none;
+}
+.nb-lt-tons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.nb-lt-ton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: var(--nb-haute);
+  border: 1px solid var(--nb-filet-fort);
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--nb-creme);
+  cursor: pointer;
+}
+.nb-lt-ton input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.nb-lt-ton:has(:checked) {
+  background: linear-gradient(120deg, var(--nb-lime), var(--nb-menthe));
+  border-color: transparent;
+  color: var(--nb-encre);
+}
+.nb-lt-ton:has(:focus-visible) {
+  outline: 2px solid var(--nb-lime-t);
+  outline-offset: 2px;
+}
+/* Les zones où l'on écrit : bien encadrées, plus claires que le bloc, avec un exemple. */
+.nb-lt-zone {
+  width: 100%;
+  min-width: 0;
+  min-height: 50px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: var(--nb-nuit);
+  border: 1.5px dashed rgba(var(--nb-voile), 0.32);
+  color: var(--nb-creme);
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.5;
+  color-scheme: dark;
+}
+textarea.nb-lt-zone {
+  min-height: 96px;
+  resize: vertical;
+}
+textarea.nb-lt-zone[data-grande] {
+  min-height: 210px;
+}
+.nb-lt-zone::placeholder {
+  color: var(--nb-brume);
+  opacity: 1;
+  font-style: italic;
+}
+.nb-lt-zone:focus-visible {
+  outline: none;
+  border-style: solid;
+  border-color: var(--nb-lime-t);
+  box-shadow: 0 0 0 3px rgba(var(--nb-lime-rgb, 166, 242, 107), 0.25);
+}
+.nb-lt-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--nb-brume);
+}
+.nb-lt-note > .t-ic {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.nb-lt-bt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--nb-lime);
+  color: var(--nb-encre);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.nb-lt-bt[data-orbi] {
+  background: linear-gradient(
+    115deg,
+    var(--nb-lime) 0%,
+    var(--nb-menthe-claire) 55%,
+    var(--nb-menthe) 100%
+  );
+}
+.nb-lt-bt:focus-visible {
+  outline: 2px solid var(--nb-creme);
+  outline-offset: 3px;
+}
+.nb-lt-bt:active {
+  transform: scale(0.98);
+}
+.nb-lt-ou {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--nb-brume);
+}
+.nb-lt-ou::before,
+.nb-lt-ou::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--nb-filet-fort);
+}
