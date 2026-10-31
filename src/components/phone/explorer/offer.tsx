@@ -5,6 +5,9 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 import { MenuArt, type MenuArtName } from "@/components/site/menu-art";
+import { criterionText, useCriterionDetail } from "@/components/matching/talent-why";
+import { dynamic } from "@/i18n/dynamic";
+import type { CriterionResult } from "@/server/matching/types";
 import { showToast } from "@/components/motion/toaster";
 import { applyFromSheetAction, tailorForApplicationAction } from "@/server/actions/explore";
 import { setJobSavedAction } from "@/server/actions/jobs";
@@ -42,6 +45,8 @@ export type PhoneOfferView = {
         score: number;
         why: { ok: boolean; text: string }[];
         gap: { href: string; text: string } | null;
+        /** The criteria of the deterministic score, for « Voir le détail du score ». */
+        criteria: CriterionResult[];
       }
     | { state: "optedOut" }
     | { state: "incomplete" };
@@ -76,6 +81,7 @@ export function PhoneOffer({ offer }: { offer: PhoneOfferView }) {
   const [saved, setSaved] = useState(offer.saved);
   const [applied, setApplied] = useState(offer.applicationId !== null);
   const [sheet, setSheet] = useState(false);
+  const [whyOpen, setWhyOpen] = useState(false);
   const [saving, startSave] = useTransition();
 
   const share = async () => {
@@ -194,9 +200,10 @@ export function PhoneOffer({ offer }: { offer: PhoneOfferView }) {
                   {offer.match.gap.text}
                 </Link>
               ) : null}
-              <Link href={`/app/jobs/${offer.slug}?pourquoi=1`} className="nb-ex-detail">
+              <button type="button" className="nb-ex-detail-b" onClick={() => setWhyOpen(true)}>
                 {t("offer.whyFull")}
-              </Link>
+                <PhoneIcon name="chevron" size={16} stroke={2.2} />
+              </button>
             </>
           ) : (
             <div className="nb-ex-pourquoi-t">
@@ -272,6 +279,17 @@ export function PhoneOffer({ offer }: { offer: PhoneOfferView }) {
         )}
       </div>
 
+      {offer.match.state === "ok" ? (
+        <WhySheet
+          open={whyOpen}
+          onClose={() => setWhyOpen(false)}
+          score={offer.match.score}
+          criteria={offer.match.criteria}
+          gap={offer.match.gap}
+          contestHref={`/app/jobs/${offer.slug}?pourquoi=1`}
+        />
+      ) : null}
+
       <ApplySheet
         offer={offer}
         open={sheet}
@@ -287,6 +305,83 @@ const FACT_ICONS = {
   contract: "offres",
   level: "horloge",
 } as const;
+
+/**
+ * « Voir le détail du score » on the phone (Ephraïm, 31/10/2026): one sheet on the offer itself,
+ * no other page and no bars. What already matches, then the gaps, each in one sentence built from
+ * the facts of the calculation. Contesting stays one link away.
+ */
+function WhySheet({
+  open,
+  onClose,
+  score,
+  criteria,
+  gap,
+  contestHref,
+}: {
+  open: boolean;
+  onClose: () => void;
+  score: number;
+  criteria: CriterionResult[];
+  gap: { href: string; text: string } | null;
+  contestHref: string;
+}) {
+  const t = useTranslations("phoneExplorer");
+  const all = useTranslations();
+  const d = dynamic(all);
+  const detail = useCriterionDetail();
+  const shown = criteria.filter((criterion) => criterion.status !== "not_applicable");
+  const good = shown.filter((criterion) => criterion.status === "met");
+  const gaps = shown.filter((criterion) => criterion.status !== "met");
+  const row = (criterion: CriterionResult, met: boolean) => (
+    <li key={criterion.key} data-ok={met ? "" : undefined}>
+      <span className="nb-ex-ec-ic" aria-hidden>
+        <PhoneIcon name={met ? "coche" : "fleche"} size={16} stroke={2.4} />
+      </span>
+      <span>
+        <b>{d(`match.criterion.${criterionText[criterion.key]}.text`)}</b>
+        <small>{detail(criterion)}</small>
+      </span>
+    </li>
+  );
+  return (
+    <PhoneSheet
+      open={open}
+      onClose={onClose}
+      label={t("offer.whySheet.title", { score })}
+      closeLabel={t("apply.close")}
+      className="nb-ex-feuille nb-ex-ec"
+    >
+      <b className="nb-ex-feuille-t">{t("offer.whySheet.title", { score })}</b>
+      <span className="nb-meta">{t("offer.whySheet.lead")}</span>
+      {gaps.length > 0 ? (
+        <>
+          <p className="nb-ex-ec-h" data-ton="ecart">
+            {t("offer.whySheet.gaps", { count: gaps.length })}
+          </p>
+          <ul className="nb-ex-ec-l">{gaps.map((criterion) => row(criterion, false))}</ul>
+          {gap ? (
+            <Link href={gap.href} className="nb-ex-ecart">
+              {gap.text}
+            </Link>
+          ) : null}
+        </>
+      ) : (
+        <p className="nb-ex-ec-h">{t("offer.whySheet.noGap")}</p>
+      )}
+      {good.length > 0 ? (
+        <>
+          <p className="nb-ex-ec-h">{t("offer.whySheet.good", { count: good.length })}</p>
+          <ul className="nb-ex-ec-l">{good.map((criterion) => row(criterion, true))}</ul>
+        </>
+      ) : null}
+      <p className="nb-ex-ec-garde">{t("offer.whySheet.guard")}</p>
+      <Link href={contestHref} className="nb-ex-ec-contester">
+        {t("offer.whySheet.contest")}
+      </Link>
+    </PhoneSheet>
+  );
+}
 
 /** A section title with its menu drawing, the same drawings as the menus (Ephraïm, 31/10/2026). */
 function SectionTitle({ art, title }: { art: MenuArtName; title: string }) {

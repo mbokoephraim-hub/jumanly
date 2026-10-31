@@ -115,12 +115,12 @@ export default async function TalentJobPage({
     },
   });
   const jobRow = await db.job.findUnique({ where: { slug }, select: { id: true } });
-  const [application, saved] = jobRow
+  const [sent, saved] = jobRow
     ? await Promise.all([
         profile
           ? db.application.findUnique({
               where: { jobId_profileId: { jobId: jobRow.id, profileId: profile.id } },
-              select: { id: true, createdAt: true },
+              select: { id: true, createdAt: true, status: true },
             })
           : null,
         db.savedJob.findUnique({
@@ -128,6 +128,8 @@ export default async function TalentJobPage({
         }),
       ])
     : [null, null];
+  // A withdrawn application can be sent again (Ephraïm, 31/10/2026): the offer shows « Postuler ».
+  const application = sent?.status === "withdrawn" ? null : sent;
   const company = job.organization.name;
   const cvs = profile?.documents ?? [];
   const outcome = typeof query.candidature === "string" ? query.candidature : undefined;
@@ -269,6 +271,7 @@ export default async function TalentJobPage({
             state: "ok",
             score: Math.round(ok.score),
             why,
+            criteria: ok.criteria,
             gap: course
               ? {
                   href: `/app/learn/${course.slug}`,

@@ -124,3 +124,107 @@
   grid-column: 1 / -1;
   margin-top: 10px;
 }
+
+/* « Voir le détail du score » : un vrai bouton, puis une seule feuille avec les écarts
+   (Ephraïm, 31/10/2026). Pas de barres : une ligne par critère. */
+.nb-ex-detail-b {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 46px;
+  margin-top: 14px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--nb-lime);
+  color: var(--nb-encre, #0f3f37);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.nb-ex-detail-b:active {
+  transform: scale(0.98);
+}
+.nb-feuille.nb-ex-feuille.nb-ex-ec {
+  height: auto;
+  padding: 10px 20px calc(18px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.nb-ex-ec .nb-ex-feuille-t {
+  margin-top: 8px;
+}
+.nb-ex-ec-h {
+  margin: 20px 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--nb-brume);
+}
+.nb-ex-ec-h[data-ton="ecart"] {
+  color: var(--nb-ambre, #f4c463);
+}
+.nb-ex-ec-l {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+.nb-ex-ec-l li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--nb-creme) 5%, transparent);
+}
+.nb-ex-ec-ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--nb-ambre, #f4c463) 18%, transparent);
+  color: var(--nb-ambre, #f4c463);
+}
+.nb-ex-ec-l li[data-ok] .nb-ex-ec-ic {
+  background: color-mix(in srgb, var(--nb-lime) 16%, transparent);
+  color: var(--nb-lime);
+}
+.nb-ex-ec-l li > span:last-child {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.nb-ex-ec-l b {
+  font-size: 14.5px;
+  font-weight: 700;
+}
+.nb-ex-ec-l small {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--nb-brume);
+}
+.nb-ex-ec .nb-ex-ecart {
+  margin-top: 10px;
+}
+.nb-ex-ec-garde {
+  margin: 20px 0 0;
+  font-size: 12.5px;
+  color: var(--nb-brume);
+  text-align: center;
+}
+.nb-ex-ec-contester {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 44px;
+  font-size: 13px;
+  color: var(--nb-brume);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

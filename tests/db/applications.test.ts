@@ -139,6 +139,17 @@ describe("cycle d'une candidature", () => {
     // Someone else cannot withdraw it.
     const other = await talent();
     expect(await withdrawApplication(db, other.id, application!.id)).toBe(false);
+
+    // Withdrawn, it can be sent again: the same application starts over (Ephraïm, 31/10/2026).
+    const again = await applyToJob(db, { userId: user.id, jobSlug: job.slug });
+    expect(again).toEqual({ status: "applied", applicationId: application!.id });
+    const [renewed] = await listApplications(db, user.id);
+    expect(renewed && talentStatus(renewed)).toBe("sent");
+    expect(renewed?.events.map((event) => event.type)).toEqual([
+      "submitted",
+      "withdrawn",
+      "submitted",
+    ]);
   });
 
   it("refuse une offre close ou inconnue", async () => {

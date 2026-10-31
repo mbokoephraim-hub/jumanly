@@ -9020,6 +9020,13 @@ Conventions :
 | `phoneExplorer.offer.duration.hoursOnly` | {hours} h |
 | `phoneExplorer.offer.gap` | Combler l’écart : cours {course}, {duration} › |
 | `phoneExplorer.offer.whyFull` | Voir le détail du score |
+| `phoneExplorer.offer.whySheet.title` | Pourquoi {score} % ? |
+| `phoneExplorer.offer.whySheet.lead` | Calcul fixe, le même pour tous. Votre nom, âge, genre ou photo n'entrent jamais dans le score. |
+| `phoneExplorer.offer.whySheet.gaps` | {count, plural, one {L'écart à combler} other {Les # écarts à combler}} |
+| `phoneExplorer.offer.whySheet.good` | {count, plural, one {Ce qui correspond déjà} other {Les # points qui correspondent déjà}} |
+| `phoneExplorer.offer.whySheet.noGap` | Aucun écart : tout correspond. |
+| `phoneExplorer.offer.whySheet.guard` | Le recruteur décide. Ce score ne bloque jamais votre candidature. |
+| `phoneExplorer.offer.whySheet.contest` | Contester ce score |
 | `phoneExplorer.offer.noScore` | Pas encore de score pour vous |
 | `phoneExplorer.offer.noScoreText` | Ajoutez vos compétences dans Carrière : Orbi vous dira ce qui correspond. |
 | `phoneExplorer.offer.noScoreLink` | Compléter mon profil › |
