@@ -687,10 +687,7 @@ function DocumentsPanel({
   return (
     <>
       <section aria-labelledby="nb-doc-cv">
-        <h2 id="nb-doc-cv" className="nb-pf-h nb-cr-h nb-doc-h">
-          {t("docs.cv")}
-        </h2>
-        <CvPanel view={view} onMenu={onMenu} />
+        <CvPanel view={view} onMenu={onMenu} title={t("docs.cv")} />
       </section>
 
       <section aria-labelledby="nb-doc-lettres">
@@ -780,9 +777,12 @@ function DocumentsPanel({
 function CvPanel({
   view,
   onMenu,
+  title,
 }: {
   view: CareerView;
   onMenu: (cv: CareerView["cvs"][number]) => void;
+  /** « Mes CV »: the section title, on one line with « Sélectionner » (Ephraïm, 31/10/2026). */
+  title?: string;
 }) {
   const t = useTranslations("phoneCareer");
   const [selecting, setSelecting] = useState(false);
@@ -817,6 +817,35 @@ function CvPanel({
     });
   return (
     <div className="nb-cr-pad">
+      {title || view.cvs.length > 0 ? (
+        <div className="nb-cr-cv-barre">
+          {title ? (
+            <h2 id="nb-doc-cv" className="nb-cr-cv-titre">
+              {title}
+              {view.cvs.length > 0 ? (
+                <span aria-label={t("cv.library", { count: view.cvs.length })}>
+                  {view.cvs.length}
+                </span>
+              ) : null}
+            </h2>
+          ) : (
+            <b>{t("cv.library", { count: view.cvs.length })}</b>
+          )}
+          {view.cvs.length > 0 ? (
+            <button type="button" onClick={selecting ? stop : () => setSelecting(true)}>
+              {selecting ? t("cancel") : t("cv.select.start")}
+            </button>
+          ) : null}
+        </div>
+      ) : null}
+      {selecting ? (
+        <div className="nb-cr-cv-barre" data-choix="">
+          <b role="status">{t("cv.select.count", { count: selected.length })}</b>
+          <button type="button" onClick={() => setChosen(all ? new Set() : new Set(ids))}>
+            {all ? t("cv.select.none") : t("cv.select.all")}
+          </button>
+        </div>
+      ) : null}
       {view.adapt && !selecting ? (
         <div className="nb-cr-carte nb-cr-orbi">
           <OrbiStar />
@@ -827,48 +856,29 @@ function CvPanel({
         </div>
       ) : null}
       {view.cvs.length > 0 ? (
-        <div className="nb-cr-cv-barre">
-          {selecting ? (
-            <>
-              <b role="status">{t("cv.select.count", { count: selected.length })}</b>
-              <button type="button" onClick={() => setChosen(all ? new Set() : new Set(ids))}>
-                {all ? t("cv.select.none") : t("cv.select.all")}
-              </button>
-              <button type="button" onClick={stop}>
-                {t("cancel")}
-              </button>
-            </>
-          ) : (
-            <>
-              <b>{t("cv.library", { count: view.cvs.length })}</b>
-              <button type="button" onClick={() => setSelecting(true)}>
-                {t("cv.select.start")}
-              </button>
-            </>
-          )}
-        </div>
-      ) : null}
-      {view.cvs.length > 0 ? (
         <ul className="nb-doc-rangee" data-rangee="" data-selection={selecting ? "" : undefined}>
           {view.cvs.map((cv, at) => {
             const isChosen = chosen.has(cv.id);
-            // Compact card (Ephraïm, 31/10/2026): a small page drawing on the left, the name on
-            // two lines at most, then one row of labels (Par défaut, Importé, score) and the
-            // template and date. Same height whatever the name's length.
+            // CV card (Ephraïm, 31/10/2026): two fit on the screen, the third peeks. A page drawing
+            // on a band of the CV's colour, the name on two lines at most, one row of labels
+            // (Par défaut, Importé, score), then the template and date. Same height for all.
             const page = (
               <>
                 <span
-                  className="nb-cr-cv-page"
-                  data-fichier={cv.file ? "" : undefined}
+                  className="nb-cr-cv-bande"
                   style={{ "--accent": cv.color } as CSSProperties}
                   aria-hidden
                 >
-                  <i data-titre="" />
-                  <i data-sous="" />
-                  <i />
-                  <i data-w="80" />
-                  <i data-section="" />
-                  <i data-w="70" />
+                  <span className="nb-cr-cv-page" data-fichier={cv.file ? "" : undefined}>
+                    <i data-titre="" />
+                    <i data-sous="" />
+                    <i />
+                    <i data-w="80" />
+                    <i data-w="70" />
+                    <i data-section="" />
+                    <i />
+                    <i data-w="80" />
+                  </span>
                 </span>
                 <span className="nb-cr-cv-t">
                   <b title={cv.title}>
@@ -937,7 +947,7 @@ function CvPanel({
                       aria-label={t("cv.more", { title: cv.title })}
                       onClick={() => onMenu(cv)}
                     >
-                      <PhoneIcon name="plusOptions" size={16} />
+                      <PhoneIcon name="plusOptions" size={22} stroke={3.6} />
                     </button>
                   </>
                 )}

@@ -5303,3 +5303,7 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 ## 2026-10-31 · Mes CV plus compacts (téléphone)
 
 Demande d'Ephraïm : cartes CV trop hautes, interlignes trop larges, titres longs illisibles. Chaque CV est maintenant une carte horizontale d'environ 84 px : petite page dessinée (couleur du modèle) à gauche, nom sur deux lignes au plus (points de suspension, nom complet au survol), une rangée d'étiquettes (« Par défaut », « Importé », score coloré vert/ambre/rouge) et « Modèle · date » sur une ligne. Couleur de repère : liseré à gauche. Textes raccourcis : « Moderne · hier », « PDF · 29 oct. », « 4 CV ».
+
+## 2026-10-31 · Mes CV : cartes plus hautes, deux à l'écran
+
+Retour d'Ephraïm : cartes compactes trop basses, trois points invisibles. Carte verticale d'environ 200 px : bande à la couleur du CV avec la page dessinée, nom sur deux lignes, étiquettes, modèle et date. Deux cartes tiennent à l'écran, la troisième dépasse. Trois points dans un rond foncé bien visible. « Mes CV » + nombre + « Sélectionner » sur une seule ligne.
