@@ -2329,7 +2329,8 @@ textarea.nb-lt-zone[data-grande] {
 .nb-lt-outils {
   display: flex;
   justify-content: center;
-  gap: 0;
+  align-items: center;
+  gap: 12px;
 }
 .nb-lt-outil {
   display: inline-flex;
@@ -2348,7 +2349,19 @@ textarea.nb-lt-zone[data-grande] {
   text-decoration: none;
   cursor: pointer;
 }
-.nb-lt-outil:last-child {
+.nb-lt-outil {
+  gap: 8px;
+  min-width: 48px;
+  height: 48px;
+  background: var(--nb-surface);
+  border: 1px solid var(--nb-filet-fort);
+  color: var(--nb-creme);
+}
+.nb-lt-outil:not([data-texte]) {
+  width: 48px;
+  padding: 0;
+}
+.nb-lt-outil.nb-lt-danger {
   color: var(--nb-corail-t);
 }
 .nb-lt-outil:focus-visible {

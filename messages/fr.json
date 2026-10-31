@@ -12728,6 +12728,7 @@
       "text": "Votre lettre",
       "use": "Utiliser cette lettre",
       "again": "{count, plural, one {Relire encore · # crédit} other {Relire encore · # crédits}}",
+      "download": "Télécharger",
       "deleteAsk": "Supprimer cette lettre ?",
       "deleteYes": "Oui, supprimer"
     },

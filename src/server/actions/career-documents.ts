@@ -22,6 +22,7 @@ import {
   PROOFREAD_MAX,
   proofread,
   saveDocument,
+  saveOwnLetter,
   saveSchema,
   tailorCv,
   tailorCvToText,
@@ -113,6 +114,21 @@ export async function proofreadAction(formData: FormData) {
   });
   if (!result.ok) redirect(`${letters}&ia=${result.code}`);
   redirect(`${DOCUMENTS}/${result.id}`);
+}
+
+/** « Utiliser cette lettre » in « Écrire et faire relire » (phone): kept without Orbi, no credit. */
+export async function saveOwnLetterAction(formData: FormData) {
+  const letters = lettersOf(formData);
+  const parsed = proofreadSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) redirect(`${letters}&erreur=input`);
+  const user = await requireUser(DOCUMENTS);
+  const t = await getTranslations("career.documents.type");
+  await saveOwnLetter(db, user.id, {
+    title: parsed.data.title || t("letter"),
+    text: parsed.data.text,
+  });
+  refresh();
+  redirect("/app/career/cv?onglet=documents&ok=lettre");
 }
 
 export async function saveDocumentAction(formData: FormData) {
