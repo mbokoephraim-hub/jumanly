@@ -10548,6 +10548,10 @@ Conventions :
 | `phoneLetter.check.name` | Titre (facultatif) |
 | `phoneLetter.check.nameExample` | Ex. : Lettre comptable |
 | `phoneLetter.check.text` | Votre lettre |
+| `phoneLetter.cancel.button` | Annuler |
+| `phoneLetter.cancel.ask` | Êtes-vous sûr de vouloir annuler ? |
+| `phoneLetter.cancel.yes` | Oui, annuler |
+| `phoneLetter.cancel.no` | Non, continuer |
 | `phoneLetter.intro.title` | Votre lettre de motivation |
 | `phoneLetter.intro.one` | Orbi l’écrit pour vous, ou vous l’écrivez et Orbi la relit. |
 | `phoneLetter.intro.two` | Elle est gardée dans Mes documents, prête à servir. |
