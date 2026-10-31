@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
   useEffect,
+  useMemo,
   useRef,
   useState,
   useTransition,
@@ -12,7 +13,7 @@ import {
   type ReactNode,
 } from "react";
 import { showToast } from "@/components/motion/toaster";
-import type { CvLabelData } from "@/features/cv/render/labels-data";
+import { labelsFromData, type CvLabelData } from "@/features/cv/render/labels-data";
 import {
   fillCvFromProfileAction,
   rewriteCvTextAction,
@@ -46,7 +47,9 @@ type Block = (typeof CV_FORM_BLOCKS)[number];
  * The parts of the form (Ephraïm, 31/10): a few boxes per screen so that none is overloaded;
  * « Suivant » and « Précédent » at the bottom, « Valider mes informations » on the last one.
  */
-const PARTS: { key: string; blocks: Block[] }[] = [
+type PartKey =
+  "identity" | "summary" | "experience" | "education" | "skills" | "achievements" | "references";
+const PARTS: { key: PartKey; blocks: Block[] }[] = [
   { key: "identity", blocks: ["identity"] },
   { key: "summary", blocks: ["summary"] },
   { key: "experience", blocks: ["experience"] },
@@ -57,7 +60,7 @@ const PARTS: { key: string; blocks: Block[] }[] = [
 ];
 
 /** The parts with boxes Orbi can improve. */
-const ORBI_PARTS = ["identity", "summary", "experience", "achievements"];
+const ORBI_PARTS: PartKey[] = ["identity", "summary", "experience", "achievements"];
 
 const COLORS: Record<Block, string> = {
   identity: "var(--nb-lime)",
@@ -196,6 +199,7 @@ export function CvFormStep({
   const [pending, run] = useTransition();
   const [busy, setBusy] = useState<string | null>(null);
   const [skill, setSkill] = useState("");
+  const labels = useMemo(() => labelsFromData(labelData), [labelData]);
   const latest = useRef(content);
   const timer = useRef<number | null>(null);
   const dirty = useRef(proposals.length > 0);
@@ -341,7 +345,8 @@ export function CvFormStep({
           onRedo={() => travel(key, 1)}
         />
       ),
-      changes: fresh ? <OrbiChanges before={entry.stack[entry.at - 1]!} after={values} /> : null,
+      changes:
+        fresh && entry ? <OrbiChanges before={entry.stack[entry.at - 1]!} after={values} /> : null,
       glow: fresh ? "" : undefined,
     };
   };
