@@ -584,3 +584,59 @@ button.jm-top-link:hover {
   background-color: #1c3a2c;
   color: #e3f67c;
 }
+
+/* « Learn. Grow. Connect. » scrolling across the hero card (31/10/2026). With reduced motion the
+   words stand still, centered, and the copy used for the loop is hidden. */
+.jm-marquee {
+  overflow: hidden;
+}
+.jm-marquee-track {
+  display: flex;
+  justify-content: center;
+}
+.jm-marquee-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.jm-marquee-copy {
+  display: none;
+}
+.jm-marquee-word {
+  font-size: clamp(56px, 15vw, 150px);
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+  padding-inline: 0.14em;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .jm-marquee {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .jm-marquee-track {
+    width: max-content;
+    justify-content: flex-start;
+    animation: jm-marquee 16s linear infinite;
+  }
+  .jm-marquee-group {
+    flex-wrap: nowrap;
+  }
+  .jm-marquee-copy {
+    display: flex;
+  }
+  .jm-hero-art {
+    animation: jm-hero-float 5.5s ease-in-out infinite;
+  }
+}
+@keyframes jm-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes jm-hero-float {
+  50% {
+    transform: translateY(-10px) rotate(-3deg);
+  }
+}

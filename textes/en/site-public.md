@@ -169,6 +169,7 @@ brackets are placeholders hidden on the site until they are filled in.
 | `home.hero.eyebrow` | Learning · Career · Recruitment |
 | `home.hero.title` | Learn. Grow. Connect. |
 | `home.hero.subtitle` | Jumanly brings together learning, career development, job offers and recruitment on a single platform. Build your skills, create a profile that reflects who you are and meet the employers who need what you can do. |
+| `home.hero.short` | Talents and recruiters find the tools to reach their goals. |
 | `home.hero.ctaPrimary` | Create my free account |
 | `home.hero.ctaSecondary` | I'm hiring |
 | `home.hero.reassurance1` | Free sign-up |

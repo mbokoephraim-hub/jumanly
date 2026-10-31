@@ -5280,3 +5280,10 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - Toutes les icônes de l'accueil deviennent des dessins colorés de `menu-art.tsx` (7 nouveaux : cv, career, connect, free, why, privacy, payment), taille `lg`.
 - Menu : plus de lignes de séparation, titre de groupe en gris lisible, bord du panneau en simple liseré Lime (l'ancien bord dégradé se coupait au défilement).
 - Bloc de chiffres retiré (textes `home.stats.*` gardés, inutilisés). `next build` passe en local.
+
+## 2026-10-31 · Accueil épuré et barre du haut sans fond
+
+- Demande d'Ephraïm : barre du haut sans fond (directement sur le fond sombre, logo pour fond sombre, plus de bouton liste d'attente, seulement l'icône du menu sans rond) ; accueil avec un seul bouton « Rejoindre la liste d'attente » à la taille du texte, sans les trois rappels, sans photo, sans l'étiquette « Formation · Carrière · Recrutement », « Learn. Grow. Connect. » qui défile, texte court.
+- La barre n'est plus collante (elle défile avec la page), puisqu'elle n'a plus de fond.
+- Titre : bande qui défile (`.jm-marquee`), immobile et centrée en mouvement réduit ; titre complet lu par les lecteurs d'écran. Nouveau texte `home.hero.short` (FR + EN). Sous le bouton, cinq tuiles colorées du menu qui flottent doucement.
+- Retirés de la page : photo et cartes flottantes, bouton d'installation de l'appli (le bouton unique demandé). `next build` passe.

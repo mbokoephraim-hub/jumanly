@@ -45,7 +45,7 @@ export function PublicMobileMenu({
         aria-controls="jm-site-menu"
         aria-label={open ? closeLabel : openLabel}
         onClick={() => setOpen((value) => !value)}
-        className="jm-burger relative grid size-11 shrink-0 place-items-center rounded-full bg-[rgb(255_255_255/0.06)] text-lime ring-1 ring-sapin/15 transition-colors ring-inset hover:bg-[rgb(255_255_255/0.12)] xl:hidden"
+        className="jm-burger relative -mr-1.5 grid size-11 shrink-0 place-items-center rounded-full text-lime transition-colors hover:bg-[rgb(255_255_255/0.08)] xl:hidden"
         data-open={open || undefined}
       >
         <span aria-hidden className="jm-burger-lines">
