@@ -70,11 +70,8 @@ export default async function DiagnosticPage({
         <DiagnosticResult
           userId={user.id}
           id={current.id}
-          date={current.createdAt}
           result={v2}
-          summary={personal?.summary ?? null}
-          strengthTexts={personal?.strengthTexts}
-          miniPlan={personal?.miniPlan}
+          summary={personal?.summary || null}
           notice={notice}
         />
       );
