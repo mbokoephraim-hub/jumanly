@@ -130,7 +130,7 @@ export async function PhoneNewLetter({
                 />
               </div>
               <button type="submit" formAction={saveOwnLetterAction} className="nb-lt-bt">
-                {t("phoneLetter.view.use")}
+                {t("letterModel.retain")}
               </button>
               <button type="submit" className="nb-lt-annuler">
                 <OrbiDisc size={24} />

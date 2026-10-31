@@ -12834,6 +12834,80 @@
       "skip": "Passer"
     }
   },
+  "letterModel": {
+    "back": "Retour",
+    "retain": "Retenir cette lettre",
+    "next": {
+      "title": "Votre texte est retenu",
+      "text": "Étape suivante : définissez le modèle visuel de votre lettre de motivation.",
+      "go": "Passer à l’étape suivante"
+    },
+    "heading": "Lettre de motivation",
+    "date": "Le {date}",
+    "recipient": "À l’attention de {company}",
+    "subject": "Objet : candidature au poste de {title}",
+    "pick": {
+      "title": "Le modèle visuel",
+      "lead": "Définissez le modèle visuel de votre lettre : choisissez un modèle, une couleur et votre photo.",
+      "color": "Couleur",
+      "photo": "Photo",
+      "noPhoto": "Vous n’avez pas encore de photo : vos initiales s’affichent à la place.",
+      "addPhoto": "Ajouter une photo",
+      "templates": "{count, plural, one {# modèle} other {# modèles}}",
+      "locked": "Avec {plan}",
+      "lockedPaid": "Formule payante",
+      "lockedNote": "Le modèle {name} est inclus dans {plan}.",
+      "lockedNotePaid": "Le modèle {name} est inclus dans les formules payantes.",
+      "upgrade": "Voir les formules",
+      "validate": "Valider le modèle"
+    },
+    "photo": {
+      "rond": "Ronde",
+      "carre": "Carrée",
+      "aucune": "Sans photo"
+    },
+    "template": {
+      "horizon": "Horizon",
+      "centre": "Centré",
+      "carte": "Carte",
+      "ruban": "Ruban",
+      "duo": "Duo",
+      "signature": "Signature"
+    },
+    "color": {
+      "sapin": "Vert sapin",
+      "marine": "Bleu marine",
+      "bleu": "Bleu",
+      "petrole": "Bleu pétrole",
+      "foret": "Vert forêt",
+      "bordeaux": "Bordeaux",
+      "prune": "Prune",
+      "violet": "Violet",
+      "encre": "Noir encre"
+    },
+    "preview": {
+      "title": "Aperçu de votre lettre",
+      "editText": "Texte",
+      "other": "Choisir un autre modèle",
+      "save": "Enregistrer cette lettre",
+      "saving": "Enregistrement…",
+      "error": "Le PDF n’a pas pu être créé. Réessayez dans un instant."
+    },
+    "saved": {
+      "title": "Votre lettre est enregistrée",
+      "text": "Le PDF est téléchargé. Vous retrouvez la lettre dans Mes documents.",
+      "back": "Revenir à mes documents"
+    },
+    "design": {
+      "current": "Modèle {name}",
+      "hint": "Modèle, couleur et photo",
+      "change": "Changer le design"
+    },
+    "error": {
+      "locked": "Ce modèle n’est pas inclus dans votre formule.",
+      "input": "Choisissez un modèle, une couleur et la photo."
+    }
+  },
   "phoneInterview": {
     "seo": "Simulation d’entretien",
     "back": {

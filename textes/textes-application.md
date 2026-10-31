@@ -10639,6 +10639,67 @@ Conventions :
 | `phoneLetter.intro.skip` | Passer |
 | `phoneLetter.check.textExample` | Écrivez ou collez votre lettre ici… |
 
+### Modèles visuels des lettres de motivation
+
+*Demande d'Ephraïm du 31/10/2026 : après « Retenir cette lettre », la personne choisit le modèle visuel (six modèles à bandeau de couleur, photo ronde, carrée ou sans photo, couleur), le valide, voit l'aperçu, puis enregistre : le PDF se télécharge et la lettre reste dans Mes documents. Le premier modèle est ouvert à tous, les autres viennent avec la formule.*
+
+| Clé | Texte |
+|---|---|
+| `letterModel.back` | Retour |
+| `letterModel.retain` | Retenir cette lettre |
+| `letterModel.next.title` | Votre texte est retenu |
+| `letterModel.next.text` | Étape suivante : définissez le modèle visuel de votre lettre de motivation. |
+| `letterModel.next.go` | Passer à l’étape suivante |
+| `letterModel.heading` | Lettre de motivation |
+| `letterModel.date` | Le {date} |
+| `letterModel.recipient` | À l’attention de {company} |
+| `letterModel.subject` | Objet : candidature au poste de {title} |
+| `letterModel.pick.title` | Le modèle visuel |
+| `letterModel.pick.lead` | Définissez le modèle visuel de votre lettre : choisissez un modèle, une couleur et votre photo. |
+| `letterModel.pick.color` | Couleur |
+| `letterModel.pick.photo` | Photo |
+| `letterModel.pick.noPhoto` | Vous n’avez pas encore de photo : vos initiales s’affichent à la place. |
+| `letterModel.pick.addPhoto` | Ajouter une photo |
+| `letterModel.pick.templates` | {count, plural, one {# modèle} other {# modèles}} |
+| `letterModel.pick.locked` | Avec {plan} |
+| `letterModel.pick.lockedPaid` | Formule payante |
+| `letterModel.pick.lockedNote` | Le modèle {name} est inclus dans {plan}. |
+| `letterModel.pick.lockedNotePaid` | Le modèle {name} est inclus dans les formules payantes. |
+| `letterModel.pick.upgrade` | Voir les formules |
+| `letterModel.pick.validate` | Valider le modèle |
+| `letterModel.photo.rond` | Ronde |
+| `letterModel.photo.carre` | Carrée |
+| `letterModel.photo.aucune` | Sans photo |
+| `letterModel.template.horizon` | Horizon |
+| `letterModel.template.centre` | Centré |
+| `letterModel.template.carte` | Carte |
+| `letterModel.template.ruban` | Ruban |
+| `letterModel.template.duo` | Duo |
+| `letterModel.template.signature` | Signature |
+| `letterModel.color.sapin` | Vert sapin |
+| `letterModel.color.marine` | Bleu marine |
+| `letterModel.color.bleu` | Bleu |
+| `letterModel.color.petrole` | Bleu pétrole |
+| `letterModel.color.foret` | Vert forêt |
+| `letterModel.color.bordeaux` | Bordeaux |
+| `letterModel.color.prune` | Prune |
+| `letterModel.color.violet` | Violet |
+| `letterModel.color.encre` | Noir encre |
+| `letterModel.preview.title` | Aperçu de votre lettre |
+| `letterModel.preview.editText` | Texte |
+| `letterModel.preview.other` | Choisir un autre modèle |
+| `letterModel.preview.save` | Enregistrer cette lettre |
+| `letterModel.preview.saving` | Enregistrement… |
+| `letterModel.preview.error` | Le PDF n’a pas pu être créé. Réessayez dans un instant. |
+| `letterModel.saved.title` | Votre lettre est enregistrée |
+| `letterModel.saved.text` | Le PDF est téléchargé. Vous retrouvez la lettre dans Mes documents. |
+| `letterModel.saved.back` | Revenir à mes documents |
+| `letterModel.design.current` | Modèle {name} |
+| `letterModel.design.hint` | Modèle, couleur et photo |
+| `letterModel.design.change` | Changer le design |
+| `letterModel.error.locked` | Ce modèle n’est pas inclus dans votre formule. |
+| `letterModel.error.input` | Choisissez un modèle, une couleur et la photo. |
+
 ### Modèle B · Simulation d’entretien au téléphone
 
 *Lot B6 (docs/modele-b, rangée 16, planche `Entretien.dc.html`) : réglages, essai offert, préparation des questions, micro, entretien à l’oral et par écrit, indice, pause, arrêt, analyse, bilan, détail d’une réponse et « Mes simulations ». Rien n’est montré au recruteur.*
