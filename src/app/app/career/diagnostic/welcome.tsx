@@ -109,7 +109,7 @@ export async function DiagnosticWelcome({
       {resume ? (
         <form action={discardDiagnosticDraftAction} className="t-flux">
           {prefill}
-          <div className="t-verre t-fort t-bas-f">
+          <div className="t-verre t-fort t-bas-f dg-a-duo">
             <button type="submit" className="t-bt t-sec t-m t-press">
               {t("career.diagnostic.welcome.restart")}
             </button>

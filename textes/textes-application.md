@@ -6097,8 +6097,8 @@ Conventions :
 | `career.diagnostic.welcome.text` | Six dimensions, une question à la fois. Vous voyez votre profil se dessiner pendant que vous répondez, puis vous recevez un bilan expliqué point par point. |
 | `career.diagnostic.welcome.duration` | 3 minutes |
 | `career.diagnostic.welcome.launch` | Lancer mon diagnostic |
-| `career.diagnostic.welcome.resume` | Reprendre mon diagnostic, étape {current} sur {total} |
-| `career.diagnostic.welcome.restart` | Recommencer à zéro |
+| `career.diagnostic.welcome.resume` | Reprendre · étape {current}/{total} |
+| `career.diagnostic.welcome.restart` | Recommencer |
 | `career.diagnostic.welcome.prefillHint` | Métier visé, compétences, langues, études et CV déjà remplis : vous pouvez tout modifier. |
 | `career.diagnostic.welcome.hook.dimensions` | 6 dimensions |
 | `career.diagnostic.welcome.hook.dimensionsText` | Projet, compétences, expérience, outils, entretiens, recherche. |
