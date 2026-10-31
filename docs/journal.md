@@ -5316,3 +5316,4 @@ Les lettres reprennent la carte des CV (deux à l'écran, la troisième dépasse
 - Une dizaine de questions au lieu d'environ 32 (barème `diagnostic_scoring_v3`, voir docs/decisions/2026-10-31-diagnostic-dix-questions.md), 3 ou 4 réponses par question, dessins du menu sur les questions et sur certaines réponses, compétences sur un seul écran.
 - Accueil du diagnostic et questionnaire : plus de grand vide en bas (marges de la barre fixe comptées deux fois de trop).
 - Résultat du diagnostic refait (niveau, à faire maintenant, six thèmes touchables, atouts) et compétences préparées par Orbi pour n'importe quel métier (`diagnostic_domain`), sinon citées par la personne.
+- Résultat du diagnostic allégé : la note, le niveau et les trois actions (une ligne chacune, qui mène où agir) ; thèmes, atouts et textes retirés. Corrige aussi un doublon dans diagnostic-flow.tsx arrivé avec la fusion de #281.

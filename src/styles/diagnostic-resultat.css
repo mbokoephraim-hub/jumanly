@@ -375,3 +375,57 @@
 .t-dq-orbi {
   align-self: flex-start;
 }
+
+/*
+ * Version allégée (Ephraïm, 31/10/2026, « pas de trop de choses ») : la note, le niveau et les
+ * trois actions, chacune une seule ligne qui mène à l'endroit où agir.
+ */
+.dg-r-hero {
+  gap: 16px;
+}
+.dg-r-t h2 {
+  font-size: 22px;
+}
+.dg-r-role {
+  font-size: 13.5px;
+}
+.dg-r-todo li {
+  padding: 0;
+  box-shadow: var(--verre);
+}
+.dg-r-todo li::after {
+  content: none;
+}
+.dg-r-todo a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 14px;
+  border-radius: inherit;
+  color: var(--texte);
+}
+.dg-r-todo a b {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  line-height: 1.3;
+  text-wrap: pretty;
+}
+.dg-r-todo a > .t-ic {
+  flex: none;
+  color: var(--texte2);
+}
+.dg-r-n {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--dg-r-c, #a6f26b);
+  color: #0f3f37;
+  font-size: 14px;
+  font-weight: 800;
+}
