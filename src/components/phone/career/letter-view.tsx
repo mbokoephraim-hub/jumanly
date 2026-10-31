@@ -28,7 +28,7 @@ export async function PhoneLetter({
   plan,
 }: {
   document: { id: string; title: string; updatedAt: Date; data: CareerDocumentContent };
-  notice: "cree" | "enregistre" | "relu" | "input" | null;
+  notice: "cree" | "enregistre" | "relu" | "utilisee" | "input" | null;
   aiError: OrbiLimitCode | null;
   plan: string | null;
 }) {
@@ -74,6 +74,26 @@ export async function PhoneLetter({
         </p>
       )}
       {aiError && <OrbiLimit code={aiError} plan={plan} />}
+      {notice === "utilisee" && (
+        <div className="nb-lt-accueil">
+          <div
+            className="nb-lt-carte nb-lt-fini"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="nb-lt-fini-t"
+          >
+            <span className="nb-lt-fini-i" aria-hidden>
+              <PhoneIcon name="coche" size={30} stroke={2.6} />
+            </span>
+            <h2 id="nb-lt-fini-t">{t("phoneLetter.saved.title")}</h2>
+            <p>{t("phoneLetter.saved.text")}</p>
+            <Link href={back} className="nb-lt-bt" autoFocus>
+              <PhoneIcon name="document" size={20} />
+              {t("phoneLetter.saved.back")}
+            </Link>
+          </div>
+        </div>
+      )}
 
       {data.corrections.length > 0 && (
         <form action={applyCorrectionsAction} className="nb-lt-bloc" data-orbi="">
