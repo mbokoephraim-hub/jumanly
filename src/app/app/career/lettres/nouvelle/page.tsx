@@ -39,7 +39,7 @@ export default async function NewLetterPage({
   ]);
   const aiError = orbiLimitCode(params.ia);
   return (
-    <div className="t-flux t-od-bas">
+    <div className="t-flux nb-lt-page">
       {/* The same head as « Nouveau CV » (Ephraïm, 31/10/2026): round back, bold title beside it. */}
       <header className="nb-cv-tete nb-lt-tete">
         <Link

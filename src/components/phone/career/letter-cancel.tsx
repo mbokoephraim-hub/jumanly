@@ -9,9 +9,15 @@ import { useEffect, useRef, useState } from "react";
  */
 export function LetterCancel({
   href,
+  formId,
+  className = "nb-lt-annuler",
   texts,
 }: {
-  href: string;
+  /** Where « Oui » goes… */
+  href?: string;
+  /** …or the form « Oui » sends (« Supprimer » on a letter). */
+  formId?: string;
+  className?: string;
   /** Already translated on the server (phoneLetter.cancel.*). */
   texts: Record<"cancel" | "ask" | "yes" | "no", string>;
 }) {
@@ -29,7 +35,7 @@ export function LetterCancel({
   }, [asking]);
   return (
     <>
-      <button type="button" className="nb-lt-annuler" onClick={() => setAsking(true)}>
+      <button type="button" className={className} onClick={() => setAsking(true)}>
         {texts.cancel}
       </button>
       {asking && (
@@ -41,7 +47,16 @@ export function LetterCancel({
             aria-labelledby="nb-lt-annuler-t"
           >
             <h2 id="nb-lt-annuler-t">{texts.ask}</h2>
-            <button type="button" className="nb-lt-bt" onClick={() => router.push(href)}>
+            <button
+              type="button"
+              className="nb-lt-bt"
+              onClick={() => {
+                if (formId) {
+                  (document.getElementById(formId) as HTMLFormElement | null)?.requestSubmit();
+                  setAsking(false);
+                } else if (href) router.push(href);
+              }}
+            >
               {texts.yes}
             </button>
             <button

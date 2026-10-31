@@ -355,9 +355,12 @@ export function acceptableCorrection(text: string, correction: Omit<Correction, 
 export async function proofread(
   db: PrismaClient,
   userId: string,
-  input: { title: string; text: string },
+  input: { title: string; text: string; documentId?: string },
 ): Promise<DocumentResult> {
   const text = input.text.slice(0, PROOFREAD_MAX);
+  // « Relire encore » (phone, 31/10/2026): the same letter, read again, keeps its kind.
+  const existing = input.documentId ? await getDocument(db, userId, input.documentId) : null;
+  if (input.documentId && !existing) throw new Error("Document not found");
   let corrections: Omit<Correction, "id">[];
   try {
     const run = await runAi(db, {
@@ -387,6 +390,17 @@ export async function proofread(
     if (error instanceof AiError) return { ok: false, code: error.code };
     throw error;
   }
+  const found = corrections.map((item) => ({ id: randomUUID(), ...item }));
+  if (existing) {
+    await db.document.update({
+      where: { id: existing.id },
+      data: {
+        title: input.title,
+        content: json({ ...existing.data, text, corrections: found }),
+      },
+    });
+    return { ok: true, id: existing.id };
+  }
   const profile = await db.talentProfile.findUniqueOrThrow({
     where: { userId },
     select: { id: true },
@@ -400,7 +414,7 @@ export async function proofread(
         type: "proofread",
         text,
         jobId: null,
-        corrections: corrections.map((item) => ({ id: randomUUID(), ...item })),
+        corrections: found,
       } satisfies CareerDocumentContent),
     },
   });

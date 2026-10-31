@@ -12720,6 +12720,17 @@
       "yes": "Oui, annuler",
       "no": "Non, continuer"
     },
+    "view": {
+      "corrections": "{count, plural, one {Orbi propose # correction} other {Orbi propose # corrections}}",
+      "keep": "Garder les corrections cochées",
+      "nothing": "Orbi n’a rien trouvé à corriger.",
+      "read": "Orbi a relu votre lettre.",
+      "text": "Votre lettre",
+      "use": "Utiliser cette lettre",
+      "again": "{count, plural, one {Relire encore · # crédit} other {Relire encore · # crédits}}",
+      "deleteAsk": "Supprimer cette lettre ?",
+      "deleteYes": "Oui, supprimer"
+    },
     "intro": {
       "title": "Votre lettre de motivation",
       "one": "Orbi l’écrit pour vous, ou vous l’écrivez et Orbi la relit.",
