@@ -76,7 +76,7 @@ export async function personProfile(
           skills: {
             orderBy: [{ verified: "desc" }, { level: "desc" }, { createdAt: "asc" }],
             take: 16,
-            select: { verified: true, skill: { select: { name: true, category: true } } },
+            select: { id: true, verified: true, skill: { select: { name: true, category: true } } },
           },
           experiences: {
             orderBy: [{ startDate: "desc" }],
@@ -223,6 +223,7 @@ export async function personProfile(
     link: link === "blocked" ? ("none" as const) : (link ?? ("none" as const)),
     conversationId: conversation?.id ?? null,
     skills: (limited ? [] : profile.skills).map((row) => ({
+      id: row.id,
       name: row.skill.name,
       category: row.skill.category,
       verified: row.verified,

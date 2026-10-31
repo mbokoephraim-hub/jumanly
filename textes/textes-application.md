@@ -10335,10 +10335,8 @@ Conventions :
 | `phoneCareer.form.learningRemove` | Supprimer le point {n} |
 | `phoneCareer.form.learningsMax` | {max} points au plus. |
 | `phoneCareer.form.learningsCount` | {count, plural, =0 {Aucun point rempli} one {# point rempli} other {# points remplis}} |
-| `phoneCareer.form.schoolLogo` | Logo de l’école |
-| `phoneCareer.form.schoolLogoHint` | Facultatif. Il s’affiche à la place de l’icône, à côté du diplôme. |
-| `phoneCareer.form.organizationLogo` | Logo de l’organisme |
-| `phoneCareer.form.organizationLogoHint` | Facultatif. Il s’affiche à la place de l’icône, à côté du certificat. |
+| `phoneCareer.form.institutionLogo` | Logo de l’institution |
+| `phoneCareer.form.optionalParen` | (facultatif) |
 | `phoneCareer.form.experienceOrbi` | Orbi corrige les fautes et met vos résultats en valeur. |
 | `phoneCareer.form.experienceOrbiNew` | Écrivez en vrac, Orbi en fait des réalisations claires. |
 | `phoneCareer.form.experienceDelete` | Supprimer cette expérience |
@@ -10450,6 +10448,16 @@ Conventions :
 | `phoneCareer.sheets.languageLevelFluent` | Courant |
 | `phoneCareer.sheets.languageLevelNative` | Langue maternelle |
 | `phoneCareer.sheets.languageLevelMissing` | Choisissez votre niveau pour chaque langue. |
+| `phoneCareer.sheets.languageSearch` | Tapez une langue, ex. : Lingala |
+| `phoneCareer.sheets.languageNone` | Aucune langue trouvée. Vérifiez l’orthographe. |
+| `phoneCareer.sheets.languageAddAnother` | Ajouter une autre langue |
+| `phoneCareer.sheets.languageChange` | {language} : changer le niveau |
+| `phoneCareer.sheets.languageRemove` | Retirer {language} |
+| `phoneCareer.skillAdd` | Ajouter une compétence |
+| `phoneCareer.skillRemoveMode` | Retirer |
+| `phoneCareer.skillRemoveDone` | Terminé |
+| `phoneCareer.skillRemove` | Retirer {skill} |
+| `phoneCareer.skillRemoveError` | La compétence n’a pas pu être retirée. Réessayez. |
 | `phoneCareer.reglages.back` | Retour |
 | `phoneCareer.reglages.close` | Fermer |
 | `phoneCareer.reglages.cancel` | Annuler |

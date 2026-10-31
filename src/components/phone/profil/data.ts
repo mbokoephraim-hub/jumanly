@@ -53,7 +53,7 @@ export type ProfileView = {
     people: { initials: string; image: string | null; color: string }[];
     line: string;
   } | null;
-  skills: { name: string; color: string; verified: boolean }[];
+  skills: { id: string; name: string; color: string; verified: boolean }[];
   skillsCount: string;
   families: { label: string; color: string; share: number }[];
   experiences: {
