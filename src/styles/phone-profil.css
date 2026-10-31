@@ -731,9 +731,17 @@ button.nb-pf-rb,
   background: var(--nb-surface);
 }
 .nb-pf-langues b {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12.5px;
   font-weight: 700;
+}
+/* The language's flag (31/10/2026), an emoji drawn by the phone. */
+.nb-pf-drapeau {
+  flex: none;
+  font-size: 16px;
+  line-height: 1;
 }
 .nb-pf-niv {
   display: flex;

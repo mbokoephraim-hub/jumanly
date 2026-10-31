@@ -9,6 +9,10 @@ export type EducationRow = {
   line: string;
   /** Photo of the document the person joined. */
   image: string | null;
+  /** Logo of the school or of the organization, shown instead of the icon (31/10/2026). */
+  logo?: string | null;
+  /** « Ce que j'ai appris »: 2 to 3 short points. */
+  learnings?: string[];
   /** A certificate confirmed by a referent. */
   verified: boolean;
   /** The owner's view: the item opens its form. */
@@ -61,8 +65,17 @@ export function EducationList({
       {rows.map((item) => {
         const body = (
           <>
-            <span aria-hidden data-jumanly={item.jumanly ? "" : undefined}>
-              <PhoneIcon name="formation" size={17} />
+            <span
+              aria-hidden
+              data-jumanly={item.jumanly ? "" : undefined}
+              data-logo={item.logo ? "" : undefined}
+            >
+              {item.logo ? (
+                // eslint-disable-next-line @next/next/no-img-element -- a 160 px logo the person sent
+                <img src={item.logo} alt="" width={36} height={36} loading="lazy" />
+              ) : (
+                <PhoneIcon name="formation" size={17} />
+              )}
             </span>
             <span className="nb-vf-txt">
               <b>{item.title}</b>
@@ -72,6 +85,16 @@ export function EducationList({
               ) : item.image ? (
                 <span className="nb-vf-doc">{labels.document}</span>
               ) : null}
+              {item.learnings && item.learnings.length > 0 ? (
+                <ul className="nb-pf-pts nb-ed-pts">
+                  {item.learnings.map((point, n) => (
+                    <li key={n}>
+                      <i aria-hidden />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </span>
             {item.jumanly ? (
               <span className="nb-pf-tag nb-cr-jumanly">{labels.jumanly}</span>
@@ -79,7 +102,11 @@ export function EducationList({
           </>
         );
         return (
-          <div key={item.id} className="nb-vf-row">
+          <div
+            key={item.id}
+            className="nb-vf-row"
+            data-pts={item.learnings && item.learnings.length > 0 ? "" : undefined}
+          >
             {item.href ? (
               <Link href={item.href} className="nb-pf-form nb-cr-form">
                 {body}

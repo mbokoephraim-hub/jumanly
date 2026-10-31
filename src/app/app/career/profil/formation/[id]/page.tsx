@@ -1,3 +1,4 @@
+import { achievementsOf } from "@/lib/achievements";
 import { FreshOnEachVisit } from "@/components/phone/fresh-visit";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
@@ -56,6 +57,8 @@ export default async function CareerEducationPage({
             format: item?.format ?? null,
             length: item?.length ?? null,
             image: item?.image ?? null,
+            schoolLogo: item?.schoolLogo ?? null,
+            learnings: achievementsOf(item?.learnings ?? ""),
             reference: state
               ? {
                   id: state.id,

@@ -654,7 +654,14 @@ function ProfilePanel({
         <ul className="nb-pf-langues">
           {person.languages.map((language) => (
             <li key={language.name}>
-              <b>{language.name}</b>
+              <b>
+                {language.flag ? (
+                  <span className="nb-pf-drapeau" aria-hidden>
+                    {language.flag}
+                  </span>
+                ) : null}
+                {language.name}
+              </b>
               <span className="nb-pf-niv" aria-hidden>
                 {[1, 2, 3, 4, 5].map((bar) => (
                   <i key={bar} data-on={bar <= language.level ? "" : undefined} />

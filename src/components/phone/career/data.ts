@@ -1,4 +1,5 @@
 import "server-only";
+import { achievementsOf } from "@/lib/achievements";
 import QRCode from "qrcode";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { accentHex } from "@/features/cv/render/palette";
@@ -292,6 +293,8 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
         jumanly: false,
         kind: item.kind,
         image: item.image,
+        logo: item.schoolLogo,
+        learnings: achievementsOf(item.learnings),
         verified: item.kind === "certificate" && state?.status === "confirmed",
       };
     }),

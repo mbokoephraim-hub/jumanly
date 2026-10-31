@@ -187,3 +187,28 @@
   font-weight: 700;
   color: var(--nb-lime-t);
 }
+
+/* Diplômes et certificats (31/10/2026): the school's logo instead of the icon, and « Ce que j'ai
+   appris » under the title. */
+.nb-pf-form > span[data-logo]:first-child {
+  overflow: hidden;
+  background: #fff;
+}
+.nb-pf-form > span[data-logo]:first-child img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.nb-vf-row[data-pts],
+.nb-vf-row[data-pts] > .nb-pf-form {
+  align-items: flex-start;
+}
+.nb-vf-row[data-pts] > .nb-vf-img {
+  margin-top: 6px;
+}
+.nb-ed-pts {
+  margin-top: 6px;
+}
+.nb-ed-pts i {
+  background: var(--nb-t-c3a6ff, #c3a6ff);
+}

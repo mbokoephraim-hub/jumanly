@@ -18,9 +18,19 @@ import {
   saveCareerHeadAction,
   saveCareerPhotoAction,
 } from "@/server/actions/career-phone";
-import { ACHIEVEMENTS_MAX, achievementsOf, achievementsText } from "@/lib/achievements";
+import {
+  ACHIEVEMENTS_MAX,
+  achievementsOf,
+  achievementsText,
+  LEARNINGS_MAX,
+} from "@/lib/achievements";
 import { PhoneBack } from "../back";
-import { AchievementsField, CompanyField, type CompanyValue } from "./experience-fields";
+import {
+  AchievementsField,
+  CompanyField,
+  LogoPicker,
+  type CompanyValue,
+} from "./experience-fields";
 import {
   DocumentImageField,
   NO_REFERENT,
@@ -919,6 +929,10 @@ export type EducationValues = {
   format: "online" | "in_person" | "hybrid" | null;
   length: "short" | "long" | null;
   image: string | null;
+  /** Logo of the school or of the organization, shown instead of the icon (31/10/2026). */
+  schoolLogo: string | null;
+  /** « Ce que j'ai appris »: 2 to 3 short points. */
+  learnings: string[];
   /** « Faire vérifier » (certificates): the last request to a referent. */
   reference: ReferenceStateValue;
 };
@@ -942,7 +956,11 @@ const TRAINING_LENGTHS = ["short", "long"] as const;
  */
 export function EducationForm({ values }: { values: EducationValues }) {
   const t = useTranslations("phoneCareer.form");
-  const [form, setForm] = useState(values);
+  const [form, setForm] = useState(() => ({
+    ...values,
+    // Two empty points to start with (« en deux ou trois points »).
+    learnings: values.learnings.length > 0 ? values.learnings : ["", ""],
+  }));
   const [referent, setReferent] = useState<ReferentValue>(NO_REFERENT);
   const { pending, error, save } = useSave();
   const set = (patch: Partial<EducationValues>) => setForm((before) => ({ ...before, ...patch }));
@@ -961,6 +979,7 @@ export function EducationForm({ values }: { values: EducationValues }) {
             saveCareerEducationAction({
               ...form,
               id: form.id ?? undefined,
+              learnings: form.learnings.map((point) => point.trim()).filter(Boolean),
               referent: asking ? referent : null,
             }),
           asking
@@ -997,6 +1016,13 @@ export function EducationForm({ values }: { values: EducationValues }) {
           />
         )}
       </Field>
+      <LogoPicker
+        name={form.school}
+        logo={form.schoolLogo}
+        onChange={(schoolLogo) => set({ schoolLogo })}
+        label={certificate ? t("organizationLogo") : t("schoolLogo")}
+        hint={certificate ? t("organizationLogoHint") : t("schoolLogoHint")}
+      />
       {certificate ? (
         <>
           <Chips
@@ -1071,6 +1097,12 @@ export function EducationForm({ values }: { values: EducationValues }) {
           />
         )}
       </Field>
+      <AchievementsField
+        kind="learning"
+        points={form.learnings}
+        onChange={(learnings) => set({ learnings })}
+        max={LEARNINGS_MAX}
+      />
       <DocumentImageField
         label={t(`${k}.image`)}
         hint={t(`${k}.imageHint`)}

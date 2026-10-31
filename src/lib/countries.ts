@@ -132,3 +132,46 @@ const ZONES: Record<string, string> = {
 export function timeZoneOf(code: string): string | null {
   return ZONES[code] ?? null;
 }
+
+/**
+ * The flag shown beside a language on the profile (demande d'Ephraïm du 31/10/2026): the country
+ * most associated with it; the languages of the Congo (lingala, kikongo, tshiluba) take the flag
+ * of the DRC. A language without a sensible country has none.
+ */
+const LANGUAGE_FLAGS: Record<string, string> = {
+  fr: "FR",
+  en: "GB",
+  ln: "CD",
+  kg: "CD",
+  lu: "CD",
+  sw: "TZ",
+  pt: "PT",
+  ar: "SA",
+  es: "ES",
+  de: "DE",
+  it: "IT",
+  zh: "CN",
+  ja: "JP",
+  ru: "RU",
+  nl: "NL",
+  wo: "SN",
+  yo: "NG",
+  ha: "NG",
+  ig: "NG",
+  am: "ET",
+  rw: "RW",
+  rn: "BI",
+  sg: "CF",
+  zu: "ZA",
+  af: "ZA",
+  ff: "SN",
+  mg: "MG",
+  so: "SO",
+  tw: "GH",
+};
+
+/** « 🇨🇩 » for « ln », an empty string for a language without a flag. */
+export function languageFlagOf(code: string) {
+  const country = LANGUAGE_FLAGS[code.trim().toLowerCase().split(/[-_]/)[0] ?? ""];
+  return country ? flagOf(country) : "";
+}

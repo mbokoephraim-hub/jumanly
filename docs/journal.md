@@ -5337,3 +5337,7 @@ Six modèles visuels (bandeau de couleur, photo ronde, carrée ou sans photo, 9 
 - 2026-10-31 : offre au téléphone, titres avec les dessins du menu, « En bref » refait en tuiles (études, postes, date limite) et langues avec niveau en 6 crans (A1 à C2) et en mots.
 - 2026-10-31 : Carrière › Vue, « Prochaines étapes » animées (reflet de la couleur de l'étape, numéro qui bat, flèche qui avance, en décalé ; rien avec les animations réduites).
 - 2026-10-31 : offre au téléphone, « Voir le détail du score » devient un bouton qui ouvre une seule feuille (écarts puis points qui correspondent, sans barres, « Contester ce score » en lien) ; une candidature retirée peut être renvoyée (même candidature remise à zéro, historique gardé).
+
+## 2026-10-31 · Diplômes, certificats et langues enrichis
+
+Demande d'Ephraïm : sur un diplôme ou un certificat, on peut ajouter le logo de l'école (ou de l'organisme), affiché à la place de l'icône, et 2 à 3 points « Ce que j'ai appris » affichés sous le titre (`Education.schoolLogo`, `Education.learnings`, une ligne par point ; logo rangé comme ceux des expériences). Chaque langue du profil porte son drapeau (`languageFlagOf` dans src/lib/countries.ts : lingala, kikongo et tshiluba → RD Congo, anglais → Royaume-Uni, swahili → Tanzanie). Profil ordinateur non touché.

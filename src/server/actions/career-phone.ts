@@ -59,7 +59,13 @@ import {
   suggestCompanies,
   type CompanySuggestion,
 } from "@/server/services/experience-company";
-import { ACHIEVEMENT_MAX, ACHIEVEMENTS_MAX, achievementsText } from "@/lib/achievements";
+import {
+  ACHIEVEMENT_MAX,
+  ACHIEVEMENTS_MAX,
+  achievementsText,
+  LEARNING_MAX,
+  LEARNINGS_MAX,
+} from "@/lib/achievements";
 import {
   EducationImageError,
   isOwnEducationImage,
@@ -462,6 +468,8 @@ const educationInput = z.object({
   format: z.enum(["online", "in_person", "hybrid"]).nullable(),
   length: z.enum(["short", "long"]).nullable(),
   image: z.string().max(300).nullable(),
+  schoolLogo: z.string().max(300).nullable().default(null),
+  learnings: z.array(z.string().max(LEARNING_MAX)).max(LEARNINGS_MAX).default([]),
   referent: referentInput,
 });
 
@@ -475,7 +483,17 @@ export async function saveCareerEducationAction(
 ): Promise<Result> {
   const shape = educationInput.safeParse(raw);
   if (!shape.success) return fail("invalid");
-  const { id, kind, format, length, image, referent: rawReferent, ...rest } = shape.data;
+  const {
+    id,
+    kind,
+    format,
+    length,
+    image,
+    schoolLogo,
+    learnings,
+    referent: rawReferent,
+    ...rest
+  } = shape.data;
   const certificate = kind === "certificate";
   const asked = certificate ? referentOf(rawReferent) : { ok: true as const, referent: null };
   if (!asked.ok) return fail(asked.error);
@@ -493,6 +511,7 @@ export async function saveCareerEducationAction(
   if (refused) return refused;
   const input = parsed.data;
   const ownImage = image && isOwnEducationImage(profile.id, image) ? image : null;
+  const ownLogo = schoolLogo && isOwnExperienceLogo(profile.id, schoolLogo) ? schoolLogo : null;
   const data = {
     kind,
     degree: input.degree,
@@ -504,17 +523,21 @@ export async function saveCareerEducationAction(
     format: certificate ? format : null,
     length: certificate ? length : null,
     image: ownImage,
+    schoolLogo: ownLogo,
+    learnings: achievementsText(learnings),
   };
   let educationId = id;
   if (id) {
     const before = await db.education.findFirst({
       where: { id, profileId: profile.id },
-      select: { kind: true, degree: true, school: true, image: true },
+      select: { kind: true, degree: true, school: true, image: true, schoolLogo: true },
     });
     if (!before) return fail("missing");
     await db.education.update({ where: { id }, data });
     if (before.image && before.image !== ownImage)
       await removeEducationImage(fileStorage(db), profile.id, before.image);
+    if (before.schoolLogo && before.schoolLogo !== ownLogo)
+      await removeExperienceLogo(fileStorage(db), profile.id, before.schoolLogo);
     // What the referent confirmed changed: the « Vérifié » badge no longer holds.
     if (before.kind !== kind || before.degree !== data.degree || before.school !== data.school)
       await outdateReferenceChecks(db, { educationId: id });
@@ -559,10 +582,12 @@ export async function deleteCareerEducationAction(id: string): Promise<Result> {
   const { profile } = await mine();
   const before = await db.education.findFirst({
     where: { id: String(id), profileId: profile.id },
-    select: { image: true },
+    select: { image: true, schoolLogo: true },
   });
   await db.education.deleteMany({ where: { id: String(id), profileId: profile.id } });
   if (before?.image) await removeEducationImage(fileStorage(db), profile.id, before.image);
+  if (before?.schoolLogo)
+    await removeExperienceLogo(fileStorage(db), profile.id, before.schoolLogo);
   return saved(profile.id);
 }
 

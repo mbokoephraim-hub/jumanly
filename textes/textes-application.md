@@ -10325,6 +10325,20 @@ Conventions :
 | `phoneCareer.form.achievementRemove` | Supprimer la réalisation {n} |
 | `phoneCareer.form.achievementsMax` | {max} réalisations au plus. |
 | `phoneCareer.form.achievementsCount` | {count, plural, =0 {Aucune réalisation remplie} one {# réalisation remplie} other {# réalisations remplies}} |
+| `phoneCareer.form.learnings` | Ce que j’ai appris |
+| `phoneCareer.form.learningsHint` | 2 à 3 points courts, un par champ. Ils s’affichent sous le diplôme ou le certificat. |
+| `phoneCareer.form.learningLabel` | Point {n} |
+| `phoneCareer.form.learningPlaceholder` | Point {n}, ex. : Concevoir un plan de communication |
+| `phoneCareer.form.learningAdd` | Ajouter un point |
+| `phoneCareer.form.learningUp` | Monter le point {n} |
+| `phoneCareer.form.learningDown` | Descendre le point {n} |
+| `phoneCareer.form.learningRemove` | Supprimer le point {n} |
+| `phoneCareer.form.learningsMax` | {max} points au plus. |
+| `phoneCareer.form.learningsCount` | {count, plural, =0 {Aucun point rempli} one {# point rempli} other {# points remplis}} |
+| `phoneCareer.form.schoolLogo` | Logo de l’école |
+| `phoneCareer.form.schoolLogoHint` | Facultatif. Il s’affiche à la place de l’icône, à côté du diplôme. |
+| `phoneCareer.form.organizationLogo` | Logo de l’organisme |
+| `phoneCareer.form.organizationLogoHint` | Facultatif. Il s’affiche à la place de l’icône, à côté du certificat. |
 | `phoneCareer.form.experienceOrbi` | Orbi corrige les fautes et met vos résultats en valeur. |
 | `phoneCareer.form.experienceOrbiNew` | Écrivez en vrac, Orbi en fait des réalisations claires. |
 | `phoneCareer.form.experienceDelete` | Supprimer cette expérience |

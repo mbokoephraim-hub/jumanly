@@ -5,7 +5,7 @@ import { getFormatter, getMessages, getTranslations } from "next-intl/server";
 import type { Messages } from "next-intl";
 import type { ReactNode } from "react";
 import { pickMessages } from "@/i18n/client-messages";
-import { countryCode, countryName, flagOf, timeZoneOf } from "@/lib/countries";
+import { countryCode, countryName, flagOf, languageFlagOf, timeZoneOf } from "@/lib/countries";
 import {
   colorOf,
   familyShares,
@@ -246,6 +246,8 @@ export async function profileView(
       .filter(Boolean)
       .join(" · "),
     image: item.image,
+    logo: item.schoolLogo,
+    learnings: achievementsOf(item.learnings),
     verified: item.kind === "certificate" && item.referenceChecks.length > 0,
   });
   const diplomas = person.educations.filter((item) => item.kind === "diploma").map(educationRow);
@@ -260,6 +262,7 @@ export async function profileView(
     } catch {}
     return {
       name: name.charAt(0).toUpperCase() + name.slice(1),
+      flag: languageFlagOf(item.code),
       level: LANGUAGE_BARS[item.level],
       label: tl(`languages.level.${item.level}`),
     };
