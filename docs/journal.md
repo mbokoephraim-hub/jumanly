@@ -5323,6 +5323,10 @@ Les lettres reprennent la carte des CV (deux à l'écran, la troisième dépasse
 ## 2026-10-31 · Mes documents aéré
 
 Demande d'Ephraïm : de l'air et un trait entre CV, lettres et portfolio (.nb-doc-section), bouton « + Nouveau CV » seul, « Sélectionner » remplacé par une icône ronde (case cochée, libellé gardé pour les lecteurs d'écran), aide « Touchez une lettre pour la modifier… » retirée.
+
+## 2026-10-31 · Nouveau parcours de création de CV (téléphone)
+
+Demande d'Ephraïm : « Nouveau CV » propose trois choix à cocher puis « Valider » (reprendre le profil, tout écrire soi-même, adapter à une offre, réservé à `career.cv.tailor`, verrouillé et expliqué sinon). « Mes informations » en 7 parties (identité, profil professionnel sans limite avec jauge 6 à 8 lignes A4, expériences, formation, compétences et langues, réalisations et liens, références), tout repris du profil y compris références et liens (`CvContent.links`). Orbi améliore chaque case (même droit `career.cv.tailor`, crédits `cv_coach`) : changements surlignés, flèches retour/avant. Puis le studio (photo ou « Pas de photo », 15 modèles avec cadenas, couleurs, aperçu en direct, « Tout annuler », « Voir le CV »), puis l'aperçu (« Modifier encore », « Annuler », « Enregistrer » → confirmation, « Retour aux documents »). Publié sans vérification (types non vérifiés) à la demande d'Ephraïm.
 - Vue › carte diagnostic : « Analyser » bat doucement avec un halo (rien avec les animations réduites), « 3 minutes ».
 - Retirer une candidature : question « Voulez-vous vraiment… ? » Oui / Non, puis la candidature quitte la liste Candidatures du téléphone.
 - 2026-10-31 : accueil du diagnostic, « Recommencer » et « Reprendre · étape x/y » sur une seule ligne, boutons plus petits.

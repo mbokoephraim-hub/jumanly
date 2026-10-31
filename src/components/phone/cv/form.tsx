@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
   useEffect,
-  useMemo,
   useRef,
   useState,
   useTransition,
@@ -13,16 +12,12 @@ import {
   type ReactNode,
 } from "react";
 import { showToast } from "@/components/motion/toaster";
-import { documentFromCv } from "@/features/cv/render/build";
-import { CvPaginationProvider, CvPreview } from "@/features/cv/render/CvPreview";
-import { labelsFromData, type CvLabelData } from "@/features/cv/render/labels-data";
-import type { CvStyle } from "@/features/cv/style";
-import type { CvTemplate } from "@/features/cv/templates/registry";
+import type { CvLabelData } from "@/features/cv/render/labels-data";
 import {
-  decideCvSummaryAction,
   fillCvFromProfileAction,
-  rewriteCvSummaryAction,
+  rewriteCvTextAction,
   saveCvContentAction,
+  validateCvInfoAction,
 } from "@/server/actions/cv-flow";
 import type { CvContent } from "@/server/services/cv";
 import { PROFILE_PALETTE } from "@/lib/profile-colors";
@@ -31,24 +26,44 @@ import { AchievementsField } from "../career/experience-fields";
 import { PhoneIcon } from "../icon";
 import { CvFrame } from "./frame";
 import { OrbiSpark } from "./marks";
+import { OrbiChanges, OrbiTools, type OrbiHistory, type OrbiState } from "./orbi-field";
 
-/** The blocks of « Mes informations », in the order Ephraïm gave (29/10). */
-const BLOCKS = [
+/** The blocks of « Mes informations », in the order Ephraïm gave (29/10, then 31/10). */
+export const CV_FORM_BLOCKS = [
   "identity",
   "summary",
-  "achievements",
-  "skills",
   "experience",
   "education",
+  "skills",
   "languages",
+  "achievements",
+  "links",
   "references",
 ] as const;
-type Block = (typeof BLOCKS)[number];
+type Block = (typeof CV_FORM_BLOCKS)[number];
+
+/**
+ * The parts of the form (Ephraïm, 31/10): a few boxes per screen so that none is overloaded;
+ * « Suivant » and « Précédent » at the bottom, « Valider mes informations » on the last one.
+ */
+const PARTS: { key: string; blocks: Block[] }[] = [
+  { key: "identity", blocks: ["identity"] },
+  { key: "summary", blocks: ["summary"] },
+  { key: "experience", blocks: ["experience"] },
+  { key: "education", blocks: ["education"] },
+  { key: "skills", blocks: ["skills", "languages"] },
+  { key: "achievements", blocks: ["achievements", "links"] },
+  { key: "references", blocks: ["references"] },
+];
+
+/** The parts with boxes Orbi can improve. */
+const ORBI_PARTS = ["identity", "summary", "experience", "achievements"];
 
 const COLORS: Record<Block, string> = {
   identity: "var(--nb-lime)",
   summary: "var(--nb-menthe)",
   achievements: "var(--nb-ambre)",
+  links: PROFILE_PALETTE.ciel,
   skills: PROFILE_PALETTE.ciel,
   experience: PROFILE_PALETTE.corail,
   education: PROFILE_PALETTE.lilas,
@@ -58,21 +73,25 @@ const COLORS: Record<Block, string> = {
 
 const LANGUAGE_LEVELS = ["native", "fluent", "professional", "intermediate", "basic"] as const;
 const SAVE_DELAY_MS = 1200;
+/** About 95 characters per line of text on an A4 page in the templates. */
+const A4_LINE = 95;
 
 type Option = { value: string; label: string };
 type Status = "saved" | "saving" | "waiting" | "error";
+type Extra = CvContent["hiddenExtras"][number];
+const EXTRAS: readonly string[] = ["achievements", "references", "links"];
+const isExtra = (block: Block): block is Block & Extra => EXTRAS.includes(block);
 
-/** Each block's visibility on the CV: a CV section, or one of the blocks added on 29/10. */
+/** Each block's visibility on the CV: a CV section, or one of the blocks added later. */
 function shown(content: CvContent, block: Block) {
   if (block === "identity") return true;
-  if (block === "achievements" || block === "references")
-    return !content.hiddenExtras.includes(block);
+  if (isExtra(block)) return !content.hiddenExtras.includes(block);
   return content.sections.find((section) => section.id === block)?.visible ?? true;
 }
 
 function withShown(content: CvContent, block: Block, on: boolean): CvContent {
   if (block === "identity") return content;
-  if (block === "achievements" || block === "references") {
+  if (isExtra(block)) {
     const hidden = new Set(content.hiddenExtras);
     if (on) hidden.delete(block);
     else hidden.add(block);
@@ -86,62 +105,102 @@ function withShown(content: CvContent, block: Block, on: boolean): CvContent {
   };
 }
 
-/**
- * Mes informations (Ephraïm, 29/10): after the template, everything the CV prints in blocks —
- * identity and contacts, professional profile, achievements, skills, experiences, education,
- * languages, references — already filled from the profile and editable on the spot. The CV
- * fills in above while the talent types; changes are saved on this CV only (the profile stays
- * as it is), then « Continuer » opens the preview.
- */
+/** Lines a text takes on an A4 page, each paragraph starting a new line. */
+export function a4Lines(text: string) {
+  return text
+    .split(/\n+/)
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .reduce((sum, part) => sum + Math.ceil(part.length / A4_LINE), 0);
+}
+
+/** A change Orbi proposed for an offer, shown applied with « Annuler » (mode « Adapter »). */
+export type CvProposal = {
+  target: {
+    section: "headline" | "summary" | "bullet";
+    experience: number | null;
+    bullet: number | null;
+  };
+  after: string;
+};
+
+/** The content with Orbi's changes for an offer applied, and the history to undo each one. */
+function withProposals(initial: CvContent, proposals: CvProposal[]) {
+  let content = initial;
+  const history: Record<string, OrbiHistory> = {};
+  for (const proposal of proposals) {
+    const { section, experience, bullet } = proposal.target;
+    if (section === "headline") {
+      history.headline = { stack: [[content.info.headline], [proposal.after]], at: 1 };
+      content = { ...content, info: { ...content.info, headline: proposal.after } };
+    } else if (section === "summary") {
+      history.summary = { stack: [[content.summary], [proposal.after]], at: 1 };
+      content = { ...content, summary: proposal.after };
+    } else if (experience !== null && bullet !== null && content.experiences[experience]) {
+      const key = `bullets-${experience}`;
+      const before = history[key]?.stack[0] ?? content.experiences[experience]!.bullets;
+      const bullets = content.experiences[experience]!.bullets.map((text, at) =>
+        at === bullet ? proposal.after : text,
+      );
+      history[key] = { stack: [before, bullets], at: 1 };
+      content = {
+        ...content,
+        experiences: content.experiences.map((item, at) =>
+          at === experience ? { ...item, bullets } : item,
+        ),
+      };
+    }
+  }
+  return { content, history };
+}
 
 /** Réalisations of one experience on a CV (12 were allowed before, one per line). */
 const CV_BULLETS_MAX = 12;
+
+/**
+ * Mes informations (Ephraïm, 29/10 then 31/10): the boxes of the CV, part by part, before any
+ * layout: identity and contacts, the bio (no limit, 6 to 8 lines advised), experiences with
+ * dates and points, education, skills and languages, achievements and links, references.
+ * Filled from the profile or by hand, all editable; saved on this CV only while the talent
+ * types. With Pro, Orbi improves each box: its changes are highlighted, with arrows to go back
+ * and forth. « Valider mes informations » opens the studio.
+ */
 export function CvFormStep({
   cvId,
   initial,
-  fromProfile,
+  proposals,
   labels: labelData,
-  template,
-  style,
-  photoUrl,
   languages: languageOptions,
   countries,
   steps,
+  orbi,
+  isNew,
 }: {
   cvId: string;
   initial: CvContent;
-  /** Achievements taken from the portfolio, offered while the CV has none. */
-  fromProfile: { achievements: string[] };
+  proposals: CvProposal[];
   labels: CvLabelData;
-  template: CvTemplate;
-  style: CvStyle;
-  photoUrl: string | null;
   languages: Option[];
   countries: Option[];
   steps: ComponentProps<typeof CvFrame>["steps"];
+  orbi: OrbiState;
+  isNew: boolean;
 }) {
   const t = useTranslations("phoneCv");
   const router = useRouter();
-  const [content, setContent] = useState<CvContent>(() =>
-    initial.achievements.length === 0 && fromProfile.achievements.length > 0
-      ? { ...initial, achievements: fromProfile.achievements }
-      : initial,
-  );
-  const [open, setOpen] = useState<Block | null>("identity");
+  const [start] = useState(() => withProposals(initial, proposals));
+  const [content, setContent] = useState<CvContent>(start.content);
+  const [history, setHistory] = useState<Record<string, OrbiHistory>>(start.history);
+  const [part, setPart] = useState(0);
   const [status, setStatus] = useState<Status>("saved");
-  const [large, setLarge] = useState(false);
-  const [pending, start] = useTransition();
-  const [suggestion, setSuggestion] = useState<{ id: string; text: string } | null>(null);
+  const [pending, run] = useTransition();
+  const [busy, setBusy] = useState<string | null>(null);
   const [skill, setSkill] = useState("");
   const latest = useRef(content);
   const timer = useRef<number | null>(null);
-  const dirty = useRef(false);
-
-  const labels = useMemo(() => labelsFromData(labelData), [labelData]);
-  const data = useMemo(
-    () => documentFromCv(content, labels, photoUrl),
-    [content, labels, photoUrl],
-  );
+  const dirty = useRef(proposals.length > 0);
+  const top = useRef<HTMLDivElement>(null);
+  const suffix = isNew ? "&nouveau=1" : "";
 
   const save = async () => {
     if (timer.current) window.clearTimeout(timer.current);
@@ -168,24 +227,38 @@ export function CvFormStep({
     timer.current = window.setTimeout(() => void save(), SAVE_DELAY_MS);
   };
 
-  // Achievements taken from the portfolio are saved with the first change, or on Continuer.
-  useEffect(() => {
-    if (latest.current !== initial) dirty.current = true;
-    return () => {
+  useEffect(
+    () => () => {
       if (timer.current) window.clearTimeout(timer.current);
-    };
-  }, [initial]);
+    },
+    [],
+  );
 
   const fail = (message = t("error")) => showToast({ message, tone: "error" });
 
-  const next = () =>
-    start(async () => {
-      if (await save()) router.push(`/app/career/cv/${cvId}?etape=apercu`);
-      else fail(t("form.saveError"));
+  const go = (to: number) => {
+    setPart(to);
+    void save();
+    top.current?.scrollIntoView({ block: "start" });
+    window.scrollTo({ top: 0 });
+  };
+
+  const validate = () =>
+    run(async () => {
+      if (timer.current) window.clearTimeout(timer.current);
+      setStatus("saving");
+      const result = await validateCvInfoAction(cvId, latest.current);
+      if (!result.ok) {
+        setStatus("error");
+        return fail(t("form.saveError"));
+      }
+      dirty.current = false;
+      setStatus("saved");
+      router.push(`/app/career/cv/${cvId}?etape=studio${suffix}`);
     });
 
   const refill = () =>
-    start(async () => {
+    run(async () => {
       if (!(await save())) return fail(t("form.saveError"));
       const result = await fillCvFromProfileAction(cvId);
       if (!result.ok)
@@ -194,39 +267,90 @@ export function CvFormStep({
       router.refresh();
     });
 
-  const rewrite = () =>
-    start(async () => {
-      if (!(await save())) return fail(t("form.saveError"));
-      const result = await rewriteCvSummaryAction(cvId);
-      if (result.ok) setSuggestion(result.suggestion);
-      else
-        fail(
-          t.has(`content.orbiError.${result.error}` as "content.orbiError.same")
-            ? t(`content.orbiError.${result.error}` as "content.orbiError.same")
-            : t("error"),
-        );
+  // ── Orbi on each box (Pro): the texts proposed replace the box, highlighted, undoable ──
+  const remember = (key: string, values: string[]) =>
+    setHistory((all) => {
+      const entry = all[key];
+      if (!entry) return all;
+      // Typing after a change of Orbi: this is the current version, « Rétablir » goes away.
+      return {
+        ...all,
+        [key]: { stack: [...entry.stack.slice(0, entry.at), values], at: entry.at },
+      };
     });
 
-  const decide = (decision: "applied" | "ignored") => {
-    if (!suggestion) return;
-    const text = suggestion.text;
-    setSuggestion(null);
-    start(async () => {
-      const result = await decideCvSummaryAction({ suggestion: suggestion.id, decision });
-      if (!result.ok) return fail();
-      if (decision === "applied") {
-        latest.current = { ...latest.current, summary: text };
-        setContent(latest.current);
-      }
-      showToast({ message: decision === "applied" ? t("content.kept") : t("content.refused") });
+  /** Where the texts of a box go back: read in the handlers only, never while drawing. */
+  const applyTo = (key: string, values: string[]) => {
+    if (key === "headline") setInfo({ headline: values[0] ?? "" });
+    else if (key === "summary") set("summary", values[0] ?? "");
+    else if (key === "achievements") set("achievements", values);
+    else if (key.startsWith("bullets-"))
+      setAt("experiences", Number(key.slice(8)), { bullets: values });
+  };
+
+  const improve = (
+    key: string,
+    kind: "headline" | "summary" | "bullets" | "achievements",
+    values: string[],
+  ) => {
+    if (orbi.state !== "ready") return;
+    setBusy(key);
+    run(async () => {
+      const result = await rewriteCvTextAction(cvId, {
+        kind,
+        texts: values,
+        context: latest.current,
+      });
+      setBusy(null);
+      if (!result.ok) return fail(t(`orbiField.error.${result.error}`));
+      setHistory((all) => {
+        const entry = all[key];
+        const stack = entry ? [...entry.stack.slice(0, entry.at), values] : [values];
+        return { ...all, [key]: { stack: [...stack, result.texts], at: stack.length } };
+      });
+      applyTo(key, result.texts);
+      showToast({ message: t("orbiField.done") });
     });
+  };
+
+  const travel = (key: string, step: -1 | 1) => {
+    const entry = history[key];
+    if (!entry) return;
+    const at = entry.at + step;
+    if (at < 0 || at >= entry.stack.length) return;
+    setHistory({ ...history, [key]: { ...entry, at } });
+    applyTo(key, entry.stack[at]!);
+  };
+
+  const orbiFor = (
+    key: string,
+    kind: "headline" | "summary" | "bullets" | "achievements",
+    values: string[],
+  ) => {
+    const entry = history[key];
+    const fresh = entry && entry.at > 0 && same(entry.stack[entry.at]!, values);
+    return {
+      tools: (
+        <OrbiTools
+          orbi={orbi}
+          busy={busy === key}
+          disabled={pending || !values.some((value) => value.trim())}
+          history={entry ?? null}
+          onImprove={() => improve(key, kind, values)}
+          onUndo={() => travel(key, -1)}
+          onRedo={() => travel(key, 1)}
+        />
+      ),
+      changes: fresh ? <OrbiChanges before={entry.stack[entry.at - 1]!} after={values} /> : null,
+      glow: fresh ? "" : undefined,
+    };
   };
 
   const set = <K extends keyof CvContent>(key: K, value: CvContent[K]) =>
     change({ ...latest.current, [key]: value });
   const setInfo = (patch: Partial<CvContent["info"]>) =>
     set("info", { ...latest.current.info, ...patch });
-  const setAt = <K extends "experiences" | "education" | "references" | "languages">(
+  const setAt = <K extends "experiences" | "education" | "references" | "languages" | "links">(
     key: K,
     index: number,
     patch: Partial<CvContent[K][number]>,
@@ -237,7 +361,9 @@ export function CvFormStep({
         at === index ? { ...item, ...patch } : item,
       ) as CvContent[K],
     );
-  const removeAt = <K extends "experiences" | "education" | "references" | "languages" | "skills">(
+  const removeAt = <
+    K extends "experiences" | "education" | "references" | "languages" | "skills" | "links",
+  >(
     key: K,
     index: number,
   ) => set(key, latest.current[key].filter((_, at) => at !== index) as CvContent[K]);
@@ -248,17 +374,6 @@ export function CvFormStep({
     if (!latest.current.skills.some((item) => item.name.toLowerCase() === name.toLowerCase()))
       set("skills", [...latest.current.skills, { name, level: 2 }]);
     setSkill("");
-  };
-
-  const count: Record<Block, string> = {
-    identity: [content.info.headline, content.info.city].filter(Boolean).join(" · "),
-    summary: content.summary ? t("form.written") : t("form.toWrite"),
-    achievements: t("form.count", { count: content.achievements.filter(Boolean).length }),
-    skills: t("form.count", { count: content.skills.length }),
-    experience: t("form.count", { count: content.experiences.length }),
-    education: t("form.count", { count: content.education.length }),
-    languages: t("form.count", { count: content.languages.length }),
-    references: t("form.count", { count: content.references.length }),
   };
 
   const field = (id: string, label: string, input: ReactNode, hint?: string, wide = true) => (
@@ -285,17 +400,28 @@ export function CvFormStep({
                 onChange={(event) => setInfo({ name: event.target.value })}
               />,
             )}
-            {field(
-              "cvf-titre",
-              t("form.headline"),
-              <input
-                id="cvf-titre"
-                value={content.info.headline}
-                maxLength={160}
-                placeholder={t("form.headlinePlaceholder")}
-                onChange={(event) => setInfo({ headline: event.target.value })}
-              />,
-            )}
+            {(() => {
+              const orbiBox = orbiFor("headline", "headline", [content.info.headline]);
+              return (
+                <div className="nb-cvf-champ nb-cvf-orbibox" data-large="" data-orbi={orbiBox.glow}>
+                  <div className="nb-cvf-label">
+                    <label htmlFor="cvf-titre">{t("form.headline")}</label>
+                    {orbiBox.tools}
+                  </div>
+                  <input
+                    id="cvf-titre"
+                    value={content.info.headline}
+                    maxLength={160}
+                    placeholder={t("form.headlinePlaceholder")}
+                    onChange={(event) => {
+                      setInfo({ headline: event.target.value });
+                      remember("headline", [event.target.value]);
+                    }}
+                  />
+                  {orbiBox.changes}
+                </div>
+              );
+            })()}
             {field(
               "cvf-email",
               t("form.email"),
@@ -365,63 +491,45 @@ export function CvFormStep({
             )}
           </div>
         );
-      case "summary":
+      case "summary": {
+        const lines = a4Lines(content.summary);
+        const gauge = lines === 0 ? "empty" : lines < 4 ? "short" : lines <= 8 ? "good" : "long";
+        const orbiBox = orbiFor("summary", "summary", [content.summary]);
         return (
-          <>
-            {suggestion ? (
-              <div
-                className="nb-cv-resume"
-                data-orbi=""
-                role="group"
-                aria-label={t("content.proposal")}
-              >
-                <small>{t("content.proposal")}</small>
-                <p>{suggestion.text}</p>
-                <div className="nb-cv-deux">
-                  <button
-                    type="button"
-                    className="nb-bouton"
-                    data-contour=""
-                    onClick={() => decide("ignored")}
-                    disabled={pending}
-                  >
-                    {t("content.refuse")}
-                  </button>
-                  <button
-                    type="button"
-                    className="nb-bouton"
-                    data-plein=""
-                    onClick={() => decide("applied")}
-                    disabled={pending}
-                  >
-                    {t("content.keep")}
-                  </button>
-                </div>
-              </div>
-            ) : null}
-            {field(
-              "cvf-resume",
-              t("form.summary"),
-              <textarea
-                id="cvf-resume"
-                rows={5}
-                maxLength={1500}
-                value={content.summary}
-                placeholder={t("content.summaryEmpty")}
-                onChange={(event) => set("summary", event.target.value)}
-              />,
-              t("content.summaryHint"),
-            )}
-            <button type="button" className="nb-cvf-orbi" onClick={rewrite} disabled={pending}>
-              <OrbiSpark size={14} />
-              {t("content.rewrite")}
-            </button>
-          </>
+          <div className="nb-cvf-champ nb-cvf-orbibox" data-large="" data-orbi={orbiBox.glow}>
+            <div className="nb-cvf-label">
+              <label htmlFor="cvf-resume">{t("form.summary")}</label>
+              {orbiBox.tools}
+            </div>
+            <textarea
+              id="cvf-resume"
+              rows={9}
+              value={content.summary}
+              placeholder={t("form.summaryPlaceholder")}
+              aria-describedby="cvf-resume-lignes"
+              onChange={(event) => {
+                set("summary", event.target.value);
+                remember("summary", [event.target.value]);
+              }}
+            />
+            <p className="nb-cvf-jauge" id="cvf-resume-lignes" data-etat={gauge}>
+              <span aria-hidden>
+                <i style={{ width: `${Math.min(100, (lines / 8) * 100)}%` }} />
+              </span>
+              {t(`form.lines.${gauge}`, { count: lines })}
+            </p>
+            {orbiBox.changes}
+          </div>
         );
-      case "achievements":
+      }
+      case "achievements": {
+        const orbiBox = orbiFor("achievements", "achievements", content.achievements);
         return (
-          <>
-            <p className="nb-cvf-aide">{t("form.achievementsHint")}</p>
+          <div className="nb-cvf-orbibox" data-orbi={orbiBox.glow}>
+            <div className="nb-cvf-label">
+              <p className="nb-cvf-aide">{t("form.achievementsHint")}</p>
+              {orbiBox.tools}
+            </div>
             <ul className="nb-cvf-lignes">
               {content.achievements.map((line, index) => (
                 <li key={index}>
@@ -430,14 +538,13 @@ export function CvFormStep({
                     value={line}
                     maxLength={300}
                     placeholder={t("form.achievementPlaceholder")}
-                    onChange={(event) =>
-                      set(
-                        "achievements",
-                        latest.current.achievements.map((item, at) =>
-                          at === index ? event.target.value : item,
-                        ),
-                      )
-                    }
+                    onChange={(event) => {
+                      const next = latest.current.achievements.map((item, at) =>
+                        at === index ? event.target.value : item,
+                      );
+                      set("achievements", next);
+                      remember("achievements", next);
+                    }}
                   />
                   <Remove
                     label={t("form.remove")}
@@ -457,8 +564,10 @@ export function CvFormStep({
                 onClick={() => set("achievements", [...latest.current.achievements, ""])}
               />
             ) : null}
-          </>
+            {orbiBox.changes}
+          </div>
         );
+      }
       case "skills":
         return (
           <>
@@ -602,12 +711,27 @@ export function CvFormStep({
                     />
                     {t("form.current")}
                   </label>
-                  <AchievementsField
-                    inCv
-                    max={CV_BULLETS_MAX}
-                    points={item.bullets}
-                    onChange={(bullets) => setAt("experiences", index, { bullets })}
-                  />
+                  {(() => {
+                    const key = `bullets-${index}`;
+                    const orbiBox = orbiFor(key, "bullets", item.bullets);
+                    return (
+                      <div className="nb-cvf-orbibox nb-cvf-points" data-orbi={orbiBox.glow}>
+                        <div className="nb-cvf-label" data-droite="">
+                          {orbiBox.tools}
+                        </div>
+                        <AchievementsField
+                          inCv
+                          max={CV_BULLETS_MAX}
+                          points={item.bullets}
+                          onChange={(bullets) => {
+                            setAt("experiences", index, { bullets });
+                            remember(key, bullets);
+                          }}
+                        />
+                        {orbiBox.changes}
+                      </div>
+                    );
+                  })()}
                 </div>
               </fieldset>
             ))}
@@ -754,6 +878,39 @@ export function CvFormStep({
             ) : null}
           </>
         );
+      case "links":
+        return (
+          <>
+            <p className="nb-cvf-aide">{t("form.linksHint")}</p>
+            {content.links.map((item, index) => (
+              <div key={index} className="nb-cvf-lien">
+                <input
+                  aria-label={t("form.linkLabel", { n: index + 1 })}
+                  value={item.label}
+                  maxLength={60}
+                  placeholder={t("form.linkLabelPlaceholder")}
+                  onChange={(event) => setAt("links", index, { label: event.target.value })}
+                />
+                <input
+                  aria-label={t("form.linkUrl", { n: index + 1 })}
+                  type="url"
+                  inputMode="url"
+                  value={item.url}
+                  maxLength={300}
+                  placeholder={t("form.linkUrlPlaceholder")}
+                  onChange={(event) => setAt("links", index, { url: event.target.value })}
+                />
+                <Remove label={t("form.remove")} onClick={() => removeAt("links", index)} />
+              </div>
+            ))}
+            {content.links.length < 8 ? (
+              <Add
+                label={t("form.addLink")}
+                onClick={() => set("links", [...latest.current.links, { label: "", url: "" }])}
+              />
+            ) : null}
+          </>
+        );
       case "references":
         return (
           <>
@@ -818,120 +975,126 @@ export function CvFormStep({
     }
   };
 
+  const current = PARTS[part]!;
+  const last = part === PARTS.length - 1;
   return (
     <CvFrame
-      title={t("form.title")}
-      sub={t("form.sub")}
-      back={{ href: steps?.hrefs.modele ?? "/app/career/cv", label: t("back") }}
+      title={t(`form.part.${current.key}.title`)}
+      sub={t("form.partOf", { n: part + 1, all: PARTS.length })}
+      back={
+        part > 0
+          ? { href: "#", label: t("back"), onClick: () => go(part - 1) }
+          : { href: "/app/career/cv?onglet=cv", label: t("close"), close: true }
+      }
       steps={steps}
       className="nb-cvf"
       bottom={
-        <button
-          type="button"
-          className="nb-bouton nb-cv-principal"
-          data-plein=""
-          data-large=""
-          disabled={pending}
-          aria-busy={pending}
-          onClick={next}
-        >
-          {t("form.next")}
-        </button>
+        <div className="nb-cv-deux">
+          {part > 0 ? (
+            <button
+              type="button"
+              className="nb-bouton"
+              data-contour=""
+              data-large=""
+              onClick={() => go(part - 1)}
+            >
+              {t("form.previous")}
+            </button>
+          ) : null}
+          <button
+            type="button"
+            className="nb-bouton nb-cv-principal"
+            data-plein=""
+            data-large=""
+            disabled={pending}
+            aria-busy={pending}
+            onClick={last ? validate : () => go(part + 1)}
+          >
+            {last ? t("form.validate") : t("form.nextPart")}
+          </button>
+        </div>
       }
     >
-      <div className="nb-cv-orbi">
-        <span className="nb-cv-orbi-i" aria-hidden>
-          <OrbiSpark size={18} />
-        </span>
-        <p>
-          <b>{t("form.orbiTitle")}</b> {t("form.orbiText")}
-        </p>
+      <div ref={top} className="nb-cvf-parties" aria-hidden>
+        {PARTS.map((item, index) => (
+          <button
+            key={item.key}
+            type="button"
+            tabIndex={-1}
+            data-fait={index <= part ? "" : undefined}
+            onClick={() => go(index)}
+          />
+        ))}
       </div>
-      <button type="button" className="nb-cvf-reprendre" onClick={refill} disabled={pending}>
-        <PhoneIcon name="refaire" size={15} />
-        {t("form.refill")}
-      </button>
-
-      <section
-        className="nb-cvf-apercu"
-        data-grand={large ? "" : undefined}
-        aria-label={t("form.live")}
-      >
-        <header>
-          <b>
-            <i aria-hidden />
-            {t("form.live")}
-          </b>
-          <small role="status">{t(`form.status.${status}`)}</small>
-          <button type="button" onClick={() => setLarge((value) => !value)} aria-expanded={large}>
-            {large ? t("form.smaller") : t("form.larger")}
-          </button>
-        </header>
-        <div className="nb-cvf-page">
-          <CvPaginationProvider>
-            <CvPreview data={data} template={template} style={style} />
-          </CvPaginationProvider>
+      <p className="nb-cvf-intro">{t(`form.part.${current.key}.text`)}</p>
+      {part === 0 ? (
+        <button type="button" className="nb-cvf-reprendre" onClick={refill} disabled={pending}>
+          <PhoneIcon name="refaire" size={15} />
+          {t("form.refill")}
+        </button>
+      ) : null}
+      {orbi.state === "ready" && ORBI_PARTS.includes(current.key) ? (
+        <div className="nb-cv-orbi">
+          <span className="nb-cv-orbi-i" aria-hidden>
+            <OrbiSpark size={18} />
+          </span>
+          <p>{t("orbiField.tip")}</p>
         </div>
-      </section>
+      ) : null}
 
       <ul className="nb-cvf-blocs">
-        {BLOCKS.map((block, index) => {
-          const isOpen = open === block;
+        {current.blocks.map((block, index) => {
           const visible = shown(content, block);
           return (
             <li
               key={block}
               className="nb-cvf-bloc"
-              data-ouvert={isOpen ? "" : undefined}
+              data-ouvert=""
               data-cache={visible ? undefined : ""}
-              style={{ "--c": COLORS[block], animationDelay: `${0.04 * index}s` } as CSSProperties}
+              style={{ "--c": COLORS[block], animationDelay: `${0.05 * index}s` } as CSSProperties}
             >
               <div className="nb-cvf-bloc-h">
-                <button
-                  type="button"
-                  className="nb-cvf-bloc-b"
-                  aria-expanded={isOpen}
-                  aria-controls={`cvf-bloc-${block}`}
-                  onClick={() => setOpen(isOpen ? null : block)}
-                >
+                <h2 className="nb-cvf-bloc-b">
                   <i className="nb-cv-point" aria-hidden />
                   <span>
                     <b>{t(`form.block.${block}`)}</b>
-                    <small>{count[block] || t("form.toWrite")}</small>
                   </span>
-                  <em>
-                    <PhoneIcon name={isOpen ? "haut" : "modifier"} size={15} />
-                    {isOpen ? t("form.close") : t("form.edit")}
-                  </em>
-                </button>
+                </h2>
                 {block === "identity" ? null : (
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={visible}
-                    aria-label={t("content.show", { name: t(`form.block.${block}`) })}
-                    className="nb-switch"
-                    onClick={() => change(withShown(latest.current, block, !visible))}
-                  >
-                    <span />
-                  </button>
+                  <label className="nb-cvf-montrer">
+                    <small>{visible ? t("form.onCv") : t("form.offCv")}</small>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={visible}
+                      aria-label={t("content.show", { name: t(`form.block.${block}`) })}
+                      className="nb-switch"
+                      onClick={() => change(withShown(latest.current, block, !visible))}
+                    >
+                      <span />
+                    </button>
+                  </label>
                 )}
               </div>
-              {isOpen ? (
-                <div id={`cvf-bloc-${block}`} className="nb-cvf-bloc-c">
-                  {body(block)}
-                </div>
-              ) : null}
+              <div className="nb-cvf-bloc-c">{body(block)}</div>
             </li>
           );
         })}
       </ul>
-      <p className="nb-cv-note" data-centre="">
-        {t("form.profileStays")}
+      <p className="nb-cv-note" data-centre="" role="status">
+        {t(`form.status.${status}`)} · {t("form.profileStays")}
       </p>
+      {last ? null : (
+        <p className="nb-cvf-suite">
+          {t("form.nextIs", { name: t(`form.part.${PARTS[part + 1]!.key}.title`) })}
+        </p>
+      )}
     </CvFrame>
   );
 }
+
+const same = (a: string[], b: string[]) =>
+  a.length === b.length && a.every((value, index) => value === b[index]);
 
 function Remove({ label, onClick }: { label: string; onClick: () => void }) {
   return (

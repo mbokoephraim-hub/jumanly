@@ -5,7 +5,7 @@ import { redirect, RedirectType } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { cvFonts, type CvFontCode } from "@/features/cv/render/palette";
-import { cvDensities, cvTitleLanguages } from "@/features/cv/style";
+import { cvDensities, cvStyleSchema, cvTitleLanguages } from "@/features/cv/style";
 import { DEFAULT_TEMPLATE_ID, findTemplate } from "@/features/cv/templates/registry";
 import { PROFILE_COLORS } from "@/lib/profile-colors";
 import { requireUser } from "@/server/auth/session";
@@ -24,8 +24,10 @@ import {
   type CvContent,
 } from "@/server/services/cv";
 import {
+  cvTextKinds,
   decideSuggestion,
   improveCvSummary,
+  rewriteCvTexts,
   pendingSuggestions,
   targetSkillsFor,
   type ImproveResult,
@@ -45,6 +47,9 @@ import {
 } from "@/server/services/cv-to-profile";
 import { CV_FILE_MAX_BYTES } from "@/server/services/cv-file";
 import { ensureProfile, getFullProfile } from "@/server/services/profile";
+import { tailorCv } from "@/server/services/career-documents";
+import { blankCv, cvFromWholeProfile, cvStartModes } from "@/server/services/cv-start";
+import { can } from "@/server/entitlements";
 
 /**
  * Créer un CV (docs/carriere-v3, captures 06 to 15): the four steps of a CV on the phone and
@@ -104,6 +109,7 @@ export async function saveCvContentAction(cvId: string, raw: unknown): Promise<R
     ...parsed.data,
     achievements: parsed.data.achievements.filter(Boolean),
     references: parsed.data.references.filter((item) => item.name),
+    links: parsed.data.links.filter((item) => item.url),
   };
   await saveContent(cv.id, content);
   return { ok: true };
@@ -449,7 +455,15 @@ export async function fillCvFromProfileAction(
   const { user, profile } = await owner();
   const cv = await ownedCv(profile.id, cvId);
   if (!cv) return { ok: false, error: "missing" };
-  const content = cvFromProfile(await getFullProfile(db, user.id), parseCv(cv.content));
+  const previous = parseCv(cv.content);
+  const whole = await cvFromWholeProfile(db, user.id);
+  // Everything the profile holds, in the boxes; the CV's own choices stay.
+  const content: CvContent = {
+    ...whole,
+    info: { ...whole.info, showEmail: previous.info.showEmail, phone: previous.info.phone },
+    sections: previous.sections,
+    hiddenExtras: previous.hiddenExtras,
+  };
   if (isEmptyCv(content)) return { ok: false, error: "profile" };
   await saveContent(cv.id, content);
   refresh();
@@ -595,4 +609,144 @@ export async function newCvFromImportAction(formData: FormData) {
   await db.aiSuggestion.update({ where: { id: pending.id }, data: { status: "applied" } });
   refresh();
   redirect(`/app/career/cv/${cv.id}?etape=modele`, RedirectType.replace);
+}
+
+// ─── Nouveau CV (Ephraïm, 31/10/2026) ───────────────────────────────────────────────────────
+
+const startSchema = z.object({
+  mode: z.enum(cvStartModes),
+  job: z.string().max(60).optional(),
+});
+
+/**
+ * « Valider » on « Nouveau CV »: a CV filled from the whole profile, an empty one, or a copy
+ * adapted by Orbi to an offer (`career.cv.tailor`, Pro and above; the others see it locked).
+ * Then « Mes informations », step by step; `nouveau=1` lets « Tout annuler » remove it.
+ */
+export async function createCvAction(formData: FormData) {
+  const parsed = startSchema.safeParse({
+    mode: formData.get("mode"),
+    job: formData.get("job") ?? undefined,
+  });
+  if (!parsed.success) redirect("/app/career/cv/nouveau?erreur=choix", RedirectType.replace);
+  const { user, profile } = await owner();
+  const count = await db.document.count({ where: { profileId: profile.id, kind: "cv" } });
+  if (count >= MAX_CVS) redirect("/app/career/cv/nouveau?erreur=limite", RedirectType.replace);
+  const { mode, job } = parsed.data;
+  if (mode === "offre") {
+    if (!(await can(db, { type: "user", id: user.id }, "career.cv.tailor")))
+      redirect("/app/career/cv/nouveau?erreur=offre", RedirectType.replace);
+    if (!job) redirect("/app/career/cv/nouveau?choix=offre&erreur=job", RedirectType.replace);
+  }
+  const t = await getTranslations("career.cv");
+  const base = await db.document.create({
+    data: {
+      profileId: profile.id,
+      kind: "cv",
+      title: count === 0 ? t("default") : `${t("default")} ${count + 1}`,
+      templateId: DEFAULT_TEMPLATE_ID,
+      isPrimary: count === 0,
+      content: mode === "zero" ? blankCv() : await cvFromWholeProfile(db, user.id),
+    },
+  });
+  let cvId = base.id;
+  if (mode === "offre" && job) {
+    const tailor = await getTranslations("career.cv.tailor");
+    const result = await tailorCv(db, user.id, {
+      cvId: base.id,
+      jobId: job,
+      title: (jobTitle) => tailor("name", { jobTitle }),
+    });
+    // The copy is the CV; the profile CV made to start it goes away.
+    await db.document.delete({ where: { id: base.id } });
+    if (!result.ok) {
+      const code = { notFound: "job", limit: "limite" }[result.code as string] ?? result.code;
+      redirect(`/app/career/cv/nouveau?choix=offre&erreur=${code}`, RedirectType.replace);
+    }
+    cvId = result.id;
+    if (count === 0) await db.document.update({ where: { id: cvId }, data: { isPrimary: true } });
+  }
+  refresh();
+  redirect(`/app/career/cv/${cvId}?etape=contenu&nouveau=1`, RedirectType.replace);
+}
+
+const rewriteSchema = z.object({
+  kind: z.enum(cvTextKinds),
+  texts: z.array(z.string().max(6000)).min(1).max(12),
+  context: cvContentInputSchema,
+});
+
+/** « Améliorer avec Orbi » on one box of « Mes informations » (Pro): the texts proposed. */
+export async function rewriteCvTextAction(cvId: string, raw: z.input<typeof rewriteSchema>) {
+  const parsed = rewriteSchema.safeParse(raw);
+  if (!parsed.success) return { ok: false as const, error: "empty" as const };
+  const { user, profile } = await owner();
+  const cv = await ownedCv(profile.id, cvId);
+  if (!cv) return { ok: false as const, error: "empty" as const };
+  const context = parsed.data.context as CvContent;
+  return rewriteCvTexts(db, user.id, cv.id, {
+    kind: parsed.data.kind,
+    texts: parsed.data.texts,
+    context,
+  });
+}
+
+/**
+ * « Valider mes informations »: the form is saved, and the changes Orbi proposed for an offer
+ * (shown applied, with « Annuler ») are closed: kept when their text is on the CV, else refused.
+ */
+export async function validateCvInfoAction(cvId: string, raw: unknown): Promise<Result> {
+  const saved = await saveCvContentAction(cvId, raw);
+  if (!saved.ok) return saved;
+  const { user, profile } = await owner();
+  const cv = await ownedCv(profile.id, cvId);
+  if (!cv) return { ok: false, error: "missing" };
+  const text = JSON.stringify(parseCv(cv.content));
+  const pending = await pendingSuggestions(db, user.id, cv.id);
+  for (const item of pending) {
+    const kept = item.payload.after !== null && text.includes(JSON.stringify(item.payload.after));
+    await db.aiSuggestion.update({
+      where: { id: item.id },
+      data: { status: kept ? "applied" : "ignored" },
+    });
+  }
+  return { ok: true };
+}
+
+/** A template touched in the studio: the layout changes at once, the texts stay. */
+export async function setCvTemplateQuickAction(cvId: string, template: string): Promise<Result> {
+  const parsed = z.string().min(1).max(40).safeParse(template);
+  if (!parsed.success) return { ok: false, error: "invalid" };
+  const { user, profile } = await owner();
+  const cv = await ownedCv(profile.id, cvId);
+  if (!cv) return { ok: false, error: "missing" };
+  const result = await applyTemplate(db, user.id, cv.id, parsed.data);
+  return result === "applied" ? { ok: true } : { ok: false, error: result };
+}
+
+/** « Tout annuler » on a CV that already existed: its template and look as they were. */
+export async function restoreCvDesignAction(
+  cvId: string,
+  template: string,
+  rawStyle: unknown,
+): Promise<Result> {
+  const style = cvStyleSchema.safeParse(rawStyle);
+  if (!style.success) return { ok: false, error: "invalid" };
+  const { user, profile } = await owner();
+  const cv = await ownedCv(profile.id, cvId);
+  if (!cv) return { ok: false, error: "missing" };
+  if (cv.templateId !== template) await applyTemplate(db, user.id, cv.id, template);
+  await updateCvStyle(db, user.id, cv.id, () => style.data);
+  refresh();
+  return { ok: true };
+}
+
+/** « Enregistrer » on « Voir le CV »: the CV is ready, first in « Mes documents ». */
+export async function finishCvAction(cvId: string): Promise<Result> {
+  const { profile } = await owner();
+  const cv = await ownedCv(profile.id, cvId);
+  if (!cv) return { ok: false, error: "missing" };
+  await db.document.update({ where: { id: cv.id }, data: { updatedAt: new Date() } });
+  refresh();
+  return { ok: true };
 }

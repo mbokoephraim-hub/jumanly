@@ -2,14 +2,16 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { PhoneIcon } from "../icon";
 
-export const CV_STEPS = ["modele", "contenu", "style", "apercu"] as const;
+export const CV_STEPS = ["modele", "contenu", "style", "apercu", "studio", "voir"] as const;
 export type CvStep = (typeof CV_STEPS)[number];
 /**
- * The steps shown in the bar (Ephraïm, 29/10): Modèle, Mes informations, Aperçu. « Style »
- * (colours and font) opens from the preview and counts as part of it.
+ * The steps shown in the bar (Ephraïm, 31/10): Mes informations, Studio, Aperçu. The former
+ * screens (Modèle, Style, the preview with its checks) still open and count with the studio
+ * or the preview.
  */
-export const CV_BAR_STEPS = ["modele", "contenu", "apercu"] as const;
-export const barStepOf = (step: CvStep) => (step === "style" ? "apercu" : step);
+export const CV_BAR_STEPS = ["contenu", "studio", "voir"] as const;
+export const barStepOf = (step: CvStep): (typeof CV_BAR_STEPS)[number] =>
+  step === "modele" || step === "style" ? "studio" : step === "apercu" ? "voir" : step;
 
 /**
  * The frame of « Créer un CV » (docs/carriere-v3, captures 06 to 15): full screen, without the
@@ -23,10 +25,13 @@ export function CvFrame({
   back,
   steps,
   bottom,
+  action,
   children,
   className,
 }: {
   title: string;
+  /** A link or button at the top right, in place of the step count (« Modifier encore »). */
+  action?: ReactNode;
   sub?: string;
   back: { href: string; label: string; close?: boolean; onClick?: () => void };
   steps?: {
@@ -64,7 +69,9 @@ export function CvFrame({
           <h1>{title}</h1>
           {sub ? <p>{sub}</p> : null}
         </div>
-        {steps ? (
+        {action ? (
+          action
+        ) : steps ? (
           <span className="nb-cv-num" aria-hidden>
             {steps.count}
           </span>
