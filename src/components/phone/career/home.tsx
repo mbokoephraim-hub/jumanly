@@ -24,6 +24,7 @@ import type { CareerView } from "./data";
 import { CvExportButton } from "./cv-export";
 import { OrbiStar, Ring, Segment, tint } from "./kit";
 import { CareerSearch } from "./search";
+import { groundOf, LettersPanel, type LetterRow } from "./letters-panel";
 
 const TABS = ["progression", "candidatures", "documents"] as const;
 type Tab = (typeof TABS)[number];
@@ -31,8 +32,7 @@ type Tab = (typeof TABS)[number];
 /** The colours of the next steps of « Progression », in order. */
 const STEP_COLORS = ["#F4C463", "#FF8A7A", "#2FD3A6"] as const;
 
-/** A cover letter of « Mes documents ». */
-export type LetterRow = { id: string; title: string; line: string; href: string };
+export type { LetterRow } from "./letters-panel";
 
 /** A saved offer of « Candidatures › Enregistrées ». */
 export type SavedOffer = {
@@ -669,17 +669,6 @@ function ApplicationsPanel({ view, saved }: { view: CareerView; saved: SavedOffe
 }
 
 /**
- * Bright but soft grounds for the letter and project cards (Ephraïm, 31/10/2026): one per offer,
- * picked from the letter or project so each keeps its colour.
- */
-const VIVID = ["#7c6cf2", "#f0785a", "#22b59a", "#3f8ef0", "#e9a23b", "#e0609c"];
-function vivid(key: string) {
-  let sum = 0;
-  for (const char of key) sum = (sum * 31 + char.charCodeAt(0)) >>> 0;
-  return VIVID[sum % VIVID.length];
-}
-
-/**
  * « Mes documents » (Ephraïm, 29/10/2026): the CVs, the cover letters and the portfolio on one
  * screen. Each section is a row of cards that scrolls sideways (Ephraïm, 30/10/2026).
  */
@@ -702,44 +691,7 @@ function DocumentsPanel({
       </section>
 
       <section aria-labelledby="nb-doc-lettres">
-        <h2 id="nb-doc-lettres" className="nb-pf-h nb-cr-h nb-doc-h" data-loin="">
-          {t("docs.letters")}
-        </h2>
-        <div className="nb-cr-pad">
-          {letters.length === 0 ? (
-            <p className="nb-pf-vide nb-cr-vide-cv">{t("docs.lettersEmpty")}</p>
-          ) : (
-            <ul className="nb-doc-rangee" data-rangee="">
-              {letters.map((letter, at) => (
-                // Same card as a CV (Ephraïm, 31/10/2026): two on the screen, the letter drawing
-                // of the « Vue » tab on a warm band, the title on two lines at most, then its line.
-                <li
-                  key={letter.id}
-                  className="nb-cr-carte nb-cr-cv"
-                  style={{ animationDelay: `${at * 0.08}s` }}
-                >
-                  <Link href={letter.href} className="nb-cr-cv-l">
-                    <span
-                      className="nb-cr-cv-bande"
-                      data-lettre=""
-                      data-vif=""
-                      style={{ "--accent": vivid(letter.id) } as CSSProperties}
-                    >
-                      <MenuArt name="letter" size="lg" />
-                    </span>
-                    <span className="nb-cr-cv-t">
-                      <b title={letter.title}>{letter.title}</b>
-                      <small>{letter.line}</small>
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-          <Link href="/app/career/lettres/nouvelle" className="nb-cr-nouveau">
-            {t("docs.letterNew")}
-          </Link>
-        </div>
+        <LettersPanel letters={letters} />
       </section>
 
       <section aria-labelledby="nb-doc-port">
@@ -768,7 +720,7 @@ function DocumentsPanel({
                     className="nb-cr-cv-bande nb-doc-couv"
                     data-lettre=""
                     data-vif=""
-                    style={{ "--accent": vivid(project.title) } as CSSProperties}
+                    style={{ "--accent": groundOf(project.id) } as CSSProperties}
                     aria-hidden
                   >
                     {project.cover ? (

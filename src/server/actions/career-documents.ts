@@ -8,6 +8,7 @@ import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
+import { PROFILE_COLORS } from "@/lib/profile-colors";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { saveApplicationDraft } from "@/server/services/application-draft";
@@ -288,4 +289,66 @@ export async function applicationLetterAction(formData: FormData) {
   });
   refresh();
   redirect(`${back}&lettre=orbi`);
+}
+
+// ─── Mes lettres de motivation (téléphone) ───────────────────────────────────
+
+/** The documents of « Mes lettres de motivation » (listDocuments). */
+const LETTER_KINDS = ["cover_letter", "bio", "other"] as const;
+type LetterResult = { ok: true } | { ok: false; error: string };
+
+async function ownedLetter(userId: string, documentId: string) {
+  return db.document.findFirst({
+    where: { id: documentId, kind: { in: [...LETTER_KINDS] }, profile: { userId } },
+    select: { id: true, updatedAt: true },
+  });
+}
+
+/** « Supprimer » on the letters chosen with « Sélectionner » (Ephraïm, 31/10/2026). */
+export async function deleteLettersAction(
+  ids: string[],
+): Promise<{ ok: true; count: number } | { ok: false; error: string }> {
+  const parsed = z.array(z.string().min(1).max(64)).min(1).max(200).safeParse(ids);
+  if (!parsed.success) return { ok: false, error: "invalid" };
+  const user = await requireUser(DOCUMENTS);
+  const { count } = await db.document.deleteMany({
+    where: {
+      id: { in: parsed.data },
+      kind: { in: [...LETTER_KINDS] },
+      profile: { userId: user.id },
+    },
+  });
+  if (count === 0) return { ok: false, error: "missing" };
+  refresh();
+  return { ok: true, count };
+}
+
+/** The pencil of a letter › « Titre » (Ephraïm, 31/10/2026). */
+export async function renameLetterAction(documentId: string, title: string): Promise<LetterResult> {
+  const parsed = z.string().trim().min(1).max(120).safeParse(title);
+  if (!parsed.success) return { ok: false, error: "invalid" };
+  const user = await requireUser(DOCUMENTS);
+  const letter = await ownedLetter(user.id, documentId);
+  if (!letter) return { ok: false, error: "missing" };
+  await db.document.update({ where: { id: letter.id }, data: { title: parsed.data } });
+  refresh();
+  return { ok: true };
+}
+
+/** The pencil of a letter › « Étiquette »: one of the profile colours, or none. */
+export async function setLetterColorAction(
+  documentId: string,
+  color: string | null,
+): Promise<LetterResult> {
+  const parsed = z.enum(PROFILE_COLORS).nullable().safeParse(color);
+  if (!parsed.success) return { ok: false, error: "invalid" };
+  const user = await requireUser(DOCUMENTS);
+  const letter = await ownedLetter(user.id, documentId);
+  if (!letter) return { ok: false, error: "missing" };
+  await db.document.update({
+    where: { id: letter.id },
+    data: { colorTag: parsed.data, updatedAt: letter.updatedAt },
+  });
+  refresh();
+  return { ok: true };
 }

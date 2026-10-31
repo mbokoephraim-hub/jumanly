@@ -11816,6 +11816,20 @@
       "letterTitle": "LT · {title}",
       "letterMade": "Faite le {date} à {time}"
     },
+    "letters": {
+      "count": "{count, plural, one {# lettre} other {# lettres}}",
+      "help": "Touchez une lettre pour la modifier. Le crayon change son titre et son étiquette.",
+      "chosen": "{count, plural, =0 {Aucune lettre choisie} one {# lettre choisie} other {# lettres choisies}}",
+      "delete": "{count, plural, =0 {Supprimer} one {Supprimer cette lettre} other {Supprimer ces # lettres}}",
+      "deleteQuestion": "{count, plural, one {Supprimer cette lettre ?} other {Supprimer ces # lettres ?}}",
+      "deleteText": "Elle disparaît de Mes documents. Les candidatures déjà envoyées gardent leur copie.",
+      "deleted": "{count, plural, one {Lettre supprimée.} other {# lettres supprimées.}}",
+      "edit": "Modifier le titre et l’étiquette de « {title} »",
+      "title": "Titre de la lettre",
+      "label": "Étiquette",
+      "renamed": "Titre changé.",
+      "open": "Ouvrir la lettre pour la modifier"
+    },
     "suggestion": "{count, plural, one {Ajoutez {skill} à vos compétences : une offre ouverte le demande.} other {Ajoutez {skill} à vos compétences : # offres ouvertes le demandent.}}",
     "suggestionAdd": "Ajouter",
     "suggestionAdded": "{skill} est ajouté à vos compétences.",

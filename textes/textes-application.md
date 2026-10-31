@@ -9764,6 +9764,18 @@ Conventions :
 | `phoneCareer.docs.letterNew` | + Nouvelle lettre |
 | `phoneCareer.docs.letterTitle` | LT · {title} |
 | `phoneCareer.docs.letterMade` | Faite le {date} à {time} |
+| `phoneCareer.letters.count` | {count, plural, one {# lettre} other {# lettres}} |
+| `phoneCareer.letters.help` | Touchez une lettre pour la modifier. Le crayon change son titre et son étiquette. |
+| `phoneCareer.letters.chosen` | {count, plural, =0 {Aucune lettre choisie} one {# lettre choisie} other {# lettres choisies}} |
+| `phoneCareer.letters.delete` | {count, plural, =0 {Supprimer} one {Supprimer cette lettre} other {Supprimer ces # lettres}} |
+| `phoneCareer.letters.deleteQuestion` | {count, plural, one {Supprimer cette lettre ?} other {Supprimer ces # lettres ?}} |
+| `phoneCareer.letters.deleteText` | Elle disparaît de Mes documents. Les candidatures déjà envoyées gardent leur copie. |
+| `phoneCareer.letters.deleted` | {count, plural, one {Lettre supprimée.} other {# lettres supprimées.}} |
+| `phoneCareer.letters.edit` | Modifier le titre et l’étiquette de « {title} » |
+| `phoneCareer.letters.title` | Titre de la lettre |
+| `phoneCareer.letters.label` | Étiquette |
+| `phoneCareer.letters.renamed` | Titre changé. |
+| `phoneCareer.letters.open` | Ouvrir la lettre pour la modifier |
 | `phoneCareer.suggestion` | {count, plural, one {Ajoutez {skill} à vos compétences : une offre ouverte le demande.} other {Ajoutez {skill} à vos compétences : # offres ouvertes le demandent.}} |
 | `phoneCareer.suggestionAdd` | Ajouter |
 | `phoneCareer.suggestionAdded` | {skill} est ajouté à vos compétences. |
