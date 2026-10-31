@@ -2850,7 +2850,7 @@ Conventions :
 | `candidature.requests.none` | Vous n'avez pas encore de document à envoyer. Ajoutez-le dans Mes documents, ou répondez dans la conversation. |
 | `candidature.requests.send` | Envoyer ce document |
 | `candidature.withdraw.cta` | Retirer ma candidature |
-| `candidature.withdraw.title` | Retirer votre candidature ? |
+| `candidature.withdraw.title` | Voulez-vous vraiment retirer votre candidature ? |
 | `candidature.withdraw.text` | {company} sera informé. Vous pourrez postuler à d'autres offres à tout moment. |
 | `candidature.withdraw.confirm` | Oui, retirer ma candidature |
 
@@ -10587,9 +10587,10 @@ Conventions :
 | `phoneCareer.application.orbiPlaceholder` | Écrire à Orbi… |
 | `phoneCareer.application.orbiSend` | Demander à Orbi |
 | `phoneCareer.application.withdraw` | Retirer ma candidature |
-| `phoneCareer.application.withdrawQuestion` | Retirer votre candidature ? |
+| `phoneCareer.application.withdrawQuestion` | Voulez-vous vraiment retirer votre candidature ? |
 | `phoneCareer.application.withdrawText` | {company} sera prévenu. Vous pourrez postuler à d’autres offres à tout moment. |
-| `phoneCareer.application.withdrawConfirm` | Retirer |
+| `phoneCareer.application.withdrawConfirm` | Oui, retirer |
+| `phoneCareer.application.withdrawNo` | Non |
 | `phoneCareer.application.withdrawn` | Candidature retirée |
 | `phoneCareer.application.error` | Cela n’a pas marché. Réessayez dans un instant. |
 
