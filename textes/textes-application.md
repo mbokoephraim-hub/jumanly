@@ -10555,6 +10555,15 @@ Conventions :
 | `phoneLetter.cancel.ask` | Êtes-vous sûr de vouloir annuler ? |
 | `phoneLetter.cancel.yes` | Oui, annuler |
 | `phoneLetter.cancel.no` | Non, continuer |
+| `phoneLetter.view.corrections` | {count, plural, one {Orbi propose # correction} other {Orbi propose # corrections}} |
+| `phoneLetter.view.keep` | Garder les corrections cochées |
+| `phoneLetter.view.nothing` | Orbi n’a rien trouvé à corriger. |
+| `phoneLetter.view.read` | Orbi a relu votre lettre. |
+| `phoneLetter.view.text` | Votre lettre |
+| `phoneLetter.view.use` | Utiliser cette lettre |
+| `phoneLetter.view.again` | {count, plural, one {Relire encore · # crédit} other {Relire encore · # crédits}} |
+| `phoneLetter.view.deleteAsk` | Supprimer cette lettre ? |
+| `phoneLetter.view.deleteYes` | Oui, supprimer |
 | `phoneLetter.intro.title` | Votre lettre de motivation |
 | `phoneLetter.intro.one` | Orbi l’écrit pour vous, ou vous l’écrivez et Orbi la relit. |
 | `phoneLetter.intro.two` | Elle est gardée dans Mes documents, prête à servir. |

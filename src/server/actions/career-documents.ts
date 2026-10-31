@@ -122,7 +122,26 @@ export async function saveDocumentAction(formData: FormData) {
   if (!parsed.success) redirect(`${DOCUMENTS}/${documentId}?erreur=input`);
   await saveDocument(db, user.id, documentId, parsed.data);
   refresh();
+  // « Utiliser cette lettre » on a phone: saved, back to Mes documents.
+  if (formData.get("fini") === "1") redirect("/app/career/cv?onglet=documents&ok=lettre");
   redirect(`${DOCUMENTS}/${documentId}?ok=enregistre`);
+}
+
+/** « Relire encore » on a phone: Orbi reads the letter as it stands now, in the same document. */
+export async function proofreadAgainAction(formData: FormData) {
+  const documentId = id(formData.get("id"));
+  const back = `${DOCUMENTS}/${documentId}`;
+  const user = await requireUser(back);
+  const parsed = saveSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success || !parsed.data.text.trim()) redirect(`${back}?erreur=input`);
+  if (!(await getDocument(db, user.id, documentId))) redirect(LETTERS);
+  const result = await proofread(db, user.id, {
+    title: parsed.data.title,
+    text: parsed.data.text,
+    documentId,
+  });
+  refresh();
+  redirect(result.ok ? `${back}?ok=relu` : `${back}?ia=${result.code}`);
 }
 
 export async function applyCorrectionsAction(formData: FormData) {

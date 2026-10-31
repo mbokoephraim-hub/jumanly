@@ -2272,3 +2272,93 @@ textarea.nb-lt-zone[data-grande] {
 .nb-lt-carte .nb-lt-annuler {
   border-color: transparent;
 }
+
+/* Pages « Nouvelle lettre » et « une lettre » : pas de grand vide en bas (Ephraïm, 31/10/2026). */
+.nb-lt-page {
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+}
+.nb-lt-annuler > svg {
+  margin-right: 8px;
+}
+.nb-lt-corr {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nb-lt-corr label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--nb-haute);
+  border: 1px solid var(--nb-filet-fort);
+  cursor: pointer;
+}
+.nb-lt-corr label:has(:checked) {
+  border-color: var(--nb-lime-t);
+}
+.nb-lt-corr input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  accent-color: var(--nb-lime);
+}
+.nb-lt-corr label > span {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  font-size: 14.5px;
+  line-height: 1.4;
+}
+.nb-lt-corr del {
+  color: var(--nb-brume);
+}
+.nb-lt-corr b {
+  color: var(--nb-creme);
+}
+.nb-lt-corr small {
+  font-size: 12.5px;
+  color: var(--nb-brume);
+}
+.nb-lt-outils {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+}
+.nb-lt-outil {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--nb-gris);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+.nb-lt-outil:last-child {
+  color: var(--nb-corail-t);
+}
+.nb-lt-outil:focus-visible {
+  outline: 2px solid var(--nb-lime-t);
+}
+.nb-lt-page:has(.nb-lt-outils .nb-lt-accueil) > :not(.nb-lt-outils) {
+  filter: blur(7px);
+  pointer-events: none;
+}
+/* No bottom bar on these pages: the column's room for it would leave a gap under « Annuler ». */
+.t-contenu:has(> .jm-page > .nb-lt-page) {
+  padding-bottom: 0;
+}

@@ -14,7 +14,11 @@ import {
 } from "@/server/actions/career-documents";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { getDocument, TEXT_MAX } from "@/server/services/career-documents";
+import { DOCUMENTS_GATE, getDocument, TEXT_MAX } from "@/server/services/career-documents";
+import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
+import { isPhone } from "@/server/view";
+import { PhoneLetter } from "@/components/phone/career/letter-view";
+import { orbiLimitCode } from "@/components/talent/cv/orbi-limit";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("docs.letter");
@@ -39,6 +43,21 @@ export default async function DocumentPage({
   const d = dynamic(t);
   const { data } = document;
   const proposal = data.type !== "proofread";
+
+  if (await isPhone()) {
+    const plans = await listPublicPlans(db);
+    const notices = ["cree", "enregistre", "relu"] as const;
+    const notice =
+      query.erreur === "input" ? "input" : (notices.find((value) => value === query.ok) ?? null);
+    return (
+      <PhoneLetter
+        document={document}
+        notice={notice}
+        aiError={orbiLimitCode(query.ia)}
+        plan={talentPlanFor(plans, DOCUMENTS_GATE.key)}
+      />
+    );
+  }
 
   return (
     <div className="t-flux t-od-bas">
