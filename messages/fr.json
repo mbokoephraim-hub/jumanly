@@ -4100,7 +4100,7 @@
     "next": {
       "title": "Prochaine action",
       "course": "Formation « {course} », {minutes} min",
-      "diagnostic": "Faire mon diagnostic de carrière, 6 à 8 minutes",
+      "diagnostic": "Faire mon diagnostic de carrière, 3 minutes",
       "profile": "Décrire une expérience avec un résultat, 10 min",
       "start": "Commencer"
     },
@@ -12005,7 +12005,7 @@
       },
       "next": "{count, plural, =0 {Vous êtes au plus haut stade.} one {Encore une étape pour passer « {stage} ».} other {Encore # étapes pour passer « {stage} ».}}",
       "noStage": "Faites votre diagnostic",
-      "noStageText": "6 à 8 minutes pour savoir où vous en êtes et par quoi commencer.",
+      "noStageText": "3 minutes pour savoir où vous en êtes et par quoi commencer.",
       "diagnostic": "Analyser",
       "urgent": "À faire maintenant",
       "report": "Voir mon diagnostic",
