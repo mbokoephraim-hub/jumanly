@@ -660,7 +660,9 @@ export async function createCvAction(formData: FormData) {
     // The copy is the CV; the profile CV made to start it goes away.
     await db.document.delete({ where: { id: base.id } });
     if (!result.ok) {
-      const code = { notFound: "job", limit: "limite" }[result.code as string] ?? result.code;
+      const code =
+        ({ notFound: "job", limit: "limite" } as Record<string, string>)[result.code] ??
+        result.code;
       redirect(`/app/career/cv/nouveau?choix=offre&erreur=${code}`, RedirectType.replace);
     }
     cvId = result.id;

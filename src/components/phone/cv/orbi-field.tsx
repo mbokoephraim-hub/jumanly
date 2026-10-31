@@ -55,6 +55,7 @@ export function OrbiTools({
   const t = useTranslations("phoneCv.orbiField");
   const [why, setWhy] = useState(false);
   const ready = orbi.state === "ready";
+  const lock = orbi.state === "ready" ? "entitlement" : orbi.state;
   return (
     <span className="nb-cvo">
       {history ? (
@@ -97,7 +98,7 @@ export function OrbiTools({
       </button>
       {why && !ready ? (
         <span className="nb-cvo-pourquoi" role="status">
-          {t(`why.${orbi.state}`, { plan: orbi.plan })}{" "}
+          {t(`why.${lock}`, { plan: orbi.plan })}{" "}
           <Link
             href={
               orbi.state === "consent"
@@ -105,7 +106,7 @@ export function OrbiTools({
                 : "/app/abonnement/formules"
             }
           >
-            {t(`whyLink.${orbi.state}`)}
+            {t(`whyLink.${lock}`)}
           </Link>
         </span>
       ) : null}
