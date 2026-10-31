@@ -30,27 +30,46 @@ export async function printCvPdf({
   try {
     browser = await launch();
   } catch (error) {
-    console.error(error);
+    console.error("[cv-pdf] Chromium n'a pas démarré", error);
     throw new CvExportError("browser");
   }
+  let step = "page";
   try {
     const page = await browser.newPage();
+    // The service worker of the site (public/sw.js) would keep fetching pages and pictures in the
+    // background: the print waits for the CV only (Ephraïm, 31/10: the download failed in production).
+    await page.setBypassServiceWorker(true);
+    // A plain browser name: a firewall rule against « HeadlessChrome » must not stop the print.
+    const agent = (await browser.userAgent()).replace(/HeadlessChrome/g, "Chrome");
+    await page.setUserAgent({ userAgent: agent });
     const bypass = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
     if (bypass) await page.setExtraHTTPHeaders({ "x-vercel-protection-bypass": bypass });
-    await page.goto(url, { waitUntil: "networkidle0", timeout: 20_000 });
+    step = "goto";
+    const response = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 25_000 });
+    if (!response || !response.ok()) {
+      console.error("[cv-pdf] page d'impression refusée", response?.status(), response?.url());
+      throw new CvExportError("browser");
+    }
+    step = "ready";
+    // The page says when the CV is paginated (fonts loaded): that is the only signal needed.
     await page
-      .waitForFunction(() => document.body.dataset.pret === "1", { timeout: 15_000 })
+      .waitForFunction(() => document.body.dataset.pret === "1", { timeout: 25_000 })
       .catch(() => {
         throw new CvExportError("timeout");
       });
+    step = "print";
     const info = await page.evaluate(() => {
       const article = document.querySelector<HTMLElement>("article.cv");
       return { pages: Number(article?.dataset.pages ?? 0), alert: article?.dataset.alerte ?? null };
     });
-    const raw = await page.pdf({ preferCSSPageSize: true, printBackground: true });
+    const raw = await page.pdf({ preferCSSPageSize: true, printBackground: true, timeout: 20_000 });
     return { bytes: await withMetadata(raw, name), pages: info.pages, alert: info.alert };
+  } catch (error) {
+    console.error(`[cv-pdf] échec à l'étape « ${step} »`, error);
+    if (error instanceof CvExportError) throw error;
+    throw new CvExportError(step === "ready" ? "timeout" : "browser");
   } finally {
-    await browser.close();
+    await browser.close().catch(() => undefined);
   }
 }
 
