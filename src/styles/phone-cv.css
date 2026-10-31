@@ -2205,3 +2205,51 @@ textarea.nb-lt-zone[data-grande] {
     animation: none;
   }
 }
+
+/* « À mettre en avant » : plusieurs points, un par ligne (Ephraïm, 31/10/2026). */
+.nb-lt-points {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nb-lt-points li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nb-lt-points .nb-lt-zone {
+  flex: 1;
+}
+.nb-lt-retirer {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--nb-haute);
+  color: var(--nb-brume);
+  cursor: pointer;
+}
+.nb-lt-ajouter {
+  align-self: flex-start;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px dashed rgba(var(--nb-menthe-rgb, 47, 211, 166), 0.6);
+  border-radius: 999px;
+  background: none;
+  color: var(--nb-menthe-claire-t);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.nb-lt-retirer:focus-visible,
+.nb-lt-ajouter:focus-visible {
+  outline: 2px solid var(--nb-lime-t);
+  outline-offset: 2px;
+}

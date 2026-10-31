@@ -10526,7 +10526,9 @@ Conventions :
 | `phoneLetter.write.tone` | Ton |
 | `phoneLetter.write.points` | À mettre en avant (facultatif) |
 | `phoneLetter.write.note` | {count, plural, one {# crédit Orbi} other {# crédits Orbi}} · rien n’est inventé |
-| `phoneLetter.write.pointsExample` | Ex. : 3 ans au service client, anglais courant |
+| `phoneLetter.write.pointsExample` | Ex. : 3 ans au service client |
+| `phoneLetter.write.pointsAdd` | + Ajouter un autre point |
+| `phoneLetter.write.pointsRemove` | Retirer le point |
 | `phoneLetter.or` | ou |
 | `phoneLetter.check.title` | Écrire et faire relire par Orbi |
 | `phoneLetter.check.name` | Titre (facultatif) |

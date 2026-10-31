@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { OrbiMark } from "@/components/talent/orbi-mark";
+import { OrbiDisc } from "@/components/phone/icon";
 
 /**
  * « Nouvelle lettre » au téléphone (Ephraïm, 31/10/2026) : à l'arrivée, la page est floutée
@@ -37,7 +37,7 @@ export function LetterIntro({
         <button type="button" className="nb-lt-passer" onClick={() => setOpen(false)}>
           {t("skip")}
         </button>
-        <OrbiMark size={44} />
+        <OrbiDisc size={48} />
         <h2 id="nb-lt-accueil-t">{t("title")}</h2>
         <ol>
           <li>{t("one")}</li>

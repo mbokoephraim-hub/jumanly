@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
-import { PhoneIcon } from "@/components/phone/icon";
+import { OrbiDisc, PhoneIcon } from "@/components/phone/icon";
 import { TalentIcon } from "@/components/talent/icon";
-import { OrbiMark } from "@/components/talent/orbi-mark";
+import { LetterPoints } from "@/components/phone/career/letter-points";
 import { OrbiLimit, type OrbiLimitCode } from "@/components/talent/cv/orbi-limit";
 import { generateDocumentAction, proofreadAction } from "@/server/actions/career-documents";
 import { aiFeatures } from "@/server/ai";
@@ -36,7 +36,7 @@ export async function PhoneNewLetter({
           {t("phoneLetter.write.title")}
         </h2>
         <p className="nb-lt-bulle">
-          <OrbiMark size={26} />
+          <OrbiDisc size={28} />
           <span>{t("phoneLetter.write.orbi")}</span>
         </p>
         {state !== "ready" ? (
@@ -75,23 +75,18 @@ export async function PhoneNewLetter({
                 ))}
               </div>
             </fieldset>
-            <div className="nb-lt-champ">
-              <label htmlFor="nb-lt-points">{t("phoneLetter.write.points")}</label>
-              <textarea
-                id="nb-lt-points"
-                name="points"
-                maxLength={600}
-                rows={2}
-                className="nb-lt-zone"
-                placeholder={t("phoneLetter.write.pointsExample")}
-              />
-            </div>
+            <LetterPoints
+              label={t("phoneLetter.write.points")}
+              example={t("phoneLetter.write.pointsExample")}
+              addLabel={t("phoneLetter.write.pointsAdd")}
+              removeLabel={t("phoneLetter.write.pointsRemove")}
+            />
             <p className="nb-lt-note">
               <TalentIcon name="cadenas" size="s" />
               {t("phoneLetter.write.note", { count: aiFeatures.career_document.credits })}
             </p>
             <button type="submit" className="nb-lt-bt" data-orbi="">
-              <OrbiMark size={20} />
+              <OrbiDisc size={26} />
               {t("docs.letters.create.submit")}
             </button>
           </form>
