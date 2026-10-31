@@ -251,7 +251,9 @@ export async function generateDocument(
     data: {
       profileId: profile.id,
       kind: kindOf[input.type],
-      title: output.title.trim() || values.jobTitle,
+      // A letter for an offer is named after it: « LT · Assistante en communication » in Mes
+      // documents (Ephraïm, 31/10/2026).
+      title: (input.type === "letter" && job?.title) || output.title.trim() || values.jobTitle,
       content: json({
         type: input.type,
         text: output.text.trim(),
@@ -267,7 +269,7 @@ export function listDocuments(db: PrismaClient, userId: string) {
   return db.document.findMany({
     where: { kind: { in: ["cover_letter", "bio", "other"] }, profile: { userId } },
     orderBy: { updatedAt: "desc" },
-    select: { id: true, title: true, kind: true, content: true, updatedAt: true },
+    select: { id: true, title: true, kind: true, content: true, colorTag: true, updatedAt: true },
   });
 }
 
