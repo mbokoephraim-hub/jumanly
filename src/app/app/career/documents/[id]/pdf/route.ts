@@ -33,7 +33,10 @@ export async function GET(_: Request, { params }: RouteContext<"/app/career/docu
     ]);
     // A template no longer in the plan prints in the open one; the choice stays for later.
     const template = access[design.template] ? design.template : "horizon";
-    const data = await sheetDataOf(facts, document);
+    const data = await sheetDataOf(facts, {
+      text: document.data.text,
+      updatedAt: document.updatedAt,
+    });
     pdf = await renderLetterPdf({
       data,
       design: { ...design, template },
