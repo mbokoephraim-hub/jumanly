@@ -5326,3 +5326,7 @@ Demande d'Ephraïm : de l'air et un trait entre CV, lettres et portfolio (.nb-do
 - Vue › carte diagnostic : « Analyser » bat doucement avec un halo (rien avec les animations réduites), « 3 minutes ».
 - Retirer une candidature : question « Voulez-vous vraiment… ? » Oui / Non, puis la candidature quitte la liste Candidatures du téléphone.
 - 2026-10-31 : accueil du diagnostic, « Recommencer » et « Reprendre · étape x/y » sur une seule ligne, boutons plus petits.
+
+## 2026-10-31 · Modèles de lettres de motivation
+
+Six modèles visuels (bandeau de couleur, photo ronde, carrée ou sans photo, 9 couleurs). Parcours au téléphone : « Retenir cette lettre » → message « Passer à l’étape suivante » → « Le modèle visuel » (/app/career/documents/[id]/modele) → « Valider le modèle » → aperçu (/apercu) → « Choisir un autre modèle » ou « Enregistrer cette lettre » (PDF téléchargé + message). Le bouton Télécharger quitte la page du texte ; « Changer le design » sur une lettre déjà mise en forme. Gratuit : 1 modèle ; formules payantes : les 6. Vérifications réduites à la demande d’Ephraïm (lint et types passés, rendu des 6 modèles contrôlé à l’écran et en PDF ; build et e2e non lancés).

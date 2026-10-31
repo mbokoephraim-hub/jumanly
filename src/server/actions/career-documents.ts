@@ -13,6 +13,7 @@ import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { saveApplicationDraft } from "@/server/services/application-draft";
 import { parseCv } from "@/server/services/cv";
+import { isCoverLetter, saveLetterDesign } from "@/server/services/letter-design";
 import {
   decideCorrections,
   deleteDocument,
@@ -20,6 +21,7 @@ import {
   generateLinkedin,
   generateSchema,
   getDocument,
+  parseDocument,
   PROOFREAD_MAX,
   proofread,
   saveDocument,
@@ -129,7 +131,7 @@ export async function saveOwnLetterAction(formData: FormData) {
     text: parsed.data.text,
   });
   refresh();
-  redirect(`${DOCUMENTS}/${letter.id}?ok=utilisee`);
+  redirect(`${DOCUMENTS}/${letter.id}?ok=retenue`);
 }
 
 export async function saveDocumentAction(formData: FormData) {
@@ -137,11 +139,14 @@ export async function saveDocumentAction(formData: FormData) {
   const user = await requireUser(`${DOCUMENTS}/${documentId}`);
   const parsed = saveSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) redirect(`${DOCUMENTS}/${documentId}?erreur=input`);
-  await saveDocument(db, user.id, documentId, parsed.data);
+  const saved = await saveDocument(db, user.id, documentId, parsed.data);
   refresh();
-  // « Utiliser cette lettre » on a phone: saved, back to Mes documents.
-  // « Utiliser cette lettre » on a phone: the message « Lettre enregistrée » over the letter.
-  if (formData.get("fini") === "1") redirect(`${DOCUMENTS}/${documentId}?ok=utilisee`);
+  // « Retenir cette lettre » on a phone: the text is kept, a message leads to the next step,
+  // the visual template (Ephraïm, 31/10/2026). Another text: « Utiliser », saved as it is.
+  if (formData.get("fini") === "1")
+    redirect(
+      `${DOCUMENTS}/${documentId}?ok=${isCoverLetter(saved && parseDocument(saved.content)) ? "retenue" : "utilisee"}`,
+    );
   redirect(`${DOCUMENTS}/${documentId}?ok=enregistre`);
 }
 
@@ -160,6 +165,23 @@ export async function proofreadAgainAction(formData: FormData) {
   });
   refresh();
   redirect(result.ok ? `${back}?ok=relu` : `${back}?ia=${result.code}`);
+}
+
+/** « Valider le modèle »: the template (checked against the plan), colour and photo, then the preview. */
+export async function chooseLetterDesignAction(formData: FormData) {
+  const documentId = id(formData.get("id"));
+  const back = `${DOCUMENTS}/${documentId}/modele`;
+  const user = await requireUser(back);
+  const result = await saveLetterDesign(db, user.id, documentId, {
+    template: formData.get("template"),
+    color: formData.get("color"),
+    photo: formData.get("photo"),
+  });
+  if (result === "notFound") redirect(LETTERS);
+  if (result === "locked") redirect(`${back}?erreur=locked`);
+  if (result === "invalid") redirect(`${back}?erreur=input`);
+  refresh();
+  redirect(`${DOCUMENTS}/${documentId}/apercu`);
 }
 
 export async function applyCorrectionsAction(formData: FormData) {
