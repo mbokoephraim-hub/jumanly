@@ -2050,3 +2050,43 @@ html[data-nb-theme="clair"] .nb-app .nb-cr-cv-page {
 .nb-cr-onglets a {
   font-size: 15px;
 }
+
+/* Lettres de motivation : la même carte que les CV (Ephraïm, 31/10/2026), avec le dessin de
+   lettre de l'onglet Vue au milieu d'une bande ambrée. */
+.nb-cr-cv-bande[data-lettre] {
+  --accent: #c9962f;
+  align-items: center;
+  padding-top: 0;
+}
+
+/* Fonds vifs mais doux pour les lettres, le portfolio et les projets (Ephraïm, 31/10/2026) : une
+   couleur pleine par offre, un léger cercle clair pour donner du mouvement. */
+.nb-cr-cv-bande[data-vif] {
+  position: relative;
+  background: var(--accent);
+}
+.nb-cr-cv-bande[data-vif]::before {
+  content: "";
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  right: -34px;
+  top: -46px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+}
+.nb-cr-cv-bande[data-vif] > * {
+  position: relative;
+}
+.nb-cr-cv-bande[data-port] {
+  --accent: #e0609c;
+}
+.nb-doc-couv > img {
+  position: absolute;
+  inset: 0;
+}
+.nb-doc-couv > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

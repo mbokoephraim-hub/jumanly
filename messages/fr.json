@@ -11812,7 +11812,9 @@
       "portfolioManage": "Mes réalisations",
       "letters": "Mes lettres de motivation",
       "lettersEmpty": "Aucune lettre pour l’instant. Orbi peut en rédiger une à partir de votre profil et d’une offre.",
-      "letterNew": "+ Nouvelle lettre"
+      "letterNew": "+ Nouvelle lettre",
+      "letterTitle": "LT · {title}",
+      "letterMade": "Faite le {date} à {time}"
     },
     "suggestion": "{count, plural, one {Ajoutez {skill} à vos compétences : une offre ouverte le demande.} other {Ajoutez {skill} à vos compétences : # offres ouvertes le demandent.}}",
     "suggestionAdd": "Ajouter",

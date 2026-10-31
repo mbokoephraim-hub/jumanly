@@ -9762,6 +9762,8 @@ Conventions :
 | `phoneCareer.docs.letters` | Mes lettres de motivation |
 | `phoneCareer.docs.lettersEmpty` | Aucune lettre pour l’instant. Orbi peut en rédiger une à partir de votre profil et d’une offre. |
 | `phoneCareer.docs.letterNew` | + Nouvelle lettre |
+| `phoneCareer.docs.letterTitle` | LT · {title} |
+| `phoneCareer.docs.letterMade` | Faite le {date} à {time} |
 | `phoneCareer.suggestion` | {count, plural, one {Ajoutez {skill} à vos compétences : une offre ouverte le demande.} other {Ajoutez {skill} à vos compétences : # offres ouvertes le demandent.}} |
 | `phoneCareer.suggestionAdd` | Ajouter |
 | `phoneCareer.suggestionAdded` | {skill} est ajouté à vos compétences. |

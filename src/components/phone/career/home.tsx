@@ -669,6 +669,17 @@ function ApplicationsPanel({ view, saved }: { view: CareerView; saved: SavedOffe
 }
 
 /**
+ * Bright but soft grounds for the letter and project cards (Ephraïm, 31/10/2026): one per offer,
+ * picked from the letter or project so each keeps its colour.
+ */
+const VIVID = ["#7c6cf2", "#f0785a", "#22b59a", "#3f8ef0", "#e9a23b", "#e0609c"];
+function vivid(key: string) {
+  let sum = 0;
+  for (const char of key) sum = (sum * 31 + char.charCodeAt(0)) >>> 0;
+  return VIVID[sum % VIVID.length];
+}
+
+/**
  * « Mes documents » (Ephraïm, 29/10/2026): the CVs, the cover letters and the portfolio on one
  * screen. Each section is a row of cards that scrolls sideways (Ephraïm, 30/10/2026).
  */
@@ -699,14 +710,25 @@ function DocumentsPanel({
             <p className="nb-pf-vide nb-cr-vide-cv">{t("docs.lettersEmpty")}</p>
           ) : (
             <ul className="nb-doc-rangee" data-rangee="">
-              {letters.map((letter) => (
-                <li key={letter.id} className="nb-doc-case">
-                  <Link href={letter.href} className="nb-cr-carte nb-doc-lettre">
-                    <span className="nb-doc-i" data-lettre="" aria-hidden>
-                      <PhoneIcon name="document" size={19} />
+              {letters.map((letter, at) => (
+                // Same card as a CV (Ephraïm, 31/10/2026): two on the screen, the letter drawing
+                // of the « Vue » tab on a warm band, the title on two lines at most, then its line.
+                <li
+                  key={letter.id}
+                  className="nb-cr-carte nb-cr-cv"
+                  style={{ animationDelay: `${at * 0.08}s` }}
+                >
+                  <Link href={letter.href} className="nb-cr-cv-l">
+                    <span
+                      className="nb-cr-cv-bande"
+                      data-lettre=""
+                      data-vif=""
+                      style={{ "--accent": vivid(letter.id) } as CSSProperties}
+                    >
+                      <MenuArt name="letter" size="lg" />
                     </span>
-                    <span className="nb-doc-t">
-                      <b>{letter.title}</b>
+                    <span className="nb-cr-cv-t">
+                      <b title={letter.title}>{letter.title}</b>
                       <small>{letter.line}</small>
                     </span>
                   </Link>
@@ -726,32 +748,38 @@ function DocumentsPanel({
         </h2>
         <div className="nb-cr-pad">
           <ul className="nb-doc-rangee" data-rangee="">
-            <li className="nb-doc-case" data-large="">
-              <div className="nb-cr-carte nb-doc-port">
-                <span className="nb-doc-i" data-on={portfolio ? "" : undefined} aria-hidden>
-                  <PhoneIcon name="lien" size={19} />
+            {/* The portfolio and its projects in the same card as a CV, the portfolio drawing of the
+                menu on a bright band (Ephraïm, 31/10/2026). */}
+            <li className="nb-cr-carte nb-cr-cv">
+              <div className="nb-cr-cv-l">
+                <span className="nb-cr-cv-bande" data-lettre="" data-vif="" data-port="">
+                  <MenuArt name="portfolio" size="lg" />
                 </span>
-                <span className="nb-doc-t">
+                <span className="nb-cr-cv-t">
                   <b>{portfolio ? t("docs.portfolioOn") : t("docs.portfolioOff")}</b>
                   <small>{t("docs.portfolioCount", { count: view.projects.length })}</small>
                 </span>
               </div>
             </li>
             {view.projects.map((project) => (
-              <li key={project.id} className="nb-doc-case">
-                <Link
-                  href={project.href}
-                  className="nb-cr-carte nb-doc-projet"
-                  style={{ "--fond": project.ground } as CSSProperties}
-                >
-                  <span className="nb-doc-projet-img" aria-hidden>
+              <li key={project.id} className="nb-cr-carte nb-cr-cv">
+                <Link href={project.href} className="nb-cr-cv-l">
+                  <span
+                    className="nb-cr-cv-bande nb-doc-couv"
+                    data-lettre=""
+                    data-vif=""
+                    style={{ "--accent": vivid(project.title) } as CSSProperties}
+                    aria-hidden
+                  >
                     {project.cover ? (
                       // eslint-disable-next-line @next/next/no-img-element -- stored picture
                       <img src={project.cover} alt="" loading="lazy" />
-                    ) : null}
+                    ) : (
+                      <MenuArt name="portfolio" size="lg" />
+                    )}
                   </span>
-                  <span className="nb-doc-t">
-                    <b>{project.title}</b>
+                  <span className="nb-cr-cv-t">
+                    <b title={project.title}>{project.title}</b>
                     <small>{project.line}</small>
                   </span>
                 </Link>

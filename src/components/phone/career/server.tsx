@@ -49,19 +49,36 @@ export async function CareerTab({ user }: { user: { id: string } }) {
   const d = dynamic(t);
   const view = await careerView(home, now);
   const day = (date: Date) => format.dateTime(date, { day: "numeric", month: "short" });
-  const letters: LetterRow[] = documents.map((letter) => {
-    const type = parseDocument(letter.content)?.type ?? "letter";
+  const hour = (date: Date) => format.dateTime(date, { hour: "2-digit", minute: "2-digit" });
+  const contents = documents.map((letter) => parseDocument(letter.content));
+  const jobIds = [...new Set(contents.flatMap((content) => content?.jobId ?? []))];
+  const jobs = jobIds.length
+    ? await db.job.findMany({ where: { id: { in: jobIds } }, select: { id: true, title: true } })
+    : [];
+  const jobTitle = new Map(jobs.map((job) => [job.id, job.title]));
+  const letters: LetterRow[] = documents.map((letter, at) => {
+    const content = contents[at];
+    const type = content?.type ?? "letter";
+    // A letter Orbi wrote or one the person wrote and had read again.
+    const isLetter = type === "letter" || type === "proofread";
+    const offer = content?.jobId ? jobTitle.get(content.jobId) : undefined;
     return {
       id: letter.id,
-      title: letter.title,
+      // « LT · Assistante en communication » (Ephraïm, 31/10/2026): the offer's title when the
+      // letter answers one, its own title otherwise.
+      title: isLetter
+        ? t("phoneCareer.docs.letterTitle", { title: offer ?? letter.title })
+        : letter.title,
       href: `/app/career/documents/${letter.id}`,
-      line:
-        type === "letter"
-          ? t("docs.letters.written", { date: day(letter.updatedAt) })
-          : t("docs.letters.line", {
-              type: d(`docs.letters.type.${type}`),
-              date: day(letter.updatedAt),
-            }),
+      line: isLetter
+        ? t("phoneCareer.docs.letterMade", {
+            date: day(letter.updatedAt),
+            time: hour(letter.updatedAt),
+          })
+        : t("docs.letters.line", {
+            type: d(`docs.letters.type.${type}`),
+            date: day(letter.updatedAt),
+          }),
     };
   });
   const saved: SavedOffer[] = savedRows.map((row) => {
