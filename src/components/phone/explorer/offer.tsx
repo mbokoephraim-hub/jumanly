@@ -452,7 +452,7 @@ function Brief({ brief }: { brief: PhoneOfferView["brief"] }) {
                         <span className="nb-ex-niveau-t">
                           {t("offer.languageLevel", {
                             level: item.level,
-                            word: t(`offer.cefr.${item.level}`),
+                            word: t(`offer.cefr.${CEFR[rank - 1]!}`),
                           })}
                         </span>
                       </>
