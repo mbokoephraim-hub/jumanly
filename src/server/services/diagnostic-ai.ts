@@ -11,9 +11,11 @@ import {
   choiceAnswers,
   FOLLOW_UPS,
   ruleFollowUps,
+  SKILLS_ASSESSED,
   type Answers,
   type Draft,
 } from "./diagnostic-scoring";
+import { demandedSkills } from "./diagnostic-store";
 
 export const DIAGNOSTIC_GATE = { key: "career.diagnostic.level", levels: ["personalized"] };
 
@@ -220,4 +222,78 @@ export async function followUpQuestions(
     if (error instanceof AiError) return { source: "rules" as const, questions: fallback };
     throw error;
   }
+}
+
+// ─── Any job (31/10/2026): Orbi prepares the skills to assess ────────────────
+
+const DOMAIN_SYSTEM = [
+  "Tu es le conseiller carrière de Jumanly, plateforme d'emploi africaine.",
+  `On te donne un métier visé. Tu réponds avec le domaine du métier (2 à 4 mots) et exactement ${SKILLS_ASSESSED} compétences professionnelles clés qu'un recruteur attend pour ce métier : concrètes, vérifiables (savoir-faire, techniques, outils, normes), jamais des qualités vagues comme « motivation » ou « dynamisme ».`,
+  "Chaque compétence tient en 1 à 4 mots, en français, sans phrase. Si le texte n'est pas un métier, renvoie une liste vide.",
+  "Ne mentionne jamais âge, genre, origine, nationalité, religion, situation familiale, santé ou handicap.",
+].join("\n");
+
+export const domainOutputSchema = z.object({
+  domain: z.string(),
+  skills: z.array(z.string()),
+});
+
+const DOMAIN_TTL_MS = 24 * 3_600_000;
+/** The same job asked again (the flow, then the analysis) does not call the model twice. */
+const domainCache = new Map<string, { skills: string[]; at: number }>();
+
+/**
+ * The key skills of a job Jumanly does not know yet, proposed by Orbi (no credit, consent
+ * checked and the call logged by `runAi`). The model only chooses which skills to ask about:
+ * the levels are the talent's answers and the scores stay those of the fixed rules
+ * (règle d'or 3). Without the model or the consent, nothing: the talent names their skills.
+ */
+export async function domainSkills(db: PrismaClient, userId: string, role: string) {
+  const key = role.trim().toLowerCase().replace(/\s+/g, " ");
+  const cached = domainCache.get(key);
+  if (cached && Date.now() - cached.at < DOMAIN_TTL_MS) return cached.skills;
+  try {
+    const run = await runAi(db, {
+      userId,
+      feature: "diagnostic_domain",
+      system: DOMAIN_SYSTEM,
+      prompt: `Métier visé : ${role.trim().slice(0, 120)}`,
+      schema: domainOutputSchema,
+      timeoutMs: 10_000,
+      maxTokens: 300,
+      template: () => ({ domain: "", skills: [] }),
+    });
+    const skills = [
+      ...new Set(
+        run.output.skills
+          .map((skill) => skill.trim().replace(/[.;]+$/, ""))
+          .filter((skill) => skill.length >= 2 && skill.length <= 60),
+      ),
+    ].slice(0, SKILLS_ASSESSED);
+    if (run.source === "ai") {
+      if (domainCache.size > 500) domainCache.clear();
+      domainCache.set(key, { skills, at: Date.now() });
+    }
+    return skills;
+  } catch (error) {
+    if (error instanceof AiError) return [];
+    throw error;
+  }
+}
+
+/**
+ * The skills of the diagnostic for any target job: Jumanly's job families, then real offers,
+ * then Orbi (`scope: "ai"`) when they do not know the job.
+ */
+export async function diagnosticSkills(db: PrismaClient, userId: string, role: string) {
+  const found = await demandedSkills(db, role);
+  if (!role.trim() || found.field || found.skills.length >= SKILLS_ASSESSED)
+    return { ...found, ai: false };
+  const proposed = await domainSkills(db, userId, role);
+  if (proposed.length === 0) return { ...found, ai: false };
+  return {
+    ...found,
+    skills: [...new Set([...found.skills, ...proposed])].slice(0, SKILLS_ASSESSED),
+    ai: true,
+  };
 }

@@ -25,6 +25,9 @@ export const aiFeatures = {
   diagnostic: { credits: 2, tier: "default" },
   // The two follow-up questions of the personalized diagnostic (docs/experience-animee § 5.3).
   diagnostic_followup: { credits: 1, tier: "fast" },
+  // Orbi prepares the diagnostic of any job (31/10/2026): the key skills to assess when Jumanly's
+  // job families and offers do not know the target job. Free like the diagnostic itself.
+  diagnostic_domain: { credits: 0, tier: "fast" },
   // E10. Interview simulations are paid by their own quota (`career.interview.*.monthly`, one
   // per session), so their model calls cost no credit.
   interview_questions: { credits: 0, tier: "fast" },

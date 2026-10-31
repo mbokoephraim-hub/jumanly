@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { dynamic } from "@/i18n/dynamic";
 import { motionReduced } from "@/lib/motion";
 import {
@@ -24,12 +24,14 @@ import {
   screensFor,
   shownAnswers,
   SKILL_PICKS,
+  SKILLS_ASSESSED,
   skillPickOf,
   type Draft,
   type ReadyItem,
   type Screen,
 } from "@/server/services/diagnostic-scoring";
 import { MenuArt, type MenuArtName } from "@/components/site/menu-art";
+import { OrbiSpark } from "@/components/phone/cv/marks";
 import "@/styles/diagnostic-questions.css";
 import { TalentIcon } from "./icon";
 import { OrbiMark } from "./orbi-mark";
@@ -37,9 +39,16 @@ import { OrbiMark } from "./orbi-mark";
 export type SkillSource = {
   names: string[];
   offers: number;
-  scope: "field" | "role" | "all" | "own";
+  /** ai: prepared by Orbi for a job Jumanly does not know yet (31/10/2026). */
+  scope: "field" | "role" | "all" | "own" | "ai";
 };
 type Option = { value: string; label: string; hint?: string; art?: MenuArtName };
+
+const split = (value: string | undefined) =>
+  (value ?? "")
+    .split(/[,;\n]+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
 
 /** The drawings of the site menu, on the questions (Ephraïm, 31/10/2026). */
 const questionArt: Partial<Record<string, MenuArtName>> = {
@@ -100,16 +109,16 @@ export function DiagnosticFlow({
   const fetchedRole = useRef(initial.targetRole?.trim() ?? "");
   const moved = useRef(false);
 
-  const screens = screensFor(answers, skills.names, personalized);
+  // A job no one knows yet, without Orbi: the talent names their key skills on the skills screen.
+  const own = skills.names.length === 0;
+  const named = own ? split(answers.topSkills).slice(0, SKILLS_ASSESSED) : skills.names;
+  const screens = screensFor(answers, named, personalized);
   // The follow-up questions are asked once, after the last question of the personalized level.
   const askFollowUps = personalized && answers.followUps === undefined;
   const at = Math.max(0, Math.min(index, screens.length - 1));
   const screen = screens[at]!;
   // Every screen that may be asked, so that the page works as one long form without JavaScript.
-  const all = useMemo(
-    () => screensFor({ targetRole: "-", experience: "a2" }, skills.names, personalized),
-    [skills.names, personalized],
-  );
+  const all = screensFor({ targetRole: "-", experience: "a2" }, named, personalized);
   const step =
     screen.dimension === "more" ? dimensions.length - 1 : dimensions.indexOf(screen.dimension);
 
@@ -152,7 +161,7 @@ export function DiagnosticFlow({
           ? {
               names: found.skills,
               offers: found.offers,
-              scope: found.field ? "field" : found.scope,
+              scope: found.ai ? "ai" : found.field ? "field" : found.scope,
             }
           : { names: [], offers: 0, scope: "own" };
     }
@@ -273,20 +282,52 @@ export function DiagnosticFlow({
     if ("skills" in item) {
       const hint =
         skills.scope === "own"
-          ? t("q.skillLevel.source.own")
-          : skills.scope === "field"
-            ? t("q.skillLevel.source.field")
-            : skills.scope === "all"
-              ? t("q.skillLevel.source.all", { count: skills.offers })
-              : t("q.skillLevel.source.role", { count: skills.offers });
+          ? t("q.skills.ownHint")
+          : skills.scope === "ai"
+            ? t("q.skills.aiHint")
+            : skills.scope === "field"
+              ? t("q.skillLevel.source.field")
+              : skills.scope === "all"
+                ? t("q.skillLevel.source.all", { count: skills.offers })
+                : t("q.skillLevel.source.role", { count: skills.offers });
       return (
         <>
           <QuestionHead
             id={`diag-q-${item.id}`}
             art="trainings"
-            text={t("q.skills.text")}
+            text={own ? t("q.skills.ownText") : t("q.skills.text")}
             hint={hint}
           />
+          {skills.scope === "ai" && (
+            <span className="t-badge-o t-dq-orbi">
+              <OrbiSpark size={14} />
+              {t("q.skills.aiBadge")}
+            </span>
+          )}
+          {own && (
+            <span className="t-verre t-saisie">
+              <input
+                id="diag-topSkills"
+                name="topSkills"
+                type="text"
+                maxLength={200}
+                aria-label={t("q.skills.ownText")}
+                placeholder={t("q.topSkillsPlaceholder")}
+                value={answers.topSkills ?? ""}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  const kept = split(value).slice(0, SKILLS_ASSESSED);
+                  setAnswers((current) => ({
+                    ...current,
+                    topSkills: value,
+                    skillChecks: (current.skillChecks ?? []).filter((check) =>
+                      kept.includes(check.skill),
+                    ),
+                  }));
+                }}
+              />
+            </span>
+          )}
           <ul className="t-dq-sk">
             {item.skills.map((skill, index) => {
               const chosen = skillPickOf(check(skill));

@@ -3496,6 +3496,19 @@ Conventions :
 | `diag.plan` | Mon plan |
 | `diag.welcome.hooks` | Ce que vous obtenez |
 | `diag.flow.close` | Quitter le diagnostic |
+| `diag.result.outOf` | sur 100 |
+| `diag.result.outOfLong` | sur 100 |
+| `diag.result.badge` | Votre niveau aujourd'hui |
+| `diag.result.role` | Pour le métier : {role} |
+| `diag.result.scale` | Les quatre niveaux |
+| `diag.result.word.discovery` | Vous posez les bases, et c'est le bon moment pour le faire. Commencez par les trois actions ci-dessous, une par une. |
+| `diag.result.word.building` | Vous avez déjà de bonnes bases. Trois actions ciblées vous rapprocheront vite du niveau « Prêt ». |
+| `diag.result.word.ready` | Vous pouvez candidater dès maintenant. Les trois actions ci-dessous vous aideront à sortir du lot. |
+| `diag.result.word.competitive` | Vous êtes bien placé sur vos offres. Gardez le rythme et visez les postes exigeants. |
+| `diag.result.todo` | À faire maintenant |
+| `diag.result.go` | Y aller |
+| `diag.result.themes` | Vos six thèmes |
+| `diag.result.themesHint` | Touchez un thème pour savoir ce qu'il veut dire et quoi faire. |
 | `plan.seo` | Mon plan de progression |
 | `plan.title` | Mon plan de progression |
 | `plan.back` | Retour |
@@ -5992,6 +6005,10 @@ Conventions :
 | `career.diagnostic.q.horizon` | Où vous voyez-vous dans trois ans ? |
 | `career.diagnostic.q.useProfile` | Utiliser mon profil et mon CV pour affiner le bilan |
 | `career.diagnostic.q.skills.text` | Votre niveau dans ces compétences ? |
+| `career.diagnostic.q.skills.ownText` | Vos 3 compétences clés pour ce métier ? |
+| `career.diagnostic.q.skills.ownHint` | Écrivez-les, séparées par des virgules, puis donnez votre niveau pour chacune. |
+| `career.diagnostic.q.skills.aiHint` | Orbi les a choisies pour le métier que vous visez. Donnez votre niveau. |
+| `career.diagnostic.q.skills.aiBadge` | Préparé par Orbi |
 | `career.diagnostic.q.skills.p0` | Pas encore |
 | `career.diagnostic.q.skills.p1` | Les bases |
 | `career.diagnostic.q.skills.p2` | À l'aise |

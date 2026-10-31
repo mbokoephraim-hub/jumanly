@@ -16,9 +16,9 @@ import {
   parseDiagnosticV2,
   parsePersonalized,
 } from "@/server/services/diagnostic";
-import { DIAGNOSTIC_GATE } from "@/server/services/diagnostic-ai";
+import { DIAGNOSTIC_GATE, diagnosticSkills } from "@/server/services/diagnostic-ai";
 import { dimensions, screensFor, type Draft } from "@/server/services/diagnostic-scoring";
-import { demandedSkills, diagnosticPrefill, getDraft } from "@/server/services/diagnostic-store";
+import { diagnosticPrefill, getDraft } from "@/server/services/diagnostic-store";
 import { cheapestPlanWhere, levelOf, listPublicPlans } from "@/server/services/plans";
 import { DiagnosticResult } from "./result";
 import { DiagnosticWelcome, PROGRESSION_HREF } from "./welcome";
@@ -73,6 +73,8 @@ export default async function DiagnosticPage({
           date={current.createdAt}
           result={v2}
           summary={personal?.summary ?? null}
+          strengthTexts={personal?.strengthTexts}
+          miniPlan={personal?.miniPlan}
           notice={notice}
         />
       );
@@ -147,10 +149,14 @@ export default async function DiagnosticPage({
   const initial: Draft = resume
     ? resume.answers
     : { ...(useProfile ? prefill.draft : {}), useProfile };
-  const found = await demandedSkills(db, initial.targetRole ?? "");
+  const found = await diagnosticSkills(db, user.id, initial.targetRole ?? "");
   const skills: SkillSource =
     found.skills.length > 0
-      ? { names: found.skills, offers: found.offers, scope: found.field ? "field" : found.scope }
+      ? {
+          names: found.skills,
+          offers: found.offers,
+          scope: found.ai ? "ai" : found.field ? "field" : found.scope,
+        }
       : { names: [], offers: 0, scope: "own" };
   const assessed = (initial.skillChecks ?? []).map((item) => item.skill);
   const messages = await getMessages();
