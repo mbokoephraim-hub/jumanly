@@ -33,7 +33,8 @@ export const phoneIcons = {
   fleche: "M5 12h13M13 6l6 6-6 6",
   horloge: "M12 4.5a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15zM12 8v4l3 2",
   lecture: "M8 5.5v13l11-6.5z",
-  cadenas: "M8 11V8a4 4 0 0 1 8 0v3",
+  cadenas:
+    "M8 11V8a4 4 0 0 1 8 0v3M7 11h10a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2zM12 15v1.5",
   agenda: "M4.5 6.5h15v13h-15zM4.5 10.5h15M8.5 4v4M15.5 4v4",
   photo: "M4 5.5h16v13H4zM4 15l4.5-4.5 4 4 2.5-2.5L20 17M15.5 9.5h.01",
   micro: "M12 3.5a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0v-5a3 3 0 0 0-3-3zM6 11a6 6 0 0 0 12 0M12 17v3.5",

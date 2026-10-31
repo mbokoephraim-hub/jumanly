@@ -1686,61 +1686,48 @@ button.nb-cr-cv-l {
   padding: 10px 11px 12px;
 }
 
-/* Progression › pas encore de diagnostic (Ephraïm, 31/10/2026) : la première chose à faire, en
-   dégradé, mise en avant. Texte Sapin sur Lime (règle d'or n° 10). */
+/* Progression › pas encore de diagnostic (Ephraïm, 31/10/2026) : la première chose à faire, sur
+   un dégradé vert sombre avec un motif, une pastille rouge et un bouton blanc « Analyser ». */
 .nb-cr-urgent {
   position: relative;
   overflow: hidden;
-  padding: 18px 18px 18px;
+  padding: 18px;
   border-radius: 24px;
   background:
-    radial-gradient(circle at 100% 0, rgba(255, 255, 255, 0.45), transparent 55%),
-    linear-gradient(135deg, #d4fa9e 0%, #a6f26b 45%, #5fe0b8 100%);
-  color: #0f3f37;
-  box-shadow: 0 18px 40px -18px rgba(95, 224, 184, 0.65);
+    radial-gradient(rgba(166, 242, 107, 0.16) 1.2px, transparent 1.4px) 0 0 / 14px 14px,
+    radial-gradient(circle at 100% 0, rgba(95, 224, 184, 0.35), transparent 60%),
+    linear-gradient(150deg, #1d6b4f 0%, #0f3f37 55%, #0b2a26 100%);
+  color: #f2ede5;
+  box-shadow:
+    inset 0 0 0 1px rgba(166, 242, 107, 0.18),
+    0 18px 40px -20px rgba(0, 0, 0, 0.7);
 }
 .nb-cr-urgent-b {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 5px 10px;
+  padding: 4px 10px;
   border-radius: 999px;
-  background: #0f3f37;
-  color: #a6f26b;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-.nb-cr-urgent-b i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #f08a7c;
-  box-shadow: 0 0 0 0 rgba(240, 138, 124, 0.7);
-  animation: nbCrPouls 1.6s ease-out infinite;
-}
-@keyframes nbCrPouls {
-  to {
-    box-shadow: 0 0 0 8px rgba(240, 138, 124, 0);
-  }
+  background: #e5302a;
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 700;
 }
 .nb-cr .nb-cr-urgent h2 {
   margin: 12px 0 0;
-  max-width: 72%;
+  max-width: 64%;
   font-size: 24px;
   font-weight: 800;
   line-height: 1.12;
   letter-spacing: -0.02em;
-  color: #0f3f37;
+  color: #f2ede5;
 }
 .nb-cr .nb-cr-urgent p {
-  margin-top: 6px;
-  max-width: 78%;
-  font-size: 13.5px;
+  margin-top: 8px;
+  max-width: 70%;
+  font-size: 15px;
   font-weight: 600;
   line-height: 1.4;
-  color: rgba(15, 63, 55, 0.82);
+  color: rgba(242, 237, 229, 0.85);
 }
 .nb-cr-urgent-go {
   position: relative;
@@ -1748,50 +1735,83 @@ button.nb-cr-cv-l {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 14px;
-  min-height: 44px;
-  padding: 0 18px;
+  margin-top: 16px;
+  min-height: 46px;
+  padding: 0 22px;
   border-radius: 999px;
-  background: #0f3f37;
-  color: #a6f26b;
-  font-size: 14.5px;
+  background: #fff;
+  color: #0f3f37;
+  font-size: 15px;
   font-weight: 800;
   text-decoration: none;
 }
 .nb-cr-urgent-art {
   position: absolute;
-  right: 14px;
-  top: 16px;
+  right: 12px;
+  top: 34px;
   transform: rotate(8deg);
 }
 .nb-cr-urgent-art .jm-menu-art {
-  background: rgba(255, 255, 255, 0.7);
+  width: 96px;
+  height: 96px;
+  border-radius: 28px;
+  background: rgba(242, 237, 229, 0.92);
 }
-@media (prefers-reduced-motion: reduce) {
-  .nb-cr-urgent-b i {
-    animation: none;
-  }
+.nb-cr-urgent-art .jm-menu-art svg {
+  width: 68px;
+  height: 68px;
 }
 
-/* Les trois chiffres, chacun avec son dessin. */
-.nb-cr-urgent + .nb-cr-chiffres {
-  margin-top: 14px;
-}
-.nb-cr-chiffres > div {
-  gap: 10px;
-  padding: 12px 8px 14px;
-}
-.nb-cr-ch-t {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-.nb-cr-chiffres .nb-cr-ch-t small {
-  margin-top: 0;
-  font-size: 11.5px;
-  font-weight: 700;
+/* Les titres de Progression en minuscules (Ephraïm, 31/10/2026). */
+.nb-cr-pad .nb-pf-h.nb-cr-h0 {
+  text-transform: none;
+  letter-spacing: -0.01em;
+  font-size: 17px;
+  font-weight: 800;
   color: var(--nb-creme);
+}
+
+/* Prochaines étapes : chacune sa couleur, lignes resserrées. */
+.nb-cr-etapes a {
+  padding: 14px 12px;
+}
+.nb-cr-etape-t b {
+  font-size: 14px;
+  line-height: 1.25;
+}
+.nb-cr-etape-t small {
+  display: block;
+  margin-top: 2px;
+  line-height: 1.3;
+  color: var(--nb-gris);
+}
+
+/* Mes entraînements : texte serré, cadenas bien visible, un seul bouton. */
+.nb-cr-sim-t b {
+  line-height: 1.25;
+}
+.nb-cr-sim-t small {
+  line-height: 1.35;
+}
+.nb-cr-sim:not([data-ouvert]) .nb-cr-sim-i {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(229, 48, 42, 0.16);
+  color: #ff6b5f;
+}
+.nb-cr-sim-go {
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--nb-lime);
+  color: var(--nb-sur-lime, #0f3f37);
+  font-size: 14.5px;
+  font-weight: 800;
+  text-decoration: none;
 }
 
 /* Mes documents et candidatures : le dessin du menu du site, puis « 4 CV construits ». */
@@ -1800,11 +1820,22 @@ button.nb-cr-cv-l {
   align-content: start;
   row-gap: 6px;
 }
+.nb-cr-suivi-doc li > * {
+  padding: 16px 14px;
+  min-height: 150px;
+}
 .nb-cr-suivi-doc li .jm-menu-art {
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  width: 48px;
+  height: 48px;
+  border-radius: 15px;
+}
+.nb-cr-suivi-doc li .jm-menu-art svg {
+  width: 34px;
+  height: 34px;
 }
 .nb-cr-suivi-doc span {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 800;
   line-height: 1.2;
 }
