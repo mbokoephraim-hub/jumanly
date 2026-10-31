@@ -73,6 +73,9 @@ export const phoneIcons = {
   envoyer: "M5 12h13M13 6l6 6-6 6",
   partager: "M21 3 10.5 13.5M21 3l-6.5 18-4-7.5L3 9.5z",
   plusOptions: "M5 12h.01M12 12h.01M19 12h.01",
+  // A text cursor over a line: give a name (menu of a CV, 31/10/2026).
+  renommer: "M4 17.5h10M9 6.5v8M6.5 6.5h5M17.5 5v14M15.5 5h4M15.5 19h4",
+  oeil: "M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12zM12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z",
 } as const;
 
 export type PhoneIconName = keyof typeof phoneIcons;

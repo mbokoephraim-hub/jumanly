@@ -10434,6 +10434,15 @@ Conventions :
 | `phoneCareer.cv.menu.namePrimary` | CV principal |
 | `phoneCareer.cv.menu.nameSecond` | CV candidatures spontanées |
 | `phoneCareer.cv.menu.nameThird` | CV stage |
+| `phoneCareer.cv.menu.renameHelp` | Nommez chaque CV selon son usage ou son objectif : vous le retrouvez d’un coup d’œil. |
+| `phoneCareer.cv.menu.nameCdd` | CV CDD |
+| `phoneCareer.cv.menu.nameCdi` | CV CDI |
+| `phoneCareer.cv.menu.nameInterim` | CV intérim |
+| `phoneCareer.cv.menu.downloadPdf` | Télécharger |
+| `phoneCareer.cv.menu.word` | Télécharger en Word |
+| `phoneCareer.cv.menu.preparing` | Préparation du PDF… |
+| `phoneCareer.cv.menu.downloaded` | PDF téléchargé. |
+| `phoneCareer.cv.menu.downloadError` | Le PDF n’a pas pu être préparé. Réessayez dans un instant. |
 | `phoneCareer.cv.menu.primaryLong` | Utiliser par défaut pour postuler |
 | `phoneCareer.cv.menu.color` | Couleur |
 | `phoneCareer.cv.menu.colorNone` | Sans couleur |

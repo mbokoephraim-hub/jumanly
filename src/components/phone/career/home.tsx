@@ -11,6 +11,7 @@ import {
   useState,
   useTransition,
   type CSSProperties,
+  type ReactNode,
   type TouchEvent,
 } from "react";
 import { showToast } from "@/components/motion/toaster";
@@ -18,10 +19,10 @@ import { deleteCv, duplicateCv, setPrimaryCv } from "@/server/actions/cv";
 import { deleteCvsAction, renameCvAction, setCvColorAction } from "@/server/actions/cv-flow";
 import { PROFILE_COLORS, PROFILE_PALETTE, type ProfileColor } from "@/lib/profile-colors";
 import { FilAvatar } from "../fil/avatar";
-import { OrbiDisc, PhoneIcon } from "../icon";
+import { OrbiDisc, PhoneIcon, type PhoneIconName } from "../icon";
+import { savePdf } from "../cv/save-pdf";
 import { PhoneSheet } from "../sheet";
 import type { CareerView } from "./data";
-import { CvExportButton } from "./cv-export";
 import { OrbiStar, Ring, Segment, tint } from "./kit";
 import { CareerSearch } from "./search";
 import { groundOf, LettersPanel, type LetterRow } from "./letters-panel";
@@ -992,14 +993,40 @@ function CvPanel({
   );
 }
 
+/** Names proposed in « Renommer », each with its colour (Ephraïm, 31/10/2026). */
+const CV_NAME_IDEAS = [
+  ["nameThird", "ciel"],
+  ["nameCdd", "ambre"],
+  ["nameCdi", "lime"],
+  ["nameInterim", "lilas"],
+  ["nameSecond", "corail"],
+] as const satisfies readonly (readonly [string, ProfileColor])[];
+
+/** One line of the menu: a small icon, then the words. */
+function MenuLine({ icon, children }: { icon: PhoneIconName; children: ReactNode }) {
+  return (
+    <>
+      <PhoneIcon name={icon} size={19} className="nb-cr-cv-ico" />
+      <span>{children}</span>
+    </>
+  );
+}
+
+/**
+ * The « ··· » of a CV (Ephraïm, 31/10/2026): the colours on one line, each choice with its icon,
+ * « Supprimer » and « Télécharger » side by side at the bottom. A choice that opens something
+ * (read, download, change) closes the menu first.
+ */
 function CvMenu({ cv, onClose }: { cv: CareerView["cvs"][number] | null; onClose: () => void }) {
   const t = useTranslations("phoneCareer");
   const [confirm, setConfirm] = useState(false);
   const [naming, setNaming] = useState<string | null>(null);
+  const [namedColor, setNamedColor] = useState<ProfileColor | null>(null);
   const [pending, start] = useTransition();
   const close = () => {
     setConfirm(false);
     setNaming(null);
+    setNamedColor(null);
     onClose();
   };
   const fail = () => showToast({ message: t("form.error"), tone: "error" });
@@ -1008,6 +1035,9 @@ function CvMenu({ cv, onClose }: { cv: CareerView["cvs"][number] | null; onClose
     start(async () => {
       const result = await renameCvAction(cv.id, title).catch(() => null);
       if (!result?.ok) return fail();
+      if (namedColor && cv.tag?.key !== namedColor) {
+        await setCvColorAction(cv.id, namedColor).catch(() => null);
+      }
       showToast({ message: t("cv.menu.renamed") });
       close();
     });
@@ -1018,6 +1048,15 @@ function CvMenu({ cv, onClose }: { cv: CareerView["cvs"][number] | null; onClose
       if (!result?.ok) return fail();
       close();
     });
+  // One touch: the menu closes, the PDF is prepared and saved on the device.
+  const download = (id: string) => {
+    close();
+    showToast({ message: t("cv.menu.preparing"), tone: "info" });
+    savePdf(id).then(
+      () => showToast({ message: t("cv.menu.downloaded") }),
+      () => showToast({ message: t("cv.menu.downloadError"), tone: "error" }),
+    );
+  };
   return (
     <PhoneSheet
       open={cv !== null}
@@ -1042,16 +1081,27 @@ function CvMenu({ cv, onClose }: { cv: CareerView["cvs"][number] | null; onClose
             maxLength={80}
             required
             autoFocus
-            onChange={(event) => setNaming(event.target.value)}
+            onChange={(event) => {
+              setNaming(event.target.value);
+              setNamedColor(null);
+            }}
           />
+          <p className="nb-cr-cv-aide">{t("cv.menu.renameHelp")}</p>
           <span className="nb-cr-cv-idees">
-            {[t("cv.menu.namePrimary"), t("cv.menu.nameSecond"), t("cv.menu.nameThird")].map(
-              (idea) => (
-                <button key={idea} type="button" onClick={() => setNaming(idea)}>
-                  {idea}
-                </button>
-              ),
-            )}
+            {CV_NAME_IDEAS.map(([key, color]) => (
+              <button
+                key={key}
+                type="button"
+                aria-pressed={naming === t(`cv.menu.${key}`)}
+                style={{ "--teinte": PROFILE_PALETTE[color] } as CSSProperties}
+                onClick={() => {
+                  setNaming(t(`cv.menu.${key}`));
+                  setNamedColor(color);
+                }}
+              >
+                {t(`cv.menu.${key}`)}
+              </button>
+            ))}
           </span>
           <button
             type="submit"
@@ -1109,43 +1159,52 @@ function CvMenu({ cv, onClose }: { cv: CareerView["cvs"][number] | null; onClose
               />
             ))}
           </div>
-          <button type="button" className="nb-opt nb-fil-opt" onClick={() => setNaming(cv.title)}>
-            {t("cv.menu.rename")}
+          <button
+            type="button"
+            className="nb-opt nb-fil-opt nb-cr-cv-opt"
+            onClick={() => setNaming(cv.title)}
+          >
+            <MenuLine icon="renommer">{t("cv.menu.rename")}</MenuLine>
           </button>
-          <Link href={`${cv.href}/lire`} className="nb-opt nb-fil-opt">
-            {t("cv.menu.read")}
+          <Link href={`${cv.href}/lire`} className="nb-opt nb-fil-opt nb-cr-cv-opt" onClick={close}>
+            <MenuLine icon="oeil">{t("cv.menu.read")}</MenuLine>
           </Link>
           {cv.file ? (
-            <>
-              <a href={`${cv.href}/fichier?telecharger=1`} className="nb-opt nb-fil-opt" download>
-                {t("cv.menu.download")}
-              </a>
-              {/* The file stays as it is; a copy made in Jumanly can be changed. */}
-              <form action={duplicateCv}>
-                <input type="hidden" name="id" value={cv.id} />
-                <button type="submit" className="nb-opt nb-fil-opt">
-                  {t("cv.menu.editable")}
-                </button>
-              </form>
-            </>
+            // The file stays as it is; a copy made in Jumanly can be changed.
+            <form action={duplicateCv}>
+              <input type="hidden" name="id" value={cv.id} />
+              <button type="submit" className="nb-opt nb-fil-opt nb-cr-cv-opt">
+                <MenuLine icon="modifier">{t("cv.menu.editable")}</MenuLine>
+              </button>
+            </form>
           ) : (
             <>
-              <Link href={`${cv.href}?etape=contenu`} className="nb-opt nb-fil-opt">
-                {t("cv.menu.edit")}
+              <Link
+                href={`${cv.href}?etape=contenu`}
+                className="nb-opt nb-fil-opt nb-cr-cv-opt"
+                onClick={close}
+              >
+                <MenuLine icon="modifier">{t("cv.menu.edit")}</MenuLine>
               </Link>
-              <CvExportButton
-                id={cv.id}
-                title={cv.title}
-                label={t("cv.menu.export")}
-                className="nb-opt nb-fil-opt"
-              />
-              <Link href={`${cv.href}?adapter=`} className="nb-opt nb-fil-opt">
-                {t("cv.menu.adapt")}
+              <a
+                href={`/app/career/cv/${cv.id}/word`}
+                download
+                className="nb-opt nb-fil-opt nb-cr-cv-opt"
+                onClick={close}
+              >
+                <MenuLine icon="document">{t("cv.menu.word")}</MenuLine>
+              </a>
+              <Link
+                href={`${cv.href}?adapter=`}
+                className="nb-opt nb-fil-opt nb-cr-cv-opt"
+                onClick={close}
+              >
+                <MenuLine icon="offres">{t("cv.menu.adapt")}</MenuLine>
               </Link>
               <form action={duplicateCv}>
                 <input type="hidden" name="id" value={cv.id} />
-                <button type="submit" className="nb-opt nb-fil-opt">
-                  {t("cv.menu.duplicate")}
+                <button type="submit" className="nb-opt nb-fil-opt nb-cr-cv-opt">
+                  <MenuLine icon="copier">{t("cv.menu.duplicate")}</MenuLine>
                 </button>
               </form>
             </>
@@ -1154,19 +1213,45 @@ function CvMenu({ cv, onClose }: { cv: CareerView["cvs"][number] | null; onClose
             <form action={setPrimaryCv}>
               <input type="hidden" name="id" value={cv.id} />
               <input type="hidden" name="retour" value="liste" />
-              <button type="submit" className="nb-opt nb-fil-opt">
-                {t("cv.menu.primaryLong")}
+              <button type="submit" className="nb-opt nb-fil-opt nb-cr-cv-opt">
+                <MenuLine icon="coche">{t("cv.menu.primaryLong")}</MenuLine>
               </button>
             </form>
           ) : null}
-          <button
-            type="button"
-            className="nb-opt nb-fil-opt"
-            data-danger=""
-            onClick={() => setConfirm(true)}
-          >
-            {t("cv.menu.delete")}
-          </button>
+          <div className="nb-cr-cv-duo">
+            <button
+              type="button"
+              className="nb-bouton"
+              data-contour=""
+              data-danger=""
+              onClick={() => setConfirm(true)}
+            >
+              <PhoneIcon name="corbeille" size={18} />
+              {t("cv.menu.delete")}
+            </button>
+            {cv.file ? (
+              <a
+                href={`${cv.href}/fichier?telecharger=1`}
+                download
+                className="nb-bouton"
+                data-plein=""
+                onClick={close}
+              >
+                <PhoneIcon name="telecharger" size={18} />
+                {t("cv.menu.downloadPdf")}
+              </a>
+            ) : (
+              <button
+                type="button"
+                className="nb-bouton"
+                data-plein=""
+                onClick={() => download(cv.id)}
+              >
+                <PhoneIcon name="telecharger" size={18} />
+                {t("cv.menu.downloadPdf")}
+              </button>
+            )}
+          </div>
         </>
       ) : null}
     </PhoneSheet>

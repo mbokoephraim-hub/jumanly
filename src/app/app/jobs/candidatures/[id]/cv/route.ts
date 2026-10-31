@@ -3,7 +3,7 @@ import { getCurrentUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { exportCvCopy } from "@/features/cv/export/export";
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 /** « Voir le CV envoyé » : the copy of the CV kept with the application. */
 export async function GET(
