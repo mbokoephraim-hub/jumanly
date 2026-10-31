@@ -4,6 +4,7 @@ import { LetterCancel } from "@/components/phone/career/letter-cancel";
 import { OrbiDisc, PhoneIcon } from "@/components/phone/icon";
 import { CopyButton } from "@/components/talent/copy-button";
 import { OrbiLimit, type OrbiLimitCode } from "@/components/talent/cv/orbi-limit";
+import { colorHex, parseLetterDesign } from "@/features/letter/design";
 import { dynamic } from "@/i18n/dynamic";
 import {
   applyCorrectionsAction,
@@ -13,13 +14,15 @@ import {
 } from "@/server/actions/career-documents";
 import { aiFeatures } from "@/server/ai";
 import type { CareerDocumentContent } from "@/server/services/career-documents";
+import { isCoverLetter } from "@/server/services/letter-design";
 import { TEXT_MAX } from "@/server/services/career-documents";
 
 /**
  * A letter on the phone (Ephraïm, 31/10/2026), after « Rédiger avec Orbi » or « Relire »: Orbi's
- * corrections to keep, the letter in a framed zone, then « Utiliser cette lettre » (saved, back to
- * Mes documents) or « Relire encore » (Orbi reads it again as it stands). Copy, PDF and delete
- * below. Same head and greens as « Nouvelle lettre ».
+ * corrections to keep, the letter in a framed zone, then « Retenir cette lettre » (the text is
+ * kept, a message leads to the visual template) or « Relire encore » (Orbi reads it again as it
+ * stands). Copy and delete below; the PDF comes after the template is chosen. Same head and greens
+ * as « Nouvelle lettre ».
  */
 export async function PhoneLetter({
   document,
@@ -27,8 +30,14 @@ export async function PhoneLetter({
   aiError,
   plan,
 }: {
-  document: { id: string; title: string; updatedAt: Date; data: CareerDocumentContent };
-  notice: "cree" | "enregistre" | "relu" | "utilisee" | "input" | null;
+  document: {
+    id: string;
+    title: string;
+    style: unknown;
+    updatedAt: Date;
+    data: CareerDocumentContent;
+  };
+  notice: "cree" | "enregistre" | "relu" | "utilisee" | "retenue" | "input" | null;
   aiError: OrbiLimitCode | null;
   plan: string | null;
 }) {
@@ -36,6 +45,10 @@ export async function PhoneLetter({
   const d = dynamic(t);
   const { data } = document;
   const back = "/app/career/cv?onglet=documents";
+  // A cover letter goes on to its visual template (Ephraïm, 31/10/2026); other texts are used as is.
+  const letter = isCoverLetter(data);
+  const design = parseLetterDesign(document.style);
+  const models = `/app/career/documents/${document.id}/modele`;
   return (
     <div className="t-flux nb-lt-page">
       <header className="nb-cv-tete nb-lt-tete">
@@ -46,6 +59,46 @@ export async function PhoneLetter({
           <h1>{document.title}</h1>
         </div>
       </header>
+
+      {letter && design.chosen && (
+        <Link href={models} className="lm-design">
+          <span
+            className="lm-design-c"
+            style={{ background: colorHex(design.color) }}
+            aria-hidden
+          />
+          <span className="lm-design-t">
+            <b>
+              {t("letterModel.design.current", {
+                name: t(`letterModel.template.${design.template}`),
+              })}
+            </b>
+            <small>{t("letterModel.design.hint")}</small>
+          </span>
+          <span className="lm-design-a">{t("letterModel.design.change")}</span>
+        </Link>
+      )}
+
+      {notice === "retenue" && (
+        <div className="nb-lt-accueil">
+          <div
+            className="nb-lt-carte nb-lt-fini"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="lm-retenue-t"
+          >
+            <span className="nb-lt-fini-i" aria-hidden>
+              <PhoneIcon name="coche" size={30} stroke={2.6} />
+            </span>
+            <h2 id="lm-retenue-t">{t("letterModel.next.title")}</h2>
+            <p>{t("letterModel.next.text")}</p>
+            <Link href={models} className="nb-lt-bt" autoFocus>
+              {t("letterModel.next.go")}
+              <PhoneIcon name="fleche" size={20} />
+            </Link>
+          </div>
+        </div>
+      )}
 
       {notice === "cree" && (
         <p className="nb-lt-bulle" role="status">
@@ -167,7 +220,7 @@ export async function PhoneLetter({
           />
         </div>
         <button type="submit" className="nb-lt-bt">
-          {t("phoneLetter.view.use")}
+          {letter ? t("letterModel.retain") : t("phoneLetter.view.use")}
         </button>
         <button type="submit" formAction={proofreadAgainAction} className="nb-lt-annuler">
           <OrbiDisc size={24} />
@@ -184,10 +237,16 @@ export async function PhoneLetter({
         >
           <PhoneIcon name="copier" size={22} />
         </CopyButton>
-        <a href={`/app/career/documents/${document.id}/pdf`} className="nb-lt-outil" data-texte="">
-          <PhoneIcon name="telecharger" size={22} />
-          {t("phoneLetter.view.download")}
-        </a>
+        {letter ? null : (
+          <a
+            href={`/app/career/documents/${document.id}/pdf`}
+            className="nb-lt-outil"
+            data-texte=""
+          >
+            <PhoneIcon name="telecharger" size={22} />
+            {t("phoneLetter.view.download")}
+          </a>
+        )}
         <form id="nb-lettre-supprimer" action={deleteDocumentAction} hidden>
           <input type="hidden" name="id" value={document.id} />
         </form>
