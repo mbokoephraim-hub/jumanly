@@ -2710,6 +2710,55 @@ Conventions :
 | `apply.sent.similar` | Offres similaires |
 | `apply.sent.back` | Retour aux offres |
 
+### Postuler · réponses toutes prêtes et vérification avant l'envoi (31/10/2026)
+
+*Demande d'Ephraïm du 31/10/2026 : aux questions du recruteur, le talent touche une réponse au lieu de l'écrire (une précision s'ouvre seulement quand elle sert), le salaire reste un chiffre libre. L'étape 3 rassure : rien n'est encore envoyé, tout est à relire, et l'on peut ajouter autre chose (portfolio, réalisation, lien).*
+
+| Clé | Texte |
+|---|---|
+| `apply.questions.title` | Les questions du recruteur |
+| `apply.questions.help` | Touchez votre réponse. C'est facultatif : votre candidature part même sans réponse. |
+| `apply.questions.number` | Question {n} |
+| `apply.questions.yes` | Oui |
+| `apply.questions.no` | Non |
+| `apply.questions.free` | Votre réponse, en quelques mots |
+| `apply.questions.experience.yes` | Oui, déjà |
+| `apply.questions.experience.no` | Non, pas encore |
+| `apply.questions.experience.where` | Dites-nous où |
+| `apply.questions.experience.wherePlaceholder` | Entreprise, ministère, organisation… |
+| `apply.questions.start.now` | Immédiatement |
+| `apply.questions.start.week` | Dans une semaine |
+| `apply.questions.start.month` | Dans un mois |
+| `apply.questions.place.here` | Oui, j'y suis |
+| `apply.questions.place.ready` | Non, mais je suis prêt·e à venir |
+| `apply.questions.place.no` | Non |
+| `apply.questions.salary.label` | Votre montant |
+| `apply.questions.salary.unit` | USD par mois |
+| `apply.questions.salary.placeholder` | Ex. 850 |
+| `apply.questions.salary.hint` | Écrivez le chiffre qui vous convient. Il ne bloque jamais votre candidature. |
+| `apply.check.pendingTitle` | Votre candidature n'est pas encore envoyée |
+| `apply.check.pendingText` | Prenez un instant pour vérifier que tout ce qui suit est vraiment ce que vous voulez envoyer. Rien ne part avant que vous touchiez « Envoyer ma candidature ». |
+| `apply.check.receives` | Ce que {company} va recevoir |
+| `apply.check.profile` | Votre profil |
+| `apply.check.cv` | Votre CV |
+| `apply.check.documents` | Vos documents |
+| `apply.check.noDocument` | Aucun document joint. C'est facultatif. |
+| `apply.check.answers` | Vos réponses |
+| `apply.check.noAnswer` | Pas de réponse |
+| `apply.check.see` | Voir |
+| `apply.check.change` | Changer |
+| `apply.check.edit` | Modifier |
+| `apply.check.extra` | Ajouter autre chose |
+| `apply.check.extraLine` | Un portfolio, une réalisation, un lien… |
+| `apply.extra.title` | Ajouter une autre information |
+| `apply.extra.help` | Elle sera jointe à cette candidature et gardée dans vos documents. |
+| `apply.extra.name` | Titre |
+| `apply.extra.namePlaceholder` | Ex. Mon portfolio, Campagne pour le ministère |
+| `apply.extra.text` | Description ou lien |
+| `apply.extra.textPlaceholder` | Expliquez en quelques lignes, ou collez un lien. |
+| `apply.extra.save` | Joindre à ma candidature |
+| `apply.extra.full` | Vous avez déjà joint {max} documents, le maximum. Retirez-en un pour en ajouter un autre. |
+
 ### Refonte mobile · Suivi
 
 *Suivi (docs/refonte-mobile/talent-2 § 2) : les candidatures groupées par situation, ce qui demande une action d'abord. « Terminées » garde les candidatures closes, avec une suite concrète après un refus.*
@@ -3621,6 +3670,7 @@ Conventions :
 | `docs.letters.type.email` | E-mail de candidature |
 | `docs.letters.type.thankYou` | Message de remerciement |
 | `docs.letters.type.proofread` | Texte relu |
+| `docs.letters.type.extra` | Information jointe à une candidature |
 | `docs.letters.linkedin.label` | LinkedIn |
 | `docs.letters.linkedin.text` | Orbi propose un titre, un résumé et 5 compétences à copier sur LinkedIn. |
 | `docs.letters.linkedin.cta` | Préparer mon LinkedIn |

@@ -1,0 +1,473 @@
+/*
+ * Postuler · réponses toutes prêtes et vérification avant l'envoi (Ephraïm, 31/10/2026).
+ * Étape 2 : une carte par question du recruteur, des réponses à toucher (`.t-apq`).
+ * Étape 3 : un bandeau « pas encore envoyée », puis ce que l'entreprise va recevoir (`.t-apv`).
+ * Texte Sapin sur Lime, jamais blanc sur Lime (règle d'or n° 10).
+ */
+
+/* ─── Étape 2 · les questions ─────────────────────────────────────────────── */
+.t-apq {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.t-apq-tete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.t-apq-nb {
+  flex: none;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--lime-c);
+  color: var(--texte);
+}
+.t-apq-l {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.t-apq-c {
+  border: 0;
+  margin: 0;
+  min-width: 0;
+  padding: 16px;
+  border-radius: var(--r-carte);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: box-shadow 0.2s ease;
+}
+.t-apq-c:has(input:checked),
+.t-apq-c:has(input:not([type="hidden"]):not(:placeholder-shown)),
+.t-apq-c:has(textarea:not(:placeholder-shown)) {
+  box-shadow:
+    var(--verre),
+    0 0 0 1.5px color-mix(in srgb, var(--lime) 55%, transparent);
+}
+.t-apq-q {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.t-apq-q small {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--texte2);
+}
+.t-apq-q span {
+  font-size: 15.5px;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+/* Les réponses : des pilules à toucher, sur plusieurs lignes au besoin. */
+.t-apq-ch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.t-apq-ch label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 16px 10px 12px;
+  border-radius: 999px;
+  background: var(--zone);
+  box-shadow: inset 0 0 0 1px var(--trait);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--texte);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.t-apq-ch input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.t-apq-coche {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.8px var(--texte2);
+  display: grid;
+  place-items: center;
+}
+.t-apq-ch label:has(:checked) {
+  background: var(--lime);
+  color: var(--sapin);
+  box-shadow: none;
+}
+.t-apq-ch label:has(:checked) .t-apq-coche {
+  box-shadow: none;
+  background: var(--sapin);
+}
+.t-apq-ch label:has(:checked) .t-apq-coche::after {
+  content: "";
+  width: 8px;
+  height: 4px;
+  margin-top: -2px;
+  border: solid var(--lime);
+  border-width: 0 0 2px 2px;
+  transform: rotate(-45deg);
+}
+.t-apq-ch label:has(:focus-visible) {
+  outline: 2px solid var(--texte);
+  outline-offset: 2px;
+}
+/* « Dites-nous où » : seulement après « Oui, déjà ». */
+.t-apq-plus {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+}
+.t-apq-c:has(input[data-detail]:checked) .t-apq-plus {
+  display: flex;
+  animation: t-apq-ouvre 0.22s ease;
+}
+@keyframes t-apq-ouvre {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+.t-apq-plus label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--texte2);
+}
+.t-apq-plus input,
+.t-apq-c textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: var(--zone);
+  box-shadow: inset 0 0 0 1px var(--trait);
+  font: inherit;
+  font-size: 14.5px;
+  color: var(--texte);
+}
+.t-apq-c textarea {
+  min-height: 84px;
+  resize: vertical;
+}
+/* Le salaire : un chiffre libre, l'unité à côté. */
+.t-apq-sal {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 16px 6px 6px;
+  border-radius: 18px;
+  background: var(--zone);
+  box-shadow: inset 0 0 0 1px var(--trait);
+}
+.t-apq-sal:focus-within {
+  box-shadow: inset 0 0 0 2px var(--texte);
+}
+.t-apq-sal input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  background: transparent;
+  font: inherit;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--texte);
+  outline: none;
+}
+.t-apq-u {
+  flex: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--texte2);
+}
+.t-apq-aide {
+  font-size: 12px;
+  color: var(--texte2);
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-apq-c:has(input[data-detail]:checked) .t-apq-plus {
+    animation: none;
+  }
+}
+
+/* ─── Étape 3 · vérifier avant l'envoi ────────────────────────────────────── */
+.t-apv-att {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--r-carte);
+  background: var(--ambre-c);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ambre) 40%, transparent);
+  min-width: 0;
+}
+.t-apv-att-ic {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: var(--ambre);
+  color: var(--sapin);
+}
+.t-apv-att b {
+  display: block;
+  font-size: 15px;
+  line-height: 1.3;
+}
+.t-apv-att p {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--texte2);
+}
+.t-apv-lab {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--texte2);
+  margin-top: 4px;
+}
+.t-apv {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.t-apv-c {
+  padding: 16px;
+  border-radius: var(--r-carte);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.t-apv-h {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.t-apv-n {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--lime);
+  color: var(--sapin);
+}
+.t-apv-h h3 {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+.t-apv-a {
+  flex: none;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--zone);
+  color: var(--texte);
+}
+.t-apv-r {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.t-apv-r .t-t {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.t-apv-r .t-t b,
+.t-apv-r .t-t span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.t-apv-r .t-t b {
+  font-size: 14.5px;
+}
+.t-apv-r .t-t span {
+  font-size: 12.5px;
+  color: var(--texte2);
+}
+.t-apv-av {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  font-weight: 700;
+  background: var(--g-profil);
+  color: var(--texte);
+}
+/* La première page du CV, dessinée. */
+.t-apv-pg {
+  flex: none;
+  width: 40px;
+  height: 52px;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 8px 18px -10px rgba(0, 0, 0, 0.5);
+  padding: 7px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.t-apv-pg i {
+  height: 3px;
+  border-radius: 2px;
+  background: #dce5e1;
+}
+.t-apv-pg i.t-h {
+  height: 5px;
+  width: 70%;
+  background: #0f3f37;
+}
+.t-apv-pg i.t-c {
+  width: 45%;
+  background: #a6f26b;
+}
+.t-apv-docs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.t-apv-docs li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.t-apv-di {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--menthe-c);
+  color: var(--texte);
+}
+.t-apv-vide {
+  font-size: 13px;
+  color: var(--texte2);
+}
+.t-apv-plus {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 18px;
+  border: 1.5px dashed color-mix(in srgb, var(--texte2) 55%, transparent);
+  background: transparent;
+  color: var(--texte);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+.t-apv-plus-ic {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: var(--lime);
+  color: var(--sapin);
+}
+.t-apv-plus .t-t {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.t-apv-plus .t-t b {
+  font-size: 14px;
+}
+.t-apv-plus .t-t span {
+  font-size: 12.5px;
+  color: var(--texte2);
+}
+.t-apv-rep {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.t-apv-rep > div {
+  padding: 10px 0;
+  min-width: 0;
+}
+.t-apv-rep > div + div {
+  border-top: 1px solid var(--trait);
+}
+.t-apv-rep dt {
+  font-size: 12.5px;
+  color: var(--texte2);
+  overflow-wrap: anywhere;
+}
+.t-apv-rep dd {
+  margin: 3px 0 0;
+  font-size: 14.5px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.t-apv-rep dd.t-apv-sans {
+  font-weight: 500;
+  font-style: italic;
+  color: var(--texte2);
+}
+
+/* « Ajouter une autre information » : le titre a le même champ que le texte. */
+#ap-autre .t-champ input {
+  width: 100%;
+  min-height: 46px;
+  border-radius: 18px;
+  padding: 12px 14px;
+  background: var(--surface);
+  box-shadow: var(--verre);
+  font: inherit;
+  font-size: 14px;
+  color: var(--texte);
+}

@@ -5287,3 +5287,9 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - La barre n'est plus collante (elle défile avec la page), puisqu'elle n'a plus de fond.
 - Titre : bande qui défile (`.jm-marquee`), immobile et centrée en mouvement réduit ; titre complet lu par les lecteurs d'écran. Nouveau texte `home.hero.short` (FR + EN). Sous le bouton, cinq tuiles colorées du menu qui flottent doucement.
 - Retirés de la page : photo et cartes flottantes, bouton d'installation de l'appli (le bouton unique demandé). `next build` passe.
+
+## 2026-10-31 · Postuler : réponses toutes prêtes et vérification avant l'envoi
+
+- Étape 2 : chaque question du recruteur sur sa carte. Réponses à toucher pour les questions habituelles (déjà occupé un poste semblable, date de début, lieu, salaire), reconnues à leur formulation (`screeningPresetOf`). « Dites-nous où » ne s'ouvre qu'après « Oui, déjà » (CSS `:has`). Salaire : chiffre libre, enregistré avec « USD par mois ». Les autres questions gardent une réponse libre.
+- Étape 3 : bandeau « Votre candidature n'est pas encore envoyée », puis profil, CV, documents et réponses dans des cartes numérotées, chacune modifiable. « Ajouter autre chose » (portfolio, réalisation, lien) crée un document « other » (type `extra`) et le joint au brouillon (`addApplicationExtraAction`).
+- Écran de la lettre non touché (refait dans un autre fil).
