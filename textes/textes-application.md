@@ -10463,6 +10463,29 @@ Conventions :
 | `phoneCareer.application.withdrawn` | Candidature retirée |
 | `phoneCareer.application.error` | Cela n’a pas marché. Réessayez dans un instant. |
 
+### Modèle B · Nouvelle lettre au téléphone
+
+*`/app/career/lettres/nouvelle` au téléphone (demande d'Ephraïm du 31/10/2026) : deux blocs séparés, « Rédiger avec Orbi » (l'offre, le ton, ce qu'Orbi doit souligner) et « Écrire et faire relire par Orbi » ; chaque zone d'écriture est encadrée et montre un exemple.*
+
+| Clé | Texte |
+|---|---|
+| `phoneLetter.write.title` | Rédiger avec Orbi |
+| `phoneLetter.write.orbi` | Orbi rédige à partir de votre profil et de l’offre. Vous relisez et modifiez avant tout envoi. |
+| `phoneLetter.write.offer` | Pour quelle offre voulez-vous écrire la lettre ? |
+| `phoneLetter.write.offerHint` | Touchez pour choisir parmi vos candidatures et vos offres enregistrées. |
+| `phoneLetter.write.noOffer` | Sans offre précise |
+| `phoneLetter.write.tone` | Ton de la lettre |
+| `phoneLetter.write.points` | À mettre en avant (facultatif) |
+| `phoneLetter.write.pointsHint` | Dites à Orbi ce qu’il doit souligner. |
+| `phoneLetter.write.pointsExample` | Ex. : 3 ans au service client, anglais courant, j’aime travailler en équipe. |
+| `phoneLetter.or` | ou |
+| `phoneLetter.check.title` | Écrire et faire relire par Orbi |
+| `phoneLetter.check.lead` | Écrivez ou collez votre lettre : Orbi propose des corrections, vous gardez celles que vous voulez. |
+| `phoneLetter.check.name` | Titre (facultatif) |
+| `phoneLetter.check.nameExample` | Ex. : Lettre pour le poste de comptable |
+| `phoneLetter.check.text` | Votre lettre |
+| `phoneLetter.check.textExample` | Ex. : Madame, Monsieur, je vous écris pour le poste de… Touchez ici pour écrire ou coller votre texte. |
+
 ### Modèle B · Simulation d’entretien au téléphone
 
 *Lot B6 (docs/modele-b, rangée 16, planche `Entretien.dc.html`) : réglages, essai offert, préparation des questions, micro, entretien à l’oral et par écrit, indice, pause, arrêt, analyse, bilan, détail d’une réponse et « Mes simulations ». Rien n’est montré au recruteur.*

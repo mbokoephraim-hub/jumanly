@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { FlowHead } from "@/components/talent/flow-head";
-import { LetterCreateForm, LetterProofreadForm } from "@/components/talent/cv/letter-form";
+import { PhoneNewLetter } from "@/components/phone/career/new-letter";
 import { Notice } from "@/components/talent/notice";
 import { OrbiLimit, orbiLimitCode } from "@/components/talent/cv/orbi-limit";
 import { requireUser } from "@/server/auth/session";
@@ -17,9 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * « Nouvelle lettre » on a phone (Carrière › Mes documents, demande d'Ephraïm du 29/10/2026): the
- * form of the sheet of « CV et documents », on its own page, then « Faire relire un texte ». On a
- * computer, the sheet over the documents.
+ * « Nouvelle lettre » on a phone (Carrière › Mes documents, demande d'Ephraïm du 29/10/2026, redone
+ * 31/10/2026): two separate blocks, « Rédiger avec Orbi » then « Écrire et faire relire par Orbi ».
+ * On a computer, the sheet over the documents.
  */
 export default async function NewLetterPage({
   searchParams,
@@ -44,20 +44,12 @@ export default async function NewLetterPage({
       />
       {params.erreur === "input" && <Notice tone="err">{t("docs.letters.inputError")}</Notice>}
       {aiError && <OrbiLimit code={aiError} plan={talentPlanFor(plans, DOCUMENTS_GATE.key)} />}
-      <LetterCreateForm
+      <PhoneNewLetter
         state={generate.state}
         plan={talentPlanFor(plans, DOCUMENTS_GATE.key)}
         offers={offers}
-        phone
+        proofreadReady={check.state === "ready"}
       />
-      {check.state === "ready" && (
-        <section className="t-flux" aria-labelledby="lettre-relire-t">
-          <h2 id="lettre-relire-t" className="t-ck-t">
-            {t("docs.letters.proofread.title")}
-          </h2>
-          <LetterProofreadForm phone />
-        </section>
-      )}
     </div>
   );
 }
