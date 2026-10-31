@@ -2116,3 +2116,33 @@ html[data-nb-theme="clair"] .nb-app .nb-cr-cv-page {
   margin: 4px 0 8px;
   text-align: center;
 }
+
+/* Mes documents (Ephraïm, 31/10/2026) : de l'air entre CV, lettres et portfolio, avec un trait
+   de séparation ; « Sélectionner » devient une icône ronde. */
+.nb-doc-section + .nb-doc-section {
+  margin-top: 26px;
+}
+.nb-doc-section + .nb-doc-section::before {
+  content: "";
+  display: block;
+  height: 1px;
+  margin: 0 20px 20px;
+  background: color-mix(in srgb, var(--nb-creme) 14%, transparent);
+}
+.nb-cr-cv-barre button.nb-cr-cv-choisir {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--nb-creme) 22%, transparent);
+  background: var(--nb-haute);
+  color: var(--nb-creme);
+}
+.nb-cr-cv-titre {
+  min-width: 0;
+}

@@ -84,8 +84,14 @@ export function LettersPanel({ letters }: { letters: LetterRow[] }) {
           ) : null}
         </h2>
         {letters.length > 0 ? (
-          <button type="button" onClick={selecting ? stop : () => setSelecting(true)}>
-            {selecting ? t("cancel") : t("cv.select.start")}
+          <button
+            type="button"
+            className={selecting ? undefined : "nb-cr-cv-choisir"}
+            aria-label={selecting ? undefined : t("cv.select.start")}
+            title={selecting ? undefined : t("cv.select.start")}
+            onClick={selecting ? stop : () => setSelecting(true)}
+          >
+            {selecting ? t("cancel") : <PhoneIcon name="selection" size={22} strong />}
           </button>
         ) : null}
       </div>
@@ -96,8 +102,6 @@ export function LettersPanel({ letters }: { letters: LetterRow[] }) {
             {all ? t("cv.select.none") : t("cv.select.all")}
           </button>
         </div>
-      ) : letters.length > 0 ? (
-        <p className="nb-meta nb-lt-aide">{t("letters.help")}</p>
       ) : null}
       {letters.length === 0 ? (
         <p className="nb-pf-vide nb-cr-vide-cv">{t("docs.lettersEmpty")}</p>

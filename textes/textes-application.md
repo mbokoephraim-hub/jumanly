@@ -9970,7 +9970,7 @@ Conventions :
 | `phoneCareer.when.hourMinute` | {hour} h {minute} |
 | `phoneCareer.cv.score` | {score}/100 |
 | `phoneCareer.cv.empty` | Pas encore de CV. Orbi peut en préparer un depuis votre profil, en une minute. |
-| `phoneCareer.cv.newLong` | + Nouveau CV · modèle, import ou Orbi |
+| `phoneCareer.cv.newLong` | + Nouveau CV |
 | `phoneCareer.cv.changedToday` | aujourd’hui |
 | `phoneCareer.cv.changedYesterday` | hier |
 | `phoneCareer.cv.meta` | {template} · {when} |
