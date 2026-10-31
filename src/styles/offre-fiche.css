@@ -11,3 +11,116 @@
 .nb-ex-comp {
   margin-bottom: 12px;
 }
+
+/* Section titles with the menu drawings, and « En bref » redrawn (Ephraïm, 31/10/2026). */
+.nb-ex-h3-art {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+.nb-ex .nb-ex-art {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+}
+.nb-ex .nb-ex-art svg {
+  width: 28px;
+  height: 28px;
+}
+.nb-ex-br {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.nb-ex-br-tuile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 14px;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--nb-creme) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--nb-creme) 9%, transparent);
+}
+.nb-ex-br-tuile[data-large] {
+  grid-column: 1 / -1;
+}
+.nb-ex-br-ic {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 4px;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--nb-lime) 16%, transparent);
+  color: var(--nb-lime);
+}
+.nb-ex-br-tuile small {
+  font-size: 12.5px;
+  color: var(--nb-brume);
+}
+.nb-ex-br-tuile > b {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.nb-ex-langues {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  margin: 6px 0 0;
+  padding: 0;
+}
+.nb-ex-langues li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 4px;
+}
+.nb-ex-langues li b {
+  font-size: 15px;
+  font-weight: 700;
+}
+.nb-ex-niveau {
+  display: flex;
+  gap: 3px;
+}
+.nb-ex-niveau i {
+  width: 14px;
+  height: 7px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--nb-creme) 14%, transparent);
+}
+.nb-ex-niveau i[data-plein] {
+  background: var(--nb-lime);
+}
+.nb-ex-niveau-t {
+  grid-column: 1 / -1;
+  font-size: 12.5px;
+  color: var(--nb-brume);
+}
+.nb-ex-br-tuile[data-large] {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 12px;
+}
+.nb-ex-br-tuile[data-large] .nb-ex-br-ic {
+  grid-row: span 2;
+  margin: 0;
+}
+.nb-ex-br-tuile[data-large] small,
+.nb-ex-br-tuile[data-large] > b {
+  grid-column: 2;
+}
+.nb-ex-br-tuile[data-large] .nb-ex-br-ic:has(+ small + .nb-ex-langues) {
+  grid-row: auto;
+}
+.nb-ex-br-tuile[data-large] .nb-ex-langues {
+  grid-column: 1 / -1;
+  margin-top: 10px;
+}

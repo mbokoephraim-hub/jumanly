@@ -11037,6 +11037,16 @@
       "education": "Niveau d’études",
       "languages": "Langues",
       "openings": "Postes à pourvoir",
+      "openingsCount": "{count, plural, one {# poste} other {# postes}}",
+      "languageLevel": "{level} · {word}",
+      "cefr": {
+        "A1": "Débutant",
+        "A2": "Élémentaire",
+        "B1": "Intermédiaire",
+        "B2": "Avancé",
+        "C1": "Autonome",
+        "C2": "Maîtrise"
+      },
       "closes": "Candidatures jusqu’au",
       "companyAbout": "À propos de {company}",
       "benefits": "Ce qu’on offre",

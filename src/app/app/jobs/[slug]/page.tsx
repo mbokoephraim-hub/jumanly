@@ -252,34 +252,17 @@ export default async function TalentJobPage({
           ? [{ kind: "salary" as const, text: salaryText(d, job) }]
           : []),
       ],
-      details: [
-        ...(job.educationLevels.length > 0
-          ? [
-              {
-                label: tx("offer.education"),
-                value: job.educationLevels
-                  .map((key) => d(`phoneRhOffres.wizard.educationLevels.${key}`))
-                  .join(", "),
-              },
-            ]
-          : []),
-        ...(parseLanguages(job.languagesRequired).length > 0
-          ? [
-              {
-                label: tx("offer.languages"),
-                value: parseLanguages(job.languagesRequired)
-                  .map((item) =>
-                    item.level
-                      ? `${languageLabel(item.code)} (${item.level})`
-                      : languageLabel(item.code),
-                  )
-                  .join(", "),
-              },
-            ]
-          : []),
-        { label: tx("offer.openings"), value: String(job.openings) },
-        ...(job.closesAt ? [{ label: tx("offer.closes"), value: formatDate(job.closesAt) }] : []),
-      ],
+      brief: {
+        education: job.educationLevels.map((key) =>
+          d(`phoneRhOffres.wizard.educationLevels.${key}`),
+        ),
+        languages: parseLanguages(job.languagesRequired).map((item) => ({
+          name: languageLabel(item.code),
+          level: item.level.toUpperCase(),
+        })),
+        openings: job.openings,
+        closes: job.closesAt ? formatDate(job.closesAt) : null,
+      },
       companyAbout: job.companyAbout || null,
       match: ok
         ? {
