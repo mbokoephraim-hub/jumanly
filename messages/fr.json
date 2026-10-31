@@ -11917,8 +11917,8 @@
       "next": "{count, plural, =0 {Vous êtes au plus haut stade.} one {Encore une étape pour passer « {stage} ».} other {Encore # étapes pour passer « {stage} ».}}",
       "noStage": "Faites votre diagnostic",
       "noStageText": "6 à 8 minutes pour savoir où vous en êtes et par quoi commencer.",
-      "diagnostic": "Commencer maintenant",
-      "urgent": "À faire en premier",
+      "diagnostic": "Analyser",
+      "urgent": "À faire maintenant",
       "report": "Voir mon diagnostic",
       "fromDiagnostic": "Conseillé par votre diagnostic",
       "top": "Vous êtes au plus haut stade. Gardez votre profil à jour.",
@@ -11965,7 +11965,10 @@
         "plan": "{plan, select, none {Une formule avec les simulations} other {Une formule avec les simulations, dès {plan}}}",
         "planCta": "Voir les formules",
         "done": "Fait",
-        "free": "Postuler reste gratuit, toujours."
+        "free": "Postuler reste gratuit, toujours.",
+        "lockedPlan": "Vous ne pouvez pas faire de simulation d’entretien avec la formule que vous utilisez.",
+        "lockedApply": "Candidatez d’abord à une offre pour vous entraîner sur elle.",
+        "upgrade": "{plan, select, none {Changer de formule} other {Passer à {plan}}}"
       },
       "prepare": "À préparer",
       "reservedTag": "Réservé",

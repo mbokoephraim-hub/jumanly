@@ -9808,8 +9808,8 @@ Conventions :
 | `phoneCareer.progression.next` | {count, plural, =0 {Vous êtes au plus haut stade.} one {Encore une étape pour passer « {stage} ».} other {Encore # étapes pour passer « {stage} ».}} |
 | `phoneCareer.progression.noStage` | Faites votre diagnostic |
 | `phoneCareer.progression.noStageText` | 6 à 8 minutes pour savoir où vous en êtes et par quoi commencer. |
-| `phoneCareer.progression.diagnostic` | Commencer maintenant |
-| `phoneCareer.progression.urgent` | À faire en premier |
+| `phoneCareer.progression.diagnostic` | Analyser |
+| `phoneCareer.progression.urgent` | À faire maintenant |
 | `phoneCareer.progression.report` | Voir mon diagnostic |
 | `phoneCareer.progression.fromDiagnostic` | Conseillé par votre diagnostic |
 | `phoneCareer.progression.top` | Vous êtes au plus haut stade. Gardez votre profil à jour. |
@@ -9840,6 +9840,9 @@ Conventions :
 | `phoneCareer.training.sim.planCta` | Voir les formules |
 | `phoneCareer.training.sim.done` | Fait |
 | `phoneCareer.training.sim.free` | Postuler reste gratuit, toujours. |
+| `phoneCareer.training.sim.lockedPlan` | Vous ne pouvez pas faire de simulation d’entretien avec la formule que vous utilisez. |
+| `phoneCareer.training.sim.lockedApply` | Candidatez d’abord à une offre pour vous entraîner sur elle. |
+| `phoneCareer.training.sim.upgrade` | {plan, select, none {Changer de formule} other {Passer à {plan}}} |
 | `phoneCareer.training.prepare` | À préparer |
 | `phoneCareer.training.reservedTag` | Réservé |
 | `phoneCareer.training.prep.interview` | Préparer l’entretien : {title} |

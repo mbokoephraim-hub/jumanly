@@ -253,10 +253,7 @@ function ProgressionPanel({
       {progression.diagnostic ? (
         // No diagnostic yet (Ephraïm, 31/10/2026): the first thing to do, put forward.
         <section className="nb-cr-urgent" aria-labelledby="nb-cr-urgent-t">
-          <span className="nb-cr-urgent-b">
-            <i aria-hidden />
-            {t("progression.urgent")}
-          </span>
+          <span className="nb-cr-urgent-b">{t("progression.urgent")}</span>
           <h2 id="nb-cr-urgent-t">{progression.stage}</h2>
           <p>{progression.next}</p>
           <Link href="/app/career/diagnostic" className="nb-cr-urgent-go">
@@ -291,35 +288,6 @@ function ProgressionPanel({
           </ol>
         </div>
       )}
-      <div className="nb-cr-chiffres">
-        <div className="nb-cr-carte">
-          <span className="nb-cr-ch-t">
-            <MenuArt name="trainings" size="sm" />
-            <small>{t("progression.courses")}</small>
-          </span>
-          <Ring percent={progression.coursesPercent} color="#C3A6FF" size={56}>
-            {progression.courses}
-          </Ring>
-        </div>
-        <div className="nb-cr-carte">
-          <span className="nb-cr-ch-t">
-            <MenuArt name="talents" size="sm" />
-            <small>{t("progression.profile")}</small>
-          </span>
-          <Ring percent={progression.percent} color="var(--nb-lime)" size={56}>
-            {t("completeValue", { percent: progression.percent })}
-          </Ring>
-        </div>
-        <div className="nb-cr-carte">
-          <span className="nb-cr-ch-t">
-            <MenuArt name="jobs" size="sm" />
-            <small>{t("progression.applications")}</small>
-          </span>
-          <Ring percent={progression.applicationsPercent} color="#7CC4FF" size={56}>
-            {progression.applications}
-          </Ring>
-        </div>
-      </div>
       <FollowUp view={view} letters={letters} onTab={onTab} />
       {progression.steps.length > 0 ? (
         <>
@@ -329,10 +297,16 @@ function ProgressionPanel({
               const color = STEP_COLORS[index % STEP_COLORS.length]!;
               return (
                 <li key={step.title}>
-                  <Link href={step.href}>
+                  <Link
+                    href={step.href}
+                    style={{
+                      background: `linear-gradient(135deg, ${tint(color, "2e")}, ${tint(color, "0d")})`,
+                      boxShadow: `inset 0 0 0 1px ${tint(color, "55")}`,
+                    }}
+                  >
                     <span
                       className="nb-cr-num"
-                      style={{ background: tint(color, "33"), color }}
+                      style={{ background: color, color: "#0f3f37" }}
                       aria-hidden
                     >
                       {index + 1}
@@ -440,40 +414,35 @@ function TrainingBlock({ training }: { training: CareerView["training"] }) {
       </h2>
       <div className="nb-cr-carte nb-cr-sim" data-ouvert={training.open ? "" : undefined}>
         <span className="nb-cr-sim-i" aria-hidden>
-          <PhoneIcon name={training.open ? "micro" : "cadenas"} size={20} />
+          <PhoneIcon
+            name={training.open ? "micro" : "cadenas"}
+            size={training.open ? 20 : 24}
+            strong
+          />
         </span>
         <div className="nb-cr-sim-t">
           <b>{t("training.sim.title")}</b>
-          <small>{training.open ? t("training.sim.open") : t("training.sim.reserved")}</small>
+          <small>
+            {training.open
+              ? t("training.sim.open")
+              : !training.plan
+                ? t("training.sim.lockedPlan")
+                : t("training.sim.lockedApply")}
+          </small>
         </div>
         {training.open ? (
           <Link href={training.start} className="nb-bouton" data-plein="">
             {t("training.sim.start")}
           </Link>
         ) : (
-          <ul className="nb-cr-sim-c">
-            <li data-fait={training.applied ? "" : undefined}>
-              <span aria-hidden>
-                {training.applied ? <PhoneIcon name="coche" size={14} /> : null}
-              </span>
-              <span>{t("training.sim.applied")}</span>
-              {training.applied ? (
-                <em>{t("training.sim.done")}</em>
-              ) : (
-                <Link href="/app/jobs">{t("training.sim.appliedCta")}</Link>
-              )}
-            </li>
-            <li data-fait={training.plan ? "" : undefined}>
-              <span aria-hidden>{training.plan ? <PhoneIcon name="coche" size={14} /> : null}</span>
-              <span>{t("training.sim.plan", { plan: training.planName ?? "none" })}</span>
-              {training.plan ? (
-                <em>{t("training.sim.done")}</em>
-              ) : (
-                <Link href="/app/abonnement/formules">{t("training.sim.planCta")}</Link>
-              )}
-            </li>
-            <li className="nb-cr-sim-gratuit">{t("training.sim.free")}</li>
-          </ul>
+          <Link
+            href={training.plan ? "/app/jobs" : "/app/abonnement/formules"}
+            className="nb-cr-sim-go"
+          >
+            {training.plan
+              ? t("training.sim.appliedCta")
+              : t("training.sim.upgrade", { plan: training.planName ?? "none" })}
+          </Link>
         )}
       </div>
 
@@ -488,7 +457,7 @@ function TrainingBlock({ training }: { training: CareerView["training"] }) {
                   <Link href={item.href}>
                     <span
                       className="nb-cr-num"
-                      style={{ background: tint(color, "33"), color }}
+                      style={{ background: color, color: "#0f3f37" }}
                       aria-hidden
                     >
                       <PhoneIcon name={item.locked ? "cadenas" : "idee"} size={17} />
