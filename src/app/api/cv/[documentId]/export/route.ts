@@ -3,7 +3,7 @@ import { getCurrentUser } from "@/server/auth/session";
 import { exportOwnCv } from "@/features/cv/export/export";
 
 /** Chromium needs time and memory (docs/modeles-cv § 6.3). */
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 /** « Exporter mon CV » (POST, `?format=pdf`): the PDF file, or `{ error }` with the reason. */
 export async function POST(

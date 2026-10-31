@@ -193,25 +193,28 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
     if (id) uses.set(id, (uses.get(id) ?? 0) + 1);
   }
 
-  const rows = applications.map((application) => {
-    const status = talentStatus(application, now);
-    const interview = application.interviews.find((item) => item.startsAt && item.startsAt > now);
-    return {
-      id: application.id,
-      title: application.job.title,
-      company: application.job.organization.name,
-      logo: application.job.organization.logo,
-      jobSlug: application.job.slug,
-      createdAt: application.createdAt,
-      viewedAt: application.viewedAt,
-      status,
-      bars: applicationBars(status),
-      interviewAt: interview?.startsAt ?? null,
-      open: isJobOpen(application.job, now),
-      /** The score shown when the person applied, frozen with the application. */
-      score: application.matchScore,
-    };
-  });
+  // A withdrawn application leaves the list (Ephraïm, 31/10/2026): the person chose to drop it.
+  const rows = applications
+    .filter((application) => application.status !== "withdrawn")
+    .map((application) => {
+      const status = talentStatus(application, now);
+      const interview = application.interviews.find((item) => item.startsAt && item.startsAt > now);
+      return {
+        id: application.id,
+        title: application.job.title,
+        company: application.job.organization.name,
+        logo: application.job.organization.logo,
+        jobSlug: application.job.slug,
+        createdAt: application.createdAt,
+        viewedAt: application.viewedAt,
+        status,
+        bars: applicationBars(status),
+        interviewAt: interview?.startsAt ?? null,
+        open: isJobOpen(application.job, now),
+        /** The score shown when the person applied, frozen with the application. */
+        score: application.matchScore,
+      };
+    });
   const active = rows.filter(
     (row) => !["withdrawn", "notSelected", "hired", "jobClosed"].includes(row.status),
   );
@@ -304,7 +307,7 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
       priorities,
       diagnosticId: diagnostic?.id ?? null,
       courses: { done: courses.filter((course) => course.finished).length, all: courses.length },
-      applications: applications.length,
+      applications: applications.filter((item) => item.status !== "withdrawn").length,
       upcoming: upcoming ? { id: upcoming.id, at: upcoming.interviewAt! } : null,
     },
     /** « Mes entraînements »: what to prepare and the follow-up of the simulations. */

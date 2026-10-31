@@ -17,14 +17,31 @@ const nextConfig: NextConfig = {
   experimental: { serverActions: { bodySizeLimit: "4.2mb" }, staleTimes: { static: 30 } },
   // Export PDF des CV par Chromium (docs/modeles-cv § 6.3) : ces paquets restent hors du bundle.
   serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium", "playwright-core"],
+  // The CV export also carries the Sora files: when Chromium fails, the CV is drawn by react-pdf
+  // (src/server/pdf/cv-simple.tsx, Ephraïm 31/10/2026).
   outputFileTracingIncludes: {
-    "/api/cv/[documentId]/export": ["./node_modules/@sparticuz/chromium/bin/**"],
+    "/api/cv/[documentId]/export": [
+      "./node_modules/@sparticuz/chromium/bin/**",
+      "./public/fonts/cv/Sora-*.ttf",
+    ],
     // « Télécharger en PDF » of the phone and of the studio (Ephraïm, 29/10: it failed in
     // production because Chromium was not shipped with this route).
-    "/app/career/cv/[id]/pdf": ["./node_modules/@sparticuz/chromium/bin/**"],
-    "/app/jobs/candidatures/[id]/cv": ["./node_modules/@sparticuz/chromium/bin/**"],
-    "/app/hire/candidats/[applicationId]/cv": ["./node_modules/@sparticuz/chromium/bin/**"],
-    "/app/messages/[id]/document/[messageId]": ["./node_modules/@sparticuz/chromium/bin/**"],
+    "/app/career/cv/[id]/pdf": [
+      "./node_modules/@sparticuz/chromium/bin/**",
+      "./public/fonts/cv/Sora-*.ttf",
+    ],
+    "/app/jobs/candidatures/[id]/cv": [
+      "./node_modules/@sparticuz/chromium/bin/**",
+      "./public/fonts/cv/Sora-*.ttf",
+    ],
+    "/app/hire/candidats/[applicationId]/cv": [
+      "./node_modules/@sparticuz/chromium/bin/**",
+      "./public/fonts/cv/Sora-*.ttf",
+    ],
+    "/app/messages/[id]/document/[messageId]": [
+      "./node_modules/@sparticuz/chromium/bin/**",
+      "./public/fonts/cv/Sora-*.ttf",
+    ],
     // Job sheet drawn by Jumanly (react-pdf, no browser): the Sora font and the logo it reads.
     "/api/offres/[slug]/fiche": [
       "./public/fonts/cv/Sora-*.ttf",

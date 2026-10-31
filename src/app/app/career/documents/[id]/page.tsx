@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { CopyButton } from "@/components/talent/copy-button";
@@ -17,6 +18,7 @@ import { db } from "@/server/db";
 import { DOCUMENTS_GATE, getDocument, TEXT_MAX } from "@/server/services/career-documents";
 import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
 import { isPhone } from "@/server/view";
+import { isCoverLetter } from "@/server/services/letter-design";
 import { PhoneLetter } from "@/components/phone/career/letter-view";
 import { orbiLimitCode } from "@/components/talent/cv/orbi-limit";
 
@@ -46,7 +48,7 @@ export default async function DocumentPage({
 
   if (await isPhone()) {
     const plans = await listPublicPlans(db);
-    const notices = ["cree", "enregistre", "relu", "utilisee"] as const;
+    const notices = ["cree", "enregistre", "relu", "utilisee", "retenue"] as const;
     const notice =
       query.erreur === "input" ? "input" : (notices.find((value) => value === query.ok) ?? null);
     return (
@@ -180,6 +182,18 @@ export default async function DocumentPage({
               </a>
             </span>
           </div>
+          {isCoverLetter(data) && (
+            <div className="t-li">
+              <span className="t-cases t-c1">
+                <TalentIcon name="modifier" size="s" />
+              </span>
+              <span className="t-t">
+                <Link href={`/app/career/documents/${document.id}/modele`} className="t-lien">
+                  <b>{t("letterModel.design.change")}</b>
+                </Link>
+              </span>
+            </div>
+          )}
           <form action={deleteDocumentAction} className="t-li t-danger">
             <input type="hidden" name="id" value={document.id} />
             <span className="t-cases">

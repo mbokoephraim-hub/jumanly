@@ -2850,7 +2850,7 @@ Conventions :
 | `candidature.requests.none` | Vous n'avez pas encore de document à envoyer. Ajoutez-le dans Mes documents, ou répondez dans la conversation. |
 | `candidature.requests.send` | Envoyer ce document |
 | `candidature.withdraw.cta` | Retirer ma candidature |
-| `candidature.withdraw.title` | Retirer votre candidature ? |
+| `candidature.withdraw.title` | Voulez-vous vraiment retirer votre candidature ? |
 | `candidature.withdraw.text` | {company} sera informé. Vous pourrez postuler à d'autres offres à tout moment. |
 | `candidature.withdraw.confirm` | Oui, retirer ma candidature |
 
@@ -3463,7 +3463,7 @@ Conventions :
 | `point.weak.none` | Rien de pressant : continuez sur votre lancée. |
 | `point.next.title` | Prochaine action |
 | `point.next.course` | Formation « {course} », {minutes} min |
-| `point.next.diagnostic` | Faire mon diagnostic de carrière, 6 à 8 minutes |
+| `point.next.diagnostic` | Faire mon diagnostic de carrière, 3 minutes |
 | `point.next.profile` | Décrire une expérience avec un résultat, 10 min |
 | `point.next.start` | Commencer |
 | `point.diagnostic` | Voir mon diagnostic |
@@ -6097,8 +6097,8 @@ Conventions :
 | `career.diagnostic.welcome.text` | Six dimensions, une question à la fois. Vous voyez votre profil se dessiner pendant que vous répondez, puis vous recevez un bilan expliqué point par point. |
 | `career.diagnostic.welcome.duration` | 3 minutes |
 | `career.diagnostic.welcome.launch` | Lancer mon diagnostic |
-| `career.diagnostic.welcome.resume` | Reprendre mon diagnostic, étape {current} sur {total} |
-| `career.diagnostic.welcome.restart` | Recommencer à zéro |
+| `career.diagnostic.welcome.resume` | Reprendre · étape {current}/{total} |
+| `career.diagnostic.welcome.restart` | Recommencer |
 | `career.diagnostic.welcome.prefillHint` | Métier visé, compétences, langues, études et CV déjà remplis : vous pouvez tout modifier. |
 | `career.diagnostic.welcome.hook.dimensions` | 6 dimensions |
 | `career.diagnostic.welcome.hook.dimensionsText` | Projet, compétences, expérience, outils, entretiens, recherche. |
@@ -9979,7 +9979,7 @@ Conventions :
 | `phoneCareer.progression.stage.competitive` | Compétitif |
 | `phoneCareer.progression.next` | {count, plural, =0 {Vous êtes au plus haut stade.} one {Encore une étape pour passer « {stage} ».} other {Encore # étapes pour passer « {stage} ».}} |
 | `phoneCareer.progression.noStage` | Faites votre diagnostic |
-| `phoneCareer.progression.noStageText` | 6 à 8 minutes pour savoir où vous en êtes et par quoi commencer. |
+| `phoneCareer.progression.noStageText` | 3 minutes pour savoir où vous en êtes et par quoi commencer. |
 | `phoneCareer.progression.diagnostic` | Analyser |
 | `phoneCareer.progression.urgent` | À faire maintenant |
 | `phoneCareer.progression.report` | Voir mon diagnostic |
@@ -10558,6 +10558,15 @@ Conventions :
 | `phoneCareer.cv.menu.namePrimary` | CV principal |
 | `phoneCareer.cv.menu.nameSecond` | CV candidatures spontanées |
 | `phoneCareer.cv.menu.nameThird` | CV stage |
+| `phoneCareer.cv.menu.renameHelp` | Nommez chaque CV selon son usage ou son objectif : vous le retrouvez d’un coup d’œil. |
+| `phoneCareer.cv.menu.nameCdd` | CV CDD |
+| `phoneCareer.cv.menu.nameCdi` | CV CDI |
+| `phoneCareer.cv.menu.nameInterim` | CV intérim |
+| `phoneCareer.cv.menu.downloadPdf` | Télécharger |
+| `phoneCareer.cv.menu.word` | Télécharger en Word |
+| `phoneCareer.cv.menu.preparing` | Préparation du PDF… |
+| `phoneCareer.cv.menu.downloaded` | PDF téléchargé. |
+| `phoneCareer.cv.menu.downloadError` | Le PDF n’a pas pu être préparé. Réessayez dans un instant. |
 | `phoneCareer.cv.menu.primaryLong` | Utiliser par défaut pour postuler |
 | `phoneCareer.cv.menu.color` | Couleur |
 | `phoneCareer.cv.menu.colorNone` | Sans couleur |
@@ -10697,9 +10706,10 @@ Conventions :
 | `phoneCareer.application.orbiPlaceholder` | Écrire à Orbi… |
 | `phoneCareer.application.orbiSend` | Demander à Orbi |
 | `phoneCareer.application.withdraw` | Retirer ma candidature |
-| `phoneCareer.application.withdrawQuestion` | Retirer votre candidature ? |
+| `phoneCareer.application.withdrawQuestion` | Voulez-vous vraiment retirer votre candidature ? |
 | `phoneCareer.application.withdrawText` | {company} sera prévenu. Vous pourrez postuler à d’autres offres à tout moment. |
-| `phoneCareer.application.withdrawConfirm` | Retirer |
+| `phoneCareer.application.withdrawConfirm` | Oui, retirer |
+| `phoneCareer.application.withdrawNo` | Non |
 | `phoneCareer.application.withdrawn` | Candidature retirée |
 | `phoneCareer.application.error` | Cela n’a pas marché. Réessayez dans un instant. |
 
@@ -10748,6 +10758,67 @@ Conventions :
 | `phoneLetter.intro.start` | C’est parti |
 | `phoneLetter.intro.skip` | Passer |
 | `phoneLetter.check.textExample` | Écrivez ou collez votre lettre ici… |
+
+### Modèles visuels des lettres de motivation
+
+*Demande d'Ephraïm du 31/10/2026 : après « Retenir cette lettre », la personne choisit le modèle visuel (six modèles à bandeau de couleur, photo ronde, carrée ou sans photo, couleur), le valide, voit l'aperçu, puis enregistre : le PDF se télécharge et la lettre reste dans Mes documents. Le premier modèle est ouvert à tous, les autres viennent avec la formule.*
+
+| Clé | Texte |
+|---|---|
+| `letterModel.back` | Retour |
+| `letterModel.retain` | Retenir cette lettre |
+| `letterModel.next.title` | Votre texte est retenu |
+| `letterModel.next.text` | Étape suivante : définissez le modèle visuel de votre lettre de motivation. |
+| `letterModel.next.go` | Passer à l’étape suivante |
+| `letterModel.heading` | Lettre de motivation |
+| `letterModel.date` | Le {date} |
+| `letterModel.recipient` | À l’attention de {company} |
+| `letterModel.subject` | Objet : candidature au poste de {title} |
+| `letterModel.pick.title` | Le modèle visuel |
+| `letterModel.pick.lead` | Définissez le modèle visuel de votre lettre : choisissez un modèle, une couleur et votre photo. |
+| `letterModel.pick.color` | Couleur |
+| `letterModel.pick.photo` | Photo |
+| `letterModel.pick.noPhoto` | Vous n’avez pas encore de photo : vos initiales s’affichent à la place. |
+| `letterModel.pick.addPhoto` | Ajouter une photo |
+| `letterModel.pick.templates` | {count, plural, one {# modèle} other {# modèles}} |
+| `letterModel.pick.locked` | Avec {plan} |
+| `letterModel.pick.lockedPaid` | Formule payante |
+| `letterModel.pick.lockedNote` | Le modèle {name} est inclus dans {plan}. |
+| `letterModel.pick.lockedNotePaid` | Le modèle {name} est inclus dans les formules payantes. |
+| `letterModel.pick.upgrade` | Voir les formules |
+| `letterModel.pick.validate` | Valider le modèle |
+| `letterModel.photo.rond` | Ronde |
+| `letterModel.photo.carre` | Carrée |
+| `letterModel.photo.aucune` | Sans photo |
+| `letterModel.template.horizon` | Horizon |
+| `letterModel.template.centre` | Centré |
+| `letterModel.template.carte` | Carte |
+| `letterModel.template.ruban` | Ruban |
+| `letterModel.template.duo` | Duo |
+| `letterModel.template.signature` | Signature |
+| `letterModel.color.sapin` | Vert sapin |
+| `letterModel.color.marine` | Bleu marine |
+| `letterModel.color.bleu` | Bleu |
+| `letterModel.color.petrole` | Bleu pétrole |
+| `letterModel.color.foret` | Vert forêt |
+| `letterModel.color.bordeaux` | Bordeaux |
+| `letterModel.color.prune` | Prune |
+| `letterModel.color.violet` | Violet |
+| `letterModel.color.encre` | Noir encre |
+| `letterModel.preview.title` | Aperçu de votre lettre |
+| `letterModel.preview.editText` | Texte |
+| `letterModel.preview.other` | Choisir un autre modèle |
+| `letterModel.preview.save` | Enregistrer cette lettre |
+| `letterModel.preview.saving` | Enregistrement… |
+| `letterModel.preview.error` | Le PDF n’a pas pu être créé. Réessayez dans un instant. |
+| `letterModel.saved.title` | Votre lettre est enregistrée |
+| `letterModel.saved.text` | Le PDF est téléchargé. Vous retrouvez la lettre dans Mes documents. |
+| `letterModel.saved.back` | Revenir à mes documents |
+| `letterModel.design.current` | Modèle {name} |
+| `letterModel.design.hint` | Modèle, couleur et photo |
+| `letterModel.design.change` | Changer le design |
+| `letterModel.error.locked` | Ce modèle n’est pas inclus dans votre formule. |
+| `letterModel.error.input` | Choisissez un modèle, une couleur et la photo. |
 
 ### Modèle B · Simulation d’entretien au téléphone
 

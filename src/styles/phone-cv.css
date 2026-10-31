@@ -3204,3 +3204,9 @@ textarea.nb-lt-zone[data-grande] {
     animation: none;
   }
 }
+/* While Orbi writes, the buttons of the form wait (a second touch made a second letter). */
+.nb-lt-bt:disabled,
+.nb-lt-annuler:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}

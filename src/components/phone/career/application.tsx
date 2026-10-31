@@ -374,7 +374,7 @@ export function PhoneApplication({ view }: { view: ApplicationView }) {
             {t("withdrawConfirm")}
           </button>
           <button type="button" className="nb-bouton" data-large="" data-contour="" onClick={close}>
-            {t("cancel")}
+            {t("withdrawNo")}
           </button>
         </div>
       </PhoneSheet>

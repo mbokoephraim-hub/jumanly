@@ -3,6 +3,7 @@ import { OrbiDisc, PhoneIcon } from "@/components/phone/icon";
 import { TalentIcon } from "@/components/talent/icon";
 import { LetterOffer } from "@/components/phone/career/letter-offer";
 import { LetterPoints } from "@/components/phone/career/letter-points";
+import { OnceButton } from "@/components/phone/once-button";
 import { OrbiLimit, type OrbiLimitCode } from "@/components/talent/cv/orbi-limit";
 import {
   generateDocumentAction,
@@ -81,10 +82,10 @@ export async function PhoneNewLetter({
               <TalentIcon name="cadenas" size="s" />
               {t("phoneLetter.write.note", { count: aiFeatures.career_document.credits })}
             </p>
-            <button type="submit" className="nb-lt-bt" data-orbi="">
+            <OnceButton className="nb-lt-bt" data-orbi="">
               <OrbiDisc size={26} />
               {t("docs.letters.create.submit")}
-            </button>
+            </OnceButton>
           </form>
         )}
       </section>
@@ -129,13 +130,13 @@ export async function PhoneNewLetter({
                   placeholder={t("phoneLetter.check.textExample")}
                 />
               </div>
-              <button type="submit" formAction={saveOwnLetterAction} className="nb-lt-bt">
-                {t("phoneLetter.view.use")}
-              </button>
-              <button type="submit" className="nb-lt-annuler">
+              <OnceButton formAction={saveOwnLetterAction} className="nb-lt-bt">
+                {t("letterModel.retain")}
+              </OnceButton>
+              <OnceButton className="nb-lt-annuler">
                 <OrbiDisc size={24} />
                 {t("docs.letters.proofread.submit", { count: aiFeatures.proofread.credits })}
-              </button>
+              </OnceButton>
             </form>
           </section>
         </>

@@ -6,7 +6,7 @@ import { exportCvCopy } from "@/features/cv/export/export";
 import { pdfFileName, renderTextPdf } from "@/server/pdf/text-document";
 import { ConnectError, getConversation } from "@/server/services/connect";
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 /** A CV, a letter or a text sent in a conversation, for its two sides only. */
 export async function GET(

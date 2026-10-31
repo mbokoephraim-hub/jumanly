@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getCurrentUser } from "@/server/auth/session";
 import { exportOwnCv } from "@/features/cv/export/export";
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 /**
  * The « PDF » link of the editor (works without JavaScript): same export as
