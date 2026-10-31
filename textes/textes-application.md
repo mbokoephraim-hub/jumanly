@@ -3463,7 +3463,7 @@ Conventions :
 | `point.weak.none` | Rien de pressant : continuez sur votre lancée. |
 | `point.next.title` | Prochaine action |
 | `point.next.course` | Formation « {course} », {minutes} min |
-| `point.next.diagnostic` | Faire mon diagnostic de carrière, 6 à 8 minutes |
+| `point.next.diagnostic` | Faire mon diagnostic de carrière, 3 minutes |
 | `point.next.profile` | Décrire une expérience avec un résultat, 10 min |
 | `point.next.start` | Commencer |
 | `point.diagnostic` | Voir mon diagnostic |
@@ -9869,7 +9869,7 @@ Conventions :
 | `phoneCareer.progression.stage.competitive` | Compétitif |
 | `phoneCareer.progression.next` | {count, plural, =0 {Vous êtes au plus haut stade.} one {Encore une étape pour passer « {stage} ».} other {Encore # étapes pour passer « {stage} ».}} |
 | `phoneCareer.progression.noStage` | Faites votre diagnostic |
-| `phoneCareer.progression.noStageText` | 6 à 8 minutes pour savoir où vous en êtes et par quoi commencer. |
+| `phoneCareer.progression.noStageText` | 3 minutes pour savoir où vous en êtes et par quoi commencer. |
 | `phoneCareer.progression.diagnostic` | Analyser |
 | `phoneCareer.progression.urgent` | À faire maintenant |
 | `phoneCareer.progression.report` | Voir mon diagnostic |
