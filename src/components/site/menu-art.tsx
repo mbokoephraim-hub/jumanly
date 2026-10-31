@@ -6,7 +6,21 @@ import { cx } from "@/lib/cx";
  * Rose for liveliness). Decorative only: the title next to it says what the entry is.
  */
 export type MenuArtName =
-  "talents" | "recruiters" | "companies" | "partners" | "trainings" | "jobs" | "pricing" | "about";
+  | "talents"
+  | "recruiters"
+  | "companies"
+  | "partners"
+  | "trainings"
+  | "jobs"
+  | "pricing"
+  | "about"
+  | "cv"
+  | "career"
+  | "connect"
+  | "free"
+  | "why"
+  | "privacy"
+  | "payment";
 
 const SAPIN = "#0f3f37";
 const LIME = "#a6f26b";
@@ -25,19 +39,36 @@ const tiles: Record<MenuArtName, string> = {
   jobs: "bg-[#dcf8ef]",
   pricing: "bg-[#ffe5e0]",
   about: "bg-[#e3f1ff]",
+  cv: "bg-[#ece8ff]",
+  career: "bg-[#e9fbd9]",
+  connect: "bg-[#fde7f0]",
+  free: "bg-[#dcf8ef]",
+  why: "bg-[#fff4d6]",
+  privacy: "bg-[#e3f1ff]",
+  payment: "bg-[#ffeedd]",
 };
 
-export function MenuArt({ name, className }: { name: MenuArtName; className?: string }) {
+export function MenuArt({
+  name,
+  size = "md",
+  className,
+}: {
+  name: MenuArtName;
+  /** md: menu entries; lg: cards of the home page. */
+  size?: "md" | "lg";
+  className?: string;
+}) {
   return (
     <span
       aria-hidden
       className={cx(
-        "jm-menu-art flex size-[52px] shrink-0 items-center justify-center rounded-[16px]",
+        "jm-menu-art flex shrink-0 items-center justify-center",
+        size === "lg" ? "size-16 rounded-[20px]" : "size-[52px] rounded-[16px]",
         tiles[name],
         className,
       )}
     >
-      <svg viewBox="0 0 48 48" className="size-9" fill="none">
+      <svg viewBox="0 0 48 48" className={size === "lg" ? "size-11" : "size-9"} fill="none">
         {drawings[name]}
       </svg>
     </span>
@@ -126,6 +157,94 @@ const drawings: Record<MenuArtName, React.ReactNode> = {
         d="M24 28s-8-4.7-8-10a4.5 4.5 0 0 1 8-2.8 4.5 4.5 0 0 1 8 2.8c0 5.3-8 10-8 10z"
         fill={LIME}
       />
+    </>
+  ),
+  // A CV sheet with a photo and lines.
+  cv: (
+    <>
+      <rect x="9" y="4" width="30" height="40" rx="5" fill={LILAS} />
+      <circle cx="19" cy="15" r="5" fill="#fff" />
+      <rect x="15" y="25" width="18" height="3" rx="1.5" fill="#fff" />
+      <rect x="15" y="31" width="13" height="3" rx="1.5" fill="#fff" />
+      <path
+        d="M33 30l4 4 8-9"
+        stroke={SAPIN}
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </>
+  ),
+  // Bars that grow, an arrow going up.
+  career: (
+    <>
+      <rect x="6" y="30" width="8" height="12" rx="2.5" fill={MENTHE} />
+      <rect x="18" y="22" width="8" height="20" rx="2.5" fill={LIME} />
+      <rect x="30" y="13" width="8" height="29" rx="2.5" fill={SAPIN} />
+      <path
+        d="M6 20L18 11l6 5L38 5"
+        stroke={CORAIL}
+        strokeWidth="3.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </>
+  ),
+  // Two speech bubbles.
+  connect: (
+    <>
+      <path
+        d="M6 7h24a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H16l-7 6v-6H6a4 4 0 0 1-4-4V11a4 4 0 0 1 4-4z"
+        fill={ROSE}
+      />
+      <path
+        d="M42 18H24a4 4 0 0 0-4 4v10a4 4 0 0 0 4 4h11l6 5v-5h1a4 4 0 0 0 4-4V22a4 4 0 0 0-4-4z"
+        fill={SAPIN}
+      />
+      <circle cx="28" cy="27" r="2" fill={LIME} />
+      <circle cx="34" cy="27" r="2" fill={LIME} />
+      <circle cx="40" cy="27" r="2" fill={LIME} />
+    </>
+  ),
+  // A check in a round seal.
+  free: (
+    <>
+      <circle cx="24" cy="24" r="19" fill={MENTHE} />
+      <circle cx="24" cy="24" r="13" fill="#fff" />
+      <path
+        d="M17 24.5l5 5 9-10"
+        stroke={SAPIN}
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </>
+  ),
+  // An eye and a spark: the « Pourquoi ? » of each suggestion.
+  why: (
+    <>
+      <path d="M3 24s8-13 21-13 21 13 21 13-8 13-21 13S3 24 3 24z" fill={AMBRE} />
+      <circle cx="24" cy="24" r="8" fill={SAPIN} />
+      <circle cx="27" cy="21" r="2.5" fill="#fff" />
+    </>
+  ),
+  // A padlock.
+  privacy: (
+    <>
+      <path d="M15 21v-6a9 9 0 0 1 18 0v6" stroke={SAPIN} strokeWidth="4.5" />
+      <rect x="8" y="20" width="32" height="24" rx="6" fill="#5aa9f0" />
+      <circle cx="24" cy="30" r="3.5" fill="#fff" />
+      <rect x="22.5" y="31" width="3" height="7" rx="1.5" fill="#fff" />
+    </>
+  ),
+  // A phone paying a card.
+  payment: (
+    <>
+      <rect x="6" y="14" width="30" height="20" rx="4" fill={CORAIL} />
+      <rect x="6" y="19" width="30" height="4" fill={SAPIN} />
+      <rect x="26" y="8" width="16" height="32" rx="4" fill={SAPIN} />
+      <rect x="29" y="12" width="10" height="20" rx="2" fill={LIME} />
+      <circle cx="34" cy="36" r="1.6" fill="#fff" />
     </>
   ),
 };

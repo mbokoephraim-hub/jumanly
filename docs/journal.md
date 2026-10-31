@@ -5272,3 +5272,11 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 
 - Depuis la fusion de la liste d'attente v2 (#254), la construction de production échouait sur `/questionnaire-test/[token]` (« uncached or runtime data during prerendering ») : aucune version n'était plus mise en ligne, d'où le menu et l'accueil du 30/10 invisibles sur jumanly.io.
 - Correctif : `generateStaticParams` avec un jeton de démonstration (`aucun`), comme `/offres/[slug]` ; les vrais liens sont rendus à la demande. `next build` passe en local.
+
+## 2026-10-31 · Accueil : sections claires et sombres en alternance
+
+- Demande d'Ephraïm : fond clair derrière l'accueil (le « Crème doux » du téléphone), alterner sections claires et sombres, titres verts ou blancs, icônes dans le style du menu, enlever les lignes du menu et le bloc de chiffres (0 USD, 5, 100 %, 2).
+- Nouveau ton `clair` de `MarketingSection` (`jm-light jm-section-clair`, fond #f2ede5, cartes #fbf8f3, étiquettes vert clair, titres Sapin). Ordre : accueil (fond crème, carte sombre), Pour qui (sombre), Parcours (clair), Modules (sombre), Formations (clair), Offres (sombre), Forfaits (clair), Engagements (sombre), FAQ (clair).
+- Toutes les icônes de l'accueil deviennent des dessins colorés de `menu-art.tsx` (7 nouveaux : cv, career, connect, free, why, privacy, payment), taille `lg`.
+- Menu : plus de lignes de séparation, titre de groupe en gris lisible, bord du panneau en simple liseré Lime (l'ancien bord dégradé se coupait au défilement).
+- Bloc de chiffres retiré (textes `home.stats.*` gardés, inutilisés). `next build` passe en local.

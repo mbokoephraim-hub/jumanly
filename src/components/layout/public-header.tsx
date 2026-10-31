@@ -127,8 +127,8 @@ export async function PublicHeader() {
             <Fragment key={group.key}>
               <p
                 className={cx(
-                  "jm-menu-item px-3 pb-1 text-[12px] font-semibold tracking-[0.08em] text-ardoise uppercase",
-                  index === 0 ? "pt-1" : "mt-2 border-t border-sapin/10 pt-4",
+                  "jm-menu-item px-3 pb-1 text-[12px] font-semibold tracking-[0.08em] text-[#3e524d] uppercase",
+                  index === 0 ? "pt-1" : "pt-5",
                 )}
               >
                 {t(`group.${group.key}`)}
@@ -145,7 +145,7 @@ export async function PublicHeader() {
               ))}
             </Fragment>
           ))}
-          <div className="jm-menu-item mt-2 flex flex-col gap-2.5 border-t border-sapin/10 pt-3.5">
+          <div className="jm-menu-item mt-3 flex flex-col gap-2.5 pt-1">
             <LanguageSwitch idPrefix="menu" className="self-start" />
             {signupOpen ? (
               <>

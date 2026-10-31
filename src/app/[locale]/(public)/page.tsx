@@ -8,19 +8,18 @@ import {
   Eyebrow,
   FaqAccordion,
   FloatCard,
-  IconTile,
   LimeCtaBand,
   MarketingSection,
   PhotoFrame,
   SectionHead,
   SiteButton,
-  StatRow,
   heroTitle,
   lead,
   sectionTitle,
   stagger,
 } from "@/components/site/marketing";
 import { InstallApp } from "@/components/site/install-app";
+import { MenuArt, type MenuArtName } from "@/components/site/menu-art";
 import { CountUp, MotionRoot } from "@/components/site/motion";
 import { PublicCourseCard, PublicJobCard } from "@/components/site/public-cards";
 import { buttonClasses } from "@/components/ui";
@@ -68,25 +67,25 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     {
       key: "talents",
       href: "/talents",
-      icon: "profil",
+      art: "talents",
     },
     {
       key: "rh",
       href: "/recruteurs",
-      icon: "hire",
+      art: "recruiters",
     },
     {
       key: "companies",
       href: "/entreprises",
-      icon: "equipe",
+      art: "companies",
     },
   ] as const;
 
   const steps = [
-    { key: "step1", icon: "learn" },
-    { key: "step2", icon: "cv" },
-    { key: "step3", icon: "jobs" },
-    { key: "step4", icon: "connect" },
+    { key: "step1", art: "trainings" },
+    { key: "step2", art: "cv" },
+    { key: "step3", art: "jobs" },
+    { key: "step4", art: "connect" },
   ] as const;
 
   // Prices are read from the plans in the database, never written in the code.
@@ -95,36 +94,31 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     {
       key: "talents",
       price: t("home.pricing.talents.price", { price: price(highestPrice(plans, "talent")) }),
-      icon: "profil",
+      art: "talents",
     },
     {
       key: "rh",
       price: t("home.pricing.rh.price", { price: price(highestPrice(plans, "rh")) }),
-      icon: "hire",
+      art: "recruiters",
     },
     {
       key: "companies",
       price: t("home.pricing.companies.price", { price: price(lowestPaidPrice(plans, "company")) }),
-      icon: "entreprise",
+      art: "companies",
     },
     {
       key: "partners",
       price: t("home.pricing.partners.price"),
-      icon: "certificat",
+      art: "partners",
     },
   ] as const;
 
   const commitments = [
-    ["free", "check"],
-    ["ai", "eye"],
-    ["privacy", "lock"],
-    ["payment", "mobile-money"],
+    ["free", "free"],
+    ["ai", "why"],
+    ["privacy", "privacy"],
+    ["payment", "payment"],
   ] as const;
-
-  const stats = (["free", "modules", "why", "payment"] as const).map((key) => ({
-    value: t(`home.stats.${key}.value`),
-    label: t(`home.stats.${key}.label`),
-  }));
 
   // The testimonials block stays hidden as long as it only holds placeholders.
   const testimonials = (["item1", "item2", "item3"] as const)
@@ -154,7 +148,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 
       {/* Hero (30/10/2026): a big rounded card in the brand gradient, the title centered with its
           last word in color, then colored cards stacked behind the photo of a real day. */}
-      <section className="px-3 pt-2 sm:px-5 lg:pt-4">
+      <section className="jm-section-clair -mt-[72px] px-3 pt-[80px] pb-10 sm:px-5 lg:-mt-[84px] lg:pt-[100px] lg:pb-16">
         <div className="jm-hero-card relative mx-auto max-w-[1240px] overflow-hidden rounded-[32px] px-5 pt-12 sm:px-8 lg:rounded-[44px] lg:pt-20">
           <div className="relative mx-auto flex max-w-[860px] flex-col items-center gap-6 text-center">
             <div className="jm-rise" style={stagger(0)}>
@@ -243,15 +237,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         </div>
       </section>
 
-      <section className="bg-papier px-4">
-        <div className="relative mx-auto max-w-[1200px] pb-12 lg:pb-16">
-          <div className="jm-card relative mx-auto mt-12 max-w-[1200px] rounded-[24px] px-2 py-6 lg:mt-16 lg:py-8">
-            <h2 className="sr-only">{t("home.stats.label")}</h2>
-            <StatRow items={stats} />
-          </div>
-        </div>
-      </section>
-
       {/* For whom? Three cards, each with its picture */}
       <MarketingSection innerClassName="flex flex-col gap-12">
         <div data-reveal>
@@ -271,8 +256,8 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               style={stagger(index)}
             >
               <div className="flex items-center justify-between gap-3">
-                <IconTile icon={audience.icon} size={48} className="bg-[#1c3a2c] text-lime" />
-                <span className="text-xs font-semibold text-neon">
+                <MenuArt name={audience.art} size="lg" />
+                <span className="text-xs font-semibold text-feuille-fonce">
                   {t(`home.audiences.${audience.key}.label`)}
                 </span>
               </div>
@@ -284,7 +269,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                   {t(`home.audiences.${audience.key}.text`)}
                 </p>
                 <div className="flex-1" />
-                <ArrowLink href={audience.href} stretched className="mt-2 text-lime">
+                <ArrowLink href={audience.href} stretched className="mt-2 text-feuille-fonce">
                   {t(`home.audiences.${audience.key}.cta`)}
                 </ArrowLink>
               </div>
@@ -293,8 +278,8 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         </ul>
       </MarketingSection>
 
-      {/* Journey: four numbered steps */}
-      <MarketingSection innerClassName="flex flex-col gap-12">
+      {/* Journey: four numbered steps, on the light « Crème doux » */}
+      <MarketingSection tone="clair" innerClassName="flex flex-col gap-12">
         <div className="flex flex-col gap-10">
           <div data-reveal>
             <SectionHead
@@ -311,19 +296,18 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                 className="jm-card jm-lift flex flex-col gap-4 rounded-[24px] p-6"
                 style={stagger(index)}
               >
-                <span
-                  aria-hidden
-                  className={cx(
-                    "flex size-12 shrink-0 items-center justify-center rounded-full text-[17px] font-semibold",
-                    "bg-[#1c3a2c] text-lime",
-                  )}
-                >
-                  {String(t(`home.journey.${step.key}.number`)).padStart(2, "0")}
-                </span>
+                <div className="flex items-start justify-between">
+                  <MenuArt name={step.art} size="lg" />
+                  <span
+                    aria-hidden
+                    className="text-[40px] leading-none font-semibold tracking-[-0.04em] text-sapin/15"
+                  >
+                    {String(t(`home.journey.${step.key}.number`)).padStart(2, "0")}
+                  </span>
+                </div>
                 <div className="flex flex-col gap-1">
                   <h3 className="flex items-center gap-2 text-lg leading-7 font-semibold tracking-[-0.015em]">
                     {t(`home.journey.${step.key}.title`)}
-                    <Icon name={step.icon} className="size-[18px] text-feuille-fonce" />
                   </h3>
                   <p className="text-[15px] leading-6 text-ardoise">
                     {t(`home.journey.${step.key}.text`)}
@@ -349,7 +333,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           <ModuleCard
             name={t("home.modules.learn.name")}
             text={t("home.modules.learn.text")}
-            icon="learn"
+            art="trainings"
           />
           <li
             data-reveal
@@ -388,28 +372,28 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
           <ModuleCard
             name={t("home.modules.career.name")}
             text={t("home.modules.career.text")}
-            icon="career"
+            art="career"
           />
           <ModuleCard
             name={t("home.modules.jobs.name")}
             text={t("home.modules.jobs.text")}
-            icon="jobs"
+            art="jobs"
           />
           <ModuleCard
             name={t("home.modules.hire.name")}
             text={t("home.modules.hire.text")}
-            icon="hire"
+            art="recruiters"
           />
           <ModuleCard
             name={t("home.modules.connect.name")}
             text={t("home.modules.connect.text")}
-            icon="connect"
+            art="connect"
           />
         </ul>
       </MarketingSection>
 
-      {/* Trainings */}
-      <MarketingSection tone="blanc" innerClassName="flex flex-col gap-10">
+      {/* Trainings, on the light « Crème doux » */}
+      <MarketingSection tone="clair" innerClassName="flex flex-col gap-10">
         <div
           data-reveal
           className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between"
@@ -479,8 +463,11 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         </div>
       </MarketingSection>
 
-      {/* Plans: a Sapin panel, prices read from the database */}
-      <MarketingSection innerClassName="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16">
+      {/* Plans, on the light « Crème doux »: prices read from the database */}
+      <MarketingSection
+        tone="clair"
+        innerClassName="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16"
+      >
         <div data-reveal className="flex flex-col gap-6 lg:w-[400px] lg:shrink-0">
           <SectionHead
             eyebrow={t("home.pricing.eyebrow")}
@@ -488,9 +475,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             text={t("home.pricing.subtitle")}
           />
           <p className="jm-card flex items-center gap-3 rounded-[18px] px-4 py-3 text-sm leading-5 text-ardoise">
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-lime text-sapin">
-              <Icon name="mobile-money" className="size-[18px]" />
-            </span>
+            <MenuArt name="payment" />
             {t("home.pricing.payment")}
           </p>
           <SiteButton href="/tarifs" tone="lime" className="self-start">
@@ -505,11 +490,11 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               className="jm-card jm-lift flex flex-col gap-3 rounded-[24px] p-6 lg:p-7"
               style={stagger(index)}
             >
-              <IconTile icon={family.icon} size={48} className="bg-[#1c3a2c] text-lime" />
+              <MenuArt name={family.art} size="lg" />
               <h3 className="text-base leading-6 font-semibold">
                 {t(`home.pricing.${family.key}.name`)}
               </h3>
-              <p className="text-[28px] leading-[34px] font-semibold tracking-[-0.03em] text-lime">
+              <p className="text-[28px] leading-[34px] font-semibold tracking-[-0.03em] text-feuille-fonce">
                 <CountUp text={family.price} />
               </p>
               <p className="text-sm leading-[22px] text-ardoise">
@@ -538,7 +523,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               className="jm-card jm-lift flex flex-col gap-4 rounded-[24px] p-6 lg:p-7"
               style={stagger(index)}
             >
-              <IconTile icon={icon} className="bg-[#1c3a2c] text-lime" />
+              <MenuArt name={icon} size="lg" />
               <h3 className="text-xl leading-[26px] font-semibold tracking-[-0.02em]">
                 {t(`home.trust.${key}.title`)}
               </h3>
@@ -561,9 +546,9 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         </MarketingSection>
       )}
 
-      {/* FAQ */}
+      {/* FAQ, on the light « Crème doux » */}
       <MarketingSection
-        tone="blanc"
+        tone="clair"
         innerClassName="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-20"
       >
         <div data-reveal className="flex flex-col gap-5 lg:w-[380px] lg:shrink-0">
@@ -601,12 +586,12 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
 function ModuleCard({
   name,
   text,
-  icon,
+  art,
   className,
 }: {
   name: string;
   text: string;
-  icon: IconName;
+  art: MenuArtName;
   className?: string;
 }) {
   return (
@@ -614,7 +599,7 @@ function ModuleCard({
       data-reveal
       className={cx("jm-card jm-lift flex flex-col gap-3 rounded-[24px] p-6 lg:p-8", className)}
     >
-      <IconTile icon={icon} size={48} className="bg-[#1c3a2c] text-lime" />
+      <MenuArt name={art} size="lg" />
       <h3 className="pt-2 text-[22px] leading-7 font-semibold tracking-[-0.02em]">{name}</h3>
       <p className="text-[15px] leading-6 text-ardoise">{text}</p>
     </li>

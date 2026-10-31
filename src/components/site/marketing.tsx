@@ -12,12 +12,14 @@ import { keepTogether } from "@/lib/typography";
  * « papier » is the page, « blanc » the cards, « sapin » the text.
  */
 
-export type SectionTone = "creme" | "blanc" | "sapin" | "lime" | "profondeur" | "ia";
+export type SectionTone = "creme" | "blanc" | "clair" | "sapin" | "lime" | "profondeur" | "ia";
 
 /** Light tones fill the whole width; the others are rounded panels laid on the page. */
 const sectionTones: Record<SectionTone, string> = {
   creme: "bg-papier text-sapin",
   blanc: "bg-blanc text-sapin",
+  // The light « Crème doux » of the phone app (30/10/2026): light tokens, green titles.
+  clair: "jm-light jm-section-clair text-sapin",
   sapin: "bg-nuit text-blanc ring-1 ring-blanc/8 ring-inset",
   lime: "jm-card text-sapin",
   profondeur: "bg-nuit text-blanc ring-1 ring-blanc/8 ring-inset",
@@ -134,7 +136,7 @@ export function Eyebrow({ children, dark = false }: { children: ReactNode; dark?
     <p
       className={cx(
         // The small dark-green tag of the Modèle B site, Néon text.
-        "inline-flex items-center self-start rounded-md bg-[#1c3a2c] px-2.5 py-1 text-[13px] leading-[18px] font-medium text-neon",
+        "jm-eyebrow inline-flex items-center self-start rounded-md bg-[#1c3a2c] px-2.5 py-1 text-[13px] leading-[18px] font-medium text-neon",
         dark && "bg-[#1c3a2c]",
       )}
     >
