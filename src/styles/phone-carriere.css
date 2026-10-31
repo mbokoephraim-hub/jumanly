@@ -453,53 +453,61 @@ a.nb-cr-rb {
   display: block;
   color: var(--nb-creme);
 }
-/* Carte CV compacte (Ephraïm, 31/10/2026) : petite page dessinée à gauche, nom sur deux lignes
-   au plus, une rangée d'étiquettes, le modèle et la date. ~84 px de haut. */
+/* Carte CV (Ephraïm, 31/10/2026) : deux cartes visibles à l'écran, la troisième dépasse. Une bande
+   à la couleur du CV avec sa page dessinée, puis le nom (deux lignes au plus), les étiquettes, le
+   modèle et la date. */
 .nb-cr-cv > .nb-cr-cv-l {
   display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 10px 34px 10px 10px;
+  flex-direction: column;
+  height: 100%;
   text-decoration: none;
+}
+.nb-cr-cv-bande {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 104px;
+  padding-top: 14px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--accent) 28%, var(--nb-haute));
 }
 .nb-cr-cv-page {
   position: relative;
-  flex: none;
   display: block;
-  width: 46px;
-  height: 62px;
-  padding: 6px 5px;
-  border-radius: 6px;
+  width: 74px;
+  height: 90px;
+  padding: 9px 8px;
+  border-radius: 6px 6px 0 0;
   background: #f2ede5;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.25);
 }
 .nb-cr-cv-page i {
   display: block;
-  height: 2px;
-  margin-top: 3px;
-  border-radius: 1px;
+  height: 3px;
+  margin-top: 4px;
+  border-radius: 2px;
   background: #d7dfdc;
 }
 .nb-cr-cv-page i[data-titre] {
-  height: 5px;
+  height: 7px;
   width: 70%;
   margin-top: 0;
   border-radius: 2px;
   background: var(--accent);
 }
 .nb-cr-cv-page i[data-sous] {
-  height: 2px;
+  height: 3px;
   width: 45%;
-  margin-top: 3px;
+  margin-top: 4px;
   background: #b9c7c3;
 }
 .nb-cr-cv-page i[data-sous] + i {
-  margin-top: 6px;
+  margin-top: 8px;
 }
 .nb-cr-cv-page i[data-section] {
-  height: 3px;
+  height: 4px;
   width: 40%;
-  margin-top: 6px;
+  margin-top: 8px;
   background: var(--accent);
 }
 .nb-cr-cv-page i[data-w="80"] {
@@ -516,7 +524,8 @@ a.nb-cr-rb {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  padding: 10px 11px 12px;
 }
 .nb-cr-cv-t b {
   display: -webkit-box;
@@ -524,9 +533,10 @@ a.nb-cr-rb {
   -webkit-box-orient: vertical;
   overflow: hidden;
   overflow-wrap: anywhere;
-  font-size: 13.5px;
+  min-height: 2.5em;
+  font-size: 14px;
   font-weight: 700;
-  line-height: 1.22;
+  line-height: 1.25;
 }
 .nb-cr-cv-etiq {
   display: flex;
@@ -575,16 +585,17 @@ a.nb-cr-rb {
 }
 .nb-cr-cv-plus {
   position: absolute;
-  right: 0;
-  top: 0;
-  width: 40px;
-  height: 44px;
+  right: 6px;
+  top: 6px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: none;
-  border: 0;
-  color: #55656a;
+  border-radius: 50%;
+  background: rgba(11, 26, 30, 0.75);
+  border: 1px solid rgba(242, 237, 229, 0.3);
+  color: #f2ede5;
   cursor: pointer;
 }
 .nb-cr-nouveau {
@@ -901,8 +912,35 @@ a.nb-cr-rb {
   display: flex;
   align-items: center;
   gap: 14px;
-  min-height: 40px;
-  margin: -6px 0 4px;
+  min-height: 44px;
+  margin-bottom: 4px;
+}
+.nb-cr-cv-titre {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--nb-creme);
+}
+.nb-cr-cv-titre span {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--nb-haute);
+  color: var(--nb-brume);
+}
+.nb-cr-cv-barre[data-choix] {
+  min-height: 36px;
+  margin-top: -6px;
 }
 .nb-cr-cv-barre b {
   flex: 1;
@@ -923,7 +961,7 @@ a.nb-cr-rb {
 }
 .nb-cr-cv[data-teinte] {
   border-color: color-mix(in srgb, var(--teinte) 70%, transparent);
-  box-shadow: inset 3px 0 0 var(--teinte);
+  box-shadow: inset 0 3px 0 var(--teinte);
 }
 .nb-cr-cv-pastille {
   display: inline-block;
@@ -1679,7 +1717,7 @@ button.nb-cr-cv-l {
   scroll-snap-align: start;
 }
 .nb-doc-rangee > .nb-cr-cv {
-  flex-basis: 252px;
+  flex-basis: calc(50% - 22px);
 }
 .nb-doc-rangee > .nb-doc-case {
   flex-basis: 196px;
@@ -1895,6 +1933,7 @@ html[data-nb-theme="clair"] .nb-app .nb-cr-cv-note[data-score="bas"] {
   color: #a3271c;
 }
 html[data-nb-theme="clair"] .nb-app .nb-cr-cv-page {
+  background: #fffdf9;
   box-shadow: 0 0 0 1px rgba(15, 63, 55, 0.12);
 }
 
