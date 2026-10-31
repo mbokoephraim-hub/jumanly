@@ -9909,10 +9909,11 @@ Conventions :
 | `phoneCareer.cv.score` | {score}/100 |
 | `phoneCareer.cv.empty` | Pas encore de CV. Orbi peut en préparer un depuis votre profil, en une minute. |
 | `phoneCareer.cv.newLong` | + Nouveau CV · modèle, import ou Orbi |
-| `phoneCareer.cv.changedToday` | modifié aujourd’hui |
-| `phoneCareer.cv.changedYesterday` | modifié hier |
-| `phoneCareer.cv.meta` | Modèle {template} · {when} |
-| `phoneCareer.cv.metaFile` | {kind} importé · {when} |
+| `phoneCareer.cv.changedToday` | aujourd’hui |
+| `phoneCareer.cv.changedYesterday` | hier |
+| `phoneCareer.cv.meta` | {template} · {when} |
+| `phoneCareer.cv.metaFile` | {kind} · {when} |
+| `phoneCareer.cv.scoreLabel` | Score du CV : {score} sur 100 |
 | `phoneCareer.cv.fileKind.pdf` | PDF |
 | `phoneCareer.cv.fileKind.docx` | Fichier Word |
 | `phoneCareer.cv.fileKind.image` | Photo |
@@ -10371,7 +10372,7 @@ Conventions :
 | `phoneCareer.billing.backCareer` | Retour à Carrière |
 | `phoneCareer.cv.menu.deleteQuestion` | Supprimer « {title} » ? |
 | `phoneCareer.cv.menu.deleteText` | Ce CV disparaît. Les candidatures déjà envoyées gardent leur copie. |
-| `phoneCareer.cv.library` | {count, plural, one {Mon CV} other {Mes # CV}} |
+| `phoneCareer.cv.library` | {count, plural, one {# CV} other {# CV}} |
 | `phoneCareer.cv.select.start` | Sélectionner |
 | `phoneCareer.cv.select.count` | {count, plural, =0 {Aucun CV choisi} one {# CV choisi} other {# CV choisis}} |
 | `phoneCareer.cv.select.all` | Tout choisir |
