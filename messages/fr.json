@@ -8298,6 +8298,7 @@
           "tech": "Tech",
           "elegant": "Élégant",
           "visuel": "Visuel",
+          "prestige": "Prestige",
           "compact": "Compact"
         },
         "description": {
@@ -8315,7 +8316,8 @@
           "creatif": "Monogramme ou photo en grand, nom très présent, colonne de cartes teintées à droite.",
           "tech": "Compétences regroupées par domaine, projets avant l'expérience, outils sous chaque poste.",
           "elegant": "En-tête centré avec photo ronde, titres centrés entre deux filets.",
-          "visuel": "Grande photo, jauges de compétences et pastilles de langues (niveaux aussi écrits en toutes lettres)."
+          "visuel": "Grande photo, jauges de compétences et pastilles de langues (niveaux aussi écrits en toutes lettres).",
+          "prestige": "Bandeau sombre avec photo ronde, nom en capitales, expériences en frise datée et colonne de compétences en étiquettes."
         },
         "audience": {
           "classique": "Tous profils, candidatures en ligne",
@@ -8332,7 +8334,8 @@
           "creatif": "Communication, design",
           "tech": "Développement, data, numérique",
           "elegant": "Hôtellerie, juridique, profils seniors",
-          "visuel": "Montrer ses niveaux d'un coup d'œil"
+          "visuel": "Montrer ses niveaux d'un coup d'œil",
+          "prestige": "Un CV soigné qui marque, pour tous les métiers"
         },
         "preview": "Aperçu avec votre contenu",
         "previewFull": "Aperçu plein écran",

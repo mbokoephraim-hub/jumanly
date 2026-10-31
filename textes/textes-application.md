@@ -6483,6 +6483,7 @@ Conventions :
 | `career.cv.template.name.tech` | Tech |
 | `career.cv.template.name.elegant` | Élégant |
 | `career.cv.template.name.visuel` | Visuel |
+| `career.cv.template.name.prestige` | Prestige |
 | `career.cv.template.description.classique` | Une colonne, en-tête centré, filets fins. Le plus sûr pour les logiciels de recrutement. |
 | `career.cv.template.description.epure` | Titres de sections dans une marge à gauche, beaucoup de blanc, photo carrée facultative. |
 | `career.cv.template.description.premierEmploi` | La formation et les projets passent avant l'expérience. Compétences en étiquettes. |
@@ -6498,6 +6499,7 @@ Conventions :
 | `career.cv.template.description.tech` | Compétences regroupées par domaine, projets avant l'expérience, outils sous chaque poste. |
 | `career.cv.template.description.elegant` | En-tête centré avec photo ronde, titres centrés entre deux filets. |
 | `career.cv.template.description.visuel` | Grande photo, jauges de compétences et pastilles de langues (niveaux aussi écrits en toutes lettres). |
+| `career.cv.template.description.prestige` | Bandeau sombre avec photo ronde, nom en capitales, expériences en frise datée et colonne de compétences en étiquettes. |
 | `career.cv.template.audience.classique` | Tous profils, candidatures en ligne |
 | `career.cv.template.audience.epure` | CV sobre et aéré |
 | `career.cv.template.audience.premierEmploi` | Étudiants, jeunes diplômés, stages |
@@ -6513,6 +6515,7 @@ Conventions :
 | `career.cv.template.audience.tech` | Développement, data, numérique |
 | `career.cv.template.audience.elegant` | Hôtellerie, juridique, profils seniors |
 | `career.cv.template.audience.visuel` | Montrer ses niveaux d'un coup d'œil |
+| `career.cv.template.audience.prestige` | Un CV soigné qui marque, pour tous les métiers |
 | `career.cv.templates.title` | Choisir un modèle |
 | `career.cv.templates.subtitle` | Changez de mise en page quand vous voulez : votre contenu ne bouge pas. |
 | `career.cv.templates.count` | {included} modèles inclus dans votre forfait · {others} autres avec Starter ou Pro |

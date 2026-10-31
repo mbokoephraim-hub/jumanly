@@ -24,6 +24,7 @@ import "../templates/creatif.css";
 import "../templates/tech.css";
 import "../templates/elegant.css";
 import "../templates/visuel.css";
+import "../templates/prestige.css";
 import { accentHex, fontOf } from "./palette";
 import type { CvDocumentBlock, CvDocumentData, CvDocumentItem } from "./model";
 import { blockLayout, MAX_PAGES, type CvStyle } from "../style";

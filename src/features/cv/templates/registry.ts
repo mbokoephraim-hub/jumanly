@@ -1,5 +1,5 @@
 /**
- * The 15 CV templates (docs/modeles-cv/SPECIFICATION-MODELES-CV.md § 3, values of
+ * The 16 CV templates (« Prestige » added on 31/10/2026, Ephraïm's own model) (docs/modeles-cv/SPECIFICATION-MODELES-CV.md § 3, values of
  * docs/modeles-cv/modeles/catalogue.json). The catalogue lives in the code, versioned with the
  * application; names and descriptions are texts (`cv.templates.<id>.*`). The access level of a
  * template is compared with the entitlement `career.cv.templates.access`: no plan name here.
@@ -487,6 +487,35 @@ export const cvTemplateRegistry = [
     sideHeader: ["photo", "contact"],
     skills: "bars",
     languages: "dots",
+    interests: "chips",
+  },
+  {
+    // Ephraïm's own model (31/10/2026): night band, accent name, timeline, tinted right column.
+    id: "prestige",
+    access: "free",
+    layout: "two",
+    photo: true,
+    accent: "orange",
+    density: "standard",
+    ats: "veryGood",
+    pages: [1, 2],
+    order: [
+      "summary",
+      "highlights",
+      "experience",
+      "projects",
+      "volunteer",
+      "education",
+      "skills",
+      "languages",
+      "certificates",
+      "interests",
+    ],
+    side: ["education", "skills", "languages", "certificates", "interests"],
+    header: ["photo", "identity", "contact"],
+    sideHeader: [],
+    skills: "chips",
+    languages: "levelList",
     interests: "chips",
   },
 ] as const satisfies readonly CvTemplate[];
