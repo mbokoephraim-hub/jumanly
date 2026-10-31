@@ -14,7 +14,7 @@ export async function ExplorerTexts({ children }: { children: ReactNode }) {
   const messages = await getMessages();
   return (
     <NextIntlClientProvider
-      messages={pickMessages(messages, ["phoneExplorer", "phoneFil", "phone"])}
+      messages={pickMessages(messages, ["phoneExplorer", "phoneFil", "phone", "match", "jobs"])}
     >
       {children}
     </NextIntlClientProvider>

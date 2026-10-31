@@ -95,12 +95,14 @@ export default async function ApplyPage({
       },
     },
   });
-  const application = profile
+  // A withdrawn application can be sent again: the page behaves as if none existed.
+  const sent = profile
     ? await db.application.findUnique({
         where: { jobId_profileId: { jobId: jobRow.id, profileId: profile.id } },
-        select: { id: true },
+        select: { id: true, status: true },
       })
     : null;
+  const application = sent?.status === "withdrawn" ? null : sent;
 
   // ─── Confirmation: only once the server has recorded the application. ─────────────────
   if (application) {

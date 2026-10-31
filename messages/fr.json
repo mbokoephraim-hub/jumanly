@@ -11025,6 +11025,15 @@
       },
       "gap": "Combler l’écart : cours {course}, {duration} ›",
       "whyFull": "Voir le détail du score",
+      "whySheet": {
+        "title": "Pourquoi {score} % ?",
+        "lead": "Calcul fixe, le même pour tous. Votre nom, âge, genre ou photo n'entrent jamais dans le score.",
+        "gaps": "{count, plural, one {L'écart à combler} other {Les # écarts à combler}}",
+        "good": "{count, plural, one {Ce qui correspond déjà} other {Les # points qui correspondent déjà}}",
+        "noGap": "Aucun écart : tout correspond.",
+        "guard": "Le recruteur décide. Ce score ne bloque jamais votre candidature.",
+        "contest": "Contester ce score"
+      },
       "noScore": "Pas encore de score pour vous",
       "noScoreText": "Ajoutez vos compétences dans Carrière : Orbi vous dira ce qui correspond.",
       "noScoreLink": "Compléter mon profil ›",

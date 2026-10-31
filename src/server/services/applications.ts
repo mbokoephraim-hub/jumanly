@@ -7,7 +7,7 @@
  */
 import { freezeApplicationMatch } from "@/server/matching/service";
 import { screeningAnswersFor, screeningQuestionsOf } from "./screening";
-import type { Prisma, PrismaClient, StageKind } from "@/generated/prisma/client";
+import { Prisma, type PrismaClient, type StageKind } from "@/generated/prisma/client";
 import { snapshotAttachments, type AttachmentRef } from "./application-attachments";
 import { isJobOpen } from "./jobs";
 import { reportError } from "@/server/observability";
@@ -132,7 +132,10 @@ export async function applyToJob(
   const existing = await db.application.findUnique({
     where: { jobId_profileId: { jobId: job.id, profileId: profile.id } },
   });
-  if (existing) return { status: "already", applicationId: existing.id };
+  // A withdrawn application can be sent again (Ephraïm, 31/10/2026): the same row starts over,
+  // its history keeps the withdrawal. Anything else is still « already sent ».
+  if (existing && existing.status !== "withdrawn")
+    return { status: "already", applicationId: existing.id };
   if (!isJobOpen(job, now)) return { status: "closed" };
 
   const cv = input.cvDocumentId
@@ -144,29 +147,61 @@ export async function applyToJob(
   const stages = await ensureStages(db, job.id);
   const first = stages.find((stage) => stage.kind === "new") ?? stages[0]!;
   try {
-    const application = await db.application.create({
-      data: {
-        jobId: job.id,
-        profileId: profile.id,
-        stageId: first.id,
-        coverLetter: input.coverLetter?.trim() || null,
-        attachments: attachments as Prisma.InputJsonValue,
-        screeningAnswers: screeningAnswersFor(
-          screeningQuestionsOf(job.screeningQuestions),
-          input.answers ?? {},
-        ),
-        cvSnapshot: cv
-          ? {
-              documentId: cv.id,
-              title: cv.title,
-              templateId: cv.templateId,
-              content: cv.content as Prisma.InputJsonValue,
-              ...(cv.style ? { style: cv.style as Prisma.InputJsonValue } : {}),
-            }
-          : undefined,
-        events: { create: { actorId: input.userId, type: "submitted" } },
-      },
-    });
+    const fresh = {
+      stageId: first.id,
+      coverLetter: input.coverLetter?.trim() || null,
+      attachments: attachments as Prisma.InputJsonValue,
+      screeningAnswers: screeningAnswersFor(
+        screeningQuestionsOf(job.screeningQuestions),
+        input.answers ?? {},
+      ),
+      cvSnapshot: cv
+        ? {
+            documentId: cv.id,
+            title: cv.title,
+            templateId: cv.templateId,
+            content: cv.content as Prisma.InputJsonValue,
+            ...(cv.style ? { style: cv.style as Prisma.InputJsonValue } : {}),
+          }
+        : Prisma.DbNull,
+    };
+    const application = existing
+      ? await db.application.update({
+          where: { id: existing.id },
+          data: {
+            ...fresh,
+            status: "active",
+            viewedAt: null,
+            shortlistedAt: null,
+            shortlistedById: null,
+            matchScore: null,
+            matchExplanation: Prisma.DbNull,
+            events: { create: { actorId: input.userId, type: "submitted" } },
+          },
+        })
+      : await db.application.create({
+          data: {
+            jobId: job.id,
+            profileId: profile.id,
+            stageId: first.id,
+            coverLetter: input.coverLetter?.trim() || null,
+            attachments: attachments as Prisma.InputJsonValue,
+            screeningAnswers: screeningAnswersFor(
+              screeningQuestionsOf(job.screeningQuestions),
+              input.answers ?? {},
+            ),
+            cvSnapshot: cv
+              ? {
+                  documentId: cv.id,
+                  title: cv.title,
+                  templateId: cv.templateId,
+                  content: cv.content as Prisma.InputJsonValue,
+                  ...(cv.style ? { style: cv.style as Prisma.InputJsonValue } : {}),
+                }
+              : undefined,
+            events: { create: { actorId: input.userId, type: "submitted" } },
+          },
+        });
     // An imported CV kept as a file goes as that file, copied: deleting the CV later keeps it.
     if (cv?.fileKey) {
       const key = await copyCvFileForApplication(fileStorage(db), cv.fileKey, application.id);
