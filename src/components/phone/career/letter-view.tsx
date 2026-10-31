@@ -161,23 +161,28 @@ export async function PhoneLetter({
           label={t("docs.letter.copy")}
           copied={t("docs.letter.copied")}
           className="nb-lt-outil"
-        />
-        <a href={`/app/career/documents/${document.id}/pdf`} className="nb-lt-outil">
-          {t("docs.menu.pdf")}
+        >
+          <PhoneIcon name="copier" size={22} />
+        </CopyButton>
+        <a href={`/app/career/documents/${document.id}/pdf`} className="nb-lt-outil" data-texte="">
+          <PhoneIcon name="telecharger" size={22} />
+          {t("phoneLetter.view.download")}
         </a>
         <form id="nb-lettre-supprimer" action={deleteDocumentAction} hidden>
           <input type="hidden" name="id" value={document.id} />
         </form>
         <LetterCancel
           formId="nb-lettre-supprimer"
-          className="nb-lt-outil"
+          className="nb-lt-outil nb-lt-danger"
           texts={{
             cancel: t("docs.menu.delete"),
             ask: t("phoneLetter.view.deleteAsk"),
             yes: t("phoneLetter.view.deleteYes"),
             no: t("phoneLetter.cancel.no"),
           }}
-        />
+        >
+          <PhoneIcon name="corbeille" size={22} />
+        </LetterCancel>
       </div>
     </div>
   );

@@ -10563,6 +10563,7 @@ Conventions :
 | `phoneLetter.view.text` | Votre lettre |
 | `phoneLetter.view.use` | Utiliser cette lettre |
 | `phoneLetter.view.again` | {count, plural, one {Relire encore · # crédit} other {Relire encore · # crédits}} |
+| `phoneLetter.view.download` | Télécharger |
 | `phoneLetter.view.deleteAsk` | Supprimer cette lettre ? |
 | `phoneLetter.view.deleteYes` | Oui, supprimer |
 | `phoneLetter.intro.title` | Votre lettre de motivation |

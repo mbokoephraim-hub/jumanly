@@ -421,6 +421,31 @@ export async function proofread(
   return { ok: true, id: document.id };
 }
 
+/** « Utiliser cette lettre » on a phone, without Orbi: the person's own letter, kept as it is. */
+export async function saveOwnLetter(
+  db: PrismaClient,
+  userId: string,
+  input: { title: string; text: string },
+) {
+  const profile = await db.talentProfile.findUniqueOrThrow({
+    where: { userId },
+    select: { id: true },
+  });
+  return db.document.create({
+    data: {
+      profileId: profile.id,
+      kind: kindOf.letter,
+      title: input.title,
+      content: json({
+        type: "letter",
+        text: input.text.slice(0, TEXT_MAX),
+        jobId: null,
+        corrections: [],
+      } satisfies CareerDocumentContent),
+    },
+  });
+}
+
 /** Applies the corrections chosen (each on its first remaining occurrence), drops the others. */
 export function applyCorrections(text: string, corrections: Correction[], chosen: string[]) {
   return corrections

@@ -4,7 +4,11 @@ import { TalentIcon } from "@/components/talent/icon";
 import { LetterOffer } from "@/components/phone/career/letter-offer";
 import { LetterPoints } from "@/components/phone/career/letter-points";
 import { OrbiLimit, type OrbiLimitCode } from "@/components/talent/cv/orbi-limit";
-import { generateDocumentAction, proofreadAction } from "@/server/actions/career-documents";
+import {
+  generateDocumentAction,
+  proofreadAction,
+  saveOwnLetterAction,
+} from "@/server/actions/career-documents";
 import { aiFeatures } from "@/server/ai";
 import { PROOFREAD_MAX } from "@/server/services/career-documents";
 
@@ -125,7 +129,11 @@ export async function PhoneNewLetter({
                   placeholder={t("phoneLetter.check.textExample")}
                 />
               </div>
-              <button type="submit" className="nb-lt-bt">
+              <button type="submit" formAction={saveOwnLetterAction} className="nb-lt-bt">
+                {t("phoneLetter.view.use")}
+              </button>
+              <button type="submit" className="nb-lt-annuler">
+                <OrbiDisc size={24} />
                 {t("docs.letters.proofread.submit", { count: aiFeatures.proofread.credits })}
               </button>
             </form>

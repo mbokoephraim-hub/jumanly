@@ -48,6 +48,8 @@ export const phoneIcons = {
   contact:
     "M6 3.5h12v17H6zM12 7.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM8.5 16c.6-1.6 1.9-2.5 3.5-2.5s2.9.9 3.5 2.5",
   corbeille: "M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12",
+  copier: "M9 8.5h10v11.5H9zM15 8.5V4H5v11.5h4",
+  telecharger: "M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14",
   cacher:
     "M3 3l18 18M10.6 6.1A9 9 0 0 1 21 12a14 14 0 0 1-2.4 3.2M6.6 6.6A14 14 0 0 0 3 12a9 9 0 0 0 12.4 5.4",
   citer: "M4.5 5.5h15v10H10l-5.5 4z",

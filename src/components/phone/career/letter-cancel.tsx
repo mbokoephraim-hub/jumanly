@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 /**
  * « Annuler » at the very bottom of « Nouvelle lettre » (Ephraïm, 31/10/2026): asks first, then
@@ -11,8 +11,11 @@ export function LetterCancel({
   href,
   formId,
   className = "nb-lt-annuler",
+  children,
   texts,
 }: {
+  /** An icon instead of the word: `texts.cancel` becomes the button's name. */
+  children?: ReactNode;
   /** Where « Oui » goes… */
   href?: string;
   /** …or the form « Oui » sends (« Supprimer » on a letter). */
@@ -35,8 +38,14 @@ export function LetterCancel({
   }, [asking]);
   return (
     <>
-      <button type="button" className={className} onClick={() => setAsking(true)}>
-        {texts.cancel}
+      <button
+        type="button"
+        className={className}
+        aria-label={children ? texts.cancel : undefined}
+        title={children ? texts.cancel : undefined}
+        onClick={() => setAsking(true)}
+      >
+        {children ?? texts.cancel}
       </button>
       {asking && (
         <div className="nb-lt-accueil">
