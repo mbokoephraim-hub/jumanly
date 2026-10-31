@@ -9695,9 +9695,9 @@ Conventions :
 | `phoneCareer.tab.profil` | Profil |
 | `phoneCareer.tab.cv` | CV |
 | `phoneCareer.tab.portfolio` | Portfolio |
-| `phoneCareer.tab.progression` | Progression |
+| `phoneCareer.tab.progression` | Vue |
 | `phoneCareer.tab.candidatures` | Candidatures |
-| `phoneCareer.tab.documents` | Mes documents |
+| `phoneCareer.tab.documents` | Documents |
 | `phoneCareer.me.title` | Mon profil |
 | `phoneCareer.me.open` | Ouvrir mon profil, {name} |
 | `phoneCareer.me.complete` | Profil complété à {percent} % |

@@ -1990,3 +1990,24 @@ html[data-nb-theme="clair"] .nb-app .nb-cr-cv-page {
 .nb-onglet > .nb-cr.nb-ca {
   padding-bottom: 12px;
 }
+
+/* En-tête de Carrière aligné sur les autres onglets (Ephraïm, 31/10/2026) : la photo et son
+   anneau tiennent dans la hauteur des ronds (44 px), un peu plus bas sous l'heure, et les onglets
+   « Vue · Candidatures · Documents » un peu plus grands. */
+.nb-app .nb-cr-tete {
+  padding-top: calc(var(--nb-haut) + 8px);
+  align-items: center;
+}
+.nb-cr-moi {
+  gap: 10px;
+}
+.nb-cr-moi-t b {
+  font-size: 14.5px;
+}
+.nb-cr-moi-t small {
+  font-size: 11px;
+}
+.nb-cr-onglets button,
+.nb-cr-onglets a {
+  font-size: 15px;
+}
