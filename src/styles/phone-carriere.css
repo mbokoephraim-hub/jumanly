@@ -1909,3 +1909,26 @@ button.nb-cr-cv-l {
 .nb-cr-sim {
   overflow: hidden;
 }
+
+/* Progression (Ephraïm, 31/10/2026) : « À préparer » et « Mon suivi » comme les autres titres,
+   pastille plus petite, et plus de vide sous le dernier bloc (la couche de l'onglet garde déjà la
+   place de la barre du bas et d'Orbi). */
+.nb-cr .nb-cr-entr-s {
+  margin: 22px 0 10px;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--nb-creme);
+}
+.nb-cr .nb-cr-suivi-vide {
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+.nb-cr-urgent-b {
+  padding: 2px 8px;
+  font-size: 10.5px;
+}
+.nb-onglet > .nb-cr.nb-ca {
+  padding-bottom: 12px;
+}
