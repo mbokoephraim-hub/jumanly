@@ -4162,6 +4162,36 @@
       "go": "Y aller",
       "themes": "Vos points forts et à travailler",
       "themesHint": "Touchez un thème pour savoir ce qu'il veut dire et quoi faire."
+    },
+    "todo": {
+      "role": {
+        "title": "Choisir une piste de métier",
+        "text": "Ouvrez cinq offres qui vous attirent et notez ce qu'elles demandent."
+      },
+      "skills": {
+        "title": "Vous former et obtenir une attestation",
+        "text": "Une formation gratuite, et son attestation pour le prouver."
+      },
+      "experience": {
+        "title": "Valoriser une réalisation",
+        "text": "Ajoutez une réalisation liée à vos compétences ou à votre métier."
+      },
+      "cv": {
+        "title": "Mettre votre CV à jour",
+        "text": "Refaites-le avec un modèle gratuit, puis faites-le relire."
+      },
+      "interview": {
+        "title": "Préparer votre présentation",
+        "text": "Entraînez-vous à présenter votre parcours en 2 minutes."
+      },
+      "search": {
+        "title": "Candidater cette semaine",
+        "text": "Postulez à trois offres : c'est toujours gratuit."
+      },
+      "network": {
+        "title": "Activer votre réseau",
+        "text": "Rendez votre profil visible et écrivez à trois professionnels."
+      }
     }
   },
   "plan": {

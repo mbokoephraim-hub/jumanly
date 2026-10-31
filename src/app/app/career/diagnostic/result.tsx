@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import { getTranslations } from "next-intl/server";
 import { PROGRESSION_HREF } from "./welcome";
 import { OrbiSpark } from "@/components/phone/cv/marks";
+import { MenuArt, type MenuArtName } from "@/components/site/menu-art";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
@@ -18,8 +19,21 @@ import {
 import { bandFor, stages } from "@/server/services/diagnostic-scoring";
 import "@/styles/diagnostic-resultat.css";
 
+/** The drawings of the site menu on each action (Ephraïm, 31/10/2026). */
+const priorityArt: Record<Priority, MenuArtName> = {
+  role: "career",
+  skills: "trainings",
+  experience: "portfolio",
+  cv: "cv",
+  interview: "recruiters",
+  search: "jobs",
+  network: "connect",
+};
+/** Where to act: a course with its attestation, the achievements of the profile, the CV… */
 const priorityHref = (priority: Priority) =>
-  miniPlanLinks[priority] ?? (priority === "interview" ? stepLinks.interview : "/app/jobs");
+  priority === "experience"
+    ? "/app/profil?onglet=realisations"
+    : (miniPlanLinks[priority] ?? (priority === "interview" ? stepLinks.interview : "/app/jobs"));
 
 /**
  * Result of the diagnostic, kept to what leads to an action (Ephraïm, 31/10/2026): the score and
@@ -140,15 +154,13 @@ export async function DiagnosticResult({
           <section aria-labelledby="dg-faire" className="dg-r-sec">
             <h2 id="dg-faire">{t("diag.result.todo")}</h2>
             <ol className="dg-r-todo">
-              {result.priorities.map((priority, index) => (
+              {result.priorities.map((priority) => (
                 <li key={priority}>
                   <Link href={priorityHref(priority)} className="t-press">
-                    <span className="dg-r-n" aria-hidden>
-                      {index + 1}
-                    </span>
+                    <MenuArt name={priorityArt[priority]} size="md" />
                     <span className="dg-r-todo-t">
-                      <b>{d(`career.diagnostic.miniPlan.step.${priority}.title`)}</b>
-                      <span>{d(`career.diagnostic.miniPlan.step.${priority}.text`)}</span>
+                      <b>{d(`diag.todo.${priority}.title`)}</b>
+                      <span>{d(`diag.todo.${priority}.text`)}</span>
                     </span>
                     <TalentIcon name="suivant" size="s" />
                   </Link>

@@ -5318,3 +5318,4 @@ Les lettres reprennent la carte des CV (deux à l'écran, la troisième dépasse
 - Résultat du diagnostic refait (niveau, à faire maintenant, six thèmes touchables, atouts) et compétences préparées par Orbi pour n'importe quel métier (`diagnostic_domain`), sinon citées par la personne.
 - Résultat du diagnostic allégé : la note, le niveau et les trois actions (une ligne chacune, qui mène où agir) ; thèmes, atouts et textes retirés. Corrige aussi un doublon dans diagnostic-flow.tsx arrivé avec la fusion de #281.
 - Résultat du diagnostic, l'essentiel : niveau expliqué en une phrase, points forts et à travailler en barres simples, trois actions avec une phrase.
+- Résultat : dessins du menu sur les trois actions, textes raccourcis, action compétences = formation + attestation, réalisation liée aux compétences ou au métier.
