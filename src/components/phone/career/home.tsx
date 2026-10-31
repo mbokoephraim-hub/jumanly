@@ -18,7 +18,7 @@ import { deleteCv, duplicateCv, setPrimaryCv } from "@/server/actions/cv";
 import { deleteCvsAction, renameCvAction, setCvColorAction } from "@/server/actions/cv-flow";
 import { PROFILE_COLORS, PROFILE_PALETTE, type ProfileColor } from "@/lib/profile-colors";
 import { FilAvatar } from "../fil/avatar";
-import { PhoneIcon } from "../icon";
+import { OrbiDisc, PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
 import type { CareerView } from "./data";
 import { CvExportButton } from "./cv-export";
@@ -351,7 +351,7 @@ function FollowUp({
       <h2 id="nb-cr-suivi-h" className="nb-pf-h nb-cr-h0">
         {t("follow.title")}
       </h2>
-      <ul>
+      <ul data-rangee="">
         <li>
           <button type="button" className="nb-cr-carte" onClick={() => onTab("documents")}>
             <MenuArt name="cv" size="sm" />
@@ -413,6 +413,16 @@ function TrainingBlock({ training }: { training: CareerView["training"] }) {
         {t("training.title")}
       </h2>
       <div className="nb-cr-carte nb-cr-sim" data-ouvert={training.open ? "" : undefined}>
+        {/* The poster on top (Ephraïm, 31/10/2026): Orbi, the voice and the written answer. */}
+        <div className="nb-cr-affiche" aria-hidden>
+          <span className="nb-cr-affiche-i">
+            <PhoneIcon name="micro" size={22} strong />
+          </span>
+          <OrbiDisc size={64} />
+          <span className="nb-cr-affiche-i">
+            <PhoneIcon name="modifier" size={22} strong />
+          </span>
+        </div>
         <span className="nb-cr-sim-i" aria-hidden>
           <PhoneIcon
             name={training.open ? "micro" : "cadenas"}

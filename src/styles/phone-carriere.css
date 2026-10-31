@@ -1839,3 +1839,73 @@ button.nb-cr-cv-l {
   font-weight: 800;
   line-height: 1.2;
 }
+
+/* Mes documents et candidatures à l'horizontale (Ephraïm, 31/10/2026) : une rangée qui défile. */
+.nb-cr-suivi-doc ul {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  margin: 0 -20px;
+  padding: 0 20px 4px;
+  scroll-padding: 0 20px;
+}
+.nb-cr-suivi-doc ul::-webkit-scrollbar {
+  display: none;
+}
+.nb-cr-suivi-doc li {
+  flex: none;
+  width: 158px;
+  scroll-snap-align: start;
+}
+
+/* Lignes coupées proprement : pas de mot seul sur la dernière ligne. */
+.nb-cr-pad :is(p, small, b, span, h2) {
+  text-wrap: pretty;
+}
+
+/* Mes entraînements : l'affiche en dégradé au-dessus. */
+.nb-cr-affiche {
+  width: calc(100% + 28px);
+  margin: -14px -14px 2px;
+  height: 112px;
+  border-radius: 20px 20px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background:
+    radial-gradient(rgba(242, 237, 229, 0.12) 1.2px, transparent 1.4px) 0 0 / 14px 14px,
+    radial-gradient(circle at 20% 0, rgba(195, 166, 255, 0.45), transparent 60%),
+    linear-gradient(135deg, #2fd3a6 0%, #1d6b4f 55%, #0f3f37 100%);
+}
+.nb-cr-affiche-i {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(242, 237, 229, 0.92);
+  color: #0f3f37;
+  transform: rotate(-6deg);
+}
+.nb-cr-affiche-i:last-child {
+  transform: rotate(6deg);
+}
+
+/* Carte diagnostic : titre plus grand, texte et bouton plus petits. */
+.nb-cr .nb-cr-urgent h2 {
+  font-size: 28px;
+}
+.nb-cr .nb-cr-urgent p {
+  font-size: 13px;
+}
+.nb-cr-urgent-go {
+  min-height: 38px;
+  padding: 0 16px;
+  font-size: 13.5px;
+}
+.nb-cr-sim {
+  overflow: hidden;
+}
