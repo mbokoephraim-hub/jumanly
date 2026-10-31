@@ -490,3 +490,18 @@
 .dg-r-todo a {
   align-items: center;
 }
+
+/* La note sur la même ligne que sa barre ; le dessin du menu à la place du numéro. */
+.dg-r-mini li {
+  grid-template-areas:
+    "n n"
+    "b s";
+  row-gap: 4px;
+}
+.dg-r-mini b {
+  font-size: 15px;
+  line-height: 1;
+}
+.dg-r-todo a {
+  gap: 12px;
+}

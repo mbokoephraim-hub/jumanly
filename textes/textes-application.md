@@ -3506,6 +3506,20 @@ Conventions :
 | `diag.result.word.ready` | Vous pouvez candidater dès maintenant. Les trois actions ci-dessous vous aideront à sortir du lot. |
 | `diag.result.word.competitive` | Vous êtes bien placé sur vos offres. Gardez le rythme et visez les postes exigeants. |
 | `diag.result.todo` | À faire maintenant |
+| `diag.todo.role.title` | Choisir une piste de métier |
+| `diag.todo.role.text` | Ouvrez cinq offres qui vous attirent et notez ce qu'elles demandent. |
+| `diag.todo.skills.title` | Vous former et obtenir une attestation |
+| `diag.todo.skills.text` | Une formation gratuite, et son attestation pour le prouver. |
+| `diag.todo.experience.title` | Valoriser une réalisation |
+| `diag.todo.experience.text` | Ajoutez une réalisation liée à vos compétences ou à votre métier. |
+| `diag.todo.cv.title` | Mettre votre CV à jour |
+| `diag.todo.cv.text` | Refaites-le avec un modèle gratuit, puis faites-le relire. |
+| `diag.todo.interview.title` | Préparer votre présentation |
+| `diag.todo.interview.text` | Entraînez-vous à présenter votre parcours en 2 minutes. |
+| `diag.todo.search.title` | Candidater cette semaine |
+| `diag.todo.search.text` | Postulez à trois offres : c'est toujours gratuit. |
+| `diag.todo.network.title` | Activer votre réseau |
+| `diag.todo.network.text` | Rendez votre profil visible et écrivez à trois professionnels. |
 | `diag.result.go` | Y aller |
 | `diag.result.themes` | Vos points forts et à travailler |
 | `diag.result.themesHint` | Touchez un thème pour savoir ce qu'il veut dire et quoi faire. |
