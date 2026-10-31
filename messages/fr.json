@@ -4145,6 +4145,23 @@
     },
     "flow": {
       "close": "Quitter le diagnostic"
+    },
+    "result": {
+      "outOf": "sur 100",
+      "outOfLong": "sur 100",
+      "badge": "Votre niveau aujourd'hui",
+      "role": "Pour le métier : {role}",
+      "scale": "Les quatre niveaux",
+      "word": {
+        "discovery": "Vous posez les bases, et c'est le bon moment pour le faire. Commencez par les trois actions ci-dessous, une par une.",
+        "building": "Vous avez déjà de bonnes bases. Trois actions ciblées vous rapprocheront vite du niveau « Prêt ».",
+        "ready": "Vous pouvez candidater dès maintenant. Les trois actions ci-dessous vous aideront à sortir du lot.",
+        "competitive": "Vous êtes bien placé sur vos offres. Gardez le rythme et visez les postes exigeants."
+      },
+      "todo": "À faire maintenant",
+      "go": "Y aller",
+      "themes": "Vos six thèmes",
+      "themesHint": "Touchez un thème pour savoir ce qu'il veut dire et quoi faire."
     }
   },
   "plan": {
@@ -7676,6 +7693,10 @@
         "useProfile": "Utiliser mon profil et mon CV pour affiner le bilan",
         "skills": {
           "text": "Votre niveau dans ces compétences ?",
+          "ownText": "Vos 3 compétences clés pour ce métier ?",
+          "ownHint": "Écrivez-les, séparées par des virgules, puis donnez votre niveau pour chacune.",
+          "aiHint": "Orbi les a choisies pour le métier que vous visez. Donnez votre niveau.",
+          "aiBadge": "Préparé par Orbi",
           "p0": "Pas encore",
           "p1": "Les bases",
           "p2": "À l'aise",

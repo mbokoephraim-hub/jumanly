@@ -1,0 +1,377 @@
+/*
+ * Résultat du diagnostic (Ephraïm, 31/10/2026) : la note et le niveau sur une carte sombre avec
+ * les quatre niveaux, le mot d'Orbi, « À faire maintenant », les six thèmes avec leur dessin
+ * (touchés : ce que ça veut dire et quoi faire), les atouts. Texte Sapin sur Lime (règle n° 10).
+ */
+
+/* ─── La carte du niveau ──────────────────────────────────────────────────── */
+.dg-r-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 20px 18px 16px;
+  border-radius: 26px;
+  background:
+    radial-gradient(rgba(166, 242, 107, 0.14) 1.2px, transparent 1.4px) 0 0 / 14px 14px,
+    radial-gradient(circle at 100% 0, rgba(95, 224, 184, 0.35), transparent 60%),
+    linear-gradient(150deg, #1d6b4f 0%, #0f3f37 55%, #0b2a26 100%);
+  color: #f2ede5;
+  box-shadow:
+    inset 0 0 0 1px rgba(166, 242, 107, 0.18),
+    0 18px 40px -20px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.dg-r-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.dg-r-ring {
+  --p: 0;
+  flex: none;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  background:
+    radial-gradient(circle, #0d2f2a 0 62%, transparent 63%),
+    conic-gradient(#a6f26b 0, #2fd3a6 calc(var(--p) * 1%), rgba(255, 255, 255, 0.14) 0);
+}
+.dg-r-ring b {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.dg-r-ring small {
+  margin-top: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(242, 237, 229, 0.7);
+}
+.dg-r-t {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.dg-r-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(166, 242, 107, 0.18);
+  color: #c9f7a2;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+.dg-r-t h2 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.dg-r-role {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(242, 237, 229, 0.82);
+  overflow-wrap: anywhere;
+}
+.dg-r-stage {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(242, 237, 229, 0.88);
+  text-wrap: pretty;
+}
+/* Les quatre niveaux, celui de la personne en Lime. */
+.dg-r-echelle {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+.dg-r-echelle li {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  font-size: 11px;
+  color: rgba(242, 237, 229, 0.6);
+}
+.dg-r-echelle i {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+}
+.dg-r-echelle span {
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dg-r-echelle small {
+  font-size: 10.5px;
+}
+.dg-r-echelle li.dg-r-ici {
+  color: #f2ede5;
+}
+.dg-r-echelle li.dg-r-ici i {
+  background: linear-gradient(90deg, #a6f26b, #2fd3a6);
+  box-shadow: 0 0 12px rgba(166, 242, 107, 0.6);
+}
+.dg-r-date {
+  margin: 0;
+  font-size: 11.5px;
+  color: rgba(242, 237, 229, 0.6);
+}
+
+/* ─── Le mot d'Orbi ───────────────────────────────────────────────────────── */
+.dg-r-orbi {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.dg-r-orbi-ic {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #5fe0b8, #2fd3a6);
+  color: #0b1a1f;
+}
+.dg-r-orbi p {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 6px 20px 20px 20px;
+  background: var(--surface);
+  box-shadow: var(--verre);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--texte);
+  text-wrap: pretty;
+}
+
+/* ─── Sections ────────────────────────────────────────────────────────────── */
+.dg-r-sec {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+.dg-r-sec h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.dg-r-aide {
+  margin: -4px 0 0;
+  font-size: 13px;
+  color: var(--texte2);
+}
+.dg-r-go {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--lime);
+  color: var(--sapin);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* À faire maintenant : trois cartes numérotées, chacune sa couleur. */
+.dg-r-todo {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.dg-r-todo li {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow:
+    var(--verre),
+    inset 4px 0 0 var(--dg-r-c, #a6f26b);
+  min-width: 0;
+}
+.dg-r-todo li:nth-child(2) {
+  --dg-r-c: #2fd3a6;
+}
+.dg-r-todo li:nth-child(3) {
+  --dg-r-c: #f4c463;
+}
+.dg-r-todo li::after {
+  content: attr(data-rang);
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--dg-r-c, #a6f26b);
+  color: #0f3f37;
+  font-size: 12px;
+  font-weight: 800;
+}
+.dg-r-todo-t {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 24px;
+}
+.dg-r-todo-t b {
+  font-size: 15px;
+  line-height: 1.3;
+}
+.dg-r-todo-t p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--texte2);
+  text-wrap: pretty;
+}
+
+/* Les six thèmes : une ligne par thème, touchée elle s'ouvre. */
+.dg-r-dims {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dg-r-dim {
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: var(--verre);
+  --dg-r-b: #a6f26b;
+}
+.dg-r-dim[data-bande="mid"] {
+  --dg-r-b: #f4c463;
+}
+.dg-r-dim[data-bande="low"] {
+  --dg-r-b: #f08a7c;
+}
+.dg-r-dim summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px 12px 12px;
+  cursor: pointer;
+}
+.dg-r-dim summary::-webkit-details-marker {
+  display: none;
+}
+.dg-r-dim-n {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.dg-r-dim-n b {
+  font-size: 14.5px;
+  line-height: 1.25;
+}
+.dg-r-barre {
+  height: 7px;
+  border-radius: 999px;
+  background: var(--zone);
+  overflow: hidden;
+}
+.dg-r-barre i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--dg-r-b);
+}
+.dg-r-note {
+  flex: none;
+  min-width: 40px;
+  padding: 5px 8px;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 800;
+  background: color-mix(in srgb, var(--dg-r-b) 22%, transparent);
+  color: var(--texte);
+}
+.dg-r-dim-d {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 14px 14px 60px;
+}
+.dg-r-dim-d p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--texte2);
+  text-wrap: pretty;
+}
+.dg-r-dim[open] summary .dg-r-dim-n b {
+  color: var(--texte);
+}
+
+/* Les atouts. */
+.dg-r-atouts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dg-r-atouts li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: var(--verre);
+  font-size: 14px;
+  line-height: 1.4;
+}
+.dg-r-coche {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--lime);
+  color: var(--sapin);
+}
+
+/* Le badge « Préparé par Orbi » sur l'écran des compétences. */
+.t-dq-orbi {
+  align-self: flex-start;
+}

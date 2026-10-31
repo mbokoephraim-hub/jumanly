@@ -167,10 +167,11 @@ describe("diagnostic_scoring_v3 · une dizaine de questions", () => {
     expect(ids({}, ["A"])).not.toContain("familiarity");
   });
 
-  it("les compétences évaluées sur un seul écran, trois au plus, aucun écran sans compétence", () => {
+  it("les compétences évaluées sur un seul écran, trois au plus, toujours posé", () => {
     const screen = screensFor({}, ["A", "B", "C", "D"], false).find((item) => item.id === "skills");
     expect(screen && "skills" in screen ? screen.skills : []).toEqual(["A", "B", "C"]);
-    expect(ids({}, [])).not.toContain("skills");
+    // Métier inconnu : l'écran reste, la personne cite ses compétences.
+    expect(ids({}, [])).toContain("skills");
   });
 
   it("le diagnostic personnalisé n'ajoute que les questions de relance", () => {

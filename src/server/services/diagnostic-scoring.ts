@@ -227,11 +227,11 @@ const base: { id: QuestionId | "skills"; dimension: Dimension }[] = [
 ];
 
 /** Questions that can be left empty. */
-export const optionalQuestions: readonly string[] = ["targetRole", "ready"];
+export const optionalQuestions: readonly string[] = ["targetRole", "ready", "topSkills"];
 
 /**
  * The screens to show for the answers so far: no question on the target job without one, the
- * assessed skills together on one screen (none when there is none to assess). The personalized
+ * assessed skills together on one screen (named by the talent when none is known for the job). The personalized
  * level adds Orbi's two follow-up questions once they are asked.
  */
 export function screensFor(draft: Draft, skills: string[], personalized: boolean): Screen[] {
@@ -240,9 +240,8 @@ export function screensFor(draft: Draft, skills: string[], personalized: boolean
   for (const item of base) {
     if (item.id === "familiarity" && !hasRole) continue;
     if (item.id === "skills") {
-      const assessed = skills.slice(0, SKILLS_ASSESSED);
-      if (assessed.length > 0)
-        screens.push({ id: "skills", dimension: "skills", skills: assessed });
+      // Always asked: without known skills for the job, the talent names theirs on this screen.
+      screens.push({ id: "skills", dimension: "skills", skills: skills.slice(0, SKILLS_ASSESSED) });
       continue;
     }
     screens.push(item as { id: QuestionId; dimension: Dimension });

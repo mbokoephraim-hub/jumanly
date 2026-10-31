@@ -9,6 +9,7 @@ import { dynamic } from "@/i18n/dynamic";
 import { ruleDiagnostic } from "@/server/services/diagnostic";
 import {
   DIAGNOSTIC_GATE,
+  diagnosticSkills,
   followUpQuestions,
   personalizedDiagnostic,
 } from "@/server/services/diagnostic-ai";
@@ -151,8 +152,8 @@ export async function diagnosticFollowUpsAction(answers: unknown): Promise<strin
 
 /** The skills to assess for a target job, from the real published offers. */
 export async function diagnosticSkillsAction(role: string) {
-  await requireUser(PATH);
-  return demandedSkills(db, typeof role === "string" ? role.slice(0, 120) : "");
+  const user = await requireUser(PATH);
+  return diagnosticSkills(db, user.id, typeof role === "string" ? role.slice(0, 120) : "");
 }
 
 /** « Lecture de votre profil et de votre CV »: what the scan reads, counted. */

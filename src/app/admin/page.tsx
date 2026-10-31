@@ -63,6 +63,7 @@ const aiFeature: Record<string, AiFeatureText> = {
   linkedin: "linkedin",
   diagnostic: "diagnostic",
   diagnostic_followup: "diagnostic",
+  diagnostic_domain: "diagnostic",
   job_writer: "jobDraft",
   learn_coach: "learnCoach",
   orbi_chat: "orbiChat",

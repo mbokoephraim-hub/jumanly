@@ -69,6 +69,7 @@ const featureText: Record<
   cv_tailor: "cvCoach",
   diagnostic: "diagnostic",
   diagnostic_followup: "diagnostic",
+  diagnostic_domain: "diagnostic",
   career_document: "documents",
   proofread: "documents",
   linkedin: "linkedin",
