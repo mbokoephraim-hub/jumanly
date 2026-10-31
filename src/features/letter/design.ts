@@ -49,7 +49,7 @@ export type LetterPhoto = (typeof letterPhotos)[number];
 
 export const letterDesignSchema = z.object({
   template: z.enum(letterTemplateIds).default("horizon"),
-  color: z.enum(colorCodes).default("sapin"),
+  color: z.enum(colorCodes).default("marine"),
   photo: z.enum(letterPhotos).default("rond"),
   /** Set by « Valider le modèle »: a letter without it has never been laid out. */
   chosen: z.boolean().default(false),
@@ -94,20 +94,31 @@ export type LetterSheetData = {
   initials: string;
   /** « Lettre de motivation ». */
   heading: string;
-  /** « Le 31 octobre 2026 ». */
+  /** « Kinshasa, le 31 octobre 2026 », or « Le 31 octobre 2026 » without a city. */
   date: string;
-  /** « À l’attention de … » when the letter is for an offer. */
-  recipient: string | null;
-  /** « Objet : candidature au poste de … ». */
+  /** « À l’attention de … » and the offer, framed, when the letter is for an offer. */
+  recipient: { to: string; detail: string } | null;
+  /** « Objet : », then « candidature au poste de … ». */
+  subjectLabel: string;
   subject: string | null;
   text: string;
 };
 
 export function paragraphsOf(text: string) {
+  // A textarea sends « \r\n »: without this, the whole letter was one paragraph.
   return text
-    .split(/\n{2,}/)
+    .replace(/\r\n?/g, "\n")
+    .split(/\n\s*\n/)
     .map((part) => part.trim())
     .filter(Boolean);
+}
+
+/** « Sublime » and « KOYI SALEY »: the band shows the family name in the light colour. */
+export function nameParts(name: string) {
+  const parts = name.trim().split(/\s+/);
+  return parts.length > 1
+    ? { first: parts[0]!, last: parts.slice(1).join(" ") }
+    : { first: name.trim(), last: "" };
 }
 
 export function initialsOf(name: string) {
