@@ -23,7 +23,7 @@ import {
 
 export type { Priority } from "./diagnostic-scoring";
 export type Strength =
-  "experience" | "education" | "availability" | "mobility" | "interview" | "applications";
+  "experience" | "education" | "availability" | "mobility" | "interview" | "tools" | "applications";
 export type Step = "profile" | "cv" | "skills" | "interview" | "jobs" | "network" | "role";
 
 /** Fields every diagnostic result carries (the progress plan and the Career page read them). */
@@ -85,10 +85,12 @@ export function ruleDiagnostic(
 
   const strengths: Strength[] = [];
   if (years >= 2) strengths.push("experience");
-  if (["bachelor", "master", "doctorate"].includes(answers.education)) strengths.push("education");
+  if (["bachelor", "master", "doctorate"].includes(answers.education ?? ""))
+    strengths.push("education");
   if (answers.time === "a3" || answers.time === "a4") strengths.push("availability");
   if (answers.mobility === "a3" || answers.mobility === "a4") strengths.push("mobility");
   if (answers.confidence >= 4) strengths.push("interview");
+  if (answers.ready.length >= 3) strengths.push("tools");
   if (answers.applications === "a3" || answers.applications === "a4")
     strengths.push("applications");
 

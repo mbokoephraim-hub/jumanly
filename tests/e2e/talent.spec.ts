@@ -124,14 +124,14 @@ async function buildProfile(page: Page) {
   }
 }
 
-/** Answers every screen of the diagnostic (second answer of each choice), then starts the scan. Returns the number of follow-up questions met. */
+/** Answers every screen of the diagnostic (second answer of each choice, each skill too), then starts the scan. Returns the number of follow-up questions met. */
 async function answerDiagnostic(flow: Locator) {
   let followUps = 0;
   for (let step = 0; step < 70; step++) {
     // While Jumanly Intelligence writes its follow-up questions, the button waits.
     await expect(flow.locator("button[aria-busy]")).toHaveCount(0, { timeout: 30_000 });
     const screen = flow.locator("[data-screen]:not([hidden])");
-    const groups = screen.locator("fieldset");
+    const groups = screen.locator("fieldset, [role=radiogroup]");
     for (let index = 0; index < (await groups.count()); index++) {
       await groups.nth(index).locator("label").nth(1).click();
     }
@@ -166,7 +166,10 @@ test("le diagnostic en six dimensions : une question par écran, le scan, puis l
 
   const flow = page.locator("#diagnostic-flow");
   await expect(flow).toContainText("Étape 1 sur 6 · Clarté du projet");
-  // Next without an answer: the question asks for one.
+  // About ten questions (31/10/2026); the target job may stay empty, the next one asks for an answer.
+  await expect(flow).toContainText(/Question 1 sur (9|10)/);
+  await flow.getByRole("button", { name: "Suivant", exact: true }).click();
+  await expect(flow).toContainText("Question 2 sur");
   await flow.getByRole("button", { name: "Suivant", exact: true }).click();
   await expect(flow.getByRole("alert")).toHaveText(
     "Choisissez au moins une réponse pour continuer.",

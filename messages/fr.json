@@ -7528,8 +7528,8 @@
       "title": "Diagnostic de carrière",
       "eyebrow": "Career · Diagnostic de carrière",
       "intro": {
-        "simple": "Six dimensions, 6 à 8 minutes. Votre bilan est calculé par des règles fixes, expliquées point par point.",
-        "personalized": "Six dimensions, quatre questions de plus et deux questions de relance, 8 à 10 minutes. Jumanly Intelligence explique vos résultats et propose des pistes ; les notes restent calculées par des règles fixes."
+        "simple": "Une dizaine de questions, environ 3 minutes. Votre bilan est calculé par des règles fixes, expliquées point par point.",
+        "personalized": "Une dizaine de questions et deux questions de relance d'Orbi, environ 5 minutes. Jumanly Intelligence explique vos résultats et propose des pistes ; les notes restent calculées par des règles fixes."
       },
       "badge": {
         "simple": "Diagnostic simplifié",
@@ -7569,11 +7569,11 @@
           "a6": "Entrepreneur ou indépendant"
         },
         "experience": {
-          "text": "Combien d'années d'expérience professionnelle avez-vous (stages compris) ?",
+          "text": "Votre expérience professionnelle, stages compris ?",
           "a1": "Aucune",
           "a2": "Moins d'un an",
           "a3": "1 à 3 ans",
-          "a4": "3 à 5 ans",
+          "a4": "Plus de 3 ans",
           "a5": "Plus de 5 ans"
         },
         "education": "Quel est votre plus haut niveau d'études ?",
@@ -7600,7 +7600,11 @@
         "confidence": {
           "text": "Sur une échelle de 1 à 5, à quel point vous sentez-vous prêt pour un entretien ?",
           "min": "Pas prêt",
-          "max": "Tout à fait prêt"
+          "max": "Tout à fait prêt",
+          "short": "Face à un recruteur, vous vous sentez…",
+          "c5": "À l'aise",
+          "c3": "Un peu stressé·e",
+          "c1": "Pas encore prêt·e"
         },
         "cvStatus": {
           "text": "Où en est votre CV ?",
@@ -7609,20 +7613,20 @@
           "a3": "Il est à jour"
         },
         "applications": {
-          "text": "Combien de candidatures avez-vous envoyées le mois dernier ?",
+          "text": "Combien de candidatures le mois dernier ?",
           "a1": "Aucune",
           "a2": "1 à 5",
-          "a3": "6 à 15",
+          "a3": "Plus de 5",
           "a4": "Plus de 15"
         },
         "obstacle": {
           "text": "Qu'est-ce qui vous freine le plus aujourd'hui ?",
-          "a1": "Je ne sais pas quel métier choisir",
-          "a2": "Il me manque des compétences",
-          "a3": "Mon CV ne donne pas de réponses",
+          "a1": "Choisir mon métier",
+          "a2": "Des compétences qui manquent",
+          "a3": "Mon CV reste sans réponse",
           "a4": "Je suis mal à l'aise en entretien",
           "a5": "Je ne trouve pas d'offres adaptées",
-          "a6": "Je manque de réseau"
+          "a6": "Pas assez de réseau"
         },
         "time": {
           "text": "Combien de temps pouvez-vous consacrer chaque semaine à votre progression ?",
@@ -7670,12 +7674,27 @@
         "digital": "Quels outils numériques utilisez-vous avec aisance ?",
         "horizon": "Où vous voyez-vous dans trois ans ?",
         "useProfile": "Utiliser mon profil et mon CV pour affiner le bilan",
+        "skills": {
+          "text": "Votre niveau dans ces compétences ?",
+          "p0": "Pas encore",
+          "p1": "Les bases",
+          "p2": "À l'aise",
+          "p3": "Je peux le prouver"
+        },
+        "ready": {
+          "text": "Qu'avez-vous déjà de prêt ?",
+          "hint": "Touchez tout ce que vous avez. Rien encore ? Passez à la suite.",
+          "cv": "Un CV à jour",
+          "letter": "Une lettre de motivation",
+          "profile": "Un profil en ligne à jour",
+          "portfolio": "Des réalisations à montrer"
+        },
         "sectors": {
           "text": "Quels secteurs vous attirent ?",
           "placeholder": "Ex. : Banque, santé, numérique"
         },
         "familiarity": {
-          "text": "À quel point ce métier vous est-il familier ?",
+          "text": "Ce métier, vous le connaissez ?",
           "a1": "Je l'exerce",
           "a2": "Je l'ai découvert en stage",
           "a3": "J'en ai entendu parler",
@@ -7735,10 +7754,10 @@
           "a3": "Je n'en ai pas"
         },
         "interviews": {
-          "text": "Combien d'entretiens d'embauche avez-vous passés ces 6 derniers mois ?",
+          "text": "Combien d'entretiens ces 6 derniers mois ?",
           "a1": "Aucun",
           "a2": "1 ou 2",
-          "a3": "3 à 5",
+          "a3": "3 ou plus",
           "a4": "Plus de 5"
         },
         "pitch": {
@@ -7748,10 +7767,10 @@
           "a3": "Non"
         },
         "contacts": {
-          "text": "Combien de professionnels de votre domaine pourriez-vous contacter cette semaine ?",
+          "text": "Combien de professionnels de votre domaine pourriez-vous contacter ?",
           "a1": "Aucun",
           "a2": "1 ou 2",
-          "a3": "3 à 5",
+          "a3": "3 ou plus",
           "a4": "Plus de 5"
         }
       },
@@ -7814,6 +7833,7 @@
           "mobility": "Une ouverture à la mobilité",
           "interview": "De l'assurance en entretien",
           "applications": "Une recherche déjà active",
+          "tools": "Des outils de candidature déjà prêts",
           "none": "Vos atouts se préciseront en complétant votre profil. Chaque expérience compte, même courte."
         },
         "priority": {
@@ -7841,7 +7861,7 @@
         "titleAgain": "Refaites le point",
         "tagline": "{duration}, une question à la fois. Vos réponses restent privées.",
         "text": "Six dimensions, une question à la fois. Vous voyez votre profil se dessiner pendant que vous répondez, puis vous recevez un bilan expliqué point par point.",
-        "duration": "6 à 8 minutes",
+        "duration": "3 minutes",
         "launch": "Lancer mon diagnostic",
         "resume": "Reprendre mon diagnostic, étape {current} sur {total}",
         "restart": "Recommencer à zéro",
@@ -7864,10 +7884,10 @@
         "hello": "Ici, vous allez découvrir où vous en êtes dans votre carrière professionnelle.",
         "howTitle": "Comment ça se passe",
         "how": {
-          "1": "Répondez à 6 thèmes",
+          "1": "Répondez à 10 questions",
           "2": "Votre profil se dessine",
           "3": "Recevez votre bilan sur 100",
-          "1Text": "Une question à la fois",
+          "1Text": "Une à la fois, en un geste",
           "2Text": "Projet, compétences, expérience…",
           "3Text": "Et vos priorités, expliquées"
         },
@@ -7980,6 +8000,7 @@
           "education": "Niveau d'études",
           "quantified": "Résultats chiffrés",
           "achievement": "Réalisation décrite",
+          "portfolio": "Réalisations à montrer",
           "cvStatus": "État du CV",
           "coverLetter": "Lettre de motivation",
           "onlineProfile": "Profil en ligne",

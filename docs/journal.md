@@ -5307,3 +5307,8 @@ Demande d'Ephraïm : cartes CV trop hautes, interlignes trop larges, titres long
 ## 2026-10-31 · Mes CV : cartes plus hautes, deux à l'écran
 
 Retour d'Ephraïm : cartes compactes trop basses, trois points invisibles. Carte verticale d'environ 200 px : bande à la couleur du CV avec la page dessinée, nom sur deux lignes, étiquettes, modèle et date. Deux cartes tiennent à l'écran, la troisième dépasse. Trois points dans un rond foncé bien visible. « Mes CV » + nombre + « Sélectionner » sur une seule ligne.
+
+## 31/10/2026 · Diagnostic de carrière raccourci
+
+- Une dizaine de questions au lieu d'environ 32 (barème `diagnostic_scoring_v3`, voir docs/decisions/2026-10-31-diagnostic-dix-questions.md), 3 ou 4 réponses par question, dessins du menu sur les questions et sur certaines réponses, compétences sur un seul écran.
+- Accueil du diagnostic et questionnaire : plus de grand vide en bas (marges de la barre fixe comptées deux fois de trop).

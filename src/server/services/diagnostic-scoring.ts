@@ -1,12 +1,13 @@
 /**
- * Career diagnostic, scoring `diagnostic_scoring_v2` (partie 08 § 8.11,
- * docs/experience-animee § 5.3): six dimensions scored out of 100 by fixed rules, a global level
- * on four stages, and the adaptive questions. Pure functions, shared by the server (which always
- * recomputes) and the questionnaire (live radar). The AI never scores (règle d'or 3).
+ * Career diagnostic, scoring `diagnostic_scoring_v3` (partie 08 § 8.11, docs/experience-animee
+ * § 5.3, shortened to about ten questions on 31/10/2026, see
+ * docs/decisions/2026-10-31-diagnostic-dix-questions.md): six dimensions scored out of 100 by
+ * fixed rules, a global level on four stages, and the adaptive questions. Pure functions, shared
+ * by the server (which always recomputes) and the questionnaire. The AI never scores (règle d'or 3).
  */
 import { z } from "zod";
 
-export const SCORING_VERSION = "diagnostic_scoring_v2";
+export const SCORING_VERSION = "diagnostic_scoring_v3";
 
 export const dimensions = [
   "clarity",
@@ -67,6 +68,26 @@ export const choiceAnswers = {
 } as const;
 export type ChoiceQuestion = keyof typeof choiceAnswers;
 
+/**
+ * The answers shown since 31/10/2026: three or four per question. The other codes stay valid so
+ * that earlier diagnostics and drafts still read (« Plus de 5 » now reads a3 for counts).
+ */
+export const shownAnswers: Partial<Record<ChoiceQuestion, readonly string[]>> = {
+  familiarity: ["a1", "a2", "a4"],
+  experience: ["a1", "a2", "a3", "a4"],
+  interviews: ["a1", "a2", "a3"],
+  applications: ["a1", "a2", "a3"],
+  contacts: ["a1", "a2", "a3"],
+  obstacle: ["a1", "a2", "a3", "a6"],
+};
+
+/** « Qu'avez-vous déjà de prêt ? »: several boxes, none is fine. */
+export const readyItems = ["cv", "letter", "profile", "portfolio"] as const;
+export type ReadyItem = (typeof readyItems)[number];
+
+/** Interview confidence on three answers (stored on the 1–5 scale). */
+export const confidenceAnswers = [5, 3, 1] as const;
+
 export const educationAnswers = [
   "none",
   "secondary",
@@ -78,8 +99,29 @@ export const educationAnswers = [
 
 /** Self-assessment levels: Aucun niveau (0), Notions, Intermédiaire, Avancé, Expert. */
 export const SKILL_LEVELS = [0, 1, 2, 3, 4] as const;
-/** Skills assessed one by one (the most asked for in the offers of the target job). */
-export const SKILLS_ASSESSED = 5;
+/** Skills assessed on one screen (the most asked for in the offers of the target job). */
+export const SKILLS_ASSESSED = 3;
+/** Earlier diagnostics assessed up to five. */
+const SKILLS_KEPT = 5;
+
+/**
+ * The four answers of each assessed skill, level and proof in one tap: « Pas encore »,
+ * « Les bases », « À l'aise », « Je peux le prouver » (texts `q.skills.p<n>`).
+ */
+export const SKILL_PICKS = [
+  { level: 0, proof: "a4" },
+  { level: 2, proof: "a4" },
+  { level: 3, proof: "a3" },
+  { level: 4, proof: "a1" },
+] as const;
+
+/** The pick that matches a skill check, for a draft written before 31/10/2026 too. */
+export function skillPickOf(check: { level: number; proof: string } | undefined) {
+  if (!check) return undefined;
+  if (check.level === 0) return 0;
+  if ((check.proof === "a1" || check.proof === "a2") && check.level >= 2) return 3;
+  return check.level >= 3 ? 2 : 1;
+}
 
 const pick = (values: readonly string[]) => z.enum(values as [string, ...string[]]);
 const optionalPick = (values: readonly string[]) =>
@@ -104,9 +146,9 @@ export type FollowUp = z.infer<typeof followUpSchema>;
 
 /** Every answer of the questionnaire. Adaptive questions are optional: rules ignore them when they were not asked. */
 export const answersSchema = z.object({
-  // 1. Clarté du projet
-  situation: pick(choiceAnswers.situation),
-  goal: pick(choiceAnswers.goal),
+  // 1. Clarté du projet (situation and goal: earlier diagnostics only)
+  situation: optionalPick(choiceAnswers.situation),
+  goal: optionalPick(choiceAnswers.goal),
   targetRole: text(120),
   sectors: text(200),
   familiarity: optionalPick(choiceAnswers.familiarity),
@@ -114,28 +156,33 @@ export const answersSchema = z.object({
   // 2. Compétences
   topSkills: text(200),
   skillsToBuild: text(200),
-  skillChecks: z.array(skillCheckSchema).max(SKILLS_ASSESSED).default([]),
+  skillChecks: z.array(skillCheckSchema).max(SKILLS_KEPT).default([]),
   languages: text(200),
   digital: text(200),
   // 3. Expérience
   experience: pick(choiceAnswers.experience),
-  education: z.enum(educationAnswers),
+  /** From the profile only since 31/10/2026 (not asked). */
+  education: z.preprocess(
+    (value) => (value === "" ? undefined : value),
+    z.enum(educationAnswers).optional(),
+  ),
   quantified: optionalPick(choiceAnswers.quantified),
   achievement: text(1000),
-  // 4. Outils de candidature
-  cvStatus: pick(choiceAnswers.cvStatus),
-  coverLetter: pick(choiceAnswers.coverLetter),
-  onlineProfile: pick(choiceAnswers.onlineProfile),
+  // 4. Outils de candidature: what is ready (cvStatus, coverLetter, onlineProfile: earlier ones)
+  ready: z.array(pick(readyItems)).max(readyItems.length).default([]),
+  cvStatus: optionalPick(choiceAnswers.cvStatus),
+  coverLetter: optionalPick(choiceAnswers.coverLetter),
+  onlineProfile: optionalPick(choiceAnswers.onlineProfile),
   // 5. Entretiens
   confidence: z.coerce.number().int().min(1).max(5),
   interviews: pick(choiceAnswers.interviews),
-  pitch: pick(choiceAnswers.pitch),
+  pitch: optionalPick(choiceAnswers.pitch),
   // 6. Recherche active et réseau
   applications: pick(choiceAnswers.applications),
   obstacle: pick(choiceAnswers.obstacle),
-  time: pick(choiceAnswers.time),
-  mobility: pick(choiceAnswers.mobility),
-  workMode: pick(choiceAnswers.workMode),
+  time: optionalPick(choiceAnswers.time),
+  mobility: optionalPick(choiceAnswers.mobility),
+  workMode: optionalPick(choiceAnswers.workMode),
   contacts: pick(choiceAnswers.contacts),
   // Diagnostic personnalisé
   values: z.array(pick(choiceAnswers.values)).max(3).default([]),
@@ -159,81 +206,53 @@ type QuestionId = Exclude<keyof Answers, "skillChecks" | "useProfile" | "followU
 
 export type Screen =
   | { id: QuestionId; dimension: Dimension | "more" }
-  | { id: `skill${number}`; dimension: "skills"; skill: string; index: number }
+  | { id: "skills"; dimension: "skills"; skills: string[] }
   | { id: `followUp${number}`; dimension: "more"; followUp: string; index: number };
 
-const base: { id: QuestionId; dimension: Dimension }[] = [
-  { id: "situation", dimension: "clarity" },
-  { id: "goal", dimension: "clarity" },
+/**
+ * About ten questions (Ephraïm, 31/10/2026), three or four answers each. What the profile already
+ * says (studies, skills, languages) is read there, not asked again.
+ */
+const base: { id: QuestionId | "skills"; dimension: Dimension }[] = [
   { id: "targetRole", dimension: "clarity" },
   { id: "familiarity", dimension: "clarity" },
-  { id: "companies", dimension: "clarity" },
-  { id: "sectors", dimension: "clarity" },
-  { id: "topSkills", dimension: "skills" },
-  { id: "skillsToBuild", dimension: "skills" },
-  { id: "languages", dimension: "skills" },
-  { id: "digital", dimension: "skills" },
+  { id: "skills", dimension: "skills" },
   { id: "experience", dimension: "experience" },
-  { id: "education", dimension: "experience" },
-  { id: "quantified", dimension: "experience" },
-  { id: "achievement", dimension: "experience" },
-  { id: "cvStatus", dimension: "tools" },
-  { id: "coverLetter", dimension: "tools" },
-  { id: "onlineProfile", dimension: "tools" },
+  { id: "ready", dimension: "tools" },
   { id: "confidence", dimension: "interviews" },
   { id: "interviews", dimension: "interviews" },
-  { id: "pitch", dimension: "interviews" },
   { id: "applications", dimension: "search" },
-  { id: "obstacle", dimension: "search" },
-  { id: "time", dimension: "search" },
-  { id: "mobility", dimension: "search" },
-  { id: "workMode", dimension: "search" },
   { id: "contacts", dimension: "search" },
+  { id: "obstacle", dimension: "search" },
 ];
 
-/** Free-text questions: they can be left empty. */
-export const optionalQuestions: readonly string[] = [
-  "targetRole",
-  "sectors",
-  "topSkills",
-  "skillsToBuild",
-  "languages",
-  "digital",
-  "achievement",
-  "feedback",
-  "horizon",
-];
+/** Questions that can be left empty. */
+export const optionalQuestions: readonly string[] = ["targetRole", "ready"];
 
 /**
- * The screens to show for the answers so far: no question on the target job without one, no
- * question on figures in a job without experience, one screen per assessed skill. The
- * personalized level adds four questions at the end, then the follow-ups once they are asked.
+ * The screens to show for the answers so far: no question on the target job without one, the
+ * assessed skills together on one screen (none when there is none to assess). The personalized
+ * level adds Orbi's two follow-up questions once they are asked.
  */
 export function screensFor(draft: Draft, skills: string[], personalized: boolean): Screen[] {
   const hasRole = Boolean(draft.targetRole?.trim());
-  const worked = draft.experience !== undefined && draft.experience !== "a1";
   const screens: Screen[] = [];
   for (const item of base) {
-    if ((item.id === "familiarity" || item.id === "companies") && !hasRole) continue;
-    if (item.id === "quantified" && !worked) continue;
-    screens.push(item);
-    if (item.id === "skillsToBuild") {
-      skills
-        .slice(0, SKILLS_ASSESSED)
-        .forEach((skill, index) =>
-          screens.push({ id: `skill${index}`, dimension: "skills", skill, index }),
-        );
+    if (item.id === "familiarity" && !hasRole) continue;
+    if (item.id === "skills") {
+      const assessed = skills.slice(0, SKILLS_ASSESSED);
+      if (assessed.length > 0)
+        screens.push({ id: "skills", dimension: "skills", skills: assessed });
+      continue;
     }
+    screens.push(item as { id: QuestionId; dimension: Dimension });
   }
-  if (personalized) {
-    for (const id of ["values", "workStyle", "feedback", "horizon"] as const)
-      screens.push({ id, dimension: "more" });
+  if (personalized)
     (draft.followUps ?? [])
       .slice(0, FOLLOW_UPS)
       .forEach((item, index) =>
         screens.push({ id: `followUp${index}`, dimension: "more", followUp: item.question, index }),
       );
-  }
   return screens;
 }
 
@@ -253,7 +272,8 @@ export function ruleFollowUps(draft: Draft): { code: string; skill?: string }[] 
   if (draft.obstacle && draft.obstacle !== "a1") codes.push({ code: "obstacleTried" });
   const unproven = draft.skillChecks?.find((item) => item.proof === "a4" && item.level > 0);
   if (unproven) codes.push({ code: "skillProof", skill: unproven.skill });
-  if (draft.pitch === "a2" || draft.pitch === "a3") codes.push({ code: "pitch" });
+  if (draft.pitch === "a2" || draft.pitch === "a3" || (draft.confidence ?? 5) <= 3)
+    codes.push({ code: "pitch" });
   codes.push({ code: "nextJob" }, { code: "proudSkill" });
   return codes.slice(0, FOLLOW_UPS);
 }
@@ -263,52 +283,34 @@ export function ruleFollowUps(draft: Draft): { code: string; skill?: string }[] 
 export type Reason = { code: string; points: number; max: number };
 export type DimensionScore = { key: Dimension; score: number; reasons: Reason[] };
 
-const listCount = (value: string | undefined) =>
-  (value ?? "")
-    .split(/[,;\n]+/)
-    .map((item) => item.trim())
-    .filter(Boolean).length;
-
 const table = (values: Record<string, number>, answer: string | undefined) =>
   answer ? (values[answer] ?? 0) : 0;
 
-/** Fixed points of each answer (partie 08 § 8.11). */
+/** Fixed points of each answer (partie 08 § 8.11, about ten questions since 31/10/2026). */
 export const POINTS = {
   clarity: {
-    targetRole: 35,
-    familiarity: { a1: 25, a2: 18, a3: 8, a4: 0 },
-    companies: { a1: 20, a2: 10, a3: 0 },
-    sectors: 10,
-    obstacle: 10,
+    targetRole: 40,
+    familiarity: { a1: 35, a2: 25, a3: 15, a4: 5 },
+    obstacle: 25,
   },
   skills: {
-    level: 40,
-    proof: 30,
+    level: 55,
+    proof: 45,
     proofValue: { a1: 1, a2: 0.8, a3: 0.8, a4: 0 } as Record<string, number>,
-    topSkills: { many: 15, some: 8 },
-    languages: { many: 8, one: 4 },
-    digital: 7,
   },
   experience: {
-    experience: { a1: 0, a2: 15, a3: 30, a4: 40, a5: 50 },
-    education: { none: 0, secondary: 8, vocational: 15, bachelor: 20, master: 25, doctorate: 25 },
-    quantified: { a1: 15, a2: 8, a3: 0 },
-    achievement: 10,
+    experience: { a1: 0, a2: 20, a3: 40, a4: 60, a5: 60 },
+    portfolio: 20,
+    education: { none: 0, secondary: 6, vocational: 12, bachelor: 16, master: 20, doctorate: 20 },
   },
-  tools: {
-    cvStatus: { a1: 0, a2: 20, a3: 45 },
-    coverLetter: { a1: 30, a2: 15, a3: 0 },
-    onlineProfile: { a1: 25, a2: 10, a3: 0 },
-  },
+  tools: { cv: 45, letter: 30, profile: 25 },
   interviews: {
-    confidence: 40,
-    interviews: { a1: 0, a2: 15, a3: 25, a4: 30 },
-    pitch: { a1: 30, a2: 15, a3: 0 },
+    confidence: 50,
+    interviews: { a1: 0, a2: 30, a3: 50, a4: 50 },
   },
   search: {
-    applications: { a1: 0, a2: 15, a3: 28, a4: 35 },
-    time: { a1: 5, a2: 12, a3: 20, a4: 25 },
-    contacts: { a1: 0, a2: 15, a3: 30, a4: 40 },
+    applications: { a1: 0, a2: 30, a3: 50, a4: 50 },
+    contacts: { a1: 0, a2: 25, a3: 50, a4: 50 },
   },
 } as const;
 
@@ -318,14 +320,16 @@ function reason(code: string, points: number, max: number): Reason {
   return { code, points: Math.round(points), max };
 }
 
-/** The six dimensions for the answers so far: a question not answered yet counts 0. */
+/**
+ * The six dimensions for the answers so far: a question not answered yet counts 0. The studies
+ * count only when the profile gives them (they are not asked): the dimension is then out of 80,
+ * brought back to 100.
+ */
 export function scoreDimensions(draft: Draft): DimensionScore[] {
   const p = POINTS;
   const hasRole = Boolean(draft.targetRole?.trim());
-  const worked = draft.experience !== undefined && draft.experience !== "a1";
   const checks = draft.skillChecks ?? [];
-  const named = listCount(draft.topSkills);
-  const languages = listCount(draft.languages);
+  const ready = draft.ready ?? [];
   const confidence = draft.confidence;
 
   const groups: Record<Dimension, Reason[]> = {
@@ -336,12 +340,6 @@ export function scoreDimensions(draft: Draft): DimensionScore[] {
         hasRole ? table(p.clarity.familiarity, draft.familiarity) : 0,
         maxOf(p.clarity.familiarity),
       ),
-      reason(
-        "companies",
-        hasRole ? table(p.clarity.companies, draft.companies) : 0,
-        maxOf(p.clarity.companies),
-      ),
-      reason("sectors", listCount(draft.sectors) > 0 ? p.clarity.sectors : 0, p.clarity.sectors),
       reason(
         "obstacle",
         draft.obstacle && draft.obstacle !== "a1" ? p.clarity.obstacle : 0,
@@ -367,17 +365,6 @@ export function scoreDimensions(draft: Draft): DimensionScore[] {
               checks.length,
         p.skills.proof,
       ),
-      reason(
-        "topSkills",
-        named >= 3 ? p.skills.topSkills.many : named > 0 ? p.skills.topSkills.some : 0,
-        p.skills.topSkills.many,
-      ),
-      reason(
-        "languages",
-        languages >= 2 ? p.skills.languages.many : languages === 1 ? p.skills.languages.one : 0,
-        p.skills.languages.many,
-      ),
-      reason("digital", listCount(draft.digital) > 0 ? p.skills.digital : 0, p.skills.digital),
     ],
     experience: [
       reason(
@@ -386,33 +373,24 @@ export function scoreDimensions(draft: Draft): DimensionScore[] {
         maxOf(p.experience.experience),
       ),
       reason(
-        "education",
-        table(p.experience.education, draft.education),
-        maxOf(p.experience.education),
+        "portfolio",
+        ready.includes("portfolio") ? p.experience.portfolio : 0,
+        p.experience.portfolio,
       ),
-      reason(
-        "quantified",
-        worked ? table(p.experience.quantified, draft.quantified) : 0,
-        maxOf(p.experience.quantified),
-      ),
-      reason(
-        "achievement",
-        (draft.achievement ?? "").trim().length >= 30 ? p.experience.achievement : 0,
-        p.experience.achievement,
-      ),
+      ...(draft.education
+        ? [
+            reason(
+              "education",
+              table(p.experience.education, draft.education),
+              maxOf(p.experience.education),
+            ),
+          ]
+        : []),
     ],
     tools: [
-      reason("cvStatus", table(p.tools.cvStatus, draft.cvStatus), maxOf(p.tools.cvStatus)),
-      reason(
-        "coverLetter",
-        table(p.tools.coverLetter, draft.coverLetter),
-        maxOf(p.tools.coverLetter),
-      ),
-      reason(
-        "onlineProfile",
-        table(p.tools.onlineProfile, draft.onlineProfile),
-        maxOf(p.tools.onlineProfile),
-      ),
+      reason("cvStatus", ready.includes("cv") ? p.tools.cv : 0, p.tools.cv),
+      reason("coverLetter", ready.includes("letter") ? p.tools.letter : 0, p.tools.letter),
+      reason("onlineProfile", ready.includes("profile") ? p.tools.profile : 0, p.tools.profile),
     ],
     interviews: [
       reason(
@@ -425,7 +403,6 @@ export function scoreDimensions(draft: Draft): DimensionScore[] {
         table(p.interviews.interviews, draft.interviews),
         maxOf(p.interviews.interviews),
       ),
-      reason("pitch", table(p.interviews.pitch, draft.pitch), maxOf(p.interviews.pitch)),
     ],
     search: [
       reason(
@@ -433,18 +410,18 @@ export function scoreDimensions(draft: Draft): DimensionScore[] {
         table(p.search.applications, draft.applications),
         maxOf(p.search.applications),
       ),
-      reason("time", table(p.search.time, draft.time), maxOf(p.search.time)),
       reason("contacts", table(p.search.contacts, draft.contacts), maxOf(p.search.contacts)),
     ],
   };
-  return dimensions.map((key) => ({
-    key,
-    score: Math.min(
-      100,
-      groups[key].reduce((sum, item) => sum + item.points, 0),
-    ),
-    reasons: groups[key],
-  }));
+  return dimensions.map((key) => {
+    const points = groups[key].reduce((sum, item) => sum + item.points, 0);
+    const max = groups[key].reduce((sum, item) => sum + item.max, 0);
+    return {
+      key,
+      score: max === 0 ? 0 : Math.min(100, Math.round((points * 100) / max)),
+      reasons: groups[key],
+    };
+  });
 }
 
 /** Rounded mean of the six dimensions. */
