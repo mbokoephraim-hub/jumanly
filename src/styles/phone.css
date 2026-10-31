@@ -6360,8 +6360,18 @@ textarea.nb-ca-in[data-haut] {
 .nb-ca-feuille .nb-bouton {
   margin-top: 8px;
 }
+/* In the sheet's column, `flex: 1` (basis 0) squashed the search bar (Ephraïm, 31/10/2026):
+   keep a full, comfortable height. */
 .nb-ca-feuille-champ {
-  border-radius: 25px;
+  flex: none;
+  height: 52px;
+  min-height: 52px;
+  border-radius: 26px;
+  padding: 0 8px 0 16px;
+  gap: 10px;
+}
+.nb-ca-feuille-champ input {
+  font-size: 15px;
 }
 .nb-ca-feuille-champ > button {
   font-size: 14px;
