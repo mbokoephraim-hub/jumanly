@@ -10802,7 +10802,9 @@ Conventions :
 | `letterModel.heading` | Lettre de motivation |
 | `letterModel.date` | Le {date} |
 | `letterModel.recipient` | À l’attention de {company} |
-| `letterModel.subject` | Objet : candidature au poste de {title} |
+| `letterModel.datePlace` | {city}, le {date} |
+| `letterModel.subjectLabel` | Objet : |
+| `letterModel.subject` | Candidature au poste de {title} |
 | `letterModel.pick.title` | Le modèle visuel |
 | `letterModel.pick.lead` | Définissez le modèle visuel de votre lettre : choisissez un modèle, une couleur et votre photo. |
 | `letterModel.pick.color` | Couleur |
@@ -10834,7 +10836,7 @@ Conventions :
 | `letterModel.color.prune` | Prune |
 | `letterModel.color.violet` | Violet |
 | `letterModel.color.encre` | Noir encre |
-| `letterModel.preview.title` | Aperçu de votre lettre |
+| `letterModel.preview.title` | Aperçu |
 | `letterModel.preview.editText` | Texte |
 | `letterModel.preview.other` | Choisir un autre modèle |
 | `letterModel.preview.save` | Enregistrer cette lettre |

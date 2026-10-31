@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+// Loaded with the page, so an app opened before an update still gets it (Ephraïm, 31/10/2026).
+import "@/styles/letter-models.css";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";

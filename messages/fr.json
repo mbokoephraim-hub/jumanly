@@ -13038,7 +13038,9 @@
     "heading": "Lettre de motivation",
     "date": "Le {date}",
     "recipient": "À l’attention de {company}",
-    "subject": "Objet : candidature au poste de {title}",
+    "datePlace": "{city}, le {date}",
+    "subjectLabel": "Objet :",
+    "subject": "Candidature au poste de {title}",
     "pick": {
       "title": "Le modèle visuel",
       "lead": "Définissez le modèle visuel de votre lettre : choisissez un modèle, une couleur et votre photo.",
@@ -13079,7 +13081,7 @@
       "encre": "Noir encre"
     },
     "preview": {
-      "title": "Aperçu de votre lettre",
+      "title": "Aperçu",
       "editText": "Texte",
       "other": "Choisir un autre modèle",
       "save": "Enregistrer cette lettre",

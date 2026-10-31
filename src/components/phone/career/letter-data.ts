@@ -17,6 +17,7 @@ export async function sheetDataOf(
   const place = [facts.city, facts.country ? countryName(facts.country, locale) : ""]
     .filter(Boolean)
     .join(", ");
+  const day = format.dateTime(letter.updatedAt, { day: "numeric", month: "long", year: "numeric" });
   return {
     name: facts.name,
     headline: facts.headline,
@@ -24,10 +25,11 @@ export async function sheetDataOf(
     photoUrl: facts.photoUrl,
     initials: initialsOf(facts.name),
     heading: t("heading"),
-    date: t("date", {
-      date: format.dateTime(letter.updatedAt, { day: "numeric", month: "long", year: "numeric" }),
-    }),
-    recipient: facts.job ? t("recipient", { company: facts.job.company }) : null,
+    date: facts.city ? t("datePlace", { city: facts.city, date: day }) : t("date", { date: day }),
+    recipient: facts.job
+      ? { to: t("recipient", { company: facts.job.company }), detail: facts.job.title }
+      : null,
+    subjectLabel: t("subjectLabel"),
     subject: facts.job ? t("subject", { title: facts.job.title }) : null,
     text: letter.text,
   };

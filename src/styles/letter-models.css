@@ -89,7 +89,16 @@
   align-self: flex-end;
   color: #52606d;
 }
-.lm-dest,
+.lm-dest {
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  min-width: 46%;
+  line-height: 1.4;
+}
+.lm-dest b {
+  font-weight: 700;
+}
 .lm-objet {
   font-weight: 700;
 }
@@ -99,6 +108,8 @@
   letter-spacing: 0.12em;
 }
 .lm-p {
+  text-align: justify;
+  hyphens: auto;
   white-space: pre-line;
   overflow-wrap: anywhere;
 }
@@ -166,7 +177,8 @@
   outline-offset: 3px;
 }
 .lm-puces {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
 .lm-puce {
@@ -175,14 +187,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   min-height: 46px;
-  padding: 0 10px;
+  padding: 0 6px;
+  white-space: nowrap;
   border-radius: 999px;
   background: var(--nb-surface, #fff);
   border: 1.5px solid var(--nb-filet-fort, #cfd8d3);
   color: var(--nb-creme, #0f3f37);
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -203,8 +216,9 @@
   outline-offset: 2px;
 }
 .lm-forme {
-  width: 16px;
-  height: 16px;
+  flex: none;
+  width: 14px;
+  height: 14px;
   border: 2px solid currentColor;
   border-radius: 50%;
 }
@@ -379,4 +393,20 @@
 .lm-flux:has(.lm-bas .nb-lt-accueil) > :not(.lm-bas) {
   filter: blur(7px);
   pointer-events: none;
+}
+
+/* L'aide « pas encore de photo » : le lien sur sa propre ligne. */
+.lm-groupe > .nb-lt-note {
+  display: block;
+}
+.lm-groupe > .nb-lt-note .lm-lien {
+  display: inline-block;
+  margin-top: 4px;
+}
+/* Aperçu : les deux boutons après la lettre, sans la recouvrir. */
+.lm-bas-2 {
+  position: static;
+  margin: 4px 0 0;
+  padding: 0 0 calc(8px + env(safe-area-inset-bottom));
+  background: none;
 }
