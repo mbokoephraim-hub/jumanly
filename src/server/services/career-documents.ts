@@ -59,7 +59,8 @@ const correctionSchema = z.object({
 export type Correction = z.infer<typeof correctionSchema>;
 
 const contentSchema = z.object({
-  type: z.enum([...documentTypes, "proofread"]),
+  // « extra »: an information added while applying (portfolio, achievement, link).
+  type: z.enum([...documentTypes, "proofread", "extra"]),
   text: z.string(),
   jobId: z.string().nullable().default(null),
   corrections: z.array(correctionSchema).default([]),

@@ -3242,6 +3242,62 @@
       "similar": "Offres similaires",
       "back": "Retour aux offres"
     },
+    "questions": {
+      "title": "Les questions du recruteur",
+      "help": "Touchez votre réponse. C'est facultatif : votre candidature part même sans réponse.",
+      "number": "Question {n}",
+      "yes": "Oui",
+      "no": "Non",
+      "free": "Votre réponse, en quelques mots",
+      "experience": {
+        "yes": "Oui, déjà",
+        "no": "Non, pas encore",
+        "where": "Dites-nous où",
+        "wherePlaceholder": "Entreprise, ministère, organisation…"
+      },
+      "start": {
+        "now": "Immédiatement",
+        "week": "Dans une semaine",
+        "month": "Dans un mois"
+      },
+      "place": {
+        "here": "Oui, j'y suis",
+        "ready": "Non, mais je suis prêt·e à venir",
+        "no": "Non"
+      },
+      "salary": {
+        "label": "Votre montant",
+        "unit": "USD par mois",
+        "placeholder": "Ex. 850",
+        "hint": "Écrivez le chiffre qui vous convient. Il ne bloque jamais votre candidature."
+      }
+    },
+    "check": {
+      "pendingTitle": "Votre candidature n'est pas encore envoyée",
+      "pendingText": "Prenez un instant pour vérifier que tout ce qui suit est vraiment ce que vous voulez envoyer. Rien ne part avant que vous touchiez « Envoyer ma candidature ».",
+      "receives": "Ce que {company} va recevoir",
+      "profile": "Votre profil",
+      "cv": "Votre CV",
+      "documents": "Vos documents",
+      "noDocument": "Aucun document joint. C'est facultatif.",
+      "answers": "Vos réponses",
+      "noAnswer": "Pas de réponse",
+      "see": "Voir",
+      "change": "Changer",
+      "edit": "Modifier",
+      "extra": "Ajouter autre chose",
+      "extraLine": "Un portfolio, une réalisation, un lien…"
+    },
+    "extra": {
+      "title": "Ajouter une autre information",
+      "help": "Elle sera jointe à cette candidature et gardée dans vos documents.",
+      "name": "Titre",
+      "namePlaceholder": "Ex. Mon portfolio, Campagne pour le ministère",
+      "text": "Description ou lien",
+      "textPlaceholder": "Expliquez en quelques lignes, ou collez un lien.",
+      "save": "Joindre à ma candidature",
+      "full": "Vous avez déjà joint {max} documents, le maximum. Retirez-en un pour en ajouter un autre."
+    },
     "web": {
       "steps": "Étapes de la candidature",
       "step": {
@@ -4308,7 +4364,8 @@
         "bio": "Biographie",
         "email": "E-mail de candidature",
         "thankYou": "Message de remerciement",
-        "proofread": "Texte relu"
+        "proofread": "Texte relu",
+        "extra": "Information jointe à une candidature"
       },
       "linkedin": {
         "label": "LinkedIn",

@@ -2,6 +2,7 @@
 
 import { refresh } from "next/cache";
 import {
+  composeScreeningAnswer,
   screeningAnswersFor,
   screeningAnswersOf,
   screeningQuestionsOf,
@@ -139,7 +140,22 @@ export async function saveApplicationStepAction(formData: FormData) {
           Object.fromEntries(
             [...formData.entries()]
               .filter(([key]) => key.startsWith("answer-"))
-              .map(([key, value]) => [key.slice(7), String(value)]),
+              .map(([key, value]) => {
+                const id = key.slice(7);
+                // A ready answer may come with a detail (« Dites-nous où ») or a unit (salary).
+                const unit = String(formData.get(`unit-${id}`) ?? "").trim();
+                const main = String(value).trim();
+                return [
+                  id,
+                  composeScreeningAnswer(
+                    unit && main ? `${main} ${unit}` : main,
+                    // The detail goes with one option only (« Oui, déjà »): another tap drops it.
+                    formData.get(`detailFor-${id}`) === main
+                      ? String(formData.get(`detail-${id}`) ?? "")
+                      : "",
+                  ),
+                ];
+              }),
           ),
         )
       : undefined;
@@ -204,4 +220,61 @@ export async function countOffersAction(values: Record<string, string>): Promise
       .slice(0, 20),
   );
   return countJobs(db, parseJobFilters(raw));
+}
+
+const extraSchema = z.object({
+  job: z.string().min(1).max(200),
+  back: z.enum(["lettre", "verification"]),
+  title: z.string().trim().min(1).max(120),
+  text: z.string().trim().min(1).max(2000),
+});
+
+/**
+ * « Ajouter autre chose » (Ephraïm, 31/10/2026): a portfolio, an achievement or a link, written in
+ * a few lines, kept in the talent's documents and joined to the draft. Free like applying.
+ */
+export async function addApplicationExtraAction(formData: FormData) {
+  const parsed = extraSchema.safeParse({
+    job: formData.get("job"),
+    back: formData.get("back"),
+    title: formData.get("title"),
+    text: formData.get("text"),
+  });
+  const slug = String(formData.get("job") ?? "");
+  if (!parsed.success) redirect(slug ? applyHref(slug, "verification") : "/app/jobs");
+  const { job: jobSlug, back, title, text } = parsed.data;
+  const user = await requireUser(applyHref(jobSlug));
+  const job = await db.job.findUnique({
+    where: { slug: jobSlug },
+    select: { id: true, status: true, closesAt: true },
+  });
+  if (!job) redirect("/app/jobs");
+  if (!isJobOpen(job)) redirect(`/app/jobs/${jobSlug}?candidature=close`);
+  const draft = await getApplicationDraft(db, user.id, job.id);
+  const refs = parseRefs(draft?.attachments);
+  if (refs.length < ATTACHMENTS_MAX) {
+    const profile = await db.talentProfile.findUnique({
+      where: { userId: user.id },
+      select: { id: true },
+    });
+    if (profile) {
+      const document = await db.document.create({
+        data: {
+          profileId: profile.id,
+          kind: "other",
+          title,
+          content: { type: "extra", text, jobId: job.id, corrections: [] },
+        },
+        select: { id: true },
+      });
+      await saveApplicationDraft(db, {
+        userId: user.id,
+        jobId: job.id,
+        step: draft?.step === "verification" ? "verification" : back,
+        attachments: [...refs, { type: "document", id: document.id }],
+      });
+    }
+  }
+  refresh();
+  redirect(applyHref(jobSlug, back));
 }

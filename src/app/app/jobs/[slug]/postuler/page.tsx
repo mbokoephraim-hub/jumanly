@@ -1,9 +1,11 @@
+import "@/styles/postuler-v2.css";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Logo, toneOf } from "@/components/talent/art";
+import { ApplyQuestions } from "@/components/talent/apply-questions";
 import { ApplySend } from "@/components/talent/apply-send";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
@@ -14,7 +16,7 @@ import { ApplySentDialog } from "@/components/talent/web/apply-sent-dialog";
 import { dynamic } from "@/i18n/dynamic";
 import { formatDayMonth } from "@/lib/dates";
 import { applicationLetterAction } from "@/server/actions/career-documents";
-import { saveApplicationStepAction } from "@/server/actions/jobs";
+import { addApplicationExtraAction, saveApplicationStepAction } from "@/server/actions/jobs";
 import { requireUser } from "@/server/auth/session";
 import { screeningAnswersOf, screeningQuestionsOf } from "@/server/services/screening";
 import { db } from "@/server/db";
@@ -536,9 +538,9 @@ export default async function ApplyPage({
 
         <form id={formId} action={saveApplicationStepAction} className="t-flux">
           {keep}
-          {(questions.length > 0 || job.requestedDocuments.length > 0) && (
+          {job.requestedDocuments.length > 0 && (
             <fieldset className="t-flux t-serre">
-              <legend className="t-h2s">{t("hireOffers.questions.title")}</legend>
+              <legend className="sr-only">{t("hireOffers.questions.title")}</legend>
               {job.requestedDocuments.length > 0 && (
                 <p className="t-aide">
                   {t("hireOffers.questions.documents", {
@@ -548,57 +550,10 @@ export default async function ApplyPage({
                   })}
                 </p>
               )}
-              {questions.length > 0 && (
-                <>
-                  <input type="hidden" name="answers" value="1" />
-                  <p className="t-aide">{t("hireOffers.questions.optional")}</p>
-                  <div className="t-verre">
-                    {questions.map((question) => {
-                      const saved = answers.get(question.id) ?? "";
-                      const id = `apply-q-${question.id}`;
-                      return (
-                        <div key={question.id} className="t-rx-rep">
-                          {question.kind === "yesno" ? (
-                            <fieldset className="t-flux t-serre">
-                              <legend>
-                                <p>{question.text}</p>
-                              </legend>
-                              <div className="t-seg">
-                                {(["yes", "no"] as const).map((value) => (
-                                  <label key={value}>
-                                    <input
-                                      type="radio"
-                                      name={`answer-${question.id}`}
-                                      value={value}
-                                      defaultChecked={saved === value}
-                                    />
-                                    {t(`hireOffers.questions.${value}`)}
-                                  </label>
-                                ))}
-                              </div>
-                            </fieldset>
-                          ) : (
-                            <>
-                              <label htmlFor={id}>
-                                <p>{question.text}</p>
-                              </label>
-                              <textarea
-                                id={id}
-                                name={`answer-${question.id}`}
-                                maxLength={1000}
-                                rows={3}
-                                defaultValue={saved}
-                                placeholder={t("hireOffers.questions.answer")}
-                              />
-                            </>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </>
-              )}
             </fieldset>
+          )}
+          {questions.length > 0 && (
+            <ApplyQuestions questions={questions} answers={answers} form={formId} />
           )}
           <div className="t-verre t-fort t-bas-f">
             <Link href={stepHref("verification")} className="t-bt t-sec t-m t-press">
@@ -745,98 +700,170 @@ export default async function ApplyPage({
     );
   }
 
-  // ─── Step 3 · check and send. ────────────────────────────────────────────────────────────
+  // ─── Step 3 · check and send (Ephraïm, 31/10/2026): nothing is sent yet, everything in clear. ──
   const documents = [
-    ...(letter ? [t("apply.docs.letter")] : []),
-    ...joined.map((item) => item.title),
+    ...(letter
+      ? [{ key: "lettre", title: t("apply.docs.letter"), icon: "document" as const }]
+      : []),
+    ...joined.map((item) => ({
+      key: refValue(item),
+      title: item.title,
+      icon: item.type === "certificate" ? ("certificat" as const) : ("document" as const),
+    })),
   ];
+  const initials = (user.name || user.email)
+    .split(/\s+/)
+    .map((part) => part[0] ?? "")
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+  const cvLine = chosenCv
+    ? [
+        chosenCv.pageCount ? t("apply.cv.pages", { count: chosenCv.pageCount }) : null,
+        t("apply.web.cvLine", { date: formatDayMonth(chosenCv.updatedAt) }),
+      ]
+        .filter(Boolean)
+        .join(" · ")
+    : t("apply.cv.profileLine");
+  const full = refs.length >= ATTACHMENTS_MAX;
   return layout(
     <>
       <h2 className="t-h2s">{t("apply.review.title")}</h2>
-      {chosenCv && (
-        <div className="t-verre t-cv-big">
-          {page}
-          <div className="t-t">
-            <b>{t("apply.review.cv", { title: chosenCv.title })}</b>
-            <span>
-              {[
-                chosenCv.pageCount ? t("apply.cv.pages", { count: chosenCv.pageCount }) : null,
-                t("apply.web.cvLine", { date: formatDayMonth(chosenCv.updatedAt) }),
-              ]
-                .filter(Boolean)
-                .join(" · ")}
+      <div className="t-apv-att" role="note">
+        <span className="t-apv-att-ic" aria-hidden>
+          <TalentIcon name="horloge" size="s" />
+        </span>
+        <div>
+          <b>{t("apply.check.pendingTitle")}</b>
+          <p>{t("apply.check.pendingText")}</p>
+        </div>
+      </div>
+
+      <p className="t-apv-lab">{t("apply.check.receives", { company })}</p>
+      <div className="t-apv">
+        <section className="t-verre t-apv-c" aria-labelledby="apv-profil">
+          <div className="t-apv-h">
+            <span className="t-apv-n" aria-hidden>
+              {1}
             </span>
-            <a
-              href={`/app/career/cv/${chosenCv.id}/pdf`}
-              target="_blank"
-              rel="noreferrer"
-              className="t-bt t-sec t-s t-press"
-            >
-              {t("apply.web.preview")}
-            </a>
+            <h3 id="apv-profil">{t("apply.check.profile")}</h3>
+            <Link href="/app/profil/apercu" className="t-apv-a t-press">
+              {t("apply.check.see")}
+            </Link>
           </div>
-        </div>
-      )}
-      <div className="t-verre t-liste t-recap">
-        <div className="t-li">
-          <span className="t-cases t-c2" aria-hidden>
-            <TalentIcon name="profil" size="s" />
-          </span>
-          <div className="t-t">
-            <b>{user.name}</b>
-            <span>{user.email}</span>
-          </div>
-          <Link href="/app/profil" className="t-v t-lien-d">
-            {t("apply.review.edit")}
-          </Link>
-        </div>
-        <div className={chosenCv ? "t-li t-post-cvl" : "t-li"}>
-          <span className="t-cases t-c2" aria-hidden>
-            <TalentIcon name="cv" size="s" />
-          </span>
-          <div className="t-t">
-            <b>
-              {chosenCv ? t("apply.review.cv", { title: chosenCv.title }) : t("apply.cv.profile")}
-            </b>
-            <span>
-              {chosenCv
-                ? [
-                    chosenCv.pageCount ? t("apply.cv.pages", { count: chosenCv.pageCount }) : null,
-                    "PDF",
-                  ]
-                    .filter(Boolean)
-                    .join(" · ")
-                : t("apply.cv.profileLine")}
+          <div className="t-apv-r">
+            <span className="t-apv-av" aria-hidden>
+              {initials}
+            </span>
+            <span className="t-t">
+              <b>{user.name}</b>
+              <span>{user.email}</span>
             </span>
           </div>
-          <Link href={stepHref("cv")} className="t-v t-lien-d">
-            {t("apply.review.edit")}
-          </Link>
-        </div>
-        <div className="t-li">
-          <span className="t-cases t-c1" aria-hidden>
-            <TalentIcon name="document" size="s" />
-          </span>
-          <div className="t-t">
-            <b>{t("apply.review.docs", { count: documents.length })}</b>
-            {documents.length > 0 && <span>{documents.join(", ")}</span>}
+        </section>
+
+        <section className="t-verre t-apv-c" aria-labelledby="apv-cv">
+          <div className="t-apv-h">
+            <span className="t-apv-n" aria-hidden>
+              {2}
+            </span>
+            <h3 id="apv-cv">{t("apply.check.cv")}</h3>
+            <Link href={stepHref("cv")} className="t-apv-a t-press">
+              {t("apply.check.change")}
+            </Link>
           </div>
-          <Link href={stepHref("lettre")} className="t-v t-lien-d">
-            {documents.length > 0 ? t("apply.review.see") : t("apply.review.add")}
-          </Link>
-        </div>
-        <div className="t-li t-post-profil">
-          <span className="t-cases t-c3" aria-hidden>
-            <TalentIcon name="favori" size="s" />
-          </span>
-          <div className="t-t">
-            <b>{t("apply.web.profile")}</b>
-            <span>{t("apply.web.profileLine")}</span>
+          <div className="t-apv-r">
+            <span className="t-apv-pg" aria-hidden>
+              <i className="t-h" />
+              <i />
+              <i className="t-c" />
+              <i />
+              <i />
+            </span>
+            <span className="t-t">
+              <b>{chosenCv ? chosenCv.title : t("apply.cv.profile")}</b>
+              <span>{cvLine}</span>
+            </span>
+            {chosenCv && (
+              <a
+                href={`/app/career/cv/${chosenCv.id}/pdf`}
+                target="_blank"
+                rel="noreferrer"
+                className="t-bt t-sec t-s t-press"
+              >
+                {t("apply.web.preview")}
+              </a>
+            )}
           </div>
-          <Link href="/app/profil/apercu" className="t-v t-lien-d">
-            {t("apply.web.profileSee")}
-          </Link>
-        </div>
+        </section>
+
+        <section className="t-verre t-apv-c" aria-labelledby="apv-docs">
+          <div className="t-apv-h">
+            <span className="t-apv-n" aria-hidden>
+              {3}
+            </span>
+            <h3 id="apv-docs">{t("apply.check.documents")}</h3>
+            <Link href={stepHref("lettre")} className="t-apv-a t-press">
+              {t("apply.check.edit")}
+            </Link>
+          </div>
+          {documents.length === 0 ? (
+            <p className="t-apv-vide">{t("apply.check.noDocument")}</p>
+          ) : (
+            <ul className="t-apv-docs">
+              {documents.map((item) => (
+                <li key={item.key}>
+                  <span className="t-apv-di" aria-hidden>
+                    <TalentIcon name={item.icon} size="xs" />
+                  </span>
+                  {item.title}
+                </li>
+              ))}
+            </ul>
+          )}
+          {!full && (
+            <SheetButton target="ap-autre" className="t-apv-plus t-press">
+              <span className="t-apv-plus-ic" aria-hidden>
+                <TalentIcon name="plus" size="s" />
+              </span>
+              <span className="t-t">
+                <b>{t("apply.check.extra")}</b>
+                <span>{t("apply.check.extraLine")}</span>
+              </span>
+            </SheetButton>
+          )}
+        </section>
+
+        {questions.length > 0 && (
+          <section className="t-verre t-apv-c" aria-labelledby="apv-rep">
+            <div className="t-apv-h">
+              <span className="t-apv-n" aria-hidden>
+                {4}
+              </span>
+              <h3 id="apv-rep">{t("apply.check.answers")}</h3>
+              <Link href={`${stepHref("lettre")}#apq-titre`} className="t-apv-a t-press">
+                {t("apply.check.edit")}
+              </Link>
+            </div>
+            <dl className="t-apv-rep">
+              {questions.map((question) => {
+                const saved = answers.get(question.id);
+                const shown =
+                  question.kind === "yesno" && saved
+                    ? t(saved === "yes" ? "apply.questions.yes" : "apply.questions.no")
+                    : saved;
+                return (
+                  <div key={question.id}>
+                    <dt>{question.text}</dt>
+                    <dd className={shown ? undefined : "t-apv-sans"}>
+                      {shown || t("apply.check.noAnswer")}
+                    </dd>
+                  </div>
+                );
+              })}
+            </dl>
+          </section>
+        )}
       </div>
       <p className="t-gar">
         <TalentIcon name="confidentialite" size="s" />
@@ -867,6 +894,42 @@ export default async function ApplyPage({
           later: t("apply.failed.later"),
         }}
       />
+
+      <Sheet id="ap-autre" title={t("apply.extra.title")} closeLabel={t("offer.close")}>
+        {full ? (
+          <p className="t-aide">{t("apply.extra.full", { max: ATTACHMENTS_MAX })}</p>
+        ) : (
+          <form action={addApplicationExtraAction} className="t-flux">
+            <input type="hidden" name="job" value={slug} />
+            <input type="hidden" name="back" value="verification" />
+            <p className="t-aide">{t("apply.extra.help")}</p>
+            <div className="t-champ">
+              <label htmlFor="ap-autre-titre">{t("apply.extra.name")}</label>
+              <input
+                id="ap-autre-titre"
+                name="title"
+                required
+                maxLength={120}
+                placeholder={t("apply.extra.namePlaceholder")}
+              />
+            </div>
+            <div className="t-champ">
+              <label htmlFor="ap-autre-texte">{t("apply.extra.text")}</label>
+              <textarea
+                id="ap-autre-texte"
+                name="text"
+                required
+                rows={5}
+                maxLength={2000}
+                placeholder={t("apply.extra.textPlaceholder")}
+              />
+            </div>
+            <button type="submit" className="t-bt t-p t-pl t-press">
+              {t("apply.extra.save")}
+            </button>
+          </form>
+        )}
+      </Sheet>
     </>,
   );
 }
