@@ -42,7 +42,7 @@ export function useCancelCv({
   const router = useRouter();
   const [asking, setAsking] = useState(false);
   const [pending, start] = useTransition();
-  const leave = () => router.replace("/app/career/cv?onglet=cv");
+  const leave = () => router.replace("/app/career/cv?onglet=documents");
   const confirm = () =>
     start(async () => {
       if (isNew) {
