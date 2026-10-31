@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { FlowHead } from "@/components/talent/flow-head";
+import Link from "next/link";
+import { PhoneIcon } from "@/components/phone/icon";
+import { LetterCancel } from "@/components/phone/career/letter-cancel";
 import { LetterIntro } from "@/components/phone/career/letter-intro";
 import { PhoneNewLetter } from "@/components/phone/career/new-letter";
 import { Notice } from "@/components/talent/notice";
@@ -38,11 +40,19 @@ export default async function NewLetterPage({
   const aiError = orbiLimitCode(params.ia);
   return (
     <div className="t-flux t-od-bas">
-      <FlowHead
-        back="/app/career/cv?onglet=documents"
-        backLabel={t("docs.back")}
-        title={t("docs.letters.create.title")}
-      />
+      {/* The same head as « Nouveau CV » (Ephraïm, 31/10/2026): round back, bold title beside it. */}
+      <header className="nb-cv-tete nb-lt-tete">
+        <Link
+          href="/app/career/cv?onglet=documents"
+          className="nb-cv-retour"
+          aria-label={t("docs.back")}
+        >
+          <PhoneIcon name="retour" size={20} stroke={2} />
+        </Link>
+        <div className="nb-cv-titre">
+          <h1>{t("docs.letters.create.title")}</h1>
+        </div>
+      </header>
       {params.erreur === "input" && <Notice tone="err">{t("docs.letters.inputError")}</Notice>}
       {aiError && <OrbiLimit code={aiError} plan={talentPlanFor(plans, DOCUMENTS_GATE.key)} />}
       <PhoneNewLetter
@@ -50,6 +60,15 @@ export default async function NewLetterPage({
         plan={talentPlanFor(plans, DOCUMENTS_GATE.key)}
         offers={offers}
         proofreadReady={check.state === "ready"}
+      />
+      <LetterCancel
+        href="/app/career/cv?onglet=documents"
+        texts={{
+          cancel: t("phoneLetter.cancel.button"),
+          ask: t("phoneLetter.cancel.ask"),
+          yes: t("phoneLetter.cancel.yes"),
+          no: t("phoneLetter.cancel.no"),
+        }}
       />
       {/* Back from Orbi with an error or a limit: no welcome message again. */}
       {!params.erreur && !aiError && !params.de && (

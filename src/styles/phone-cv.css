@@ -1883,7 +1883,7 @@ button.nb-cv-depart {
   margin: 0;
   padding: 12px 14px;
   border-radius: 18px 18px 18px 6px;
-  background: linear-gradient(135deg, var(--nb-f-10362f, #10362f), var(--nb-haute));
+  background: var(--nb-haute);
   border: 1.5px solid rgba(var(--nb-menthe-rgb, 47, 211, 166), 0.55);
   font-size: 14px;
   line-height: 1.45;
@@ -2004,7 +2004,7 @@ html[data-nb-theme="clair"] .nb-lt-zone {
   height: 1px;
 }
 .nb-lt-ton:has(:checked) {
-  background: linear-gradient(120deg, var(--nb-lime), var(--nb-menthe));
+  background: var(--nb-lime);
   border-color: transparent;
   color: var(--nb-encre);
 }
@@ -2074,14 +2074,6 @@ textarea.nb-lt-zone[data-grande] {
   font-size: 16px;
   font-weight: 800;
   cursor: pointer;
-}
-.nb-lt-bt[data-orbi] {
-  background: linear-gradient(
-    115deg,
-    var(--nb-lime) 0%,
-    var(--nb-menthe-claire) 55%,
-    var(--nb-menthe) 100%
-  );
 }
 .nb-lt-bt:focus-visible {
   outline: 2px solid var(--nb-creme);
@@ -2252,4 +2244,31 @@ textarea.nb-lt-zone[data-grande] {
 .nb-lt-ajouter:focus-visible {
   outline: 2px solid var(--nb-lime-t);
   outline-offset: 2px;
+}
+
+/* En-tête comme « Nouveau CV » ; « Annuler » tout en bas, avec confirmation (Ephraïm, 31/10/2026). */
+.nb-lt-tete {
+  padding: 8px 0 4px;
+}
+.nb-lt-annuler {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 52px;
+  border-radius: 999px;
+  background: none;
+  border: 1.5px solid var(--nb-filet-fort);
+  color: var(--nb-creme);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.nb-lt-annuler:focus-visible {
+  outline: 2px solid var(--nb-lime-t);
+  outline-offset: 2px;
+}
+.nb-lt-carte .nb-lt-annuler {
+  border-color: transparent;
 }

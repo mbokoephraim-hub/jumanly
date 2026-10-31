@@ -12694,6 +12694,12 @@
       "text": "Votre lettre",
       "textExample": "Écrivez ou collez votre lettre ici…"
     },
+    "cancel": {
+      "button": "Annuler",
+      "ask": "Êtes-vous sûr de vouloir annuler ?",
+      "yes": "Oui, annuler",
+      "no": "Non, continuer"
+    },
     "intro": {
       "title": "Votre lettre de motivation",
       "one": "Orbi l’écrit pour vous, ou vous l’écrivez et Orbi la relit.",
