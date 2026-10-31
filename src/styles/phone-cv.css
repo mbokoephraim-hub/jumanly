@@ -1974,22 +1974,26 @@ html[data-nb-theme="clair"] .nb-lt-zone {
 .nb-lt-menu select:focus-visible {
   outline: none;
 }
+/* Les trois tons sur une seule ligne (Ephraïm, 31/10/2026). */
 .nb-lt-tons {
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
 }
 .nb-lt-ton {
   position: relative;
   display: inline-flex;
   align-items: center;
+  flex: 1 1 0;
+  justify-content: center;
+  min-width: 0;
   min-height: 44px;
-  padding: 0 18px;
+  padding: 0 8px;
   border-radius: 999px;
   background: var(--nb-haute);
   border: 1px solid var(--nb-filet-fort);
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 700;
+  white-space: nowrap;
   color: var(--nb-creme);
   cursor: pointer;
 }
@@ -2028,7 +2032,7 @@ textarea.nb-lt-zone {
   resize: vertical;
 }
 textarea.nb-lt-zone[data-grande] {
-  min-height: 210px;
+  min-height: 180px;
 }
 .nb-lt-zone::placeholder {
   color: var(--nb-brume);
@@ -2103,4 +2107,101 @@ textarea.nb-lt-zone[data-grande] {
   flex: 1;
   height: 1px;
   background: var(--nb-filet-fort);
+}
+
+/* Accueil de « Nouvelle lettre » : la page floutée derrière un court message, « Passer » possible. */
+.nb-lt-accueil {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px;
+  background: rgba(var(--nb-nuit-rgb), 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: nb-lt-entree 0.25s var(--nb-courbe);
+}
+.nb-lt-carte {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px 20px 20px;
+  border-radius: 24px;
+  background: var(--nb-surface);
+  border: 1.5px solid rgba(var(--nb-menthe-rgb, 47, 211, 166), 0.55);
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.6);
+}
+.nb-lt-carte h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--nb-creme);
+}
+.nb-lt-carte ol {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: nb-lt;
+}
+.nb-lt-carte li {
+  display: flex;
+  gap: 10px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--nb-texte);
+  counter-increment: nb-lt;
+}
+.nb-lt-carte li::before {
+  content: counter(nb-lt);
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--nb-menthe);
+  color: var(--nb-encre);
+  font-size: 13px;
+  font-weight: 800;
+}
+.nb-lt-passer {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--nb-brume);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.nb-lt-passer:focus-visible {
+  outline: 2px solid var(--nb-lime-t);
+}
+/* backdrop-filter does not reach through the shell's layers: the page itself is blurred. */
+:has(> .nb-lt-accueil) > :not(.nb-lt-accueil) {
+  filter: blur(7px);
+  pointer-events: none;
+}
+@keyframes nb-lt-entree {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-lt-accueil {
+    animation: none;
+  }
 }

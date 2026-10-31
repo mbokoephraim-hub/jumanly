@@ -695,7 +695,7 @@ function DocumentsPanel({
         </h2>
         <div className="nb-cr-pad">
           {letters.length === 0 ? (
-            <p className="nb-pf-vide">{t("docs.lettersEmpty")}</p>
+            <p className="nb-pf-vide nb-cr-vide-cv">{t("docs.lettersEmpty")}</p>
           ) : (
             <ul className="nb-doc-rangee" data-rangee="">
               {letters.map((letter) => (
