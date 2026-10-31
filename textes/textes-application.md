@@ -6073,6 +6073,17 @@ Conventions :
 | `career.diagnostic.last.open` | Voir mon bilan complet |
 | `career.diagnostic.welcome.constellation` | Les six dimensions de votre bilan |
 | `career.diagnostic.welcome.noscript` | Sans JavaScript, toutes les questions s'affichent sur une seule page. |
+| `career.diagnostic.welcome.hello` | Ici, vous allez découvrir où vous en êtes dans votre carrière professionnelle. |
+| `career.diagnostic.welcome.howTitle` | Comment ça se passe |
+| `career.diagnostic.welcome.how.1` | Répondez à 6 thèmes |
+| `career.diagnostic.welcome.how.2` | Votre profil se dessine |
+| `career.diagnostic.welcome.how.3` | Recevez votre bilan sur 100 |
+| `career.diagnostic.welcome.how.1Text` | Une question à la fois |
+| `career.diagnostic.welcome.how.2Text` | Projet, compétences, expérience… |
+| `career.diagnostic.welcome.how.3Text` | Et vos priorités, expliquées |
+| `career.diagnostic.welcome.private` | Privé |
+| `career.diagnostic.welcome.useProfileShort` | Partir de mon profil et de mon CV |
+| `career.diagnostic.welcome.useProfileHint` | Vous pourrez tout modifier. |
 | `career.diagnostic.card.label` | Votre carte professionnelle |
 | `career.diagnostic.card.noTarget` | Métier visé à préciser |
 | `career.diagnostic.card.skills` | {count, plural, =0 {Aucune compétence déclarée} one {# compétence déclarée} other {# compétences déclarées}} |
@@ -9700,17 +9711,17 @@ Conventions :
 | `phoneCareer.me.certificatesAddLabel` | Se former pour obtenir une attestation |
 | `phoneCareer.me.certificatesEmpty` | Vos formations suivies en ligne ou en présentiel, et vos attestations Jumanly. |
 | `phoneCareer.follow.title` | Mes documents et candidatures |
-| `phoneCareer.follow.cvs` | {count, plural, one {CV} other {CV}} |
+| `phoneCareer.follow.cvs` | {count, plural, =0 {Aucun CV construit} one {# CV construit} other {# CV construits}} |
 | `phoneCareer.follow.cvScore` | CV principal : {score} % |
 | `phoneCareer.follow.cvFile` | CV importé, prêt à envoyer |
 | `phoneCareer.follow.cvNone` | Créez votre premier CV |
-| `phoneCareer.follow.letters` | {count, plural, one {Lettre} other {Lettres}} |
+| `phoneCareer.follow.letters` | {count, plural, =0 {0 lettre} one {# lettre} other {# lettres}} |
 | `phoneCareer.follow.lettersReady` | À adapter à chaque offre |
 | `phoneCareer.follow.lettersNone` | Orbi peut vous aider |
-| `phoneCareer.follow.works` | {count, plural, one {Réalisation} other {Réalisations}} |
+| `phoneCareer.follow.works` | {count, plural, =0 {0 réalisation} one {# réalisation} other {# réalisations}} |
 | `phoneCareer.follow.worksFeatured` | {count, plural, =0 {Aucune mise en avant} one {# mise en avant} other {# mises en avant}} |
 | `phoneCareer.follow.worksNone` | Montrez votre travail |
-| `phoneCareer.follow.active` | {count, plural, one {Candidature en cours} other {Candidatures en cours}} |
+| `phoneCareer.follow.active` | {count, plural, =0 {0 candidature en cours} one {# candidature en cours} other {# candidatures en cours}} |
 | `phoneCareer.follow.interviews` | {count, plural, one {# entretien prévu} other {# entretiens prévus}} |
 | `phoneCareer.follow.applied` | {count, plural, one {# envoyée au total} other {# envoyées au total}} |
 | `phoneCareer.follow.noneYet` | Postuler est gratuit |
@@ -9795,9 +9806,12 @@ Conventions :
 | `phoneCareer.progression.stage.ready` | Prêt |
 | `phoneCareer.progression.stage.competitive` | Compétitif |
 | `phoneCareer.progression.next` | {count, plural, =0 {Vous êtes au plus haut stade.} one {Encore une étape pour passer « {stage} ».} other {Encore # étapes pour passer « {stage} ».}} |
-| `phoneCareer.progression.noStage` | À découvrir |
-| `phoneCareer.progression.noStageText` | Faites le point en quelques minutes : Orbi vous dit où vous en êtes et quoi faire ensuite. |
-| `phoneCareer.progression.diagnostic` | Faire le point |
+| `phoneCareer.progression.noStage` | Faites votre diagnostic |
+| `phoneCareer.progression.noStageText` | 6 à 8 minutes pour savoir où vous en êtes et par quoi commencer. |
+| `phoneCareer.progression.diagnostic` | Commencer maintenant |
+| `phoneCareer.progression.urgent` | À faire en premier |
+| `phoneCareer.progression.report` | Voir mon diagnostic |
+| `phoneCareer.progression.fromDiagnostic` | Conseillé par votre diagnostic |
 | `phoneCareer.progression.top` | Vous êtes au plus haut stade. Gardez votre profil à jour. |
 | `phoneCareer.progression.courses` | cours suivis |
 | `phoneCareer.progression.coursesValue` | {done}/{all} |

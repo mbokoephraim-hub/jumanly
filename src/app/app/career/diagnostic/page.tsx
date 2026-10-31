@@ -26,7 +26,7 @@ import {
 import { demandedSkills, diagnosticPrefill, getDraft } from "@/server/services/diagnostic-store";
 import { cheapestPlanWhere, levelOf, listPublicPlans } from "@/server/services/plans";
 import { DiagnosticResult } from "./result";
-import { DiagnosticWelcome } from "./welcome";
+import { DiagnosticWelcome, PROGRESSION_HREF } from "./welcome";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("diag");
@@ -171,7 +171,7 @@ export default async function DiagnosticPage({
         title={t("diag.title")}
         end={
           <Link
-            href={latest ? "/app/career/diagnostic" : "/app/profil/point"}
+            href={latest ? "/app/career/diagnostic" : PROGRESSION_HREF}
             className="t-bi t-press"
             aria-label={t("diag.flow.close")}
           >
@@ -209,7 +209,12 @@ async function LegacyResult({
   const d = dynamic(t);
   return (
     <div className="t-flux">
-      <FlowHead back="/app/profil/point" backLabel={t("diag.back")} title={t("diag.title")} />
+      <FlowHead
+        back={PROGRESSION_HREF}
+        history={false}
+        backLabel={t("diag.back")}
+        title={t("diag.title")}
+      />
       <Notice>{t("career.diagnostic.result.legacy")}</Notice>
       <section aria-labelledby="dg-anciens-atouts" className="t-verre t-fb-c">
         <h2 id="dg-anciens-atouts" className="t-h4">

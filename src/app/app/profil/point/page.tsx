@@ -23,11 +23,16 @@ export default async function CareerPointPage() {
   return (
     <div className="t-flux">
       <FlowHead
-        back="/app/profil"
+        back="/app/career/cv?onglet=progression"
+        history={false}
         backLabel={t("point.back")}
         title={t("point.title")}
         end={
-          <Link href="/app/profil" className="t-bi t-press" aria-label={t("point.close")}>
+          <Link
+            href="/app/career/cv?onglet=progression"
+            className="t-bi t-press"
+            aria-label={t("point.close")}
+          >
             <TalentIcon name="fermer" size="s" />
           </Link>
         }

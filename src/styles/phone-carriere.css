@@ -1685,3 +1685,126 @@ button.nb-cr-cv-l {
 .nb-doc-projet .nb-doc-t {
   padding: 10px 11px 12px;
 }
+
+/* Progression › pas encore de diagnostic (Ephraïm, 31/10/2026) : la première chose à faire, en
+   dégradé, mise en avant. Texte Sapin sur Lime (règle d'or n° 10). */
+.nb-cr-urgent {
+  position: relative;
+  overflow: hidden;
+  padding: 18px 18px 18px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 100% 0, rgba(255, 255, 255, 0.45), transparent 55%),
+    linear-gradient(135deg, #d4fa9e 0%, #a6f26b 45%, #5fe0b8 100%);
+  color: #0f3f37;
+  box-shadow: 0 18px 40px -18px rgba(95, 224, 184, 0.65);
+}
+.nb-cr-urgent-b {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #0f3f37;
+  color: #a6f26b;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.nb-cr-urgent-b i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f08a7c;
+  box-shadow: 0 0 0 0 rgba(240, 138, 124, 0.7);
+  animation: nbCrPouls 1.6s ease-out infinite;
+}
+@keyframes nbCrPouls {
+  to {
+    box-shadow: 0 0 0 8px rgba(240, 138, 124, 0);
+  }
+}
+.nb-cr .nb-cr-urgent h2 {
+  margin: 12px 0 0;
+  max-width: 72%;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: #0f3f37;
+}
+.nb-cr .nb-cr-urgent p {
+  margin-top: 6px;
+  max-width: 78%;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: rgba(15, 63, 55, 0.82);
+}
+.nb-cr-urgent-go {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: #0f3f37;
+  color: #a6f26b;
+  font-size: 14.5px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.nb-cr-urgent-art {
+  position: absolute;
+  right: 14px;
+  top: 16px;
+  transform: rotate(8deg);
+}
+.nb-cr-urgent-art .jm-menu-art {
+  background: rgba(255, 255, 255, 0.7);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-cr-urgent-b i {
+    animation: none;
+  }
+}
+
+/* Les trois chiffres, chacun avec son dessin. */
+.nb-cr-urgent + .nb-cr-chiffres {
+  margin-top: 14px;
+}
+.nb-cr-chiffres > div {
+  gap: 10px;
+  padding: 12px 8px 14px;
+}
+.nb-cr-ch-t {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.nb-cr-chiffres .nb-cr-ch-t small {
+  margin-top: 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--nb-creme);
+}
+
+/* Mes documents et candidatures : le dessin du menu du site, puis « 4 CV construits ». */
+.nb-cr-suivi-doc li > * {
+  grid-template-columns: 1fr;
+  align-content: start;
+  row-gap: 6px;
+}
+.nb-cr-suivi-doc li .jm-menu-art {
+  margin-bottom: 4px;
+}
+.nb-cr-suivi-doc span {
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.2;
+}

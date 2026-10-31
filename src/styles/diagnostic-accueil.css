@@ -1,0 +1,188 @@
+/*
+ * Accueil du diagnostic de carrière (Ephraïm, 31/10/2026) : style Modèle B, peu de texte, en
+ * gras. Orbi (son étoile) dit ce que la personne va découvrir, puis les trois étapes, l'option
+ * « partir de mon profil » et le bouton en dégradé « Lancer mon diagnostic ».
+ */
+.dg-a {
+  gap: 16px;
+}
+.dg-a-hero {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.dg-a-orbi {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #5fe0b8, #2fd3a6);
+  color: #0b1a1f;
+  box-shadow: 0 10px 24px -10px rgba(47, 211, 166, 0.8);
+}
+.dg-a-bulle {
+  flex: 1;
+  min-width: 0;
+  padding: 16px 16px 14px;
+  border-radius: 6px 22px 22px 22px;
+  background: var(--nb-surface, #13282c);
+  box-shadow: inset 0 0 0 1px var(--nb-filet, rgba(255, 255, 255, 0.07));
+}
+.dg-a-bulle h2 {
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--nb-creme, #f2ede5);
+}
+.dg-a-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+.dg-a-tags span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(166, 242, 107, 0.14);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--nb-creme, #f2ede5);
+}
+.dg-a-etapes h2 {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--nb-brume, #8fa39e);
+  margin-bottom: 10px;
+}
+.dg-a-etapes ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dg-a-etapes li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: var(--nb-surface, #13282c);
+  box-shadow: inset 0 0 0 1px var(--nb-filet, rgba(255, 255, 255, 0.07));
+}
+/* Un fil relie les trois étapes. */
+.dg-a-etapes li + li::before {
+  content: "";
+  position: absolute;
+  left: 33px;
+  top: -9px;
+  width: 2px;
+  height: 10px;
+  background: rgba(166, 242, 107, 0.45);
+}
+.dg-a-n {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: #a6f26b;
+  color: #0f3f37;
+  font-size: 16px;
+  font-weight: 800;
+}
+.dg-a-etapes li > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.dg-a-etapes b {
+  font-size: 15.5px;
+  font-weight: 800;
+  color: var(--nb-creme, #f2ede5);
+}
+.dg-a-etapes small {
+  font-size: 12.5px;
+  color: var(--nb-brume, #8fa39e);
+}
+.dg-a-note {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12.5px;
+  color: var(--nb-brume, #8fa39e);
+}
+/* « Partir de mon profil et de mon CV » : une case Lime. */
+.dg-a-profil {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: var(--nb-surface, #13282c);
+  box-shadow: inset 0 0 0 1px var(--nb-filet, rgba(255, 255, 255, 0.07));
+  cursor: pointer;
+}
+.dg-a-profil input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.dg-a-coche {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 2px var(--nb-brume, #8fa39e);
+  display: grid;
+  place-items: center;
+}
+.dg-a-profil:has(input:checked) .dg-a-coche {
+  background: #a6f26b;
+  box-shadow: none;
+}
+.dg-a-profil:has(input:checked) .dg-a-coche::after {
+  content: "";
+  width: 10px;
+  height: 5px;
+  margin-top: -3px;
+  border: solid #0f3f37;
+  border-width: 0 0 2.5px 2.5px;
+  transform: rotate(-45deg);
+}
+.dg-a-profil:has(:focus-visible) {
+  outline: 2px solid var(--nb-creme, #f2ede5);
+}
+.dg-a-profil > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.dg-a-profil b {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--nb-creme, #f2ede5);
+}
+.dg-a-profil small {
+  font-size: 12px;
+  color: var(--nb-brume, #8fa39e);
+}
+/* Le bouton en dégradé, texte plus gras. */
+.dg-a .dg-a-go {
+  font-weight: 800;
+  font-size: 16px;
+}

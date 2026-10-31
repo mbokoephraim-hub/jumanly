@@ -7860,7 +7860,20 @@
           "personalized": "Jumanly Intelligence explique vos résultats et vous propose des pistes."
         },
         "constellation": "Les six dimensions de votre bilan",
-        "noscript": "Sans JavaScript, toutes les questions s'affichent sur une seule page."
+        "noscript": "Sans JavaScript, toutes les questions s'affichent sur une seule page.",
+        "hello": "Ici, vous allez découvrir où vous en êtes dans votre carrière professionnelle.",
+        "howTitle": "Comment ça se passe",
+        "how": {
+          "1": "Répondez à 6 thèmes",
+          "2": "Votre profil se dessine",
+          "3": "Recevez votre bilan sur 100",
+          "1Text": "Une question à la fois",
+          "2Text": "Projet, compétences, expérience…",
+          "3Text": "Et vos priorités, expliquées"
+        },
+        "private": "Privé",
+        "useProfileShort": "Partir de mon profil et de mon CV",
+        "useProfileHint": "Vous pourrez tout modifier."
       },
       "last": {
         "title": "Votre dernier bilan",
@@ -11741,17 +11754,17 @@
     },
     "follow": {
       "title": "Mes documents et candidatures",
-      "cvs": "{count, plural, one {CV} other {CV}}",
+      "cvs": "{count, plural, =0 {Aucun CV construit} one {# CV construit} other {# CV construits}}",
       "cvScore": "CV principal : {score} %",
       "cvFile": "CV importé, prêt à envoyer",
       "cvNone": "Créez votre premier CV",
-      "letters": "{count, plural, one {Lettre} other {Lettres}}",
+      "letters": "{count, plural, =0 {0 lettre} one {# lettre} other {# lettres}}",
       "lettersReady": "À adapter à chaque offre",
       "lettersNone": "Orbi peut vous aider",
-      "works": "{count, plural, one {Réalisation} other {Réalisations}}",
+      "works": "{count, plural, =0 {0 réalisation} one {# réalisation} other {# réalisations}}",
       "worksFeatured": "{count, plural, =0 {Aucune mise en avant} one {# mise en avant} other {# mises en avant}}",
       "worksNone": "Montrez votre travail",
-      "active": "{count, plural, one {Candidature en cours} other {Candidatures en cours}}",
+      "active": "{count, plural, =0 {0 candidature en cours} one {# candidature en cours} other {# candidatures en cours}}",
       "interviews": "{count, plural, one {# entretien prévu} other {# entretiens prévus}}",
       "applied": "{count, plural, one {# envoyée au total} other {# envoyées au total}}",
       "noneYet": "Postuler est gratuit"
@@ -11902,9 +11915,12 @@
         "competitive": "Compétitif"
       },
       "next": "{count, plural, =0 {Vous êtes au plus haut stade.} one {Encore une étape pour passer « {stage} ».} other {Encore # étapes pour passer « {stage} ».}}",
-      "noStage": "À découvrir",
-      "noStageText": "Faites le point en quelques minutes : Orbi vous dit où vous en êtes et quoi faire ensuite.",
-      "diagnostic": "Faire le point",
+      "noStage": "Faites votre diagnostic",
+      "noStageText": "6 à 8 minutes pour savoir où vous en êtes et par quoi commencer.",
+      "diagnostic": "Commencer maintenant",
+      "urgent": "À faire en premier",
+      "report": "Voir mon diagnostic",
+      "fromDiagnostic": "Conseillé par votre diagnostic",
       "top": "Vous êtes au plus haut stade. Gardez votre profil à jour.",
       "courses": "cours suivis",
       "coursesValue": "{done}/{all}",

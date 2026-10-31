@@ -153,7 +153,7 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
     db.careerDiagnostic.findFirst({
       where: { userId },
       orderBy: { createdAt: "desc" },
-      select: { result: true },
+      select: { id: true, result: true },
     }),
     skillToAdd(db, owned, now),
     suggestedSkills(db, owned, 6),
@@ -181,6 +181,11 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
   const score = (diagnostic?.result as { score?: unknown } | null)?.score;
   const stage: Stage | null = typeof score === "number" ? stageFor(score) : null;
   const nextStage = stage ? (stages[stages.indexOf(stage) + 1] ?? null) : null;
+  // What the last diagnostic invites to do first (Ephraïm, 31/10/2026): shown in Progression.
+  const advised = (diagnostic?.result as { priorities?: unknown } | null)?.priorities;
+  const priorities = Array.isArray(advised)
+    ? advised.filter((item): item is string => typeof item === "string").slice(0, 3)
+    : [];
 
   const uses = new Map<string, number>();
   for (const application of applications) {
@@ -296,6 +301,8 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
     progression: {
       stage,
       nextStage,
+      priorities,
+      diagnosticId: diagnostic?.id ?? null,
       courses: { done: courses.filter((course) => course.finished).length, all: courses.length },
       applications: applications.length,
       upcoming: upcoming ? { id: upcoming.id, at: upcoming.interviewAt! } : null,

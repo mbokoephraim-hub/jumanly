@@ -5293,3 +5293,9 @@ Test : `modele-b-prechargement.spec.ts` (onglets ouverts alors que tout appel au
 - Étape 2 : chaque question du recruteur sur sa carte. Réponses à toucher pour les questions habituelles (déjà occupé un poste semblable, date de début, lieu, salaire), reconnues à leur formulation (`screeningPresetOf`). « Dites-nous où » ne s'ouvre qu'après « Oui, déjà » (CSS `:has`). Salaire : chiffre libre, enregistré avec « USD par mois ». Les autres questions gardent une réponse libre.
 - Étape 3 : bandeau « Votre candidature n'est pas encore envoyée », puis profil, CV, documents et réponses dans des cartes numérotées, chacune modifiable. « Ajouter autre chose » (portfolio, réalisation, lien) crée un document « other » (type `extra`) et le joint au brouillon (`addApplicationExtraAction`).
 - Écran de la lettre non touché (refait dans un autre fil).
+
+## 2026-10-31 · Progression et accueil du diagnostic
+
+- Carrière › Progression sans diagnostic : carte en dégradé Lime → Menthe « À faire en premier », titre « Faites votre diagnostic », bouton « Commencer maintenant » qui ouvre directement le diagnostic. Avec un diagnostic : « Voir mon diagnostic », et ses priorités passent en tête des « Prochaines étapes ».
+- Chiffres (cours, profil, candidatures) et cartes « Mes documents et candidatures » avec les dessins du menu du site (`MenuArt`, nouveaux dessins `letter` et `portfolio`, taille `sm`) ; textes « 4 CV construits », « 0 lettre »…
+- Accueil du diagnostic refait (Modèle B, étoile d'Orbi, trois étapes, peu de texte). Retour, fermeture et bilan ramènent toujours à Progression (`PROGRESSION_HREF`), « Faire le point » aussi.
