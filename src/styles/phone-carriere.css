@@ -2243,3 +2243,91 @@ html[data-nb-theme="clair"] .nb-app .nb-cr-cv-page {
 .nb-app[data-reduit] .nb-cr-urgent-go::after {
   animation: none;
 }
+
+/* « Prochaines étapes » appellent le clic (Ephraïm, 31/10/2026) : un reflet qui traverse chaque
+   carte l'une après l'autre, le numéro qui bat avec un halo de sa couleur, la flèche qui avance.
+   Rien ne bouge avec les animations réduites. */
+.nb-cr-etapes a.nb-cr-etape-anim {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.nb-cr-etape-anim::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    color-mix(in srgb, var(--etape-c, #a6f26b) 45%, transparent) 50%,
+    transparent 65%
+  );
+  transform: translateX(-100%);
+  animation: nb-cr-reflet 3.6s ease-in-out infinite;
+  animation-delay: var(--etape-d, 0s);
+  pointer-events: none;
+}
+.nb-cr-etape-anim .nb-cr-num {
+  animation: nb-cr-num 3.6s ease-in-out infinite;
+  animation-delay: var(--etape-d, 0s);
+}
+.nb-cr-etape-anim > svg {
+  animation: nb-cr-fleche 3.6s ease-in-out infinite;
+  animation-delay: var(--etape-d, 0s);
+  color: var(--etape-c, var(--nb-brume)) !important;
+}
+@keyframes nb-cr-reflet {
+  0% {
+    transform: translateX(-100%);
+  }
+  35%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+@keyframes nb-cr-num {
+  0%,
+  40%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--etape-c, #a6f26b) 70%, transparent);
+  }
+  12% {
+    transform: scale(1.1);
+  }
+  30% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--etape-c, #a6f26b) 0%, transparent);
+  }
+}
+@keyframes nb-cr-fleche {
+  0%,
+  30%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  20% {
+    transform: translateX(5px);
+  }
+  15% {
+    transform: translateX(1px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-cr-etape-anim::before,
+  .nb-cr-etape-anim .nb-cr-num,
+  .nb-cr-etape-anim > svg {
+    animation: none;
+  }
+  .nb-cr-etape-anim::before {
+    display: none;
+  }
+}
+.nb-app[data-reduit] .nb-cr-etape-anim::before {
+  display: none;
+}
+.nb-app[data-reduit] .nb-cr-etape-anim .nb-cr-num,
+.nb-app[data-reduit] .nb-cr-etape-anim > svg {
+  animation: none;
+}
