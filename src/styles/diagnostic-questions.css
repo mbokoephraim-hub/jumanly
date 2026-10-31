@@ -1,0 +1,100 @@
+/*
+ * Diagnostic en une dizaine de questions (Ephraïm, 31/10/2026) : le dessin du menu à côté de la
+ * question, des réponses courtes, les compétences sur un seul écran (quatre pilules chacune).
+ * Texte Sapin sur Lime, jamais blanc sur Lime (règle d'or n° 10).
+ */
+
+/* La page garde déjà la place de la barre fixe : pas de vide de plus en bas. */
+#diagnostic-flow.t-flux,
+.t-flux:has(> #diagnostic-flow) {
+  padding-bottom: 0;
+}
+
+/* La question et son dessin. */
+.t-diag-q .t-dq-lg {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 4px;
+}
+.t-diag-q legend.t-dq-lg {
+  width: 100%;
+}
+.t-diag-q .t-dq-lg .t-lgd,
+.t-diag-q .t-dq-lg > span:not(.jm-menu-art) {
+  flex: 1;
+  min-width: 0;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-wrap: pretty;
+}
+
+/* Réponses avec un dessin à gauche. */
+.t-dq-art .t-ch {
+  padding: 10px 14px 10px 10px;
+}
+.t-dq-art .t-ch .t-t b {
+  font-size: 15px;
+}
+
+/* Les compétences : une carte par compétence, quatre pilules. */
+.t-dq-sk {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.t-dq-sk li {
+  padding: 14px;
+  border-radius: var(--r-carte, 22px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.t-dq-sk b {
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+.t-dq-pil {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.t-dq-pil label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: var(--zone);
+  box-shadow: inset 0 0 0 1px var(--trait);
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: center;
+  color: var(--texte);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+.t-dq-pil input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.t-dq-pil label:has(:checked) {
+  background: var(--lime);
+  color: var(--sapin);
+  box-shadow: none;
+}
+.t-dq-pil label:has(:focus-visible) {
+  outline: 2px solid var(--texte);
+  outline-offset: 2px;
+}

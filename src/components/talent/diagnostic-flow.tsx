@@ -17,14 +17,20 @@ import {
 import {
   answersSchema,
   choiceAnswers,
+  confidenceAnswers,
   dimensions,
   optionalQuestions,
+  readyItems,
   screensFor,
-  SKILL_LEVELS,
-  SKILLS_ASSESSED,
+  shownAnswers,
+  SKILL_PICKS,
+  skillPickOf,
   type Draft,
+  type ReadyItem,
   type Screen,
 } from "@/server/services/diagnostic-scoring";
+import { MenuArt, type MenuArtName } from "@/components/site/menu-art";
+import "@/styles/diagnostic-questions.css";
 import { TalentIcon } from "./icon";
 import { OrbiMark } from "./orbi-mark";
 
@@ -33,13 +39,33 @@ export type SkillSource = {
   offers: number;
   scope: "field" | "role" | "all" | "own";
 };
-type Option = { value: string; label: string; hint?: string };
+type Option = { value: string; label: string; hint?: string; art?: MenuArtName };
 
-const split = (value: string | undefined) =>
-  (value ?? "")
-    .split(/[,;\n]+/)
-    .map((item) => item.trim())
-    .filter(Boolean);
+/** The drawings of the site menu, on the questions (Ephraïm, 31/10/2026). */
+const questionArt: Partial<Record<string, MenuArtName>> = {
+  targetRole: "jobs",
+  familiarity: "career",
+  skills: "trainings",
+  experience: "companies",
+  ready: "cv",
+  confidence: "recruiters",
+  interviews: "talents",
+  applications: "jobs",
+  contacts: "connect",
+  obstacle: "why",
+};
+const readyArt: Record<ReadyItem, MenuArtName> = {
+  cv: "cv",
+  letter: "letter",
+  profile: "talents",
+  portfolio: "portfolio",
+};
+const obstacleArt: Record<string, MenuArtName> = {
+  a1: "career",
+  a2: "trainings",
+  a3: "cv",
+  a6: "connect",
+};
 
 /**
  * The career diagnostic, one question per screen, in the talent design (planche talent-4 § 5):
@@ -54,7 +80,6 @@ export function DiagnosticFlow({
   personalized,
   prefilled,
   cvScore,
-  education,
 }: {
   initial: Draft;
   initialIndex: number;
@@ -62,7 +87,6 @@ export function DiagnosticFlow({
   personalized: boolean;
   prefilled: string[];
   cvScore: number | null;
-  education: Option[];
 }) {
   const t = useTranslations("career.diagnostic");
   const d = dynamic(t);
@@ -98,38 +122,20 @@ export function DiagnosticFlow({
   const set = (key: keyof Draft, value: unknown) =>
     setAnswers((current) => ({ ...current, [key]: value }));
   const check = (skill: string) => answers.skillChecks?.find((item) => item.skill === skill);
-  const setCheck = (skill: string, patch: { level?: number; proof?: string }) =>
-    setAnswers((current) => {
-      const checks = current.skillChecks ?? [];
-      const before = checks.find((item) => item.skill === skill);
-      // « Aucun niveau »: nothing to prove, « Rien encore » is kept; leaving it asks again.
-      const proof =
-        patch.level === 0
-          ? { proof: "a4" }
-          : patch.level !== undefined && before?.level === 0
-            ? { proof: "" }
-            : {};
-      const next = { skill, proof: "", ...before, ...patch, ...proof } as {
-        skill: string;
-        level: number;
-        proof: string;
-      };
-      return {
-        ...current,
-        skillChecks: [
-          ...checks.filter((item) => item.skill !== skill),
-          next,
-        ] as Draft["skillChecks"],
-      };
-    });
+  /** One tap gives the level and the proof (« Je peux le prouver »: an attestation or a project). */
+  const setPick = (skill: string, pick: number) =>
+    setAnswers((current) => ({
+      ...current,
+      skillChecks: [
+        ...(current.skillChecks ?? []).filter((item) => item.skill !== skill),
+        { skill, ...SKILL_PICKS[pick]! },
+      ],
+    }));
 
   const valid = (item: Screen) => {
     if ("followUp" in item) return true;
-    if ("skill" in item) {
-      const value = check(item.skill);
-      return value?.level !== undefined && Boolean(value.proof);
-    }
-    if (optionalQuestions.includes(item.id) || item.id === "values") return true;
+    if ("skills" in item) return item.skills.every((skill) => check(skill) !== undefined);
+    if (optionalQuestions.includes(item.id)) return true;
     const value = answers[item.id];
     return value !== undefined && value !== "";
   };
@@ -149,9 +155,6 @@ export function DiagnosticFlow({
               scope: found.field ? "field" : found.scope,
             }
           : { names: [], offers: 0, scope: "own" };
-    }
-    if (screen.id === "topSkills" && next.names.length === 0) {
-      next = { names: split(current.topSkills).slice(0, SKILLS_ASSESSED), offers: 0, scope: "own" };
     }
     if (next !== skills) {
       setSkills(next);
@@ -225,9 +228,6 @@ export function DiagnosticFlow({
       />
     );
 
-  const choices = (id: keyof typeof choiceAnswers): Option[] =>
-    choiceAnswers[id].map((code) => ({ value: code, label: d(`q.${id}.${code}`) }));
-
   const body = (item: Screen): ReactNode => {
     if ("followUp" in item) {
       const value = answers.followUps?.[item.index]?.answer ?? "";
@@ -270,195 +270,113 @@ export function DiagnosticFlow({
         </>
       );
     }
-    if ("skill" in item) {
-      const value = check(item.skill);
+    if ("skills" in item) {
+      const hint =
+        skills.scope === "own"
+          ? t("q.skillLevel.source.own")
+          : skills.scope === "field"
+            ? t("q.skillLevel.source.field")
+            : skills.scope === "all"
+              ? t("q.skillLevel.source.all", { count: skills.offers })
+              : t("q.skillLevel.source.role", { count: skills.offers });
       return (
         <>
-          <input type="hidden" name={`skill-${item.index}`} value={item.skill} />
-          <Choices
-            legend={t("q.skillLevel.text", { skill: item.skill })}
-            legendId={`diag-q-${item.id}`}
-            hint={
-              skills.scope === "own"
-                ? t("q.skillLevel.source.own")
-                : skills.scope === "field"
-                  ? t("q.skillLevel.source.field")
-                  : skills.scope === "all"
-                    ? t("q.skillLevel.source.all", { count: skills.offers })
-                    : t("q.skillLevel.source.role", { count: skills.offers })
-            }
-            name={`skillLevel-${item.index}`}
-            value={value?.level !== undefined ? String(value.level) : undefined}
-            onChange={(level) => setCheck(item.skill, { level: Number(level) })}
-            options={SKILL_LEVELS.map((level) => ({
-              value: String(level),
-              label: d(`q.skillLevel.l${level}`),
-              hint: d(`q.skillLevel.l${level}Hint`),
-            }))}
+          <QuestionHead
+            id={`diag-q-${item.id}`}
+            art="trainings"
+            text={t("q.skills.text")}
+            hint={hint}
           />
-          {value?.level === 0 ? (
-            <input type="hidden" name={`skillProof-${item.index}`} value="a4" />
-          ) : (
-            <Choices
-              legend={t("q.skillProof.text")}
-              name={`skillProof-${item.index}`}
-              value={value?.proof || undefined}
-              onChange={(proof) => setCheck(item.skill, { proof })}
-              options={choices("skillProof")}
-            />
-          )}
+          <ul className="t-dq-sk">
+            {item.skills.map((skill, index) => {
+              const chosen = skillPickOf(check(skill));
+              return (
+                <li key={skill} className="t-verre">
+                  <input type="hidden" name={`skill-${index}`} value={skill} />
+                  <b id={`diag-sk-${index}`}>{skill}</b>
+                  <div role="radiogroup" aria-labelledby={`diag-sk-${index}`} className="t-dq-pil">
+                    {SKILL_PICKS.map((_, pick) => (
+                      <label key={pick} className="t-press">
+                        <input
+                          type="radio"
+                          name={`skillPick-${index}`}
+                          value={pick}
+                          checked={chosen === pick}
+                          onChange={() => setPick(skill, pick)}
+                        />
+                        {d(`q.skills.p${pick}`)}
+                      </label>
+                    ))}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         </>
       );
     }
     const id = item.id;
     const legendId = `diag-q-${id}`;
     const note = prefilled.includes(id) ? t("prefilled") : undefined;
-    const radio = (options: Option[], legend: string, hint?: string) => (
-      <Choices
-        legend={legend}
-        legendId={legendId}
-        hint={hint ?? note}
-        name={id}
-        value={answers[id] === undefined ? undefined : String(answers[id])}
-        onChange={(value) => set(id, id === "confidence" ? Number(value) : value)}
-        options={options}
-      />
-    );
-    const text = (
-      label: string,
-      options: { placeholder?: string; hint?: string; area?: boolean; max: number },
-    ) => {
-      const hint = options.hint ?? note;
-      const field = {
-        id: `diag-${id}`,
-        name: id,
-        placeholder: options.placeholder,
-        maxLength: options.max,
-        value: String(answers[id] ?? ""),
-        "aria-describedby": hint ? `diag-${id}-hint` : undefined,
-      };
-      return (
-        <>
-          <label id={legendId} tabIndex={-1} htmlFor={`diag-${id}`} className="t-lgd">
-            {label}
-          </label>
-          {hint && (
-            <p id={`diag-${id}-hint`} className="t-aide">
-              {hint}
-            </p>
-          )}
-          {options.area ? (
-            <textarea
-              {...field}
-              rows={5}
-              onChange={(event) => set(id, event.target.value)}
-              className="t-verre t-rep"
-            />
-          ) : (
-            <span className="t-verre t-saisie">
-              <input {...field} type="text" onChange={(event) => set(id, event.target.value)} />
-            </span>
-          )}
-        </>
-      );
-    };
+    const art = questionArt[id];
     switch (id) {
-      case "education":
-        return radio(education, t("q.education"));
-      case "confidence":
-        return radio(
-          [1, 2, 3, 4, 5].map((value) => ({
-            value: String(value),
-            label:
-              value === 1
-                ? `1 · ${t("q.confidence.min")}`
-                : value === 5
-                  ? `5 · ${t("q.confidence.max")}`
-                  : String(value),
-          })),
-          t("q.confidence.text"),
+      case "targetRole": {
+        const hint = note ?? t("q.targetRole.hint");
+        return (
+          <>
+            <QuestionHead
+              id={legendId}
+              art="jobs"
+              text={t("q.targetRole.text")}
+              hint={hint}
+              htmlFor={`diag-${id}`}
+            />
+            <span className="t-verre t-saisie">
+              <input
+                id={`diag-${id}`}
+                name={id}
+                type="text"
+                maxLength={120}
+                placeholder={t("q.targetRole.placeholder")}
+                value={answers.targetRole ?? ""}
+                onChange={(event) => set(id, event.target.value)}
+              />
+            </span>
+          </>
         );
-      case "cvStatus":
-        return radio(
-          choices("cvStatus"),
-          t("q.cvStatus.text"),
-          cvScore === null ? note : t("cvScore", { score: cvScore }),
-        );
-      case "targetRole":
-        return text(t("q.targetRole.text"), {
-          placeholder: t("q.targetRole.placeholder"),
-          hint: note ?? t("q.targetRole.hint"),
-          max: 120,
-        });
-      case "sectors":
-        return text(t("q.sectors.text"), {
-          placeholder: t("q.sectors.placeholder"),
-          hint: note ?? t("q.topSkillsHint"),
-          max: 200,
-        });
-      case "topSkills":
-        return text(t("q.topSkills"), {
-          placeholder: t("q.topSkillsPlaceholder"),
-          hint: note ?? t("q.topSkillsHint"),
-          max: 200,
-        });
-      case "skillsToBuild":
-        return text(t("q.skillsToBuild"), {
-          placeholder: t("q.skillsToBuildPlaceholder"),
-          hint: t("q.topSkillsHint"),
-          max: 200,
-        });
-      case "languages":
-        return text(t("q.languages"), {
-          placeholder: t("q.languagesPlaceholder"),
-          hint: note ?? t("q.topSkillsHint"),
-          max: 200,
-        });
-      case "digital":
-        return text(t("q.digital"), {
-          placeholder: t("q.digitalPlaceholder"),
-          hint: t("q.topSkillsHint"),
-          max: 200,
-        });
-      case "achievement":
-        return text(t("q.achievement.text"), {
-          placeholder: t("q.achievement.placeholder"),
-          area: true,
-          max: 1000,
-        });
-      case "feedback":
-        return text(t("q.feedback"), { max: 300 });
-      case "horizon":
-        return text(t("q.horizon"), { area: true, max: 300 });
-      case "values": {
-        const chosen = answers.values ?? [];
+      }
+      case "ready": {
+        const chosen = answers.ready ?? [];
         return (
           <fieldset className="t-fs">
-            <legend>
+            <legend className="t-dq-lg">
               <span id={legendId} tabIndex={-1}>
-                {t("q.values.text")}
+                {t("q.ready.text")}
               </span>
             </legend>
-            <div className="t-choix">
-              {choiceAnswers.values.map((code) => {
+            <p className="t-aide">
+              {cvScore === null ? t("q.ready.hint") : t("cvScore", { score: cvScore })}
+            </p>
+            <div className="t-choix t-dq-art">
+              {readyItems.map((code) => {
                 const on = chosen.includes(code);
                 return (
                   <label key={code} className="t-verre t-ch t-press">
                     <input
                       type="checkbox"
-                      name="values"
+                      name="ready"
                       value={code}
                       checked={on}
-                      disabled={!on && chosen.length >= 3}
                       onChange={() =>
                         set(
-                          "values",
-                          on ? chosen.filter((item) => item !== code) : [...chosen, code],
+                          "ready",
+                          on ? chosen.filter((value) => value !== code) : [...chosen, code],
                         )
                       }
                     />
+                    <MenuArt name={readyArt[code]} size="sm" />
                     <span className="t-t">
-                      <b>{d(`q.values.${code}`)}</b>
+                      <b>{d(`q.ready.${code}`)}</b>
                     </span>
                     <span className="t-case" aria-hidden>
                       <TalentIcon name="valider" size="xs" />
@@ -470,9 +388,40 @@ export function DiagnosticFlow({
           </fieldset>
         );
       }
+      case "confidence":
+        return (
+          <Choices
+            legend={t("q.confidence.short")}
+            legendId={legendId}
+            art={art}
+            name={id}
+            value={answers.confidence === undefined ? undefined : String(answers.confidence)}
+            onChange={(value) => set(id, Number(value))}
+            options={confidenceAnswers.map((value) => ({
+              value: String(value),
+              label: d(`q.confidence.c${value}`),
+            }))}
+          />
+        );
       default: {
         const key = id as keyof typeof choiceAnswers;
-        return radio(choices(key), d(`q.${key}.text`));
+        const codes = shownAnswers[key] ?? choiceAnswers[key];
+        return (
+          <Choices
+            legend={d(`q.${key}.text`)}
+            legendId={legendId}
+            art={key === "obstacle" ? undefined : art}
+            hint={note}
+            name={id}
+            value={answers[id] === undefined ? undefined : String(answers[id])}
+            onChange={(value) => set(id, value)}
+            options={codes.map((code) => ({
+              value: code,
+              label: d(`q.${key}.${code}`),
+              art: key === "obstacle" ? obstacleArt[code] : undefined,
+            }))}
+          />
+        );
       }
     }
   };
@@ -569,9 +518,43 @@ export function DiagnosticFlow({
 }
 
 /** One question with its answers as glass cards (a real radio button in each). */
+/** A question's title with its drawing, for the screens that are not a list of answers. */
+function QuestionHead({
+  id,
+  art,
+  text,
+  hint,
+  htmlFor,
+}: {
+  id: string;
+  art: MenuArtName;
+  text: string;
+  hint?: string;
+  htmlFor?: string;
+}) {
+  return (
+    <>
+      <div className="t-dq-lg">
+        <MenuArt name={art} size="md" />
+        {htmlFor ? (
+          <label id={id} tabIndex={-1} htmlFor={htmlFor} className="t-lgd">
+            {text}
+          </label>
+        ) : (
+          <p id={id} tabIndex={-1} className="t-lgd">
+            {text}
+          </p>
+        )}
+      </div>
+      {hint && <p className="t-aide">{hint}</p>}
+    </>
+  );
+}
+
 function Choices({
   legend,
   legendId,
+  art,
   hint,
   name,
   value,
@@ -580,6 +563,7 @@ function Choices({
 }: {
   legend: string;
   legendId?: string;
+  art?: MenuArtName;
   hint?: string;
   name: string;
   value: string | undefined;
@@ -588,13 +572,14 @@ function Choices({
 }) {
   return (
     <fieldset className="t-fs">
-      <legend>
+      <legend className={art ? "t-dq-lg" : undefined}>
+        {art && <MenuArt name={art} size="md" />}
         <span id={legendId} tabIndex={legendId ? -1 : undefined}>
           {legend}
         </span>
       </legend>
       {hint && <p className="t-aide">{hint}</p>}
-      <div className="t-choix">
+      <div className={options.some((option) => option.art) ? "t-choix t-dq-art" : "t-choix"}>
         {options.map((option) => (
           <label key={option.value} className="t-verre t-ch t-press">
             <input
@@ -604,6 +589,7 @@ function Choices({
               checked={value === option.value}
               onChange={() => onChange(option.value)}
             />
+            {option.art && <MenuArt name={option.art} size="sm" />}
             <span className="t-t">
               <b>{option.label}</b>
               {option.hint && <span>{option.hint}</span>}

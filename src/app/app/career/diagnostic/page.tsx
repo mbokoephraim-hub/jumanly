@@ -17,12 +17,7 @@ import {
   parsePersonalized,
 } from "@/server/services/diagnostic";
 import { DIAGNOSTIC_GATE } from "@/server/services/diagnostic-ai";
-import {
-  dimensions,
-  educationAnswers,
-  screensFor,
-  type Draft,
-} from "@/server/services/diagnostic-scoring";
+import { dimensions, screensFor, type Draft } from "@/server/services/diagnostic-scoring";
 import { demandedSkills, diagnosticPrefill, getDraft } from "@/server/services/diagnostic-store";
 import { cheapestPlanWhere, levelOf, listPublicPlans } from "@/server/services/plans";
 import { DiagnosticResult } from "./result";
@@ -158,7 +153,6 @@ export default async function DiagnosticPage({
       ? { names: found.skills, offers: found.offers, scope: found.field ? "field" : found.scope }
       : { names: [], offers: 0, scope: "own" };
   const assessed = (initial.skillChecks ?? []).map((item) => item.skill);
-  const tProfile = await getTranslations("talent.profile.education.level");
   const messages = await getMessages();
   const flowMessages = { career: { diagnostic: messages.career.diagnostic }, diag: messages.diag };
 
@@ -192,7 +186,6 @@ export default async function DiagnosticPage({
           personalized={withAi}
           prefilled={useProfile ? Object.keys(prefill.draft) : []}
           cvScore={prefill.cvScore}
-          education={educationAnswers.map((code) => ({ value: code, label: tProfile(code) }))}
         />
       </NextIntlClientProvider>
     </div>

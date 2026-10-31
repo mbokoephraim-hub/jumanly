@@ -5877,8 +5877,8 @@ Conventions :
 |---|---|
 | `career.diagnostic.title` | Diagnostic de carrière |
 | `career.diagnostic.eyebrow` | Career · Diagnostic de carrière |
-| `career.diagnostic.intro.simple` | Six dimensions, 6 à 8 minutes. Votre bilan est calculé par des règles fixes, expliquées point par point. |
-| `career.diagnostic.intro.personalized` | Six dimensions, quatre questions de plus et deux questions de relance, 8 à 10 minutes. Jumanly Intelligence explique vos résultats et propose des pistes ; les notes restent calculées par des règles fixes. |
+| `career.diagnostic.intro.simple` | Une dizaine de questions, environ 3 minutes. Votre bilan est calculé par des règles fixes, expliquées point par point. |
+| `career.diagnostic.intro.personalized` | Une dizaine de questions et deux questions de relance d'Orbi, environ 5 minutes. Jumanly Intelligence explique vos résultats et propose des pistes ; les notes restent calculées par des règles fixes. |
 | `career.diagnostic.badge.simple` | Diagnostic simplifié |
 | `career.diagnostic.badge.personalized` | Diagnostic personnalisé |
 | `career.diagnostic.upsell` | Le diagnostic personnalisé est disponible avec {plan}. |
@@ -5914,11 +5914,11 @@ Conventions :
 | `career.diagnostic.q.situation.a4` | En poste, je veux évoluer |
 | `career.diagnostic.q.situation.a5` | En poste, je veux changer de métier |
 | `career.diagnostic.q.situation.a6` | Entrepreneur ou indépendant |
-| `career.diagnostic.q.experience.text` | Combien d'années d'expérience professionnelle avez-vous (stages compris) ? |
+| `career.diagnostic.q.experience.text` | Votre expérience professionnelle, stages compris ? |
 | `career.diagnostic.q.experience.a1` | Aucune |
 | `career.diagnostic.q.experience.a2` | Moins d'un an |
 | `career.diagnostic.q.experience.a3` | 1 à 3 ans |
-| `career.diagnostic.q.experience.a4` | 3 à 5 ans |
+| `career.diagnostic.q.experience.a4` | Plus de 3 ans |
 | `career.diagnostic.q.experience.a5` | Plus de 5 ans |
 | `career.diagnostic.q.education` | Quel est votre plus haut niveau d'études ? |
 | `career.diagnostic.q.goal.text` | Quel est votre objectif principal pour les six prochains mois ? |
@@ -5944,18 +5944,18 @@ Conventions :
 | `career.diagnostic.q.cvStatus.a1` | Je n'en ai pas |
 | `career.diagnostic.q.cvStatus.a2` | J'en ai un, mais il n'est pas à jour |
 | `career.diagnostic.q.cvStatus.a3` | Il est à jour |
-| `career.diagnostic.q.applications.text` | Combien de candidatures avez-vous envoyées le mois dernier ? |
+| `career.diagnostic.q.applications.text` | Combien de candidatures le mois dernier ? |
 | `career.diagnostic.q.applications.a1` | Aucune |
 | `career.diagnostic.q.applications.a2` | 1 à 5 |
-| `career.diagnostic.q.applications.a3` | 6 à 15 |
+| `career.diagnostic.q.applications.a3` | Plus de 5 |
 | `career.diagnostic.q.applications.a4` | Plus de 15 |
 | `career.diagnostic.q.obstacle.text` | Qu'est-ce qui vous freine le plus aujourd'hui ? |
-| `career.diagnostic.q.obstacle.a1` | Je ne sais pas quel métier choisir |
-| `career.diagnostic.q.obstacle.a2` | Il me manque des compétences |
-| `career.diagnostic.q.obstacle.a3` | Mon CV ne donne pas de réponses |
+| `career.diagnostic.q.obstacle.a1` | Choisir mon métier |
+| `career.diagnostic.q.obstacle.a2` | Des compétences qui manquent |
+| `career.diagnostic.q.obstacle.a3` | Mon CV reste sans réponse |
 | `career.diagnostic.q.obstacle.a4` | Je suis mal à l'aise en entretien |
 | `career.diagnostic.q.obstacle.a5` | Je ne trouve pas d'offres adaptées |
-| `career.diagnostic.q.obstacle.a6` | Je manque de réseau |
+| `career.diagnostic.q.obstacle.a6` | Pas assez de réseau |
 | `career.diagnostic.q.time.text` | Combien de temps pouvez-vous consacrer chaque semaine à votre progression ? |
 | `career.diagnostic.q.time.a1` | Moins d'une heure |
 | `career.diagnostic.q.time.a2` | 1 à 3 heures |
@@ -5991,6 +5991,21 @@ Conventions :
 | `career.diagnostic.q.digital` | Quels outils numériques utilisez-vous avec aisance ? |
 | `career.diagnostic.q.horizon` | Où vous voyez-vous dans trois ans ? |
 | `career.diagnostic.q.useProfile` | Utiliser mon profil et mon CV pour affiner le bilan |
+| `career.diagnostic.q.skills.text` | Votre niveau dans ces compétences ? |
+| `career.diagnostic.q.skills.p0` | Pas encore |
+| `career.diagnostic.q.skills.p1` | Les bases |
+| `career.diagnostic.q.skills.p2` | À l'aise |
+| `career.diagnostic.q.skills.p3` | Je peux le prouver |
+| `career.diagnostic.q.ready.text` | Qu'avez-vous déjà de prêt ? |
+| `career.diagnostic.q.ready.hint` | Touchez tout ce que vous avez. Rien encore ? Passez à la suite. |
+| `career.diagnostic.q.ready.cv` | Un CV à jour |
+| `career.diagnostic.q.ready.letter` | Une lettre de motivation |
+| `career.diagnostic.q.ready.profile` | Un profil en ligne à jour |
+| `career.diagnostic.q.ready.portfolio` | Des réalisations à montrer |
+| `career.diagnostic.q.confidence.short` | Face à un recruteur, vous vous sentez… |
+| `career.diagnostic.q.confidence.c5` | À l'aise |
+| `career.diagnostic.q.confidence.c3` | Un peu stressé·e |
+| `career.diagnostic.q.confidence.c1` | Pas encore prêt·e |
 
 #### Résultat
 
@@ -6022,6 +6037,7 @@ Conventions :
 | `career.diagnostic.rule.strength.mobility` | Une ouverture à la mobilité |
 | `career.diagnostic.rule.strength.interview` | De l'assurance en entretien |
 | `career.diagnostic.rule.strength.applications` | Une recherche déjà active |
+| `career.diagnostic.rule.strength.tools` | Des outils de candidature déjà prêts |
 | `career.diagnostic.rule.strength.none` | Vos atouts se préciseront en complétant votre profil. Chaque expérience compte, même courte. |
 | `career.diagnostic.rule.priority.role` | Choisir un métier cible |
 | `career.diagnostic.rule.priority.skills` | Renforcer les compétences demandées dans vos offres cibles |
@@ -6048,7 +6064,7 @@ Conventions :
 | `career.diagnostic.welcome.titleAgain` | Refaites le point |
 | `career.diagnostic.welcome.tagline` | {duration}, une question à la fois. Vos réponses restent privées. |
 | `career.diagnostic.welcome.text` | Six dimensions, une question à la fois. Vous voyez votre profil se dessiner pendant que vous répondez, puis vous recevez un bilan expliqué point par point. |
-| `career.diagnostic.welcome.duration` | 6 à 8 minutes |
+| `career.diagnostic.welcome.duration` | 3 minutes |
 | `career.diagnostic.welcome.launch` | Lancer mon diagnostic |
 | `career.diagnostic.welcome.resume` | Reprendre mon diagnostic, étape {current} sur {total} |
 | `career.diagnostic.welcome.restart` | Recommencer à zéro |
@@ -6075,10 +6091,10 @@ Conventions :
 | `career.diagnostic.welcome.noscript` | Sans JavaScript, toutes les questions s'affichent sur une seule page. |
 | `career.diagnostic.welcome.hello` | Ici, vous allez découvrir où vous en êtes dans votre carrière professionnelle. |
 | `career.diagnostic.welcome.howTitle` | Comment ça se passe |
-| `career.diagnostic.welcome.how.1` | Répondez à 6 thèmes |
+| `career.diagnostic.welcome.how.1` | Répondez à 10 questions |
 | `career.diagnostic.welcome.how.2` | Votre profil se dessine |
 | `career.diagnostic.welcome.how.3` | Recevez votre bilan sur 100 |
-| `career.diagnostic.welcome.how.1Text` | Une question à la fois |
+| `career.diagnostic.welcome.how.1Text` | Une à la fois, en un geste |
 | `career.diagnostic.welcome.how.2Text` | Projet, compétences, expérience… |
 | `career.diagnostic.welcome.how.3Text` | Et vos priorités, expliquées |
 | `career.diagnostic.welcome.private` | Privé |
@@ -6148,6 +6164,7 @@ Conventions :
 | `career.diagnostic.dimension.reason.education` | Niveau d'études |
 | `career.diagnostic.dimension.reason.quantified` | Résultats chiffrés |
 | `career.diagnostic.dimension.reason.achievement` | Réalisation décrite |
+| `career.diagnostic.dimension.reason.portfolio` | Réalisations à montrer |
 | `career.diagnostic.dimension.reason.cvStatus` | État du CV |
 | `career.diagnostic.dimension.reason.coverLetter` | Lettre de motivation |
 | `career.diagnostic.dimension.reason.onlineProfile` | Profil en ligne |
@@ -6159,7 +6176,7 @@ Conventions :
 | `career.diagnostic.dimension.reason.contacts` | Professionnels à contacter |
 | `career.diagnostic.q.sectors.text` | Quels secteurs vous attirent ? |
 | `career.diagnostic.q.sectors.placeholder` | Ex. : Banque, santé, numérique |
-| `career.diagnostic.q.familiarity.text` | À quel point ce métier vous est-il familier ? |
+| `career.diagnostic.q.familiarity.text` | Ce métier, vous le connaissez ? |
 | `career.diagnostic.q.familiarity.a1` | Je l'exerce |
 | `career.diagnostic.q.familiarity.a2` | Je l'ai découvert en stage |
 | `career.diagnostic.q.familiarity.a3` | J'en ai entendu parler |
@@ -6203,10 +6220,10 @@ Conventions :
 | `career.diagnostic.q.onlineProfile.a1` | Oui, il est à jour |
 | `career.diagnostic.q.onlineProfile.a2` | Il existe, mais il n'est pas à jour |
 | `career.diagnostic.q.onlineProfile.a3` | Je n'en ai pas |
-| `career.diagnostic.q.interviews.text` | Combien d'entretiens d'embauche avez-vous passés ces 6 derniers mois ? |
+| `career.diagnostic.q.interviews.text` | Combien d'entretiens ces 6 derniers mois ? |
 | `career.diagnostic.q.interviews.a1` | Aucun |
 | `career.diagnostic.q.interviews.a2` | 1 ou 2 |
-| `career.diagnostic.q.interviews.a3` | 3 à 5 |
+| `career.diagnostic.q.interviews.a3` | 3 ou plus |
 | `career.diagnostic.q.interviews.a4` | Plus de 5 |
 | `career.diagnostic.q.pitch.text` | Savez-vous présenter votre parcours en 2 minutes ? |
 | `career.diagnostic.q.pitch.a1` | Oui |
@@ -6216,10 +6233,10 @@ Conventions :
 | `career.diagnostic.q.workMode.a2` | Hybride |
 | `career.diagnostic.q.workMode.a3` | Télétravail |
 | `career.diagnostic.q.workMode.a4` | Peu importe |
-| `career.diagnostic.q.contacts.text` | Combien de professionnels de votre domaine pourriez-vous contacter cette semaine ? |
+| `career.diagnostic.q.contacts.text` | Combien de professionnels de votre domaine pourriez-vous contacter ? |
 | `career.diagnostic.q.contacts.a1` | Aucun |
 | `career.diagnostic.q.contacts.a2` | 1 ou 2 |
-| `career.diagnostic.q.contacts.a3` | 3 à 5 |
+| `career.diagnostic.q.contacts.a3` | 3 ou plus |
 | `career.diagnostic.q.contacts.a4` | Plus de 5 |
 | `career.diagnostic.radar.live` | Votre profil se dessine |
 | `career.diagnostic.radar.liveHint` | Chaque réponse fait grandir l'axe concerné. Notes provisoires, calculées par des règles fixes. |

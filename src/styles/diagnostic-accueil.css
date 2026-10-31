@@ -186,3 +186,12 @@
   font-weight: 800;
   font-size: 16px;
 }
+
+/*
+ * Plus de grand vide en bas (Ephraïm, 31/10/2026) : la page (.t-contenu) garde déjà la place de
+ * la barre fixe ; les deux .t-flux imbriqués en ajoutaient chacun 110 px de plus.
+ */
+.dg-a.t-flux,
+.dg-a form.t-flux {
+  padding-bottom: 0;
+}

@@ -12,7 +12,12 @@ import {
   followUpQuestions,
   personalizedDiagnostic,
 } from "@/server/services/diagnostic-ai";
-import { answersSchema, SKILLS_ASSESSED, type Answers } from "@/server/services/diagnostic-scoring";
+import {
+  answersSchema,
+  SKILL_PICKS,
+  SKILLS_ASSESSED,
+  type Answers,
+} from "@/server/services/diagnostic-scoring";
 import {
   demandedSkills,
   discardDraft,
@@ -30,12 +35,13 @@ function answersFromForm(formData: FormData) {
   );
   const skillChecks = Array.from({ length: SKILLS_ASSESSED }, (_, index) => ({
     skill: formData.get(`skill-${index}`),
-    level: formData.get(`skillLevel-${index}`),
-    proof: formData.get(`skillLevel-${index}`) === "0" ? "a4" : formData.get(`skillProof-${index}`),
-  })).filter((item) => item.skill && item.level && item.proof);
+    pick: SKILL_PICKS[Number(formData.get(`skillPick-${index}`) ?? -1)],
+  }))
+    .filter((item) => item.skill && item.pick)
+    .map((item) => ({ skill: item.skill, ...item.pick }));
   return {
     ...entries,
-    values: formData.getAll("values").map(String),
+    ready: formData.getAll("ready").map(String),
     useProfile: formData.get("useProfile") === "on",
     skillChecks,
   };

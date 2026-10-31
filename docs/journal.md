@@ -5311,3 +5311,7 @@ Retour d'Ephraïm : cartes compactes trop basses, trois points invisibles. Carte
 ## 2026-10-31 · Mes lettres de motivation : même carte que les CV
 
 Les lettres reprennent la carte des CV (deux à l'écran, la troisième dépasse) : bande ambrée avec le dessin de lettre de l'onglet Vue (MenuArt « letter »), titre sur deux lignes, ligne d'info. Titre et ligne restent fournis par server.tsx (fil lettre).
+## 31/10/2026 · Diagnostic de carrière raccourci
+
+- Une dizaine de questions au lieu d'environ 32 (barème `diagnostic_scoring_v3`, voir docs/decisions/2026-10-31-diagnostic-dix-questions.md), 3 ou 4 réponses par question, dessins du menu sur les questions et sur certaines réponses, compétences sur un seul écran.
+- Accueil du diagnostic et questionnaire : plus de grand vide en bas (marges de la barre fixe comptées deux fois de trop).

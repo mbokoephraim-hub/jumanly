@@ -178,7 +178,7 @@ export async function diagnosticPrefill(db: PrismaClient, userId: string) {
         }
       : {}),
     ...(highest !== undefined ? { education: order[highest] } : {}),
-    ...(score === null ? {} : { cvStatus: score >= 70 ? "a3" : "a2" }),
+    ...(score !== null && score >= 70 ? { ready: ["cv" as const] } : {}),
   };
   return { draft, cvScore: score };
 }
