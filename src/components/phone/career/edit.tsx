@@ -1016,13 +1016,15 @@ export function EducationForm({ values }: { values: EducationValues }) {
           />
         )}
       </Field>
-      <LogoPicker
-        name={form.school}
-        logo={form.schoolLogo}
-        onChange={(schoolLogo) => set({ schoolLogo })}
-        label={certificate ? t("organizationLogo") : t("schoolLogo")}
-        hint={certificate ? t("organizationLogoHint") : t("schoolLogoHint")}
-      />
+      <div className="nb-ca-ch">
+        <LogoPicker
+          name={form.school}
+          logo={form.schoolLogo}
+          onChange={(schoolLogo) => set({ schoolLogo })}
+          label={t("institutionLogo")}
+          optional={t("optionalParen")}
+        />
+      </div>
       {certificate ? (
         <>
           <Chips

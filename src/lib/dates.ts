@@ -35,7 +35,16 @@ export function formatRelativeDays(date: Date, now = new Date()): string {
 
 /** "français", "anglais"… from an ISO 639-1 code. */
 export function languageName(code: string): string {
-  return new Intl.DisplayNames([intlLocale()], { type: "language" }).of(code) ?? code;
+  // The names people use in the Congo (Ephraïm, 31/10/2026).
+  if (intlLocale().startsWith("fr")) {
+    if (code === "lua") return "tshiluba";
+    if (code === "lu") return "kiluba";
+  }
+  try {
+    return new Intl.DisplayNames([intlLocale()], { type: "language" }).of(code) ?? code;
+  } catch {
+    return code;
+  }
 }
 
 /** "il y a 2 jours", "il y a 1 semaine", "dans 3 jours": days, then weeks, then months. */

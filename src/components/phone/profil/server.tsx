@@ -1,5 +1,6 @@
 import "server-only";
 import { achievementsOf } from "@/lib/achievements";
+import { languageName } from "@/lib/dates";
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
 import type { Messages } from "next-intl";
@@ -184,6 +185,7 @@ export async function profileView(
 
   // ─── À propos ────────────────────────────────────────────────────────────────────
   const skills = person.skills.map((skill) => ({
+    id: skill.id,
     name: skill.name,
     color: PROFILE_PALETTE[colorOf(skill.name)],
     verified: skill.verified,
@@ -254,12 +256,8 @@ export async function profileView(
   const certificates = person.educations
     .filter((item) => item.kind === "certificate")
     .map(educationRow);
-  const languageName = new Intl.DisplayNames(["fr"], { type: "language" });
   const languages = person.languages.map((item) => {
-    let name = item.code;
-    try {
-      name = languageName.of(item.code) ?? item.code;
-    } catch {}
+    const name = languageName(item.code);
     return {
       name: name.charAt(0).toUpperCase() + name.slice(1),
       flag: languageFlagOf(item.code),

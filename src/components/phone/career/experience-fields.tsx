@@ -185,13 +185,15 @@ export function LogoPicker({
   logo,
   onChange,
   label,
-  hint,
+  optional,
 }: {
   name: string;
   logo: string | null;
   onChange: (logo: string | null) => void;
+  /** Another title (« Logo de l’institution »), without the company's help sentence. */
   label?: string;
-  hint?: string;
+  /** « (facultatif) », on the title's line. */
+  optional?: string;
 }) {
   const t = useTranslations("phoneCareer.form");
   const input = useRef<HTMLInputElement>(null);
@@ -214,8 +216,11 @@ export function LogoPicker({
     <div className="nb-xp-logo">
       <CompanyMark name={name} logo={logo} />
       <div>
-        <strong>{label ?? t("logo")}</strong>
-        <span>{hint ?? t("logoHint")}</span>
+        <strong>
+          {label ?? t("logo")}
+          {optional ? <small> {optional}</small> : null}
+        </strong>
+        {label ? null : <span>{t("logoHint")}</span>}
         <div>
           <button
             type="button"
