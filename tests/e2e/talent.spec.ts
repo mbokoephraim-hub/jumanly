@@ -159,7 +159,7 @@ test("le diagnostic en six dimensions : une question par écran, le scan, puis l
   await expect(
     page.getByRole("heading", { name: /^(Où en êtes-vous vraiment \?|Refaites le point)$/ }),
   ).toBeVisible();
-  const restart = page.getByRole("button", { name: "Recommencer à zéro" });
+  const restart = page.getByRole("button", { name: "Recommencer", exact: true });
   if (await restart.isVisible()) await restart.click();
   else await page.getByRole("button", { name: "Lancer mon diagnostic" }).click();
   await expect(page).toHaveURL(/etape=1/);
@@ -212,7 +212,7 @@ test("diagnostic personnalisé : deux questions de relance de l'IA, puis le mini
   await expect(
     page.getByRole("heading", { name: /^(Où en êtes-vous vraiment \?|Refaites le point)$/ }),
   ).toBeVisible();
-  const restart = page.getByRole("button", { name: "Recommencer à zéro" });
+  const restart = page.getByRole("button", { name: "Recommencer", exact: true });
   if (await restart.isVisible()) await restart.click();
   else await page.getByRole("button", { name: "Lancer mon diagnostic" }).click();
   await expect(page).toHaveURL(/etape=1/);

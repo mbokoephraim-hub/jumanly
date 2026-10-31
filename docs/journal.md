@@ -5325,6 +5325,7 @@ Les lettres reprennent la carte des CV (deux à l'écran, la troisième dépasse
 Demande d'Ephraïm : de l'air et un trait entre CV, lettres et portfolio (.nb-doc-section), bouton « + Nouveau CV » seul, « Sélectionner » remplacé par une icône ronde (case cochée, libellé gardé pour les lecteurs d'écran), aide « Touchez une lettre pour la modifier… » retirée.
 - Vue › carte diagnostic : « Analyser » bat doucement avec un halo (rien avec les animations réduites), « 3 minutes ».
 - Retirer une candidature : question « Voulez-vous vraiment… ? » Oui / Non, puis la candidature quitte la liste Candidatures du téléphone.
+- 2026-10-31 : accueil du diagnostic, « Recommencer » et « Reprendre · étape x/y » sur une seule ligne, boutons plus petits.
 
 ## 2026-10-31 · Modèles de lettres de motivation
 
