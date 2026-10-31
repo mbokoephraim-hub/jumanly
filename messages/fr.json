@@ -3434,7 +3434,7 @@
     },
     "withdraw": {
       "cta": "Retirer ma candidature",
-      "title": "Retirer votre candidature ?",
+      "title": "Voulez-vous vraiment retirer votre candidature ?",
       "text": "{company} sera informé. Vous pourrez postuler à d'autres offres à tout moment.",
       "confirm": "Oui, retirer ma candidature"
     },
@@ -12774,9 +12774,10 @@
       "orbiPlaceholder": "Écrire à Orbi…",
       "orbiSend": "Demander à Orbi",
       "withdraw": "Retirer ma candidature",
-      "withdrawQuestion": "Retirer votre candidature ?",
+      "withdrawQuestion": "Voulez-vous vraiment retirer votre candidature ?",
       "withdrawText": "{company} sera prévenu. Vous pourrez postuler à d’autres offres à tout moment.",
-      "withdrawConfirm": "Retirer",
+      "withdrawConfirm": "Oui, retirer",
+      "withdrawNo": "Non",
       "withdrawn": "Candidature retirée",
       "error": "Cela n’a pas marché. Réessayez dans un instant."
     }
