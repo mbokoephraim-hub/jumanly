@@ -2331,3 +2331,107 @@ html[data-nb-theme="clair"] .nb-app .nb-cr-cv-page {
 .nb-app[data-reduit] .nb-cr-etape-anim > svg {
   animation: none;
 }
+
+/* « Langues », one at a time (31/10/2026). */
+.nb-lg {
+  display: grid;
+  gap: 8px;
+}
+.nb-lg-item {
+  padding: 4px 4px 4px 0;
+  border-radius: 16px;
+}
+.nb-lg-item[data-ouvert] {
+  padding: 4px 10px 12px;
+  background: var(--nb-surface);
+}
+.nb-lg-tete {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nb-lg-nom {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--nb-creme);
+  text-align: left;
+}
+.nb-lg-nom span {
+  font-size: 18px;
+  line-height: 1;
+}
+.nb-lg-nom b {
+  font-size: 14.5px;
+}
+.nb-lg-nom small {
+  margin-left: auto;
+  font-size: 12.5px;
+  color: var(--nb-brume);
+}
+.nb-lg-retirer {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: none;
+  border: 1px solid rgba(var(--nb-voile), 0.16);
+  color: var(--nb-brume);
+}
+.nb-lg-item .nb-ca-chips {
+  margin-top: 6px;
+}
+.nb-lg-ajout .nb-ex-recherche {
+  flex: none;
+}
+.nb-lg-choix {
+  margin: 6px 0 0;
+  padding: 4px;
+  list-style: none;
+  border-radius: 16px;
+  background: var(--nb-surface);
+}
+.nb-lg-choix button {
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  border-radius: 12px;
+  background: none;
+  border: 0;
+  color: var(--nb-creme);
+  font-size: 14.5px;
+  text-align: left;
+}
+.nb-lg-choix button:hover,
+.nb-lg-choix button:focus-visible {
+  background: rgba(var(--nb-voile), 0.06);
+}
+.nb-lg-choix span {
+  font-size: 18px;
+}
+.nb-lg-plus {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  justify-self: start;
+  border-radius: 999px;
+  border: 1px dashed rgba(var(--nb-lime-rgb, 166, 242, 107), 0.5);
+  background: none;
+  color: var(--nb-lime-t, #a6f26b);
+  font-size: 13.5px;
+  font-weight: 700;
+}

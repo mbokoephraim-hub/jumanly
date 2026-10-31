@@ -8,6 +8,9 @@ import {
   saveCareerLanguagesAction,
   searchCareerSkillsAction,
 } from "@/server/actions/career-phone";
+import { languageName } from "@/lib/dates";
+import { languageFlagOf } from "@/lib/countries";
+import { ALL_LANGUAGE_CODES, searchable } from "@/lib/languages";
 import { PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
 import type { CareerView } from "./data";
@@ -209,7 +212,12 @@ export function LanguagesSheet({
   choices: CareerView["sheets"];
 }) {
   const t = useTranslations("phoneCareer.sheets");
-  const [languages, setLanguages] = useState(choices.languages);
+  // Only the languages the person speaks: others are added one at a time (31/10/2026).
+  const [languages, setLanguages] = useState<SpokenLanguage[]>(() =>
+    choices.languages
+      .filter((item) => item.on)
+      .map((item) => ({ code: item.code, label: item.label, level: item.level })),
+  );
   const [missing, setMissing] = useState(false);
   const [places, setPlaces] = useState(choices.places);
   const [place, setPlace] = useState("");
@@ -233,64 +241,13 @@ export function LanguagesSheet({
         <p className="nb-meta" id="ca-langues">
           {t("languages")}
         </p>
-        <div className="nb-ca-chips" role="group" aria-labelledby="ca-langues">
-          {languages.map((item) => (
-            <button
-              key={item.code}
-              type="button"
-              className="nb-ex-chip"
-              data-fort=""
-              aria-pressed={item.on}
-              onClick={() =>
-                setLanguages((before) =>
-                  before.map((other) =>
-                    other.code === item.code ? { ...other, on: !other.on } : other,
-                  ),
-                )
-              }
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-        {languages
-          .filter((item) => item.on)
-          .map((item) => (
-            <div key={item.code}>
-              <p className="nb-meta" id={`ca-niveau-${item.code}`}>
-                {t("languageLevel", { language: item.label })}
-              </p>
-              <div
-                className="nb-ca-chips"
-                role="radiogroup"
-                aria-labelledby={`ca-niveau-${item.code}`}
-              >
-                {[
-                  ...phoneLanguageLevels,
-                  ...(item.level === "fluent" ? ["fluent" as const] : []),
-                ].map((level) => (
-                  <button
-                    key={level}
-                    type="button"
-                    role="radio"
-                    className="nb-ex-chip"
-                    data-fort=""
-                    aria-checked={item.level === level}
-                    onClick={() => {
-                      setMissing(false);
-                      setLanguages((before) =>
-                        before.map((other) =>
-                          other.code === item.code ? { ...other, level } : other,
-                        ),
-                      );
-                    }}
-                  >
-                    {t(levelKey[level])}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
+        <LanguageList
+          languages={languages}
+          onChange={(next) => {
+            setMissing(false);
+            setLanguages(next);
+          }}
+        />
         {missing ? (
           <p className="nb-meta" role="alert">
             {t("languageLevelMissing")}
@@ -347,7 +304,7 @@ export function LanguagesSheet({
           disabled={pending}
           onClick={() =>
             start(async () => {
-              const ticked = languages.filter((item) => item.on);
+              const ticked = languages;
               if (ticked.some((item) => !item.level)) {
                 setMissing(true);
                 return;
@@ -369,5 +326,174 @@ export function LanguagesSheet({
         </button>
       </div>
     </PhoneSheet>
+  );
+}
+
+type SpokenLanguage = {
+  code: string;
+  label: string;
+  level?: (typeof phoneLanguageLevels)[number] | "fluent";
+};
+
+const LANGUAGES_MAX = 12;
+
+/** Every language with its name in French, for the search (built once, in the browser). */
+let allLanguages: { code: string; label: string; key: string }[] | null = null;
+function languageChoices() {
+  allLanguages ??= ALL_LANGUAGE_CODES.map((code) => {
+    const name = languageName(code);
+    const label = name.charAt(0).toLocaleUpperCase("fr") + name.slice(1);
+    return { code, label, key: searchable(label) };
+  }).sort((a, b) => a.label.localeCompare(b.label, "fr"));
+  return allLanguages;
+}
+
+/**
+ * « Langues » (demande d'Ephraïm du 31/10/2026): one language at a time. The person types its name,
+ * picks it among the suggestions (every language of the world), and its four levels appear right
+ * away; « Ajouter une autre langue » opens the field again. A language already chosen shows its
+ * flag and level, and is touched to change the level.
+ */
+function LanguageList({
+  languages,
+  onChange,
+}: {
+  languages: SpokenLanguage[];
+  onChange: (languages: SpokenLanguage[]) => void;
+}) {
+  const t = useTranslations("phoneCareer.sheets");
+  const [query, setQuery] = useState("");
+  const [adding, setAdding] = useState(languages.length === 0);
+  const [open, setOpen] = useState<string | null>(null);
+  const typed = searchable(query);
+  const matches = typed
+    ? languageChoices()
+        .filter((item) => !languages.some((other) => other.code === item.code))
+        .map((item) => ({ item, at: item.key.indexOf(typed) }))
+        .filter(({ at }) => at >= 0)
+        .sort((a, b) => Number(a.at !== 0) - Number(b.at !== 0) || a.at - b.at)
+        .slice(0, 6)
+        .map(({ item }) => item)
+    : [];
+  const pick = (item: { code: string; label: string }) => {
+    onChange([...languages, { code: item.code, label: item.label }]);
+    setOpen(item.code);
+    setQuery("");
+    setAdding(false);
+  };
+  return (
+    <div className="nb-lg">
+      {languages.map((item) => {
+        const shown = open === item.code || !item.level;
+        const flag = languageFlagOf(item.code);
+        return (
+          <div key={item.code} className="nb-lg-item" data-ouvert={shown ? "" : undefined}>
+            <div className="nb-lg-tete">
+              <button
+                type="button"
+                className="nb-lg-nom"
+                aria-expanded={shown}
+                aria-label={t("languageChange", { language: item.label })}
+                onClick={() => setOpen(shown ? null : item.code)}
+              >
+                {flag ? <span aria-hidden>{flag}</span> : null}
+                <b>{item.label}</b>
+                {item.level ? <small>{t(levelKey[item.level])}</small> : null}
+              </button>
+              <button
+                type="button"
+                className="nb-lg-retirer"
+                aria-label={t("languageRemove", { language: item.label })}
+                onClick={() => onChange(languages.filter((other) => other.code !== item.code))}
+              >
+                <PhoneIcon name="fermer" size={16} />
+              </button>
+            </div>
+            {shown ? (
+              <div
+                className="nb-ca-chips"
+                role="radiogroup"
+                aria-label={t("languageLevel", { language: item.label })}
+              >
+                {[
+                  ...phoneLanguageLevels,
+                  ...(item.level === "fluent" ? ["fluent" as const] : []),
+                ].map((level) => (
+                  <button
+                    key={level}
+                    type="button"
+                    role="radio"
+                    className="nb-ex-chip"
+                    data-fort=""
+                    aria-checked={item.level === level}
+                    onClick={() => {
+                      onChange(
+                        languages.map((other) =>
+                          other.code === item.code ? { ...other, level } : other,
+                        ),
+                      );
+                      setOpen(null);
+                    }}
+                  >
+                    {t(levelKey[level])}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        );
+      })}
+      {adding ? (
+        <div className="nb-lg-ajout">
+          <label className="nb-ex-recherche nb-ca-feuille-champ">
+            <PhoneIcon name="recherche" size={16} />
+            <input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && matches[0]) {
+                  event.preventDefault();
+                  pick(matches[0]);
+                }
+              }}
+              aria-label={t("languageSearch")}
+              placeholder={t("languageSearch")}
+              maxLength={40}
+              autoComplete="off"
+              autoFocus={languages.length > 0}
+            />
+          </label>
+          {typed ? (
+            matches.length > 0 ? (
+              <ul className="nb-lg-choix" role="listbox" aria-label={t("languageSearch")}>
+                {matches.map((item) => {
+                  const flag = languageFlagOf(item.code);
+                  return (
+                    <li key={item.code}>
+                      <button
+                        type="button"
+                        role="option"
+                        aria-selected={false}
+                        onClick={() => pick(item)}
+                      >
+                        {flag ? <span aria-hidden>{flag}</span> : null}
+                        {item.label}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p className="nb-meta">{t("languageNone")}</p>
+            )
+          ) : null}
+        </div>
+      ) : languages.length < LANGUAGES_MAX ? (
+        <button type="button" className="nb-lg-plus" onClick={() => setAdding(true)}>
+          <PhoneIcon name="plus" size={16} strong />
+          {t("languageAddAnother")}
+        </button>
+      ) : null}
+    </div>
   );
 }
