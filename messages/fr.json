@@ -12682,7 +12682,9 @@
       "tone": "Ton",
       "points": "À mettre en avant (facultatif)",
       "note": "{count, plural, one {# crédit Orbi} other {# crédits Orbi}} · rien n’est inventé",
-      "pointsExample": "Ex. : 3 ans au service client, anglais courant"
+      "pointsExample": "Ex. : 3 ans au service client",
+      "pointsAdd": "+ Ajouter un autre point",
+      "pointsRemove": "Retirer le point"
     },
     "or": "ou",
     "check": {
