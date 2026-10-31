@@ -3434,7 +3434,7 @@
     },
     "withdraw": {
       "cta": "Retirer ma candidature",
-      "title": "Retirer votre candidature ?",
+      "title": "Voulez-vous vraiment retirer votre candidature ?",
       "text": "{company} sera informé. Vous pourrez postuler à d'autres offres à tout moment.",
       "confirm": "Oui, retirer ma candidature"
     },
@@ -4100,7 +4100,7 @@
     "next": {
       "title": "Prochaine action",
       "course": "Formation « {course} », {minutes} min",
-      "diagnostic": "Faire mon diagnostic de carrière, 6 à 8 minutes",
+      "diagnostic": "Faire mon diagnostic de carrière, 3 minutes",
       "profile": "Décrire une expérience avec un résultat, 10 min",
       "start": "Commencer"
     },
@@ -11948,6 +11948,15 @@
         "namePrimary": "CV principal",
         "nameSecond": "CV candidatures spontanées",
         "nameThird": "CV stage",
+        "renameHelp": "Nommez chaque CV selon son usage ou son objectif : vous le retrouvez d’un coup d’œil.",
+        "nameCdd": "CV CDD",
+        "nameCdi": "CV CDI",
+        "nameInterim": "CV intérim",
+        "downloadPdf": "Télécharger",
+        "word": "Télécharger en Word",
+        "preparing": "Préparation du PDF…",
+        "downloaded": "PDF téléchargé.",
+        "downloadError": "Le PDF n’a pas pu être préparé. Réessayez dans un instant.",
         "primaryLong": "Utiliser par défaut pour postuler",
         "color": "Couleur",
         "colorNone": "Sans couleur",
@@ -12005,7 +12014,7 @@
       },
       "next": "{count, plural, =0 {Vous êtes au plus haut stade.} one {Encore une étape pour passer « {stage} ».} other {Encore # étapes pour passer « {stage} ».}}",
       "noStage": "Faites votre diagnostic",
-      "noStageText": "6 à 8 minutes pour savoir où vous en êtes et par quoi commencer.",
+      "noStageText": "3 minutes pour savoir où vous en êtes et par quoi commencer.",
       "diagnostic": "Analyser",
       "urgent": "À faire maintenant",
       "report": "Voir mon diagnostic",
@@ -12774,9 +12783,10 @@
       "orbiPlaceholder": "Écrire à Orbi…",
       "orbiSend": "Demander à Orbi",
       "withdraw": "Retirer ma candidature",
-      "withdrawQuestion": "Retirer votre candidature ?",
+      "withdrawQuestion": "Voulez-vous vraiment retirer votre candidature ?",
       "withdrawText": "{company} sera prévenu. Vous pourrez postuler à d’autres offres à tout moment.",
-      "withdrawConfirm": "Retirer",
+      "withdrawConfirm": "Oui, retirer",
+      "withdrawNo": "Non",
       "withdrawn": "Candidature retirée",
       "error": "Cela n’a pas marché. Réessayez dans un instant."
     }

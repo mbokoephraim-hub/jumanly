@@ -2850,7 +2850,7 @@ Conventions :
 | `candidature.requests.none` | Vous n'avez pas encore de document à envoyer. Ajoutez-le dans Mes documents, ou répondez dans la conversation. |
 | `candidature.requests.send` | Envoyer ce document |
 | `candidature.withdraw.cta` | Retirer ma candidature |
-| `candidature.withdraw.title` | Retirer votre candidature ? |
+| `candidature.withdraw.title` | Voulez-vous vraiment retirer votre candidature ? |
 | `candidature.withdraw.text` | {company} sera informé. Vous pourrez postuler à d'autres offres à tout moment. |
 | `candidature.withdraw.confirm` | Oui, retirer ma candidature |
 
@@ -3463,7 +3463,7 @@ Conventions :
 | `point.weak.none` | Rien de pressant : continuez sur votre lancée. |
 | `point.next.title` | Prochaine action |
 | `point.next.course` | Formation « {course} », {minutes} min |
-| `point.next.diagnostic` | Faire mon diagnostic de carrière, 6 à 8 minutes |
+| `point.next.diagnostic` | Faire mon diagnostic de carrière, 3 minutes |
 | `point.next.profile` | Décrire une expérience avec un résultat, 10 min |
 | `point.next.start` | Commencer |
 | `point.diagnostic` | Voir mon diagnostic |
@@ -9869,7 +9869,7 @@ Conventions :
 | `phoneCareer.progression.stage.competitive` | Compétitif |
 | `phoneCareer.progression.next` | {count, plural, =0 {Vous êtes au plus haut stade.} one {Encore une étape pour passer « {stage} ».} other {Encore # étapes pour passer « {stage} ».}} |
 | `phoneCareer.progression.noStage` | Faites votre diagnostic |
-| `phoneCareer.progression.noStageText` | 6 à 8 minutes pour savoir où vous en êtes et par quoi commencer. |
+| `phoneCareer.progression.noStageText` | 3 minutes pour savoir où vous en êtes et par quoi commencer. |
 | `phoneCareer.progression.diagnostic` | Analyser |
 | `phoneCareer.progression.urgent` | À faire maintenant |
 | `phoneCareer.progression.report` | Voir mon diagnostic |
@@ -10448,6 +10448,15 @@ Conventions :
 | `phoneCareer.cv.menu.namePrimary` | CV principal |
 | `phoneCareer.cv.menu.nameSecond` | CV candidatures spontanées |
 | `phoneCareer.cv.menu.nameThird` | CV stage |
+| `phoneCareer.cv.menu.renameHelp` | Nommez chaque CV selon son usage ou son objectif : vous le retrouvez d’un coup d’œil. |
+| `phoneCareer.cv.menu.nameCdd` | CV CDD |
+| `phoneCareer.cv.menu.nameCdi` | CV CDI |
+| `phoneCareer.cv.menu.nameInterim` | CV intérim |
+| `phoneCareer.cv.menu.downloadPdf` | Télécharger |
+| `phoneCareer.cv.menu.word` | Télécharger en Word |
+| `phoneCareer.cv.menu.preparing` | Préparation du PDF… |
+| `phoneCareer.cv.menu.downloaded` | PDF téléchargé. |
+| `phoneCareer.cv.menu.downloadError` | Le PDF n’a pas pu être préparé. Réessayez dans un instant. |
 | `phoneCareer.cv.menu.primaryLong` | Utiliser par défaut pour postuler |
 | `phoneCareer.cv.menu.color` | Couleur |
 | `phoneCareer.cv.menu.colorNone` | Sans couleur |
@@ -10587,9 +10596,10 @@ Conventions :
 | `phoneCareer.application.orbiPlaceholder` | Écrire à Orbi… |
 | `phoneCareer.application.orbiSend` | Demander à Orbi |
 | `phoneCareer.application.withdraw` | Retirer ma candidature |
-| `phoneCareer.application.withdrawQuestion` | Retirer votre candidature ? |
+| `phoneCareer.application.withdrawQuestion` | Voulez-vous vraiment retirer votre candidature ? |
 | `phoneCareer.application.withdrawText` | {company} sera prévenu. Vous pourrez postuler à d’autres offres à tout moment. |
-| `phoneCareer.application.withdrawConfirm` | Retirer |
+| `phoneCareer.application.withdrawConfirm` | Oui, retirer |
+| `phoneCareer.application.withdrawNo` | Non |
 | `phoneCareer.application.withdrawn` | Candidature retirée |
 | `phoneCareer.application.error` | Cela n’a pas marché. Réessayez dans un instant. |
 

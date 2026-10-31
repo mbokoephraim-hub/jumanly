@@ -5,7 +5,7 @@ import { getActiveSpace } from "@/server/hire-context";
 import { exportCvCopy } from "@/features/cv/export/export";
 import { hirePermissions } from "@/server/services/hire";
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 /** The CV a candidate sent, for the recruiting team of the job's organization only. */
 export async function GET(
