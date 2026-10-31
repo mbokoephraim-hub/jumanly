@@ -5,7 +5,7 @@ import { compareRows } from "@/config/pricing-compare";
 import { parseConsent, readConsentCookie, serializeConsent } from "@/lib/consent";
 import { durationParts } from "@/lib/format";
 import { hasPlaceholder, withoutPlaceholders } from "@/lib/placeholders";
-import { isSafeInternalPath, loginHref, signupHref } from "@/lib/signup";
+import { isSafeInternalPath, joinHref, loginHref, signupHref } from "@/lib/signup";
 import {
   contactSchema,
   partnerContactSchema,
@@ -73,16 +73,17 @@ describe("liens d'inscription", () => {
     expect(loginHref("https://exemple.com")).toBe("/connexion");
   });
 
-  it("chaque formule mène à l'inscription, au devis ou au formulaire partenaires", () => {
+  it("chaque formule mène à l'inscription (ou à la liste d'attente), au devis ou au formulaire partenaires", () => {
     for (const plan of plans) {
       const href = planCtaHref(plan);
       if (plan.family === "partner") expect(href).toBe("/partenaires#contact");
       else if (!plan.isPurchasable && plan.priceCents === null)
         expect(href).toBe("/contact?sujet=devis");
       else {
-        expect(href).toContain("/inscription?");
-        expect(href).toContain(`profil=${plan.family}`);
-        expect(href).toContain(`forfait=${plan.code}`);
+        // Inscriptions fermées : la liste d'attente (src/lib/signup.ts) ; ouvertes : l'inscription.
+        expect(href).toBe(joinHref({ profil: plan.family, forfait: plan.code }));
+        expect(href).toMatch(/^\/(inscription|liste-attente)\?/);
+        expect(href).toContain(`profil=`);
       }
     }
   });
