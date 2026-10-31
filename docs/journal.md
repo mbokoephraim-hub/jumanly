@@ -5317,3 +5317,4 @@ Les lettres reprennent la carte des CV (deux à l'écran, la troisième dépasse
 - Accueil du diagnostic et questionnaire : plus de grand vide en bas (marges de la barre fixe comptées deux fois de trop).
 - Résultat du diagnostic refait (niveau, à faire maintenant, six thèmes touchables, atouts) et compétences préparées par Orbi pour n'importe quel métier (`diagnostic_domain`), sinon citées par la personne.
 - Résultat du diagnostic allégé : la note, le niveau et les trois actions (une ligne chacune, qui mène où agir) ; thèmes, atouts et textes retirés. Corrige aussi un doublon dans diagnostic-flow.tsx arrivé avec la fusion de #281.
+- Résultat du diagnostic, l'essentiel : niveau expliqué en une phrase, points forts et à travailler en barres simples, trois actions avec une phrase.

@@ -3507,7 +3507,7 @@ Conventions :
 | `diag.result.word.competitive` | Vous êtes bien placé sur vos offres. Gardez le rythme et visez les postes exigeants. |
 | `diag.result.todo` | À faire maintenant |
 | `diag.result.go` | Y aller |
-| `diag.result.themes` | Vos six thèmes |
+| `diag.result.themes` | Vos points forts et à travailler |
 | `diag.result.themesHint` | Touchez un thème pour savoir ce qu'il veut dire et quoi faire. |
 | `plan.seo` | Mon plan de progression |
 | `plan.title` | Mon plan de progression |
