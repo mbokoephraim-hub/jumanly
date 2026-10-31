@@ -164,7 +164,7 @@ export function PhoneCareer({
                   tone={view.tone}
                   org={false}
                   me
-                  size={38}
+                  size={33}
                 />
                 <span className="nb-cr-moi-t">
                   <b>{view.name}</b>
