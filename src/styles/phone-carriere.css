@@ -1686,8 +1686,18 @@ button.nb-cr-cv-l {
 .nb-ca-projet-corps .nb-ca-docs {
   margin-top: 14px;
 }
-.nb-ca-doc-ajout {
-  margin-top: 0;
+/* The form's `.nb-ca-ch > label` rule (block, grey, small) took over this button: text sat at the
+   top (Ephraïm, 31/10/2026). Keep it a centred Lime button. */
+.nb-ca-ch > label.nb-ca-doc-ajout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  margin: 0;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--nb-lime-t);
   cursor: pointer;
 }
 
