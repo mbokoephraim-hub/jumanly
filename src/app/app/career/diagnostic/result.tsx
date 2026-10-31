@@ -15,7 +15,7 @@ import {
   type DiagnosticV2,
   type Priority,
 } from "@/server/services/diagnostic";
-import { stages } from "@/server/services/diagnostic-scoring";
+import { bandFor, stages } from "@/server/services/diagnostic-scoring";
 import "@/styles/diagnostic-resultat.css";
 
 const priorityHref = (priority: Priority) =>
@@ -93,6 +93,7 @@ export async function DiagnosticResult({
                 {result.roles[0] && <span className="dg-r-role">{result.roles[0]}</span>}
               </div>
             </div>
+            <p className="dg-r-stage">{d(`career.diagnostic.stage.${result.stage}Text`)}</p>
             <ol className="dg-r-echelle" aria-label={t("diag.result.scale")}>
               {stages.map((stage) => (
                 <li
@@ -116,6 +117,26 @@ export async function DiagnosticResult({
             </div>
           )}
 
+          <section aria-labelledby="dg-themes" className="dg-r-sec">
+            <h2 id="dg-themes">{t("diag.result.themes")}</h2>
+            <ul className="dg-r-mini" aria-label={t("diag.scores")}>
+              {[...result.dimensions]
+                .sort((a, b) => b.score - a.score)
+                .map((item) => (
+                  <li key={item.key} data-bande={bandFor(item.score)}>
+                    <span>{name(item.key)}</span>
+                    <span className="dg-r-barre" aria-hidden>
+                      <i style={{ width: `${Math.max(4, item.score)}%` }} />
+                    </span>
+                    <b>
+                      {item.score}
+                      <span className="sr-only">{t("diag.result.outOfLong")}</span>
+                    </b>
+                  </li>
+                ))}
+            </ul>
+          </section>
+
           <section aria-labelledby="dg-faire" className="dg-r-sec">
             <h2 id="dg-faire">{t("diag.result.todo")}</h2>
             <ol className="dg-r-todo">
@@ -125,7 +146,10 @@ export async function DiagnosticResult({
                     <span className="dg-r-n" aria-hidden>
                       {index + 1}
                     </span>
-                    <b>{d(`career.diagnostic.miniPlan.step.${priority}.title`)}</b>
+                    <span className="dg-r-todo-t">
+                      <b>{d(`career.diagnostic.miniPlan.step.${priority}.title`)}</b>
+                      <span>{d(`career.diagnostic.miniPlan.step.${priority}.text`)}</span>
+                    </span>
                     <TalentIcon name="suivant" size="s" />
                   </Link>
                 </li>
