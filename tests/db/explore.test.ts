@@ -39,7 +39,7 @@ async function person(visibility: "private" | "recruiters" | "anonymous", name =
 }
 
 describe("Explorer", () => {
-  it("ne propose que des profils visibles, jamais une connexion ni un profil bloqué", async () => {
+  it("propose les profils visibles et privés, jamais une connexion ni un profil bloqué", async () => {
     const me = await person("recruiters");
     const visible = await person("recruiters");
     const hidden = await person("private");
@@ -54,7 +54,9 @@ describe("Explorer", () => {
     });
     const ids = (await peopleToKnow(db, me, 500)).map((row) => row.id);
     expect(ids).toContain(visible);
-    for (const id of [me, hidden, anonymous, friend, blocked]) expect(ids).not.toContain(id);
+    // « Privé » keeps a talent out of the recruiters' pool, not out of Explorer (27/10/2026).
+    expect(ids).toContain(hidden);
+    for (const id of [me, anonymous, friend, blocked]) expect(ids).not.toContain(id);
   });
 
   it("met d'abord les personnes qui ont des connexions en commun", async () => {
@@ -72,10 +74,13 @@ describe("Explorer", () => {
     expect(first?.reason).toEqual({ kind: "mutual", count: 1 });
   });
 
-  it("une page de personne privée ne s'ouvre qu'à ses connexions", async () => {
+  it("une page de personne privée ne montre que l'essentiel hors de ses connexions", async () => {
     const me = await person("recruiters");
     const secret = await person("private");
-    expect(await personProfile(db, me, secret, "connection")).toBeNull();
+    // Ephraïm 27/10/2026: every member can be found; a private page shows name, photo, title only.
+    const outside = await personProfile(db, me, secret, "connection");
+    expect(outside?.limited).toBe(true);
+    expect(outside?.about).toBeNull();
     await db.connection.create({
       data: { requesterId: me, addresseeId: secret, status: "accepted", respondedAt: new Date() },
     });
@@ -113,18 +118,19 @@ describe("Explorer", () => {
       data: { requesterId: blocker, addresseeId: me, status: "blocked", blockedById: blocker },
     });
     expect(await personProfile(db, me, blocker, "connection")).toBeNull();
-    expect(await personProfile(db, me, secret, "connection")).toBeNull();
+    expect((await personProfile(db, me, secret, "connection"))?.limited).toBe(true);
     // The application was checked by the caller (recordView): the profile opens.
     expect((await personProfile(db, me, secret, "candidate"))?.id).toBe(secret);
   });
 
-  it("la recherche trouve une personne visible par son nom, pas une privée", async () => {
+  it("la recherche trouve une personne visible ou privée par son nom, pas une anonyme", async () => {
     const me = await person("recruiters");
     const tag = `Zébulon${Date.now()}`;
     const shown = await person("recruiters", `${tag} Visible`);
-    await person("private", `${tag} Caché`);
+    const secret = await person("private", `${tag} Privée`);
+    await person("anonymous", `${tag} Anonyme`);
     const found = await exploreSearch(db, me, tag, "personnes");
-    expect(found.people.map((row) => row.id)).toEqual([shown]);
+    expect(found.people.map((row) => row.id).sort()).toEqual([shown, secret].sort());
     expect(found.offers).toEqual([]);
   });
 
