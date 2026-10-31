@@ -27,8 +27,8 @@ export async function PublicHeader() {
     { key: "discover", links: pages },
   ] as const;
   return (
-    <header className="sticky top-0 z-40 px-3 pt-3 sm:px-5 sm:pt-4">
-      <div className="jm-glass-pill jm-glass-edge mx-auto flex h-[60px] max-w-[1200px] items-center gap-2 pr-2 pl-4 lg:h-[68px] lg:pl-6">
+    <header className="relative z-40 px-4 pt-3 sm:px-5 sm:pt-4">
+      <div className="mx-auto flex h-[60px] max-w-[1200px] items-center gap-2 lg:h-[68px]">
         <Link href="/" aria-label={t("logo.label")} className="jm-logo-hover shrink-0">
           <span className="xl:hidden">
             <Logo variant="negative" height={24} />
@@ -107,17 +107,7 @@ export async function PublicHeader() {
               {t("signup")}
             </SiteButton>
           </>
-        ) : (
-          <SiteButton
-            href="/liste-attente"
-            tone="lime"
-            size="md"
-            className="jm-cta-glow h-10 px-4 max-[379px]:hidden lg:h-11 lg:px-5"
-          >
-            <span className="lg:hidden">{t("waitlistShort")}</span>
-            <span className="max-lg:hidden">{t("waitlist")}</span>
-          </SiteButton>
-        )}
+        ) : null}
         <PublicMobileMenu
           openLabel={t("menu.open")}
           closeLabel={t("menu.close")}

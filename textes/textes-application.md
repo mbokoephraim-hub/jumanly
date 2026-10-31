@@ -245,6 +245,7 @@ Conventions :
 | `home.hero.eyebrow` | Formation · Carrière · Recrutement |
 | `home.hero.title` | Learn. Grow. Connect. |
 | `home.hero.subtitle` | Jumanly réunit la formation, le développement de carrière, les offres d'emploi et le recrutement sur une seule plateforme. Formez-vous, construisez un profil qui vous ressemble et rencontrez les employeurs qui ont besoin de vos compétences. |
+| `home.hero.short` | Talents et recruteurs trouvent ici les solutions pour atteindre leurs objectifs. |
 | `home.hero.ctaPrimary` | Créer mon compte gratuit |
 | `home.hero.ctaSecondary` | Je recrute |
 | `home.hero.reassurance1` | Inscription gratuite |

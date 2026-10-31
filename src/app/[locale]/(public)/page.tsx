@@ -2,27 +2,22 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getMessages, getTranslations } from "next-intl/server";
 import { AiOrb } from "@/components/brand";
-import { Icon, type IconName } from "@/components/brand/icon";
+import { Icon } from "@/components/brand/icon";
 import {
   ArrowLink,
   Eyebrow,
   FaqAccordion,
-  FloatCard,
   LimeCtaBand,
   MarketingSection,
-  PhotoFrame,
   SectionHead,
   SiteButton,
-  heroTitle,
   lead,
   sectionTitle,
   stagger,
 } from "@/components/site/marketing";
-import { InstallApp } from "@/components/site/install-app";
 import { MenuArt, type MenuArtName } from "@/components/site/menu-art";
 import { CountUp, MotionRoot } from "@/components/site/motion";
 import { PublicCourseCard, PublicJobCard } from "@/components/site/public-cards";
-import { buttonClasses } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
 import { withoutPlaceholders } from "@/lib/placeholders";
@@ -54,7 +49,6 @@ export async function generateMetadata({ params }: PageProps<"/[locale]">): Prom
 export default async function HomePage({ params }: PageProps<"/[locale]">) {
   await applySiteLocale(params);
   const t = await getTranslations();
-  const tInstall = await getTranslations("system.install");
   const [plans, courses, latest, messages, overrides] = await Promise.all([
     getPublicPlans(),
     getFeaturedCourses(),
@@ -133,9 +127,8 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
     emails: [t("footer.col.contact.pro"), t("footer.col.contact.general")],
   });
 
-  // « Learn. Grow. Connect. »: the last word on a Nuit pill.
-  const titleWords = t("home.hero.title").split(" ");
-  const lastWord = titleWords.pop();
+  // « Learn. Grow. Connect. », word by word for the scrolling band.
+  const heroWords = t("home.hero.title").split(" ");
   const matchValue = splitLastNumber(t("home.hero.visual.matchShort"))?.value ?? 0;
 
   return (
@@ -146,94 +139,70 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       />
       <MotionRoot />
 
-      {/* Hero (30/10/2026): a big rounded card in the brand gradient, the title centered with its
-          last word in color, then colored cards stacked behind the photo of a real day. */}
-      <section className="jm-section-clair -mt-[72px] px-3 pt-[80px] pb-10 sm:px-5 lg:-mt-[84px] lg:pt-[100px] lg:pb-16">
-        <div className="jm-hero-card relative mx-auto max-w-[1240px] overflow-hidden rounded-[32px] px-5 pt-12 sm:px-8 lg:rounded-[44px] lg:pt-20">
-          <div className="relative mx-auto flex max-w-[860px] flex-col items-center gap-6 text-center">
-            <div className="jm-rise" style={stagger(0)}>
-              <Eyebrow>{t("home.hero.eyebrow")}</Eyebrow>
-            </div>
-            <h1 className={cx(heroTitle, "jm-hero-title text-[#fbf9f4]")}>
-              {titleWords.map((word, index) => (
-                <span
-                  key={word}
-                  className="jm-word mr-[0.22em] inline-block"
-                  style={stagger(index)}
-                >
-                  {word}
-                </span>
-              ))}
-              <span
-                className="jm-word jm-hero-highlight inline-block"
-                style={stagger(titleWords.length)}
-              >
-                {lastWord}
+      {/* Hero (31/10/2026): on the cream band, the big gradient card. « Learn. Grow. Connect. »
+          scrolls slowly across it (still with reduced motion), one short line, one button. */}
+      <section className="jm-section-clair px-3 pt-3 pb-10 sm:px-5 lg:pt-5 lg:pb-16">
+        <div className="jm-hero-card relative mx-auto flex max-w-[1240px] flex-col items-center gap-8 overflow-hidden rounded-[32px] pt-14 pb-12 text-center lg:gap-10 lg:rounded-[44px] lg:pt-24 lg:pb-20">
+          <h1 className="w-full">
+            <span className="sr-only">{t("home.hero.title")}</span>
+            <span aria-hidden className="jm-marquee block">
+              <span className="jm-marquee-track">
+                {[0, 1].map((copy) => (
+                  <span
+                    key={copy}
+                    className={cx("jm-marquee-group", copy === 1 && "jm-marquee-copy")}
+                  >
+                    {heroWords.map((word, index) => (
+                      <span
+                        key={word}
+                        className={cx(
+                          "jm-marquee-word",
+                          index % 2 === 1 ? "jm-hero-highlight" : "text-[#fbf9f4]",
+                        )}
+                      >
+                        {word}
+                      </span>
+                    ))}
+                  </span>
+                ))}
               </span>
-            </h1>
-            <p className={cx(lead, "jm-rise max-w-[620px] text-[#d9e6e1]")} style={stagger(3)}>
-              {t("home.hero.subtitle")}
-            </p>
-            <div
-              className="jm-rise flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row"
-              style={stagger(4)}
-            >
-              <SiteButton href={joinHref({ profil: "talent" })} tone="lime" className="jm-cta-glow">
-                {t("home.hero.ctaPrimary")}
-              </SiteButton>
-              <SiteButton href="/recruteurs" tone="light">
-                {t("home.hero.ctaSecondary")}
-              </SiteButton>
-            </div>
-            <ul
-              className="jm-rise flex flex-wrap justify-center gap-x-4 gap-y-2"
-              style={stagger(5)}
-            >
-              {(["reassurance1", "reassurance2", "reassurance3"] as const).map((key) => (
-                <li
-                  key={key}
-                  className="flex items-center gap-1.5 text-[13px] leading-[18px] font-medium text-[#d9e6e1]"
-                >
-                  <span className="flex size-5 items-center justify-center rounded-full bg-lime text-sapin">
-                    <Icon name="check" className="size-3" />
-                  </span>
-                  {t(`home.hero.${key}`)}
-                </li>
-              ))}
-            </ul>
-            <InstallApp
-              id="jm-installer-accueil"
-              buttonClassName="inline-flex items-center gap-3 rounded-pill py-1 pr-4 pl-1 text-left text-sm font-semibold text-[#fbf9f4] hover:bg-[rgb(255_255_255/0.08)]"
-              dialogClassName={installDialog}
-              trigger={
-                <>
-                  <span className="flex size-10 items-center justify-center rounded-full bg-[rgb(255_255_255/0.1)] text-lime ring-1 ring-[rgb(255_255_255/0.18)] ring-inset">
-                    <Icon name="telecharger" className="size-5" />
-                  </span>
-                  <span className="flex flex-col items-start">
-                    {t("system.install.button")}
-                    <span className="text-xs font-medium text-[#b9cbc5]">
-                      {t("system.install.text")}
-                    </span>
-                  </span>
-                </>
-              }
-              steps={<InstallSteps t={tInstall} id="jm-installer-accueil" />}
-            />
+            </span>
+          </h1>
+          <p
+            className={cx(
+              lead,
+              "jm-rise max-w-[520px] px-6 text-[#d9e6e1] lg:text-xl lg:leading-8",
+            )}
+            style={stagger(1)}
+          >
+            {t("home.hero.short")}
+          </p>
+          <div className="jm-rise" style={stagger(2)}>
+            <SiteButton href={joinHref()} tone="lime" className="jm-cta-glow">
+              {signupOpen ? t("home.hero.ctaPrimary") : t("nav.waitlist")}
+            </SiteButton>
           </div>
-          <HeroVisual
-            alt={t("home.hero.photoAlt")}
-            badge={t("home.hero.visual.badge")}
-            matchTitle={t("home.hero.visual.matchTitle")}
-            matchText={t("home.hero.visual.matchText")}
-            notification={t("home.hero.visual.notification")}
-            notificationText={t("home.hero.visual.notificationText")}
-            match={matchValue}
-            stack={[
-              { label: t("nav.trainings"), icon: "learn" },
-              { label: t("nav.jobs"), icon: "jobs" },
-            ]}
-          />
+          <ul
+            aria-hidden
+            className="jm-rise mt-2 flex items-end justify-center gap-2.5 sm:gap-3 lg:gap-5"
+            style={stagger(3)}
+          >
+            {(["trainings", "career", "jobs", "recruiters", "connect"] as const).map(
+              (art, index) => (
+                <li
+                  key={art}
+                  className="jm-hero-art"
+                  style={{ animationDelay: `${index * -1.1}s` }}
+                >
+                  <MenuArt
+                    name={art}
+                    size="lg"
+                    className="shadow-[0_18px_40px_-18px_rgb(0_0_0/0.6)] max-sm:size-[54px] max-sm:rounded-[16px]"
+                  />
+                </li>
+              ),
+            )}
+          </ul>
         </div>
       </section>
 
@@ -603,160 +572,5 @@ function ModuleCard({
       <h3 className="pt-2 text-[22px] leading-7 font-semibold tracking-[-0.02em]">{name}</h3>
       <p className="text-[15px] leading-6 text-ardoise">{text}</p>
     </li>
-  );
-}
-
-const installDialog =
-  "mx-auto mt-auto mb-0 w-full max-w-none rounded-t-[28px] bg-blanc p-6 pb-8 text-sapin shadow-float backdrop:bg-nuit/55 sm:mb-auto sm:max-w-md sm:rounded-[28px]";
-
-/** The three steps of Safari on iPhone (« Installer l'appli »), in the dialog of the hero. */
-function InstallSteps({
-  t,
-  id,
-}: {
-  t: Awaited<ReturnType<typeof getTranslations<"system.install">>>;
-  id: string;
-}) {
-  const steps = [
-    { key: "step1", icon: "partager" },
-    { key: "step2", icon: "ajouter" },
-    { key: "step3", icon: "valider" },
-  ] as const;
-  return (
-    <div className="flex flex-col gap-5">
-      <div className="flex items-start justify-between gap-3">
-        <h2 id={`${id}-t`} className="text-xl leading-7 font-semibold tracking-[-0.01em]">
-          {t("ios.title")}
-        </h2>
-        <form method="dialog">
-          <button
-            type="submit"
-            aria-label={t("ios.close")}
-            className="-mt-1 -mr-2 flex size-11 items-center justify-center rounded-full text-sapin hover:bg-sapin/6"
-          >
-            <Icon name="fermer" />
-          </button>
-        </form>
-      </div>
-      <p className="text-sm leading-5 text-ardoise">{t("ios.intro")}</p>
-      <ol aria-label={t("ios.steps")} className="flex flex-col gap-4">
-        {steps.map(({ key, icon }, index) => (
-          <li key={key} className="flex items-start gap-3">
-            <span
-              aria-hidden
-              className="flex size-9 shrink-0 items-center justify-center rounded-full bg-lime text-sm font-bold text-sapin"
-            >
-              {index + 1}
-            </span>
-            <span className="flex min-w-0 flex-1 flex-col gap-0.5 pt-1">
-              <b className="flex items-center gap-2 text-[15px] leading-5 font-semibold">
-                {t(`ios.${key}.title`)}
-                <Icon name={icon} className="size-[18px] shrink-0 text-sapin/70" />
-              </b>
-              <span className="text-sm leading-5 text-ardoise">{t(`ios.${key}.text`)}</span>
-            </span>
-          </li>
-        ))}
-      </ol>
-      <form method="dialog">
-        <button
-          type="submit"
-          className={buttonClasses({ variant: "secondary", size: "lg", fullWidth: true })}
-        >
-          {t("ios.done")}
-        </button>
-      </form>
-    </div>
-  );
-}
-
-/**
- * Hero picture: a photo of someone using Jumanly, and the cards of a real day on Jumanly floating
- * over it (a compatible offer with its score, a new offer, a certificate). Decorative labels belong
- * to the illustration, described by the photo's alternative text.
- */
-function HeroVisual({
-  alt,
-  badge,
-  matchTitle,
-  matchText,
-  notification,
-  notificationText,
-  match,
-  stack,
-}: {
-  alt: string;
-  badge: string;
-  matchTitle: string;
-  matchText: string;
-  notification: string;
-  notificationText: string;
-  match: number;
-  /** The colored cards peeking out behind the photo, from the back to the front. */
-  stack: { label: string; icon: IconName }[];
-}) {
-  return (
-    <div className="jm-rise relative mx-auto mt-12 max-w-[980px] lg:mt-16" style={stagger(2)}>
-      <div aria-hidden className="flex flex-col items-center">
-        {stack.map((card, index) => (
-          <div
-            key={card.label}
-            className={cx(
-              "jm-stack-card flex h-16 items-start justify-center gap-2 rounded-t-[24px] pt-2 text-[14px] leading-5 font-semibold text-[#0f3f37] lg:h-[72px] lg:rounded-t-[28px] lg:pt-2.5 lg:text-[15px]",
-              index === 0 ? "jm-stack-warm w-[78%]" : "jm-stack-cool -mt-8 w-[89%] lg:-mt-9",
-            )}
-          >
-            <Icon name={card.icon} className="size-[18px]" />
-            {card.label}
-          </div>
-        ))}
-      </div>
-      <PhotoFrame
-        photo={{ src: "accueil-tablette.webp", alt, position: "58% 30%", priority: true }}
-        className="-mt-8 -mb-8 h-[380px] sm:h-[460px] lg:-mt-9 lg:h-[540px]"
-      />
-      <FloatCard
-        className="jm-pop top-24 -left-1 flex w-[230px] flex-col gap-2 sm:w-[260px] lg:top-40 lg:-left-6"
-        style={stagger(0)}
-      >
-        <div className="flex items-center gap-2.5">
-          <AiOrb size={30} className="jm-pulse" />
-          <div className="flex min-w-0 flex-col">
-            <span className="truncate text-[13px] leading-[18px] font-semibold">{matchTitle}</span>
-            <span className="text-[11px] leading-[15px] text-ardoise">
-              <CountUp text={matchText} />
-            </span>
-          </div>
-        </div>
-        <span className="h-1.5 overflow-hidden rounded-pill bg-brume">
-          <span
-            className="jm-fill block h-full rounded-pill bg-lime"
-            style={{ width: `${match}%` }}
-          />
-        </span>
-      </FloatCard>
-      <FloatCard
-        className="jm-pop -right-1 bottom-24 flex items-center gap-2.5 py-2.5 pr-4 pl-2.5 lg:right-auto lg:bottom-16 lg:left-0"
-        style={stagger(1)}
-      >
-        <span className="flex size-9 items-center justify-center rounded-full bg-lime text-sapin">
-          <Icon name="notification" className="size-[18px]" />
-        </span>
-        <span className="flex flex-col">
-          <span className="text-[13px] leading-[18px] font-semibold">{notification}</span>
-          <span className="text-[11px] leading-[15px] text-ardoise">{notificationText}</span>
-        </span>
-      </FloatCard>
-      <span
-        aria-hidden
-        className="jm-pop absolute top-24 right-4 flex items-center gap-2 rounded-pill bg-blanc py-1.5 pr-3.5 pl-1.5 text-xs font-semibold text-sapin shadow-[0_10px_30px_rgba(0,0,0,0.35)] ring-1 ring-sapin/10 ring-inset max-sm:hidden lg:top-28 lg:right-8"
-        style={stagger(2)}
-      >
-        <span className="flex size-7 items-center justify-center rounded-full bg-lime text-sapin">
-          <Icon name="certificat" className="size-3.5" />
-        </span>
-        {badge}
-      </span>
-    </div>
   );
 }
