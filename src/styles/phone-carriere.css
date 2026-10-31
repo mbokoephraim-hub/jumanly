@@ -1686,8 +1686,18 @@ button.nb-cr-cv-l {
 .nb-ca-projet-corps .nb-ca-docs {
   margin-top: 14px;
 }
-.nb-ca-doc-ajout {
-  margin-top: 0;
+/* The form's `.nb-ca-ch > label` rule (block, grey, small) took over this button: text sat at the
+   top (Ephraïm, 31/10/2026). Keep it a centred Lime button. */
+.nb-ca-ch > label.nb-ca-doc-ajout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  margin: 0;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--nb-lime-t);
   cursor: pointer;
 }
 
@@ -2156,4 +2166,80 @@ html[data-nb-theme="clair"] .nb-app .nb-cr-cv-page {
 }
 .nb-cr-cv-idees button[aria-pressed="true"]::before {
   background: var(--nb-encre);
+}
+
+/* Mes documents (Ephraïm, 31/10/2026) : de l'air entre CV, lettres et portfolio, avec un trait
+   de séparation ; « Sélectionner » devient une icône ronde. */
+.nb-doc-section + .nb-doc-section {
+  margin-top: 26px;
+}
+.nb-doc-section + .nb-doc-section::before {
+  content: "";
+  display: block;
+  height: 1px;
+  margin: 0 20px 20px;
+  background: color-mix(in srgb, var(--nb-creme) 14%, transparent);
+}
+.nb-cr-cv-barre button.nb-cr-cv-choisir {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--nb-creme) 22%, transparent);
+  background: var(--nb-haute);
+  color: var(--nb-creme);
+}
+.nb-cr-cv-titre {
+  min-width: 0;
+}
+
+/* « Analyser » appelle le clic (Ephraïm, 31/10/2026) : un halo qui s'élargit et un léger battement.
+   Rien ne bouge avec les animations réduites. */
+.nb-cr-urgent-go {
+  animation: nb-cr-appel 2.2s ease-in-out infinite;
+}
+.nb-cr-urgent-go::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(166, 242, 107, 0.75);
+  animation: nb-cr-halo 2.2s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes nb-cr-appel {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  12% {
+    transform: scale(1.06);
+  }
+  24% {
+    transform: scale(1);
+  }
+}
+@keyframes nb-cr-halo {
+  0% {
+    box-shadow: 0 0 0 0 rgba(166, 242, 107, 0.75);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 14px rgba(166, 242, 107, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-cr-urgent-go,
+  .nb-cr-urgent-go::after {
+    animation: none;
+  }
+}
+.nb-app[data-reduit] .nb-cr-urgent-go,
+.nb-app[data-reduit] .nb-cr-urgent-go::after {
+  animation: none;
 }

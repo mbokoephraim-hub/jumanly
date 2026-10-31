@@ -2850,7 +2850,7 @@ Conventions :
 | `candidature.requests.none` | Vous n'avez pas encore de document à envoyer. Ajoutez-le dans Mes documents, ou répondez dans la conversation. |
 | `candidature.requests.send` | Envoyer ce document |
 | `candidature.withdraw.cta` | Retirer ma candidature |
-| `candidature.withdraw.title` | Retirer votre candidature ? |
+| `candidature.withdraw.title` | Voulez-vous vraiment retirer votre candidature ? |
 | `candidature.withdraw.text` | {company} sera informé. Vous pourrez postuler à d'autres offres à tout moment. |
 | `candidature.withdraw.confirm` | Oui, retirer ma candidature |
 
@@ -3463,7 +3463,7 @@ Conventions :
 | `point.weak.none` | Rien de pressant : continuez sur votre lancée. |
 | `point.next.title` | Prochaine action |
 | `point.next.course` | Formation « {course} », {minutes} min |
-| `point.next.diagnostic` | Faire mon diagnostic de carrière, 6 à 8 minutes |
+| `point.next.diagnostic` | Faire mon diagnostic de carrière, 3 minutes |
 | `point.next.profile` | Décrire une expérience avec un résultat, 10 min |
 | `point.next.start` | Commencer |
 | `point.diagnostic` | Voir mon diagnostic |
@@ -3506,8 +3506,22 @@ Conventions :
 | `diag.result.word.ready` | Vous pouvez candidater dès maintenant. Les trois actions ci-dessous vous aideront à sortir du lot. |
 | `diag.result.word.competitive` | Vous êtes bien placé sur vos offres. Gardez le rythme et visez les postes exigeants. |
 | `diag.result.todo` | À faire maintenant |
+| `diag.todo.role.title` | Choisir une piste de métier |
+| `diag.todo.role.text` | Ouvrez cinq offres qui vous attirent et notez ce qu'elles demandent. |
+| `diag.todo.skills.title` | Vous former et obtenir une attestation |
+| `diag.todo.skills.text` | Une formation gratuite, et son attestation pour le prouver. |
+| `diag.todo.experience.title` | Valoriser une réalisation |
+| `diag.todo.experience.text` | Ajoutez une réalisation liée à vos compétences ou à votre métier. |
+| `diag.todo.cv.title` | Mettre votre CV à jour |
+| `diag.todo.cv.text` | Refaites-le avec un modèle gratuit, puis faites-le relire. |
+| `diag.todo.interview.title` | Préparer votre présentation |
+| `diag.todo.interview.text` | Entraînez-vous à présenter votre parcours en 2 minutes. |
+| `diag.todo.search.title` | Candidater cette semaine |
+| `diag.todo.search.text` | Postulez à trois offres : c'est toujours gratuit. |
+| `diag.todo.network.title` | Activer votre réseau |
+| `diag.todo.network.text` | Rendez votre profil visible et écrivez à trois professionnels. |
 | `diag.result.go` | Y aller |
-| `diag.result.themes` | Vos six thèmes |
+| `diag.result.themes` | Vos points forts et à travailler |
 | `diag.result.themesHint` | Touchez un thème pour savoir ce qu'il veut dire et quoi faire. |
 | `plan.seo` | Mon plan de progression |
 | `plan.title` | Mon plan de progression |
@@ -9855,7 +9869,7 @@ Conventions :
 | `phoneCareer.progression.stage.competitive` | Compétitif |
 | `phoneCareer.progression.next` | {count, plural, =0 {Vous êtes au plus haut stade.} one {Encore une étape pour passer « {stage} ».} other {Encore # étapes pour passer « {stage} ».}} |
 | `phoneCareer.progression.noStage` | Faites votre diagnostic |
-| `phoneCareer.progression.noStageText` | 6 à 8 minutes pour savoir où vous en êtes et par quoi commencer. |
+| `phoneCareer.progression.noStageText` | 3 minutes pour savoir où vous en êtes et par quoi commencer. |
 | `phoneCareer.progression.diagnostic` | Analyser |
 | `phoneCareer.progression.urgent` | À faire maintenant |
 | `phoneCareer.progression.report` | Voir mon diagnostic |
@@ -9956,7 +9970,7 @@ Conventions :
 | `phoneCareer.when.hourMinute` | {hour} h {minute} |
 | `phoneCareer.cv.score` | {score}/100 |
 | `phoneCareer.cv.empty` | Pas encore de CV. Orbi peut en préparer un depuis votre profil, en une minute. |
-| `phoneCareer.cv.newLong` | + Nouveau CV · modèle, import ou Orbi |
+| `phoneCareer.cv.newLong` | + Nouveau CV |
 | `phoneCareer.cv.changedToday` | aujourd’hui |
 | `phoneCareer.cv.changedYesterday` | hier |
 | `phoneCareer.cv.meta` | {template} · {when} |
@@ -10582,9 +10596,10 @@ Conventions :
 | `phoneCareer.application.orbiPlaceholder` | Écrire à Orbi… |
 | `phoneCareer.application.orbiSend` | Demander à Orbi |
 | `phoneCareer.application.withdraw` | Retirer ma candidature |
-| `phoneCareer.application.withdrawQuestion` | Retirer votre candidature ? |
+| `phoneCareer.application.withdrawQuestion` | Voulez-vous vraiment retirer votre candidature ? |
 | `phoneCareer.application.withdrawText` | {company} sera prévenu. Vous pourrez postuler à d’autres offres à tout moment. |
-| `phoneCareer.application.withdrawConfirm` | Retirer |
+| `phoneCareer.application.withdrawConfirm` | Oui, retirer |
+| `phoneCareer.application.withdrawNo` | Non |
 | `phoneCareer.application.withdrawn` | Candidature retirée |
 | `phoneCareer.application.error` | Cela n’a pas marché. Réessayez dans un instant. |
 

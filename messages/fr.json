@@ -3434,7 +3434,7 @@
     },
     "withdraw": {
       "cta": "Retirer ma candidature",
-      "title": "Retirer votre candidature ?",
+      "title": "Voulez-vous vraiment retirer votre candidature ?",
       "text": "{company} sera informé. Vous pourrez postuler à d'autres offres à tout moment.",
       "confirm": "Oui, retirer ma candidature"
     },
@@ -4100,7 +4100,7 @@
     "next": {
       "title": "Prochaine action",
       "course": "Formation « {course} », {minutes} min",
-      "diagnostic": "Faire mon diagnostic de carrière, 6 à 8 minutes",
+      "diagnostic": "Faire mon diagnostic de carrière, 3 minutes",
       "profile": "Décrire une expérience avec un résultat, 10 min",
       "start": "Commencer"
     },
@@ -4160,8 +4160,38 @@
       },
       "todo": "À faire maintenant",
       "go": "Y aller",
-      "themes": "Vos six thèmes",
+      "themes": "Vos points forts et à travailler",
       "themesHint": "Touchez un thème pour savoir ce qu'il veut dire et quoi faire."
+    },
+    "todo": {
+      "role": {
+        "title": "Choisir une piste de métier",
+        "text": "Ouvrez cinq offres qui vous attirent et notez ce qu'elles demandent."
+      },
+      "skills": {
+        "title": "Vous former et obtenir une attestation",
+        "text": "Une formation gratuite, et son attestation pour le prouver."
+      },
+      "experience": {
+        "title": "Valoriser une réalisation",
+        "text": "Ajoutez une réalisation liée à vos compétences ou à votre métier."
+      },
+      "cv": {
+        "title": "Mettre votre CV à jour",
+        "text": "Refaites-le avec un modèle gratuit, puis faites-le relire."
+      },
+      "interview": {
+        "title": "Préparer votre présentation",
+        "text": "Entraînez-vous à présenter votre parcours en 2 minutes."
+      },
+      "search": {
+        "title": "Candidater cette semaine",
+        "text": "Postulez à trois offres : c'est toujours gratuit."
+      },
+      "network": {
+        "title": "Activer votre réseau",
+        "text": "Rendez votre profil visible et écrivez à trois professionnels."
+      }
     }
   },
   "plan": {
@@ -11943,7 +11973,7 @@
       },
       "score": "{score}/100",
       "empty": "Pas encore de CV. Orbi peut en préparer un depuis votre profil, en une minute.",
-      "newLong": "+ Nouveau CV · modèle, import ou Orbi",
+      "newLong": "+ Nouveau CV",
       "changedToday": "aujourd’hui",
       "changedYesterday": "hier",
       "meta": "{template} · {when}",
@@ -11984,7 +12014,7 @@
       },
       "next": "{count, plural, =0 {Vous êtes au plus haut stade.} one {Encore une étape pour passer « {stage} ».} other {Encore # étapes pour passer « {stage} ».}}",
       "noStage": "Faites votre diagnostic",
-      "noStageText": "6 à 8 minutes pour savoir où vous en êtes et par quoi commencer.",
+      "noStageText": "3 minutes pour savoir où vous en êtes et par quoi commencer.",
       "diagnostic": "Analyser",
       "urgent": "À faire maintenant",
       "report": "Voir mon diagnostic",
@@ -12753,9 +12783,10 @@
       "orbiPlaceholder": "Écrire à Orbi…",
       "orbiSend": "Demander à Orbi",
       "withdraw": "Retirer ma candidature",
-      "withdrawQuestion": "Retirer votre candidature ?",
+      "withdrawQuestion": "Voulez-vous vraiment retirer votre candidature ?",
       "withdrawText": "{company} sera prévenu. Vous pourrez postuler à d’autres offres à tout moment.",
-      "withdrawConfirm": "Retirer",
+      "withdrawConfirm": "Oui, retirer",
+      "withdrawNo": "Non",
       "withdrawn": "Candidature retirée",
       "error": "Cela n’a pas marché. Réessayez dans un instant."
     }

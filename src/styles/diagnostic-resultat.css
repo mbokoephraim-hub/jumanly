@@ -429,3 +429,79 @@
   font-size: 14px;
   font-weight: 800;
 }
+
+/*
+ * L'essentiel (Ephraïm, 31/10/2026) : où j'en suis (une phrase, puis les six thèmes en barres
+ * simples, du plus fort au plus faible) et où je vais (trois actions, une phrase chacune).
+ */
+.dg-r-mini {
+  list-style: none;
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: var(--verre);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dg-r-mini li {
+  --dg-r-b: #a6f26b;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 34px;
+  grid-template-areas:
+    "n s"
+    "b s";
+  column-gap: 12px;
+  row-gap: 5px;
+  align-items: center;
+}
+.dg-r-mini li[data-bande="mid"] {
+  --dg-r-b: #f4c463;
+}
+.dg-r-mini li[data-bande="low"] {
+  --dg-r-b: #f08a7c;
+}
+.dg-r-mini li > span:first-child {
+  grid-area: n;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.dg-r-mini .dg-r-barre {
+  grid-area: b;
+  height: 6px;
+}
+.dg-r-mini b {
+  grid-area: s;
+  text-align: right;
+  font-size: 16px;
+  font-weight: 800;
+}
+.dg-r-todo-t {
+  padding-right: 0;
+  gap: 3px;
+}
+.dg-r-todo-t > span {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--texte2);
+  text-wrap: pretty;
+}
+.dg-r-todo a {
+  align-items: center;
+}
+
+/* La note sur la même ligne que sa barre ; le dessin du menu à la place du numéro. */
+.dg-r-mini li {
+  grid-template-areas:
+    "n n"
+    "b s";
+  row-gap: 4px;
+}
+.dg-r-mini b {
+  font-size: 15px;
+  line-height: 1;
+}
+.dg-r-todo a {
+  gap: 12px;
+}

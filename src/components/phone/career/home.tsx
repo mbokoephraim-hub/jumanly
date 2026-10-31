@@ -687,15 +687,15 @@ function DocumentsPanel({
   const t = useTranslations("phoneCareer");
   return (
     <>
-      <section aria-labelledby="nb-doc-cv">
+      <section aria-labelledby="nb-doc-cv" className="nb-doc-section">
         <CvPanel view={view} onMenu={onMenu} title={t("docs.cv")} />
       </section>
 
-      <section aria-labelledby="nb-doc-lettres">
+      <section aria-labelledby="nb-doc-lettres" className="nb-doc-section">
         <LettersPanel letters={letters} />
       </section>
 
-      <section aria-labelledby="nb-doc-port">
+      <section aria-labelledby="nb-doc-port" className="nb-doc-section">
         <h2 id="nb-doc-port" className="nb-pf-h nb-cr-h nb-doc-h" data-loin="">
           {t("docs.portfolio")}
         </h2>
@@ -813,8 +813,14 @@ function CvPanel({
             <b>{t("cv.library", { count: view.cvs.length })}</b>
           )}
           {view.cvs.length > 0 ? (
-            <button type="button" onClick={selecting ? stop : () => setSelecting(true)}>
-              {selecting ? t("cancel") : t("cv.select.start")}
+            <button
+              type="button"
+              className={selecting ? undefined : "nb-cr-cv-choisir"}
+              aria-label={selecting ? undefined : t("cv.select.start")}
+              title={selecting ? undefined : t("cv.select.start")}
+              onClick={selecting ? stop : () => setSelecting(true)}
+            >
+              {selecting ? t("cancel") : <PhoneIcon name="selection" size={22} strong />}
             </button>
           ) : null}
         </div>
