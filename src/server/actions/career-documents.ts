@@ -123,12 +123,12 @@ export async function saveOwnLetterAction(formData: FormData) {
   if (!parsed.success) redirect(`${letters}&erreur=input`);
   const user = await requireUser(DOCUMENTS);
   const t = await getTranslations("career.documents.type");
-  await saveOwnLetter(db, user.id, {
+  const letter = await saveOwnLetter(db, user.id, {
     title: parsed.data.title || t("letter"),
     text: parsed.data.text,
   });
   refresh();
-  redirect("/app/career/cv?onglet=documents&ok=lettre");
+  redirect(`${DOCUMENTS}/${letter.id}?ok=utilisee`);
 }
 
 export async function saveDocumentAction(formData: FormData) {
@@ -139,7 +139,8 @@ export async function saveDocumentAction(formData: FormData) {
   await saveDocument(db, user.id, documentId, parsed.data);
   refresh();
   // « Utiliser cette lettre » on a phone: saved, back to Mes documents.
-  if (formData.get("fini") === "1") redirect("/app/career/cv?onglet=documents&ok=lettre");
+  // « Utiliser cette lettre » on a phone: the message « Lettre enregistrée » over the letter.
+  if (formData.get("fini") === "1") redirect(`${DOCUMENTS}/${documentId}?ok=utilisee`);
   redirect(`${DOCUMENTS}/${documentId}?ok=enregistre`);
 }
 

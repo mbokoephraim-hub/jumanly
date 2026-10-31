@@ -2497,3 +2497,28 @@ textarea.nb-lt-zone[data-grande] {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* « Lettre enregistrée » après « Utiliser cette lettre » (Ephraïm, 31/10/2026). */
+.nb-lt-fini {
+  align-items: center;
+  text-align: center;
+}
+.nb-lt-fini-i {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--nb-lime);
+  color: var(--nb-encre);
+}
+.nb-lt-fini p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--nb-gris);
+}
+.nb-lt-fini .nb-lt-bt {
+  width: 100%;
+  text-decoration: none;
+}

@@ -12732,6 +12732,11 @@
       "deleteAsk": "Supprimer cette lettre ?",
       "deleteYes": "Oui, supprimer"
     },
+    "saved": {
+      "title": "Votre lettre est bien enregistrée",
+      "text": "Vous la retrouvez dans Mes documents.",
+      "back": "Revenir à mes documents"
+    },
     "intro": {
       "title": "Votre lettre de motivation",
       "one": "Orbi l’écrit pour vous, ou vous l’écrivez et Orbi la relit.",

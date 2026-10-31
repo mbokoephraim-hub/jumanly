@@ -10563,6 +10563,9 @@ Conventions :
 | `phoneLetter.view.text` | Votre lettre |
 | `phoneLetter.view.use` | Utiliser cette lettre |
 | `phoneLetter.view.again` | {count, plural, one {Relire encore · # crédit} other {Relire encore · # crédits}} |
+| `phoneLetter.saved.title` | Votre lettre est bien enregistrée |
+| `phoneLetter.saved.text` | Vous la retrouvez dans Mes documents. |
+| `phoneLetter.saved.back` | Revenir à mes documents |
 | `phoneLetter.view.download` | Télécharger |
 | `phoneLetter.view.deleteAsk` | Supprimer cette lettre ? |
 | `phoneLetter.view.deleteYes` | Oui, supprimer |

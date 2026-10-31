@@ -46,7 +46,7 @@ export default async function DocumentPage({
 
   if (await isPhone()) {
     const plans = await listPublicPlans(db);
-    const notices = ["cree", "enregistre", "relu"] as const;
+    const notices = ["cree", "enregistre", "relu", "utilisee"] as const;
     const notice =
       query.erreur === "input" ? "input" : (notices.find((value) => value === query.ok) ?? null);
     return (
