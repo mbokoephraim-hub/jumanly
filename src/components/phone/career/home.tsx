@@ -300,10 +300,15 @@ function ProgressionPanel({
                 <li key={step.title}>
                   <Link
                     href={step.href}
-                    style={{
-                      background: `linear-gradient(135deg, ${tint(color, "2e")}, ${tint(color, "0d")})`,
-                      boxShadow: `inset 0 0 0 1px ${tint(color, "55")}`,
-                    }}
+                    className="nb-cr-etape-anim"
+                    style={
+                      {
+                        background: `linear-gradient(135deg, ${tint(color, "2e")}, ${tint(color, "0d")})`,
+                        boxShadow: `inset 0 0 0 1px ${tint(color, "55")}`,
+                        "--etape-c": color,
+                        "--etape-d": `${index * 0.6}s`,
+                      } as CSSProperties
+                    }
                   >
                     <span
                       className="nb-cr-num"
