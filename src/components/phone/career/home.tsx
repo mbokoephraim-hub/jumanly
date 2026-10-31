@@ -852,34 +852,49 @@ function CvPanel({
         <ul className="nb-doc-rangee" data-rangee="" data-selection={selecting ? "" : undefined}>
           {view.cvs.map((cv, at) => {
             const isChosen = chosen.has(cv.id);
+            // Compact card (Ephraïm, 31/10/2026): a small page drawing on the left, the name on
+            // two lines at most, then one row of labels (Par défaut, Importé, score) and the
+            // template and date. Same height whatever the name's length.
             const page = (
               <>
                 <span
                   className="nb-cr-cv-page"
+                  data-fichier={cv.file ? "" : undefined}
                   style={{ "--accent": cv.color } as CSSProperties}
                   aria-hidden
                 >
                   <i data-titre="" />
                   <i data-sous="" />
                   <i />
-                  <i data-w="85" />
-                  <i data-w="70" />
-                  <i data-section="" />
-                  <i />
                   <i data-w="80" />
+                  <i data-section="" />
+                  <i data-w="70" />
                 </span>
-                <em className="nb-cr-cv-note" data-defaut={cv.primary ? "" : undefined}>
-                  {cv.primary
-                    ? t("cv.primary")
-                    : cv.file
-                      ? t("cv.imported")
-                      : t("cv.score", { score: cv.score })}
-                </em>
                 <span className="nb-cr-cv-t">
-                  <b>
+                  <b title={cv.title}>
                     {cv.tag ? <i className="nb-cr-cv-pastille" aria-hidden /> : null}
                     {cv.title}
                   </b>
+                  <span className="nb-cr-cv-etiq">
+                    {cv.primary ? (
+                      <em className="nb-cr-cv-note" data-defaut="">
+                        <PhoneIcon name="coche" size={11} stroke={3} />
+                        {t("cv.primary")}
+                      </em>
+                    ) : null}
+                    {cv.file ? (
+                      <em className="nb-cr-cv-note">{t("cv.imported")}</em>
+                    ) : (
+                      <em
+                        className="nb-cr-cv-note"
+                        data-score={cv.score >= 75 ? "haut" : cv.score >= 50 ? "moyen" : "bas"}
+                        title={t("cv.scoreLabel", { score: cv.score })}
+                      >
+                        <span className="sr-only">{t("cv.scoreLabel", { score: cv.score })}</span>
+                        <span aria-hidden>{t("cv.score", { score: cv.score })}</span>
+                      </em>
+                    )}
+                  </span>
                   <small>{cv.meta}</small>
                 </span>
               </>
@@ -922,7 +937,7 @@ function CvPanel({
                       aria-label={t("cv.more", { title: cv.title })}
                       onClick={() => onMenu(cv)}
                     >
-                      <PhoneIcon name="plusOptions" size={18} />
+                      <PhoneIcon name="plusOptions" size={16} />
                     </button>
                   </>
                 )}

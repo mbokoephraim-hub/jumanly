@@ -94,7 +94,7 @@ export type CareerView = {
     href: string;
     pdf: string;
     primary: boolean;
-    /** « Modèle Moderne · modifié hier ». */
+    /** « Moderne · hier ». */
     meta: string;
     score: number;
     /** The CV's accent colour, for its drawn thumbnail. */
@@ -312,7 +312,7 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
     ...home.profile.desiredLocations,
   ];
 
-  // « modifié hier », « 3 oct. ».
+  // « hier », « 3 oct. ».
   const cvWhen = (date: Date) =>
     date >= midnight
       ? t("cv.changedToday")

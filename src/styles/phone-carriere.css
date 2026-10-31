@@ -453,45 +453,54 @@ a.nb-cr-rb {
   display: block;
   color: var(--nb-creme);
 }
+/* Carte CV compacte (Ephraïm, 31/10/2026) : petite page dessinée à gauche, nom sur deux lignes
+   au plus, une rangée d'étiquettes, le modèle et la date. ~84 px de haut. */
+.nb-cr-cv > .nb-cr-cv-l {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 34px 10px 10px;
+  text-decoration: none;
+}
 .nb-cr-cv-page {
   position: relative;
+  flex: none;
   display: block;
-  height: 150px;
-  padding: 12px;
+  width: 46px;
+  height: 62px;
+  padding: 6px 5px;
+  border-radius: 6px;
   background: #f2ede5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 .nb-cr-cv-page i {
   display: block;
-  height: 4px;
-  margin-top: 5px;
-  border-radius: 2px;
+  height: 2px;
+  margin-top: 3px;
+  border-radius: 1px;
   background: #d7dfdc;
 }
 .nb-cr-cv-page i[data-titre] {
-  height: 10px;
-  width: 60%;
+  height: 5px;
+  width: 70%;
   margin-top: 0;
-  border-radius: 3px;
+  border-radius: 2px;
   background: var(--accent);
 }
 .nb-cr-cv-page i[data-sous] {
-  height: 5px;
-  width: 40%;
-  margin-top: 6px;
+  height: 2px;
+  width: 45%;
+  margin-top: 3px;
   background: #b9c7c3;
 }
 .nb-cr-cv-page i[data-sous] + i {
-  margin-top: 14px;
+  margin-top: 6px;
 }
 .nb-cr-cv-page i[data-section] {
-  height: 6px;
-  width: 35%;
-  margin-top: 12px;
-  border-radius: 3px;
+  height: 3px;
+  width: 40%;
+  margin-top: 6px;
   background: var(--accent);
-}
-.nb-cr-cv-page i[data-w="85"] {
-  width: 85%;
 }
 .nb-cr-cv-page i[data-w="80"] {
   width: 80%;
@@ -499,44 +508,76 @@ a.nb-cr-rb {
 .nb-cr-cv-page i[data-w="70"] {
   width: 70%;
 }
+.nb-cr-cv-page[data-fichier] {
+  background: #e4e9e7;
+}
+.nb-cr-cv-t {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.nb-cr-cv-t b {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.22;
+}
+.nb-cr-cv-etiq {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 5px;
+  overflow: hidden;
+}
 .nb-cr-cv-note {
-  position: absolute;
-  right: 8px;
-  top: 122px;
-  height: 20px;
+  flex: none;
+  height: 18px;
   padding: 0 7px;
   display: inline-flex;
   align-items: center;
-  border-radius: 10px;
+  gap: 3px;
+  border-radius: 9px;
   font-size: 10.5px;
   font-style: normal;
   font-weight: 700;
-  background: var(--nb-nuit);
+  line-height: 1;
+  background: var(--nb-haute);
   color: var(--nb-creme);
 }
 .nb-cr-cv-note[data-defaut] {
   background: var(--nb-lime);
   color: var(--nb-sur-lime, #0f3f37);
 }
-.nb-cr-cv-t,
-.nb-cr-real-t {
-  display: block;
-  padding: 10px 11px 12px;
+.nb-cr-cv-note[data-score="haut"] {
+  background: rgba(166, 242, 107, 0.16);
+  color: var(--nb-lime-t);
 }
-.nb-cr-cv-t b {
-  display: block;
-  font-size: 13px;
-  font-weight: 700;
+.nb-cr-cv-note[data-score="moyen"] {
+  background: rgba(244, 196, 99, 0.16);
+  color: #f4c463;
+}
+.nb-cr-cv-note[data-score="bas"] {
+  background: rgba(255, 138, 128, 0.14);
+  color: #ff9e94;
 }
 .nb-cr-cv-t small {
-  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11.5px;
+  line-height: 1.2;
   color: var(--nb-brume);
 }
 .nb-cr-cv-plus {
   position: absolute;
-  right: 4px;
-  top: 4px;
-  width: 44px;
+  right: 0;
+  top: 0;
+  width: 40px;
   height: 44px;
   display: flex;
   align-items: center;
@@ -860,13 +901,14 @@ a.nb-cr-rb {
   display: flex;
   align-items: center;
   gap: 14px;
-  min-height: 44px;
-  margin-bottom: 6px;
+  min-height: 40px;
+  margin: -6px 0 4px;
 }
 .nb-cr-cv-barre b {
   flex: 1;
-  font-size: 14px;
-  font-weight: 800;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--nb-brume);
 }
 .nb-cr-cv-barre button {
   min-height: 40px;
@@ -881,7 +923,7 @@ a.nb-cr-rb {
 }
 .nb-cr-cv[data-teinte] {
   border-color: color-mix(in srgb, var(--teinte) 70%, transparent);
-  box-shadow: inset 0 3px 0 var(--teinte);
+  box-shadow: inset 3px 0 0 var(--teinte);
 }
 .nb-cr-cv-pastille {
   display: inline-block;
@@ -1636,6 +1678,9 @@ button.nb-cr-cv-l {
   min-width: 0;
   scroll-snap-align: start;
 }
+.nb-doc-rangee > .nb-cr-cv {
+  flex-basis: 252px;
+}
 .nb-doc-rangee > .nb-doc-case {
   flex-basis: 196px;
   display: flex;
@@ -1838,6 +1883,19 @@ button.nb-cr-cv-l {
   font-size: 16px;
   font-weight: 800;
   line-height: 1.2;
+}
+
+/* Carte CV compacte, thème clair : étiquettes de score lisibles sur crème. */
+html[data-nb-theme="clair"] .nb-app .nb-cr-cv-note[data-score="moyen"] {
+  background: rgba(176, 112, 0, 0.12);
+  color: #8a5300;
+}
+html[data-nb-theme="clair"] .nb-app .nb-cr-cv-note[data-score="bas"] {
+  background: rgba(180, 40, 30, 0.1);
+  color: #a3271c;
+}
+html[data-nb-theme="clair"] .nb-app .nb-cr-cv-page {
+  box-shadow: 0 0 0 1px rgba(15, 63, 55, 0.12);
 }
 
 /* Mes documents et candidatures à l'horizontale (Ephraïm, 31/10/2026) : une rangée qui défile. */
