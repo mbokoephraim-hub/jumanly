@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { OrbiDisc, PhoneIcon } from "@/components/phone/icon";
 import { TalentIcon } from "@/components/talent/icon";
+import { LetterOffer } from "@/components/phone/career/letter-offer";
 import { LetterPoints } from "@/components/phone/career/letter-points";
 import { OrbiLimit, type OrbiLimitCode } from "@/components/talent/cv/orbi-limit";
 import { generateDocumentAction, proofreadAction } from "@/server/actions/career-documents";
@@ -22,7 +23,7 @@ export async function PhoneNewLetter({
 }: {
   state: "ready" | OrbiLimitCode;
   plan: string | null;
-  offers: { id: string; title: string; company: string }[];
+  offers: { id: string; title: string; company: string; logo: string | null }[];
   proofreadReady: boolean;
 }) {
   const t = await getTranslations();
@@ -45,20 +46,11 @@ export async function PhoneNewLetter({
           <form action={generateDocumentAction} className="nb-lt-f">
             <input type="hidden" name="retour" value="telephone" />
             <input type="hidden" name="type" value="letter" />
-            <div className="nb-lt-champ">
-              <label htmlFor="nb-lt-offre">{t("phoneLetter.write.offer")}</label>
-              <span className="nb-lt-menu">
-                <select id="nb-lt-offre" name="jobId" defaultValue="">
-                  <option value="">{t("phoneLetter.write.noOffer")}</option>
-                  {offers.map((offer) => (
-                    <option key={offer.id} value={offer.id}>
-                      {[offer.title, offer.company].join(" · ")}
-                    </option>
-                  ))}
-                </select>
-                <PhoneIcon name="bas" size={20} />
-              </span>
-            </div>
+            <LetterOffer
+              label={t("phoneLetter.write.offer")}
+              none={t("phoneLetter.write.noOffer")}
+              offers={offers}
+            />
             <fieldset className="nb-lt-champ">
               <legend>{t("phoneLetter.write.tone")}</legend>
               <div className="nb-lt-tons">
