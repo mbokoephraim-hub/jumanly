@@ -1,5 +1,6 @@
 "use client";
 
+import { MenuArt } from "@/components/site/menu-art";
 import "@/styles/phone-onglets.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -249,46 +250,74 @@ function ProgressionPanel({
   const stages = ["discovery", "building", "ready", "competitive"] as const;
   return (
     <div className="nb-cr-pad">
-      <div className="nb-cr-carte nb-cr-stade">
-        <p className="nb-cr-sur">{t("progression.stageLabel")}</p>
-        <p className="nb-cr-stade-n">{progression.stage}</p>
-        <p className="nb-cr-stade-d">{progression.next}</p>
-        {progression.diagnostic ? (
-          <Link href="/app/career/diagnostic" className="nb-cr-pastille nb-cr-faire">
+      {progression.diagnostic ? (
+        // No diagnostic yet (Ephraïm, 31/10/2026): the first thing to do, put forward.
+        <section className="nb-cr-urgent" aria-labelledby="nb-cr-urgent-t">
+          <span className="nb-cr-urgent-b">
+            <i aria-hidden />
+            {t("progression.urgent")}
+          </span>
+          <h2 id="nb-cr-urgent-t">{progression.stage}</h2>
+          <p>{progression.next}</p>
+          <Link href="/app/career/diagnostic" className="nb-cr-urgent-go">
             {t("progression.diagnostic")}
+            <PhoneIcon name="chevron" size={16} />
           </Link>
-        ) : null}
-        <ol className="nb-cr-frise" aria-label={t("progression.stageLabel")}>
-          {stages.map((stage, index) => (
-            <li
-              key={stage}
-              data-fait={index <= progression.stageIndex ? "" : undefined}
-              aria-current={index === progression.stageIndex ? "step" : undefined}
-            >
-              <span aria-hidden />
-              {t(`progression.stage.${stage}`)}
-            </li>
-          ))}
-        </ol>
-      </div>
+          <span className="nb-cr-urgent-art" aria-hidden>
+            <MenuArt name="career" size="lg" />
+          </span>
+        </section>
+      ) : (
+        <div className="nb-cr-carte nb-cr-stade">
+          <p className="nb-cr-sur">{t("progression.stageLabel")}</p>
+          <p className="nb-cr-stade-n">{progression.stage}</p>
+          <p className="nb-cr-stade-d">{progression.next}</p>
+          {progression.report ? (
+            <Link href={progression.report} className="nb-cr-pastille nb-cr-faire">
+              {t("progression.report")}
+            </Link>
+          ) : null}
+          <ol className="nb-cr-frise" aria-label={t("progression.stageLabel")}>
+            {stages.map((stage, index) => (
+              <li
+                key={stage}
+                data-fait={index <= progression.stageIndex ? "" : undefined}
+                aria-current={index === progression.stageIndex ? "step" : undefined}
+              >
+                <span aria-hidden />
+                {t(`progression.stage.${stage}`)}
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
       <div className="nb-cr-chiffres">
         <div className="nb-cr-carte">
-          <Ring percent={progression.coursesPercent} color="#C3A6FF" size={52}>
+          <span className="nb-cr-ch-t">
+            <MenuArt name="trainings" size="sm" />
+            <small>{t("progression.courses")}</small>
+          </span>
+          <Ring percent={progression.coursesPercent} color="#C3A6FF" size={56}>
             {progression.courses}
           </Ring>
-          <small>{t("progression.courses")}</small>
         </div>
         <div className="nb-cr-carte">
-          <Ring percent={progression.percent} color="var(--nb-lime)" size={52}>
+          <span className="nb-cr-ch-t">
+            <MenuArt name="talents" size="sm" />
+            <small>{t("progression.profile")}</small>
+          </span>
+          <Ring percent={progression.percent} color="var(--nb-lime)" size={56}>
             {t("completeValue", { percent: progression.percent })}
           </Ring>
-          <small>{t("progression.profile")}</small>
         </div>
         <div className="nb-cr-carte">
-          <Ring percent={progression.applicationsPercent} color="#7CC4FF" size={52}>
+          <span className="nb-cr-ch-t">
+            <MenuArt name="jobs" size="sm" />
+            <small>{t("progression.applications")}</small>
+          </span>
+          <Ring percent={progression.applicationsPercent} color="#7CC4FF" size={56}>
             {progression.applications}
           </Ring>
-          <small>{t("progression.applications")}</small>
         </div>
       </div>
       <FollowUp view={view} letters={letters} onTab={onTab} />
@@ -351,8 +380,7 @@ function FollowUp({
       <ul>
         <li>
           <button type="button" className="nb-cr-carte" onClick={() => onTab("documents")}>
-            <i style={{ background: "var(--nb-lime)" }} aria-hidden />
-            <b>{view.cvs.length}</b>
+            <MenuArt name="cv" size="sm" />
             <span>{t("follow.cvs", { count: view.cvs.length })}</span>
             <small>
               {primary && !primary.file
@@ -365,16 +393,14 @@ function FollowUp({
         </li>
         <li>
           <button type="button" className="nb-cr-carte" onClick={() => onTab("documents")}>
-            <i style={{ background: "#F4C463" }} aria-hidden />
-            <b>{letters.length}</b>
+            <MenuArt name="letter" size="sm" />
             <span>{t("follow.letters", { count: letters.length })}</span>
             <small>{letters.length > 0 ? t("follow.lettersReady") : t("follow.lettersNone")}</small>
           </button>
         </li>
         <li>
           <Link href="/app/profil?onglet=realisations" className="nb-cr-carte">
-            <i style={{ background: "#C3A6FF" }} aria-hidden />
-            <b>{view.projects.length}</b>
+            <MenuArt name="portfolio" size="sm" />
             <span>{t("follow.works", { count: view.projects.length })}</span>
             <small>
               {view.projects.length > 0
@@ -385,8 +411,7 @@ function FollowUp({
         </li>
         <li>
           <button type="button" className="nb-cr-carte" onClick={() => onTab("candidatures")}>
-            <i style={{ background: "#7CC4FF" }} aria-hidden />
-            <b>{active}</b>
+            <MenuArt name="jobs" size="sm" />
             <span>{t("follow.active", { count: active })}</span>
             <small>
               {interviews > 0

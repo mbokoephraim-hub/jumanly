@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { getFormatter, getTranslations } from "next-intl/server";
+import { PROGRESSION_HREF } from "./welcome";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
@@ -41,7 +42,8 @@ export async function DiagnosticResult({
     <div className="t-flux t-w4 t-large">
       <div className="t-w4-h">
         <FlowHead
-          back="/app/profil/point"
+          back={PROGRESSION_HREF}
+          history={false}
           backLabel={t("diag.back")}
           title={t("diag.title")}
           end={

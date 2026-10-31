@@ -129,6 +129,8 @@ export type CareerView = {
     applicationsPercent: number;
     coursesPercent: number;
     steps: { text: string; title: string; detail: string; href: string }[];
+    /** The last diagnostic's report, once there is one. */
+    report: string | null;
   };
   /** « Mes entraînements » (demande du 29/10/2026): preparations and the simulations' follow-up. */
   training: {
@@ -412,7 +414,30 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
   if (home.progression.courses.all === 0) steps.push(step("course", "/app/learn"));
   const stages = ["discovery", "building", "ready", "competitive"] as const;
   const stageIndex = home.progression.stage ? stages.indexOf(home.progression.stage) : -1;
-  const nextSteps = steps.slice(0, 3);
+  // What the diagnostic invites to do comes first (Ephraïm, 31/10/2026).
+  const tr = await getTranslations("career.diagnostic.rule.priority");
+  const advisedHref: Record<string, string> = {
+    role: "/app/jobs",
+    skills: "/app/learn",
+    experience: "/app/profil?onglet=realisations",
+    cv: "/app/career/cv?onglet=documents",
+    interview: "/app/career/entretiens",
+    search: "/app/jobs",
+    network: "/app/jobs",
+  };
+  const advised: Step[] = home.progression.priorities.flatMap((key) =>
+    advisedHref[key]
+      ? [
+          {
+            text: tr(key as "role"),
+            title: tr(key as "role"),
+            detail: t("progression.fromDiagnostic"),
+            href: advisedHref[key]!,
+          },
+        ]
+      : [],
+  );
+  const nextSteps = [...advised, ...steps].slice(0, 3);
 
   // « Mes entraînements »: the simulation opens on the application to prepare.
   const training = home.training;
@@ -709,6 +734,9 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
           ? 0
           : Math.round((100 * home.progression.courses.done) / home.progression.courses.all),
       steps: nextSteps,
+      report: home.progression.diagnosticId
+        ? `/app/career/diagnostic?bilan=${home.progression.diagnosticId}`
+        : null,
     },
     training: {
       open: training.access.open,

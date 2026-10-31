@@ -20,7 +20,9 @@ export type MenuArtName =
   | "free"
   | "why"
   | "privacy"
-  | "payment";
+  | "payment"
+  | "letter"
+  | "portfolio";
 
 const SAPIN = "#0f3f37";
 const LIME = "#a6f26b";
@@ -46,6 +48,8 @@ const tiles: Record<MenuArtName, string> = {
   why: "bg-[#fff4d6]",
   privacy: "bg-[#e3f1ff]",
   payment: "bg-[#ffeedd]",
+  letter: "bg-[#fff4d6]",
+  portfolio: "bg-[#fde7f0]",
 };
 
 export function MenuArt({
@@ -54,8 +58,8 @@ export function MenuArt({
   className,
 }: {
   name: MenuArtName;
-  /** md: menu entries; lg: cards of the home page. */
-  size?: "md" | "lg";
+  /** sm: small tiles of the signed-in space; md: menu entries; lg: cards of the home page. */
+  size?: "sm" | "md" | "lg";
   className?: string;
 }) {
   return (
@@ -63,12 +67,20 @@ export function MenuArt({
       aria-hidden
       className={cx(
         "jm-menu-art flex shrink-0 items-center justify-center",
-        size === "lg" ? "size-16 rounded-[20px]" : "size-[52px] rounded-[16px]",
+        size === "lg"
+          ? "size-16 rounded-[20px]"
+          : size === "sm"
+            ? "size-9 rounded-[12px]"
+            : "size-[52px] rounded-[16px]",
         tiles[name],
         className,
       )}
     >
-      <svg viewBox="0 0 48 48" className={size === "lg" ? "size-11" : "size-9"} fill="none">
+      <svg
+        viewBox="0 0 48 48"
+        className={size === "lg" ? "size-11" : size === "sm" ? "size-6" : "size-9"}
+        fill="none"
+      >
         {drawings[name]}
       </svg>
     </span>
@@ -245,6 +257,34 @@ const drawings: Record<MenuArtName, React.ReactNode> = {
       <rect x="26" y="8" width="16" height="32" rx="4" fill={SAPIN} />
       <rect x="29" y="12" width="10" height="20" rx="2" fill={LIME} />
       <circle cx="34" cy="36" r="1.6" fill="#fff" />
+    </>
+  ),
+  // An envelope with a letter coming out.
+  letter: (
+    <>
+      <rect
+        x="11"
+        y="5"
+        width="26"
+        height="24"
+        rx="3"
+        fill="#fff"
+        stroke={SAPIN}
+        strokeWidth="2.5"
+      />
+      <rect x="16" y="11" width="16" height="3" rx="1.5" fill={LIME} />
+      <rect x="16" y="17" width="11" height="3" rx="1.5" fill={MENTHE} />
+      <path d="M4 20l20 13 20-13v20a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z" fill={AMBRE} />
+      <path d="M4 40l15-12M44 40L29 28" stroke={SAPIN} strokeWidth="2.5" strokeLinecap="round" />
+    </>
+  ),
+  // A frame with a picture and a star: a piece of work to show.
+  portfolio: (
+    <>
+      <rect x="4" y="8" width="34" height="28" rx="5" fill={SAPIN} />
+      <circle cx="14" cy="17" r="4" fill={AMBRE} />
+      <path d="M8 32l9-9 6 6 5-5 6 8z" fill={ROSE} />
+      <path d="M38 26l2.4 5 5.6.8-4 3.9 1 5.5-5-2.6-5 2.6 1-5.5-4-3.9 5.6-.8z" fill={LIME} />
     </>
   ),
 };
