@@ -11964,7 +11964,7 @@
       },
       "score": "{score}/100",
       "empty": "Pas encore de CV. Orbi peut en préparer un depuis votre profil, en une minute.",
-      "newLong": "+ Nouveau CV · modèle, import ou Orbi",
+      "newLong": "+ Nouveau CV",
       "changedToday": "aujourd’hui",
       "changedYesterday": "hier",
       "meta": "{template} · {when}",
