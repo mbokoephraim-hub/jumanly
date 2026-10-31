@@ -108,6 +108,8 @@ export async function personProfile(
               format: true,
               length: true,
               image: true,
+              schoolLogo: true,
+              learnings: true,
               referenceChecks: CONFIRMED_CHECK,
             },
           },

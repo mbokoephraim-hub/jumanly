@@ -77,7 +77,7 @@ export type ProfileView = {
   /** « Diplômes » then « Certificats » (demande d'Ephraïm du 29/10/2026). */
   diplomas: EducationRow[];
   certificates: EducationRow[];
-  languages: { name: string; level: number; label: string }[];
+  languages: { name: string; flag: string; level: number; label: string }[];
   works: {
     id: string;
     kind: string;

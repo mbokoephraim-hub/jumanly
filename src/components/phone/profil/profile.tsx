@@ -697,7 +697,14 @@ export function PersonProfile({
                 <ul className="nb-pf-langues">
                   {person.languages.map((item) => (
                     <li key={item.name}>
-                      <b>{item.name}</b>
+                      <b>
+                        {item.flag ? (
+                          <span className="nb-pf-drapeau" aria-hidden>
+                            {item.flag}
+                          </span>
+                        ) : null}
+                        {item.name}
+                      </b>
                       <span
                         className="nb-pf-niv"
                         role="img"

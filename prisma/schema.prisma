@@ -1414,6 +1414,11 @@ model Education {
   /// Photo of the certificate or of the diploma sent by the person (`/medias/formations/…`, WebP).
   /// For a diploma it is shown as « Justificatif joint », never as « Vérifié ».
   image           String?
+  /// Logo of the school or of the training organization sent by the person, shown instead of the
+  /// generic icon (`/medias/experiences/…`, like the logos of experiences).
+  schoolLogo      String?
+  /// « Ce que j'ai appris »: 2 to 3 short points, one per line.
+  learnings       String           @default("")
   createdAt       DateTime         @default(now())
   referenceChecks ReferenceCheck[]
 

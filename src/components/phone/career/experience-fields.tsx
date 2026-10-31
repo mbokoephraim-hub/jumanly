@@ -3,7 +3,7 @@
 import "@/styles/phone-experience.css";
 import { useTranslations } from "next-intl";
 import { useEffect, useId, useRef, useState, useTransition } from "react";
-import { ACHIEVEMENT_MAX, ACHIEVEMENTS_MAX } from "@/lib/achievements";
+import { ACHIEVEMENT_MAX, ACHIEVEMENTS_MAX, LEARNING_MAX } from "@/lib/achievements";
 import { colorOf, PROFILE_PALETTE } from "@/lib/profile-colors";
 import { showToast } from "@/components/motion/toaster";
 import { suggestCompaniesAction, uploadExperienceLogoAction } from "@/server/actions/career-phone";
@@ -176,15 +176,22 @@ export function CompanyField({
   );
 }
 
-/** « Ajouter le logo » for a company without a page: a square image, its initials otherwise. */
-function LogoPicker({
+/**
+ * « Ajouter le logo » for a company without a page, or for the school of a diploma (31/10/2026): a
+ * square image, its initials otherwise.
+ */
+export function LogoPicker({
   name,
   logo,
   onChange,
+  label,
+  hint,
 }: {
   name: string;
   logo: string | null;
   onChange: (logo: string | null) => void;
+  label?: string;
+  hint?: string;
 }) {
   const t = useTranslations("phoneCareer.form");
   const input = useRef<HTMLInputElement>(null);
@@ -207,8 +214,8 @@ function LogoPicker({
     <div className="nb-xp-logo">
       <CompanyMark name={name} logo={logo} />
       <div>
-        <strong>{t("logo")}</strong>
-        <span>{t("logoHint")}</span>
+        <strong>{label ?? t("logo")}</strong>
+        <span>{hint ?? t("logoHint")}</span>
         <div>
           <button
             type="button"
@@ -252,10 +259,13 @@ export function AchievementsField({
   onChange,
   max = ACHIEVEMENTS_MAX,
   inCv = false,
+  kind = "achievement",
 }: {
   points: string[];
   onChange: (points: string[]) => void;
   max?: number;
+  /** « Ce que j'ai appris » of a diploma or a certificate: its texts and shorter points. */
+  kind?: "achievement" | "learning";
   /** In the CV form (« Mes informations »): its field layout instead of the profile's. */
   inCv?: boolean;
 }) {
@@ -287,9 +297,9 @@ export function AchievementsField({
       className={inCv ? "nb-cvf-champ nb-xp-pts" : "nb-ca-ch nb-xp-pts"}
       data-large={inCv ? "" : undefined}
     >
-      <span id={`${id}-t`}>{t("achievements")}</span>
+      <span id={`${id}-t`}>{t(`${kind}s`)}</span>
       <p className="nb-xp-aide" id={`${id}-a`}>
-        {t("achievementsHint")}
+        {t(`${kind}sHint`)}
       </p>
       <ol ref={list} aria-labelledby={`${id}-t`} aria-describedby={`${id}-a`}>
         {points.map((point, at) => {
@@ -301,9 +311,9 @@ export function AchievementsField({
                 className="nb-ca-in"
                 value={point}
                 rows={2}
-                maxLength={ACHIEVEMENT_MAX}
-                aria-label={t("achievementLabel", { n })}
-                placeholder={t("achievementPlaceholder", { n })}
+                maxLength={kind === "learning" ? LEARNING_MAX : ACHIEVEMENT_MAX}
+                aria-label={t(`${kind}Label`, { n })}
+                placeholder={t(`${kind}Placeholder`, { n })}
                 onChange={(event) => {
                   const next = [...points];
                   next[at] = event.target.value.replace(/\r?\n/g, " ");
@@ -325,7 +335,7 @@ export function AchievementsField({
                   type="button"
                   onClick={() => move(at, at - 1)}
                   disabled={at === 0}
-                  aria-label={t("achievementUp", { n })}
+                  aria-label={t(`${kind}Up`, { n })}
                 >
                   <PhoneIcon name="haut" size={16} />
                 </button>
@@ -333,7 +343,7 @@ export function AchievementsField({
                   type="button"
                   onClick={() => move(at, at + 1)}
                   disabled={at === points.length - 1}
-                  aria-label={t("achievementDown", { n })}
+                  aria-label={t(`${kind}Down`, { n })}
                 >
                   <PhoneIcon name="bas" size={16} />
                 </button>
@@ -343,7 +353,7 @@ export function AchievementsField({
                     onChange(points.filter((_, index) => index !== at));
                     setFocusAt(Math.max(0, Math.min(at, points.length - 2)));
                   }}
-                  aria-label={t("achievementRemove", { n })}
+                  aria-label={t(`${kind}Remove`, { n })}
                 >
                   <PhoneIcon name="corbeille" size={16} />
                 </button>
@@ -362,13 +372,13 @@ export function AchievementsField({
           }}
         >
           <PhoneIcon name="plus" size={16} strong />
-          {t("achievementAdd")}
+          {t(`${kind}Add`)}
         </button>
       ) : (
-        <p className="nb-xp-aide">{t("achievementsMax", { max })}</p>
+        <p className="nb-xp-aide">{t(`${kind}sMax`, { max })}</p>
       )}
       <p className="nb-meta nb-xp-compte" aria-live="polite">
-        {t("achievementsCount", { count: filled })}
+        {t(`${kind}sCount`, { count: filled })}
       </p>
     </div>
   );

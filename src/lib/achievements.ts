@@ -26,3 +26,8 @@ export function achievementsText(points: string[]): string {
     .filter(Boolean)
     .join("\n");
 }
+
+/** « Ce que j'ai appris » of a diploma or a certificate (demande d'Ephraïm du 31/10/2026): 2 to 3. */
+export const LEARNINGS_MAX = 3;
+/** Length of one learning point. */
+export const LEARNING_MAX = 160;
