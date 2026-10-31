@@ -309,7 +309,8 @@ function LetterEdit({ letter, onClose }: { letter: LetterRow | null; onClose: ()
               />
             ))}
           </div>
-          <Link href={letter.href} className="nb-opt nb-fil-opt">
+          <Link href={letter.href} className="nb-bouton nb-lt-ouvrir" data-large="" data-contour="">
+            <PhoneIcon name="modifier" size={18} />
             {t("letters.open")}
           </Link>
         </>

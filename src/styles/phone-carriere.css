@@ -1038,22 +1038,26 @@ button.nb-cr-cv-l {
   font-size: 13px;
   cursor: pointer;
 }
+/* All the colours on one line (Ephraïm, 31/10/2026). */
 .nb-cr-cv-teintes {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
   align-items: center;
-  gap: 10px;
+  justify-items: center;
+  gap: 6px;
   padding: 10px 0 14px;
 }
 .nb-cr-cv-teintes span {
-  width: 100%;
+  grid-column: 1 / -1;
+  justify-self: start;
   font-size: 12.5px;
   font-weight: 700;
   color: var(--nb-brume);
 }
 .nb-cr-cv-teintes button {
-  width: 32px;
-  height: 32px;
+  width: 100%;
+  max-width: 32px;
+  aspect-ratio: 1;
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
@@ -2093,4 +2097,12 @@ html[data-nb-theme="clair"] .nb-app .nb-cr-cv-page {
 .nb-lt-aide {
   margin: -2px 0 10px;
   font-size: 13px;
+}
+.nb-lt-ouvrir {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 4px 0 8px;
+  text-align: center;
 }
