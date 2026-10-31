@@ -2050,3 +2050,11 @@ html[data-nb-theme="clair"] .nb-app .nb-cr-cv-page {
 .nb-cr-onglets a {
   font-size: 15px;
 }
+
+/* Lettres de motivation : la même carte que les CV (Ephraïm, 31/10/2026), avec le dessin de
+   lettre de l'onglet Vue au milieu d'une bande ambrée. */
+.nb-cr-cv-bande[data-lettre] {
+  --accent: #c9962f;
+  align-items: center;
+  padding-top: 0;
+}
