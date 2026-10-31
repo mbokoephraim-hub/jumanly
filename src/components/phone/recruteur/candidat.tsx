@@ -1,5 +1,6 @@
 import "server-only";
 import Link from "next/link";
+import { GoldVerifiedBadge } from "../badge-or";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { addNoteAction } from "@/server/actions/hire";
@@ -416,9 +417,11 @@ export async function RhCandidate({
         {profile.skills.slice(0, 10).map((item) => (
           <p key={item.id} className="nb-rh-f-comp">
             <span>{item.skill.name}</span>
-            <span className="nb-meta" data-lime={item.verified ? "" : undefined}>
-              {item.verified ? t("cv.verified") : t("cv.declared")}
-            </span>
+            {item.verified ? (
+              <GoldVerifiedBadge label={t("cv.verified")} small />
+            ) : (
+              <span className="nb-meta">{t("cv.declared")}</span>
+            )}
           </p>
         ))}
       </section>

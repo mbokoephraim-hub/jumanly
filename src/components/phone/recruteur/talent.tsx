@@ -1,5 +1,6 @@
 import "server-only";
 import { notFound } from "next/navigation";
+import { GoldVerifiedBadge } from "../badge-or";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { db } from "@/server/db";
@@ -187,9 +188,11 @@ export async function RhTalent({
               {skills.map((skill) => (
                 <li key={skill.name}>
                   <span>{skill.name}</span>
-                  <span className="nb-rh-t-preuve" data-verifiee={skill.verified ? "" : undefined}>
-                    {skill.verified ? t("profile.verified") : t("profile.declared")}
-                  </span>
+                  {skill.verified ? (
+                    <GoldVerifiedBadge label={t("profile.verified")} small />
+                  ) : (
+                    <span className="nb-rh-t-preuve">{t("profile.declared")}</span>
+                  )}
                 </li>
               ))}
             </ul>

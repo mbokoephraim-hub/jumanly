@@ -3,6 +3,7 @@
 import "@/styles/phone-apropos.css";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { GoldSeal } from "../badge-or";
 import { useState, useTransition, type CSSProperties, type ReactNode } from "react";
 import { showToast } from "@/components/motion/toaster";
 import { connectAction, reportPersonAction } from "@/server/actions/explore";
@@ -53,23 +54,9 @@ export function ringOf(colors: string[]) {
 /** A tint of a palette colour (« #A6F26B » → « #A6F26B1F »). */
 const tint = (color: string, alpha: string) => `${color}${alpha}`;
 
+/** The profile's verified seal, beside the name: gold like every verified mark (31/10/2026). */
 export function VerifiedMark({ label, size = 18 }: { label: string; size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" role="img" aria-label={label}>
-      <path
-        d="M12 2.5l2.4 1.8 3-.1.9 2.9 2.4 1.8-1 2.8 1 2.8-2.4 1.8-.9 2.9-3-.1L12 21.5l-2.4-1.8-3 .1-.9-2.9-2.4-1.8 1-2.8-1-2.8 2.4-1.8.9-2.9 3 .1z"
-        fill="var(--nb-lime)"
-      />
-      <path
-        d="m8.2 12.2 2.6 2.6 5-5.2"
-        fill="none"
-        stroke="var(--nb-sur-lime, #0F3F37)"
-        strokeWidth="2.3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
+  return <GoldSeal size={size} label={label} />;
 }
 
 /**
@@ -577,25 +564,7 @@ export function PersonProfile({
                     >
                       <i style={{ background: skill.color }} aria-hidden />
                       {skill.name}
-                      {skill.verified ? (
-                        <svg
-                          width="13"
-                          height="13"
-                          viewBox="0 0 24 24"
-                          role="img"
-                          aria-label={t("skillVerified")}
-                        >
-                          <circle cx="12" cy="12" r="10" fill={skill.color} />
-                          <path
-                            d="m7.5 12.5 3 3 6-6.5"
-                            fill="none"
-                            stroke="#0B1A1F"
-                            strokeWidth="2.6"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      ) : null}
+                      {skill.verified ? <GoldSeal size={15} label={t("skillVerified")} /> : null}
                     </li>
                   ))}
                 </ul>
