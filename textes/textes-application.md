@@ -9724,16 +9724,16 @@ Conventions :
 | `phoneCareer.apps.firstTitle` | Trouvez votre toute première opportunité |
 | `phoneCareer.apps.firstCta` | Explorer les offres |
 | `phoneCareer.apps.hint` | Touchez une candidature pour suivre son avancée, la compléter ou la retirer. |
-| `phoneCareer.docs.cv` | CV |
-| `phoneCareer.docs.portfolio` | Portfolio |
+| `phoneCareer.docs.cv` | Mes CV |
+| `phoneCareer.docs.portfolio` | Mon portfolio |
 | `phoneCareer.docs.portfolioOn` | Votre portfolio est en ligne |
 | `phoneCareer.docs.portfolioOff` | Votre portfolio n’est pas encore publié |
 | `phoneCareer.docs.portfolioCount` | {count, plural, =0 {Aucune réalisation} one {# réalisation} other {# réalisations}} |
 | `phoneCareer.docs.portfolioSee` | Voir mon portfolio |
 | `phoneCareer.docs.portfolioManage` | Mes réalisations |
-| `phoneCareer.docs.letters` | Lettres de motivation |
+| `phoneCareer.docs.letters` | Mes lettres de motivation |
 | `phoneCareer.docs.lettersEmpty` | Aucune lettre pour l’instant. Orbi peut en rédiger une à partir de votre profil et d’une offre. |
-| `phoneCareer.docs.letterNew` | Nouvelle lettre |
+| `phoneCareer.docs.letterNew` | + Nouvelle lettre |
 | `phoneCareer.suggestion` | {count, plural, one {Ajoutez {skill} à vos compétences : une offre ouverte le demande.} other {Ajoutez {skill} à vos compétences : # offres ouvertes le demandent.}} |
 | `phoneCareer.suggestionAdd` | Ajouter |
 | `phoneCareer.suggestionAdded` | {skill} est ajouté à vos compétences. |
@@ -10520,21 +10520,25 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `phoneLetter.write.title` | Rédiger avec Orbi |
-| `phoneLetter.write.orbi` | Orbi rédige à partir de votre profil et de l’offre. Vous relisez et modifiez avant tout envoi. |
-| `phoneLetter.write.offer` | Pour quelle offre voulez-vous écrire la lettre ? |
-| `phoneLetter.write.offerHint` | Touchez pour choisir parmi vos candidatures et vos offres enregistrées. |
+| `phoneLetter.write.orbi` | Orbi écrit avec votre profil et l’offre. Vous relisez avant l’envoi. |
+| `phoneLetter.write.offer` | Pour quelle offre ? |
 | `phoneLetter.write.noOffer` | Sans offre précise |
-| `phoneLetter.write.tone` | Ton de la lettre |
+| `phoneLetter.write.tone` | Ton |
 | `phoneLetter.write.points` | À mettre en avant (facultatif) |
-| `phoneLetter.write.pointsHint` | Dites à Orbi ce qu’il doit souligner. |
-| `phoneLetter.write.pointsExample` | Ex. : 3 ans au service client, anglais courant, j’aime travailler en équipe. |
+| `phoneLetter.write.note` | {count, plural, one {# crédit Orbi} other {# crédits Orbi}} · rien n’est inventé |
+| `phoneLetter.write.pointsExample` | Ex. : 3 ans au service client, anglais courant |
 | `phoneLetter.or` | ou |
 | `phoneLetter.check.title` | Écrire et faire relire par Orbi |
-| `phoneLetter.check.lead` | Écrivez ou collez votre lettre : Orbi propose des corrections, vous gardez celles que vous voulez. |
 | `phoneLetter.check.name` | Titre (facultatif) |
-| `phoneLetter.check.nameExample` | Ex. : Lettre pour le poste de comptable |
+| `phoneLetter.check.nameExample` | Ex. : Lettre comptable |
 | `phoneLetter.check.text` | Votre lettre |
-| `phoneLetter.check.textExample` | Ex. : Madame, Monsieur, je vous écris pour le poste de… Touchez ici pour écrire ou coller votre texte. |
+| `phoneLetter.intro.title` | Votre lettre de motivation |
+| `phoneLetter.intro.one` | Orbi l’écrit pour vous, ou vous l’écrivez et Orbi la relit. |
+| `phoneLetter.intro.two` | Elle est gardée dans Mes documents, prête à servir. |
+| `phoneLetter.intro.three` | Ensuite, allez dans Explorer pour postuler à l’offre. |
+| `phoneLetter.intro.start` | C’est parti |
+| `phoneLetter.intro.skip` | Passer |
+| `phoneLetter.check.textExample` | Écrivez ou collez votre lettre ici… |
 
 ### Modèle B · Simulation d’entretien au téléphone
 

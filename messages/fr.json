@@ -11769,16 +11769,16 @@
       "hint": "Touchez une candidature pour suivre son avancée, la compléter ou la retirer."
     },
     "docs": {
-      "cv": "CV",
-      "portfolio": "Portfolio",
+      "cv": "Mes CV",
+      "portfolio": "Mon portfolio",
       "portfolioOn": "Votre portfolio est en ligne",
       "portfolioOff": "Votre portfolio n’est pas encore publié",
       "portfolioCount": "{count, plural, =0 {Aucune réalisation} one {# réalisation} other {# réalisations}}",
       "portfolioSee": "Voir mon portfolio",
       "portfolioManage": "Mes réalisations",
-      "letters": "Lettres de motivation",
+      "letters": "Mes lettres de motivation",
       "lettersEmpty": "Aucune lettre pour l’instant. Orbi peut en rédiger une à partir de votre profil et d’une offre.",
-      "letterNew": "Nouvelle lettre"
+      "letterNew": "+ Nouvelle lettre"
     },
     "suggestion": "{count, plural, one {Ajoutez {skill} à vos compétences : une offre ouverte le demande.} other {Ajoutez {skill} à vos compétences : # offres ouvertes le demandent.}}",
     "suggestionAdd": "Ajouter",
@@ -12676,23 +12676,29 @@
   "phoneLetter": {
     "write": {
       "title": "Rédiger avec Orbi",
-      "orbi": "Orbi rédige à partir de votre profil et de l’offre. Vous relisez et modifiez avant tout envoi.",
-      "offer": "Pour quelle offre voulez-vous écrire la lettre ?",
-      "offerHint": "Touchez pour choisir parmi vos candidatures et vos offres enregistrées.",
+      "orbi": "Orbi écrit avec votre profil et l’offre. Vous relisez avant l’envoi.",
+      "offer": "Pour quelle offre ?",
       "noOffer": "Sans offre précise",
-      "tone": "Ton de la lettre",
+      "tone": "Ton",
       "points": "À mettre en avant (facultatif)",
-      "pointsHint": "Dites à Orbi ce qu’il doit souligner.",
-      "pointsExample": "Ex. : 3 ans au service client, anglais courant, j’aime travailler en équipe."
+      "note": "{count, plural, one {# crédit Orbi} other {# crédits Orbi}} · rien n’est inventé",
+      "pointsExample": "Ex. : 3 ans au service client, anglais courant"
     },
     "or": "ou",
     "check": {
       "title": "Écrire et faire relire par Orbi",
-      "lead": "Écrivez ou collez votre lettre : Orbi propose des corrections, vous gardez celles que vous voulez.",
       "name": "Titre (facultatif)",
-      "nameExample": "Ex. : Lettre pour le poste de comptable",
+      "nameExample": "Ex. : Lettre comptable",
       "text": "Votre lettre",
-      "textExample": "Ex. : Madame, Monsieur, je vous écris pour le poste de… Touchez ici pour écrire ou coller votre texte."
+      "textExample": "Écrivez ou collez votre lettre ici…"
+    },
+    "intro": {
+      "title": "Votre lettre de motivation",
+      "one": "Orbi l’écrit pour vous, ou vous l’écrivez et Orbi la relit.",
+      "two": "Elle est gardée dans Mes documents, prête à servir.",
+      "three": "Ensuite, allez dans Explorer pour postuler à l’offre.",
+      "start": "C’est parti",
+      "skip": "Passer"
     }
   },
   "phoneInterview": {

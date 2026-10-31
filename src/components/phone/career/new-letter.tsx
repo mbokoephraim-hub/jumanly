@@ -58,7 +58,6 @@ export async function PhoneNewLetter({
                 </select>
                 <PhoneIcon name="bas" size={20} />
               </span>
-              <small>{t("phoneLetter.write.offerHint")}</small>
             </div>
             <fieldset className="nb-lt-champ">
               <legend>{t("phoneLetter.write.tone")}</legend>
@@ -78,20 +77,18 @@ export async function PhoneNewLetter({
             </fieldset>
             <div className="nb-lt-champ">
               <label htmlFor="nb-lt-points">{t("phoneLetter.write.points")}</label>
-              <small id="nb-lt-points-aide">{t("phoneLetter.write.pointsHint")}</small>
               <textarea
                 id="nb-lt-points"
                 name="points"
                 maxLength={600}
-                rows={3}
+                rows={2}
                 className="nb-lt-zone"
-                aria-describedby="nb-lt-points-aide"
                 placeholder={t("phoneLetter.write.pointsExample")}
               />
             </div>
             <p className="nb-lt-note">
               <TalentIcon name="cadenas" size="s" />
-              {t("docs.letters.create.note", { count: aiFeatures.career_document.credits })}
+              {t("phoneLetter.write.note", { count: aiFeatures.career_document.credits })}
             </p>
             <button type="submit" className="nb-lt-bt" data-orbi="">
               <OrbiMark size={20} />
@@ -113,7 +110,6 @@ export async function PhoneNewLetter({
               </span>
               {t("phoneLetter.check.title")}
             </h2>
-            <p className="nb-lt-lead">{t("phoneLetter.check.lead")}</p>
             <form action={proofreadAction} className="nb-lt-f">
               <input type="hidden" name="retour" value="telephone" />
               <div className="nb-lt-champ">

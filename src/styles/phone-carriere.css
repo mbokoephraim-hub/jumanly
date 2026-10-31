@@ -1338,8 +1338,15 @@ button.nb-cr-cv-l {
 }
 
 /* Mes documents: CV, Portfolio, Lettres de motivation. */
-.nb-cr .nb-doc-h {
+/* Titres de section bien visibles : « Mes CV », « Mes lettres de motivation », « Mon portfolio »
+   (Ephraïm, 31/10/2026). */
+.nb-cr .nb-pf-h.nb-doc-h {
   margin-bottom: 4px;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--nb-creme);
 }
 .nb-doc-port,
 .nb-doc-lettre {

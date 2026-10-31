@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { FlowHead } from "@/components/talent/flow-head";
+import { LetterIntro } from "@/components/phone/career/letter-intro";
 import { PhoneNewLetter } from "@/components/phone/career/new-letter";
 import { Notice } from "@/components/talent/notice";
 import { OrbiLimit, orbiLimitCode } from "@/components/talent/cv/orbi-limit";
@@ -50,6 +51,19 @@ export default async function NewLetterPage({
         offers={offers}
         proofreadReady={check.state === "ready"}
       />
+      {/* Back from Orbi with an error or a limit: no welcome message again. */}
+      {!params.erreur && !aiError && !params.de && (
+        <LetterIntro
+          texts={{
+            title: t("phoneLetter.intro.title"),
+            one: t("phoneLetter.intro.one"),
+            two: t("phoneLetter.intro.two"),
+            three: t("phoneLetter.intro.three"),
+            start: t("phoneLetter.intro.start"),
+            skip: t("phoneLetter.intro.skip"),
+          }}
+        />
+      )}
     </div>
   );
 }
