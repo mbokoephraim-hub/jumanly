@@ -18,6 +18,36 @@ function overflows(zone: Element) {
   return zone.scrollHeight > zone.clientHeight + 1;
 }
 
+/**
+ * Keeps in the page as many points of an element (`ul.cv-puces > li`) as fit, at least two, with
+ * its heading; returns the element with the other points, to pour on the next page, or null when
+ * the element cannot be cut.
+ */
+function splitPoints(element: HTMLElement, zone: () => Element): HTMLElement | null {
+  const list = element.querySelector(":scope > ul.cv-puces, :scope ul.cv-puces");
+  const points = list ? Array.from(list.children) : [];
+  if (!list || points.length < 3) return null;
+  const moved: Element[] = [];
+  while (overflows(zone()) && list.children.length > 2) {
+    const last = list.lastElementChild!;
+    moved.unshift(last);
+    last.remove();
+  }
+  if (overflows(zone()) || moved.length === 0) {
+    moved.forEach((point) => list.appendChild(point));
+    return null;
+  }
+  const rest = element.cloneNode(true) as HTMLElement;
+  rest.classList.add("cv-el-suite");
+  const restList = rest.querySelector("ul.cv-puces")!;
+  // The continuation keeps only its points: the title, company and dates stay above.
+  Array.from(rest.children).forEach((child) => {
+    if (!child.contains(restList)) child.remove();
+  });
+  restList.replaceChildren(...moved.map((point) => point.cloneNode(true)));
+  return rest;
+}
+
 export function paginate(article: HTMLElement): PaginationResult {
   const source = article.querySelector(".cv-source");
   const pattern = article.querySelector(".cv-page-modele")?.firstElementChild;
@@ -73,9 +103,21 @@ export function paginate(article: HTMLElement): PaginationResult {
           current.classList.add("cv-suite");
           zone().appendChild(current);
         }
-        const copy = element.cloneNode(true);
+        let copy = element.cloneNode(true) as HTMLElement;
         current.appendChild(copy);
         if (overflows(zone())) {
+          // A long experience is cut between its points (Ephraïm, 31/10): page 1 stays full
+          // instead of leaving a hole, the rest goes on with the next page.
+          const rest = splitPoints(copy, zone);
+          if (rest) {
+            index++;
+            current = shell();
+            current.classList.add("cv-suite");
+            zone().appendChild(current);
+            current.appendChild(rest);
+            copy = rest;
+            if (!overflows(zone())) continue;
+          }
           copy.parentNode?.removeChild(copy);
           const empty = !current.querySelector(".cv-el");
           if (empty) current.remove(); // a title never stays alone at the bottom of a page

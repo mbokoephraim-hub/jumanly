@@ -748,7 +748,8 @@ export async function finishCvAction(cvId: string): Promise<Result> {
   const { profile } = await owner();
   const cv = await ownedCv(profile.id, cvId);
   if (!cv) return { ok: false, error: "missing" };
+  // No refresh here: the page would be drawn again and close the « CV enregistré » sheet
+  // before the talent reads it (Ephraïm, 31/10). The documents are fresh on each visit.
   await db.document.update({ where: { id: cv.id }, data: { updatedAt: new Date() } });
-  refresh();
   return { ok: true };
 }

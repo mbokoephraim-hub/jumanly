@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition, type ComponentProps } from "react";
 import { showToast } from "@/components/motion/toaster";
@@ -39,12 +38,11 @@ export function CvFinalStep({
   steps: ComponentProps<typeof CvFrame>["steps"];
 }) {
   const t = useTranslations("phoneCv");
-  const router = useRouter();
   const [saved, setSaved] = useState(false);
   const [pending, start] = useTransition();
   const suffix = isNew ? "&nouveau=1" : "";
   const cancel = useCancelCv({ cvId, isNew });
-  const documents = "/app/career/cv?onglet=cv";
+  const documents = "/app/career/cv?onglet=documents";
 
   const save = () =>
     start(async () => {
@@ -99,7 +97,7 @@ export function CvFinalStep({
       {cancel.sheet}
       <PhoneSheet
         open={saved}
-        onClose={() => router.replace(documents)}
+        onClose={() => undefined}
         label={t("final.savedTitle")}
         closeLabel={t("close")}
       >
@@ -114,7 +112,11 @@ export function CvFinalStep({
             className="nb-bouton nb-cv-principal"
             data-plein=""
             data-large=""
-            onClick={() => router.replace(documents)}
+            onClick={() => {
+              // A full visit: « Mes documents » opens on its tab with the new CV in it.
+              // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- a full visit, on purpose
+              window.location.assign(documents);
+            }}
           >
             {t("final.backToDocuments")}
           </button>
