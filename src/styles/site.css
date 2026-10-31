@@ -344,7 +344,9 @@ button.jm-top-link:hover {
   color: #0f3f37;
   -webkit-backdrop-filter: blur(24px) saturate(170%);
   backdrop-filter: blur(24px) saturate(170%);
-  box-shadow: 0 40px 90px -20px rgb(0 0 0 / 0.75);
+  box-shadow:
+    0 40px 90px -20px rgb(0 0 0 / 0.75),
+    0 0 0 1.5px rgb(166 242 107 / 0.55);
   opacity: 0;
   transform: translateY(-14px) scale(0.96);
   transform-origin: top right;
@@ -559,4 +561,26 @@ button.jm-top-link:hover {
 }
 .jm-stack-cool {
   background: linear-gradient(100deg, #c9bdfb, #9fd8f2 55%, #a8efc9);
+}
+
+/* Light sections of the home page (31/10/2026): the « Crème doux » of the phone app, alternating
+   with the dark ones. Titles in Sapin green, cards a lighter cream with a soft edge. */
+.jm-site-b .jm-section-clair {
+  background-color: #f2ede5;
+  color: #0f3f37;
+}
+.jm-site-b .jm-light .jm-card {
+  background-color: #fbf8f3;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.8) inset,
+    0 0 0 1px rgb(15 63 55 / 0.08),
+    0 18px 40px -28px rgb(15 63 55 / 0.35);
+}
+.jm-site-b .jm-light .jm-eyebrow {
+  background-color: #e4fad0;
+  color: #22662f;
+}
+.jm-site-b .jm-hero-card .jm-eyebrow {
+  background-color: #1c3a2c;
+  color: #e3f67c;
 }

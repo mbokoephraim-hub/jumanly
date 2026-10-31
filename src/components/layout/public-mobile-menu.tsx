@@ -71,7 +71,7 @@ export function PublicMobileMenu({
           <nav
             id="jm-site-menu"
             aria-label={menuLabel}
-            className="jm-site-menu-panel jm-light jm-glass-edge"
+            className="jm-site-menu-panel jm-light"
             onClick={(event) => {
               if ((event.target as Element).closest("a")) setOpen(false);
             }}
