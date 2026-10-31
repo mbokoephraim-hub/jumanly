@@ -28,14 +28,14 @@
   align-items: center;
   gap: 8px;
 }
-/* Round buttons: 44 px, the surface colour, a thin edge, cream icon. */
+/* Round buttons: 38 px, the surface colour, a thin edge, cream icon. */
 .nb-app .nb-tete-onglet .nb-rond,
 .nb-app .nb-tete-onglet .nb-ch-rb,
 .nb-app .nb-tete-onglet .nb-pf-rb {
   position: relative;
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
   flex: none;
   padding: 0;
   display: inline-flex;
@@ -53,10 +53,10 @@
   top: -2px;
   right: -2px;
 }
-/* The person's picture: 44 px to touch, 36 px to see. */
+/* The person's picture: 38 px to touch, 34 px to see (Ephraïm, 31/10/2026: smaller heads). */
 .nb-app .nb-tete-moi {
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   flex: none;
   display: inline-flex;
   align-items: center;
@@ -235,4 +235,15 @@
 }
 .nb-app .nb-rc-vitrine .nb-rc-note {
   margin-top: 6px;
+}
+
+/* Smaller round buttons on every tab (Ephraïm, 31/10/2026): 38 px, icons at 18 px. */
+.nb-app .nb-tete-onglet :is(.nb-rond, .nb-ch-rb, .nb-pf-rb) svg {
+  width: 18px;
+  height: 18px;
+}
+.nb-app .nb-tete-onglet > div,
+.nb-app .nb-tete-onglet > span,
+.nb-app .nb-cr-ronds {
+  gap: 6px;
 }

@@ -36,7 +36,7 @@ export function MeAvatar({ className }: { className?: string }) {
       className={className ? `nb-tete-moi ${className}` : "nb-tete-moi"}
       aria-label={me.label}
     >
-      <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={44} />
+      <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={34} />
     </Link>
   );
 }
