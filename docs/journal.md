@@ -5307,3 +5307,7 @@ Demande d'Ephraïm : cartes CV trop hautes, interlignes trop larges, titres long
 ## 2026-10-31 · Mes CV : cartes plus hautes, deux à l'écran
 
 Retour d'Ephraïm : cartes compactes trop basses, trois points invisibles. Carte verticale d'environ 200 px : bande à la couleur du CV avec la page dessinée, nom sur deux lignes, étiquettes, modèle et date. Deux cartes tiennent à l'écran, la troisième dépasse. Trois points dans un rond foncé bien visible. « Mes CV » + nombre + « Sélectionner » sur une seule ligne.
+
+## 2026-10-31 · Mes lettres de motivation : même carte que les CV
+
+Les lettres reprennent la carte des CV (deux à l'écran, la troisième dépasse) : bande ambrée avec le dessin de lettre de l'onglet Vue (MenuArt « letter »), titre sur deux lignes, ligne d'info. Titre et ligne restent fournis par server.tsx (fil lettre).

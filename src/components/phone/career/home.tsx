@@ -699,14 +699,20 @@ function DocumentsPanel({
             <p className="nb-pf-vide nb-cr-vide-cv">{t("docs.lettersEmpty")}</p>
           ) : (
             <ul className="nb-doc-rangee" data-rangee="">
-              {letters.map((letter) => (
-                <li key={letter.id} className="nb-doc-case">
-                  <Link href={letter.href} className="nb-cr-carte nb-doc-lettre">
-                    <span className="nb-doc-i" data-lettre="" aria-hidden>
-                      <PhoneIcon name="document" size={19} />
+              {letters.map((letter, at) => (
+                // Same card as a CV (Ephraïm, 31/10/2026): two on the screen, the letter drawing
+                // of the « Vue » tab on a warm band, the title on two lines at most, then its line.
+                <li
+                  key={letter.id}
+                  className="nb-cr-carte nb-cr-cv"
+                  style={{ animationDelay: `${at * 0.08}s` }}
+                >
+                  <Link href={letter.href} className="nb-cr-cv-l">
+                    <span className="nb-cr-cv-bande" data-lettre="">
+                      <MenuArt name="letter" size="lg" />
                     </span>
-                    <span className="nb-doc-t">
-                      <b>{letter.title}</b>
+                    <span className="nb-cr-cv-t">
+                      <b title={letter.title}>{letter.title}</b>
                       <small>{letter.line}</small>
                     </span>
                   </Link>
