@@ -9919,7 +9919,7 @@ Conventions :
 | `phoneCareer.cv.imported` | Importé |
 | `phoneCareer.cv.deleted` | CV supprimé. |
 | `phoneCareer.progression.stepText.skill` | {count, plural, one {Une offre de plus vous correspond} other {# offres de plus vous correspondent}} |
-| `phoneCareer.progression.stepText.project` | Montrez ce que vous savez faire, en 2 minutes |
+| `phoneCareer.progression.stepText.project` | Montrez ce que vous savez faire, en 2 minutes |
 | `phoneCareer.progression.stepText.interview` | Simulation avec Orbi, 10 minutes |
 | `phoneCareer.progression.stepText.cv` | Orbi le prépare depuis votre profil |
 | `phoneCareer.progression.stepText.about` | Quelques lignes sur vous, en 2 minutes |

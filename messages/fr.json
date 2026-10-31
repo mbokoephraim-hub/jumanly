@@ -11942,7 +11942,7 @@
       },
       "stepText": {
         "skill": "{count, plural, one {Une offre de plus vous correspond} other {# offres de plus vous correspondent}}",
-        "project": "Montrez ce que vous savez faire, en 2 minutes",
+        "project": "Montrez ce que vous savez faire, en 2 minutes",
         "interview": "Simulation avec Orbi, 10 minutes",
         "cv": "Orbi le prépare depuis votre profil",
         "about": "Quelques lignes sur vous, en 2 minutes",
