@@ -6336,14 +6336,18 @@ textarea.nb-ca-in[data-haut] {
   background: var(--nb-corail);
   color: var(--nb-encre);
 }
+/* Confirmation sheets: the text and the buttons line up with the title, the text is set tight
+   (Ephraïm, 31/10/2026). */
 .nb-ca-feuille-d {
-  padding: 0 18px;
+  margin: 6px 0 0;
+  padding: 0;
+  line-height: 1.4;
 }
 .nb-ca-feuille-b {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 18px 18px 0;
+  padding: 18px 0 0;
 }
 .nb-ca-feuille {
   display: flex;
