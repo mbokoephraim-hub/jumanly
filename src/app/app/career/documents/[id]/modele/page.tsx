@@ -41,7 +41,7 @@ export default async function LetterModelPage({
     listPublicPlans(db),
     db.profilePhoto.findUnique({ where: { userId: user.id }, select: { userId: true } }),
   ]);
-  const data = await sheetDataOf(facts, letter);
+  const data = await sheetDataOf(facts, { text: letter.data.text, updatedAt: letter.updatedAt });
   const error =
     query.erreur === "locked"
       ? t("error.locked")

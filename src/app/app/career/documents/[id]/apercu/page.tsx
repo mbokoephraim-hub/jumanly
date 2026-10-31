@@ -31,7 +31,7 @@ export default async function LetterPreviewPage({
     getTranslations("letterModel"),
     letterFacts(db, user.id, letter.data.jobId),
   ]);
-  const data = await sheetDataOf(facts, letter);
+  const data = await sheetDataOf(facts, { text: letter.data.text, updatedAt: letter.updatedAt });
   const models = `/app/career/documents/${id}/modele`;
 
   return (

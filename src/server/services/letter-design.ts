@@ -123,7 +123,7 @@ export async function letterPhoto(db: PrismaClient, userId: string) {
     select: { bytes: true, contentType: true },
   });
   if (!photo) return null;
-  const format =
+  const format: "jpg" | "png" | null =
     photo.contentType === "image/jpeg" ? "jpg" : photo.contentType === "image/png" ? "png" : null;
   return format ? { data: Buffer.from(photo.bytes), format } : null;
 }
