@@ -9032,6 +9032,14 @@ Conventions :
 | `phoneExplorer.offer.education` | Niveau d’études |
 | `phoneExplorer.offer.languages` | Langues |
 | `phoneExplorer.offer.openings` | Postes à pourvoir |
+| `phoneExplorer.offer.openingsCount` | {count, plural, one {# poste} other {# postes}} |
+| `phoneExplorer.offer.languageLevel` | {level} · {word} |
+| `phoneExplorer.offer.cefr.A1` | Débutant |
+| `phoneExplorer.offer.cefr.A2` | Élémentaire |
+| `phoneExplorer.offer.cefr.B1` | Intermédiaire |
+| `phoneExplorer.offer.cefr.B2` | Avancé |
+| `phoneExplorer.offer.cefr.C1` | Autonome |
+| `phoneExplorer.offer.cefr.C2` | Maîtrise |
 | `phoneExplorer.offer.closes` | Candidatures jusqu’au |
 | `phoneExplorer.offer.companyAbout` | À propos de {company} |
 | `phoneExplorer.offer.benefits` | Ce qu’on offre |
