@@ -37,6 +37,10 @@ jobs:
       # Valeurs de test uniquement (le serveur e2e tourne sur le port 3100).
       BETTER_AUTH_SECRET: secret-de-test-ci-uniquement-0123456789abcdef # gitleaks:allow
       BETTER_AUTH_URL: http://localhost:3100
+      # Les parcours e2e passent par l'inscription publique : la CI la construit ouverte. En
+      # production, tant que NEXT_PUBLIC_SIGNUP_OPEN ne vaut pas 1, les boutons mènent à la liste
+      # d'attente (src/lib/signup.ts, vérifié par tests/unit/site.test.ts).
+      NEXT_PUBLIC_SIGNUP_OPEN: "1"
     services:
       postgres:
         image: pgvector/pgvector:pg16
