@@ -11384,7 +11384,9 @@
       "modele": "Modèle",
       "contenu": "Mes informations",
       "style": "Style",
-      "apercu": "Aperçu"
+      "apercu": "Aperçu",
+      "studio": "Studio",
+      "voir": "Aperçu"
     },
     "start": {
       "title": "Nouveau CV",
@@ -11398,7 +11400,44 @@
       "import": "Importer mon CV",
       "importText": "PDF, Word ou photo, Orbi le lit pour vous",
       "noLogo": "Le CV téléchargé ne porte ni logo ni couleur Jumanly.",
-      "limit": "Vous avez déjà 10 CV, le maximum. Supprimez-en un pour en créer un nouveau."
+      "limit": "Vous avez déjà 10 CV, le maximum. Supprimez-en un pour en créer un nouveau.",
+      "intro": "Votre profil remplit déjà {percent} % du CV. Choisissez comment commencer, puis validez.",
+      "choose": "Comment voulez-vous remplir votre CV ?",
+      "advised": "Conseillé",
+      "pro": "Pro",
+      "profil": {
+        "title": "Reprendre les informations de mon profil",
+        "text": "Tout ce que vous avez rempli dans votre profil est placé dans les cases. Vous pourrez tout modifier."
+      },
+      "zero": {
+        "title": "Tout écrire moi-même",
+        "text": "Vous remplissez chaque case vous-même, de A à Z."
+      },
+      "offre": {
+        "title": "Adapter à une offre",
+        "text": "Orbi prépare un CV pour une offre précise, à partir de votre profil."
+      },
+      "lockedTitle": "Réservé à la formule {plan}",
+      "lockedText": "Orbi lit l’offre et met en avant, dans votre CV, ce qui compte pour elle. Les deux autres choix restent ouverts à tous.",
+      "lockedSee": "Voir les formules",
+      "offerWhich": "Pour quelle offre ?",
+      "offerNone": "Enregistrez une offre ou postulez : elle apparaîtra ici.",
+      "offerFind": "Voir les offres",
+      "validate": "Valider",
+      "validating": "Préparation…",
+      "importLead": "Vous avez déjà un CV en fichier ?",
+      "importLink": "Importer",
+      "error": {
+        "limite": "Vous avez déjà 10 CV, le maximum. Supprimez-en un pour en créer un nouveau.",
+        "choix": "Choisissez une option pour continuer.",
+        "offre": "Adapter à une offre fait partie d’une formule supérieure.",
+        "job": "Choisissez l’offre pour laquelle adapter votre CV.",
+        "consent": "Pour qu’Orbi adapte votre CV, autorisez l’aide d’Orbi dans Paramètres › Confidentialité.",
+        "entitlement": "Adapter à une offre fait partie d’une formule supérieure.",
+        "quota": "Vos crédits Orbi du mois sont épuisés. Vous pouvez partir de votre profil.",
+        "unavailable": "Orbi n’est pas disponible pour le moment. Réessayez dans un instant.",
+        "empty": "Votre profil est encore vide : Orbi n’a rien à adapter."
+      }
     },
     "template": {
       "title": "Choisir un modèle",
@@ -11700,7 +11739,8 @@
         "experience": "Expériences",
         "education": "Formation",
         "languages": "Langues",
-        "references": "Références"
+        "references": "Références",
+        "links": "Liens (portfolio, réseaux)"
       },
       "name": "Nom complet",
       "headline": "Titre sur ce CV",
@@ -11746,7 +11786,117 @@
       "referenceRolePlaceholder": "Par exemple : Responsable RH, Banque du Fleuve",
       "referenceContact": "Contact",
       "referenceContactHint": "Son e-mail, ou « Sur demande ».",
-      "addReference": "Ajouter une référence"
+      "addReference": "Ajouter une référence",
+      "part": {
+        "identity": {
+          "title": "Identité et coordonnées",
+          "text": "Votre nom, votre titre et comment vous joindre."
+        },
+        "summary": {
+          "title": "Profil professionnel",
+          "text": "Présentez-vous : qui vous êtes, ce que vous savez faire, ce que vous cherchez."
+        },
+        "experience": {
+          "title": "Expériences",
+          "text": "Chaque poste avec ses dates et les points clés de ce que vous avez fait."
+        },
+        "education": {
+          "title": "Formation",
+          "text": "Vos diplômes et vos écoles."
+        },
+        "skills": {
+          "title": "Compétences et langues",
+          "text": "Ce que vous savez faire et les langues que vous parlez."
+        },
+        "achievements": {
+          "title": "Réalisations et liens",
+          "text": "Vos réussites concrètes et les liens vers votre portfolio ou vos réseaux."
+        },
+        "references": {
+          "title": "Références",
+          "text": "Des personnes qui peuvent parler de votre travail."
+        }
+      },
+      "partOf": "Partie {n} sur {all}",
+      "previous": "Précédent",
+      "nextPart": "Suivant",
+      "validate": "Valider mes informations",
+      "nextIs": "Ensuite : {name}",
+      "onCv": "Sur le CV",
+      "offCv": "Masqué",
+      "summaryPlaceholder": "Exemple : comptable depuis 4 ans dans une PME, je tiens la paie et la trésorerie…",
+      "lines": {
+        "empty": "Conseillé : 6 à 8 lignes sur une page A4. Vous pouvez écrire autant que vous voulez.",
+        "short": "{count, plural, one {# ligne} other {# lignes}} sur une page A4 · un peu court, 6 à 8 conseillées",
+        "good": "{count} lignes sur une page A4 · bonne longueur",
+        "long": "{count} lignes sur une page A4 · c’est long, 6 à 8 conseillées"
+      },
+      "linksHint": "Ils s’affichent avec vos coordonnées, en adresse courte.",
+      "linkLabel": "Nom du lien {n}",
+      "linkLabelPlaceholder": "Portfolio",
+      "linkUrl": "Adresse du lien {n}",
+      "linkUrlPlaceholder": "https://…",
+      "addLink": "Ajouter un lien"
+    },
+    "orbiField": {
+      "improve": "Améliorer",
+      "busy": "Orbi écrit…",
+      "locked": "Orbi · {plan}",
+      "undo": "Revenir au texte d’avant",
+      "redo": "Remettre le texte d’Orbi",
+      "done": "Orbi a amélioré ce texte. Les changements sont surlignés.",
+      "changed": "{count, plural, one {Ce qu’Orbi a changé} other {Ce qu’Orbi a changé (# lignes)}}",
+      "tip": "Orbi peut améliorer chaque case : touchez « Améliorer ». Ses changements sont surlignés, et les flèches permettent de revenir en arrière.",
+      "why": {
+        "entitlement": "Orbi améliore chaque case avec la formule {plan}.",
+        "consent": "Autorisez d’abord l’aide d’Orbi.",
+        "quota": "Vos crédits Orbi du mois sont épuisés."
+      },
+      "whyLink": {
+        "entitlement": "Voir les formules",
+        "consent": "Ouvrir les paramètres",
+        "quota": "Voir les formules"
+      },
+      "error": {
+        "empty": "Écrivez d’abord quelque chose dans cette case.",
+        "same": "Orbi n’a rien trouvé à améliorer ici.",
+        "consent": "Autorisez l’aide d’Orbi dans Paramètres › Confidentialité.",
+        "entitlement": "Orbi améliore les cases avec une formule supérieure.",
+        "quota": "Vos crédits Orbi du mois sont épuisés.",
+        "unavailable": "Orbi n’est pas disponible pour le moment. Réessayez dans un instant."
+      }
+    },
+    "studio": {
+      "title": "Studio",
+      "sub": "Choisissez votre photo, le modèle et la couleur",
+      "live": "Aperçu en direct de votre CV",
+      "current": "Modèle : {name}",
+      "photo": "Photo",
+      "withPhoto": "Avec photo",
+      "noPhoto": "Pas de photo",
+      "photoMissing": "Vous n’avez pas encore de photo de profil : ajoutez-en une dans Mon profil pour l’afficher.",
+      "photoTemplate": "Ce modèle n’affiche pas de photo : choisissez un modèle avec photo pour la voir.",
+      "templates": "Modèles",
+      "included": "{included} sur {count} inclus dans votre formule",
+      "color": "Couleur",
+      "cancelAll": "Tout annuler",
+      "see": "Voir le CV"
+    },
+    "cancel": {
+      "title": "Tout annuler ?",
+      "textNew": "Ce CV ne sera pas gardé. Votre profil, lui, ne change pas.",
+      "text": "Le CV reprend l’apparence qu’il avait avant. Vos textes restent enregistrés.",
+      "keep": "Continuer",
+      "confirm": "Tout annuler"
+    },
+    "final": {
+      "title": "Votre CV",
+      "editAgain": "Modifier encore",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "savedTitle": "CV enregistré",
+      "savedText": "Votre CV a bien été enregistré et il est prêt à être utilisé.",
+      "backToDocuments": "Retour aux documents"
     },
     "check": {
       "headline": {

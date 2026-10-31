@@ -9,8 +9,18 @@ import { languageName } from "@/lib/dates";
 import { setCvTemplateStepAction } from "@/server/actions/cv-flow";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { cvChecks, cvScore, targetSkillsFor } from "@/server/services/cv-coach";
-import { listProjects } from "@/server/services/portfolio";
+import { aiReadiness } from "@/server/ai";
+import {
+  cvChecks,
+  cvScore,
+  CV_TEXT_GATE,
+  pendingSuggestions,
+  targetSkillsFor,
+} from "@/server/services/cv-coach";
+import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
+import { initialsOf } from "../fil/data";
+import { CvFinalStep } from "./final";
+import { CvStudioStep } from "./studio";
 import { profileLanguageCodes } from "@/server/services/profile-view";
 import { countryOptions } from "@/config/countries";
 import { cvTextLabelData } from "@/features/cv/labels";
@@ -51,7 +61,8 @@ export async function PhoneCvSteps({
   if (!cv) notFound();
   const t = await getTranslations();
   const d = dynamic(t);
-  const steps = await stepsOf(step, cv.id);
+  const isNew = query.nouveau === "1";
+  const steps = await stepsOf(step, cv.id, isNew);
   const editor = `/app/career/cv/${cv.id}`;
 
   if (step === "modele") {
@@ -83,9 +94,11 @@ export async function PhoneCvSteps({
   const { template, style, content } = source;
 
   if (step === "contenu") {
-    const [labels, projects] = await Promise.all([
+    const [labels, readiness, plans, pending] = await Promise.all([
       cvTextLabelData(style.titlesLanguage),
-      listProjects(db, cv.profileId),
+      aiReadiness(db, user.id, "cv_coach", CV_TEXT_GATE),
+      listPublicPlans(db),
+      pendingSuggestions(db, user.id, cv.id),
     ]);
     return (
       <CvTexts>
@@ -93,18 +106,69 @@ export async function PhoneCvSteps({
           key={cv.updatedAt.toISOString()}
           cvId={cv.id}
           initial={content}
-          fromProfile={{
-            achievements: projects
-              .map((project) => project.title.trim())
-              .filter(Boolean)
-              .slice(0, 6),
-          }}
+          proposals={pending.flatMap((item) =>
+            item.payload.after !== null && item.payload.kind === "tailor"
+              ? [{ target: item.payload.target, after: item.payload.after }]
+              : [],
+          )}
           labels={labels}
-          template={template}
-          style={style}
-          photoUrl={source.photoUrl}
           languages={profileLanguageCodes.map((code) => ({ value: code, label: label(code) }))}
           countries={countryOptions("code")}
+          steps={steps}
+          orbi={{
+            state: readiness === "unavailable" ? "ready" : readiness,
+            plan: talentPlanFor(plans, CV_TEXT_GATE.key) || t("phoneCv.start.pro"),
+          }}
+          isNew={isNew}
+        />
+      </CvTexts>
+    );
+  }
+
+  if (step === "studio") {
+    const [{ choices }, owner2] = await Promise.all([
+      templateChoices(user.id),
+      db.user.findUniqueOrThrow({
+        where: { id: user.id },
+        select: { firstName: true, lastName: true, name: true },
+      }),
+    ]);
+    const { data } = await previewData(source);
+    const colors = [...cvColors]
+      .sort((a, b) => Number(b.ats) - Number(a.ats))
+      .map((item) => ({ ...item, name: d(`cv.colors.${item.code}`) }));
+    const name = [owner2.firstName, owner2.lastName].filter(Boolean).join(" ") || owner2.name || "";
+    return (
+      <CvTexts>
+        <CvStudioStep
+          key={cv.updatedAt.toISOString()}
+          cvId={cv.id}
+          title={cv.title}
+          data={data}
+          templateId={template.id}
+          style={style}
+          choices={choices}
+          colors={colors}
+          photo={{ url: source.photoUrl, initials: initialsOf(name || "?") }}
+          isNew={isNew}
+          steps={steps}
+        />
+      </CvTexts>
+    );
+  }
+
+  if (step === "voir") {
+    const { data } = await previewData(source);
+    return (
+      <CvTexts>
+        <CvFinalStep
+          key={cv.updatedAt.toISOString()}
+          cvId={cv.id}
+          title={cv.title}
+          data={data}
+          template={template}
+          style={style}
+          isNew={isNew}
           steps={steps}
         />
       </CvTexts>

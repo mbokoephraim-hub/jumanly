@@ -506,3 +506,99 @@ export async function pendingSuggestions(db: PrismaClient, userId: string, docum
     return payload && payload.after !== null ? [{ id: row.id, payload }] : [];
   });
 }
+
+// ─── Orbi on each box of « Mes informations » (Ephraïm, 31/10/2026) ─────────────────────────
+
+/** The boxes Orbi can rewrite: the title, the bio, the points of one experience, the achievements. */
+export const cvTextKinds = ["headline", "summary", "bullets", "achievements"] as const;
+export type CvTextKind = (typeof cvTextKinds)[number];
+
+/** Orbi rewrites the CV for Pro and above (`career.cv.tailor`, the CV rewriting right). */
+export const CV_TEXT_GATE = { key: "career.cv.tailor" };
+
+const textsOutput = z.object({ texts: z.array(z.string()) });
+
+const TEXTS_SYSTEM = [
+  "Tu es Orbi, l'assistant de Jumanly, une plateforme d'emploi africaine. Tu améliores un texte d'un CV, en français simple et professionnel.",
+  "Tu reçois une liste « texts » : tu renvoies exactement le même nombre de textes, dans le même ordre, chacun amélioré.",
+  "Règles strictes :",
+  "- Garde le sens. Corrige l'orthographe, rends le texte clair, concret, et commence les points par un verbe d'action.",
+  "- N'invente jamais d'expérience, de diplôme, de compétence, d'entreprise ni de chiffre. Si un résultat chiffré manque, écris « [chiffre] ».",
+  "- Un titre reste court (moins de 12 mots). Un résumé reste à la première personne, sans limite imposée, idéalement 6 à 8 lignes.",
+  "- N'utilise et ne mentionne jamais : âge, genre, photo, origine, religion, situation familiale, santé.",
+].join("\n");
+
+/** Tidy by rules when the model is not used: spaces, a capital, a full stop on long lines. */
+export function tidyCvText(text: string, kind: CvTextKind) {
+  const clean = text.replace(/\s+/g, " ").trim();
+  if (!clean) return clean;
+  const capital = clean.charAt(0).toLocaleUpperCase("fr") + clean.slice(1);
+  if (kind === "headline") return capital.replace(/[.\s]+$/, "");
+  return /[.!?…»)]$/.test(capital) ? capital : `${capital}.`;
+}
+
+export type CvTextsResult =
+  { ok: true; texts: string[] } | { ok: false; error: "empty" | "same" | AiError["code"] };
+
+/**
+ * « Améliorer avec Orbi » on one box: the texts proposed come back to the form, where they are
+ * shown highlighted with « Annuler » and « Rétablir »; nothing is saved by this call. Each text
+ * is checked like every suggestion: no figure the CV does not already hold.
+ */
+export async function rewriteCvTexts(
+  db: PrismaClient,
+  userId: string,
+  documentId: string,
+  input: { kind: CvTextKind; texts: string[]; context: CvContent },
+): Promise<CvTextsResult> {
+  const document = await db.document.findFirst({
+    where: { id: documentId, kind: "cv", profile: { userId } },
+    select: { id: true },
+  });
+  const texts = input.texts.map((text) => text.trim());
+  if (!document || !texts.some(Boolean)) return { ok: false, error: "empty" };
+  const content = input.context;
+  const max = input.kind === "summary" ? 6000 : input.kind === "headline" ? 160 : 400;
+  const template = () => ({ texts: texts.map((text) => tidyCvText(text, input.kind)) });
+  let proposed: string[];
+  try {
+    const run = await runAi(db, {
+      userId,
+      feature: "cv_coach",
+      gate: CV_TEXT_GATE,
+      system: TEXTS_SYSTEM,
+      prompt: [
+        `Case du CV : ${input.kind}`,
+        "Contexte du CV (JSON, pour comprendre, ne pas recopier) :",
+        JSON.stringify({
+          headline: content.info.headline,
+          experiences: content.experiences.map((item) => item.title),
+          skills: content.skills.map((skill) => skill.name),
+        }),
+        "Textes à améliorer (JSON) :",
+        JSON.stringify({ texts }),
+      ].join("\n"),
+      schema: textsOutput,
+      template,
+    });
+    proposed = run.output.texts;
+  } catch (error) {
+    if (error instanceof AiError) return { ok: false, error: error.code };
+    throw error;
+  }
+  const known = digits(`${texts.join(" ")} ${JSON.stringify(content)}`);
+  const safe =
+    proposed.length === texts.length &&
+    proposed.every(
+      (text, index) =>
+        // An empty line stays empty; a filled one gets a text without new figures.
+        (texts[index] === "" ? text.trim() === "" : text.trim() !== "") &&
+        text.length <= max &&
+        [...digits(text)].every((value) => known.has(value)),
+    );
+  const result = (safe ? proposed : template().texts).map((text, index) =>
+    texts[index] === "" ? "" : text.trim(),
+  );
+  if (result.every((text, index) => text === texts[index])) return { ok: false, error: "same" };
+  return { ok: true, texts: result };
+}

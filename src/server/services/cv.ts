@@ -33,6 +33,9 @@ export async function canUseTemplate(db: PrismaClient, subject: Subject, templat
   return includesAccess(await templatesAccess(db, subject), template.access);
 }
 
+/** The blocks of a CV that are not sections (achievements, references, links). */
+export const cvExtraBlocks = ["achievements", "references", "links"] as const;
+
 export const cvSectionIds = ["summary", "experience", "education", "skills", "languages"] as const;
 export type CvSectionId = (typeof cvSectionIds)[number];
 
@@ -79,8 +82,10 @@ const cvContentSchema = z.object({
   references: z
     .array(z.object({ name: z.string(), role: z.string(), contact: z.string() }))
     .default([]),
-  /** The blocks added on 29/10 that the talent chose not to print. */
-  hiddenExtras: z.array(z.enum(["achievements", "references"])).default([]),
+  /** « Liens » (Ephraïm, 31/10): the portfolio and the networks, printed with the contacts. */
+  links: z.array(z.object({ label: z.string(), url: z.string() })).default([]),
+  /** The blocks added on 29/10 and 31/10 that the talent chose not to print. */
+  hiddenExtras: z.array(z.enum(cvExtraBlocks)).default([]),
 });
 
 /** What the form « Mes informations » sends back: the whole content, bounded. */
@@ -94,7 +99,8 @@ export const cvContentInputSchema = z.object({
     showEmail: z.boolean(),
     phone: z.string().trim().max(40),
   }),
-  summary: z.string().trim().max(1500),
+  // No limit for the talent (Ephraïm, 31/10): about 6 to 8 lines on an A4 page is advised.
+  summary: z.string().trim().max(6000),
   experiences: z
     .array(
       z.object({
@@ -146,7 +152,10 @@ export const cvContentInputSchema = z.object({
       }),
     )
     .max(6),
-  hiddenExtras: z.array(z.enum(["achievements", "references"])),
+  links: z
+    .array(z.object({ label: z.string().trim().max(60), url: z.string().trim().max(300) }))
+    .max(8),
+  hiddenExtras: z.array(z.enum(cvExtraBlocks)),
 });
 
 export type CvContent = z.infer<typeof cvContentSchema>;
@@ -172,6 +181,7 @@ export const emptyCv: CvContent = {
   sections: cvSectionIds.map((id) => ({ id, visible: true })),
   achievements: [],
   references: [],
+  links: [],
   hiddenExtras: [],
 };
 
@@ -227,6 +237,7 @@ export function cvFromProfile(profile: FullProfile, previous?: CvContent): CvCon
     sections: previous?.sections ?? emptyCv.sections,
     achievements: previous?.achievements ?? [],
     references: previous?.references ?? [],
+    links: previous?.links ?? [],
     hiddenExtras: previous?.hiddenExtras ?? [],
   };
 }

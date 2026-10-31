@@ -51,6 +51,15 @@ export function splitName(name: string) {
   return { firstName: words[0] ?? "", lastName: words.slice(1).join(" ") };
 }
 
+/** « https://www.behance.net/awa/ » is printed « behance.net/awa ». */
+export function shortLink(url: string) {
+  return url
+    .trim()
+    .replace(/^https?:\/\//i, "")
+    .replace(/^www\./i, "")
+    .replace(/\/+$/, "");
+}
+
 /** A stored CV, as printed. Hidden sections are left out. */
 export function documentFromCv(
   content: CvContent,
@@ -170,6 +179,12 @@ export function documentFromCv(
       ...(place ? [{ value: place }] : []),
       ...(content.info.showEmail && content.info.email ? [{ value: content.info.email }] : []),
       ...(content.info.phone ? [{ value: content.info.phone }] : []),
+      // Portfolio and networks (Ephraïm, 31/10): the address, short, with the contacts.
+      ...(content.hiddenExtras.includes("links")
+        ? []
+        : content.links
+            .filter((link) => link.url.trim())
+            .map((link) => ({ value: shortLink(link.url) }))),
     ],
     photoUrl: photoUrl ?? undefined,
     blocks,

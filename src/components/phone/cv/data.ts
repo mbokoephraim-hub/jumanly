@@ -75,10 +75,11 @@ export async function templateChoices(userId: string) {
 }
 
 /** The steps of a CV, each one opening its own screen. */
-export async function stepsOf(current: CvStep, cvId: string | null) {
+export async function stepsOf(current: CvStep, cvId: string | null, isNew = false) {
   const t = await getTranslations("phoneCv.steps");
+  const suffix = isNew ? "&nouveau=1" : "";
   const hrefs = Object.fromEntries(
-    CV_STEPS.map((step) => [step, cvId ? `/app/career/cv/${cvId}?etape=${step}` : null]),
+    CV_STEPS.map((step) => [step, cvId ? `/app/career/cv/${cvId}?etape=${step}${suffix}` : null]),
   ) as Record<CvStep, string | null>;
   return {
     current,

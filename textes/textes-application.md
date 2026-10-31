@@ -9693,6 +9693,116 @@ Conventions :
 | `phoneCv.form.referenceContact` | Contact |
 | `phoneCv.form.referenceContactHint` | Son e-mail, ou « Sur demande ». |
 | `phoneCv.form.addReference` | Ajouter une référence |
+| `phoneCv.steps.studio` | Studio |
+| `phoneCv.steps.voir` | Aperçu |
+| `phoneCv.start.intro` | Votre profil remplit déjà {percent} % du CV. Choisissez comment commencer, puis validez. |
+| `phoneCv.start.choose` | Comment voulez-vous remplir votre CV ? |
+| `phoneCv.start.advised` | Conseillé |
+| `phoneCv.start.pro` | Pro |
+| `phoneCv.start.profil.title` | Reprendre les informations de mon profil |
+| `phoneCv.start.profil.text` | Tout ce que vous avez rempli dans votre profil est placé dans les cases. Vous pourrez tout modifier. |
+| `phoneCv.start.zero.title` | Tout écrire moi-même |
+| `phoneCv.start.zero.text` | Vous remplissez chaque case vous-même, de A à Z. |
+| `phoneCv.start.offre.title` | Adapter à une offre |
+| `phoneCv.start.offre.text` | Orbi prépare un CV pour une offre précise, à partir de votre profil. |
+| `phoneCv.start.lockedTitle` | Réservé à la formule {plan} |
+| `phoneCv.start.lockedText` | Orbi lit l’offre et met en avant, dans votre CV, ce qui compte pour elle. Les deux autres choix restent ouverts à tous. |
+| `phoneCv.start.lockedSee` | Voir les formules |
+| `phoneCv.start.offerWhich` | Pour quelle offre ? |
+| `phoneCv.start.offerNone` | Enregistrez une offre ou postulez : elle apparaîtra ici. |
+| `phoneCv.start.offerFind` | Voir les offres |
+| `phoneCv.start.validate` | Valider |
+| `phoneCv.start.validating` | Préparation… |
+| `phoneCv.start.importLead` | Vous avez déjà un CV en fichier ? |
+| `phoneCv.start.importLink` | Importer |
+| `phoneCv.start.error.limite` | Vous avez déjà 10 CV, le maximum. Supprimez-en un pour en créer un nouveau. |
+| `phoneCv.start.error.choix` | Choisissez une option pour continuer. |
+| `phoneCv.start.error.offre` | Adapter à une offre fait partie d’une formule supérieure. |
+| `phoneCv.start.error.job` | Choisissez l’offre pour laquelle adapter votre CV. |
+| `phoneCv.start.error.consent` | Pour qu’Orbi adapte votre CV, autorisez l’aide d’Orbi dans Paramètres › Confidentialité. |
+| `phoneCv.start.error.entitlement` | Adapter à une offre fait partie d’une formule supérieure. |
+| `phoneCv.start.error.quota` | Vos crédits Orbi du mois sont épuisés. Vous pouvez partir de votre profil. |
+| `phoneCv.start.error.unavailable` | Orbi n’est pas disponible pour le moment. Réessayez dans un instant. |
+| `phoneCv.start.error.empty` | Votre profil est encore vide : Orbi n’a rien à adapter. |
+| `phoneCv.form.part.identity.title` | Identité et coordonnées |
+| `phoneCv.form.part.identity.text` | Votre nom, votre titre et comment vous joindre. |
+| `phoneCv.form.part.summary.title` | Profil professionnel |
+| `phoneCv.form.part.summary.text` | Présentez-vous : qui vous êtes, ce que vous savez faire, ce que vous cherchez. |
+| `phoneCv.form.part.experience.title` | Expériences |
+| `phoneCv.form.part.experience.text` | Chaque poste avec ses dates et les points clés de ce que vous avez fait. |
+| `phoneCv.form.part.education.title` | Formation |
+| `phoneCv.form.part.education.text` | Vos diplômes et vos écoles. |
+| `phoneCv.form.part.skills.title` | Compétences et langues |
+| `phoneCv.form.part.skills.text` | Ce que vous savez faire et les langues que vous parlez. |
+| `phoneCv.form.part.achievements.title` | Réalisations et liens |
+| `phoneCv.form.part.achievements.text` | Vos réussites concrètes et les liens vers votre portfolio ou vos réseaux. |
+| `phoneCv.form.part.references.title` | Références |
+| `phoneCv.form.part.references.text` | Des personnes qui peuvent parler de votre travail. |
+| `phoneCv.form.partOf` | Partie {n} sur {all} |
+| `phoneCv.form.previous` | Précédent |
+| `phoneCv.form.nextPart` | Suivant |
+| `phoneCv.form.validate` | Valider mes informations |
+| `phoneCv.form.nextIs` | Ensuite : {name} |
+| `phoneCv.form.onCv` | Sur le CV |
+| `phoneCv.form.offCv` | Masqué |
+| `phoneCv.form.summaryPlaceholder` | Exemple : comptable depuis 4 ans dans une PME, je tiens la paie et la trésorerie… |
+| `phoneCv.form.lines.empty` | Conseillé : 6 à 8 lignes sur une page A4. Vous pouvez écrire autant que vous voulez. |
+| `phoneCv.form.lines.short` | {count, plural, one {# ligne} other {# lignes}} sur une page A4 · un peu court, 6 à 8 conseillées |
+| `phoneCv.form.lines.good` | {count} lignes sur une page A4 · bonne longueur |
+| `phoneCv.form.lines.long` | {count} lignes sur une page A4 · c’est long, 6 à 8 conseillées |
+| `phoneCv.form.block.links` | Liens (portfolio, réseaux) |
+| `phoneCv.form.linksHint` | Ils s’affichent avec vos coordonnées, en adresse courte. |
+| `phoneCv.form.linkLabel` | Nom du lien {n} |
+| `phoneCv.form.linkLabelPlaceholder` | Portfolio |
+| `phoneCv.form.linkUrl` | Adresse du lien {n} |
+| `phoneCv.form.linkUrlPlaceholder` | https://… |
+| `phoneCv.form.addLink` | Ajouter un lien |
+| `phoneCv.orbiField.improve` | Améliorer |
+| `phoneCv.orbiField.busy` | Orbi écrit… |
+| `phoneCv.orbiField.locked` | Orbi · {plan} |
+| `phoneCv.orbiField.undo` | Revenir au texte d’avant |
+| `phoneCv.orbiField.redo` | Remettre le texte d’Orbi |
+| `phoneCv.orbiField.done` | Orbi a amélioré ce texte. Les changements sont surlignés. |
+| `phoneCv.orbiField.changed` | {count, plural, one {Ce qu’Orbi a changé} other {Ce qu’Orbi a changé (# lignes)}} |
+| `phoneCv.orbiField.tip` | Orbi peut améliorer chaque case : touchez « Améliorer ». Ses changements sont surlignés, et les flèches permettent de revenir en arrière. |
+| `phoneCv.orbiField.why.entitlement` | Orbi améliore chaque case avec la formule {plan}. |
+| `phoneCv.orbiField.why.consent` | Autorisez d’abord l’aide d’Orbi. |
+| `phoneCv.orbiField.why.quota` | Vos crédits Orbi du mois sont épuisés. |
+| `phoneCv.orbiField.whyLink.entitlement` | Voir les formules |
+| `phoneCv.orbiField.whyLink.consent` | Ouvrir les paramètres |
+| `phoneCv.orbiField.whyLink.quota` | Voir les formules |
+| `phoneCv.orbiField.error.empty` | Écrivez d’abord quelque chose dans cette case. |
+| `phoneCv.orbiField.error.same` | Orbi n’a rien trouvé à améliorer ici. |
+| `phoneCv.orbiField.error.consent` | Autorisez l’aide d’Orbi dans Paramètres › Confidentialité. |
+| `phoneCv.orbiField.error.entitlement` | Orbi améliore les cases avec une formule supérieure. |
+| `phoneCv.orbiField.error.quota` | Vos crédits Orbi du mois sont épuisés. |
+| `phoneCv.orbiField.error.unavailable` | Orbi n’est pas disponible pour le moment. Réessayez dans un instant. |
+| `phoneCv.studio.title` | Studio |
+| `phoneCv.studio.sub` | Choisissez votre photo, le modèle et la couleur |
+| `phoneCv.studio.live` | Aperçu en direct de votre CV |
+| `phoneCv.studio.current` | Modèle : {name} |
+| `phoneCv.studio.photo` | Photo |
+| `phoneCv.studio.withPhoto` | Avec photo |
+| `phoneCv.studio.noPhoto` | Pas de photo |
+| `phoneCv.studio.photoMissing` | Vous n’avez pas encore de photo de profil : ajoutez-en une dans Mon profil pour l’afficher. |
+| `phoneCv.studio.photoTemplate` | Ce modèle n’affiche pas de photo : choisissez un modèle avec photo pour la voir. |
+| `phoneCv.studio.templates` | Modèles |
+| `phoneCv.studio.included` | {included} sur {count} inclus dans votre formule |
+| `phoneCv.studio.color` | Couleur |
+| `phoneCv.studio.cancelAll` | Tout annuler |
+| `phoneCv.studio.see` | Voir le CV |
+| `phoneCv.cancel.title` | Tout annuler ? |
+| `phoneCv.cancel.textNew` | Ce CV ne sera pas gardé. Votre profil, lui, ne change pas. |
+| `phoneCv.cancel.text` | Le CV reprend l’apparence qu’il avait avant. Vos textes restent enregistrés. |
+| `phoneCv.cancel.keep` | Continuer |
+| `phoneCv.cancel.confirm` | Tout annuler |
+| `phoneCv.final.title` | Votre CV |
+| `phoneCv.final.editAgain` | Modifier encore |
+| `phoneCv.final.cancel` | Annuler |
+| `phoneCv.final.save` | Enregistrer |
+| `phoneCv.final.savedTitle` | CV enregistré |
+| `phoneCv.final.savedText` | Votre CV a bien été enregistré et il est prêt à être utilisé. |
+| `phoneCv.final.backToDocuments` | Retour aux documents |
 | `phoneCv.preview.save` | Enregistrer |
 | `phoneCv.preview.savedButton` | Enregistré ✓ |
 | `phoneCv.preview.savedIn` | « {title} » est enregistré dans votre bibliothèque de CV. |

@@ -17,12 +17,28 @@ import { CV_FILE_MAX_BYTES } from "@/server/services/cv-file";
 import { parseImport } from "@/server/services/cv-import";
 import { getFullProfile } from "@/server/services/profile";
 import { isPhone } from "@/server/view";
+import { can } from "@/server/entitlements";
+import { tailorOffers } from "@/server/services/career-documents";
+import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
+import { companyTone } from "@/components/phone/explorer/data";
+import { initialsOf } from "@/components/phone/fil/data";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("phoneCv");
   return { title: t("seo"), robots: { index: false } };
 }
 
+const START_ERRORS = [
+  "limite",
+  "choix",
+  "offre",
+  "job",
+  "consent",
+  "entitlement",
+  "quota",
+  "unavailable",
+  "empty",
+] as const;
 const IMPORT_ERRORS = ["format", "size", "empty", "unreadable", "photo", "orbi"] as const;
 const STEPS = ["depart", "modele", "orbi", "import", "trouve"] as const;
 
@@ -136,16 +152,37 @@ export default async function NewCvPage({ searchParams }: PageProps<"/app/career
     );
   }
 
-  const profile = await db.talentProfile.findUnique({
-    where: { userId: user.id },
-    select: { completeness: true },
-  });
+  const subject = { type: "user" as const, id: user.id };
+  const [profile, canTailor, plans] = await Promise.all([
+    db.talentProfile.findUnique({ where: { userId: user.id }, select: { completeness: true } }),
+    can(db, subject, "career.cv.tailor"),
+    listPublicPlans(db),
+  ]);
+  const asked = typeof query.offre === "string" ? query.offre.slice(0, 60) : undefined;
+  const offers = canTailor ? await tailorOffers(db, user.id, asked) : [];
+  const error = START_ERRORS.find((code) => code === query.erreur);
+  const choice = query.choix === "offre" || asked ? "offre" : null;
   return (
     <CvTexts>
       <FreshOnEachVisit>
         <CvStart
+          key={`${error ?? ""}-${choice ?? ""}`}
           percent={profile?.completeness ?? 0}
-          error={query.erreur === "limite" ? t("phoneCv.start.limit") : null}
+          error={error ? dynamic(t)(`phoneCv.start.error.${error}`) : null}
+          tailor={{
+            locked: canTailor
+              ? null
+              : talentPlanFor(plans, "career.cv.tailor") || t("phoneCv.start.pro"),
+          }}
+          offers={offers.map((offer) => ({
+            id: offer.id,
+            title: offer.title,
+            company: offer.company,
+            initials: initialsOf(offer.company),
+            logo: offer.logo,
+            tone: companyTone(offer.company),
+          }))}
+          initial={{ mode: canTailor ? choice : null, job: asked ?? null }}
         />
       </FreshOnEachVisit>
     </CvTexts>
