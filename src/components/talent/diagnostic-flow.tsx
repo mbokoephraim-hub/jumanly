@@ -44,11 +44,31 @@ export type SkillSource = {
 };
 type Option = { value: string; label: string; hint?: string; art?: MenuArtName };
 
-const split = (value: string | undefined) =>
-  (value ?? "")
-    .split(/[,;\n]+/)
-    .map((item) => item.trim())
-    .filter(Boolean);
+/** The drawings of the site menu, on the questions (Ephraïm, 31/10/2026). */
+const questionArt: Partial<Record<string, MenuArtName>> = {
+  targetRole: "jobs",
+  familiarity: "career",
+  skills: "trainings",
+  experience: "companies",
+  ready: "cv",
+  confidence: "recruiters",
+  interviews: "talents",
+  applications: "jobs",
+  contacts: "connect",
+  obstacle: "why",
+};
+const readyArt: Record<ReadyItem, MenuArtName> = {
+  cv: "cv",
+  letter: "letter",
+  profile: "talents",
+  portfolio: "portfolio",
+};
+const obstacleArt: Record<string, MenuArtName> = {
+  a1: "career",
+  a2: "trainings",
+  a3: "cv",
+  a6: "connect",
+};
 
 /** The drawings of the site menu, on the questions (Ephraïm, 31/10/2026). */
 const questionArt: Partial<Record<string, MenuArtName>> = {
