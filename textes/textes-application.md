@@ -2661,12 +2661,25 @@ Conventions :
 | `apply.cv.profile` | Mon profil Jumanly |
 | `apply.cv.profileLine` | Sans CV joint : le recruteur voit votre profil. |
 | `apply.cv.create` | Créer un CV depuis mon profil |
+| `apply.cv.adaptDone` | Orbi a adapté votre CV à cette offre : il est choisi ci-dessous. Relisez-le dans Carrière si besoin. |
+| `apply.choice.title` | Comment voulez-vous postuler ? |
+| `apply.choice.existant` | Avec un CV existant |
+| `apply.choice.existantLine` | Choisissez le CV à envoyer parmi les vôtres. |
+| `apply.choice.existantNone` | Pas encore de CV : vous pourrez envoyer votre profil Jumanly. |
+| `apply.choice.adapter` | Adapter mon CV à cette offre |
+| `apply.choice.adapterLine` | Orbi vous aide : il prépare une copie de votre CV pour cette offre. |
+| `apply.choice.locked` | Avec la formule {plan} |
+| `apply.choice.importer` | Importer un CV |
+| `apply.choice.importerLine` | Un fichier que vous avez déjà : Orbi le lit pour vous. |
+| `apply.choice.creer` | Créer un CV |
+| `apply.choice.creerLine` | À partir de votre profil, en quelques minutes. |
 | `apply.docs.title` | Ajouter une lettre ou des documents |
 | `apply.docs.letter` | Lettre de motivation |
 | `apply.docs.words` | {count, plural, one {# mot} other {# mots}} |
 | `apply.docs.edit` | Modifier la lettre |
 | `apply.docs.remove` | Retirer {name} |
 | `apply.docs.add` | Ajouter un document |
+| `apply.docs.addLine` | Diplôme, attestation, lettre : ce que vous avez déjà. |
 | `apply.docs.certificateLine` | Obtenue le {date} |
 | `apply.docs.documentLine` | Enregistré le {date} |
 | `apply.docs.orbi.label` | Orbi peut aider |
@@ -9057,6 +9070,7 @@ Conventions :
 | `phoneExplorer.offer.unsavedToast` | Offre retirée des enregistrées. |
 | `phoneExplorer.offer.saveError` | L’offre n’a pas pu être enregistrée. Réessayez. |
 | `phoneExplorer.offer.apply` | Postuler |
+| `phoneExplorer.offer.resume` | Reprendre ma candidature |
 | `phoneExplorer.offer.applied` | Candidature envoyée |
 | `phoneExplorer.offer.appliedOpen` | Voir ma candidature |
 | `phoneExplorer.offer.closed` | Offre fermée |

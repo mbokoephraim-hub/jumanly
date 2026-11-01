@@ -204,6 +204,9 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
   const talent = await context.newPage();
   await logIn(talent, demo.talentFree);
   await talent.goto(`/app/jobs/${slug}/postuler`);
+  // First screen (01/11/2026): how to apply; « Avec un CV existant » is chosen.
+  await talent.getByRole("button", { name: "Continuer" }).click();
+  await expect(talent).toHaveURL(/etape=cv/);
   await talent.getByRole("button", { name: "Continuer" }).click();
   await expect(talent).toHaveURL(/etape=lettre/);
   const asked = talent.locator("fieldset").filter({ hasText: "Questions du recruteur" });
