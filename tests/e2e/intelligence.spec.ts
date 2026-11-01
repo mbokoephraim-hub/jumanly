@@ -55,10 +55,10 @@ test("score expliqué, import de CV et révision humaine", async ({
   }).toPass({ timeout: 30_000 });
   if (isMobile) {
     await expect(page.getByRole("checkbox", { name: /compétence/ })).toBeChecked();
-    await page.getByRole("button", { name: "Ajouter à mon profil et créer le CV" }).click();
-    await page.waitForURL(/etape=contenu/);
-    await page.goto("/app/career/cv");
-    await expect(page.locator(".nb-ca").first()).toContainText("Excel");
+    // « Remplir mon profil avec ce CV » fills the profile and opens the CV in the reader (31/10).
+    await page.getByRole("button", { name: /^Remplir mon profil avec ce CV/ }).click();
+    await expect(page).toHaveURL(/\/lire\?importe=profil/, { timeout: 20_000 });
+    await expect(page.getByText(/Excel/).filter({ visible: true }).first()).toBeVisible();
   } else {
     await expect(page.getByRole("switch", { name: /compétence/ })).toBeChecked();
     await page.getByRole("button", { name: "Ajouter à mon profil" }).click();
@@ -71,7 +71,13 @@ test("score expliqué, import de CV et révision humaine", async ({
   // On a phone (Modèle B), the offer's Orbi card links to the full score (`?pourquoi=1`).
   if (isMobile) {
     await page.goto(`/app/jobs/${JOB}`);
-    await page.getByRole("link", { name: "Voir le détail du score" }).click();
+    // The detail opens in a sheet over the offer (31/10); « Contester ce score » leads to the
+    // full score (`?pourquoi=1`).
+    await page
+      .getByRole("button", { name: "Voir le détail du score" })
+      .filter({ visible: true })
+      .click();
+    await page.getByRole("link", { name: "Contester ce score" }).filter({ visible: true }).click();
     await expect(page).toHaveURL(/pourquoi=1/);
   } else {
     await page.goto(`/app/jobs/${JOB}`);

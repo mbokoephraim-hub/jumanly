@@ -364,7 +364,8 @@ export function PersonProfile({
           </p>
         ) : null}
         {person.bio ? <p className="nb-pf-bio">{person.bio}</p> : null}
-        <div className="nb-pf-chips" data-ligne="">
+        {/* It scrolls sideways on a narrow phone: reachable with the keyboard too (WCAG 2.1.1). */}
+        <div className="nb-pf-chips" data-ligne="" tabIndex={0}>
           <span className="nb-pf-st">
             <svg
               width="13"

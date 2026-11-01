@@ -72,7 +72,9 @@ test("un éditeur crée une formation, un talent Free la suit jusqu'à l'attesta
 
   await goToStep("Public et objectifs");
   await page.locator("#course-description").fill("Description fictive : contenu de test.");
-  await page.locator("#course-objectives").fill("Premier objectif\nSecond objectif");
+  // One field per objective since the simplified editor (28/10).
+  await page.locator("#course-objective-0").fill("Premier objectif");
+  await page.locator("#course-objective-1").fill("Second objectif");
   await page.locator("#course-skills").fill("Communication orale");
   await page.getByRole("button", { name: "Enregistrer la fiche" }).click();
   await expect(page.getByText("Modifications enregistrées.")).toBeVisible();

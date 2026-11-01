@@ -73,10 +73,9 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
     skill: "Analyse de données",
     question,
   });
-  // « Vérifier et publier »: the question is shown, and never blocks an application. On a phone,
-  // the preview counts it (Modèle B recruteur, M4).
-  if (isMobile) await expect(main(page)).toContainText("1 question de présélection");
-  else await expect(main(page)).toContainText(question);
+  // « Vérifier et publier » shows the question on a computer; on a phone the last of the ten steps
+  // is the publication itself (29/10).
+  if (!isMobile) await expect(main(page)).toContainText(question);
   await expectAccessible(page);
   const { detailUrl } = await publishFilledOffer(page, "Publier");
   await expect(main(page)).toContainText(isMobile ? "Votre offre est en ligne" : "Offre publiée");
@@ -141,6 +140,11 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
     skill: "Comptabilité générale",
   });
   if (isMobile) {
+    // The ONEM authorization is asked before publishing (29/10).
+    await page
+      .getByRole("radio", { name: "Oui, je détiens l'autorisation de l'ONEM" })
+      .filter({ visible: true })
+      .click();
     await page.getByRole("button", { name: "Publier l'offre", exact: true }).click();
     await expect(
       page.getByRole("alert").filter({ hasText: "nombre d'offres en ligne" }),
@@ -209,11 +213,20 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
   await expect(talent).toHaveURL(/etape=cv/);
   await talent.getByRole("button", { name: "Continuer" }).click();
   await expect(talent).toHaveURL(/etape=lettre/);
-  const asked = talent.locator("fieldset").filter({ hasText: "Questions du recruteur" });
-  await expect(asked).toContainText("ne bloque pas votre candidature");
-  // On a phone, the questions of Modèle B are open questions (Modèle B recruteur, M4).
-  if (isMobile) await asked.getByLabel(question).fill("Oui");
-  else await asked.getByText("Oui", { exact: true }).click();
+  // The questions are optional: the application goes even without an answer (01/11).
+  const asked = talent.getByRole("region", { name: "Les questions du recruteur" });
+  await expect(asked).toContainText("votre candidature part même sans réponse");
+  // The answer is a tap: « Oui » for a yes/no question, the first proposed answer when the
+  // question is recognised (an availability gives « Immédiatement », 01/11).
+  // The round radio is hidden inside its pill: the person taps the pill.
+  await asked
+    .locator("label")
+    .filter({ has: talent.getByRole("radio") })
+    .first()
+    .click({
+      timeout: 15_000,
+    });
+  await expect(asked.getByRole("radio").first()).toBeChecked();
   await talent.getByRole("button", { name: "Continuer" }).click();
   await expect(talent).toHaveURL(/etape=verification/);
   await talent.getByRole("button", { name: "Envoyer ma candidature" }).click();
@@ -246,14 +259,16 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
     const file = page.locator(".nb-rh-fiche").filter({ visible: true });
     await file.getByRole("tab", { name: /^Réponses/ }).click();
     await expect(file).toContainText(question);
-    await expect(file).toContainText("Oui");
+    await expect(file).toContainText(/Oui|Immédiatement/);
     return;
   }
   await expect(page.locator("#reponses")).toContainText(question);
-  await expect(page.locator("#reponses")).toContainText("Oui");
+  await expect(page.locator("#reponses")).toContainText(/Oui|Immédiatement/);
 });
 
-test("une organisation pas encore vérifiée envoie son offre en validation", async ({
+// Decision of 29/10/2026 (docs/decisions/2026-10-29-publication-directe-offres.md): an offer is
+// published at once, even before the company is verified.
+test("une organisation pas encore vérifiée publie son offre tout de suite", async ({
   page,
   isMobile,
 }) => {
@@ -266,15 +281,15 @@ test("une organisation pas encore vérifiée envoie son offre en validation", as
     responsibilities: ["Préparer les expéditions"],
     skill: "Bureautique",
   });
-  await publishFilledOffer(page, "Envoyer en validation");
-  await expect(main(page)).toContainText(
-    isMobile ? "Votre offre part en vérification" : "Offre envoyée en validation",
-  );
+  if (!isMobile) await expect(main(page)).toContainText("Organisation pas encore vérifiée");
+  await publishFilledOffer(page, "Publier");
+  await expect(main(page)).toContainText(isMobile ? "Votre offre est en ligne" : "Offre publiée");
   await page.goto("/app/hire/offres");
   const card = main(page)
     .locator(isMobile ? ".nb-rh-offre" : "article")
     .filter({ hasText: title });
-  await expect(card).toContainText(isMobile ? "En vérification" : "En validation");
+  await expect(card).toBeVisible();
+  await expect(card).not.toContainText(/En (vérification|validation)/);
 });
 
 test("les écrans des offres ne débordent jamais à 390 et 412 px, même avec des textes longs", async ({

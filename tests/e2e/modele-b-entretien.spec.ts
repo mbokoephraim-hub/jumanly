@@ -253,8 +253,9 @@ test.describe("Modèle B · Simulation d'entretien au téléphone", () => {
     await page.waitForURL(/\/app\/suivi\/[^/?]+$/);
     const application = page.url();
     const screen = page.locator(".nb-ca-candidature");
+    // An active application shows « Commencer l’entraînement » in its Orbi card (30/10).
     await screen
-      .getByRole("link", { name: /S’entraîner avec Orbi/ })
+      .getByRole("link", { name: /S’entraîner avec Orbi|Commencer l’entraînement/ })
       .first()
       .click();
     await page.waitForURL(/\/app\/career\/entretiens\/nouveau\?candidature=/);
@@ -265,7 +266,7 @@ test.describe("Modèle B · Simulation d'entretien au téléphone", () => {
     await expect(settings.locator(".nb-h1")).not.toBeEmpty();
     await settings.getByRole("link", { name: "Candidature" }).click();
     await page.waitForURL(application);
-    await expect(screen.getByRole("heading", { name: "Candidature" })).toBeVisible();
+    await expect(screen.getByRole("heading", { name: "Candidature", exact: true })).toBeVisible();
     const background = await page.evaluate(
       () => getComputedStyle(document.querySelector(".nb-ca-candidature")!).visibility,
     );

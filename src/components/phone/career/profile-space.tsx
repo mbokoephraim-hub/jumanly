@@ -242,7 +242,8 @@ export function PhoneMyProfile({
         ) : null}
         {person.bio ? <p className="nb-pf-bio">{person.bio}</p> : null}
         {/* « N abonnés · entreprise · disponibilité » on one compact line (Ephraïm 29/10/2026). */}
-        <div className="nb-pf-chips" data-ligne="">
+        {/* It scrolls sideways on a narrow phone: reachable with the keyboard too (WCAG 2.1.1). */}
+        <div className="nb-pf-chips" data-ligne="" tabIndex={0}>
           <span className="nb-pf-st">
             <Svg
               d="M9 4.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM2.5 19.5c.8-3.3 3.4-5 6.5-5s5.7 1.7 6.5 5M16 4.8a3.4 3.4 0 0 1 0 6.4M18.5 14.6c1.6.8 2.6 2.4 3 4.9"

@@ -218,10 +218,10 @@ test.describe("Modèle B recruteur · Talents au téléphone", () => {
     await create.getByLabel("Nom de la liste").fill("Finance fictive");
     await create.getByRole("button", { name: "Créer la liste" }).click();
     await expect(toast(page, "Liste créée.")).toBeVisible();
-    // The toast sits over the top bar: it is closed before the list's own screen is checked.
+    // The toast sits over the top bar: a tap on the pill closes it (no close cross since 29/10).
     await page
       .getByRole("region", { name: "Messages de confirmation" })
-      .getByRole("button", { name: "Fermer" })
+      .getByRole("button", { name: "Liste créée." })
       .click();
     await main(page)
       .getByRole("link", { name: /Data fictive/ })

@@ -42,7 +42,8 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
       .getByRole("link", { name: /Analyste de données junior/ })
       .first();
     await expect(card).toContainText("vue");
-    await expect(card).toContainText("jours en ligne");
+    // The compact tiles (« 6 j · en ligne », 29/10).
+    await expect(card).toContainText(/\d+ ?j\s*en ligne/);
     await capture(page, "041-offres");
     await expectAccessible(page);
 
@@ -213,8 +214,8 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
     await wizard(page).getByRole("button", { name: "Nombre de personnes recherchées +" }).click();
     await expect(wizard(page)).toContainText("2 personnes");
     await wizard(page)
-      .getByRole("radiogroup", { name: "Niveau d'études demandé" })
-      .getByRole("radio", { name: "Licence" })
+      .getByRole("group", { name: "Niveaux d'études acceptés" })
+      .getByRole("button", { name: "Licence" })
       .click();
     await wizard(page)
       .getByRole("radiogroup", { name: "Choisir une langue" })
@@ -290,6 +291,10 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
     ).toHaveAttribute("href", /\/api\/offres\/[^/]+\/fiche\?jumanly=1$/);
     await capture(page, "054-publier-4");
     await expectAccessible(page);
+    // The ONEM authorization is asked before publishing (29/10).
+    await wizard(page)
+      .getByRole("radio", { name: "Oui, je détiens l'autorisation de l'ONEM" })
+      .click();
     await wizard(page)
       .getByRole("button", { name: /^(Publier l'offre|Envoyer en vérification)$/ })
       .click();
