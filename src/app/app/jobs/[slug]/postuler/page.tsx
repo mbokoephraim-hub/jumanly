@@ -10,13 +10,19 @@ import { ApplySend } from "@/components/talent/apply-send";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
-import { OrbiMark } from "@/components/talent/orbi-mark";
+import { OrbiSpark } from "@/components/phone/cv/marks";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
 import { ApplySentDialog } from "@/components/talent/web/apply-sent-dialog";
 import { dynamic } from "@/i18n/dynamic";
 import { formatDayMonth } from "@/lib/dates";
 import { applicationLetterAction } from "@/server/actions/career-documents";
-import { addApplicationExtraAction, saveApplicationStepAction } from "@/server/actions/jobs";
+import {
+  addApplicationExtraAction,
+  applyChoiceAction,
+  saveApplicationStepAction,
+} from "@/server/actions/jobs";
+import { can } from "@/server/entitlements";
+import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
 import { requireUser } from "@/server/auth/session";
 import { screeningAnswersOf, screeningQuestionsOf } from "@/server/services/screening";
 import { db } from "@/server/db";
@@ -193,7 +199,19 @@ export default async function ApplyPage({
   });
   const refValue = (ref: { type: string; id: string }) => `${ref.type}:${ref.id}`;
   const stepHref = (to: ApplyStep) => `${base}/postuler?etape=${to}`;
-  const back = index === 0 ? base : stepHref(applySteps[index - 1]!);
+  // The first screen (Ephraïm, 01/11/2026): how to apply, before the list of CVs.
+  // An application already started resumes where it was left (Ephraïm, 01/11/2026).
+  const choosing =
+    step === "cv" &&
+    !draft &&
+    query.etape === undefined &&
+    query.cv === undefined &&
+    query.ia === undefined;
+  const back = choosing
+    ? base
+    : index === 0
+      ? `${base}/postuler`
+      : stepHref(applySteps[index - 1]!);
   const formId = `apply-${step}`;
   const keep = (
     <>
@@ -207,20 +225,26 @@ export default async function ApplyPage({
       <FlowHead
         back={back}
         history={false}
-        backLabel={index === 0 ? t("apply.backOffer") : t("apply.back")}
+        backLabel={choosing ? t("apply.backOffer") : t("apply.back")}
         title={t("apply.title")}
         end={
-          <button
-            type="submit"
-            form={formId}
-            name="next"
-            value="quitter"
-            formNoValidate
-            className="t-bi t-press"
-            aria-label={t("apply.close")}
-          >
-            <TalentIcon name="fermer" size="s" />
-          </button>
+          choosing ? (
+            <Link href={base} className="t-bi t-press" aria-label={t("apply.backOffer")}>
+              <TalentIcon name="fermer" size="s" />
+            </Link>
+          ) : (
+            <button
+              type="submit"
+              form={formId}
+              name="next"
+              value="quitter"
+              formNoValidate
+              className="t-bi t-press"
+              aria-label={t("apply.close")}
+            >
+              <TalentIcon name="fermer" size="s" />
+            </button>
+          )
         }
       />
       <p className="t-w-sous">{[job.title, company].join(" · ")}</p>
@@ -320,9 +344,43 @@ export default async function ApplyPage({
     </div>
   );
 
-  // ─── Step 1 · the CV. ──────────────────────────────────────────────────────────────
-  if (step === "cv") {
-    const tailored = cvs[0] ?? null;
+  // ─── Step 1 · how to apply: a CV I have, adapted by Orbi, imported or created. ─────────
+  if (choosing) {
+    const subject = { type: "user" as const, id: user.id };
+    const [canTailor, plans] = await Promise.all([
+      can(db, subject, "career.cv.tailor"),
+      listPublicPlans(db),
+    ]);
+    const options = [
+      {
+        key: "existant",
+        icon: <TalentIcon name="cv" size="s" />,
+        line: cvs.length > 0 ? t("apply.choice.existantLine") : t("apply.choice.existantNone"),
+        locked: false,
+      },
+      {
+        key: "adapter",
+        icon: <OrbiSpark size={22} />,
+        line: canTailor
+          ? t("apply.choice.adapterLine")
+          : t("apply.choice.locked", {
+              plan: talentPlanFor(plans, "career.cv.tailor") || t("phoneCv.start.pro"),
+            }),
+        locked: !canTailor,
+      },
+      {
+        key: "importer",
+        icon: <TalentIcon name="telecharger" size="s" />,
+        line: t("apply.choice.importerLine"),
+        locked: false,
+      },
+      {
+        key: "creer",
+        icon: <TalentIcon name="plus" size="s" />,
+        line: t("apply.choice.creerLine"),
+        locked: false,
+      },
+    ] as const;
     return layout(
       <>
         <div className="t-verre t-cd t-min t-post-offre">
@@ -334,6 +392,84 @@ export default async function ApplyPage({
             </div>
           </div>
         </div>
+        <form id={formId} action={applyChoiceAction} className="t-flux">
+          <input type="hidden" name="job" value={slug} />
+          <fieldset className="t-fs">
+            <legend className="t-h2s">{t("apply.choice.title")}</legend>
+            <div className="t-flux t-serre t-cvg">
+              {options.map((option) => (
+                <label
+                  key={option.key}
+                  className="t-verre t-cvc t-press t-ap-choix"
+                  data-off={option.locked ? "" : undefined}
+                >
+                  <input
+                    type="radio"
+                    name="choice"
+                    value={option.key}
+                    defaultChecked={option.key === "existant"}
+                    disabled={option.locked}
+                  />
+                  <span
+                    className={
+                      option.key === "adapter" ? "t-ap-choix-ic t-orbi" : "t-cases t-accomp"
+                    }
+                    aria-hidden
+                  >
+                    {option.icon}
+                  </span>
+                  <span className="t-t">
+                    <b>{d(`apply.choice.${option.key}`)}</b>
+                    <span>{option.line}</span>
+                  </span>
+                  {option.locked ? (
+                    <TalentIcon name="cadenas" size="xs" />
+                  ) : (
+                    <span className="t-radio" aria-hidden />
+                  )}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <div className="t-verre t-fort t-bas-f">
+            <span className="t-post-note">
+              <TalentIcon name="cadenas" size="xs" />
+              {t("apply.web.nothingSent")}
+            </span>
+            <button type="submit" className="t-bt t-p t-pl t-press">
+              {t("apply.continue")}
+              <TalentIcon name="suivant" size="xs" className="t-post-fl" />
+            </button>
+          </div>
+        </form>
+      </>,
+    );
+  }
+
+  // ─── Step 1 · the CV. ──────────────────────────────────────────────────────────────
+  if (step === "cv") {
+    const adaptError = typeof query.ia === "string" ? query.ia : null;
+    const adaptKey = (["entitlement", "quota", "consent", "limit"] as const).find(
+      (code) => code === adaptError,
+    );
+    return layout(
+      <>
+        <div className="t-verre t-cd t-min t-post-offre">
+          <div className="t-haut">
+            <Logo name={company} src={job.organization.logo} tone={tone} />
+            <div className="t-t">
+              <b>{job.title}</b>
+              <span>{[company, job.city].filter(Boolean).join(" · ")}</span>
+            </div>
+          </div>
+        </div>
+        {query.adapte === "1" && <Notice tone="ok">{t("apply.cv.adaptDone")}</Notice>}
+        {adaptError && (
+          <p role="status" className="t-gar t-err">
+            <TalentIcon name="aide" size="s" />
+            <span>{d(`phoneExplorer.apply.adaptError.${adaptKey ?? "other"}`)}</span>
+          </p>
+        )}
         <form id={formId} action={saveApplicationStepAction} className="t-flux">
           {keep}
           <fieldset className="t-fs">
@@ -393,25 +529,6 @@ export default async function ApplyPage({
               )}
             </div>
           </fieldset>
-          <div className="t-post-plus">
-            <Link href="/app/career/cv?creer=1" className="t-ajout t-press">
-              <TalentIcon name="plus" size="s" />
-              {t("apply.cv.create")}
-            </Link>
-            {tailored && (
-              <Link
-                href={`/app/career/cv/${tailored.id}?adapter=${jobRow.id}`}
-                className="t-verre t-prep t-press t-post-adapter"
-              >
-                <OrbiMark size={32} />
-                <span className="t-t">
-                  <b>{t("apply.web.tailor")}</b>
-                  <span>{t("apply.web.tailorLine")}</span>
-                </span>
-                <TalentIcon name="suivant" size="s" />
-              </Link>
-            )}
-          </div>
           <div className="t-verre t-fort t-bas-f">
             <span className="t-post-note">
               <TalentIcon name="cadenas" size="xs" />
@@ -516,20 +633,27 @@ export default async function ApplyPage({
                 </button>
               </form>
             ))}
-            <SheetButton target="ap-ajout" className="t-ajout t-press">
-              <TalentIcon name="plus" size="s" />
-              {t("apply.docs.add")}
+            <SheetButton target="ap-ajout" className="t-ap-ajout t-press">
+              <span className="t-ap-ajout-ic" aria-hidden>
+                <TalentIcon name="plus" size="s" />
+              </span>
+              <span className="t-t">
+                <b>{t("apply.docs.add")}</b>
+                <span>{t("apply.docs.addLine")}</span>
+              </span>
             </SheetButton>
           </div>
           {!letter && (
-            <div className="t-verre t-carte t-sugg">
-              <OrbiMark size={36} />
+            <div className="t-carte t-sugg t-ap-orbi">
+              <span className="t-ap-choix-ic t-orbi" aria-hidden>
+                <OrbiSpark size={22} />
+              </span>
               <div className="t-t">
                 <small>{t("apply.docs.orbi.label")}</small>
                 <b>{t("apply.docs.orbi.text")}</b>
                 <form action={applicationLetterAction}>
                   <input type="hidden" name="job" value={slug} />
-                  <button type="submit" className="t-bt t-sec t-s t-press">
+                  <button type="submit" className="t-bt t-p t-s t-press">
                     {t("apply.docs.orbi.cta")}
                   </button>
                 </form>

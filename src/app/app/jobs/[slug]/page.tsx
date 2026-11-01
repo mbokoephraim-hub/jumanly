@@ -291,6 +291,7 @@ export default async function TalentJobPage({
       benefits: job.benefits,
       saved: Boolean(saved),
       applicationId: application?.id ?? null,
+      resume: draft !== null,
       open,
       questions: questionCount,
       cvs: [...cvs]

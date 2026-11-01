@@ -5347,3 +5347,8 @@ Demande d'Ephraïm : sur un diplôme ou un certificat, on peut ajouter le logo d
 ## 2026-10-31 · Badge doré « Vérifié »
 
 Demande d'Ephraïm : ce qui est vérifié ne doit plus ressembler au texte vert. Nouveau composant `src/components/phone/badge-or.tsx` (sceau doré `GoldSeal` + pilule dorée `GoldVerifiedBadge`, CSS `src/styles/phone-badge-or.css`, fond plein lisible en thème sombre et « Crème doux »). Appliqué aux expériences et certificats vérifiés, aux compétences vérifiées, au sceau « Profil vérifié » et aux compétences vérifiées des fiches candidat et talent côté recruteur. Les diplômes restent sans « Vérifié » (décision du 29/10).
+
+
+## 2026-11-01 · Postuler : choisir d'abord comment postuler
+
+Demande d'Ephraïm : en touchant « Postuler », proposer d'abord quatre choix puis « Continuer » : avec un CV existant (mène à « Quel CV envoyer ? »), adapter mon CV à cette offre (Orbi fait une copie du CV principal pour l'offre et la ramène choisie ; sans CV, Créer un CV › « Pour une offre » ; droit `career.cv.tailor`, sinon choix verrouillé avec la formule), importer un CV, créer un CV (`applyChoiceAction`). Au téléphone, « Postuler » ouvre la page Postuler au lieu de la feuille ; une candidature commencée reprend là où elle s'est arrêtée (« Reprendre ma candidature »). Étape 2 : « Ajouter un document » en carte avec une icône qui pulse doucement (arrêtée si animations réduites), carte Orbi avec l'étoile d'Orbi sur un dégradé sombre.

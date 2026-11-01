@@ -25,6 +25,9 @@ import {
 } from "@/server/services/application-attachments";
 import { countJobs, isJobOpen, parseJobFilters } from "@/server/services/jobs";
 import { reportError } from "@/server/observability";
+import { tailorCv } from "@/server/services/career-documents";
+import { isPhone } from "@/server/view";
+import { getTranslations } from "next-intl/server";
 
 const applySchema = z.object({
   job: z.string().min(1).max(200),
@@ -277,4 +280,70 @@ export async function addApplicationExtraAction(formData: FormData) {
   }
   refresh();
   redirect(applyHref(jobSlug, back));
+}
+
+const choiceSchema = z.object({
+  job: z.string().min(1).max(200),
+  choice: z.enum(["existant", "adapter", "importer", "creer"]),
+});
+
+/**
+ * The first screen of « Postuler » (Ephraïm, 01/11/2026): how to apply. « Un CV existant » opens
+ * the list of CVs; « Adapter avec Orbi » makes a copy of the main CV for this offer and brings it
+ * back chosen (the same copy as in Carrière, `career.cv.tailor`, optional: applying stays free);
+ * « Importer » and « Créer » open the existing CV flows.
+ */
+export async function applyChoiceAction(formData: FormData) {
+  const parsed = choiceSchema.safeParse({
+    job: formData.get("job"),
+    choice: formData.get("choice"),
+  });
+  if (!parsed.success) {
+    const slug = String(formData.get("job") ?? "");
+    redirect(slug ? applyHref(slug) : "/app/jobs");
+  }
+  const { job: slug, choice } = parsed.data;
+  const user = await requireUser(applyHref(slug));
+  const phone = await isPhone();
+  if (choice === "existant") redirect(applyHref(slug, "cv"));
+  if (choice === "importer") {
+    redirect(phone ? "/app/career/cv/nouveau?etape=import" : "/app/career/cv?importer=1");
+  }
+  const job = await db.job.findUnique({ where: { slug }, select: { id: true } });
+  if (!job) redirect("/app/jobs");
+  if (choice === "creer") {
+    redirect(phone ? "/app/career/cv/nouveau" : "/app/career/cv?creer=1");
+  }
+  // « Adapter avec Orbi »: a copy already made for this offer is taken as it is.
+  const cvs = await db.document.findMany({
+    where: { kind: "cv", profile: { userId: user.id } },
+    orderBy: [{ isPrimary: "desc" }, { updatedAt: "desc" }],
+    select: { id: true, adaptedForJobId: true },
+  });
+  const ready = cvs.find((cv) => cv.adaptedForJobId === job.id);
+  if (ready) redirect(`${applyHref(slug, "cv")}&cv=${ready.id}`);
+  const base = cvs.find((cv) => cv.adaptedForJobId === null) ?? cvs[0];
+  // No CV yet: Orbi makes one from the profile, for this offer (Créer un CV › « Pour une offre »).
+  if (!base) {
+    redirect(phone ? `/app/career/cv/nouveau?offre=${job.id}` : "/app/career/cv?creer=1");
+  }
+  const t = await getTranslations("career.cv.tailor");
+  let made: string | null = null;
+  let code = "unavailable";
+  try {
+    const result = await tailorCv(db, user.id, {
+      cvId: base.id,
+      jobId: job.id,
+      title: (jobTitle) => t("name", { jobTitle }),
+    });
+    if (result.ok) made = result.id;
+    else code = result.code;
+  } catch (error) {
+    void reportError(error, { message: "Postuler · adapter le CV" });
+  }
+  if (made) {
+    refresh();
+    redirect(`${applyHref(slug, "cv")}&cv=${made}&adapte=1`);
+  }
+  redirect(`${applyHref(slug, "cv")}&ia=${code}`);
 }

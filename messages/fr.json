@@ -3174,7 +3174,21 @@
       "badge": "Adapté à l'offre",
       "profile": "Mon profil Jumanly",
       "profileLine": "Sans CV joint : le recruteur voit votre profil.",
-      "create": "Créer un CV depuis mon profil"
+      "create": "Créer un CV depuis mon profil",
+      "adaptDone": "Orbi a adapté votre CV à cette offre : il est choisi ci-dessous. Relisez-le dans Carrière si besoin."
+    },
+    "choice": {
+      "title": "Comment voulez-vous postuler ?",
+      "existant": "Avec un CV existant",
+      "existantLine": "Choisissez le CV à envoyer parmi les vôtres.",
+      "existantNone": "Pas encore de CV : vous pourrez envoyer votre profil Jumanly.",
+      "adapter": "Adapter mon CV à cette offre",
+      "adapterLine": "Orbi vous aide : il prépare une copie de votre CV pour cette offre.",
+      "locked": "Avec la formule {plan}",
+      "importer": "Importer un CV",
+      "importerLine": "Un fichier que vous avez déjà : Orbi le lit pour vous.",
+      "creer": "Créer un CV",
+      "creerLine": "À partir de votre profil, en quelques minutes."
     },
     "docs": {
       "title": "Ajouter une lettre ou des documents",
@@ -3183,6 +3197,7 @@
       "edit": "Modifier la lettre",
       "remove": "Retirer {name}",
       "add": "Ajouter un document",
+      "addLine": "Diplôme, attestation, lettre : ce que vous avez déjà.",
       "certificateLine": "Obtenue le {date}",
       "documentLine": "Enregistré le {date}",
       "orbi": {
@@ -11066,6 +11081,7 @@
       "unsavedToast": "Offre retirée des enregistrées.",
       "saveError": "L’offre n’a pas pu être enregistrée. Réessayez.",
       "apply": "Postuler",
+      "resume": "Reprendre ma candidature",
       "applied": "Candidature envoyée",
       "appliedOpen": "Voir ma candidature",
       "closed": "Offre fermée",
