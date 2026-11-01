@@ -921,6 +921,17 @@ export async function RhOfferCandidates({
           ) : null}
         </section>
       ) : null}
+      {board.shortlisted.length > 0 ? (
+        <Link href={`/app/hire/offres/${jobId}/verification`} className="nb-rh-pieces-lien">
+          <MenuArt name="privacy" size="xs" />
+          <span>
+            <b>{tt("pieces.title")}</b>
+            <span className="nb-meta">
+              {tt("pieces.line", { count: board.shortlisted.length })}
+            </span>
+          </span>
+        </Link>
+      ) : null}
       <p className="nb-meta nb-rh-regle">
         {board.withScores ? t("classes.rule") : t("candidates.ruleNoScore")}
         {sortable ? ` ${tt("swipe.hint")}` : null}

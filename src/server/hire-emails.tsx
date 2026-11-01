@@ -25,6 +25,7 @@ import {
   notRetainedEmail,
   shortlistedEmail,
 } from "../../emails/_components/recruiter-content";
+import { t as translate } from "../../emails/_components/translator";
 import { send } from "./account-emails";
 
 type Person = { email: string; firstName?: string | null };
@@ -97,3 +98,16 @@ export const mailJoinRequest = (to: Person, input: Parameters<typeof joinRequest
 
 export const mailEnding = (to: Person, input: Parameters<typeof endingEmail>[1]) =>
   deliver(to.email, endingEmail(to.firstName, input));
+
+/** « Dossier de vérification »: the pieces asked to a retained candidate, or a reminder. */
+export const mailVerificationRequest = (
+  to: Person,
+  input: Omit<Parameters<typeof documentRequestEmail>[1], "documentName">,
+) =>
+  deliver(
+    to.email,
+    documentRequestEmail(to.firstName, {
+      ...input,
+      documentName: translate("phoneRhPieces.mailDocumentName"),
+    }),
+  );

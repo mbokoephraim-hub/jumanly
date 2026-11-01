@@ -10758,6 +10758,8 @@ Conventions :
 | `phoneCareer.application.practiceGo` | Commencer l’entraînement |
 | `phoneCareer.application.mine` | Ma candidature |
 | `phoneCareer.application.cv` | CV envoyé |
+| `phoneCareer.application.pieces` | Pièces demandées |
+| `phoneCareer.application.piecesLine` | {done} sur {total} déposées |
 | `phoneCareer.application.writeTo` | Écrire à {name} |
 | `phoneCareer.application.writeTeam` | Écrire à l’équipe de recrutement |
 | `phoneCareer.application.draftInterview` | {name, select, none {Bonjour} other {Bonjour {name}}}, merci pour l’invitation. Je confirme ma présence {day} à {hour}. Bonne journée, {me} |
@@ -16369,6 +16371,72 @@ Conventions :
 | `phoneRhTri.swipe.retain` | Retenir |
 | `phoneRhTri.swipe.hold` | En attente |
 | `phoneRhTri.swipe.hint` | Glissez une carte vers la droite pour retenir, vers la gauche pour mettre en attente. |
+| `phoneRhTri.pieces.title` | Dossier de vérification |
+| `phoneRhTri.pieces.line` | {count, plural, one {Demander des pièces au retenu, suivre ce qu'il envoie} other {Demander des pièces aux # retenus, suivre ce qu'ils envoient}} |
+| `phoneRhPieces.seo` | Dossier de vérification |
+| `phoneRhPieces.back` | Pipeline de l'offre |
+| `phoneRhPieces.title` | Dossier de vérification |
+| `phoneRhPieces.mailDocumentName` | des pièces pour vérifier votre candidature |
+| `phoneRhPieces.sent` | {count, plural, one {Demande envoyée à # candidat.} other {Demande envoyée à # candidats.}} |
+| `phoneRhPieces.error` | La demande n'est pas partie. Choisissez au moins un candidat et une pièce, une date à venir et un message. |
+| `phoneRhPieces.optional` | (facultatif) |
+| `phoneRhPieces.piece.diploma` | Diplôme |
+| `phoneRhPieces.piece.transcript` | Relevé de notes |
+| `phoneRhPieces.piece.referent` | Référent |
+| `phoneRhPieces.piece.thesis` | Thèse ou mémoire |
+| `phoneRhPieces.piece.certificate` | Certificat |
+| `phoneRhPieces.piece.portfolio` | Portfolio |
+| `phoneRhPieces.piece.test` | Test pratique |
+| `phoneRhPieces.follow.title` | Suivi des pièces |
+| `phoneRhPieces.follow.none` | Aucune pièce demandée pour cette offre. |
+| `phoneRhPieces.follow.count` | {done} sur {total} ont tout envoyé |
+| `phoneRhPieces.follow.complete` | Complet |
+| `phoneRhPieces.follow.late` | Date limite passée |
+| `phoneRhPieces.follow.due` | Avant le {date, date, long} |
+| `phoneRhPieces.follow.rule` | Orbi compare les diplômes au CV envoyé et signale ce qui est à vérifier. Il ne déclare jamais une pièce fausse : c'est une question à poser. Les pièces ne sont visibles que par l'équipe de l'offre, chaque ouverture est inscrite au journal. |
+| `phoneRhPieces.state.pending` | En attente |
+| `phoneRhPieces.state.file` | Fichier |
+| `phoneRhPieces.state.certificate` | Attestation Jumanly vérifiée |
+| `phoneRhPieces.state.referent` | {name} · {email} |
+| `phoneRhPieces.check.school` | À vérifier : {school} n'apparaît pas dans le CV envoyé |
+| `phoneRhPieces.check.year` | À vérifier : le CV indique {cv}, le profil {piece} |
+| `phoneRhPieces.ask.title` | Demander des pièces |
+| `phoneRhPieces.ask.none` | Retenez d'abord des candidats dans le pipeline ; ceux qui ont déjà une demande n'apparaissent plus ici. |
+| `phoneRhPieces.ask.who` | À qui |
+| `phoneRhPieces.ask.what` | Quelles pièces |
+| `phoneRhPieces.ask.required` | Obligatoire |
+| `phoneRhPieces.ask.due` | Date limite |
+| `phoneRhPieces.ask.message` | Message (modifiable) |
+| `phoneRhPieces.ask.template` | Bonjour, votre candidature au poste de {jobTitle} avance. Pour poursuivre, {company} vous demande quelques pièces, à déposer avant le {date} depuis votre candidature sur Jumanly. Vous pouvez réutiliser celles de votre Skills Passport. Merci ! |
+| `phoneRhPieces.ask.rule` | Chacun reçoit une notification, un message dans Messages et un e-mail, puis deux relances avant la date limite. Une pièce manquante n'écarte personne : vous décidez. |
+| `phoneRhPieces.ask.send` | Envoyer la demande |
+| `talentPieces.seo` | Pièces demandées |
+| `talentPieces.back` | Mes candidatures |
+| `talentPieces.title` | Pièces demandées |
+| `talentPieces.lead` | {company} vous demande ces pièces pour votre candidature au poste de {jobTitle}. |
+| `talentPieces.progress` | {done} sur {total} déposées · avant le {date, date, long} |
+| `talentPieces.ok` | Pièce déposée. |
+| `talentPieces.error.size` | Ce fichier dépasse 4 Mo. Essayez une version plus légère. |
+| `talentPieces.error.type` | Envoyez un PDF ou une image (PNG, JPEG, WebP). |
+| `talentPieces.error.other` | Rien n'a été déposé. Ajoutez un fichier, une attestation ou les coordonnées demandées. |
+| `talentPieces.privacy` | Seule l'équipe de recrutement de cette offre voit vos pièces. Elles ne servent qu'à cette candidature. |
+| `talentPieces.state.received` | Déposée le {date} |
+| `talentPieces.state.required` | Obligatoire |
+| `talentPieces.state.optional` | Facultative |
+| `talentPieces.referent.name` | Nom du référent |
+| `talentPieces.referent.email` | E-mail du référent |
+| `talentPieces.referent.consent` | En le donnant, vous acceptez que l'entreprise contacte cette personne au sujet de votre candidature. Prévenez-la. |
+| `talentPieces.reuse` | Réutiliser une attestation de mon Skills Passport |
+| `talentPieces.reuseNone` | Aucune, j'envoie un fichier |
+| `talentPieces.education` | Ce diplôme sur mon profil |
+| `talentPieces.educationNone` | Choisir un diplôme |
+| `talentPieces.file` | Fichier (PDF ou image, 4 Mo au plus) |
+| `talentPieces.fileReplace` | Remplacer {name} |
+| `talentPieces.note.portfolio` | Lien vers le portfolio |
+| `talentPieces.note.test` | Lien ou réponse au test |
+| `talentPieces.note.thesis` | Titre du mémoire ou de la thèse |
+| `talentPieces.send` | Déposer |
+| `talentPieces.update` | Mettre à jour |
 | `phoneRhOffres.tile.views` | {count, plural, one {vue} other {vues}} |
 | `phoneRhOffres.tile.online` | en ligne |
 | `phoneRhOffres.tile.daysValue` | {count, plural, =0 {Auj.} other {# j}} |

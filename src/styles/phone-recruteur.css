@@ -5598,3 +5598,225 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
     transition: none;
   }
 }
+
+/* Dossier de vérification (« Logique du recrutement », étape 3) : recruteur et candidat */
+.nb-rh-pieces-lien {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 20px 0;
+  padding: 12px 14px;
+  border-radius: 18px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+  color: var(--nb-creme);
+}
+.nb-rh-pieces-lien > span {
+  display: grid;
+  gap: 2px;
+}
+.jm-pieces {
+  --p-carte: var(--nb-carte, #ffffff);
+  --p-texte: var(--nb-creme, #0f3f37);
+  --p-doux: var(--nb-brume, #5b6b67);
+  --p-filet: var(--nb-filet-fort, #d9d3c8);
+  --p-accent: var(--nb-lime, #a6f26b);
+  --p-encre: var(--nb-encre, #0f3f37);
+  display: grid;
+  gap: 14px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 12px 20px 40px;
+  color: var(--p-texte);
+}
+.jm-pieces-h {
+  display: grid;
+  gap: 6px;
+}
+.jm-pieces-h h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 700;
+}
+.jm-pieces-retour {
+  justify-self: start;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.jm-pieces-s {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 20px;
+  border: 1px solid var(--p-filet);
+  background: var(--p-carte);
+}
+.jm-pieces-s h2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.jm-pieces-s h2 span {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--p-doux);
+}
+.jm-pieces-s[data-recu] {
+  border-left: 3px solid var(--p-accent);
+}
+.jm-pieces-meta {
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--p-doux);
+}
+.jm-pieces-compte {
+  font-size: 15px;
+  font-weight: 700;
+}
+.jm-pieces-barre {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--p-filet);
+}
+.jm-pieces-barre i {
+  display: block;
+  height: 100%;
+  background: var(--p-accent);
+}
+.jm-pieces-liste,
+.jm-pieces-depots {
+  display: grid;
+  gap: 10px;
+}
+.jm-pieces-liste > li {
+  display: grid;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--p-filet);
+}
+.jm-pieces-qui {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  font-weight: 700;
+}
+.jm-pieces-qui span {
+  font-size: 13px;
+  color: var(--p-doux);
+}
+.jm-pieces-qui span[data-etat="ok"] {
+  color: var(--nb-menthe-claire-t, #0b6b53);
+}
+.jm-pieces-qui span[data-etat="retard"] {
+  color: var(--nb-corail-t, #a43a2c);
+}
+.jm-pieces-liste ul {
+  display: grid;
+  gap: 6px;
+}
+.jm-pieces-liste ul li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px 12px;
+  font-size: 14px;
+}
+.jm-pieces-liste ul li b {
+  font-size: 13px;
+  color: var(--p-doux);
+}
+.jm-pieces-recu {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  text-align: right;
+}
+.jm-pieces-recu a {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.jm-pieces-recu em {
+  font-style: normal;
+  font-size: 13px;
+  color: var(--nb-ambre-t, #8a5a00);
+}
+.jm-pieces-form {
+  display: grid;
+  gap: 12px;
+}
+.jm-pieces-form fieldset {
+  display: grid;
+  gap: 6px;
+}
+.jm-pieces-form legend {
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+.jm-pieces-form label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  font-size: 14.5px;
+}
+.jm-pieces-piece {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+.jm-pieces-oblig {
+  font-size: 13px !important;
+  color: var(--p-doux);
+}
+.jm-pieces-champ {
+  display: grid !important;
+  gap: 6px;
+  font-weight: 600;
+}
+.jm-pieces-champ input:not([type="checkbox"]),
+.jm-pieces-champ select,
+.jm-pieces-champ textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--p-filet);
+  background: transparent;
+  font: inherit;
+  font-weight: 400;
+  color: inherit;
+}
+.jm-pieces-message {
+  white-space: pre-line;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.jm-pieces-envoyer {
+  justify-self: start;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: var(--p-accent);
+  color: var(--p-encre);
+  font-weight: 700;
+}
+.jm-pieces-erreur {
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--nb-corail, #f08a7c) 20%, transparent);
+  font-weight: 600;
+}

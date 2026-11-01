@@ -6,11 +6,13 @@
  */
 import "server-only";
 import { db } from "@/server/db";
-import { mailEnding } from "@/server/hire-emails";
+import { mailVerificationRequest, mailEnding } from "@/server/hire-emails";
 import { reportError } from "@/server/observability";
+import { t as translate } from "../../emails/_components/translator";
 import { runScheduledAts } from "@/server/services/hire-ats";
 import { expireJoinRequests } from "@/server/services/org-join";
 import { runEndingReminders } from "@/server/services/job-reminders";
+import { piecesHref, runVerificationReminders } from "@/server/services/hire-verification";
 
 export async function runHireJobs(now = new Date()) {
   const ats = await runScheduledAts(db, now).catch((error) => {
@@ -29,5 +31,26 @@ export async function runHireJobs(now = new Date()) {
     });
   }
   const expiredJoinRequests = await expireJoinRequests(db, now);
-  return { ats, endingReminders: reminders.length, expiredJoinRequests };
+  // « Dossier de vérification »: two reminders before the deadline.
+  const pieces = await runVerificationReminders(
+    db,
+    translate("phoneRhPieces.mailDocumentName"),
+    now,
+  ).catch((error) => {
+    reportError(error);
+    return [];
+  });
+  for (const item of pieces)
+    await mailVerificationRequest(item.talent, {
+      company: item.company,
+      jobTitle: item.jobTitle,
+      date: item.dueAt,
+      href: piecesHref(item.applicationId),
+    });
+  return {
+    ats,
+    endingReminders: reminders.length,
+    expiredJoinRequests,
+    verificationReminders: pieces.length,
+  };
 }

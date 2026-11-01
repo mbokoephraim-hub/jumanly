@@ -5,6 +5,7 @@ import { db } from "@/server/db";
 import { isClosedStatus, type TalentApplicationStatus } from "@/server/services/applications";
 import { LINK_VISIBLE_HOURS } from "@/server/services/interviews";
 import { suiviApplication } from "@/server/services/suivi";
+import { piecesHref } from "@/server/services/hire-verification";
 import { PhoneApplication, type ApplicationView } from "./application";
 import { CareerTexts } from "./server";
 
@@ -57,6 +58,10 @@ export async function PhoneApplicationScreen({
   const application = await suiviApplication(db, userId, id);
   if (!application) notFound();
   const t = await getTranslations("phoneCareer.application");
+  const pieces = await db.verificationRequest.findFirst({
+    where: { applicationId: application.id, application: { profile: { userId } } },
+    select: { items: { select: { receivedAt: true } } },
+  });
   const tm = await getTranslations("connect.invite");
   const format = await getFormatter();
   const now = new Date();
@@ -163,6 +168,15 @@ export async function PhoneApplicationScreen({
         : null,
     practice: `/app/career/entretiens/nouveau?candidature=${application.id}`,
     cv: cv?.title ? { title: cv.title, href: `/app/jobs/candidatures/${application.id}/cv` } : null,
+    pieces: pieces
+      ? {
+          href: piecesHref(application.id),
+          line: t("piecesLine", {
+            done: pieces.items.filter((item) => item.receivedAt !== null).length,
+            total: pieces.items.length,
+          }),
+        }
+      : null,
     write: conversationId
       ? {
           conversationId,
