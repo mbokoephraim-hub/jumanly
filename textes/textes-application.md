@@ -16290,6 +16290,19 @@ Conventions :
 | `phoneRhOffres.candidates.rule` | Classés par correspondance avec l'offre. Le score ne tient compte ni du nom, ni de l'âge, ni de la photo. Vous décidez. |
 | `phoneRhOffres.candidates.ruleNoScore` | Classés du plus récent au plus ancien. Vous décidez. |
 | `phoneRhOffres.candidates.sort` | Trier dans Candidatures |
+| `phoneRhOffres.classes.title` | Résultats de l'analyse |
+| `phoneRhOffres.classes.fort` | Fort potentiel |
+| `phoneRhOffres.classes.considerer` | À considérer |
+| `phoneRhOffres.classes.limite` | Limité |
+| `phoneRhOffres.classes.hors` | Hors critères |
+| `phoneRhOffres.classes.none` | Pas encore classés |
+| `phoneRhOffres.classes.all` | Voir toutes les classes |
+| `phoneRhOffres.classes.open` | {count, plural, one {Voir # candidat} other {Voir les # candidats}} |
+| `phoneRhOffres.classes.rule` | Orbi range chaque candidat selon sa compatibilité avec l'offre : 75 % et plus, Fort potentiel ; de 50 à 74 %, À considérer ; en dessous, Limité. Le score ne tient compte ni du nom, ni de l'âge, ni de la photo. Personne n'est écarté sans vous. |
+| `phoneRhOffres.classes.horsLead` | Un critère éliminatoire que vous avez fixé manque. Ces candidats restent visibles : vous pouvez les remettre dans la liste. |
+| `phoneRhOffres.classes.missing` | Manque : {label} |
+| `phoneRhOffres.classes.score` | Compatibilité {value} % |
+| `phoneRhOffres.classes.documents` | {received} sur {asked} |
 | `phoneRhOffres.tile.views` | {count, plural, one {vue} other {vues}} |
 | `phoneRhOffres.tile.online` | en ligne |
 | `phoneRhOffres.tile.daysValue` | {count, plural, =0 {Auj.} other {# j}} |

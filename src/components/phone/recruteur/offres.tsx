@@ -1,6 +1,6 @@
 import "server-only";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
 import { pickMessages } from "@/i18n/client-messages";
@@ -17,6 +17,8 @@ import { ensureStages } from "@/server/services/applications";
 import { requestedDocumentKinds, type OfferRow } from "@/server/services/hire-offers";
 import { screeningQuestionsOf } from "@/server/services/screening";
 import { MenuArt } from "@/components/site/menu-art";
+import { countryCode, countryName, flagOf } from "@/lib/countries";
+import { classCounts, orbiClasses, type OrbiClass } from "@/server/services/hire-classes";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { RhOfferActions, RhWhy, type RhOfferActionsData } from "./offre-actions";
 import type { RhOfferDraft, RhPublishData } from "./publier";
@@ -648,19 +650,25 @@ export async function RhOfferDetail({
 }
 
 /**
- * The pipeline of one offer (Ephraïm, 01/11/2026): every stage in order, with its candidates, so the
- * recruiter sees at once who applied and where each person is. Each card opens the file, with
- * shortcuts to the CV and to the documents sent. Ranked by match with the offer inside a stage,
- * never by name, age or photo; the recruiter decides.
+ * The pipeline of one offer (« JUMANLY Hire, logique du recrutement », Ephraïm 01/11/2026): the
+ * stages as scrolling tabs with their counts, then the segmented bar of Orbi's classes (touch a
+ * segment to filter), then one continuous list grouped by class: « Fort potentiel » first and
+ * open, « Limité » folded, « Hors critères » at the bottom, never hidden, with the missing
+ * criterion. Ranked by the deterministic match inside a class, never by name, age or photo; the
+ * recruiter decides.
  */
 export async function RhOfferCandidates({
   ctx,
   jobId,
   unseen,
+  stageId,
+  orbiClass,
 }: {
   ctx: HireContext;
   jobId: string;
   unseen: number;
+  stageId?: string;
+  orbiClass?: string;
 }) {
   const t = await getTranslations("phoneRhOffres");
   const format = await getFormatter();
@@ -703,6 +711,108 @@ export async function RhOfferCandidates({
       rows: board.rows.filter((row) => stageOf(row) === "withdrawn"),
     },
   ].filter((column) => column.kind !== "withdrawn" || column.rows.length > 0);
+  const current =
+    columns.find((column) => column.id === stageId) ??
+    columns.find((column) => column.rows.length > 0) ??
+    columns[0]!;
+  const base = `/app/hire/offres/${jobId}?vue=candidats&etape=${current.id}`;
+  const chosen = orbiClasses.find((key) => key === orbiClass) ?? null;
+  const counts = classCounts(current.rows);
+  const classed = counts.reduce((sum, item) => sum + item.count, 0);
+  const position = followed.findIndex((stage) => stage.id === current.id);
+  const groups: { key: OrbiClass | "none"; rows: typeof current.rows }[] = board.withScores
+    ? [
+        ...orbiClasses.map((key) => ({
+          key,
+          rows: current.rows.filter((row) => row.orbiClass === key),
+        })),
+        { key: "none" as const, rows: current.rows.filter((row) => row.orbiClass === null) },
+      ].filter((group) => (chosen ? group.key === chosen : true) && group.rows.length > 0)
+    : [{ key: "none" as const, rows: current.rows }];
+  const card = (row: (typeof current.rows)[number]) => {
+    const code = countryCode(row.country);
+    return (
+      <li key={row.id} className="nb-rh-pipe-carte" data-classe={row.orbiClass ?? undefined}>
+        <Link href={`/app/hire/candidats/${row.id}`} className="nb-rh-cand">
+          <span className="nb-rh-mini" aria-hidden>
+            {initials(row.name)}
+          </span>
+          <span className="nb-rh-res-t">
+            <b>{row.name}</b>
+            {row.headline ? <span className="nb-meta nb-rh-coupe">{row.headline}</span> : null}
+            <span className="nb-meta">
+              {[row.city, code ? `${flagOf(code)}` : null].filter(Boolean).join(" ")}
+              {code ? <span className="sr-only">{countryName(code)}</span> : null}
+            </span>
+          </span>
+          {row.score !== null ? (
+            <span
+              className="nb-rh-anneau"
+              style={{ "--p": row.score } as CSSProperties}
+              role="img"
+              aria-label={t("classes.score", { value: row.score })}
+            >
+              <b aria-hidden>{row.score}</b>
+            </span>
+          ) : null}
+        </Link>
+        {row.matched.length > 0 || row.documents.asked > 0 ? (
+          <span className="nb-rh-pipe-faits">
+            {row.matched.map((skill) => (
+              <span key={skill} className="nb-rh-pipe-comp">
+                {skill}
+              </span>
+            ))}
+            {row.documents.asked > 0 ? (
+              <span
+                className="nb-rh-pipe-docs"
+                data-complet={row.documents.received >= row.documents.asked ? "" : undefined}
+              >
+                <MenuArt name="letter" size="xs" />
+                {t("classes.documents", {
+                  received: row.documents.received,
+                  asked: row.documents.asked,
+                })}
+              </span>
+            ) : null}
+          </span>
+        ) : null}
+        {row.missedCriteria.length > 0 ? (
+          <p className="nb-rh-pipe-manque">
+            {t("classes.missing", { label: row.missedCriteria.join(", ") })}
+          </p>
+        ) : null}
+        {position >= 0 ? (
+          <span
+            className="nb-rh-pipe-points"
+            role="img"
+            aria-label={t("pipeline.step", { index: position + 1, total: followed.length })}
+          >
+            {followed.map((stage, at) => (
+              <i
+                key={stage.id}
+                data-fait={at <= position ? "" : undefined}
+                data-actuel={at === position && current.kind !== "hired" ? "" : undefined}
+              />
+            ))}
+          </span>
+        ) : null}
+        <span className="nb-meta">
+          {t("pipeline.applied", { when: format.relativeTime(row.createdAt, now) })}
+        </span>
+        <span className="nb-rh-pipe-acces">
+          <Link href={`/app/hire/candidats/${row.id}?onglet=cv`}>
+            <MenuArt name="cv" size="xs" />
+            {t("pipeline.cv")}
+          </Link>
+          <Link href={`/app/hire/candidats/${row.id}?onglet=reponses`}>
+            <MenuArt name="letter" size="xs" />
+            {t("pipeline.documents")}
+          </Link>
+        </span>
+      </li>
+    );
+  };
   return (
     <div className="nb-page nb-rh-detail nb-rh-pipe">
       <header className="nb-rh-barre">
@@ -714,101 +824,99 @@ export async function RhOfferCandidates({
       <section className="nb-rh-detail-h">
         <h1>{board.job.title}</h1>
         <p className="nb-meta">{t("candidates.line", { count: board.rows.length, unseen })}</p>
-        <p className="nb-meta">{t("pipeline.lead")}</p>
       </section>
       <nav className="nb-rh-pipe-nav" aria-label={t("pipeline.stages")}>
         {columns.map((column) => (
-          <a key={column.id} href={`#etape-${column.id}`} data-kind={column.kind}>
+          <Link
+            key={column.id}
+            href={`/app/hire/offres/${jobId}?vue=candidats&etape=${column.id}`}
+            data-kind={column.kind}
+            aria-current={column.id === current.id ? "page" : undefined}
+            scroll={false}
+          >
             {column.name}
             <b>{column.rows.length}</b>
-          </a>
+          </Link>
         ))}
       </nav>
+      {board.withScores && classed > 0 ? (
+        <section className="nb-rh-classes" aria-labelledby="rh-classes-t">
+          <h2 id="rh-classes-t">
+            <MenuArt name="funnel" size="xs" />
+            {t("classes.title")}
+          </h2>
+          <div className="nb-rh-classes-barre" aria-hidden>
+            {counts
+              .filter((item) => item.count > 0)
+              .map((item) => (
+                <i
+                  key={item.key}
+                  data-classe={item.key}
+                  style={{ flexGrow: item.count } as CSSProperties}
+                />
+              ))}
+          </div>
+          <ul className="nb-rh-classes-liste">
+            {counts.map((item) => (
+              <li key={item.key}>
+                <Link
+                  href={chosen === item.key ? base : `${base}&classe=${item.key}`}
+                  data-classe={item.key}
+                  aria-current={chosen === item.key ? "true" : undefined}
+                  aria-disabled={item.count === 0 ? "true" : undefined}
+                  scroll={false}
+                >
+                  <b>{item.count}</b>
+                  {t(`classes.${item.key}`)}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          {chosen ? (
+            <Link href={base} className="nb-rh-classes-tous" scroll={false}>
+              {t("classes.all")}
+            </Link>
+          ) : null}
+        </section>
+      ) : null}
       <p className="nb-meta nb-rh-regle">
-        {board.withScores ? t("candidates.rule") : t("candidates.ruleNoScore")}
+        {board.withScores ? t("classes.rule") : t("candidates.ruleNoScore")}
       </p>
       <div className="nb-rh-pipe-etapes">
-        {columns.map((column, index) => (
-          <section
-            key={column.id}
-            id={`etape-${column.id}`}
-            className="nb-rh-pipe-etape"
-            data-kind={column.kind}
-            aria-labelledby={`etape-${column.id}-t`}
-          >
-            <h2 id={`etape-${column.id}-t`}>
-              <span className="nb-rh-pipe-num" aria-hidden>
-                {column.kind === "withdrawn" ? "–" : index + 1}
-              </span>
-              {column.name}
-              <b>{column.rows.length}</b>
-            </h2>
-            {column.rows.length === 0 ? (
-              <p className="nb-meta nb-rh-pipe-vide">{t("pipeline.empty")}</p>
-            ) : (
-              <ul>
-                {column.rows.map((row) => {
-                  const position = followed.findIndex((stage) => stage.id === column.id);
-                  return (
-                    <li key={row.id} className="nb-rh-pipe-carte">
-                      <Link href={`/app/hire/candidats/${row.id}`} className="nb-rh-cand">
-                        <span className="nb-rh-mini" aria-hidden>
-                          {initials(row.name)}
-                        </span>
-                        <span className="nb-rh-res-t">
-                          <b>{row.name}</b>
-                          <span className="nb-meta">
-                            {[row.facts[0]?.skill, row.city].filter(Boolean).join(" · ")}
-                          </span>
-                          <span className="nb-meta">
-                            {t("pipeline.applied", {
-                              when: format.relativeTime(row.createdAt, now),
-                            })}
-                          </span>
-                        </span>
-                        {row.score !== null ? (
-                          <span className="nb-rh-score">
-                            {format.number(row.score / 100, { style: "percent" })}
-                          </span>
-                        ) : null}
-                      </Link>
-                      {position >= 0 ? (
-                        <span
-                          className="nb-rh-pipe-points"
-                          role="img"
-                          aria-label={t("pipeline.step", {
-                            index: position + 1,
-                            total: followed.length,
-                          })}
-                        >
-                          {followed.map((stage, at) => (
-                            <i
-                              key={stage.id}
-                              data-fait={at <= position ? "" : undefined}
-                              data-actuel={
-                                at === position && column.kind !== "hired" ? "" : undefined
-                              }
-                            />
-                          ))}
-                        </span>
-                      ) : null}
-                      <span className="nb-rh-pipe-acces">
-                        <Link href={`/app/hire/candidats/${row.id}?onglet=cv`}>
-                          <MenuArt name="cv" size="xs" />
-                          {t("pipeline.cv")}
-                        </Link>
-                        <Link href={`/app/hire/candidats/${row.id}?onglet=reponses`}>
-                          <MenuArt name="letter" size="xs" />
-                          {t("pipeline.documents")}
-                        </Link>
-                      </span>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </section>
-        ))}
+        {current.rows.length === 0 ? (
+          <p className="nb-meta nb-rh-pipe-vide">{t("pipeline.empty")}</p>
+        ) : (
+          groups.map((group) => {
+            const list = <ul>{group.rows.map(card)}</ul>;
+            const title =
+              group.key === "none" ? (board.withScores ? t("classes.none") : current.name) : null;
+            if (group.key === "limite" && !chosen)
+              return (
+                <details key={group.key} className="nb-rh-pipe-groupe" data-classe={group.key}>
+                  <summary>
+                    <span>{t("classes.limite")}</span>
+                    <b>{t("classes.open", { count: group.rows.length })}</b>
+                  </summary>
+                  {list}
+                </details>
+              );
+            return (
+              <section
+                key={group.key}
+                className="nb-rh-pipe-groupe"
+                data-classe={group.key === "none" ? undefined : group.key}
+                aria-label={title ?? t(`classes.${group.key as OrbiClass}`)}
+              >
+                <h2>
+                  <span>{title ?? t(`classes.${group.key as OrbiClass}`)}</span>
+                  <b>{group.rows.length}</b>
+                </h2>
+                {group.key === "hors" ? <p className="nb-meta">{t("classes.horsLead")}</p> : null}
+                {list}
+              </section>
+            );
+          })
+        )}
       </div>
       <div className="nb-bas">
         <Link href={`/app/hire/candidats?offre=${jobId}`} className="nb-bp">

@@ -19864,6 +19864,21 @@
       "ruleNoScore": "Classés du plus récent au plus ancien. Vous décidez.",
       "sort": "Trier dans Candidatures"
     },
+    "classes": {
+      "title": "Résultats de l'analyse",
+      "fort": "Fort potentiel",
+      "considerer": "À considérer",
+      "limite": "Limité",
+      "hors": "Hors critères",
+      "none": "Pas encore classés",
+      "all": "Voir toutes les classes",
+      "open": "{count, plural, one {Voir # candidat} other {Voir les # candidats}}",
+      "rule": "Orbi range chaque candidat selon sa compatibilité avec l'offre : 75 % et plus, Fort potentiel ; de 50 à 74 %, À considérer ; en dessous, Limité. Le score ne tient compte ni du nom, ni de l'âge, ni de la photo. Personne n'est écarté sans vous.",
+      "horsLead": "Un critère éliminatoire que vous avez fixé manque. Ces candidats restent visibles : vous pouvez les remettre dans la liste.",
+      "missing": "Manque : {label}",
+      "score": "Compatibilité {value} %",
+      "documents": "{received} sur {asked}"
+    },
     "tile": {
       "views": "{count, plural, one {vue} other {vues}}",
       "online": "en ligne",

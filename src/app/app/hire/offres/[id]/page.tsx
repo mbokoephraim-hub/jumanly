@@ -714,7 +714,16 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
     interviews: 0,
   };
   if (one(query.vue) === "candidats" && permissions.readApplications)
-    return <RhOfferCandidates ctx={ctx} jobId={job.id} unseen={figures.unseen} />;
+    return (
+      <RhOfferCandidates
+        key={`${one(query.etape) ?? ""}-${one(query.classe) ?? ""}`}
+        ctx={ctx}
+        jobId={job.id}
+        unseen={figures.unseen}
+        stageId={one(query.etape)}
+        orbiClass={one(query.classe)}
+      />
+    );
   const ok = (["pause", "reprise"] as const).find((value) => value === one(query.ok));
   const tl = await getTranslations("hireOffers.list");
   return (
