@@ -402,3 +402,116 @@
     transition: none;
   }
 }
+
+/* ─── « Partager mon profil » (Ephraïm, 01/11/2026, comme Instagram) : la rangée des personnes des
+   discussions, puis une rangée d'icônes rondes aux tuiles pastel du menu du site, dessin en Sapin. ─── */
+.nb-pp-titre {
+  text-align: center;
+}
+.nb-pp {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+.nb-pp-vide {
+  padding: 8px 0 4px;
+  text-align: center;
+}
+.nb-pp-gens,
+.nb-pp-icones {
+  display: flex;
+  gap: 4px;
+  margin: 0 -20px;
+  padding: 4px 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.nb-pp-gens::-webkit-scrollbar,
+.nb-pp-icones::-webkit-scrollbar {
+  display: none;
+}
+.nb-pp-gens {
+  list-style: none;
+}
+.nb-pp-gens li {
+  flex: none;
+  width: 76px;
+}
+.nb-pp-icones {
+  padding-top: 14px;
+  border-top: 1px solid var(--nb-filet);
+  animation: nbPtMonte 0.22s var(--nb-courbe);
+}
+.nb-pp-icones > a,
+.nb-pp-icones > button {
+  flex: none;
+  width: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--nb-texte);
+  font: inherit;
+  font-size: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.nb-pp-rond {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #0f3f37;
+  background: #e9fbd9;
+  transition: transform 0.18s var(--nb-courbe);
+}
+.nb-pp-icones > :active .nb-pp-rond {
+  transform: scale(0.92);
+}
+.nb-pp-icones [data-cle="copy"] .nb-pp-rond {
+  background: #a6f26b;
+}
+.nb-pp-icones [data-cle="whatsapp"] .nb-pp-rond {
+  background: #dcf8ef;
+  color: #0e7a5c;
+}
+.nb-pp-icones [data-cle="linkedin"] .nb-pp-rond {
+  background: #e3f1ff;
+  color: #1d5fa8;
+}
+.nb-pp-icones [data-cle="facebook"] .nb-pp-rond {
+  background: #ece8ff;
+  color: #5a43c9;
+}
+.nb-pp-icones [data-cle="email"] .nb-pp-rond {
+  background: #ffe5e0;
+  color: #b4473a;
+}
+.nb-pp-icones [data-cle="qr"] .nb-pp-rond {
+  background: #fff4d6;
+  color: #8a5a00;
+}
+.nb-pp-icones [data-cle="pdf"] .nb-pp-rond {
+  background: #fde7f0;
+  color: #a2386c;
+}
+.nb-pp-envoyer {
+  width: 100%;
+  animation: nbPtMonte 0.22s var(--nb-courbe);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-pp-icones,
+  .nb-pp-envoyer {
+    animation: none;
+  }
+  .nb-pp-rond {
+    transition: none;
+  }
+}
