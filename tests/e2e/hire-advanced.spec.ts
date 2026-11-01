@@ -205,6 +205,9 @@ test("Suivi : confirmer un entretien, l'ajouter à l'agenda, puis proposer d'aut
   await talent.goto("/app/suivi");
   const todo = talent.getByRole("region", { name: /^À faire/ });
   await expect(todo).toContainText("Choisir un créneau");
+  // On a computer the first application opens beside the list (AutoSelect): wait for it, the
+  // title of the page streams in again after that change of address.
+  await expect(talent).toHaveURL(/[?&]id=/);
   await expectAccessible(talent);
   await todo
     .getByRole("link", { name: /Choisir un créneau/ })

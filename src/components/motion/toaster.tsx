@@ -132,10 +132,14 @@ function ToastItem({
       onPointerLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
-      className="jm-toast pointer-events-auto flex max-w-[min(100%,340px)] items-center gap-2 rounded-full bg-sapin py-1.5 pr-3 pl-2 text-blanc shadow-float"
+      className="jm-toast pointer-events-auto flex max-w-[min(100%,340px)] items-center gap-2 rounded-full bg-sapin py-1 pr-3 pl-2 text-blanc shadow-float"
     >
       {toast.href ? (
-        <Link href={toast.href} onClick={onDone} className="flex min-w-0 items-center gap-2">
+        <Link
+          href={toast.href}
+          onClick={onDone}
+          className="flex min-h-6 min-w-0 items-center gap-2"
+        >
           {body}
         </Link>
       ) : (
@@ -143,7 +147,7 @@ function ToastItem({
           type="button"
           onClick={onDone}
           title={closeLabel}
-          className="flex min-w-0 items-center gap-2 text-left"
+          className="flex min-h-6 min-w-0 items-center gap-2 text-left"
         >
           {body}
         </button>
@@ -155,7 +159,7 @@ function ToastItem({
             toast.action!.run();
             onDone();
           }}
-          className="shrink-0 rounded-pill px-2 py-0.5 text-[13px] font-semibold text-lime hover:bg-blanc/10"
+          className="min-h-6 shrink-0 rounded-pill px-2 py-0.5 text-[13px] font-semibold text-lime hover:bg-blanc/10"
         >
           {toast.action.label}
         </button>

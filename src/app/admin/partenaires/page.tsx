@@ -55,7 +55,7 @@ function contractState(partner: Partner, now: Date): ContractState {
 const tileTones = [
   "bg-sapin text-lime",
   "bg-neon text-sapin",
-  "bg-[#14745f] text-blanc",
+  "bg-[#14745f] text-[#fff]",
   "bg-lime text-sapin",
   "bg-nuit text-neon",
 ];

@@ -62,7 +62,7 @@ export function SpaceSwitcher({
         aria-label={t("spaceSwitcher.aria")}
         className={cx(
           "flex h-10 max-w-[min(13rem,100%)] cursor-pointer list-none items-center gap-2 rounded-pill pr-3.5 pl-[5px] text-[13px] font-semibold [&::-webkit-details-marker]:hidden",
-          tone === "dark" ? "bg-blanc/10 text-blanc" : "bg-blanc text-sapin",
+          tone === "dark" ? "bg-blanc/10 text-[#fff]" : "bg-blanc text-sapin",
         )}
       >
         {current ? (
