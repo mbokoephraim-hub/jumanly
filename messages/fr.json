@@ -19875,7 +19875,7 @@
       "none": "Pas encore classés",
       "all": "Voir toutes les classes",
       "open": "{count, plural, one {Voir # candidat} other {Voir les # candidats}}",
-      "rule": "Orbi range chaque candidat selon sa compatibilité avec l'offre : 75 % et plus, Fort potentiel ; de 50 à 74 %, À considérer ; en dessous, Limité. Le score ne tient compte ni du nom, ni de l'âge, ni de la photo. Personne n'est écarté sans vous.",
+      "rule": "Orbi range chaque candidat selon sa compatibilité avec l'offre : 75 % et plus ou une forte progression (étoile Potentiel), Fort potentiel ; de 50 à 74 %, À considérer ; en dessous, Limité. Le score ne tient compte ni du nom, ni de l'âge, ni de la photo. Personne n'est écarté sans vous.",
       "horsLead": "Un critère éliminatoire que vous avez fixé manque. Ces candidats restent visibles : vous pouvez les remettre dans la liste.",
       "missing": "Manque : {label}",
       "score": "Compatibilité {value} %",
@@ -20367,6 +20367,29 @@
       "retain": "Retenir",
       "hold": "En attente",
       "hint": "Glissez une carte vers la droite pour retenir, vers la gauche pour mettre en attente."
+    },
+    "notes": {
+      "compatibility": "Compatibilité",
+      "potential": "Potentiel",
+      "confidence": "Confiance",
+      "percent": "{value} %",
+      "star": "★ Fort potentiel",
+      "level": {
+        "low": "faible",
+        "medium": "moyenne",
+        "high": "élevée"
+      },
+      "confidenceChange": "{before} → {after}",
+      "potentialWhy": "Potentiel : {reasons}.",
+      "reason": {
+        "training": "formations récentes",
+        "progression": "progression de poste",
+        "proofs": "compétences prouvées"
+      },
+      "diplomaVerified": "Diplôme vérifié",
+      "diplomaToCheck": "Diplôme reçu, un point à vérifier",
+      "referents": "{count, plural, one {# référent donné} other {# référents donnés}}",
+      "newSince": "Nouveau depuis sa candidature : {title}"
     },
     "pieces": {
       "title": "Dossier de vérification",

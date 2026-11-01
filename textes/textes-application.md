@@ -16300,7 +16300,7 @@ Conventions :
 | `phoneRhOffres.classes.none` | Pas encore classés |
 | `phoneRhOffres.classes.all` | Voir toutes les classes |
 | `phoneRhOffres.classes.open` | {count, plural, one {Voir # candidat} other {Voir les # candidats}} |
-| `phoneRhOffres.classes.rule` | Orbi range chaque candidat selon sa compatibilité avec l'offre : 75 % et plus, Fort potentiel ; de 50 à 74 %, À considérer ; en dessous, Limité. Le score ne tient compte ni du nom, ni de l'âge, ni de la photo. Personne n'est écarté sans vous. |
+| `phoneRhOffres.classes.rule` | Orbi range chaque candidat selon sa compatibilité avec l'offre : 75 % et plus ou une forte progression (étoile Potentiel), Fort potentiel ; de 50 à 74 %, À considérer ; en dessous, Limité. Le score ne tient compte ni du nom, ni de l'âge, ni de la photo. Personne n'est écarté sans vous. |
 | `phoneRhOffres.classes.horsLead` | Un critère éliminatoire que vous avez fixé manque. Ces candidats restent visibles : vous pouvez les remettre dans la liste. |
 | `phoneRhOffres.classes.missing` | Manque : {label} |
 | `phoneRhOffres.classes.score` | Compatibilité {value} % |
@@ -16371,6 +16371,23 @@ Conventions :
 | `phoneRhTri.swipe.retain` | Retenir |
 | `phoneRhTri.swipe.hold` | En attente |
 | `phoneRhTri.swipe.hint` | Glissez une carte vers la droite pour retenir, vers la gauche pour mettre en attente. |
+| `phoneRhTri.notes.compatibility` | Compatibilité |
+| `phoneRhTri.notes.potential` | Potentiel |
+| `phoneRhTri.notes.confidence` | Confiance |
+| `phoneRhTri.notes.percent` | {value} % |
+| `phoneRhTri.notes.star` | ★ Fort potentiel |
+| `phoneRhTri.notes.level.low` | faible |
+| `phoneRhTri.notes.level.medium` | moyenne |
+| `phoneRhTri.notes.level.high` | élevée |
+| `phoneRhTri.notes.confidenceChange` | {before} → {after} |
+| `phoneRhTri.notes.potentialWhy` | Potentiel : {reasons}. |
+| `phoneRhTri.notes.reason.training` | formations récentes |
+| `phoneRhTri.notes.reason.progression` | progression de poste |
+| `phoneRhTri.notes.reason.proofs` | compétences prouvées |
+| `phoneRhTri.notes.diplomaVerified` | Diplôme vérifié |
+| `phoneRhTri.notes.diplomaToCheck` | Diplôme reçu, un point à vérifier |
+| `phoneRhTri.notes.referents` | {count, plural, one {# référent donné} other {# référents donnés}} |
+| `phoneRhTri.notes.newSince` | Nouveau depuis sa candidature : {title} |
 | `phoneRhTri.pieces.title` | Dossier de vérification |
 | `phoneRhTri.pieces.line` | {count, plural, one {Demander des pièces au retenu, suivre ce qu'il envoie} other {Demander des pièces aux # retenus, suivre ce qu'ils envoient}} |
 | `phoneRhPieces.seo` | Dossier de vérification |

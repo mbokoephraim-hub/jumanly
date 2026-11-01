@@ -230,6 +230,23 @@ export async function RhCandidateSummary({
       .map(() => t("orbi.gapExperience")),
   ].slice(0, 2);
   const questions = proposedQuestions(application, 2);
+  // What the verification proved (« Diplôme vérifié », « 2 référents donnés »).
+  const pieces = await db.verificationItem.findMany({
+    where: { request: { applicationId: application.id }, receivedAt: { not: null } },
+    select: { kind: true, certificateCode: true, checks: true },
+  });
+  const referents = pieces.filter((item) => item.kind === "referent").length;
+  const proofsGained = [
+    ...pieces
+      .filter((item) => item.kind === "diploma")
+      .slice(0, 1)
+      .map((item) =>
+        item.certificateCode || (Array.isArray(item.checks) && item.checks.length === 0)
+          ? t("notes.diplomaVerified")
+          : t("notes.diplomaToCheck"),
+      ),
+    ...(referents > 0 ? [t("notes.referents", { count: referents })] : []),
+  ];
 
   // ─── Elimination criteria ────────────────────────────────────────────────────────
   const criteria = parseCriteria(job.knockoutCriteria);
@@ -321,6 +338,51 @@ export async function RhCandidateSummary({
                     <span className="nb-meta">{t("orbi.rule")}</span>
                   </span>
                 </div>
+                <dl className="nb-rh-fr-notes">
+                  <div>
+                    <dt>{t("notes.compatibility")}</dt>
+                    <dd>{t("notes.percent", { value: explanation.score })}</dd>
+                  </div>
+                  <div data-etoile={row.star ? "" : undefined}>
+                    <dt>{t("notes.potential")}</dt>
+                    <dd>
+                      {row.star
+                        ? t("notes.star")
+                        : t("notes.percent", { value: row.potential.value })}
+                    </dd>
+                  </div>
+                  <div data-niveau={row.confidence.after.level}>
+                    <dt>{t("notes.confidence")}</dt>
+                    <dd>
+                      {row.confidence.changed &&
+                      row.confidence.before.level !== row.confidence.after.level
+                        ? t("notes.confidenceChange", {
+                            before: t(`notes.level.${row.confidence.before.level}`),
+                            after: t(`notes.level.${row.confidence.after.level}`),
+                          })
+                        : t(`notes.level.${row.confidence.after.level}`)}
+                    </dd>
+                  </div>
+                </dl>
+                {row.potential.reasons.length > 0 ? (
+                  <p className="nb-meta">
+                    {t("notes.potentialWhy", {
+                      reasons: row.potential.reasons
+                        .map((reason) => t(`notes.reason.${reason}`))
+                        .join(", "),
+                    })}
+                  </p>
+                ) : null}
+                {proofsGained.length > 0 || row.newSince.length > 0 ? (
+                  <ul className="nb-rh-fr-gains">
+                    {proofsGained.map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                    {row.newSince.map((title) => (
+                      <li key={title}>{t("notes.newSince", { title })}</li>
+                    ))}
+                  </ul>
+                ) : null}
                 {notes.length > 0 ? (
                   <>
                     <p className="nb-rh-f-verif" data-lime="">

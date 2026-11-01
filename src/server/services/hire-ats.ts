@@ -47,6 +47,7 @@ import {
   type OrbiClass,
 } from "./hire-classes";
 import { parseCriteria } from "./jobs";
+import { confidenceChange, potentialOf, strongPotential, type Potential } from "./hire-scores";
 
 /** At most this many files « à voir en priorité ». */
 export const RECOMMENDED_MAX = 5;
@@ -124,6 +125,13 @@ export type AtsRow = {
   missedCriteria: string[];
   /** « En attente », a member's gesture. */
   onHold: boolean;
+  /** Orbi's « Potentiel » (trajectory) and « Confiance » (share of proven facts). */
+  potential: Potential;
+  confidence: ReturnType<typeof confidenceChange>;
+  /** Attestations shown on the profile since the application (« a progressé »). */
+  newSince: string[];
+  /** The « Fort potentiel » star (strong potential, compatibility below the strong class). */
+  star: boolean;
   /** Orbi's class (null when the organization sees no score). */
   orbiClass: OrbiClass | null;
 };
@@ -252,6 +260,7 @@ export async function atsBoard(
       coverLetter: true,
       cvSnapshot: true,
       attachments: true,
+      verification: { select: { items: { select: { required: true, receivedAt: true } } } },
       events: {
         where: { type: ANALYSIS_EVENT },
         orderBy: { createdAt: "desc" },
@@ -262,8 +271,23 @@ export async function atsBoard(
         select: {
           matchingEnabled: true,
           headline: true,
+          userId: true,
           user: { select: { name: true, city: true, country: true } },
-          experiences: { select: { startDate: true, endDate: true } },
+          experiences: {
+            select: {
+              title: true,
+              startDate: true,
+              endDate: true,
+              referenceChecks: { where: { status: "confirmed" }, select: { id: true }, take: 1 },
+            },
+          },
+          educations: {
+            select: {
+              kind: true,
+              endYear: true,
+              referenceChecks: { where: { status: "confirmed" }, select: { id: true }, take: 1 },
+            },
+          },
           skills: {
             select: { skillId: true, verified: true, proof: true, source: true, level: true },
           },
@@ -289,6 +313,15 @@ export async function atsBoard(
     },
     orderBy: { createdAt: "asc" },
     select: { applicationId: true, type: true, payload: true },
+  });
+  // Attestations of Jumanly the people chose to show (« Visible sur mon profil »): trainings.
+  const certificates = await db.certificate.findMany({
+    where: {
+      revokedAt: null,
+      onProfile: true,
+      enrollment: { userId: { in: applications.map((item) => item.profile.userId) } },
+    },
+    select: { issuedAt: true, courseTitle: true, enrollment: { select: { userId: true } } },
   });
   const proofJob = {
     skills: job.skills.map((item) => ({
@@ -350,6 +383,47 @@ export async function atsBoard(
         criteria,
       ),
       onHold: isOnHold(criterionEvents.filter((event) => event.applicationId === application.id)),
+      ...(() => {
+        const own = certificates.filter(
+          (item) => item.enrollment.userId === application.profile.userId,
+        );
+        const skills = application.profile.skills.map((item) => ({
+          proven:
+            item.verified || ["certificate", "project", "experience"].includes(item.proof ?? ""),
+        }));
+        const potential = potentialOf(
+          {
+            experiences: application.profile.experiences,
+            trainings: [
+              ...own.map((item) => ({ at: item.issuedAt })),
+              ...application.profile.educations
+                .filter((item) => item.kind === "certificate" && item.endYear)
+                .map((item) => ({ at: new Date(Date.UTC(item.endYear!, 5, 30)) })),
+            ],
+            skills,
+          },
+          now,
+        );
+        const confidence = confidenceChange({
+          skills,
+          items: [...application.profile.experiences, ...application.profile.educations].map(
+            (item) => ({ confirmed: item.referenceChecks.length > 0 }),
+          ),
+          pieces: (application.verification?.items ?? []).map((item) => ({
+            required: item.required,
+            received: item.receivedAt !== null,
+          })),
+        });
+        return {
+          potential,
+          confidence,
+          // Shown to the recruiter « avec son accord »: attestations on the profile since applying.
+          newSince: own
+            .filter((item) => item.issuedAt > application.createdAt)
+            .map((item) => item.courseTitle)
+            .slice(0, 3),
+        };
+      })(),
     };
   });
   const withScores = matchingLevel !== "none";
@@ -363,8 +437,12 @@ export async function atsBoard(
         : row.missedCriteria.length > 0
           ? ("hors" as const)
           : row.score !== null
-            ? classOf({ score: row.score })
+            ? classOf({
+                score: row.score,
+                strongPotential: strongPotential(row.potential.value, row.score),
+              })
             : null,
+      star: withScores && strongPotential(row.potential.value, row.score),
     }))
     .sort(
       (a, b) =>

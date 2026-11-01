@@ -807,6 +807,7 @@ export async function RhOfferCandidates({
                 ) : null}
               </span>
             ) : null}
+            {row.star ? <span className="nb-rh-pipe-etoile">{tt("notes.star")}</span> : null}
             {row.shortlisted || row.onHold ? (
               <span className="nb-rh-pipe-etat" data-etat={row.shortlisted ? "retenu" : "attente"}>
                 {row.shortlisted ? tt("state.retained") : tt("state.hold")}
