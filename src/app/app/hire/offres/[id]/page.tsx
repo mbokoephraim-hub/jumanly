@@ -27,6 +27,8 @@ import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
 import { getOrgJob, HireError, hirePermissions } from "@/server/services/hire";
 import { isPhone } from "@/server/view";
+import { effectiveRights } from "@/server/services/org-team";
+import { RhCandidateSummary } from "@/components/phone/recruteur/resume-fiche";
 import {
   RhOfferCandidates,
   RhOfferDetail,
@@ -698,6 +700,7 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
     throw error;
   });
   const permissions = hirePermissions(ctx.role);
+  const sortable = permissions.manage && effectiveRights(space.role, space.rights).sort;
   const published = one(query.publiee);
   if (published === "1" || published === "verification")
     return (
@@ -713,10 +716,25 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
     views: 0,
     interviews: 0,
   };
+  const fiche = one(query.fiche);
+  if (one(query.vue) === "candidats" && permissions.readApplications && fiche)
+    return (
+      <RhCandidateSummary
+        key={fiche}
+        ctx={ctx}
+        jobId={job.id}
+        applicationId={fiche.slice(0, 60)}
+        stageId={one(query.etape)}
+        query={query}
+        sortable={sortable}
+      />
+    );
   if (one(query.vue) === "candidats" && permissions.readApplications)
     return (
       <RhOfferCandidates
-        key={`${one(query.etape) ?? ""}-${one(query.classe) ?? ""}`}
+        query={query}
+        sortable={sortable}
+        key={`${one(query.etape) ?? ""}-${one(query.classe) ?? ""}-${one(query.cible) ?? ""}`}
         ctx={ctx}
         jobId={job.id}
         unseen={figures.unseen}

@@ -21,6 +21,18 @@ export const CLASS_CONSIDER = 50;
 export const CRITERION_UNMET_EVENT = "criterion_unmet";
 export const CRITERION_MET_EVENT = "criterion_met";
 
+/** « En attente » (a member's gesture, no answer to the candidate) and its end. */
+export const HOLD_EVENT = "on_hold";
+export const HOLD_LIFTED_EVENT = "hold_lifted";
+
+/** Is the application « En attente » (the last hold event wins, events oldest first)? */
+export function isOnHold(events: readonly { type: string }[]) {
+  const last = [...events]
+    .reverse()
+    .find((event) => event.type === HOLD_EVENT || event.type === HOLD_LIFTED_EVENT);
+  return last?.type === HOLD_EVENT;
+}
+
 /**
  * The class of one candidate. `missedCriteria`: the elimination criteria the recruiter marked as
  * missing (never guessed by Orbi). `strongPotential`: the « Fort potentiel » star, when known.

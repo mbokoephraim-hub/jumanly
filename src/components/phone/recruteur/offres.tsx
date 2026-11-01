@@ -17,6 +17,9 @@ import { ensureStages } from "@/server/services/applications";
 import { requestedDocumentKinds, type OfferRow } from "@/server/services/hire-offers";
 import { screeningQuestionsOf } from "@/server/services/screening";
 import { MenuArt } from "@/components/site/menu-art";
+import { sortGestureAction } from "@/server/actions/hire-tri";
+import { SwipeCard } from "./tri-client";
+import { RhUndoGesture } from "./tri";
 import { countryCode, countryName, flagOf } from "@/lib/countries";
 import { classCounts, orbiClasses, type OrbiClass } from "@/server/services/hire-classes";
 import { OrbiDisc, PhoneIcon } from "../icon";
@@ -663,14 +666,21 @@ export async function RhOfferCandidates({
   unseen,
   stageId,
   orbiClass,
+  query,
+  sortable,
 }: {
   ctx: HireContext;
   jobId: string;
   unseen: number;
+  /** The member may sort (manage + the « Trier » right). */
+  sortable: boolean;
   stageId?: string;
   orbiClass?: string;
+  query: Record<string, string | string[] | undefined>;
 }) {
   const t = await getTranslations("phoneRhOffres");
+  const tt = await getTranslations("phoneRhTri");
+
   const format = await getFormatter();
   const board = await atsBoard(db, ctx, jobId);
   const stages = await db.pipelineStage.findMany({
@@ -731,85 +741,112 @@ export async function RhOfferCandidates({
     : [{ key: "none" as const, rows: current.rows }];
   const card = (row: (typeof current.rows)[number]) => {
     const code = countryCode(row.country);
+    const canSort = sortable && row.status === "active";
+    const fiche = `${base}${chosen ? `&classe=${chosen}` : ""}&fiche=${row.id}`;
+    const here = `${base}${chosen ? `&classe=${chosen}` : ""}`;
+    const gesture = (gesture: "retenir" | "attente") => (
+      <form id={`rh-tri-${gesture}-${row.id}`} action={sortGestureAction} hidden>
+        <input type="hidden" name="application" value={row.id} />
+        <input type="hidden" name="job" value={jobId} />
+        <input type="hidden" name="gesture" value={gesture} />
+        <input type="hidden" name="back" value={here} />
+      </form>
+    );
     return (
-      <li key={row.id} className="nb-rh-pipe-carte" data-classe={row.orbiClass ?? undefined}>
-        <Link href={`/app/hire/candidats/${row.id}`} className="nb-rh-cand">
-          <span className="nb-rh-mini" aria-hidden>
-            {initials(row.name)}
-          </span>
-          <span className="nb-rh-res-t">
-            <b>{row.name}</b>
-            {row.headline ? <span className="nb-meta nb-rh-coupe">{row.headline}</span> : null}
-            <span className="nb-meta">
-              {[row.city, code ? `${flagOf(code)}` : null].filter(Boolean).join(" ")}
-              {code ? <span className="sr-only">{countryName(code)}</span> : null}
-            </span>
-          </span>
-          {row.score !== null ? (
-            <span
-              className="nb-rh-anneau"
-              style={{ "--p": row.score } as CSSProperties}
-              role="img"
-              aria-label={t("classes.score", { value: row.score })}
-            >
-              <b aria-hidden>{row.score}</b>
-            </span>
-          ) : null}
-        </Link>
-        {row.matched.length > 0 || row.documents.asked > 0 ? (
-          <span className="nb-rh-pipe-faits">
-            {row.matched.map((skill) => (
-              <span key={skill} className="nb-rh-pipe-comp">
-                {skill}
+      <li key={row.id}>
+        {canSort && !row.shortlisted ? gesture("retenir") : null}
+        {canSort && !row.onHold ? gesture("attente") : null}
+        <SwipeCard
+          right={canSort && !row.shortlisted ? `rh-tri-retenir-${row.id}` : null}
+          left={canSort && !row.onHold ? `rh-tri-attente-${row.id}` : null}
+          rightLabel={tt("swipe.retain")}
+          leftLabel={tt("swipe.hold")}
+        >
+          <div className="nb-rh-pipe-carte" data-classe={row.orbiClass ?? undefined}>
+            <Link href={fiche} className="nb-rh-cand">
+              <span className="nb-rh-mini" aria-hidden>
+                {initials(row.name)}
               </span>
-            ))}
-            {row.documents.asked > 0 ? (
-              <span
-                className="nb-rh-pipe-docs"
-                data-complet={row.documents.received >= row.documents.asked ? "" : undefined}
-              >
-                <MenuArt name="letter" size="xs" />
-                {t("classes.documents", {
-                  received: row.documents.received,
-                  asked: row.documents.asked,
-                })}
+              <span className="nb-rh-res-t">
+                <b>{row.name}</b>
+                {row.headline ? <span className="nb-meta nb-rh-coupe">{row.headline}</span> : null}
+                <span className="nb-meta">
+                  {[row.city, code ? `${flagOf(code)}` : null].filter(Boolean).join(" ")}
+                  {code ? <span className="sr-only">{countryName(code)}</span> : null}
+                </span>
+              </span>
+              {row.score !== null ? (
+                <span
+                  className="nb-rh-anneau"
+                  style={{ "--p": row.score } as CSSProperties}
+                  role="img"
+                  aria-label={t("classes.score", { value: row.score })}
+                >
+                  <b aria-hidden>{row.score}</b>
+                </span>
+              ) : null}
+            </Link>
+            {row.matched.length > 0 || row.documents.asked > 0 ? (
+              <span className="nb-rh-pipe-faits">
+                {row.matched.map((skill) => (
+                  <span key={skill} className="nb-rh-pipe-comp">
+                    {skill}
+                  </span>
+                ))}
+                {row.documents.asked > 0 ? (
+                  <span
+                    className="nb-rh-pipe-docs"
+                    data-complet={row.documents.received >= row.documents.asked ? "" : undefined}
+                  >
+                    <MenuArt name="letter" size="xs" />
+                    {t("classes.documents", {
+                      received: row.documents.received,
+                      asked: row.documents.asked,
+                    })}
+                  </span>
+                ) : null}
               </span>
             ) : null}
-          </span>
-        ) : null}
-        {row.missedCriteria.length > 0 ? (
-          <p className="nb-rh-pipe-manque">
-            {t("classes.missing", { label: row.missedCriteria.join(", ") })}
-          </p>
-        ) : null}
-        {position >= 0 ? (
-          <span
-            className="nb-rh-pipe-points"
-            role="img"
-            aria-label={t("pipeline.step", { index: position + 1, total: followed.length })}
-          >
-            {followed.map((stage, at) => (
-              <i
-                key={stage.id}
-                data-fait={at <= position ? "" : undefined}
-                data-actuel={at === position && current.kind !== "hired" ? "" : undefined}
-              />
-            ))}
-          </span>
-        ) : null}
-        <span className="nb-meta">
-          {t("pipeline.applied", { when: format.relativeTime(row.createdAt, now) })}
-        </span>
-        <span className="nb-rh-pipe-acces">
-          <Link href={`/app/hire/candidats/${row.id}?onglet=cv`}>
-            <MenuArt name="cv" size="xs" />
-            {t("pipeline.cv")}
-          </Link>
-          <Link href={`/app/hire/candidats/${row.id}?onglet=reponses`}>
-            <MenuArt name="letter" size="xs" />
-            {t("pipeline.documents")}
-          </Link>
-        </span>
+            {row.shortlisted || row.onHold ? (
+              <span className="nb-rh-pipe-etat" data-etat={row.shortlisted ? "retenu" : "attente"}>
+                {row.shortlisted ? tt("state.retained") : tt("state.hold")}
+              </span>
+            ) : null}
+            {row.missedCriteria.length > 0 ? (
+              <p className="nb-rh-pipe-manque">
+                {t("classes.missing", { label: row.missedCriteria.join(", ") })}
+              </p>
+            ) : null}
+            {position >= 0 ? (
+              <span
+                className="nb-rh-pipe-points"
+                role="img"
+                aria-label={t("pipeline.step", { index: position + 1, total: followed.length })}
+              >
+                {followed.map((stage, at) => (
+                  <i
+                    key={stage.id}
+                    data-fait={at <= position ? "" : undefined}
+                    data-actuel={at === position && current.kind !== "hired" ? "" : undefined}
+                  />
+                ))}
+              </span>
+            ) : null}
+            <span className="nb-meta">
+              {t("pipeline.applied", { when: format.relativeTime(row.createdAt, now) })}
+            </span>
+            <span className="nb-rh-pipe-acces">
+              <Link href={`/app/hire/candidats/${row.id}?onglet=cv`}>
+                <MenuArt name="cv" size="xs" />
+                {t("pipeline.cv")}
+              </Link>
+              <Link href={`/app/hire/candidats/${row.id}?onglet=reponses`}>
+                <MenuArt name="letter" size="xs" />
+                {t("pipeline.documents")}
+              </Link>
+            </span>
+          </div>
+        </SwipeCard>
       </li>
     );
   };
@@ -825,6 +862,11 @@ export async function RhOfferCandidates({
         <h1>{board.job.title}</h1>
         <p className="nb-meta">{t("candidates.line", { count: board.rows.length, unseen })}</p>
       </section>
+      <RhUndoGesture
+        query={query}
+        jobId={jobId}
+        back={`${base}${chosen ? `&classe=${chosen}` : ""}`}
+      />
       <nav className="nb-rh-pipe-nav" aria-label={t("pipeline.stages")}>
         {columns.map((column) => (
           <Link
@@ -881,6 +923,7 @@ export async function RhOfferCandidates({
       ) : null}
       <p className="nb-meta nb-rh-regle">
         {board.withScores ? t("classes.rule") : t("candidates.ruleNoScore")}
+        {sortable ? ` ${tt("swipe.hint")}` : null}
       </p>
       <div className="nb-rh-pipe-etapes">
         {current.rows.length === 0 ? (

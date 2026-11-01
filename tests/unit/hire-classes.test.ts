@@ -5,7 +5,11 @@ import {
   classCounts,
   classOf,
   documentsOf,
+  HOLD_EVENT,
+  HOLD_LIFTED_EVENT,
+  isOnHold,
   missedCriteriaOf,
+  rankByClass,
 } from "@/server/services/hire-classes";
 
 describe("classes Orbi du pipeline", () => {
@@ -50,5 +54,24 @@ describe("classes Orbi du pipeline", () => {
       received: 2,
       asked: 2,
     });
+  });
+});
+
+describe("tri du pipeline", () => {
+  it("la dernière mise en attente gagne", () => {
+    expect(isOnHold([{ type: HOLD_EVENT }])).toBe(true);
+    expect(isOnHold([{ type: HOLD_EVENT }, { type: HOLD_LIFTED_EVENT }])).toBe(false);
+    expect(isOnHold([{ type: "viewed" }])).toBe(false);
+  });
+
+  it("ordonne par classe en gardant l'ordre du score", () => {
+    const rows = [
+      { id: "a", orbiClass: "limite" as const },
+      { id: "b", orbiClass: null },
+      { id: "c", orbiClass: "fort" as const },
+      { id: "d", orbiClass: "hors" as const },
+      { id: "e", orbiClass: "fort" as const },
+    ];
+    expect(rankByClass(rows).map((row) => row.id)).toEqual(["c", "e", "a", "d", "b"]);
   });
 });

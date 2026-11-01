@@ -16303,6 +16303,72 @@ Conventions :
 | `phoneRhOffres.classes.missing` | Manque : {label} |
 | `phoneRhOffres.classes.score` | Compatibilité {value} % |
 | `phoneRhOffres.classes.documents` | {received} sur {asked} |
+| `phoneRhTri.back` | Pipeline |
+| `phoneRhTri.previous` | Candidat précédent |
+| `phoneRhTri.next` | Candidat suivant |
+| `phoneRhTri.position` | {index} sur {total} |
+| `phoneRhTri.identity.job` | {title} chez {company} |
+| `phoneRhTri.identity.studies` | Études en cours : {degree}, {school} |
+| `phoneRhTri.sentence.years` | {count, plural, one {# an d'expérience} other {# ans d'expérience}} |
+| `phoneRhTri.sentence.now` | disponible tout de suite |
+| `phoneRhTri.sentence.from` | disponible le {date, date, long} |
+| `phoneRhTri.state.retained` | Dans les retenus |
+| `phoneRhTri.state.hold` | En attente |
+| `phoneRhTri.class.fort` | Fort potentiel |
+| `phoneRhTri.class.considerer` | À considérer |
+| `phoneRhTri.class.limite` | Limité |
+| `phoneRhTri.class.hors` | Hors critères |
+| `phoneRhTri.orbi.title` | L'avis d'Orbi |
+| `phoneRhTri.orbi.score` | Compatibilité {value} % |
+| `phoneRhTri.orbi.rule` | Calculé sans le nom, l'âge, la photo ni l'origine. Vous décidez. |
+| `phoneRhTri.orbi.reasons` | Pour |
+| `phoneRhTri.orbi.gaps` | Écarts |
+| `phoneRhTri.orbi.gapSkill` | Pas de {skill} dans le profil |
+| `phoneRhTri.orbi.gapLanguages` | Une langue demandée manque ou a un niveau plus bas |
+| `phoneRhTri.orbi.gapExperience` | Moins d'expérience que demandé |
+| `phoneRhTri.orbi.questions` | Deux questions à poser en entretien |
+| `phoneRhTri.orbi.question.proven` | Racontez un projet où vous avez utilisé {skill}. Quel était votre rôle ? |
+| `phoneRhTri.orbi.question.check` | Comment avez-vous pratiqué {skill} ? Donnez un exemple concret. |
+| `phoneRhTri.orbi.none` | Le score de ce candidat n'est pas calculé : il a désactivé le calcul de compatibilité. |
+| `phoneRhTri.criteria.title` | Critères éliminatoires |
+| `phoneRhTri.criteria.lead` | Orbi ne les vérifie pas seul. Si un critère manque, marquez-le : le candidat passe dans « Hors critères » et reste visible. |
+| `phoneRhTri.criteria.unmet` | Ne le remplit pas |
+| `phoneRhTri.criteria.met` | Le remplit finalement |
+| `phoneRhTri.criteria.missing` | Manque |
+| `phoneRhTri.skills.title` | Compétences |
+| `phoneRhTri.skills.none` | Aucune compétence indiquée. |
+| `phoneRhTri.skills.proven` | prouvée |
+| `phoneRhTri.timeline.title` | Parcours |
+| `phoneRhTri.timeline.none` | Pas encore d'expérience ni de diplôme indiqué. |
+| `phoneRhTri.timeline.today` | aujourd'hui |
+| `phoneRhTri.practical.title` | Pratique |
+| `phoneRhTri.practical.languages` | Langues |
+| `phoneRhTri.practical.contract` | Contrat cherché |
+| `phoneRhTri.practical.availability` | Disponibilité |
+| `phoneRhTri.practical.mobility` | Mobilité |
+| `phoneRhTri.practical.relocation` | Prêt à déménager |
+| `phoneRhTri.practical.unknown` | Non précisé |
+| `phoneRhTri.documents.title` | Documents |
+| `phoneRhTri.documents.none` | Aucun document joint. |
+| `phoneRhTri.documents.cv` | CV |
+| `phoneRhTri.documents.letter` | Lettre de motivation |
+| `phoneRhTri.documents.state.received` | Reçu |
+| `phoneRhTri.documents.state.read` | Lu par Orbi |
+| `phoneRhTri.documents.state.verified` | Vérifié |
+| `phoneRhTri.documents.missing` | {count, plural, one {# document demandé manque} other {# documents demandés manquent}} |
+| `phoneRhTri.file` | Ouvrir le dossier complet |
+| `phoneRhTri.applied` | Candidature {when} |
+| `phoneRhTri.actions.reject` | Ne pas retenir |
+| `phoneRhTri.actions.hold` | En attente |
+| `phoneRhTri.actions.unhold` | Sortir de l'attente |
+| `phoneRhTri.actions.retain` | Retenir |
+| `phoneRhTri.actions.unretain` | Retirer des retenus |
+| `phoneRhTri.undo.retained` | Candidature de {name} retenue. |
+| `phoneRhTri.undo.hold` | Candidature de {name} mise en attente. |
+| `phoneRhTri.undo.button` | Annuler |
+| `phoneRhTri.swipe.retain` | Retenir |
+| `phoneRhTri.swipe.hold` | En attente |
+| `phoneRhTri.swipe.hint` | Glissez une carte vers la droite pour retenir, vers la gauche pour mettre en attente. |
 | `phoneRhOffres.tile.views` | {count, plural, one {vue} other {vues}} |
 | `phoneRhOffres.tile.online` | en ligne |
 | `phoneRhOffres.tile.daysValue` | {count, plural, =0 {Auj.} other {# j}} |
