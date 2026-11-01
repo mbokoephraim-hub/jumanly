@@ -1,6 +1,6 @@
 import "server-only";
 import Link from "next/link";
-import { GoldVerifiedBadge } from "../badge-or";
+import { GoldSeal } from "../badge-or";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { addNoteAction } from "@/server/actions/hire";
@@ -418,7 +418,7 @@ export async function RhCandidate({
           <p key={item.id} className="nb-rh-f-comp">
             <span>{item.skill.name}</span>
             {item.verified ? (
-              <GoldVerifiedBadge label={t("cv.verified")} small />
+              <GoldSeal size={18} label={t("cv.verified")} />
             ) : (
               <span className="nb-meta">{t("cv.declared")}</span>
             )}

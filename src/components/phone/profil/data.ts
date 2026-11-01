@@ -28,6 +28,8 @@ export type ProfileView = {
   online: boolean;
   socials: { kind: SocialKind | "email"; href: string; label: string }[];
   verified: boolean;
+  /** A paid subscriber: the gold seal beside the name. */
+  premium: boolean;
   handle: string;
   place: { flag: string; flagLabel: string; text: string; time: string | null } | null;
   /** The short line under the name: the person's title. */

@@ -1,41 +1,8 @@
-/* Badge doré « Vérifié » (Ephraïm, 31/10/2026) : tout ce qui est vérifié (expérience, certificat,
-   attestation, compétence, profil) porte un vrai badge or, distinct des autres textes.
-   Le fond est plein : il se lit de la même façon en thème sombre et en thème « Crème doux ».
-   Texte brun foncé sur or : contraste supérieur à 7:1. */
-.nb-or {
+/* Badge doré « Vérifié » (Ephraïm, 31/10 puis 01/11/2026) : le sceau or seul, sans le mot, au bout
+   de la ligne du titre (poste, certificat). Le mot reste lu par les lecteurs d'écran. */
+.nb-or-sceau {
   display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  width: fit-content;
-  margin-top: 5px;
-  padding: 3px 10px 3px 4px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #fbe7a1 0%, #e9c45a 38%, #c8962a 72%, #e7c15b 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.55),
-    inset 0 -1px 0 rgba(122, 82, 0, 0.35),
-    0 1px 3px rgba(0, 0, 0, 0.25);
-  border: 1px solid #a8780f;
-  color: #3a2600;
-  font-size: 11.5px;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-.nb-or svg {
-  flex: none;
-  filter: drop-shadow(0 1px 0 rgba(122, 82, 0, 0.35));
-}
-html[data-nb-theme="clair"] .nb-or {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    inset 0 -1px 0 rgba(122, 82, 0, 0.3),
-    0 1px 2px rgba(122, 82, 0, 0.25);
-}
-/* Version courte, au bout d'une ligne (compétences du recruteur). */
-.nb-or[data-petit] {
-  margin-top: 0;
-  padding: 2px 8px 2px 3px;
-  font-size: 11px;
+  margin-left: 6px;
+  vertical-align: -3px;
+  line-height: 0;
 }

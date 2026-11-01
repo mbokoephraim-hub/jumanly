@@ -1,5 +1,6 @@
 import type { PrismaClient } from "@/generated/prisma/client";
 import { parseSocialLinks } from "@/lib/social-links";
+import { resolvePlan } from "@/server/entitlements";
 import { links } from "./explore";
 import { lastActive } from "./hire-phone-talents";
 import { parseProject, portfolioLevel } from "./portfolio";
@@ -197,6 +198,9 @@ export async function personProfile(
     image: user.image,
     banner: profile.banner,
     verified: user.emailVerified,
+    /** The gold seal beside the name: paid subscribers only (Ephraïm 01/11/2026). Read from the
+     * price, never from a plan name (CLAUDE.md § 2). */
+    premium: Boolean((await resolvePlan(db, { type: "user", id: user.id }))?.priceCents),
     handle: profile.handle,
     socials: limited ? {} : parseSocialLinks(profile.socialLinks),
     email: profile.showEmail && !limited ? user.email : null,

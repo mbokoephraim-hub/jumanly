@@ -321,7 +321,9 @@ export function PersonProfile({
         <h1>
           {person.name}
           {person.verified ? (
-            <VerifiedMark label={t("verified")} />
+            person.premium ? (
+              <VerifiedMark label={t("verified")} />
+            ) : null
           ) : (
             <span className="nb-pf-tag" data-gris="">
               {t("notVerified")}
@@ -596,14 +598,16 @@ export function PersonProfile({
                     ) : null}
                     <ExperienceLogo item={item} />
                     <div>
-                      <h3>{item.title}</h3>
+                      <h3>
+                        {item.title}
+                        {item.verified ? (
+                          <ItemVerifiedMark label={t("itemVerified")} help={t("verifiedHelp")} />
+                        ) : null}
+                      </h3>
                       <ExperienceMeta
                         item={item}
                         label={t("companyPage", { company: item.company })}
                       />
-                      {item.verified ? (
-                        <ItemVerifiedMark label={t("itemVerified")} help={t("verifiedHelp")} />
-                      ) : null}
                       <ExperiencePoints item={item} points={points} />
                       {item.points.length > POINTS_SHOWN ? (
                         <button
