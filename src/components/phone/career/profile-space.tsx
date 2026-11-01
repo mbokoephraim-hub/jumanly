@@ -12,6 +12,7 @@ import {
   removeCareerSkillAction,
   setCareerAvailabilityAction,
 } from "@/server/actions/career-phone";
+import { GoldSeal } from "../badge-or";
 import { PhoneBack } from "../back";
 import type { PostView } from "../fil/data";
 import { PostCard, type PostSheet } from "../fil/post";
@@ -529,25 +530,7 @@ function ProfilePanel({
           >
             <i style={{ background: skill.color }} aria-hidden />
             {skill.name}
-            {skill.verified ? (
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 24 24"
-                role="img"
-                aria-label={tp("skillVerified")}
-              >
-                <circle cx="12" cy="12" r="10" fill={skill.color} />
-                <path
-                  d="m7.5 12.5 3 3 6-6.5"
-                  fill="none"
-                  stroke="#0B1A1F"
-                  strokeWidth="2.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            ) : null}
+            {skill.verified ? <GoldSeal size={15} label={tp("skillVerified")} /> : null}
             {removing ? (
               <button
                 type="button"

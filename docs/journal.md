@@ -5342,3 +5342,8 @@ Six modèles visuels (bandeau de couleur, photo ronde, carrée ou sans photo, 9 
 
 Demande d'Ephraïm : sur un diplôme ou un certificat, on peut ajouter le logo de l'école (ou de l'organisme), affiché à la place de l'icône, et 2 à 3 points « Ce que j'ai appris » affichés sous le titre (`Education.schoolLogo`, `Education.learnings`, une ligne par point ; logo rangé comme ceux des expériences). Chaque langue du profil porte son drapeau (`languageFlagOf` dans src/lib/countries.ts : lingala, kikongo et tshiluba → RD Congo, anglais → Royaume-Uni, swahili → Tanzanie). Profil ordinateur non touché.
 - 2026-10-31 : diplômes et certificats, « Logo de l’institution (facultatif) » sur une ligne et dans les marges ; langues ajoutées une à une (recherche dans toutes les langues, src/lib/languages.ts, niveaux tout de suite, « Ajouter une autre langue », drapeau) ; compétences avec « Ajouter une compétence » et « Retirer » (croix sur chaque compétence).
+
+
+## 2026-10-31 · Badge doré « Vérifié »
+
+Demande d'Ephraïm : ce qui est vérifié ne doit plus ressembler au texte vert. Nouveau composant `src/components/phone/badge-or.tsx` (sceau doré `GoldSeal` + pilule dorée `GoldVerifiedBadge`, CSS `src/styles/phone-badge-or.css`, fond plein lisible en thème sombre et « Crème doux »). Appliqué aux expériences et certificats vérifiés, aux compétences vérifiées, au sceau « Profil vérifié » et aux compétences vérifiées des fiches candidat et talent côté recruteur. Les diplômes restent sans « Vérifié » (décision du 29/10).

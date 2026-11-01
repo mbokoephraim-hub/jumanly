@@ -16807,7 +16807,7 @@ Conventions :
 | `phoneRhCandidatures.cv.degree` | {degree}, {school} |
 | `phoneRhCandidatures.cv.year` | ({year}) |
 | `phoneRhCandidatures.cv.certificate` | {title} · attestation Jumanly |
-| `phoneRhCandidatures.cv.verified` | vérifiée |
+| `phoneRhCandidatures.cv.verified` | Vérifiée |
 | `phoneRhCandidatures.cv.declared` | déclarée |
 | `phoneRhCandidatures.answers.none` | Pas de question ni de lettre pour cette offre. |
 | `phoneRhCandidatures.answers.yes` | Oui |
