@@ -190,13 +190,12 @@ test.describe("Modèle B · accueil au téléphone", () => {
     await expectAccessible(page);
     await next.click();
 
-    // Notifications, then « Profil prêt » with the real completeness.
+    // Notifications, then « Profil prêt » (no completeness since 01/11/2026).
     await expect(
       page.getByRole("heading", { name: "Ne ratez aucune offre pour vous" }),
     ).toBeVisible();
     await page.getByRole("button", { name: "Plus tard" }).click();
     await expect(page.getByRole("heading", { name: "Bienvenue, Awa" })).toBeVisible();
-    await expect(page.locator(".nb-pret-pct")).toHaveText(/Profil complété à \d+ %/);
     await expectAccessible(page);
     // « Modifier mes réponses » comes back to step 1.
     await page.getByRole("button", { name: /Modifier mes réponses/ }).click();

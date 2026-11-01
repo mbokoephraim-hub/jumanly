@@ -43,7 +43,6 @@ import { talentAttestations } from "@/server/services/attestations";
 import { listProjects, portfolioLevel } from "@/server/services/portfolio";
 import {
   cefrLevels,
-  completeness,
   getFullProfile,
   languageLevels,
   parseProfileLanguages,
@@ -77,25 +76,6 @@ const former: Record<string, SectionId> = {
   langues: "langues",
   preferences: "recherche",
   projets: "projets",
-};
-
-/** Completeness parts → the screen that fills them (on a tablet or a computer: `wide`). */
-const fillers: Record<string, string> = {
-  identity: "/app/profil/modifier",
-  summary: "/app/profil/modifier",
-  experience: "/app/profil/experience",
-  education: "/app/profil?section=etudes#etudes",
-  skills: "/app/profil/competence",
-  languages: "/app/profil?section=langues#langues",
-  preferences: "/app/profil/recherche",
-};
-
-const wideFillers: Record<string, string> = {
-  identity: "/app/profil?fenetre=modifier",
-  summary: "/app/profil?fenetre=modifier",
-  experience: "/app/profil?fenetre=experience",
-  skills: "/app/profil?fenetre=competence",
-  preferences: "/app/profil?fenetre=recherche",
 };
 
 /** On a phone, the sections keep the order of the planche talent-4 § 3 (`order`). */
@@ -169,7 +149,6 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
     portfolioLevel(db, user.id),
   ]);
   const projects = await listProjects(db, profile.id);
-  const { percent, missing } = completeness(profile);
   const languages = parseProfileLanguages(profile.languages);
   const shown = attestations.filter((attestation) => attestation.onProfile);
 
@@ -184,7 +163,6 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
   const role = profile.headline || profile.desiredJobTitles[0];
   const aim = profile.targetJob || profile.desiredJobTitles[0];
   const place = [role, user.city].filter(Boolean).join(" · ");
-  const next = missing[0];
   const topEducation = profile.educations[0];
   const searchLine = [
     profile.desiredContracts[0] && td(`profil.contract.${profile.desiredContracts[0]}`),
@@ -430,26 +408,6 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
         </div>
 
         <div className="t-w4-col">
-          <WideLink
-            href={next ? fillers[next]! : "/app/profil/point"}
-            wide={next ? (wideFillers[next] ?? fillers[next]!) : "/app/profil?fenetre=point"}
-            className="t-verre t-compl t-w4-o1 t-press"
-          >
-            <span
-              className="t-anneau"
-              style={{ "--p": percent } as React.CSSProperties}
-              aria-hidden
-            >
-              <b>{t("profil.completeness.ring", { percent })}</b>
-            </span>
-            <span className="t-t">
-              <b>{t("profil.completeness.title", { percent })}</b>
-              <span>
-                {next ? td(`profil.completeness.next.${next}`) : t("profil.completeness.done")}
-              </span>
-            </span>
-            <TalentIcon name="suivant" size="s" />
-          </WideLink>
           <section aria-labelledby="pf-cherche" className="t-verre t-w4-cherche t-w4-web">
             <h2 id="pf-cherche">
               {t("profil.search.title")}
