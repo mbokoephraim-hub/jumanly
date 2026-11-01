@@ -5027,3 +5027,205 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
     animation: none;
   }
 }
+
+/* Les classes Orbi du pipeline (« Logique du recrutement », Ephraïm 01/11/2026) */
+.nb-rh-pipe-nav a[aria-current="page"] {
+  border-color: var(--nb-lime);
+  background: var(--nb-lime);
+  color: var(--nb-encre);
+}
+.nb-rh-pipe-nav a[aria-current="page"] b {
+  background: var(--nb-encre);
+  color: var(--nb-lime);
+}
+.nb-rh-pipe [data-classe="fort"] {
+  --classe: var(--nb-lime);
+  --classe-t: var(--nb-lime-t);
+}
+.nb-rh-pipe [data-classe="considerer"] {
+  --classe: var(--nb-menthe-claire);
+  --classe-t: var(--nb-menthe-claire-t);
+}
+.nb-rh-pipe [data-classe="limite"] {
+  --classe: var(--nb-ambre);
+  --classe-t: var(--nb-ambre-t);
+}
+.nb-rh-pipe [data-classe="hors"] {
+  --classe: var(--nb-corail);
+  --classe-t: var(--nb-corail-t);
+}
+.nb-rh-classes {
+  display: grid;
+  gap: 10px;
+  margin: 12px 20px 0;
+  padding: 14px;
+  border-radius: 20px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+}
+.nb-rh-classes h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.nb-rh-classes-barre {
+  display: flex;
+  gap: 3px;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+}
+.nb-rh-classes-barre i {
+  flex-basis: 0;
+  min-width: 8px;
+  background: var(--classe);
+}
+.nb-rh-classes-liste {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+.nb-rh-classes-liste a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: 12px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-noir);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--nb-creme);
+}
+.nb-rh-classes-liste a b {
+  display: inline-grid;
+  place-items: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--classe);
+  color: var(--nb-encre);
+  font-size: 13px;
+}
+.nb-rh-classes-liste a[aria-current="true"] {
+  border-color: var(--classe);
+  box-shadow: inset 0 0 0 1px var(--classe);
+}
+.nb-rh-classes-liste a[aria-disabled="true"] {
+  opacity: 0.55;
+}
+.nb-rh-classes-tous {
+  justify-self: start;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nb-lime-t);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.nb-rh-pipe-groupe {
+  display: grid;
+  gap: 10px;
+}
+.nb-rh-pipe-groupe > h2,
+.nb-rh-pipe-groupe > summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.nb-rh-pipe-groupe > h2::before,
+.nb-rh-pipe-groupe > summary::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--classe, var(--nb-haute));
+}
+.nb-rh-pipe-groupe > h2 > b {
+  margin-left: auto;
+  color: var(--nb-brume);
+  font-size: 14px;
+}
+.nb-rh-pipe-groupe > summary {
+  min-height: 48px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px dashed var(--nb-filet-fort);
+  cursor: pointer;
+  list-style: none;
+}
+.nb-rh-pipe-groupe > summary::-webkit-details-marker {
+  display: none;
+}
+.nb-rh-pipe-groupe > summary > b {
+  margin-left: auto;
+  font-size: 13.5px;
+  color: var(--nb-lime-t);
+}
+.nb-rh-pipe-groupe[open] > summary > b {
+  display: none;
+}
+.nb-rh-pipe-groupe ul {
+  display: grid;
+  gap: 10px;
+}
+.nb-rh-pipe-carte[data-classe] {
+  border-left: 3px solid var(--classe);
+}
+.nb-rh-coupe {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-rh-anneau {
+  --p: 0;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  background:
+    radial-gradient(closest-side, var(--nb-noir) 76%, transparent 78%),
+    conic-gradient(var(--classe, var(--nb-lime)) calc(var(--p) * 1%), var(--nb-haute) 0);
+}
+.nb-rh-anneau b {
+  font-size: 14px;
+  font-weight: 700;
+}
+.nb-rh-pipe-faits {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.nb-rh-pipe-comp {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--nb-lime) 16%, transparent);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--nb-lime-t);
+}
+.nb-rh-pipe-docs {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--nb-brume);
+}
+.nb-rh-pipe-docs[data-complet] {
+  color: var(--nb-menthe-claire-t);
+}
+.nb-rh-pipe-manque {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--nb-corail-t);
+}

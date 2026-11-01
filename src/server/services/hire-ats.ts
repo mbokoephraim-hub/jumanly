@@ -34,6 +34,16 @@ import {
 } from "./hire";
 import { proposedQuestions } from "./hire-interviews";
 import { notify } from "./notifications";
+import { sentAttachments } from "./application-attachments";
+import {
+  classOf,
+  CRITERION_MET_EVENT,
+  CRITERION_UNMET_EVENT,
+  documentsOf,
+  missedCriteriaOf,
+  type OrbiClass,
+} from "./hire-classes";
+import { parseCriteria } from "./jobs";
 
 /** At most this many files « à voir en priorité ». */
 export const RECOMMENDED_MAX = 5;
@@ -99,6 +109,18 @@ export type AtsRow = {
   /** Skills of the offer declared without proof, or missing. */
   toCheck: string[];
   group: "recommended" | "verify" | "other";
+  /** Short professional title of the profile (« Analyste financière »). */
+  headline: string | null;
+  /** ISO code of the country, for the flag. */
+  country: string | null;
+  /** Up to two skills of the offer the profile has, required ones first. */
+  matched: string[];
+  /** Documents asked by the offer and received (« 3 sur 3 »). */
+  documents: { received: number; asked: number };
+  /** Elimination criteria the recruiter marked as missing. */
+  missedCriteria: string[];
+  /** Orbi's class (null when the organization sees no score). */
+  orbiClass: OrbiClass | null;
 };
 
 const DAY = 86_400_000;
@@ -222,6 +244,9 @@ export async function atsBoard(
       matchExplanation: true,
       shortlistedAt: true,
       shortlistedById: true,
+      coverLetter: true,
+      cvSnapshot: true,
+      attachments: true,
       events: {
         where: { type: ANALYSIS_EVENT },
         orderBy: { createdAt: "desc" },
@@ -231,7 +256,8 @@ export async function atsBoard(
       profile: {
         select: {
           matchingEnabled: true,
-          user: { select: { name: true, city: true } },
+          headline: true,
+          user: { select: { name: true, city: true, country: true } },
           experiences: { select: { startDate: true, endDate: true } },
           skills: {
             select: { skillId: true, verified: true, proof: true, source: true, level: true },
@@ -244,6 +270,18 @@ export async function atsBoard(
     matchingLevel === "none"
       ? new Map<string, MatchExplanation | "disabled">()
       : await applicationMatches(db, applications, now);
+  const criteria = parseCriteria(job.knockoutCriteria);
+  const criterionEvents =
+    criteria.length > 0
+      ? await db.applicationEvent.findMany({
+          where: {
+            applicationId: { in: applications.map((application) => application.id) },
+            type: { in: [CRITERION_UNMET_EVENT, CRITERION_MET_EVENT] },
+          },
+          orderBy: { createdAt: "asc" },
+          select: { applicationId: true, type: true, payload: true },
+        })
+      : [];
   const proofJob = {
     skills: job.skills.map((item) => ({
       skillId: item.skillId,
@@ -286,12 +324,39 @@ export async function atsBoard(
       toCheck: proofs
         .filter((item) => item.proof === "declared" || item.proof === "missing")
         .map((item) => item.name),
+      headline: application.profile.headline,
+      country: application.profile.user.country,
+      matched: [...proofs]
+        .filter((item) => item.proof !== "missing")
+        .sort((a, b) => Number(b.required) - Number(a.required))
+        .slice(0, 2)
+        .map((item) => item.name),
+      documents: documentsOf({
+        asked: job.requestedDocuments,
+        hasCv: application.cvSnapshot !== null,
+        hasLetter: Boolean(application.coverLetter?.trim()),
+        attachments: sentAttachments(application.attachments),
+      }),
+      missedCriteria: missedCriteriaOf(
+        criterionEvents.filter((event) => event.applicationId === application.id),
+        criteria,
+      ),
     };
   });
   const withScores = matchingLevel !== "none";
   const groupOf = groupRows(draft, withScores);
   const rows: AtsRow[] = draft
-    .map((row) => ({ ...row, group: groupOf(row) }))
+    .map((row) => ({
+      ...row,
+      group: groupOf(row),
+      orbiClass: !withScores
+        ? null
+        : row.missedCriteria.length > 0
+          ? ("hors" as const)
+          : row.score !== null
+            ? classOf({ score: row.score })
+            : null,
+    }))
     .sort(
       (a, b) =>
         (withScores ? (b.score ?? -1) - (a.score ?? -1) : 0) ||
