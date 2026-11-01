@@ -189,17 +189,11 @@ export type ThreadView = {
   context: ContextView | null;
   /** « Voir la candidature » in the menu ···. */
   applicationHref: string | null;
-  /** The line under the name during a call: « Entretien · Analyste… » or their line. */
-  callLine: string;
-  /** A video call is possible here (connections, or the recruiter of an application). */
-  canCall: boolean;
   pinned: boolean;
   /** The other side is typing (as the page was read). */
   typing: boolean;
   /** The replies Orbi suggests above the field (rules, no credit). */
   suggestions: string[];
-  /** My initials, for my own tile during a call. */
-  me: { initials: string };
   /** What « Joindre » offers. */
   certificates: AttachDoc[];
   cvs: AttachDoc[];
