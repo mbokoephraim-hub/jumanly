@@ -107,18 +107,11 @@ test.describe("Modèle B · Explorer au téléphone", () => {
     await save.click();
     await expect(save).toHaveAttribute("aria-pressed", before ?? "false");
 
-    // « Postuler » opens its sheet: the CV, a word, « Envoyer ma candidature ». Free, always.
-    await pile.getByRole("button", { name: "Postuler", exact: true }).click();
-    const sheet = page.getByRole("dialog", { name: /^Postuler chez/ });
-    await expect(sheet.getByText("Votre CV")).toBeVisible();
-    await expect(sheet.getByRole("radio").first()).toBeVisible();
-    await expect(sheet.getByRole("button", { name: "Envoyer ma candidature" })).toBeVisible();
-    // A touch on the veil above the sheet closes it.
-    await sheet
-      .getByRole("button", { name: "Fermer" })
-      .first()
-      .click({ position: { x: 195, y: 24 } });
-    await expect(sheet).toBeHidden();
+    // « Postuler » opens its page (01/11/2026): first, how to apply. Free, always.
+    await pile.getByRole("link", { name: /^(Postuler|Reprendre ma candidature)$/ }).click();
+    await page.waitForURL("**/postuler**");
+    await expect(page.getByRole("heading", { level: 1, name: "Postuler" })).toBeVisible();
+    await page.goto("/app/jobs/ux-assistant-administratif-cotonou");
 
     // The company's page, its tabs, « Suivre » and the way back.
     await pile.getByRole("link", { name: /Voir la page/ }).click();

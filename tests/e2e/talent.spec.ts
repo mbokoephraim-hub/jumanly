@@ -59,6 +59,9 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
   if (isMobile) await page.goto(`/app/jobs/${JOB}/postuler`);
   else await page.getByRole("link", { name: "Postuler", exact: true }).click();
   await expect(page).toHaveURL(/\/postuler/);
+  // First screen (01/11/2026): how to apply; « Avec un CV existant » is chosen.
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page).toHaveURL(/etape=cv/);
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/etape=lettre/);
   await page.getByRole("button", { name: "Ajouter un document" }).click();
