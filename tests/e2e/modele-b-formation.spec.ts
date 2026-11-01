@@ -14,7 +14,7 @@ test.describe("Modèle B · Formation au téléphone", () => {
     await page.goto("/app/learn");
     const tab = page.locator(".nb-fo-accueil");
     await expect(tab.getByRole("heading", { name: "Formation", exact: true })).toBeVisible();
-    await expect(tab.getByRole("link", { name: /^Continuer/ })).toBeVisible();
+    await expect(tab.getByRole("link", { name: /^Reprendre/ })).toBeVisible();
 
     // « Pourquoi ? » asks Orbi why the course counts; Orbi answers in its sheet.
     await tab.getByRole("button", { name: "Pourquoi ?" }).click();

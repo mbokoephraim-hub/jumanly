@@ -294,9 +294,9 @@ test("reprendre une formation depuis Apprendre", async ({ page, isMobile }) => {
   await logIn(page, "grace.ux@jumanly.test");
   await page.goto("/app/learn");
   await expectAccessible(page);
-  // On the phone, Formation is Modèle B (lot B7): « Continuer » opens the lesson to resume.
+  // On the phone, Formation is Modèle B (lot B7): « Reprendre » opens the lesson to resume.
   await page
-    .getByRole("link", { name: isMobile ? /^Continuer/ : "Reprendre" })
+    .getByRole("link", { name: isMobile ? /^Reprendre/ : "Reprendre" })
     .filter({ visible: true })
     .first()
     .click();

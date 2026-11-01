@@ -78,6 +78,11 @@ export const phoneIcons = {
   plusOptions: "M5 12h.01M12 12h.01M19 12h.01",
   // A text cursor over a line: give a name (menu of a CV, 31/10/2026).
   renommer: "M4 17.5h10M9 6.5v8M6.5 6.5h5M17.5 5v14M15.5 5h4M15.5 19h4",
+  // A question in a ring: « Pourquoi ? » of Orbi's advice in Formation (01/11/2026).
+  question:
+    "M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM9.6 9.5a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.1-2.4 3.6M12 16.8h.01",
+  // A screen with two lines of text: the subtitles of a lesson.
+  sousTitres: "M4 6h16v12H4zM7.5 11.5h4M13.5 11.5h3M7.5 14.5h2.5M12 14.5h4.5",
   oeil: "M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12zM12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z",
 } as const;
 

@@ -129,42 +129,85 @@ export function PhoneFormation({ view }: { view: FormationView }) {
             {tab === "pour-vous" ? (
               <>
                 {view.current ? (
-                  <Link href={view.current.href} className="nb-fo-continuer">
-                    <span className="nb-fo-continuer-haut" data-ton={view.current.tone}>
-                      {view.current.cover ? (
-                        <CourseCover src={view.current.cover} />
-                      ) : (
-                        <CourseArt play />
-                      )}
-                      <span className="nb-fo-lire" aria-hidden>
-                        <PhoneIcon name="lecture" size={20} />
-                      </span>
-                    </span>
-                    <span className="nb-fo-continuer-bas">
-                      <span className="nb-fo-sur">{t("continue")}</span>
-                      <b>{view.current.title}</b>
-                      <small className="nb-meta">{view.current.line}</small>
-                      <span className="nb-fo-barre" aria-hidden>
-                        <i style={{ width: `${view.current.progress}%` }} />
-                      </span>
-                    </span>
-                  </Link>
+                  <>
+                    <div className="nb-ex-sec">
+                      <h2 id="fo-reprendre">{t("resume.title")}</h2>
+                      <button
+                        type="button"
+                        className="nb-fo-tout"
+                        onClick={() => setTab("mes-cours")}
+                      >
+                        {t("tab.mine")}
+                      </button>
+                    </div>
+                    {/* « Reprendre » (Ephraïm, 01/11/2026): the cover small with its progress, the
+                        title once, the time left, one lime button that pulses, Orbi inside. */}
+                    <div className="nb-fo-reprendre">
+                      <Link
+                        href={view.current.href}
+                        className="nb-fo-continuer"
+                        aria-label={t("resume.label", { course: view.current.title })}
+                      >
+                        <span className="nb-fo-rp-haut">
+                          <span
+                            className="nb-fo-vign"
+                            data-ton={view.current.tone}
+                            data-couv={view.current.cover ? "" : undefined}
+                            aria-hidden
+                          >
+                            {view.current.cover ? (
+                              <CourseCover src={view.current.cover} />
+                            ) : (
+                              <CourseArt />
+                            )}
+                            <span className="nb-fo-lire">
+                              <PhoneIcon name="lecture" size={14} fill="currentColor" />
+                            </span>
+                            <span className="nb-fo-vign-barre">
+                              <i style={{ width: `${view.current.progress}%` }} />
+                            </span>
+                          </span>
+                          <span className="nb-fo-rp-t">
+                            <span className="nb-fo-sur">{view.current.lesson}</span>
+                            <b>{view.current.title}</b>
+                            <small className="nb-meta">{view.current.left}</small>
+                          </span>
+                        </span>
+                        <span className="nb-fo-rp-bas">
+                          <span className="nb-fo-rp-pc">
+                            {t("percent", { value: view.current.progress })}
+                          </span>
+                          <span className="nb-fo-barre" aria-hidden>
+                            <i style={{ width: `${view.current.progress}%` }} />
+                          </span>
+                          <span className="nb-fo-rp-bouton">{t("resume.action")}</span>
+                        </span>
+                      </Link>
+                      {view.advice ? (
+                        <div className="nb-fo-conseil">
+                          <OrbiDisc size={26} />
+                          <span>
+                            {view.advice.lead}
+                            <br />
+                            {view.advice.end}
+                          </span>
+                          <button
+                            type="button"
+                            aria-label={t("why")}
+                            onClick={() => askOrbiFrom("cours")}
+                          >
+                            <PhoneIcon name="question" size={18} stroke={2} />
+                          </button>
+                        </div>
+                      ) : null}
+                    </div>
+                  </>
                 ) : (
                   <div className="nb-fo-vide">
                     <b>{t("empty.title")}</b>
                     <p className="nb-meta">{t("empty.text")}</p>
                   </div>
                 )}
-
-                {view.advice ? (
-                  <div className="nb-fo-conseil">
-                    <OrbiDisc size={34} />
-                    <span>{view.advice.text}</span>
-                    <button type="button" onClick={() => askOrbiFrom("cours")}>
-                      {t("why")}
-                    </button>
-                  </div>
-                ) : null}
 
                 <div className="nb-ex-sec">
                   <h2 id="fo-offres">{t("forOffers")}</h2>
