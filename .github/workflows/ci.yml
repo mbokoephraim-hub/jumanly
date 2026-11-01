@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
       - uses: pnpm/action-setup@v4
       # Pas de cache pnpm ici : rien n'est installé, l'audit lit seulement pnpm-lock.yaml.
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
       - name: Failles connues dans les dépendances de production
@@ -58,7 +58,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: pnpm
