@@ -6,7 +6,7 @@ import { demo, logIn, skipIntro } from "./session";
  * name, the column is shorter than the window (a floating pill, not a full-height bar), and the
  * label shows in a tooltip when the keyboard reaches an icon.
  */
-test("menu de l'admin en colonne flottante d'icônes", async ({ page, isMobile }) => {
+test("menu de l'admin : rubriques par groupe dans la colonne", async ({ page, isMobile }) => {
   test.skip(isMobile, "La colonne s'affiche à partir de 1024 px ; le téléphone garde la pilule.");
   await page.setViewportSize({ width: 1440, height: 900 });
   await logIn(page, demo.admin);
@@ -34,19 +34,9 @@ test("menu de l'admin en colonne flottante d'icônes", async ({ page, isMobile }
     "page",
   );
 
-  const rail = page.locator(".jm-admin-rail");
-  const box = await rail.boundingBox();
-  expect(box).not.toBeNull();
-  expect(box!.width).toBeLessThan(80);
-  expect(box!.height).toBeLessThan(900 * 0.85);
-  expect(box!.y).toBeGreaterThan(40);
-
-  const users = nav.getByRole("link", { name: "Utilisateurs", exact: true });
-  const tip = users.locator(".jm-admin-tip");
-  await expect(tip).toBeHidden();
-  await users.focus();
-  await expect(tip).toBeVisible();
-  await expect(tip).toHaveText("Utilisateurs");
+  // Modèle B (27/10): the column names each rubric under its group (Pilotage, Comptes…), so the
+  // former icon tooltips are gone.
+  await expect(nav.getByText("Pilotage", { exact: true })).toBeVisible();
 });
 
 test("le menu d'un éditeur de contenus ne montre que ses rubriques", async ({ page, isMobile }) => {
@@ -108,7 +98,8 @@ test("éditeur par étapes : programme, quiz, attestation et publication", async
   await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
 
   const steps = page.getByRole("navigation", { name: "Étapes de la formation" });
-  await expect(steps.getByRole("listitem")).toHaveCount(7);
+  // Seven steps, each saying whether it is done, after the way back to the Studio (28/10).
+  await expect(steps.getByRole("link", { name: /\((à faire|fait)\)$/ })).toHaveCount(7);
   await expect(steps.getByRole("link", { name: /^Informations/ })).toHaveAttribute(
     "aria-current",
     "step",

@@ -746,8 +746,12 @@ export async function JobFlow({
     current.status === "published" ||
     current.status === "paused" ||
     current.status === "pending_review";
+  // Decision of 29/10/2026: an offer is published at once, verified company or not; only a flagged
+  // offer or one sent back for correction goes to a moderator first (publishJob, hire.ts).
   const publishLabel =
-    verified && current.status !== "changes_requested" ? t("form.publish") : t("form.submit");
+    flags.length === 0 && current.status !== "changes_requested"
+      ? t("form.publish")
+      : t("form.submit");
   const section = (title: string, body: ReactNode) => (
     <div className="t-rx-sec">
       <h3>{title}</h3>

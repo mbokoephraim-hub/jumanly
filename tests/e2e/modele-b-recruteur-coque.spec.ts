@@ -100,8 +100,10 @@ test.describe("Modèle B recruteur · coque au téléphone", () => {
     await expect(scopes).toHaveCount(0);
     await expect(field).toHaveValue("");
 
-    // The avatar opens the account, its corner shows the company's mark.
-    await main.getByRole("link", { name: "Mon compte" }).filter({ visible: true }).click();
+    // The avatar opens the recruiter's profile (29/10), the account is the round at its top.
+    await main.getByRole("link", { name: "Mon profil" }).filter({ visible: true }).click();
+    await expect(page).toHaveURL(/\/app\/hire\/compte\/profil$/);
+    await page.getByRole("link", { name: "Mon compte" }).filter({ visible: true }).first().click();
     await expect(page).toHaveURL(/\/app\/hire\/compte$/);
   });
 });

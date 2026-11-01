@@ -14957,7 +14957,7 @@
       "salaryMissing": "Salaire non indiqué.",
       "salaryMissingText": "Facultatif, mais les offres avec salaire reçoivent plus de candidatures.",
       "verified": "Organisation vérifiée : publication immédiate",
-      "unverified": "Organisation non vérifiée : l'offre passe « En validation » avant d'être visible.",
+      "unverified": "Organisation pas encore vérifiée : l'offre est publiée tout de suite, sans le badge « vérifiée ».",
       "quota": "Offres actives : {count} sur {max}",
       "quotaAfter": "Après publication : {count} sur {max}",
       "quotaUnlimited": "Offres actives : {count}",

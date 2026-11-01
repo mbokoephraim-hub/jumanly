@@ -12350,7 +12350,7 @@ Conventions :
 | `hireOffers.form.salaryMissing` | Salaire non indiqué. |
 | `hireOffers.form.salaryMissingText` | Facultatif, mais les offres avec salaire reçoivent plus de candidatures. |
 | `hireOffers.form.verified` | Organisation vérifiée : publication immédiate |
-| `hireOffers.form.unverified` | Organisation non vérifiée : l'offre passe « En validation » avant d'être visible. |
+| `hireOffers.form.unverified` | Organisation pas encore vérifiée : l'offre est publiée tout de suite, sans le badge « vérifiée ». |
 | `hireOffers.form.quota` | Offres actives : {count} sur {max} |
 | `hireOffers.form.quotaAfter` | Après publication : {count} sur {max} |
 | `hireOffers.form.quotaUnlimited` | Offres actives : {count} |

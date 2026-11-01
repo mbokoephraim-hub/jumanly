@@ -73,6 +73,9 @@ test.describe("Modèle B recruteur · Compte, entreprise et changer de profil au
     // ── The recruiter ────────────────────────────────────────────────────────────────────────
     await logIn(page, recruiter, undefined, "/app/hire");
     await page.goto("/app/hire");
+    // The avatar opens the profile (29/10), the account is the round at its top.
+    await page.getByRole("link", { name: "Mon profil" }).filter({ visible: true }).first().click();
+    await expect(page).toHaveURL(/\/app\/hire\/compte\/profil$/);
     await page.getByRole("link", { name: "Mon compte" }).filter({ visible: true }).first().click();
     await expect(page).toHaveURL(/\/app\/hire\/compte$/);
     await expect(seen(page, "Nadine Fictive")).toBeVisible();
@@ -107,13 +110,18 @@ test.describe("Modèle B recruteur · Compte, entreprise et changer de profil au
     // Mon profil recruteur (136) and Modifier (137): Orbi proposes, the person saves.
     await visibleLink(page, /Mon profil recruteur/).click();
     await expect(page).toHaveURL(/\/app\/hire\/compte\/profil$/);
-    await expect(seen(page, "Aperçu : ce que voient les talents")).toBeVisible();
-    await expect(seen(page, "Analyste de données fictif")).toBeVisible();
-    await expect(seen(page, "Kinshasa · recrute aussi à Lubumbashi")).toBeVisible();
+    // The person's profile (docs/profil-personne, 26/10), with the hiring part one tap away.
+    await expect(
+      page
+        .getByRole("heading", { level: 1, name: "Nadine Fictive" })
+        .filter({ visible: true })
+        .first(),
+    ).toBeVisible();
+    await expect(seen(page, "Recrute en ce moment")).toBeVisible();
     await capture(page, "136-compte-profil");
     await fits(page);
     await expectAccessible(page);
-    await visibleLink(page, "Modifier mon profil").click();
+    await visibleLink(page, "Recrutement").click();
     await expect(page).toHaveURL(/\/profil\/modifier$/);
     await heading(page, "Modifier mon profil");
     await visibleButton(page, "Orbi propose une accroche").click();
@@ -134,8 +142,7 @@ test.describe("Modèle B recruteur · Compte, entreprise et changer de profil au
     await badge.click();
     await visibleButton(page, "Enregistrer").click();
     await expect(page).toHaveURL(/\/app\/hire\/compte\/profil\?ok=1/);
-    await expect(seen(page, /Je recrute les talents data et service client/)).toBeVisible();
-    await expect(seen(page, "Votre téléphone n'est visible que par votre équipe.")).toBeVisible();
+    await expect(seen(page, "Profil enregistré.")).toBeVisible();
     await closeToast(page);
 
     // Mes statistiques (138).
@@ -258,10 +265,13 @@ test.describe("Modèle B recruteur · Compte, entreprise et changer de profil au
     await page.goto("/app/hire/compte");
     await visibleLink(page, /Page de l'entreprise/).click();
     await expect(page).toHaveURL(/\/app\/entreprises\//);
-    await expect(
-      seen(page, /Votre entreprise · page administrée par Recruteuse Fictive/),
-    ).toBeVisible();
-    const publish = visibleLink(page, `Publier au nom de ${org}`);
+    await expect(seen(page, /administrée par Recruteuse Fictive/)).toBeVisible();
+    // « Publier » beside « Modifier », a post in the company's name (docs/profil-personne).
+    const publish = main(page)
+      .locator('a[href="/app/fil/publier?nom=entreprise"]')
+      .filter({ visible: true })
+      .first();
+    await expect(publish).toHaveText("Publier");
     await expect(publish).toBeVisible();
     await capture(page, "149-entreprise");
     await fits(page);

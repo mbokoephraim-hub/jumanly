@@ -172,9 +172,9 @@ test.describe("Étape 3 · nettoyage, sur ordinateur", () => {
 test.describe("Étape 3 · page entreprise côté talent, au téléphone", () => {
   test.skip(({ isMobile }) => !isMobile, "La page entreprise du talent est celle du téléphone.");
 
-  test("les personnes qui disent y travailler apparaissent, jamais un profil anonyme", async ({
-    page,
-  }) => {
+  // Since the company page took the profile identity (27/10, PR #188), « Membres » lists only the
+  // recruiting team; people who say they work there are not listed, anonymous or not.
+  test("les membres sont l'équipe qui recrute, jamais un profil anonyme", async ({ page }) => {
     test.setTimeout(120_000);
     const company = `Entreprise fictive A6 ${suffix()}`;
     execFileSync("pnpm", [
@@ -214,9 +214,11 @@ test.describe("Étape 3 · page entreprise côté talent, au téléphone", () =>
       .getByRole("tablist", { name: "Sections de la page" })
       .getByRole("tab", { name: "Membres" })
       .click();
-    const lea = pile.locator(".nb-ex-pers").filter({ hasText: "Léa Visible" });
-    await expect(lea).toBeVisible();
-    await expect(lea).toContainText("Indiqué par la personne");
-    await expect(pile.getByText("Noa Anonyme")).toHaveCount(0);
+    const members = pile.getByRole("tabpanel", { name: "Membres" });
+    await expect(
+      members.getByRole("heading", { name: "1 recruteur de l’entreprise" }),
+    ).toBeVisible();
+    await expect(members.getByText("Léa Visible")).toHaveCount(0);
+    await expect(members.getByText("Noa Anonyme")).toHaveCount(0);
   });
 });

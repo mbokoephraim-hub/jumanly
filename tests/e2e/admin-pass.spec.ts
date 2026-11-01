@@ -95,7 +95,7 @@ test("passe finale de l'admin · fiches ouvertes", async ({ page, isMobile }) =>
   await page.goto("/admin/formations");
   const course = await page
     .locator(
-      'a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"]):not([href^="/admin/formations/domaines"]):not([href^="/admin/formations/parcours"])',
+      'a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"]):not([href^="/admin/formations/domaines"]):not([href^="/admin/formations/parcours"]):not([href^="/admin/formations/video"])',
     )
     .first()
     .getAttribute("href");
@@ -141,7 +141,7 @@ test("passe finale de l'admin · PDF des formations et rôles", async ({ browser
   await admin.page.goto("/admin/formations");
   const href = await admin.page
     .locator(
-      'a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"]):not([href^="/admin/formations/domaines"]):not([href^="/admin/formations/parcours"])',
+      'a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"]):not([href^="/admin/formations/domaines"]):not([href^="/admin/formations/parcours"]):not([href^="/admin/formations/video"])',
     )
     .first()
     .getAttribute("href");
@@ -178,7 +178,7 @@ test("passe finale de l'admin · Studio et éditeur à 1024 px", async ({ page, 
   await check(page, "/admin/formations");
   const href = await page
     .locator(
-      'a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"]):not([href^="/admin/formations/domaines"]):not([href^="/admin/formations/parcours"])',
+      'a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"]):not([href^="/admin/formations/domaines"]):not([href^="/admin/formations/parcours"]):not([href^="/admin/formations/video"])',
     )
     .first()
     .getAttribute("href");
