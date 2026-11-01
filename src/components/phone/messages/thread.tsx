@@ -176,7 +176,7 @@ export function PhoneThread({ view }: { view: ThreadView }) {
   const [pendingBlock, startBlock] = useTransition();
   const mute = useMute(view);
   const ping = useTypingPing(view.id);
-  const live = useChatPulse({ conversationId: view.id, every: 3_000 });
+  const live = useChatPulse({ conversationId: view.id, every: 3_000, active: true });
   // The messages read with the page; the ones arriving after rise gently.
   const [seen] = useState(() => new Set(view.messages.map((message) => message.id)));
 
