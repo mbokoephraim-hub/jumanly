@@ -1,6 +1,7 @@
 "use client";
 
 import "@/styles/phone-apropos.css";
+import "@/styles/phone-modifier-profil.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -43,7 +44,8 @@ import { FilAvatar } from "../fil/avatar";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { pagesSeen } from "../pages-seen";
 import { PhoneSheet } from "../sheet";
-import { SOCIAL_KINDS, type SocialKind } from "@/lib/social-links";
+import { type SocialKind } from "@/lib/social-links";
+import { SocialFields, SocialTile } from "./social-fields";
 
 /** Where a form of the profile goes back to when it was opened directly: « Mon profil ». */
 const CAREER = "/app/profil";
@@ -460,6 +462,7 @@ export function HeadForm({
           {t("photoChange")}
         </button>
       </div>
+      <h2 className="nb-ca-sous nb-mp-titre">{t("sectionIdentity")}</h2>
       <Field label={t("name")} error={error === "name" ? t("errors.name") : null}>
         {(id) => (
           <input
@@ -484,17 +487,19 @@ export function HeadForm({
         }
       >
         {(id) => (
-          <input
-            id={id}
-            className="nb-ca-in"
-            value={form.handle}
-            onChange={(event) => set({ handle: event.target.value.replace(/^@/, "") })}
-            autoCapitalize="none"
-            autoCorrect="off"
-            spellCheck={false}
-            maxLength={30}
-            aria-describedby="ca-alias-aide"
-          />
+          <div className="nb-mp-alias">
+            <input
+              id={id}
+              className="nb-ca-in"
+              value={form.handle}
+              onChange={(event) => set({ handle: event.target.value.replace(/^@/, "") })}
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+              maxLength={30}
+              aria-describedby="ca-alias-aide"
+            />
+          </div>
         )}
       </Field>
       <p id="ca-alias-aide" className="nb-meta nb-ca-aide">
@@ -561,7 +566,6 @@ export function HeadForm({
         </span>
         <PhoneIcon name="chevron" size={18} />
       </Link>
-      {recruiter ? null : <p className="nb-meta nb-ca-aide">{t("cvHint")}</p>}
       {recruiter ? null : (
         <Chips
           label={t("availability")}
@@ -573,32 +577,22 @@ export function HeadForm({
           }))}
         />
       )}
-      <h2 className="nb-ca-sous">{t("socials")}</h2>
+      <h2 className="nb-ca-sous nb-mp-titre">{t("socials")}</h2>
       <p className="nb-meta nb-ca-aide">{t("socialsHint")}</p>
-      {SOCIAL_KINDS.map((kind) => (
-        <Field
-          key={kind}
-          label={t(`social.${kind}`)}
-          error={error === "socials" && form.socials[kind] ? t("errors.socials") : null}
-        >
-          {(id) => (
-            <input
-              id={id}
-              type="url"
-              inputMode="url"
-              className="nb-ca-in"
-              value={form.socials[kind]}
-              onChange={(event) =>
-                set({ socials: { ...form.socials, [kind]: event.target.value } })
-              }
-              placeholder={t(`socialPlaceholder.${kind}`)}
-              autoCapitalize="none"
-              maxLength={300}
-            />
-          )}
-        </Field>
-      ))}
-      <div className="nb-ca-bascule">
+      <SocialFields
+        values={form.socials}
+        onChange={(socials) => set({ socials })}
+        invalid={error === "socials"}
+        labels={{
+          name: (kind) => t(`social.${kind}`),
+          placeholder: (kind) => t(`socialPlaceholder.${kind}`),
+          clear: (kind) => t("socialClear", { network: t(`social.${kind}`) }),
+          error: t("errors.socials"),
+        }}
+      />
+      <h2 className="nb-ca-sous nb-mp-titre">{t("sectionVisibility")}</h2>
+      <div className="nb-mp-carte nb-mp-courriel">
+        <SocialTile kind="email" />
         <span id="ca-courriel">{t("showEmail")}</span>
         <button
           type="button"

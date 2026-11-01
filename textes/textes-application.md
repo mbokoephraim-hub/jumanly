@@ -10251,9 +10251,12 @@ Conventions :
 | `phoneCareer.form.bannerError` | Cette image n’a pas pu être enregistrée. Essayez une image JPEG ou PNG. |
 | `phoneCareer.form.name` | Nom affiché |
 | `phoneCareer.form.handle` | Nom d’utilisateur |
-| `phoneCareer.form.handleHint` | Lettres, chiffres et points, de 3 à 30 caractères. Il s’affiche sous votre nom : @prenom.nom. |
+| `phoneCareer.form.handleHint` | 3 à 30 caractères : lettres, chiffres et points. |
 | `phoneCareer.form.socials` | Réseaux |
-| `phoneCareer.form.socialsHint` | Seuls les réseaux remplis s’affichent sur votre profil. |
+| `phoneCareer.form.socialsHint` | Seuls les réseaux remplis s’affichent. |
+| `phoneCareer.form.socialClear` | Effacer {network} |
+| `phoneCareer.form.sectionIdentity` | Identité |
+| `phoneCareer.form.sectionVisibility` | Visibilité |
 | `phoneCareer.form.social.linkedin` | LinkedIn |
 | `phoneCareer.form.social.instagram` | Instagram |
 | `phoneCareer.form.social.x` | X (Twitter) |
@@ -10267,10 +10270,10 @@ Conventions :
 | `phoneCareer.form.showEmail` | Afficher mon e-mail sur mon profil |
 | `phoneCareer.form.headline` | Titre professionnel |
 | `phoneCareer.form.headlinePlaceholder` | Ex. : Social manager |
-| `phoneCareer.form.headlineHint` | Il s’affiche dans votre bannière et sous votre nom : c’est ce que voient les recruteurs, vos connexions et les offres où vous candidatez. |
+| `phoneCareer.form.headlineHint` | Affiché sous votre nom et dans votre bannière. |
 | `phoneCareer.form.cap` | Mon Cap |
 | `phoneCareer.form.capPlaceholder` | Ex. : Responsable marketing digital |
-| `phoneCareer.form.capHint` | Le métier vers lequel vous allez. Choisi à l’inscription, il change quand votre projet évolue. La bannière l’affiche tant que vous n’avez pas de titre professionnel. |
+| `phoneCareer.form.capHint` | Le métier que vous visez. |
 | `phoneCareer.form.city` | Ville |
 | `phoneCareer.form.improve` | Améliorer |
 | `phoneCareer.form.availability` | Disponibilité |
@@ -10279,8 +10282,7 @@ Conventions :
 | `phoneCareer.form.availabilityOption.not_looking` | Pas en recherche |
 | `phoneCareer.form.accountSettings` | Paramètres du compte |
 | `phoneCareer.form.aboutTitle` | À propos |
-| `phoneCareer.form.aboutHint` | Votre bio : un titre et quelques lignes sur vous |
-| `phoneCareer.form.cvHint` | Chaque CV a son propre titre et sa bio de candidature : les changer dans un CV ne touche pas à votre profil. |
+| `phoneCareer.form.aboutHint` | Un titre et quelques lignes sur vous |
 | `phoneCareer.form.aboutHeading` | Titre |
 | `phoneCareer.form.aboutHeadingPlaceholder` | Ex. : Ce que je fais |
 | `phoneCareer.form.aboutLabel` | Votre texte |
