@@ -124,7 +124,13 @@ test.describe("Modèle B · accueil au téléphone", () => {
     // Step 1: the name, required.
     const next = page.getByRole("button", { name: /^(Continuer|Terminer)$/ });
     await expect(page.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "1");
-    await page.getByLabel("Prénom").fill("");
+    // The form may hydrate after the first keystroke and give the name back: empty it until it
+    // stays empty.
+    await expect(async () => {
+      await page.getByLabel("Prénom").fill("");
+      await page.waitForTimeout(300);
+      await expect(page.getByLabel("Prénom")).toHaveValue("");
+    }).toPass();
     await next.click();
     await expect(page.locator(".nb-bas .nb-erreur")).toBeVisible();
     await page.getByLabel("Prénom").fill("Awa");
@@ -190,7 +196,7 @@ test.describe("Modèle B · accueil au téléphone", () => {
     ).toBeVisible();
     await page.getByRole("button", { name: "Plus tard" }).click();
     await expect(page.getByRole("heading", { name: "Bienvenue, Awa" })).toBeVisible();
-    await expect(page.getByText(/Profil complété à \d+ %/)).toBeVisible();
+    await expect(page.locator(".nb-pret-pct")).toHaveText(/Profil complété à \d+ %/);
     await expectAccessible(page);
     // « Modifier mes réponses » comes back to step 1.
     await page.getByRole("button", { name: /Modifier mes réponses/ }).click();

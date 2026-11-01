@@ -112,7 +112,9 @@ test("simulation orale : la réponse se tape si la dictée n'est pas disponible"
 }) => {
   test.skip(isMobile, "Une simulation du mois par exécution suffit.");
   test.setTimeout(120_000);
-  await logIn(page, demo.talentPro);
+  // The simulation is kept for people who applied with a plan that includes it (29/10); the oral
+  // one needs Pro: Aminata.
+  await logIn(page, "aminata.ux@jumanly.test");
   // Lot 6b (planche talent-4 § 5 bis): « À l'oral » opens « Nouvel entraînement », format oral.
   await page.goto("/app/career/entretiens");
   await page.getByRole("link", { name: /À l'oral/ }).click();
@@ -134,10 +136,13 @@ test("projets : verrou en Free, page publique sans compte", async ({ page, brows
   await logIn(page, demo.talentFree);
   await page.goto("/app/career/portfolio");
   if (isMobile) {
-    // Modèle B (lots B5, B9): the former portfolio page leads to the Portfolio tab of Carrière.
-    await expect(page).toHaveURL(/\/app\/career\/cv\?onglet=portfolio$/);
+    // Modèle B: the former portfolio page leads to the « Réalisations » of Mon profil (29/10).
+    await expect(page).toHaveURL(/\/app\/profil(\?onglet=realisations)?$/);
     await expect(
-      page.locator(".nb-cr-onglets").getByRole("tab", { name: "Portfolio" }),
+      page
+        .getByRole("tablist", { name: "Sections du profil" })
+        .filter({ visible: true })
+        .getByRole("tab", { name: "Réalisations" }),
     ).toHaveAttribute("aria-selected", "true");
   } else {
     // The former portfolio page leads to the « Projets » of Mon profil.

@@ -78,12 +78,10 @@ test.describe("Modèle B · Fil au téléphone", () => {
     await page.keyboard.press("Escape");
     await expect(share).toBeHidden();
 
-    // A photo carries the actions in its notch; Commenter opens the post, with its answers and
-    // the reply bar; the way back is the Fil.
+    // The actions sit under the photo; Commenter opens the post, with its answers and the reply
+    // bar; the way back is the Fil.
     const patrick = fil.locator("article").filter({ hasText: "Premier jour chez Fleuve Banque" });
-    await expect(
-      patrick.locator(".nb-fil-im .nb-fil-encoche").getByRole("button", { name: /^J'aime/ }),
-    ).toBeVisible();
+    await expect(patrick.getByRole("button", { name: /^J'aime/ })).toBeVisible();
     await patrick.getByRole("link", { name: /^Commenter/ }).click();
     await page.waitForURL(/\/app\/fil\/[^/]+$/);
     await expect(page.getByRole("heading", { name: "Publication" })).toBeVisible();

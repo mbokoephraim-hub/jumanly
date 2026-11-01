@@ -201,8 +201,8 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
     await expect(page).toHaveURL(/\/app\/jobs\/demo-assistant-administratif-kinshasa/);
     const save = page.getByRole("button", { name: /^Enregistr/ });
     await expect(save).toHaveAttribute("aria-pressed", "false");
+    // The button shows the result itself: no toast (29/10, toasts only when nothing else answers).
     await save.click();
-    await expect(page.getByText("Offre enregistrée.")).toBeVisible();
     await expect(save).toHaveAttribute("aria-pressed", "true");
     await save.click();
     await expect(save).toHaveAttribute("aria-pressed", "false");
@@ -233,8 +233,8 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
       .filter({ visible: true })
       .first();
     await expect(save).toHaveAttribute("aria-pressed", "false");
+    // The button shows the result itself: no toast (29/10, toasts only when nothing else answers).
     await save.click();
-    await expect(page.getByText("Offre enregistrée.")).toBeVisible();
     await expect(save).toHaveAttribute("aria-pressed", "true");
     await page.getByRole("button", { name: "Annuler" }).click();
     await expect(save).toHaveAttribute("aria-pressed", "false");
