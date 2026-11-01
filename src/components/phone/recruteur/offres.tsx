@@ -16,6 +16,7 @@ import { atsBoard } from "@/server/services/hire-ats";
 import { ensureStages } from "@/server/services/applications";
 import { requestedDocumentKinds, type OfferRow } from "@/server/services/hire-offers";
 import { screeningQuestionsOf } from "@/server/services/screening";
+import { MenuArt } from "@/components/site/menu-art";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { RhOfferActions, RhWhy, type RhOfferActionsData } from "./offre-actions";
 import type { RhOfferDraft, RhPublishData } from "./publier";
@@ -120,6 +121,7 @@ export async function RhOffersList({
                 <Link href={`/app/hire/offres/${offer.id}`} className="nb-rh-offre">
                   <span className="nb-rh-offre-h">
                     <span className="nb-rh-statut" data-statut={status}>
+                      {status === "published" ? <i className="nb-rh-pouls" aria-hidden /> : null}
                       {t(`status.${status}`)}
                     </span>
                     {offer.figures.unseen > 0 ? (
@@ -136,27 +138,21 @@ export async function RhOffersList({
                   <span className="nb-rh-chiffres">
                     <span data-ton="vues">
                       <span className="nb-rh-chiffre-h">
-                        <i aria-hidden>
-                          <PhoneIcon name="oeil" size={16} />
-                        </i>
+                        <MenuArt name="why" size="xs" />
                         <b>{offer.figures.views}</b>
                       </span>
                       {t("tile.views", { count: offer.figures.views })}
                     </span>
                     <span data-ton="jours">
                       <span className="nb-rh-chiffre-h">
-                        <i aria-hidden>
-                          <PhoneIcon name="horloge" size={16} />
-                        </i>
+                        <MenuArt name="clock" size="xs" />
                         <b>{offer.publishedAt ? t("tile.daysValue", { count: online }) : "–"}</b>
                       </span>
                       {t("tile.online")}
                     </span>
                     <span data-ton="cand">
                       <span className="nb-rh-chiffre-h">
-                        <i aria-hidden>
-                          <PhoneIcon name="candidatures" size={16} />
-                        </i>
+                        <MenuArt name="people" size="xs" />
                         <b>{offer.figures.applications}</b>
                       </span>
                       {t("tile.applications", { count: offer.figures.applications })}
@@ -440,6 +436,7 @@ export async function RhOfferDetail({
         </header>
         <section className="nb-rh-detail-h">
           <span className="nb-rh-statut" data-statut={status}>
+            {status === "published" ? <i className="nb-rh-pouls" aria-hidden /> : null}
             {t(`status.${status}`)}
           </span>
           <h1>{job.title}</h1>
@@ -460,23 +457,17 @@ export async function RhOfferDetail({
         <div className="nb-rh-detail-corps">
           <div className="nb-rh-tuiles">
             <p data-ton="vues">
-              <i aria-hidden>
-                <PhoneIcon name="oeil" size={18} />
-              </i>
+              <MenuArt name="why" size="sm" />
               <b>{format.number(figures.views)}</b>
               {t("figures.views", { count: figures.views })}
             </p>
             <Tile href={figures.applications > 0 ? pipelineHref : null} ton="cand">
-              <i aria-hidden>
-                <PhoneIcon name="candidatures" size={18} />
-              </i>
+              <MenuArt name="people" size="sm" />
               <b>{format.number(figures.applications)}</b>
               {t("figures.applications", { count: figures.applications })}
             </Tile>
             <p data-ton="taux">
-              <i aria-hidden>
-                <PhoneIcon name="tendance" size={18} />
-              </i>
+              <MenuArt name="career" size="sm" />
               <b>
                 {rate === null
                   ? "–"
@@ -489,25 +480,19 @@ export async function RhOfferDetail({
               {t("figures.rate")}
             </p>
             <Tile href={figures.unseen > 0 ? pipelineHref : null} ton="nouv">
-              <i aria-hidden>
-                <PhoneIcon name="cloche" size={18} />
-              </i>
+              <MenuArt name="bell" size="sm" />
               <b data-lime="">{figures.unseen}</b>
               {t("figures.unseen", { count: figures.unseen })}
             </Tile>
             <p data-ton="jours">
-              <i aria-hidden>
-                <PhoneIcon name={left !== null && !ended ? "agenda" : "horloge"} size={18} />
-              </i>
+              <MenuArt name={left !== null && !ended ? "calendar" : "clock"} size="sm" />
               <b>{left !== null && !ended ? Math.max(0, left) : online}</b>
               {left !== null && !ended
                 ? t("detail.tileLeft", { count: Math.max(0, left) })
                 : t("figures.days", { count: online })}
             </p>
             <p data-ton="delai">
-              <i aria-hidden>
-                <PhoneIcon name="minuteur" size={18} />
-              </i>
+              <MenuArt name="hourglass" size="sm" />
               <b>{responseDays === null ? "–" : format.number(responseDays)}</b>
               {responseDays === null ? t("detail.tileNoResponse") : t("detail.tileResponse")}
             </p>
@@ -520,7 +505,7 @@ export async function RhOfferDetail({
           <section className="nb-rh-carte-stat" aria-labelledby="rh-pipe-t">
             <div className="nb-rh-courbe-h">
               <h2 id="rh-pipe-t">
-                <PhoneIcon name="candidatures" size={18} />
+                <MenuArt name="pipeline" size="xs" />
                 {t("detail.pipeline")}
               </h2>
               {figures.applications > 0 ? (
@@ -550,7 +535,7 @@ export async function RhOfferDetail({
           </section>
           <section className="nb-rh-carte-stat" aria-labelledby="rh-funnel-t">
             <h2 id="rh-funnel-t">
-              <PhoneIcon name="entonnoir" size={18} />
+              <MenuArt name="funnel" size="xs" />
               {t("detail.funnel")}
             </h2>
             <ol className="nb-rh-entonnoir">
@@ -577,7 +562,7 @@ export async function RhOfferDetail({
           <section className="nb-rh-courbe nb-rh-carte-stat" aria-labelledby="rh-courbe-t">
             <div className="nb-rh-courbe-h">
               <h2 id="rh-courbe-t">
-                <PhoneIcon name="tendance" size={18} />
+                <MenuArt name="career" size="xs" />
                 {t("detail.chart")}
               </h2>
               <nav className="nb-rh-periode" aria-label={t("detail.period")}>
@@ -612,7 +597,7 @@ export async function RhOfferDetail({
           </section>
           <section className="nb-rh-courbe nb-rh-carte-stat" aria-labelledby="rh-vues-t">
             <h2 id="rh-vues-t">
-              <PhoneIcon name="oeil" size={18} />
+              <MenuArt name="why" size="xs" />
               {t("detail.views")}
             </h2>
             <Bars
@@ -630,7 +615,7 @@ export async function RhOfferDetail({
           </section>
           <section className="nb-rh-sources nb-rh-carte-stat" aria-labelledby="rh-sources-t">
             <h2 id="rh-sources-t">
-              <PhoneIcon name="lien" size={18} />
+              <MenuArt name="partners" size="xs" />
               {t("detail.sources")}
             </h2>
             {sources.map((row) => (
@@ -797,17 +782,23 @@ export async function RhOfferCandidates({
                           })}
                         >
                           {followed.map((stage, at) => (
-                            <i key={stage.id} data-fait={at <= position ? "" : undefined} />
+                            <i
+                              key={stage.id}
+                              data-fait={at <= position ? "" : undefined}
+                              data-actuel={
+                                at === position && column.kind !== "hired" ? "" : undefined
+                              }
+                            />
                           ))}
                         </span>
                       ) : null}
                       <span className="nb-rh-pipe-acces">
                         <Link href={`/app/hire/candidats/${row.id}?onglet=cv`}>
-                          <PhoneIcon name="cv" size={16} />
+                          <MenuArt name="cv" size="xs" />
                           {t("pipeline.cv")}
                         </Link>
                         <Link href={`/app/hire/candidats/${row.id}?onglet=reponses`}>
-                          <PhoneIcon name="document" size={16} />
+                          <MenuArt name="letter" size="xs" />
                           {t("pipeline.documents")}
                         </Link>
                       </span>

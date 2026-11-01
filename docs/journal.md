@@ -5364,3 +5364,7 @@ Demande d'Ephraïm : rendre la page plus intuitive, réseaux sociaux avec leurs 
 ## 2026-11-01 · Offres recruteur au téléphone : icônes, statistiques, pipeline
 
 Demande d'Ephraïm. Liste des offres : tuiles avec icônes (vues, en ligne, candidats) sans coupure de mot, barre « Taux de candidature », date de clôture. Page d'une offre : six tuiles avec icônes (candidatures et nouvelles mènent au pipeline), délai moyen de réponse, « Où en sont les candidats » par étape, entonnoir vues → candidatures → ouvertes → entretiens → retenues, vues par jour, sources en barres. « Voir les candidats » ouvre le pipeline de l'offre : toutes les étapes dans l'ordre, chaque candidat avec sa progression et deux raccourcis « CV » et « Documents » vers son dossier. Vérifié en local (captures dans /mnt/project-files/captures/offres-stats-pipeline-2026-11-01/), sans e2e.
+
+## 2026-11-01 · Offres recruteur : dessins du menu et « En cours » qui clignote
+
+Retour d'Ephraïm : les icônes doivent être celles du menu du site, en couleur. Les tuiles et titres des offres utilisent maintenant `MenuArt` (nouveaux dessins : people, clock, bell, calendar, hourglass, funnel, pipeline ; taille `xs`). Le badge « En cours » a un point qui pulse et un halo qui respire ; l'étape actuelle d'un candidat clignote dans le pipeline. Animations coupées avec prefers-reduced-motion.
