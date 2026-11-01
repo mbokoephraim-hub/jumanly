@@ -1302,17 +1302,6 @@
   align-items: center;
   gap: 7px;
 }
-.nb-rh-chiffres i,
-.nb-rh-tuiles i {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 28px;
-  height: 28px;
-  border-radius: 9px;
-  background: color-mix(in srgb, var(--ton, var(--nb-menthe-claire-t)) 16%, transparent);
-  color: var(--ton, var(--nb-menthe-claire-t));
-}
 [data-ton="vues"] {
   --ton: var(--nb-menthe-claire-t);
 }
@@ -1435,7 +1424,7 @@
 .nb-rh-tuiles > a[data-lien] {
   border-color: color-mix(in srgb, var(--nb-lime-t) 45%, var(--nb-filet-fort));
 }
-.nb-rh-tuiles i {
+.nb-rh-tuiles .jm-menu-art {
   margin-bottom: 6px;
 }
 .nb-rh-tuiles b {
@@ -4986,4 +4975,55 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
 .nb-rh-carte-stat .nb-rh-periode a,
 .nb-rh-lien-stat {
   white-space: nowrap;
+}
+
+/* « En cours » clignote doucement (Ephraïm, 01/11/2026) */
+.nb-rh-statut[data-statut="published"] {
+  gap: 7px;
+  animation: nb-rh-halo 1.6s ease-in-out infinite;
+}
+.nb-rh-pouls {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--nb-lime);
+}
+.nb-rh-pouls::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--nb-lime);
+  animation: nb-rh-pouls 1.6s ease-out infinite;
+}
+.nb-rh-pipe-points i[data-actuel] {
+  animation: nb-rh-encours 1.2s ease-in-out infinite;
+}
+@keyframes nb-rh-pouls {
+  from {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+@keyframes nb-rh-halo {
+  50% {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--nb-lime) 28%, transparent);
+  }
+}
+@keyframes nb-rh-encours {
+  50% {
+    opacity: 0.55;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-rh-statut[data-statut="published"],
+  .nb-rh-pouls::after,
+  .nb-rh-pipe-points i[data-actuel] {
+    animation: none;
+  }
 }

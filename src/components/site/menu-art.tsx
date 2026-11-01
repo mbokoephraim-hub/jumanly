@@ -22,7 +22,14 @@ export type MenuArtName =
   | "privacy"
   | "payment"
   | "letter"
-  | "portfolio";
+  | "portfolio"
+  | "people"
+  | "clock"
+  | "bell"
+  | "calendar"
+  | "hourglass"
+  | "funnel"
+  | "pipeline";
 
 const SAPIN = "#0f3f37";
 const LIME = "#a6f26b";
@@ -50,6 +57,13 @@ const tiles: Record<MenuArtName, string> = {
   payment: "bg-[#ffeedd]",
   letter: "bg-[#fff4d6]",
   portfolio: "bg-[#fde7f0]",
+  people: "bg-[#e9fbd9]",
+  clock: "bg-[#fff4d6]",
+  bell: "bg-[#ffe5e0]",
+  calendar: "bg-[#ffeedd]",
+  hourglass: "bg-[#ece8ff]",
+  funnel: "bg-[#dcf8ef]",
+  pipeline: "bg-[#e3f1ff]",
 };
 
 export function MenuArt({
@@ -58,8 +72,8 @@ export function MenuArt({
   className,
 }: {
   name: MenuArtName;
-  /** sm: small tiles of the signed-in space; md: menu entries; lg: cards of the home page. */
-  size?: "sm" | "md" | "lg";
+  /** xs: figures of a card; sm: small tiles of the signed-in space; md: menu entries; lg: cards of the home page. */
+  size?: "xs" | "sm" | "md" | "lg";
   className?: string;
 }) {
   return (
@@ -71,14 +85,18 @@ export function MenuArt({
           ? "size-16 rounded-[20px]"
           : size === "sm"
             ? "size-9 rounded-[12px]"
-            : "size-[52px] rounded-[16px]",
+            : size === "xs"
+              ? "size-7 rounded-[9px]"
+              : "size-[52px] rounded-[16px]",
         tiles[name],
         className,
       )}
     >
       <svg
         viewBox="0 0 48 48"
-        className={size === "lg" ? "size-11" : size === "sm" ? "size-6" : "size-9"}
+        className={
+          size === "lg" ? "size-11" : size === "sm" ? "size-6" : size === "xs" ? "size-5" : "size-9"
+        }
         fill="none"
       >
         {drawings[name]}
@@ -285,6 +303,90 @@ const drawings: Record<MenuArtName, React.ReactNode> = {
       <circle cx="14" cy="17" r="4" fill={AMBRE} />
       <path d="M8 32l9-9 6 6 5-5 6 8z" fill={ROSE} />
       <path d="M38 26l2.4 5 5.6.8-4 3.9 1 5.5-5-2.6-5 2.6 1-5.5-4-3.9 5.6-.8z" fill={LIME} />
+    </>
+  ),
+  // Three people: the candidates of an offer.
+  people: (
+    <>
+      <circle cx="12" cy="17" r="5.5" fill={MENTHE} />
+      <circle cx="36" cy="17" r="5.5" fill={CORAIL} />
+      <path d="M2 38c0-6 4.5-10 10-10s10 4 10 10z" fill={MENTHE} />
+      <path d="M26 38c0-6 4.5-10 10-10s10 4 10 10z" fill={CORAIL} />
+      <circle cx="24" cy="14" r="7" fill={SAPIN} />
+      <path d="M11 42c0-7.7 5.8-13 13-13s13 5.3 13 13z" fill={LIME} />
+    </>
+  ),
+  // A clock: how long the offer has been online.
+  clock: (
+    <>
+      <circle cx="24" cy="25" r="18" fill={AMBRE} />
+      <circle cx="24" cy="25" r="13" fill="#fff" />
+      <path
+        d="M24 17v8l6 4"
+        stroke={SAPIN}
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <rect x="20" y="3" width="8" height="5" rx="2" fill={SAPIN} />
+    </>
+  ),
+  // A bell with a dot: something new to look at.
+  bell: (
+    <>
+      <path d="M11 34V22a13 13 0 0 1 26 0v12l4 4H7z" fill={CORAIL} />
+      <path d="M19 40a5 5 0 0 0 10 0z" fill={SAPIN} />
+      <circle cx="37" cy="10" r="6" fill={LIME} stroke={SAPIN} strokeWidth="2.5" />
+    </>
+  ),
+  // A calendar page: the days left.
+  calendar: (
+    <>
+      <rect x="5" y="9" width="38" height="34" rx="6" fill="#fff" stroke={SAPIN} strokeWidth="3" />
+      <path d="M5 15a6 6 0 0 1 6-6h26a6 6 0 0 1 6 6v5H5z" fill={CORAIL} />
+      <rect x="13" y="4" width="4" height="10" rx="2" fill={SAPIN} />
+      <rect x="31" y="4" width="4" height="10" rx="2" fill={SAPIN} />
+      <rect x="12" y="26" width="6" height="5" rx="1.5" fill={AMBRE} />
+      <rect x="21" y="26" width="6" height="5" rx="1.5" fill={AMBRE} />
+      <rect x="30" y="26" width="6" height="5" rx="1.5" fill={LIME} />
+      <rect x="12" y="34" width="6" height="5" rx="1.5" fill={AMBRE} />
+    </>
+  ),
+  // An hourglass: the time taken to answer.
+  hourglass: (
+    <>
+      <rect x="9" y="4" width="30" height="5" rx="2.5" fill={SAPIN} />
+      <rect x="9" y="39" width="30" height="5" rx="2.5" fill={SAPIN} />
+      <path
+        d="M13 9h22c0 8-11 11-11 15 0 4 11 7 11 15H13c0-8 11-11 11-15 0-4-11-7-11-15z"
+        fill={LILAS}
+      />
+      <path d="M17 39c1-4 7-6 7-9 0 3 6 5 7 9z" fill={AMBRE} />
+      <path d="M19 13h10c-1 3-5 5-5 6 0-1-4-3-5-6z" fill={AMBRE} />
+    </>
+  ),
+  // A funnel: from the views to the people hired.
+  funnel: (
+    <>
+      <path d="M4 7h40L30 24H18z" fill={MENTHE} />
+      <path d="M18 24h12v11l-12 7z" fill={SAPIN} />
+      <circle cx="13" cy="4" r="2.5" fill={LIME} />
+      <circle cx="24" cy="3" r="2.5" fill={CORAIL} />
+      <circle cx="35" cy="4" r="2.5" fill={AMBRE} />
+    </>
+  ),
+  // Columns of cards: the stages of the pipeline.
+  pipeline: (
+    <>
+      <rect x="3" y="6" width="12" height="36" rx="4" fill="#5aa9f0" />
+      <rect x="18" y="6" width="12" height="36" rx="4" fill={SAPIN} />
+      <rect x="33" y="6" width="12" height="36" rx="4" fill={MENTHE} />
+      <rect x="5.5" y="10" width="7" height="7" rx="2" fill="#fff" />
+      <rect x="5.5" y="20" width="7" height="7" rx="2" fill="#fff" />
+      <rect x="5.5" y="30" width="7" height="7" rx="2" fill="#fff" />
+      <rect x="20.5" y="10" width="7" height="7" rx="2" fill={LIME} />
+      <rect x="20.5" y="20" width="7" height="7" rx="2" fill={LIME} />
+      <rect x="35.5" y="10" width="7" height="7" rx="2" fill="#fff" />
     </>
   ),
 };
