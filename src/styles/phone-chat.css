@@ -1385,3 +1385,268 @@
     transition: none;
   }
 }
+
+/* « Proposer un rendez-vous » (01/11/2026): calendar, hours, how, pulsing « Envoyer ». */
+.nb-ag {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 4px;
+}
+.nb-ag-cal {
+  border-radius: 22px;
+  padding: 12px 12px 10px;
+  background:
+    radial-gradient(
+      120% 80% at 0% 0%,
+      rgba(var(--nb-lime-rgb, 166, 242, 107), 0.14),
+      transparent 60%
+    ),
+    radial-gradient(
+      90% 70% at 100% 100%,
+      rgba(var(--nb-menthe-rgb, 47, 211, 166), 0.16),
+      transparent 60%
+    ),
+    var(--nb-nuit);
+  border: 1px solid rgba(var(--nb-voile), 0.08);
+}
+.nb-ag-mois {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px 8px;
+}
+.nb-ag-mois b {
+  font-size: 15px;
+  font-weight: 700;
+}
+.nb-ag-mois button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nb-creme);
+  background: rgba(var(--nb-voile), 0.08);
+}
+.nb-ag-mois button:disabled {
+  opacity: 0.3;
+}
+.nb-ag-grille {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  text-align: center;
+}
+.nb-ag-sem {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--nb-brume);
+  padding-bottom: 2px;
+}
+.nb-ag-jour {
+  height: 38px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--nb-creme);
+  font-size: 14px;
+  font-weight: 600;
+  transition:
+    background 0.15s,
+    transform 0.15s;
+}
+.nb-ag-jour[data-weekend] {
+  color: var(--nb-brume);
+}
+.nb-ag-jour:disabled {
+  opacity: 0.25;
+}
+.nb-ag-jour[aria-pressed="true"] {
+  background: linear-gradient(135deg, var(--nb-lime), var(--nb-menthe));
+  color: var(--nb-sur-lime, #0f3f37);
+  font-weight: 800;
+  transform: scale(1.06);
+  box-shadow: 0 6px 16px rgba(var(--nb-lime-rgb, 166, 242, 107), 0.3);
+}
+.nb-ag-tete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+}
+.nb-ag-tete b {
+  font-size: 14px;
+}
+.nb-ag-heures {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  max-height: 178px;
+  overflow-y: auto;
+  padding: 2px;
+}
+.nb-ag-heures button {
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(var(--nb-voile), 0.12);
+  background: var(--nb-nuit);
+  color: var(--nb-creme);
+  font-size: 13px;
+  font-weight: 600;
+}
+.nb-ag-heures button[aria-pressed="true"] {
+  border-color: transparent;
+  background: var(--nb-lime);
+  color: var(--nb-sur-lime, #0f3f37);
+  font-weight: 800;
+}
+.nb-ag-modes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.nb-ag-modes button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 4px;
+  border-radius: 16px;
+  border: 1px solid rgba(var(--nb-voile), 0.12);
+  background: var(--nb-nuit);
+  color: var(--nb-creme);
+  font-size: 13px;
+  font-weight: 700;
+}
+.nb-ag-modes button > span {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nb-ag-modes [data-mode="visio"] > span {
+  background: #ece8ff;
+  color: #6b55e0;
+}
+.nb-ag-modes [data-mode="place"] > span {
+  background: #ffe5e0;
+  color: #c4513f;
+}
+.nb-ag-modes [data-mode="call"] > span {
+  background: #dcf8ef;
+  color: #0f3f37;
+}
+.nb-ag-modes button[aria-pressed="true"] {
+  border-color: var(--nb-lime);
+  box-shadow: 0 0 0 1px var(--nb-lime) inset;
+}
+.nb-ag-champ {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.nb-ag-champ > span {
+  font-size: 12px;
+  color: var(--nb-brume);
+}
+.nb-ag-champ input {
+  height: 48px;
+  border-radius: 16px;
+  border: 1px solid rgba(var(--nb-menthe-rgb, 47, 211, 166), 0.45);
+  background: var(--nb-nuit);
+  color: var(--nb-creme);
+  padding: 0 14px;
+  font: inherit;
+  font-size: 14px;
+  outline: 0;
+}
+.nb-ag-champ input:focus {
+  border-color: var(--nb-lime);
+}
+.nb-ag-champ input::placeholder {
+  color: var(--nb-brume);
+}
+.nb-ag-err {
+  color: var(--nb-corail);
+  font-size: 12px;
+}
+.nb-ag-lieu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.nb-ag-gps {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 14px;
+  border-radius: 16px;
+  border: 1px dashed rgba(var(--nb-menthe-rgb, 47, 211, 166), 0.6);
+  background: transparent;
+  color: var(--nb-menthe);
+  font-size: 14px;
+  text-align: left;
+}
+.nb-ag-gps[data-on] {
+  border-style: solid;
+  background: rgba(var(--nb-menthe-rgb, 47, 211, 166), 0.12);
+}
+.nb-ag-gps b {
+  flex: 1;
+}
+.nb-ag-gps button {
+  border: 0;
+  background: none;
+  color: var(--nb-brume);
+  font-size: 13px;
+  text-decoration: underline;
+}
+.nb-ag-note {
+  margin: 0;
+}
+.nb-ag-envoyer {
+  margin-top: 6px;
+  height: 54px;
+  border: 0;
+  border-radius: 27px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--nb-brume);
+  background: rgba(var(--nb-voile), 0.1);
+}
+.nb-ag-envoyer[data-pret] {
+  color: #0f3f37;
+  background: linear-gradient(110deg, #a6f26b, #2fd3a6, #a6f26b);
+  background-size: 220% 100%;
+  animation:
+    nbAgPulse 1.4s ease-in-out infinite,
+    nbAgGlide 3s linear infinite;
+}
+@keyframes nbAgPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(166, 242, 107, 0.55);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow: 0 0 0 9px rgba(166, 242, 107, 0);
+    filter: brightness(1.12);
+  }
+}
+@keyframes nbAgGlide {
+  to {
+    background-position: -220% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-ag-envoyer[data-pret] {
+    animation: none;
+  }
+}

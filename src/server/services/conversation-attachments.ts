@@ -117,6 +117,75 @@ export async function sendSlot(
   );
 }
 
+export const meetingModes = ["visio", "place", "call"] as const;
+
+export const meetingSchema = z.object({
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  times: z
+    .array(z.string().regex(/^\d{2}:\d{2}$/))
+    .min(1)
+    .max(8),
+  mode: z.enum(meetingModes),
+  /** Visio: the address of the video meeting (Meet, Zoom, Teams…). */
+  link: z
+    .string()
+    .trim()
+    .max(500)
+    .refine((value) => value === "" || /^https?:\/\/\S+$/i.test(value))
+    .default(""),
+  /** Sur place: the place written by the person. */
+  address: z.string().trim().max(200).default(""),
+  /** Sur place: the position shared from the phone. */
+  geo: z
+    .object({ lat: z.number().min(-90).max(90), lng: z.number().min(-180).max(180) })
+    .nullable()
+    .default(null),
+});
+
+/**
+ * « Proposer un rendez-vous » (chat, 01/11/2026): one day of the calendar, several hours for the
+ * other side to choose from, and how (Visio with its link, Sur place with an address or a GPS
+ * position, Appel). One card in the conversation, a slot message like the others.
+ */
+export async function sendMeeting(
+  db: PrismaClient,
+  viewer: Viewer,
+  conversationId: string,
+  input: z.infer<typeof meetingSchema>,
+  modeLabel: string,
+  now = new Date(),
+) {
+  if (viewer.hire) throw new ConnectError("notFound");
+  await getConversation(db, viewer, conversationId);
+  const timezone = await conversationTimeZone(db, conversationId);
+  const slots = [...new Set(input.times)]
+    .sort()
+    .map((time) => slotToDate(`${input.date}T${time}`, timezone));
+  if (slots.length === 0 || slots.some((slot) => !slot || slot <= now))
+    throw new ConnectError("invalid");
+  const dates = slots as Date[];
+  return sendMessage(
+    db,
+    viewer,
+    conversationId,
+    {
+      body: modeLabel,
+      kind: "slot",
+      payload: {
+        startsAt: dates[0]!.toISOString(),
+        slots: dates.map((date) => date.toISOString()),
+        timezone,
+        note: modeLabel,
+        mode: input.mode,
+        ...(input.mode === "visio" && input.link ? { link: input.link } : {}),
+        ...(input.mode === "place" && input.address ? { address: input.address } : {}),
+        ...(input.mode === "place" && input.geo ? { geo: input.geo } : {}),
+      },
+    },
+    now,
+  );
+}
+
 export const linkSchema = z.object({
   url: z
     .string()

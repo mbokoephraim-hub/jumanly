@@ -40,6 +40,10 @@ type Payload = {
   startsAt?: string;
   timezone?: string;
   note?: string;
+  slots?: string[];
+  link?: string;
+  address?: string;
+  geo?: { lat?: number; lng?: number };
   interviewId?: string;
   ephemeral?: { by?: string; seconds?: number | null };
   certificate?: { code?: string; title?: string; hours?: number };
@@ -532,11 +536,55 @@ export async function messageViews(
       }
       case "slot": {
         const startsAt = payload.startsAt ? new Date(payload.startsAt) : null;
+        const slots = (payload.slots ?? []).map((value) => new Date(value));
+        const hour = (date: Date) =>
+          format
+            .dateTime(date, {
+              hour: "numeric",
+              minute: "2-digit",
+              ...(payload.timezone ? { timeZone: payload.timezone } : {}),
+            })
+            .replace(/^(\d+):00$/, "$1 h")
+            .replace(/^(\d+):(\d+)$/, "$1 h $2");
+        const dayOnly = (date: Date) => {
+          const text = format.dateTime(date, {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            ...(payload.timezone ? { timeZone: payload.timezone } : {}),
+          });
+          return text.charAt(0).toUpperCase() + text.slice(1);
+        };
+        const geo =
+          typeof payload.geo?.lat === "number" && typeof payload.geo?.lng === "number"
+            ? `${payload.geo.lat},${payload.geo.lng}`
+            : null;
+        const place = geo ?? payload.address ?? null;
+        const several = slots.length > 1;
         return {
           kind: "event",
           label: t("event.slot"),
-          title: startsAt ? longDate(startsAt, payload.timezone) : message.body,
-          meta: payload.note ?? "",
+          title:
+            several && startsAt
+              ? dayOnly(startsAt)
+              : startsAt
+                ? longDate(startsAt, payload.timezone)
+                : message.body,
+          meta: [
+            several ? t("event.hours", { hours: slots.map(hour).join(" · ") }) : null,
+            payload.note ?? null,
+            payload.address ?? null,
+          ]
+            .filter(Boolean)
+            .join(" · "),
+          extra: payload.link?.match(/^https?:\/\//i)
+            ? { href: payload.link, label: t("event.join") }
+            : place
+              ? {
+                  href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`,
+                  label: t("event.map"),
+                }
+              : null,
           action: startsAt
             ? {
                 href: `/app/messages/${id}/agenda/${message.id}`,

@@ -212,6 +212,16 @@ function Content({
           <span className="nb-ms-evt-k">{bubble.label}</span>
           <b>{bubble.title}</b>
           {bubble.meta ? <span className="nb-meta">{bubble.meta}</span> : null}
+          {bubble.extra ? (
+            <a
+              href={bubble.extra.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="nb-ms-evt-b"
+            >
+              {bubble.extra.label}
+            </a>
+          ) : null}
           {bubble.action ? (
             bubble.action.download ? (
               <a href={bubble.action.href} download className="nb-ms-evt-b">

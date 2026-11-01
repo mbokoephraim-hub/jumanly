@@ -11543,6 +11543,9 @@ Conventions :
 | `phoneMsg.event.slot` | Rendez-vous proposé |
 | `phoneMsg.event.interview` | Entretien |
 | `phoneMsg.event.agenda` | Ajouter à l’agenda |
+| `phoneMsg.event.hours` | Au choix : {hours} |
+| `phoneMsg.event.join` | Rejoindre la visio |
+| `phoneMsg.event.map` | Voir sur la carte |
 | `phoneMsg.event.choose` | Choisir un créneau |
 | `phoneMsg.event.toConfirm` | Créneau à confirmer |
 | `phoneMsg.event.mode.video` | En visio |
@@ -11674,14 +11677,30 @@ Conventions :
 | `phoneMsg.attach.noContacts` | Aucune autre connexion à partager. |
 | `phoneMsg.attach.orgSent` | Organisation partagée |
 | `phoneMsg.attach.noOrgs` | Suivez une entreprise ou postulez pour la partager ici. |
-| `phoneMsg.agenda.day` | Jour |
-| `phoneMsg.agenda.hourTitle` | Heure |
+| `phoneMsg.agenda.hourTitle` | Heures proposées |
 | `phoneMsg.agenda.hour` | {hour} h |
+| `phoneMsg.agenda.hourMin` | {hour} h {min} |
+| `phoneMsg.agenda.hoursNote` | Touchez plusieurs heures, la personne choisira. |
+| `phoneMsg.agenda.picked` | {count, plural, one {# heure choisie} other {# heures choisies}} |
+| `phoneMsg.agenda.prev` | Mois précédent |
+| `phoneMsg.agenda.next` | Mois suivant |
 | `phoneMsg.agenda.how` | Comment |
 | `phoneMsg.agenda.mode.visio` | Visio |
 | `phoneMsg.agenda.mode.place` | Sur place |
 | `phoneMsg.agenda.mode.call` | Appel |
-| `phoneMsg.agenda.send` | Envoyer : {when} |
+| `phoneMsg.agenda.linkLabel` | Lien de la visio |
+| `phoneMsg.agenda.linkPlaceholder` | https://meet.google.com/… |
+| `phoneMsg.agenda.linkBad` | Le lien doit commencer par https:// |
+| `phoneMsg.agenda.addressLabel` | Adresse ou lieu |
+| `phoneMsg.agenda.addressPlaceholder` | Rue, quartier, ville |
+| `phoneMsg.agenda.gps` | Partager ma position |
+| `phoneMsg.agenda.gpsWait` | Recherche de la position… |
+| `phoneMsg.agenda.gpsDone` | Position partagée |
+| `phoneMsg.agenda.gpsRemove` | Retirer |
+| `phoneMsg.agenda.gpsError` | Position indisponible. Écrivez l’adresse. |
+| `phoneMsg.agenda.callNote` | Vous vous appellerez à l’heure choisie. |
+| `phoneMsg.agenda.pickHour` | Choisissez au moins une heure |
+| `phoneMsg.agenda.send` | Envoyer · {day} · {count, plural, one {# heure} other {# heures}} |
 | `phoneMsg.agenda.sent` | Proposition de rendez-vous envoyée |
 | `phoneMsg.agenda.summary` | Rendez-vous proposé sur Jumanly |
 | `phoneMsg.camera.title` | Appareil photo |
