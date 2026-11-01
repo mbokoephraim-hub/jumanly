@@ -87,8 +87,8 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
     expect((await page.request.get(sentHref!)).status()).toBe(200);
     await screen.getByRole("button", { name: "Retirer ma candidature" }).click();
     await page
-      .getByRole("dialog", { name: "Retirer votre candidature ?" })
-      .getByRole("button", { name: "Retirer", exact: true })
+      .getByRole("dialog", { name: "Voulez-vous vraiment retirer votre candidature ?" })
+      .getByRole("button", { name: "Oui, retirer" })
       .click();
     await expect(page).toHaveURL(/\/app\/career\/cv/);
     return;
@@ -159,8 +159,9 @@ test("le diagnostic en six dimensions : une question par écran, le scan, puis l
   await logIn(page, demo.talentFree);
   // Lot 6b (planche talent-4 § 5): with a result, the page opens on it; « Refaire » starts again.
   await page.goto("/app/career/diagnostic?refaire=1");
+  // The welcome of the diagnostic (31/10): what happens, then « Lancer mon diagnostic ».
   await expect(
-    page.getByRole("heading", { name: /^(Où en êtes-vous vraiment \?|Refaites le point)$/ }),
+    page.getByRole("heading", { level: 1, name: "Diagnostic de carrière" }),
   ).toBeVisible();
   const restart = page.getByRole("button", { name: "Recommencer", exact: true });
   if (await restart.isVisible()) await restart.click();
@@ -187,8 +188,9 @@ test("le diagnostic en six dimensions : une question par écran, le scan, puis l
   await expect(page).toHaveURL(/bilan=/, { timeout: 30_000 });
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Diagnostic de carrière");
   const main = page.getByRole("main");
-  await expect(main.getByRole("definition").first()).toBeVisible();
-  await expect(main).toContainText("Préparation aux entretiens");
+  await expect(main.getByRole("list", { name: "Vos six notes sur 100" })).toContainText(
+    "Préparation aux entretiens",
+  );
   // « Pourquoi ces notes ? »: the points of every answer.
   await main.getByRole("button", { name: "Pourquoi ces notes ?" }).click();
   await expect(page.getByRole("dialog", { name: "Pourquoi ces notes" })).toBeVisible();
@@ -203,7 +205,8 @@ test("le diagnostic en six dimensions : une question par écran, le scan, puis l
     await expect(main.getByRole("heading", { name: "Mon plan de progression" })).toBeVisible();
     await main.getByRole("link", { name: "Refaire le diagnostic" }).click();
   }
-  await expect(page.getByRole("heading", { name: "Refaites le point" })).toBeVisible();
+  await expect(page).toHaveURL(/refaire=1/);
+  await expect(page.getByRole("button", { name: "Lancer mon diagnostic" })).toBeVisible();
 });
 
 test("diagnostic personnalisé : deux questions de relance de l'IA, puis le mini plan gratuit", async ({
@@ -212,8 +215,9 @@ test("diagnostic personnalisé : deux questions de relance de l'IA, puis le mini
   test.setTimeout(180_000);
   await logIn(page, demo.talentPro);
   await page.goto("/app/career/diagnostic?refaire=1");
+  // The welcome of the diagnostic (31/10): what happens, then « Lancer mon diagnostic ».
   await expect(
-    page.getByRole("heading", { name: /^(Où en êtes-vous vraiment \?|Refaites le point)$/ }),
+    page.getByRole("heading", { level: 1, name: "Diagnostic de carrière" }),
   ).toBeVisible();
   const restart = page.getByRole("button", { name: "Recommencer", exact: true });
   if (await restart.isVisible()) await restart.click();
@@ -228,7 +232,9 @@ test("diagnostic personnalisé : deux questions de relance de l'IA, puis le mini
     .toHaveURL(/bilan=/, { timeout: 30_000 })
     .catch(async () => open.click());
   await expect(page).toHaveURL(/bilan=/, { timeout: 30_000 });
-  await expect(page.getByRole("main")).toContainText("Calculé sur vos réponses");
+  // The result and, with a paid plan, the plan of progression beside it.
+  await expect(page.getByRole("main")).toContainText("Six notes sur 100");
+  await expect(page.getByRole("main")).toContainText("Mon plan de progression");
 });
 
 test("faire le point : atouts, à renforcer, prochaine action et son pourquoi", async ({ page }) => {

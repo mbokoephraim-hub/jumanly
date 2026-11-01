@@ -250,11 +250,12 @@ test("importer un CV : fichier refusé, puis Word lu et vérifié", async ({ pag
     fictiveDocx(["Comptable (fictif).", "Excel, comptabilité, archivage."]),
   );
   if (isMobile) {
-    // The phone: what was found, ticked, then the profile and a CV opened on Contenu.
+    // The phone: what was found, ticked, then three ways out; « Remplir mon profil » keeps the CV
+    // in « Mes CV » too and opens it in the reader.
     await expect(page.getByText("Voici ce qu’Orbi a trouvé")).toBeVisible();
     await expectAccessible(page);
-    await page.getByRole("button", { name: "Ajouter à mon profil et créer le CV" }).click();
-    await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+\?etape=contenu/);
+    await page.getByRole("button", { name: /^Remplir mon profil avec ce CV/ }).click();
+    await expect(page).toHaveURL(/\/lire\?importe=profil/, { timeout: 20_000 });
     return;
   }
   await expect(page.getByText("Lu dans « cv-fictif.docx » · à vérifier")).toBeVisible();

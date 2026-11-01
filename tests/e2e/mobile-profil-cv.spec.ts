@@ -43,21 +43,26 @@ test("compléter mon profil sur téléphone : titre, photo, expérience", async 
     .nth(1)
     .setInputFiles(photo);
   await expect(page.getByText("Photo mise à jour.")).toBeVisible();
-  await page.goto("/app/career/cv");
-  const src = await page.locator('.nb-ca img[src^="/api/photo/"]').first().getAttribute("src");
+  // « Mon profil » (its own space since 29/10) shows the photo.
+  await page.goto("/app/profil");
+  const src = await page
+    .locator('img[src^="/api/photo/"]')
+    .filter({ visible: true })
+    .first()
+    .getAttribute("src");
   const served = await page.request.get(src!);
   expect(served.headers()["content-type"]).toBe("image/jpeg");
   expect(served.headers()["x-content-type-options"]).toBe("nosniff");
 
-  // The banner (22/10/2026): a wide picture, cut to 5 by 2 in the browser, shown on Carrière.
+  // The banner (22/10/2026): a wide picture, cut to 5 by 2 in the browser, shown on Mon profil.
   await page.goto("/app/career/profil");
   await page.getByRole("button", { name: "Changer la bannière" }).click();
   const bannerSheet = page.getByRole("dialog", { name: "Bannière du profil" });
   await expect(bannerSheet.getByRole("button", { name: "Choisir dans la galerie" })).toBeVisible();
   await page.locator('.nb-ca-form input[data-banniere][type="file"]').nth(1).setInputFiles(photo);
   await expect(page.getByText("Bannière mise à jour.")).toBeVisible();
-  await page.goto("/app/career/cv");
-  const banner = page.locator('.nb-pf-banniere img[src^="/api/banniere/"]').first();
+  await page.goto("/app/profil");
+  const banner = page.locator('img[src^="/api/banniere/"]').filter({ visible: true }).first();
   const bannerServed = await page.request.get((await banner.getAttribute("src"))!);
   expect(bannerServed.headers()["content-type"]).toBe("image/jpeg");
   await page.goto("/app/career/profil");
@@ -75,8 +80,8 @@ test("compléter mon profil sur téléphone : titre, photo, expérience", async 
   await experience.getByRole("switch", { name: "J’y travaille encore" }).click();
   await experience.getByRole("button", { name: "Enregistrer" }).click();
   await expect(page.getByText("Expérience ajoutée.")).toBeVisible();
-  await page.goto("/app/career/cv");
-  await expect(page.locator(".nb-ca").first()).toContainText("Analyste junior");
+  await page.goto("/app/profil");
+  await expect(page.getByText("Analyste junior").filter({ visible: true }).first()).toBeVisible();
 
   // Removing the photo goes back to the initials.
   await page.goto("/app/career/profil");
@@ -89,46 +94,46 @@ test("compléter mon profil sur téléphone : titre, photo, expérience", async 
   expect((await page.request.get(src!)).status()).toBe(404);
 });
 
-test("télécharger mon CV sur téléphone : créer, aperçu, PDF", async ({ page, isMobile }) => {
-  test.skip(!isMobile, "Parcours du téléphone (docs/carriere-v3).");
+test("télécharger mon CV sur téléphone : créer, écrire, PDF", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "Parcours du téléphone (nouveau CV du 31/10).");
   test.setTimeout(150_000);
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("cv-mobile"));
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 
-  // « Nouveau CV » in Carrière: « Comment voulez-vous commencer ? », then a template.
-  await page.goto("/app/career/cv?onglet=cv");
-  await page.locator(".nb-cr-nouveau").filter({ visible: true }).click();
+  // « + Nouveau CV » in Mes documents: « Comment voulez-vous remplir votre CV ? ».
+  await page.goto("/app/career/cv?onglet=documents");
+  await page.getByRole("link", { name: "+ Nouveau CV" }).filter({ visible: true }).click();
   await page.waitForURL("**/app/career/cv/nouveau");
-  await page.getByRole("link", { name: /^Partir d’un modèle/ }).click();
-  await page.waitForURL(/etape=modele/);
-  await page.getByRole("button", { name: "Continuer" }).filter({ visible: true }).click();
-  await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+\?etape=contenu/);
+  await page.getByRole("radio", { name: /^Tout écrire moi-même/ }).check();
+  await page.getByRole("button", { name: "Valider" }).click();
+  await page.waitForURL(/\/app\/career\/cv\/[^/?]+\?etape=contenu/, { timeout: 30_000 });
   const id = new URL(page.url()).pathname.split("/").pop()!;
 
-  // Contenu → Mise en forme → Aperçu: « Télécharger en PDF ».
+  // A new account has an empty CV: a summary is written first (the PDF is never an empty page).
+  await page.getByRole("button", { name: "Suivant" }).click();
+  const bio = page.getByLabel("Bio de candidature");
+  const status = page.getByRole("status").filter({ hasText: /Ce que vous changez ici/ });
+  await expect(async () => {
+    await bio.fill("");
+    await bio.fill("Analyste junior (fictive) qui aime les chiffres.");
+    await expect(status).not.toHaveText(/^Enregistré ·/, { timeout: 1_000 });
+  }).toPass();
+  await expect(status).toHaveText(/^Enregistré ·/, { timeout: 10_000 });
+
+  // The PDF, from the menu of the CV: never the name of Jumanly.
+  await page.goto("/app/career/cv?onglet=documents");
   await page
-    .getByRole("link", { name: "Continuer", exact: true })
+    .locator("li")
+    .filter({ has: page.locator(`a[href^="/app/career/cv/${id}"]`) })
+    .getByRole("button", { name: /^Actions de « / })
     .filter({ visible: true })
     .click();
-  await page.waitForURL(/etape=style/);
-  await page.getByRole("link", { name: "Voir l’aperçu" }).filter({ visible: true }).click();
-  await page.waitForURL(/etape=apercu/);
-  // A new account has an empty CV: a summary is written first (the PDF is never an empty page).
-  await page.getByRole("link", { name: "Écrire le contenu" }).click();
-  await page.getByRole("button", { name: "Modifier le résumé" }).click();
-  const sheet = page.getByRole("dialog", { name: "Résumé" });
-  await sheet.getByRole("textbox").fill("Analyste junior (fictive) qui aime les chiffres.");
-  await sheet.getByRole("button", { name: "Enregistrer" }).click();
-  await expect(sheet).toBeHidden();
-  await expect(
-    page.getByText("Analyste junior (fictive)").filter({ visible: true }).first(),
-  ).toBeVisible();
-  await page.goto(`/app/career/cv/${id}?etape=apercu`);
   const download = page.waitForEvent("download");
-  await page.getByRole("button", { name: "Télécharger en PDF" }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "Télécharger" }).click();
   const path = join(mkdtempSync(join(tmpdir(), "cv-mobile-")), "cv.pdf");
   await (await download).saveAs(path);
   // The contact e-mail of the fictional account is the only place the word may appear.
   const text = execFileSync("pdftotext", ["-layout", path, "-"]).toString();
+  expect(text).toContain("Analyste junior (fictive)");
   expect(text.replace(/\S+@\S+/g, "")).not.toMatch(/Jumanly/i);
 });

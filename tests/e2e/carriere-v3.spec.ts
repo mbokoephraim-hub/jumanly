@@ -22,88 +22,77 @@ const SUMMARY = "Assistante comptable (fictive), 3 ans de clôtures mensuelles e
 test.describe("Carrière v3 · créer un CV au téléphone", () => {
   test.skip(({ isMobile }) => !isMobile, "Parcours du téléphone.");
 
-  test("un modèle, mes informations, l'aperçu puis le PDF", async ({ page }) => {
+  test("trois façons de commencer, mes informations, le studio, l'aperçu puis le PDF", async ({
+    page,
+  }) => {
     test.setTimeout(150_000);
     await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("carriere-v3"));
     await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 
-    // « Comment voulez-vous commencer ? »: Orbi, a template or an import.
+    // « Nouveau CV » (31/10): three ways to fill it, then « Valider »; importing a file stays.
     await page.goto("/app/career/cv/nouveau");
     await expect(page.getByRole("heading", { name: "Nouveau CV", level: 1 })).toBeVisible();
-    for (const name of [/^Orbi le prépare/, /^Partir d’un modèle/, /^Importer mon CV/])
-      await expect(page.getByRole("link", { name })).toBeVisible();
+    for (const name of [
+      /^Reprendre les informations/,
+      /^Tout écrire moi-même/,
+      /^Adapter à une offre/,
+    ])
+      await expect(page.getByRole("radio", { name })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Importer$/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Valider" })).toBeDisabled();
     await expectAccessible(page);
+    await page.getByRole("radio", { name: /^Tout écrire moi-même/ }).check();
+    await page.getByRole("button", { name: "Valider" }).click();
+    await page.waitForURL(/\/app\/career\/cv\/[^/?]+\?etape=contenu/, { timeout: 30_000 });
+    const id = new URL(page.url()).pathname.split("/").pop()!;
 
-    // A template of a paid plan shows the plan instead of being applied.
-    await page.getByRole("link", { name: /^Partir d’un modèle/ }).click();
-    await page.waitForURL(/etape=modele/);
-    await expect(page.getByRole("heading", { name: "Choisir un modèle", level: 1 })).toBeVisible();
+    // Mes informations, in seven parts: « Suivant » goes from one to the next, saved as typed.
+    await expect(page.getByText("Partie 1 sur 7")).toBeVisible();
+    await expectAccessible(page);
+    await page.getByRole("button", { name: "Suivant" }).click();
+    await expect(page.getByText("Partie 2 sur 7")).toBeVisible();
+    // The form may hydrate after the first keystrokes: type again until the page counts the
+    // change (« Modifié », then « Enregistré » once saved).
+    const bio = page.getByLabel("Bio de candidature");
+    const status = page.getByRole("status").filter({ hasText: /Ce que vous changez ici/ });
+    await expect(async () => {
+      await bio.fill("");
+      await bio.fill(SUMMARY);
+      await expect(status).not.toHaveText(/^Enregistré ·/, { timeout: 1_000 });
+    }).toPass();
+    await expect(status).toHaveText(/^Enregistré ·/, { timeout: 10_000 });
+    // « Suivant » keeps what was typed and opens the next part.
+    await page.getByRole("button", { name: "Suivant" }).click();
+    await expect(page.getByText("Partie 3 sur 7")).toBeVisible();
+
+    // Studio, then Aperçu, then « Enregistrer » and « Retour aux documents ».
+    await page.goto(`/app/career/cv/${id}?etape=studio&nouveau=1`);
+    await expect(page.getByRole("heading", { name: "Studio", level: 1 })).toBeVisible();
     await page
-      .getByRole("button", { name: /, inclus dans / })
-      .first()
+      .getByRole("navigation", { name: "Étapes du CV" })
+      .getByRole("link", { name: "Aperçu" })
       .click();
-    await expect(page.getByRole("link", { name: /^Passer à / }).first()).toBeVisible();
-    await expectAccessible(page);
-
-    // A free one: « Continuer » creates the CV and opens Contenu.
-    await page.getByRole("button", { name: /^Gratuits/ }).click();
-    await page.locator(".nb-cv-modele:not([data-verrou])").first().click();
-    await page.getByRole("button", { name: "Continuer" }).filter({ visible: true }).click();
-    await page.waitForURL(/\/app\/career\/cv\/[^/?]+\?etape=contenu/);
-
-    // Mes informations (Ephraïm, 29/10): blocks filled from the profile, a switch hides a block,
-    // what is typed shows at once in the live preview and is saved on « Continuer ».
-    await expect(page.getByRole("heading", { name: "Mes informations", level: 1 })).toBeVisible();
-    const section = page.getByRole("switch", { name: /^Afficher .+ sur le CV$/ }).first();
-    const before = await section.getAttribute("aria-checked");
-    await section.click();
-    await expect(section).not.toHaveAttribute("aria-checked", before ?? "true");
-    await section.click();
-    await expect(section).toHaveAttribute("aria-checked", before ?? "true");
-    await page.getByRole("button", { name: /^Profil professionnel/ }).click();
-    await page.getByLabel("Bio de candidature").fill(SUMMARY);
-    await expect(page.locator(".nb-cvf-page .cv-pages").getByText(SUMMARY)).toBeVisible();
-    await expectAccessible(page);
-    await page.getByRole("button", { name: "Continuer vers l’aperçu" }).click();
-    await page.waitForURL(/etape=apercu/);
-
-    // Couleurs et police, from the preview: the font changes the CV in place.
-    await page.getByRole("link", { name: /^Couleurs et police/ }).click();
-    await page.waitForURL(/etape=style/);
-    const fonts = page.getByRole("radiogroup", { name: "Police" });
-    await fonts.getByRole("radio").nth(1).click();
-    await expect(fonts.getByRole("radio").nth(1)).toHaveAttribute("aria-checked", "true");
-    await expectAccessible(page);
-    await page.getByRole("link", { name: "Voir l’aperçu" }).filter({ visible: true }).click();
-
-    // Aperçu: the score with its « Pourquoi ? ».
-    await page.waitForURL(/etape=apercu/);
-    await expect(page.getByRole("img", { name: /^Score du CV : \d+ sur 100$/ })).toBeVisible();
-    await page.getByRole("button", { name: "Pourquoi ?" }).first().click();
-    await expect(page.getByRole("dialog")).toBeVisible();
-    await page.keyboard.press("Escape");
-
-    // « Enregistrer » confirms the CV is kept.
+    await page.waitForURL(/etape=voir/);
+    await expect(page.getByRole("heading", { name: "Votre CV", level: 1 })).toBeVisible();
+    await expect(page.getByText(SUMMARY).filter({ visible: true }).first()).toBeVisible();
     await page.getByRole("button", { name: "Enregistrer", exact: true }).click();
-    await expect(page.getByRole("button", { name: "Enregistré ✓" })).toBeDisabled();
+    const saved = page.getByRole("dialog", { name: "CV enregistré" });
+    await expect(saved).toBeVisible();
+    await saved.getByRole("button", { name: "Retour aux documents" }).click();
+    await page.waitForURL("**/app/career/cv?onglet=documents");
 
     // The PDF downloaded is the person's CV, not an example nor an empty page.
+    await page
+      .locator("li")
+      .filter({ has: page.locator(`a[href^="/app/career/cv/${id}"]`) })
+      .getByRole("button", { name: /^Actions de « / })
+      .filter({ visible: true })
+      .click();
     const download = page.waitForEvent("download");
-    await page.getByRole("button", { name: "Télécharger en PDF" }).click();
+    await page.getByRole("dialog").getByRole("button", { name: "Télécharger" }).click();
     const file = join(mkdtempSync(join(tmpdir(), "cv-v3-")), "cv.pdf");
     await (await download).saveAs(file);
     expect(execFileSync("pdftotext", [file, "-"]).toString()).toContain("Assistante comptable");
-
-    // « Ajouter à mon profil » asks first, then adds the summary.
-    await page.getByRole("button", { name: "Ajouter à mon profil" }).first().click();
-    const add = page.getByRole("dialog", { name: "Ajouter ce CV à mon profil" });
-    await expect(add.getByText("Le résumé")).toBeVisible();
-    await add.getByRole("button", { name: "Ajouter à mon profil" }).click();
-    await expect(page.getByText("Un élément ajouté à votre profil.")).toBeVisible();
-
-    // « Terminer » ends on Carrière, the CV kept in « Mes CV ».
-    await page.getByRole("button", { name: "Terminer" }).click();
-    await page.waitForURL("**/app/career/cv?onglet=cv");
   });
 
   test("importer un PDF, le garder, le lire dans l’appli puis le supprimer", async ({ page }) => {
@@ -186,32 +175,43 @@ test.describe("Carrière v3 · créer un CV au téléphone", () => {
     const id = new URL(page.url()).pathname.split("/").pop()!;
     await page.getByRole("button", { name: /^Gratuits/ }).click();
     await page.locator(".nb-cv-modele:not([data-verrou])").first().click();
+    // The chosen card opens large when touched again: « Utiliser ce modèle » applies it too.
     await page
-      .getByRole("button", { name: "Appliquer ce modèle" })
+      .getByRole("button", { name: /^(Appliquer|Utiliser) ce modèle$/ })
       .filter({ visible: true })
       .click();
     await page.waitForURL(/etape=contenu/);
-    await expect(page.getByText("Excel").filter({ visible: true }).first()).toBeVisible();
 
-    // The PDF is this CV, with what was read.
-    await page.goto(`/app/career/cv/${id}?etape=apercu`);
+    // The PDF is this CV, with what was read (from its menu in « Mes documents »).
+    await page.goto("/app/career/cv?onglet=documents");
+    await page
+      .locator("li")
+      .filter({ has: page.locator(`a[href^="/app/career/cv/${id}"]`) })
+      .getByRole("button", { name: /^Actions de « / })
+      .filter({ visible: true })
+      .click();
     const download = page.waitForEvent("download");
-    await page.getByRole("button", { name: "Télécharger en PDF" }).click();
+    await page.getByRole("dialog").getByRole("button", { name: "Télécharger" }).click();
     const file = join(mkdtempSync(join(tmpdir(), "cv-autre-")), "cv.pdf");
     await (await download).saveAs(file);
     expect(execFileSync("pdftotext", [file, "-"]).toString()).toContain("Excel");
   });
 
-  test("Orbi prépare le CV à partir du profil", async ({ page }) => {
+  test("le profil remplit le CV : « Reprendre les informations de mon profil »", async ({
+    page,
+  }) => {
     test.setTimeout(120_000);
-    await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("carriere-v3-orbi"));
+    await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("carriere-v3-profil-cv"));
     await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 
     await page.goto("/app/career/cv/nouveau");
-    await page.getByRole("link", { name: /^Orbi le prépare/ }).click();
-    await page.waitForURL(/etape=orbi&cv=/, { timeout: 30_000 });
-    await expect(page.getByText("Votre CV est prêt")).toBeVisible({ timeout: 15_000 });
-    await page.getByRole("link", { name: "Voir le contenu" }).filter({ visible: true }).click();
-    await page.waitForURL(/\/app\/career\/cv\/[^/?]+\?etape=contenu/);
+    await page.getByRole("radio", { name: /^Reprendre les informations/ }).check();
+    await page.getByRole("button", { name: "Valider" }).click();
+    await page.waitForURL(/\/app\/career\/cv\/[^/?]+\?etape=contenu/, { timeout: 30_000 });
+    // The name and the e-mail of the account are already in the boxes.
+    await expect(page.getByRole("textbox", { name: "E-mail" })).toHaveValue(
+      /carriere-v3-profil-cv-.+@jumanly\.test/,
+    );
+    await expect(page.getByLabel("Nom complet")).not.toHaveValue("");
   });
 });
