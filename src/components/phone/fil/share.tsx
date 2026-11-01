@@ -246,7 +246,16 @@ export function ShareBody({
 }
 
 /** Small glyphs of the apps offered under « Partager ailleurs », drawn in the app's colours. */
-function BrandIcon({ name }: { name: "whatsapp" | "linkedin" | "instagram" }) {
+export function BrandIcon({ name }: { name: "whatsapp" | "linkedin" | "instagram" | "facebook" }) {
+  if (name === "facebook")
+    return (
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden focusable="false">
+        <path
+          fill="currentColor"
+          d="M13.4 20.5v-7.3h2.5l.4-2.9h-2.9V8.5c0-.8.2-1.4 1.4-1.4h1.5V4.5c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8v2.1H8v2.9h2.4v7.3z"
+        />
+      </svg>
+    );
   if (name === "linkedin")
     return (
       <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden focusable="false">

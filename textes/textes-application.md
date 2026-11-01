@@ -10198,6 +10198,18 @@ Conventions :
 | `phoneCareer.shareQrAlt` | Code QR du profil de {name} |
 | `phoneCareer.sharePdf` | Télécharger mon profil en PDF |
 | `phoneCareer.sharePrivate` | Votre profil est visible par vos connexions et les recruteurs à qui vous écrivez. Réglez-le dans Confidentialité. |
+| `phoneCareer.shareSendTo` | Envoyer dans une discussion |
+| `phoneCareer.shareSendEmpty` | Vos discussions apparaîtront ici. |
+| `phoneCareer.sharePick` | Choisir {name} |
+| `phoneCareer.shareSend` | {count, plural, one {Envoyer} other {Envoyer à # personnes}} |
+| `phoneCareer.shareSent` | {count, plural, one {Profil envoyé} other {Profil envoyé à # personnes}} |
+| `phoneCareer.shareSentTo` | Profil envoyé à {name} |
+| `phoneCareer.shareError` | L'envoi n'a pas abouti. Réessayez. |
+| `phoneCareer.shareMessage` | Mon profil Jumanly |
+| `phoneCareer.shareOutside` | Partager ailleurs |
+| `phoneCareer.shareCopyShort` | Copier |
+| `phoneCareer.shareQrShort` | Code QR |
+| `phoneCareer.sharePdfShort` | PDF |
 | `phoneCareer.close` | Fermer |
 | `phoneCareer.back` | Retour |
 | `phoneCareer.remote` | À distance |

@@ -388,6 +388,7 @@ export function PhoneMyProfile({
         onClose={() => setSheet(null)}
         name={view.name}
         share={view.share}
+        targets={targets}
       />
       <PhotoViewer
         open={photoOpen}

@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireUser } from "@/server/auth/session";
 import { publishingSpace } from "@/server/hire-context";
 import { db } from "@/server/db";
+import { siteUrl } from "@/lib/seo";
 import { reportError } from "@/server/observability";
 import { sendMessage } from "@/server/services/connect";
 import {
@@ -155,6 +156,44 @@ export async function sharePostAction(id: string, conversationIds: string[], not
       sent += 1;
     } catch (error) {
       void reportError(error, { message: "Fil · partager" });
+    }
+  }
+  if (sent === 0) return { ok: false as const, error: "failed" };
+  return { ok: true as const, value: sent };
+}
+
+/**
+ * « Partager mon profil » to people of the person's conversations (Ephraïm, 01/11/2026, like
+ * Instagram): the link of their own profile, sent as a link card in each chosen conversation.
+ * The link is built here from the person's own profile, never taken from the screen.
+ */
+export async function shareProfileAction(conversationIds: string[]) {
+  const user = await requireUser("/app/profil");
+  const chosen = z.array(postId).min(1).max(20).safeParse(conversationIds);
+  if (!chosen.success) return { ok: false as const, error: "invalid" };
+  const targets = await sendTargets(db, user.id);
+  const picked = targets.filter((item) => chosen.data.includes(item.conversationId));
+  if (picked.length === 0) return { ok: false as const, error: "notFound" };
+  const profile = await db.talentProfile.findUnique({
+    where: { userId: user.id },
+    select: { portfolioSlug: true, portfolioPublic: true },
+  });
+  const link = `${siteUrl()}${
+    profile?.portfolioPublic && profile.portfolioSlug
+      ? `/portfolio/${profile.portfolioSlug}`
+      : `/app/personnes/${user.id}`
+  }`;
+  const t = await getTranslations("phoneCareer");
+  let sent = 0;
+  for (const target of picked) {
+    try {
+      await sendMessage(db, { userId: user.id }, target.conversationId, {
+        body: t("shareMessage"),
+        payload: { link },
+      });
+      sent += 1;
+    } catch (error) {
+      void reportError(error, { message: "Profil · partager" });
     }
   }
   if (sent === 0) return { ok: false as const, error: "failed" };
