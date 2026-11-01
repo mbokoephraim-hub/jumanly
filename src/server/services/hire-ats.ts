@@ -40,6 +40,9 @@ import {
   CRITERION_MET_EVENT,
   CRITERION_UNMET_EVENT,
   documentsOf,
+  HOLD_EVENT,
+  HOLD_LIFTED_EVENT,
+  isOnHold,
   missedCriteriaOf,
   type OrbiClass,
 } from "./hire-classes";
@@ -119,6 +122,8 @@ export type AtsRow = {
   documents: { received: number; asked: number };
   /** Elimination criteria the recruiter marked as missing. */
   missedCriteria: string[];
+  /** « En attente », a member's gesture. */
+  onHold: boolean;
   /** Orbi's class (null when the organization sees no score). */
   orbiClass: OrbiClass | null;
 };
@@ -271,17 +276,20 @@ export async function atsBoard(
       ? new Map<string, MatchExplanation | "disabled">()
       : await applicationMatches(db, applications, now);
   const criteria = parseCriteria(job.knockoutCriteria);
-  const criterionEvents =
-    criteria.length > 0
-      ? await db.applicationEvent.findMany({
-          where: {
-            applicationId: { in: applications.map((application) => application.id) },
-            type: { in: [CRITERION_UNMET_EVENT, CRITERION_MET_EVENT] },
-          },
-          orderBy: { createdAt: "asc" },
-          select: { applicationId: true, type: true, payload: true },
-        })
-      : [];
+  const criterionEvents = await db.applicationEvent.findMany({
+    where: {
+      applicationId: { in: applications.map((application) => application.id) },
+      type: {
+        in: [
+          HOLD_EVENT,
+          HOLD_LIFTED_EVENT,
+          ...(criteria.length > 0 ? [CRITERION_UNMET_EVENT, CRITERION_MET_EVENT] : []),
+        ],
+      },
+    },
+    orderBy: { createdAt: "asc" },
+    select: { applicationId: true, type: true, payload: true },
+  });
   const proofJob = {
     skills: job.skills.map((item) => ({
       skillId: item.skillId,
@@ -341,6 +349,7 @@ export async function atsBoard(
         criterionEvents.filter((event) => event.applicationId === application.id),
         criteria,
       ),
+      onHold: isOnHold(criterionEvents.filter((event) => event.applicationId === application.id)),
     };
   });
   const withScores = matchingLevel !== "none";

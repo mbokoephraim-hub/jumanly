@@ -20269,6 +20269,104 @@
       }
     }
   },
+  "phoneRhTri": {
+    "back": "Pipeline",
+    "previous": "Candidat précédent",
+    "next": "Candidat suivant",
+    "position": "{index} sur {total}",
+    "identity": {
+      "job": "{title} chez {company}",
+      "studies": "Études en cours : {degree}, {school}"
+    },
+    "sentence": {
+      "years": "{count, plural, one {# an d'expérience} other {# ans d'expérience}}",
+      "now": "disponible tout de suite",
+      "from": "disponible le {date, date, long}"
+    },
+    "state": {
+      "retained": "Dans les retenus",
+      "hold": "En attente"
+    },
+    "class": {
+      "fort": "Fort potentiel",
+      "considerer": "À considérer",
+      "limite": "Limité",
+      "hors": "Hors critères"
+    },
+    "orbi": {
+      "title": "L'avis d'Orbi",
+      "score": "Compatibilité {value} %",
+      "rule": "Calculé sans le nom, l'âge, la photo ni l'origine. Vous décidez.",
+      "reasons": "Pour",
+      "gaps": "Écarts",
+      "gapSkill": "Pas de {skill} dans le profil",
+      "gapLanguages": "Une langue demandée manque ou a un niveau plus bas",
+      "gapExperience": "Moins d'expérience que demandé",
+      "questions": "Deux questions à poser en entretien",
+      "question": {
+        "proven": "Racontez un projet où vous avez utilisé {skill}. Quel était votre rôle ?",
+        "check": "Comment avez-vous pratiqué {skill} ? Donnez un exemple concret."
+      },
+      "none": "Le score de ce candidat n'est pas calculé : il a désactivé le calcul de compatibilité."
+    },
+    "criteria": {
+      "title": "Critères éliminatoires",
+      "lead": "Orbi ne les vérifie pas seul. Si un critère manque, marquez-le : le candidat passe dans « Hors critères » et reste visible.",
+      "unmet": "Ne le remplit pas",
+      "met": "Le remplit finalement",
+      "missing": "Manque"
+    },
+    "skills": {
+      "title": "Compétences",
+      "none": "Aucune compétence indiquée.",
+      "proven": "prouvée"
+    },
+    "timeline": {
+      "title": "Parcours",
+      "none": "Pas encore d'expérience ni de diplôme indiqué.",
+      "today": "aujourd'hui"
+    },
+    "practical": {
+      "title": "Pratique",
+      "languages": "Langues",
+      "contract": "Contrat cherché",
+      "availability": "Disponibilité",
+      "mobility": "Mobilité",
+      "relocation": "Prêt à déménager",
+      "unknown": "Non précisé"
+    },
+    "documents": {
+      "title": "Documents",
+      "none": "Aucun document joint.",
+      "cv": "CV",
+      "letter": "Lettre de motivation",
+      "state": {
+        "received": "Reçu",
+        "read": "Lu par Orbi",
+        "verified": "Vérifié"
+      },
+      "missing": "{count, plural, one {# document demandé manque} other {# documents demandés manquent}}"
+    },
+    "file": "Ouvrir le dossier complet",
+    "applied": "Candidature {when}",
+    "actions": {
+      "reject": "Ne pas retenir",
+      "hold": "En attente",
+      "unhold": "Sortir de l'attente",
+      "retain": "Retenir",
+      "unretain": "Retirer des retenus"
+    },
+    "undo": {
+      "retained": "Candidature de {name} retenue.",
+      "hold": "Candidature de {name} mise en attente.",
+      "button": "Annuler"
+    },
+    "swipe": {
+      "retain": "Retenir",
+      "hold": "En attente",
+      "hint": "Glissez une carte vers la droite pour retenir, vers la gauche pour mettre en attente."
+    }
+  },
   "jobSheet": {
     "kind": "Fiche de poste",
     "facts": {
