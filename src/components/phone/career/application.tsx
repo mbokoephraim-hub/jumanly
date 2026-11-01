@@ -39,6 +39,8 @@ export type ApplicationView = {
   } | null;
   practice: string;
   cv: { title: string; href: string } | null;
+  /** « Pièces demandées » (dossier de vérification): where to drop them, and how many are in. */
+  pieces: { href: string; line: string } | null;
   /** « Écrire à Nadia »: the thread with the recruiting team, and Orbi's draft. */
   write: { conversationId: string; label: string; draft: string } | null;
   /** The three questions of « Préparer avec Orbi ». */
@@ -214,6 +216,18 @@ export function PhoneApplication({ view }: { view: ApplicationView }) {
               <span>
                 <b>{t("cv")}</b>
                 <small>{view.cv.title}</small>
+              </span>
+              <PhoneIcon name="chevron" size={16} />
+            </a>
+          ) : null}
+          {view.pieces ? (
+            <a href={view.pieces.href} className="nb-cd-tuile">
+              <span className="nb-cd-tuile-i" data-cv="" aria-hidden>
+                <PhoneIcon name="coche" size={18} />
+              </span>
+              <span>
+                <b>{t("pieces")}</b>
+                <small>{view.pieces.line}</small>
               </span>
               <PhoneIcon name="chevron" size={16} />
             </a>

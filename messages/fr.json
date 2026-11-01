@@ -12991,6 +12991,8 @@
       "practiceGo": "Commencer l’entraînement",
       "mine": "Ma candidature",
       "cv": "CV envoyé",
+      "pieces": "Pièces demandées",
+      "piecesLine": "{done} sur {total} déposées",
       "writeTo": "Écrire à {name}",
       "writeTeam": "Écrire à l’équipe de recrutement",
       "draftInterview": "{name, select, none {Bonjour} other {Bonjour {name}}}, merci pour l’invitation. Je confirme ma présence {day} à {hour}. Bonne journée, {me}",
@@ -20365,7 +20367,97 @@
       "retain": "Retenir",
       "hold": "En attente",
       "hint": "Glissez une carte vers la droite pour retenir, vers la gauche pour mettre en attente."
+    },
+    "pieces": {
+      "title": "Dossier de vérification",
+      "line": "{count, plural, one {Demander des pièces au retenu, suivre ce qu'il envoie} other {Demander des pièces aux # retenus, suivre ce qu'ils envoient}}"
     }
+  },
+  "phoneRhPieces": {
+    "seo": "Dossier de vérification",
+    "back": "Pipeline de l'offre",
+    "title": "Dossier de vérification",
+    "mailDocumentName": "des pièces pour vérifier votre candidature",
+    "sent": "{count, plural, one {Demande envoyée à # candidat.} other {Demande envoyée à # candidats.}}",
+    "error": "La demande n'est pas partie. Choisissez au moins un candidat et une pièce, une date à venir et un message.",
+    "optional": "(facultatif)",
+    "piece": {
+      "diploma": "Diplôme",
+      "transcript": "Relevé de notes",
+      "referent": "Référent",
+      "thesis": "Thèse ou mémoire",
+      "certificate": "Certificat",
+      "portfolio": "Portfolio",
+      "test": "Test pratique"
+    },
+    "follow": {
+      "title": "Suivi des pièces",
+      "none": "Aucune pièce demandée pour cette offre.",
+      "count": "{done} sur {total} ont tout envoyé",
+      "complete": "Complet",
+      "late": "Date limite passée",
+      "due": "Avant le {date, date, long}",
+      "rule": "Orbi compare les diplômes au CV envoyé et signale ce qui est à vérifier. Il ne déclare jamais une pièce fausse : c'est une question à poser. Les pièces ne sont visibles que par l'équipe de l'offre, chaque ouverture est inscrite au journal."
+    },
+    "state": {
+      "pending": "En attente",
+      "file": "Fichier",
+      "certificate": "Attestation Jumanly vérifiée",
+      "referent": "{name} · {email}"
+    },
+    "check": {
+      "school": "À vérifier : {school} n'apparaît pas dans le CV envoyé",
+      "year": "À vérifier : le CV indique {cv}, le profil {piece}"
+    },
+    "ask": {
+      "title": "Demander des pièces",
+      "none": "Retenez d'abord des candidats dans le pipeline ; ceux qui ont déjà une demande n'apparaissent plus ici.",
+      "who": "À qui",
+      "what": "Quelles pièces",
+      "required": "Obligatoire",
+      "due": "Date limite",
+      "message": "Message (modifiable)",
+      "template": "Bonjour, votre candidature au poste de {jobTitle} avance. Pour poursuivre, {company} vous demande quelques pièces, à déposer avant le {date} depuis votre candidature sur Jumanly. Vous pouvez réutiliser celles de votre Skills Passport. Merci !",
+      "rule": "Chacun reçoit une notification, un message dans Messages et un e-mail, puis deux relances avant la date limite. Une pièce manquante n'écarte personne : vous décidez.",
+      "send": "Envoyer la demande"
+    }
+  },
+  "talentPieces": {
+    "seo": "Pièces demandées",
+    "back": "Mes candidatures",
+    "title": "Pièces demandées",
+    "lead": "{company} vous demande ces pièces pour votre candidature au poste de {jobTitle}.",
+    "progress": "{done} sur {total} déposées · avant le {date, date, long}",
+    "ok": "Pièce déposée.",
+    "error": {
+      "size": "Ce fichier dépasse 4 Mo. Essayez une version plus légère.",
+      "type": "Envoyez un PDF ou une image (PNG, JPEG, WebP).",
+      "other": "Rien n'a été déposé. Ajoutez un fichier, une attestation ou les coordonnées demandées."
+    },
+    "privacy": "Seule l'équipe de recrutement de cette offre voit vos pièces. Elles ne servent qu'à cette candidature.",
+    "state": {
+      "received": "Déposée le {date}",
+      "required": "Obligatoire",
+      "optional": "Facultative"
+    },
+    "referent": {
+      "name": "Nom du référent",
+      "email": "E-mail du référent",
+      "consent": "En le donnant, vous acceptez que l'entreprise contacte cette personne au sujet de votre candidature. Prévenez-la."
+    },
+    "reuse": "Réutiliser une attestation de mon Skills Passport",
+    "reuseNone": "Aucune, j'envoie un fichier",
+    "education": "Ce diplôme sur mon profil",
+    "educationNone": "Choisir un diplôme",
+    "file": "Fichier (PDF ou image, 4 Mo au plus)",
+    "fileReplace": "Remplacer {name}",
+    "note": {
+      "portfolio": "Lien vers le portfolio",
+      "test": "Lien ou réponse au test",
+      "thesis": "Titre du mémoire ou de la thèse"
+    },
+    "send": "Déposer",
+    "update": "Mettre à jour"
   },
   "jobSheet": {
     "kind": "Fiche de poste",

@@ -1572,23 +1572,23 @@ enum ApplicationSource {
 }
 
 model Application {
-  id               String             @id @default(cuid(2))
+  id               String               @id @default(cuid(2))
   jobId            String
-  job              Job                @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  job              Job                  @relation(fields: [jobId], references: [id], onDelete: Cascade)
   profileId        String
-  profile          TalentProfile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile          TalentProfile        @relation(fields: [profileId], references: [id], onDelete: Cascade)
   stageId          String
-  stage            PipelineStage      @relation(fields: [stageId], references: [id])
-  status           ApplicationStatus  @default(active)
+  stage            PipelineStage        @relation(fields: [stageId], references: [id])
+  status           ApplicationStatus    @default(active)
   coverLetter      String?
   /// Copy of the CV as sent (title, template, content): later edits do not change it.
   cvSnapshot       Json?
   /// Documents joined to the application, copied as sent (refonte mobile lot 4): attestations
   /// [{ type: "certificate", code, title, issuedAt }] and texts [{ type: "document", title, text }].
-  attachments      Json               @default("[]")
+  attachments      Json                 @default("[]")
   /// Answers to the job's screening questions [{ id, question, answer }], all optional.
-  screeningAnswers Json               @default("[]")
-  source           ApplicationSource  @default(direct)
+  screeningAnswers Json                 @default("[]")
+  source           ApplicationSource    @default(direct)
   /// Score and explanation shown when the talent applied (partie 08 § 8.10), frozen.
   matchScore       Int?
   matchExplanation Json?
@@ -1598,14 +1598,16 @@ model Application {
   shortlistedById  String?
   /// « Répartir à un collègue » (Modèle B recruteur M5): the member who follows the file.
   assignedToId     String?
-  assignedTo       User?              @relation("ApplicationAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+  assignedTo       User?                @relation("ApplicationAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
   orgTasks         OrgTask[]
   events           ApplicationEvent[]
   conversation     Conversation?
   scorecards       Scorecard[]
   interviews       Interview[]
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
+  /// « Dossier de vérification » (logique du recrutement, étape 6): the pieces asked to a retained.
+  verification     VerificationRequest?
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
 
   @@unique([jobId, profileId])
   @@index([profileId, status])
@@ -3029,4 +3031,65 @@ model AudienceEvent {
 
   @@id([kind, targetId, viewerId, day])
   @@index([ownerId, kind, day])
+}
+
+enum VerificationPiece {
+  diploma
+  transcript
+  referent
+  thesis
+  certificate
+  portfolio
+  test
+}
+
+/**
+ * « Dossier de vérification » (« JUMANLY Hire, logique du recrutement », Ephraïm 01/11/2026): the
+ * pieces a member asks a retained candidate, with a deadline. Visible only to the team of the offer,
+ * each opening logged; Orbi only points at an inconsistency « à vérifier », never calls a piece false.
+ */
+model VerificationRequest {
+  id             String             @id @default(cuid(2))
+  applicationId  String             @unique
+  application    Application        @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  organizationId String
+  createdById    String?
+  /// The message sent (an editable template).
+  message        String
+  dueAt          DateTime
+  /// Reminders sent before the deadline (two at most).
+  remindersSent  Int                @default(0)
+  lastReminderAt DateTime?
+  items          VerificationItem[]
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+
+  @@index([organizationId, dueAt])
+}
+
+model VerificationItem {
+  id              String              @id @default(cuid(2))
+  requestId       String
+  request         VerificationRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  kind            VerificationPiece
+  required        Boolean             @default(true)
+  /// A file in the private storage (PDF or image), checked by its first bytes.
+  fileKey         String?
+  fileName        String?
+  contentType     String?
+  /// An attestation of Jumanly reused from the Skills Passport (verified by its code).
+  certificateCode String?
+  /// The diploma of the profile the piece stands for (to compare with the CV).
+  educationId     String?
+  /// A referent given by the candidate, contacted only with their agreement.
+  referentName    String?
+  referentEmail   String?
+  /// A link or a short text (portfolio, practical test, thesis title).
+  note            String?
+  /// Orbi's points « à vérifier » [{ key, values }]: never a verdict.
+  checks          Json                @default("[]")
+  receivedAt      DateTime?
+  createdAt       DateTime            @default(now())
+
+  @@index([requestId])
 }
