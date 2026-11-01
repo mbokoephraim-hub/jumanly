@@ -16259,6 +16259,34 @@ Conventions :
 | `phoneRhOffres.candidates.rule` | Classés par correspondance avec l'offre. Le score ne tient compte ni du nom, ni de l'âge, ni de la photo. Vous décidez. |
 | `phoneRhOffres.candidates.ruleNoScore` | Classés du plus récent au plus ancien. Vous décidez. |
 | `phoneRhOffres.candidates.sort` | Trier dans Candidatures |
+| `phoneRhOffres.tile.views` | {count, plural, one {vue} other {vues}} |
+| `phoneRhOffres.tile.online` | en ligne |
+| `phoneRhOffres.tile.daysValue` | {count, plural, =0 {Auj.} other {# j}} |
+| `phoneRhOffres.tile.applications` | {count, plural, one {candidat} other {candidats}} |
+| `phoneRhOffres.list.closes` | {count, plural, =0 {Clôture aujourd'hui} one {Clôture demain} other {Clôture dans # jours}} |
+| `phoneRhOffres.list.rate` | Taux de candidature |
+| `phoneRhOffres.detail.tileLeft` | {count, plural, =0 {dernier jour} one {jour restant} other {jours restants}} |
+| `phoneRhOffres.detail.tileResponse` | jours en moyenne pour répondre |
+| `phoneRhOffres.detail.tileNoResponse` | pas encore de réponse donnée |
+| `phoneRhOffres.detail.views` | Vues de l'offre |
+| `phoneRhOffres.detail.viewsLabel` | {count, plural, =0 {Aucune vue} one {# vue} other {# vues}} sur les {days} derniers jours |
+| `phoneRhOffres.detail.funnel` | Des vues aux recrutements |
+| `phoneRhOffres.detail.funnelStep.views` | Vues de l'offre |
+| `phoneRhOffres.detail.funnelStep.applications` | Candidatures |
+| `phoneRhOffres.detail.funnelStep.opened` | Ouvertes par l'équipe |
+| `phoneRhOffres.detail.funnelStep.interviews` | Entretiens |
+| `phoneRhOffres.detail.funnelStep.hired` | Retenues |
+| `phoneRhOffres.detail.funnelShare` | {share} |
+| `phoneRhOffres.detail.pipeline` | Où en sont les candidats |
+| `phoneRhOffres.detail.pipelineSee` | Ouvrir le pipeline |
+| `phoneRhOffres.pipeline.lead` | Étape par étape. Touchez un candidat pour ouvrir son dossier. |
+| `phoneRhOffres.pipeline.stages` | Étapes du pipeline |
+| `phoneRhOffres.pipeline.empty` | Personne à cette étape pour l'instant. |
+| `phoneRhOffres.pipeline.withdrawn` | Retirées |
+| `phoneRhOffres.pipeline.step` | Étape {index} sur {total} |
+| `phoneRhOffres.pipeline.cv` | CV |
+| `phoneRhOffres.pipeline.documents` | Documents |
+| `phoneRhOffres.pipeline.applied` | Candidature {when} |
 | `phoneRhOffres.published.title` | Votre offre est en ligne |
 | `phoneRhOffres.published.text` | « {title} » apparaît dans Explorer. Orbi la propose aux talents qui correspondent. |
 | `phoneRhOffres.published.reviewTitle` | Votre offre part en vérification |

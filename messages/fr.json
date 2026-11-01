@@ -19749,7 +19749,9 @@
       "new": "{count, plural, one {# nouvelle} other {# nouvelles}}",
       "online": "{count, plural, =0 {En ligne depuis aujourd'hui} one {En ligne depuis # jour} other {En ligne depuis # jours}}",
       "ended": "Candidatures fermées",
-      "notPublished": "Pas encore publiée"
+      "notPublished": "Pas encore publiée",
+      "closes": "{count, plural, =0 {Clôture aujourd'hui} one {Clôture demain} other {Clôture dans # jours}}",
+      "rate": "Taux de candidature"
     },
     "status": {
       "published": "En cours",
@@ -19801,7 +19803,23 @@
       "chartLabel": "{count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} sur les {days} derniers jours",
       "added": "+{count}",
       "sources": "D'où viennent les candidats",
-      "see": "{count, plural, one {Voir le candidat} other {Voir les # candidats}}"
+      "see": "{count, plural, one {Voir le candidat} other {Voir les # candidats}}",
+      "tileLeft": "{count, plural, =0 {dernier jour} one {jour restant} other {jours restants}}",
+      "tileResponse": "jours en moyenne pour répondre",
+      "tileNoResponse": "pas encore de réponse donnée",
+      "views": "Vues de l'offre",
+      "viewsLabel": "{count, plural, =0 {Aucune vue} one {# vue} other {# vues}} sur les {days} derniers jours",
+      "funnel": "Des vues aux recrutements",
+      "funnelStep": {
+        "views": "Vues de l'offre",
+        "applications": "Candidatures",
+        "opened": "Ouvertes par l'équipe",
+        "interviews": "Entretiens",
+        "hired": "Retenues"
+      },
+      "funnelShare": "{share}",
+      "pipeline": "Où en sont les candidats",
+      "pipelineSee": "Ouvrir le pipeline"
     },
     "source": {
       "direct": "L'offre sur Jumanly",
@@ -19814,6 +19832,22 @@
       "rule": "Classés par correspondance avec l'offre. Le score ne tient compte ni du nom, ni de l'âge, ni de la photo. Vous décidez.",
       "ruleNoScore": "Classés du plus récent au plus ancien. Vous décidez.",
       "sort": "Trier dans Candidatures"
+    },
+    "tile": {
+      "views": "{count, plural, one {vue} other {vues}}",
+      "online": "en ligne",
+      "daysValue": "{count, plural, =0 {Auj.} other {# j}}",
+      "applications": "{count, plural, one {candidat} other {candidats}}"
+    },
+    "pipeline": {
+      "lead": "Étape par étape. Touchez un candidat pour ouvrir son dossier.",
+      "stages": "Étapes du pipeline",
+      "empty": "Personne à cette étape pour l'instant.",
+      "withdrawn": "Retirées",
+      "step": "Étape {index} sur {total}",
+      "cv": "CV",
+      "documents": "Documents",
+      "applied": "Candidature {when}"
     },
     "published": {
       "title": "Votre offre est en ligne",

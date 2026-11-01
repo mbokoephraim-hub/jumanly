@@ -83,6 +83,9 @@ export const phoneIcons = {
     "M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM9.6 9.5a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.1-2.4 3.6M12 16.8h.01",
   // A screen with two lines of text: the subtitles of a lesson.
   sousTitres: "M4 6h16v12H4zM7.5 11.5h4M13.5 11.5h3M7.5 14.5h2.5M12 14.5h4.5",
+  /** Statistiques d'une offre : une courbe qui monte, un entonnoir. */
+  tendance: "M4 17l5.5-5.5 4 4L20 9M15 9h5v5",
+  entonnoir: "M4 5h16l-6 7.5V19l-4-2v-4.5z",
   oeil: "M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12zM12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z",
 } as const;
 

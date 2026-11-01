@@ -1282,16 +1282,86 @@
 }
 .nb-rh-chiffres > span {
   display: grid;
-  gap: 2px;
-  padding: 10px;
+  gap: 4px;
+  min-width: 0;
+  padding: 10px 9px;
   border-radius: 14px;
   background: var(--nb-noir);
   font-size: 12.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--nb-brume);
 }
 .nb-rh-chiffres b {
   font-size: 17px;
   color: var(--nb-creme);
+}
+.nb-rh-chiffre-h {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.nb-rh-chiffres i,
+.nb-rh-tuiles i {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--ton, var(--nb-menthe-claire-t)) 16%, transparent);
+  color: var(--ton, var(--nb-menthe-claire-t));
+}
+[data-ton="vues"] {
+  --ton: var(--nb-menthe-claire-t);
+}
+[data-ton="jours"] {
+  --ton: var(--nb-ambre-t);
+}
+[data-ton="cand"],
+[data-ton="nouv"] {
+  --ton: var(--nb-lime-t);
+}
+[data-ton="taux"] {
+  --ton: #8fb4ff;
+}
+[data-ton="delai"] {
+  --ton: #d2a8ff;
+}
+.nb-rh-taux {
+  display: grid;
+  gap: 6px;
+  margin: 2px 0 8px;
+  font-size: 12.5px;
+  color: var(--nb-brume);
+}
+.nb-rh-taux > span:first-child {
+  display: flex;
+  justify-content: space-between;
+}
+.nb-rh-taux b {
+  color: var(--nb-creme);
+}
+.nb-rh-taux-barre,
+.nb-rh-jauge {
+  display: block;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--nb-noir);
+  overflow: hidden;
+}
+.nb-rh-taux-barre > span,
+.nb-rh-jauge > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--nb-lime);
+}
+.nb-rh-offre-pied {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 /* Le détail d'une offre, ses candidats */
@@ -1349,7 +1419,8 @@
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
-.nb-rh-tuiles > p {
+.nb-rh-tuiles > p,
+.nb-rh-tuiles > a {
   display: grid;
   align-content: start;
   gap: 4px;
@@ -1360,6 +1431,12 @@
   font-size: 13.5px;
   line-height: 1.3;
   color: var(--nb-brume);
+}
+.nb-rh-tuiles > a[data-lien] {
+  border-color: color-mix(in srgb, var(--nb-lime-t) 45%, var(--nb-filet-fort));
+}
+.nb-rh-tuiles i {
+  margin-bottom: 6px;
 }
 .nb-rh-tuiles b {
   font-size: 24px;
@@ -4662,4 +4739,251 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Statistiques d'une offre et pipeline (Ephraïm, 01/11/2026) */
+.nb-rh-carte-stat {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+}
+.nb-rh-carte-stat h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.nb-rh-carte-stat h2 > svg {
+  color: var(--nb-menthe-claire-t);
+}
+.nb-rh-carte-stat .nb-rh-jauge {
+  background: var(--nb-noir);
+}
+.nb-rh-lien-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--nb-lime-t);
+}
+.nb-rh-etapes-stat {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+}
+.nb-rh-etapes-stat a {
+  display: grid;
+  grid-template-columns: minmax(0, 9em) 1fr 2em;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  font-size: 14px;
+  color: var(--nb-creme);
+}
+.nb-rh-etapes-stat a > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-rh-etapes-stat b {
+  text-align: right;
+}
+.nb-rh-etapes-stat li[data-kind="rejected"] .nb-rh-jauge > span {
+  background: var(--nb-corail-t);
+}
+.nb-rh-etapes-stat li[data-kind="hired"] .nb-rh-jauge > span {
+  background: var(--nb-menthe-claire);
+}
+.nb-rh-entonnoir {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+}
+.nb-rh-entonnoir li {
+  display: grid;
+  gap: 6px;
+}
+.nb-rh-entonnoir-t {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 14px;
+}
+.nb-rh-entonnoir-t > span {
+  flex: 1;
+  color: var(--nb-brume);
+}
+.nb-rh-entonnoir-t small {
+  min-width: 3.6em;
+  text-align: right;
+  font-size: 12.5px;
+  color: var(--nb-lime-t);
+}
+.nb-rh-entonnoir li[data-step="views"] .nb-rh-jauge > span {
+  background: var(--nb-menthe-claire);
+}
+.nb-rh-barres[data-ton="vues"] span {
+  background: color-mix(in srgb, var(--nb-menthe-claire-t) 40%, var(--nb-noir));
+}
+.nb-rh-barres[data-ton="vues"] small:first-child {
+  color: var(--nb-menthe-claire-t);
+}
+.nb-rh-carte-stat.nb-rh-courbe .nb-rh-barres {
+  height: 130px;
+}
+.nb-rh-carte-stat.nb-rh-sources p {
+  border-bottom: 0;
+  padding: 10px 0 6px;
+}
+.nb-rh-source {
+  padding-bottom: 6px;
+}
+
+/* Le pipeline d'une offre */
+.nb-rh-pipe-nav {
+  position: sticky;
+  top: calc(var(--nb-haut) + 52px);
+  z-index: 3;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--nb-filet);
+  background: var(--nb-nuit);
+  scrollbar-width: none;
+}
+.nb-rh-pipe-nav a {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nb-creme);
+}
+.nb-rh-pipe-nav b {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--nb-lime);
+  color: var(--nb-encre);
+  font-size: 12.5px;
+}
+.nb-rh-pipe-etapes {
+  display: grid;
+  gap: 18px;
+  padding: 8px 20px 24px;
+}
+.nb-rh-pipe-etape {
+  scroll-margin-top: calc(var(--nb-haut) + 120px);
+  padding: 14px;
+  border-radius: 22px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+  border-top: 4px solid var(--nb-lime);
+}
+.nb-rh-pipe-etape[data-kind="hired"] {
+  border-top-color: var(--nb-menthe-claire);
+}
+.nb-rh-pipe-etape[data-kind="rejected"],
+.nb-rh-pipe-etape[data-kind="withdrawn"] {
+  border-top-color: var(--nb-haute);
+}
+.nb-rh-pipe-etape h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.nb-rh-pipe-etape h2 > b {
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--nb-brume);
+}
+.nb-rh-pipe-num {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--nb-noir);
+  font-size: 13px;
+  color: var(--nb-lime-t);
+}
+.nb-rh-pipe-vide {
+  padding: 10px 0 2px;
+}
+.nb-rh-pipe-etape ul {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+.nb-rh-pipe-carte {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--nb-noir);
+}
+.nb-rh-pipe-carte .nb-rh-cand {
+  padding: 0;
+  border-bottom: 0;
+}
+.nb-rh-pipe-carte .nb-rh-res-t {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 2px;
+}
+.nb-rh-pipe-points {
+  display: flex;
+  gap: 4px;
+}
+.nb-rh-pipe-points i {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--nb-haute);
+}
+.nb-rh-pipe-points i[data-fait] {
+  background: var(--nb-lime);
+}
+.nb-rh-pipe-acces {
+  display: flex;
+  gap: 8px;
+}
+.nb-rh-pipe-acces a {
+  display: inline-flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--nb-filet-fort);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nb-creme);
+}
+.nb-rh-carte-stat .nb-rh-courbe-h {
+  flex-wrap: wrap;
+  row-gap: 4px;
+}
+.nb-rh-carte-stat .nb-rh-periode a,
+.nb-rh-lien-stat {
+  white-space: nowrap;
 }
