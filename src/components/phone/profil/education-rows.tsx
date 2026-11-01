@@ -1,6 +1,6 @@
 import "@/styles/phone-verification.css";
 import Link from "next/link";
-import { GoldVerifiedBadge } from "../badge-or";
+import { GoldSeal } from "../badge-or";
 import { PhoneIcon } from "../icon";
 
 /** A diploma or a certificate as the profiles show it. */
@@ -22,9 +22,15 @@ export type EducationRow = {
   jumanly?: boolean;
 };
 
-/** « Vérifié »: a gold badge beside an experience or a certificate (31/10/2026). */
+/** « Vérifié »: the gold seal alone, at the end of the title line of an experience or a
+ * certificate (Ephraïm, 01/11/2026: « juste le badge, sur la même ligne que le poste »). */
 export function ItemVerifiedMark({ label, help }: { label: string; help: string }) {
-  return <GoldVerifiedBadge label={label} help={help} />;
+  return (
+    <span className="nb-or-sceau" title={help}>
+      <GoldSeal size={18} label={label} />
+      <span className="sr-only">{help}</span>
+    </span>
+  );
 }
 
 /**
@@ -63,11 +69,14 @@ export function EducationList({
               )}
             </span>
             <span className="nb-vf-txt">
-              <b>{item.title}</b>
+              <b>
+                {item.title}
+                {item.verified ? (
+                  <ItemVerifiedMark label={labels.verified} help={labels.verifiedHelp} />
+                ) : null}
+              </b>
               <small>{item.line}</small>
-              {item.verified ? (
-                <ItemVerifiedMark label={labels.verified} help={labels.verifiedHelp} />
-              ) : item.image ? (
+              {item.verified ? null : item.image ? (
                 <span className="nb-vf-doc">{labels.document}</span>
               ) : null}
               {item.learnings && item.learnings.length > 0 ? (

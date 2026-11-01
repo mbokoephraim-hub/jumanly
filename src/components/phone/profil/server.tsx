@@ -375,6 +375,7 @@ export async function profileView(
     online: elapsed !== null && elapsed >= 0 && elapsed < 5 * MINUTE,
     socials,
     verified: person.verified,
+    premium: person.premium,
     handle: t("handle", { handle: person.handle ?? handleFrom(person.name) }),
     place,
     bio: recruiter?.headline ?? person.headline,

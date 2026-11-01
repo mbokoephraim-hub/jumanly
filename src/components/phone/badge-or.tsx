@@ -30,22 +30,3 @@ export function GoldSeal({ size = 16, label }: { size?: number; label?: string }
     </svg>
   );
 }
-
-/** « Vérifié » as a real gold badge: seal + word on a gold pill. */
-export function GoldVerifiedBadge({
-  label,
-  help,
-  small,
-}: {
-  label: string;
-  help?: string;
-  small?: boolean;
-}) {
-  return (
-    <span className="nb-or" title={help} data-petit={small ? "" : undefined}>
-      <GoldSeal size={small ? 14 : 16} />
-      {label}
-      {help ? <span className="sr-only">{help}</span> : null}
-    </span>
-  );
-}

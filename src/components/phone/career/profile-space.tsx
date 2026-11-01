@@ -225,7 +225,7 @@ export function PhoneMyProfile({
       <div className="nb-pf-id">
         <h2 className="nb-cr-nom">
           {view.name}
-          {person.verified ? <VerifiedMark label={tp("verified")} /> : null}
+          {person.verified && person.premium ? <VerifiedMark label={tp("verified")} /> : null}
           {view.planTag ? (
             <PlanMark tier={view.planTier} label={tp("planMark", { plan: view.planTag })} />
           ) : null}
@@ -606,11 +606,16 @@ function ProfilePanel({
               ) : null}
               <ExperienceLogo item={item} />
               <div>
-                <h3>{item.title}</h3>
+                <h3>
+                  {item.title}
+                  {view.experienceChecks[item.id] === "confirmed" ? (
+                    <ItemVerifiedMark label={tp("itemVerified")} help={tp("verifiedHelp")} />
+                  ) : null}
+                </h3>
                 <ExperienceMeta item={item} label={tp("companyPage", { company: item.company })} />
-                {view.experienceChecks[item.id] === "confirmed" ? (
-                  <ItemVerifiedMark label={tp("itemVerified")} help={tp("verifiedHelp")} />
-                ) : view.experienceChecks[item.id] === "pending" ? (
+                {view.experienceChecks[item.id] === "confirmed" ? null : view.experienceChecks[
+                    item.id
+                  ] === "pending" ? (
                   <span className="nb-vf-doc">{t("verify.pending")}</span>
                 ) : (
                   <Link

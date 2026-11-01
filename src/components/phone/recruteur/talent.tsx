@@ -1,6 +1,6 @@
 import "server-only";
 import { notFound } from "next/navigation";
-import { GoldVerifiedBadge } from "../badge-or";
+import { GoldSeal } from "../badge-or";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { db } from "@/server/db";
@@ -189,7 +189,7 @@ export async function RhTalent({
                 <li key={skill.name}>
                   <span>{skill.name}</span>
                   {skill.verified ? (
-                    <GoldVerifiedBadge label={t("profile.verified")} small />
+                    <GoldSeal size={18} label={t("profile.verified")} />
                   ) : (
                     <span className="nb-rh-t-preuve">{t("profile.declared")}</span>
                   )}
