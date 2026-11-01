@@ -90,10 +90,9 @@ async function Portfolio({
         </div>
         <div className="jm-rise flex flex-1 flex-col gap-2">
           <Eyebrow>{t("page.eyebrow")}</Eyebrow>
-          <h1
-            className="text-[34px] leading-[1.05] font-bold tracking-tight lg:text-[54px]"
-            style={{ color: portfolio.accent }}
-          >
+          {/* The site is dark (Modèle B) and the accents are dark greens: the name stays in the text
+              color so that it can be read (WCAG 2.2 AA). */}
+          <h1 className="text-[34px] leading-[1.05] font-bold tracking-tight lg:text-[54px]">
             {portfolio.name}
           </h1>
           {portfolio.headline && (

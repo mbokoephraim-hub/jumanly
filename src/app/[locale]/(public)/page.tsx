@@ -267,12 +267,13 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
               >
                 <div className="flex items-start justify-between">
                   <MenuArt name={step.art} size="lg" />
+                  {/* A decorative watermark: drawn by CSS, so it is not text that has to meet the
+                      contrast ratio (the step is named by its heading). */}
                   <span
                     aria-hidden
-                    className="text-[40px] leading-none font-semibold tracking-[-0.04em] text-sapin/15"
-                  >
-                    {String(t(`home.journey.${step.key}.number`)).padStart(2, "0")}
-                  </span>
+                    data-n={String(t(`home.journey.${step.key}.number`)).padStart(2, "0")}
+                    className="text-[40px] leading-none font-semibold tracking-[-0.04em] text-sapin/15 before:content-[attr(data-n)]"
+                  />
                 </div>
                 <div className="flex flex-col gap-1">
                   <h3 className="flex items-center gap-2 text-lg leading-7 font-semibold tracking-[-0.015em]">

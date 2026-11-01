@@ -124,7 +124,7 @@ export function PhoneOffer({ offer }: { offer: PhoneOfferView }) {
           </span>
         </div>
         <h1 className="nb-ex-offre-t">{offer.title}</h1>
-        <ul className="nb-ex-faits" aria-label={t("offer.facts")}>
+        <ul className="nb-ex-faits" aria-label={t("offer.facts")} tabIndex={0}>
           {offer.facts.map((fact) => (
             <li key={fact.kind} data-sorte={fact.kind}>
               {fact.flag ? (

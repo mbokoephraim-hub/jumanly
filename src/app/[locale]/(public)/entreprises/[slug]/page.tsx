@@ -149,7 +149,7 @@ export default async function CompanyPage({ params }: PageProps<"/[locale]/entre
                 <h2 className="text-[30px] leading-9 font-semibold tracking-[-0.03em] lg:text-[40px] lg:leading-[46px]">
                   {t("companyPage.jobs.title")}
                 </h2>
-                <span className="inline-flex h-[30px] items-center rounded-pill bg-lime px-3 text-xs font-semibold">
+                <span className="inline-flex h-[30px] items-center rounded-pill bg-lime px-3 text-xs font-semibold text-sapin">
                   {t("companyPage.jobs.count", { count: company.jobs.length })}
                 </span>
               </div>
