@@ -560,15 +560,16 @@ export async function messageViews(
             ? `${payload.geo.lat},${payload.geo.lng}`
             : null;
         const place = geo ?? payload.address ?? null;
-        const several = slots.length > 1 && startsAt;
+        const several = slots.length > 1;
         return {
           kind: "event",
           label: t("event.slot"),
-          title: several
-            ? dayOnly(startsAt)
-            : startsAt
-              ? longDate(startsAt, payload.timezone)
-              : message.body,
+          title:
+            several && startsAt
+              ? dayOnly(startsAt)
+              : startsAt
+                ? longDate(startsAt, payload.timezone)
+                : message.body,
           meta: [
             several ? t("event.hours", { hours: slots.map(hour).join(" · ") }) : null,
             payload.note ?? null,
