@@ -9073,7 +9073,7 @@ Conventions :
 | `phoneExplorer.offer.unsavedToast` | Offre retirée des enregistrées. |
 | `phoneExplorer.offer.saveError` | L’offre n’a pas pu être enregistrée. Réessayez. |
 | `phoneExplorer.offer.apply` | Postuler |
-| `phoneExplorer.offer.resume` | Reprendre ma candidature |
+| `phoneExplorer.offer.resume` | Reprendre |
 | `phoneExplorer.offer.applied` | Candidature envoyée |
 | `phoneExplorer.offer.appliedOpen` | Voir ma candidature |
 | `phoneExplorer.offer.closed` | Offre fermée |

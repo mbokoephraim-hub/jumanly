@@ -108,7 +108,7 @@ test.describe("Modèle B · Explorer au téléphone", () => {
     await expect(save).toHaveAttribute("aria-pressed", before ?? "false");
 
     // « Postuler » opens its page (01/11/2026): first, how to apply. Free, always.
-    await pile.getByRole("link", { name: /^(Postuler|Reprendre ma candidature)$/ }).click();
+    await pile.getByRole("link", { name: /^(Postuler|Reprendre)$/ }).click();
     await page.waitForURL("**/postuler**");
     await expect(page.getByRole("heading", { level: 1, name: "Postuler" })).toBeVisible();
     await page.goto("/app/jobs/ux-assistant-administratif-cotonou");
