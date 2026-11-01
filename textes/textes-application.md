@@ -11851,50 +11851,6 @@ Conventions :
 | `phoneChat.menu.unblock` | Débloquer |
 | `phoneChat.menu.unblockTitle` | Débloquer {name} ? |
 | `phoneChat.menu.unblockText` | {name} pourra de nouveau vous écrire. |
-| `phoneChat.call.button` | Appeler {name} en vidéo |
-| `phoneChat.call.ask` | Souhaitez-vous appeler {name} en vidéo ? |
-| `phoneChat.call.noteOnline` | {name} est en ligne. L’appel n’est pas enregistré. |
-| `phoneChat.call.note` | L’appel n’est pas enregistré. |
-| `phoneChat.call.no` | Non |
-| `phoneChat.call.yes` | Oui, appeler |
-| `phoneChat.call.label` | Appel vidéo avec {name} |
-| `phoneChat.call.encrypted` | Chiffré de bout en bout |
-| `phoneChat.call.you` | Vous |
-| `phoneChat.call.ringing` | Appel en cours |
-| `phoneChat.call.timer` | Durée de l’appel |
-| `phoneChat.call.micro` | Micro |
-| `phoneChat.call.camera` | Caméra |
-| `phoneChat.call.speaker` | Haut-parleur |
-| `phoneChat.call.hangUp` | Raccrocher |
-| `phoneChat.call.ended` | Appel terminé · {duration} |
-| `phoneChat.call.cancelled` | Appel annulé |
-| `phoneChat.call.failed` | L’appel n’a pas pu démarrer. Réessayez dans un instant. |
-| `phoneChat.call.context` | Entretien · {job} |
-| `phoneChat.call.line` | Appel vidéo · {duration} |
-| `phoneChat.call.lineMissed` | Appel vidéo sans réponse |
-| `phoneChat.call.buttonAudio` | Appeler {name} en audio |
-| `phoneChat.call.askAudio` | Souhaitez-vous appeler {name} en audio ? |
-| `phoneChat.call.labelAudio` | Appel audio avec {name} |
-| `phoneChat.call.lineAudio` | Appel audio · {duration} |
-| `phoneChat.call.lineMissedAudio` | Appel audio sans réponse |
-| `phoneChat.call.connecting` | Connexion |
-| `phoneChat.call.declined` | {name} n’a pas répondu. |
-| `phoneChat.call.denied` | Autorisez le micro (et la caméra pour la vidéo) dans votre navigateur pour appeler. |
-| `phoneChat.call.unsupported` | Ce navigateur ne permet pas d’appeler. Essayez avec Chrome, Safari ou Firefox à jour. |
-| `phoneChat.call.lost` | La connexion a été coupée. Vérifiez votre réseau et rappelez. |
-| `phoneChat.call.theirImage` | Image de {name} |
-| `phoneChat.call.incoming.title` | {name} vous appelle |
-| `phoneChat.call.incoming.video` | Appel vidéo entrant |
-| `phoneChat.call.incoming.audio` | Appel audio entrant |
-| `phoneChat.call.incoming.note` | Répondez en audio ou en vidéo. L’appel n’est pas enregistré. |
-| `phoneChat.call.incoming.refuse` | Refuser |
-| `phoneChat.call.incoming.acceptAudio` | Accepter en audio |
-| `phoneChat.call.incoming.acceptVideo` | Accepter en vidéo |
-| `phoneChat.call.incoming.audioShort` | Audio |
-| `phoneChat.call.incoming.videoShort` | Vidéo |
-| `phoneChat.duration.short` | {seconds} s |
-| `phoneChat.duration.long` | {minutes} min {seconds} s |
-| `phoneChat.duration.hours` | {hours} h {minutes} min |
 
 ### Connexions du Chat
 

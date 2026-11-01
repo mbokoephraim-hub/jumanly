@@ -19,7 +19,6 @@ import {
   type PhoneConversation,
 } from "@/server/services/messages-phone";
 import { connectionsHub } from "@/server/services/connections-hub";
-import { callAllowed } from "@/server/services/video-call";
 import { initialsOf, shortName } from "../fil/data";
 import {
   attachments,
@@ -259,14 +258,11 @@ export async function threadView(user: Viewer, conversationId: string, now = new
           }
         : null,
     applicationHref: application ? `/app/suivi/${application.id}` : null,
-    callLine: application ? tch("call.context", { job: application.job }) : who.line,
-    canCall: callAllowed(conversation),
     pinned: conversation.item.pinned,
     typing: conversation.item.typing,
     suggestions: conversation.canWrite
       ? await suggestionTexts(conversation, user.id, interviews)
       : [],
-    me: { initials: initialsOf(conversation.viewer.name) },
     ...joined,
     days: nextDays(words, now),
     forwardTo: items

@@ -1,10 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { RING_MAX_MS, callClock, durationParts } from "@/lib/call-duration";
 import { REACTIONS } from "@/lib/reactions";
 import { ringColors, suggestReplies } from "@/server/services/chat";
 import { isWordDocument } from "@/server/services/message-media";
 import { interviewCalendar } from "@/server/services/suivi";
-import { callAllowed } from "@/server/services/video-call";
 
 describe("réponses suggérées par Orbi (Chat v2, règles sans modèle)", () => {
   it("propose d'envoyer tout de suite un document demandé, puis l'entretien", () => {
@@ -58,55 +56,6 @@ describe("anneau des avatars", () => {
   it("tire trois couleurs du nom, toujours les mêmes, sans compétences", () => {
     expect(ringColors("Baobab Fintech")).toHaveLength(3);
     expect(ringColors("Baobab Fintech")).toEqual(ringColors("Baobab Fintech"));
-  });
-});
-
-describe("durée d'un appel vidéo", () => {
-  it("se dit en secondes, minutes ou heures", () => {
-    expect(durationParts(40)).toEqual({ key: "short", values: { seconds: 40 } });
-    expect(durationParts(760)).toEqual({ key: "long", values: { minutes: 12, seconds: 40 } });
-    expect(durationParts(3900)).toEqual({ key: "hours", values: { hours: 1, minutes: 5 } });
-  });
-
-  it("s'affiche en minuteur", () => {
-    expect(callClock(12.7)).toBe("00:12");
-    expect(callClock(760)).toBe("12:40");
-    expect(callClock(3900)).toBe("1:05:00");
-  });
-
-  it("un appel sans réponse se ferme au bout de 45 secondes", () => {
-    expect(RING_MAX_MS).toBe(45_000);
-  });
-});
-
-describe("qui peut appeler", () => {
-  const item = (kind: "person" | "organization") =>
-    ({ counterpart: { kind } }) as unknown as Parameters<typeof callAllowed>[0]["item"];
-
-  it("entre connexions, ou avec le recruteur d'une candidature", () => {
-    expect(
-      callAllowed({ kind: "peer", blocked: false, canWrite: true, item: item("person") }),
-    ).toBe(true);
-    expect(
-      callAllowed({ kind: "application", blocked: false, canWrite: true, item: item("person") }),
-    ).toBe(true);
-  });
-
-  it("jamais avec une entreprise sans recruteur, ni bloqué, ni fermé", () => {
-    expect(
-      callAllowed({
-        kind: "application",
-        blocked: false,
-        canWrite: true,
-        item: item("organization"),
-      }),
-    ).toBe(false);
-    expect(callAllowed({ kind: "peer", blocked: true, canWrite: true, item: item("person") })).toBe(
-      false,
-    );
-    expect(
-      callAllowed({ kind: "peer", blocked: false, canWrite: false, item: item("person") }),
-    ).toBe(false);
   });
 });
 
