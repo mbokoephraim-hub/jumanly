@@ -17,8 +17,10 @@ import {
   requiredLessons,
 } from "@/server/services/learn";
 import { lessonCheck, publicCheck } from "@/server/services/learn-phone";
+import { lessonNotes } from "@/server/services/lesson-notes";
 import { lessonResume } from "@/server/services/lesson-progress";
 import { listPublicPlans } from "@/server/services/plans";
+import { initialsOf } from "../fil/data";
 import { PhoneAttestation, type AttestationView } from "./attestation";
 import { PhoneCourse, type CourseView } from "./course";
 import { courseMark, courseTone, formationWords, shortTitle } from "./data";
@@ -26,6 +28,20 @@ import { PhoneLesson, type LessonView } from "./lesson";
 import { LearnTexts } from "./server";
 
 type Me = { id: string; name: string; firstName?: string | null; platformRole: string };
+
+/**
+ * « Résumé » and « Notions clés » of a video lesson. A text made only of points takes the course's
+ * summary as its « Résumé », when that summary is not already one of the points.
+ */
+function notesOf(text: string, courseSummary: string) {
+  const notes = lessonNotes(text);
+  const summary =
+    notes.summary ??
+    (courseSummary && !notes.notions.some((notion) => notion.text.includes(courseSummary))
+      ? courseSummary
+      : null);
+  return { summary, notions: notes.notions };
+}
 
 const coursePath = (slug: string) => `/app/learn/${encodeURIComponent(slug)}`;
 
@@ -209,9 +225,11 @@ export async function PhoneLessonScreen({
     position: t("lesson.position", { n: index + 1, count: lessons.length }),
     percent: Math.round((100 * Math.max(done.size, index)) / Math.max(1, lessons.length)),
     title: current.title,
-    line: current.transcript
-      ? t("lesson.lineCaptions", { duration: duration(minutes) })
-      : duration(minutes),
+    duration: duration(minutes),
+    captions: Boolean(current.transcript),
+    instructor: course.instructor?.trim()
+      ? { name: course.instructor.trim(), initials: initialsOf(course.instructor.trim()) }
+      : null,
     tone: courseTone(course.slug),
     video: playback
       ? {
@@ -245,14 +263,16 @@ export async function PhoneLessonScreen({
       : null,
     lead: current.kind === "video" ? null : (outline.brief ?? paragraphs[0] ?? null),
     cover: course.coverUrl,
-    // Under the video: what the admin wrote for the lesson, else the course's description.
-    about:
+    // Under the video: « Résumé » and « Notions clés », from what the admin wrote for the lesson,
+    // else from the course's description (Ephraïm, 01/11/2026).
+    ...notesOf(
       current.kind === "video"
         ? [outline.brief, ...paragraphs].filter(Boolean).join("\n\n").trim() ||
-          course.description.trim() ||
-          course.summary.trim() ||
-          null
-        : null,
+            course.description.trim() ||
+            course.summary.trim()
+        : "",
+      current.kind === "video" ? course.summary.trim() : "",
+    ),
     takeaways: outline.takeaways.length > 0 ? outline.takeaways : outline.steps.map((s) => s.title),
     check: publicCheck(lessonCheck(current.content)),
     kind: current.kind,

@@ -9,7 +9,7 @@ import { saveCourseAction, startCourseAction } from "@/server/actions/learn-phon
 import { PhoneBack } from "../back";
 import { PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
-import { CourseBanner, CourseSquare } from "./parts";
+import { CourseBanner, CourseSquare, ReadMore } from "./parts";
 
 export type CourseView = {
   slug: string;
@@ -136,7 +136,10 @@ export function PhoneCourse({ view }: { view: CourseView }) {
         </div>
         {view.progress ? (
           <div className="nb-fo-progres">
-            <span className="nb-meta">{view.progress.text}</span>
+            <span className="nb-fo-progres-t">
+              <span>{view.progress.text}</span>
+              <b>{t("percent", { value: view.progress.percent })}</b>
+            </span>
             <span className="nb-fo-barre" aria-hidden>
               <i style={{ width: `${view.progress.percent}%` }} />
             </span>
@@ -146,9 +149,13 @@ export function PhoneCourse({ view }: { view: CourseView }) {
       {view.about ? (
         <section className="nb-fo-bloc" aria-labelledby="fo-apropos">
           <h2 id="fo-apropos">{t("course.about")}</h2>
-          <p className="nb-fo-texte" data-paragraphes="">
-            {view.about}
-          </p>
+          <ReadMore long={view.about.length > 220}>
+            {(open) => (
+              <p className="nb-fo-texte" data-paragraphes="" data-replie={open ? undefined : ""}>
+                {view.about}
+              </p>
+            )}
+          </ReadMore>
         </section>
       ) : null}
       {view.outcomes.length > 0 ? (

@@ -11235,8 +11235,16 @@ Conventions :
 | `phoneLearn.continueLine` | {lesson} · {title} · {duration} |
 | `phoneLearn.empty.title` | Aucun cours en cours |
 | `phoneLearn.empty.text` | Choisissez un cours pour vos offres ci-dessous : la première leçon prend quelques minutes. |
-| `phoneLearn.advice` | {course} est demandé dans {count, plural, one {# de vos offres} other {# de vos offres}}. Il vous reste {left, plural, =0 {le quiz final} one {# leçon} other {# leçons}}. |
-| `phoneLearn.adviceNoOffer` | Il vous reste {left, plural, =0 {le quiz final} one {# leçon} other {# leçons}} pour finir {course}. |
+| `phoneLearn.advice` | {course} est demandé dans {count, plural, one {# de vos offres} other {# de vos offres}}. |
+| `phoneLearn.adviceLeft` | {left, plural, =0 {Plus que le quiz final} one {Plus qu’une leçon} other {Plus que # leçons}} pour finir ce cours. |
+| `phoneLearn.adviceNoOffer` | {left, plural, =0 {Plus que le quiz final} one {Plus qu’une leçon} other {Plus que # leçons}} pour |
+| `phoneLearn.adviceEnd` | finir ce cours. |
+| `phoneLearn.resume.title` | Reprendre |
+| `phoneLearn.resume.action` | Reprendre |
+| `phoneLearn.resume.label` | Reprendre {course} |
+| `phoneLearn.resume.left` | {duration} restantes |
+| `phoneLearn.readMore` | Lire la suite |
+| `phoneLearn.readLess` | Réduire |
 | `phoneLearn.why` | Pourquoi ? |
 | `phoneLearn.forOffers` | Pour vos offres |
 | `phoneLearn.seeAll` | Tout voir |
@@ -11336,6 +11344,15 @@ Conventions :
 | `phoneLearn.lesson.start` | 0:00 |
 | `phoneLearn.lesson.lineCaptions` | {duration} · sous-titres en français |
 | `phoneLearn.lesson.about` | À propos de cette leçon |
+| `phoneLearn.lesson.with` | Avec |
+| `phoneLearn.lesson.teacher` | Enseigne ce cours |
+| `phoneLearn.lesson.duration` | Durée : {duration} |
+| `phoneLearn.lesson.captionsChip` | Sous-titres FR |
+| `phoneLearn.lesson.orbiChip` | Orbi |
+| `phoneLearn.lesson.askOrbi` | Demander à Orbi d’expliquer cette leçon |
+| `phoneLearn.lesson.summary` | Résumé |
+| `phoneLearn.lesson.notions` | Notions clés |
+| `phoneLearn.lesson.notionNumber` | {n}. |
 | `phoneLearn.lesson.takeaways` | À retenir |
 | `phoneLearn.lesson.quick` | Question rapide |
 | `phoneLearn.lesson.right` | Bonne réponse. |
