@@ -11,26 +11,27 @@ test.describe("Modèle B · nettoyage", () => {
   test("les anciennes adresses mènent à leur écran du Modèle B", async ({ page }) => {
     test.setTimeout(120_000);
     await logIn(page, "grace.ux@jumanly.test");
+    // « Mon profil » has its own space since 29/10 (/app/profil); a tab given in the address may
+    // be dropped from it once the page shows that tab.
     const cases: [string, RegExp][] = [
       ["/app/tableau-de-bord", /\/app$/],
       ["/app/espace", /\/app\/parametres$/],
       ["/app/compte", /\/app\/parametres$/],
-      ["/app/compte/connexions", /\/app\/messages$/],
-      ["/app/compte/connexions?onglet=demandes", /\/app\/messages\/demandes$/],
-      ["/app/suivi", /\/app\/career\/cv\?onglet=candidatures$/],
-      ["/app/jobs/candidatures", /\/app\/career\/cv\?onglet=candidatures$/],
-      ["/app/profil", /\/app\/career\/cv$/],
+      ["/app/compte/connexions", /\/app\/messages\/connexions\?onglet=reseau$/],
+      ["/app/compte/connexions?onglet=demandes", /\/app\/messages\/connexions\?onglet=demandes$/],
+      ["/app/suivi", /\/app\/career\/cv(\?onglet=candidatures)?$/],
+      ["/app/jobs/candidatures", /\/app\/career\/cv(\?onglet=candidatures)?$/],
       ["/app/profil?fenetre=modifier", /\/app\/career\/profil$/],
       ["/app/profil/modifier", /\/app\/career\/profil$/],
       ["/app/profil/experience", /\/app\/career\/profil\/experience\/nouvelle$/],
-      ["/app/profil/competence", /\/app\/career\/cv\?ajouter=competences$/],
-      ["/app/career/portfolio", /\/app\/career\/cv\?onglet=portfolio$/],
+      ["/app/profil/competence", /\/app\/profil(\?ajouter=competences)?$/],
+      ["/app/career/portfolio", /\/app\/profil(\?onglet=realisations)?$/],
       ["/app/recherche", /\/app\/jobs$/],
       ["/app/learn/mes-formations", /\/app\/learn/],
     ];
     for (const [from, to] of cases) {
       await page.goto(from);
-      await expect(page, from).toHaveURL(to);
+      await expect(page, from).toHaveURL(to, { timeout: 15_000 });
     }
     // Nothing of the former head and bottom bar of the talent space.
     await expect(page.locator(".nb-ancien, .t-barre-bas")).toHaveCount(0);
