@@ -209,6 +209,10 @@ const hireMatrix: { plans: string[]; rows: Row[] } = {
       "explainable",
     ),
     b("hire.cv_analysis", false, true, true, true, true, true),
+    // « Logique du recrutement » (Ephraïm, 01/11/2026): simple filters without a plan; the
+    // verification of the retained with the standard message, then custom models from Company Plus.
+    lv("hire.ats.filters", "simple", "all", "all", "all", "all", "all"),
+    lv("hire.verification", "none", "standard", "standard", "standard", "custom", "custom"),
     b("hire.shortlist", false, true, true, true, true, true),
     b("hire.collaboration", false, false, true, true, true, true),
     b("hire.scorecards", false, false, true, true, true, true),

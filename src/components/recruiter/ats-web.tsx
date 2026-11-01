@@ -65,7 +65,7 @@ export async function OfferHead({
   );
 }
 
-export type OfferTab = "candidatures" | "ats" | "retenus" | "stats";
+export type OfferTab = "candidatures" | "ats" | "tableau" | "retenus" | "pieces" | "stats";
 
 /**
  * The four parts of an offer on a computer (planche `.ofh` + `.seg`): Candidatures, Analyse (ATS),
@@ -86,7 +86,9 @@ export async function OfferTabs({
   const tabs: { key: OfferTab; href: string; count?: number }[] = [
     { key: "candidatures", href: `/app/hire/candidats?offre=${jobId}`, count: applications },
     { key: "ats", href: `/app/hire/offres/${jobId}/ats` },
+    { key: "tableau", href: `/app/hire/offres/${jobId}/tableau` },
     { key: "retenus", href: `/app/hire/offres/${jobId}/retenus`, count: shortlisted },
+    { key: "pieces", href: `/app/hire/offres/${jobId}/verification` },
     { key: "stats", href: `/app/hire/offres/${jobId}` },
   ];
   return (

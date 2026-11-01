@@ -14168,7 +14168,9 @@ Conventions :
 | `hireWeb.ats.tabsAria` | Rubriques de l'offre |
 | `hireWeb.ats.tab.candidatures` | Candidatures |
 | `hireWeb.ats.tab.ats` | Analyse (ATS) |
+| `hireWeb.ats.tab.tableau` | Tableau Orbi |
 | `hireWeb.ats.tab.retenus` | Retenus |
+| `hireWeb.ats.tab.pieces` | Vérification |
 | `hireWeb.ats.tab.stats` | Statistiques |
 | `hireWeb.ats.guard` | Chaque dossier est lu comme une donnée. Nom, âge, genre et photo ne comptent jamais. |
 | `hireWeb.ats.decide` | Orbi recommande, vous décidez. Personne n'est rejeté. |
@@ -16371,6 +16373,71 @@ Conventions :
 | `phoneRhTri.swipe.retain` | Retenir |
 | `phoneRhTri.swipe.hold` | En attente |
 | `phoneRhTri.swipe.hint` | Glissez une carte vers la droite pour retenir, vers la gauche pour mettre en attente. |
+| `phoneRhTri.blind.name` | Candidat {index} |
+| `phoneRhTri.blind.line` | Tri à l'aveugle : le nom et la photo apparaissent quand vous retenez. |
+| `phoneRhTri.blind.on` | À l'aveugle |
+| `phoneRhTri.blind.toggle` | Tri à l'aveugle : masquer le nom et la photo jusqu'à la présélection |
+| `phoneRhTri.undo.holdBlind` | Candidature mise en attente. |
+| `phoneRhTri.filters.title` | Filtres |
+| `phoneRhTri.filters.active` | {count, plural, one {# actif} other {# actifs}} |
+| `phoneRhTri.filters.scoreMin` | Compatibilité minimum (%) |
+| `phoneRhTri.filters.skill` | Compétence |
+| `phoneRhTri.filters.yearsMin` | Années d'expérience minimum |
+| `phoneRhTri.filters.place` | Ville ou pays |
+| `phoneRhTri.filters.confidence` | Niveau de confiance |
+| `phoneRhTri.filters.confidenceValue.medium` | Moyenne ou plus |
+| `phoneRhTri.filters.confidenceValue.high` | Élevée |
+| `phoneRhTri.filters.state` | Où en est la candidature |
+| `phoneRhTri.filters.stateValue.retenus` | Retenus |
+| `phoneRhTri.filters.stateValue.attente` | En attente |
+| `phoneRhTri.filters.stateValue.nouveaux` | Pas encore triés |
+| `phoneRhTri.filters.source` | Origine |
+| `phoneRhTri.filters.days` | Reçues ces derniers jours (nombre) |
+| `phoneRhTri.filters.complete` | Dossier complet seulement |
+| `phoneRhTri.filters.any` | Tous |
+| `phoneRhTri.filters.rule` | Les filtres sont enregistrés pour l'offre et partagés avec l'équipe. Ils ne portent jamais sur l'âge, le genre, la photo ou l'origine. La barre des classes compte toujours tout le monde. |
+| `phoneRhTri.filters.save` | Enregistrer les filtres |
+| `phoneRhTri.filters.reset` | Tout afficher |
+| `phoneRhTri.filters.readOnly` | Les filtres de l'offre sont réglés par l'équipe qui trie. |
+| `phoneRhTri.filters.simpleOnly` | Votre formule ouvre les filtres simples : état, date, source et dossiers complets. Les filtres sur le score, les compétences, l'expérience, le lieu et la confiance viennent avec une formule Company. |
+| `phoneRhTri.filters.simpleOnlyLink` | Voir les formules |
+| `phoneRhTri.filters.hidden` | {count, plural, one {# candidat masqué par les filtres.} other {# candidats masqués par les filtres.}} |
+| `phoneRhTri.compare.seo` | Comparer des candidats |
+| `phoneRhTri.compare.title` | Comparer |
+| `phoneRhTri.compare.pick` | Comparer |
+| `phoneRhTri.compare.button` | Comparer la sélection |
+| `phoneRhTri.compare.pickTwo` | Cochez « Comparer » sur deux à quatre candidats, puis touchez « Comparer la sélection ». |
+| `phoneRhTri.compare.caption` | Les candidats choisis, critère par critère |
+| `phoneRhTri.compare.criterion` | Critère |
+| `phoneRhTri.compare.class` | Classe |
+| `phoneRhTri.compare.none` | — |
+| `phoneRhTri.compare.nothing` | Rien à signaler |
+| `phoneRhTri.compare.years` | Expérience |
+| `phoneRhTri.compare.missing` | À vérifier |
+| `phoneRhTri.compare.documents` | {received} sur {asked} |
+| `phoneRhTri.compare.city` | Ville |
+| `phoneRhTri.compare.criteriaMissed` | Manque : {list} |
+| `phoneRhTri.compare.stage` | Étape |
+| `phoneRhTri.compare.rule` | Les mêmes faits que la fiche résumé, sans le nom dans le calcul. Orbi propose, vous décidez. |
+| `phoneRhTri.table.seo` | Tableau des candidats |
+| `phoneRhTri.results.seo` | Résultats de l'analyse |
+| `phoneRhTri.results.title` | Résultats de l'analyse |
+| `phoneRhTri.results.line` | Les classes d'Orbi et vos Fort potentiel |
+| `phoneRhTri.results.classed` | {classed, plural, =0 {Aucune candidature classée} one {# candidature classée} other {# candidatures classées}} sur {total} |
+| `phoneRhTri.results.noneStrong` | Aucun Fort potentiel pour l'instant. Regardez « À considérer » : Orbi recommande, vous décidez. |
+| `phoneRhTri.results.hiddenCount` | {count, plural, =0 {Aucun candidat en Fort potentiel pour l'instant} one {candidat en Fort potentiel, sur {total}} other {candidats en Fort potentiel, sur {total}}} |
+| `phoneRhTri.results.lockTitle` | Découvrez qui ils sont |
+| `phoneRhTri.results.lockPlan` | Avec {plan}, Orbi montre qui sont vos Fort potentiel, leur score, leurs raisons et les questions à poser en entretien. |
+| `phoneRhTri.results.lockNoPlan` | Avec une formule Company, Orbi montre qui sont vos Fort potentiel, leur score, leurs raisons et les questions à poser en entretien. |
+| `phoneRhTri.results.lockSee` | Voir les formules |
+| `phoneRhTri.results.ruleNoPlan` | Toutes les candidatures restent dans votre pipeline, lisibles et à trier comme vous le voulez. Personne n'est écarté. |
+| `phoneRhTri.results.open` | Ouvrir le pipeline |
+| `phoneRhTri.table.back` | L'offre |
+| `phoneRhTri.table.title` | Tableau Orbi |
+| `phoneRhTri.table.caption` | Candidats de l'offre ; touchez un titre de colonne pour trier |
+| `phoneRhTri.table.name` | Candidat |
+| `phoneRhTri.table.date` | Reçue le |
+| `phoneRhTri.table.pick` | Comparer {name} |
 | `phoneRhTri.notes.compatibility` | Compatibilité |
 | `phoneRhTri.notes.potential` | Potentiel |
 | `phoneRhTri.notes.confidence` | Confiance |
@@ -16427,6 +16494,10 @@ Conventions :
 | `phoneRhPieces.ask.template` | Bonjour, votre candidature au poste de {jobTitle} avance. Pour poursuivre, {company} vous demande quelques pièces, à déposer avant le {date} depuis votre candidature sur Jumanly. Vous pouvez réutiliser celles de votre Skills Passport. Merci ! |
 | `phoneRhPieces.ask.rule` | Chacun reçoit une notification, un message dans Messages et un e-mail, puis deux relances avant la date limite. Une pièce manquante n'écarte personne : vous décidez. |
 | `phoneRhPieces.ask.send` | Envoyer la demande |
+| `phoneRhPieces.ask.standardOnly` | Votre formule envoie le message type de Jumanly. Pour écrire le vôtre, passez à une formule avec modèles personnalisés. |
+| `phoneRhPieces.lock.title` | Vérifier les retenus |
+| `phoneRhPieces.lock.text` | Demander diplômes, référents et certificats, avec relances automatiques, vient avec une formule payante. Les candidatures restent lisibles et triables sans formule. |
+| `phoneRhPieces.lock.see` | Voir les formules |
 | `talentPieces.seo` | Pièces demandées |
 | `talentPieces.back` | Mes candidatures |
 | `talentPieces.title` | Pièces demandées |

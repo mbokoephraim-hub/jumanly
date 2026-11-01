@@ -46,6 +46,7 @@ import {
   missedCriteriaOf,
   type OrbiClass,
 } from "./hire-classes";
+import { filtersLevelOf } from "./hire-filters";
 import { parseCriteria } from "./jobs";
 import { confidenceChange, potentialOf, strongPotential, type Potential } from "./hire-scores";
 
@@ -113,6 +114,8 @@ export type AtsRow = {
   /** Skills of the offer declared without proof, or missing. */
   toCheck: string[];
   group: "recommended" | "verify" | "other";
+  /** Where the application came from (spontaneous, invitation, talent search). */
+  source: string;
   /** Short professional title of the profile (« Analyste financière »). */
   headline: string | null;
   /** ISO code of the country, for the flag. */
@@ -243,8 +246,10 @@ export async function atsBoard(
   const job = await getOrgJob(db, ctx, jobId);
   const stages = await ensureStages(db, job.id);
   const subject = { type: "organization" as const, id: ctx.organizationId };
-  const matchingLevel = (await level(db, subject, "hire.matching.level")) as
-    "none" | "suggestions" | "explainable";
+  const [matchingLevel, filtersLevel] = await Promise.all([
+    level(db, subject, "hire.matching.level") as Promise<"none" | "suggestions" | "explainable">,
+    level(db, subject, "hire.ats.filters").then(filtersLevelOf),
+  ]);
   const applications = await db.application.findMany({
     where: { jobId: job.id },
     orderBy: { createdAt: "asc" },
@@ -252,6 +257,7 @@ export async function atsBoard(
       id: true,
       createdAt: true,
       status: true,
+      source: true,
       stageId: true,
       matchScore: true,
       matchExplanation: true,
@@ -365,6 +371,7 @@ export async function atsBoard(
       toCheck: proofs
         .filter((item) => item.proof === "declared" || item.proof === "missing")
         .map((item) => item.name),
+      source: application.source,
       headline: application.profile.headline,
       country: application.profile.user.country,
       matched: [...proofs]
@@ -471,7 +478,24 @@ export async function atsBoard(
     job,
     withScores,
     matchingLevel,
+    filtersLevel,
     rows,
+    /**
+     * « Résultats de l'analyse » without a plan: how many files Orbi would put in « Fort potentiel »,
+     * never who they are (the scores are deterministic and computed for every application).
+     */
+    hiddenStrong: withScores
+      ? 0
+      : draft.filter(
+          (row) =>
+            row.status === "active" &&
+            row.missedCriteria.length === 0 &&
+            row.score !== null &&
+            classOf({
+              score: row.score,
+              strongPotential: strongPotential(row.potential.value, row.score),
+            }) === "fort",
+        ).length,
     stageCounts: stages
       .filter((stage) => stage.kind !== "hired" && stage.kind !== "rejected")
       .map((stage) => ({

@@ -5865,3 +5865,238 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
   background: color-mix(in srgb, var(--nb-lime) 18%, transparent);
   color: var(--nb-lime-t);
 }
+
+/* Filtres, tri à l'aveugle, comparaison, tableau (« Logique du recrutement », étape 5) */
+.nb-rh-filtres {
+  margin: 12px 20px 0;
+  border-radius: 18px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+}
+.nb-rh-filtres > summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 14px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.nb-rh-filtres > summary::-webkit-details-marker {
+  display: none;
+}
+.nb-rh-filtres > summary b {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--nb-lime);
+  color: var(--nb-encre);
+  font-size: 12px;
+}
+.nb-rh-filtres > p,
+.nb-rh-filtres-f {
+  padding: 0 14px 14px;
+}
+.nb-rh-filtres-f {
+  display: grid;
+  gap: 10px;
+}
+.nb-rh-filtres-f label {
+  display: grid;
+  gap: 4px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.nb-rh-filtres-f input:not([type="checkbox"]),
+.nb-rh-filtres-f select {
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-noir);
+  color: var(--nb-creme);
+  font: inherit;
+  font-weight: 400;
+}
+.nb-rh-filtres-f .nb-rh-filtres-case {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+}
+.nb-rh-filtres-b {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.nb-rh-pipe-comparer {
+  display: inline-flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  border-radius: 12px;
+  border: 1px dashed var(--nb-filet-fort);
+  font-size: 14px;
+  font-weight: 600;
+}
+.nb-rh-pipe-bas {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+}
+.jm-comparer,
+.jm-tableau {
+  max-width: 1200px;
+}
+.jm-comparer-defile {
+  overflow-x: auto;
+  border-radius: 16px;
+  border: 1px solid var(--p-filet);
+  background: var(--p-carte);
+}
+.jm-comparer-t {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.jm-comparer-t th,
+.jm-comparer-t td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--p-filet);
+  text-align: left;
+  vertical-align: top;
+}
+.jm-comparer-t thead th {
+  font-weight: 700;
+  white-space: nowrap;
+}
+.jm-comparer-t thead th[data-classe] {
+  border-top: 4px solid var(--classe, transparent);
+}
+.jm-comparer-t tbody th {
+  font-weight: 600;
+  color: var(--p-doux);
+}
+.jm-tableau-t tbody th {
+  color: var(--p-texte);
+}
+.jm-tableau-t tbody th small {
+  display: block;
+  font-weight: 400;
+  color: var(--p-doux);
+}
+.jm-comparer-t a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.jm-comparer [data-classe="fort"],
+.jm-tableau [data-classe="fort"],
+.jm-resultats [data-classe="fort"] {
+  --classe: var(--nb-lime, #6fbf3a);
+}
+.jm-comparer [data-classe="considerer"],
+.jm-tableau [data-classe="considerer"],
+.jm-resultats [data-classe="considerer"] {
+  --classe: var(--nb-menthe-claire, #2fd3a6);
+}
+.jm-comparer [data-classe="limite"],
+.jm-tableau [data-classe="limite"],
+.jm-resultats [data-classe="limite"] {
+  --classe: var(--nb-ambre, #f4c463);
+}
+.jm-comparer [data-classe="hors"],
+.jm-tableau [data-classe="hors"],
+.jm-resultats [data-classe="hors"] {
+  --classe: var(--nb-corail, #f08a7c);
+}
+.jm-tableau-t tbody tr[data-classe] td:first-child {
+  box-shadow: inset 4px 0 0 var(--classe);
+}
+.jm-tableau-classes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.jm-tableau-classes li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--p-filet);
+  font-weight: 600;
+}
+.jm-tableau-classes b {
+  display: inline-grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--classe);
+  color: #0f3f37;
+}
+
+/* ─── « Résultats de l'analyse » (logique du recrutement, étape 6) ───────────── */
+.jm-resultats-grand {
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  border-radius: 20px;
+  background: var(--p-carte);
+  border: 1px solid var(--p-filet);
+}
+.jm-resultats-grand b {
+  font-size: 44px;
+  line-height: 1;
+  font-weight: 800;
+}
+.jm-resultats-liste {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.jm-resultats-liste li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: var(--p-carte);
+  border: 1px solid var(--p-filet);
+  box-shadow: inset 4px 0 0 var(--classe, transparent);
+}
+.jm-resultats-liste a {
+  font-weight: 700;
+  color: inherit;
+}
+.jm-resultats-liste .jm-resultats-score {
+  margin-left: auto;
+  font-weight: 800;
+}
+.jm-resultats-flou li {
+  filter: blur(5px);
+  user-select: none;
+}
+.jm-resultats-flou i {
+  display: block;
+  height: 12px;
+  width: 60%;
+  border-radius: 6px;
+  background: var(--p-filet);
+}
+.jm-tableau-liens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.nb-rh-filtres-lock {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}

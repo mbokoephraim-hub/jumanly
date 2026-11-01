@@ -15,6 +15,7 @@ import {
   received,
   retainedWithoutPieces,
   verificationBoard,
+  verificationLevel,
   verificationPieces,
   type VerificationCheck,
 } from "@/server/services/hire-verification";
@@ -51,7 +52,11 @@ export default async function VerificationPage({
     throw error;
   });
   const { job } = board;
-  const canAsk = hirePermissions(ctx.role).manage && effectiveRights(space.role, space.rights).sort;
+  const allowed = await verificationLevel(db, ctx.organizationId);
+  const canAsk =
+    allowed !== "none" &&
+    hirePermissions(ctx.role).manage &&
+    effectiveRights(space.role, space.rights).sort;
   const waiting = canAsk ? await retainedWithoutPieces(db, ctx, job.id) : [];
   const company = await db.organization.findUnique({
     where: { id: ctx.organizationId },
@@ -168,6 +173,18 @@ export default async function VerificationPage({
         )}
       </section>
 
+      {allowed === "none" ? (
+        <section className="jm-pieces-s jm-pieces-lock" aria-labelledby="pieces-formule">
+          <h2 id="pieces-formule">
+            <MenuArt name="pricing" size="xs" />
+            {t("lock.title")}
+          </h2>
+          <p className="jm-pieces-meta">{t("lock.text")}</p>
+          <Link href="/app/abonnement/formules" className="jm-pieces-envoyer">
+            {t("lock.see")}
+          </Link>
+        </section>
+      ) : null}
       {canAsk ? (
         <section className="jm-pieces-s" aria-labelledby="pieces-demander">
           <h2 id="pieces-demander">{t("ask.title")}</h2>
@@ -214,6 +231,7 @@ export default async function VerificationPage({
                   name="message"
                   rows={6}
                   maxLength={2000}
+                  readOnly={allowed !== "custom"}
                   defaultValue={t("ask.template", {
                     company: company?.name ?? "",
                     jobTitle: job.title,
@@ -224,6 +242,9 @@ export default async function VerificationPage({
                   })}
                 />
               </label>
+              {allowed !== "custom" ? (
+                <p className="jm-pieces-meta">{t("ask.standardOnly")}</p>
+              ) : null}
               <p className="jm-pieces-meta">{t("ask.rule")}</p>
               <button type="submit" className="jm-pieces-envoyer">
                 {t("ask.send")}

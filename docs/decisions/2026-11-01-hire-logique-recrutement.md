@@ -9,3 +9,5 @@ Document d'Ephraïm « JUMANLY Hire, logique du recrutement de A à Z » (01/11/
 - Pondérations du score réglables : seulement avec un droit dédié (Company Plus dans le seed), jamais par nom de forfait.
 
 Construction en 6 étapes (une PR chacune) : 1 classes et pipeline au téléphone ; 2 fiche résumé et gestes ; 3 dossier de vérification ; 4 trois notes ; 5 filtres, comparaison, tri à l'aveugle, ordinateur ; 6 droits par fonction et écran Résultats de l'analyse.
+
+Étape 6 (droits) : `hire.ats.filters` simple → all dès la première formule payante ; `hire.verification` none → standard (RH Pro, RH Premium, Company) → custom (Company Plus, Company Premium). Les formules RH, absentes du tableau du document, reçoivent le niveau de Company. Modifiable dans l'admin.

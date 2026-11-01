@@ -339,6 +339,11 @@ model Job {
   /// « Ajouter les nouvelles au classement »: each application received after an analysis is read
   /// when it arrives (one credit each).
   atsAutoAdd              Boolean            @default(false)
+  /// Filters of the pipeline saved for the offer (logique du recrutement, filtres de l'ATS):
+  /// { scoreMin?, skill?, yearsMin?, place?, complete?, confidence?, source?, state? }.
+  pipelineFilters         Json               @default("{}")
+  /// « Tri à l'aveugle »: name and photo hidden until the person is retained (off by default).
+  blindSort               Boolean            @default(false)
   /// Last time Orbi analysed the applications of this job (now or at the closing date).
   atsRanAt                DateTime?
   /// The analysis running now: { startedAt, by, ids, stoppedAt?, finishedAt?, failed? } (one at a

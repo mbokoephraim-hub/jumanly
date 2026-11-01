@@ -656,6 +656,8 @@ Le diagnostic simplifié et les conseils généraux du plan Free sont fournis **
 | `hire.contact_requests.monthly` | 0 | 30 P | 100 P | 100 P | 300 P | contrat |
 | `hire.matching.level` | — | `suggestions` | `explainable` | `explainable` | `explainable` | `explainable` |
 | `hire.cv_analysis` | — | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `hire.ats.filters` | simple | all | all | all | all | all |
+| `hire.verification` | — | standard | standard | standard | custom | custom |
 | `hire.shortlist` | — | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `hire.collaboration` | — | — | ✓ | ✓ | ✓ | ✓ |
 | `hire.scorecards` | — | — | ✓ | ✓ | ✓ | ✓ |
