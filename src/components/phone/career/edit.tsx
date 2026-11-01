@@ -566,7 +566,6 @@ export function HeadForm({
         </span>
         <PhoneIcon name="chevron" size={18} />
       </Link>
-      {recruiter ? null : <p className="nb-meta nb-ca-aide">{t("cvHint")}</p>}
       {recruiter ? null : (
         <Chips
           label={t("availability")}
@@ -594,10 +593,7 @@ export function HeadForm({
       <h2 className="nb-ca-sous nb-mp-titre">{t("sectionVisibility")}</h2>
       <div className="nb-mp-carte nb-mp-courriel">
         <SocialTile kind="email" />
-        <span id="ca-courriel">
-          {t("showEmail")}
-          <small>{t("showEmailHint")}</small>
-        </span>
+        <span id="ca-courriel">{t("showEmail")}</span>
         <button
           type="button"
           role="switch"

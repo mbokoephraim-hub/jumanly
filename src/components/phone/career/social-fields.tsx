@@ -6,7 +6,7 @@ import { PhoneIcon } from "../icon";
 
 /**
  * The networks' marks for « Modifier le profil » (Ephraïm 01/11/2026: « juste les icônes de ces
- * réseaux »): each drawn in white on its own colour, so a network is recognised at a glance.
+ * réseaux »), all in Jumanly's mint (01/11/2026): the mark alone names the network.
  */
 const MARKS: Record<SocialKind, { d: string; fill: boolean }> = {
   linkedin: {
@@ -119,7 +119,7 @@ function SocialRow({
   );
 }
 
-/** The five networks in one card: a coloured mark, the name, the address; « × » empties it. */
+/** The five networks in one card: the mark, the address; « × » empties it. */
 export function SocialFields({
   values,
   onChange,
