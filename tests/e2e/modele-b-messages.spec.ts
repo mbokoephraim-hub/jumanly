@@ -90,8 +90,17 @@ test.describe("Modèle B · Messages au téléphone", () => {
     ] as const) {
       await attach.getByRole("button", { name: new RegExp(`^${choice}`) }).click();
       await expect(attach.getByRole("heading", { name: title })).toBeVisible();
-      if (choice === "Rendez-vous")
-        await expect(attach.getByRole("button", { name: /^Envoyer : / })).toBeVisible();
+      if (choice === "Rendez-vous") {
+        // A calendar, several hours to offer, then « Envoyer » with the count.
+        await expect(attach.getByRole("button", { name: "Mois suivant" })).toBeVisible();
+        await attach.getByRole("button", { name: "10 h", exact: true }).click();
+        await attach.getByRole("button", { name: "14 h 30", exact: true }).click();
+        await expect(
+          attach.getByRole("button", { name: /^Envoyer · .* · 2 heures$/ }),
+        ).toBeEnabled();
+        await attach.getByRole("button", { name: "Sur place" }).click();
+        await expect(attach.getByRole("button", { name: "Partager ma position" })).toBeVisible();
+      }
       await attach.getByRole("button", { name: "Joindre" }).click();
     }
     // « Appareil »: without a camera, a way to take a photo with the phone.

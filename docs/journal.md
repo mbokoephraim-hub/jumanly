@@ -5368,3 +5368,9 @@ Demande d'Ephraïm. Liste des offres : tuiles avec icônes (vues, en ligne, cand
 ## 2026-11-01 · Offres recruteur : dessins du menu et « En cours » qui clignote
 
 Retour d'Ephraïm : les icônes doivent être celles du menu du site, en couleur. Les tuiles et titres des offres utilisent maintenant `MenuArt` (nouveaux dessins : people, clock, bell, calendar, hourglass, funnel, pipeline ; taille `xs`). Le badge « En cours » a un point qui pulse et un halo qui respire ; l'étape actuelle d'un candidat clignote dans le pipeline. Animations coupées avec prefers-reduced-motion.
+
+## 2026-11-01 · Chat : « Joindre » en dessins du menu et vrai agenda de rendez-vous
+
+- Les six tuiles de « Joindre » reprennent les dessins en couleur du menu du site (MenuArt : photo, appareil, document, CV, attestation, calendrier).
+- « Proposer un rendez-vous » devient un calendrier (mois, jours, 120 jours à l'avance), une grille d'heures de 7 h à 19 h 30 toutes les demi-heures (jusqu'à 8 au choix), puis Visio (lien de la visio), Sur place (adresse et/ou position GPS du téléphone) ou Appel. Le bouton « Envoyer » clignote aux couleurs Lime/Menthe une fois prêt.
+- La carte du message montre le jour, les heures au choix, le mode, et « Rejoindre la visio » ou « Voir sur la carte ». Service `sendMeeting` (message `slot`, `startsAt` = première heure, `slots` = toutes).

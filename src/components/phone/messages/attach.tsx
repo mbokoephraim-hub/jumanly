@@ -13,30 +13,25 @@ import {
   sendUploadAction,
   type MsgResult,
 } from "@/server/actions/messages-phone";
+import { MenuArt, type MenuArtName } from "@/components/site/menu-art";
 import { PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
+import { MeetingPicker } from "./agenda";
 import { shrinkPhoto } from "./media";
 import { SheetBack } from "./parts";
 import type { AttachDoc, ThreadView } from "./types";
 
 export type AttachSheet = "joindre" | "photos" | "docs" | "cv" | "attestation" | "agenda" | null;
 
-/** The six tiles of « Joindre » (planche Chat-joindre): colour and drawing of each. */
+/** The six tiles of « Joindre »: the coloured drawings of the website's menu. */
 const TILES = [
-  ["photo", "#FF9EC7", "M4 5.5h16v13H4zM4 15l4.5-4.5 4 4 2.5-2.5L20 17M15.5 9.5v.01"],
-  ["camera", "#F4C463", "M4 8.5h3l1.5-2.5h7L17 8.5h3v10H4zM12 10.5a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"],
-  ["document", "#7CC4FF", "M6 3.5h8l4 4v13H6zM14 3.5v4h4M9 12.5h6M9 16h6"],
-  ["cv", "#A6F26B", "M5.5 3.5h9l4 4v13h-13zM14.5 3.5v4h4M8.5 11.5h7M8.5 15h7M8.5 18h4"],
-  [
-    "certificate",
-    "#2FD3A6",
-    "M12 3.5l2.5 2 3.2.2.6 3.1 2.2 2.2-1.6 2.8.4 3.2-3 1.2-1.8 2.7-2.5-1.4-2.5 1.4-1.8-2.7-3-1.2.4-3.2L3.5 11l2.2-2.2.6-3.1 3.2-.2zM9 12l2 2 4-4",
-  ],
-  ["meeting", "#C3A6FF", "M4.5 6.5h15v13h-15zM4.5 10.5h15M8.5 4v4M15.5 4v4"],
-] as const;
-
-const HOURS = ["10:00", "14:00", "16:00"] as const;
-const MODES = ["visio", "place", "call"] as const;
+  ["photo", "photo"],
+  ["camera", "camera"],
+  ["document", "document"],
+  ["cv", "cv"],
+  ["certificate", "certificate"],
+  ["meeting", "calendar"],
+] as const satisfies readonly (readonly [string, MenuArtName])[];
 
 type Picked = { file: File; url: string; on: boolean };
 
@@ -82,9 +77,6 @@ export function AttachSheets({
   const sendError = useSendError();
   const [picked, setPicked] = useState<Picked[]>([]);
   const [hd, setHd] = useState(false);
-  const [day, setDay] = useState(view.days[1]?.value ?? view.days[0]?.value ?? "");
-  const [hour, setHour] = useState<(typeof HOURS)[number]>("14:00");
-  const [mode, setMode] = useState<(typeof MODES)[number]>("visio");
   const [pending, start] = useTransition();
   const photoInput = useRef<HTMLInputElement>(null);
   const fileInput = useRef<HTMLInputElement>(null);
@@ -175,8 +167,6 @@ export function AttachSheets({
     }
   };
 
-  const hourLabel = (value: string) => t("agenda.hour", { hour: Number(value.slice(0, 2)) });
-  const dayLabel = view.days.find((item) => item.value === day)?.label ?? "";
   const label =
     sheet === "joindre" || sheet === null
       ? tc("title")
@@ -226,27 +216,14 @@ export function AttachSheets({
 
       {sheet === "joindre" ? (
         <div className="nb-ch-joindre">
-          {TILES.map(([key, color, path], index) => (
+          {TILES.map(([key, art], index) => (
             <button
               key={key}
               type="button"
               onClick={tile(key)}
               style={{ animationDelay: `${index * 0.04}s` }}
             >
-              <span style={{ background: `${color}22`, color }} aria-hidden>
-                <svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d={path} />
-                </svg>
-              </span>
+              <MenuArt name={art} size="md" />
               <b>{tc(`${key}.title`)}</b>
               <small>{tc(`${key}.sub`)}</small>
             </button>
@@ -410,58 +387,11 @@ export function AttachSheets({
         <div>
           {back}
           <h2 className="nb-ms-sht">{t("attach.sheet.agenda")}</h2>
-          <p className="nb-meta nb-ms-shtnote">{t("agenda.day")}</p>
-          <div className="nb-ms-puces">
-            {view.days.map((item) => (
-              <button
-                key={item.value}
-                type="button"
-                className="nb-chip"
-                aria-pressed={day === item.value}
-                onClick={() => setDay(item.value)}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-          <p className="nb-meta nb-ms-shtnote nb-ms-shtsec">{t("agenda.hourTitle")}</p>
-          <div className="nb-ms-puces">
-            {HOURS.map((value) => (
-              <button
-                key={value}
-                type="button"
-                className="nb-chip"
-                aria-pressed={hour === value}
-                onClick={() => setHour(value)}
-              >
-                {hourLabel(value)}
-              </button>
-            ))}
-          </div>
-          <p className="nb-meta nb-ms-shtnote nb-ms-shtsec">{t("agenda.how")}</p>
-          <div className="nb-ms-puces">
-            {MODES.map((value) => (
-              <button
-                key={value}
-                type="button"
-                className="nb-chip"
-                aria-pressed={mode === value}
-                onClick={() => setMode(value)}
-              >
-                {t(`agenda.mode.${value}`)}
-              </button>
-            ))}
-          </div>
-          <button
-            type="button"
-            className="nb-bp nb-ms-go"
-            disabled={pending || !day}
-            onClick={() =>
-              run(() => sendRdvAction(view.id, { date: day, time: hour, mode }), t("agenda.sent"))
-            }
-          >
-            {t("agenda.send", { when: `${dayLabel}, ${hourLabel(hour)}` })}
-          </button>
+          <MeetingPicker
+            firstDay={view.days[0]?.value ?? ""}
+            pending={pending}
+            onSend={(input) => run(() => sendRdvAction(view.id, input), t("agenda.sent"))}
+          />
         </div>
       ) : null}
     </PhoneSheet>

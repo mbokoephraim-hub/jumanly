@@ -22,7 +22,11 @@ import {
   ignoreConnection,
   removeConnection,
 } from "@/server/services/connections";
-import { sendDocument, sendSlot } from "@/server/services/conversation-attachments";
+import {
+  meetingSchema,
+  sendDocument,
+  sendMeeting,
+} from "@/server/services/conversation-attachments";
 import { helpModes, messageHelp, type HelpResult } from "@/server/services/message-help";
 import {
   MediaError,
@@ -205,23 +209,13 @@ export async function sendCertificateAction(conversationId: string, certificateI
   });
 }
 
-const rdvSchema = z.object({
-  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  time: z.string().regex(/^\d{2}:\d{2}$/),
-  mode: z.enum(["visio", "place", "call"]),
-});
-
-/** « Proposer un rendez-vous »: a day, an hour and how (a slot, as on the computer). */
-export async function sendRdvAction(conversationId: string, raw: z.input<typeof rdvSchema>) {
-  const parsed = rdvSchema.safeParse(raw);
+/** « Proposer un rendez-vous »: a day of the calendar, several hours and how (a slot card). */
+export async function sendRdvAction(conversationId: string, raw: z.input<typeof meetingSchema>) {
+  const parsed = meetingSchema.safeParse(raw);
   if (!parsed.success) return { ok: false, error: "invalid" } as const;
   const t = await getTranslations("phoneMsg");
   return send(conversationId, "rendez-vous", (userId) =>
-    sendSlot(db, { userId }, conversationId, {
-      date: parsed.data.date,
-      time: parsed.data.time,
-      note: t(`agenda.mode.${parsed.data.mode}`),
-    }),
+    sendMeeting(db, { userId }, conversationId, parsed.data, t(`agenda.mode.${parsed.data.mode}`)),
   );
 }
 

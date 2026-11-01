@@ -29,7 +29,11 @@ export type MenuArtName =
   | "calendar"
   | "hourglass"
   | "funnel"
-  | "pipeline";
+  | "pipeline"
+  | "photo"
+  | "camera"
+  | "document"
+  | "certificate";
 
 const SAPIN = "#0f3f37";
 const LIME = "#a6f26b";
@@ -64,6 +68,10 @@ const tiles: Record<MenuArtName, string> = {
   hourglass: "bg-[#ece8ff]",
   funnel: "bg-[#dcf8ef]",
   pipeline: "bg-[#e3f1ff]",
+  photo: "bg-[#fde7f0]",
+  camera: "bg-[#fff4d6]",
+  document: "bg-[#e3f1ff]",
+  certificate: "bg-[#dcf8ef]",
 };
 
 export function MenuArt({
@@ -387,6 +395,51 @@ const drawings: Record<MenuArtName, React.ReactNode> = {
       <rect x="20.5" y="10" width="7" height="7" rx="2" fill={LIME} />
       <rect x="20.5" y="20" width="7" height="7" rx="2" fill={LIME} />
       <rect x="35.5" y="10" width="7" height="7" rx="2" fill="#fff" />
+    </>
+  ),
+  // A picture of the gallery: a sun over two hills.
+  photo: (
+    <>
+      <rect x="4" y="8" width="40" height="32" rx="6" fill={ROSE} />
+      <circle cx="33" cy="17" r="4.5" fill={AMBRE} />
+      <path d="M4 34l11-12 9 9 6-6 14 13v2a6 6 0 0 1-6 6H10a6 6 0 0 1-6-6z" fill={SAPIN} />
+      <path d="M24 31l6-6 14 13v2a6 6 0 0 1-6 6H22z" fill={MENTHE} />
+    </>
+  ),
+  // A camera with its lens and flash.
+  camera: (
+    <>
+      <path d="M16 9h16l3 5H16z" fill={SAPIN} />
+      <rect x="4" y="13" width="40" height="28" rx="7" fill={AMBRE} />
+      <circle cx="24" cy="27" r="9" fill="#fff" stroke={SAPIN} strokeWidth="3" />
+      <circle cx="24" cy="27" r="4" fill={SAPIN} />
+      <circle cx="37" cy="19" r="2.5" fill={CORAIL} />
+    </>
+  ),
+  // A sheet with a folded corner and lines.
+  document: (
+    <>
+      <path d="M10 4h20l10 10v26a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4z" fill="#5aa9f0" />
+      <path d="M30 4v8a2 2 0 0 0 2 2h8z" fill={SAPIN} />
+      <rect x="13" y="20" width="20" height="3" rx="1.5" fill="#fff" />
+      <rect x="13" y="27" width="20" height="3" rx="1.5" fill="#fff" />
+      <rect x="13" y="34" width="12" height="3" rx="1.5" fill={LIME} />
+    </>
+  ),
+  // A rosette with a ribbon: a course finished.
+  certificate: (
+    <>
+      <path d="M15 28l-5 16 7-3 4 6 4-13z" fill={CORAIL} />
+      <path d="M33 28l5 16-7-3-4 6-4-13z" fill={LILAS} />
+      <circle cx="24" cy="19" r="15" fill={MENTHE} />
+      <circle cx="24" cy="19" r="10" fill="#fff" />
+      <path
+        d="M19 19l4 4 7-8"
+        stroke={SAPIN}
+        strokeWidth="3.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </>
   ),
 };

@@ -119,6 +119,8 @@ export type Bubble =
       title: string;
       meta: string;
       action: { href: string; label: string; download: boolean } | null;
+      /** Visio: join the meeting; Sur place: open the map. */
+      extra?: { href: string; label: string } | null;
     }
   | {
       kind: "org";
