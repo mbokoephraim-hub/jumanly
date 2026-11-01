@@ -1077,7 +1077,6 @@ function Ready({
             </svg>
             {image ? <img src={image} alt="" /> : <span>{letters}</span>}
           </span>
-          <p className="nb-pret-pct">{t("ready.complete", { pct: percent })}</p>
           <h1 className="nb-h1">{name ? t("ready.title", { name }) : t("ready.titleAnon")}</h1>
           <p className="nb-sous">{[cap, city].filter(Boolean).join(" · ")}</p>
           <div className="nb-tags">

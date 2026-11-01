@@ -2,7 +2,7 @@ import { ABOUT_TEXT_MAX } from "@/lib/profile-about";
 import { z } from "zod";
 import type { PrismaClient } from "@/generated/prisma/client";
 import { AiError, runAi } from "@/server/ai";
-import { resolvePlan, type ResolvedPlan } from "@/server/entitlements";
+import { resolvePlan } from "@/server/entitlements";
 import { talentAttestations } from "./attestations";
 import { careerTraining } from "./career-training";
 import { listApplications, talentStatus, type TalentApplicationStatus } from "./applications";
@@ -12,7 +12,7 @@ import { followedCourses } from "./learn-space";
 import { listProjects, type PortfolioProject } from "./portfolio";
 import { parseCv } from "./cv";
 import { cvScore, targetSkillsFor } from "./cv-coach";
-import { personProfile } from "./person-profile";
+import { personProfile, planTier } from "./person-profile";
 import { completeness, getFullProfile, parseProfileLanguages } from "./profile";
 
 /**
@@ -89,28 +89,7 @@ export function projectCover(project: PortfolioProject) {
   return index < 0 ? null : `/api/projets/${project.id}/${index}`;
 }
 
-/**
- * The rank of a paid plan among the paid plans of its family, cheapest first, 1 to 3 (Ephraïm
- * 29/10/2026: one icon per paid level next to the name, none for free). Read from the prices, so
- * no plan is named here (CLAUDE.md § 2). 0 for a free plan or none.
- */
-export async function planTier(
-  db: PrismaClient,
-  plan: Pick<ResolvedPlan, "family" | "priceCents"> | null,
-): Promise<PlanTier> {
-  if (!plan || !plan.priceCents) return 0;
-  const cheaper = await db.plan.count({
-    where: {
-      family: plan.family,
-      active: true,
-      isPublic: true,
-      priceCents: { gt: 0, lt: plan.priceCents },
-    },
-  });
-  return Math.min(cheaper + 1, 3) as PlanTier;
-}
-
-export type PlanTier = 0 | 1 | 2 | 3;
+export { planTier, type PlanTier } from "./person-profile";
 
 export async function careerHome(db: PrismaClient, userId: string, now = new Date()) {
   const profile = await getFullProfile(db, userId);

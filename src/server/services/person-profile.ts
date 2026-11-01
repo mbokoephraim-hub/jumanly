@@ -1,6 +1,6 @@
 import type { PrismaClient } from "@/generated/prisma/client";
 import { parseSocialLinks } from "@/lib/social-links";
-import { resolvePlan } from "@/server/entitlements";
+import { resolvePlan, type ResolvedPlan } from "@/server/entitlements";
 import { links } from "./explore";
 import { lastActive } from "./hire-phone-talents";
 import { parseProject, portfolioLevel } from "./portfolio";
@@ -198,9 +198,9 @@ export async function personProfile(
     image: user.image,
     banner: profile.banner,
     verified: user.emailVerified,
-    /** The gold seal beside the name: paid subscribers only (Ephraïm 01/11/2026). Read from the
-     * price, never from a plan name (CLAUDE.md § 2). */
-    premium: Boolean((await resolvePlan(db, { type: "user", id: user.id }))?.priceCents),
+    /** The plan mark beside the name (Ephraïm 01/11/2026): read from the price rank, never from a
+     * plan name (CLAUDE.md § 2). No gold seal beside the name anymore. */
+    ...(await planMarkOf(db, user.id)),
     handle: profile.handle,
     socials: limited ? {} : parseSocialLinks(profile.socialLinks),
     email: profile.showEmail && !limited ? user.email : null,
@@ -313,3 +313,33 @@ async function recruiterBlock(db: PrismaClient, userId: string) {
 }
 
 export type PersonProfile = NonNullable<Awaited<ReturnType<typeof personProfile>>>;
+
+/**
+ * The rank of a paid plan among the paid plans of its family, cheapest first, 1 to 3 (Ephraïm
+ * 29/10/2026: one icon per paid level next to the name, none for free). Read from the prices, so
+ * no plan is named here (CLAUDE.md § 2). 0 for a free plan or none.
+ */
+export async function planTier(
+  db: PrismaClient,
+  plan: Pick<ResolvedPlan, "family" | "priceCents"> | null,
+): Promise<PlanTier> {
+  if (!plan || !plan.priceCents) return 0;
+  const cheaper = await db.plan.count({
+    where: {
+      family: plan.family,
+      active: true,
+      isPublic: true,
+      priceCents: { gt: 0, lt: plan.priceCents },
+    },
+  });
+  return Math.min(cheaper + 1, 3) as PlanTier;
+}
+
+export type PlanTier = 0 | 1 | 2 | 3;
+
+/** The paid plan of a person, as the mark beside their name: its rank and its name. */
+async function planMarkOf(db: PrismaClient, userId: string) {
+  const plan = await resolvePlan(db, { type: "user", id: userId });
+  const tier = await planTier(db, plan);
+  return { planTier: tier, planName: tier ? (plan?.planName ?? null) : null };
+}

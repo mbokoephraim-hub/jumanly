@@ -28,8 +28,10 @@ export type ProfileView = {
   online: boolean;
   socials: { kind: SocialKind | "email"; href: string; label: string }[];
   verified: boolean;
-  /** A paid subscriber: the gold seal beside the name. */
-  premium: boolean;
+  /** The paid plan beside the name (Ephraïm 01/11/2026): crown for the top plan, blue seal for
+   * the one below; 0 and null for a free plan. */
+  planTier: 0 | 1 | 2 | 3;
+  planName: string | null;
   handle: string;
   place: { flag: string; flagLabel: string; text: string; time: string | null } | null;
   /** The short line under the name: the person's title. */

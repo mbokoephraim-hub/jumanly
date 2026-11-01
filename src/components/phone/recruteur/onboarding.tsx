@@ -1678,7 +1678,6 @@ function Ready({
             {image ? <img src={image} alt="" /> : <span>{letters}</span>}
             <CompanyBadge company={company} />
           </span>
-          <p className="nb-pret-pct">{t("ready.complete", { pct: percent })}</p>
           <h1 className="nb-h1">{t("ready.title", { name })}</h1>
           <p className="nb-sous">{[job, companyName].filter(Boolean).join(" · ")}</p>
           <p className="nb-meta">

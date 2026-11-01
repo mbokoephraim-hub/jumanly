@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
@@ -19,7 +19,7 @@ import { resolvePlan, usage } from "@/server/entitlements";
 import { getActiveSpace } from "@/server/hire-context";
 import { getPartnerSpace } from "@/server/partner-context";
 import { connectionCounts } from "@/server/services/connections";
-import { completeness, getFullProfile } from "@/server/services/profile";
+import { getFullProfile } from "@/server/services/profile";
 import { hireMemberships, partnerMemberships } from "@/server/services/organization";
 import { isTester } from "@/server/services/tester";
 
@@ -135,7 +135,6 @@ export default async function AccountPage() {
   if (await getPartnerSpace(user.id)) redirect("/app/partenaire");
   const t = await getTranslations("compte");
   const tW = await getTranslations("talentW4");
-  const tProfile = await getTranslations("profil");
   const tInstall = await getTranslations("system.install");
   const subject = { type: "user" as const, id: user.id };
   const monthStart = new Date();
@@ -160,7 +159,6 @@ export default async function AccountPage() {
       ? t("plan.unlimited")
       : t("plan.credits", { count: Math.max(0, credits.limit - credits.used) });
   const admin = (ADMIN_SHELL_ROLES as readonly string[]).includes(user.platformRole);
-  const percent = completeness(profile).percent;
   const role = profile.headline || profile.desiredJobTitles[0];
   const place = [role, user.city].filter(Boolean).join(" · ");
 
@@ -172,13 +170,7 @@ export default async function AccountPage() {
         <TalentAvatar name={user.name} image={user.image} />
         <span className="t-t">
           <b>{user.name}</b>
-          <span className="t-w4-tel">{t("profile", { percent })}</span>
-          <span className="t-w4-web">
-            {place ? tW("account.line", { place }) : tW("account.lineAlone")}
-          </span>
-        </span>
-        <span className="t-anneau t-w4-web" style={{ "--p": percent } as CSSProperties}>
-          <b>{tProfile("completeness.ring", { percent })}</b>
+          <span>{place ? tW("account.line", { place }) : tW("account.lineAlone")}</span>
         </span>
         <span className="t-bt t-p t-m t-w4-web">{tW("account.profile")}</span>
         <TalentIcon name="suivant" size="s" className="t-w4-tel" />

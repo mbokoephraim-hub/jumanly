@@ -44,8 +44,7 @@ export async function AvatarMenuContent({
 }) {
   const t = await getTranslations("compte");
   const tShell = await getTranslations("talentShell.menu");
-  const [profile, cvs, attestations, connections, plan] = await Promise.all([
-    db.talentProfile.findUnique({ where: { userId: user.id }, select: { completeness: true } }),
+  const [cvs, attestations, connections, plan] = await Promise.all([
     db.document.count({ where: { profile: { userId: user.id }, kind: "cv" } }),
     db.certificate.count({ where: { enrollment: { userId: user.id } } }),
     connectionCounts(db, user.id),
@@ -57,7 +56,6 @@ export async function AvatarMenuContent({
         <TalentAvatar name={user.name} image={user.image} />
         <span className="t-t">
           <b>{user.name}</b>
-          <span>{t("profile", { percent: profile?.completeness ?? 0 })}</span>
         </span>
         <TalentIcon name="suivant" size="s" />
       </Link>

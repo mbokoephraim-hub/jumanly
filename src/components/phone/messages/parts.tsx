@@ -4,10 +4,9 @@
 // app open across a release still gets the new Chat with its styles.
 import "@/styles/phone-chat.css";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { FilAvatar } from "../fil/avatar";
-import { ringOf, VerifiedMark } from "../profil/profile";
+import { ringOf } from "../profil/profile";
 import type { WhoView } from "./types";
 
 /**
@@ -57,14 +56,12 @@ export function WhoAvatar({
   );
 }
 
-/** The name and its green check. */
+/** The name (no seal beside it since 01/11/2026). */
 export function WhoName({ who, as = "b" }: { who: WhoView; as?: "b" | "span" }) {
-  const t = useTranslations("phoneMsg");
   const Tag = as;
   return (
     <span className="nb-ch-nom">
       <Tag>{who.name}</Tag>
-      {who.verified ? <VerifiedMark label={t("verified")} size={14} /> : null}
     </span>
   );
 }

@@ -20,10 +20,10 @@ import { PostSheets, type SendTarget } from "../fil/sheets";
 import { PhoneIcon } from "../icon";
 import { ExperienceLogo, ExperienceMeta, ExperiencePoints } from "../profil/experience-head";
 import { PhotoViewer } from "../profil/photo-viewer";
-import { AboutCard, PlanMark, ringOf, SOCIAL_PATHS, VerifiedMark } from "../profil/profile";
+import { AboutCard, PlanMark, ringOf, SOCIAL_PATHS } from "../profil/profile";
 import { AudienceStats } from "../profil/stats";
 import type { Availability, CareerView } from "./data";
-import { CAMERA, EYE, Heading, PEN, PLUS, Ring, Segment, SHARE, Svg, tint } from "./kit";
+import { CAMERA, EYE, Heading, PEN, PLUS, Segment, SHARE, Svg, tint } from "./kit";
 import { ShareSheet } from "./share";
 import { LanguagesSheet, SkillsSheet } from "./sheets";
 import { EducationList, ItemVerifiedMark } from "../profil/education-rows";
@@ -225,7 +225,6 @@ export function PhoneMyProfile({
       <div className="nb-pf-id">
         <h2 className="nb-cr-nom">
           {view.name}
-          {person.verified && person.premium ? <VerifiedMark label={tp("verified")} /> : null}
           {view.planTag ? (
             <PlanMark tier={view.planTier} label={tp("planMark", { plan: view.planTag })} />
           ) : null}
@@ -280,30 +279,6 @@ export function PhoneMyProfile({
           ) : null}
         </div>
 
-        <div className="nb-cr-carte nb-cr-complet">
-          <Ring percent={view.percent} color="var(--nb-lime)" size={48}>
-            {t("completeValue", { percent: view.percent })}
-          </Ring>
-          <span className="nb-cr-complet-t">
-            <b>{t("complete")}</b>
-            {view.completion.text ? <small>{view.completion.text}</small> : null}
-          </span>
-          {suggestion ? (
-            <button
-              type="button"
-              className="nb-cr-pastille"
-              onClick={addSuggestion}
-              disabled={pending}
-              aria-label={t("suggestionAddLabel", { skill: suggestion.skill })}
-            >
-              {t("suggestionAdd")}
-            </button>
-          ) : view.completion.href ? (
-            <Link href={view.completion.href} className="nb-cr-pastille">
-              {t("completionGo")}
-            </Link>
-          ) : null}
-        </div>
         <div className="nb-cr-actions">
           <Link href="/app/career/profil" className="nb-cr-bt" data-creme="">
             <Svg d={PEN} />

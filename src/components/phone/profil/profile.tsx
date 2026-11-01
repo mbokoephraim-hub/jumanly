@@ -60,8 +60,9 @@ export function VerifiedMark({ label, size = 18 }: { label: string; size?: numbe
 }
 
 /**
- * The mark of a paid plan after the name (Ephraïm 29/10/2026): no word, one icon per level, none
- * for a free plan. 1: a sky spark, 2: a mint bolt, 3: a gold crown.
+ * The mark of a paid plan after the name (Ephraïm 29/10/2026, 01/11/2026): no word, one icon per
+ * level, none for a free plan. 1: a sky spark, 2: a blue seal, 3: a gold crown. It replaces the
+ * gold seal that used to sit beside the name.
  */
 export function PlanMark({
   tier,
@@ -94,8 +95,18 @@ export function PlanMark({
         </>
       ) : tier === 2 ? (
         <>
-          <path d="M12 1.8l8.9 5.1v10.2L12 22.2l-8.9-5.1V6.9z" fill="#2E2557" />
-          <path d="M13.2 5.5 7.8 13h3.8l-1 5.5 5.6-7.6h-3.9z" fill="#B9A6FF" />
+          <path
+            d="M12 1.8l2.5 1.9 3.1-.1 1 3 2.5 1.8-1 3 1 3-2.5 1.8-1 3-3.1-.1L12 22.2l-2.5-1.9-3.1.1-1-3-2.5-1.8 1-3-1-3 2.5-1.8 1-3 3.1.1z"
+            fill="#1D6FD8"
+          />
+          <path
+            d="m8.3 12.2 2.5 2.5 4.9-5.1"
+            fill="none"
+            stroke="#FFFFFF"
+            strokeWidth="2.3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </>
       ) : (
         <>
@@ -320,15 +331,13 @@ export function PersonProfile({
       <div className="nb-pf-id">
         <h1>
           {person.name}
-          {person.verified ? (
-            person.premium ? (
-              <VerifiedMark label={t("verified")} />
-            ) : null
-          ) : (
+          {!person.verified ? (
             <span className="nb-pf-tag" data-gris="">
               {t("notVerified")}
             </span>
-          )}
+          ) : person.planName ? (
+            <PlanMark tier={person.planTier} label={t("planMark", { plan: person.planName })} />
+          ) : null}
         </h1>
         <p className="nb-pf-alias">{person.handle}</p>
         {person.place ? (
