@@ -6399,6 +6399,24 @@ textarea.nb-ca-in[data-haut] {
 /* ─── Carrière : paramètres, formule et paiement (lot B5) ─── */
 .nb-ca-form-barre[data-retour-texte] .nb-retour svg {
   display: block;
+  flex: none;
+}
+/* « Retour » with its word (Paramètres, portfolio, candidature, 01/11/2026): the 44 px square
+   centred the chevron + word, which pushed the chevron off the left edge. The side columns now
+   fit the word, the chevron sits 8 px from the edge and the title stays centred. */
+.nb-ca-form-barre[data-retour-texte] {
+  grid-template-columns: minmax(max-content, 1fr) minmax(0, max-content) minmax(max-content, 1fr);
+  column-gap: 8px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.nb-ca-form-barre[data-retour-texte] .nb-retour {
+  width: auto;
+  justify-content: flex-start;
+  gap: 2px;
+  padding: 0 8px 0 4px;
+  font-size: 15px;
+  white-space: nowrap;
 }
 .nb-ca-gr {
   padding: 24px 20px 6px;
