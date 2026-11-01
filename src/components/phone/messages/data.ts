@@ -41,7 +41,6 @@ type Payload = {
   timezone?: string;
   note?: string;
   slots?: string[];
-  link?: string;
   address?: string;
   geo?: { lat?: number; lng?: number };
   interviewId?: string;
