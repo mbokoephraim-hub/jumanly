@@ -243,6 +243,9 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
     await page.getByRole("link", { name: "Postuler", exact: true }).click();
   }
   await expect(page.getByRole("heading", { level: 1, name: "Postuler" })).toBeVisible();
+  // First screen (01/11/2026): how to apply, then the CVs.
+  await expect(page.getByRole("group", { name: "Comment voulez-vous postuler ?" })).toBeVisible();
+  await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page.getByRole("group", { name: "Quel CV envoyer ?" })).toBeVisible();
   await expectAccessible(page);
   await page.getByRole("button", { name: "Quitter et garder le brouillon" }).click();
@@ -294,9 +297,9 @@ test("reprendre une formation depuis Apprendre", async ({ page, isMobile }) => {
   await logIn(page, "grace.ux@jumanly.test");
   await page.goto("/app/learn");
   await expectAccessible(page);
-  // On the phone, Formation is Modèle B (lot B7): « Continuer » opens the lesson to resume.
+  // On the phone, Formation is Modèle B (lot B7): « Reprendre » opens the lesson to resume.
   await page
-    .getByRole("link", { name: isMobile ? /^Continuer/ : "Reprendre" })
+    .getByRole("link", { name: isMobile ? /^Reprendre/ : "Reprendre" })
     .filter({ visible: true })
     .first()
     .click();

@@ -75,6 +75,9 @@ test("conversation : brouillon d'Orbi relu puis envoyé, modèles, liste des mes
   const talent = await context.newPage();
   await logIn(talent, "jeanpierre.ux@jumanly.test");
   await talent.goto(`/app/jobs/${slug}/postuler`);
+  // First screen (01/11/2026): how to apply; « Avec un CV existant » is chosen.
+  await talent.getByRole("button", { name: "Continuer" }).click();
+  await expect(talent).toHaveURL(/etape=cv/);
   await talent.getByRole("button", { name: "Continuer" }).click();
   await expect(talent).toHaveURL(/etape=lettre/);
   await talent.getByRole("button", { name: "Continuer" }).click();

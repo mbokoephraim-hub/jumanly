@@ -39,10 +39,13 @@ async function person(visibility: "private" | "recruiters" | "anonymous", name =
 }
 
 describe("Explorer", () => {
-  it("propose les profils visibles et privés, jamais une connexion ni un profil bloqué", async () => {
+  // Depuis le 27/10/2026 (Ephraïm), chaque membre se trouve dans Explorer dès l'inscription : un
+  // profil privé y figure avec son nom, sa photo, son titre et sa ville seulement ; un profil
+  // anonyme n'y figure pas (src/server/services/explore.ts, person-profile.ts).
+  it("propose les membres, privés compris, jamais un anonyme, une connexion ni un profil bloqué", async () => {
     const me = await person("recruiters");
     const visible = await person("recruiters");
-    const hidden = await person("private");
+    const privateOne = await person("private");
     const anonymous = await person("anonymous");
     const friend = await person("recruiters");
     const blocked = await person("recruiters");
@@ -54,8 +57,7 @@ describe("Explorer", () => {
     });
     const ids = (await peopleToKnow(db, me, 500)).map((row) => row.id);
     expect(ids).toContain(visible);
-    // « Privé » keeps a talent out of the recruiters' pool, not out of Explorer (27/10/2026).
-    expect(ids).toContain(hidden);
+    expect(ids).toContain(privateOne);
     for (const id of [me, anonymous, friend, blocked]) expect(ids).not.toContain(id);
   });
 
@@ -74,19 +76,20 @@ describe("Explorer", () => {
     expect(first?.reason).toEqual({ kind: "mutual", count: 1 });
   });
 
-  it("une page de personne privée ne montre que l'essentiel hors de ses connexions", async () => {
+  it("une page de personne privée ne montre ses sections qu'à ses connexions", async () => {
     const me = await person("recruiters");
     const secret = await person("private");
-    // Ephraïm 27/10/2026: every member can be found; a private page shows name, photo, title only.
     const outside = await personProfile(db, me, secret, "connection");
     expect(outside?.limited).toBe(true);
     expect(outside?.about).toBeNull();
+    expect(outside?.experiences).toEqual([]);
     await db.connection.create({
       data: { requesterId: me, addresseeId: secret, status: "accepted", respondedAt: new Date() },
     });
     const page = await personProfile(db, me, secret, "connection");
     expect(page?.about).toBe("Présentation fictive");
     expect(page?.link).toBe("connected");
+    expect(page?.limited).toBe(false);
   });
 
   it("le profil d'une personne : réseaux remplis, e-mail seulement si elle le montre", async () => {
@@ -123,14 +126,14 @@ describe("Explorer", () => {
     expect((await personProfile(db, me, secret, "candidate"))?.id).toBe(secret);
   });
 
-  it("la recherche trouve une personne visible ou privée par son nom, pas une anonyme", async () => {
+  it("la recherche trouve un membre par son nom, privé compris, pas un anonyme", async () => {
     const me = await person("recruiters");
     const tag = `Zébulon${Date.now()}`;
     const shown = await person("recruiters", `${tag} Visible`);
-    const secret = await person("private", `${tag} Privée`);
+    const privateOne = await person("private", `${tag} Privé`);
     await person("anonymous", `${tag} Anonyme`);
     const found = await exploreSearch(db, me, tag, "personnes");
-    expect(found.people.map((row) => row.id).sort()).toEqual([shown, secret].sort());
+    expect(found.people.map((row) => row.id).sort()).toEqual([shown, privateOne].sort());
     expect(found.offers).toEqual([]);
   });
 

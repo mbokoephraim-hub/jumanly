@@ -8,6 +8,7 @@ import { Document, Image, Page, Text, View, renderToBuffer } from "@react-pdf/re
 import {
   colorHex,
   letterLayouts,
+  nameParts,
   paragraphsOf,
   PT_PER_U,
   tint,
@@ -38,6 +39,8 @@ export function LetterDocument({ data, design, photo, title }: LetterPdfInput) {
   const size = p(layout.photoSize);
   const strip = layout.coord === "strip-white" || layout.coord === "strip-tint";
   const align = layout.center ? "center" : "left";
+  const accent = tint(color, 0.62);
+  const name = nameParts(data.name);
 
   const photoView = withPhoto ? (
     <View
@@ -45,8 +48,8 @@ export function LetterDocument({ data, design, photo, title }: LetterPdfInput) {
         width: size,
         height: size,
         borderRadius: design.photo === "rond" ? size / 2 : p(2),
-        borderWidth: p(0.7),
-        borderColor: "#ffffff",
+        borderWidth: p(0.6),
+        borderColor: accent,
         borderStyle: "solid",
         backgroundColor: tint(color, 0.75),
         overflow: "hidden",
@@ -81,10 +84,11 @@ export function LetterDocument({ data, design, photo, title }: LetterPdfInput) {
             style={{
               fontSize: p(U.coord),
               color: onColor ? "#ffffff" : color,
-              marginRight: layout.coord === "column" ? 0 : p(3),
+              marginRight: 0,
               marginTop: layout.coord === "column" && index > 0 ? p(0.6) : 0,
             }}
           >
+            {index > 0 && layout.coord !== "column" ? "\u00a0· " : ""}
             {item}
           </Text>
         ))}
@@ -107,7 +111,8 @@ export function LetterDocument({ data, design, photo, title }: LetterPdfInput) {
           textAlign: align,
         }}
       >
-        {data.name}
+        {name.first}
+        {name.last ? <Text style={{ color: accent }}> {name.last}</Text> : null}
       </Text>
       {data.headline ? (
         <Text
@@ -116,7 +121,7 @@ export function LetterDocument({ data, design, photo, title }: LetterPdfInput) {
           {data.headline}
         </Text>
       ) : null}
-      {!strip && contacts(true, { marginTop: p(2.2) })}
+      {!strip && contacts(true, { marginTop: p(1.6) })}
     </View>
   );
 
@@ -200,21 +205,37 @@ export function LetterDocument({ data, design, photo, title }: LetterPdfInput) {
               : {}),
           }}
         >
+          {data.recipient ? (
+            <View
+              style={{
+                alignSelf: "flex-start",
+                minWidth: "46%",
+                borderLeftWidth: p(0.6),
+                borderLeftColor: color,
+                borderLeftStyle: "solid",
+                backgroundColor: tint(color, 0.93),
+                paddingVertical: p(1.6),
+                paddingHorizontal: p(2.6),
+                marginBottom: p(1.5),
+                lineHeight: 1.4,
+              }}
+            >
+              <Text style={{ fontFamily: "Helvetica-Bold", lineHeight: 1.4 }}>
+                {data.recipient.to}
+              </Text>
+              <Text style={{ lineHeight: 1.4 }}>{data.recipient.detail}</Text>
+            </View>
+          ) : null}
           <Text
             style={{
               fontSize: p(U.date),
-              color: "#52606D",
+              color,
               textAlign: "right",
-              marginBottom: p(3),
+              marginBottom: p(data.recipient ? 3 : 4),
             }}
           >
             {data.date}
           </Text>
-          {data.recipient ? (
-            <Text style={{ fontFamily: "Helvetica-Bold", marginBottom: p(2.5) }}>
-              {data.recipient}
-            </Text>
-          ) : null}
           <View
             style={{
               flexDirection: "row",
@@ -228,7 +249,7 @@ export function LetterDocument({ data, design, photo, title }: LetterPdfInput) {
                 color,
                 letterSpacing: p(U.heading) * 0.12,
                 textTransform: "uppercase",
-                marginBottom: p(data.subject ? 1.6 : 3.2),
+                marginBottom: p(data.subject ? 2 : 3.6),
                 ...(layout.heading === "underline"
                   ? {
                       flexGrow: 1,
@@ -252,12 +273,12 @@ export function LetterDocument({ data, design, photo, title }: LetterPdfInput) {
             </Text>
           </View>
           {data.subject ? (
-            <Text style={{ fontFamily: "Helvetica-Bold", marginBottom: p(3.2) }}>
-              {data.subject}
+            <Text style={{ fontFamily: "Helvetica-Bold", marginBottom: p(3.6) }}>
+              <Text style={{ color }}>{data.subjectLabel}</Text> {data.subject}
             </Text>
           ) : null}
           {paragraphsOf(data.text).map((paragraph, index) => (
-            <Text key={index} style={{ marginBottom: p(U.gap) }}>
+            <Text key={index} style={{ marginBottom: p(U.gap), textAlign: "justify" }}>
               {paragraph}
             </Text>
           ))}

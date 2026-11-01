@@ -2,7 +2,39 @@
 /* eslint-disable @next/next/no-img-element -- course covers are uploaded files or YouTube thumbnails */
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { useState, type ReactNode } from "react";
 import type { CourseRow } from "./data";
+
+/**
+ * A long text of a course or a lesson, folded to its first lines with « Lire la suite »
+ * (Ephraïm, 01/11/2026). A short text is shown whole, without the link.
+ */
+export function ReadMore({
+  long,
+  children,
+}: {
+  /** Whether the text is long enough to fold. */
+  long: boolean;
+  children: (open: boolean) => ReactNode;
+}) {
+  const t = useTranslations("phoneLearn");
+  const [open, setOpen] = useState(false);
+  if (!long) return <>{children(true)}</>;
+  return (
+    <>
+      {children(open)}
+      <button
+        type="button"
+        className="nb-fo-suite"
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
+      >
+        {open ? t("readLess") : t("readMore")}
+      </button>
+    </>
+  );
+}
 
 /** The cover the admin chose, filling its frame (the colour and initials stay underneath). */
 export function CourseCover({ src }: { src: string | null | undefined }) {

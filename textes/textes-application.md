@@ -2661,12 +2661,25 @@ Conventions :
 | `apply.cv.profile` | Mon profil Jumanly |
 | `apply.cv.profileLine` | Sans CV joint : le recruteur voit votre profil. |
 | `apply.cv.create` | Créer un CV depuis mon profil |
+| `apply.cv.adaptDone` | Orbi a adapté votre CV à cette offre : il est choisi ci-dessous. Relisez-le dans Carrière si besoin. |
+| `apply.choice.title` | Comment voulez-vous postuler ? |
+| `apply.choice.existant` | Avec un CV existant |
+| `apply.choice.existantLine` | Choisissez le CV à envoyer parmi les vôtres. |
+| `apply.choice.existantNone` | Pas encore de CV : vous pourrez envoyer votre profil Jumanly. |
+| `apply.choice.adapter` | Adapter mon CV à cette offre |
+| `apply.choice.adapterLine` | Orbi vous aide : il prépare une copie de votre CV pour cette offre. |
+| `apply.choice.locked` | Avec la formule {plan} |
+| `apply.choice.importer` | Importer un CV |
+| `apply.choice.importerLine` | Un fichier que vous avez déjà : Orbi le lit pour vous. |
+| `apply.choice.creer` | Créer un CV |
+| `apply.choice.creerLine` | À partir de votre profil, en quelques minutes. |
 | `apply.docs.title` | Ajouter une lettre ou des documents |
 | `apply.docs.letter` | Lettre de motivation |
 | `apply.docs.words` | {count, plural, one {# mot} other {# mots}} |
 | `apply.docs.edit` | Modifier la lettre |
 | `apply.docs.remove` | Retirer {name} |
 | `apply.docs.add` | Ajouter un document |
+| `apply.docs.addLine` | Diplôme, attestation, lettre : ce que vous avez déjà. |
 | `apply.docs.certificateLine` | Obtenue le {date} |
 | `apply.docs.documentLine` | Enregistré le {date} |
 | `apply.docs.orbi.label` | Orbi peut aider |
@@ -9060,6 +9073,7 @@ Conventions :
 | `phoneExplorer.offer.unsavedToast` | Offre retirée des enregistrées. |
 | `phoneExplorer.offer.saveError` | L’offre n’a pas pu être enregistrée. Réessayez. |
 | `phoneExplorer.offer.apply` | Postuler |
+| `phoneExplorer.offer.resume` | Reprendre ma candidature |
 | `phoneExplorer.offer.applied` | Candidature envoyée |
 | `phoneExplorer.offer.appliedOpen` | Voir ma candidature |
 | `phoneExplorer.offer.closed` | Offre fermée |
@@ -10240,9 +10254,12 @@ Conventions :
 | `phoneCareer.form.bannerError` | Cette image n’a pas pu être enregistrée. Essayez une image JPEG ou PNG. |
 | `phoneCareer.form.name` | Nom affiché |
 | `phoneCareer.form.handle` | Nom d’utilisateur |
-| `phoneCareer.form.handleHint` | Lettres, chiffres et points, de 3 à 30 caractères. Il s’affiche sous votre nom : @prenom.nom. |
+| `phoneCareer.form.handleHint` | 3 à 30 caractères : lettres, chiffres et points. |
 | `phoneCareer.form.socials` | Réseaux |
-| `phoneCareer.form.socialsHint` | Seuls les réseaux remplis s’affichent sur votre profil. |
+| `phoneCareer.form.socialsHint` | Seuls les réseaux remplis s’affichent. |
+| `phoneCareer.form.socialClear` | Effacer {network} |
+| `phoneCareer.form.sectionIdentity` | Identité |
+| `phoneCareer.form.sectionVisibility` | Visibilité |
 | `phoneCareer.form.social.linkedin` | LinkedIn |
 | `phoneCareer.form.social.instagram` | Instagram |
 | `phoneCareer.form.social.x` | X (Twitter) |
@@ -10256,10 +10273,10 @@ Conventions :
 | `phoneCareer.form.showEmail` | Afficher mon e-mail sur mon profil |
 | `phoneCareer.form.headline` | Titre professionnel |
 | `phoneCareer.form.headlinePlaceholder` | Ex. : Social manager |
-| `phoneCareer.form.headlineHint` | Il s’affiche dans votre bannière et sous votre nom : c’est ce que voient les recruteurs, vos connexions et les offres où vous candidatez. |
+| `phoneCareer.form.headlineHint` | Affiché sous votre nom et dans votre bannière. |
 | `phoneCareer.form.cap` | Mon Cap |
 | `phoneCareer.form.capPlaceholder` | Ex. : Responsable marketing digital |
-| `phoneCareer.form.capHint` | Le métier vers lequel vous allez. Choisi à l’inscription, il change quand votre projet évolue. La bannière l’affiche tant que vous n’avez pas de titre professionnel. |
+| `phoneCareer.form.capHint` | Le métier que vous visez. |
 | `phoneCareer.form.city` | Ville |
 | `phoneCareer.form.improve` | Améliorer |
 | `phoneCareer.form.availability` | Disponibilité |
@@ -10268,8 +10285,7 @@ Conventions :
 | `phoneCareer.form.availabilityOption.not_looking` | Pas en recherche |
 | `phoneCareer.form.accountSettings` | Paramètres du compte |
 | `phoneCareer.form.aboutTitle` | À propos |
-| `phoneCareer.form.aboutHint` | Votre bio : un titre et quelques lignes sur vous |
-| `phoneCareer.form.cvHint` | Chaque CV a son propre titre et sa bio de candidature : les changer dans un CV ne touche pas à votre profil. |
+| `phoneCareer.form.aboutHint` | Un titre et quelques lignes sur vous |
 | `phoneCareer.form.aboutHeading` | Titre |
 | `phoneCareer.form.aboutHeadingPlaceholder` | Ex. : Ce que je fais |
 | `phoneCareer.form.aboutLabel` | Votre texte |
@@ -10338,10 +10354,8 @@ Conventions :
 | `phoneCareer.form.learningRemove` | Supprimer le point {n} |
 | `phoneCareer.form.learningsMax` | {max} points au plus. |
 | `phoneCareer.form.learningsCount` | {count, plural, =0 {Aucun point rempli} one {# point rempli} other {# points remplis}} |
-| `phoneCareer.form.schoolLogo` | Logo de l’école |
-| `phoneCareer.form.schoolLogoHint` | Facultatif. Il s’affiche à la place de l’icône, à côté du diplôme. |
-| `phoneCareer.form.organizationLogo` | Logo de l’organisme |
-| `phoneCareer.form.organizationLogoHint` | Facultatif. Il s’affiche à la place de l’icône, à côté du certificat. |
+| `phoneCareer.form.institutionLogo` | Logo de l’institution |
+| `phoneCareer.form.optionalParen` | (facultatif) |
 | `phoneCareer.form.experienceOrbi` | Orbi corrige les fautes et met vos résultats en valeur. |
 | `phoneCareer.form.experienceOrbiNew` | Écrivez en vrac, Orbi en fait des réalisations claires. |
 | `phoneCareer.form.experienceDelete` | Supprimer cette expérience |
@@ -10453,6 +10467,16 @@ Conventions :
 | `phoneCareer.sheets.languageLevelFluent` | Courant |
 | `phoneCareer.sheets.languageLevelNative` | Langue maternelle |
 | `phoneCareer.sheets.languageLevelMissing` | Choisissez votre niveau pour chaque langue. |
+| `phoneCareer.sheets.languageSearch` | Tapez une langue, ex. : Lingala |
+| `phoneCareer.sheets.languageNone` | Aucune langue trouvée. Vérifiez l’orthographe. |
+| `phoneCareer.sheets.languageAddAnother` | Ajouter une autre langue |
+| `phoneCareer.sheets.languageChange` | {language} : changer le niveau |
+| `phoneCareer.sheets.languageRemove` | Retirer {language} |
+| `phoneCareer.skillAdd` | Ajouter une compétence |
+| `phoneCareer.skillRemoveMode` | Retirer |
+| `phoneCareer.skillRemoveDone` | Terminé |
+| `phoneCareer.skillRemove` | Retirer {skill} |
+| `phoneCareer.skillRemoveError` | La compétence n’a pas pu être retirée. Réessayez. |
 | `phoneCareer.reglages.back` | Retour |
 | `phoneCareer.reglages.close` | Fermer |
 | `phoneCareer.reglages.cancel` | Annuler |
@@ -10805,7 +10829,9 @@ Conventions :
 | `letterModel.heading` | Lettre de motivation |
 | `letterModel.date` | Le {date} |
 | `letterModel.recipient` | À l’attention de {company} |
-| `letterModel.subject` | Objet : candidature au poste de {title} |
+| `letterModel.datePlace` | {city}, le {date} |
+| `letterModel.subjectLabel` | Objet : |
+| `letterModel.subject` | Candidature au poste de {title} |
 | `letterModel.pick.title` | Le modèle visuel |
 | `letterModel.pick.lead` | Définissez le modèle visuel de votre lettre : choisissez un modèle, une couleur et votre photo. |
 | `letterModel.pick.color` | Couleur |
@@ -10837,7 +10863,7 @@ Conventions :
 | `letterModel.color.prune` | Prune |
 | `letterModel.color.violet` | Violet |
 | `letterModel.color.encre` | Noir encre |
-| `letterModel.preview.title` | Aperçu de votre lettre |
+| `letterModel.preview.title` | Aperçu |
 | `letterModel.preview.editText` | Texte |
 | `letterModel.preview.other` | Choisir un autre modèle |
 | `letterModel.preview.save` | Enregistrer cette lettre |
@@ -11214,8 +11240,16 @@ Conventions :
 | `phoneLearn.continueLine` | {lesson} · {title} · {duration} |
 | `phoneLearn.empty.title` | Aucun cours en cours |
 | `phoneLearn.empty.text` | Choisissez un cours pour vos offres ci-dessous : la première leçon prend quelques minutes. |
-| `phoneLearn.advice` | {course} est demandé dans {count, plural, one {# de vos offres} other {# de vos offres}}. Il vous reste {left, plural, =0 {le quiz final} one {# leçon} other {# leçons}}. |
-| `phoneLearn.adviceNoOffer` | Il vous reste {left, plural, =0 {le quiz final} one {# leçon} other {# leçons}} pour finir {course}. |
+| `phoneLearn.advice` | {course} est demandé dans {count, plural, one {# de vos offres} other {# de vos offres}}. |
+| `phoneLearn.adviceLeft` | {left, plural, =0 {Plus que le quiz final} one {Plus qu’une leçon} other {Plus que # leçons}} pour finir ce cours. |
+| `phoneLearn.adviceNoOffer` | {left, plural, =0 {Plus que le quiz final} one {Plus qu’une leçon} other {Plus que # leçons}} pour |
+| `phoneLearn.adviceEnd` | finir ce cours. |
+| `phoneLearn.resume.title` | Reprendre |
+| `phoneLearn.resume.action` | Reprendre |
+| `phoneLearn.resume.label` | Reprendre {course} |
+| `phoneLearn.resume.left` | {duration} restantes |
+| `phoneLearn.readMore` | Lire la suite |
+| `phoneLearn.readLess` | Réduire |
 | `phoneLearn.why` | Pourquoi ? |
 | `phoneLearn.forOffers` | Pour vos offres |
 | `phoneLearn.seeAll` | Tout voir |
@@ -11315,6 +11349,15 @@ Conventions :
 | `phoneLearn.lesson.start` | 0:00 |
 | `phoneLearn.lesson.lineCaptions` | {duration} · sous-titres en français |
 | `phoneLearn.lesson.about` | À propos de cette leçon |
+| `phoneLearn.lesson.with` | Avec |
+| `phoneLearn.lesson.teacher` | Enseigne ce cours |
+| `phoneLearn.lesson.duration` | Durée : {duration} |
+| `phoneLearn.lesson.captionsChip` | Sous-titres FR |
+| `phoneLearn.lesson.orbiChip` | Orbi |
+| `phoneLearn.lesson.askOrbi` | Demander à Orbi d’expliquer cette leçon |
+| `phoneLearn.lesson.summary` | Résumé |
+| `phoneLearn.lesson.notions` | Notions clés |
+| `phoneLearn.lesson.notionNumber` | {n}. |
 | `phoneLearn.lesson.takeaways` | À retenir |
 | `phoneLearn.lesson.quick` | Question rapide |
 | `phoneLearn.lesson.right` | Bonne réponse. |
@@ -11844,50 +11887,6 @@ Conventions :
 | `phoneChat.menu.unblock` | Débloquer |
 | `phoneChat.menu.unblockTitle` | Débloquer {name} ? |
 | `phoneChat.menu.unblockText` | {name} pourra de nouveau vous écrire. |
-| `phoneChat.call.button` | Appeler {name} en vidéo |
-| `phoneChat.call.ask` | Souhaitez-vous appeler {name} en vidéo ? |
-| `phoneChat.call.noteOnline` | {name} est en ligne. L’appel n’est pas enregistré. |
-| `phoneChat.call.note` | L’appel n’est pas enregistré. |
-| `phoneChat.call.no` | Non |
-| `phoneChat.call.yes` | Oui, appeler |
-| `phoneChat.call.label` | Appel vidéo avec {name} |
-| `phoneChat.call.encrypted` | Chiffré de bout en bout |
-| `phoneChat.call.you` | Vous |
-| `phoneChat.call.ringing` | Appel en cours |
-| `phoneChat.call.timer` | Durée de l’appel |
-| `phoneChat.call.micro` | Micro |
-| `phoneChat.call.camera` | Caméra |
-| `phoneChat.call.speaker` | Haut-parleur |
-| `phoneChat.call.hangUp` | Raccrocher |
-| `phoneChat.call.ended` | Appel terminé · {duration} |
-| `phoneChat.call.cancelled` | Appel annulé |
-| `phoneChat.call.failed` | L’appel n’a pas pu démarrer. Réessayez dans un instant. |
-| `phoneChat.call.context` | Entretien · {job} |
-| `phoneChat.call.line` | Appel vidéo · {duration} |
-| `phoneChat.call.lineMissed` | Appel vidéo sans réponse |
-| `phoneChat.call.buttonAudio` | Appeler {name} en audio |
-| `phoneChat.call.askAudio` | Souhaitez-vous appeler {name} en audio ? |
-| `phoneChat.call.labelAudio` | Appel audio avec {name} |
-| `phoneChat.call.lineAudio` | Appel audio · {duration} |
-| `phoneChat.call.lineMissedAudio` | Appel audio sans réponse |
-| `phoneChat.call.connecting` | Connexion |
-| `phoneChat.call.declined` | {name} n’a pas répondu. |
-| `phoneChat.call.denied` | Autorisez le micro (et la caméra pour la vidéo) dans votre navigateur pour appeler. |
-| `phoneChat.call.unsupported` | Ce navigateur ne permet pas d’appeler. Essayez avec Chrome, Safari ou Firefox à jour. |
-| `phoneChat.call.lost` | La connexion a été coupée. Vérifiez votre réseau et rappelez. |
-| `phoneChat.call.theirImage` | Image de {name} |
-| `phoneChat.call.incoming.title` | {name} vous appelle |
-| `phoneChat.call.incoming.video` | Appel vidéo entrant |
-| `phoneChat.call.incoming.audio` | Appel audio entrant |
-| `phoneChat.call.incoming.note` | Répondez en audio ou en vidéo. L’appel n’est pas enregistré. |
-| `phoneChat.call.incoming.refuse` | Refuser |
-| `phoneChat.call.incoming.acceptAudio` | Accepter en audio |
-| `phoneChat.call.incoming.acceptVideo` | Accepter en vidéo |
-| `phoneChat.call.incoming.audioShort` | Audio |
-| `phoneChat.call.incoming.videoShort` | Vidéo |
-| `phoneChat.duration.short` | {seconds} s |
-| `phoneChat.duration.long` | {minutes} min {seconds} s |
-| `phoneChat.duration.hours` | {hours} h {minutes} min |
 
 ### Connexions du Chat
 
@@ -16800,7 +16799,7 @@ Conventions :
 | `phoneRhCandidatures.cv.degree` | {degree}, {school} |
 | `phoneRhCandidatures.cv.year` | ({year}) |
 | `phoneRhCandidatures.cv.certificate` | {title} · attestation Jumanly |
-| `phoneRhCandidatures.cv.verified` | vérifiée |
+| `phoneRhCandidatures.cv.verified` | Vérifiée |
 | `phoneRhCandidatures.cv.declared` | déclarée |
 | `phoneRhCandidatures.answers.none` | Pas de question ni de lettre pour cette offre. |
 | `phoneRhCandidatures.answers.yes` | Oui |

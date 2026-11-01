@@ -471,3 +471,93 @@
   font-size: 14px;
   color: var(--texte);
 }
+
+/* Premier écran de « Postuler » (01/11/2026) : comment postuler, quatre choix. */
+.t-ap-choix {
+  min-height: 72px;
+}
+.t-ap-choix .t-cases,
+.t-ap-choix-ic {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+}
+/* Orbi, nouvelle identité : l'étoile sur un dégradé sombre. */
+.t-ap-choix-ic.t-orbi {
+  color: var(--lime);
+  background: linear-gradient(135deg, #0f3f37 0%, #1d5c4f 55%, #2b3f6b 100%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+.t-ap-choix[data-off] {
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* « Ajouter un document » bien en vue (01/11/2026) : une carte, l'icône pulse doucement. */
+.t-ap-ajout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 22px;
+  border: 1.5px dashed var(--sapin);
+  background: transparent;
+  color: var(--texte);
+  text-align: left;
+  cursor: pointer;
+}
+.sombre .t-ap-ajout {
+  border-color: var(--lime);
+}
+.t-ap-ajout .t-t b {
+  display: block;
+  font-size: 15px;
+}
+.t-ap-ajout .t-t span {
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-ap-ajout-ic {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--lime);
+  color: var(--sapin);
+  animation: t-ap-pulse 2.4s ease-out infinite;
+}
+@keyframes t-ap-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgb(166 242 107 / 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgb(166 242 107 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(166 242 107 / 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-ap-ajout-ic {
+    animation: none;
+  }
+}
+/* Carte Orbi de l'étape 2 : dégradé sombre, l'étoile d'Orbi. */
+.t-carte.t-ap-orbi {
+  border-radius: 22px;
+  color: #f3f6f2;
+  background: linear-gradient(135deg, #0c2f29 0%, #164a40 55%, #24365e 100%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+.t-ap-orbi.t-sugg .t-t small {
+  color: var(--lime);
+}
+.t-ap-orbi .t-ap-choix-ic.t-orbi {
+  background: rgb(255 255 255 / 0.08);
+}

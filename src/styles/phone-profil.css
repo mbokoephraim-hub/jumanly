@@ -971,3 +971,48 @@ button.nb-pf-rb,
   font-weight: 700;
   color: var(--nb-creme);
 }
+
+/* « Ajouter une compétence » / « Retirer » under the skills (31/10/2026). */
+.nb-pf-sk[data-retrait] {
+  padding-right: 4px;
+}
+.nb-pf-sk-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  margin-left: 2px;
+  padding: 0;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(var(--nb-voile), 0.12);
+  color: inherit;
+}
+.nb-pf-sk-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 20px 0;
+}
+.nb-pf-sk-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--nb-voile), 0.18);
+  background: none;
+  color: var(--nb-creme);
+  font-size: 13px;
+  font-weight: 700;
+}
+.nb-pf-sk-actions button[data-plein] {
+  background: var(--nb-lime);
+  border-color: transparent;
+  color: var(--nb-sur-lime, #0b1a1f);
+}
+.nb-pf-sk-actions button[aria-pressed="true"] {
+  border-color: var(--nb-lime);
+}

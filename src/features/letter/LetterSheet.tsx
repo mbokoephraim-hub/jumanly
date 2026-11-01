@@ -7,6 +7,7 @@ import type { CSSProperties } from "react";
 import {
   colorHex,
   letterLayouts,
+  nameParts,
   paragraphsOf,
   tint,
   U,
@@ -29,6 +30,9 @@ export function LetterSheet({
   const layout = letterLayouts[design.template];
   const color = colorHex(design.color);
   const light = tint(color, 0.88);
+  // On the band: the family name and the photo ring in a light shade of the colour (lettre modèle).
+  const accent = tint(color, 0.62);
+  const name = nameParts(data.name);
   const withPhoto = design.photo !== "aucune";
   const size = layout.photoSize;
   const strip = layout.coord === "strip-white" || layout.coord === "strip-tint";
@@ -40,7 +44,7 @@ export function LetterSheet({
         width: u(size),
         height: u(size),
         borderRadius: design.photo === "rond" ? "50%" : u(2),
-        border: `${u(0.7)} solid #fff`,
+        border: `${u(0.6)} solid ${accent}`,
         fontSize: u(size * 0.36),
         background: tint(color, 0.75),
         color,
@@ -63,13 +67,16 @@ export function LetterSheet({
           fontSize: u(U.coord),
           color: onColor ? "rgba(255,255,255,0.92)" : color,
           flexDirection: layout.coord === "column" ? "column" : "row",
-          gap: layout.coord === "column" ? u(0.6) : `${u(0.6)} ${u(3)}`,
+          gap: layout.coord === "column" ? u(0.6) : `${u(0.4)} 0`,
           justifyContent: layout.center ? "center" : "flex-start",
           ...style,
         }}
       >
-        {data.contacts.map((item) => (
-          <li key={item}>{item}</li>
+        {data.contacts.map((item, index) => (
+          <li key={item}>
+            {index > 0 && layout.coord !== "column" ? <span aria-hidden>{"\u00a0· "}</span> : null}
+            {item}
+          </li>
         ))}
       </ul>
     ) : null;
@@ -83,14 +90,15 @@ export function LetterSheet({
       }}
     >
       <p className="lm-nom" style={{ fontSize: u(U.name) }}>
-        {data.name}
+        {name.first}
+        {name.last ? <span style={{ color: accent }}> {name.last}</span> : null}
       </p>
       {data.headline && (
         <p className="lm-titre" style={{ fontSize: u(U.headline), marginTop: u(0.8) }}>
           {data.headline}
         </p>
       )}
-      {!strip && contacts(true, { marginTop: u(2.2) })}
+      {!strip && contacts(true, { marginTop: u(1.6) })}
     </div>
   );
 
@@ -144,21 +152,33 @@ export function LetterSheet({
             ...(layout.rule ? { borderLeft: `${u(0.6)} solid ${color}`, paddingLeft: u(4) } : null),
           }}
         >
-          <p className="lm-date" style={{ fontSize: u(U.date), marginBottom: u(3) }}>
+          {data.recipient && (
+            <div
+              className="lm-dest"
+              style={{
+                borderLeft: `${u(0.6)} solid ${color}`,
+                background: tint(color, 0.93),
+                padding: `${u(1.6)} ${u(2.6)}`,
+                marginBottom: u(1.5),
+              }}
+            >
+              <b>{data.recipient.to}</b>
+              <span>{data.recipient.detail}</span>
+            </div>
+          )}
+          <p
+            className="lm-date"
+            style={{ fontSize: u(U.date), color, marginBottom: u(data.recipient ? 3 : 4) }}
+          >
             {data.date}
           </p>
-          {data.recipient && (
-            <p className="lm-dest" style={{ marginBottom: u(2.5) }}>
-              {data.recipient}
-            </p>
-          )}
           <h2
             className="lm-h"
             style={{
               fontSize: u(U.heading),
               color,
               textAlign: layout.center ? "center" : "left",
-              marginBottom: u(data.subject ? 1.6 : 3.2),
+              marginBottom: u(data.subject ? 2 : 3.6),
               ...(layout.heading === "underline"
                 ? { paddingBottom: u(1.2), borderBottom: `${u(0.3)} solid ${light}` }
                 : null),
@@ -175,8 +195,8 @@ export function LetterSheet({
             {data.heading}
           </h2>
           {data.subject && (
-            <p className="lm-objet" style={{ marginBottom: u(3.2) }}>
-              {data.subject}
+            <p className="lm-objet" style={{ marginBottom: u(3.6) }}>
+              <span style={{ color }}>{data.subjectLabel}</span> {data.subject}
             </p>
           )}
           {paragraphsOf(data.text).map((paragraph, index) => (

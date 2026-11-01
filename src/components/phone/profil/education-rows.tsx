@@ -1,5 +1,6 @@
 import "@/styles/phone-verification.css";
 import Link from "next/link";
+import { GoldVerifiedBadge } from "../badge-or";
 import { PhoneIcon } from "../icon";
 
 /** A diploma or a certificate as the profiles show it. */
@@ -21,25 +22,9 @@ export type EducationRow = {
   jumanly?: boolean;
 };
 
-/** « Vérifié »: a lime check and the word, beside an experience or a certificate. */
+/** « Vérifié »: a gold badge beside an experience or a certificate (31/10/2026). */
 export function ItemVerifiedMark({ label, help }: { label: string; help: string }) {
-  return (
-    <span className="nb-vf-ok" title={help}>
-      <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden>
-        <circle cx="12" cy="12" r="10" fill="currentColor" />
-        <path
-          d="m7.5 12.5 3 3 6-6.5"
-          fill="none"
-          stroke="#0B1A1F"
-          strokeWidth="2.6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-      {label}
-      <span className="sr-only">{help}</span>
-    </span>
-  );
+  return <GoldVerifiedBadge label={label} help={help} />;
 }
 
 /**

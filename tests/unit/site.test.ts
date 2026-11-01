@@ -5,7 +5,7 @@ import { compareRows } from "@/config/pricing-compare";
 import { parseConsent, readConsentCookie, serializeConsent } from "@/lib/consent";
 import { durationParts } from "@/lib/format";
 import { hasPlaceholder, withoutPlaceholders } from "@/lib/placeholders";
-import { isSafeInternalPath, loginHref, signupHref, signupOpen } from "@/lib/signup";
+import { isSafeInternalPath, joinHref, loginHref, signupHref } from "@/lib/signup";
 import {
   contactSchema,
   partnerContactSchema,
@@ -79,13 +79,11 @@ describe("liens d'inscription", () => {
       if (plan.family === "partner") expect(href).toBe("/partenaires#contact");
       else if (!plan.isPurchasable && plan.priceCents === null)
         expect(href).toBe("/contact?sujet=devis");
-      else if (signupOpen) {
-        expect(href).toContain("/inscription?");
-        expect(href).toContain(`profil=${plan.family}`);
-        expect(href).toContain(`forfait=${plan.code}`);
-      } else {
-        // Sign-up closed (no NEXT_PUBLIC_SIGNUP_OPEN): every plan leads to the waitlist.
-        expect(href).toContain("/liste-attente?profil=");
+      else {
+        // Inscriptions fermées : la liste d'attente (src/lib/signup.ts) ; ouvertes : l'inscription.
+        expect(href).toBe(joinHref({ profil: plan.family, forfait: plan.code }));
+        expect(href).toMatch(/^\/(inscription|liste-attente)\?/);
+        expect(href).toContain(`profil=`);
       }
     }
   });

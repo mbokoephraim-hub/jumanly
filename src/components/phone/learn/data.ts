@@ -60,9 +60,12 @@ export type FormationView = {
     title: string;
     line: string;
     lesson: string;
+    /** « 14 min restantes » of the lesson to resume. */
+    left: string;
     progress: number;
   } | null;
-  advice: { text: string } | null;
+  /** Orbi's line in the « Reprendre » card, on two lines (Ephraïm, 01/11/2026). */
+  advice: { lead: string; end: string } | null;
   chips: string[];
   forOffers: CourseCard[];
   interview: { title: string; line: string | null; href: string };
@@ -167,6 +170,9 @@ export async function formationView(
         title: current.next?.title ?? "",
         duration: duration(Math.max(1, Math.round((current.next?.durationSec ?? 60) / 60))),
       }),
+      left: t("resume.left", {
+        duration: duration(Math.max(1, Math.round((current.next?.durationSec ?? 60) / 60))),
+      }),
       progress: current.progress,
     };
   }
@@ -174,14 +180,11 @@ export async function formationView(
   const advice =
     current && home.advice
       ? {
-          text: t("advice", {
-            course: shortTitle(current.title),
-            count: home.advice.offers,
-            left,
-          }),
+          lead: t("advice", { course: shortTitle(current.title), count: home.advice.offers }),
+          end: t("adviceLeft", { left }),
         }
       : current
-        ? { text: t("adviceNoOffer", { course: shortTitle(current.title), left }) }
+        ? { lead: t("adviceNoOffer", { left }), end: t("adviceEnd") }
         : null;
 
   const interview = home.interview

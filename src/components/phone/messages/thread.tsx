@@ -24,14 +24,12 @@ import { PhoneBack } from "../back";
 import { PhoneIcon } from "../icon";
 import { AttachSheets, useSendError, type AttachSheet } from "./attach";
 import { MessageBubble, type Open } from "./bubble";
-import { AudioGlyph, CallConfirm, VideoCall, VideoGlyph } from "./call";
 import { PhoneCamera } from "./camera";
 import { useChatPulse, useTypingPing } from "./live";
 import { VOICE_BITS_PER_SECOND, VOICE_MAX_SECONDS, clock, voiceType } from "./media";
 import { ChatMenu, useMute, type MenuSheet } from "./menu";
 import { OrbiHelp } from "./orbi-help";
 import { Spark, Typing, WhoAvatar, WhoName } from "./parts";
-import type { CallMode } from "./rtc";
 import type { MessageView, ThreadView } from "./types";
 import { MediaViewer } from "./viewer";
 
@@ -167,8 +165,6 @@ export function PhoneThread({ view }: { view: ThreadView }) {
   const [menu, setMenu] = useState<MenuSheet>(null);
   const [helping, setHelping] = useState(false);
   const [camera, setCamera] = useState(false);
-  const [asking, setAsking] = useState<CallMode | null>(null);
-  const [calling, setCalling] = useState<CallMode | null>(null);
   const [open, setOpen] = useState<Open | null>(null);
   const [searching, setSearching] = useState(false);
   const [rq, setRq] = useState("");
@@ -180,7 +176,7 @@ export function PhoneThread({ view }: { view: ThreadView }) {
   const [pendingBlock, startBlock] = useTransition();
   const mute = useMute(view);
   const ping = useTypingPing(view.id);
-  const live = useChatPulse({ conversationId: view.id, every: 3_000, active: calling === null });
+  const live = useChatPulse({ conversationId: view.id, every: 3_000, active: true });
   // The messages read with the page; the ones arriving after rise gently.
   const [seen] = useState(() => new Set(view.messages.map((message) => message.id)));
 
@@ -367,26 +363,6 @@ export function PhoneThread({ view }: { view: ThreadView }) {
                 </span>
               </span>
             )}
-            {view.canCall && !view.blockedByMe ? (
-              <>
-                <button
-                  type="button"
-                  className="nb-ch-rb"
-                  aria-label={t("call.buttonAudio", { name: who.first })}
-                  onClick={() => setAsking("audio")}
-                >
-                  <AudioGlyph />
-                </button>
-                <button
-                  type="button"
-                  className="nb-ch-rb"
-                  aria-label={t("call.button", { name: who.first })}
-                  onClick={() => setAsking("video")}
-                >
-                  <VideoGlyph />
-                </button>
-              </>
-            ) : null}
             <button
               type="button"
               className="nb-ch-rb"
@@ -709,18 +685,6 @@ export function PhoneThread({ view }: { view: ThreadView }) {
         forwardTo={view.forwardTo}
         onClose={() => setOpen(null)}
       />
-      <CallConfirm
-        view={view}
-        open={asking !== null}
-        mode={asking ?? "video"}
-        online={online}
-        onClose={() => setAsking(null)}
-        onCall={() => {
-          setCalling(asking ?? "video");
-          setAsking(null);
-        }}
-      />
-      {calling ? <VideoCall view={view} mode={calling} onEnd={() => setCalling(null)} /> : null}
       {camera ? (
         <PhoneCamera
           conversationId={view.id}

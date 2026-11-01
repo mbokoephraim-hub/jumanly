@@ -17,7 +17,8 @@ import { PhoneBack } from "../back";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { askOrbi } from "../orbi-bus";
 import { PhoneSheet } from "../sheet";
-import { CourseCover } from "./parts";
+import type { LessonNotion } from "@/server/services/lesson-notes";
+import { CourseCover, ReadMore } from "./parts";
 
 export type LessonView = {
   id: string;
@@ -29,7 +30,12 @@ export type LessonView = {
   position: string;
   percent: number;
   title: string;
-  line: string;
+  /** « 14 min ». */
+  duration: string;
+  /** The lesson has French subtitles (a transcript). */
+  captions: boolean;
+  /** Who teaches the course (Course.instructor). */
+  instructor: { name: string; initials: string } | null;
   tone: number;
   video: {
     src: string;
@@ -45,8 +51,9 @@ export type LessonView = {
   lead: string | null;
   /** The course's cover, shown over the video until it plays. */
   cover: string | null;
-  /** A video lesson: its text, or the course's description, under the video. */
-  about: string | null;
+  /** A video lesson: « Résumé » and « Notions clés » under the video (lesson-notes.ts). */
+  summary: string | null;
+  notions: LessonNotion[];
   takeaways: string[];
   check: { question: string; options: string[] } | null;
   kind: "video" | "text" | "exercise" | "quiz" | "resource";
@@ -168,13 +175,12 @@ export function PhoneLesson({ view }: { view: LessonView }) {
   return (
     <div className="nb-page nb-fo nb-fo-lecon-p">
       <header className="nb-barre nb-ex-barre">
-        <PhoneBack
-          fallback={view.courseHref}
-          label={view.courseShort}
-          text={view.courseShort}
-          history={false}
-        />
-        <b className="nb-fo-pos">{view.position}</b>
+        <PhoneBack fallback={view.courseHref} label={view.courseShort} history={false} />
+        {/* Two lines that never wrap: the course small, the position under it (01/11/2026). */}
+        <span className="nb-fo-pos">
+          <small>{view.courseShort}</small>
+          <b>{view.position}</b>
+        </span>
         <button
           type="button"
           className="nb-fo-plus"
@@ -200,7 +206,8 @@ export function PhoneLesson({ view }: { view: LessonView }) {
           >
             <CourseCover src={view.cover} />
             <span className="nb-fo-play" aria-hidden>
-              <PhoneIcon name="lecture" size={26} />
+              <PhoneIcon name="lecture" size={18} fill="currentColor" />
+              {t("lesson.play")}
             </span>
           </button>
         ) : (
@@ -240,12 +247,8 @@ export function PhoneLesson({ view }: { view: LessonView }) {
           >
             {view.cover ? <CourseCover src={view.cover} /> : <LessonArt />}
             <span className="nb-fo-play" aria-hidden>
-              <PhoneIcon name="lecture" size={26} />
-            </span>
-            <span className="nb-fo-temps" aria-hidden>
-              <span>{t("lesson.start")}</span>
-              <span className="nb-fo-piste" />
-              <span>{view.video.length}</span>
+              <PhoneIcon name="lecture" size={18} fill="currentColor" />
+              {t("lesson.play")}
             </span>
           </button>
         )
@@ -255,21 +258,94 @@ export function PhoneLesson({ view }: { view: LessonView }) {
         </div>
       )}
 
-      <div className="nb-fo-bloc">
+      <div className="nb-fo-bloc" data-sans-filet="" data-tete="">
         <h1 className="nb-fo-titre" data-petit="">
           {view.title}
         </h1>
-        <p className="nb-meta nb-fo-sous">{view.line}</p>
+        {view.instructor ? (
+          <p className="nb-fo-prof">
+            <span className="nb-fo-prof-av" aria-hidden>
+              {view.instructor.initials}
+            </span>
+            <span>
+              {t("lesson.with")} <b>{view.instructor.name}</b>
+              <small className="nb-meta">{t("lesson.teacher")}</small>
+            </span>
+          </p>
+        ) : null}
+        {/* The duration, the subtitles and Orbi on one line, with the menu's icons (01/11/2026). */}
+        <div className="nb-fo-puces">
+          <span
+            className="nb-fo-puce"
+            aria-label={t("lesson.duration", { duration: view.duration })}
+          >
+            <PhoneIcon name="horloge" size={15} stroke={2} />
+            {view.duration}
+          </span>
+          {view.captions ? (
+            <span className="nb-fo-puce">
+              <PhoneIcon name="sousTitres" size={15} stroke={2} />
+              {t("lesson.captionsChip")}
+            </span>
+          ) : null}
+          {view.kind !== "quiz" ? (
+            <button
+              type="button"
+              className="nb-fo-puce"
+              data-orbi=""
+              aria-label={t("lesson.askOrbi")}
+              onClick={() =>
+                askOrbi(`${t("lesson.explain", { lesson: view.title })} (${view.context})`)
+              }
+            >
+              <OrbiDisc size={18} />
+              {t("lesson.orbiChip")}
+            </button>
+          ) : null}
+        </div>
         {view.lead ? <p className="nb-fo-texte">{view.lead}</p> : null}
       </div>
 
-      {view.about ? (
-        <section className="nb-fo-bloc" aria-labelledby="fo-apropos">
-          <h2 id="fo-apropos">{t("lesson.about")}</h2>
-          <p className="nb-fo-texte" data-paragraphes="">
-            {view.about}
-          </p>
-        </section>
+      {view.summary || view.notions.length > 0 ? (
+        <ReadMore long={(view.summary?.length ?? 0) > 260 || view.notions.length > 3}>
+          {(open) => (
+            <>
+              {view.summary ? (
+                <section className="nb-fo-bloc" aria-labelledby="fo-resume">
+                  <h2 id="fo-resume">{t("lesson.summary")}</h2>
+                  <p
+                    className="nb-fo-texte"
+                    data-paragraphes=""
+                    data-replie={open ? undefined : ""}
+                  >
+                    {view.summary}
+                  </p>
+                </section>
+              ) : null}
+              {view.notions.length > 0 ? (
+                <section className="nb-fo-bloc" data-sans-filet="" aria-labelledby="fo-notions">
+                  <h2 id="fo-notions">{t("lesson.notions")}</h2>
+                  <ol className="nb-fo-notions">
+                    {(open ? view.notions : view.notions.slice(0, 3)).map((notion, index) => (
+                      <li key={`${index}-${notion.text.slice(0, 20)}`}>
+                        {notion.title ? (
+                          <h3>
+                            {t("lesson.notionNumber", { n: index + 1 })} {notion.title}
+                          </h3>
+                        ) : (
+                          <span className="nb-fo-notion-n" aria-hidden>
+                            {index + 1}
+                          </span>
+                        )}
+                        <p>{notion.text}</p>
+                      </li>
+                    ))}
+                  </ol>
+                </section>
+              ) : null}
+            </>
+          )}
+        </ReadMore>
       ) : null}
 
       {view.takeaways.length > 0 ? (
@@ -324,19 +400,6 @@ export function PhoneLesson({ view }: { view: LessonView }) {
             {t("lesson.explainAction")}
           </button>
         </section>
-      ) : view.kind !== "quiz" ? (
-        <div className="nb-fo-bloc" data-sans-filet="">
-          <button
-            type="button"
-            className="nb-fo-orbi"
-            onClick={() =>
-              askOrbi(`${t("lesson.explain", { lesson: view.title })} (${view.context})`)
-            }
-          >
-            <OrbiDisc size={24} />
-            {t("lesson.explainAction")}
-          </button>
-        </div>
       ) : null}
 
       {view.quiz ? (

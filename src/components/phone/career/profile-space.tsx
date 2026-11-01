@@ -9,8 +9,10 @@ import { showToast } from "@/components/motion/toaster";
 import type { AudienceFigures, AudiencePeriod } from "@/lib/audience";
 import {
   addSuggestedSkillsAction,
+  removeCareerSkillAction,
   setCareerAvailabilityAction,
 } from "@/server/actions/career-phone";
+import { GoldSeal } from "../badge-or";
 import { PhoneBack } from "../back";
 import type { PostView } from "../fil/data";
 import { PostCard, type PostSheet } from "../fil/post";
@@ -434,6 +436,21 @@ function ProfilePanel({
   const person = view.person;
   const add = t("add");
   const modify = t("modify");
+  // « Retirer des compétences » (Ephraïm, 31/10/2026): each skill gets its cross.
+  const [removing, setRemoving] = useState(false);
+  const [removed, setRemoved] = useState<string[]>([]);
+  const [, startRemove] = useTransition();
+  const skills = person.skills.filter((skill) => !removed.includes(skill.id));
+  const removeSkill = (skill: { id: string; name: string }) => {
+    setRemoved((before) => [...before, skill.id]);
+    startRemove(async () => {
+      const result = await removeCareerSkillAction(skill.id).catch(() => null);
+      if (!result?.ok) {
+        setRemoved((before) => before.filter((id) => id !== skill.id));
+        showToast({ message: t("skillRemoveError"), tone: "error" });
+      }
+    });
+  };
   // « Diplômes » then « Certificats » (Ephraïm, 29/10/2026): the certificates the person added,
   // then the attestations earned on Jumanly.
   const diplomas = view.educationRows.filter((item) => item.kind === "diploma");
@@ -472,7 +489,7 @@ function ProfilePanel({
           onClick: () => onSheet("competences"),
         }}
       />
-      {person.skills.length === 0 ? (
+      {skills.length === 0 ? (
         <p className="nb-pf-vide">{t("skillsEmpty")}</p>
       ) : (
         <>
@@ -499,10 +516,11 @@ function ProfilePanel({
         </>
       )}
       <ul className="nb-pf-comp">
-        {person.skills.map((skill, at) => (
+        {skills.map((skill, at) => (
           <li
-            key={skill.name}
+            key={skill.id}
             className="nb-pf-sk"
+            data-retrait={removing ? "" : undefined}
             style={{
               background: tint(skill.color, "1F"),
               borderColor: tint(skill.color, "55"),
@@ -512,28 +530,20 @@ function ProfilePanel({
           >
             <i style={{ background: skill.color }} aria-hidden />
             {skill.name}
-            {skill.verified ? (
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 24 24"
-                role="img"
-                aria-label={tp("skillVerified")}
+            {skill.verified ? <GoldSeal size={15} label={tp("skillVerified")} /> : null}
+            {removing ? (
+              <button
+                type="button"
+                className="nb-pf-sk-x"
+                aria-label={t("skillRemove", { skill: skill.name })}
+                onClick={() => removeSkill(skill)}
               >
-                <circle cx="12" cy="12" r="10" fill={skill.color} />
-                <path
-                  d="m7.5 12.5 3 3 6-6.5"
-                  fill="none"
-                  stroke="#0B1A1F"
-                  strokeWidth="2.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+                <PhoneIcon name="fermer" size={13} />
+              </button>
             ) : null}
           </li>
         ))}
-        {suggestion ? (
+        {suggestion && !removing ? (
           <li>
             <button
               type="button"
@@ -548,6 +558,28 @@ function ProfilePanel({
           </li>
         ) : null}
       </ul>
+      <div className="nb-pf-sk-actions">
+        <button type="button" data-plein="" onClick={() => onSheet("competences")}>
+          <PhoneIcon name="plus" size={15} strong />
+          {t("skillAdd")}
+        </button>
+        {skills.length > 0 ? (
+          <button
+            type="button"
+            aria-pressed={removing}
+            onClick={() => setRemoving((before) => !before)}
+          >
+            {removing ? (
+              t("skillRemoveDone")
+            ) : (
+              <>
+                <PhoneIcon name="corbeille" size={15} />
+                {t("skillRemoveMode")}
+              </>
+            )}
+          </button>
+        ) : null}
+      </div>
 
       <Heading
         far

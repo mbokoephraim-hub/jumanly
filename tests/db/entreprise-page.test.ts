@@ -177,7 +177,9 @@ describe("Page entreprise", () => {
 });
 
 describe("Page entreprise côté talent (étape 3, A6)", () => {
-  it("montre les recruteurs seulement, jamais un profil anonyme", async () => {
+  // « Membres » (Ephraïm, 27/10/2026) : les recruteurs de l'entreprise seulement ; les personnes
+  // qui disent y travailler restent hors de la page publique (src/server/services/explore.ts).
+  it("montre l'équipe de recrutement seulement, jamais les personnes déclarées ni un anonyme", async () => {
     const { ctx, org, name } = await company();
     const people: { id: string; userId: string }[] = [];
     for (const visibility of ["recruiters", "recruiters", "recruiters", "anonymous"] as const) {
@@ -198,11 +200,10 @@ describe("Page entreprise côté talent (étape 3, A6)", () => {
     const reader = await user();
     const page = await companyPage(db, reader.id, org.slug);
     expect(page).not.toBeNull();
-    // « Membres » : les recruteurs de l'entreprise seulement (Ephraïm 27/10/2026) ; les personnes
-    // qui disent y travailler, confirmées ou non, n'y figurent pas.
-    const shown = new Set(page!.members.map((member) => member.id));
+    const shown = new Map(page!.members.map((member) => [member.id, member.declared]));
     for (const person of people) expect(shown.has(person.userId)).toBe(false);
-    expect(page!.members.filter((member) => !member.declared && member.role)).toHaveLength(2);
+    expect(page!.members).toHaveLength(2);
+    expect(page!.members.every((member) => !member.declared && member.role)).toBe(true);
     // L'administrateur ne voit pas non plus le nom d'un profil anonyme à confirmer.
     const pending = (await companyPageScreen(db, ctx)).pending;
     expect(pending.map((item) => item.experienceId)).toEqual([people[2]!.id]);

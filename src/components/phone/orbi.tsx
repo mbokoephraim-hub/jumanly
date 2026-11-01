@@ -187,7 +187,9 @@ export function PhoneOrbi({
   return (
     <>
       <div className="nb-orbi-fab" hidden={tab === null} data-dessus={above ? "" : undefined}>
-        {current.bubble && !above ? (
+        {/* No bubble on Formation: it covered « Pour vos offres », and Orbi's advice is already
+            in the « Reprendre » card (Ephraïm, 01/11/2026). */}
+        {current.bubble && !above && shownTab !== "formation" ? (
           <button type="button" className="nb-orbi-bulle" onClick={() => openWith(current.bubble)}>
             {current.bubble}
           </button>

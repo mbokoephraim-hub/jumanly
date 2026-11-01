@@ -6,25 +6,17 @@ import { z } from "zod";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { reportError } from "@/server/observability";
-import { durationParts } from "@/lib/call-duration";
 import { REACTIONS, reactToMessage, setPinned } from "@/server/services/chat";
 import { chatSummary, type ChatSummary } from "@/server/services/chat-summary";
 import { ConnectError } from "@/server/services/connect";
 import { createReport } from "@/server/services/moderation";
-import {
-  SDP_MAX_LENGTH,
-  acceptCall,
-  answerCall,
-  endCall,
-  startCall,
-} from "@/server/services/video-call";
 import { shortName } from "@/components/phone/fil/data";
 import { durationOf } from "@/components/phone/messages/data";
 
 /**
- * The gestures of the talent's Chat (docs/chat-v2): react, pin, report, ask Orbi for the summary,
- * call in video. Order of CLAUDE.md: validate → session → service; each answers with a small
- * result the screen turns into a toast. Nothing is sent or decided on the person's behalf.
+ * The gestures of the talent's Chat (docs/chat-v2): react, pin, report, ask Orbi for the summary.
+ * Order of CLAUDE.md: validate → session → service; each answers with a small result the screen
+ * turns into a toast. Nothing is sent or decided on the person's behalf.
  */
 export type ChatResult<T = null> =
   { ok: true; value: T } | { ok: false; error: "invalid" | "notFound" | "blocked" | "failed" };
@@ -136,91 +128,5 @@ export async function chatSummaryAction(): Promise<ChatSummary> {
   } catch (error) {
     void reportError(error, { message: "Chat · résumé" });
     return { lines: [], source: "none" };
-  }
-}
-
-const modeSchema = z.enum(["audio", "video"]);
-const sdpSchema = z.string().min(10).max(SDP_MAX_LENGTH);
-
-/**
- * « Oui, appeler », in audio or in video: the call rings on the other side. With WebRTC the phone
- * sends its connection description (`offer`); the fake provider needs none.
- */
-export async function startCallAction(
-  conversationId: string,
-  mode: "audio" | "video" = "video",
-  offer: string | null = null,
-): Promise<
-  ChatResult<{ callId: string; autoAnswerMs: number | null; provider: "fake" | "webrtc" }>
-> {
-  const id = idSchema.safeParse(conversationId);
-  const how = modeSchema.safeParse(mode);
-  const sdp = sdpSchema.nullable().safeParse(offer);
-  if (!id.success || !how.success || !sdp.success) return { ok: false, error: "invalid" };
-  const user = await requireUser(`${PAGE}/${id.data}`);
-  try {
-    const call = await startCall(db, user.id, id.data, { mode: how.data, offer: sdp.data });
-    return {
-      ok: true,
-      value: { callId: call.callId, autoAnswerMs: call.autoAnswerMs, provider: call.provider },
-    };
-  } catch (error) {
-    return fail(error, "appel");
-  }
-}
-
-/** The other side picked up (fake provider only). */
-export async function answerCallAction(callId: string): Promise<ChatResult> {
-  const id = idSchema.safeParse(callId);
-  if (!id.success) return { ok: false, error: "invalid" };
-  const user = await requireUser(PAGE);
-  try {
-    await answerCall(db, user.id, id.data);
-    return { ok: true, value: null };
-  } catch (error) {
-    return fail(error, "décroché");
-  }
-}
-
-/** « Accepter en audio » or « Accepter en vidéo », with the phone's description (`answer`). */
-export async function acceptCallAction(
-  callId: string,
-  mode: "audio" | "video",
-  answer: string,
-): Promise<ChatResult> {
-  const id = idSchema.safeParse(callId);
-  const how = modeSchema.safeParse(mode);
-  const sdp = sdpSchema.safeParse(answer);
-  if (!id.success || !how.success || !sdp.success) return { ok: false, error: "invalid" };
-  const user = await requireUser(PAGE);
-  try {
-    await acceptCall(db, user.id, id.data, { mode: how.data, answer: sdp.data });
-    return { ok: true, value: null };
-  } catch (error) {
-    return fail(error, "accepter");
-  }
-}
-
-/**
- * « Raccrocher » (either side) or « Refuser »: the conversation keeps « Appel vidéo · durée » or
- * « Appel audio · durée ». Returns the seconds.
- */
-export async function endCallAction(callId: string): Promise<ChatResult<number | null>> {
-  const id = idSchema.safeParse(callId);
-  if (!id.success) return { ok: false, error: "invalid" };
-  const user = await requireUser(PAGE);
-  const t = await getTranslations("phoneChat");
-  try {
-    const seconds = await endCall(db, user.id, id.data, (spoken, mode) => {
-      const audio = mode === "audio";
-      if (spoken === null) return t(audio ? "call.lineMissedAudio" : "call.lineMissed");
-      const parts = durationParts(spoken);
-      const duration = t(`duration.${parts.key}`, parts.values);
-      return t(audio ? "call.lineAudio" : "call.line", { duration });
-    });
-    refresh();
-    return { ok: true, value: seconds };
-  } catch (error) {
-    return fail(error, "raccrocher");
   }
 }

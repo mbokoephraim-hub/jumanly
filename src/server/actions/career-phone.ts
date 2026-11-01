@@ -599,6 +599,15 @@ export async function cancelReferenceCheckAction(id: string): Promise<Result> {
   return saved(profile.id);
 }
 
+/** « Retirer » on a skill of the profile (demande d'Ephraïm du 31/10/2026). */
+export async function removeCareerSkillAction(id: string): Promise<Result> {
+  const { profile } = await mine();
+  await db.profileSkill.deleteMany({
+    where: { id: String(id).slice(0, 40), profileId: profile.id },
+  });
+  return saved(profile.id);
+}
+
 const languagesInput = z.object({
   languages: z
     .array(z.object({ code: z.string().regex(/^[a-z]{2,3}$/), level: z.enum(languageLevels) }))

@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
+// Loaded with the page, so an app opened before an update still gets it (Ephraïm, 31/10/2026).
+import "@/styles/letter-models.css";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
+import { pickMessages } from "@/i18n/client-messages";
 import { sheetDataOf } from "@/components/phone/career/letter-data";
 import { LetterModelPicker } from "@/components/phone/career/letter-models";
 import { OrbiDisc, PhoneIcon } from "@/components/phone/icon";
@@ -34,8 +38,9 @@ export default async function LetterModelPage({
   const user = await requireUser(`/app/career/documents/${id}/modele`);
   const letter = await getLetterWithDesign(db, user.id, id);
   if (!letter) notFound();
-  const [t, facts, access, plans, photo] = await Promise.all([
+  const [t, messages, facts, access, plans, photo] = await Promise.all([
     getTranslations("letterModel"),
+    getMessages(),
     letterFacts(db, user.id, letter.data.jobId),
     letterTemplateAccess(db, user.id),
     listPublicPlans(db),
@@ -63,16 +68,18 @@ export default async function LetterModelPage({
         <OrbiDisc size={28} />
         <span>{t("pick.lead")}</span>
       </p>
-      <LetterModelPicker
-        documentId={id}
-        data={data}
-        initial={letter.design}
-        access={access}
-        lockedPlan={talentPlanFor(plans, TEMPLATES_ACCESS_KEY, ["starter", "pro"])}
-        hasPhoto={Boolean(photo) || Boolean(facts.photoUrl)}
-        action={chooseLetterDesignAction}
-        error={error}
-      />
+      <NextIntlClientProvider messages={pickMessages(messages, ["letterModel"])}>
+        <LetterModelPicker
+          documentId={id}
+          data={data}
+          initial={letter.design}
+          access={access}
+          lockedPlan={talentPlanFor(plans, TEMPLATES_ACCESS_KEY, ["starter", "pro"])}
+          hasPhoto={Boolean(photo) || Boolean(facts.photoUrl)}
+          action={chooseLetterDesignAction}
+          error={error}
+        />
+      </NextIntlClientProvider>
     </div>
   );
 }
