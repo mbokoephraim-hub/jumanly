@@ -5347,3 +5347,8 @@ Demande d'Ephraïm : sur un diplôme ou un certificat, on peut ajouter le logo d
 ## 2026-10-31 · Badge doré « Vérifié »
 
 Demande d'Ephraïm : ce qui est vérifié ne doit plus ressembler au texte vert. Nouveau composant `src/components/phone/badge-or.tsx` (sceau doré `GoldSeal` + pilule dorée `GoldVerifiedBadge`, CSS `src/styles/phone-badge-or.css`, fond plein lisible en thème sombre et « Crème doux »). Appliqué aux expériences et certificats vérifiés, aux compétences vérifiées, au sceau « Profil vérifié » et aux compétences vérifiées des fiches candidat et talent côté recruteur. Les diplômes restent sans « Vérifié » (décision du 29/10).
+
+
+## 2026-11-01 · « Modifier le profil » plus lisible (téléphone)
+
+Demande d'Ephraïm : rendre la page plus intuitive, réseaux sociaux avec leurs icônes. Parties titrées (Identité, Réseaux, Visibilité), « @ » dans le champ du nom d'utilisateur, réseaux regroupés dans une carte : chaque ligne porte l'icône du réseau sur sa couleur (LinkedIn bleu, Instagram dégradé, X noir, Facebook bleu, site web menthe), le nom, l'adresse et une croix pour la vider (`src/components/phone/career/social-fields.tsx`, CSS `src/styles/phone-modifier-profil.css`). L'e-mail public a sa carte avec une phrase d'aide. Même formulaire pour le profil recruteur ; la page entreprise n'est pas touchée.

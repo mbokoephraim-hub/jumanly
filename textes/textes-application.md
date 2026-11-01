@@ -10239,7 +10239,11 @@ Conventions :
 | `phoneCareer.form.handle` | Nom d’utilisateur |
 | `phoneCareer.form.handleHint` | Lettres, chiffres et points, de 3 à 30 caractères. Il s’affiche sous votre nom : @prenom.nom. |
 | `phoneCareer.form.socials` | Réseaux |
-| `phoneCareer.form.socialsHint` | Seuls les réseaux remplis s’affichent sur votre profil. |
+| `phoneCareer.form.socialsHint` | Collez le lien de votre page. Seuls les réseaux remplis s’affichent sur votre profil. |
+| `phoneCareer.form.socialClear` | Effacer {network} |
+| `phoneCareer.form.sectionIdentity` | Identité |
+| `phoneCareer.form.sectionVisibility` | Visibilité |
+| `phoneCareer.form.showEmailHint` | Votre adresse apparaît sur votre profil, avec vos réseaux. |
 | `phoneCareer.form.social.linkedin` | LinkedIn |
 | `phoneCareer.form.social.instagram` | Instagram |
 | `phoneCareer.form.social.x` | X (Twitter) |

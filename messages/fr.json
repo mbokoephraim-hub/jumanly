@@ -12448,7 +12448,11 @@
       "handle": "Nom d’utilisateur",
       "handleHint": "Lettres, chiffres et points, de 3 à 30 caractères. Il s’affiche sous votre nom : @prenom.nom.",
       "socials": "Réseaux",
-      "socialsHint": "Seuls les réseaux remplis s’affichent sur votre profil.",
+      "socialsHint": "Collez le lien de votre page. Seuls les réseaux remplis s’affichent sur votre profil.",
+      "socialClear": "Effacer {network}",
+      "sectionIdentity": "Identité",
+      "sectionVisibility": "Visibilité",
+      "showEmailHint": "Votre adresse apparaît sur votre profil, avec vos réseaux.",
       "social": {
         "linkedin": "LinkedIn",
         "instagram": "Instagram",
