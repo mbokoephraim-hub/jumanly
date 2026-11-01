@@ -9,7 +9,6 @@ import { criterionText, useCriterionDetail } from "@/components/matching/talent-
 import { dynamic } from "@/i18n/dynamic";
 import type { CriterionResult } from "@/server/matching/types";
 import { showToast } from "@/components/motion/toaster";
-import { applyFromSheetAction, tailorForApplicationAction } from "@/server/actions/explore";
 import { setJobSavedAction } from "@/server/actions/jobs";
 import { PhoneBack } from "../back";
 import { OrbiDisc, PhoneIcon } from "../icon";
@@ -62,6 +61,8 @@ export type PhoneOfferView = {
   saved: boolean;
   /** The application already sent, if any. */
   applicationId: string | null;
+  /** An application started and left: « Postuler » becomes « Reprendre ma candidature ». */
+  resume: boolean;
   open: boolean;
   /** Screening questions: the sheet then leads to the full form, which asks them. */
   questions: number;
@@ -79,8 +80,7 @@ export type PhoneOfferView = {
 export function PhoneOffer({ offer }: { offer: PhoneOfferView }) {
   const t = useTranslations("phoneExplorer");
   const [saved, setSaved] = useState(offer.saved);
-  const [applied, setApplied] = useState(offer.applicationId !== null);
-  const [sheet, setSheet] = useState(false);
+  const applied = offer.applicationId !== null;
   const [whyOpen, setWhyOpen] = useState(false);
   const [saving, startSave] = useTransition();
 
@@ -269,9 +269,9 @@ export function PhoneOffer({ offer }: { offer: PhoneOfferView }) {
             {t("offer.applied")}
           </Link>
         ) : offer.open ? (
-          <button type="button" className="nb-ex-postuler" onClick={() => setSheet(true)}>
-            {t("offer.apply")}
-          </button>
+          <Link href={`/app/jobs/${offer.slug}/postuler`} className="nb-ex-postuler">
+            {offer.resume ? t("offer.resume") : t("offer.apply")}
+          </Link>
         ) : (
           <span className="nb-ex-postuler" aria-disabled="true">
             {t("offer.closed")}
@@ -289,13 +289,6 @@ export function PhoneOffer({ offer }: { offer: PhoneOfferView }) {
           contestHref={`/app/jobs/${offer.slug}?pourquoi=1`}
         />
       ) : null}
-
-      <ApplySheet
-        offer={offer}
-        open={sheet}
-        onClose={() => setSheet(false)}
-        onApplied={() => setApplied(true)}
-      />
     </div>
   );
 }
@@ -478,196 +471,5 @@ function List({ art, title, items }: { art: MenuArtName; title: string; items: s
         ))}
       </ul>
     </div>
-  );
-}
-
-/** « Postuler chez … »: the CV, a word, « Envoyer ma candidature », then « Candidature envoyée ». */
-function ApplySheet({
-  offer,
-  open,
-  onClose,
-  onApplied,
-}: {
-  offer: PhoneOfferView;
-  open: boolean;
-  onClose: () => void;
-  onApplied: () => void;
-}) {
-  const t = useTranslations("phoneExplorer");
-  const [cvs, setCvs] = useState(offer.cvs);
-  const [cv, setCv] = useState(offer.cvs[0]?.id ?? "");
-  const [note, setNote] = useState("");
-  const [done, setDone] = useState(false);
-  const [sending, start] = useTransition();
-  const [adapting, startAdapt] = useTransition();
-  const [adaptedNow, setAdaptedNow] = useState(false);
-  const chosen = cvs.find((item) => item.id === cv);
-
-  // The talent stays in the application: the copy joins the list, chosen (Ephraïm, 29/10/2026).
-  const adapt = () =>
-    startAdapt(async () => {
-      if (!offer.jobId || !cv) return;
-      const result = await tailorForApplicationAction({ cv, job: offer.jobId }).catch(() => null);
-      if (!result?.ok) {
-        const code = result?.error;
-        showToast({
-          message:
-            code === "entitlement"
-              ? t("apply.adaptError.entitlement")
-              : code === "quota"
-                ? t("apply.adaptError.quota")
-                : code === "consent"
-                  ? t("apply.adaptError.consent")
-                  : code === "limit"
-                    ? t("apply.adaptError.limit")
-                    : t("apply.adaptError.other"),
-          tone: "error",
-        });
-        return;
-      }
-      setCvs((before) => [
-        { id: result.value.id, title: result.value.title, line: "", adapted: true },
-        ...before,
-      ]);
-      setCv(result.value.id);
-      setAdaptedNow(true);
-    });
-
-  const send = () =>
-    start(async () => {
-      const result = await applyFromSheetAction({ job: offer.slug, cv, note });
-      if (!result.ok) {
-        showToast({
-          message: result.error === "closed" ? t("apply.closedError") : t("apply.error"),
-          tone: "error",
-        });
-        return;
-      }
-      setDone(true);
-      onApplied();
-    });
-
-  return (
-    <PhoneSheet
-      open={open}
-      onClose={onClose}
-      label={done ? t("apply.done") : t("apply.title", { company: offer.company })}
-      closeLabel={t("apply.close")}
-      className="nb-ex-feuille nb-ex-postuler-f"
-    >
-      {done ? (
-        <div className="nb-ex-envoye" role="status">
-          <span className="nb-ex-envoye-ic">
-            <PhoneIcon name="coche" size={34} stroke={2.4} />
-          </span>
-          <b>{t("apply.done")}</b>
-          <p className="nb-meta">{t("apply.doneText")}</p>
-          <Link
-            href="/app/career/cv?onglet=candidatures"
-            className="nb-bouton"
-            data-plein=""
-            data-large=""
-          >
-            {t("apply.doneSee")}
-          </Link>
-          <button type="button" className="nb-bouton" data-large="" onClick={onClose}>
-            {t("apply.doneBack")}
-          </button>
-        </div>
-      ) : (
-        <>
-          <b className="nb-ex-feuille-t">{t("apply.title", { company: offer.company })}</b>
-          <span className="nb-meta">{offer.title}</span>
-          <p className="nb-ex-etiquette">{t("apply.cv")}</p>
-          <div className="nb-ex-cvs" role="radiogroup" aria-label={t("apply.cv")}>
-            {cvs.length === 0 ? (
-              <p className="nb-meta">
-                {t("apply.noCv")}{" "}
-                <Link href="/app/career/cv" className="nb-ex-lien">
-                  {t("apply.noCvLink")}
-                </Link>
-              </p>
-            ) : null}
-            {[
-              ...cvs,
-              {
-                id: "",
-                title: t("apply.profileOnly"),
-                line: t("apply.profileOnlyLine"),
-                adapted: false,
-              },
-            ].map((item) => (
-              <button
-                key={item.id || "profil"}
-                type="button"
-                role="radio"
-                aria-checked={cv === item.id}
-                className="nb-ex-cv"
-                onClick={() => setCv(item.id)}
-              >
-                <span className="nb-ex-cv-r" aria-hidden />
-                <span>
-                  <b>{item.title}</b>
-                  <span className="nb-meta">{item.adapted ? t("apply.adapted") : item.line}</span>
-                </span>
-              </button>
-            ))}
-          </div>
-          {offer.jobId && chosen && !chosen.adapted ? (
-            <button
-              type="button"
-              className="nb-ex-adapter"
-              data-orbi=""
-              onClick={adapt}
-              disabled={adapting}
-              aria-busy={adapting}
-            >
-              {adapting ? t("apply.adapting") : t("apply.adapt")}
-              <small className="nb-meta">{t("apply.adaptHonest")}</small>
-            </button>
-          ) : null}
-          {adaptedNow ? (
-            <p className="nb-ex-note" role="status">
-              {t("apply.adaptDone")}
-            </p>
-          ) : null}
-          {offer.questions > 0 ? (
-            <>
-              <p className="nb-ex-note">{t("apply.questions", { count: offer.questions })}</p>
-              <Link
-                href={`/app/jobs/${offer.slug}/postuler${cv ? `?cv=${encodeURIComponent(cv)}` : ""}`}
-                className="nb-bouton"
-                data-plein=""
-                data-large=""
-              >
-                {t("apply.questionsCta")}
-              </Link>
-            </>
-          ) : (
-            <>
-              <label className="nb-ex-mot">
-                <span className="nb-ex-etiquette">{t("apply.note")}</span>
-                <textarea
-                  value={note}
-                  maxLength={5000}
-                  onChange={(event) => setNote(event.target.value)}
-                  placeholder={t("apply.notePlaceholder")}
-                />
-              </label>
-              <button
-                type="button"
-                className="nb-bouton"
-                data-plein=""
-                data-large=""
-                disabled={sending}
-                onClick={send}
-              >
-                {sending ? t("apply.sending") : t("apply.send")}
-              </button>
-            </>
-          )}
-        </>
-      )}
-    </PhoneSheet>
   );
 }

@@ -42,7 +42,6 @@ export default defineConfig({
       // Jumanly Intelligence answers with its templates, without calling a model.
       AI_PROVIDER: "fake",
       // Calls: « the other side » picks up by itself, without camera or microphone.
-      VIDEO_CALL_PROVIDER: "fake",
     },
   },
 });

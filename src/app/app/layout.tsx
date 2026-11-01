@@ -8,7 +8,6 @@ import { CareerTab } from "@/components/phone/career/server";
 import { ExplorerTab } from "@/components/phone/explorer/server";
 import { FormationTab } from "@/components/phone/learn/server";
 import { MessagesTab } from "@/components/phone/messages/server";
-import { IncomingCallsHost } from "@/components/phone/messages/incoming-host";
 import { TalentShell } from "@/components/talent/shell";
 import { isPhone } from "@/server/view";
 import { ShellLoading } from "@/components/app/shell-loading";
@@ -117,7 +116,6 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
           }}
         >
           <ContentBanners audience="talents" />
-          <IncomingCallsHost />
           {children}
         </PhoneShell>
       );
@@ -150,7 +148,6 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
         }
       >
         <ContentBanners audience="talents" />
-        <IncomingCallsHost />
         {children}
       </TalentShell>
     );
@@ -179,7 +176,6 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
         tabs={{}}
       >
         <ContentBanners audience="recruiters" />
-        <IncomingCallsHost />
         {children}
       </PhoneShell>
     );
@@ -255,7 +251,6 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
         }
       >
         <ContentBanners audience="recruiters" />
-        <IncomingCallsHost />
         {children}
       </RecruiterShell>
     );
@@ -285,7 +280,6 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
       }}
     >
       <ContentBanners audience={partnerSpace ? "partners" : "recruiters"} />
-      <IncomingCallsHost />
       {children}
     </AppShell>
   );

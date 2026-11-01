@@ -3,12 +3,12 @@ import { logIn } from "./session";
 
 // Chat du talent (docs/chat-v2, captures 01 à 13): the list, a discussion with Clarisse of Baobab
 // Fintech (seed `suivi.ts`: an interview to choose and a document asked for), a suggested reply
-// sent in one touch, a reaction, the menu ···, « Joindre », Orbi, and a video call hung up.
+// sent in one touch, a reaction, the menu ···, « Joindre », Orbi.
 // Sending and reacting change the demo: reseed before running again.
 test.describe("Chat du talent", () => {
   test.skip(({ isMobile }) => !isMobile, "Le Chat de la maquette est l'interface du téléphone.");
 
-  test("ouvrir une discussion, répondre, réagir, appeler et raccrocher", async ({ page }) => {
+  test("ouvrir une discussion, répondre et réagir", async ({ page }) => {
     test.setTimeout(120_000);
     await logIn(page, "grace.ux@jumanly.test");
     await page.goto("/app/messages");
@@ -93,29 +93,5 @@ test.describe("Chat du talent", () => {
     await menu.getByRole("button", { name: "Annuler" }).click();
     await page.keyboard.press("Escape");
     await expect(menu).toBeHidden();
-
-    // The video call: asked first, then the ring, the timer, and « Raccrocher ».
-    await conv.getByRole("button", { name: /^Appeler .* en vidéo$/ }).click();
-    const ask = page.getByRole("dialog", { name: /^Souhaitez-vous appeler .* en vidéo \?$/ });
-    await expect(ask.getByText("L’appel n’est pas enregistré.", { exact: false })).toBeVisible();
-    await ask.getByRole("button", { name: "Oui, appeler" }).click();
-    const call = page.getByRole("dialog", { name: /^Appel vidéo avec / });
-    await expect(call.getByText("Chiffré de bout en bout")).toBeVisible();
-    await expect(call.getByText("Vous", { exact: true })).toBeVisible();
-    await expect(call.getByRole("timer", { name: "Durée de l’appel" })).toBeVisible({
-      timeout: 15_000,
-    });
-    const micro = call.getByRole("button", { name: "Micro" });
-    await micro.click();
-    await expect(micro).toHaveAttribute("aria-pressed", "false");
-    await call.getByRole("button", { name: "Raccrocher" }).click();
-    await expect(call).toBeHidden();
-    await expect(page.getByText(/^Appel terminé · \d+ s$/)).toBeVisible();
-    await expect(
-      conv
-        .locator(".nb-ch-sys")
-        .getByText(/^Appel vidéo · /)
-        .last(),
-    ).toBeVisible();
   });
 });

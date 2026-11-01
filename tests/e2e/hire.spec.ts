@@ -82,6 +82,9 @@ async function applyTo(talent: Page, slug: string, title: string) {
   await expect(talent.getByRole("heading", { level: 1 })).toHaveText(title);
   // Postuler (planche talent-2 § 1): the CV proposed first, nothing to add, then sending.
   await talent.goto(`/app/jobs/${slug}/postuler`);
+  // First screen (01/11/2026): how to apply; « Avec un CV existant » is chosen.
+  await talent.getByRole("button", { name: "Continuer" }).click();
+  await expect(talent).toHaveURL(/etape=cv/);
   await talent.getByRole("button", { name: "Continuer" }).click();
   await expect(talent).toHaveURL(/etape=lettre/);
   await talent.getByRole("button", { name: "Continuer" }).click();
