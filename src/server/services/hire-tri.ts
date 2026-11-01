@@ -5,8 +5,10 @@
  * (« Hors critères ») or met again. Every gesture is a member's, recorded in the history, and can be
  * undone. Orbi never makes one. Golden rule n° 6: every write goes through `getOrgApplication`.
  */
-import type { PrismaClient } from "@/generated/prisma/client";
-import { getOrgApplication, HireError, hirePermissions, type HireContext } from "./hire";
+import type { Prisma, PrismaClient } from "@/generated/prisma/client";
+import { getOrgApplication, getOrgJob, HireError, hirePermissions, type HireContext } from "./hire";
+import { allowedFilters, filtersLevelOf, type PipelineFilters } from "./hire-filters";
+import { level } from "@/server/entitlements";
 import { shortlist, unshortlist } from "./hire-ats";
 import {
   CRITERION_MET_EVENT,
@@ -86,4 +88,24 @@ export async function markCriterion(
     },
   });
   return { jobId: application.jobId };
+}
+
+/** « Enregistrer les filtres » of an offer, and the blind sorting (for the whole team). */
+export async function saveFilters(
+  db: PrismaClient,
+  ctx: HireContext,
+  jobId: string,
+  filters: PipelineFilters,
+  blindSort: boolean,
+) {
+  if (!hirePermissions(ctx.role).manage) throw new HireError("forbidden");
+  const job = await getOrgJob(db, ctx, jobId);
+  const filtersLevel = filtersLevelOf(
+    await level(db, { type: "organization", id: ctx.organizationId }, "hire.ats.filters"),
+  );
+  const kept = allowedFilters(filters, filtersLevel);
+  await db.job.update({
+    where: { id: job.id },
+    data: { pipelineFilters: kept as Prisma.InputJsonObject, blindSort },
+  });
 }

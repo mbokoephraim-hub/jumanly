@@ -6,7 +6,8 @@ import { z } from "zod";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
 import { HireError } from "@/server/services/hire";
-import { markCriterion, sortGesture, sortGestures } from "@/server/services/hire-tri";
+import { markCriterion, saveFilters, sortGesture, sortGestures } from "@/server/services/hire-tri";
+import { pipelineFiltersSchema } from "@/server/services/hire-filters";
 
 /**
  * Sorting gestures of the pipeline (« Logique du recrutement », étape 5). Order of CLAUDE.md:
@@ -86,6 +87,47 @@ export async function markCriterionAction(formData: FormData) {
       input.data.label,
       input.data.missing === "1",
     );
+  } catch (error) {
+    if (error instanceof HireError) redirect(back);
+    throw error;
+  }
+  refresh();
+  redirect(back);
+}
+
+/** « Enregistrer les filtres » / « Tout afficher » of the pipeline of an offer. */
+export async function saveFiltersAction(formData: FormData) {
+  const job = String(formData.get("job") ?? "").slice(0, 60);
+  if (!job) redirect("/app/hire/offres");
+  const back = backOf(formData.get("back"), job);
+  const text = (name: string) => {
+    const value = formData.get(name);
+    return typeof value === "string" && value.trim() ? value.trim() : undefined;
+  };
+  const number = (name: string) => {
+    const value = text(name);
+    return value !== undefined && /^\d+$/.test(value) ? Number(value) : undefined;
+  };
+  const reset = formData.get("reset") === "1";
+  const parsed = pipelineFiltersSchema.safeParse(
+    reset
+      ? {}
+      : {
+          scoreMin: number("scoreMin"),
+          skill: text("skill"),
+          yearsMin: number("yearsMin"),
+          place: text("place"),
+          complete: formData.get("complete") === "on" || undefined,
+          confidence: text("confidence"),
+          source: text("source"),
+          state: text("state"),
+          days: number("days"),
+        },
+  );
+  if (!parsed.success) redirect(back);
+  const { ctx } = await requireHire("/app/hire/offres", "manage", "sort");
+  try {
+    await saveFilters(db, ctx, job, parsed.data, formData.get("blind") === "on");
   } catch (error) {
     if (error instanceof HireError) redirect(back);
     throw error;

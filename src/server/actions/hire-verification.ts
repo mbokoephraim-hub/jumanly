@@ -2,7 +2,7 @@
 
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getFormatter, getTranslations } from "next-intl/server";
 import { db } from "@/server/db";
 import { requireUser } from "@/server/auth/session";
 import { requireHire } from "@/server/hire-context";
@@ -45,7 +45,14 @@ export async function requestPiecesAction(formData: FormData) {
   let sent: Awaited<ReturnType<typeof requestPieces>>;
   try {
     const t = await getTranslations("phoneRhPieces");
-    sent = await requestPieces(db, ctx, jobId, input.data, t("mailDocumentName"));
+    const format = await getFormatter();
+    sent = await requestPieces(db, ctx, jobId, input.data, t("mailDocumentName"), (values) =>
+      t("ask.template", {
+        company: values.company,
+        jobTitle: values.jobTitle,
+        date: format.dateTime(values.dueAt, { day: "numeric", month: "long" }),
+      }),
+    );
   } catch (error) {
     if (error instanceof HireError) redirect(`${pageOf(jobId)}?erreur=formulaire`);
     throw error;

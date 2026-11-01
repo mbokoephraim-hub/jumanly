@@ -17,11 +17,26 @@ import { ensureStages } from "@/server/services/applications";
 import { requestedDocumentKinds, type OfferRow } from "@/server/services/hire-offers";
 import { screeningQuestionsOf } from "@/server/services/screening";
 import { MenuArt } from "@/components/site/menu-art";
-import { sortGestureAction } from "@/server/actions/hire-tri";
+import { saveFiltersAction, sortGestureAction } from "@/server/actions/hire-tri";
 import { SwipeCard } from "./tri-client";
 import { RhUndoGesture } from "./tri";
 import { countryCode, countryName, flagOf } from "@/lib/countries";
-import { classCounts, orbiClasses, type OrbiClass } from "@/server/services/hire-classes";
+import {
+  classCounts,
+  orbiClasses,
+  rankByClass,
+  type OrbiClass,
+} from "@/server/services/hire-classes";
+import {
+  activeFilters,
+  allowedFilters,
+  blindName,
+  filterConfidences,
+  filterSources,
+  filterStates,
+  parseFilters,
+  passes,
+} from "@/server/services/hire-filters";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { RhOfferActions, RhWhy, type RhOfferActionsData } from "./offre-actions";
 import type { RhOfferDraft, RhPublishData } from "./publier";
@@ -730,15 +745,28 @@ export async function RhOfferCandidates({
   const counts = classCounts(current.rows);
   const classed = counts.reduce((sum, item) => sum + item.count, 0);
   const position = followed.findIndex((stage) => stage.id === current.id);
+  // Saved filters of the offer: the list narrows, the class bar keeps counting everyone.
+  const allFilters = board.filtersLevel === "all";
+  const filters = allowedFilters(parseFilters(board.job.pipelineFilters), board.filtersLevel);
+  const filtered = current.rows.filter((row) => passes(row, filters, now));
+  const hiddenByFilters = current.rows.length - filtered.length;
+  const blind = board.job.blindSort;
+  const ranked = rankByClass(current.rows);
+  const nameOf = (row: (typeof current.rows)[number]) =>
+    blind && !row.shortlisted
+      ? tt("blind.name", { index: blindName(ranked.indexOf(row)) })
+      : row.name;
+  const compareForm = `rh-comparer-${jobId}`;
+  const here0 = `${base}${chosen ? `&classe=${chosen}` : ""}`;
   const groups: { key: OrbiClass | "none"; rows: typeof current.rows }[] = board.withScores
     ? [
         ...orbiClasses.map((key) => ({
           key,
-          rows: current.rows.filter((row) => row.orbiClass === key),
+          rows: filtered.filter((row) => row.orbiClass === key),
         })),
-        { key: "none" as const, rows: current.rows.filter((row) => row.orbiClass === null) },
+        { key: "none" as const, rows: filtered.filter((row) => row.orbiClass === null) },
       ].filter((group) => (chosen ? group.key === chosen : true) && group.rows.length > 0)
-    : [{ key: "none" as const, rows: current.rows }];
+    : [{ key: "none" as const, rows: filtered }];
   const card = (row: (typeof current.rows)[number]) => {
     const code = countryCode(row.country);
     const canSort = sortable && row.status === "active";
@@ -765,10 +793,10 @@ export async function RhOfferCandidates({
           <div className="nb-rh-pipe-carte" data-classe={row.orbiClass ?? undefined}>
             <Link href={fiche} className="nb-rh-cand">
               <span className="nb-rh-mini" aria-hidden>
-                {initials(row.name)}
+                {blind && !row.shortlisted ? null : initials(row.name)}
               </span>
               <span className="nb-rh-res-t">
-                <b>{row.name}</b>
+                <b>{nameOf(row)}</b>
                 {row.headline ? <span className="nb-meta nb-rh-coupe">{row.headline}</span> : null}
                 <span className="nb-meta">
                   {[row.city, code ? `${flagOf(code)}` : null].filter(Boolean).join(" ")}
@@ -845,6 +873,10 @@ export async function RhOfferCandidates({
                 <MenuArt name="letter" size="xs" />
                 {t("pipeline.documents")}
               </Link>
+              <label className="nb-rh-pipe-comparer">
+                <input type="checkbox" name="ids" value={row.id} form={compareForm} />
+                {tt("compare.pick")}
+              </label>
             </span>
           </div>
         </SwipeCard>
@@ -922,6 +954,13 @@ export async function RhOfferCandidates({
           ) : null}
         </section>
       ) : null}
+      <Link href={`/app/hire/offres/${jobId}/resultats`} className="nb-rh-pieces-lien">
+        <MenuArt name="why" size="xs" />
+        <span>
+          <b>{tt("results.title")}</b>
+          <span className="nb-meta">{tt("results.line")}</span>
+        </span>
+      </Link>
       {board.shortlisted.length > 0 ? (
         <Link href={`/app/hire/offres/${jobId}/verification`} className="nb-rh-pieces-lien">
           <MenuArt name="privacy" size="xs" />
@@ -933,6 +972,129 @@ export async function RhOfferCandidates({
           </span>
         </Link>
       ) : null}
+      <details className="nb-rh-filtres">
+        <summary>
+          <MenuArt name="funnel" size="xs" />
+          <span>{tt("filters.title")}</span>
+          {activeFilters(filters) > 0 ? (
+            <b>{tt("filters.active", { count: activeFilters(filters) })}</b>
+          ) : null}
+          {blind ? <b>{tt("blind.on")}</b> : null}
+        </summary>
+        {sortable ? (
+          <form action={saveFiltersAction} className="nb-rh-filtres-f" id={`rh-filtres-${jobId}`}>
+            <input type="hidden" name="job" value={jobId} />
+            <input type="hidden" name="back" value={here0} />
+            {allFilters ? (
+              <>
+                <label>
+                  {tt("filters.scoreMin")}
+                  <input
+                    type="number"
+                    name="scoreMin"
+                    min={0}
+                    max={100}
+                    inputMode="numeric"
+                    defaultValue={filters.scoreMin ?? ""}
+                  />
+                </label>
+                <label>
+                  {tt("filters.skill")}
+                  <input name="skill" maxLength={60} defaultValue={filters.skill ?? ""} />
+                </label>
+                <label>
+                  {tt("filters.yearsMin")}
+                  <input
+                    type="number"
+                    name="yearsMin"
+                    min={0}
+                    max={40}
+                    inputMode="numeric"
+                    defaultValue={filters.yearsMin ?? ""}
+                  />
+                </label>
+                <label>
+                  {tt("filters.place")}
+                  <input name="place" maxLength={60} defaultValue={filters.place ?? ""} />
+                </label>
+                <label>
+                  {tt("filters.confidence")}
+                  <select name="confidence" defaultValue={filters.confidence ?? ""}>
+                    <option value="">{tt("filters.any")}</option>
+                    {filterConfidences.map((value) => (
+                      <option key={value} value={value}>
+                        {tt(`filters.confidenceValue.${value}`)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </>
+            ) : (
+              <p className="nb-meta nb-rh-filtres-lock">
+                <MenuArt name="pricing" size="xs" />
+                <span>{tt("filters.simpleOnly")}</span>
+                <Link href="/app/abonnement/formules">{tt("filters.simpleOnlyLink")}</Link>
+              </p>
+            )}
+            <label>
+              {tt("filters.state")}
+              <select name="state" defaultValue={filters.state ?? ""}>
+                <option value="">{tt("filters.any")}</option>
+                {filterStates.map((value) => (
+                  <option key={value} value={value}>
+                    {tt(`filters.stateValue.${value}`)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              {tt("filters.source")}
+              <select name="source" defaultValue={filters.source ?? ""}>
+                <option value="">{tt("filters.any")}</option>
+                {filterSources.map((value) => (
+                  <option key={value} value={value}>
+                    {t(`source.${value}`)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              {tt("filters.days")}
+              <input
+                type="number"
+                name="days"
+                min={1}
+                max={365}
+                inputMode="numeric"
+                defaultValue={filters.days ?? ""}
+              />
+            </label>
+            <label className="nb-rh-filtres-case">
+              <input type="checkbox" name="complete" defaultChecked={filters.complete ?? false} />
+              {tt("filters.complete")}
+            </label>
+            <label className="nb-rh-filtres-case">
+              <input type="checkbox" name="blind" defaultChecked={blind} />
+              {tt("blind.toggle")}
+            </label>
+            <p className="nb-meta">{tt("filters.rule")}</p>
+            <div className="nb-rh-filtres-b">
+              <button type="submit" className="nb-bp">
+                {tt("filters.save")}
+              </button>
+              <button type="submit" name="reset" value="1" className="nb-bs">
+                {tt("filters.reset")}
+              </button>
+            </div>
+          </form>
+        ) : (
+          <p className="nb-meta">{tt("filters.readOnly")}</p>
+        )}
+      </details>
+      {hiddenByFilters > 0 ? (
+        <p className="nb-meta nb-rh-regle">{tt("filters.hidden", { count: hiddenByFilters })}</p>
+      ) : null}
+      <form id={compareForm} action={`/app/hire/offres/${jobId}/comparer`} method="get" hidden />
       <p className="nb-meta nb-rh-regle">
         {board.withScores ? t("classes.rule") : t("candidates.ruleNoScore")}
         {sortable ? ` ${tt("swipe.hint")}` : null}
@@ -973,7 +1135,10 @@ export async function RhOfferCandidates({
           })
         )}
       </div>
-      <div className="nb-bas">
+      <div className="nb-bas nb-rh-pipe-bas">
+        <button type="submit" form={compareForm} className="nb-bs">
+          {tt("compare.button")}
+        </button>
         <Link href={`/app/hire/candidats?offre=${jobId}`} className="nb-bp">
           {t("candidates.sort")}
         </Link>

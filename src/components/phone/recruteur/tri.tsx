@@ -26,16 +26,23 @@ export async function RhUndoGesture({
   if ((gesture !== "retenir" && gesture !== "attente") || !target) return null;
   const application = await db.application.findFirst({
     where: { id: target.slice(0, 60), jobId },
-    select: { id: true, profile: { select: { user: { select: { name: true } } } } },
+    select: {
+      id: true,
+      shortlistedAt: true,
+      job: { select: { blindSort: true } },
+      profile: { select: { user: { select: { name: true } } } },
+    },
   });
   if (!application) return null;
   const t = await getTranslations("phoneRhTri");
   return (
     <UndoBar key={`${gesture}-${target}`}>
       <span>
-        {t(gesture === "retenir" ? "undo.retained" : "undo.hold", {
-          name: application.profile.user.name,
-        })}
+        {application.job.blindSort && !application.shortlistedAt
+          ? t("undo.holdBlind")
+          : t(gesture === "retenir" ? "undo.retained" : "undo.hold", {
+              name: application.profile.user.name,
+            })}
       </span>
       <form action={sortGestureAction}>
         <input type="hidden" name="application" value={application.id} />

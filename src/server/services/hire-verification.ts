@@ -16,6 +16,7 @@ import { sniffDocumentType, type FileStorage } from "@/server/storage";
 import { ensureApplicationConversation } from "./connect";
 import { getOrgApplication, getOrgJob, HireError, hirePermissions, type HireContext } from "./hire";
 import { notify } from "./notifications";
+import { level } from "@/server/entitlements";
 
 const DAY = 86_400_000;
 const HOUR = 3_600_000;
@@ -54,6 +55,20 @@ export const requestSchema = z.object({
   message: z.string().trim().min(10).max(MESSAGE_MAX),
 });
 export type RequestInput = z.infer<typeof requestSchema>;
+
+/**
+ * What the plan opens (entitlement `hire.verification`, « Logique du recrutement », les formules):
+ * `none` asks for nothing, `standard` sends the standard message of Jumanly, `custom` lets the team
+ * write its own.
+ */
+export type VerificationLevel = "none" | "standard" | "custom";
+export const verificationLevelOf = (value: string | null | undefined): VerificationLevel =>
+  value === "custom" ? "custom" : value === "standard" ? "standard" : "none";
+
+export const verificationLevel = async (db: PrismaClient, organizationId: string) =>
+  verificationLevelOf(
+    await level(db, { type: "organization", id: organizationId }, "hire.verification"),
+  );
 
 export type VerificationCheck =
   | { key: "school_not_in_cv"; values: { school: string } }
@@ -127,15 +142,23 @@ export async function requestPieces(
   input: RequestInput,
   /** What the notification names (« des pièces pour vérifier votre candidature »). */
   documentName: string,
+  /** The standard message, used instead of the team's text when the plan has no custom models. */
+  standardMessage: (values: { company: string; jobTitle: string; dueAt: Date }) => string,
   now = new Date(),
 ) {
   if (!hirePermissions(ctx.role).manage) throw new HireError("forbidden");
+  const allowed = await verificationLevel(db, ctx.organizationId);
+  if (allowed === "none") throw new HireError("forbidden");
   const job = await getOrgJob(db, ctx, jobId);
   if (input.dueAt.getTime() < now.getTime() + HOUR) throw new HireError("invalid");
   const organization = await db.organization.findUniqueOrThrow({
     where: { id: ctx.organizationId },
     select: { name: true },
   });
+  const message =
+    allowed === "custom"
+      ? input.message
+      : standardMessage({ company: organization.name, jobTitle: job.title, dueAt: input.dueAt });
   const applications = await db.application.findMany({
     where: {
       id: { in: input.applicationIds },
@@ -161,7 +184,7 @@ export async function requestPieces(
         applicationId: application.id,
         organizationId: ctx.organizationId,
         createdById: ctx.userId,
-        message: input.message,
+        message,
         dueAt: input.dueAt,
         items: {
           create: input.pieces.map((piece) => ({ kind: piece.kind, required: piece.required })),
@@ -175,7 +198,7 @@ export async function requestPieces(
           conversationId: conversation.id,
           senderId: ctx.userId,
           kind: "text",
-          body: input.message,
+          body: message,
           payload: { verification: application.id },
           createdAt: now,
         },

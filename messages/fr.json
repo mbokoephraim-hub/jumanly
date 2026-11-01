@@ -17255,7 +17255,9 @@
       "tab": {
         "candidatures": "Candidatures",
         "ats": "Analyse (ATS)",
+        "tableau": "Tableau Orbi",
         "retenus": "Retenus",
+        "pieces": "Vérification",
         "stats": "Statistiques"
       },
       "guard": "Chaque dossier est lu comme une donnée. Nom, âge, genre et photo ne comptent jamais.",
@@ -20361,12 +20363,91 @@
     "undo": {
       "retained": "Candidature de {name} retenue.",
       "hold": "Candidature de {name} mise en attente.",
-      "button": "Annuler"
+      "button": "Annuler",
+      "holdBlind": "Candidature mise en attente."
     },
     "swipe": {
       "retain": "Retenir",
       "hold": "En attente",
       "hint": "Glissez une carte vers la droite pour retenir, vers la gauche pour mettre en attente."
+    },
+    "blind": {
+      "name": "Candidat {index}",
+      "line": "Tri à l'aveugle : le nom et la photo apparaissent quand vous retenez.",
+      "on": "À l'aveugle",
+      "toggle": "Tri à l'aveugle : masquer le nom et la photo jusqu'à la présélection"
+    },
+    "filters": {
+      "title": "Filtres",
+      "active": "{count, plural, one {# actif} other {# actifs}}",
+      "scoreMin": "Compatibilité minimum (%)",
+      "skill": "Compétence",
+      "yearsMin": "Années d'expérience minimum",
+      "place": "Ville ou pays",
+      "confidence": "Niveau de confiance",
+      "confidenceValue": {
+        "medium": "Moyenne ou plus",
+        "high": "Élevée"
+      },
+      "state": "Où en est la candidature",
+      "stateValue": {
+        "retenus": "Retenus",
+        "attente": "En attente",
+        "nouveaux": "Pas encore triés"
+      },
+      "source": "Origine",
+      "days": "Reçues ces derniers jours (nombre)",
+      "complete": "Dossier complet seulement",
+      "any": "Tous",
+      "rule": "Les filtres sont enregistrés pour l'offre et partagés avec l'équipe. Ils ne portent jamais sur l'âge, le genre, la photo ou l'origine. La barre des classes compte toujours tout le monde.",
+      "save": "Enregistrer les filtres",
+      "reset": "Tout afficher",
+      "readOnly": "Les filtres de l'offre sont réglés par l'équipe qui trie.",
+      "simpleOnly": "Votre formule ouvre les filtres simples : état, date, source et dossiers complets. Les filtres sur le score, les compétences, l'expérience, le lieu et la confiance viennent avec une formule Company.",
+      "simpleOnlyLink": "Voir les formules",
+      "hidden": "{count, plural, one {# candidat masqué par les filtres.} other {# candidats masqués par les filtres.}}"
+    },
+    "compare": {
+      "seo": "Comparer des candidats",
+      "title": "Comparer",
+      "pick": "Comparer",
+      "button": "Comparer la sélection",
+      "pickTwo": "Cochez « Comparer » sur deux à quatre candidats, puis touchez « Comparer la sélection ».",
+      "caption": "Les candidats choisis, critère par critère",
+      "criterion": "Critère",
+      "class": "Classe",
+      "none": "—",
+      "nothing": "Rien à signaler",
+      "years": "Expérience",
+      "missing": "À vérifier",
+      "documents": "{received} sur {asked}",
+      "city": "Ville",
+      "criteriaMissed": "Manque : {list}",
+      "stage": "Étape",
+      "rule": "Les mêmes faits que la fiche résumé, sans le nom dans le calcul. Orbi propose, vous décidez."
+    },
+    "table": {
+      "seo": "Tableau des candidats",
+      "back": "L'offre",
+      "title": "Tableau Orbi",
+      "caption": "Candidats de l'offre ; touchez un titre de colonne pour trier",
+      "name": "Candidat",
+      "date": "Reçue le",
+      "pick": "Comparer {name}"
+    },
+    "results": {
+      "seo": "Résultats de l'analyse",
+      "title": "Résultats de l'analyse",
+      "line": "Les classes d'Orbi et vos Fort potentiel",
+      "classed": "{classed, plural, =0 {Aucune candidature classée} one {# candidature classée} other {# candidatures classées}} sur {total}",
+      "noneStrong": "Aucun Fort potentiel pour l'instant. Regardez « À considérer » : Orbi recommande, vous décidez.",
+      "hiddenCount": "{count, plural, =0 {Aucun candidat en Fort potentiel pour l'instant} one {candidat en Fort potentiel, sur {total}} other {candidats en Fort potentiel, sur {total}}}",
+      "lockTitle": "Découvrez qui ils sont",
+      "lockPlan": "Avec {plan}, Orbi montre qui sont vos Fort potentiel, leur score, leurs raisons et les questions à poser en entretien.",
+      "lockNoPlan": "Avec une formule Company, Orbi montre qui sont vos Fort potentiel, leur score, leurs raisons et les questions à poser en entretien.",
+      "lockSee": "Voir les formules",
+      "ruleNoPlan": "Toutes les candidatures restent dans votre pipeline, lisibles et à trier comme vous le voulez. Personne n'est écarté.",
+      "open": "Ouvrir le pipeline"
     },
     "notes": {
       "compatibility": "Compatibilité",
@@ -20442,7 +20523,13 @@
       "message": "Message (modifiable)",
       "template": "Bonjour, votre candidature au poste de {jobTitle} avance. Pour poursuivre, {company} vous demande quelques pièces, à déposer avant le {date} depuis votre candidature sur Jumanly. Vous pouvez réutiliser celles de votre Skills Passport. Merci !",
       "rule": "Chacun reçoit une notification, un message dans Messages et un e-mail, puis deux relances avant la date limite. Une pièce manquante n'écarte personne : vous décidez.",
-      "send": "Envoyer la demande"
+      "send": "Envoyer la demande",
+      "standardOnly": "Votre formule envoie le message type de Jumanly. Pour écrire le vôtre, passez à une formule avec modèles personnalisés."
+    },
+    "lock": {
+      "title": "Vérifier les retenus",
+      "text": "Demander diplômes, référents et certificats, avec relances automatiques, vient avec une formule payante. Les candidatures restent lisibles et triables sans formule.",
+      "see": "Voir les formules"
     }
   },
   "talentPieces": {

@@ -15,6 +15,7 @@ import { ANALYSIS_EVENT } from "@/server/services/cv-analysis";
 import { hirePermissions, HireError, recordView, type HireContext } from "@/server/services/hire";
 import { atsBoard } from "@/server/services/hire-ats";
 import { rankByClass } from "@/server/services/hire-classes";
+import { blindName } from "@/server/services/hire-filters";
 import { proposedQuestions } from "@/server/services/hire-interviews";
 import { highlightsOf } from "@/server/services/hire-phone-candidatures";
 import { isOnHold } from "@/server/services/hire-tri";
@@ -99,6 +100,8 @@ export async function RhCandidateSummary({
   const next = at >= 0 && at < ranked.length - 1 ? hrefOf(ranked[at + 1]!.id) : null;
   const previous = at > 0 ? hrefOf(ranked[at - 1]!.id) : null;
   const self = hrefOf(row.id);
+  // « Tri à l'aveugle »: the name and the initials come once the person is retained.
+  const masked = board.job.blindSort && application.shortlistedAt === null;
   const list = `/app/hire/offres/${jobId}?vue=candidats${stageParam}`;
 
   // ─── Identity and the sentence ───────────────────────────────────────────────────
@@ -295,10 +298,13 @@ export async function RhCandidateSummary({
 
         <section className="nb-rh-fr-id" aria-labelledby="rh-fr-nom">
           <span className="nb-rh-ini nb-rh-ini-l" data-teinte={tintOf(row.id)} aria-hidden>
-            {initialsOf(person.name)}
+            {masked ? null : initialsOf(person.name)}
           </span>
           <span className="nb-rh-res-t">
-            <h1 id="rh-fr-nom">{person.name}</h1>
+            <h1 id="rh-fr-nom">
+              {masked ? t("blind.name", { index: blindName(at) }) : person.name}
+            </h1>
+            {masked ? <p className="nb-meta">{t("blind.line")}</p> : null}
             {profile.headline ? <p className="nb-rh-fr-titre">{profile.headline}</p> : null}
             {person.city || code ? (
               <p className="nb-meta">
