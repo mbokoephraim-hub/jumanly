@@ -1,0 +1,36 @@
+/* Modèle « Prestige » (prestige) · Modèle d'Ephraïm (31/10/2026) : bandeau nuit pleine largeur, photo ronde cerclée de la couleur, nom en capitales avec le nom de famille en couleur, titres de section précédés d'un trait, expériences en frise avec leurs dates en pastille, colonne de droite teintée avec les compétences en étiquettes. */
+.tpl-prestige{--pr-nuit:#172033}
+.tpl-prestige .cv-page{grid-template-columns:minmax(0,1fr) 64mm;grid-template-areas:"tete tete" "principal lateral" "pied pied"}
+.tpl-prestige .cv-tete{background:var(--pr-nuit);color:#fff;padding:9mm var(--cv-marge) 8mm;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"ph id" "ph co";column-gap:7mm;align-items:center;border-bottom:1.2mm solid var(--cv-accent)}
+.tpl-prestige .cv-photo{grid-area:ph;width:30mm;height:30mm;box-shadow:0 0 0 1.1mm var(--cv-accent),0 0 0 2mm rgba(255,255,255,.12)}
+.tpl-prestige .cv-identite{grid-area:id;align-self:end}
+.tpl-prestige .cv-nom{text-transform:uppercase;font-weight:700;letter-spacing:.01em;font-size:2.35em;color:#fff}
+.tpl-prestige .cv-nom .nom{color:color-mix(in srgb,var(--cv-accent) 55%,#fff)}
+.tpl-prestige .cv-titre{color:color-mix(in srgb,var(--cv-accent) 40%,#fff);font-weight:600;font-size:1.08em;margin-top:2mm;line-height:1.35}
+.tpl-prestige .cv-contact{grid-area:co;align-self:start;color:rgba(255,255,255,.82);margin-top:3mm;font-size:.88em}
+.tpl-prestige .cv-contact li::before{content:"•";color:color-mix(in srgb,var(--cv-accent) 60%,#fff)}
+.tpl-prestige .cv-contact .lib{color:#fff}
+.tpl-prestige .cv-principal{padding:8mm 8mm 6mm var(--cv-marge)}
+.tpl-prestige .cv-lateral{display:block;background:var(--cv-doux);border-left:.3mm solid var(--cv-filet);padding:8mm 7mm 6mm}
+.tpl-prestige .cv-page.suite .cv-principal,.tpl-prestige .cv-page.suite .cv-lateral{padding-top:var(--cv-marge)}
+.tpl-prestige .cv-page.suite .cv-tete-suite{display:block;grid-area:tete;height:4mm;background:var(--pr-nuit);border-bottom:.8mm solid var(--cv-accent)}
+.tpl-prestige .cv-page.suite .cv-tete-suite span{display:none}
+.tpl-prestige .cv-st{display:flex;align-items:center;gap:2.6mm;color:var(--cv-encre);font-size:.9em;letter-spacing:.16em;margin-bottom:3mm}
+.tpl-prestige .cv-st::before{content:"";flex:none;width:6mm;height:.75mm;border-radius:.4mm;background:var(--cv-accent)}
+.tpl-prestige .cv-it-titre{font-weight:700}
+.tpl-prestige .cv-it-sous{color:var(--cv-gris);font-weight:500}
+.tpl-prestige .cv-it-date{align-self:flex-start;padding:.6mm 2.4mm;border-radius:1.6mm;background:var(--cv-doux2);color:color-mix(in srgb,var(--cv-accent) 80%,#000);font-weight:700;font-size:.84em}
+.tpl-prestige .cv-puces li strong{font-weight:700}
+/* Frise des expériences : un rond à gauche de chaque poste, un trait qui les relie. */
+.tpl-prestige .sec-experience>.cv-el,.tpl-prestige .sec-engagement>.cv-el{position:relative;padding-left:6mm}
+.tpl-prestige .sec-experience>.cv-el::before,.tpl-prestige .sec-engagement>.cv-el::before{content:"";position:absolute;left:0;top:.35em;width:2.6mm;height:2.6mm;border-radius:50%;border:.6mm solid var(--cv-accent);background:#fff;box-sizing:border-box}
+.tpl-prestige .sec-experience>.cv-el::after,.tpl-prestige .sec-engagement>.cv-el::after{content:"";position:absolute;left:1.15mm;top:calc(.35em + 3mm);bottom:calc(-1 * var(--cv-el));width:.3mm;background:var(--cv-filet)}
+.tpl-prestige .sec-experience>.cv-el:last-child::after,.tpl-prestige .sec-engagement>.cv-el:last-child::after{display:none}
+.tpl-prestige .sec-experience>.cv-el-suite::before,.tpl-prestige .sec-engagement>.cv-el-suite::before{display:none}
+/* Colonne de droite : étiquettes blanches cerclées. */
+.tpl-prestige .cv-lateral .cv-sec+.cv-sec{margin-top:calc(var(--cv-esp) + 1mm)}
+.tpl-prestige .cv-lateral .cv-st{font-size:.84em}
+.tpl-prestige .cv-chips{gap:1.4mm}
+.tpl-prestige .cv-chips li{background:#fff;border:.25mm solid var(--cv-filet);border-radius:3mm;padding:.7mm 2.6mm;font-weight:500;font-size:.88em}
+.tpl-prestige .cv-lateral .cv-it-titre{font-size:1em}
+.tpl-prestige .cv-lateral .cv-it-date{background:none;padding:0;color:var(--cv-gris);font-weight:500}

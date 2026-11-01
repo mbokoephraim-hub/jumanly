@@ -76,9 +76,10 @@ const content: CvContent = {
 };
 
 describe("catalogue des modèles (docs/modeles-cv § 3)", () => {
-  it("15 modèles : 5 gratuits, 5 dès Starter, 5 dès Pro", () => {
-    expect(cvTemplateRegistry).toHaveLength(15);
-    for (const access of ["free", "starter", "pro"] as const) {
+  it("16 modèles : 6 gratuits (dont « Prestige »), 5 dès Starter, 5 dès Pro", () => {
+    expect(cvTemplateRegistry).toHaveLength(16);
+    expect(cvTemplateRegistry.filter((item) => item.access === "free")).toHaveLength(6);
+    for (const access of ["starter", "pro"] as const) {
       expect(cvTemplateRegistry.filter((item) => item.access === access)).toHaveLength(5);
     }
   });

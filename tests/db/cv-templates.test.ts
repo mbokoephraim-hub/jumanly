@@ -69,7 +69,7 @@ describe("droit career.cv.templates.access (docs/modeles-cv § 2 point 6)", () =
     expect(await applyTemplate(db, user.id, cv.id, pro.id)).toBe("locked");
   });
 
-  it("appliquer les 15 modèles à la suite ne modifie jamais le contenu", async () => {
+  it("appliquer les 16 modèles à la suite ne modifie jamais le contenu", async () => {
     const { user, cv } = await talentWithCv("pro");
     for (const template of cvTemplateRegistry) {
       expect(await applyTemplate(db, user.id, cv.id, template.id)).toBe("applied");
