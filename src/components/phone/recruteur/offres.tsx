@@ -18,7 +18,7 @@ import { requestedDocumentKinds, type OfferRow } from "@/server/services/hire-of
 import { screeningQuestionsOf } from "@/server/services/screening";
 import { MenuArt } from "@/components/site/menu-art";
 import { saveFiltersAction, sortGestureAction } from "@/server/actions/hire-tri";
-import { SwipeCard } from "./tri-client";
+import { RhFiltersSheet, SwipeCard } from "./tri-client";
 import { RhUndoGesture } from "./tri";
 import { countryCode, countryName, flagOf } from "@/lib/countries";
 import {
@@ -695,6 +695,7 @@ export async function RhOfferCandidates({
 }) {
   const t = await getTranslations("phoneRhOffres");
   const tt = await getTranslations("phoneRhTri");
+  const tf = await getTranslations("phoneExplorer.filters");
 
   const format = await getFormatter();
   const board = await atsBoard(db, ctx, jobId);
@@ -826,7 +827,6 @@ export async function RhOfferCandidates({
                     className="nb-rh-pipe-docs"
                     data-complet={row.documents.received >= row.documents.asked ? "" : undefined}
                   >
-                    <MenuArt name="letter" size="xs" />
                     {t("classes.documents", {
                       received: row.documents.received,
                       asked: row.documents.asked,
@@ -865,12 +865,8 @@ export async function RhOfferCandidates({
               {t("pipeline.applied", { when: format.relativeTime(row.createdAt, now) })}
             </span>
             <span className="nb-rh-pipe-acces">
-              <Link href={`/app/hire/candidats/${row.id}?onglet=cv`}>
-                <MenuArt name="cv" size="xs" />
-                {t("pipeline.cv")}
-              </Link>
+              <Link href={`/app/hire/candidats/${row.id}?onglet=cv`}>{t("pipeline.cv")}</Link>
               <Link href={`/app/hire/candidats/${row.id}?onglet=reponses`}>
-                <MenuArt name="letter" size="xs" />
                 {t("pipeline.documents")}
               </Link>
               <label className="nb-rh-pipe-comparer">
@@ -917,8 +913,11 @@ export async function RhOfferCandidates({
       {board.withScores && classed > 0 ? (
         <section className="nb-rh-classes" aria-labelledby="rh-classes-t">
           <h2 id="rh-classes-t">
-            <MenuArt name="funnel" size="xs" />
-            {t("classes.title")}
+            <Link href={`/app/hire/offres/${jobId}/resultats`}>
+              <OrbiDisc size={30} />
+              <span>{t("classes.title")}</span>
+              <PhoneIcon name="chevron" size={18} />
+            </Link>
           </h2>
           <div className="nb-rh-classes-barre" aria-hidden>
             {counts
@@ -954,13 +953,15 @@ export async function RhOfferCandidates({
           ) : null}
         </section>
       ) : null}
-      <Link href={`/app/hire/offres/${jobId}/resultats`} className="nb-rh-pieces-lien">
-        <MenuArt name="why" size="xs" />
-        <span>
-          <b>{tt("results.title")}</b>
-          <span className="nb-meta">{tt("results.line")}</span>
-        </span>
-      </Link>
+      {board.withScores && classed > 0 ? null : (
+        <Link href={`/app/hire/offres/${jobId}/resultats`} className="nb-rh-pieces-lien">
+          <OrbiDisc size={36} />
+          <span>
+            <b>{tt("results.title")}</b>
+            <span className="nb-meta">{tt("results.line")}</span>
+          </span>
+        </Link>
+      )}
       {board.shortlisted.length > 0 ? (
         <Link href={`/app/hire/offres/${jobId}/verification`} className="nb-rh-pieces-lien">
           <MenuArt name="privacy" size="xs" />
@@ -972,125 +973,140 @@ export async function RhOfferCandidates({
           </span>
         </Link>
       ) : null}
-      <details className="nb-rh-filtres">
-        <summary>
-          <MenuArt name="funnel" size="xs" />
-          <span>{tt("filters.title")}</span>
-          {activeFilters(filters) > 0 ? (
-            <b>{tt("filters.active", { count: activeFilters(filters) })}</b>
-          ) : null}
-          {blind ? <b>{tt("blind.on")}</b> : null}
-        </summary>
-        {sortable ? (
-          <form action={saveFiltersAction} className="nb-rh-filtres-f" id={`rh-filtres-${jobId}`}>
-            <input type="hidden" name="job" value={jobId} />
-            <input type="hidden" name="back" value={here0} />
-            {allFilters ? (
-              <>
-                <label>
-                  {tt("filters.scoreMin")}
+      <div className="nb-rh-pf-rangee">
+        <RhFiltersSheet
+          label={tt("filters.title")}
+          countLabel={tf("buttonCount", { count: activeFilters(filters) })}
+          count={activeFilters(filters)}
+          closeLabel={tf("close")}
+          version={`${JSON.stringify(filters)}-${blind}`}
+        >
+          {sortable ? (
+            <form action={saveFiltersAction} className="nb-rh-pf-f" id={`rh-filtres-${jobId}`}>
+              <input type="hidden" name="job" value={jobId} />
+              <input type="hidden" name="back" value={here0} />
+              <div className="nb-ex-f-tete">
+                <h2>{tt("filters.title")}</h2>
+                <button type="submit" name="reset" value="1">
+                  {tt("filters.reset")}
+                </button>
+              </div>
+              <div className="nb-ex-f-corps">
+                {allFilters ? (
+                  <>
+                    <label className="nb-rh-pf-champ">
+                      <span className="nb-ex-f-gl">{tt("filters.scoreMin")}</span>
+                      <input
+                        type="number"
+                        name="scoreMin"
+                        min={0}
+                        max={100}
+                        inputMode="numeric"
+                        defaultValue={filters.scoreMin ?? ""}
+                      />
+                    </label>
+                    <label className="nb-rh-pf-champ">
+                      <span className="nb-ex-f-gl">{tt("filters.skill")}</span>
+                      <input name="skill" maxLength={60} defaultValue={filters.skill ?? ""} />
+                    </label>
+                    <label className="nb-rh-pf-champ">
+                      <span className="nb-ex-f-gl">{tt("filters.yearsMin")}</span>
+                      <input
+                        type="number"
+                        name="yearsMin"
+                        min={0}
+                        max={40}
+                        inputMode="numeric"
+                        defaultValue={filters.yearsMin ?? ""}
+                      />
+                    </label>
+                    <label className="nb-rh-pf-champ">
+                      <span className="nb-ex-f-gl">{tt("filters.place")}</span>
+                      <input name="place" maxLength={60} defaultValue={filters.place ?? ""} />
+                    </label>
+                    <PfChoices
+                      name="confidence"
+                      legend={tt("filters.confidence")}
+                      any={tt("filters.any")}
+                      value={filters.confidence ?? ""}
+                      options={filterConfidences.map((value) => ({
+                        value,
+                        label: tt(`filters.confidenceValue.${value}`),
+                      }))}
+                    />
+                  </>
+                ) : (
+                  <p className="nb-meta nb-rh-filtres-lock">
+                    <span>{tt("filters.simpleOnly")}</span>
+                    <Link href="/app/abonnement/formules">{tt("filters.simpleOnlyLink")}</Link>
+                  </p>
+                )}
+                <PfChoices
+                  name="state"
+                  legend={tt("filters.state")}
+                  any={tt("filters.any")}
+                  value={filters.state ?? ""}
+                  options={filterStates.map((value) => ({
+                    value,
+                    label: tt(`filters.stateValue.${value}`),
+                  }))}
+                />
+                <PfChoices
+                  name="source"
+                  legend={tt("filters.source")}
+                  any={tt("filters.any")}
+                  value={filters.source ?? ""}
+                  options={filterSources.map((value) => ({
+                    value,
+                    label: t(`source.${value}`),
+                  }))}
+                />
+                <label className="nb-rh-pf-champ">
+                  <span className="nb-ex-f-gl">{tt("filters.days")}</span>
                   <input
                     type="number"
-                    name="scoreMin"
-                    min={0}
-                    max={100}
+                    name="days"
+                    min={1}
+                    max={365}
                     inputMode="numeric"
-                    defaultValue={filters.scoreMin ?? ""}
+                    defaultValue={filters.days ?? ""}
                   />
                 </label>
-                <label>
-                  {tt("filters.skill")}
-                  <input name="skill" maxLength={60} defaultValue={filters.skill ?? ""} />
-                </label>
-                <label>
-                  {tt("filters.yearsMin")}
-                  <input
-                    type="number"
-                    name="yearsMin"
-                    min={0}
-                    max={40}
-                    inputMode="numeric"
-                    defaultValue={filters.yearsMin ?? ""}
-                  />
-                </label>
-                <label>
-                  {tt("filters.place")}
-                  <input name="place" maxLength={60} defaultValue={filters.place ?? ""} />
-                </label>
-                <label>
-                  {tt("filters.confidence")}
-                  <select name="confidence" defaultValue={filters.confidence ?? ""}>
-                    <option value="">{tt("filters.any")}</option>
-                    {filterConfidences.map((value) => (
-                      <option key={value} value={value}>
-                        {tt(`filters.confidenceValue.${value}`)}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </>
-            ) : (
-              <p className="nb-meta nb-rh-filtres-lock">
-                <MenuArt name="pricing" size="xs" />
-                <span>{tt("filters.simpleOnly")}</span>
-                <Link href="/app/abonnement/formules">{tt("filters.simpleOnlyLink")}</Link>
-              </p>
-            )}
-            <label>
-              {tt("filters.state")}
-              <select name="state" defaultValue={filters.state ?? ""}>
-                <option value="">{tt("filters.any")}</option>
-                {filterStates.map((value) => (
-                  <option key={value} value={value}>
-                    {tt(`filters.stateValue.${value}`)}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              {tt("filters.source")}
-              <select name="source" defaultValue={filters.source ?? ""}>
-                <option value="">{tt("filters.any")}</option>
-                {filterSources.map((value) => (
-                  <option key={value} value={value}>
-                    {t(`source.${value}`)}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              {tt("filters.days")}
-              <input
-                type="number"
-                name="days"
-                min={1}
-                max={365}
-                inputMode="numeric"
-                defaultValue={filters.days ?? ""}
-              />
-            </label>
-            <label className="nb-rh-filtres-case">
-              <input type="checkbox" name="complete" defaultChecked={filters.complete ?? false} />
-              {tt("filters.complete")}
-            </label>
-            <label className="nb-rh-filtres-case">
-              <input type="checkbox" name="blind" defaultChecked={blind} />
-              {tt("blind.toggle")}
-            </label>
-            <p className="nb-meta">{tt("filters.rule")}</p>
-            <div className="nb-rh-filtres-b">
-              <button type="submit" className="nb-bp">
-                {tt("filters.save")}
-              </button>
-              <button type="submit" name="reset" value="1" className="nb-bs">
-                {tt("filters.reset")}
-              </button>
-            </div>
-          </form>
-        ) : (
-          <p className="nb-meta">{tt("filters.readOnly")}</p>
-        )}
-      </details>
+                <div className="nb-ex-f-opts nb-rh-pf-cases">
+                  <label className="nb-ex-f-opt nb-rh-pf-opt">
+                    <input
+                      type="checkbox"
+                      name="complete"
+                      defaultChecked={filters.complete ?? false}
+                    />
+                    {tt("filters.complete")}
+                  </label>
+                  <label className="nb-ex-f-opt nb-rh-pf-opt">
+                    <input type="checkbox" name="blind" defaultChecked={blind} />
+                    {tt("blind.toggle")}
+                  </label>
+                </div>
+                <p className="nb-meta nb-rh-pf-regle">{tt("filters.rule")}</p>
+              </div>
+              <div className="nb-ex-f-bas">
+                <button type="submit" className="nb-ex-f-voir">
+                  {tt("filters.save")}
+                </button>
+              </div>
+            </form>
+          ) : (
+            <>
+              <div className="nb-ex-f-tete">
+                <h2>{tt("filters.title")}</h2>
+              </div>
+              <div className="nb-ex-f-corps">
+                <p className="nb-meta nb-rh-pf-regle">{tt("filters.readOnly")}</p>
+              </div>
+            </>
+          )}
+        </RhFiltersSheet>
+        {blind ? <span className="nb-rh-pf-etat">{tt("blind.on")}</span> : null}
+      </div>
       {hiddenByFilters > 0 ? (
         <p className="nb-meta nb-rh-regle">{tt("filters.hidden", { count: hiddenByFilters })}</p>
       ) : null}
@@ -1137,7 +1153,7 @@ export async function RhOfferCandidates({
       </div>
       <div className="nb-bas nb-rh-pipe-bas">
         <button type="submit" form={compareForm} className="nb-bs">
-          {tt("compare.button")}
+          {tt("compare.pick")}
         </button>
         <Link href={`/app/hire/candidats?offre=${jobId}`} className="nb-bp">
           {t("candidates.sort")}
@@ -1312,4 +1328,38 @@ export async function rhPublishData(
     editing: Boolean(job),
     step: Math.min(10, Math.max(1, Math.trunc(step) || 1)),
   };
+}
+
+/** A group of choices of the filters sheet, as Explorer's chips (one radio per chip). */
+function PfChoices({
+  name,
+  legend,
+  any,
+  value,
+  options,
+}: {
+  name: string;
+  legend: string;
+  any: string;
+  value: string;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <fieldset className="nb-rh-pf-grp">
+      <legend className="nb-ex-f-gl">{legend}</legend>
+      <div className="nb-ex-f-opts">
+        {[{ value: "", label: any }, ...options].map((option) => (
+          <label key={option.value || "any"} className="nb-ex-f-opt nb-rh-pf-opt">
+            <input
+              type="radio"
+              name={name}
+              value={option.value}
+              defaultChecked={value === option.value}
+            />
+            {option.label}
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
 }

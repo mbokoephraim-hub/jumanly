@@ -135,7 +135,7 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
       .click();
     await expect(page).toHaveURL(/vue=candidats/);
     await expect(main(page)).toContainText("ni du nom, ni de l'âge, ni de la photo");
-    await expect(main(page).getByRole("link", { name: "Trier dans Candidatures" })).toHaveAttribute(
+    await expect(main(page).getByRole("link", { name: "Trier les candidatures" })).toHaveAttribute(
       "href",
       /\/app\/hire\/candidats\?offre=/,
     );

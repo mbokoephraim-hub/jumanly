@@ -16293,7 +16293,7 @@ Conventions :
 | `phoneRhOffres.candidates.line` | {count, plural, =0 {Aucun candidat} one {# candidat} other {# candidats}} · {unseen, plural, =0 {aucun nouveau} one {# nouveau} other {# nouveaux}} |
 | `phoneRhOffres.candidates.rule` | Classés par correspondance avec l'offre. Le score ne tient compte ni du nom, ni de l'âge, ni de la photo. Vous décidez. |
 | `phoneRhOffres.candidates.ruleNoScore` | Classés du plus récent au plus ancien. Vous décidez. |
-| `phoneRhOffres.candidates.sort` | Trier dans Candidatures |
+| `phoneRhOffres.candidates.sort` | Trier les candidatures |
 | `phoneRhOffres.classes.title` | Résultats de l'analyse |
 | `phoneRhOffres.classes.fort` | Fort potentiel |
 | `phoneRhOffres.classes.considerer` | À considérer |
@@ -16306,7 +16306,7 @@ Conventions :
 | `phoneRhOffres.classes.horsLead` | Un critère éliminatoire que vous avez fixé manque. Ces candidats restent visibles : vous pouvez les remettre dans la liste. |
 | `phoneRhOffres.classes.missing` | Manque : {label} |
 | `phoneRhOffres.classes.score` | Compatibilité {value} % |
-| `phoneRhOffres.classes.documents` | {received} sur {asked} |
+| `phoneRhOffres.classes.documents` | Pièces : {received} sur {asked} |
 | `phoneRhTri.back` | Pipeline |
 | `phoneRhTri.previous` | Candidat précédent |
 | `phoneRhTri.next` | Candidat suivant |
@@ -16406,7 +16406,7 @@ Conventions :
 | `phoneRhTri.compare.title` | Comparer |
 | `phoneRhTri.compare.pick` | Comparer |
 | `phoneRhTri.compare.button` | Comparer la sélection |
-| `phoneRhTri.compare.pickTwo` | Cochez « Comparer » sur deux à quatre candidats, puis touchez « Comparer la sélection ». |
+| `phoneRhTri.compare.pickTwo` | Cochez « Comparer » sur deux à quatre candidats, puis touchez « Comparer » en bas de la liste. |
 | `phoneRhTri.compare.caption` | Les candidats choisis, critère par critère |
 | `phoneRhTri.compare.criterion` | Critère |
 | `phoneRhTri.compare.class` | Classe |
