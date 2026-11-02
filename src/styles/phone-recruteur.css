@@ -1286,7 +1286,7 @@
   min-width: 0;
   padding: 10px 9px;
   border-radius: 14px;
-  background: var(--nb-noir);
+  background: color-mix(in srgb, var(--nb-creme) 5%, transparent);
   font-size: 12.5px;
   white-space: nowrap;
   overflow: hidden;
@@ -4923,10 +4923,14 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
 }
 .nb-rh-pipe-carte {
   display: grid;
-  gap: 8px;
-  padding: 12px;
-  border-radius: 16px;
-  background: var(--nb-noir);
+  gap: 10px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+}
+.nb-rh-pipe-carte {
+  --anneau-fond: var(--nb-carte);
 }
 .nb-rh-pipe-carte .nb-rh-cand {
   padding: 0;
@@ -4957,15 +4961,16 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
 }
 .nb-rh-pipe-acces a {
   display: inline-flex;
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
   justify-content: center;
   align-items: center;
-  gap: 6px;
-  min-height: 40px;
-  border-radius: 12px;
+  min-height: 38px;
+  border-radius: 999px;
   border: 1px solid var(--nb-filet-fort);
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
+  white-space: nowrap;
   color: var(--nb-creme);
 }
 .nb-rh-carte-stat .nb-rh-courbe-h {
@@ -5064,11 +5069,21 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
   background: var(--nb-carte);
 }
 .nb-rh-classes h2 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   font-size: 15px;
   font-weight: 700;
+}
+.nb-rh-classes h2 a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  color: var(--nb-creme);
+}
+.nb-rh-classes h2 a > span {
+  flex: 1;
+}
+.nb-rh-classes h2 a > svg:last-child {
+  color: var(--nb-brume);
 }
 .nb-rh-classes-barre {
   display: flex;
@@ -5095,7 +5110,7 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
   padding: 0 10px;
   border-radius: 12px;
   border: 1px solid var(--nb-filet-fort);
-  background: var(--nb-noir);
+  background: color-mix(in srgb, var(--nb-creme) 4%, transparent);
   font-size: 13.5px;
   font-weight: 600;
   color: var(--nb-creme);
@@ -5191,7 +5206,7 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
   height: 46px;
   border-radius: 999px;
   background:
-    radial-gradient(closest-side, var(--nb-noir) 76%, transparent 78%),
+    radial-gradient(closest-side, var(--anneau-fond, var(--nb-noir)) 76%, transparent 78%),
     conic-gradient(var(--classe, var(--nb-lime)) calc(var(--p) * 1%), var(--nb-haute) 0);
 }
 .nb-rh-anneau b {
@@ -5866,85 +5881,127 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
   color: var(--nb-lime-t);
 }
 
-/* Filtres, tri à l'aveugle, comparaison, tableau (« Logique du recrutement », étape 5) */
-.nb-rh-filtres {
-  margin: 12px 20px 0;
-  border-radius: 18px;
-  border: 1px solid var(--nb-filet-fort);
-  background: var(--nb-carte);
-}
-.nb-rh-filtres > summary {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 52px;
-  padding: 0 14px;
-  font-weight: 700;
-  cursor: pointer;
-  list-style: none;
-}
-.nb-rh-filtres > summary::-webkit-details-marker {
-  display: none;
-}
-.nb-rh-filtres > summary b {
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--nb-lime);
-  color: var(--nb-encre);
-  font-size: 12px;
-}
-.nb-rh-filtres > p,
-.nb-rh-filtres-f {
-  padding: 0 14px 14px;
-}
-.nb-rh-filtres-f {
-  display: grid;
-  gap: 10px;
-}
-.nb-rh-filtres-f label {
-  display: grid;
-  gap: 4px;
-  font-size: 13.5px;
-  font-weight: 600;
-}
-.nb-rh-filtres-f input:not([type="checkbox"]),
-.nb-rh-filtres-f select {
-  min-height: 44px;
-  padding: 0 12px;
-  border-radius: 12px;
-  border: 1px solid var(--nb-filet-fort);
-  background: var(--nb-noir);
-  color: var(--nb-creme);
-  font: inherit;
-  font-weight: 400;
-}
-.nb-rh-filtres-f .nb-rh-filtres-case {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 40px;
-}
-.nb-rh-filtres-b {
+/* Filtres, tri à l'aveugle, comparaison, tableau (« Logique du recrutement », étape 5).
+   Les filtres d'une offre sont ceux d'Explorer (Ephraïm, 02/11/2026) : pilule Lime, feuille du bas. */
+.nb-rh-pf-rangee {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 20px 0;
+}
+.nb-rh-pf-rangee .nb-ex-fbtn {
+  height: 40px;
+  border-radius: 20px;
+}
+.nb-rh-pf-etat {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--nb-carte);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--nb-brume);
+}
+.nb-rh-pf-f {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+}
+.nb-rh-pf-grp {
+  margin: 16px 0 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.nb-rh-pf-grp > legend {
+  margin: 0 0 8px;
+  padding: 0;
+}
+.nb-rh-pf-champ {
+  display: block;
+}
+.nb-rh-pf-champ input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(var(--nb-voile), 0.22);
+  background: transparent;
+  color: var(--nb-creme);
+  font: inherit;
+  font-size: 15px;
+}
+.nb-rh-pf-champ input:focus-visible {
+  outline: 2px solid var(--nb-lime);
+  outline-offset: 1px;
+}
+.nb-rh-pf-opt {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+.nb-rh-pf-opt input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+.nb-rh-pf-opt:has(input:checked) {
+  background: var(--nb-lime);
+  border-color: var(--nb-lime);
+  color: var(--nb-sur-lime, #0f3f37);
+}
+.nb-rh-pf-opt:has(input:focus-visible) {
+  outline: 2px solid var(--nb-lime);
+  outline-offset: 2px;
+}
+.nb-rh-pf-cases {
+  margin-top: 18px;
+}
+.nb-rh-pf-regle {
+  margin-top: 16px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+.nb-rh-pf .nb-rh-filtres-lock {
+  margin-top: 16px;
 }
 .nb-rh-pipe-comparer {
   display: inline-flex;
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
   justify-content: center;
   align-items: center;
   gap: 6px;
-  min-height: 40px;
-  border-radius: 12px;
-  border: 1px dashed var(--nb-filet-fort);
-  font-size: 14px;
+  min-height: 38px;
+  border-radius: 999px;
+  border: 1px solid var(--nb-filet-fort);
+  font-size: 13.5px;
   font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.nb-rh-pipe-comparer input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--nb-lime);
+}
+.nb-rh-pipe-comparer:has(input:checked) {
+  border-color: var(--nb-lime);
+  color: var(--nb-lime-t);
 }
 .nb-rh-pipe-bas {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 8px;
+}
+.nb-rh-pipe-bas > * {
+  white-space: nowrap;
+  min-width: 0;
+  padding-inline: 18px;
 }
 .jm-comparer,
 .jm-tableau {
@@ -6099,4 +6156,12 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
+}
+.nb-rh-pf-cases .nb-rh-pf-opt {
+  height: auto;
+  min-height: 36px;
+  padding-block: 8px;
+  white-space: normal;
+  line-height: 1.3;
+  text-align: left;
 }

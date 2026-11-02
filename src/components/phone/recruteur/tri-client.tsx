@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { PhoneSheet } from "../sheet";
 
 /** How far a finger has to travel for a gesture to count (px). */
 const THRESHOLD = 90;
@@ -144,5 +145,68 @@ export function UndoBar({ children }: { children: ReactNode }) {
     <div className="nb-rh-tri-annuler" role="status">
       {children}
     </div>
+  );
+}
+
+/**
+ * « Filtres » of an offer's candidates, like Explorer's (docs/fil-menu-publication § 3): a Lime
+ * pill with the number of filters on, which opens a sheet from the bottom. The sheet holds the
+ * server form; it closes once the saved filters come back (`version` changes).
+ */
+export function RhFiltersSheet({
+  label,
+  countLabel,
+  count,
+  closeLabel,
+  version,
+  children,
+}: {
+  label: string;
+  countLabel: string;
+  count: number;
+  closeLabel: string;
+  /** The saved filters, serialized: a new value means the form was saved. */
+  version: string;
+  children: ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+  const seen = useRef(version);
+  useEffect(() => {
+    if (seen.current === version) return;
+    seen.current = version;
+    setOpen(false);
+  }, [version]);
+  return (
+    <>
+      <button
+        type="button"
+        className="nb-ex-fbtn"
+        aria-label={countLabel}
+        aria-haspopup="dialog"
+        onClick={() => setOpen(true)}
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path
+            d="M4 7h10M18 7h2M4 17h4M12 17h8"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+          />
+          <circle cx="16" cy="7" r="2.2" stroke="currentColor" strokeWidth="2.2" />
+          <circle cx="10" cy="17" r="2.2" stroke="currentColor" strokeWidth="2.2" />
+        </svg>
+        {label}
+        {count > 0 ? <span className="nb-ex-fbtn-n">{count}</span> : null}
+      </button>
+      <PhoneSheet
+        open={open}
+        onClose={() => setOpen(false)}
+        label={label}
+        closeLabel={closeLabel}
+        className="nb-ex-feuille nb-rh-pf"
+      >
+        {children}
+      </PhoneSheet>
+    </>
   );
 }
