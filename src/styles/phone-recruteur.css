@@ -7012,3 +7012,125 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 .nb-rh-fp-apropos > .nb-pf-presente:first-child {
   margin-top: 4px;
 }
+
+/* « Documents » d'un candidat (Ephraïm, 03/11/2026) : une carte horizontale par pièce, le dessin
+   de « Mes documents » à gauche, le titre, une phrase, « Consulter » qui appelle le doigt. */
+.nb-rh-fd {
+  display: grid;
+  gap: 12px;
+  margin: 14px 20px 0;
+}
+.nb-rh-fd-liste {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nb-rh-fd-carte {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  min-width: 0;
+  padding: 12px;
+  border-radius: 22px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+}
+.nb-rh-fd-visuel {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 92px;
+  min-height: 104px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--nb-menthe) 26%, var(--nb-haute));
+}
+.nb-rh-fd-carte[data-art="cv"] .nb-rh-fd-visuel {
+  align-items: flex-end;
+}
+.nb-rh-fd-carte[data-art="cv"] .nb-cr-cv-page {
+  width: 64px;
+  height: 80px;
+}
+.nb-rh-fd-carte[data-art="letter"] .nb-rh-fd-visuel {
+  background: color-mix(in srgb, var(--nb-ambre) 24%, var(--nb-haute));
+}
+.nb-rh-fd-carte[data-art="portfolio"] .nb-rh-fd-visuel {
+  background: color-mix(in srgb, #f4a6c8 24%, var(--nb-haute));
+}
+.nb-rh-fd-carte[data-art="certificate"] .nb-rh-fd-visuel,
+.nb-rh-fd-carte[data-art="document"] .nb-rh-fd-visuel {
+  background: color-mix(in srgb, #7cc4ff 22%, var(--nb-haute));
+}
+.nb-rh-fd-t {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+.nb-rh-fd-t > b {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.nb-rh-fd-t > span:not(.nb-rh-fd-bas) {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--nb-gris);
+}
+.nb-rh-fd-bas {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 6px;
+}
+.nb-rh-fd-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 38px;
+  padding: 0 14px 0 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  background: linear-gradient(100deg, var(--nb-menthe-claire), var(--nb-lime));
+  color: var(--nb-encre);
+  animation: nb-rh-fd-appel 2.4s ease-in-out infinite;
+}
+.nb-rh-fd-go[data-premier] {
+  animation-delay: 0.4s;
+}
+@keyframes nb-rh-fd-appel {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--nb-lime) 55%, transparent);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 7px color-mix(in srgb, var(--nb-lime) 0%, transparent);
+    transform: scale(1.04);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-rh-fd-go {
+    animation: none;
+  }
+}
+.nb-app[data-reduit] .nb-rh-fd-go {
+  animation: none;
+}
+.nb-rh-fp > .nb-rh-classes-tous {
+  justify-self: start;
+  margin: 16px 20px 0;
+}

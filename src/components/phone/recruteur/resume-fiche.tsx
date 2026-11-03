@@ -147,14 +147,37 @@ export async function RhCandidateSummary({
   const state = (verified: boolean): "verified" | "read" | "received" =>
     verified ? "verified" : read ? "read" : "received";
   const file = `/app/hire/candidats/${row.id}`;
-  const documents = [
+  // « Documents » (Ephraïm, 03/11/2026): one horizontal card per piece, the drawing of « Mes
+  // documents » of the talent on the left, the title, one line on what is inside, « Consulter ».
+  const cvTitle =
+    application.cvSnapshot && typeof application.cvSnapshot === "object"
+      ? String((application.cvSnapshot as Record<string, unknown>).title ?? "").trim()
+      : "";
+  const diplomaRows = profile.educations.filter((item) => item.kind === "diploma");
+  const documents: {
+    key: string;
+    art: "cv" | "letter" | "portfolio" | "certificate" | "document";
+    title: string;
+    hook: string;
+    state: "verified" | "read" | "received" | null;
+    href: string;
+  }[] = [
     application.cvSnapshot
-      ? { key: "cv", title: t("documents.cv"), state: state(false), href: `${file}?onglet=cv` }
+      ? {
+          key: "cv",
+          art: "cv" as const,
+          title: cvTitle || t("documents.cv"),
+          hook: tf("cards.cv"),
+          state: state(false),
+          href: `${file}?onglet=cv`,
+        }
       : null,
     application.coverLetter?.trim()
       ? {
           key: "letter",
+          art: "letter" as const,
           title: t("documents.letter"),
+          hook: tf("cards.letter"),
           state: state(false),
           href: `${file}?onglet=reponses`,
         }
@@ -162,14 +185,31 @@ export async function RhCandidateSummary({
     profile.portfolioSlug && profile.portfolioPublic && !masked
       ? {
           key: "portfolio",
+          art: "portfolio" as const,
           title: tf("documents.portfolio"),
-          state: "received" as const,
+          hook: tf("cards.portfolio"),
+          state: null,
           href: `/portfolio/${profile.portfolioSlug}`,
+        }
+      : null,
+    diplomaRows.length > 0
+      ? {
+          key: "diplomas",
+          art: "certificate" as const,
+          title: tf("diplomas.title"),
+          hook: tf("cards.diplomas", {
+            count: diplomaRows.length,
+            proofs: diplomaRows.filter((item) => item.image).length,
+          }),
+          state: null,
+          href: `${self.replace(/&partie=[a-z]+/, "")}`,
         }
       : null,
     ...attachments.map((item, index) => ({
       key: `a-${index}`,
+      art: item.type === "certificate" ? ("certificate" as const) : ("document" as const),
       title: item.title,
+      hook: tf("cards.attachment"),
       // An attestation of Jumanly is checked by its code: it counts as verified.
       state: state(item.type === "certificate"),
       href: `${file}?onglet=reponses`,
@@ -386,23 +426,58 @@ export async function RhCandidateSummary({
 
         {part === "documents" ? (
           <>
-            <section className="nb-rh-fr-s" aria-labelledby="rh-fr-docs">
-              <h2 id="rh-fr-docs">
-                <MenuArt name="letter" size="xs" />
+            <section className="nb-rh-fd" aria-labelledby="rh-fd-t">
+              <h2 id="rh-fd-t" className="nb-rh-co-h">
                 {tf("documents.title")}
+                <small>{documents.length}</small>
               </h2>
               {documents.length === 0 ? (
                 <p className="nb-meta">{t("documents.none")}</p>
               ) : (
-                <ul className="nb-rh-fr-docs">
-                  {documents.map((item) => (
-                    <li key={item.key}>
-                      <Link href={item.href}>
-                        <span>{item.title}</span>
-                        <span className="nb-rh-fr-doc-etat" data-etat={item.state}>
-                          {t(`documents.state.${item.state}`)}
+                <ul className="nb-rh-fd-liste">
+                  {documents.map((item, index) => (
+                    <li key={item.key} className="nb-rh-fd-carte" data-art={item.art}>
+                      <span className="nb-rh-fd-visuel" aria-hidden>
+                        {item.art === "cv" ? (
+                          <span
+                            className="nb-cr-cv-page"
+                            style={{ "--accent": "var(--nb-menthe)" } as CSSProperties}
+                          >
+                            <i data-titre="" />
+                            <i data-sous="" />
+                            <i />
+                            <i data-w="80" />
+                            <i data-w="70" />
+                            <i data-section="" />
+                            <i />
+                            <i data-w="80" />
+                          </span>
+                        ) : (
+                          <MenuArt name={item.art} size="lg" />
+                        )}
+                      </span>
+                      <span className="nb-rh-fd-t">
+                        <b>{item.title}</b>
+                        <span>{item.hook}</span>
+                        <span className="nb-rh-fd-bas">
+                          {item.state ? (
+                            <span className="nb-rh-fr-doc-etat" data-etat={item.state}>
+                              {t(`documents.state.${item.state}`)}
+                            </span>
+                          ) : (
+                            <span />
+                          )}
+                          <Link
+                            href={item.href}
+                            className="nb-rh-fd-go"
+                            data-premier={index === 0 ? "" : undefined}
+                            aria-label={`${tf("cards.open")} · ${item.title}`}
+                          >
+                            {tf("cards.open")}
+                            <PhoneIcon name="chevron" size={14} />
+                          </Link>
                         </span>
-                      </Link>
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -412,31 +487,6 @@ export async function RhCandidateSummary({
                   {t("documents.missing", { count: missingAsked })}
                 </p>
               ) : null}
-            </section>
-
-            <section className="nb-rh-fr-s" aria-labelledby="rh-fp-dipl">
-              <h2 id="rh-fp-dipl">{tf("diplomas.title")}</h2>
-              {educations.filter((item) => item.diploma).length === 0 ? (
-                <p className="nb-meta">{tf("diplomas.none")}</p>
-              ) : (
-                <ul className="nb-rh-fr-docs">
-                  {educations
-                    .filter((item) => item.diploma)
-                    .map((item) => (
-                      <li key={item.id}>
-                        <Link href={`${file}?onglet=cv`}>
-                          <span>{[item.title, item.where].filter(Boolean).join(" · ")}</span>
-                          <span
-                            className="nb-rh-fr-doc-etat"
-                            data-etat={item.proof ? "read" : "missing"}
-                          >
-                            {item.proof ? tf("diplomas.proof") : tf("diplomas.noProof")}
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                </ul>
-              )}
             </section>
 
             <section className="nb-rh-fp-props" aria-labelledby="rh-fp-props">
