@@ -5475,3 +5475,4 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 ## 2026-11-03 · Documents : retour aux cartes Jumanly, améliorées
 
 - Ephraïm a refusé le « dossier papier » (hors de l'identité) : retiré. Les cartes de documents reviennent, et chacune dit maintenant ce que contient la pièce : la lettre montre ses premiers mots entre guillemets (2 lignes), le CV son titre et les compétences demandées par l'offre qu'il contient (petites marques Lime). Règle retenue : améliorer les écrans existants, ne pas inventer un autre style.
+- Suite (même jour) : cartes de documents espacées (14 px), une seule ligne de texte par carte (titre et aperçu coupés en « … »), toutes de la même hauteur ; le CV montre ses compétences de l'offre à la place de la ligne quand il en a.

@@ -647,14 +647,16 @@ export async function RhCandidateSummary({
                       </span>
                       <span className="nb-rh-fd-t">
                         <b>{item.title}</b>
-                        <span data-cle={item.key}>{cardLine(item.key, item.hook)}</span>
+                        {/* One line per card, every card the same height (Ephraïm, 03/11/2026). */}
                         {item.key === "cv" && cvMatches.length > 0 ? (
                           <span className="nb-rh-fd-puces" aria-label={tf("cards.cvMatches")}>
                             {cvMatches.map((name) => (
                               <span key={name}>{name}</span>
                             ))}
                           </span>
-                        ) : null}
+                        ) : (
+                          <span data-cle={item.key}>{cardLine(item.key, item.hook)}</span>
+                        )}
                         <span className="nb-rh-fd-bas">
                           {item.state ? (
                             <span className="nb-rh-fr-doc-etat" data-etat={item.state}>

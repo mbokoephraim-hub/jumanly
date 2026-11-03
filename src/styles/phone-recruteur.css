@@ -7929,3 +7929,39 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 .nb-rh-fd-puces > span::before {
   content: "✓";
 }
+
+/* Documents (Ephraïm, 03/11/2026: « étendre », « juste la première ligne », « identiques en
+   volume »): airier list, one line of text per card, every card the same height. */
+.nb-rh-fd .nb-rh-fd-liste {
+  gap: 14px;
+  grid-auto-rows: 1fr;
+}
+.nb-rh-fd .nb-rh-fd-carte {
+  align-items: center;
+  padding: 12px 14px 12px 12px;
+}
+.nb-rh-fd .nb-rh-fd-visuel {
+  align-self: stretch;
+}
+.nb-rh-fd .nb-rh-fd-t {
+  gap: 4px;
+}
+.nb-rh-fd .nb-rh-fd-t > b,
+.nb-rh-fd .nb-rh-fd-t > span:not(.nb-rh-fd-bas):not(.nb-rh-fd-puces) {
+  display: block;
+  -webkit-line-clamp: unset;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nb-rh-fd .nb-rh-fd-puces {
+  flex-wrap: nowrap;
+  overflow: hidden;
+  margin-top: 0;
+}
+.nb-rh-fd .nb-rh-fd-puces > span {
+  flex: none;
+}
+.nb-rh-fd .nb-rh-fd-bas {
+  min-height: 34px;
+}
