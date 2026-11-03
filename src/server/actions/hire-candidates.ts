@@ -1,7 +1,7 @@
 "use server";
 
 import { after } from "next/server";
-import { redirect } from "next/navigation";
+import { RedirectType, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { deliverDueDecisionMails, onStageChanged } from "@/server/application-events";
@@ -200,11 +200,12 @@ export async function decideAction(formData: FormData) {
   );
   flushMails();
   // From the file on the phone (Modèle B recruteur M5): back to the file, the decision told.
-  if (formData.get("retour") === "fiche") redirect(`${fileOf(applicationId)}?ok=decision`);
+  if (formData.get("retour") === "fiche")
+    redirect(`${fileOf(applicationId)}?ok=decision`, RedirectType.replace);
   // From « Évaluation » of the summary (03/11/2026): back to the offer's list of candidates.
   const back = formData.get("back");
   if (typeof back === "string" && /^\/app\/hire\/offres\/[a-z0-9]+\?[\w=&%-]*$/i.test(back))
-    redirect(back);
+    redirect(back, RedirectType.replace);
   redirect(`${page}?enregistree=1`);
 }
 

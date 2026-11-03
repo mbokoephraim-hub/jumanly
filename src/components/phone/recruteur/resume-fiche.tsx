@@ -36,6 +36,7 @@ import { CandidateAbout, CandidateHead } from "../profil/candidate-summary";
 import { profileView, ProfileTexts } from "../profil/server";
 import { personProfile } from "@/server/services/person-profile";
 import { parseCv } from "@/server/services/cv";
+import { RhBackLink } from "./retour";
 import { SwipePager } from "./tri-client";
 import { RhUndoGesture } from "./tri";
 
@@ -582,9 +583,13 @@ export async function RhCandidateSummary({
           <ToastOnLoad message={tf("ask.failed")} tone="error" />
         ) : null}
         <header className="nb-rh-barre">
-          <Link href={list} className="nb-rh-retour" aria-label={fromList ? tf("back") : t("back")}>
+          <RhBackLink
+            href={list}
+            className="nb-rh-retour"
+            label={fromList ? tf("back") : t("back")}
+          >
             <PhoneIcon name="retour" size={20} />
-          </Link>
+          </RhBackLink>
           <span className="nb-rh-fp-barre-t">{tf("title")}</span>
         </header>
         <RhUndoGesture query={query} jobId={jobId} back={self} />
@@ -898,6 +903,7 @@ export async function RhCandidateSummary({
                     <EvalPoints points={toVerifyLines} />
                     <Link
                       href={`${self.replace(/&partie=[a-z]+/, "")}&partie=documents`}
+                      replace
                       className="nb-rh-ev-lien"
                     >
                       {tf("eval.verify.ask")}
@@ -981,6 +987,7 @@ export async function RhCandidateSummary({
             )}
             <Link
               href={`/app/hire/candidats/${row.id}/decision?issue=rejected`}
+              replace
               className="nb-rh-fr-act"
               data-act="non"
             >

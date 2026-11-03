@@ -125,7 +125,8 @@ export function SwipePager({
         start.current = null;
         if (Math.abs(x) < THRESHOLD || Math.abs(x) < Math.abs(y) * 1.5) return;
         const target = x < 0 ? next : previous;
-        if (target) router.push(target, { scroll: true });
+        // The next candidate replaces this one: « Retour » goes to the list, not through each file.
+        if (target) router.replace(target, { scroll: true });
       }}
     >
       {children}
