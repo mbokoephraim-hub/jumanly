@@ -15,77 +15,89 @@ const POINTS_SHOWN = 4;
 const tint = (color: string, alpha: string) => `${color}${alpha}`;
 
 /**
- * The head of a candidate's file on the recruiter's phone (Ephraïm, 03/11/2026), drawn like the
- * person's profile: the photo in its ring, the networks, the name and the title, nothing else (no
- * badge, followers, company, handle or common connections).
+ * The head of a candidate's file on the recruiter's phone (Ephraïm, 03/11/2026): the photo in its
+ * ring and, on the same line, the name, the title, the place, the e-mail and LinkedIn. Nothing
+ * else (no badge, followers, company, handle or common connections).
  */
 export function CandidateHead({
   person,
   name,
   title,
+  email,
   masked,
 }: {
   person: ProfileView;
   /** « Candidat 3 » when sorted blind. */
   name: string;
   title: string | null;
-  /** Sorted blind and not retained yet: no photo, no networks. */
+  email: string | null;
+  /** Sorted blind and not retained yet: no photo, no contacts. */
   masked: boolean;
 }) {
   const t = useTranslations("phoneProfile");
+  const linkedin = person.socials.find((item) => item.kind === "linkedin");
+  const icon = (d: string) => (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d={d} />
+    </svg>
+  );
   return (
     <section className="nb-pf nb-rh-fp-tete" aria-labelledby="rh-fr-nom">
-      <div className="nb-pf-photo-l">
-        <span className="nb-pf-photo" style={{ background: ringOf(person.ring) }}>
-          {person.image && !masked ? (
-            // eslint-disable-next-line @next/next/no-img-element -- the person's own photo
-            <img src={person.image} alt="" />
-          ) : (
-            <span className="nb-pf-photo-i" aria-hidden>
-              <FilAvatar
-                initials={masked ? "" : person.initials}
-                image={null}
-                tone={person.tone}
-                org={false}
-                size={92}
-              />
-            </span>
-          )}
-        </span>
-        {!masked && person.socials.length > 0 ? (
-          <ul className="nb-pf-reseaux" aria-label={t("socials")}>
-            {person.socials.map((item) => (
-              <li key={item.kind}>
-                <a
-                  href={item.href}
-                  className="nb-pf-so"
-                  aria-label={item.label}
-                  {...(item.kind === "email"
-                    ? {}
-                    : { target: "_blank", rel: "noopener noreferrer nofollow" })}
-                >
-                  <svg
-                    width="15"
-                    height="15"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.9"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden
-                  >
-                    <path d={SOCIAL_PATHS[item.kind]} />
-                  </svg>
-                </a>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-      </div>
-      <div className="nb-pf-id">
+      <span className="nb-pf-photo" style={{ background: ringOf(person.ring) }}>
+        {person.image && !masked ? (
+          // eslint-disable-next-line @next/next/no-img-element -- the person's own photo
+          <img src={person.image} alt="" />
+        ) : (
+          <span className="nb-pf-photo-i" aria-hidden>
+            <FilAvatar
+              initials={masked ? "" : person.initials}
+              image={null}
+              tone={person.tone}
+              org={false}
+              size={80}
+            />
+          </span>
+        )}
+      </span>
+      <div className="nb-rh-fp-qui">
         <h1 id="rh-fr-nom">{name}</h1>
-        {title ? <p className="nb-pf-poste">{title}</p> : null}
+        {title ? <p className="nb-rh-fp-titre">{title}</p> : null}
+        <ul className="nb-rh-fp-contacts" aria-label={t("socials")}>
+          {person.place ? (
+            <li>
+              {person.place.flag ? (
+                <span role="img" aria-label={person.place.flagLabel}>
+                  {person.place.flag}
+                </span>
+              ) : null}
+              <span>{person.place.text}</span>
+            </li>
+          ) : null}
+          {!masked && email ? (
+            <li>
+              {icon(SOCIAL_PATHS.email)}
+              <a href={`mailto:${email}`}>{email}</a>
+            </li>
+          ) : null}
+          {!masked && linkedin ? (
+            <li>
+              {icon(SOCIAL_PATHS.linkedin)}
+              <a href={linkedin.href} target="_blank" rel="noopener noreferrer nofollow">
+                {linkedin.label}
+              </a>
+            </li>
+          ) : null}
+        </ul>
       </div>
     </section>
   );

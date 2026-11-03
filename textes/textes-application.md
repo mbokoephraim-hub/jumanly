@@ -16379,7 +16379,7 @@ Conventions :
 | `phoneRhOffres.classes.documents` | Pièces : {received} sur {asked} |
 | `phoneRhFiche.back` | Candidatures |
 | `phoneRhFiche.parts` | Parties de la fiche |
-| `phoneRhFiche.email` | E-mail |
+| `phoneRhFiche.title` | Profil |
 | `phoneRhFiche.part.resume` | Résumé |
 | `phoneRhFiche.part.documents` | Documents |
 | `phoneRhFiche.part.score` | Évaluation |

@@ -6897,12 +6897,6 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 .nb-rh-fp .nb-rh-fp-apropos {
   padding-bottom: 0;
 }
-.nb-rh-fp-tete .nb-pf-photo-l {
-  margin-top: 14px;
-}
-.nb-rh-fp-tete .nb-pf-poste {
-  margin-top: 6px;
-}
 .nb-rh-fp-aveugle,
 .nb-rh-fp-etat {
   padding: 6px 20px 0;
@@ -6936,4 +6930,85 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   content: "";
   position: absolute;
   inset: -4px 0;
+}
+
+/* 03/11/2026 (Ephraïm) : marges comme les autres pages, la photo et le nom sur la même ligne. */
+.nb-rh-fp.nb-page {
+  padding-left: 0;
+  padding-right: 0;
+}
+.nb-rh-fp .nb-rh-barre {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.nb-rh-fp-barre-t {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--nb-creme);
+  pointer-events: none;
+}
+.nb-rh-fp .nb-rh-fp-tete {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px 4px;
+}
+.nb-rh-fp-tete .nb-pf-photo {
+  width: 96px;
+  height: 96px;
+}
+.nb-rh-fp-qui {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.nb-rh-fp-qui h1 {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.nb-rh-fp-titre {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--nb-creme);
+}
+.nb-rh-fp-qui .nb-rh-fp-contacts {
+  justify-items: start;
+  margin-top: 4px;
+  font-size: 14px;
+}
+.nb-rh-fp-qui .nb-rh-fp-contacts li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+}
+.nb-rh-fp-qui .nb-rh-fp-contacts svg {
+  flex: none;
+  color: var(--nb-menthe-claire-t);
+}
+.nb-rh-fp-qui .nb-rh-fp-contacts a {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-rh-fp .nb-rh-fp-onglets {
+  padding-top: 8px;
+  margin-top: 0;
+}
+.nb-rh-fp .nb-pf-presente p {
+  font-size: 15.5px;
+  line-height: 1.55;
+  white-space: pre-line;
+}
+.nb-rh-fp-apropos > .nb-pf-presente:first-child {
+  margin-top: 4px;
 }
