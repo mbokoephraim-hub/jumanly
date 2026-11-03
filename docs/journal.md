@@ -5500,3 +5500,9 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 ## 2026-11-03 · Langues sans mot coupé
 
 - Fiche candidat (recruteur, téléphone) : les langues passent sur deux colonnes ; un nom de langue ou un niveau ne se coupe plus au milieu d'un mot (« Françai / s », « Professionne / l »). Partout ailleurs, même règle sans coupure.
+
+## 2026-11-03 · Explorer : « Offres pour vous » en cartes à encoche
+
+- Les affiches vertes sont remplacées par la carte à encoche des offres recruteur (`ExplorerOfferCard`, `src/components/phone/explorer/cards.tsx`) : « En cours » dans l'encoche, entreprise, titre (2 lignes), puis Pour vous · Salaire · Date limite. Pas de description.
+- En bas, des silhouettes neutres pour les personnes qui ont postulé (jamais un visage ni un nom, seulement le nombre, via `_count.applications`) et « Voir plus » vers la présentation de l'offre. Sans candidature : « Soyez parmi les premiers ».
+- Le Fil garde son affiche d'offre.

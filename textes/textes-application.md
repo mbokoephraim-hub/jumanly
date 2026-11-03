@@ -8973,6 +8973,21 @@ Conventions :
 | `phoneExplorer.chips.sectors` | Secteurs |
 | `phoneExplorer.chips.all` | Tout |
 | `phoneExplorer.forYou` | Offres pour vous |
+| `phoneExplorer.card.open` | En cours |
+| `phoneExplorer.card.match` | Pour vous |
+| `phoneExplorer.card.matchValue` | {score} % |
+| `phoneExplorer.card.noMatch` | À calculer |
+| `phoneExplorer.card.salaryLabel` | Salaire |
+| `phoneExplorer.card.salary` | {min, number} à {max, number} USD |
+| `phoneExplorer.card.salaryFrom` | Dès {min, number} USD |
+| `phoneExplorer.card.noSalary` | Non précisé |
+| `phoneExplorer.card.deadline` | Date limite |
+| `phoneExplorer.card.noDeadline` | Aucune |
+| `phoneExplorer.card.applicants` | {count, plural, one {# candidat a déjà postulé} other {# candidats ont déjà postulé}} |
+| `phoneExplorer.card.more` | +{count} |
+| `phoneExplorer.card.first` | Soyez parmi les premiers |
+| `phoneExplorer.card.see` | Voir plus |
+| `phoneExplorer.card.seeLabel` | Voir l'offre {title} |
 | `phoneExplorer.hiring` | Entreprises qui recrutent |
 | `phoneExplorer.fresh` | Nouvelles cette semaine |
 | `phoneExplorer.people` | Personnes à connaître |

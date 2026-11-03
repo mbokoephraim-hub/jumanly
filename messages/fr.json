@@ -10912,6 +10912,23 @@
       "all": "Tout"
     },
     "forYou": "Offres pour vous",
+    "card": {
+      "open": "En cours",
+      "match": "Pour vous",
+      "matchValue": "{score} %",
+      "noMatch": "À calculer",
+      "salaryLabel": "Salaire",
+      "salary": "{min, number} à {max, number} USD",
+      "salaryFrom": "Dès {min, number} USD",
+      "noSalary": "Non précisé",
+      "deadline": "Date limite",
+      "noDeadline": "Aucune",
+      "applicants": "{count, plural, one {# candidat a déjà postulé} other {# candidats ont déjà postulé}}",
+      "more": "+{count}",
+      "first": "Soyez parmi les premiers",
+      "see": "Voir plus",
+      "seeLabel": "Voir l'offre {title}"
+    },
     "hiring": "Entreprises qui recrutent",
     "fresh": "Nouvelles cette semaine",
     "people": "Personnes à connaître",
