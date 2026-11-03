@@ -17,7 +17,7 @@ import { cheapestPlanWhere, listPublicPlans } from "@/server/services/plans";
 import { listPools, poolsEnabled } from "@/server/services/talent-search";
 import { PhoneIcon } from "../icon";
 import { initialsOf, RhInitials, RhPct, tintOf } from "./candidatures";
-import { RhNewPool } from "./talents-client";
+import { RhDomainPicker, RhNewPool } from "./talents-client";
 import { RhFiltersSheet } from "./tri-client";
 import { FilAvatar } from "../fil/avatar";
 import { candidateAvailabilities } from "@/server/services/hire-offer-candidates";
@@ -80,22 +80,13 @@ export async function RhTalentFilters({ query }: { query: Query }) {
         <div className="nb-ex-f-corps">
           <fieldset className="nb-rh-pf-grp">
             <legend className="nb-ex-f-gl">{tt("filters.domain")}</legend>
-            <div className="nb-ex-f-opts nb-rh-t-domaines">
-              {[
-                { key: "", label: t("filters.any") },
-                ...studyFields.map((key) => ({ key, label: ts(key) })),
-              ].map((option) => (
-                <label key={option.key || "any"} className="nb-ex-f-opt nb-rh-pf-opt">
-                  <input
-                    type="radio"
-                    name="domaine"
-                    value={option.key}
-                    defaultChecked={(chosen.domain ?? "") === option.key}
-                  />
-                  {option.label}
-                </label>
-              ))}
-            </div>
+            <RhDomainPicker
+              options={studyFields.map((key) => ({ key, label: ts(key) }))}
+              chosen={chosen.domain ?? ""}
+              anyLabel={t("filters.any")}
+              placeholder={ts("search")}
+              none={ts("none")}
+            />
           </fieldset>
           <label className="nb-rh-pf-champ">
             <span className="nb-ex-f-gl">{tt("filters.title")}</span>
