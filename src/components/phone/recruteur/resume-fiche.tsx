@@ -139,7 +139,22 @@ export async function RhCandidateSummary({
     diploma: item.kind === "diploma",
     proof: Boolean(item.image),
   }));
-  const diplomasWithoutProof = educations.filter((item) => item.diploma && !item.proof).length;
+  const noProof = educations.filter((item) => item.diploma && !item.proof);
+  const diplomasWithoutProof = noProof.length;
+  // Orbi names what to add (Ephraïm, 03/11/2026: « expliquer lesquelles »).
+  const named = (items: string[]) =>
+    items
+      .slice(0, 3)
+      .map((item) => `« ${item} »`)
+      .join(", ");
+  const unverifiedNames = named(
+    experiences
+      .filter((item) => !item.verified)
+      .map((item) => [item.title, item.where.split(" · ")[0]].filter(Boolean).join(", ")),
+  );
+  const diplomaNames = named(
+    noProof.map((item) => [item.title, item.where].filter(Boolean).join(", ")),
+  );
 
   // ─── Documents and their state ───────────────────────────────────────────────────
   const read = application.events.some((event) => event.type === ANALYSIS_EVENT);
@@ -162,16 +177,6 @@ export async function RhCandidateSummary({
     state: "verified" | "read" | "received" | null;
     href: string;
   }[] = [
-    application.cvSnapshot
-      ? {
-          key: "cv",
-          art: "cv" as const,
-          title: cvTitle || t("documents.cv"),
-          hook: tf("cards.cv"),
-          state: state(false),
-          href: `${file}?onglet=cv`,
-        }
-      : null,
     application.coverLetter?.trim()
       ? {
           key: "letter",
@@ -182,6 +187,24 @@ export async function RhCandidateSummary({
           href: `${file}?onglet=reponses`,
         }
       : null,
+    // « Lettre de motivation, puis CV » (Ephraïm, 03/11/2026): the CV card is always there.
+    application.cvSnapshot
+      ? {
+          key: "cv",
+          art: "cv" as const,
+          title: cvTitle || t("documents.cv"),
+          hook: tf("cards.cv"),
+          state: state(false),
+          href: `${file}?onglet=cv`,
+        }
+      : {
+          key: "cv",
+          art: "cv" as const,
+          title: t("documents.cv"),
+          hook: tf("cards.cvNone"),
+          state: null,
+          href: self.replace(/&partie=[a-z]+/, ""),
+        },
     profile.portfolioSlug && profile.portfolioPublic && !masked
       ? {
           key: "portfolio",
@@ -290,22 +313,25 @@ export async function RhCandidateSummary({
       ? {
           id: "experiences",
           text: tf("proposals.experiences", { count: unverified }),
+          detail: tf("proposals.experiencesDetail", { items: unverifiedNames }),
           action: tf("proposals.experiencesAction"),
-          message: tf("messages.experiences", { job: job.title, company }),
+          message: tf("messages.experiences", { job: job.title, company, items: unverifiedNames }),
         }
       : null,
     diplomasWithoutProof > 0
       ? {
           id: "diplomes",
           text: tf("proposals.diplomas", { count: diplomasWithoutProof }),
+          detail: tf("proposals.diplomasDetail", { items: diplomaNames }),
           action: tf("proposals.diplomasAction"),
-          message: tf("messages.diplomas", { job: job.title, company }),
+          message: tf("messages.diplomas", { job: job.title, company, items: diplomaNames }),
         }
       : null,
     missingAsked > 0
       ? {
           id: "documents",
           text: tf("proposals.missing", { count: missingAsked }),
+          detail: tf("proposals.missingDetail"),
           action: tf("proposals.missingAction"),
           message: tf("messages.missing", { job: job.title, company }),
         }
@@ -314,8 +340,18 @@ export async function RhCandidateSummary({
       ? {
           id: "lettre",
           text: tf("proposals.letter"),
+          detail: tf("proposals.letterDetail"),
           action: tf("proposals.letterAction"),
           message: tf("messages.letter", { job: job.title, company }),
+        }
+      : null,
+    !application.cvSnapshot
+      ? {
+          id: "cv",
+          text: tf("proposals.cv"),
+          detail: tf("proposals.cvDetail"),
+          action: tf("proposals.cvAction"),
+          message: tf("messages.cv", { job: job.title, company }),
         }
       : null,
   ].filter((item): item is NonNullable<typeof item> => item !== null);
@@ -345,28 +381,10 @@ export async function RhCandidateSummary({
           <ToastOnLoad message={tf("ask.failed")} tone="error" />
         ) : null}
         <header className="nb-rh-barre">
-          <Link href={list} className="nb-rh-retour">
+          <Link href={list} className="nb-rh-retour" aria-label={fromList ? tf("back") : t("back")}>
             <PhoneIcon name="retour" size={20} />
-            {fromList ? tf("back") : t("back")}
           </Link>
           <span className="nb-rh-fp-barre-t">{tf("title")}</span>
-          {at >= 0 ? (
-            <span className="nb-rh-fr-nav">
-              {previous ? (
-                <Link href={previous} aria-label={t("previous")} className="nb-rond">
-                  <PhoneIcon name="retour" size={18} />
-                </Link>
-              ) : null}
-              <span className="nb-meta">
-                {t("position", { index: at + 1, total: ranked.length })}
-              </span>
-              {next ? (
-                <Link href={next} aria-label={t("next")} className="nb-rond nb-rh-fr-suiv">
-                  <PhoneIcon name="retour" size={18} />
-                </Link>
-              ) : null}
-            </span>
-          ) : null}
         </header>
         <RhUndoGesture query={query} jobId={jobId} back={self} />
 
@@ -500,7 +518,10 @@ export async function RhCandidateSummary({
                 <ul>
                   {proposals.map((item) => (
                     <li key={item.id} className="nb-rh-fp-prop">
-                      <p>{item.text}</p>
+                      <p>
+                        <b>{item.text}</b>
+                        <span>{item.detail}</span>
+                      </p>
                       {permissions.manage ? (
                         <RhProposal
                           id={item.id}
@@ -517,9 +538,6 @@ export async function RhCandidateSummary({
                 </ul>
               )}
             </section>
-            <Link href={file} className="nb-rh-classes-tous">
-              {t("file")}
-            </Link>
           </>
         ) : null}
 
