@@ -13,6 +13,7 @@ import { rhAssignAction } from "@/server/actions/phone-rh-candidatures";
 import type { PostView } from "../fil/data";
 import type { SendTarget } from "../fil/sheets";
 import { PhoneIcon } from "../icon";
+import { PhoneDateField } from "../calendar";
 import type { ProfileView } from "../profil/data";
 import { PersonProfile } from "../profil/profile";
 import { PhoneSheet } from "../sheet";
@@ -508,13 +509,12 @@ export function RhFile({ data, panels }: { data: RhFileData; panels: Record<Tab,
             <label className="nb-meta" htmlFor="rh-f-echeance">
               {t("document.due")}
             </label>
-            <input
+            <PhoneDateField
               id="rh-f-echeance"
               name="due"
-              type="date"
+              label={t("document.due")}
               required
               defaultValue={data.dueDefault}
-              className="nb-rh-champ-l"
             />
             <label className="nb-meta" htmlFor="rh-f-mot">
               {t("document.note")}

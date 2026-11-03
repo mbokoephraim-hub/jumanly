@@ -10080,6 +10080,15 @@
     },
     "back": "Retour",
     "close": "Fermer",
+    "calendar": {
+      "prev": "Mois précédent",
+      "next": "Mois suivant",
+      "month": "Mois",
+      "year": "Année",
+      "pick": "Choisir une date",
+      "confirm": "Confirmer",
+      "cancel": "Annuler"
+    },
     "me": "Mon profil",
     "cancel": "Annuler",
     "toasts": "Messages de confirmation",
@@ -14113,6 +14122,7 @@
       "hoursNote": "Touchez plusieurs heures, la personne choisira.",
       "picked": "{count, plural, one {# heure choisie} other {# heures choisies}}",
       "prev": "Mois précédent",
+      "dayTitle": "Choisissez le jour",
       "next": "Mois suivant",
       "how": "Comment",
       "mode": {

@@ -12,6 +12,7 @@ import {
   resumeJobAction,
 } from "@/server/actions/hire-offers";
 import { PhoneIcon } from "../icon";
+import { PhoneDateField } from "../calendar";
 import { PhoneSheet } from "../sheet";
 
 type Sheet = "menu" | "share" | "close" | "report" | "postpone" | "delete" | null;
@@ -258,17 +259,17 @@ export function RhOfferActions({
           <p>{t("postponeText")}</p>
           <input type="hidden" name="id" value={data.id} />
           <input type="hidden" name="back" value={back} />
-          <label className="nb-rh-date">
+          <div className="nb-rh-date">
             <span className="nb-meta">{t("postponeDate")}</span>
-            <input
+            <PhoneDateField
               id={`rh-repousser-${data.id}`}
-              type="date"
               name="closesAt"
+              label={t("postponeDate")}
               required
               min={tomorrow}
               defaultValue={data.closesAt && data.closesAt >= tomorrow ? data.closesAt : tomorrow}
             />
-          </label>
+          </div>
           <button type="submit" className="nb-bp">
             {t("postponeConfirm")}
           </button>

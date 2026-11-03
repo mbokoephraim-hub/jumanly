@@ -8284,6 +8284,13 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phone.refresh.loading` | Actualisation… |
 | `phone.back` | Retour |
 | `phone.close` | Fermer |
+| `phone.calendar.prev` | Mois précédent |
+| `phone.calendar.next` | Mois suivant |
+| `phone.calendar.month` | Mois |
+| `phone.calendar.year` | Année |
+| `phone.calendar.pick` | Choisir une date |
+| `phone.calendar.confirm` | Confirmer |
+| `phone.calendar.cancel` | Annuler |
 | `phone.me` | Mon profil |
 | `phone.cancel` | Annuler |
 | `phone.toasts` | Messages de confirmation |
@@ -11697,6 +11704,7 @@ Conventions :
 | `phoneMsg.agenda.hoursNote` | Touchez plusieurs heures, la personne choisira. |
 | `phoneMsg.agenda.picked` | {count, plural, one {# heure choisie} other {# heures choisies}} |
 | `phoneMsg.agenda.prev` | Mois précédent |
+| `phoneMsg.agenda.dayTitle` | Choisissez le jour |
 | `phoneMsg.agenda.next` | Mois suivant |
 | `phoneMsg.agenda.how` | Comment |
 | `phoneMsg.agenda.mode.visio` | Visio |
