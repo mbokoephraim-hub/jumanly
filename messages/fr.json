@@ -19850,6 +19850,17 @@
       "orbiSuggests": "Orbi : fort potentiel, à retenir ?",
       "waiting": "{count, plural, one {# candidat attend} other {# candidats attendent}} une réponse depuis plus de {days} jours. Retenez, mettez en attente ou répondez."
     },
+    "orbi": {
+      "title": "Classement d'Orbi",
+      "line": "{count, plural, one {# candidature lue · revoir l'analyse} other {# candidatures lues · revoir l'analyse}}",
+      "rule": "75 % et plus : Fort potentiel. De 50 à 74 % : À considérer. En dessous : Limité. Hors critères : un critère éliminatoire que vous avez fixé manque. Orbi suggère, vous décidez : personne n'est écarté sans vous.",
+      "why": "Pourquoi ?",
+      "yourOrder": "Voir dans votre ordre",
+      "byClass": "Voir par classe d'Orbi",
+      "group": {
+        "revoir": "À revoir"
+      }
+    },
     "line": "{count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} · {shortlisted, plural, =0 {aucun retenu} one {# retenu} other {# retenus}}",
     "search": "Rechercher un candidat",
     "filters": {

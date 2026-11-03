@@ -29,7 +29,7 @@ function backOf(value: FormDataEntryValue | null, jobId: string) {
   const back = String(value ?? "");
   return back.startsWith(`/app/hire/offres/${jobId}?vue=candidats`)
     ? back
-    : `/app/hire/offres/${jobId}?vue=candidats`;
+    : `/app/hire/offres/${jobId}?vue=trier`;
 }
 
 const withParams = (href: string, params: Record<string, string | null>) => {

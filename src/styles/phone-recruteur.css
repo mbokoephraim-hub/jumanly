@@ -5241,19 +5241,23 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
   background: var(--nb-encre);
   color: var(--nb-lime);
 }
-.nb-rh-pipe [data-classe="fort"] {
+.nb-rh-pipe [data-classe="fort"],
+.nb-rh-co [data-classe="fort"] {
   --classe: var(--nb-lime);
   --classe-t: var(--nb-lime-t);
 }
-.nb-rh-pipe [data-classe="considerer"] {
+.nb-rh-pipe [data-classe="considerer"],
+.nb-rh-co [data-classe="considerer"] {
   --classe: var(--nb-menthe-claire);
   --classe-t: var(--nb-menthe-claire-t);
 }
-.nb-rh-pipe [data-classe="limite"] {
+.nb-rh-pipe [data-classe="limite"],
+.nb-rh-co [data-classe="limite"] {
   --classe: var(--nb-ambre);
   --classe-t: var(--nb-ambre-t);
 }
-.nb-rh-pipe [data-classe="hors"] {
+.nb-rh-pipe [data-classe="hors"],
+.nb-rh-co [data-classe="hors"] {
   --classe: var(--nb-corail);
   --classe-t: var(--nb-corail-t);
 }
@@ -8087,4 +8091,100 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 .nb-rh-co-attente .nb-rh-pouls::after {
   flex: none;
   background: var(--nb-ambre);
+}
+
+/* Orbi's classes at the top of « À trier » (03/11/2026): the card of the pipeline, its groups. */
+.nb-rh-co-classes {
+  margin: 14px 20px 0;
+  background:
+    radial-gradient(
+      120% 90% at 0% 0%,
+      color-mix(in srgb, var(--nb-menthe) 14%, transparent),
+      transparent 60%
+    ),
+    var(--nb-carte);
+}
+.nb-rh-co-classes h2 a > span {
+  display: grid;
+  gap: 2px;
+}
+.nb-rh-co-classes h2 small {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--nb-brume);
+}
+.nb-rh-co-regle {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--nb-brume);
+}
+.nb-rh-co-ordre {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: -4px 0 2px;
+}
+.nb-rh-co-ordre a {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--nb-lime-t);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+}
+.nb-rh-co-groupe {
+  display: grid;
+  gap: 8px;
+}
+.nb-rh-co-groupe + .nb-rh-co-groupe {
+  margin-top: 10px;
+}
+.nb-rh-co-groupe h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--nb-creme);
+}
+.nb-rh-co-groupe h3 i {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--classe, var(--nb-brume));
+}
+.nb-rh-co-groupe[data-groupe="revoir"] h3 i {
+  background: var(--nb-ambre);
+}
+.nb-rh-co-groupe h3 small {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: var(--nb-haute);
+  color: var(--nb-brume);
+  font-size: 12px;
+  line-height: 22px;
+  text-align: center;
+}
+.nb-rh-co-t em.nb-rh-co-pc {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--classe);
+  color: var(--nb-encre);
+  font-size: 12px;
+  font-style: normal;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 700;
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+.nb-rh-co-pourquoi {
+  border-color: color-mix(in srgb, var(--nb-menthe) 45%, transparent);
+  color: var(--nb-menthe-claire-t, var(--nb-creme));
 }

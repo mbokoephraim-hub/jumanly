@@ -74,7 +74,7 @@ export default async function VerificationPage({
     <div className="nb-page jm-pieces">
       {sent > 0 ? <ToastOnLoad message={t("sent", { count: sent })} tone="success" /> : null}
       <header className="jm-pieces-h">
-        <Link href={`/app/hire/offres/${job.id}?vue=candidats`} className="jm-pieces-retour">
+        <Link href={`/app/hire/offres/${job.id}?vue=trier`} className="jm-pieces-retour">
           {t("back")}
         </Link>
         <h1>
