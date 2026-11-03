@@ -19905,6 +19905,8 @@
       "draft": "Brouillon, pas encore publiée",
       "online": "{count, plural, =0 {en ligne depuis aujourd'hui} one {en ligne depuis # jour} other {en ligne depuis # jours}}",
       "left": "{count, plural, one {# jour restant} other {# jours restants}}",
+      "onlineShort": "{count, plural, =0 {en ligne depuis aujourd'hui} other {en ligne depuis # j}}",
+      "leftShort": "{count, plural, one {# j restant} other {# j restants}}",
       "ended": "terminée le {date}",
       "orbiWaiting": "{count, plural, one {# candidature attend une réponse.} other {# candidatures attendent une réponse.}}",
       "orbiNone": "Pas encore de candidature. Partager l'offre dans le Fil l'aide à se faire voir.",

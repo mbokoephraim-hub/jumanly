@@ -16343,6 +16343,8 @@ Conventions :
 | `phoneRhOffres.detail.draft` | Brouillon, pas encore publiée |
 | `phoneRhOffres.detail.online` | {count, plural, =0 {en ligne depuis aujourd'hui} one {en ligne depuis # jour} other {en ligne depuis # jours}} |
 | `phoneRhOffres.detail.left` | {count, plural, one {# jour restant} other {# jours restants}} |
+| `phoneRhOffres.detail.onlineShort` | {count, plural, =0 {en ligne depuis aujourd'hui} other {en ligne depuis # j}} |
+| `phoneRhOffres.detail.leftShort` | {count, plural, one {# j restant} other {# j restants}} |
 | `phoneRhOffres.detail.ended` | terminée le {date} |
 | `phoneRhOffres.detail.orbiWaiting` | {count, plural, one {# candidature attend une réponse.} other {# candidatures attendent une réponse.}} |
 | `phoneRhOffres.detail.orbiNone` | Pas encore de candidature. Partager l'offre dans le Fil l'aide à se faire voir. |

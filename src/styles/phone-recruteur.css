@@ -7965,3 +7965,25 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 .nb-rh-fd .nb-rh-fd-bas {
   min-height: 34px;
 }
+
+/* The head of an offer on its three tabs (Ephraïm, 03/11/2026): smaller texts, dates on one line. */
+.nb-rh-of-tete {
+  gap: 6px;
+}
+.nb-rh-of-tete .nb-rh-co-org {
+  font-size: 14px;
+}
+.nb-rh-of-tete h1 {
+  font-size: 17px;
+}
+.nb-rh-of-tete .nb-meta {
+  font-size: 13px;
+}
+.nb-rh-of-tete .nb-rh-statut {
+  font-size: 12px;
+}
+.nb-rh-of-dates {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

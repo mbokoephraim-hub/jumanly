@@ -5476,3 +5476,7 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 
 - Ephraïm a refusé le « dossier papier » (hors de l'identité) : retiré. Les cartes de documents reviennent, et chacune dit maintenant ce que contient la pièce : la lettre montre ses premiers mots entre guillemets (2 lignes), le CV son titre et les compétences demandées par l'offre qu'il contient (petites marques Lime). Règle retenue : améliorer les écrans existants, ne pas inventer un autre style.
 - Suite (même jour) : cartes de documents espacées (14 px), une seule ligne de texte par carte (titre et aperçu coupés en « … »), toutes de la même hauteur ; le CV montre ses compétences de l'offre à la place de la ligne quand il en a.
+
+## 2026-11-03 · Offre : même en-tête sur Vue, Candidatures et Retenus
+
+- `RhOfferHead` (src/components/phone/recruteur/offres.tsx) : entreprise et logo, titre, état et lieu, puis les dates sur une seule ligne (« Publiée le 28 oct. · en ligne depuis 6 j · 59 j restants »). Utilisé par la Vue et par Candidatures / Retenus (candidats-offre.tsx, qui perd sa ligne « N candidatures »). Textes réduits (titre 17 px, détails 13 px).
