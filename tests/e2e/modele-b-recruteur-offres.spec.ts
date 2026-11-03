@@ -329,7 +329,7 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
     }
     await capture(page, "055-publier-5");
     await main(page).getByRole("link", { name: "Voir mes offres" }).click();
-    await expect(offers(page).getByRole("link", { name: new RegExp(title) })).toBeVisible();
+    await expect(offers(page).getByRole("heading", { name: new RegExp(title) })).toBeVisible();
 
     // « Modifier l'offre » comes back to the steps, already filled.
     await page.goto(offerUrl);
