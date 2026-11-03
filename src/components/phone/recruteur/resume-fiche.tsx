@@ -142,19 +142,11 @@ export async function RhCandidateSummary({
   const noProof = educations.filter((item) => item.diploma && !item.proof);
   const diplomasWithoutProof = noProof.length;
   // Orbi names what to add (Ephraïm, 03/11/2026: « expliquer lesquelles »).
-  const named = (items: string[]) =>
-    items
-      .slice(0, 3)
-      .map((item) => `« ${item} »`)
-      .join(", ");
+  const named = (items: string[]) => items.slice(0, 3).join(", ");
   const unverifiedNames = named(
-    experiences
-      .filter((item) => !item.verified)
-      .map((item) => [item.title, item.where.split(" · ")[0]].filter(Boolean).join(", ")),
+    experiences.filter((item) => !item.verified).map((item) => item.title),
   );
-  const diplomaNames = named(
-    noProof.map((item) => [item.title, item.where].filter(Boolean).join(", ")),
-  );
+  const diplomaNames = named(noProof.map((item) => item.title));
 
   // ─── Documents and their state ───────────────────────────────────────────────────
   const read = application.events.some((event) => event.type === ANALYSIS_EVENT);
@@ -456,23 +448,7 @@ export async function RhCandidateSummary({
                   {documents.map((item, index) => (
                     <li key={item.key} className="nb-rh-fd-carte" data-art={item.art}>
                       <span className="nb-rh-fd-visuel" aria-hidden>
-                        {item.art === "cv" ? (
-                          <span
-                            className="nb-cr-cv-page"
-                            style={{ "--accent": "var(--nb-menthe)" } as CSSProperties}
-                          >
-                            <i data-titre="" />
-                            <i data-sous="" />
-                            <i />
-                            <i data-w="80" />
-                            <i data-w="70" />
-                            <i data-section="" />
-                            <i />
-                            <i data-w="80" />
-                          </span>
-                        ) : (
-                          <MenuArt name={item.art} size="lg" />
-                        )}
+                        <MenuArt name={item.art} size="lg" />
                       </span>
                       <span className="nb-rh-fd-t">
                         <b>{item.title}</b>
@@ -515,13 +491,9 @@ export async function RhCandidateSummary({
               {proposals.length === 0 ? (
                 <p className="nb-meta">{tf("proposals.none")}</p>
               ) : (
-                <ul>
-                  {proposals.map((item) => (
-                    <li key={item.id} className="nb-rh-fp-prop">
-                      <p>
-                        <b>{item.text}</b>
-                        <span>{item.detail}</span>
-                      </p>
+                <ol className="nb-cr-etapes">
+                  {proposals.map((item, index) => (
+                    <li key={item.id}>
                       {permissions.manage ? (
                         <RhProposal
                           id={item.id}
@@ -529,13 +501,17 @@ export async function RhCandidateSummary({
                           job={jobId}
                           back={self}
                           action={item.action}
+                          detail={item.detail}
+                          index={index}
                           message={item.message}
                           texts={proposalTexts}
                         />
-                      ) : null}
+                      ) : (
+                        <p className="nb-meta">{item.detail}</p>
+                      )}
                     </li>
                   ))}
-                </ul>
+                </ol>
               )}
             </section>
           </>

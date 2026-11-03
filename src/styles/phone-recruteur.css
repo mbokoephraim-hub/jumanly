@@ -7048,13 +7048,6 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   overflow: hidden;
   background: color-mix(in srgb, var(--nb-menthe) 26%, var(--nb-haute));
 }
-.nb-rh-fd-carte[data-art="cv"] .nb-rh-fd-visuel {
-  align-items: flex-end;
-}
-.nb-rh-fd-carte[data-art="cv"] .nb-cr-cv-page {
-  width: 64px;
-  height: 80px;
-}
 .nb-rh-fd-carte[data-art="letter"] .nb-rh-fd-visuel {
   background: color-mix(in srgb, var(--nb-ambre) 24%, var(--nb-haute));
 }
@@ -7164,4 +7157,27 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 }
 .nb-app[data-reduit] .nb-rh-fp-prop-go {
   animation: none;
+}
+/* Propositions d'Orbi = « Prochaines étapes » de Carrière (Ephraïm, 03/11/2026), en boutons. */
+.nb-rh-fp-props .nb-cr-etapes {
+  gap: 10px;
+}
+.nb-cr-etapes button.nb-rh-fp-etape {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 12px;
+  border: 0;
+  border-radius: 18px;
+  font: inherit;
+  text-align: left;
+  color: var(--nb-creme);
+  cursor: pointer;
+}
+.nb-cr-etapes button.nb-rh-fp-etape > svg {
+  flex: none;
 }

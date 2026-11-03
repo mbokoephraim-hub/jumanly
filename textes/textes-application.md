@@ -16395,9 +16395,9 @@ Conventions :
 | `phoneRhFiche.documents.title` | Documents de candidature |
 | `phoneRhFiche.documents.portfolio` | Portfolio |
 | `phoneRhFiche.diplomas.title` | Diplômes |
-| `phoneRhFiche.cards.cv` | Consultez ici le CV que ce candidat a envoyé avec sa candidature. |
-| `phoneRhFiche.cards.cvNone` | Aucun CV joint à cette candidature : le résumé ci-dessus reprend son parcours. |
-| `phoneRhFiche.cards.letter` | Lisez ici la lettre de motivation écrite pour votre offre. |
+| `phoneRhFiche.cards.cv` | Lisez ici le CV envoyé pour cette offre. |
+| `phoneRhFiche.cards.cvNone` | Aucun CV joint à cette candidature. |
+| `phoneRhFiche.cards.letter` | Lisez ici la lettre écrite pour cette offre. |
 | `phoneRhFiche.cards.portfolio` | Découvrez les réalisations que ce candidat a choisi de montrer. |
 | `phoneRhFiche.cards.diplomas` | {count, plural, one {# diplôme déclaré} other {# diplômes déclarés}}, {proofs, plural, =0 {aucun justificatif joint} one {# avec justificatif} other {# avec justificatif}}. |
 | `phoneRhFiche.cards.attachment` | Pièce jointe à la candidature. |
@@ -16408,19 +16408,19 @@ Conventions :
 | `phoneRhFiche.proposals.title` | Propositions d'Orbi |
 | `phoneRhFiche.proposals.none` | Rien à demander pour l'instant : le dossier est complet. |
 | `phoneRhFiche.proposals.experiences` | {count, plural, one {Une expérience n'est pas encore vérifiée.} other {# expériences ne sont pas encore vérifiées.}} |
-| `phoneRhFiche.proposals.experiencesDetail` | Demandez-lui de faire confirmer {items} par un ancien responsable. |
+| `phoneRhFiche.proposals.experiencesDetail` | À faire confirmer : {items} |
 | `phoneRhFiche.proposals.experiencesAction` | Demander une vérification |
 | `phoneRhFiche.proposals.diplomas` | {count, plural, one {Un diplôme n'a pas de justificatif.} other {# diplômes n'ont pas de justificatif.}} |
-| `phoneRhFiche.proposals.diplomasDetail` | Demandez-lui d’ajouter une copie de {items}. |
+| `phoneRhFiche.proposals.diplomasDetail` | Copie manquante : {items} |
 | `phoneRhFiche.proposals.diplomasAction` | Demander les diplômes |
 | `phoneRhFiche.proposals.missing` | {count, plural, one {Un document demandé n'a pas été envoyé.} other {# documents demandés n'ont pas été envoyés.}} |
-| `phoneRhFiche.proposals.missingDetail` | Demandez-lui de joindre les pièces prévues dans l’offre. |
+| `phoneRhFiche.proposals.missingDetail` | Des pièces prévues dans l’offre manquent |
 | `phoneRhFiche.proposals.missingAction` | Demander les documents |
 | `phoneRhFiche.proposals.letter` | Pas de lettre de motivation avec la candidature. |
 | `phoneRhFiche.proposals.letterAction` | Demander une lettre |
-| `phoneRhFiche.proposals.letterDetail` | Demandez-lui quelques lignes sur ce qui l’attire dans ce poste. |
+| `phoneRhFiche.proposals.letterDetail` | Quelques lignes sur sa motivation |
 | `phoneRhFiche.proposals.cv` | Pas de CV joint à la candidature. |
-| `phoneRhFiche.proposals.cvDetail` | Demandez-lui d’envoyer un CV à jour pour compléter son dossier. |
+| `phoneRhFiche.proposals.cvDetail` | Un CV à jour pour compléter le dossier |
 | `phoneRhFiche.proposals.cvAction` | Demander le CV |
 | `phoneRhFiche.messages.experiences` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour avancer, pourriez-vous faire vérifier ces expériences : {items} ? Depuis votre profil Jumanly, vous pouvez demander à un ancien responsable de les confirmer. Merci ! |
 | `phoneRhFiche.messages.diplomas` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour avancer, pourriez-vous nous envoyer une copie de ces diplômes : {items} ? Vous pouvez les joindre ici, dans cette conversation. Merci ! |
