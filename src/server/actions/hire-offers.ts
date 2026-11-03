@@ -5,7 +5,15 @@ import { updateTag } from "next/cache";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
 import { reportError } from "@/server/observability";
-import { HireError, getOrgJob, pauseJob, publishJob, resumeJob } from "@/server/services/hire";
+import {
+  HireError,
+  archiveJob,
+  getOrgJob,
+  pauseJob,
+  postponeJob,
+  publishJob,
+  resumeJob,
+} from "@/server/services/hire";
 import {
   attachJobSheet,
   jobSheetPagesOf,
@@ -145,6 +153,32 @@ export async function resumeJobAction(formData: FormData) {
   const job = await db.job.findUniqueOrThrow({ where: { id: jobId }, select: { slug: true } });
   refresh(job.slug);
   redirect(withParam(back, "ok=reprise"));
+}
+
+/** « Repousser l'offre »: a new closing date (yyyy-mm-dd), kept until the end of that day (UTC). */
+export async function postponeJobAction(formData: FormData) {
+  const date = String(formData.get("closesAt") ?? "");
+  const jobId = id(formData.get("id"));
+  const back = backTo(formData, `${OFFERS}/${jobId}`);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) redirect(withParam(back, "erreur=date"));
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
+  const closesAt = new Date(`${date}T23:59:59.000Z`);
+  const job = await postponeJob(db, ctx, jobId, closesAt).catch((error: unknown) => {
+    if (error instanceof HireError) return null;
+    throw error;
+  });
+  if (!job) redirect(withParam(back, "erreur=date"));
+  refresh(job.slug);
+  redirect(withParam(back, "repoussee=1"));
+}
+
+/** « Supprimer l'offre »: out of every list, the applications kept. */
+export async function archiveJobAction(formData: FormData) {
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
+  const jobId = id(formData.get("id"));
+  const job = await guarded(() => archiveJob(db, ctx, jobId));
+  refresh(job.slug);
+  redirect(`${OFFERS}?ok=retiree`);
 }
 
 /**
