@@ -5472,8 +5472,6 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - « Pour le retenir » répond aux besoins du poste : compétences demandées par l'offre et présentes au profil (requises d'abord, « déjà prouvée » si vérifiée), puis critères remplis (expérience, formation, langues, lieu, contrat) et preuves reçues. Les titres d'expérience n'y figurent plus.
 - « Points faibles » et « À vérifier » : un point précis par ligne, pastille colorée avec icône, sujet en gras et nature du point en dessous.
 
-## 2026-11-03 · Profil candidat : « Le dossier » papier
+## 2026-11-03 · Documents : retour aux cartes Jumanly, améliorées
 
-- Ephraïm trouvait les cartes de documents génériques. La partie Documents devient « Le dossier » : un intercalaire par pièce (Lettre, CV, Diplômes, Portfolio, Pièce n), la pièce choisie s'affiche comme une feuille crème à trous de classeur, avec son tampon d'état (Reçu, Lu par Orbi, Vérifié).
-- La feuille montre ce que dit la pièce : début de la lettre (nombre de mots, temps de lecture), titre, résumé, expériences et compétences du CV (celles demandées par l'offre cochées), diplômes avec ou sans justificatif. Une pièce absente est une feuille vide en pointillés.
-- Composant `src/components/phone/recruteur/fiche-dossier.tsx` ; le bouton ouvre toujours la pièce elle-même (lettre en feuille, CV en PDF).
+- Ephraïm a refusé le « dossier papier » (hors de l'identité) : retiré. Les cartes de documents reviennent, et chacune dit maintenant ce que contient la pièce : la lettre montre ses premiers mots entre guillemets (2 lignes), le CV son titre et les compétences demandées par l'offre qu'il contient (petites marques Lime). Règle retenue : améliorer les écrans existants, ne pas inventer un autre style.
