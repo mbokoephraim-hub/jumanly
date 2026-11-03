@@ -5544,3 +5544,10 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 
 - Tâche horaire `runReviewReminders` (`src/server/services/hire-review.ts`, appelée par `runHireJobs`) : 3 jours après un « En attente », le membre qui l'a posé (sinon l'équipe de recrutement) reçoit la notification `reviewReminder` (« X de « offre » est à revoir aujourd'hui »), une seule fois (événement `review_reminded`). Vérifié en local : 1 envoyée, 0 au second passage.
 - Une carte mise de côté dont le score correspond à Fort potentiel affiche « Orbi : fort potentiel, à retenir ? ». La carte reste où le recruteur l'a placée (droit `hire.matching.level` requis).
+
+## 2026-11-03 · Candidatures recruteur : les classes d'Orbi dans « À trier »
+
+- Accord d'Ephraïm : en haut d'« À trier », la carte « Classement d'Orbi » (vraie icône d'Orbi, barre colorée, Fort potentiel · À considérer · Limité · Hors critères, la règle en clair), puis les cartes groupées par classe avec leur % et « Pourquoi ? » (partie Score de la fiche). « À revoir » reste en tête ; « Voir dans votre ordre » rend la liste que l'équipe déplace.
+- Les classes viennent de la même analyse que le diagnostic (`atsBoard`), aucune sans lecture des CV ni quand `hire.matching.level` vaut « none ». Orbi suggère, personne n'est écarté.
+- L'écran en double « Résultats de l'analyse » (`?vue=candidats` sans fiche) ouvre maintenant « À trier » (classe gardée).
+- `OrbiMark` est redessiné comme la vraie icône d'Orbi (disque menthe, étincelle, point crème) : « Recommandation d'Orbi » et tous les autres endroits suivent.

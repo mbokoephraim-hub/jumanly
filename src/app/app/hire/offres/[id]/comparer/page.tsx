@@ -39,7 +39,7 @@ export default async function ComparePage({
     .map((value) => value.slice(0, 60));
   const ranked = rankByClass(board.rows);
   const rows = ranked.filter((row) => asked.includes(row.id)).slice(0, MAX);
-  const back = `/app/hire/offres/${board.job.id}?vue=candidats`;
+  const back = `/app/hire/offres/${board.job.id}?vue=trier`;
   const nameOf = (row: (typeof rows)[number]) =>
     board.job.blindSort && !row.shortlisted
       ? t("blind.name", { index: blindName(ranked.indexOf(row)) })

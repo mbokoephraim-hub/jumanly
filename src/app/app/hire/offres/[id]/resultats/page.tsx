@@ -37,7 +37,7 @@ export default async function ResultsPage({
     throw error;
   });
   const { job } = board;
-  const pipeline = `/app/hire/offres/${job.id}?vue=candidats`;
+  const pipeline = `/app/hire/offres/${job.id}?vue=trier`;
   const active = board.rows.filter((row) => row.status === "active");
   const ranked = rankByClass(board.rows);
   const nameOf = (row: (typeof ranked)[number]) =>

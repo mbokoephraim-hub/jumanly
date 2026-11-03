@@ -25,6 +25,17 @@ export type RhOrderRow = {
   shortlisted: boolean;
   /** « À revoir aujourd'hui », « À revoir le 6 nov. », « Classé par vous » (03/11/2026). */
   badge?: { text: string; tone: "due" | "revoir" | "vous" } | null;
+  /**
+   * Orbi's class in « À trier » (03/11/2026): the compatibility in its colour, and « Pourquoi ? »
+   * opens the score part of the file in place of « Voir plus ».
+   */
+  orbi?: {
+    classe: "fort" | "considerer" | "limite" | "hors";
+    text: string;
+    label: string;
+    why: string;
+    whyLabel: string;
+  } | null;
 };
 
 export type RhOrderTexts = {
@@ -266,7 +277,18 @@ export function RhCandidateOrder({
                   ) : null}
                 </span>
                 <span className="nb-rh-co-t">
-                  <b>{row.name}</b>
+                  <b>
+                    {row.name}
+                    {row.orbi ? (
+                      <em
+                        className="nb-rh-co-pc"
+                        data-classe={row.orbi.classe}
+                        aria-label={row.orbi.label}
+                      >
+                        {row.orbi.text}
+                      </em>
+                    ) : null}
+                  </b>
                   {row.headline ? <span className="nb-rh-co-titre">{row.headline}</span> : null}
                   <small>
                     {row.badge ? (
@@ -299,6 +321,15 @@ export function RhCandidateOrder({
                     <PhoneIcon name="bas" size={18} />
                   </button>
                 </span>
+              ) : row.orbi ? (
+                <Link
+                  href={row.orbi.why}
+                  className="nb-rh-co-plus nb-rh-co-pourquoi"
+                  draggable={false}
+                  aria-label={`${row.orbi.whyLabel} · ${row.name}`}
+                >
+                  {row.orbi.whyLabel}
+                </Link>
               ) : (
                 <Link
                   href={row.href}

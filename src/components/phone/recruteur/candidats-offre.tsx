@@ -22,6 +22,8 @@ import { RhFiltersSheet } from "./tri-client";
 import { RhOfferHead } from "./offres";
 import { deskTabHref } from "./desk-tabs";
 import { DESK_RUBRIQUES, type DeskCounts, type DeskRubrique } from "@/server/services/hire-desk";
+import { atsBoard } from "@/server/services/hire-ats";
+import { orbiClasses, type OrbiClass } from "@/server/services/hire-classes";
 
 export type RhOfferTab = "apercu" | DeskRubrique;
 
@@ -83,6 +85,7 @@ export async function RhOfferCandidatesList({
   sortable: boolean;
 }) {
   const t = await getTranslations("phoneRhCandidats");
+  const to = await getTranslations("phoneRhOffres");
   const format = await getFormatter();
   const now = new Date();
   const search = candidateSearchSchema.parse({
@@ -91,14 +94,22 @@ export async function RhOfferCandidatesList({
     dispo: one(query.dispo),
     ville: one(query.ville),
   });
-  const [data, atsOpen, org] = await Promise.all([
+  const [data, atsOpen, org, board] = await Promise.all([
     offerCandidates(db, ctx, jobId, search, { rubrique: tab }),
     can(db, { type: "organization", id: ctx.organizationId }, CV_ANALYSIS_RIGHT),
     db.organization.findUniqueOrThrow({
       where: { id: ctx.organizationId },
       select: { name: true, logo: true, verifiedAt: true },
     }),
+    // Orbi's classes sit at the top of « À trier » (Ephraïm, 03/11/2026), from the same analysis
+    // as the diagnostic: no class without a reading of the CVs, none when matching is off.
+    tab === "trier" ? atsBoard(db, ctx, jobId) : null,
   ]);
+  const classOfRow = new Map(
+    (board?.rows ?? [])
+      .filter((row) => row.orbiClass !== null)
+      .map((row) => [row.id, { classe: row.orbiClass as OrbiClass, score: row.score }]),
+  );
   const { job, candidates } = data;
   const applied = data.search;
   const filtered = Boolean(applied.q) || searchCount(applied) > 0;
@@ -159,8 +170,74 @@ export async function RhOfferCandidatesList({
         : person.placedByYou && tab === "trier"
           ? { text: t("desk.placedByYou"), tone: "vous" }
           : null,
+      orbi: (() => {
+        const found = classOfRow.get(person.id);
+        if (!found) return null;
+        const label = to(`classes.${found.classe}`);
+        return {
+          classe: found.classe,
+          text: found.score !== null ? `${found.score} %` : label,
+          label:
+            found.score !== null
+              ? `${label} · ${to("classes.score", { value: found.score })}`
+              : label,
+          why: `/app/hire/offres/${jobId}?vue=candidats&de=${tab}&fiche=${person.id}&partie=score`,
+          whyLabel: t("orbi.why"),
+        };
+      })(),
     };
   });
+  // The classes of « À trier »: the cards set aside to review first (the recruiter put them
+  // there), then Fort potentiel, À considérer, Limité, Hors critères, then the ones not read yet.
+  // « Votre ordre » (`ordre=vous`) gives back the list as the team placed it, cards that move.
+  const counts = orbiClasses.map((key) => ({
+    key,
+    count: candidates.filter((person) => classOfRow.get(person.id)?.classe === key).length,
+  }));
+  // Only the cards of « À trier » are counted (the retained ones have left it).
+  const classed = tab === "trier" ? counts.reduce((sum, item) => sum + item.count, 0) : 0;
+  const chosen = orbiClasses.find((key) => key === one(query.classe));
+  const yourOrder = one(query.ordre) === "vous";
+  const grouped = classed > 0 && !yourOrder;
+  const trier = deskTabHref(jobId, "trier");
+  type Group = { key: OrbiClass | "revoir" | "none"; rows: RhOrderRow[] };
+  const groups: Group[] = grouped
+    ? (
+        [
+          {
+            key: "revoir",
+            rows: rows.filter((_, index) => candidates[index]!.review !== null && !chosen),
+          },
+          ...orbiClasses.map((key) => ({
+            key,
+            rows: rows.filter(
+              (row, index) =>
+                (chosen ? key === chosen : candidates[index]!.review === null) &&
+                row.orbi?.classe === key,
+            ),
+          })),
+          {
+            key: "none",
+            rows: chosen
+              ? []
+              : rows.filter((row, index) => candidates[index]!.review === null && !row.orbi),
+          },
+        ] satisfies Group[]
+      ).filter((group) => group.rows.length > 0)
+    : [];
+
+  const texts = {
+    more: t("list.more"),
+    moreLabel: t("list.moreLabel"),
+    move: t("list.move"),
+    moveDone: t("list.moveDone"),
+    up: t("list.up"),
+    down: t("list.down"),
+    hint: t("list.hint"),
+    failed: t("list.failed"),
+    unseen: t("list.unseen"),
+    shortlisted: t("list.shortlisted"),
+  };
 
   return (
     <div className="nb-page nb-rh-detail nb-rh-co">
@@ -276,7 +353,46 @@ export async function RhOfferCandidatesList({
         </RhFiltersSheet>
       </div>
 
-      {tab === "trier" ? (
+      {classed > 0 ? (
+        <section className="nb-rh-classes nb-rh-co-classes" aria-labelledby={`rh-co-cl-${jobId}`}>
+          <h2 id={`rh-co-cl-${jobId}`}>
+            <Link href={`/app/hire/offres/${jobId}/ats`}>
+              <OrbiDisc size={34} />
+              <span>
+                {t("orbi.title")}
+                <small>{t("orbi.line", { count: classed })}</small>
+              </span>
+              <PhoneIcon name="chevron" size={18} />
+            </Link>
+          </h2>
+          <div className="nb-rh-classes-barre" aria-hidden>
+            {counts
+              .filter((item) => item.count > 0)
+              .map((item) => (
+                <i key={item.key} data-classe={item.key} style={{ flexGrow: item.count }} />
+              ))}
+          </div>
+          <ul className="nb-rh-classes-liste">
+            {counts.map((item) => (
+              <li key={item.key}>
+                <Link
+                  href={chosen === item.key ? trier : `${trier}&classe=${item.key}`}
+                  data-classe={item.key}
+                  aria-current={chosen === item.key ? "true" : undefined}
+                  aria-disabled={item.count === 0 ? "true" : undefined}
+                  scroll={false}
+                  replace
+                >
+                  <b>{item.count}</b>
+                  {to(`classes.${item.key}`)}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <p className="nb-rh-co-regle">{t("orbi.rule")}</p>
+        </section>
+      ) : null}
+      {tab === "trier" && classed === 0 ? (
         <section className="nb-rh-co-ats" aria-labelledby={`rh-co-ats-${jobId}`}>
           <div className="nb-rh-co-affiche" aria-hidden>
             <span className="nb-rh-co-affiche-i">
@@ -315,6 +431,24 @@ export async function RhOfferCandidatesList({
           {t(`desk.title.${tab}`)}
           <small>{candidates.length}</small>
         </h2>
+        {grouped ? (
+          <p className="nb-rh-co-ordre">
+            {chosen ? (
+              <Link href={trier} scroll={false} replace>
+                {to("classes.all")}
+              </Link>
+            ) : null}
+            <Link href={`${trier}&ordre=vous`} scroll={false} replace>
+              {t("orbi.yourOrder")}
+            </Link>
+          </p>
+        ) : classed > 0 ? (
+          <p className="nb-rh-co-ordre">
+            <Link href={trier} scroll={false} replace>
+              {t("orbi.byClass")}
+            </Link>
+          </p>
+        ) : null}
         {rows.length === 0 ? (
           <p className="nb-vide">
             {filtered
@@ -323,23 +457,41 @@ export async function RhOfferCandidatesList({
                 ? t("list.empty")
                 : t(`desk.empty.${tab}`)}
           </p>
+        ) : grouped ? (
+          groups.map((group) => (
+            <div
+              key={group.key}
+              className="nb-rh-co-groupe"
+              data-classe={group.key === "revoir" || group.key === "none" ? undefined : group.key}
+              data-groupe={group.key}
+            >
+              <h3>
+                <i aria-hidden />
+                {group.key === "revoir"
+                  ? t("orbi.group.revoir")
+                  : group.key === "none"
+                    ? to("classes.none")
+                    : to(`classes.${group.key}`)}
+                <small>{group.rows.length}</small>
+              </h3>
+              {group.key === "hors" ? <p className="nb-meta">{to("classes.horsLead")}</p> : null}
+              <RhCandidateOrder
+                job={jobId}
+                // « Classé par vous » speaks of the team's order, shown under « Voir dans votre ordre ».
+                rows={group.rows.map((row) =>
+                  row.badge?.tone === "vous" ? { ...row, badge: null } : row,
+                )}
+                sortable={false}
+                texts={texts}
+              />
+            </div>
+          ))
         ) : (
           <RhCandidateOrder
             job={jobId}
             rows={rows}
             sortable={sortable && !filtered && tab === "trier" && rows.length > 1}
-            texts={{
-              more: t("list.more"),
-              moreLabel: t("list.moreLabel"),
-              move: t("list.move"),
-              moveDone: t("list.moveDone"),
-              up: t("list.up"),
-              down: t("list.down"),
-              hint: t("list.hint"),
-              failed: t("list.failed"),
-              unseen: t("list.unseen"),
-              shortlisted: t("list.shortlisted"),
-            }}
+            texts={texts}
           />
         )}
       </section>

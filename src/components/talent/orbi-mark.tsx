@@ -3,8 +3,8 @@ import { cx } from "@/lib/cx";
 export type OrbiState = "repos" | "ecoute" | "reflechit";
 
 /**
- * The mark of Orbi (planche Fondations § 9): a Sapin disc, its orbit and a Lime satellite, no dark
- * gradient. « ecoute »: the orbit breathes; « reflechit »: the satellite turns. Both stop in reduced
+ * The mark of Orbi, drawn like the real Orbi icon (OrbiDisc, src/components/phone/icon.tsx): a mint
+ * disc, the dark spark and a Crème dot. « ecoute »: the orbit breathes; « reflechit »: the satellite turns. Both stop in reduced
  * motion (src/styles/talent.css).
  */
 export function OrbiMark({
@@ -25,20 +25,23 @@ export function OrbiMark({
       aria-hidden
       focusable="false"
     >
-      <circle cx="24" cy="24" r="23" fill="#0F3F37" />
+      <circle cx="24" cy="24" r="23" fill="#2FD3A6" />
       <circle
         className="t-orb"
         cx="24"
         cy="24"
-        r="13"
+        r="17"
         fill="none"
-        stroke="#A6F26B"
-        strokeOpacity=".45"
-        strokeWidth="1.6"
+        stroke="#0B1A1F"
+        strokeOpacity="0"
+        strokeWidth="1.4"
       />
-      <circle cx="24" cy="24" r="5" fill="#F2EDE5" />
+      <path
+        d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z"
+        fill="#0B1A1F"
+      />
       <g className="t-sat">
-        <circle cx="33.2" cy="14.8" r="4.4" fill="#A6F26B" />
+        <circle cx="35" cy="13" r="3.4" fill="#F2EDE5" />
       </g>
     </svg>
   );

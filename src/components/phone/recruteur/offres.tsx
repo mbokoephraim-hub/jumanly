@@ -275,7 +275,7 @@ export async function RhOffersList({
           <div className="nb-rh-oc-pied">
             {total > 0 ? (
               <Link
-                href={`${href}?vue=candidats`}
+                href={`${href}?vue=trier`}
                 className="nb-rh-oc-faces"
                 aria-label={t("list.card.faces", { count: total })}
               >

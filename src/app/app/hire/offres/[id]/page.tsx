@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect, RedirectType } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { JobSettings } from "@/components/hire/job-settings";
 import { ModerationChanges } from "@/components/hire/moderation-changes";
@@ -30,10 +30,10 @@ import { isPhone } from "@/server/view";
 import { effectiveRights } from "@/server/services/org-team";
 import { RH_FILE_PARTS, RhCandidateSummary } from "@/components/phone/recruteur/resume-fiche";
 import { RhOfferCandidatesList, RhOfferTabs } from "@/components/phone/recruteur/candidats-offre";
-import { deskTabOf, fromTabOf } from "@/components/phone/recruteur/desk-tabs";
+import { deskTabHref, deskTabOf, fromTabOf } from "@/components/phone/recruteur/desk-tabs";
+import { orbiClasses } from "@/server/services/hire-classes";
 import { DESK_RUBRIQUES, deskCounts, emptyCounts } from "@/server/services/hire-desk";
 import {
-  RhOfferCandidates,
   RhOfferDetail,
   RhOffresTexts,
   RhOfferPublished,
@@ -736,19 +736,15 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
         fromTab={fromTabOf(one(query.de)) ?? "trier"}
       />
     );
-  if (one(query.vue) === "candidats" && permissions.readApplications)
-    return (
-      <RhOfferCandidates
-        query={query}
-        sortable={sortable}
-        key={`${one(query.etape) ?? ""}-${one(query.classe) ?? ""}-${one(query.cible) ?? ""}`}
-        ctx={ctx}
-        jobId={job.id}
-        unseen={figures.unseen}
-        stageId={one(query.etape)}
-        orbiClass={one(query.classe)}
-      />
+  // « Résultats de l'analyse » was a second list of the same candidates (Ephraïm, 03/11/2026):
+  // Orbi's classes now sit at the top of « À trier », the old address opens it.
+  if (one(query.vue) === "candidats" && permissions.readApplications) {
+    const classe = orbiClasses.find((key) => key === one(query.classe));
+    redirect(
+      `${deskTabHref(job.id, "trier")}${classe ? `&classe=${classe}` : ""}`,
+      RedirectType.replace,
     );
+  }
   // « Voir plus » of an offer opens « Candidats » (Ephraïm, 03/11/2026); « Vue d'ensemble » keeps
   // the figures, and the answers of its actions (pause, report, limit) still land there.
   // The « ··· » of « Candidatures » (03/11/2026) comes back with `vue=candidatures`: it stays there.
@@ -769,7 +765,7 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
         ) : null}
         {one(query.limite) ? <ToastOnLoad message={tl("limit")} tone="error" /> : null}
         <RhOfferCandidatesList
-          key={`${one(query.vue) ?? ""}-${one(query.q) ?? ""}-${one(query.skill) ?? ""}-${one(query.dispo) ?? ""}-${one(query.ville) ?? ""}`}
+          key={`${one(query.vue) ?? ""}-${one(query.classe) ?? ""}-${one(query.ordre) ?? ""}-${one(query.q) ?? ""}-${one(query.skill) ?? ""}-${one(query.dispo) ?? ""}-${one(query.ville) ?? ""}`}
           ctx={ctx}
           jobId={job.id}
           query={query}
