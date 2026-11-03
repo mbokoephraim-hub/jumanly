@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
+import { PhoneIcon } from "../icon";
 import { askCandidateAction } from "@/server/actions/hire-candidate-ask";
 import { PhoneSheet } from "../sheet";
+
+const STEP_COLORS = ["#F4C463", "#FF8A7A", "#2FD3A6"] as const;
 
 export type RhProposalTexts = {
   title: string;
@@ -23,6 +26,8 @@ export function RhProposal({
   job,
   back,
   action,
+  detail,
+  index,
   message,
   texts,
 }: {
@@ -32,14 +37,38 @@ export function RhProposal({
   back: string;
   /** The text of the button (« Demander une vérification »). */
   action: string;
+  /** What to add, in one short line under the title. */
+  detail: string;
+  /** Its place in the list: the colour of « Prochaines étapes » of Carrière (1 jaune, 2 corail, 3 vert). */
+  index: number;
   message: string;
   texts: RhProposalTexts;
 }) {
   const [open, setOpen] = useState(false);
+  const color = STEP_COLORS[index % STEP_COLORS.length]!;
   return (
     <>
-      <button type="button" className="nb-rh-fp-prop-go" onClick={() => setOpen(true)}>
-        {action}
+      <button
+        type="button"
+        className="nb-cr-etape-anim nb-rh-fp-etape"
+        onClick={() => setOpen(true)}
+        style={
+          {
+            background: `linear-gradient(135deg, ${color}2e, ${color}0d)`,
+            boxShadow: `inset 0 0 0 1px ${color}55`,
+            "--etape-c": color,
+            "--etape-d": `${index * 0.6}s`,
+          } as CSSProperties
+        }
+      >
+        <span className="nb-cr-num" style={{ background: color, color: "#0f3f37" }} aria-hidden>
+          {index + 1}
+        </span>
+        <span className="nb-cr-etape-t">
+          <b>{action}</b>
+          <small>{detail}</small>
+        </span>
+        <PhoneIcon name="chevron" size={16} />
       </button>
       <PhoneSheet
         open={open}

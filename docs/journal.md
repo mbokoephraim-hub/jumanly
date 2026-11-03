@@ -5436,3 +5436,4 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - Barre du haut : icône retour seule (libellé lu par le lecteur d'écran), plus de « 1 sur 5 » ni de flèches (le glissement reste).
 - Documents : lettre de motivation, puis CV toujours présent avec le dessin du CV (« Aucun CV joint » si besoin). « Ouvrir le dossier complet » retiré.
 - Propositions d'Orbi : chaque carte dit quoi ajouter et nomme les pièces (diplômes, expériences), nouvelle proposition « Demander le CV », bouton qui pulse (arrêté en mouvement réduit).
+- Suite (même jour) : icône du CV identique aux autres cartes, textes courts (« Lisez ici le CV envoyé pour cette offre. »). Propositions d'Orbi sur le modèle « Prochaines étapes » de Carrière : numéro coloré (jaune, corail, vert), titre = action, une ligne sur ce qui manque, flèche, reflet animé.
