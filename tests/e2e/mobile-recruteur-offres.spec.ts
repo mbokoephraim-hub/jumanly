@@ -285,9 +285,7 @@ test("une organisation pas encore vérifiée publie son offre tout de suite", as
   await publishFilledOffer(page, "Publier");
   await expect(main(page)).toContainText(isMobile ? "Votre offre est en ligne" : "Offre publiée");
   await page.goto("/app/hire/offres");
-  const card = main(page)
-    .locator(isMobile ? ".nb-rh-offre" : "article")
-    .filter({ hasText: title });
+  const card = main(page).locator("article").filter({ hasText: title });
   await expect(card).toBeVisible();
   await expect(card).not.toContainText(/En (vérification|validation)/);
 });

@@ -19785,6 +19785,26 @@
       "online": "{count, plural, =0 {En ligne depuis aujourd'hui} one {En ligne depuis # jour} other {En ligne depuis # jours}}",
       "ended": "Candidatures fermées",
       "notPublished": "Pas encore publiée",
+      "section": {
+        "encours": "En cours",
+        "terminees": "Terminées",
+        "autres": "Brouillons et pauses"
+      },
+      "card": {
+        "verified": "Entreprise vérifiée",
+        "views": "Vues",
+        "applications": "Candidatures",
+        "left": "Il reste",
+        "leftValue": "{count, plural, =0 {Dernier jour} one {# jour} other {# jours}}",
+        "deadline": "Date limite",
+        "noDeadline": "Aucune",
+        "endedOn": "Terminée le",
+        "more": "Voir plus",
+        "moreLabel": "Voir plus sur l'offre {title}",
+        "faces": "{count, plural, one {# candidature, voir le candidat} other {# candidatures, voir les candidats}}",
+        "noFaces": "Pas encore de candidature",
+        "moreFaces": "+{count}"
+      },
       "closes": "{count, plural, =0 {Clôture aujourd'hui} one {Clôture demain} other {Clôture dans # jours}}",
       "rate": "Taux de candidature"
     },

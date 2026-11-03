@@ -16244,6 +16244,22 @@ Conventions :
 | `phoneRhOffres.list.online` | {count, plural, =0 {En ligne depuis aujourd'hui} one {En ligne depuis # jour} other {En ligne depuis # jours}} |
 | `phoneRhOffres.list.ended` | Candidatures fermées |
 | `phoneRhOffres.list.notPublished` | Pas encore publiée |
+| `phoneRhOffres.list.section.encours` | En cours |
+| `phoneRhOffres.list.section.terminees` | Terminées |
+| `phoneRhOffres.list.section.autres` | Brouillons et pauses |
+| `phoneRhOffres.list.card.verified` | Entreprise vérifiée |
+| `phoneRhOffres.list.card.views` | Vues |
+| `phoneRhOffres.list.card.applications` | Candidatures |
+| `phoneRhOffres.list.card.left` | Il reste |
+| `phoneRhOffres.list.card.leftValue` | {count, plural, =0 {Dernier jour} one {# jour} other {# jours}} |
+| `phoneRhOffres.list.card.deadline` | Date limite |
+| `phoneRhOffres.list.card.noDeadline` | Aucune |
+| `phoneRhOffres.list.card.endedOn` | Terminée le |
+| `phoneRhOffres.list.card.more` | Voir plus |
+| `phoneRhOffres.list.card.moreLabel` | Voir plus sur l'offre {title} |
+| `phoneRhOffres.list.card.faces` | {count, plural, one {# candidature, voir le candidat} other {# candidatures, voir les candidats}} |
+| `phoneRhOffres.list.card.noFaces` | Pas encore de candidature |
+| `phoneRhOffres.list.card.moreFaces` | +{count} |
 | `phoneRhOffres.status.published` | En cours |
 | `phoneRhOffres.status.pending_review` | En vérification |
 | `phoneRhOffres.status.draft` | Brouillon |

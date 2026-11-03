@@ -14,7 +14,12 @@ import { activeCount, listOffers, offerTabs, type OfferTab } from "@/server/serv
 import { orgStructure } from "@/server/services/org-structure";
 import { isPhone } from "@/server/view";
 import { RhNewOffer, RhTab } from "@/components/phone/recruteur/head";
-import { RH_OFFER_FILTERS, RhOffersList, rhOffersLine } from "@/components/phone/recruteur/offres";
+import {
+  RH_OFFER_FILTERS,
+  RhOffersList,
+  rhOfferExtras,
+  rhOffersLine,
+} from "@/components/phone/recruteur/offres";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hireOffers.list");
@@ -269,9 +274,8 @@ async function HireOffersPageContent({ searchParams }: PageProps<"/app/hire/offr
 }
 
 /**
- * On a phone, the Offres tab of Modèle B (docs/modele-b-recruteur, lot M4, planches
- * Recruteur-offres and -offres-encours): the line of figures, « Toutes · En cours · Terminées »
- * and one card per offer.
+ * On a phone, the Offres tab of Modèle B: the line of figures, « Toutes · En cours · Terminées »
+ * and one card per offer, grouped « En cours » then « Terminées » (Ephraïm, 03/11/2026).
  */
 async function PhoneOffers({ searchParams }: PageProps<"/app/hire/offres">) {
   const params = await searchParams;
@@ -279,6 +283,13 @@ async function PhoneOffers({ searchParams }: PageProps<"/app/hire/offres">) {
   const t = await getTranslations("hireOffers");
   const now = new Date();
   const offers = await listOffers(db, ctx, now);
+  const [extras, org] = await Promise.all([
+    rhOfferExtras(ctx, offers),
+    db.organization.findUniqueOrThrow({
+      where: { id: ctx.organizationId },
+      select: { name: true, logo: true, verifiedAt: true },
+    }),
+  ]);
   const filter = RH_OFFER_FILTERS.find((key) => key === params.vue) ?? "toutes";
   const ok = OK_TOASTS.find((value) => value === params.ok);
   return (
@@ -294,7 +305,13 @@ async function PhoneOffers({ searchParams }: PageProps<"/app/hire/offres">) {
           {t("list.limit")}
         </p>
       ) : null}
-      <RhOffersList offers={offers} filter={filter} now={now} />
+      <RhOffersList
+        offers={offers}
+        extras={extras}
+        org={{ name: org.name, logo: org.logo, verified: Boolean(org.verifiedAt) }}
+        filter={filter}
+        now={now}
+      />
     </RhTab>
   );
 }
