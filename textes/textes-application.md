@@ -16446,6 +16446,16 @@ Conventions :
 | `phoneRhFiche.cards.diplomas` | {count, plural, one {# diplôme déclaré} other {# diplômes déclarés}}, {proofs, plural, =0 {aucun justificatif joint} one {# avec justificatif} other {# avec justificatif}}. |
 | `phoneRhFiche.cards.attachment` | Pièce jointe à la candidature. |
 | `phoneRhFiche.cards.open` | Consulter |
+| `phoneRhFiche.reader.seo` | CV du candidat |
+| `phoneRhFiche.reader.title` | CV du candidat |
+| `phoneRhFiche.reader.back` | Revenir au profil du candidat |
+| `phoneRhFiche.reader.kind.pdf` | PDF envoyé par le candidat |
+| `phoneRhFiche.reader.kind.image` | Photo envoyée par le candidat |
+| `phoneRhFiche.reader.kind.jumanly` | CV fait sur Jumanly |
+| `phoneRhFiche.reader.pages` | Le CV « {title} » |
+| `phoneRhFiche.reader.unreadable` | Ce PDF ne s'affiche pas sur ce téléphone. |
+| `phoneRhFiche.reader.open` | L'enregistrer |
+| `phoneRhFiche.reader.empty` | Ce CV ne contient encore rien à lire. Vous pouvez demander au candidat un CV à jour. |
 | `phoneRhFiche.cards.letterQuote` | « {text} » |
 | `phoneRhFiche.cards.cvMatches` | Compétences demandées par l'offre |
 | `phoneRhFiche.diplomas.none` | Aucun diplôme indiqué. |

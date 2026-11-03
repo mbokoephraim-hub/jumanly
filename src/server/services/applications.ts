@@ -162,6 +162,10 @@ export async function applyToJob(
             templateId: cv.templateId,
             content: cv.content as Prisma.InputJsonValue,
             ...(cv.style ? { style: cv.style as Prisma.InputJsonValue } : {}),
+            // An imported CV kept as a file: the recruiter reads that file (03/11/2026).
+            ...(cv.fileKey
+              ? { file: { key: cv.fileKey, name: cv.fileName ?? cv.title, type: cv.fileType } }
+              : {}),
           }
         : Prisma.DbNull,
     };
