@@ -7461,6 +7461,13 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 .nb-rh-fp .nb-rh-fp-apropos .nb-pf-langues b {
   font-size: 15px;
 }
+.nb-rh-fp .nb-rh-fp-apropos .nb-pf-langues {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.nb-rh-fp .nb-rh-fp-apropos .nb-pf-langues li {
+  padding: 12px 14px;
+}
 .nb-rh-fp .nb-rh-fp-apropos small,
 .nb-rh-fp .nb-rh-fp-apropos .nb-pf-plus {
   font-size: 13px;
