@@ -16395,6 +16395,12 @@ Conventions :
 | `phoneRhFiche.documents.title` | Documents de candidature |
 | `phoneRhFiche.documents.portfolio` | Portfolio |
 | `phoneRhFiche.diplomas.title` | Diplômes |
+| `phoneRhFiche.cards.cv` | Consultez ici le CV que ce candidat a envoyé avec sa candidature. |
+| `phoneRhFiche.cards.letter` | Lisez ici la lettre de motivation écrite pour votre offre. |
+| `phoneRhFiche.cards.portfolio` | Découvrez les réalisations que ce candidat a choisi de montrer. |
+| `phoneRhFiche.cards.diplomas` | {count, plural, one {# diplôme déclaré} other {# diplômes déclarés}}, {proofs, plural, =0 {aucun justificatif joint} one {# avec justificatif} other {# avec justificatif}}. |
+| `phoneRhFiche.cards.attachment` | Pièce jointe à la candidature. |
+| `phoneRhFiche.cards.open` | Consulter |
 | `phoneRhFiche.diplomas.none` | Aucun diplôme indiqué. |
 | `phoneRhFiche.diplomas.proof` | Justificatif joint |
 | `phoneRhFiche.diplomas.noProof` | Pas de justificatif |

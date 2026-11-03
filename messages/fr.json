@@ -20402,6 +20402,14 @@
       "proof": "Justificatif joint",
       "noProof": "Pas de justificatif"
     },
+    "cards": {
+      "cv": "Consultez ici le CV que ce candidat a envoyé avec sa candidature.",
+      "letter": "Lisez ici la lettre de motivation écrite pour votre offre.",
+      "portfolio": "Découvrez les réalisations que ce candidat a choisi de montrer.",
+      "diplomas": "{count, plural, one {# diplôme déclaré} other {# diplômes déclarés}}, {proofs, plural, =0 {aucun justificatif joint} one {# avec justificatif} other {# avec justificatif}}.",
+      "attachment": "Pièce jointe à la candidature.",
+      "open": "Consulter"
+    },
     "proposals": {
       "title": "Propositions d'Orbi",
       "none": "Rien à demander pour l'instant : le dossier est complet.",

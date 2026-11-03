@@ -5426,3 +5426,7 @@ Demande d'Ephraïm (cinq captures du profil). La fiche reprend la tête du profi
 ## 2026-11-03 · Fiche du candidat : marges et tête sur une ligne
 
 Retour d'Ephraïm : le texte commençait trop loin du bord (la marge de la page s'ajoutait à celle du profil) ; il commence maintenant à 20 px comme ailleurs. La barre du haut porte le titre « Profil ». La photo et, à côté, le nom, le titre, la ville, l'e-mail (icône et adresse) et LinkedIn s'il existe ; les parties Résumé · Documents · Évaluation remontent juste en dessous, la bio en texte plus grand. Captures : `/mnt/project-files/captures/fiche-candidat-tete-2026-11-03/`.
+
+## 2026-11-03 · Fiche du candidat : Documents en cartes horizontales
+
+Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples de cartes produit). Chaque pièce est une carte horizontale : à gauche le dessin de « Mes documents » (page de CV, enveloppe de la lettre, image du portfolio, médaille pour les diplômes et attestations) sur un fond de couleur, puis le titre, une phrase d'accroche (« Consultez ici le CV que ce candidat a envoyé… »), l'état (Reçu, Lu par Orbi, Vérifié) et « Consulter » qui pulse doucement pour appeler le doigt (arrêté quand les animations sont réduites). Les propositions d'Orbi restent en dessous. Captures : `/mnt/project-files/captures/fiche-candidat-documents-2026-11-03/`.
