@@ -57,7 +57,7 @@ const FIL_FACTS: OrbiFact[] = ["digest", "entreprises", "suivre", "ecrire"];
 const MESSAGE_FACTS: OrbiFact[] = ["nonlus", "prioritaire", "recruteur", "relire"];
 /** The recruiter's questions answered from the organization's facts (lot M7), by tab and rank. */
 const RH_FACTS: Partial<Record<PhoneTab, (RhOrbiFact | null)[]>> = {
-  candidatures: ["first"],
+  agenda: ["first"],
   talents: ["propose"],
   messages: ["waiting", "unread"],
 };

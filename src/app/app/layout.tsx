@@ -172,7 +172,11 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
           image: user.image ?? null,
         }}
         reduceMotion={user.reduceMotion}
-        badges={{ candidatures: counts.newApplications, messages: counts.unreadMessages }}
+        badges={{
+          offres: counts.newApplications,
+          agenda: counts.agendaDue,
+          messages: counts.unreadMessages,
+        }}
         tabs={{}}
       >
         <ContentBanners audience="recruiters" />

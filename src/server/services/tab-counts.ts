@@ -1,6 +1,6 @@
 /**
  * The counts on the phone's menu (Ephraïm 29/10/2026: « s'il y a trois messages, que l'icône
- * message montre trois »). What is unread stays counted until it is read (Chat, Candidatures);
+ * message montre trois »). What is unread stays counted until it is read (Chat, Offres, Agenda);
  * what is simply new counts from the person's last visit to the tab, which the phone remembers
  * (Fil: posts of others; Explorer: offers published; Carrière: news of their applications).
  */
@@ -17,7 +17,8 @@ export type TabCounts = {
   fil: number;
   explorer?: number;
   carriere?: number;
-  candidatures?: number;
+  offres?: number;
+  agenda?: number;
   messages: number;
 };
 
@@ -56,5 +57,10 @@ export async function recruiterTabCounts(
     seen.fil ? newPostsSince(db, ctx.userId, seen.fil) : 0,
     recruiterBarCounts(db, ctx),
   ]);
-  return { fil, candidatures: bar.newApplications, messages: bar.unreadMessages };
+  return {
+    fil,
+    offres: bar.newApplications,
+    agenda: bar.agendaDue,
+    messages: bar.unreadMessages,
+  };
 }

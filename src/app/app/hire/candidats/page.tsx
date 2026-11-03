@@ -501,11 +501,7 @@ export default async function CandidatesPage(props: PageProps<"/app/hire/candida
     );
     const tb = await getTranslations("phoneRhBureau");
     return (
-      <RhTab
-        tab="candidatures"
-        legacy={false}
-        subtitle={tb("line", { count: online.length, waiting })}
-      >
+      <RhTab tab="offres" legacy={false} subtitle={tb("line", { count: online.length, waiting })}>
         <RhOfferChooser
           offers={offers}
           counts={counts}
@@ -521,7 +517,7 @@ export default async function CandidatesPage(props: PageProps<"/app/hire/candida
     throw error;
   });
   return (
-    <RhTab tab="candidatures" legacy={false} subtitle={await rhCandidaturesLine(data)}>
+    <RhTab tab="offres" legacy={false} subtitle={await rhCandidaturesLine(data)}>
       <RhCandidatures ctx={ctx} query={query} data={data} />
     </RhTab>
   );
