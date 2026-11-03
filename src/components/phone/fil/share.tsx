@@ -226,7 +226,8 @@ export function ShareBody({
             autoComplete="off"
           />
           <button type="submit" className="nb-pt-envoyer" disabled={pending} aria-busy={pending}>
-            {t("shareTo.send", { count: picked.length })}
+            <PhoneIcon name="envoyer" size={20} />
+            <span>{t("shareTo.send", { count: picked.length })}</span>
           </button>
         </form>
       ) : (
