@@ -30,6 +30,8 @@ import { isPhone } from "@/server/view";
 import { effectiveRights } from "@/server/services/org-team";
 import { RH_FILE_PARTS, RhCandidateSummary } from "@/components/phone/recruteur/resume-fiche";
 import { RhOfferCandidatesList, RhOfferTabs } from "@/components/phone/recruteur/candidats-offre";
+import { deskTabOf, fromTabOf } from "@/components/phone/recruteur/desk-tabs";
+import { DESK_RUBRIQUES, deskCounts, emptyCounts } from "@/server/services/hire-desk";
 import {
   RhOfferCandidates,
   RhOfferDetail,
@@ -730,7 +732,8 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
         query={query}
         sortable={sortable}
         part={RH_FILE_PARTS.find((value) => value === one(query.partie)) ?? "resume"}
-        fromList={one(query.de) === "candidatures"}
+        fromList={fromTabOf(one(query.de)) !== null}
+        fromTab={fromTabOf(one(query.de)) ?? "trier"}
       />
     );
   if (one(query.vue) === "candidats" && permissions.readApplications)
@@ -749,7 +752,7 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
   // « Voir plus » of an offer opens « Candidats » (Ephraïm, 03/11/2026); « Vue d'ensemble » keeps
   // the figures, and the answers of its actions (pause, report, limit) still land there.
   // The « ··· » of « Candidatures » (03/11/2026) comes back with `vue=candidatures`: it stays there.
-  const listed = one(query.vue) === "candidatures" || one(query.vue) === "retenus";
+  const listed = ["candidatures", "retenus", ...DESK_RUBRIQUES].includes(one(query.vue) ?? "");
   const overview =
     one(query.vue) === "apercu" ||
     (!listed && ["jours", "rapport", "ok", "limite"].some((key) => one(query[key]) !== undefined));
@@ -770,7 +773,7 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
           ctx={ctx}
           jobId={job.id}
           query={query}
-          tab={one(query.vue) === "retenus" ? "retenus" : "candidats"}
+          tab={deskTabOf(one(query.vue))}
           sortable={sortable}
         />
       </RhOffresTexts>
@@ -783,18 +786,16 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
         where: { jobId: job.id, shortlistedAt: { not: null }, status: { not: "withdrawn" } },
       })
     : 0;
+  const desk = permissions.readApplications
+    ? ((await deskCounts(db, ctx, [job.id])).get(job.id) ?? emptyCounts())
+    : emptyCounts();
   return (
     <>
       {ok && <ToastOnLoad message={tl(`ok.${ok}`)} tone="success" />}
       <RhOfferDetail
         tabs={
           permissions.readApplications ? (
-            <RhOfferTabs
-              jobId={job.id}
-              current="apercu"
-              applications={figures.applications}
-              shortlisted={shortlisted}
-            />
+            <RhOfferTabs jobId={job.id} current="apercu" counts={desk} />
           ) : undefined
         }
         ctx={ctx}

@@ -19,44 +19,43 @@ import { RhOfferActions, type RhOfferActionsData } from "./offre-actions";
 import { initialsOf, tintOf } from "./candidatures";
 import { RhFiltersSheet } from "./tri-client";
 import { RhOfferHead } from "./offres";
+import { deskTabHref } from "./desk-tabs";
+import { DESK_RUBRIQUES, type DeskCounts, type DeskRubrique } from "@/server/services/hire-desk";
 
-export type RhOfferTab = "apercu" | "candidats" | "retenus";
+export type RhOfferTab = "apercu" | DeskRubrique;
 
 type Query = Record<string, string | string[] | undefined>;
 const one = (value: string | string[] | undefined) =>
   typeof value === "string" ? value : undefined;
 
 /**
- * The three parts of an offer on the phone (Ephraïm, 03/11/2026): « Vue d'ensemble » on the left,
- * « Candidats » in the middle (where « Voir plus » of the offer lands) and « Retenus ».
+ * The parts of an offer on the phone (Ephraïm, 03/11/2026, « Candidatures recruteur », step 2):
+ * Vue · À trier · À compléter · Entretiens · Décision. Each candidate is where the recruiter has
+ * something to do with them; « Retenus » is now À compléter and Entretiens.
  */
 export async function RhOfferTabs({
   jobId,
   current,
-  applications,
-  shortlisted,
+  counts,
 }: {
   jobId: string;
   current: RhOfferTab;
-  applications: number;
-  shortlisted: number;
+  counts: DeskCounts;
 }) {
   const t = await getTranslations("phoneRhCandidats");
-  const tabs = [
-    { key: "apercu", href: `/app/hire/offres/${jobId}?vue=apercu`, count: null },
-    { key: "candidats", href: `/app/hire/offres/${jobId}`, count: applications },
-    { key: "retenus", href: `/app/hire/offres/${jobId}?vue=retenus`, count: shortlisted },
-  ] as const;
+  const tabs = ["apercu", ...DESK_RUBRIQUES] as const;
   return (
-    <nav className="nb-rh-co-onglets" aria-label={t("tabs")}>
-      {tabs.map((tab) => (
+    <nav className="nb-rh-co-onglets nb-rh-co-onglets-defil" aria-label={t("tabs")}>
+      {tabs.map((key) => (
         <Link
-          key={tab.key}
-          href={tab.href}
-          aria-current={tab.key === current ? "page" : undefined}
+          key={key}
+          href={deskTabHref(jobId, key)}
+          aria-current={key === current ? "page" : undefined}
           scroll={false}
+          replace
         >
-          {t(`tab.${tab.key}`)}
+          {t(`tab.${key}`)}
+          {key !== "apercu" && counts[key] > 0 ? <small>{counts[key]}</small> : null}
         </Link>
       ))}
     </nav>
@@ -79,7 +78,7 @@ export async function RhOfferCandidatesList({
   ctx: HireContext;
   jobId: string;
   query: Query;
-  tab: "candidats" | "retenus";
+  tab: DeskRubrique;
   sortable: boolean;
 }) {
   const t = await getTranslations("phoneRhCandidats");
@@ -92,7 +91,7 @@ export async function RhOfferCandidatesList({
     ville: one(query.ville),
   });
   const [data, atsOpen, org] = await Promise.all([
-    offerCandidates(db, ctx, jobId, search, { shortlistedOnly: tab === "retenus" }),
+    offerCandidates(db, ctx, jobId, search, { rubrique: tab }),
     can(db, { type: "organization", id: ctx.organizationId }, CV_ANALYSIS_RIGHT),
     db.organization.findUniqueOrThrow({
       where: { id: ctx.organizationId },
@@ -102,8 +101,7 @@ export async function RhOfferCandidatesList({
   const { job, candidates } = data;
   const applied = data.search;
   const filtered = Boolean(applied.q) || searchCount(applied) > 0;
-  const here =
-    tab === "retenus" ? `/app/hire/offres/${jobId}?vue=retenus` : `/app/hire/offres/${jobId}`;
+  const here = deskTabHref(jobId, tab);
   const hidden = (keep: Record<string, string | undefined>) =>
     Object.entries(keep).map(([name, value]) =>
       value ? <input key={name} type="hidden" name={name} value={value} /> : null,
@@ -125,7 +123,7 @@ export async function RhOfferCandidatesList({
     start: null,
     closesAt: job.closesAt ? job.closesAt.toISOString().slice(0, 10) : null,
     minDate: new Date(now.getTime() + 86_400_000).toISOString().slice(0, 10),
-    back: `/app/hire/offres/${jobId}?vue=${tab === "retenus" ? "retenus" : "candidatures"}`,
+    back: deskTabHref(jobId, tab),
   };
   const rows: RhOrderRow[] = candidates.map((person) => {
     const name = person.name ?? t("list.blind", { number: person.number });
@@ -136,8 +134,17 @@ export async function RhOfferCandidatesList({
       image: person.image,
       tone: Number(tintOf(person.id)),
       headline: person.headline?.trim() || t("list.noHeadline"),
-      line: [person.city, format.relativeTime(person.createdAt, now)].filter(Boolean).join(" · "),
-      href: `/app/hire/offres/${jobId}?vue=candidats&de=candidatures&fiche=${person.id}`,
+      line:
+        tab === "completer" && person.pieces
+          ? t("desk.pieces", {
+              received: person.pieces.received,
+              required: person.pieces.required,
+              date: person.pieces.dueAt,
+            })
+          : tab === "decision"
+            ? t(`desk.outcome.${person.status}`)
+            : [person.city, format.relativeTime(person.createdAt, now)].filter(Boolean).join(" · "),
+      href: `/app/hire/offres/${jobId}?vue=candidats&de=${tab}&fiche=${person.id}`,
       unseen: person.unseen,
       shortlisted: person.shortlisted,
     };
@@ -153,17 +160,13 @@ export async function RhOfferCandidatesList({
         <RhOfferActions data={actions} items={["edit", "pause", "postpone", "delete"]} />
       </header>
       <RhOfferHead job={job} organization={org} now={now} />
-      <RhOfferTabs
-        jobId={jobId}
-        current={tab}
-        applications={data.total}
-        shortlisted={data.shortlisted}
-      />
+      <RhOfferTabs jobId={jobId} current={tab} counts={data.counts} />
+      <p className="nb-rh-co-aide">{t(`desk.help.${tab}`)}</p>
 
       <div className="nb-rh-co-recherche">
         <form method="get" action={`/app/hire/offres/${jobId}`} role="search">
           {hidden({
-            vue: tab === "retenus" ? "retenus" : undefined,
+            vue: tab,
             skill: applied.skill,
             dispo: applied.dispo,
             ville: applied.ville,
@@ -187,7 +190,7 @@ export async function RhOfferCandidatesList({
           version={JSON.stringify(applied)}
         >
           <form method="get" action={`/app/hire/offres/${jobId}`} className="nb-rh-pf-f">
-            {hidden({ vue: tab === "retenus" ? "retenus" : undefined, q: applied.q })}
+            {hidden({ vue: tab, q: applied.q })}
             <div className="nb-ex-f-tete">
               <h2>{t("filters.title")}</h2>
               <Link
@@ -255,7 +258,7 @@ export async function RhOfferCandidatesList({
         </RhFiltersSheet>
       </div>
 
-      {tab === "candidats" ? (
+      {tab === "trier" ? (
         <section className="nb-rh-co-ats" aria-labelledby={`rh-co-ats-${jobId}`}>
           <div className="nb-rh-co-affiche" aria-hidden>
             <span className="nb-rh-co-affiche-i">
@@ -291,22 +294,22 @@ export async function RhOfferCandidatesList({
 
       <section className="nb-rh-co-tous" aria-labelledby={`rh-co-tous-${tab}`}>
         <h2 id={`rh-co-tous-${tab}`} className="nb-rh-co-h">
-          {tab === "retenus" ? t("list.titleRetenus") : t("list.title")}
+          {t(`desk.title.${tab}`)}
           <small>{candidates.length}</small>
         </h2>
         {rows.length === 0 ? (
           <p className="nb-vide">
             {filtered
               ? t("list.emptySearch")
-              : tab === "retenus"
-                ? t("list.emptyRetenus")
-                : t("list.empty")}
+              : data.total === 0 && tab === "trier"
+                ? t("list.empty")
+                : t(`desk.empty.${tab}`)}
           </p>
         ) : (
           <RhCandidateOrder
             job={jobId}
             rows={rows}
-            sortable={sortable && !filtered && tab === "candidats" && rows.length > 1}
+            sortable={sortable && !filtered && tab === "trier" && rows.length > 1}
             texts={{
               more: t("list.more"),
               moreLabel: t("list.moreLabel"),

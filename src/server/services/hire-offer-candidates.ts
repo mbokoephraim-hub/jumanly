@@ -1,8 +1,14 @@
 import { z } from "zod";
-import type { Availability, Prisma, PrismaClient } from "@/generated/prisma/client";
+import type {
+  ApplicationStatus,
+  Availability,
+  Prisma,
+  PrismaClient,
+} from "@/generated/prisma/client";
 import { level } from "@/server/entitlements";
 import { getOrgJob, HireError, hirePermissions, type HireContext } from "./hire";
 import { filtersLevelOf, type FiltersLevel } from "./hire-filters";
+import { emptyCounts, rubriqueOf, type DeskRubrique } from "./hire-desk";
 
 /**
  * « Candidats » of an offer on the recruiter's phone (Ephraïm, 03/11/2026): every person who
@@ -52,6 +58,11 @@ export type OfferCandidate = {
   unseen: boolean;
   /** 1, 2, 3… in the order of application: « Candidat 3 » when sorted blind. */
   number: number;
+  /** Where the recruiter works on them (03/11/2026): À trier, À compléter, Entretiens, Décision. */
+  rubrique: DeskRubrique;
+  status: ApplicationStatus;
+  /** « À compléter »: the pieces asked and received, the date limit. */
+  pieces: { required: number; received: number; dueAt: Date } | null;
 };
 
 /** Order of the list: the recruiter's places first, then the order of application. */
@@ -76,7 +87,7 @@ export async function offerCandidates(
   ctx: HireContext,
   jobId: string,
   search: CandidateSearch,
-  options: { shortlistedOnly?: boolean } = {},
+  options: { shortlistedOnly?: boolean; rubrique?: DeskRubrique } = {},
 ) {
   if (!hirePermissions(ctx.role).readApplications) throw new HireError("forbidden");
   const job = await getOrgJob(db, ctx, jobId);
@@ -87,7 +98,8 @@ export async function offerCandidates(
   const where: Prisma.ApplicationWhereInput = {
     jobId: job.id,
     job: { organizationId: ctx.organizationId },
-    status: { not: "withdrawn" },
+    // Withdrawn applications only show in « Décision ».
+    ...(options.rubrique === "decision" ? {} : { status: { not: "withdrawn" } }),
   };
   const rows = await db.application.findMany({
     where,
@@ -97,6 +109,10 @@ export async function offerCandidates(
       viewedAt: true,
       shortlistedAt: true,
       recruiterRank: true,
+      status: true,
+      verification: {
+        select: { dueAt: true, items: { select: { required: true, receivedAt: true } } },
+      },
       profile: {
         select: {
           headline: true,
@@ -119,6 +135,7 @@ export async function offerCandidates(
   const blind = job.blindSort;
   const shown = orderCandidates(rows).filter((row) => {
     if (options.shortlistedOnly && !row.shortlistedAt) return false;
+    if (options.rubrique && rubriqueOf(row) !== options.rubrique) return false;
     const skills = row.profile.skills.map((item) => fold(item.skill.name));
     const hidden = blind && !row.shortlistedAt;
     if (
@@ -146,13 +163,32 @@ export async function offerCandidates(
       shortlisted: Boolean(row.shortlistedAt),
       unseen: !row.viewedAt,
       number: numbers.get(row.id) ?? 0,
+      rubrique: rubriqueOf(row),
+      status: row.status,
+      pieces: row.verification
+        ? {
+            required: row.verification.items.filter((item) => item.required).length,
+            received: row.verification.items.filter((item) => item.required && item.receivedAt)
+              .length,
+            dueAt: row.verification.dueAt,
+          }
+        : null,
     };
   });
+  const counts = emptyCounts();
+  for (const row of rows) counts[rubriqueOf(row)] += 1;
+  if (options.rubrique !== "decision") {
+    // The withdrawn ones were left out of the query: count them for « Décision » too.
+    counts.decision += await db.application.count({
+      where: { jobId: job.id, job: { organizationId: ctx.organizationId }, status: "withdrawn" },
+    });
+  }
   return {
     job,
     candidates,
-    total: rows.length,
-    shortlisted: rows.filter((row) => row.shortlistedAt).length,
+    total: rows.filter((row) => row.status !== "withdrawn").length,
+    shortlisted: rows.filter((row) => row.shortlistedAt && row.status !== "withdrawn").length,
+    counts,
     search: applied,
     filtersLevel,
   };

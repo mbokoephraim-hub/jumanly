@@ -16270,6 +16270,27 @@ Conventions :
 | `phoneRhCandidats.tab.apercu` | Vue |
 | `phoneRhCandidats.tab.candidats` | Candidatures |
 | `phoneRhCandidats.tab.retenus` | Retenus |
+| `phoneRhCandidats.tab.trier` | À trier |
+| `phoneRhCandidats.tab.completer` | À compléter |
+| `phoneRhCandidats.tab.entretiens` | Entretiens |
+| `phoneRhCandidats.tab.decision` | Décision |
+| `phoneRhCandidats.desk.help.trier` | Les nouvelles candidatures. Orbi aide à les classer, vous décidez : Retenir, En attente ou Ne pas retenir. |
+| `phoneRhCandidats.desk.help.completer` | Retenus, mais il manque encore des pièces. Ils passent seuls dans Entretiens dès que tout est arrivé. |
+| `phoneRhCandidats.desk.help.entretiens` | Retenus, dossier complet : prêts à être rencontrés. |
+| `phoneRhCandidats.desk.help.decision` | Embauchés, non retenus ou retirés par le candidat. |
+| `phoneRhCandidats.desk.title.trier` | À trier |
+| `phoneRhCandidats.desk.title.completer` | À compléter |
+| `phoneRhCandidats.desk.title.entretiens` | Prêts pour l'entretien |
+| `phoneRhCandidats.desk.title.decision` | Décisions prises |
+| `phoneRhCandidats.desk.empty.trier` | Tout est trié pour cette offre. |
+| `phoneRhCandidats.desk.empty.completer` | Aucun dossier en attente de pièces. |
+| `phoneRhCandidats.desk.empty.entretiens` | Personne n'est encore prêt pour l'entretien. Retenez un candidat dans À trier. |
+| `phoneRhCandidats.desk.empty.decision` | Aucune décision prise pour le moment. |
+| `phoneRhCandidats.desk.pieces` | {received} sur {required} pièces · avant le {date, date, medium} |
+| `phoneRhCandidats.desk.outcome.hired` | Embauché |
+| `phoneRhCandidats.desk.outcome.rejected` | Non retenu |
+| `phoneRhCandidats.desk.outcome.withdrawn` | Retiré par le candidat |
+| `phoneRhCandidats.desk.outcome.active` | En cours |
 | `phoneRhCandidats.line` | {count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} · {shortlisted, plural, =0 {aucun retenu} one {# retenu} other {# retenus}} |
 | `phoneRhCandidats.search` | Rechercher un candidat |
 | `phoneRhCandidats.filters.title` | Filtres |
