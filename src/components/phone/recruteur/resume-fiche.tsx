@@ -12,7 +12,13 @@ import { applicationMatches } from "@/server/matching/service";
 import type { MatchExplanation } from "@/server/matching/types";
 import { sentAttachments } from "@/server/services/application-attachments";
 import { ANALYSIS_EVENT } from "@/server/services/cv-analysis";
-import { hirePermissions, HireError, recordView, type HireContext } from "@/server/services/hire";
+import {
+  hirePermissions,
+  HireError,
+  recordView,
+  rejectReasons,
+  type HireContext,
+} from "@/server/services/hire";
 import { atsBoard } from "@/server/services/hire-ats";
 import { rankByClass } from "@/server/services/hire-classes";
 import { blindName } from "@/server/services/hire-filters";
@@ -23,6 +29,8 @@ import { parseCriteria } from "@/server/services/jobs";
 import { candidateSearchSchema, offerCandidates } from "@/server/services/hire-offer-candidates";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { RhProposal, type RhProposalTexts } from "./fiche-proposition";
+import { RhDecision, type RhDecisionOption } from "./fiche-decision";
+import { holdReasons, retainReasons, suggestionOf } from "@/server/services/hire-evaluation";
 import { CandidateAbout, CandidateHead } from "../profil/candidate-summary";
 import { profileView, ProfileTexts } from "../profil/server";
 import { personProfile } from "@/server/services/person-profile";
@@ -238,22 +246,11 @@ export async function RhCandidateSummary({
     : undefined;
   const explanation: MatchExplanation | null = match && match !== "disabled" ? match : null;
   const latest = profile.experiences[0] ?? null;
-  const { notes } = highlightsOf(
+  const { notes, checks } = highlightsOf(
     explanation,
     latest ? { title: latest.title, company: latest.company } : null,
     job.city,
   );
-  const gaps = [
-    ...(explanation?.missingSkills ?? [])
-      .filter((item) => item.importance === "required")
-      .map((item) => t("orbi.gapSkill", { skill: item.skill })),
-    ...(explanation?.criteria ?? [])
-      .filter((item) => item.key === "languages" && item.status === "unmet")
-      .map(() => t("orbi.gapLanguages")),
-    ...(explanation?.criteria ?? [])
-      .filter((item) => item.key === "experience" && item.status === "unmet")
-      .map(() => t("orbi.gapExperience")),
-  ].slice(0, 2);
   const questions = proposedQuestions(application, 2);
   // What the verification proved (« Diplôme vérifié », « 2 référents donnés »).
   const pieces = await db.verificationItem.findMany({
@@ -361,6 +358,78 @@ export async function RhCandidateSummary({
   const cvSummary = cv?.summary?.trim() ?? "";
   const bio = cvSummary ? { title: null, text: cvSummary } : (view?.about ?? null);
   const title = cv?.info.headline?.trim() || profile.headline?.trim() || null;
+
+  // ─── « Évaluation » (Ephraïm, 03/11/2026): Orbi's opinion and reasons, the recruiter decides ──
+  const toVerifyLines = [
+    ...experiences
+      .filter((item) => !item.verified)
+      .slice(0, 3)
+      .map((item) => tf("eval.verify.experience", { title: item.title })),
+    ...noProof.slice(0, 3).map((item) => tf("eval.verify.diploma", { title: item.title })),
+    ...(missingAsked > 0 ? [tf("eval.verify.documents", { count: missingAsked })] : []),
+    ...(!application.cvSnapshot ? [tf("eval.verify.cv")] : []),
+    ...checks
+      .filter((item) => item.key === "declared")
+      .slice(0, 2)
+      .map((item) => tf("eval.verify.skill", { skill: "skill" in item ? item.skill : "" })),
+  ];
+  const suggestion = suggestionOf({
+    orbiClass: explanation ? (row.orbiClass ?? null) : row.orbiClass === "hors" ? "hors" : null,
+    toVerify:
+      experiences.filter((item) => !item.verified).length + diplomasWithoutProof + missingAsked,
+  });
+  const criterionRows = (explanation?.criteria ?? []).filter(
+    (item) => item.status !== "not_applicable" && item.weight > 0,
+  );
+  const weakLines = [
+    ...(explanation?.missingSkills ?? [])
+      .filter((item) => item.importance === "required")
+      .slice(0, 3)
+      .map((item) => t("orbi.gapSkill", { skill: item.skill })),
+    ...criterionRows
+      .filter((item) => item.status === "unmet" && !item.key.startsWith("skills"))
+      .map((item) => tf("eval.weak.unmet", { label: tr(`why.criteria.${item.key}`) })),
+    ...criterionRows
+      .filter((item) => item.status === "partial" && !item.key.startsWith("skills"))
+      .map((item) => tf("eval.weak.partial", { label: tr(`why.criteria.${item.key}`) })),
+    ...row.missedCriteria.map((label) => tf("eval.weak.knockout", { label })),
+  ];
+  const strongLines = [
+    ...notes.slice(0, 3).map((note) => tr(`notes.${note.key}`, note as never)),
+    ...proofsGained,
+    ...(row.star ? [t("notes.star")] : []),
+  ];
+  const decisionOptions: RhDecisionOption[] = [
+    {
+      choice: "retain",
+      label: t("actions.retain"),
+      line: tf("eval.decision.retainLine"),
+      done: shortlisted ? tf("eval.decision.retained") : null,
+      reasons: retainReasons.map((value) => ({
+        value,
+        label: tf(`eval.reasons.retain.${value}`),
+      })),
+    },
+    {
+      choice: "hold",
+      label: t("actions.hold"),
+      line: tf("eval.decision.holdLine"),
+      done: onHold ? tf("eval.decision.held") : null,
+      reasons: holdReasons.map((value) => ({ value, label: tf(`eval.reasons.hold.${value}`) })),
+    },
+    {
+      choice: "reject",
+      label: t("actions.reject"),
+      line: tf("eval.decision.rejectLine"),
+      done: null,
+      reasons: rejectReasons
+        .filter((value): value is Exclude<typeof value, "withdrawn"> => value !== "withdrawn")
+        .map((value) => ({ value, label: tf(`eval.reasons.reject.${value}`) })),
+    },
+  ];
+  const suggestedLabel = suggestion
+    ? decisionOptions.find((item) => item.choice === suggestion.suggestion)!.label
+    : null;
 
   return (
     <SwipePager next={next} previous={previous}>
@@ -518,95 +587,189 @@ export async function RhCandidateSummary({
         ) : null}
 
         {part === "score" ? (
-          board.withScores ? (
-            <section className="nb-rh-fr-s nb-rh-fr-orbi" aria-labelledby="rh-fr-orbi">
-              <h2 id="rh-fr-orbi">
-                <span className="nb-rh-etoile" aria-hidden />
-                {t("orbi.title")}
-              </h2>
-              {explanation ? (
-                <>
-                  <div className="nb-rh-fr-score">
-                    <span
-                      className="nb-rh-anneau nb-rh-anneau-l"
-                      style={{ "--p": explanation.score } as CSSProperties}
-                      role="img"
-                      aria-label={t("orbi.score", { value: explanation.score })}
-                    >
-                      <b aria-hidden>{explanation.score}</b>
-                    </span>
-                    <span className="nb-rh-res-t">
-                      <b>{row.orbiClass ? t(`class.${row.orbiClass}`) : null}</b>
-                      <span className="nb-meta">{t("orbi.rule")}</span>
-                    </span>
+          <>
+            {board.withScores ? (
+              <section className="nb-rh-ev" aria-labelledby="rh-ev-avis">
+                <h2 id="rh-ev-avis" className="nb-rh-co-h">
+                  <OrbiDisc size={26} />
+                  {t("orbi.title")}
+                </h2>
+                {explanation ? (
+                  <div className="nb-rh-ev-avis" data-classe={row.orbiClass ?? undefined}>
+                    <div className="nb-rh-fr-score">
+                      <span
+                        className="nb-rh-anneau nb-rh-anneau-l"
+                        style={{ "--p": explanation.score } as CSSProperties}
+                        role="img"
+                        aria-label={t("orbi.score", { value: explanation.score })}
+                      >
+                        <b aria-hidden>{explanation.score}</b>
+                      </span>
+                      <span className="nb-rh-res-t">
+                        <b>{row.orbiClass ? t(`class.${row.orbiClass}`) : null}</b>
+                        <span className="nb-meta">
+                          {row.orbiClass ? tf(`eval.summary.${row.orbiClass}`) : null}
+                        </span>
+                      </span>
+                    </div>
+                    {suggestion && suggestedLabel ? (
+                      <p className="nb-rh-ev-sugg" data-choix={suggestion.suggestion}>
+                        <b>{tf("eval.suggests", { choice: suggestedLabel })}</b>
+                        <span>{tf(`eval.why.${suggestion.why}`)}</span>
+                      </p>
+                    ) : null}
+                    <dl className="nb-rh-fr-notes">
+                      <div>
+                        <dt>{t("notes.compatibility")}</dt>
+                        <dd>{t("notes.percent", { value: explanation.score })}</dd>
+                      </div>
+                      <div data-etoile={row.star ? "" : undefined}>
+                        <dt>{t("notes.potential")}</dt>
+                        <dd>
+                          {row.star
+                            ? t("notes.star")
+                            : t("notes.percent", { value: row.potential.value })}
+                        </dd>
+                      </div>
+                      <div data-niveau={row.confidence.after.level}>
+                        <dt>{t("notes.confidence")}</dt>
+                        <dd>{t(`notes.level.${row.confidence.after.level}`)}</dd>
+                      </div>
+                    </dl>
+                    <p className="nb-meta">{t("orbi.rule")}</p>
                   </div>
-                  <dl className="nb-rh-fr-notes">
-                    <div>
-                      <dt>{t("notes.compatibility")}</dt>
-                      <dd>{t("notes.percent", { value: explanation.score })}</dd>
-                    </div>
-                    <div data-etoile={row.star ? "" : undefined}>
-                      <dt>{t("notes.potential")}</dt>
-                      <dd>
-                        {row.star
-                          ? t("notes.star")
-                          : t("notes.percent", { value: row.potential.value })}
-                      </dd>
-                    </div>
-                    <div data-niveau={row.confidence.after.level}>
-                      <dt>{t("notes.confidence")}</dt>
-                      <dd>
-                        {row.confidence.changed &&
-                        row.confidence.before.level !== row.confidence.after.level
-                          ? t("notes.confidenceChange", {
-                              before: t(`notes.level.${row.confidence.before.level}`),
-                              after: t(`notes.level.${row.confidence.after.level}`),
-                            })
-                          : t(`notes.level.${row.confidence.after.level}`)}
-                      </dd>
-                    </div>
-                  </dl>
-                  {row.potential.reasons.length > 0 ? (
-                    <p className="nb-meta">
-                      {t("notes.potentialWhy", {
-                        reasons: row.potential.reasons
-                          .map((reason) => t(`notes.reason.${reason}`))
-                          .join(", "),
+                ) : (
+                  <p className="nb-meta">{t("orbi.none")}</p>
+                )}
+              </section>
+            ) : (
+              <section className="nb-rh-co-ats" aria-labelledby="rh-fp-score">
+                <div className="nb-rh-co-affiche" aria-hidden>
+                  <OrbiDisc size={64} />
+                </div>
+                <div className="nb-rh-co-ats-corps">
+                  <span className="nb-rh-co-ats-i" aria-hidden>
+                    <PhoneIcon name="cadenas" size={22} strong />
+                  </span>
+                  <div>
+                    <h2 id="rh-fp-score">{tf("score.title")}</h2>
+                    <p>{tf("score.locked")}</p>
+                  </div>
+                </div>
+                <Link href="/app/hire/abonnement" className="nb-rh-co-ats-go" data-verrou="">
+                  {tf("score.upgrade")}
+                </Link>
+              </section>
+            )}
+
+            {criterionRows.length > 0 || criteria.length > 0 ? (
+              <section className="nb-rh-ev" aria-labelledby="rh-ev-crit">
+                <h2 id="rh-ev-crit" className="nb-rh-co-h">
+                  {tf("eval.criteria.title")}
+                </h2>
+                {criterionRows.length > 0 ? (
+                  <ul className="nb-rh-ev-crit">
+                    {criterionRows.map((item) => (
+                      <li key={item.key} data-statut={item.status}>
+                        <span className="nb-rh-ev-signe" aria-hidden>
+                          {tf(
+                            `eval.criteria.sign.${item.status as "met" | "partial" | "unmet" | "unknown"}`,
+                          )}
+                        </span>
+                        <span>{tr(`why.criteria.${item.key}`)}</span>
+                        <b>
+                          {tf(
+                            `eval.criteria.status.${item.status as "met" | "partial" | "unmet" | "unknown"}`,
+                          )}
+                        </b>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                {criteria.length > 0 ? (
+                  <>
+                    <p className="nb-rh-f-verif">{t("criteria.title")}</p>
+                    <p className="nb-meta">{t("criteria.lead")}</p>
+                    <ul className="nb-rh-fr-crit">
+                      {criteria.map((label) => {
+                        const missed = row.missedCriteria.includes(label);
+                        return (
+                          <li key={label} data-manque={missed ? "" : undefined}>
+                            <span>{label}</span>
+                            {live ? (
+                              <form action={markCriterionAction}>
+                                <input type="hidden" name="application" value={row.id} />
+                                <input type="hidden" name="job" value={jobId} />
+                                <input type="hidden" name="label" value={label} />
+                                <input type="hidden" name="missing" value={missed ? "0" : "1"} />
+                                <input type="hidden" name="back" value={self} />
+                                <button type="submit" className="nb-rh-fr-crit-b">
+                                  {missed ? t("criteria.met") : t("criteria.unmet")}
+                                </button>
+                              </form>
+                            ) : missed ? (
+                              <b>{t("criteria.missing")}</b>
+                            ) : null}
+                          </li>
+                        );
                       })}
-                    </p>
-                  ) : null}
-                  {proofsGained.length > 0 || row.newSince.length > 0 ? (
-                    <ul className="nb-rh-fr-gains">
-                      {proofsGained.map((line) => (
+                    </ul>
+                  </>
+                ) : null}
+              </section>
+            ) : null}
+
+            <section className="nb-rh-ev" aria-labelledby="rh-ev-pourquoi">
+              <h2 id="rh-ev-pourquoi" className="nb-rh-co-h">
+                {tf("eval.reasonsTitle")}
+              </h2>
+              <div className="nb-rh-ev-liste" data-ton="pour">
+                <p>{tf("eval.strong.title")}</p>
+                {strongLines.length > 0 ? (
+                  <ul>
+                    {strongLines.map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <small className="nb-meta">{tf("eval.strong.none")}</small>
+                )}
+              </div>
+              <div className="nb-rh-ev-liste" data-ton="faible">
+                <p>{tf("eval.weak.title")}</p>
+                {weakLines.length > 0 ? (
+                  <ul>
+                    {weakLines.map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <small className="nb-meta">{tf("eval.weak.none")}</small>
+                )}
+              </div>
+              <div className="nb-rh-ev-liste" data-ton="verifier">
+                <p>{tf("eval.verify.title")}</p>
+                {toVerifyLines.length > 0 ? (
+                  <>
+                    <ul>
+                      {toVerifyLines.map((line) => (
                         <li key={line}>{line}</li>
                       ))}
-                      {row.newSince.map((title) => (
-                        <li key={title}>{t("notes.newSince", { title })}</li>
-                      ))}
                     </ul>
-                  ) : null}
-                  {notes.length > 0 ? (
-                    <>
-                      <p className="nb-rh-f-verif" data-lime="">
-                        {t("orbi.reasons")}
-                      </p>
-                      <ul className="nb-rh-puces">
-                        {notes.slice(0, 3).map((note, index) => (
-                          <li key={index}>{tr(`notes.${note.key}`, note as never)}</li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : null}
-                  {gaps.length > 0 ? (
-                    <>
-                      <p className="nb-rh-f-verif">{t("orbi.gaps")}</p>
-                      <ul className="nb-rh-puces" data-ambre="">
-                        {gaps.map((gap) => (
-                          <li key={gap}>{gap}</li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : null}
+                    <Link
+                      href={`${self.replace(/&partie=[a-z]+/, "")}&partie=documents`}
+                      className="nb-rh-ev-lien"
+                    >
+                      {tf("eval.verify.ask")}
+                      <PhoneIcon name="chevron" size={14} />
+                    </Link>
+                  </>
+                ) : (
+                  <small className="nb-meta">{tf("eval.verify.none")}</small>
+                )}
+              </div>
+              {explanation ? (
+                <>
                   {questions.length > 0 ? (
                     <>
                       <p className="nb-rh-f-verif">{t("orbi.questions")}</p>
@@ -622,61 +785,39 @@ export async function RhCandidateSummary({
                     </>
                   ) : null}
                 </>
-              ) : (
-                <p className="nb-meta">{t("orbi.none")}</p>
-              )}
+              ) : null}
             </section>
-          ) : (
-            <section className="nb-rh-co-ats" aria-labelledby="rh-fp-score">
-              <div className="nb-rh-co-affiche" aria-hidden>
-                <OrbiDisc size={64} />
-              </div>
-              <div className="nb-rh-co-ats-corps">
-                <span className="nb-rh-co-ats-i" aria-hidden>
-                  <PhoneIcon name="cadenas" size={22} strong />
-                </span>
-                <div>
-                  <h2 id="rh-fp-score">{tf("score.title")}</h2>
-                  <p>{tf("score.locked")}</p>
-                </div>
-              </div>
-              <Link href="/app/hire/abonnement" className="nb-rh-co-ats-go" data-verrou="">
-                {tf("score.upgrade")}
-              </Link>
-            </section>
-          )
-        ) : null}
 
-        {part === "score" ? (
-          <>
-            {criteria.length > 0 ? (
-              <section className="nb-rh-fr-s" aria-labelledby="rh-fr-crit">
-                <h2 id="rh-fr-crit">{t("criteria.title")}</h2>
-                <p className="nb-meta">{t("criteria.lead")}</p>
-                <ul className="nb-rh-fr-crit">
-                  {criteria.map((label) => {
-                    const missed = row.missedCriteria.includes(label);
-                    return (
-                      <li key={label} data-manque={missed ? "" : undefined}>
-                        <span>{label}</span>
-                        {live ? (
-                          <form action={markCriterionAction}>
-                            <input type="hidden" name="application" value={row.id} />
-                            <input type="hidden" name="job" value={jobId} />
-                            <input type="hidden" name="label" value={label} />
-                            <input type="hidden" name="missing" value={missed ? "0" : "1"} />
-                            <input type="hidden" name="back" value={self} />
-                            <button type="submit" className="nb-rh-fr-crit-b">
-                              {missed ? t("criteria.met") : t("criteria.unmet")}
-                            </button>
-                          </form>
-                        ) : missed ? (
-                          <b>{t("criteria.missing")}</b>
-                        ) : null}
-                      </li>
-                    );
+            {live ? (
+              <section className="nb-rh-ev" aria-labelledby="rh-ev-decision">
+                <h2 id="rh-ev-decision" className="nb-rh-co-h">
+                  {tf("eval.decision.title")}
+                </h2>
+                <p className="nb-meta">{tf("eval.decision.lead")}</p>
+                <RhDecision
+                  application={row.id}
+                  job={jobId}
+                  back={after}
+                  suggested={suggestion?.suggestion ?? null}
+                  options={decisionOptions}
+                  rejectMessage={tr("reject.message", {
+                    name: person.firstName || person.name.split(/\s+/)[0] || "",
+                    job: job.title,
+                    company,
                   })}
-                </ul>
+                  texts={{
+                    suggested: tf("eval.decision.suggested"),
+                    reason: tf("eval.decision.reason"),
+                    message: tr("reject.messageLabel"),
+                    confirm: {
+                      retain: tf("eval.decision.confirm.retain"),
+                      hold: tf("eval.decision.confirm.hold"),
+                      reject: tr("reject.send"),
+                    },
+                    cancel: tp("cancel"),
+                    close: tp("close"),
+                  }}
+                />
               </section>
             ) : null}
           </>

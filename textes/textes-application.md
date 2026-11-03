@@ -16427,6 +16427,68 @@ Conventions :
 | `phoneRhFiche.messages.missing` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Il nous manque encore certains documents demandés dans l'offre. Pourriez-vous les joindre ici, dans cette conversation ? Merci ! |
 | `phoneRhFiche.messages.letter` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pourriez-vous nous dire en quelques lignes pourquoi ce poste vous intéresse ? Vous pouvez répondre ici. Merci ! |
 | `phoneRhFiche.messages.cv` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour compléter votre dossier, pourriez-vous nous envoyer votre CV à jour ? Vous pouvez le joindre ici, dans cette conversation. Merci ! |
+| `phoneRhFiche.eval.summary.fort` | Le profil répond à l'essentiel de l'offre. |
+| `phoneRhFiche.eval.summary.considerer` | Le profil répond à une partie de l'offre. |
+| `phoneRhFiche.eval.summary.limite` | Le profil est encore loin de ce que l'offre demande. |
+| `phoneRhFiche.eval.summary.hors` | Un critère indispensable de l'offre n'est pas rempli. |
+| `phoneRhFiche.eval.suggests` | Orbi suggère : {choice} |
+| `phoneRhFiche.eval.why.knockout` | Un critère indispensable manque. Vérifiez-le avant de décider. |
+| `phoneRhFiche.eval.why.strong` | Le profil est fort et ses informations sont confirmées. |
+| `phoneRhFiche.eval.why.verify` | Le profil est fort, mais des informations restent à vérifier. |
+| `phoneRhFiche.eval.why.consider` | Le profil est intéressant : comparez-le ou voyez-le en entretien. |
+| `phoneRhFiche.eval.why.limited` | Trop d'écarts avec l'offre pour l'instant. |
+| `phoneRhFiche.eval.criteria.title` | Critères de l'offre |
+| `phoneRhFiche.eval.criteria.sign.met` | ✓ |
+| `phoneRhFiche.eval.criteria.sign.partial` | ≈ |
+| `phoneRhFiche.eval.criteria.sign.unmet` | ✗ |
+| `phoneRhFiche.eval.criteria.sign.unknown` | ? |
+| `phoneRhFiche.eval.criteria.status.met` | Rempli |
+| `phoneRhFiche.eval.criteria.status.partial` | En partie |
+| `phoneRhFiche.eval.criteria.status.unmet` | Manquant |
+| `phoneRhFiche.eval.criteria.status.unknown` | À vérifier |
+| `phoneRhFiche.eval.reasonsTitle` | Pourquoi ? |
+| `phoneRhFiche.eval.strong.title` | Pour le retenir |
+| `phoneRhFiche.eval.strong.none` | Pas de point fort ressorti pour l'instant. |
+| `phoneRhFiche.eval.weak.title` | Points faibles |
+| `phoneRhFiche.eval.weak.none` | Aucun écart avec l'offre. |
+| `phoneRhFiche.eval.weak.unmet` | « {label} » ne correspond pas à l'offre |
+| `phoneRhFiche.eval.weak.partial` | « {label} » correspond en partie |
+| `phoneRhFiche.eval.weak.knockout` | Critère indispensable non rempli : {label} |
+| `phoneRhFiche.eval.verify.title` | À vérifier |
+| `phoneRhFiche.eval.verify.none` | Rien à vérifier : le dossier est complet. |
+| `phoneRhFiche.eval.verify.experience` | Expérience non confirmée : {title} |
+| `phoneRhFiche.eval.verify.diploma` | Diplôme sans justificatif : {title} |
+| `phoneRhFiche.eval.verify.documents` | {count, plural, one {Un document demandé manque} other {# documents demandés manquent}} |
+| `phoneRhFiche.eval.verify.cv` | Pas de CV joint |
+| `phoneRhFiche.eval.verify.skill` | Compétence déclarée, pas encore prouvée : {skill} |
+| `phoneRhFiche.eval.verify.ask` | Demander ces informations |
+| `phoneRhFiche.eval.decision.title` | Votre décision |
+| `phoneRhFiche.eval.decision.lead` | Orbi suggère, vous décidez. Choisissez une raison : elle reste dans l'équipe. |
+| `phoneRhFiche.eval.decision.suggested` | Suggestion d'Orbi |
+| `phoneRhFiche.eval.decision.reason` | Raison · pour votre équipe seulement |
+| `phoneRhFiche.eval.decision.retainLine` | Il rejoint la liste des retenus. |
+| `phoneRhFiche.eval.decision.holdLine` | Mis de côté, sans réponse pour l'instant. |
+| `phoneRhFiche.eval.decision.rejectLine` | Il reçoit un message poli de votre part. |
+| `phoneRhFiche.eval.decision.retained` | Déjà dans les retenus |
+| `phoneRhFiche.eval.decision.held` | Déjà en attente |
+| `phoneRhFiche.eval.decision.confirm.retain` | Retenir |
+| `phoneRhFiche.eval.decision.confirm.hold` | Mettre en attente |
+| `phoneRhFiche.eval.reasons.retain.skills` | Compétences demandées |
+| `phoneRhFiche.eval.reasons.retain.experience` | Expérience utile |
+| `phoneRhFiche.eval.reasons.retain.potential` | Fort potentiel |
+| `phoneRhFiche.eval.reasons.retain.proofs` | Informations confirmées |
+| `phoneRhFiche.eval.reasons.retain.other` | Autre raison |
+| `phoneRhFiche.eval.reasons.hold.verify` | Informations à vérifier |
+| `phoneRhFiche.eval.reasons.hold.compare` | À comparer avec d'autres |
+| `phoneRhFiche.eval.reasons.hold.interview` | À voir en entretien |
+| `phoneRhFiche.eval.reasons.hold.documents` | Documents manquants |
+| `phoneRhFiche.eval.reasons.hold.other` | Autre raison |
+| `phoneRhFiche.eval.reasons.reject.skills` | Compétences éloignées du poste |
+| `phoneRhFiche.eval.reasons.reject.experience` | Expérience insuffisante |
+| `phoneRhFiche.eval.reasons.reject.knockout` | Critère indispensable non rempli |
+| `phoneRhFiche.eval.reasons.reject.otherCandidate` | Autre candidat plus proche |
+| `phoneRhFiche.eval.reasons.reject.positionClosed` | Poste pourvu ou annulé |
+| `phoneRhFiche.eval.reasons.reject.other` | Autre raison |
 | `phoneRhFiche.ask.title` | Envoyer un message au candidat |
 | `phoneRhFiche.ask.lead` | Le message arrive dans ses Messages. Vous pouvez le modifier avant de l'envoyer. |
 | `phoneRhFiche.ask.label` | Votre message |

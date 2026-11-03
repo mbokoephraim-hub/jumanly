@@ -201,6 +201,10 @@ export async function decideAction(formData: FormData) {
   flushMails();
   // From the file on the phone (Modèle B recruteur M5): back to the file, the decision told.
   if (formData.get("retour") === "fiche") redirect(`${fileOf(applicationId)}?ok=decision`);
+  // From « Évaluation » of the summary (03/11/2026): back to the offer's list of candidates.
+  const back = formData.get("back");
+  if (typeof back === "string" && /^\/app\/hire\/offres\/[a-z0-9]+\?[\w=&%-]*$/i.test(back))
+    redirect(back);
   redirect(`${page}?enregistree=1`);
 }
 

@@ -5437,3 +5437,12 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - Documents : lettre de motivation, puis CV toujours présent avec le dessin du CV (« Aucun CV joint » si besoin). « Ouvrir le dossier complet » retiré.
 - Propositions d'Orbi : chaque carte dit quoi ajouter et nomme les pièces (diplômes, expériences), nouvelle proposition « Demander le CV », bouton qui pulse (arrêté en mouvement réduit).
 - Suite (même jour) : icône du CV identique aux autres cartes, textes courts (« Lisez ici le CV envoyé pour cette offre. »). Propositions d'Orbi sur le modèle « Prochaines étapes » de Carrière : numéro coloré (jaune, corail, vert), titre = action, une ligne sur ce qui manque, flèche, reflet animé.
+
+## 2026-11-03 · Profil du candidat : partie « Évaluation »
+
+- Logique validée par Ephraïm : Orbi donne son avis et ses raisons, le recruteur décide.
+- Bloc 1, l'avis d'Orbi : classe, une phrase, suggestion (Retenir, En attente, Ne pas retenir) selon `suggestionOf` (`src/server/services/hire-evaluation.ts`, testée). Hors critères → Ne pas retenir ; Fort potentiel et rien à vérifier → Retenir ; Fort potentiel avec des points à vérifier, ou À considérer → En attente ; Limité → Ne pas retenir.
+- Bloc 2, les critères de l'offre : ✓ rempli, ≈ en partie, ✗ manquant, ? à vérifier, puis les critères éliminatoires.
+- Bloc 3, « Pourquoi ? » : pour le retenir, points faibles, à vérifier (lien vers Documents pour demander).
+- Bloc 4, « Votre décision » : trois choix, la suggestion d'Orbi marquée, raison obligatoire dans la feuille. Retenir et En attente gardent la raison (événement `sort_reason`) ; Ne pas retenir envoie le message et le motif (`decideAction`, retour à la liste).
+- Rien n'est décidé sans un geste du recruteur. Le nom, l'âge, la photo et l'origine n'entrent pas dans l'avis.
