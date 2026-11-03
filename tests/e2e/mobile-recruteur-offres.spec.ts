@@ -78,13 +78,15 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
   if (!isMobile) await expect(main(page)).toContainText(question);
   await expectAccessible(page);
   const { detailUrl } = await publishFilledOffer(page, "Publier");
+  // On a phone the offer opens on « Candidats »; its figures and « ··· » are in « Vue d'ensemble ».
+  const overviewUrl = isMobile ? `${detailUrl}?vue=apercu` : detailUrl;
   await expect(main(page)).toContainText(isMobile ? "Votre offre est en ligne" : "Offre publiée");
   await expectAccessible(page);
   const slug = await slugOf(page);
 
   if (isMobile) {
     // The offer's page, then « ··· » › « Mettre en pause ».
-    await page.goto(detailUrl);
+    await page.goto(overviewUrl);
     await expect(main(page).getByRole("heading", { level: 1, name: first })).toBeVisible();
     await expectAccessible(page);
     await (await phoneMenu(page, first)).getByRole("button", { name: /^Mettre en pause/ }).click();
@@ -121,7 +123,7 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
   await expect(main(page)).toContainText(isMobile ? "Votre offre est en ligne" : "Offre publiée");
 
   // Resuming the first one now meets the limit: nothing changes, the recruiter is told.
-  await page.goto(detailUrl);
+  await page.goto(overviewUrl);
   if (isMobile)
     await (
       await phoneMenu(page, first)
@@ -170,7 +172,7 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
     await expect(main(page).locator(".nb-rh-statut")).toHaveText("Terminée");
 
     // The first offer goes back online, now that a place is free.
-    await page.goto(detailUrl);
+    await page.goto(overviewUrl);
     await (
       await phoneMenu(page, first)
     )

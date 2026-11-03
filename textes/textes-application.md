@@ -16226,6 +16226,58 @@ Conventions :
 | `phoneRhFil.compose.done` | Publication partagée |
 | `phoneRhFil.compose.submit` | Publier |
 
+### Recruteur au téléphone · Candidats d'une offre
+
+*Demande d'Ephraïm du 03/11/2026 : « Voir plus » d'une offre ouvre ses onglets Vue d'ensemble · Candidats · Retenus, d'abord sur Candidats : recherche et filtres, le diagnostic ATS avec Orbi (réservé aux formules qui l'ouvrent), puis tous les candidats dans l'ordre où ils ont postulé, que le recruteur peut déplacer.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhCandidats.back` | Offres |
+| `phoneRhCandidats.tabs` | Parties de l'offre |
+| `phoneRhCandidats.tab.apercu` | Vue d'ensemble |
+| `phoneRhCandidats.tab.candidats` | Candidats |
+| `phoneRhCandidats.tab.retenus` | Retenus |
+| `phoneRhCandidats.line` | {count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} · {shortlisted, plural, =0 {aucun retenu} one {# retenu} other {# retenus}} |
+| `phoneRhCandidats.search` | Rechercher un candidat |
+| `phoneRhCandidats.filters.title` | Filtres |
+| `phoneRhCandidats.filters.count` | {count, plural, =0 {Filtres} one {Filtres, # actif} other {Filtres, # actifs}} |
+| `phoneRhCandidats.filters.close` | Fermer les filtres |
+| `phoneRhCandidats.filters.reset` | Tout effacer |
+| `phoneRhCandidats.filters.skill` | Compétence |
+| `phoneRhCandidats.filters.skillPlaceholder` | Par exemple : Excel, comptabilité |
+| `phoneRhCandidats.filters.dispo` | Disponibilité |
+| `phoneRhCandidats.filters.any` | Toutes |
+| `phoneRhCandidats.filters.dispoValue.open` | En recherche active |
+| `phoneRhCandidats.filters.dispoValue.listening` | À l'écoute |
+| `phoneRhCandidats.filters.dispoValue.not_looking` | Pas en recherche |
+| `phoneRhCandidats.filters.city` | Ville |
+| `phoneRhCandidats.filters.apply` | Voir les candidats |
+| `phoneRhCandidats.filters.locked` | Les filtres par compétence, disponibilité et ville viennent avec une formule payante. |
+| `phoneRhCandidats.filters.lockedLink` | Voir les formules |
+| `phoneRhCandidats.ats.title` | Diagnostic ATS avec Orbi |
+| `phoneRhCandidats.ats.text` | Orbi lit chaque CV, le compare à l'offre et vous dit pourquoi. Vous gardez la décision. |
+| `phoneRhCandidats.ats.start` | Démarrer le diagnostic |
+| `phoneRhCandidats.ats.locked` | Réservé aux formules Pro et Premium. |
+| `phoneRhCandidats.ats.upgrade` | Voir les formules |
+| `phoneRhCandidats.ats.none` | Le diagnostic s'ouvre dès la première candidature. |
+| `phoneRhCandidats.list.title` | Tous les candidats |
+| `phoneRhCandidats.list.titleRetenus` | Les retenus |
+| `phoneRhCandidats.list.empty` | Personne n'a encore candidaté à cette offre. |
+| `phoneRhCandidats.list.emptyRetenus` | Personne n'est encore retenu pour cette offre. |
+| `phoneRhCandidats.list.emptySearch` | Aucun candidat ne correspond à cette recherche. |
+| `phoneRhCandidats.list.blind` | Candidat {number} |
+| `phoneRhCandidats.list.noHeadline` | Titre du profil non renseigné |
+| `phoneRhCandidats.list.hint` | Appuyez longuement sur une carte pour la déplacer. |
+| `phoneRhCandidats.list.move` | Déplacer |
+| `phoneRhCandidats.list.moveDone` | Terminé |
+| `phoneRhCandidats.list.up` | Monter |
+| `phoneRhCandidats.list.down` | Descendre |
+| `phoneRhCandidats.list.failed` | Le nouvel ordre n'a pas pu être gardé. Réessayez. |
+| `phoneRhCandidats.list.more` | Voir plus |
+| `phoneRhCandidats.list.moreLabel` | Voir le profil |
+| `phoneRhCandidats.list.unseen` | Pas encore vue |
+| `phoneRhCandidats.list.shortlisted` | Retenu |
+
 ### Modèle B recruteur · Offres au téléphone
 
 *Lot M4 (docs/modele-b-recruteur, mobile/captures section 03) : les offres et leurs indicateurs, publier en quatre étapes, partager, clôturer avec le rapport PDF. Candidater reste gratuit.*

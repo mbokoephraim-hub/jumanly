@@ -21,6 +21,55 @@ test.use(CAPTURE_VIEWPORT);
 test.describe("Modèle B recruteur · Offres au téléphone", () => {
   test.skip(({ isMobile }) => !isMobile, "Le Modèle B est l'interface du téléphone.");
 
+  test("les candidats d'une offre : recherche, ordre de candidature, déplacer et retenus", async ({
+    page,
+  }) => {
+    test.setTimeout(120_000);
+    await logIn(page, RECRUITER, undefined, "/app/hire/offres");
+    await page.goto("/app/hire/offres");
+    await offers(page)
+      .locator("article")
+      .filter({ has: page.getByRole("heading", { name: DEMO_OFFER }) })
+      .first()
+      .getByRole("link", { name: /^Voir plus sur l'offre/ })
+      .click();
+    const people = page.locator(".nb-rh-co").filter({ visible: true });
+    const names = () => people.locator(".nb-rh-co-liste li b").allTextContents();
+    await expect(people.locator(".nb-rh-co-liste li").first()).toBeVisible();
+    const before = await names();
+    expect(before.length).toBeGreaterThan(1);
+
+    // « Déplacer », then « Descendre » the first card: the new order is kept for the team.
+    await people.getByRole("button", { name: "Déplacer" }).click();
+    await people.getByRole("button", { name: `Descendre · ${before[0]}` }).click();
+    await expect.poll(names).toEqual([before[1], before[0], ...before.slice(2)]);
+    await page.reload();
+    await expect.poll(names).toEqual([before[1], before[0], ...before.slice(2)]);
+    // Back as it was for the other tests.
+    await people.getByRole("button", { name: "Déplacer" }).click();
+    await people.getByRole("button", { name: `Monter · ${before[0]}` }).click();
+    await expect.poll(names).toEqual(before);
+    await page.reload();
+    await expect.poll(names).toEqual(before);
+
+    // The search keeps the people whose name, title or skill matches.
+    const field = people.getByRole("searchbox", { name: "Rechercher un candidat" });
+    await field.fill(before[0]!.split(" ")[0]!);
+    await field.press("Enter");
+    await expect(page).toHaveURL(/[?&]q=/);
+    await expect.poll(names).toContain(before[0]);
+    await expect(people.getByRole("button", { name: "Déplacer" })).toHaveCount(0);
+
+    // « Retenus »: only the files kept for the next stage.
+    await main(page)
+      .getByRole("navigation", { name: "Parties de l'offre" })
+      .getByRole("link", { name: /^Retenus/ })
+      .click();
+    await expect(page).toHaveURL(/vue=retenus/);
+    await expect(people.getByRole("heading", { name: /^Les retenus/ })).toBeVisible();
+    await expect(people.getByRole("heading", { name: "Diagnostic ATS avec Orbi" })).toHaveCount(0);
+  });
+
   test("les offres, leurs chiffres, le détail, le menu et les candidats d'une offre", async ({
     page,
   }) => {
@@ -80,11 +129,25 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
     await capture(page, "044-offres-recherche-texte");
     await main(page).getByRole("button", { name: "Annuler" }).filter({ visible: true }).click();
 
-    // The offer and its figures.
+    // The offer opens on « Candidats » (03/11/2026): search, filters, the ATS diagnosis with
+    // Orbi, every person in the order they applied; « Vue d'ensemble » keeps the figures.
     await offers(page)
       .getByRole("link", { name: /Analyste de données junior/ })
       .first()
       .click();
+    const parts = main(page).getByRole("navigation", { name: "Parties de l'offre" });
+    await expect(parts.getByRole("link", { name: /^Candidats/ })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    const people = page.locator(".nb-rh-co").filter({ visible: true });
+    await expect(people.getByRole("heading", { name: "Diagnostic ATS avec Orbi" })).toBeVisible();
+    await expect(people.getByRole("heading", { name: /^Tous les candidats/ })).toBeVisible();
+    await expect(people.getByRole("searchbox", { name: "Rechercher un candidat" })).toBeVisible();
+    await expect(people.getByRole("link", { name: /^Voir le profil · / }).first()).toBeVisible();
+    await capture(page, "045a-offre-candidats");
+    await parts.getByRole("link", { name: "Vue d'ensemble" }).click();
+    await expect(page).toHaveURL(/vue=apercu/);
     await expect(detail(page).getByRole("heading", { name: DEMO_OFFER })).toBeVisible();
     await expect(detail(page)).toContainText("des vues deviennent candidatures");
     await expect(detail(page).getByRole("heading", { name: "Candidatures reçues" })).toBeVisible();
@@ -332,7 +395,7 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
     await expect(offers(page).getByRole("heading", { name: new RegExp(title) })).toBeVisible();
 
     // « Modifier l'offre » comes back to the steps, already filled.
-    await page.goto(offerUrl);
+    await page.goto(`${offerUrl}?vue=apercu`);
     await detail(page).getByRole("button", { name: "Actions de l'offre" }).click();
     const menu = sheet(page, title);
     await menu.getByRole("link", { name: /^Modifier l'offre/ }).click();

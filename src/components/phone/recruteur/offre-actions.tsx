@@ -43,7 +43,8 @@ export function RhOfferActions({ data }: { data: RhOfferActionsData }) {
     setSheet(data.start);
   }
   const close = () => setSheet(null);
-  const back = `/app/hire/offres/${data.id}`;
+  // « Vue d'ensemble » of the offer (03/11/2026): the plain address opens « Candidats ».
+  const back = `/app/hire/offres/${data.id}?vue=apercu`;
   const live = data.status === "published" || data.status === "pending_review";
 
   return (
@@ -193,7 +194,7 @@ export function RhOfferActions({ data }: { data: RhOfferActionsData }) {
           <p>{t("closeText", { count: data.applications })}</p>
           <form action={closeJobAction}>
             <input type="hidden" name="id" value={data.id} />
-            <input type="hidden" name="back" value={`${back}?rapport=1`} />
+            <input type="hidden" name="back" value={`/app/hire/offres/${data.id}?rapport=1`} />
             <button type="submit" className="nb-bp" data-danger="">
               {t("closeConfirm")}
             </button>
