@@ -19810,7 +19810,38 @@
     "tab": {
       "apercu": "Vue",
       "candidats": "Candidatures",
-      "retenus": "Retenus"
+      "retenus": "Retenus",
+      "trier": "À trier",
+      "completer": "À compléter",
+      "entretiens": "Entretiens",
+      "decision": "Décision"
+    },
+    "desk": {
+      "help": {
+        "trier": "Les nouvelles candidatures. Orbi aide à les classer, vous décidez : Retenir, En attente ou Ne pas retenir.",
+        "completer": "Retenus, mais il manque encore des pièces. Ils passent seuls dans Entretiens dès que tout est arrivé.",
+        "entretiens": "Retenus, dossier complet : prêts à être rencontrés.",
+        "decision": "Embauchés, non retenus ou retirés par le candidat."
+      },
+      "title": {
+        "trier": "À trier",
+        "completer": "À compléter",
+        "entretiens": "Prêts pour l'entretien",
+        "decision": "Décisions prises"
+      },
+      "empty": {
+        "trier": "Tout est trié pour cette offre.",
+        "completer": "Aucun dossier en attente de pièces.",
+        "entretiens": "Personne n'est encore prêt pour l'entretien. Retenez un candidat dans À trier.",
+        "decision": "Aucune décision prise pour le moment."
+      },
+      "pieces": "{received} sur {required} pièces · avant le {date, date, medium}",
+      "outcome": {
+        "hired": "Embauché",
+        "rejected": "Non retenu",
+        "withdrawn": "Retiré par le candidat",
+        "active": "En cours"
+      }
     },
     "line": "{count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} · {shortlisted, plural, =0 {aucun retenu} one {# retenu} other {# retenus}}",
     "search": "Rechercher un candidat",

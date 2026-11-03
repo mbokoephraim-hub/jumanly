@@ -8022,3 +8022,41 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   text-align: center;
   color: var(--nb-brume);
 }
+
+/* Les cinq parties d'une offre (étape 2, 03/11/2026) : la barre défile si elle déborde. */
+.nb-rh-co-onglets-defil {
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 2px;
+}
+.nb-rh-co-onglets-defil::-webkit-scrollbar {
+  display: none;
+}
+.nb-rh-co-onglets a small {
+  margin-left: 5px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--nb-creme) 12%, transparent);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+.nb-rh-co-onglets a[aria-current="page"] small {
+  background: color-mix(in srgb, var(--nb-sur-lime, #0f3f37) 16%, transparent);
+}
+.nb-rh-co-aide {
+  margin: 8px 22px 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--nb-brume);
+}
+.nb-rh-co-onglets-defil a {
+  padding: 0 8px;
+  font-size: 12.5px;
+}
+.nb-rh-co-onglets-defil a small {
+  margin-left: 4px;
+}

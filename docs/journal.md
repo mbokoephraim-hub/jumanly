@@ -5526,3 +5526,9 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - Proposition validée par Ephraïm : https://claude.ai/artifact/118burXaSC1mTEjnUkYwCA (3 étapes).
 - L'onglet Candidatures (téléphone, sans paramètre) s'ouvre sur le choix de l'offre (`RhOfferChooser`, `src/components/phone/recruteur/bureau.tsx`). Ce sont les cartes à encoche des Offres, avec À trier · À compléter · Entretiens (`src/server/services/hire-desk.ts`, `rubriqueOf`). « Ouvrir » mène à l'onglet Candidatures de l'offre. Avec une seule offre en ligne, on y entre directement.
 - Les anciennes vues (`?vue=`, `?offre=`) restent pour les liens existants ; l'étape 2 les remplace.
+
+## 2026-11-03 · Candidatures recruteur, étape 2 : rubriques de l'offre
+
+- Sur le téléphone, la barre de l'offre devient Vue · À trier · À compléter · Entretiens · Décision (`?vue=trier|completer|entretiens|decision` ; les anciennes adresses `candidatures` et `retenus` mènent à À trier et Entretiens). Chaque onglet indique combien il contient et une ligne d'aide.
+- `offerCandidates(…, { rubrique })` filtre selon `rubriqueOf`. À compléter affiche « 2 sur 4 pièces · avant le … », Décision affiche l'issue. Les retirés n'apparaissent que dans Décision.
+- La fiche s'ouvre avec `de=<rubrique>` : le passage au candidat suivant reste dans la rubrique, et Retour y ramène.

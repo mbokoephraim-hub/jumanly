@@ -37,6 +37,8 @@ import { profileView, ProfileTexts } from "../profil/server";
 import { personProfile } from "@/server/services/person-profile";
 import { parseCv } from "@/server/services/cv";
 import { RhBackLink } from "./retour";
+import { deskTabHref } from "./desk-tabs";
+import type { DeskRubrique } from "@/server/services/hire-desk";
 import { SwipePager } from "./tri-client";
 import { RhUndoGesture } from "./tri";
 
@@ -62,6 +64,7 @@ export async function RhCandidateSummary({
   sortable,
   part = "resume",
   fromList = false,
+  fromTab = "trier",
 }: {
   ctx: HireContext;
   jobId: string;
@@ -73,6 +76,8 @@ export async function RhCandidateSummary({
   part?: RhFilePart;
   /** Opened from « Candidatures »: back there, and the order of application to go next. */
   fromList?: boolean;
+  /** The rubrique of the offer it was opened from: back there, next within it (03/11/2026). */
+  fromTab?: DeskRubrique;
 }) {
   const t = await getTranslations("phoneRhTri");
   const tf = await getTranslations("phoneRhFiche");
@@ -98,10 +103,14 @@ export async function RhCandidateSummary({
     (item) => item.stage.name === row.stage.name && item.status === row.status,
   );
   const ranked: { id: string }[] = fromList
-    ? (await offerCandidates(db, ctx, jobId, candidateSearchSchema.parse({}))).candidates
+    ? (
+        await offerCandidates(db, ctx, jobId, candidateSearchSchema.parse({}), {
+          rubrique: fromTab,
+        })
+      ).candidates
     : rankByClass(sameStage);
   const at = ranked.findIndex((item) => item.id === row.id);
-  const stageParam = fromList ? "&de=candidatures" : stageId ? `&etape=${stageId}` : "";
+  const stageParam = fromList ? `&de=${fromTab}` : stageId ? `&etape=${stageId}` : "";
   const partParam = part === "resume" ? "" : `&partie=${part}`;
   const hrefOf = (id: string, keep = partParam) =>
     `/app/hire/offres/${jobId}?vue=candidats${stageParam}&fiche=${id}${keep}`;
@@ -112,7 +121,7 @@ export async function RhCandidateSummary({
   // « Tri à l'aveugle »: the name and the initials come once the person is retained.
   const masked = board.job.blindSort && application.shortlistedAt === null;
   const list = fromList
-    ? `/app/hire/offres/${jobId}`
+    ? deskTabHref(jobId, fromTab)
     : `/app/hire/offres/${jobId}?vue=candidats${stageParam}`;
 
   // ─── Experiences (all of them) and studies ──────────────────────────────────────
