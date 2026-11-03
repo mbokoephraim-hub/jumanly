@@ -19331,10 +19331,11 @@
     "nav": {
       "fil": "Fil",
       "offres": "Offres",
-      "candidatures": "Candidatures",
+      "agenda": "Agenda",
       "talents": "Talents",
       "messages": "Chat",
-      "candidaturesNew": "Candidatures, {count, plural, one {# nouvelle} other {# nouvelles}}",
+      "offresNew": "Offres, {count, plural, one {# nouvelle candidature} other {# nouvelles candidatures}}",
+      "agendaDue": "Agenda, {count, plural, one {# chose à faire} other {# choses à faire}}",
       "chat": "Chat",
       "messagesUnread": "Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}}",
       "filNew": "Fil, {count, plural, one {# nouvelle publication} other {# nouvelles publications}}"
@@ -19396,7 +19397,7 @@
         "placeholder": "Offres, entreprises, personnes",
         "note": "Mes offres : seulement les vôtres. Entreprises et personnes : tout Jumanly."
       },
-      "candidatures": {
+      "agenda": {
         "label": "Rechercher un candidat",
         "placeholder": "Nom, compétence, ville",
         "note": "Seulement les personnes qui ont candidaté à vos offres."
@@ -19431,9 +19432,9 @@
         "q3": "Rédiger une nouvelle offre",
         "q4": "Faut-il relancer une offre ?"
       },
-      "candidatures": {
-        "bubble": "Qui recevoir en premier ?",
-        "from": "Orbi · depuis Candidatures",
+      "agenda": {
+        "bubble": "Qu'ai-je à faire aujourd'hui ?",
+        "from": "Orbi · depuis Agenda",
         "q1": "Qui recevoir en premier ?",
         "q2": "Faire le diagnostic de tous les CV",
         "q3": "Préparer mon prochain entretien",
@@ -19455,6 +19456,30 @@
         "q3": "Proposer une réponse à un candidat",
         "q4": "Relire un message avant de l'envoyer"
       }
+    }
+  },
+  "phoneRhAgenda": {
+    "line": "{tasks, plural, =0 {Rien d'urgent} one {# chose à faire} other {# choses à faire}} · {today, plural, =0 {aucun entretien aujourd'hui} one {# entretien aujourd'hui} other {# entretiens aujourd'hui}}",
+    "week": "Les 7 prochains jours",
+    "today": "Aujourd'hui",
+    "count": "{count, plural, =0 {aucun entretien} one {# entretien} other {# entretiens}}",
+    "dayEmpty": "Aucun entretien ce jour-là.",
+    "toFix": "{count, plural, one {# entretien sans date} other {# entretiens sans date}}",
+    "pending": "En attente du candidat",
+    "see": "Voir",
+    "blind": "Candidat anonyme",
+    "evaluate": {
+      "title": "À évaluer",
+      "go": "Évaluer"
+    },
+    "tasks": {
+      "title": "À faire",
+      "empty": "Rien à faire pour l'instant. Orbi vous prévient dès qu'un candidat attend.",
+      "reviewDue": "À revoir aujourd'hui · {job}",
+      "reviewOn": "À revoir le {date, date, medium} · {job}",
+      "pieces": "Pièces {received} sur {required} · avant le {date, date, medium} · {job}",
+      "piecesLate": "Pièces en retard : {received} sur {required} · {job}",
+      "waiting": "{count, plural, one {# candidat attend} other {# candidats attendent}} une réponse depuis plus de {days} jours"
     }
   },
   "phoneRhAccueil": {

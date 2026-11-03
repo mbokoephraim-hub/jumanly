@@ -1,11 +1,11 @@
 /**
  * The five tabs of the phone interface (Modèle B, brief § 3), in the order of the bar, and the
  * pages that belong to each. Two sets: the talent's (Fil · Explorer · Carrière · Formation ·
- * Messages, docs/modele-b) and the recruiter's (Fil · Offres · Candidatures · Talents · Messages,
- * docs/modele-b-recruteur).
+ * Messages, docs/modele-b) and the recruiter's (Fil · Offres · Agenda · Talents · Messages,
+ * docs/modele-b-recruteur; Agenda replaced Candidatures on 03/11/2026).
  */
 export const PHONE_TABS = ["fil", "explorer", "carriere", "formation", "messages"] as const;
-export const RECRUITER_TABS = ["fil", "offres", "candidatures", "talents", "messages"] as const;
+export const RECRUITER_TABS = ["fil", "offres", "agenda", "talents", "messages"] as const;
 export type TalentTab = (typeof PHONE_TABS)[number];
 export type RecruiterTab = (typeof RECRUITER_TABS)[number];
 export type PhoneTab = TalentTab | RecruiterTab;
@@ -31,7 +31,7 @@ export const TAB_ROOTS: Record<TalentTab, string> = {
 export const RECRUITER_ROOTS: Record<RecruiterTab, string> = {
   fil: "/app/hire",
   offres: "/app/hire/offres",
-  candidatures: "/app/hire/candidats",
+  agenda: "/app/hire/entretiens",
   talents: "/app/hire/talents",
   messages: "/app/messages",
 };
@@ -62,8 +62,9 @@ const SETS: Record<TabSetName, TabSet> = {
     roots: RECRUITER_ROOTS,
     prefixes: [
       ["/app/hire/offres", "offres"],
-      ["/app/hire/candidats", "candidatures"],
-      ["/app/hire/entretiens", "candidatures"],
+      // The candidates are worked on inside their offer (Ephraïm, 03/11/2026).
+      ["/app/hire/candidats", "offres"],
+      ["/app/hire/entretiens", "agenda"],
       ["/app/hire/talents", "talents"],
       ["/app/hire/viviers", "talents"],
       ["/app/messages", "messages"],

@@ -5556,3 +5556,9 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 
 - Ephraïm : « trop de textes ». La phrase d'aide sous les rubriques est retirée, la règle d'Orbi se replie sous « Comment Orbi classe ? », le bandeau d'attente et le diagnostic sont raccourcis.
 - « Voir dans votre ordre » devient un bouton à deux positions « Orbi · Mon ordre », à droite du titre « À trier ».
+
+## 2026-11-03 · Onglet « Agenda » du recruteur (téléphone)
+
+- Ephraïm : « Candidatures » ramenait toujours aux offres. Le menu du bas devient Fil · Offres · Agenda · Talents · Chat (choix « Oui, Agenda »).
+- Agenda (`/app/hire/entretiens` au téléphone) : les 7 prochains jours (point menthe quand il y a un entretien), les entretiens du jour choisi, « À évaluer », puis « À faire » de toutes les offres : cartes « À revoir », pièces attendues ou en retard, candidats sans réponse depuis 7 jours (`agendaTasks`, src/server/services/hire-agenda.ts). Chaque ligne ouvre le candidat dans son offre.
+- Pastilles du menu : Offres = nouvelles candidatures, Agenda = choses dues. `/app/hire/candidats` appartient désormais à l'onglet Offres.

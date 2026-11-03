@@ -15885,10 +15885,29 @@ Conventions :
 |---|---|
 | `phoneRh.nav.fil` | Fil |
 | `phoneRh.nav.offres` | Offres |
-| `phoneRh.nav.candidatures` | Candidatures |
+| `phoneRh.nav.agenda` | Agenda |
+| `phoneRhAgenda.line` | {tasks, plural, =0 {Rien d'urgent} one {# chose à faire} other {# choses à faire}} · {today, plural, =0 {aucun entretien aujourd'hui} one {# entretien aujourd'hui} other {# entretiens aujourd'hui}} |
+| `phoneRhAgenda.week` | Les 7 prochains jours |
+| `phoneRhAgenda.today` | Aujourd'hui |
+| `phoneRhAgenda.count` | {count, plural, =0 {aucun entretien} one {# entretien} other {# entretiens}} |
+| `phoneRhAgenda.dayEmpty` | Aucun entretien ce jour-là. |
+| `phoneRhAgenda.toFix` | {count, plural, one {# entretien sans date} other {# entretiens sans date}} |
+| `phoneRhAgenda.pending` | En attente du candidat |
+| `phoneRhAgenda.see` | Voir |
+| `phoneRhAgenda.blind` | Candidat anonyme |
+| `phoneRhAgenda.evaluate.title` | À évaluer |
+| `phoneRhAgenda.evaluate.go` | Évaluer |
+| `phoneRhAgenda.tasks.title` | À faire |
+| `phoneRhAgenda.tasks.empty` | Rien à faire pour l'instant. Orbi vous prévient dès qu'un candidat attend. |
+| `phoneRhAgenda.tasks.reviewDue` | À revoir aujourd'hui · {job} |
+| `phoneRhAgenda.tasks.reviewOn` | À revoir le {date, date, medium} · {job} |
+| `phoneRhAgenda.tasks.pieces` | Pièces {received} sur {required} · avant le {date, date, medium} · {job} |
+| `phoneRhAgenda.tasks.piecesLate` | Pièces en retard : {received} sur {required} · {job} |
+| `phoneRhAgenda.tasks.waiting` | {count, plural, one {# candidat attend} other {# candidats attendent}} une réponse depuis plus de {days} jours |
 | `phoneRh.nav.talents` | Talents |
 | `phoneRh.nav.messages` | Chat |
-| `phoneRh.nav.candidaturesNew` | Candidatures, {count, plural, one {# nouvelle} other {# nouvelles}} |
+| `phoneRh.nav.offresNew` | Offres, {count, plural, one {# nouvelle candidature} other {# nouvelles candidatures}} |
+| `phoneRh.nav.agendaDue` | Agenda, {count, plural, one {# chose à faire} other {# choses à faire}} |
 | `phoneRh.nav.chat` | Chat |
 | `phoneRh.nav.messagesUnread` | Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}} |
 | `phoneRh.nav.filNew` | Fil, {count, plural, one {# nouvelle publication} other {# nouvelles publications}} |
@@ -15936,9 +15955,9 @@ Conventions :
 | `phoneRh.search.offres.label` | Rechercher une offre, une entreprise ou une personne |
 | `phoneRh.search.offres.placeholder` | Offres, entreprises, personnes |
 | `phoneRh.search.offres.note` | Mes offres : seulement les vôtres. Entreprises et personnes : tout Jumanly. |
-| `phoneRh.search.candidatures.label` | Rechercher un candidat |
-| `phoneRh.search.candidatures.placeholder` | Nom, compétence, ville |
-| `phoneRh.search.candidatures.note` | Seulement les personnes qui ont candidaté à vos offres. |
+| `phoneRh.search.agenda.label` | Rechercher un candidat |
+| `phoneRh.search.agenda.placeholder` | Nom, compétence, ville |
+| `phoneRh.search.agenda.note` | Seulement les personnes qui ont candidaté à vos offres. |
 | `phoneRh.search.talents.label` | Rechercher un talent |
 | `phoneRh.search.talents.placeholder` | Compétence, métier, ville |
 | `phoneRh.search.talents.note` | Seulement les talents qui ont rendu leur profil visible. |
@@ -15959,12 +15978,12 @@ Conventions :
 | `phoneRh.orbi.offres.q2` | Quelle offre marche le mieux ? |
 | `phoneRh.orbi.offres.q3` | Rédiger une nouvelle offre |
 | `phoneRh.orbi.offres.q4` | Faut-il relancer une offre ? |
-| `phoneRh.orbi.candidatures.bubble` | Qui recevoir en premier ? |
-| `phoneRh.orbi.candidatures.from` | Orbi · depuis Candidatures |
-| `phoneRh.orbi.candidatures.q1` | Qui recevoir en premier ? |
-| `phoneRh.orbi.candidatures.q2` | Faire le diagnostic de tous les CV |
-| `phoneRh.orbi.candidatures.q3` | Préparer mon prochain entretien |
-| `phoneRh.orbi.candidatures.q4` | Répondre aux candidats sans réponse |
+| `phoneRh.orbi.agenda.bubble` | Qu'ai-je à faire aujourd'hui ? |
+| `phoneRh.orbi.agenda.from` | Orbi · depuis Agenda |
+| `phoneRh.orbi.agenda.q1` | Qui recevoir en premier ? |
+| `phoneRh.orbi.agenda.q2` | Faire le diagnostic de tous les CV |
+| `phoneRh.orbi.agenda.q3` | Préparer mon prochain entretien |
+| `phoneRh.orbi.agenda.q4` | Répondre aux candidats sans réponse |
 | `phoneRh.orbi.talents.bubble` | Qui proposer pour mes offres ? |
 | `phoneRh.orbi.talents.from` | Orbi · depuis Talents |
 | `phoneRh.orbi.talents.q1` | Qui proposer pour mes offres ? |

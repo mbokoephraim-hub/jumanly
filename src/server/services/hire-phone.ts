@@ -7,17 +7,20 @@ import type { JobStatus, PrismaClient } from "@/generated/prisma/client";
 import { hirePermissions, jobScope, type HireContext } from "./hire";
 import { unreadCount } from "./connect";
 import { hireSearchPreview } from "./hire-search";
+import { agendaTasks } from "./hire-agenda";
 
 /** The lime count of Candidatures (applications nobody of the team opened yet) and Messages. */
 export async function recruiterBarCounts(db: PrismaClient, ctx: HireContext) {
   const scope = await jobScope(db, ctx);
-  const [newApplications, unreadMessages] = await Promise.all([
+  const [newApplications, unreadMessages, agenda] = await Promise.all([
     hirePermissions(ctx.role).readApplications
       ? db.application.count({ where: { job: scope, viewedAt: null, status: "active" } })
       : 0,
     unreadCount(db, { userId: ctx.userId, hire: ctx }),
+    agendaTasks(db, ctx),
   ]);
-  return { newApplications, unreadMessages };
+  // « Agenda » counts what is due (reviews, late pieces, people waiting); Offres, the new ones.
+  return { newApplications, unreadMessages, agendaDue: agenda.due };
 }
 
 /** « Rechercher dans » of the recruiter's search (planche Recruteur-offres-recherche). */

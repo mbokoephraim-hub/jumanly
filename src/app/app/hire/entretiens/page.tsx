@@ -28,6 +28,10 @@ import { isPhone } from "@/server/view";
 import { hirePermissions } from "@/server/services/hire";
 import { interviewsToEvaluate, invitableApplications } from "@/server/services/hire-interviews";
 import { listInterviews } from "@/server/services/interviews";
+import { agendaTasks } from "@/server/services/hire-agenda";
+import { rhInterviews } from "@/server/services/hire-phone-candidatures";
+import { RhTab } from "@/components/phone/recruteur/head";
+import { RhAgenda } from "@/components/phone/recruteur/agenda";
 import { cheapestPlanWhere, listPublicPlans } from "@/server/services/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -62,8 +66,30 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
   if (candidature && candidature !== "nouveau")
     redirect(`/app/hire/candidats/${encodeURIComponent(candidature)}/entretien`);
   const { ctx } = await requireHire("/app/hire/entretiens", "readApplications");
-  // On a phone, the interviews of the day are a view of Candidatures (planche Recruteur-cand-entretiens) (Modèle B recruteur M8).
-  if (await isPhone()) redirect("/app/hire/candidats?vue=entretiens");
+  // On a phone, the tab « Agenda » (Ephraïm, 03/11/2026): it replaced « Candidatures ».
+  if (await isPhone()) {
+    const now = new Date();
+    const timeZone = defaultTimeZone();
+    const [interviews, tasks, ta] = await Promise.all([
+      rhInterviews(db, ctx, null, timeZone, now),
+      agendaTasks(db, ctx, now),
+      getTranslations("phoneRhAgenda"),
+    ]);
+    const today = now.toLocaleDateString("en-CA", { timeZone });
+    const day = dayKey.test(one(query.jour)) ? one(query.jour) : today;
+    return (
+      <RhTab
+        tab="agenda"
+        legacy={false}
+        subtitle={ta("line", {
+          tasks: tasks.reviews.length + tasks.pieces.length + tasks.waiting.length,
+          today: interviews.today.length,
+        })}
+      >
+        <RhAgenda interviews={interviews} tasks={tasks} day={day} timeZone={timeZone} now={now} />
+      </RhTab>
+    );
+  }
   const t = await getTranslations("hireInterviews");
   const tw = await getTranslations("hireWeb.agenda");
   const format = await getFormatter();

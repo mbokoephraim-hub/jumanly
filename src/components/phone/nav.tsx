@@ -167,7 +167,8 @@ export function PhoneNav({
       return set === "recruteur"
         ? tRh("messagesUnread", { count })
         : t("messagesUnread", { count });
-    if (tab === "candidatures") return tRh("candidaturesNew", { count });
+    if (tab === "offres") return tRh("offresNew", { count });
+    if (tab === "agenda") return tRh("agendaDue", { count });
     if (tab === "fil")
       return set === "recruteur" ? tRh("filNew", { count }) : t("filNew", { count });
     if (tab === "explorer") return t("explorerNew", { count });

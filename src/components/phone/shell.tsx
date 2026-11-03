@@ -51,7 +51,7 @@ export async function PhoneShell({
   set?: TabSetName;
   /** Counts on the menu: unread conversations on Chat, new applications on Candidatures (the
    * others, new since the last visit, come from the phone). */
-  badges?: { candidatures?: number; messages: number };
+  badges?: { offres?: number; agenda?: number; messages: number };
   /** The tabs already drawn for the phone, kept mounted (each lot adds its own). */
   tabs: Partial<Record<PhoneTab, ReactNode>>;
   children: ReactNode;

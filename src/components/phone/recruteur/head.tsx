@@ -15,7 +15,7 @@ import { RhTabPage, type RhSearchSetup } from "./tab-page";
 const SCOPES: Record<RecruiterTab, string[]> = {
   fil: ["tout", "publications", "personnes", "entreprises"],
   offres: ["tout", "offres", "entreprises", "personnes"],
-  candidatures: ["tout", "nom", "competence", "ville"],
+  agenda: ["tout", "nom", "competence", "ville"],
   talents: ["tout", "competence", "metier", "ville"],
   messages: ["tout", "candidats", "personnes"],
 };
@@ -144,7 +144,7 @@ export async function RhTab({
       key,
       label: t(`search.scopes.${key as "tout"}`),
     })),
-    ...(tab === "candidatures"
+    ...(tab === "agenda"
       ? { searchIn: t("search.searchBy"), percent: t("search.percent", { score: "{score}" }) }
       : tab === "talents"
         ? { searchIn: t("search.searchBy") }
