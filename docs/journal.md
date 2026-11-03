@@ -5514,3 +5514,9 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 ## 2026-11-03 · Explorer : « Entreprises qui recrutent » redessinées
 
 - Même famille que les cartes d'offres : bannière en bandeau (ou dégradé menthe rayé), logo posé sur le bord, nom + badge vérifié, puis Offres · Secteur · Ville. En bas, « Recrute en ce moment » (point qui pulse) ou « Pas d'offre ouverte », et « Voir ».
+
+## 2026-11-03 · Retour depuis la fiche candidat en un seul pas
+
+- Sur la fiche candidat (recruteur, téléphone), les onglets, le glissement vers le candidat suivant, les gestes (Retenir, En attente, Ne pas retenir) et l'envoi d'une proposition d'Orbi remplacent la page dans l'historique au lieu d'en ajouter une (`RedirectType.replace`, `router.replace`).
+- « Retour » (`RhBackLink`, `src/components/phone/recruteur/retour.tsx`) revient d'un pas, vers la liste d'où l'on vient. Une fiche ouverte directement (lien, notification) remplace la page par la liste. La lecture du CV se ferme de la même façon.
+- Vérifié localement : liste → fiche → Documents → Évaluation → Retour = la liste ; le retour du téléphone mène ensuite à la page d'avant la liste.

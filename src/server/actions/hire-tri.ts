@@ -2,7 +2,15 @@
 
 import { refresh } from "next/cache";
 import { holdReasons, retainReasons } from "@/server/services/hire-evaluation";
-import { redirect } from "next/navigation";
+import { RedirectType, redirect } from "next/navigation";
+
+/**
+ * Every answer on a candidate's file replaces the page in the history (Ephraïm, 03/11/2026): « Retour »
+ * then goes straight back to the list, never through each state the file went through.
+ */
+function go(url: string): never {
+  redirect(url, RedirectType.replace);
+}
 import { z } from "zod";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
@@ -46,7 +54,7 @@ export async function sortGestureAction(formData: FormData) {
     gesture: formData.get("gesture"),
     reason: formData.get("reason") || undefined,
   });
-  if (!input.success) redirect("/app/hire/offres");
+  if (!input.success) go("/app/hire/offres");
   const { ctx } = await requireHire("/app/hire/offres", "manage", "sort");
   const back = backOf(formData.get("back"), input.data.job);
   try {
@@ -59,12 +67,12 @@ export async function sortGestureAction(formData: FormData) {
       input.data.reason,
     );
   } catch (error) {
-    if (error instanceof HireError) redirect(withParams(back, { geste: null, cible: null }));
+    if (error instanceof HireError) go(withParams(back, { geste: null, cible: null }));
     throw error;
   }
   const undone = input.data.gesture.startsWith("annuler-");
   refresh();
-  redirect(
+  go(
     withParams(back, {
       geste: undone ? null : input.data.gesture,
       cible: undone ? null : input.data.application,
@@ -86,7 +94,7 @@ export async function markCriterionAction(formData: FormData) {
     label: formData.get("label"),
     missing: formData.get("missing"),
   });
-  if (!input.success) redirect("/app/hire/offres");
+  if (!input.success) go("/app/hire/offres");
   const { ctx } = await requireHire("/app/hire/offres", "manage", "sort");
   const back = backOf(formData.get("back"), input.data.job);
   try {
@@ -98,17 +106,17 @@ export async function markCriterionAction(formData: FormData) {
       input.data.missing === "1",
     );
   } catch (error) {
-    if (error instanceof HireError) redirect(back);
+    if (error instanceof HireError) go(back);
     throw error;
   }
   refresh();
-  redirect(back);
+  go(back);
 }
 
 /** « Enregistrer les filtres » / « Tout afficher » of the pipeline of an offer. */
 export async function saveFiltersAction(formData: FormData) {
   const job = String(formData.get("job") ?? "").slice(0, 60);
-  if (!job) redirect("/app/hire/offres");
+  if (!job) go("/app/hire/offres");
   const back = backOf(formData.get("back"), job);
   const text = (name: string) => {
     const value = formData.get(name);
@@ -134,14 +142,14 @@ export async function saveFiltersAction(formData: FormData) {
           days: number("days"),
         },
   );
-  if (!parsed.success) redirect(back);
+  if (!parsed.success) go(back);
   const { ctx } = await requireHire("/app/hire/offres", "manage", "sort");
   try {
     await saveFilters(db, ctx, job, parsed.data, formData.get("blind") === "on");
   } catch (error) {
-    if (error instanceof HireError) redirect(back);
+    if (error instanceof HireError) go(back);
     throw error;
   }
   refresh();
-  redirect(back);
+  go(back);
 }

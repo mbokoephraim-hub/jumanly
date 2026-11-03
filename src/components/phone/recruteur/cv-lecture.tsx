@@ -7,6 +7,7 @@ import type { CvStyle } from "@/features/cv/style";
 import type { CvTemplate } from "@/features/cv/templates/registry";
 import { CvFrame } from "../cv/frame";
 import { PdfPages } from "../cv/pdf-pages";
+import { useRhBack } from "./retour";
 
 /**
  * « Consulter » the CV of a candidate (Ephraïm, 03/11/2026): the CV itself, read inside the app,
@@ -32,8 +33,15 @@ export function RhCvReader({
 }) {
   const [unreadable, setUnreadable] = useState(false);
   const onError = useCallback(() => setUnreadable(true), []);
+  // Closing goes back to the file it was opened from, without adding a page to the history.
+  const close = useRhBack(back.href);
   return (
-    <CvFrame title={title} sub={sub} back={{ ...back, close: true }} className="nb-rh-cvl">
+    <CvFrame
+      title={title}
+      sub={sub}
+      back={{ ...back, close: true, onClick: close }}
+      className="nb-rh-cvl"
+    >
       <div className="nb-cv-lire-doc">
         {file === "pdf" && !unreadable ? (
           <PdfPages src={fileUrl} label={texts.pages} onError={onError} />

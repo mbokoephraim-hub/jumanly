@@ -1,6 +1,14 @@
 "use server";
 
-import { redirect } from "next/navigation";
+import { RedirectType, redirect } from "next/navigation";
+
+/**
+ * Every answer on a candidate's file replaces the page in the history (Ephraïm, 03/11/2026): « Retour »
+ * then goes straight back to the list, never through each state the file went through.
+ */
+function go(url: string): never {
+  redirect(url, RedirectType.replace);
+}
 import { z } from "zod";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
@@ -37,7 +45,7 @@ export async function askCandidateAction(formData: FormData) {
       ? parsed.data.back
       : fallback;
   const withParam = (param: string) => `${back}${back.includes("?") ? "&" : "?"}${param}`;
-  if (!parsed.success) redirect(withParam("demande=vide"));
+  if (!parsed.success) go(withParam("demande=vide"));
   const { ctx } = await requireHire(back, "manage");
   try {
     const application = await getOrgApplication(db, ctx, parsed.data.application);
@@ -49,8 +57,8 @@ export async function askCandidateAction(formData: FormData) {
     });
   } catch (error) {
     if (error instanceof HireError || error instanceof ConnectError)
-      redirect(withParam("demande=erreur"));
+      go(withParam("demande=erreur"));
     throw error;
   }
-  redirect(withParam("demande=envoyee"));
+  go(withParam("demande=envoyee"));
 }
