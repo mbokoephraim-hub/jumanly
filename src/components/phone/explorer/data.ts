@@ -54,6 +54,7 @@ export type CompanyView = {
   banner: string | null;
   verified: boolean;
   sector: string | null;
+  city: string | null;
   /** « Fintech · 8 offres » (cards) and « Fintech · Kinshasa · 8 offres » (lists). */
   line: string;
   listLine: string;
@@ -183,6 +184,7 @@ export async function explorerWords(now = new Date()) {
       banner: row.banner,
       verified: row.verified,
       sector: row.sector,
+      city: row.city,
       line: row.sector
         ? t("companyLine", { sector: row.sector, ...count })
         : t("companyLineNoSector", count),

@@ -5510,3 +5510,7 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 ## 2026-11-03 · Pastille « En cours » de l'encoche
 
 - La pastille ne touche plus le coin arrondi de la carte (6 px de marge en haut et à droite). Avant, le coin la rognait et elle n'était plus une pilule nette. Cela vaut pour les cartes d'offres recruteur et pour l'Explorer talent.
+
+## 2026-11-03 · Explorer : « Entreprises qui recrutent » redessinées
+
+- Même famille que les cartes d'offres : bannière en bandeau (ou dégradé menthe rayé), logo posé sur le bord, nom + badge vérifié, puis Offres · Secteur · Ville. En bas, « Recrute en ce moment » (point qui pulse) ou « Pas d'offre ouverte », et « Voir ».
