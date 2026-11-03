@@ -8450,3 +8450,125 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   line-height: 1.35;
   color: var(--nb-brume);
 }
+/* Agenda's parts (03/11/2026): Aujourd'hui · Semaine · Mois · À planifier · À faire. */
+.nb-rh-ag .nb-rh-co-onglets {
+  margin: 0;
+}
+.nb-rh-ag .nb-rh-co-onglets small {
+  margin-left: 6px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--nb-haute);
+  color: var(--nb-creme);
+  font-size: 11.5px;
+  line-height: 20px;
+  text-align: center;
+}
+.nb-rh-ag .nb-rh-co-onglets a[aria-current="page"] small {
+  background: color-mix(in srgb, var(--nb-encre) 18%, transparent);
+  color: var(--nb-encre);
+}
+.nb-rh-ag-sous {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nb-rh-ag-sous span::first-letter {
+  text-transform: uppercase;
+}
+.nb-rh-ag-sous small {
+  font-size: 12px;
+  color: var(--nb-menthe-claire-t);
+}
+.nb-rh-ag-aide {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--nb-brume);
+}
+.nb-rh-ag-qui small {
+  font-size: 12px;
+  color: var(--nb-brume);
+}
+.nb-rh-ag-rdv[data-plan] {
+  padding-left: 12px;
+}
+.nb-rh-ag-mois {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 20px;
+  border: 1px solid var(--nb-filet-fort);
+  background:
+    radial-gradient(
+      120% 90% at 0% 0%,
+      color-mix(in srgb, var(--nb-menthe) 12%, transparent),
+      transparent 60%
+    ),
+    var(--nb-carte);
+}
+.nb-rh-ag-mois-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nb-rh-ag-mois-h h2 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--nb-creme);
+  text-transform: capitalize;
+}
+.nb-rh-ag-mois-h a {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: var(--nb-surface);
+  color: var(--nb-creme);
+}
+.nb-rh-ag-grille {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+.nb-rh-ag-jn {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--nb-brume);
+  text-align: center;
+  text-transform: uppercase;
+}
+.nb-rh-ag-case {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nb-creme);
+}
+.nb-rh-ag-case[data-autre],
+.nb-rh-ag-case[data-passe] {
+  color: color-mix(in srgb, var(--nb-brume) 60%, transparent);
+}
+.nb-rh-ag-case[aria-current="date"] {
+  background: linear-gradient(160deg, var(--nb-lime), var(--nb-menthe));
+  color: var(--nb-encre);
+}
+.nb-rh-ag-case i {
+  position: absolute;
+  bottom: 3px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--nb-menthe);
+  color: var(--nb-encre);
+  font-size: 10.5px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 16px;
+}

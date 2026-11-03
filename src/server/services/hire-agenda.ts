@@ -35,10 +35,20 @@ export type AgendaPieces = {
 
 export type AgendaWaiting = { jobId: string; jobTitle: string; count: number };
 
+/** Retained, file complete, no interview proposed yet: « À planifier ». */
+export type AgendaToPlan = {
+  applicationId: string;
+  jobId: string;
+  jobTitle: string;
+  name: string | null;
+  retainedAt: Date;
+};
+
 export type AgendaTasks = {
   reviews: AgendaReview[];
   pieces: AgendaPieces[];
   waiting: AgendaWaiting[];
+  toPlan: AgendaToPlan[];
   /** What is due now: reviews due, pieces late, offers with people waiting. */
   due: number;
 };
@@ -54,6 +64,8 @@ export function agendaOf(
     job: { title: string; blindSort: boolean };
     profile: { user: { name: string | null } };
     events: { type: string; createdAt: Date }[];
+    /** The interviews still standing (proposed, confirmed, to move). */
+    interviews?: { id: string }[];
     verification: {
       dueAt: Date;
       items: { required: boolean; receivedAt: Date | null }[];
@@ -64,6 +76,7 @@ export function agendaOf(
   const reviews: AgendaReview[] = [];
   const pieces: AgendaPieces[] = [];
   const waiting = new Map<string, AgendaWaiting>();
+  const toPlan: AgendaToPlan[] = [];
   for (const row of rows) {
     const rubrique = rubriqueOf(row);
     const name = row.job.blindSort && !row.shortlistedAt ? null : row.profile.user.name;
@@ -89,6 +102,14 @@ export function agendaOf(
       };
       entry.count += 1;
       waiting.set(row.jobId, entry);
+    } else if (rubrique === "entretiens" && (row.interviews ?? []).length === 0) {
+      toPlan.push({
+        applicationId: row.id,
+        jobId: row.jobId,
+        jobTitle: row.job.title,
+        name,
+        retainedAt: row.shortlistedAt ?? row.createdAt,
+      });
     } else if (rubrique === "completer" && row.verification) {
       const required = row.verification.items.filter((item) => item.required);
       pieces.push({
@@ -112,6 +133,7 @@ export function agendaOf(
     reviews,
     pieces,
     waiting: list,
+    toPlan: toPlan.sort((a, b) => a.retainedAt.getTime() - b.retainedAt.getTime()),
     due:
       reviews.filter((item) => item.due).length +
       pieces.filter((item) => item.late).length +
@@ -126,7 +148,7 @@ export async function agendaTasks(
   now = new Date(),
 ): Promise<AgendaTasks> {
   if (!hirePermissions(ctx.role).readApplications)
-    return { reviews: [], pieces: [], waiting: [], due: 0 };
+    return { reviews: [], pieces: [], waiting: [], toPlan: [], due: 0 };
   const rows = await db.application.findMany({
     where: {
       status: "active",
@@ -143,6 +165,10 @@ export async function agendaTasks(
       },
       job: { select: { title: true, blindSort: true } },
       profile: { select: { user: { select: { name: true } } } },
+      interviews: {
+        where: { status: { in: ["pending", "confirmed", "reschedule"] } },
+        select: { id: true },
+      },
       events: {
         where: { type: { in: [HOLD_EVENT, HOLD_LIFTED_EVENT] } },
         orderBy: { createdAt: "asc" },

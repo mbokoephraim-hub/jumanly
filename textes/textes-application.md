@@ -15888,6 +15888,24 @@ Conventions :
 | `phoneRh.nav.agenda` | Agenda |
 | `phoneRhAgenda.line` | {tasks, plural, =0 {Rien d'urgent} one {# chose à faire} other {# choses à faire}} · {today, plural, =0 {aucun entretien aujourd'hui} one {# entretien aujourd'hui} other {# entretiens aujourd'hui}} |
 | `phoneRhAgenda.week` | Les 7 prochains jours |
+| `phoneRhAgenda.tabs` | Parties de l'agenda |
+| `phoneRhAgenda.tab.jour` | Aujourd'hui |
+| `phoneRhAgenda.tab.semaine` | Semaine |
+| `phoneRhAgenda.tab.mois` | Mois |
+| `phoneRhAgenda.tab.planifier` | À planifier |
+| `phoneRhAgenda.tab.faire` | À faire |
+| `phoneRhAgenda.weekThis` | Cette semaine |
+| `phoneRhAgenda.weekNext` | Semaine prochaine |
+| `phoneRhAgenda.weekEmpty` | Aucun entretien prévu. |
+| `phoneRhAgenda.monthPrev` | Mois précédent |
+| `phoneRhAgenda.monthNext` | Mois suivant |
+| `phoneRhAgenda.monthEmpty` | Aucun entretien ce mois-ci. |
+| `phoneRhAgenda.plan.title` | Prêts pour un entretien |
+| `phoneRhAgenda.plan.help` | Retenus, dossier complet. « Planifier » : choisissez le jour et l'heure, l'invitation est prête. |
+| `phoneRhAgenda.plan.empty` | Aucun candidat à planifier pour l'instant. |
+| `phoneRhAgenda.plan.since` | Retenu le {date, date, medium} |
+| `phoneRhAgenda.plan.go` | Planifier |
+| `phoneRhAgenda.plan.pending` | En attente de réponse du candidat |
 | `phoneRhAgenda.today` | Aujourd'hui |
 | `phoneRhAgenda.count` | {count, plural, =0 {aucun entretien} one {# entretien} other {# entretiens}} |
 | `phoneRhAgenda.dayEmpty` | Aucun entretien ce jour-là. |
