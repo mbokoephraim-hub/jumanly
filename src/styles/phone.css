@@ -11130,3 +11130,96 @@ input:checked + .nb-ca-radio::after {
 .nb-ex-ec-recrute .nb-rh-pouls {
   flex: none;
 }
+
+/* « Les modèles de notifications » (Ephraïm, 03/11/2026): a badge of the kind on the photo, a
+   short title above the sentence and, for what awaits an answer, its button. */
+.nb-nm-av {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+}
+.nb-nm-badge {
+  --nm: var(--nb-brume);
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--nm);
+  color: var(--nb-nuit);
+  box-shadow: 0 0 0 2px var(--nb-nuit);
+}
+.nb-nm-badge svg {
+  stroke-width: 2.4;
+}
+.nb-nm-titre {
+  --nm-t: var(--nb-brume);
+  display: block;
+  margin-bottom: 2px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--nm-t);
+}
+.nb-nm-bas {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+.nb-nm-bas small {
+  margin-top: 0 !important;
+}
+.nb-nm-action {
+  --nm: var(--nb-lime);
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 14px;
+  background: var(--nm);
+  color: var(--nb-nuit);
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.nb-nm-badge[data-kind="message"],
+.nb-nm-titre[data-kind="message"],
+.nb-nm-action[data-kind="message"] {
+  --nm: var(--nb-menthe);
+  --nm-t: var(--nb-menthe-t, var(--nb-menthe));
+}
+.nb-nm-badge[data-kind="connexion"],
+.nb-nm-titre[data-kind="connexion"],
+.nb-nm-action[data-kind="connexion"] {
+  --nm: var(--nb-lime);
+  --nm-t: var(--nb-lime-t, var(--nb-lime));
+}
+.nb-nm-badge[data-kind="candidature"],
+.nb-nm-titre[data-kind="candidature"],
+.nb-nm-action[data-kind="candidature"],
+.nb-nm-badge[data-kind="offre"],
+.nb-nm-titre[data-kind="offre"],
+.nb-nm-action[data-kind="offre"] {
+  --nm: var(--nb-ambre);
+  --nm-t: var(--nb-ambre-t, var(--nb-ambre));
+}
+.nb-nm-badge[data-kind="agenda"],
+.nb-nm-titre[data-kind="agenda"],
+.nb-nm-action[data-kind="agenda"] {
+  --nm: var(--nb-corail);
+  --nm-t: var(--nb-corail-t, var(--nb-corail));
+}
+.nb-nm-badge[data-kind="fil"],
+.nb-nm-titre[data-kind="fil"],
+.nb-nm-action[data-kind="fil"],
+.nb-nm-badge[data-kind="formation"],
+.nb-nm-titre[data-kind="formation"],
+.nb-nm-action[data-kind="formation"] {
+  --nm: var(--nb-menthe-claire);
+  --nm-t: var(--nb-menthe-claire-t, var(--nb-menthe-claire));
+}

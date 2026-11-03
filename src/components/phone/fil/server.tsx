@@ -1,4 +1,5 @@
 import "server-only";
+import { notifModelOf } from "../notif-model";
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
 import { dynamic } from "@/i18n/dynamic";
@@ -116,6 +117,7 @@ export async function notificationRows(userId: string, now = new Date()): Promis
   );
   // The photo of the person who wrote, liked, asked… (Ephraïm 29/10/2026).
   const actors = await notificationActors(db, userId, all);
+  const modelOf = await notifModelOf();
   const today = new Date(now);
   today.setHours(0, 0, 0, 0);
   const DAY = 86_400_000;
@@ -173,6 +175,7 @@ export async function notificationRows(userId: string, now = new Date()): Promis
       what: candidate ? text.slice(candidate.length) : text,
       ago,
       unread: !item.readAt,
+      model: modelOf(item.type),
       avatar: who
         ? { initials: initialsOf(who), tone: toneOf(who, org), org, image: actor?.image ?? null }
         : null,

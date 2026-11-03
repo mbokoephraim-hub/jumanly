@@ -8778,3 +8778,13 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 .nb-rh-t-trouve p {
   margin: 0;
 }
+/* « Les modèles de notifications » (03/11/2026): only the name in bold. */
+.nb-rn-phrase {
+  font-size: 15px;
+  line-height: 1.4;
+}
+.nb-rn-phrase b,
+.nb-rn-texte .nb-rn-phrase b {
+  font-size: inherit;
+  font-weight: 700;
+}

@@ -1117,6 +1117,7 @@ export const phoneNotificationFilters = {
     "interviewDeclined",
     "interviewCanceled",
     "interviewAccepted",
+    "interviewSoon",
     "matchReviewed",
     "profileViewed",
     "diagnosticReady",
