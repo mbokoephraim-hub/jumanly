@@ -1345,7 +1345,7 @@
 }
 .nb-rh-oc {
   --oc-r: 26px;
-  --oc-encoche-h: 44px;
+  --oc-encoche-h: 48px;
   position: relative;
   display: grid;
   border-radius: var(--oc-r);
@@ -1375,7 +1375,7 @@
   gap: 10px;
   min-width: 0;
   /* Laisse la place de l'encoche. */
-  padding-right: 104px;
+  padding-right: 120px;
   font-size: 15px;
   font-weight: 600;
 }
@@ -1518,7 +1518,9 @@
   align-items: flex-start;
   justify-content: flex-end;
   height: var(--oc-encoche-h);
-  padding: 0 0 8px 8px;
+  /* La pastille ne touche plus le coin arrondi de la carte (Ephraïm, 03/11/2026) : sinon le coin
+     la rogne et elle n'est plus une pilule nette. */
+  padding: 6px 6px 8px 8px;
   background: var(--nb-nuit);
   border-bottom-left-radius: 20px;
 }
