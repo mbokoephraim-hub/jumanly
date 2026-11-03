@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { RhBell, RhTab } from "@/components/phone/recruteur/head";
-import { RhTalents, RhTalentsTexts } from "@/components/phone/recruteur/talents";
+import { RhTalentFilters, RhTalents, RhTalentsTexts } from "@/components/phone/recruteur/talents";
 import { requireHire } from "@/server/hire-context";
 import { isPhone } from "@/server/view";
 
@@ -29,7 +29,16 @@ export default async function TalentsRedirect({ searchParams }: PageProps<"/app/
     const t = await getTranslations("phoneRhTalents");
     const ok = TOASTS.find((key) => key === query.ok);
     return (
-      <RhTab tab="talents" legacy={false} actions={<RhBell />}>
+      <RhTab
+        tab="talents"
+        legacy={false}
+        actions={<RhBell />}
+        searchExtra={
+          <RhTalentsTexts>
+            <RhTalentFilters ctx={ctx} query={query} />
+          </RhTalentsTexts>
+        }
+      >
         {ok ? <ToastOnLoad message={t(`ok.${ok}`)} tone="success" /> : null}
         {typeof query.erreur === "string" ? (
           <p className="nb-erreur nb-rh-marge" role="alert">

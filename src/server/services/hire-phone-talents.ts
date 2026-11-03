@@ -52,6 +52,12 @@ const orgSubject = (ctx: HireContext) => ({
 });
 
 /** Members of the organization: never suggested to their own company. */
+export type DiscoverFilters = {
+  skill?: string;
+  city?: string;
+  dispo?: "open" | "listening" | "not_looking";
+};
+
 async function colleagues(db: PrismaClient, organizationId: string) {
   const rows = await db.membership.findMany({
     where: { organizationId },
@@ -70,6 +76,8 @@ export async function rhDiscover(
   ctx: HireContext,
   jobId: string | null,
   now = new Date(),
+  /** The filters of the sheet next to the search (Ephraïm, 03/11/2026). */
+  filters: DiscoverFilters = {},
 ): Promise<Discover> {
   if (!hirePermissions(ctx.role).manage) throw new HireError("forbidden");
   if ((await level(db, orgSubject(ctx), "hire.talent_search")) === "none")
@@ -98,7 +106,24 @@ export async function rhDiscover(
       visibleWhere,
       { id: { notIn: hidden.map((item) => item.profileId) } },
       { userId: { notIn: members } },
-      ...(skills.length > 0 ? [{ skills: { some: { skill: { name: { in: skills } } } } }] : []),
+      ...(skills.length > 0 && !filters.skill
+        ? [{ skills: { some: { skill: { name: { in: skills } } } } }]
+        : []),
+      ...(filters.skill
+        ? [
+            {
+              skills: {
+                some: {
+                  skill: { name: { contains: filters.skill, mode: "insensitive" as const } },
+                },
+              },
+            },
+          ]
+        : []),
+      ...(filters.city
+        ? [{ user: { city: { contains: filters.city, mode: "insensitive" as const } } }]
+        : []),
+      ...(filters.dispo ? [{ availability: filters.dispo }] : []),
     ],
   };
   const [total, rows, matching] = await Promise.all([

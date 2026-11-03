@@ -89,8 +89,11 @@ export function RhTabPage({
   texts,
   className,
   ownHeading = true,
+  searchExtra,
   children,
 }: {
+  /** What stands on the line of the search, at its right (the « Filtres » of Talents). */
+  searchExtra?: ReactNode;
   title: string;
   /** False while the page below still carries its own h1 (screens not redone yet). */
   ownHeading?: boolean;
@@ -194,6 +197,7 @@ export function RhTabPage({
                 </button>
               ) : null}
             </label>
+            {!open ? searchExtra : null}
             {open ? (
               <button type="button" className="nb-ex-annuler" data-retour="" onClick={close}>
                 {texts.cancel}

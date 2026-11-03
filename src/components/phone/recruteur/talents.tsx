@@ -16,8 +16,11 @@ import { rhDiscover, rhNetwork, rhProposals } from "@/server/services/hire-phone
 import { cheapestPlanWhere, listPublicPlans } from "@/server/services/plans";
 import { listPools, poolsEnabled } from "@/server/services/talent-search";
 import { PhoneIcon } from "../icon";
-import { RhInitials, RhPct } from "./candidatures";
+import { initialsOf, RhInitials, RhPct, tintOf } from "./candidatures";
 import { RhNewPool } from "./talents-client";
+import { RhFiltersSheet } from "./tri-client";
+import { FilAvatar } from "../fil/avatar";
+import { candidateAvailabilities } from "@/server/services/hire-offer-candidates";
 
 /** The texts the Talents screens need in the browser (sheets). */
 export async function RhTalentsTexts({ children }: { children: ReactNode }) {
@@ -36,6 +39,110 @@ const FILTERS = ["toutes", "talents", "rh"] as const;
 type Query = Record<string, string | string[] | undefined>;
 const one = (value: string | string[] | undefined) =>
   typeof value === "string" ? value : undefined;
+
+/** The filters of « Découvrir », read from the address (never saved). */
+function filtersOf(query: Query) {
+  const text = (value: string | undefined) => (value ?? "").trim().slice(0, 60);
+  return {
+    offre: one(query.offre) ?? "",
+    skill: text(one(query.skill)),
+    city: text(one(query.ville)),
+    dispo: candidateAvailabilities.find((value) => value === one(query.dispo)),
+  };
+}
+
+/**
+ * « Filtres », on the line of the search (Ephraïm, 03/11/2026): the offer, a skill, the city and
+ * the availability of the talents « Découvrir » shows. Saving opens « Découvrir » with them.
+ */
+export async function RhTalentFilters({ ctx, query }: { ctx: HireContext; query: Query }) {
+  const t = await getTranslations("phoneRhCandidats");
+  const tt = await getTranslations("phoneRhTalents");
+  const chosen = filtersOf(query);
+  const offers = await db.job.findMany({
+    where: { organizationId: ctx.organizationId, status: "published" },
+    orderBy: { publishedAt: "desc" },
+    take: 12,
+    select: { id: true, title: true },
+  });
+  const count = [chosen.offre, chosen.skill, chosen.city, chosen.dispo].filter(Boolean).length;
+  return (
+    <RhFiltersSheet
+      label={t("filters.title")}
+      countLabel={t("filters.count", { count })}
+      count={count}
+      closeLabel={t("filters.close")}
+      version={JSON.stringify(chosen)}
+    >
+      <form method="get" action="/app/hire/talents" className="nb-rh-pf-f">
+        <div className="nb-ex-f-tete">
+          <h2>{t("filters.title")}</h2>
+          <Link href="/app/hire/talents">{t("filters.reset")}</Link>
+        </div>
+        <div className="nb-ex-f-corps">
+          {offers.length > 0 ? (
+            <fieldset className="nb-rh-pf-grp">
+              <legend className="nb-ex-f-gl">{tt("filters.offer")}</legend>
+              <div className="nb-ex-f-opts">
+                {[{ id: "", title: tt("offers.all") }, ...offers].map((offer) => (
+                  <label key={offer.id || "all"} className="nb-ex-f-opt nb-rh-pf-opt">
+                    <input
+                      type="radio"
+                      name="offre"
+                      value={offer.id}
+                      defaultChecked={chosen.offre === offer.id}
+                    />
+                    {offer.title}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          ) : null}
+          <label className="nb-rh-pf-champ">
+            <span className="nb-ex-f-gl">{t("filters.skill")}</span>
+            <input
+              name="skill"
+              maxLength={60}
+              defaultValue={chosen.skill}
+              placeholder={t("filters.skillPlaceholder")}
+            />
+          </label>
+          <fieldset className="nb-rh-pf-grp">
+            <legend className="nb-ex-f-gl">{t("filters.dispo")}</legend>
+            <div className="nb-ex-f-opts">
+              {[
+                { value: "", label: t("filters.any") },
+                ...candidateAvailabilities.map((value) => ({
+                  value,
+                  label: t(`filters.dispoValue.${value}`),
+                })),
+              ].map((option) => (
+                <label key={option.value || "any"} className="nb-ex-f-opt nb-rh-pf-opt">
+                  <input
+                    type="radio"
+                    name="dispo"
+                    value={option.value}
+                    defaultChecked={(chosen.dispo ?? "") === option.value}
+                  />
+                  {option.label}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <label className="nb-rh-pf-champ">
+            <span className="nb-ex-f-gl">{t("filters.city")}</span>
+            <input name="ville" maxLength={60} defaultValue={chosen.city} />
+          </label>
+        </div>
+        <div className="nb-ex-f-bas">
+          <button type="submit" className="nb-ex-f-voir">
+            {tt("filters.apply")}
+          </button>
+        </div>
+      </form>
+    </RhFiltersSheet>
+  );
+}
 
 /**
  * The tab Talents of the recruiter's phone (planches 101, 104, 106 and 107): « Découvrir » the
@@ -92,8 +199,12 @@ export async function RhTalents({ ctx, query }: { ctx: HireContext; query: Query
   let body: ReactNode;
   if (tab === "decouvrir") {
     const offre = one(query.offre) ?? null;
+    const filters = filtersOf(query);
+    const wanted = { skill: filters.skill, city: filters.city, dispo: filters.dispo };
     const discover = manage
-      ? await rhDiscover(db, ctx, offre).catch(() => rhDiscover(db, ctx, null))
+      ? await rhDiscover(db, ctx, offre, undefined, wanted).catch(() =>
+          rhDiscover(db, ctx, null, undefined, wanted),
+        )
       : ({ status: "locked" } as const);
     if (discover.status === "locked") {
       const plan = cheapestPlanWhere(
@@ -113,27 +224,6 @@ export async function RhTalents({ ctx, query }: { ctx: HireContext; query: Query
     } else {
       body = (
         <>
-          {discover.offers.length > 0 ? (
-            <nav className="nb-rh-filtres" aria-label={t("offers.label")}>
-              <Link
-                href={href({ offre: null })}
-                className="nb-chip"
-                aria-current={discover.job ? undefined : "page"}
-              >
-                {t("offers.all")}
-              </Link>
-              {discover.offers.map((offer) => (
-                <Link
-                  key={offer.id}
-                  href={href({ offre: offer.id })}
-                  className="nb-chip"
-                  aria-current={offer.id === discover.job ? "page" : undefined}
-                >
-                  {offer.title}
-                </Link>
-              ))}
-            </nav>
-          ) : null}
           <p className="nb-meta nb-rh-regle">{t("discover.line", { count: discover.total })}</p>
           {discover.cards.length === 0 ? (
             <p className="nb-vide nb-rh-marge">{t("discover.empty")}</p>
@@ -299,23 +389,36 @@ export async function RhTalents({ ctx, query }: { ctx: HireContext; query: Query
         filter === "toutes" ||
         (filter === "talents" ? person.kind === "talent" : person.kind === "rh"),
     );
+    const avatar = (id: string, name: string, image: string | null | undefined, size: number) => (
+      <FilAvatar
+        initials={initialsOf(name)}
+        image={image ?? null}
+        tone={Number(tintOf(id))}
+        org={false}
+        size={size}
+      />
+    );
+    // « Réseau » redone (Ephraïm, 03/11/2026: « c'est en désordre »): the invitations first, people
+    // to know in a row of cards, then the relations with their filter.
     body = (
-      <>
+      <div className="nb-rh-rs">
         {network.received.length > 0 ? (
-          <section aria-labelledby="rh-t-invit" className="nb-rh-reseau">
-            <h2 id="rh-t-invit" className="nb-meta nb-rh-marge">
+          <section aria-labelledby="rh-t-invit" className="nb-rh-rs-bloc">
+            <h2 id="rh-t-invit" className="nb-rh-rs-h">
               {t("network.received")}
+              <small>{network.received.length}</small>
             </h2>
-            <ul className="nb-rh-liste-l">
+            <ul className="nb-rh-rs-liste">
               {network.received.map((person) => (
-                <li key={person.id} className="nb-rh-invit">
-                  <RhInitials id={person.userId} name={person.name} />
-                  <span className="nb-rh-res-t">
+                <li key={person.id} className="nb-rh-rs-ligne" data-invit="">
+                  {avatar(person.userId, person.name, person.image, 46)}
+                  <span className="nb-rh-rs-t">
                     <b>{person.name}</b>
-                    {person.title ? <span className="nb-meta">{person.title}</span> : null}
-                    <span className="nb-meta">{t(`network.kind.${person.kind}`)}</span>
+                    <span>
+                      {[t(`network.kind.${person.kind}`), person.title].filter(Boolean).join(" · ")}
+                    </span>
                   </span>
-                  <form action={rhAnswerInvitationAction} className="nb-rh-invit-b">
+                  <form action={rhAnswerInvitationAction} className="nb-rh-rs-choix">
                     <input type="hidden" name="id" value={person.id} />
                     <button
                       type="submit"
@@ -326,7 +429,7 @@ export async function RhTalents({ ctx, query }: { ctx: HireContext; query: Query
                     >
                       <PhoneIcon name="fermer" size={18} />
                     </button>
-                    <button type="submit" name="answer" value="accept" className="nb-bp nb-bp-s">
+                    <button type="submit" name="answer" value="accept" className="nb-rh-rs-go">
                       {t("network.accept")}
                     </button>
                   </form>
@@ -335,27 +438,28 @@ export async function RhTalents({ ctx, query }: { ctx: HireContext; query: Query
             </ul>
           </section>
         ) : null}
-        <section aria-labelledby="rh-t-know" className="nb-rh-reseau">
-          <h2 id="rh-t-know" className="nb-meta nb-rh-marge">
+        <section aria-labelledby="rh-t-know" className="nb-rh-rs-bloc">
+          <h2 id="rh-t-know" className="nb-rh-rs-h">
             {t("network.know")}
           </h2>
           {network.know.length === 0 ? (
-            <p className="nb-vide nb-rh-marge">{t("network.none")}</p>
+            <p className="nb-vide">{t("network.none")}</p>
           ) : (
-            <ul className="nb-rh-connaitre">
+            <ul className="nb-rh-rs-cartes">
               {network.know.map((person) => (
-                <li key={person.id}>
-                  <Link href={`/app/personnes/${person.id}`} className="nb-rh-connaitre-c">
-                    <RhInitials id={person.id} name={person.name} />
+                <li key={person.id} className="nb-rh-rs-carte">
+                  <Link href={`/app/personnes/${person.id}`} className="nb-rh-rs-carte-l">
+                    {avatar(person.id, person.name, person.image, 64)}
                     <b>{person.name}</b>
-                    <span className="nb-meta">
-                      {[person.title, person.company, person.city].filter(Boolean).join(" · ")}
+                    <span>
+                      {[person.title, person.company, person.city].filter(Boolean).join(" · ") ||
+                        "\u00a0"}
                     </span>
-                    <span className="nb-rh-genre">{t(`network.kind.${person.kind}`)}</span>
+                    <em data-genre={person.kind}>{t(`network.kind.${person.kind}`)}</em>
                   </Link>
                   <form action={rhConnectAction}>
                     <input type="hidden" name="id" value={person.id} />
-                    <button type="submit" className="nb-bp nb-bp-s">
+                    <button type="submit" className="nb-rh-rs-go">
                       {t("network.connect")}
                     </button>
                   </form>
@@ -364,52 +468,41 @@ export async function RhTalents({ ctx, query }: { ctx: HireContext; query: Query
             </ul>
           )}
         </section>
-        <section aria-labelledby="rh-t-rel" className="nb-rh-reseau">
-          <div className="nb-rh-marge nb-rh-rel-t">
-            <h2 id="rh-t-rel">{t("network.relations")}</h2>
-            <span className="nb-meta">{network.relations.length}</span>
-          </div>
-          <nav className="nb-rh-filtres" aria-label={t("network.filters")}>
+        <section aria-labelledby="rh-t-rel" className="nb-rh-rs-bloc">
+          <h2 id="rh-t-rel" className="nb-rh-rs-h">
+            {t("network.relations")}
+            <small>{network.relations.length}</small>
+          </h2>
+          <nav className="nb-rh-co-onglets nb-rh-rs-filtre" aria-label={t("network.filters")}>
             {FILTERS.map((key) => (
               <Link
                 key={key}
                 href={href({ relations: key === "toutes" ? null : key })}
-                className="nb-chip"
                 aria-current={key === filter ? "page" : undefined}
+                scroll={false}
+                replace
               >
                 {t(`network.filter.${key}`)}
               </Link>
             ))}
           </nav>
           {relations.length === 0 ? (
-            <p className="nb-vide nb-rh-marge">{t("network.empty")}</p>
+            <p className="nb-vide">{t("network.empty")}</p>
           ) : (
-            <ul className="nb-rh-liste-l">
+            <ul className="nb-rh-rs-liste">
               {relations.map((person) => (
                 <li key={person.id}>
-                  <Link
-                    href={
-                      person.conversationId
-                        ? `/app/messages/${person.conversationId}`
-                        : `/app/personnes/${person.userId}`
-                    }
-                    className="nb-rh-cl"
-                    aria-label={
-                      person.conversationId ? t("network.write", { name: person.name }) : undefined
-                    }
-                  >
-                    <RhInitials id={person.userId} name={person.name} />
-                    <span className="nb-rh-res-t">
+                  <Link href={`/app/personnes/${person.userId}`} className="nb-rh-rs-ligne">
+                    {avatar(person.userId, person.name, person.image, 46)}
+                    <span className="nb-rh-rs-t">
                       <b>{person.name}</b>
-                      <span className="nb-meta">
+                      <span>
                         {[t(`network.kind.${person.kind}`), person.title]
                           .filter(Boolean)
                           .join(" · ")}
                       </span>
                       {person.mutual > 0 ? (
-                        <span className="nb-meta">
-                          {t("network.mutual", { count: person.mutual })}
-                        </span>
+                        <small>{t("network.mutual", { count: person.mutual })}</small>
                       ) : null}
                     </span>
                     <PhoneIcon name="chevron" size={18} />
@@ -419,13 +512,14 @@ export async function RhTalents({ ctx, query }: { ctx: HireContext; query: Query
             </ul>
           )}
         </section>
-      </>
+      </div>
     );
   }
 
   return (
     <div className="nb-rh-talents">
       {tabs}
+      <p className="nb-rh-t-aide">{t(`tabs.help.${tab}`)}</p>
       {body}
     </div>
   );

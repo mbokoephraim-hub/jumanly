@@ -8573,3 +8573,181 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 .nb-rh-ag-case[aria-current="date"] .nb-rh-ag-points i {
   background: var(--nb-encre);
 }
+/* Talents (03/11/2026): « Filtres » on the line of the search, one line under the parts, Réseau. */
+.nb-rh-recherche .nb-ex-champ > .nb-ex-fbtn {
+  flex: none;
+}
+.nb-rh-t-aide {
+  margin: 0 20px 10px;
+  font-size: 13px;
+  color: var(--nb-brume);
+}
+.nb-rh-rs {
+  display: grid;
+  gap: 22px;
+  padding: 4px 0 28px;
+}
+.nb-rh-rs-bloc {
+  display: grid;
+  gap: 10px;
+}
+.nb-rh-rs-bloc > :not(.nb-rh-rs-cartes) {
+  margin-inline: 20px;
+}
+.nb-rh-rs-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--nb-creme);
+}
+.nb-rh-rs-h small {
+  min-width: 24px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--nb-haute);
+  color: var(--nb-brume);
+  font-size: 12.5px;
+  line-height: 24px;
+  text-align: center;
+}
+.nb-rh-rs-cartes {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 2px 20px 6px;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 20px;
+  scrollbar-width: none;
+}
+.nb-rh-rs-cartes::-webkit-scrollbar {
+  display: none;
+}
+.nb-rh-rs-carte {
+  flex: 0 0 158px;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 10px;
+  padding: 14px 12px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--nb-filet-fort);
+  background:
+    radial-gradient(
+      120% 70% at 50% 0%,
+      color-mix(in srgb, var(--nb-menthe) 12%, transparent),
+      transparent 70%
+    ),
+    var(--nb-carte);
+  scroll-snap-align: start;
+}
+.nb-rh-rs-carte-l {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 4px;
+  min-width: 0;
+  text-align: center;
+  color: var(--nb-creme);
+}
+.nb-rh-rs-carte-l > :first-child {
+  margin-bottom: 4px;
+}
+.nb-rh-rs-carte-l b {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 14.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-rh-rs-carte-l span {
+  display: -webkit-box;
+  min-height: 2.7em;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--nb-brume);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.nb-rh-rs-carte-l em {
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--nb-menthe) 16%, transparent);
+  color: var(--nb-menthe-claire-t);
+  font-size: 11.5px;
+  font-style: normal;
+  font-weight: 700;
+}
+.nb-rh-rs-carte-l em[data-genre="rh"] {
+  background: color-mix(in srgb, var(--nb-lime) 16%, transparent);
+  color: var(--nb-lime-t);
+}
+.nb-rh-rs-carte form {
+  display: grid;
+}
+.nb-rh-rs-go {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 0;
+  background: linear-gradient(135deg, var(--nb-lime), var(--nb-menthe));
+  color: var(--nb-encre);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+.nb-rh-rs-filtre {
+  margin-top: 0;
+  margin-bottom: 2px;
+}
+.nb-rh-rs-liste {
+  display: grid;
+  gap: 8px;
+}
+.nb-rh-rs-ligne {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 68px;
+  padding: 10px 12px;
+  border-radius: 18px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+  color: var(--nb-creme);
+}
+.nb-rh-rs-ligne > svg {
+  color: var(--nb-brume);
+}
+.nb-rh-rs-t {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.nb-rh-rs-t b {
+  overflow: hidden;
+  font-size: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-rh-rs-t span {
+  overflow: hidden;
+  font-size: 13px;
+  color: var(--nb-brume);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-rh-rs-t small {
+  font-size: 12px;
+  color: var(--nb-menthe-claire-t);
+}
+.nb-rh-rs-choix {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
