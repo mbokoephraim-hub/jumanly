@@ -16396,6 +16396,7 @@ Conventions :
 | `phoneRhFiche.documents.portfolio` | Portfolio |
 | `phoneRhFiche.diplomas.title` | Diplômes |
 | `phoneRhFiche.cards.cv` | Consultez ici le CV que ce candidat a envoyé avec sa candidature. |
+| `phoneRhFiche.cards.cvNone` | Aucun CV joint à cette candidature : le résumé ci-dessus reprend son parcours. |
 | `phoneRhFiche.cards.letter` | Lisez ici la lettre de motivation écrite pour votre offre. |
 | `phoneRhFiche.cards.portfolio` | Découvrez les réalisations que ce candidat a choisi de montrer. |
 | `phoneRhFiche.cards.diplomas` | {count, plural, one {# diplôme déclaré} other {# diplômes déclarés}}, {proofs, plural, =0 {aucun justificatif joint} one {# avec justificatif} other {# avec justificatif}}. |
@@ -16407,17 +16408,25 @@ Conventions :
 | `phoneRhFiche.proposals.title` | Propositions d'Orbi |
 | `phoneRhFiche.proposals.none` | Rien à demander pour l'instant : le dossier est complet. |
 | `phoneRhFiche.proposals.experiences` | {count, plural, one {Une expérience n'est pas encore vérifiée.} other {# expériences ne sont pas encore vérifiées.}} |
+| `phoneRhFiche.proposals.experiencesDetail` | Demandez-lui de faire confirmer {items} par un ancien responsable. |
 | `phoneRhFiche.proposals.experiencesAction` | Demander une vérification |
 | `phoneRhFiche.proposals.diplomas` | {count, plural, one {Un diplôme n'a pas de justificatif.} other {# diplômes n'ont pas de justificatif.}} |
+| `phoneRhFiche.proposals.diplomasDetail` | Demandez-lui d’ajouter une copie de {items}. |
 | `phoneRhFiche.proposals.diplomasAction` | Demander les diplômes |
 | `phoneRhFiche.proposals.missing` | {count, plural, one {Un document demandé n'a pas été envoyé.} other {# documents demandés n'ont pas été envoyés.}} |
+| `phoneRhFiche.proposals.missingDetail` | Demandez-lui de joindre les pièces prévues dans l’offre. |
 | `phoneRhFiche.proposals.missingAction` | Demander les documents |
 | `phoneRhFiche.proposals.letter` | Pas de lettre de motivation avec la candidature. |
 | `phoneRhFiche.proposals.letterAction` | Demander une lettre |
-| `phoneRhFiche.messages.experiences` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour avancer, pourriez-vous faire vérifier vos expériences ? Depuis votre profil Jumanly, vous pouvez demander à un ancien responsable de les confirmer. Merci ! |
-| `phoneRhFiche.messages.diplomas` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour avancer, pourriez-vous nous envoyer une copie de vos diplômes ? Vous pouvez les joindre ici, dans cette conversation. Merci ! |
+| `phoneRhFiche.proposals.letterDetail` | Demandez-lui quelques lignes sur ce qui l’attire dans ce poste. |
+| `phoneRhFiche.proposals.cv` | Pas de CV joint à la candidature. |
+| `phoneRhFiche.proposals.cvDetail` | Demandez-lui d’envoyer un CV à jour pour compléter son dossier. |
+| `phoneRhFiche.proposals.cvAction` | Demander le CV |
+| `phoneRhFiche.messages.experiences` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour avancer, pourriez-vous faire vérifier ces expériences : {items} ? Depuis votre profil Jumanly, vous pouvez demander à un ancien responsable de les confirmer. Merci ! |
+| `phoneRhFiche.messages.diplomas` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour avancer, pourriez-vous nous envoyer une copie de ces diplômes : {items} ? Vous pouvez les joindre ici, dans cette conversation. Merci ! |
 | `phoneRhFiche.messages.missing` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Il nous manque encore certains documents demandés dans l'offre. Pourriez-vous les joindre ici, dans cette conversation ? Merci ! |
 | `phoneRhFiche.messages.letter` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pourriez-vous nous dire en quelques lignes pourquoi ce poste vous intéresse ? Vous pouvez répondre ici. Merci ! |
+| `phoneRhFiche.messages.cv` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour compléter votre dossier, pourriez-vous nous envoyer votre CV à jour ? Vous pouvez le joindre ici, dans cette conversation. Merci ! |
 | `phoneRhFiche.ask.title` | Envoyer un message au candidat |
 | `phoneRhFiche.ask.lead` | Le message arrive dans ses Messages. Vous pouvez le modifier avant de l'envoyer. |
 | `phoneRhFiche.ask.label` | Votre message |

@@ -7134,3 +7134,34 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   justify-self: start;
   margin: 16px 20px 0;
 }
+/* Propositions d'Orbi (Ephraïm, 03/11/2026): what to add, then a button that calls the eye. */
+.nb-rh-fp-prop {
+  border-color: color-mix(in srgb, var(--nb-lime) 45%, var(--nb-filet-fort));
+  box-shadow: inset 3px 0 0 var(--nb-lime);
+}
+.nb-rh-fp-prop p {
+  display: grid;
+  gap: 4px;
+}
+.nb-rh-fp-prop p span {
+  font-size: 14px;
+  color: var(--nb-creme);
+  opacity: 0.85;
+}
+.nb-rh-fp-prop-go {
+  animation: nb-rh-fd-appel 1.8s ease-in-out infinite;
+}
+.nb-rh-fp-prop:nth-child(2) .nb-rh-fp-prop-go {
+  animation-delay: 0.5s;
+}
+.nb-rh-fp-prop:nth-child(3) .nb-rh-fp-prop-go {
+  animation-delay: 1s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-rh-fp-prop-go {
+    animation: none;
+  }
+}
+.nb-app[data-reduit] .nb-rh-fp-prop-go {
+  animation: none;
+}

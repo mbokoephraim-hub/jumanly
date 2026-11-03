@@ -5430,3 +5430,9 @@ Retour d'Ephraïm : le texte commençait trop loin du bord (la marge de la page 
 ## 2026-11-03 · Fiche du candidat : Documents en cartes horizontales
 
 Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples de cartes produit). Chaque pièce est une carte horizontale : à gauche le dessin de « Mes documents » (page de CV, enveloppe de la lettre, image du portfolio, médaille pour les diplômes et attestations) sur un fond de couleur, puis le titre, une phrase d'accroche (« Consultez ici le CV que ce candidat a envoyé… »), l'état (Reçu, Lu par Orbi, Vérifié) et « Consulter » qui pulse doucement pour appeler le doigt (arrêté quand les animations sont réduites). Les propositions d'Orbi restent en dessous. Captures : `/mnt/project-files/captures/fiche-candidat-documents-2026-11-03/`.
+
+## 2026-11-03 · Profil du candidat : haut, documents, propositions d'Orbi
+
+- Barre du haut : icône retour seule (libellé lu par le lecteur d'écran), plus de « 1 sur 5 » ni de flèches (le glissement reste).
+- Documents : lettre de motivation, puis CV toujours présent avec le dessin du CV (« Aucun CV joint » si besoin). « Ouvrir le dossier complet » retiré.
+- Propositions d'Orbi : chaque carte dit quoi ajouter et nomme les pièces (diplômes, expériences), nouvelle proposition « Demander le CV », bouton qui pulse (arrêté en mouvement réduit).

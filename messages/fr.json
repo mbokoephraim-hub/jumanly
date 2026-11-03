@@ -20404,6 +20404,7 @@
     },
     "cards": {
       "cv": "Consultez ici le CV que ce candidat a envoyé avec sa candidature.",
+      "cvNone": "Aucun CV joint à cette candidature : le résumé ci-dessus reprend son parcours.",
       "letter": "Lisez ici la lettre de motivation écrite pour votre offre.",
       "portfolio": "Découvrez les réalisations que ce candidat a choisi de montrer.",
       "diplomas": "{count, plural, one {# diplôme déclaré} other {# diplômes déclarés}}, {proofs, plural, =0 {aucun justificatif joint} one {# avec justificatif} other {# avec justificatif}}.",
@@ -20414,19 +20415,27 @@
       "title": "Propositions d'Orbi",
       "none": "Rien à demander pour l'instant : le dossier est complet.",
       "experiences": "{count, plural, one {Une expérience n'est pas encore vérifiée.} other {# expériences ne sont pas encore vérifiées.}}",
+      "experiencesDetail": "Demandez-lui de faire confirmer {items} par un ancien responsable.",
       "experiencesAction": "Demander une vérification",
       "diplomas": "{count, plural, one {Un diplôme n'a pas de justificatif.} other {# diplômes n'ont pas de justificatif.}}",
+      "diplomasDetail": "Demandez-lui d’ajouter une copie de {items}.",
       "diplomasAction": "Demander les diplômes",
       "missing": "{count, plural, one {Un document demandé n'a pas été envoyé.} other {# documents demandés n'ont pas été envoyés.}}",
+      "missingDetail": "Demandez-lui de joindre les pièces prévues dans l’offre.",
       "missingAction": "Demander les documents",
       "letter": "Pas de lettre de motivation avec la candidature.",
-      "letterAction": "Demander une lettre"
+      "letterAction": "Demander une lettre",
+      "letterDetail": "Demandez-lui quelques lignes sur ce qui l’attire dans ce poste.",
+      "cv": "Pas de CV joint à la candidature.",
+      "cvDetail": "Demandez-lui d’envoyer un CV à jour pour compléter son dossier.",
+      "cvAction": "Demander le CV"
     },
     "messages": {
-      "experiences": "Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour avancer, pourriez-vous faire vérifier vos expériences ? Depuis votre profil Jumanly, vous pouvez demander à un ancien responsable de les confirmer. Merci !",
-      "diplomas": "Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour avancer, pourriez-vous nous envoyer une copie de vos diplômes ? Vous pouvez les joindre ici, dans cette conversation. Merci !",
+      "experiences": "Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour avancer, pourriez-vous faire vérifier ces expériences : {items} ? Depuis votre profil Jumanly, vous pouvez demander à un ancien responsable de les confirmer. Merci !",
+      "diplomas": "Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour avancer, pourriez-vous nous envoyer une copie de ces diplômes : {items} ? Vous pouvez les joindre ici, dans cette conversation. Merci !",
       "missing": "Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Il nous manque encore certains documents demandés dans l'offre. Pourriez-vous les joindre ici, dans cette conversation ? Merci !",
-      "letter": "Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pourriez-vous nous dire en quelques lignes pourquoi ce poste vous intéresse ? Vous pouvez répondre ici. Merci !"
+      "letter": "Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pourriez-vous nous dire en quelques lignes pourquoi ce poste vous intéresse ? Vous pouvez répondre ici. Merci !",
+      "cv": "Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour compléter votre dossier, pourriez-vous nous envoyer votre CV à jour ? Vous pouvez le joindre ici, dans cette conversation. Merci !"
     },
     "ask": {
       "title": "Envoyer un message au candidat",
