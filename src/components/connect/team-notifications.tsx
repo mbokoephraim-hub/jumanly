@@ -89,6 +89,7 @@ const categoryOf: Record<NotificationType, Category> = {
   orgTaskReminder: "applications",
   orgTaskDone: "applications",
   reviewReminder: "applications",
+  interviewSoon: "applications",
 };
 
 const categoryStyle: Record<Category, { icon: IconName; tile: string }> = {

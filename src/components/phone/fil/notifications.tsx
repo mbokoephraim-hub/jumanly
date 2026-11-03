@@ -20,7 +20,8 @@ export type NotifRow = {
   id: string;
   href: string;
   group: "today" | "thisWeek" | "earlier";
-  filter: Exclude<NotifFilter, "tout"> | null;
+  /** The chip that shows it besides « Tout » (talent: candidatures, offres, réseau). */
+  filter: string | null;
   /** The name written in bold at the start of the sentence, when there is one. */
   who: string | null;
   what: string;
@@ -36,10 +37,28 @@ export type NotifRow = {
  * · Réseau », how many are unread and « Tout marquer comme lu », then today, this week, earlier.
  * A touch marks the line read and opens its page.
  */
-export function PhoneNotifications({ rows, push }: { rows: NotifRow[]; push?: ReactNode }) {
+export function PhoneNotifications({
+  rows,
+  push,
+  top,
+  filters,
+  fallback = "/app",
+  settingsHref = "/app/parametres?onglet=confidentialite",
+}: {
+  rows: NotifRow[];
+  push?: ReactNode;
+  /** What awaits an answer above the list (the recruiter's join requests, offers ending). */
+  top?: ReactNode;
+  /** The chips; the talent's by default. The recruiter's are « Tout · Candidatures · Entretiens ·
+   * Réseau » (Ephraïm 03/11/2026: « le même design que celui du talent »). */
+  filters?: { key: string; label: string }[];
+  fallback?: string;
+  settingsHref?: string;
+}) {
   const t = useTranslations("phoneFil");
   const router = useRouter();
-  const [filter, setFilter] = useState<NotifFilter>("tout");
+  const chips = filters ?? NOTIF_FILTERS.map((key) => ({ key, label: t(`notifs.filter.${key}`) }));
+  const [filter, setFilter] = useState<string>("tout");
   // Read here: the line leaves the list at once (Ephraïm 29/10/2026), before its page opens.
   const [gone, setGone] = useState<ReadonlySet<string>>(new Set());
   const [pending, start] = useTransition();
@@ -53,28 +72,25 @@ export function PhoneNotifications({ rows, push }: { rows: NotifRow[]; push?: Re
   return (
     <div className="nb-page nb-fil nb-fil-notifs">
       <header className="nb-barre">
-        <PhoneBack fallback="/app" label={t("notifs.back")} text={t("notifs.back")} />
+        {/* The chevron alone, the title centred (Ephraïm 03/11/2026). */}
+        <PhoneBack fallback={fallback} label={t("notifs.back")} />
         <h1>{t("notifs.title")}</h1>
-        <Link
-          href="/app/parametres?onglet=confidentialite"
-          className="nb-rond"
-          aria-label={t("notifs.settings")}
-        >
+        <Link href={settingsHref} className="nb-rond" aria-label={t("notifs.settings")}>
           <PhoneIcon name="reglages" size={22} />
         </Link>
       </header>
       {/* « Recevoir vos messages sur ce téléphone » (29/10/2026). */}
       {push}
       <div className="nb-chips nb-fil-filtres" role="group" aria-label={t("notifs.filters")}>
-        {NOTIF_FILTERS.map((key) => (
+        {chips.map((chip) => (
           <button
-            key={key}
+            key={chip.key}
             type="button"
             className="nb-chip"
-            aria-pressed={filter === key}
-            onClick={() => setFilter(key)}
+            aria-pressed={filter === chip.key}
+            onClick={() => setFilter(chip.key)}
           >
-            {t(`notifs.filter.${key}`)}
+            {chip.label}
           </button>
         ))}
       </div>
@@ -155,6 +171,8 @@ export function PhoneNotifications({ rows, push }: { rows: NotifRow[]; push?: Re
           })}
         </section>
       ))}
+      {/* What awaits an answer of the administrator, after the notifications (03/11/2026). */}
+      {top ? <div className="nb-rn-haut">{top}</div> : null}
     </div>
   );
 }

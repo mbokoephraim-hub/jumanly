@@ -11223,3 +11223,25 @@ input:checked + .nb-ca-radio::after {
   --nm: var(--nb-menthe-claire);
   --nm-t: var(--nb-menthe-claire-t, var(--nb-menthe-claire));
 }
+/* Notifications (talent and recruiter, 03/11/2026): the chevron alone, the title centred. */
+.nb-fil-notifs .nb-barre h1 {
+  text-align: center;
+}
+.nb-fil-notifs .nb-barre .nb-retour {
+  width: 44px;
+  flex: none;
+}
+.nb-fil-notifs .nb-rn-haut:not(:empty) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.nb-fil-notifs .nb-fil-filtres {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nb-fil-notifs .nb-fil-filtres .nb-chip {
+  flex: none;
+}
+.nb-fil-notifs .nb-rn-haut:not(:empty) {
+  margin: 24px 20px 32px;
+}
