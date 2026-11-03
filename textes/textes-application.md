@@ -16294,6 +16294,7 @@ Conventions :
 | `phoneRhCandidats.desk.review.due` | À revoir aujourd'hui |
 | `phoneRhCandidats.desk.review.on` | À revoir le {date, date, medium} |
 | `phoneRhCandidats.desk.placedByYou` | Classé par vous |
+| `phoneRhCandidats.desk.orbiSuggests` | Orbi : fort potentiel, à retenir ? |
 | `phoneRhCandidats.desk.waiting` | {count, plural, one {# candidat attend} other {# candidats attendent}} une réponse depuis plus de {days} jours. Retenez, mettez en attente ou répondez. |
 | `phoneRhCandidats.line` | {count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} · {shortlisted, plural, =0 {aucun retenu} one {# retenu} other {# retenus}} |
 | `phoneRhCandidats.search` | Rechercher un candidat |
@@ -20557,6 +20558,7 @@ Conventions :
 | `notifications.item.orgJoinRequest` | {name} demande à rejoindre {org}. |
 | `notifications.item.orgJoinAccepted` | Votre demande pour rejoindre {org} est acceptée. Bienvenue dans l'équipe ! |
 | `notifications.item.orgJoinDeclined` | Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation. |
+| `notifications.item.reviewReminder` | {candidate, select, none {Un candidat} other {{candidate}}} de « {jobTitle} » est à revoir aujourd'hui. |
 | `notifications.item.jobEnding` | {days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}} |
 | `notifications.item.candidateAssigned` | Un collègue vous confie le dossier de {candidate} pour « {jobTitle} ». |
 | `notifications.item.talentShared` | {colleague} vous partage le profil d'un talent. |

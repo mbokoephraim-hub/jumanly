@@ -9,7 +9,7 @@ import { level } from "@/server/entitlements";
 import { getOrgJob, HireError, hirePermissions, type HireContext } from "./hire";
 import { filtersLevelOf, type FiltersLevel } from "./hire-filters";
 import { emptyCounts, rubriqueOf, type DeskRubrique } from "./hire-desk";
-import { HOLD_EVENT, HOLD_LIFTED_EVENT, isOnHold } from "./hire-classes";
+import { classOf, HOLD_EVENT, HOLD_LIFTED_EVENT, isOnHold } from "./hire-classes";
 
 /**
  * « Candidats » of an offer on the recruiter's phone (Ephraïm, 03/11/2026): every person who
@@ -68,6 +68,11 @@ export type OfferCandidate = {
   review: { since: Date; remindAt: Date; due: boolean } | null;
   /** The recruiter placed this card (moved it, or set it aside to review): Orbi never moves it. */
   placedByYou: boolean;
+  /**
+   * Orbi's word on a card the recruiter set aside (03/11/2026): « Fort potentiel » when the score
+   * says so. A suggestion only: the card stays where the recruiter put it.
+   */
+  orbiSuggests: "fort" | null;
 };
 
 /** « À revoir » comes back after this many days (Ephraïm, 03/11/2026). */
@@ -106,6 +111,9 @@ export async function offerCandidates(
     await level(db, { type: "organization", id: ctx.organizationId }, "hire.ats.filters"),
   );
   const applied = allowedSearch(search, filtersLevel);
+  const withScores =
+    (await level(db, { type: "organization", id: ctx.organizationId }, "hire.matching.level")) !==
+    "none";
   const where: Prisma.ApplicationWhereInput = {
     jobId: job.id,
     job: { organizationId: ctx.organizationId },
@@ -120,6 +128,7 @@ export async function offerCandidates(
       viewedAt: true,
       shortlistedAt: true,
       recruiterRank: true,
+      matchScore: true,
       status: true,
       events: {
         where: { type: { in: [HOLD_EVENT, HOLD_LIFTED_EVENT] } },
@@ -202,6 +211,13 @@ export async function offerCandidates(
       status: row.status,
       review: reviewOf(row),
       placedByYou: row.recruiterRank !== null || reviewOf(row) !== null,
+      orbiSuggests:
+        withScores &&
+        reviewOf(row) !== null &&
+        row.matchScore !== null &&
+        classOf({ score: row.matchScore }) === "fort"
+          ? "fort"
+          : null,
       pieces: row.verification
         ? {
             required: row.verification.items.filter((item) => item.required).length,

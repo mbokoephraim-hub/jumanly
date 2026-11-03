@@ -5539,3 +5539,8 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - Une carte placée par le recruteur (déplacée ou mise de côté) porte « Classé par vous ». Orbi ne réordonne jamais cette liste.
 - Un bandeau indique les candidats sans réponse depuis plus de 7 jours (`WAITING_DAYS`).
 - Pas encore construit : une notification le jour du rappel, et une suggestion d'Orbi sur une carte classée à la main.
+
+## 2026-11-03 · Candidatures recruteur : rappel « À revoir » et suggestion d'Orbi
+
+- Tâche horaire `runReviewReminders` (`src/server/services/hire-review.ts`, appelée par `runHireJobs`) : 3 jours après un « En attente », le membre qui l'a posé (sinon l'équipe de recrutement) reçoit la notification `reviewReminder` (« X de « offre » est à revoir aujourd'hui »), une seule fois (événement `review_reminded`). Vérifié en local : 1 envoyée, 0 au second passage.
+- Une carte mise de côté dont le score correspond à Fort potentiel affiche « Orbi : fort potentiel, à retenir ? ». La carte reste où le recruteur l'a placée (droit `hire.matching.level` requis).

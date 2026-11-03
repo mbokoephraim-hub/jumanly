@@ -88,6 +88,7 @@ const categoryOf: Record<NotificationType, Category> = {
   orgTaskAssigned: "applications",
   orgTaskReminder: "applications",
   orgTaskDone: "applications",
+  reviewReminder: "applications",
 };
 
 const categoryStyle: Record<Category, { icon: IconName; tile: string }> = {

@@ -5,6 +5,7 @@
  * an answer. Every task is safe to run often: each reminder and each analysis is claimed once.
  */
 import "server-only";
+import { runReviewReminders } from "@/server/services/hire-review";
 import { db } from "@/server/db";
 import { mailVerificationRequest, mailEnding } from "@/server/hire-emails";
 import { reportError } from "@/server/observability";
@@ -47,8 +48,14 @@ export async function runHireJobs(now = new Date()) {
       date: item.dueAt,
       href: piecesHref(item.applicationId),
     });
+  // « À revoir »: the candidates set aside come back after 3 days (03/11/2026).
+  const reviewReminders = await runReviewReminders(db, now).catch((error) => {
+    reportError(error);
+    return 0;
+  });
   return {
     ats,
+    reviewReminders,
     endingReminders: reminders.length,
     expiredJoinRequests,
     verificationReminders: pieces.length,

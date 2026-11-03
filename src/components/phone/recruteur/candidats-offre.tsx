@@ -144,7 +144,11 @@ export async function RhOfferCandidatesList({
             })
           : tab === "decision"
             ? t(`desk.outcome.${person.status}`)
-            : [person.city, format.relativeTime(person.createdAt, now)].filter(Boolean).join(" · "),
+            : person.orbiSuggests
+              ? t("desk.orbiSuggests")
+              : [person.city, format.relativeTime(person.createdAt, now)]
+                  .filter(Boolean)
+                  .join(" · "),
       href: `/app/hire/offres/${jobId}?vue=candidats&de=${tab}&fiche=${person.id}`,
       unseen: person.unseen,
       shortlisted: person.shortlisted,
