@@ -16377,6 +16377,49 @@ Conventions :
 | `phoneRhOffres.classes.missing` | Manque : {label} |
 | `phoneRhOffres.classes.score` | Compatibilité {value} % |
 | `phoneRhOffres.classes.documents` | Pièces : {received} sur {asked} |
+| `phoneRhFiche.back` | Candidatures |
+| `phoneRhFiche.parts` | Parties de la fiche |
+| `phoneRhFiche.part.resume` | Résumé |
+| `phoneRhFiche.part.documents` | Documents |
+| `phoneRhFiche.part.score` | Score |
+| `phoneRhFiche.bio.title` | Bio professionnelle |
+| `phoneRhFiche.bio.none` | Le candidat n'a pas encore écrit sa bio. |
+| `phoneRhFiche.experiences.title` | Expériences |
+| `phoneRhFiche.experiences.none` | Aucune expérience indiquée. |
+| `phoneRhFiche.experiences.verified` | Vérifiée par un référent |
+| `phoneRhFiche.experiences.unverified` | Pas encore vérifiée |
+| `phoneRhFiche.educations.title` | Formation |
+| `phoneRhFiche.educations.none` | Aucune formation indiquée. |
+| `phoneRhFiche.details.title` | Autres détails |
+| `phoneRhFiche.documents.title` | Documents de candidature |
+| `phoneRhFiche.documents.portfolio` | Portfolio |
+| `phoneRhFiche.diplomas.title` | Diplômes |
+| `phoneRhFiche.diplomas.none` | Aucun diplôme indiqué. |
+| `phoneRhFiche.diplomas.proof` | Justificatif joint |
+| `phoneRhFiche.diplomas.noProof` | Pas de justificatif |
+| `phoneRhFiche.proposals.title` | Propositions d'Orbi |
+| `phoneRhFiche.proposals.none` | Rien à demander pour l'instant : le dossier est complet. |
+| `phoneRhFiche.proposals.experiences` | {count, plural, one {Une expérience n'est pas encore vérifiée.} other {# expériences ne sont pas encore vérifiées.}} |
+| `phoneRhFiche.proposals.experiencesAction` | Demander une vérification |
+| `phoneRhFiche.proposals.diplomas` | {count, plural, one {Un diplôme n'a pas de justificatif.} other {# diplômes n'ont pas de justificatif.}} |
+| `phoneRhFiche.proposals.diplomasAction` | Demander les diplômes |
+| `phoneRhFiche.proposals.missing` | {count, plural, one {Un document demandé n'a pas été envoyé.} other {# documents demandés n'ont pas été envoyés.}} |
+| `phoneRhFiche.proposals.missingAction` | Demander les documents |
+| `phoneRhFiche.proposals.letter` | Pas de lettre de motivation avec la candidature. |
+| `phoneRhFiche.proposals.letterAction` | Demander une lettre |
+| `phoneRhFiche.messages.experiences` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour avancer, pourriez-vous faire vérifier vos expériences ? Depuis votre profil Jumanly, vous pouvez demander à un ancien responsable de les confirmer. Merci ! |
+| `phoneRhFiche.messages.diplomas` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour avancer, pourriez-vous nous envoyer une copie de vos diplômes ? Vous pouvez les joindre ici, dans cette conversation. Merci ! |
+| `phoneRhFiche.messages.missing` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Il nous manque encore certains documents demandés dans l'offre. Pourriez-vous les joindre ici, dans cette conversation ? Merci ! |
+| `phoneRhFiche.messages.letter` | Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pourriez-vous nous dire en quelques lignes pourquoi ce poste vous intéresse ? Vous pouvez répondre ici. Merci ! |
+| `phoneRhFiche.ask.title` | Envoyer un message au candidat |
+| `phoneRhFiche.ask.lead` | Le message arrive dans ses Messages. Vous pouvez le modifier avant de l'envoyer. |
+| `phoneRhFiche.ask.label` | Votre message |
+| `phoneRhFiche.ask.send` | Envoyer |
+| `phoneRhFiche.ask.sent` | Message envoyé au candidat. |
+| `phoneRhFiche.ask.failed` | Le message n'est pas parti. Réessayez. |
+| `phoneRhFiche.score.title` | Le score d'Orbi |
+| `phoneRhFiche.score.locked` | Le score de compatibilité et l'avis d'Orbi sont réservés aux formules Pro et Premium. |
+| `phoneRhFiche.score.upgrade` | Voir les formules |
 | `phoneRhTri.back` | Pipeline |
 | `phoneRhTri.previous` | Candidat précédent |
 | `phoneRhTri.next` | Candidat suivant |
