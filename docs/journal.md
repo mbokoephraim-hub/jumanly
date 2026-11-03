@@ -5520,3 +5520,9 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - Sur la fiche candidat (recruteur, téléphone), les onglets, le glissement vers le candidat suivant, les gestes (Retenir, En attente, Ne pas retenir) et l'envoi d'une proposition d'Orbi remplacent la page dans l'historique au lieu d'en ajouter une (`RedirectType.replace`, `router.replace`).
 - « Retour » (`RhBackLink`, `src/components/phone/recruteur/retour.tsx`) revient d'un pas, vers la liste d'où l'on vient. Une fiche ouverte directement (lien, notification) remplace la page par la liste. La lecture du CV se ferme de la même façon.
 - Vérifié localement : liste → fiche → Documents → Évaluation → Retour = la liste ; le retour du téléphone mène ensuite à la page d'avant la liste.
+
+## 2026-11-03 · Candidatures recruteur, étape 1 : choisir l'offre
+
+- Proposition validée par Ephraïm : https://claude.ai/artifact/118burXaSC1mTEjnUkYwCA (3 étapes).
+- L'onglet Candidatures (téléphone, sans paramètre) s'ouvre sur le choix de l'offre (`RhOfferChooser`, `src/components/phone/recruteur/bureau.tsx`). Ce sont les cartes à encoche des Offres, avec À trier · À compléter · Entretiens (`src/server/services/hire-desk.ts`, `rubriqueOf`). « Ouvrir » mène à l'onglet Candidatures de l'offre. Avec une seule offre en ligne, on y entre directement.
+- Les anciennes vues (`?vue=`, `?offre=`) restent pour les liens existants ; l'étape 2 les remplace.

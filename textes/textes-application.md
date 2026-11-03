@@ -17260,6 +17260,17 @@ Conventions :
 
 | Clé | Texte |
 |---|---|
+| `phoneRhBureau.intro` | Choisissez une offre pour travailler sur ses candidats. |
+| `phoneRhBureau.count.trier` | À trier |
+| `phoneRhBureau.count.completer` | À compléter |
+| `phoneRhBureau.count.entretiens` | Entretiens |
+| `phoneRhBureau.total` | {count, plural, one {# candidature} other {# candidatures}} au total |
+| `phoneRhBureau.none` | Pas encore de candidature |
+| `phoneRhBureau.open` | Ouvrir |
+| `phoneRhBureau.openLabel` | Ouvrir les candidatures de l'offre {title} |
+| `phoneRhBureau.empty` | Aucune offre en ligne pour le moment. Publiez une offre pour recevoir des candidatures. |
+| `phoneRhBureau.emptyCta` | Voir mes offres |
+| `phoneRhBureau.line` | {count, plural, =0 {Aucune offre en ligne} one {# offre} other {# offres}} · {waiting, plural, =0 {rien en attente} one {# candidat en attente} other {# candidats en attente}} |
 | `phoneRhCandidatures.line` | {unseen, plural, =0 {Aucune nouvelle} one {# nouvelle} other {# nouvelles}} · {total, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} · {high} à fort potentiel |
 | `phoneRhCandidatures.results` | {count, plural, one {# résultat} other {# résultats}} |
 | `phoneRhCandidatures.percent` | {score} % |
