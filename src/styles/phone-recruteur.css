@@ -7987,3 +7987,11 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* « Que faire maintenant ? » stops well above « Voir les N candidats » (Ephraïm, 03/11/2026). */
+.nb-rh-vue {
+  padding-bottom: calc(140px + env(safe-area-inset-bottom));
+}
+.nb-rh-vu-defile {
+  padding-bottom: 6px;
+}
