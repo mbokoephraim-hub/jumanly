@@ -5458,3 +5458,9 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
   - Pourquoi ? : ce qui marche, à améliorer, à faire.
   - Puis l'activité qui existait déjà (pipeline, courbes, sources).
 - La règle fixe est dans `src/server/services/hire-offer-review.ts` (`offerVerdict`, `offerPoints`), testée. Elle n'utilise que les chiffres de l'offre. Les seuils sont un choix par défaut à confirmer : 5 % de vues transformées, 20 vues après 3 jours, réponse en 5 jours, 3 retenus par poste.
+- Suite, Vue v2 (Ephraïm : « J'aime l'originalité », la v1 copiait Évaluation). La page a maintenant son propre style et trois parties :
+  - Les chiffres : vues, candidatures, taux, « 1 candidature toutes les N vues », courbe des vues sur 7 ou 30 jours.
+  - Diagnostic d'Orbi : qui regarde l'offre (par domaine), qui candidate, d'où viennent les candidats.
+  - Que faire maintenant ? : trois cartes qui défilent (Ce qui marche, À améliorer, À faire).
+- Les domaines sont comptés à partir des compétences. La nouvelle table `JobViewFamily` (migration `20261103160000_job_view_family`) garde un compteur par famille de compétences quand un talent connecté voit l'offre. On n'enregistre jamais qui a regardé, et les membres de l'organisation ne sont pas comptés.
+- Les domaines des visiteurs ne s'affichent qu'à partir de 5 vues de talents connectés, pour ne désigner personne.
