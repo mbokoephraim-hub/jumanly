@@ -5506,3 +5506,7 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - Les affiches vertes sont remplacées par la carte à encoche des offres recruteur (`ExplorerOfferCard`, `src/components/phone/explorer/cards.tsx`) : « En cours » dans l'encoche, entreprise, titre (2 lignes), puis Pour vous · Salaire · Date limite. Pas de description.
 - En bas, des silhouettes neutres pour les personnes qui ont postulé (jamais un visage ni un nom, seulement le nombre, via `_count.applications`) et « Voir plus » vers la présentation de l'offre. Sans candidature : « Soyez parmi les premiers ».
 - Le Fil garde son affiche d'offre.
+
+## 2026-11-03 · Pastille « En cours » de l'encoche
+
+- La pastille ne touche plus le coin arrondi de la carte (6 px de marge en haut et à droite). Avant, le coin la rognait et elle n'était plus une pilule nette. Cela vaut pour les cartes d'offres recruteur et pour l'Explorer talent.
