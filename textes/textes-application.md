@@ -8859,6 +8859,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.notifs.empty` | Rien dans cette catégorie pour l'instant. |
 | `phoneFil.notifs.newDot` | Non lue |
 | `phoneFil.notifs.newMessage` | vous a envoyé un message. |
+| `notifModels.text.newApplication` | a postulé à « {jobTitle} ». |
 | `phoneFil.notifs.newMessageJob` | vous a écrit au sujet de « {jobTitle} ». |
 | `phoneFil.orbi.digest` | {count, plural, =0 {Rien de nouveau depuis hier. Les offres d'Explorer vous attendent.} one {Une nouveauté aujourd'hui : {names}.} other {# nouveautés aujourd'hui : {names}.}} |
 | `phoneFil.orbi.digestTitle` | Résumer les nouveautés du jour |
@@ -17980,6 +17981,37 @@ Conventions :
 | `phoneRhMessages.error.other` | Cela n'a pas fonctionné. Réessayez dans un instant. |
 | `phoneRhNotifs.back` | Retour |
 | `phoneRhNotifs.title` | Notifications |
+| `notifModels.title.newMessage` | Nouveau message |
+| `notifModels.title.teamMessage` | Message de l'équipe |
+| `notifModels.title.mention` | Mention |
+| `notifModels.title.connectionRequest` | Demande de connexion |
+| `notifModels.title.connectionAccepted` | Nouvelle connexion |
+| `notifModels.title.connectionDeclined` | Demande de connexion |
+| `notifModels.title.newApplication` | Nouvelle candidature |
+| `notifModels.title.myApplication` | Votre candidature |
+| `notifModels.title.profileViewed` | Profil consulté |
+| `notifModels.title.documentRequest` | Document demandé |
+| `notifModels.title.interviewInvite` | Invitation à un entretien |
+| `notifModels.title.interview` | Entretien |
+| `notifModels.title.interviewConfirmed` | Entretien confirmé |
+| `notifModels.title.interviewReschedule` | Nouvel horaire demandé |
+| `notifModels.title.interviewCanceled` | Entretien annulé |
+| `notifModels.title.reminder` | Rappel d'agenda |
+| `notifModels.title.offer` | Offre |
+| `notifModels.title.ats` | Diagnostic ATS |
+| `notifModels.title.feed` | Fil |
+| `notifModels.title.team` | Équipe |
+| `notifModels.title.learning` | Formation |
+| `notifModels.title.reference` | Vérification |
+| `notifModels.title.billing` | Abonnement |
+| `notifModels.title.jumanly` | Jumanly |
+| `notifModels.action.reply` | Répondre |
+| `notifModels.action.seeRequest` | Voir la demande |
+| `notifModels.action.seeApplication` | Voir la candidature |
+| `notifModels.action.send` | Envoyer |
+| `notifModels.action.answer` | Répondre |
+| `notifModels.action.seeInterview` | Voir l'entretien |
+| `notifModels.action.review` | Revoir |
 | `phoneRhNotifs.readAll` | Tout marquer comme lu |
 | `phoneRhNotifs.settings` | Réglage des notifications |
 | `phoneRhNotifs.tabs.label` | Catégories de notifications |
@@ -20617,6 +20649,8 @@ Conventions :
 | `notifications.item.orgJoinAccepted` | Votre demande pour rejoindre {org} est acceptée. Bienvenue dans l'équipe ! |
 | `notifications.item.orgJoinDeclined` | Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation. |
 | `notifications.item.reviewReminder` | {candidate, select, none {Un candidat} other {{candidate}}} de « {jobTitle} » est à revoir aujourd'hui. |
+| `notifications.item.interviewSoon` | Entretien avec {candidate, select, none {un candidat} other {{candidate}}} {day, select, today {aujourd'hui} other {demain}} à {time} · « {jobTitle} » |
+| `notifications.item.interviewSoonTalent` | Votre entretien avec {company} a lieu {day, select, today {aujourd'hui} other {demain}} à {time} · « {jobTitle} » |
 | `notifications.item.jobEnding` | {days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}} |
 | `notifications.item.candidateAssigned` | Un collègue vous confie le dossier de {candidate} pour « {jobTitle} ». |
 | `notifications.item.talentShared` | {colleague} vous partage le profil d'un talent. |

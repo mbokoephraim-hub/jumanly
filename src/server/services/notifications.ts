@@ -75,6 +75,8 @@ export const notificationTypes = [
   "orgTaskDone",
   // « À revoir » (Candidatures recruteur, 03/11/2026): the day a candidate set aside comes back.
   "reviewReminder",
+  // « Rappel d'agenda » (03/11/2026): a confirmed interview within the next 24 hours.
+  "interviewSoon",
   // Le Fil (Modèle B, lot B3): answers, names, J'aime, republications and quotes.
   "feedReply",
   "feedMention",
@@ -93,6 +95,7 @@ export type NotificationType = (typeof notificationTypes)[number];
 /** Types worth a toast when they arrive while the person is on the platform (brief § 4.3). */
 export const importantNotificationTypes: readonly NotificationType[] = [
   "interviewInvite",
+  "interviewSoon",
   "newMessage",
   "contactRequest",
   "connectionRequest",
@@ -117,6 +120,7 @@ export const notificationCategories = {
     "interviewDeclined",
     "interviewCanceled",
     "interviewAccepted",
+    "interviewSoon",
     "jobUnavailable",
     "matchReviewed",
     "profileViewed",
@@ -166,6 +170,7 @@ export const recruiterNotificationCategories = {
     "interviewDeclined",
     "interviewCanceled",
     "interviewAccepted",
+    "interviewSoon",
   ],
   "rh.team": [
     "candidateAssigned",
@@ -227,6 +232,7 @@ export function categoryOf(type: NotificationType): NotificationCategory | null 
  * says only who wrote (« Nouveau message de Sublime »), without a dangling « · ».
  */
 export function notificationKey(type: string, values: Record<string, string>) {
+  if (type === "interviewSoon") return values.company ? "interviewSoonTalent" : "interviewSoon";
   return type === "newMessage" && !values.jobTitle ? "newMessageDirect" : type;
 }
 

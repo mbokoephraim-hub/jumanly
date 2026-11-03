@@ -11,6 +11,7 @@ import {
 } from "@/server/actions/connect";
 import { PhoneBack } from "../back";
 import { PhoneIcon } from "../icon";
+import { NotifBadge, type NotifModelView } from "../notif-badge";
 
 const TABS = ["tout", "candidatures", "entretiens", "reseau"] as const;
 type Tab = (typeof TABS)[number];
@@ -22,6 +23,8 @@ export type RhNotifRow = {
   href: string;
   group: (typeof GROUPS)[number];
   tab: RhNotifTab | null;
+  /** The name that opens the sentence, written in bold. */
+  who: string | null;
   text: string;
   ago: string;
   unread: boolean;
@@ -30,6 +33,8 @@ export type RhNotifRow = {
   /** Their photo, when they have one. */
   image: string | null;
   tint: string;
+  /** « Les modèles de notifications » (03/11/2026): badge, title and button of its kind. */
+  model: NotifModelView;
 };
 
 /**
@@ -118,22 +123,38 @@ export function RhNotifications({ rows, top }: { rows: RhNotifRow[]; top?: React
                       className="nb-rn-ligne"
                       data-non-lu={isUnread(row) ? "" : undefined}
                     >
-                      {row.image ? (
-                        <span className="nb-rh-ini nb-rn-photo" aria-hidden>
-                          <img src={row.image} alt="" width={44} height={44} />
-                        </span>
-                      ) : row.initials ? (
-                        <span className="nb-rh-ini" data-teinte={row.tint} aria-hidden>
-                          {row.initials}
-                        </span>
-                      ) : (
-                        <span className="nb-rh-ini nb-rn-cloche" aria-hidden>
-                          <PhoneIcon name="cloche" size={20} />
-                        </span>
-                      )}
+                      <span className="nb-nm-av">
+                        {row.image ? (
+                          <span className="nb-rh-ini nb-rn-photo" aria-hidden>
+                            <img src={row.image} alt="" width={44} height={44} />
+                          </span>
+                        ) : row.initials ? (
+                          <span className="nb-rh-ini" data-teinte={row.tint} aria-hidden>
+                            {row.initials}
+                          </span>
+                        ) : (
+                          <span className="nb-rh-ini nb-rn-cloche" aria-hidden>
+                            <PhoneIcon name="cloche" size={20} />
+                          </span>
+                        )}
+                        <NotifBadge model={row.model} />
+                      </span>
                       <span className="nb-rn-texte">
-                        <b>{row.text}</b>
-                        <small>{row.ago}</small>
+                        <span className="nb-nm-titre" data-kind={row.model.kind}>
+                          {row.model.title}
+                        </span>
+                        <span className="nb-rn-phrase">
+                          {row.who ? <b>{row.who}</b> : null}
+                          {row.text}
+                        </span>
+                        <span className="nb-nm-bas">
+                          <small>{row.ago}</small>
+                          {row.model.action ? (
+                            <span className="nb-nm-action" data-kind={row.model.kind}>
+                              {row.model.action}
+                            </span>
+                          ) : null}
+                        </span>
                       </span>
                       {isUnread(row) ? (
                         <span className="nb-rn-point">

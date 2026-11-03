@@ -6,6 +6,7 @@
  */
 import "server-only";
 import { runReviewReminders } from "@/server/services/hire-review";
+import { runInterviewReminders } from "@/server/services/interview-reminders";
 import { db } from "@/server/db";
 import { mailVerificationRequest, mailEnding } from "@/server/hire-emails";
 import { reportError } from "@/server/observability";
@@ -53,9 +54,15 @@ export async function runHireJobs(now = new Date()) {
     reportError(error);
     return 0;
   });
+  // « Rappel d'agenda »: the confirmed interviews of the next 24 hours (03/11/2026).
+  const interviewReminders = await runInterviewReminders(db, now).catch((error) => {
+    reportError(error);
+    return 0;
+  });
   return {
     ats,
     reviewReminders,
+    interviewReminders,
     endingReminders: reminders.length,
     expiredJoinRequests,
     verificationReminders: pieces.length,

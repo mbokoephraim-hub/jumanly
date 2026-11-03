@@ -10820,6 +10820,46 @@
       "closesAt": "Candidatures jusqu'au {date, date, long}"
     }
   },
+  "notifModels": {
+    "text": {
+      "newApplication": "a postulé à « {jobTitle} »."
+    },
+    "title": {
+      "newMessage": "Nouveau message",
+      "teamMessage": "Message de l'équipe",
+      "mention": "Mention",
+      "connectionRequest": "Demande de connexion",
+      "connectionAccepted": "Nouvelle connexion",
+      "connectionDeclined": "Demande de connexion",
+      "newApplication": "Nouvelle candidature",
+      "myApplication": "Votre candidature",
+      "profileViewed": "Profil consulté",
+      "documentRequest": "Document demandé",
+      "interviewInvite": "Invitation à un entretien",
+      "interview": "Entretien",
+      "interviewConfirmed": "Entretien confirmé",
+      "interviewReschedule": "Nouvel horaire demandé",
+      "interviewCanceled": "Entretien annulé",
+      "reminder": "Rappel d'agenda",
+      "offer": "Offre",
+      "ats": "Diagnostic ATS",
+      "feed": "Fil",
+      "team": "Équipe",
+      "learning": "Formation",
+      "reference": "Vérification",
+      "billing": "Abonnement",
+      "jumanly": "Jumanly"
+    },
+    "action": {
+      "reply": "Répondre",
+      "seeRequest": "Voir la demande",
+      "seeApplication": "Voir la candidature",
+      "send": "Envoyer",
+      "answer": "Répondre",
+      "seeInterview": "Voir l'entretien",
+      "review": "Revoir"
+    }
+  },
   "phoneExplorer": {
     "seo": "Explorer",
     "title": "Explorer",
@@ -25112,6 +25152,8 @@
       "orgJoinAccepted": "Votre demande pour rejoindre {org} est acceptée. Bienvenue dans l'équipe !",
       "orgJoinDeclined": "Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation.",
       "reviewReminder": "{candidate, select, none {Un candidat} other {{candidate}}} de « {jobTitle} » est à revoir aujourd'hui.",
+      "interviewSoon": "Entretien avec {candidate, select, none {un candidat} other {{candidate}}} {day, select, today {aujourd'hui} other {demain}} à {time} · « {jobTitle} »",
+      "interviewSoonTalent": "Votre entretien avec {company} a lieu {day, select, today {aujourd'hui} other {demain}} à {time} · « {jobTitle} »",
       "jobEnding": "{days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}}",
       "candidateAssigned": "Un collègue vous confie le dossier de {candidate} pour « {jobTitle} ».",
       "talentShared": "{colleague} vous partage le profil d'un talent.",

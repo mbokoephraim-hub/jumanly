@@ -14,6 +14,7 @@ import {
   notificationTypes,
   notificationValues,
 } from "@/server/services/notifications";
+import { notifModelOf } from "../notif-model";
 import { initialsOf, tintOf } from "./candidatures";
 import { RhNotifications, type RhNotifRow, type RhNotifTab } from "./notifications-client";
 
@@ -34,6 +35,8 @@ const TAB_OF: Partial<Record<string, RhNotifTab>> = {
   interviewDeclined: "entretiens",
   interviewCanceled: "entretiens",
   interviewAccepted: "entretiens",
+  interviewSoon: "entretiens",
+  reviewReminder: "candidatures",
   newMessage: "reseau",
   teamMessage: "reseau",
   colleagueProposed: "reseau",
@@ -56,18 +59,27 @@ export async function rhNotificationRows(userId: string, now = new Date()): Prom
   const t = await getTranslations();
   const d = dynamic(t);
   const ta = await getTranslations("phoneRhNotifs.ago");
+  const tf = await getTranslations("phoneFil.notifs");
+  const tm = await getTranslations("notifModels");
   const format = await getFormatter();
   const all = (await listNotifications(db, userId)).filter((item) =>
     (notificationTypes as readonly string[]).includes(item.type),
   );
   // The photo of the person who wrote, asked, shared… (Ephraïm 29/10/2026).
   const actors = await notificationActors(db, userId, all);
+  const modelOf = await notifModelOf();
   const today = new Date(now);
   today.setHours(0, 0, 0, 0);
   const DAY = 86_400_000;
   return all.map((item) => {
     const values = notificationValues(item.payload);
-    const text = d(`notifications.item.${notificationKey(item.type, values)}`, values);
+    // « Amani Démo vous a envoyé un message. »: the name first, beside the photo (03/11/2026).
+    const text =
+      item.type === "newMessage" && values.senderName
+        ? `${values.senderName} ${values.jobTitle ? tf("newMessageJob", values) : tf("newMessage")}`
+        : item.type === "newApplication" && values.candidateName
+          ? `${values.candidateName} ${tm("text.newApplication", values)}`
+          : d(`notifications.item.${notificationKey(item.type, values)}`, values);
     const actor = actors.get(item.id) ?? null;
     const named = [
       values.name,
@@ -107,12 +119,15 @@ export async function rhNotificationRows(userId: string, now = new Date()): Prom
       href: item.href ?? "/app/notifications",
       group,
       tab: TAB_OF[item.type] ?? null,
-      text,
+      // The name in bold, the rest of the sentence in normal weight.
+      who: named ?? null,
+      text: named ? text.slice(named.length) : text,
       ago,
       unread: !item.readAt,
       initials: who ? initialsOf(who) : null,
       image: actor?.image ?? null,
       tint: tintOf(who ?? item.type),
+      model: modelOf(item.type),
     };
   });
 }

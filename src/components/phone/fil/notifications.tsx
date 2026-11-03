@@ -11,6 +11,7 @@ import {
 import { PhoneBack } from "../back";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { FilAvatar } from "./avatar";
+import { NotifBadge, type NotifModelView } from "../notif-badge";
 
 export const NOTIF_FILTERS = ["tout", "candidatures", "offres", "reseau"] as const;
 export type NotifFilter = (typeof NOTIF_FILTERS)[number];
@@ -25,6 +26,8 @@ export type NotifRow = {
   what: string;
   ago: string;
   unread: boolean;
+  /** « Les modèles de notifications » (03/11/2026): badge, title and button of its kind. */
+  model: NotifModelView;
   avatar: { initials: string; tone: number; org: boolean; image: string | null } | "orbi" | null;
 };
 
@@ -112,21 +115,34 @@ export function PhoneNotifications({ rows, push }: { rows: NotifRow[]; push?: Re
                   className="nb-fil-notif"
                   data-nouveau={isUnread ? "" : undefined}
                 >
-                  {row.avatar === "orbi" ? (
-                    <OrbiDisc size={44} />
-                  ) : row.avatar ? (
-                    <FilAvatar {...row.avatar} size={44} />
-                  ) : (
-                    <span className="nb-av nb-fil-av" data-ton="moi" aria-hidden>
-                      {t("notifs.systemInitial")}
-                    </span>
-                  )}
+                  <span className="nb-nm-av">
+                    {row.avatar === "orbi" ? (
+                      <OrbiDisc size={44} />
+                    ) : row.avatar ? (
+                      <FilAvatar {...row.avatar} size={44} />
+                    ) : (
+                      <span className="nb-av nb-fil-av" data-ton="moi" aria-hidden>
+                        {t("notifs.systemInitial")}
+                      </span>
+                    )}
+                    <NotifBadge model={row.model} />
+                  </span>
                   <span className="nb-fil-notif-t">
+                    <span className="nb-nm-titre" data-kind={row.model.kind}>
+                      {row.model.title}
+                    </span>
                     <span>
                       {row.who ? <b>{row.who}</b> : null}
                       {row.what}
                     </span>
-                    <small>{row.ago}</small>
+                    <span className="nb-nm-bas">
+                      <small>{row.ago}</small>
+                      {row.model.action ? (
+                        <span className="nb-nm-action" data-kind={row.model.kind}>
+                          {row.model.action}
+                        </span>
+                      ) : null}
+                    </span>
                   </span>
                   {isUnread ? (
                     <span className="nb-fil-point">
