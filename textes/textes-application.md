@@ -16491,11 +16491,18 @@ Conventions :
 | `phoneRhFiche.eval.reasonsTitle` | Pourquoi ? |
 | `phoneRhFiche.eval.strong.title` | Pour le retenir |
 | `phoneRhFiche.eval.strong.none` | Pas de point fort ressorti pour l'instant. |
+| `phoneRhFiche.eval.strong.skill` | Compétence {importance, select, required {requise} other {souhaitée}} par l'offre{proven, select, yes {, déjà prouvée} other {}} |
+| `phoneRhFiche.eval.strong.met` | Répond à ce que demande l'offre |
+| `phoneRhFiche.eval.strong.proof` | Confirmé pendant la vérification |
 | `phoneRhFiche.eval.weak.title` | Points faibles |
 | `phoneRhFiche.eval.weak.none` | Aucun écart avec l'offre. |
 | `phoneRhFiche.eval.weak.unmet` | « {label} » ne correspond pas à l'offre |
 | `phoneRhFiche.eval.weak.partial` | « {label} » correspond en partie |
 | `phoneRhFiche.eval.weak.knockout` | Critère indispensable non rempli : {label} |
+| `phoneRhFiche.eval.weak.missing` | Compétence requise, absente du profil |
+| `phoneRhFiche.eval.weak.unmetKind` | Ne correspond pas à l'offre |
+| `phoneRhFiche.eval.weak.partialKind` | Correspond en partie à l'offre |
+| `phoneRhFiche.eval.weak.knockoutKind` | Critère indispensable non rempli |
 | `phoneRhFiche.eval.verify.title` | À vérifier |
 | `phoneRhFiche.eval.verify.none` | Rien à vérifier : le dossier est complet. |
 | `phoneRhFiche.eval.verify.experience` | Expérience non confirmée : {title} |
@@ -16504,6 +16511,11 @@ Conventions :
 | `phoneRhFiche.eval.verify.cv` | Pas de CV joint |
 | `phoneRhFiche.eval.verify.skill` | Compétence déclarée, pas encore prouvée : {skill} |
 | `phoneRhFiche.eval.verify.ask` | Demander ces informations |
+| `phoneRhFiche.eval.verify.experienceKind` | Expérience à confirmer |
+| `phoneRhFiche.eval.verify.diplomaKind` | Diplôme sans justificatif |
+| `phoneRhFiche.eval.verify.documentsKind` | Pièce demandée, pas encore reçue |
+| `phoneRhFiche.eval.verify.cvKind` | Demandez-le au candidat |
+| `phoneRhFiche.eval.verify.skillKind` | Compétence déclarée, pas encore prouvée |
 | `phoneRhFiche.eval.decision.title` | Votre décision |
 | `phoneRhFiche.eval.decision.lead` | Orbi suggère, vous décidez. Choisissez une raison : elle reste dans l'équipe. |
 | `phoneRhFiche.eval.decision.suggested` | Suggestion d'Orbi |

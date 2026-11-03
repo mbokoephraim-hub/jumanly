@@ -5464,3 +5464,10 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
   - Que faire maintenant ? : trois cartes qui défilent (Ce qui marche, À améliorer, À faire).
 - Les domaines sont comptés à partir des compétences. La nouvelle table `JobViewFamily` (migration `20261103160000_job_view_family`) garde un compteur par famille de compétences quand un talent connecté voit l'offre. On n'enregistre jamais qui a regardé, et les membres de l'organisation ne sont pas comptés.
 - Les domaines des visiteurs ne s'affichent qu'à partir de 5 vues de talents connectés, pour ne désigner personne.
+
+## 2026-11-03 · Profil candidat : documents ouverts directement, « Pourquoi ? » en points
+
+- « Consulter » ouvre la pièce elle-même, plus jamais l'ancienne fiche candidat : la lettre (et un texte joint) se lit dans une feuille sur le profil, le CV ouvre son PDF (`/app/hire/candidats/[id]/cv`) et une attestation sa page, dans un nouvel onglet. Sans CV, la carte reste mais sans bouton.
+- Cartes de documents plus petites (dessin 60 px, bouton Consulter 30 px, 13 px).
+- « Pour le retenir » répond aux besoins du poste : compétences demandées par l'offre et présentes au profil (requises d'abord, « déjà prouvée » si vérifiée), puis critères remplis (expérience, formation, langues, lieu, contrat) et preuves reçues. Les titres d'expérience n'y figurent plus.
+- « Points faibles » et « À vérifier » : un point précis par ligne, pastille colorée avec icône, sujet en gras et nature du point en dessous.
