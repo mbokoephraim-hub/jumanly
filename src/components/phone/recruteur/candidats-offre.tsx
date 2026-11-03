@@ -13,23 +13,14 @@ import {
 } from "@/server/services/hire-offer-candidates";
 import { publicJobUrl } from "@/components/recruiter/offers";
 import { hirePermissions } from "@/server/services/hire";
-import { FilAvatar } from "../fil/avatar";
-import { Verified } from "../explorer/cards";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { RhCandidateOrder, type RhOrderRow } from "./candidats-ordre";
 import { RhOfferActions, type RhOfferActionsData } from "./offre-actions";
 import { initialsOf, tintOf } from "./candidatures";
 import { RhFiltersSheet } from "./tri-client";
+import { RhOfferHead } from "./offres";
 
 export type RhOfferTab = "apercu" | "candidats" | "retenus";
-
-const initialsOfName = (name: string) =>
-  name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((word) => word[0]!.toUpperCase())
-    .join("");
 
 type Query = Record<string, string | string[] | undefined>;
 const one = (value: string | string[] | undefined) =>
@@ -161,22 +152,7 @@ export async function RhOfferCandidatesList({
         </Link>
         <RhOfferActions data={actions} items={["edit", "pause", "postpone", "delete"]} />
       </header>
-      <section className="nb-rh-co-tete">
-        <span className="nb-rh-co-org">
-          <FilAvatar
-            initials={initialsOfName(org.name)}
-            image={org.logo}
-            tone={0}
-            org
-            square
-            size={44}
-          />
-          <span>{org.name}</span>
-          {org.verifiedAt ? <Verified label={t("verified")} size={16} /> : null}
-        </span>
-        <h1>{job.title}</h1>
-        <p className="nb-meta">{t("line", { count: data.total, shortlisted: data.shortlisted })}</p>
-      </section>
+      <RhOfferHead job={job} organization={org} now={now} />
       <RhOfferTabs
         jobId={jobId}
         current={tab}

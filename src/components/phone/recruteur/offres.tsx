@@ -403,6 +403,83 @@ type DetailJob = {
  * status and dates, four real figures, Orbi's line with « Pourquoi ? », applications per day over 7
  * or 30 days, where the candidates come from, then « Voir les N candidats ».
  */
+/**
+ * The head of an offer, the same on « Vue », « Candidatures » and « Retenus » (Ephraïm,
+ * 03/11/2026): the company with its logo, the title, the state with the place, and the dates on
+ * one single line.
+ */
+export async function RhOfferHead({
+  job,
+  organization,
+  now,
+  notice,
+}: {
+  job: {
+    title: string;
+    status: OfferRow["status"];
+    city: string;
+    contractType: string;
+    remote: string;
+    publishedAt: Date | null;
+    closesAt: Date | null;
+    updatedAt: Date;
+  };
+  organization: { name: string; logo: string | null; verifiedAt: Date | null };
+  now: Date;
+  notice?: string;
+}) {
+  const t = await getTranslations("phoneRhOffres");
+  const format = await getFormatter();
+  const status = statusKey(job, now);
+  const day = (date: Date) => format.dateTime(date, { day: "numeric", month: "short" });
+  const online = daysSince(job.publishedAt, now);
+  const left = job.closesAt ? Math.ceil((job.closesAt.getTime() - now.getTime()) / DAY) : null;
+  const ended = status === "closed" || status === "expired";
+  const dates = [
+    job.publishedAt ? t("detail.published", { date: day(job.publishedAt) }) : t("detail.draft"),
+    ended
+      ? t("detail.ended", { date: day(job.status === "closed" ? job.updatedAt : job.closesAt!) })
+      : job.publishedAt
+        ? t("detail.onlineShort", { count: online })
+        : null,
+    !ended && left !== null && left > 0 ? t("detail.leftShort", { count: left }) : null,
+  ].filter(Boolean);
+  return (
+    <section className="nb-rh-co-tete nb-rh-of-tete">
+      <span className="nb-rh-co-org">
+        <FilAvatar
+          initials={initialsOfName(organization.name)}
+          image={organization.logo}
+          tone={0}
+          org
+          square
+          size={36}
+        />
+        <span>{organization.name}</span>
+        {organization.verifiedAt ? <Verified label={t("vue.verified")} size={14} /> : null}
+      </span>
+      <h1>{job.title}</h1>
+      <p className="nb-meta">
+        <span className="nb-rh-statut" data-statut={status}>
+          {status === "published" ? <i className="nb-rh-pouls" aria-hidden /> : null}
+          {t(`status.${status}`)}
+        </span>{" "}
+        {[
+          job.city,
+          t(`contract.${job.contractType}` as "contract.cdi"),
+          t(`remote.${job.remote}` as "remote.onsite"),
+        ].join(" · ")}
+      </p>
+      <p className="nb-meta nb-rh-of-dates">{dates.join(" · ")}</p>
+      {notice ? (
+        <p className="nb-erreur" role="alert">
+          {notice}
+        </p>
+      ) : null}
+    </section>
+  );
+}
+
 export async function RhOfferDetail({
   ctx,
   job,
@@ -460,20 +537,6 @@ export async function RhOfferDetail({
     }),
     db.jobViewFamily.findMany({ where: { jobId: job.id }, orderBy: { count: "desc" } }),
   ]);
-  const status = statusKey(job, now);
-  const day = (date: Date) => format.dateTime(date, { day: "numeric", month: "short" });
-  const online = daysSince(job.publishedAt, now);
-  const left = job.closesAt ? Math.ceil((job.closesAt.getTime() - now.getTime()) / DAY) : null;
-  const ended = status === "closed" || status === "expired";
-  const dates = [
-    job.publishedAt ? t("detail.published", { date: day(job.publishedAt) }) : t("detail.draft"),
-    ended
-      ? t("detail.ended", { date: day(job.status === "closed" ? job.updatedAt : job.closesAt!) })
-      : job.publishedAt
-        ? t("detail.online", { count: online })
-        : null,
-    !ended && left !== null && left > 0 ? t("detail.left", { count: left }) : null,
-  ].filter(Boolean);
 
   // ─── Les chiffres ──────────────────────────────────────────────────────────────────
   const rate = figures.views > 0 ? figures.applications / figures.views : null;
@@ -550,6 +613,10 @@ export async function RhOfferDetail({
   const hired = applications.filter((row) => row.status === "hired").length;
 
   // ─── Ce qui marche · À améliorer · À faire ─────────────────────────────────────────
+  const status = statusKey(job, now);
+  const online = daysSince(job.publishedAt, now);
+  const left = job.closesAt ? Math.ceil((job.closesAt.getTime() - now.getTime()) / DAY) : null;
+  const ended = status === "closed" || status === "expired";
   const review: OfferFigures = {
     views: figures.views,
     applications: figures.applications,
@@ -649,38 +716,7 @@ export async function RhOfferDetail({
           </Link>
           <RhOfferActions data={actions} items={["edit", "pause", "postpone", "delete"]} />
         </header>
-        <section className="nb-rh-co-tete">
-          <span className="nb-rh-co-org">
-            <FilAvatar
-              initials={initialsOfName(organization.name)}
-              image={organization.logo}
-              tone={0}
-              org
-              square
-              size={44}
-            />
-            <span>{organization.name}</span>
-            {organization.verifiedAt ? <Verified label={t("vue.verified")} size={16} /> : null}
-          </span>
-          <h1>{job.title}</h1>
-          <p className="nb-meta">
-            <span className="nb-rh-statut" data-statut={status}>
-              {status === "published" ? <i className="nb-rh-pouls" aria-hidden /> : null}
-              {t(`status.${status}`)}
-            </span>{" "}
-            {[
-              job.city,
-              t(`contract.${job.contractType}` as "contract.cdi"),
-              t(`remote.${job.remote}` as "remote.onsite"),
-            ].join(" · ")}
-          </p>
-          <p className="nb-meta">{dates.join(" · ")}</p>
-          {notice ? (
-            <p className="nb-erreur" role="alert">
-              {notice}
-            </p>
-          ) : null}
-        </section>
+        <RhOfferHead job={job} organization={organization} now={now} notice={notice} />
         {tabs}
 
         <section className="nb-rh-vu-chiffres" aria-labelledby="rh-vu-chiffres">
