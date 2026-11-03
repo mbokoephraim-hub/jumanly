@@ -20369,10 +20369,11 @@
   "phoneRhFiche": {
     "back": "Candidatures",
     "parts": "Parties de la fiche",
+    "email": "E-mail",
     "part": {
       "resume": "Résumé",
       "documents": "Documents",
-      "score": "Score"
+      "score": "Évaluation"
     },
     "bio": {
       "title": "Bio professionnelle",

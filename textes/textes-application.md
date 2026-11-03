@@ -16379,9 +16379,10 @@ Conventions :
 | `phoneRhOffres.classes.documents` | Pièces : {received} sur {asked} |
 | `phoneRhFiche.back` | Candidatures |
 | `phoneRhFiche.parts` | Parties de la fiche |
+| `phoneRhFiche.email` | E-mail |
 | `phoneRhFiche.part.resume` | Résumé |
 | `phoneRhFiche.part.documents` | Documents |
-| `phoneRhFiche.part.score` | Score |
+| `phoneRhFiche.part.score` | Évaluation |
 | `phoneRhFiche.bio.title` | Bio professionnelle |
 | `phoneRhFiche.bio.none` | Le candidat n'a pas encore écrit sa bio. |
 | `phoneRhFiche.experiences.title` | Expériences |
