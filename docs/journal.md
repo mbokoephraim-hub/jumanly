@@ -5484,3 +5484,4 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 ## 2026-11-03 · Messages préparés par Orbi au candidat : des messages qui respirent
 
 - Les cinq messages des propositions d'Orbi (expériences, diplômes, documents manquants, lettre, CV) sont réécrits en paragraphes : salutation par le prénom (« Bonjour, » en tri à l'aveugle), remerciement, demande, éléments demandés un par ligne (« • … »), où répondre, puis « Bien cordialement, L'équipe recrutement de … ». Retours à la ligne `\n` dans les textes, convertis à l'envoi ; espace fine insécable avant « ? ». Champ du message plus haut (11 lignes).
+- Suite (même jour) : la Vue d'une offre garde 140 px sous « Que faire maintenant ? », les cartes ne passent plus sous le bouton « Voir les N candidats ».
