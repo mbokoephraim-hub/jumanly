@@ -5562,3 +5562,8 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - Ephraïm : « Candidatures » ramenait toujours aux offres. Le menu du bas devient Fil · Offres · Agenda · Talents · Chat (choix « Oui, Agenda »).
 - Agenda (`/app/hire/entretiens` au téléphone) : les 7 prochains jours (point menthe quand il y a un entretien), les entretiens du jour choisi, « À évaluer », puis « À faire » de toutes les offres : cartes « À revoir », pièces attendues ou en retard, candidats sans réponse depuis 7 jours (`agendaTasks`, src/server/services/hire-agenda.ts). Chaque ligne ouvre le candidat dans son offre.
 - Pastilles du menu : Offres = nouvelles candidatures, Agenda = choses dues. `/app/hire/candidats` appartient désormais à l'onglet Offres.
+
+## 2026-11-03 · Agenda : rubriques et planification
+
+- Ephraïm : comment planifier, voir le mois, la semaine prochaine ? Agenda a maintenant cinq rubriques : Aujourd'hui (7 jours + entretiens du jour) · Semaine (cette semaine, semaine prochaine) · Mois (calendrier, mois précédent/suivant) · À planifier (retenus au dossier complet sans entretien, bouton « Planifier » vers le planificateur existant ; entretiens en attente de réponse du candidat) · À faire (à évaluer, à revoir, pièces, sans réponse).
+- `agendaTasks` renvoie aussi `toPlan` (rubrique Entretiens sans entretien proposé, confirmé ou à déplacer).

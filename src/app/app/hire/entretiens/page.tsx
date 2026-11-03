@@ -31,7 +31,7 @@ import { listInterviews } from "@/server/services/interviews";
 import { agendaTasks } from "@/server/services/hire-agenda";
 import { rhInterviews } from "@/server/services/hire-phone-candidatures";
 import { RhTab } from "@/components/phone/recruteur/head";
-import { RhAgenda } from "@/components/phone/recruteur/agenda";
+import { AGENDA_VIEWS, RhAgenda } from "@/components/phone/recruteur/agenda";
 import { cheapestPlanWhere, listPublicPlans } from "@/server/services/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -77,6 +77,11 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
     ]);
     const today = now.toLocaleDateString("en-CA", { timeZone });
     const day = dayKey.test(one(query.jour)) ? one(query.jour) : today;
+    const view = AGENDA_VIEWS.find((key) => key === one(query.vue)) ?? "jour";
+    const month = monthKey.test(one(query.mois)) ? one(query.mois) : monthOf(today);
+    const canPlan =
+      hirePermissions(ctx.role).manage &&
+      (await can(db, { type: "organization", id: ctx.organizationId }, "connect.appointments"));
     return (
       <RhTab
         tab="agenda"
@@ -86,7 +91,16 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
           today: interviews.today.length,
         })}
       >
-        <RhAgenda interviews={interviews} tasks={tasks} day={day} timeZone={timeZone} now={now} />
+        <RhAgenda
+          interviews={interviews}
+          tasks={tasks}
+          view={view}
+          month={month}
+          canPlan={canPlan}
+          day={day}
+          timeZone={timeZone}
+          now={now}
+        />
       </RhTab>
     );
   }
