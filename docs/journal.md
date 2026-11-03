@@ -5447,3 +5447,14 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - Bloc 4, « Votre décision » : trois choix, la suggestion d'Orbi marquée, raison obligatoire dans la feuille. Retenir et En attente gardent la raison (événement `sort_reason`) ; Ne pas retenir envoie le message et le motif (`decideAction`, retour à la liste).
 - Rien n'est décidé sans un geste du recruteur. Le nom, l'âge, la photo et l'origine n'entrent pas dans l'avis.
 - Suite : mêmes tailles de texte qu'Évaluation dans Résumé et Documents (titres de partie 18 px, titres d'élément 15 px, texte 14 px, détails 13 px), en CSS seulement.
+
+## 2026-11-03 · Offre au téléphone : partie « Vue » refaite
+
+- Le haut est le même que « Candidatures » : logo, nom de l'entreprise, badge vérifié, titre 18 px, menu « ··· » réduit. Le statut, la ville et le contrat sont sur une ligne, les dates sur la suivante.
+- Même identité qu'« Évaluation » :
+  - L'avis d'Orbi sur l'offre : un anneau postes pourvus / postes à pourvoir (`Job.openings`), une ligne d'avis et trois chiffres (vues, candidatures, taux).
+  - Objectif de l'offre : postes pourvus, candidats retenus (3 conseillés par poste), temps écoulé.
+  - Parcours des candidats, avec des étapes numérotées : vues, candidatures, ouvertes, retenus, entretiens, recrutés.
+  - Pourquoi ? : ce qui marche, à améliorer, à faire.
+  - Puis l'activité qui existait déjà (pipeline, courbes, sources).
+- La règle fixe est dans `src/server/services/hire-offer-review.ts` (`offerVerdict`, `offerPoints`), testée. Elle n'utilise que les chiffres de l'offre. Les seuils sont un choix par défaut à confirmer : 5 % de vues transformées, 20 vues après 3 jours, réponse en 5 jours, 3 retenus par poste.

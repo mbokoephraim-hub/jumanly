@@ -7482,3 +7482,99 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 .nb-rh-fp .nb-rh-fp-apropos .nb-pf-form b {
   font-size: 15px;
 }
+/* « Vue » d'une offre (Ephraïm, 03/11/2026) : même identité qu'« Évaluation ». */
+.nb-rh-vue .nb-rh-detail-corps {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+.nb-rh-vue .nb-rh-detail-corps > .nb-rh-ev {
+  margin-left: 0;
+  margin-right: 0;
+}
+.nb-rh-vue .nb-rh-co-tete .nb-rh-statut {
+  vertical-align: middle;
+  margin-right: 4px;
+}
+.nb-rh-ev-avis[data-ton="good"] {
+  border-color: color-mix(in srgb, var(--nb-lime) 45%, transparent);
+}
+.nb-rh-ev-avis[data-ton="watch"] {
+  border-color: color-mix(in srgb, #f4c463 45%, transparent);
+}
+.nb-rh-ev-avis[data-ton="bad"] {
+  border-color: color-mix(in srgb, #ff8a7a 45%, transparent);
+}
+.nb-rh-vue .nb-rh-anneau b {
+  font-size: 16px;
+}
+.nb-rh-vue-buts,
+.nb-rh-vue-parcours {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nb-rh-vue-buts li,
+.nb-rh-vue-parcours li {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--nb-creme) 5%, transparent);
+  font-size: 14px;
+}
+.nb-rh-vue-but-t {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+.nb-rh-vue-but-t b {
+  font-size: 15px;
+}
+.nb-rh-vue-buts li .nb-rh-jauge > span {
+  background: #f4c463;
+}
+.nb-rh-vue-buts li[data-plein] .nb-rh-jauge > span {
+  background: var(--nb-lime);
+}
+.nb-rh-vue-parcours li {
+  grid-template-columns: 36px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 12px;
+}
+.nb-rh-vue-parcours li .nb-cr-num {
+  grid-row: span 3;
+  color: #0f3f37;
+  background: var(--nb-menthe-claire, #8be3c4);
+}
+.nb-rh-vue-parcours li[data-etape="views"] .nb-cr-num {
+  background: #f4c463;
+}
+.nb-rh-vue-parcours li[data-etape="applications"] .nb-cr-num,
+.nb-rh-vue-parcours li[data-etape="opened"] .nb-cr-num {
+  background: #ff8a7a;
+}
+.nb-rh-vue-parcours li[data-etape="shortlisted"] .nb-cr-num,
+.nb-rh-vue-parcours li[data-etape="hired"] .nb-cr-num {
+  background: var(--nb-lime);
+}
+.nb-rh-vue-parcours li small {
+  font-size: 13px;
+  opacity: 0.8;
+}
+.nb-rh-vue-parcours li .nb-rh-jauge {
+  grid-column: 2;
+}
+.nb-rh-vue-activite {
+  margin: 24px 0 4px;
+}
+.nb-rh-vue .nb-rh-carte-stat h2 {
+  font-size: 15px;
+}
+.nb-rh-vue .nb-rh-fr-notes > div {
+  background: color-mix(in srgb, var(--nb-creme) 5%, transparent);
+}

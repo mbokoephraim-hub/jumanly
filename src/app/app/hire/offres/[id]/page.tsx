@@ -806,6 +806,7 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
         openReport={one(query.rapport) === "1"}
         notice={one(query.limite) ? tl("limit") : undefined}
         now={now}
+        shortlisted={shortlisted}
       />
     </>
   );

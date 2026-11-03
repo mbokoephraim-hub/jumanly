@@ -38,10 +38,17 @@ import {
   passes,
 } from "@/server/services/hire-filters";
 import { OrbiDisc, PhoneIcon } from "../icon";
+import {
+  offerPoints,
+  offerVerdict,
+  SHORTLIST_PER_POST,
+  type OfferFigures,
+  type OfferPoint,
+} from "@/server/services/hire-offer-review";
 import { FilAvatar } from "../fil/avatar";
 import { Verified } from "../explorer/cards";
 import { tintOf } from "./candidatures";
-import { RhOfferActions, RhWhy, type RhOfferActionsData } from "./offre-actions";
+import { RhOfferActions, type RhOfferActionsData } from "./offre-actions";
 import type { RhOfferDraft, RhPublishData } from "./publier";
 
 const DAY = 86_400_000;
@@ -341,17 +348,6 @@ export async function RhOffersList({
   );
 }
 
-/** A tile of the offer page: a link to the pipeline when there is someone to see. */
-function Tile({ href, ton, children }: { href: string | null; ton: string; children: ReactNode }) {
-  return href ? (
-    <Link href={href} data-ton={ton} data-lien="">
-      {children}
-    </Link>
-  ) : (
-    <p data-ton={ton}>{children}</p>
-  );
-}
-
 /** Bars per day (7 or 30 days): applications or views of the offer. */
 function Bars({
   bars,
@@ -399,6 +395,7 @@ type DetailJob = {
   publishedAt: Date | null;
   closesAt: Date | null;
   updatedAt: Date;
+  openings: number;
 };
 
 /**
@@ -417,9 +414,12 @@ export async function RhOfferDetail({
   notice,
   now,
   tabs,
+  shortlisted = 0,
 }: {
   ctx: HireContext;
   job: DetailJob;
+  /** Retained candidates of the offer (« Retenus »). */
+  shortlisted?: number;
   /** « Vue d'ensemble · Candidats · Retenus » (03/11/2026), under the title. */
   tabs?: ReactNode;
   /** « Remettre en ligne » refused by the limit of the plan. */
@@ -435,7 +435,7 @@ export async function RhOfferDetail({
   const format = await getFormatter();
   const since = new Date(now.getTime() - (period - 1) * DAY);
   since.setUTCHours(0, 0, 0, 0);
-  const [applications, canExport, stages, viewDays] = await Promise.all([
+  const [applications, canExport, stages, viewDays, organization] = await Promise.all([
     db.application.findMany({
       where: { jobId: job.id },
       select: {
@@ -455,6 +455,10 @@ export async function RhOfferDetail({
     can(db, { type: "organization", id: ctx.organizationId }, "reports.export"),
     ensureStages(db, job.id),
     db.jobViewDay.findMany({ where: { jobId: job.id, day: { gte: since } } }),
+    db.organization.findUniqueOrThrow({
+      where: { id: ctx.organizationId },
+      select: { name: true, logo: true, verifiedAt: true },
+    }),
   ]);
   const status = statusKey(job, now);
   const day = (date: Date) => format.dateTime(date, { day: "numeric", month: "short" });
@@ -515,26 +519,6 @@ export async function RhOfferDetail({
     whole > 0
       ? format.number(Math.min(1, part / whole), { style: "percent", maximumFractionDigits: 1 })
       : "–";
-  const funnel = [
-    { key: "views", count: figures.views, share: null },
-    {
-      key: "applications",
-      count: figures.applications,
-      share: share(figures.applications, figures.views),
-    },
-    {
-      key: "opened",
-      count: Math.max(0, figures.applications - figures.unseen),
-      share: share(figures.applications - figures.unseen, figures.applications),
-    },
-    {
-      key: "interviews",
-      count: interviewed,
-      share: share(interviewed, figures.applications),
-    },
-    { key: "hired", count: hired, share: share(hired, figures.applications) },
-  ] as const;
-  const funnelTop = Math.max(1, ...funnel.map((row) => row.count));
   const sourceTop = Math.max(1, ...sources.map((row) => row.count));
   const from = job.publishedAt ?? job.updatedAt;
   const to = job.status === "closed" ? job.updatedAt : now;
@@ -564,29 +548,167 @@ export async function RhOfferDetail({
     manage,
     start: openReport && report ? "report" : null,
   };
-  const orbi =
-    figures.unseen > 0
-      ? t("detail.orbiWaiting", { count: figures.unseen })
-      : figures.applications === 0 && job.publishedAt
-        ? t("detail.orbiNone")
-        : t("detail.orbiDone");
+  // ─── « Vue » (Ephraïm, 03/11/2026): the goal of the offer, then Orbi's reading of its figures ──
+  const openings = Math.max(1, job.openings);
+  const review: OfferFigures = {
+    views: figures.views,
+    applications: figures.applications,
+    unseen: figures.unseen,
+    shortlisted,
+    hired,
+    openings,
+    online,
+    left: ended ? null : left,
+    responseDays,
+    invited: sources.find((row) => row.source === "invitation")?.count ?? 0,
+  };
+  const verdict = offerVerdict(review);
+  const points = offerPoints(review);
+  const percent = (value: number) =>
+    format.number(value, { style: "percent", maximumFractionDigits: 1 });
+  const pointText = (point: OfferPoint) => {
+    switch (point.key) {
+      case "rate":
+      case "lowRate":
+        return t(`vue.point.${point.key}`, { share: percent(point.share) });
+      case "seen":
+      case "fewViews":
+        return t(`vue.point.${point.key}`, { count: point.views });
+      case "fastAnswer":
+      case "slowAnswer":
+        return t(`vue.point.${point.key}`, { days: format.number(point.days) });
+      case "shortlist":
+      case "open":
+        return t(`vue.point.${point.key}`, { count: point.count });
+      case "retain":
+        return t("vue.point.retain", { count: point.wanted });
+      case "closing":
+        return t("vue.point.closing", { count: point.days });
+      default:
+        return t(`vue.point.${point.key}`);
+    }
+  };
+  const total =
+    job.publishedAt && job.closesAt
+      ? Math.max(1, Math.ceil((job.closesAt.getTime() - job.publishedAt.getTime()) / DAY))
+      : null;
+  const goals = [
+    {
+      key: "hired",
+      label: t("vue.goal.hired"),
+      value: t("vue.goal.hiredValue", { count: hired, total: openings }),
+      share: Math.min(1, hired / openings),
+    },
+    {
+      key: "shortlisted",
+      label: t("vue.goal.shortlisted"),
+      value: t("vue.goal.shortlistedValue", {
+        count: shortlisted,
+        total: openings * SHORTLIST_PER_POST,
+      }),
+      share: Math.min(1, shortlisted / (openings * SHORTLIST_PER_POST)),
+    },
+    ...(total
+      ? [
+          {
+            key: "time",
+            label: t("vue.goal.time"),
+            value: ended
+              ? t("vue.goal.timeEnded")
+              : t("vue.goal.timeValue", { count: Math.min(online, total), total }),
+            share: ended ? 1 : Math.min(1, online / total),
+          },
+        ]
+      : []),
+  ];
+  const steps = [
+    { key: "views", count: figures.views, share: null as string | null },
+    {
+      key: "applications",
+      count: figures.applications,
+      share:
+        figures.views > 0
+          ? t("vue.stepShare.views", { share: share(figures.applications, figures.views) })
+          : null,
+    },
+    {
+      key: "opened",
+      count: Math.max(0, figures.applications - figures.unseen),
+      share:
+        figures.applications > 0
+          ? t("vue.stepShare.applications", {
+              share: share(figures.applications - figures.unseen, figures.applications),
+            })
+          : null,
+    },
+    {
+      key: "shortlisted",
+      count: shortlisted,
+      share:
+        figures.applications > 0
+          ? t("vue.stepShare.applications", { share: share(shortlisted, figures.applications) })
+          : null,
+    },
+    {
+      key: "interviews",
+      count: interviewed,
+      share:
+        figures.applications > 0
+          ? t("vue.stepShare.applications", { share: share(interviewed, figures.applications) })
+          : null,
+    },
+    {
+      key: "hired",
+      count: hired,
+      share: t("vue.stepShare.openings", { count: openings }),
+    },
+  ] as const;
+  const stepTop = Math.max(1, ...steps.map((row) => row.count));
+  const ratePercent =
+    rate === null
+      ? "–"
+      : format.number(rate / 100, {
+          style: "percent",
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 1,
+        });
   return (
     <RhOffresTexts>
-      <div className="nb-page nb-rh-detail">
+      <div className="nb-page nb-rh-detail nb-rh-co nb-rh-vue">
         <header className="nb-rh-barre">
           <Link href="/app/hire/offres" className="nb-rh-retour">
             <PhoneIcon name="retour" size={20} />
             {t("detail.back")}
           </Link>
-          <RhOfferActions data={actions} />
+          <RhOfferActions
+            data={{
+              ...actions,
+              closesAt: job.closesAt ? job.closesAt.toISOString().slice(0, 10) : null,
+              minDate: new Date(now.getTime() + DAY).toISOString().slice(0, 10),
+              back: `/app/hire/offres/${job.id}?vue=apercu`,
+            }}
+            items={["edit", "pause", "postpone", "delete"]}
+          />
         </header>
-        <section className="nb-rh-detail-h">
-          <span className="nb-rh-statut" data-statut={status}>
-            {status === "published" ? <i className="nb-rh-pouls" aria-hidden /> : null}
-            {t(`status.${status}`)}
+        <section className="nb-rh-co-tete">
+          <span className="nb-rh-co-org">
+            <FilAvatar
+              initials={initialsOfName(organization.name)}
+              image={organization.logo}
+              tone={0}
+              org
+              square
+              size={44}
+            />
+            <span>{organization.name}</span>
+            {organization.verifiedAt ? <Verified label={t("vue.verified")} size={16} /> : null}
           </span>
           <h1>{job.title}</h1>
           <p className="nb-meta">
+            <span className="nb-rh-statut" data-statut={status}>
+              {status === "published" ? <i className="nb-rh-pouls" aria-hidden /> : null}
+              {t(`status.${status}`)}
+            </span>{" "}
             {[
               job.city,
               t(`contract.${job.contractType}` as "contract.cdi"),
@@ -602,53 +724,148 @@ export async function RhOfferDetail({
         </section>
         {tabs}
         <div className="nb-rh-detail-corps">
-          <div className="nb-rh-tuiles">
-            <p data-ton="vues">
-              <MenuArt name="why" size="sm" />
-              <b>{format.number(figures.views)}</b>
-              {t("figures.views", { count: figures.views })}
-            </p>
-            <Tile href={figures.applications > 0 ? pipelineHref : null} ton="cand">
-              <MenuArt name="people" size="sm" />
-              <b>{format.number(figures.applications)}</b>
-              {t("figures.applications", { count: figures.applications })}
-            </Tile>
-            <p data-ton="taux">
-              <MenuArt name="career" size="sm" />
-              <b>
-                {rate === null
-                  ? "–"
-                  : format.number(rate / 100, {
-                      style: "percent",
-                      minimumFractionDigits: 1,
-                      maximumFractionDigits: 1,
-                    })}
-              </b>
-              {t("figures.rate")}
-            </p>
-            <Tile href={figures.unseen > 0 ? pipelineHref : null} ton="nouv">
-              <MenuArt name="bell" size="sm" />
-              <b data-lime="">{figures.unseen}</b>
-              {t("figures.unseen", { count: figures.unseen })}
-            </Tile>
-            <p data-ton="jours">
-              <MenuArt name={left !== null && !ended ? "calendar" : "clock"} size="sm" />
-              <b>{left !== null && !ended ? Math.max(0, left) : online}</b>
-              {left !== null && !ended
-                ? t("detail.tileLeft", { count: Math.max(0, left) })
-                : t("figures.days", { count: online })}
-            </p>
-            <p data-ton="delai">
-              <MenuArt name="hourglass" size="sm" />
-              <b>{responseDays === null ? "–" : format.number(responseDays)}</b>
-              {responseDays === null ? t("detail.tileNoResponse") : t("detail.tileResponse")}
-            </p>
-          </div>
-          <div className="nb-rh-orbi-ligne nb-rh-orbi-offre">
-            <OrbiDisc size={40} />
-            <span>{orbi}</span>
-            <RhWhy label={t("detail.why")} text={t("detail.whyText")} />
-          </div>
+          <section className="nb-rh-ev" aria-labelledby="rh-vue-avis">
+            <h2 id="rh-vue-avis" className="nb-rh-co-h">
+              <OrbiDisc size={26} />
+              {t("vue.title")}
+            </h2>
+            <div className="nb-rh-ev-avis" data-ton={verdict.tone}>
+              <div className="nb-rh-fr-score">
+                <span
+                  className="nb-rh-anneau nb-rh-anneau-l"
+                  style={
+                    { "--p": Math.round(Math.min(1, hired / openings) * 100) } as CSSProperties
+                  }
+                  role="img"
+                  aria-label={t("vue.ring", { count: hired, total: openings })}
+                >
+                  <b aria-hidden>
+                    {hired}/{openings}
+                  </b>
+                </span>
+                <span className="nb-rh-res-t">
+                  <b>{t("vue.goalLine", { count: openings })}</b>
+                  <span className="nb-meta">
+                    {left !== null && !ended && left > 0
+                      ? t("vue.goalLeft", { count: left })
+                      : ended
+                        ? t("vue.goalEnded")
+                        : t("vue.goalOpen")}
+                  </span>
+                </span>
+              </div>
+              <p
+                className="nb-rh-ev-sugg"
+                data-choix={
+                  verdict.tone === "good" ? "retain" : verdict.tone === "watch" ? "hold" : "reject"
+                }
+              >
+                <b>{t(`vue.verdict.${verdict.verdict}`)}</b>
+                <span>{t(`vue.verdictWhy.${verdict.verdict}`, { count: figures.unseen })}</span>
+              </p>
+              <dl className="nb-rh-fr-notes">
+                <div>
+                  <dt>{t("vue.views")}</dt>
+                  <dd>{format.number(figures.views)}</dd>
+                </div>
+                <div>
+                  <dt>{t("vue.applications")}</dt>
+                  <dd>{format.number(figures.applications)}</dd>
+                </div>
+                <div>
+                  <dt>{t("vue.rate")}</dt>
+                  <dd>{ratePercent}</dd>
+                </div>
+              </dl>
+              <p className="nb-meta">{t("vue.rule")}</p>
+            </div>
+          </section>
+
+          <section className="nb-rh-ev" aria-labelledby="rh-vue-objectif">
+            <h2 id="rh-vue-objectif" className="nb-rh-co-h">
+              {t("vue.goalTitle")}
+            </h2>
+            <ul className="nb-rh-vue-buts">
+              {goals.map((goal) => (
+                <li key={goal.key} data-plein={goal.share >= 1 ? "" : undefined}>
+                  <span className="nb-rh-vue-but-t">
+                    <span>{goal.label}</span>
+                    <b>{goal.value}</b>
+                  </span>
+                  <span className="nb-rh-jauge" aria-hidden>
+                    <span
+                      style={{ width: `${goal.share > 0 ? Math.max(4, goal.share * 100) : 0}%` }}
+                    />
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="nb-rh-ev" aria-labelledby="rh-vue-parcours">
+            <h2 id="rh-vue-parcours" className="nb-rh-co-h">
+              {t("vue.stepsTitle")}
+            </h2>
+            <p className="nb-meta">{t("vue.stepsLead")}</p>
+            <ol className="nb-rh-vue-parcours">
+              {steps.map((row, index) => (
+                <li key={row.key} data-etape={row.key}>
+                  <span className="nb-cr-num" aria-hidden>
+                    {index + 1}
+                  </span>
+                  <span className="nb-rh-vue-but-t">
+                    <span>{t(`vue.step.${row.key}`)}</span>
+                    <b>{format.number(row.count)}</b>
+                  </span>
+                  {row.share ? <small>{row.share}</small> : null}
+                  <span className="nb-rh-jauge" aria-hidden>
+                    <span
+                      style={{
+                        width: `${row.count ? Math.max(3, (row.count / stepTop) * 100) : 0}%`,
+                      }}
+                    />
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          <section className="nb-rh-ev" aria-labelledby="rh-vue-pourquoi">
+            <h2 id="rh-vue-pourquoi" className="nb-rh-co-h">
+              {t("vue.whyTitle")}
+            </h2>
+            {(
+              [
+                ["pour", "works", points.works],
+                ["faible", "improve", points.improve],
+                ["verifier", "todo", points.todo],
+              ] as const
+            ).map(([tone, key, list]) => (
+              <div key={key} className="nb-rh-ev-liste" data-ton={tone}>
+                <p>{t(`vue.${key}.title`)}</p>
+                {list.length > 0 ? (
+                  <ul>
+                    {list.map((point) => (
+                      <li key={point.key}>{pointText(point)}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <small className="nb-meta">{t(`vue.${key}.none`)}</small>
+                )}
+                {key === "todo" && figures.applications > 0 ? (
+                  <Link
+                    href={`/app/hire/offres/${job.id}?vue=candidatures`}
+                    className="nb-rh-ev-lien"
+                  >
+                    {t("vue.todo.go")}
+                    <PhoneIcon name="chevron" size={14} />
+                  </Link>
+                ) : null}
+              </div>
+            ))}
+          </section>
+
+          <h2 className="nb-rh-co-h nb-rh-vue-activite">{t("vue.activity")}</h2>
           <section className="nb-rh-carte-stat" aria-labelledby="rh-pipe-t">
             <div className="nb-rh-courbe-h">
               <h2 id="rh-pipe-t">
@@ -676,32 +893,6 @@ export async function RhOfferDetail({
                     </span>
                     <b>{row.count}</b>
                   </Link>
-                </li>
-              ))}
-            </ol>
-          </section>
-          <section className="nb-rh-carte-stat" aria-labelledby="rh-funnel-t">
-            <h2 id="rh-funnel-t">
-              <MenuArt name="funnel" size="xs" />
-              {t("detail.funnel")}
-            </h2>
-            <ol className="nb-rh-entonnoir">
-              {funnel.map((row) => (
-                <li key={row.key} data-step={row.key}>
-                  <span className="nb-rh-entonnoir-t">
-                    <span>{t(`detail.funnelStep.${row.key}`)}</span>
-                    <b>{format.number(row.count)}</b>
-                    {row.share ? (
-                      <small>{t("detail.funnelShare", { share: row.share })}</small>
-                    ) : null}
-                  </span>
-                  <span className="nb-rh-jauge" aria-hidden>
-                    <span
-                      style={{
-                        width: `${row.count ? Math.max(3, (row.count / funnelTop) * 100) : 0}%`,
-                      }}
-                    />
-                  </span>
                 </li>
               ))}
             </ol>
