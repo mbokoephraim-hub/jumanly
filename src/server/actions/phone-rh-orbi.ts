@@ -69,7 +69,7 @@ export async function rhOrbiFactAction(raw: string): Promise<OrbiFactAnswer | nu
       const open = data.rows.filter((row) => row.phase !== "nonretenu" && row.phase !== "recrute");
       const first = open.slice(0, SHOWN);
       return {
-        question: tq("candidatures.q1"),
+        question: tq("agenda.q1"),
         text:
           open.length === 0
             ? t("fact.first.none")
