@@ -8753,3 +8753,10 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   align-items: center;
   gap: 6px;
 }
+/* The search of « Domaine » in the filters of Talents (03/11/2026). */
+.nb-rh-t-dom-q {
+  margin-bottom: 10px;
+}
+.nb-rh-t-domaines label[hidden] {
+  display: none;
+}

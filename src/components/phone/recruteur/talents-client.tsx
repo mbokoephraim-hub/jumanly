@@ -570,3 +570,71 @@ export function RhTalentProfile({
     </div>
   );
 }
+
+const foldText = (value: string) =>
+  value
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .trim();
+
+/**
+ * « Domaine » in the filters of Talents (Ephraïm, 03/11/2026): a search above the chips, each
+ * letter keeps only the fields that match (« data » → Data et statistiques). « Toutes » and the
+ * field chosen always stay; the others are hidden, never removed from the form.
+ */
+export function RhDomainPicker({
+  options,
+  chosen,
+  anyLabel,
+  placeholder,
+  none,
+}: {
+  options: { key: string; label: string }[];
+  chosen: string;
+  anyLabel: string;
+  placeholder: string;
+  none: string;
+}) {
+  const [query, setQuery] = useState("");
+  const q = foldText(query);
+  const shown = (option: { key: string; label: string }) =>
+    !q || option.key === chosen || foldText(`${option.label} ${option.key}`).includes(q);
+  const matches = options.filter((option) => q && shown(option) && option.key !== chosen);
+  return (
+    <>
+      <label className="nb-ex-recherche nb-rh-t-dom-q">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <circle cx="11" cy="11" r="6.5" stroke="currentColor" strokeWidth="2" />
+          <path d="m16 16 4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+        </svg>
+        <input
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder={placeholder}
+          aria-label={placeholder}
+          enterKeyHint="search"
+        />
+      </label>
+      <div className="nb-ex-f-opts nb-rh-t-domaines">
+        {[{ key: "", label: anyLabel }, ...options].map((option) => (
+          <label
+            key={option.key || "any"}
+            className="nb-ex-f-opt nb-rh-pf-opt"
+            hidden={option.key !== "" && !shown(option)}
+          >
+            <input
+              type="radio"
+              name="domaine"
+              value={option.key}
+              defaultChecked={chosen === option.key}
+            />
+            {option.label}
+          </label>
+        ))}
+      </div>
+      {q && matches.length === 0 ? <p className="nb-meta">{none}</p> : null}
+    </>
+  );
+}
