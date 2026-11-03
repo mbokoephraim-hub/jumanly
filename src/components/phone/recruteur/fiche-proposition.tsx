@@ -87,7 +87,7 @@ export function RhProposal({
             <textarea
               id={`rh-fp-${id}-${application}`}
               name="body"
-              rows={6}
+              rows={11}
               minLength={10}
               maxLength={2000}
               required

@@ -5480,3 +5480,7 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 ## 2026-11-03 · Offre : même en-tête sur Vue, Candidatures et Retenus
 
 - `RhOfferHead` (src/components/phone/recruteur/offres.tsx) : entreprise et logo, titre, état et lieu, puis les dates sur une seule ligne (« Publiée le 28 oct. · en ligne depuis 6 j · 59 j restants »). Utilisé par la Vue et par Candidatures / Retenus (candidats-offre.tsx, qui perd sa ligne « N candidatures »). Textes réduits (titre 17 px, détails 13 px).
+
+## 2026-11-03 · Messages préparés par Orbi au candidat : des messages qui respirent
+
+- Les cinq messages des propositions d'Orbi (expériences, diplômes, documents manquants, lettre, CV) sont réécrits en paragraphes : salutation par le prénom (« Bonjour, » en tri à l'aveugle), remerciement, demande, éléments demandés un par ligne (« • … »), où répondre, puis « Bien cordialement, L'équipe recrutement de … ». Retours à la ligne `\n` dans les textes, convertis à l'envoi ; espace fine insécable avant « ? ». Champ du message plus haut (11 lignes).

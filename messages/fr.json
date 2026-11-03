@@ -20487,11 +20487,11 @@
       "cvAction": "Demander le CV"
     },
     "messages": {
-      "experiences": "Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour avancer, pourriez-vous faire vérifier ces expériences : {items} ? Depuis votre profil Jumanly, vous pouvez demander à un ancien responsable de les confirmer. Merci !",
-      "diplomas": "Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour avancer, pourriez-vous nous envoyer une copie de ces diplômes : {items} ? Vous pouvez les joindre ici, dans cette conversation. Merci !",
-      "missing": "Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Il nous manque encore certains documents demandés dans l'offre. Pourriez-vous les joindre ici, dans cette conversation ? Merci !",
-      "letter": "Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pourriez-vous nous dire en quelques lignes pourquoi ce poste vous intéresse ? Vous pouvez répondre ici. Merci !",
-      "cv": "Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour compléter votre dossier, pourriez-vous nous envoyer votre CV à jour ? Vous pouvez le joindre ici, dans cette conversation. Merci !"
+      "experiences": "Bonjour{first, select, none {} other { {first}}},\\n\\nMerci pour votre candidature au poste de {job} chez {company}.\\n\\nPour avancer dans l'étude de votre dossier, pourriez-vous faire confirmer les expériences suivantes ?\\n{items}\\n\\nDepuis votre profil Jumanly, vous pouvez demander à un ancien responsable de les confirmer en quelques clics.\\n\\nBien cordialement,\\nL'équipe recrutement de {company}",
+      "diplomas": "Bonjour{first, select, none {} other { {first}}},\\n\\nMerci pour votre candidature au poste de {job} chez {company}.\\n\\nPour compléter votre dossier, pourriez-vous nous envoyer une copie des diplômes suivants ?\\n{items}\\n\\nVous pouvez les joindre directement dans cette conversation.\\n\\nBien cordialement,\\nL'équipe recrutement de {company}",
+      "missing": "Bonjour{first, select, none {} other { {first}}},\\n\\nMerci pour votre candidature au poste de {job} chez {company}.\\n\\nIl nous manque encore certains documents demandés dans l'offre.\\n\\nPourriez-vous les joindre directement dans cette conversation ?\\n\\nBien cordialement,\\nL'équipe recrutement de {company}",
+      "letter": "Bonjour{first, select, none {} other { {first}}},\\n\\nMerci pour votre candidature au poste de {job} chez {company}.\\n\\nPourriez-vous nous dire, en quelques lignes, pourquoi ce poste vous intéresse et ce que vous aimeriez y apporter ?\\n\\nVous pouvez répondre directement ici.\\n\\nBien cordialement,\\nL'équipe recrutement de {company}",
+      "cv": "Bonjour{first, select, none {} other { {first}}},\\n\\nMerci pour votre candidature au poste de {job} chez {company}.\\n\\nPour compléter votre dossier, pourriez-vous nous envoyer votre CV à jour ?\\n\\nVous pouvez le joindre directement dans cette conversation.\\n\\nBien cordialement,\\nL'équipe recrutement de {company}"
     },
     "eval": {
       "summary": {
