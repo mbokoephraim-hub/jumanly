@@ -8060,3 +8060,31 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 .nb-rh-co-onglets-defil a small {
   margin-left: 4px;
 }
+
+/* Étape 3 (03/11/2026) : « À revoir », « Classé par vous », candidats sans réponse. */
+.nb-rh-co-t em.nb-rh-co-badge[data-ton="due"] {
+  color: var(--nb-ambre-t);
+}
+.nb-rh-co-t em.nb-rh-co-badge[data-ton="revoir"] {
+  color: var(--nb-menthe-t);
+}
+.nb-rh-co-t em.nb-rh-co-badge[data-ton="vous"] {
+  color: var(--nb-brume);
+}
+.nb-rh-co-attente {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 20px 0;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--nb-ambre) 12%, var(--nb-carte));
+  color: var(--nb-creme);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.nb-rh-co-attente .nb-rh-pouls,
+.nb-rh-co-attente .nb-rh-pouls::after {
+  flex: none;
+  background: var(--nb-ambre);
+}

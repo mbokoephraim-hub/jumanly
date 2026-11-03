@@ -5532,3 +5532,10 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - Sur le téléphone, la barre de l'offre devient Vue · À trier · À compléter · Entretiens · Décision (`?vue=trier|completer|entretiens|decision` ; les anciennes adresses `candidatures` et `retenus` mènent à À trier et Entretiens). Chaque onglet indique combien il contient et une ligne d'aide.
 - `offerCandidates(…, { rubrique })` filtre selon `rubriqueOf`. À compléter affiche « 2 sur 4 pièces · avant le … », Décision affiche l'issue. Les retirés n'apparaissent que dans Décision.
 - La fiche s'ouvre avec `de=<rubrique>` : le passage au candidat suivant reste dans la rubrique, et Retour y ramène.
+
+## 2026-11-03 · Candidatures recruteur, étape 3 : À revoir, Classé par vous, candidats sans réponse
+
+- Dans À trier, un candidat mis « En attente » remonte en tête de liste avec un rappel 3 jours plus tard (`REVIEW_DAYS`) : « À revoir le … », puis « À revoir aujourd'hui » quand la date est passée.
+- Une carte placée par le recruteur (déplacée ou mise de côté) porte « Classé par vous ». Orbi ne réordonne jamais cette liste.
+- Un bandeau indique les candidats sans réponse depuis plus de 7 jours (`WAITING_DAYS`).
+- Pas encore construit : une notification le jour du rappel, et une suggestion d'Orbi sur une carte classée à la main.

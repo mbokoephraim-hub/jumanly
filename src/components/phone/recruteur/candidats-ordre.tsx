@@ -23,6 +23,8 @@ export type RhOrderRow = {
   href: string;
   unseen: boolean;
   shortlisted: boolean;
+  /** « À revoir aujourd'hui », « À revoir le 6 nov. », « Classé par vous » (03/11/2026). */
+  badge?: { text: string; tone: "due" | "revoir" | "vous" } | null;
 };
 
 export type RhOrderTexts = {
@@ -267,7 +269,13 @@ export function RhCandidateOrder({
                   <b>{row.name}</b>
                   {row.headline ? <span className="nb-rh-co-titre">{row.headline}</span> : null}
                   <small>
-                    {row.shortlisted ? <em>{texts.shortlisted}</em> : null}
+                    {row.badge ? (
+                      <em className="nb-rh-co-badge" data-ton={row.badge.tone}>
+                        {row.badge.text}
+                      </em>
+                    ) : row.shortlisted ? (
+                      <em>{texts.shortlisted}</em>
+                    ) : null}
                     {row.line}
                   </small>
                 </span>

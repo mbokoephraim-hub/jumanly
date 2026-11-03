@@ -10,6 +10,7 @@ import {
   candidateSearchSchema,
   offerCandidates,
   searchCount,
+  WAITING_DAYS,
 } from "@/server/services/hire-offer-candidates";
 import { publicJobUrl } from "@/components/recruiter/offers";
 import { hirePermissions } from "@/server/services/hire";
@@ -147,6 +148,13 @@ export async function RhOfferCandidatesList({
       href: `/app/hire/offres/${jobId}?vue=candidats&de=${tab}&fiche=${person.id}`,
       unseen: person.unseen,
       shortlisted: person.shortlisted,
+      badge: person.review
+        ? person.review.due
+          ? { text: t("desk.review.due"), tone: "due" }
+          : { text: t("desk.review.on", { date: person.review.remindAt }), tone: "revoir" }
+        : person.placedByYou && tab === "trier"
+          ? { text: t("desk.placedByYou"), tone: "vous" }
+          : null,
     };
   });
 
@@ -162,6 +170,12 @@ export async function RhOfferCandidatesList({
       <RhOfferHead job={job} organization={org} now={now} />
       <RhOfferTabs jobId={jobId} current={tab} counts={data.counts} />
       <p className="nb-rh-co-aide">{t(`desk.help.${tab}`)}</p>
+      {tab === "trier" && data.waiting > 0 ? (
+        <p className="nb-rh-co-attente" role="status">
+          <i className="nb-rh-pouls" aria-hidden />
+          {t("desk.waiting", { count: data.waiting, days: WAITING_DAYS })}
+        </p>
+      ) : null}
 
       <div className="nb-rh-co-recherche">
         <form method="get" action={`/app/hire/offres/${jobId}`} role="search">
