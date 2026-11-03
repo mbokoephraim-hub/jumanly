@@ -78,65 +78,65 @@ export function Score({ score }: { score: number | null }) {
   );
 }
 
-/** The covers' two rings (planche Offres). */
-function Rings({
-  width,
-  height,
-  r,
-  stroke,
-}: {
-  width: number;
-  height: number;
-  r: number;
-  stroke: number;
-}) {
-  return (
-    <svg
-      viewBox={`0 0 ${width} ${height}`}
-      preserveAspectRatio="xMidYMid slice"
-      aria-hidden
-      className="nb-ex-anneaux"
-    >
-      <g fill="none" stroke="#fff" strokeOpacity=".22" strokeWidth={stroke}>
-        <circle cx={height === 126 ? 20 : 0} cy={height === 126 ? 63 : 60} r={r} />
-        <circle cx={height === 126 ? width - 20 : width} cy={height === 126 ? 63 : 150} r={r} />
-      </g>
-    </svg>
-  );
-}
-
-/** A company card of « Entreprises qui recrutent »: a tall picture, or its colour and its mark. */
+/**
+ * A company of « Entreprises qui recrutent » (Ephraïm, 03/11/2026), in the family of the offer cards:
+ * its banner as a band (or its colour and rings), its logo set on the edge, its name, then Offres ·
+ * Secteur · Ville, and at the bottom « Recrute en ce moment » and « Voir l'entreprise ».
+ */
 export function CompanyCard({ company }: { company: CompanyView }) {
   const t = useTranslations("phoneExplorer");
+  const hiring = company.offers > 0;
   return (
-    <Link
-      href={company.href}
-      className="nb-ex-ent"
-      data-ton={company.tone}
-      aria-label={t("companyCard", { name: company.name })}
-    >
-      {company.banner ? (
-        <img src={company.banner} alt="" className="nb-ex-ent-img" />
-      ) : (
-        <>
-          <Rings width={176} height={236} r={70} stroke={20} />
-          <span className="nb-ex-ent-mark">
-            <CompanyMark
-              initials={company.initials}
-              logo={company.logo}
-              tone={company.tone}
-              size={72}
-              white
-            />
+    <article className="nb-ex-ec" data-ton={company.tone}>
+      <div className="nb-ex-ec-bande" aria-hidden>
+        {company.banner ? <img src={company.banner} alt="" /> : null}
+      </div>
+      <div className="nb-ex-ec-corps">
+        <span className="nb-ex-ec-logo">
+          <CompanyMark
+            initials={company.initials}
+            logo={company.logo}
+            tone={company.tone}
+            size={58}
+          />
+        </span>
+        <h3 className="nb-ex-ec-nom">
+          <Link href={company.href}>{company.name}</Link>
+          {company.verified ? <Verified label={t("companyCardVerified")} size={16} /> : null}
+        </h3>
+        <dl className="nb-rh-oc-stats">
+          <div>
+            <dt>{t("companyCardOffers")}</dt>
+            <dd data-plein={hiring ? "" : undefined}>{company.offers}</dd>
+          </div>
+          <div>
+            <dt>{t("companyCardSector")}</dt>
+            <dd>{company.sector ?? t("companyCardNone")}</dd>
+          </div>
+          <div>
+            <dt>{t("companyCardCity")}</dt>
+            <dd>{company.city ?? t("companyCardNone")}</dd>
+          </div>
+        </dl>
+      </div>
+      <div className="nb-rh-oc-pied">
+        {hiring ? (
+          <span className="nb-ex-ec-recrute">
+            <i className="nb-rh-pouls" aria-hidden />
+            {t("companyCardHiring")}
           </span>
-        </>
-      )}
-      <span className="nb-ex-ent-ombre" aria-hidden />
-      <span className="nb-ex-ent-texte">
-        <b>{company.name}</b>
-        <span>{company.line}</span>
-      </span>
-    </Link>
+        ) : (
+          <span className="nb-rh-oc-aucune">{t("companyCardQuiet")}</span>
+        )}
+        <Link
+          href={company.href}
+          className="nb-rh-oc-plusbt"
+          aria-label={t("companyCard", { name: company.name })}
+        >
+          {t("companyCardSee")}
+        </Link>
+      </div>
+    </article>
   );
 }
 

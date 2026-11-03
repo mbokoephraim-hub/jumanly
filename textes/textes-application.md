@@ -9002,6 +9002,14 @@ Conventions :
 | `phoneExplorer.companyLine` | {sector} · {count, plural, one {# offre} other {# offres}} |
 | `phoneExplorer.companyLineNoSector` | {count, plural, one {# offre} other {# offres}} |
 | `phoneExplorer.companyCard` | Voir la page de {name} |
+| `phoneExplorer.companyCardVerified` | Entreprise vérifiée |
+| `phoneExplorer.companyCardOffers` | Offres |
+| `phoneExplorer.companyCardSector` | Secteur |
+| `phoneExplorer.companyCardCity` | Ville |
+| `phoneExplorer.companyCardNone` | — |
+| `phoneExplorer.companyCardHiring` | Recrute en ce moment |
+| `phoneExplorer.companyCardQuiet` | Pas d'offre ouverte |
+| `phoneExplorer.companyCardSee` | Voir |
 | `phoneExplorer.offerKind` | {contract} · {remote} |
 | `phoneExplorer.reason.mutual` | {count, plural, one {# connexion en commun} other {# connexions en commun}} |
 | `phoneExplorer.reason.field` | Même domaine que vous |
