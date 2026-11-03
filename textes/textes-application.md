@@ -12217,6 +12217,7 @@ Conventions :
 | `hireOffers.list.ok.reprise` | Offre reprise : elle est de nouveau visible. |
 | `hireOffers.list.ok.fermee` | Offre clôturée. Ses dossiers restent consultables. |
 | `hireOffers.list.ok.supprimee` | Brouillon supprimé. |
+| `hireOffers.list.ok.retiree` | Offre supprimée. Les candidatures restent dans l'historique des candidats. |
 | `hireOffers.list.limit` | Limite d'offres actives atteinte : clôturez ou mettez en pause une offre pour en reprendre une autre. |
 | `hireOffers.menu.applications` | Voir les candidatures |
 | `hireOffers.menu.applicationsText` | {count} · {unseen, plural, =0 {aucune nouvelle} one {# nouvelle} other {# nouvelles}} |
@@ -16233,6 +16234,7 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `phoneRhCandidats.back` | Offres |
+| `phoneRhCandidats.verified` | Entreprise vérifiée |
 | `phoneRhCandidats.tabs` | Parties de l'offre |
 | `phoneRhCandidats.tab.apercu` | Vue |
 | `phoneRhCandidats.tab.candidats` | Candidatures |
@@ -16663,6 +16665,20 @@ Conventions :
 | `phoneRhOffres.menu.reportDownload` | Télécharger le PDF |
 | `phoneRhOffres.menu.reportLocked` | Le rapport PDF fait partie des outils de recrutement avancés. L'administrateur de l'entreprise peut les activer. |
 | `phoneRhOffres.menu.reportLater` | Plus tard |
+| `phoneRhOffres.menu.postpone` | Repousser l'offre |
+| `phoneRhOffres.menu.postponeHint` | Choisir une nouvelle date de fin |
+| `phoneRhOffres.menu.postponeTitle` | Repousser l'offre |
+| `phoneRhOffres.menu.postponeText` | L'offre reste ouverte jusqu'à la nouvelle date. Les candidatures déjà reçues ne changent pas. |
+| `phoneRhOffres.menu.postponeDate` | Nouvelle date de fin |
+| `phoneRhOffres.menu.postponeConfirm` | Repousser |
+| `phoneRhOffres.menu.postponeDone` | Offre repoussée. |
+| `phoneRhOffres.menu.postponeError` | Choisissez une date à partir de demain. |
+| `phoneRhOffres.menu.delete` | Supprimer l'offre |
+| `phoneRhOffres.menu.deleteHint` | Elle disparaît de vos offres et d'Explorer |
+| `phoneRhOffres.menu.deleteTitle` | Supprimer « {title} » ? |
+| `phoneRhOffres.menu.deleteText` | {count, plural, =0 {L'offre disparaît de vos offres, d'Explorer et de sa page publique.} one {L'offre disparaît de vos offres et d'Explorer. La candidature reçue reste dans l'historique du candidat.} other {L'offre disparaît de vos offres et d'Explorer. Les # candidatures reçues restent dans l'historique des candidats.}} |
+| `phoneRhOffres.menu.deleteConfirm` | Supprimer l'offre |
+| `phoneRhOffres.menu.deleteKeep` | Garder l'offre |
 | `phoneRhOffres.publish.title` | Nouvelle offre |
 | `phoneRhOffres.publish.editTitle` | Modifier l'offre |
 | `phoneRhOffres.publish.back` | Retour |

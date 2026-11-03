@@ -14802,7 +14802,8 @@
         "pause": "Offre mise en pause. Ses candidatures restent.",
         "reprise": "Offre reprise : elle est de nouveau visible.",
         "fermee": "Offre clôturée. Ses dossiers restent consultables.",
-        "supprimee": "Brouillon supprimé."
+        "supprimee": "Brouillon supprimé.",
+        "retiree": "Offre supprimée. Les candidatures restent dans l'historique des candidats."
       },
       "limit": "Limite d'offres actives atteinte : clôturez ou mettez en pause une offre pour en reprendre une autre."
     },
@@ -19769,6 +19770,7 @@
   },
   "phoneRhCandidats": {
     "back": "Offres",
+    "verified": "Entreprise vérifiée",
     "tabs": "Parties de l'offre",
     "tab": {
       "apercu": "Vue",
@@ -20020,7 +20022,21 @@
       "reportText": "{views, plural, one {# vue} other {# vues}} · {applications, plural, one {# candidature} other {# candidatures}} · {hired, plural, one {# retenu} other {# retenus}}. Le PDF reprend les statistiques et les sources de la période de l'offre.",
       "reportDownload": "Télécharger le PDF",
       "reportLocked": "Le rapport PDF fait partie des outils de recrutement avancés. L'administrateur de l'entreprise peut les activer.",
-      "reportLater": "Plus tard"
+      "reportLater": "Plus tard",
+      "postpone": "Repousser l'offre",
+      "postponeHint": "Choisir une nouvelle date de fin",
+      "postponeTitle": "Repousser l'offre",
+      "postponeText": "L'offre reste ouverte jusqu'à la nouvelle date. Les candidatures déjà reçues ne changent pas.",
+      "postponeDate": "Nouvelle date de fin",
+      "postponeConfirm": "Repousser",
+      "postponeDone": "Offre repoussée.",
+      "postponeError": "Choisissez une date à partir de demain.",
+      "delete": "Supprimer l'offre",
+      "deleteHint": "Elle disparaît de vos offres et d'Explorer",
+      "deleteTitle": "Supprimer « {title} » ?",
+      "deleteText": "{count, plural, =0 {L'offre disparaît de vos offres, d'Explorer et de sa page publique.} one {L'offre disparaît de vos offres et d'Explorer. La candidature reçue reste dans l'historique du candidat.} other {L'offre disparaît de vos offres et d'Explorer. Les # candidatures reçues restent dans l'historique des candidats.}}",
+      "deleteConfirm": "Supprimer l'offre",
+      "deleteKeep": "Garder l'offre"
     },
     "publish": {
       "title": "Nouvelle offre",

@@ -54,7 +54,12 @@ export function Toaster({
   useEffect(() => {
     const onToast = (event: Event) => {
       const detail = (event as CustomEvent<ToastInput>).detail;
-      setToasts((list) => [...list.slice(-2), { ...detail, id: ++next.current }]);
+      // The same message already on screen (a page shown twice, a double tap): show it once.
+      setToasts((list) =>
+        list.some((toast) => toast.message === detail.message)
+          ? list
+          : [...list.slice(-2), { ...detail, id: ++next.current }],
+      );
     };
     window.addEventListener(EVENT, onToast);
     return () => window.removeEventListener(EVENT, onToast);

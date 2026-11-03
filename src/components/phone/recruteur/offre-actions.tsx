@@ -5,11 +5,19 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { showToast } from "@/components/motion/toaster";
 import { closeJobAction, duplicateJobAction, reopenJobAction } from "@/server/actions/hire";
-import { pauseJobAction, resumeJobAction } from "@/server/actions/hire-offers";
+import {
+  archiveJobAction,
+  pauseJobAction,
+  postponeJobAction,
+  resumeJobAction,
+} from "@/server/actions/hire-offers";
 import { PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
 
-type Sheet = "menu" | "share" | "close" | "report" | null;
+type Sheet = "menu" | "share" | "close" | "report" | "postpone" | "delete" | null;
+
+/** What the « ··· » offers; « Candidatures » keeps four (Ephraïm, 03/11/2026). */
+export type RhOfferMenuItem = "edit" | "pause" | "postpone" | "delete" | "all";
 
 export type RhOfferActionsData = {
   id: string;
@@ -25,6 +33,12 @@ export type RhOfferActionsData = {
   manage: boolean;
   /** The sheet opened on arrival (« Clôturer » just done: the report). */
   start: "report" | null;
+  /** The closing date (yyyy-mm-dd, UTC), for « Repousser l'offre ». */
+  closesAt?: string | null;
+  /** The first date « Repousser » accepts (tomorrow, yyyy-mm-dd), computed by the server. */
+  minDate?: string;
+  /** Where pause, resume and postpone come back (the overview by default). */
+  back?: string;
 };
 
 /**
@@ -32,7 +46,13 @@ export type RhOfferActionsData = {
  * Recruteur-offre-menu, -partage, -cloturer, -rapport): modify, pause or resume, share (link,
  * Fil, WhatsApp), duplicate, close with its confirmation, then the report in PDF.
  */
-export function RhOfferActions({ data }: { data: RhOfferActionsData }) {
+export function RhOfferActions({
+  data,
+  items = ["all"],
+}: {
+  data: RhOfferActionsData;
+  items?: RhOfferMenuItem[];
+}) {
   const t = useTranslations("phoneRhOffres.menu");
   const tc = useTranslations("phone");
   const [sheet, setSheet] = useState<Sheet>(data.start);
@@ -44,8 +64,11 @@ export function RhOfferActions({ data }: { data: RhOfferActionsData }) {
   }
   const close = () => setSheet(null);
   // « Vue d'ensemble » of the offer (03/11/2026): the plain address opens « Candidats ».
-  const back = `/app/hire/offres/${data.id}?vue=apercu`;
+  const back = data.back ?? `/app/hire/offres/${data.id}?vue=apercu`;
   const live = data.status === "published" || data.status === "pending_review";
+  const all = items.includes("all");
+  const shows = (item: Exclude<RhOfferMenuItem, "all">) => all || items.includes(item);
+  const tomorrow = data.minDate ?? "";
 
   return (
     <>
@@ -68,13 +91,13 @@ export function RhOfferActions({ data }: { data: RhOfferActionsData }) {
       >
         <p className="nb-meta nb-rh-feuille-sur">{data.title}</p>
         <div className="nb-rh-menu">
-          {data.status !== "closed" ? (
+          {shows("edit") && data.status !== "closed" ? (
             <Link href={`/app/hire/offres/${data.id}/modifier`} className="nb-rh-menu-l">
               <b>{t("edit")}</b>
               <span className="nb-meta">{t("editHint")}</span>
             </Link>
           ) : null}
-          {data.status === "published" ? (
+          {shows("pause") && data.status === "published" ? (
             <form action={pauseJobAction}>
               <input type="hidden" name="id" value={data.id} />
               <input type="hidden" name="back" value={back} />
@@ -84,7 +107,7 @@ export function RhOfferActions({ data }: { data: RhOfferActionsData }) {
               </button>
             </form>
           ) : null}
-          {data.status === "paused" ? (
+          {shows("pause") && data.status === "paused" ? (
             <form action={resumeJobAction}>
               <input type="hidden" name="id" value={data.id} />
               <input type="hidden" name="back" value={back} />
@@ -94,20 +117,28 @@ export function RhOfferActions({ data }: { data: RhOfferActionsData }) {
               </button>
             </form>
           ) : null}
-          {data.url && live ? (
+          {all && data.url && live ? (
             <button type="button" className="nb-rh-menu-l" onClick={() => setSheet("share")}>
               <b>{t("share")}</b>
               <span className="nb-meta">{t("shareHint")}</span>
             </button>
           ) : null}
-          <form action={duplicateJobAction}>
-            <input type="hidden" name="id" value={data.id} />
-            <button type="submit" className="nb-rh-menu-l">
-              <b>{t("duplicate")}</b>
-              <span className="nb-meta">{t("duplicateHint")}</span>
+          {shows("postpone") && data.status !== "closed" ? (
+            <button type="button" className="nb-rh-menu-l" onClick={() => setSheet("postpone")}>
+              <b>{t("postpone")}</b>
+              <span className="nb-meta">{t("postponeHint")}</span>
             </button>
-          </form>
-          {data.status === "closed" ? (
+          ) : null}
+          {all ? (
+            <form action={duplicateJobAction}>
+              <input type="hidden" name="id" value={data.id} />
+              <button type="submit" className="nb-rh-menu-l">
+                <b>{t("duplicate")}</b>
+                <span className="nb-meta">{t("duplicateHint")}</span>
+              </button>
+            </form>
+          ) : null}
+          {all && data.status === "closed" ? (
             <form action={reopenJobAction}>
               <input type="hidden" name="id" value={data.id} />
               <button type="submit" className="nb-rh-menu-l">
@@ -116,13 +147,13 @@ export function RhOfferActions({ data }: { data: RhOfferActionsData }) {
               </button>
             </form>
           ) : null}
-          {data.status === "closed" && data.report ? (
+          {all && data.status === "closed" && data.report ? (
             <button type="button" className="nb-rh-menu-l" onClick={() => setSheet("report")}>
               <b>{t("report")}</b>
               <span className="nb-meta">{t("reportHint")}</span>
             </button>
           ) : null}
-          {data.status !== "closed" && data.status !== "draft" ? (
+          {all && data.status !== "closed" && data.status !== "draft" ? (
             <button
               type="button"
               className="nb-rh-menu-l"
@@ -131,6 +162,17 @@ export function RhOfferActions({ data }: { data: RhOfferActionsData }) {
             >
               <b>{t("close")}</b>
               <span className="nb-meta">{t("closeHint")}</span>
+            </button>
+          ) : null}
+          {shows("delete") && !all ? (
+            <button
+              type="button"
+              className="nb-rh-menu-l"
+              data-danger=""
+              onClick={() => setSheet("delete")}
+            >
+              <b>{t("delete")}</b>
+              <span className="nb-meta">{t("deleteHint")}</span>
             </button>
           ) : null}
         </div>
@@ -201,6 +243,58 @@ export function RhOfferActions({ data }: { data: RhOfferActionsData }) {
           </form>
           <button type="button" className="nb-annuler" onClick={close}>
             {t("closeKeep")}
+          </button>
+        </div>
+      </PhoneSheet>
+
+      <PhoneSheet
+        open={sheet === "postpone"}
+        onClose={close}
+        label={t("postponeTitle")}
+        closeLabel={tc("close")}
+      >
+        <form action={postponeJobAction} className="nb-rh-confirme">
+          <h2>{t("postponeTitle")}</h2>
+          <p>{t("postponeText")}</p>
+          <input type="hidden" name="id" value={data.id} />
+          <input type="hidden" name="back" value={back} />
+          <label className="nb-rh-date">
+            <span className="nb-meta">{t("postponeDate")}</span>
+            <input
+              id={`rh-repousser-${data.id}`}
+              type="date"
+              name="closesAt"
+              required
+              min={tomorrow}
+              defaultValue={data.closesAt && data.closesAt >= tomorrow ? data.closesAt : tomorrow}
+            />
+          </label>
+          <button type="submit" className="nb-bp">
+            {t("postponeConfirm")}
+          </button>
+          <button type="button" className="nb-annuler" onClick={close}>
+            {tc("cancel")}
+          </button>
+        </form>
+      </PhoneSheet>
+
+      <PhoneSheet
+        open={sheet === "delete"}
+        onClose={close}
+        label={t("deleteTitle", { title: data.title })}
+        closeLabel={tc("close")}
+      >
+        <div className="nb-rh-confirme">
+          <h2>{t("deleteTitle", { title: data.title })}</h2>
+          <p>{t("deleteText", { count: data.applications })}</p>
+          <form action={archiveJobAction}>
+            <input type="hidden" name="id" value={data.id} />
+            <button type="submit" className="nb-bp" data-danger="">
+              {t("deleteConfirm")}
+            </button>
+          </form>
+          <button type="button" className="nb-annuler" onClick={close}>
+            {t("deleteKeep")}
           </button>
         </div>
       </PhoneSheet>

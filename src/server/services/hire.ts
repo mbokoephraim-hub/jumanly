@@ -402,6 +402,40 @@ export async function pauseJob(
   return job;
 }
 
+/**
+ * « Repousser l'offre » (Ephraïm, 03/11/2026): a new closing date, later than today. A closed or
+ * deleted offer keeps its dates.
+ */
+export async function postponeJob(
+  db: PrismaClient,
+  ctx: HireContext,
+  jobId: string,
+  closesAt: Date,
+  now = new Date(),
+) {
+  assert(hirePermissions(ctx.role).manage);
+  const job = await getOrgJob(db, ctx, jobId);
+  if (job.status === "closed" || job.status === "archived") throw new HireError("invalid");
+  if (Number.isNaN(closesAt.getTime()) || closesAt.getTime() <= now.getTime())
+    throw new HireError("invalid");
+  await db.job.update({ where: { id: job.id }, data: { closesAt } });
+  await audit(db, ctx, "job.postpone", job.id);
+  return job;
+}
+
+/**
+ * « Supprimer l'offre » (Ephraïm, 03/11/2026): the offer leaves the lists, Explorer and the
+ * public pages (`archived`). The applications are never erased: candidates keep their history.
+ */
+export async function archiveJob(db: PrismaClient, ctx: HireContext, jobId: string) {
+  assert(hirePermissions(ctx.role).manage);
+  const job = await getOrgJob(db, ctx, jobId);
+  if (job.status === "archived") throw new HireError("invalid");
+  await db.job.update({ where: { id: job.id }, data: { status: "archived", pausedAt: null } });
+  await audit(db, ctx, "job.archive", job.id);
+  return job;
+}
+
 /** « Reprendre » a paused job: live again, within `jobs.active.max`. */
 export async function resumeJob(
   db: PrismaClient,

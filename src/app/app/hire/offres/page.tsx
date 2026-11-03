@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const FILTERS = ["responsable", "equipe", "departement", "entite"] as const;
-const OK_TOASTS = ["brouillon", "pause", "reprise", "fermee", "supprimee"] as const;
+const OK_TOASTS = ["brouillon", "pause", "reprise", "fermee", "supprimee", "retiree"] as const;
 
 /**
  * Mes offres (brief recruteur § 2.4, planches recruteur-1 r2 and r1plus): the search and its

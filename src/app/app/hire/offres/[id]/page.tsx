@@ -746,12 +746,23 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
     );
   // « Voir plus » of an offer opens « Candidats » (Ephraïm, 03/11/2026); « Vue d'ensemble » keeps
   // the figures, and the answers of its actions (pause, report, limit) still land there.
+  // The « ··· » of « Candidatures » (03/11/2026) comes back with `vue=candidatures`: it stays there.
+  const listed = one(query.vue) === "candidatures" || one(query.vue) === "retenus";
   const overview =
     one(query.vue) === "apercu" ||
-    ["jours", "rapport", "ok", "limite"].some((key) => one(query[key]) !== undefined);
-  if (!overview && permissions.readApplications)
+    (!listed && ["jours", "rapport", "ok", "limite"].some((key) => one(query[key]) !== undefined));
+  if (!overview && permissions.readApplications) {
+    const tl = await getTranslations("hireOffers.list");
+    const tm = await getTranslations("phoneRhOffres.menu");
+    const done = (["pause", "reprise"] as const).find((value) => value === one(query.ok));
     return (
       <RhOffresTexts>
+        {done ? <ToastOnLoad message={tl(`ok.${done}`)} tone="success" /> : null}
+        {one(query.repoussee) ? <ToastOnLoad message={tm("postponeDone")} tone="success" /> : null}
+        {one(query.erreur) === "date" ? (
+          <ToastOnLoad message={tm("postponeError")} tone="error" />
+        ) : null}
+        {one(query.limite) ? <ToastOnLoad message={tl("limit")} tone="error" /> : null}
         <RhOfferCandidatesList
           key={`${one(query.vue) ?? ""}-${one(query.q) ?? ""}-${one(query.skill) ?? ""}-${one(query.dispo) ?? ""}-${one(query.ville) ?? ""}`}
           ctx={ctx}
@@ -762,6 +773,7 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
         />
       </RhOffresTexts>
     );
+  }
   const ok = (["pause", "reprise"] as const).find((value) => value === one(query.ok));
   const tl = await getTranslations("hireOffers.list");
   const shortlisted = permissions.readApplications

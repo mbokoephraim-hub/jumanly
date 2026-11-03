@@ -6689,3 +6689,60 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
     transition: none;
   }
 }
+
+/* En-tête de « Candidatures » (Ephraïm, 03/11/2026) : le logo et le nom de l'entreprise,
+   puis le titre de l'offre, plus petit. */
+.nb-rh-co-tete {
+  display: grid;
+  gap: 8px;
+  padding: 16px 20px 14px;
+}
+.nb-rh-co-org {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+.nb-rh-co-org > span:nth-child(2) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-rh-co-org .nb-ex-verif {
+  flex: none;
+  color: var(--nb-menthe-t);
+}
+.nb-rh-co-tete h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.nb-rh-co-tete .nb-meta {
+  margin: -2px 0 0;
+}
+
+/* « Repousser l'offre » : la nouvelle date de fin. */
+.nb-rh-date {
+  display: grid;
+  justify-self: stretch;
+  gap: 6px;
+  text-align: left;
+}
+.nb-rh-date input {
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--nb-filet-fort);
+  border-radius: 14px;
+  background: var(--nb-surface);
+  color: var(--nb-creme);
+  font: inherit;
+  color-scheme: dark;
+}
+html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
+  color-scheme: light;
+}

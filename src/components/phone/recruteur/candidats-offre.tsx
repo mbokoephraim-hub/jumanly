@@ -11,12 +11,25 @@ import {
   offerCandidates,
   searchCount,
 } from "@/server/services/hire-offer-candidates";
+import { publicJobUrl } from "@/components/recruiter/offers";
+import { hirePermissions } from "@/server/services/hire";
+import { FilAvatar } from "../fil/avatar";
+import { Verified } from "../explorer/cards";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { RhCandidateOrder, type RhOrderRow } from "./candidats-ordre";
+import { RhOfferActions, type RhOfferActionsData } from "./offre-actions";
 import { initialsOf, tintOf } from "./candidatures";
 import { RhFiltersSheet } from "./tri-client";
 
 export type RhOfferTab = "apercu" | "candidats" | "retenus";
+
+const initialsOfName = (name: string) =>
+  name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]!.toUpperCase())
+    .join("");
 
 type Query = Record<string, string | string[] | undefined>;
 const one = (value: string | string[] | undefined) =>
@@ -87,9 +100,13 @@ export async function RhOfferCandidatesList({
     dispo: one(query.dispo),
     ville: one(query.ville),
   });
-  const [data, atsOpen] = await Promise.all([
+  const [data, atsOpen, org] = await Promise.all([
     offerCandidates(db, ctx, jobId, search, { shortlistedOnly: tab === "retenus" }),
     can(db, { type: "organization", id: ctx.organizationId }, CV_ANALYSIS_RIGHT),
+    db.organization.findUniqueOrThrow({
+      where: { id: ctx.organizationId },
+      select: { name: true, logo: true, verifiedAt: true },
+    }),
   ]);
   const { job, candidates } = data;
   const applied = data.search;
@@ -100,6 +117,25 @@ export async function RhOfferCandidatesList({
     Object.entries(keep).map(([name, value]) =>
       value ? <input key={name} type="hidden" name={name} value={value} /> : null,
     );
+  // The « ··· » of the page (Ephraïm, 03/11/2026): modify, pause, postpone, delete, nothing else.
+  const actions: RhOfferActionsData = {
+    id: job.id,
+    title: job.title,
+    status: (["published", "pending_review", "draft", "paused", "closed"] as const).includes(
+      job.status as "published",
+    )
+      ? (job.status as RhOfferActionsData["status"])
+      : "other",
+    url: job.publishedAt ? publicJobUrl(job.slug) : null,
+    org: org.name,
+    applications: data.total,
+    report: null,
+    manage: hirePermissions(ctx.role).manage,
+    start: null,
+    closesAt: job.closesAt ? job.closesAt.toISOString().slice(0, 10) : null,
+    minDate: new Date(now.getTime() + 86_400_000).toISOString().slice(0, 10),
+    back: `/app/hire/offres/${jobId}?vue=${tab === "retenus" ? "retenus" : "candidatures"}`,
+  };
   const rows: RhOrderRow[] = candidates.map((person) => {
     const name = person.name ?? t("list.blind", { number: person.number });
     return {
@@ -123,8 +159,21 @@ export async function RhOfferCandidatesList({
           <PhoneIcon name="retour" size={20} />
           {t("back")}
         </Link>
+        <RhOfferActions data={actions} items={["edit", "pause", "postpone", "delete"]} />
       </header>
-      <section className="nb-rh-detail-h">
+      <section className="nb-rh-co-tete">
+        <span className="nb-rh-co-org">
+          <FilAvatar
+            initials={initialsOfName(org.name)}
+            image={org.logo}
+            tone={0}
+            org
+            square
+            size={44}
+          />
+          <span>{org.name}</span>
+          {org.verifiedAt ? <Verified label={t("verified")} size={16} /> : null}
+        </span>
         <h1>{job.title}</h1>
         <p className="nb-meta">{t("line", { count: data.total, shortlisted: data.shortlisted })}</p>
       </section>
