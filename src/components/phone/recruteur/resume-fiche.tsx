@@ -284,12 +284,6 @@ export async function RhCandidateSummary({
   // the title are those of the CV sent, else of the profile.
   const row_ = await personProfile(db, ctx.userId, profile.userId, "candidate");
   const view = row_ ? await profileView(row_, { now }) : null;
-  if (view && person.email && !view.socials.some((item) => item.kind === "email"))
-    view.socials.splice(Math.min(2, view.socials.length), 0, {
-      kind: "email",
-      href: `mailto:${person.email}`,
-      label: tf("email"),
-    });
   const cv = application.cvSnapshot
     ? parseCv(
         (application.cvSnapshot as Record<string, Prisma.JsonValue>).content ??
@@ -315,6 +309,7 @@ export async function RhCandidateSummary({
             <PhoneIcon name="retour" size={20} />
             {fromList ? tf("back") : t("back")}
           </Link>
+          <span className="nb-rh-fp-barre-t">{tf("title")}</span>
           {at >= 0 ? (
             <span className="nb-rh-fr-nav">
               {previous ? (
@@ -341,6 +336,7 @@ export async function RhCandidateSummary({
               person={view}
               name={masked ? t("blind.name", { index: blindName(at) }) : person.name}
               title={title}
+              email={person.email}
               masked={masked}
             />
           </ProfileTexts>

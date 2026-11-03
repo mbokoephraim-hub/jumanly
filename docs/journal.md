@@ -5422,3 +5422,7 @@ Demande d'Ephraïm. Depuis « Candidatures », « Voir plus » ouvre la fiche du
 ## 2026-11-03 · Fiche du candidat : tête et « Résumé » comme le profil d'une personne
 
 Demande d'Ephraïm (cinq captures du profil). La fiche reprend la tête du profil, sans bannière : la photo dans son anneau, les réseaux (et l'e-mail), le nom et le titre (celui du CV envoyé, sinon du profil). Ni badge, ni abonnés, ni entreprise, ni « recrute en ce moment », ni @, ni connexions en commun. Les parties s'appellent Résumé · Documents · Évaluation, dans la pilule du profil. « Résumé » reprend « À propos » à l'identique (`src/components/phone/profil/candidate-summary.tsx`) : la bio (le résumé du CV envoyé, sinon celle du profil, en entier), les compétences avec leurs familles, toutes les expériences dépliées, les diplômes, les certificats et les langues. Les critères éliminatoires passent dans « Évaluation ». Captures : `/mnt/project-files/captures/fiche-candidat-resume-2026-11-03/`.
+
+## 2026-11-03 · Fiche du candidat : marges et tête sur une ligne
+
+Retour d'Ephraïm : le texte commençait trop loin du bord (la marge de la page s'ajoutait à celle du profil) ; il commence maintenant à 20 px comme ailleurs. La barre du haut porte le titre « Profil ». La photo et, à côté, le nom, le titre, la ville, l'e-mail (icône et adresse) et LinkedIn s'il existe ; les parties Résumé · Documents · Évaluation remontent juste en dessous, la bio en texte plus grand. Captures : `/mnt/project-files/captures/fiche-candidat-tete-2026-11-03/`.

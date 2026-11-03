@@ -20369,7 +20369,7 @@
   "phoneRhFiche": {
     "back": "Candidatures",
     "parts": "Parties de la fiche",
-    "email": "E-mail",
+    "title": "Profil",
     "part": {
       "resume": "Résumé",
       "documents": "Documents",
