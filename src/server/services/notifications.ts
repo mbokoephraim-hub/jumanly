@@ -73,6 +73,8 @@ export const notificationTypes = [
   "orgTaskAssigned",
   "orgTaskReminder",
   "orgTaskDone",
+  // « À revoir » (Candidatures recruteur, 03/11/2026): the day a candidate set aside comes back.
+  "reviewReminder",
   // Le Fil (Modèle B, lot B3): answers, names, J'aime, republications and quotes.
   "feedReply",
   "feedMention",
@@ -156,7 +158,7 @@ export const NOTIFICATION_CATEGORIES = Object.keys(
  * is the talent's category `messages`: one person, one inbox.
  */
 export const recruiterNotificationCategories = {
-  "rh.applications": ["newApplication", "atsReady", "jobEnding"],
+  "rh.applications": ["newApplication", "atsReady", "jobEnding", "reviewReminder"],
   "rh.interviews": [
     "interviewTeam",
     "interviewConfirmed",

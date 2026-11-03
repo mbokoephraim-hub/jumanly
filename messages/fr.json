@@ -19847,6 +19847,7 @@
         "on": "À revoir le {date, date, medium}"
       },
       "placedByYou": "Classé par vous",
+      "orbiSuggests": "Orbi : fort potentiel, à retenir ?",
       "waiting": "{count, plural, one {# candidat attend} other {# candidats attendent}} une réponse depuis plus de {days} jours. Retenez, mettez en attente ou répondez."
     },
     "line": "{count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} · {shortlisted, plural, =0 {aucun retenu} one {# retenu} other {# retenus}}",
@@ -25034,6 +25035,7 @@
       "orgJoinRequest": "{name} demande à rejoindre {org}.",
       "orgJoinAccepted": "Votre demande pour rejoindre {org} est acceptée. Bienvenue dans l'équipe !",
       "orgJoinDeclined": "Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation.",
+      "reviewReminder": "{candidate, select, none {Un candidat} other {{candidate}}} de « {jobTitle} » est à revoir aujourd'hui.",
       "jobEnding": "{days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}}",
       "candidateAssigned": "Un collègue vous confie le dossier de {candidate} pour « {jobTitle} ».",
       "talentShared": "{colleague} vous partage le profil d'un talent.",
