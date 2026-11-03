@@ -27,9 +27,10 @@ import { highlightsOf } from "@/server/services/hire-phone-candidatures";
 import { isOnHold } from "@/server/services/hire-tri";
 import { parseCriteria } from "@/server/services/jobs";
 import { candidateSearchSchema, offerCandidates } from "@/server/services/hire-offer-candidates";
-import { OrbiDisc, PhoneIcon } from "../icon";
+import { OrbiDisc, PhoneIcon, type PhoneIconName } from "../icon";
 import { RhProposal, type RhProposalTexts } from "./fiche-proposition";
 import { RhDecision, type RhDecisionOption } from "./fiche-decision";
+import { RhDocumentOpen } from "./fiche-document";
 import { holdReasons, retainReasons, suggestionOf } from "@/server/services/hire-evaluation";
 import { CandidateAbout, CandidateHead } from "../profil/candidate-summary";
 import { profileView, ProfileTexts } from "../profil/server";
@@ -176,6 +177,10 @@ export async function RhCandidateSummary({
     hook: string;
     state: "verified" | "read" | "received" | null;
     href: string;
+    /** A text read in a sheet on the profile (the letter); null opens `href`. */
+    text: string | null;
+    /** A file (the CV in PDF, an attestation), opened in a new tab. */
+    external: boolean;
   }[] = [
     application.coverLetter?.trim()
       ? {
@@ -184,7 +189,9 @@ export async function RhCandidateSummary({
           title: t("documents.letter"),
           hook: tf("cards.letter"),
           state: state(false),
-          href: `${file}?onglet=reponses`,
+          href: self,
+          text: application.coverLetter.trim(),
+          external: false,
         }
       : null,
     // « Lettre de motivation, puis CV » (Ephraïm, 03/11/2026): the CV card is always there.
@@ -195,7 +202,9 @@ export async function RhCandidateSummary({
           title: cvTitle || t("documents.cv"),
           hook: tf("cards.cv"),
           state: state(false),
-          href: `${file}?onglet=cv`,
+          href: `${file}/cv`,
+          text: null,
+          external: true,
         }
       : {
           key: "cv",
@@ -204,6 +213,8 @@ export async function RhCandidateSummary({
           hook: tf("cards.cvNone"),
           state: null,
           href: self.replace(/&partie=[a-z]+/, ""),
+          text: null,
+          external: false,
         },
     profile.portfolioSlug && profile.portfolioPublic && !masked
       ? {
@@ -213,6 +224,8 @@ export async function RhCandidateSummary({
           hook: tf("cards.portfolio"),
           state: null,
           href: `/portfolio/${profile.portfolioSlug}`,
+          text: null,
+          external: true,
         }
       : null,
     diplomaRows.length > 0
@@ -226,6 +239,8 @@ export async function RhCandidateSummary({
           }),
           state: null,
           href: `${self.replace(/&partie=[a-z]+/, "")}`,
+          text: null,
+          external: false,
         }
       : null,
     ...attachments.map((item, index) => ({
@@ -235,7 +250,9 @@ export async function RhCandidateSummary({
       hook: tf("cards.attachment"),
       // An attestation of Jumanly is checked by its code: it counts as verified.
       state: state(item.type === "certificate"),
-      href: `${file}?onglet=reponses`,
+      href: item.type === "certificate" ? `/attestations/${item.code}` : self,
+      text: item.type === "document" ? item.text : null,
+      external: item.type === "certificate",
     })),
   ].filter((item): item is NonNullable<typeof item> => item !== null);
   const missingAsked = Math.max(0, row.documents.asked - row.documents.received);
@@ -246,7 +263,7 @@ export async function RhCandidateSummary({
     : undefined;
   const explanation: MatchExplanation | null = match && match !== "disabled" ? match : null;
   const latest = profile.experiences[0] ?? null;
-  const { notes, checks } = highlightsOf(
+  const { checks } = highlightsOf(
     explanation,
     latest ? { title: latest.title, company: latest.company } : null,
     job.city,
@@ -360,18 +377,52 @@ export async function RhCandidateSummary({
   const title = cv?.info.headline?.trim() || profile.headline?.trim() || null;
 
   // ─── « Évaluation » (Ephraïm, 03/11/2026): Orbi's opinion and reasons, the recruiter decides ──
-  const toVerifyLines = [
+  // « À vérifier » (Ephraïm, 03/11/2026): one precise point per row, with its own badge.
+  const toVerifyLines: EvalPoint[] = [
     ...experiences
       .filter((item) => !item.verified)
       .slice(0, 3)
-      .map((item) => tf("eval.verify.experience", { title: item.title })),
-    ...noProof.slice(0, 3).map((item) => tf("eval.verify.diploma", { title: item.title })),
-    ...(missingAsked > 0 ? [tf("eval.verify.documents", { count: missingAsked })] : []),
-    ...(!application.cvSnapshot ? [tf("eval.verify.cv")] : []),
+      .map((item) => ({
+        key: `e-${item.id}`,
+        icon: "organisation" as const,
+        title: item.title,
+        detail: tf("eval.verify.experienceKind"),
+      })),
+    ...noProof.slice(0, 3).map((item) => ({
+      key: `d-${item.id}`,
+      icon: "formation" as const,
+      title: item.title,
+      detail: tf("eval.verify.diplomaKind"),
+    })),
+    ...(missingAsked > 0
+      ? [
+          {
+            key: "documents",
+            icon: "trombone" as const,
+            title: tf("eval.verify.documents", { count: missingAsked }),
+            detail: tf("eval.verify.documentsKind"),
+          },
+        ]
+      : []),
+    ...(!application.cvSnapshot
+      ? [
+          {
+            key: "cv",
+            icon: "cv" as const,
+            title: tf("eval.verify.cv"),
+            detail: tf("eval.verify.cvKind"),
+          },
+        ]
+      : []),
     ...checks
       .filter((item) => item.key === "declared")
       .slice(0, 2)
-      .map((item) => tf("eval.verify.skill", { skill: "skill" in item ? item.skill : "" })),
+      .map((item, index) => ({
+        key: `s-${index}`,
+        icon: "idee" as const,
+        title: "skill" in item ? String(item.skill) : "",
+        detail: tf("eval.verify.skillKind"),
+      })),
   ];
   const suggestion = suggestionOf({
     orbiClass: explanation ? (row.orbiClass ?? null) : row.orbiClass === "hors" ? "hors" : null,
@@ -381,23 +432,83 @@ export async function RhCandidateSummary({
   const criterionRows = (explanation?.criteria ?? []).filter(
     (item) => item.status !== "not_applicable" && item.weight > 0,
   );
-  const weakLines = [
+  const weakLines: EvalPoint[] = [
     ...(explanation?.missingSkills ?? [])
       .filter((item) => item.importance === "required")
       .slice(0, 3)
-      .map((item) => t("orbi.gapSkill", { skill: item.skill })),
+      .map((item) => ({
+        key: `m-${item.skillId}`,
+        icon: "idee" as const,
+        title: item.skill,
+        detail: tf("eval.weak.missing"),
+      })),
     ...criterionRows
-      .filter((item) => item.status === "unmet" && !item.key.startsWith("skills"))
-      .map((item) => tf("eval.weak.unmet", { label: tr(`why.criteria.${item.key}`) })),
-    ...criterionRows
-      .filter((item) => item.status === "partial" && !item.key.startsWith("skills"))
-      .map((item) => tf("eval.weak.partial", { label: tr(`why.criteria.${item.key}`) })),
-    ...row.missedCriteria.map((label) => tf("eval.weak.knockout", { label })),
+      .filter(
+        (item) =>
+          (item.status === "unmet" || item.status === "partial") && !item.key.startsWith("skills"),
+      )
+      .map((item) => ({
+        key: `w-${item.key}`,
+        icon: "fermer" as const,
+        title: tr(`why.criteria.${item.key}`),
+        detail: tf(item.status === "unmet" ? "eval.weak.unmetKind" : "eval.weak.partialKind"),
+      })),
+    ...row.missedCriteria.map((label, index) => ({
+      key: `x-${index}`,
+      icon: "drapeau" as const,
+      title: label,
+      detail: tf("eval.weak.knockoutKind"),
+    })),
   ];
-  const strongLines = [
-    ...notes.slice(0, 3).map((note) => tr(`notes.${note.key}`, note as never)),
-    ...proofsGained,
-    ...(row.star ? [t("notes.star")] : []),
+  // « Pour le retenir » (Ephraïm, 03/11/2026): what answers the needs of the post, the skills the
+  // offer asks for and the person showed, then the criteria met; never a job title alone.
+  const evidenceOf = new Map(
+    (explanation?.criteria ?? [])
+      .flatMap((item) => item.evidence ?? [])
+      .map((item) => [item.skillId, item]),
+  );
+  const ownSkills = new Map(profile.skills.map((item) => [item.skillId, item]));
+  const shownSkills = [...job.skills]
+    .sort((a, b) => Number(a.importance !== "required") - Number(b.importance !== "required"))
+    .filter((item) => {
+      const evidence = evidenceOf.get(item.skillId);
+      return evidence ? evidence.coverage > 0 : ownSkills.has(item.skillId);
+    })
+    .slice(0, 4);
+  const STRONG_CRITERIA = ["experience", "education", "languages", "location", "contract"];
+  const strongLines: EvalPoint[] = [
+    ...shownSkills.map((item) => {
+      const proven =
+        evidenceOf.get(item.skillId)?.verified ?? ownSkills.get(item.skillId)?.verified ?? false;
+      return {
+        key: `k-${item.skillId}`,
+        icon: proven ? ("coche" as const) : ("talents" as const),
+        title: item.skill.name,
+        detail: tf("eval.strong.skill", {
+          importance: item.importance === "required" ? "required" : "preferred",
+          proven: proven ? "yes" : "no",
+        }),
+      };
+    }),
+    ...criterionRows
+      .filter((item) => item.status === "met" && STRONG_CRITERIA.includes(item.key))
+      .map((item) => ({
+        key: `c-${item.key}`,
+        icon: "coche" as const,
+        title: tr(`why.criteria.${item.key}`),
+        detail: tf("eval.strong.met"),
+      })),
+    ...proofsGained
+      .filter((line) => line !== t("notes.diplomaToCheck"))
+      .map((line, index) => ({
+        key: `p-${index}`,
+        icon: "coche" as const,
+        title: line,
+        detail: tf("eval.strong.proof"),
+      })),
+    ...(row.star
+      ? [{ key: "star", icon: "talents" as const, title: t("notes.star"), detail: null }]
+      : []),
   ];
   const decisionOptions: RhDecisionOption[] = [
     {
@@ -517,7 +628,7 @@ export async function RhCandidateSummary({
                   {documents.map((item, index) => (
                     <li key={item.key} className="nb-rh-fd-carte" data-art={item.art}>
                       <span className="nb-rh-fd-visuel" aria-hidden>
-                        <MenuArt name={item.art} size="lg" />
+                        <MenuArt name={item.art} size="md" />
                       </span>
                       <span className="nb-rh-fd-t">
                         <b>{item.title}</b>
@@ -530,15 +641,18 @@ export async function RhCandidateSummary({
                           ) : (
                             <span />
                           )}
-                          <Link
-                            href={item.href}
-                            className="nb-rh-fd-go"
-                            data-premier={index === 0 ? "" : undefined}
-                            aria-label={`${tf("cards.open")} · ${item.title}`}
-                          >
-                            {tf("cards.open")}
-                            <PhoneIcon name="chevron" size={14} />
-                          </Link>
+                          {item.key === "cv" && !application.cvSnapshot ? null : (
+                            <RhDocumentOpen
+                              label={tf("cards.open")}
+                              ariaLabel={`${tf("cards.open")} · ${item.title}`}
+                              first={index === 0}
+                              title={item.title}
+                              text={item.text}
+                              href={item.href}
+                              external={item.external}
+                              closeLabel={tp("close")}
+                            />
+                          )}
                         </span>
                       </span>
                     </li>
@@ -726,11 +840,7 @@ export async function RhCandidateSummary({
               <div className="nb-rh-ev-liste" data-ton="pour">
                 <p>{tf("eval.strong.title")}</p>
                 {strongLines.length > 0 ? (
-                  <ul>
-                    {strongLines.map((line) => (
-                      <li key={line}>{line}</li>
-                    ))}
-                  </ul>
+                  <EvalPoints points={strongLines} />
                 ) : (
                   <small className="nb-meta">{tf("eval.strong.none")}</small>
                 )}
@@ -738,11 +848,7 @@ export async function RhCandidateSummary({
               <div className="nb-rh-ev-liste" data-ton="faible">
                 <p>{tf("eval.weak.title")}</p>
                 {weakLines.length > 0 ? (
-                  <ul>
-                    {weakLines.map((line) => (
-                      <li key={line}>{line}</li>
-                    ))}
-                  </ul>
+                  <EvalPoints points={weakLines} />
                 ) : (
                   <small className="nb-meta">{tf("eval.weak.none")}</small>
                 )}
@@ -751,11 +857,7 @@ export async function RhCandidateSummary({
                 <p>{tf("eval.verify.title")}</p>
                 {toVerifyLines.length > 0 ? (
                   <>
-                    <ul>
-                      {toVerifyLines.map((line) => (
-                        <li key={line}>{line}</li>
-                      ))}
-                    </ul>
+                    <EvalPoints points={toVerifyLines} />
                     <Link
                       href={`${self.replace(/&partie=[a-z]+/, "")}&partie=documents`}
                       className="nb-rh-ev-lien"
@@ -866,5 +968,26 @@ export async function RhCandidateSummary({
         ) : null}
       </div>
     </SwipePager>
+  );
+}
+
+/** One precise point of « Pourquoi ? » (Ephraïm, 03/11/2026): a badge, the subject, its kind. */
+type EvalPoint = { key: string; icon: PhoneIconName; title: string; detail: string | null };
+
+function EvalPoints({ points }: { points: EvalPoint[] }) {
+  return (
+    <ul className="nb-rh-ev-points">
+      {points.map((item) => (
+        <li key={item.key}>
+          <span className="nb-rh-ev-pastille" aria-hidden>
+            <PhoneIcon name={item.icon} size={15} />
+          </span>
+          <span className="nb-rh-ev-point-t">
+            <b>{item.title}</b>
+            {item.detail ? <small>{item.detail}</small> : null}
+          </span>
+        </li>
+      ))}
+    </ul>
   );
 }

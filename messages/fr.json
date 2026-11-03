@@ -20522,14 +20522,21 @@
       "reasonsTitle": "Pourquoi ?",
       "strong": {
         "title": "Pour le retenir",
-        "none": "Pas de point fort ressorti pour l'instant."
+        "none": "Pas de point fort ressorti pour l'instant.",
+        "skill": "Compétence {importance, select, required {requise} other {souhaitée}} par l'offre{proven, select, yes {, déjà prouvée} other {}}",
+        "met": "Répond à ce que demande l'offre",
+        "proof": "Confirmé pendant la vérification"
       },
       "weak": {
         "title": "Points faibles",
         "none": "Aucun écart avec l'offre.",
         "unmet": "« {label} » ne correspond pas à l'offre",
         "partial": "« {label} » correspond en partie",
-        "knockout": "Critère indispensable non rempli : {label}"
+        "knockout": "Critère indispensable non rempli : {label}",
+        "missing": "Compétence requise, absente du profil",
+        "unmetKind": "Ne correspond pas à l'offre",
+        "partialKind": "Correspond en partie à l'offre",
+        "knockoutKind": "Critère indispensable non rempli"
       },
       "verify": {
         "title": "À vérifier",
@@ -20539,7 +20546,12 @@
         "documents": "{count, plural, one {Un document demandé manque} other {# documents demandés manquent}}",
         "cv": "Pas de CV joint",
         "skill": "Compétence déclarée, pas encore prouvée : {skill}",
-        "ask": "Demander ces informations"
+        "ask": "Demander ces informations",
+        "experienceKind": "Expérience à confirmer",
+        "diplomaKind": "Diplôme sans justificatif",
+        "documentsKind": "Pièce demandée, pas encore reçue",
+        "cvKind": "Demandez-le au candidat",
+        "skillKind": "Compétence déclarée, pas encore prouvée"
       },
       "decision": {
         "title": "Votre décision",
