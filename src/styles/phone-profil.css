@@ -734,8 +734,16 @@ button.nb-pf-rb,
   display: flex;
   align-items: center;
   gap: 6px;
+  min-width: 0;
   font-size: 12.5px;
   font-weight: 700;
+}
+/* A language or a level never breaks inside a word (« Françai / s », Ephraïm 03/11/2026). */
+.nb-pf-langues b,
+.nb-pf-langues small {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
 }
 /* The language's flag (31/10/2026), an emoji drawn by the phone. */
 .nb-pf-drapeau {

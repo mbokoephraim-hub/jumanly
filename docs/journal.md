@@ -5496,3 +5496,7 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 
 - Ephraïm ne veut plus le calendrier natif du téléphone : nouveau `JmCalendar` (src/components/phone/calendar.tsx, CSS phone-calendrier.css) sur son modèle, aux couleurs Jumanly : bande menthe → Lime avec le titre et les flèches, carte sombre, mois et année en pilules, grille de cases fines (jours des mois voisins en gris, point sous aujourd'hui), jour choisi en carré Lime, « Confirmer » / « Annuler ».
 - `PhoneDateField` remplace les champs date natifs du recruteur au téléphone (document demandé dans le chat et dans la fiche, repousser une offre, date de clôture du parcours de publication, date de début d'une proposition, événement du Fil avec l'heure à côté). Le choix d'un rendez-vous dans le chat (talent et recruteur) utilise le même calendrier.
+
+## 2026-11-03 · Langues sans mot coupé
+
+- Fiche candidat (recruteur, téléphone) : les langues passent sur deux colonnes ; un nom de langue ou un niveau ne se coupe plus au milieu d'un mot (« Françai / s », « Professionne / l »). Partout ailleurs, même règle sans coupure.
