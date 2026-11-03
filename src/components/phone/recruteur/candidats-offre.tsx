@@ -250,7 +250,6 @@ export async function RhOfferCandidatesList({
       </header>
       <RhOfferHead job={job} organization={org} now={now} />
       <RhOfferTabs jobId={jobId} current={tab} counts={data.counts} />
-      <p className="nb-rh-co-aide">{t(`desk.help.${tab}`)}</p>
       {tab === "trier" && data.waiting > 0 ? (
         <p className="nb-rh-co-attente" role="status">
           <i className="nb-rh-pouls" aria-hidden />
@@ -389,7 +388,10 @@ export async function RhOfferCandidatesList({
               </li>
             ))}
           </ul>
-          <p className="nb-rh-co-regle">{t("orbi.rule")}</p>
+          <details className="nb-rh-co-regle">
+            <summary>{t("orbi.how")}</summary>
+            <p>{t("orbi.rule")}</p>
+          </details>
         </section>
       ) : null}
       {tab === "trier" && classed === 0 ? (
@@ -427,28 +429,31 @@ export async function RhOfferCandidatesList({
       ) : null}
 
       <section className="nb-rh-co-tous" aria-labelledby={`rh-co-tous-${tab}`}>
-        <h2 id={`rh-co-tous-${tab}`} className="nb-rh-co-h">
-          {t(`desk.title.${tab}`)}
-          <small>{candidates.length}</small>
-        </h2>
-        {grouped ? (
-          <p className="nb-rh-co-ordre">
-            {chosen ? (
-              <Link href={trier} scroll={false} replace>
-                {to("classes.all")}
+        <div className="nb-rh-co-liste-h">
+          <h2 id={`rh-co-tous-${tab}`} className="nb-rh-co-h">
+            {chosen ? to(`classes.${chosen}`) : t(`desk.title.${tab}`)}
+            <small>
+              {chosen ? counts.find((item) => item.key === chosen)?.count : candidates.length}
+            </small>
+          </h2>
+          {classed > 0 ? (
+            // How the list is laid out (Ephraïm, 03/11/2026): by Orbi's classes, or the team's order.
+            <nav className="nb-rh-co-tri" aria-label={t("orbi.order")}>
+              <Link href={trier} aria-current={grouped ? "page" : undefined} scroll={false} replace>
+                <OrbiDisc size={18} />
+                {t("orbi.byOrbi")}
               </Link>
-            ) : null}
-            <Link href={`${trier}&ordre=vous`} scroll={false} replace>
-              {t("orbi.yourOrder")}
-            </Link>
-          </p>
-        ) : classed > 0 ? (
-          <p className="nb-rh-co-ordre">
-            <Link href={trier} scroll={false} replace>
-              {t("orbi.byClass")}
-            </Link>
-          </p>
-        ) : null}
+              <Link
+                href={`${trier}&ordre=vous`}
+                aria-current={grouped ? undefined : "page"}
+                scroll={false}
+                replace
+              >
+                {t("orbi.yours")}
+              </Link>
+            </nav>
+          ) : null}
+        </div>
         {rows.length === 0 ? (
           <p className="nb-vide">
             {filtered

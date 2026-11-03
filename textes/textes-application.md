@@ -16296,13 +16296,15 @@ Conventions :
 | `phoneRhCandidats.desk.placedByYou` | Classé par vous |
 | `phoneRhCandidats.desk.orbiSuggests` | Orbi : fort potentiel, à retenir ? |
 | `phoneRhCandidats.orbi.title` | Classement d'Orbi |
-| `phoneRhCandidats.orbi.line` | {count, plural, one {# candidature lue · revoir l'analyse} other {# candidatures lues · revoir l'analyse}} |
-| `phoneRhCandidats.orbi.rule` | 75 % et plus : Fort potentiel. De 50 à 74 % : À considérer. En dessous : Limité. Hors critères : un critère éliminatoire que vous avez fixé manque. Orbi suggère, vous décidez : personne n'est écarté sans vous. |
+| `phoneRhCandidats.orbi.line` | {count, plural, one {# lue} other {# lues}} · revoir |
+| `phoneRhCandidats.orbi.rule` | 75 % et plus : Fort potentiel. 50 à 74 % : À considérer. Moins : Limité. Hors critères : un critère éliminatoire manque. Personne n'est écarté sans vous. |
+| `phoneRhCandidats.orbi.how` | Comment Orbi classe ? |
+| `phoneRhCandidats.orbi.order` | Ordre de la liste |
+| `phoneRhCandidats.orbi.byOrbi` | Orbi |
+| `phoneRhCandidats.orbi.yours` | Mon ordre |
 | `phoneRhCandidats.orbi.why` | Pourquoi ? |
-| `phoneRhCandidats.orbi.yourOrder` | Voir dans votre ordre |
-| `phoneRhCandidats.orbi.byClass` | Voir par classe d'Orbi |
 | `phoneRhCandidats.orbi.group.revoir` | À revoir |
-| `phoneRhCandidats.desk.waiting` | {count, plural, one {# candidat attend} other {# candidats attendent}} une réponse depuis plus de {days} jours. Retenez, mettez en attente ou répondez. |
+| `phoneRhCandidats.desk.waiting` | {count, plural, one {# candidat attend} other {# candidats attendent}} depuis plus de {days} jours |
 | `phoneRhCandidats.line` | {count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} · {shortlisted, plural, =0 {aucun retenu} one {# retenu} other {# retenus}} |
 | `phoneRhCandidats.search` | Rechercher un candidat |
 | `phoneRhCandidats.filters.title` | Filtres |
@@ -16321,7 +16323,7 @@ Conventions :
 | `phoneRhCandidats.filters.locked` | Les filtres par compétence, disponibilité et ville viennent avec une formule payante. |
 | `phoneRhCandidats.filters.lockedLink` | Voir les formules |
 | `phoneRhCandidats.ats.title` | Diagnostic ATS avec Orbi |
-| `phoneRhCandidats.ats.text` | Orbi lit chaque CV, le compare à l'offre et vous dit pourquoi. Vous gardez la décision. |
+| `phoneRhCandidats.ats.text` | Orbi lit chaque CV et vous dit pourquoi. |
 | `phoneRhCandidats.ats.start` | Démarrer le diagnostic |
 | `phoneRhCandidats.ats.locked` | Réservé aux formules Pro et Premium. |
 | `phoneRhCandidats.ats.upgrade` | Voir les formules |

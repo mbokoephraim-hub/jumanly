@@ -5551,3 +5551,8 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - Les classes viennent de la même analyse que le diagnostic (`atsBoard`), aucune sans lecture des CV ni quand `hire.matching.level` vaut « none ». Orbi suggère, personne n'est écarté.
 - L'écran en double « Résultats de l'analyse » (`?vue=candidats` sans fiche) ouvre maintenant « À trier » (classe gardée).
 - `OrbiMark` est redessiné comme la vraie icône d'Orbi (disque menthe, étincelle, point crème) : « Recommandation d'Orbi » et tous les autres endroits suivent.
+
+## 2026-11-03 · Rubriques d'une offre allégées
+
+- Ephraïm : « trop de textes ». La phrase d'aide sous les rubriques est retirée, la règle d'Orbi se replie sous « Comment Orbi classe ? », le bandeau d'attente et le diagnostic sont raccourcis.
+- « Voir dans votre ordre » devient un bouton à deux positions « Orbi · Mon ordre », à droite du titre « À trier ».
