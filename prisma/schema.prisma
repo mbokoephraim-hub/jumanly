@@ -374,6 +374,7 @@ model Job {
   applicationDrafts       ApplicationDraft[]
   matchResults            MatchResult[]
   viewDays                JobViewDay[]
+  viewFamilies            JobViewFamily[]
   feedPosts               FeedPost[]
   createdAt               DateTime           @default(now())
   updatedAt               DateTime           @updatedAt
@@ -383,6 +384,17 @@ model Job {
 
 /// Views of a job's page, one row per day (UTC): the real figures of « Mes offres » and
 /// « Performance » (planche recruteur-1 r2, r4). No person is recorded.
+/// Views of an offer by signed-in talents, counted per family of skills (« Qui regarde votre
+/// offre », Ephraïm 03/11/2026): a counter, never the person.
+model JobViewFamily {
+  jobId  String
+  job    Job    @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  family String
+  count  Int    @default(0)
+
+  @@id([jobId, family])
+}
+
 model JobViewDay {
   jobId String
   job   Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)

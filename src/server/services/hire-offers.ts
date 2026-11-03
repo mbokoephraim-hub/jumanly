@@ -13,6 +13,7 @@ import { PDFDict, PDFDocument, PDFName, PDFStream } from "pdf-lib";
 import { getDocumentProxy } from "unpdf";
 import { z } from "zod";
 import { Prisma, type JobStatus, type PrismaClient } from "@/generated/prisma/client";
+import { familyShares } from "@/lib/profile-colors";
 import { studyFields } from "@/lib/studies";
 import { fileStorage } from "@/server/storage";
 import {
@@ -769,11 +770,20 @@ export async function offerHistory(
 const utcDay = (date: Date) =>
   new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
 
-/** One view of a job's page (the public page or the signed-in one): a counter per day, no person. */
-export async function recordJobView(db: PrismaClient, slug: string, now = new Date()) {
+/**
+ * One view of a job's page (the public page or the signed-in one): a counter per day, no person.
+ * A signed-in talent also adds one to the family of skills they mostly hold (« Qui regarde votre
+ * offre », 03/11/2026): only a counter per family is kept, never who looked.
+ */
+export async function recordJobView(
+  db: PrismaClient,
+  slug: string,
+  now = new Date(),
+  viewerId?: string | null,
+) {
   const job = await db.job.findFirst({
     where: { slug, status: { in: ["published", "paused", "closed"] } },
-    select: { id: true },
+    select: { id: true, organizationId: true },
   });
   if (!job) return false;
   const day = utcDay(now);
@@ -782,7 +792,30 @@ export async function recordJobView(db: PrismaClient, slug: string, now = new Da
     create: { jobId: job.id, day, count: 1 },
     update: { count: { increment: 1 } },
   });
+  if (viewerId) {
+    const family = await viewerFamily(db, viewerId, job.organizationId);
+    if (family)
+      await db.jobViewFamily.upsert({
+        where: { jobId_family: { jobId: job.id, family } },
+        create: { jobId: job.id, family, count: 1 },
+        update: { count: { increment: 1 } },
+      });
+  }
   return true;
+}
+
+/** The family of skills a talent mostly holds; none for a member of the offer's organization. */
+async function viewerFamily(db: PrismaClient, userId: string, organizationId: string) {
+  const member = await db.membership.findFirst({
+    where: { userId, organizationId },
+    select: { id: true },
+  });
+  if (member) return null;
+  const skills = await db.profileSkill.findMany({
+    where: { profile: { userId } },
+    select: { skill: { select: { category: true } } },
+  });
+  return familyShares(skills.map((row) => row.skill.category))[0]?.family ?? null;
 }
 
 /**
