@@ -8004,3 +8004,21 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 .nb-rh-vu-defile {
   padding-bottom: 6px;
 }
+
+/* Candidatures › choisir l'offre (Ephraïm, 03/11/2026, étape 1). */
+.nb-rh-bureau-intro {
+  margin: 12px 20px 0;
+  font-size: 13.5px;
+  color: var(--nb-brume);
+}
+.nb-rh-bureau-stats dd[data-plein] {
+  color: var(--nb-lime);
+}
+.nb-rh-bureau-vide {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  margin: 48px 28px;
+  text-align: center;
+  color: var(--nb-brume);
+}

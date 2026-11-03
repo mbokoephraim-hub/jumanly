@@ -28,6 +28,9 @@ import { isPhone } from "@/server/view";
 import { RhTab } from "@/components/phone/recruteur/head";
 import { RhCandidatures, rhCandidaturesLine } from "@/components/phone/recruteur/candidatures";
 import { rhApplications } from "@/server/services/hire-phone-candidatures";
+import { deskCounts } from "@/server/services/hire-desk";
+import { listOffers } from "@/server/services/hire-offers";
+import { RhOfferChooser, deskHref, deskOffer } from "@/components/phone/recruteur/bureau";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hireCandidates");
@@ -474,6 +477,44 @@ export default async function CandidatesPage(props: PageProps<"/app/hire/candida
   if (query.vue === "talents") redirect("/app/hire/talents");
   if (query.vue === "propositions") redirect("/app/hire/talents?onglet=propositions");
   const { ctx } = await requireHire("/app/hire/candidats", "readApplications");
+  // Step 1 of « Candidatures recruteur » (03/11/2026): the tab opens on the choice of the offer;
+  // with a single offer online, straight into it. The old views stay for links that name one.
+  if (Object.keys(query).length === 0) {
+    const now = new Date();
+    const offers = (await listOffers(db, ctx, now)).filter(deskOffer);
+    const online = offers.filter((offer) => offer.status === "published");
+    if (offers.length === 1 && online.length === 1) redirect(deskHref(online[0]!.id));
+    const [counts, org] = await Promise.all([
+      deskCounts(
+        db,
+        ctx,
+        offers.map((offer) => offer.id),
+      ),
+      db.organization.findUniqueOrThrow({
+        where: { id: ctx.organizationId },
+        select: { name: true, logo: true, verifiedAt: true },
+      }),
+    ]);
+    const waiting = [...counts.values()].reduce(
+      (sum, count) => sum + count.trier + count.completer + count.entretiens,
+      0,
+    );
+    const tb = await getTranslations("phoneRhBureau");
+    return (
+      <RhTab
+        tab="candidatures"
+        legacy={false}
+        subtitle={tb("line", { count: online.length, waiting })}
+      >
+        <RhOfferChooser
+          offers={offers}
+          counts={counts}
+          org={{ name: org.name, logo: org.logo, verified: Boolean(org.verifiedAt) }}
+          now={now}
+        />
+      </RhTab>
+    );
+  }
   const offre = typeof query.offre === "string" ? query.offre : null;
   const data = await rhApplications(db, ctx, offre).catch((error) => {
     if (error instanceof HireError) notFound();

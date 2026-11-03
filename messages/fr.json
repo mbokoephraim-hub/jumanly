@@ -21033,6 +21033,21 @@
       "warning": "Candidater sur Jumanly est toujours gratuit. Si l'on vous demande de payer pour postuler, signalez-le à assistant@jumanly.io."
     }
   },
+  "phoneRhBureau": {
+    "intro": "Choisissez une offre pour travailler sur ses candidats.",
+    "count": {
+      "trier": "À trier",
+      "completer": "À compléter",
+      "entretiens": "Entretiens"
+    },
+    "total": "{count, plural, one {# candidature} other {# candidatures}} au total",
+    "none": "Pas encore de candidature",
+    "open": "Ouvrir",
+    "openLabel": "Ouvrir les candidatures de l'offre {title}",
+    "empty": "Aucune offre en ligne pour le moment. Publiez une offre pour recevoir des candidatures.",
+    "emptyCta": "Voir mes offres",
+    "line": "{count, plural, =0 {Aucune offre en ligne} one {# offre} other {# offres}} · {waiting, plural, =0 {rien en attente} one {# candidat en attente} other {# candidats en attente}}"
+  },
   "phoneRhCandidatures": {
     "line": "{unseen, plural, =0 {Aucune nouvelle} one {# nouvelle} other {# nouvelles}} · {total, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} · {high} à fort potentiel",
     "results": "{count, plural, one {# résultat} other {# résultats}}",
