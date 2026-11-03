@@ -19935,6 +19935,89 @@
       "pipeline": "Où en sont les candidats",
       "pipelineSee": "Ouvrir le pipeline"
     },
+    "vue": {
+      "verified": "Entreprise vérifiée",
+      "title": "L'avis d'Orbi sur l'offre",
+      "ring": "{count} poste pourvu sur {total}",
+      "goalLine": "{count, plural, one {Objectif : # poste à pourvoir} other {Objectif : # postes à pourvoir}}",
+      "goalLeft": "{count, plural, one {Il reste # jour avant la clôture.} other {Il reste # jours avant la clôture.}}",
+      "goalEnded": "L'offre est terminée.",
+      "goalOpen": "Pas de date de clôture.",
+      "verdict": {
+        "filled": "Objectif atteint",
+        "late": "La clôture approche",
+        "unseen": "L'offre est peu vue",
+        "unconvincing": "Vue, mais peu de candidatures",
+        "toSort": "Des candidatures attendent",
+        "onTrack": "L'offre avance bien"
+      },
+      "verdictWhy": {
+        "filled": "Tous les postes sont pourvus. Pensez à clôturer l'offre.",
+        "late": "Il reste peu de jours et pas assez de candidats retenus : triez ou repoussez la date.",
+        "unseen": "Partagez le lien de l'offre ou invitez des talents depuis Explorer.",
+        "unconvincing": "Beaucoup de personnes la voient sans candidater : revoyez le titre, le salaire ou la description.",
+        "toSort": "{count, plural, one {# candidature n'est pas encore ouverte.} other {# candidatures ne sont pas encore ouvertes.}}",
+        "onTrack": "Les vues et les candidatures suivent. Continuez le tri."
+      },
+      "views": "Vues",
+      "applications": "Candidatures",
+      "rate": "Vues → candidatures",
+      "rule": "Calculé sur les chiffres de l'offre, jamais sur l'identité des candidats. Vous décidez.",
+      "goalTitle": "Objectif de l'offre",
+      "goal": {
+        "hired": "Postes pourvus",
+        "hiredValue": "{count} sur {total}",
+        "shortlisted": "Candidats retenus",
+        "shortlistedValue": "{count} sur {total} conseillés",
+        "time": "Temps écoulé",
+        "timeValue": "{count} jours sur {total}",
+        "timeEnded": "Terminé"
+      },
+      "stepsTitle": "Parcours des candidats",
+      "stepsLead": "De la première vue jusqu'au recrutement.",
+      "step": {
+        "views": "Ont vu l'offre",
+        "applications": "Ont candidaté",
+        "opened": "Candidatures ouvertes",
+        "shortlisted": "Retenus",
+        "interviews": "Vus en entretien",
+        "hired": "Recrutés"
+      },
+      "stepShare": {
+        "views": "{share} des vues",
+        "applications": "{share} des candidatures",
+        "openings": "{count, plural, one {pour # poste} other {pour # postes}}"
+      },
+      "whyTitle": "Pourquoi ?",
+      "works": {
+        "title": "Ce qui marche",
+        "none": "Rien à signaler pour l'instant."
+      },
+      "improve": {
+        "title": "À améliorer",
+        "none": "Rien à améliorer pour l'instant."
+      },
+      "todo": {
+        "title": "À faire",
+        "none": "Rien à faire pour l'instant.",
+        "go": "Voir les candidatures"
+      },
+      "point": {
+        "rate": "{share} des personnes qui voient l'offre candidatent",
+        "seen": "{count, plural, one {# personne a vu l'offre} other {# personnes ont vu l'offre}}",
+        "fastAnswer": "Vous répondez en {days} jours en moyenne",
+        "shortlist": "{count, plural, one {# candidat retenu} other {# candidats retenus}}",
+        "lowRate": "Seulement {share} des vues deviennent des candidatures",
+        "fewViews": "{count, plural, =0 {Personne n'a encore vu l'offre} one {Une seule vue pour l'instant} other {Seulement # vues pour l'instant}}",
+        "slowAnswer": "Les candidats attendent {days} jours en moyenne une première réponse",
+        "noInvite": "Aucun talent invité : invitez des profils depuis Explorer",
+        "open": "{count, plural, one {Ouvrir # candidature} other {Ouvrir # candidatures}}",
+        "retain": "{count, plural, one {Retenir encore # candidat} other {Retenir encore # candidats}}",
+        "closing": "{count, plural, =0 {L'offre se termine aujourd'hui} one {L'offre se termine dans # jour} other {L'offre se termine dans # jours}}",
+        "noApplication": "Attendre les premières candidatures ou inviter des talents"
+      },
+      "activity": "Activité"
+    },
     "source": {
       "direct": "L'offre sur Jumanly",
       "invitation": "Vos invitations",
