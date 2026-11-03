@@ -6,6 +6,7 @@
  * undone. Orbi never makes one. Golden rule n° 6: every write goes through `getOrgApplication`.
  */
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
+import { SORT_REASON_EVENT, type SortReason } from "./hire-evaluation";
 import { getOrgApplication, getOrgJob, HireError, hirePermissions, type HireContext } from "./hire";
 import { allowedFilters, filtersLevelOf, type PipelineFilters } from "./hire-filters";
 import { level } from "@/server/entitlements";
@@ -38,8 +39,20 @@ export async function sortGesture(
   applicationId: string,
   gesture: SortGesture,
   now = new Date(),
+  /** « Évaluation » (03/11/2026): why « Retenir » or « En attente », for the team only. */
+  reason?: SortReason,
 ) {
   const application = await editable(db, ctx, applicationId);
+  if (reason && (gesture === "retenir" || gesture === "attente"))
+    await db.applicationEvent.create({
+      data: {
+        applicationId,
+        actorId: ctx.userId,
+        type: SORT_REASON_EVENT,
+        payload: { gesture, reason },
+        createdAt: now,
+      },
+    });
   const jobId = application.jobId;
   const onHold = isOnHold(application.events);
   if (gesture === "retenir") {

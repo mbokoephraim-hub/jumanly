@@ -1,6 +1,7 @@
 "use server";
 
 import { refresh } from "next/cache";
+import { holdReasons, retainReasons } from "@/server/services/hire-evaluation";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/server/db";
@@ -35,6 +36,7 @@ const gestureSchema = z.object({
   application: z.string().min(1).max(60),
   job: z.string().min(1).max(60),
   gesture: z.enum(sortGestures),
+  reason: z.enum([...retainReasons, ...holdReasons]).optional(),
 });
 
 export async function sortGestureAction(formData: FormData) {
@@ -42,12 +44,20 @@ export async function sortGestureAction(formData: FormData) {
     application: formData.get("application"),
     job: formData.get("job"),
     gesture: formData.get("gesture"),
+    reason: formData.get("reason") || undefined,
   });
   if (!input.success) redirect("/app/hire/offres");
   const { ctx } = await requireHire("/app/hire/offres", "manage", "sort");
   const back = backOf(formData.get("back"), input.data.job);
   try {
-    await sortGesture(db, ctx, input.data.application, input.data.gesture);
+    await sortGesture(
+      db,
+      ctx,
+      input.data.application,
+      input.data.gesture,
+      new Date(),
+      input.data.reason,
+    );
   } catch (error) {
     if (error instanceof HireError) redirect(withParams(back, { geste: null, cible: null }));
     throw error;

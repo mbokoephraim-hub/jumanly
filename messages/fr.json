@@ -20437,6 +20437,98 @@
       "letter": "Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pourriez-vous nous dire en quelques lignes pourquoi ce poste vous intéresse ? Vous pouvez répondre ici. Merci !",
       "cv": "Bonjour, merci pour votre candidature à l'offre « {job} » chez {company}. Pour compléter votre dossier, pourriez-vous nous envoyer votre CV à jour ? Vous pouvez le joindre ici, dans cette conversation. Merci !"
     },
+    "eval": {
+      "summary": {
+        "fort": "Le profil répond à l'essentiel de l'offre.",
+        "considerer": "Le profil répond à une partie de l'offre.",
+        "limite": "Le profil est encore loin de ce que l'offre demande.",
+        "hors": "Un critère indispensable de l'offre n'est pas rempli."
+      },
+      "suggests": "Orbi suggère : {choice}",
+      "why": {
+        "knockout": "Un critère indispensable manque. Vérifiez-le avant de décider.",
+        "strong": "Le profil est fort et ses informations sont confirmées.",
+        "verify": "Le profil est fort, mais des informations restent à vérifier.",
+        "consider": "Le profil est intéressant : comparez-le ou voyez-le en entretien.",
+        "limited": "Trop d'écarts avec l'offre pour l'instant."
+      },
+      "criteria": {
+        "title": "Critères de l'offre",
+        "sign": {
+          "met": "✓",
+          "partial": "≈",
+          "unmet": "✗",
+          "unknown": "?"
+        },
+        "status": {
+          "met": "Rempli",
+          "partial": "En partie",
+          "unmet": "Manquant",
+          "unknown": "À vérifier"
+        }
+      },
+      "reasonsTitle": "Pourquoi ?",
+      "strong": {
+        "title": "Pour le retenir",
+        "none": "Pas de point fort ressorti pour l'instant."
+      },
+      "weak": {
+        "title": "Points faibles",
+        "none": "Aucun écart avec l'offre.",
+        "unmet": "« {label} » ne correspond pas à l'offre",
+        "partial": "« {label} » correspond en partie",
+        "knockout": "Critère indispensable non rempli : {label}"
+      },
+      "verify": {
+        "title": "À vérifier",
+        "none": "Rien à vérifier : le dossier est complet.",
+        "experience": "Expérience non confirmée : {title}",
+        "diploma": "Diplôme sans justificatif : {title}",
+        "documents": "{count, plural, one {Un document demandé manque} other {# documents demandés manquent}}",
+        "cv": "Pas de CV joint",
+        "skill": "Compétence déclarée, pas encore prouvée : {skill}",
+        "ask": "Demander ces informations"
+      },
+      "decision": {
+        "title": "Votre décision",
+        "lead": "Orbi suggère, vous décidez. Choisissez une raison : elle reste dans l'équipe.",
+        "suggested": "Suggestion d'Orbi",
+        "reason": "Raison · pour votre équipe seulement",
+        "retainLine": "Il rejoint la liste des retenus.",
+        "holdLine": "Mis de côté, sans réponse pour l'instant.",
+        "rejectLine": "Il reçoit un message poli de votre part.",
+        "retained": "Déjà dans les retenus",
+        "held": "Déjà en attente",
+        "confirm": {
+          "retain": "Retenir",
+          "hold": "Mettre en attente"
+        }
+      },
+      "reasons": {
+        "retain": {
+          "skills": "Compétences demandées",
+          "experience": "Expérience utile",
+          "potential": "Fort potentiel",
+          "proofs": "Informations confirmées",
+          "other": "Autre raison"
+        },
+        "hold": {
+          "verify": "Informations à vérifier",
+          "compare": "À comparer avec d'autres",
+          "interview": "À voir en entretien",
+          "documents": "Documents manquants",
+          "other": "Autre raison"
+        },
+        "reject": {
+          "skills": "Compétences éloignées du poste",
+          "experience": "Expérience insuffisante",
+          "knockout": "Critère indispensable non rempli",
+          "otherCandidate": "Autre candidat plus proche",
+          "positionClosed": "Poste pourvu ou annulé",
+          "other": "Autre raison"
+        }
+      }
+    },
     "ask": {
       "title": "Envoyer un message au candidat",
       "lead": "Le message arrive dans ses Messages. Vous pouvez le modifier avant de l'envoyer.",
