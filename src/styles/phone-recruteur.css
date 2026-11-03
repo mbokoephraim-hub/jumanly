@@ -7425,3 +7425,60 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   overflow-wrap: normal;
   word-break: keep-all;
 }
+/* Mêmes tailles de texte partout dans le profil du candidat, celles d'« Évaluation »
+   (Ephraïm, 03/11/2026) : titres de partie 18 px, titres d'élément 15 px, texte 14 px, détails 13 px. */
+.nb-rh-fp .nb-rh-fp-apropos .nb-pf-h,
+.nb-rh-fp .nb-rh-fp-apropos .nb-pf-h-t {
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--nb-creme);
+}
+.nb-rh-fp .nb-rh-fp-apropos .nb-pf-h span span,
+.nb-rh-fp .nb-rh-fp-apropos .nb-pf-h > span:not(.nb-pf-h-t) {
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.75;
+}
+.nb-rh-fp .nb-rh-fp-apropos p,
+.nb-rh-fp .nb-rh-fp-apropos li,
+.nb-rh-fp .nb-rh-fp-apropos .nb-pf-vide {
+  font-size: 14px;
+  line-height: 1.45;
+}
+.nb-rh-fp .nb-rh-fp-apropos .nb-pf-legende li {
+  font-size: 13px;
+}
+.nb-rh-fp .nb-rh-fp-apropos .nb-pf-sk {
+  font-size: 14px;
+}
+.nb-rh-fp .nb-rh-fp-apropos h3,
+.nb-rh-fp .nb-rh-fp-apropos li b,
+.nb-rh-fp .nb-rh-fp-apropos .nb-pf-langues b {
+  font-size: 15px;
+}
+.nb-rh-fp .nb-rh-fp-apropos small,
+.nb-rh-fp .nb-rh-fp-apropos .nb-pf-plus {
+  font-size: 13px;
+}
+.nb-rh-fp .nb-rh-fd-t b {
+  font-size: 15px;
+}
+.nb-rh-fp .nb-rh-fd-t > span:not(.nb-rh-fd-bas) {
+  font-size: 14px;
+  line-height: 1.4;
+}
+.nb-rh-fp .nb-rh-fr-doc-etat {
+  font-size: 13px;
+}
+.nb-rh-fp-props .nb-cr-etape-t b {
+  font-size: 15px;
+}
+.nb-rh-fp-props .nb-cr-etape-t small {
+  font-size: 13px;
+}
+.nb-rh-fp .nb-rh-fp-apropos .nb-vf-txt b,
+.nb-rh-fp .nb-rh-fp-apropos .nb-pf-form b {
+  font-size: 15px;
+}

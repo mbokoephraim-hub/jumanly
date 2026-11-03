@@ -5446,3 +5446,4 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - Bloc 3, « Pourquoi ? » : pour le retenir, points faibles, à vérifier (lien vers Documents pour demander).
 - Bloc 4, « Votre décision » : trois choix, la suggestion d'Orbi marquée, raison obligatoire dans la feuille. Retenir et En attente gardent la raison (événement `sort_reason`) ; Ne pas retenir envoie le message et le motif (`decideAction`, retour à la liste).
 - Rien n'est décidé sans un geste du recruteur. Le nom, l'âge, la photo et l'origine n'entrent pas dans l'avis.
+- Suite : mêmes tailles de texte qu'Évaluation dans Résumé et Documents (titres de partie 18 px, titres d'élément 15 px, texte 14 px, détails 13 px), en CSS seulement.
