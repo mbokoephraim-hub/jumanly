@@ -38,12 +38,21 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
       "aria-current",
       "page",
     );
+    // The card (03/11/2026): state in the notch, company, title, views · applications · days
+    // left, a short description, the faces of the candidates and « Voir plus ».
     const card = offers(page)
-      .getByRole("link", { name: /Analyste de données junior/ })
+      .locator("article")
+      .filter({ has: page.getByRole("heading", { name: DEMO_OFFER }) })
       .first();
-    await expect(card).toContainText("vue");
-    // The compact tiles (« 6 j · en ligne », 29/10).
-    await expect(card).toContainText(/\d+ ?j\s*en ligne/);
+    await expect(card.locator(".nb-rh-oc-etat")).toHaveText("En cours");
+    await expect(card.locator("dl")).toContainText("Vues");
+    await expect(card.locator("dl")).toContainText("Candidatures");
+    await expect(
+      card.getByRole("link", { name: /candidatures?, voir les? candidats?/ }),
+    ).toBeVisible();
+    await expect(
+      card.getByRole("link", { name: /^Voir plus sur l'offre Analyste de données junior/ }),
+    ).toBeVisible();
     await capture(page, "041-offres");
     await expectAccessible(page);
 
@@ -320,7 +329,7 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
     }
     await capture(page, "055-publier-5");
     await main(page).getByRole("link", { name: "Voir mes offres" }).click();
-    await expect(offers(page).getByRole("link", { name: new RegExp(title) })).toBeVisible();
+    await expect(offers(page).getByRole("heading", { name: new RegExp(title) })).toBeVisible();
 
     // « Modifier l'offre » comes back to the steps, already filled.
     await page.goto(offerUrl);

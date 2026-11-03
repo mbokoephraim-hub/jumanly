@@ -38,6 +38,9 @@ import {
   passes,
 } from "@/server/services/hire-filters";
 import { OrbiDisc, PhoneIcon } from "../icon";
+import { FilAvatar } from "../fil/avatar";
+import { Verified } from "../explorer/cards";
+import { tintOf } from "./candidatures";
 import { RhOfferActions, RhWhy, type RhOfferActionsData } from "./offre-actions";
 import type { RhOfferDraft, RhPublishData } from "./publier";
 
@@ -94,24 +97,217 @@ export async function rhOffersLine(offers: OfferRow[]) {
   });
 }
 
+/** The company shown on each card: its logo (or initials), its name, its check when verified. */
+export type RhOffersOrg = { name: string; logo: string | null; verified: boolean };
+
+/** What each card adds to the list: a short description and the first faces of its candidates. */
+export type RhOfferExtra = {
+  summary: string;
+  /** The last three people who applied; no photo nor initials when the offer is sorted blind. */
+  faces: { id: string; name: string | null; image: string | null }[];
+};
+
 /**
- * The Offres tab of the recruiter's phone (Modèle B recruteur, M4, planches Recruteur-offres and
- * -offres-encours): the line of figures, « Toutes · En cours · Terminées », then one card per offer
- * with its status, its new applications and three real figures. Every offer is the organization's
- * (`jobScope`).
+ * The description and the last three applicants of each offer, for the cards of the Offres tab.
+ * Only the organization's offers (`organizationId`, on top of the ids already scoped by
+ * `listOffers`), and only people who applied (règle d'or 5).
+ */
+export async function rhOfferExtras(
+  ctx: HireContext,
+  offers: OfferRow[],
+): Promise<Map<string, RhOfferExtra>> {
+  if (offers.length === 0) return new Map();
+  const jobs = await db.job.findMany({
+    where: { id: { in: offers.map((offer) => offer.id) }, organizationId: ctx.organizationId },
+    select: {
+      id: true,
+      description: true,
+      blindSort: true,
+      applications: {
+        orderBy: { createdAt: "desc" },
+        take: 3,
+        select: {
+          id: true,
+          profile: { select: { user: { select: { name: true, image: true } } } },
+        },
+      },
+    },
+  });
+  return new Map(
+    jobs.map((job) => [
+      job.id,
+      {
+        summary: shortText(job.description, 200),
+        faces: job.applications.map((application) => ({
+          id: application.id,
+          name: job.blindSort ? null : application.profile.user.name,
+          image: job.blindSort ? null : application.profile.user.image,
+        })),
+      },
+    ]),
+  );
+}
+
+/** The first words of a description, on one line, cut at a word. */
+function shortText(text: string, max: number) {
+  const flat = text
+    .replace(/[#*_>`~-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (flat.length <= max) return flat;
+  const cut = flat.slice(0, max);
+  return `${cut.slice(0, Math.max(cut.lastIndexOf(" "), max - 20)).trimEnd()}…`;
+}
+
+const initialsOfName = (name: string) =>
+  name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+
+/** The section of the list an offer falls in: live, ended, or still a draft or paused. */
+const sectionOf = (offer: OfferRow) =>
+  offer.tab === "actives"
+    ? "encours"
+    : offer.tab === "cloturees" || offer.tab === "expirees"
+      ? "terminees"
+      : "autres";
+
+/**
+ * The Offres tab of the recruiter's phone (Ephraïm, 03/11/2026): « Toutes · En cours · Terminées »,
+ * then the offers grouped « En cours », « Terminées » (and the drafts and pauses), one card each
+ * with its state in the notch, the company, the title, views · applications · days left, a short
+ * description, the faces of the last candidates and « Voir plus ». Every offer is the
+ * organization's (`jobScope`).
  */
 export async function RhOffersList({
   offers,
+  extras,
+  org,
   filter,
   now,
 }: {
   offers: OfferRow[];
+  extras: Map<string, RhOfferExtra>;
+  org: RhOffersOrg;
   filter: RhOfferFilter;
   now: Date;
 }) {
   const t = await getTranslations("phoneRhOffres");
   const format = await getFormatter();
   const shown = offers.filter((offer) => inFilter(offer, filter));
+  const sections = (["encours", "terminees", "autres"] as const)
+    .map((key) => ({ key, items: shown.filter((offer) => sectionOf(offer) === key) }))
+    .filter((section) => section.items.length > 0);
+  const titled = filter === "toutes" && sections.length > 1;
+
+  const card = (offer: OfferRow) => {
+    const status = statusKey(offer, now);
+    const ended = status === "closed" || status === "expired";
+    const extra = extras.get(offer.id);
+    const total = offer.figures.applications;
+    const faces = extra?.faces ?? [];
+    const more = Math.max(0, total - faces.length);
+    const left =
+      offer.closesAt && !ended
+        ? Math.max(0, Math.ceil((offer.closesAt.getTime() - now.getTime()) / DAY))
+        : null;
+    const endedOn = ended ? (offer.closesAt ?? offer.updatedAt) : null;
+    const href = `/app/hire/offres/${offer.id}`;
+    return (
+      <li key={offer.id}>
+        <article className="nb-rh-oc" data-fin={ended ? "" : undefined}>
+          <div className="nb-rh-oc-corps">
+            <span className="nb-rh-oc-org">
+              <FilAvatar
+                initials={initialsOfName(org.name)}
+                image={org.logo}
+                tone={0}
+                org
+                square
+                size={44}
+              />
+              <span>{org.name}</span>
+              {org.verified ? <Verified label={t("list.card.verified")} size={16} /> : null}
+            </span>
+            <h3 className="nb-rh-oc-t">
+              <Link href={href}>{offer.title}</Link>
+            </h3>
+            <dl className="nb-rh-oc-stats">
+              <div>
+                <dt>{t("list.card.views")}</dt>
+                <dd>{format.number(offer.figures.views)}</dd>
+              </div>
+              <div>
+                <dt>{t("list.card.applications")}</dt>
+                <dd>{format.number(total)}</dd>
+              </div>
+              <div>
+                {endedOn ? (
+                  <>
+                    <dt>{t("list.card.endedOn")}</dt>
+                    <dd>{format.dateTime(endedOn, { day: "numeric", month: "short" })}</dd>
+                  </>
+                ) : left !== null ? (
+                  <>
+                    <dt>{t("list.card.left")}</dt>
+                    <dd>{t("list.card.leftValue", { count: left })}</dd>
+                  </>
+                ) : (
+                  <>
+                    <dt>{t("list.card.deadline")}</dt>
+                    <dd>{t("list.card.noDeadline")}</dd>
+                  </>
+                )}
+              </div>
+            </dl>
+            {extra?.summary ? <p className="nb-rh-oc-desc">{extra.summary}</p> : null}
+          </div>
+          <div className="nb-rh-oc-pied">
+            {total > 0 ? (
+              <Link
+                href={`${href}?vue=candidats`}
+                className="nb-rh-oc-faces"
+                aria-label={t("list.card.faces", { count: total })}
+              >
+                {faces.map((face, index) => (
+                  <span key={face.id} className="nb-rh-oc-face" style={{ zIndex: 4 - index }}>
+                    <FilAvatar
+                      initials={face.name ? initialsOfName(face.name) : ""}
+                      image={face.image}
+                      tone={Number(tintOf(face.id))}
+                      org={false}
+                      size={36}
+                    />
+                  </span>
+                ))}
+                {more > 0 ? (
+                  <span className="nb-rh-oc-plus">{t("list.card.moreFaces", { count: more })}</span>
+                ) : null}
+              </Link>
+            ) : (
+              <span className="nb-rh-oc-aucune">{t("list.card.noFaces")}</span>
+            )}
+            <Link href={href} className="nb-rh-oc-plusbt">
+              <span aria-hidden>{t("list.card.more")}</span>
+              <span className="sr-only">{t("list.card.moreLabel", { title: offer.title })}</span>
+            </Link>
+          </div>
+          <span className="nb-rh-oc-encoche">
+            <i className="nb-rh-oc-k1" aria-hidden />
+            <i className="nb-rh-oc-k2" aria-hidden />
+            <span className="nb-rh-statut nb-rh-oc-etat" data-statut={status}>
+              {status === "published" ? <i className="nb-rh-pouls" aria-hidden /> : null}
+              {t(`status.${status}`)}
+            </span>
+          </span>
+        </article>
+      </li>
+    );
+  };
+
   return (
     <div className="nb-rh-offres">
       <nav className="nb-rh-filtres" aria-label={t("list.filters")}>
@@ -129,90 +325,17 @@ export async function RhOffersList({
       {shown.length === 0 ? (
         <p className="nb-vide">{t(`list.empty.${filter}`)}</p>
       ) : (
-        <ul className="nb-rh-cartes">
-          {shown.map((offer) => {
-            const status = statusKey(offer, now);
-            const online = daysSince(offer.publishedAt, now);
-            const left = offer.closesAt
-              ? Math.ceil((offer.closesAt.getTime() - now.getTime()) / DAY)
-              : null;
-            return (
-              <li key={offer.id}>
-                <Link href={`/app/hire/offres/${offer.id}`} className="nb-rh-offre">
-                  <span className="nb-rh-offre-h">
-                    <span className="nb-rh-statut" data-statut={status}>
-                      {status === "published" ? <i className="nb-rh-pouls" aria-hidden /> : null}
-                      {t(`status.${status}`)}
-                    </span>
-                    {offer.figures.unseen > 0 ? (
-                      <span className="nb-rh-nouv">
-                        {t("list.new", { count: offer.figures.unseen })}
-                      </span>
-                    ) : null}
-                    <PhoneIcon name="chevron" size={16} />
-                  </span>
-                  <b className="nb-rh-offre-t">{offer.title}</b>
-                  <span className="nb-meta">
-                    {[offer.city, t(`contract.${offer.contractType}`)].join(" · ")}
-                  </span>
-                  <span className="nb-rh-chiffres">
-                    <span data-ton="vues">
-                      <span className="nb-rh-chiffre-h">
-                        <MenuArt name="why" size="xs" />
-                        <b>{offer.figures.views}</b>
-                      </span>
-                      {t("tile.views", { count: offer.figures.views })}
-                    </span>
-                    <span data-ton="jours">
-                      <span className="nb-rh-chiffre-h">
-                        <MenuArt name="clock" size="xs" />
-                        <b>{offer.publishedAt ? t("tile.daysValue", { count: online }) : "–"}</b>
-                      </span>
-                      {t("tile.online")}
-                    </span>
-                    <span data-ton="cand">
-                      <span className="nb-rh-chiffre-h">
-                        <MenuArt name="people" size="xs" />
-                        <b>{offer.figures.applications}</b>
-                      </span>
-                      {t("tile.applications", { count: offer.figures.applications })}
-                    </span>
-                  </span>
-                  {offer.figures.views > 0 ? (
-                    <span className="nb-rh-taux">
-                      <span>
-                        {t("list.rate")}
-                        <b>
-                          {format.number(
-                            Math.min(1, offer.figures.applications / offer.figures.views),
-                            { style: "percent", maximumFractionDigits: 1 },
-                          )}
-                        </b>
-                      </span>
-                      <span className="nb-rh-taux-barre" aria-hidden>
-                        <span
-                          style={{
-                            width: `${Math.max(3, Math.min(100, (offer.figures.applications / offer.figures.views) * 100))}%`,
-                          }}
-                        />
-                      </span>
-                    </span>
-                  ) : null}
-                  <span className="nb-meta nb-rh-offre-pied">
-                    <PhoneIcon name="agenda" size={14} />
-                    {offer.publishedAt
-                      ? status === "closed" || status === "expired"
-                        ? t("list.ended")
-                        : left !== null && left >= 0
-                          ? t("list.closes", { count: left })
-                          : t("list.online", { count: online })
-                      : t("list.notPublished")}
-                  </span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        sections.map((section) => (
+          <section key={section.key} aria-label={t(`list.section.${section.key}`)}>
+            {titled ? (
+              <h2 className="nb-rh-oc-section">
+                {t(`list.section.${section.key}`)}
+                <small>{section.items.length}</small>
+              </h2>
+            ) : null}
+            <ul className="nb-rh-cartes">{section.items.map(card)}</ul>
+          </section>
+        ))
       )}
     </div>
   );
