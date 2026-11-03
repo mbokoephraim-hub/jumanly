@@ -34,6 +34,14 @@ export type OfferView = {
   sector: string | null;
   /** The offer drawn as a poster, as in the Fil (« Offres pour vous », 29/10/2026). */
   poster: PosterView;
+  /** The notched card of « Offres pour vous » (Ephraïm, 03/11/2026). */
+  card: {
+    /** « 500 à 850 USD », null when the offer gives none. */
+    salary: string | null;
+    /** « 12 nov. », null without a deadline. */
+    closes: string | null;
+    applicants: number;
+  };
 };
 
 export type CompanyView = {
@@ -143,6 +151,21 @@ export async function explorerWords(now = new Date()) {
                 }),
         skills: row.skills.map((item) => item.skill.name),
         closes: row.closesAt ? tf("poster.closesAt", { date: row.closesAt }) : null,
+      },
+      card: {
+        salary:
+          row.salaryMin === null
+            ? null
+            : row.salaryMax === null || row.salaryMax === row.salaryMin
+              ? t("card.salaryFrom", { min: Math.round(row.salaryMin / 100) })
+              : t("card.salary", {
+                  min: Math.round(row.salaryMin / 100),
+                  max: Math.round(row.salaryMax / 100),
+                }),
+        closes: row.closesAt
+          ? format.dateTime(row.closesAt, { day: "numeric", month: "short" })
+          : null,
+        applicants: row._count.applications,
       },
     };
   };

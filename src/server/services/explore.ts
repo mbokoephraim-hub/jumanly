@@ -42,6 +42,8 @@ const offerSelect = {
   salaryMin: true,
   salaryMax: true,
   closesAt: true,
+  /** « Voir plus » card (03/11/2026): how many people applied, never who. */
+  _count: { select: { applications: true } },
   skills: {
     where: { kind: "hard" },
     orderBy: { weight: "desc" },

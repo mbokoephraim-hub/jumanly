@@ -10971,3 +10971,49 @@ input:checked + .nb-ca-radio::after {
 .nb-ms-rebond .nb-ms-ecrire {
   margin-top: 10px;
 }
+
+/* « Offres pour vous » en cartes à encoche (Ephraïm, 03/11/2026), celles des offres recruteur. */
+.nb-ex-ocs .nb-ex-oc {
+  flex: 0 0 auto;
+  width: min(320px, 84vw);
+  grid-template-rows: 1fr auto;
+  scroll-snap-align: start;
+}
+.nb-ex-oc .nb-rh-oc-stats dd[data-score] {
+  color: var(--nb-lime);
+}
+.nb-ex-oc-ombre {
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: color-mix(in srgb, var(--nb-creme) 10%, var(--nb-carte));
+  color: var(--nb-brume);
+}
+.nb-ex-oc .nb-rh-oc-corps {
+  grid-template-rows: auto auto 1fr;
+  align-content: start;
+}
+.nb-ex-oc .nb-rh-oc-t {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: normal;
+}
+/* Un salaire tient sur deux lignes plutôt que d'être coupé. */
+.nb-ex-oc .nb-rh-oc-stats dd {
+  font-size: 14px;
+  line-height: 1.3;
+  white-space: normal;
+  overflow-wrap: normal;
+}
+.nb-ex-oc .nb-rh-oc-aucune {
+  line-height: 1.35;
+}
+.nb-ex-oc .nb-rh-oc-stats {
+  align-self: end;
+}
+.nb-ex-oc .nb-rh-oc-stats > div {
+  align-content: start;
+}

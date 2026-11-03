@@ -270,3 +270,77 @@ export function SavedLink({ count }: { count: number }) {
     </Link>
   );
 }
+
+/**
+ * An offer of « Offres pour vous » (Ephraïm, 03/11/2026): the notched card of the recruiter's
+ * offers, for the talent. « En cours » in the notch, the company, the title, then Pour vous ·
+ * Salaire · Date limite, no description. At the bottom, plain silhouettes for the people who
+ * applied (never a face or a name: just to show others apply), and « Voir plus » to the offer.
+ */
+export function ExplorerOfferCard({ offer }: { offer: OfferView }) {
+  const t = useTranslations("phoneExplorer.card");
+  const count = offer.card.applicants;
+  const shown = Math.min(count, 3);
+  return (
+    <article className="nb-rh-oc nb-ex-oc">
+      <div className="nb-rh-oc-corps">
+        <span className="nb-rh-oc-org">
+          <CompanyMark initials={offer.initials} logo={offer.logo} tone={offer.tone} size={44} />
+          <span>{offer.company}</span>
+          {offer.verified ? <Verified label={offer.company} size={16} /> : null}
+        </span>
+        <h3 className="nb-rh-oc-t">
+          <Link href={offer.href}>{offer.title}</Link>
+        </h3>
+        <dl className="nb-rh-oc-stats">
+          <div>
+            <dt>{t("match")}</dt>
+            <dd data-score={offer.score !== null ? "" : undefined}>
+              {offer.score !== null ? t("matchValue", { score: offer.score }) : t("noMatch")}
+            </dd>
+          </div>
+          <div>
+            <dt>{t("salaryLabel")}</dt>
+            <dd>{offer.card.salary ?? t("noSalary")}</dd>
+          </div>
+          <div>
+            <dt>{t("deadline")}</dt>
+            <dd>{offer.card.closes ?? t("noDeadline")}</dd>
+          </div>
+        </dl>
+      </div>
+      <div className="nb-rh-oc-pied">
+        {count > 0 ? (
+          <span className="nb-rh-oc-faces" role="img" aria-label={t("applicants", { count })}>
+            {Array.from({ length: shown }, (_, index) => (
+              <span
+                key={index}
+                className="nb-rh-oc-face nb-ex-oc-ombre"
+                style={{ zIndex: 4 - index }}
+              >
+                <PhoneIcon name="personne" size={18} />
+              </span>
+            ))}
+            {count > shown ? (
+              <span className="nb-rh-oc-plus">{t("more", { count: count - shown })}</span>
+            ) : null}
+          </span>
+        ) : (
+          <span className="nb-rh-oc-aucune">{t("first")}</span>
+        )}
+        <Link href={offer.href} className="nb-rh-oc-plusbt">
+          <span aria-hidden>{t("see")}</span>
+          <span className="sr-only">{t("seeLabel", { title: offer.title })}</span>
+        </Link>
+      </div>
+      <span className="nb-rh-oc-encoche">
+        <i className="nb-rh-oc-k1" aria-hidden />
+        <i className="nb-rh-oc-k2" aria-hidden />
+        <span className="nb-rh-statut nb-rh-oc-etat" data-statut="published">
+          <i className="nb-rh-pouls" aria-hidden />
+          {t("open")}
+        </span>
+      </span>
+    </article>
+  );
+}
