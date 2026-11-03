@@ -6367,52 +6367,34 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
    (comme « Mes entraînements »), puis une carte par personne : photo, nom, titre, « Voir plus ». */
 .nb-rh-co-onglets {
   display: flex;
-  gap: 4px;
-  margin: 14px 20px 0;
-  padding: 4px;
-  border-radius: 999px;
+  height: 40px;
+  margin: 14px 20px 4px;
+  padding: 3px;
+  border-radius: 20px;
   background: var(--nb-surface);
-  border: 1px solid var(--nb-filet);
+  border: 1px solid rgba(var(--nb-voile), 0.06);
 }
+/* Mêmes dimensions que le menu de Carrière (Vue · Candidatures · Documents), 03/11/2026. */
 .nb-rh-co-onglets a {
-  flex: 1 1 auto;
-  display: inline-flex;
+  flex: 1 0 auto;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  min-width: 0;
-  min-height: 44px;
-  padding: 0 10px;
-  border-radius: 999px;
+  height: 100%;
+  padding: 0 9px;
+  border-radius: 17px;
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
-  color: var(--nb-gris);
+  color: var(--nb-t-c9d6d2, #c9d6d2);
   -webkit-tap-highlight-color: transparent;
   transition:
-    background 0.25s var(--nb-courbe),
-    color 0.25s var(--nb-courbe);
+    background-color 0.3s,
+    color 0.3s;
 }
 .nb-rh-co-onglets a[aria-current="page"] {
   background: var(--nb-lime);
   color: var(--nb-sur-lime, #0f3f37);
-}
-.nb-rh-co-onglets b {
-  min-width: 20px;
-  height: 20px;
-  padding: 0 6px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--nb-creme) 10%, transparent);
-  font-size: 11.5px;
-  line-height: 20px;
-  text-align: center;
-}
-.nb-rh-co-onglets a[aria-current="page"] b {
-  background: color-mix(in srgb, var(--nb-sur-lime, #0f3f37) 14%, transparent);
-}
-.nb-rh-detail-h + .nb-rh-co-onglets,
-.nb-rh-detail .nb-rh-co-onglets {
-  margin-bottom: 4px;
 }
 .nb-rh-co-recherche {
   display: flex;
@@ -6514,14 +6496,16 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
   line-height: 1.5;
   color: var(--nb-brume);
 }
+/* En dégradé, comme « Voir plus » des cartes d'offres (Ephraïm, 03/11/2026). */
 .nb-rh-co-ats-go {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 50px;
   border-radius: 999px;
-  background: var(--nb-lime);
-  color: var(--nb-sur-lime, #0f3f37);
+  background: linear-gradient(100deg, var(--nb-menthe-claire), var(--nb-lime));
+  color: var(--nb-encre);
+  box-shadow: 0 8px 22px -8px color-mix(in srgb, var(--nb-lime) 70%, transparent);
   font-size: 15.5px;
   font-weight: 700;
   -webkit-tap-highlight-color: transparent;
