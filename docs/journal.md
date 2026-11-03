@@ -5485,3 +5485,9 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 
 - Les cinq messages des propositions d'Orbi (expériences, diplômes, documents manquants, lettre, CV) sont réécrits en paragraphes : salutation par le prénom (« Bonjour, » en tri à l'aveugle), remerciement, demande, éléments demandés un par ligne (« • … »), où répondre, puis « Bien cordialement, L'équipe recrutement de … ». Retours à la ligne `\n` dans les textes, convertis à l'envoi ; espace fine insécable avant « ? ». Champ du message plus haut (11 lignes).
 - Suite (même jour) : la Vue d'une offre garde 140 px sous « Que faire maintenant ? », les cartes ne passent plus sous le bouton « Voir les N candidats ».
+
+## 2026-11-03 · Lire le CV d'un candidat dans l'appli
+
+- « Consulter » sur le CV ouvre `/app/hire/candidats/[id]/lire` : le CV dans l'appli, jamais un téléchargement ni un autre onglet (Ephraïm : « consulter doit demander de voir juste comment se présentent les CV »). PDF importé dessiné page par page (PdfPages), photo telle quelle, CV Jumanly par sa mise en page. Lecture journalisée (`cv.view`). Retour au profil du candidat.
+- La route `/cv` sert d'abord le fichier importé tel quel (copie gardée avec la candidature ou fichier du document d'origine) avant d'imprimer le modèle ; à la candidature, la copie du CV garde désormais la référence du fichier (`file`).
+- Portfolio et attestation s'ouvrent aussi dans l'appli (plus de nouvel onglet).

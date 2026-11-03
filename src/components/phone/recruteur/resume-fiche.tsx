@@ -202,9 +202,10 @@ export async function RhCandidateSummary({
           title: cvTitle || t("documents.cv"),
           hook: tf("cards.cv"),
           state: state(false),
-          href: `${file}/cv`,
+          // Read in the app, never a download or another tab (Ephraïm, 03/11/2026).
+          href: `${file}/lire?retour=${encodeURIComponent(self)}`,
           text: null,
-          external: true,
+          external: false,
         }
       : {
           key: "cv",
@@ -225,7 +226,7 @@ export async function RhCandidateSummary({
           state: null,
           href: `/portfolio/${profile.portfolioSlug}`,
           text: null,
-          external: true,
+          external: false,
         }
       : null,
     diplomaRows.length > 0
@@ -252,7 +253,7 @@ export async function RhCandidateSummary({
       state: state(item.type === "certificate"),
       href: item.type === "certificate" ? `/attestations/${item.code}` : self,
       text: item.type === "document" ? item.text : null,
-      external: item.type === "certificate",
+      external: false,
     })),
   ].filter((item): item is NonNullable<typeof item> => item !== null);
   const missingAsked = Math.max(0, row.documents.asked - row.documents.received);

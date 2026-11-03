@@ -4,6 +4,8 @@ import { db } from "@/server/db";
 import { getActiveSpace } from "@/server/hire-context";
 import { exportCvCopy } from "@/features/cv/export/export";
 import { hirePermissions } from "@/server/services/hire";
+import { cvFileResponse } from "@/server/services/cv-original";
+import { originalCvFile } from "@/server/services/application-cv";
 
 export const maxDuration = 60;
 
@@ -33,6 +35,9 @@ export async function GET(
       metadata: { applicationId },
     },
   });
+  // An imported CV kept as a file (PDF, photo, Word): the file itself, as the talent sent it.
+  const original = await originalCvFile(application.cvSnapshot);
+  if (original) return cvFileResponse(original.file, original.name, "inline");
   return exportCvCopy(
     "application",
     applicationId,
