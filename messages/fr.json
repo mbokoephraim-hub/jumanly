@@ -19841,7 +19841,13 @@
         "rejected": "Non retenu",
         "withdrawn": "Retiré par le candidat",
         "active": "En cours"
-      }
+      },
+      "review": {
+        "due": "À revoir aujourd'hui",
+        "on": "À revoir le {date, date, medium}"
+      },
+      "placedByYou": "Classé par vous",
+      "waiting": "{count, plural, one {# candidat attend} other {# candidats attendent}} une réponse depuis plus de {days} jours. Retenez, mettez en attente ou répondez."
     },
     "line": "{count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} · {shortlisted, plural, =0 {aucun retenu} one {# retenu} other {# retenus}}",
     "search": "Rechercher un candidat",

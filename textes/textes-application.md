@@ -16291,6 +16291,10 @@ Conventions :
 | `phoneRhCandidats.desk.outcome.rejected` | Non retenu |
 | `phoneRhCandidats.desk.outcome.withdrawn` | Retiré par le candidat |
 | `phoneRhCandidats.desk.outcome.active` | En cours |
+| `phoneRhCandidats.desk.review.due` | À revoir aujourd'hui |
+| `phoneRhCandidats.desk.review.on` | À revoir le {date, date, medium} |
+| `phoneRhCandidats.desk.placedByYou` | Classé par vous |
+| `phoneRhCandidats.desk.waiting` | {count, plural, one {# candidat attend} other {# candidats attendent}} une réponse depuis plus de {days} jours. Retenez, mettez en attente ou répondez. |
 | `phoneRhCandidats.line` | {count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} · {shortlisted, plural, =0 {aucun retenu} one {# retenu} other {# retenus}} |
 | `phoneRhCandidats.search` | Rechercher un candidat |
 | `phoneRhCandidats.filters.title` | Filtres |

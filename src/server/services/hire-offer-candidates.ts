@@ -9,6 +9,7 @@ import { level } from "@/server/entitlements";
 import { getOrgJob, HireError, hirePermissions, type HireContext } from "./hire";
 import { filtersLevelOf, type FiltersLevel } from "./hire-filters";
 import { emptyCounts, rubriqueOf, type DeskRubrique } from "./hire-desk";
+import { HOLD_EVENT, HOLD_LIFTED_EVENT, isOnHold } from "./hire-classes";
 
 /**
  * « Candidats » of an offer on the recruiter's phone (Ephraïm, 03/11/2026): every person who
@@ -63,7 +64,17 @@ export type OfferCandidate = {
   status: ApplicationStatus;
   /** « À compléter »: the pieces asked and received, the date limit. */
   pieces: { required: number; received: number; dueAt: Date } | null;
+  /** « À revoir » (the gesture « En attente », step 3): since when, the reminder 3 days after. */
+  review: { since: Date; remindAt: Date; due: boolean } | null;
+  /** The recruiter placed this card (moved it, or set it aside to review): Orbi never moves it. */
+  placedByYou: boolean;
 };
+
+/** « À revoir » comes back after this many days (Ephraïm, 03/11/2026). */
+export const REVIEW_DAYS = 3;
+/** A candidate still without an answer after this many days shows in the banner of « À trier ». */
+export const WAITING_DAYS = 7;
+const DAY = 86_400_000;
 
 /** Order of the list: the recruiter's places first, then the order of application. */
 export function orderCandidates<
@@ -87,7 +98,7 @@ export async function offerCandidates(
   ctx: HireContext,
   jobId: string,
   search: CandidateSearch,
-  options: { shortlistedOnly?: boolean; rubrique?: DeskRubrique } = {},
+  options: { shortlistedOnly?: boolean; rubrique?: DeskRubrique; now?: Date } = {},
 ) {
   if (!hirePermissions(ctx.role).readApplications) throw new HireError("forbidden");
   const job = await getOrgJob(db, ctx, jobId);
@@ -110,6 +121,11 @@ export async function offerCandidates(
       shortlistedAt: true,
       recruiterRank: true,
       status: true,
+      events: {
+        where: { type: { in: [HOLD_EVENT, HOLD_LIFTED_EVENT] } },
+        orderBy: { createdAt: "asc" },
+        select: { type: true, createdAt: true },
+      },
       verification: {
         select: { dueAt: true, items: { select: { required: true, receivedAt: true } } },
       },
@@ -150,7 +166,26 @@ export async function offerCandidates(
     if (ville && !fold(row.profile.user.city ?? "").includes(ville)) return false;
     return true;
   });
-  const candidates: OfferCandidate[] = shown.map((row) => {
+  const now = options.now ?? new Date();
+  const reviewOf = (row: (typeof rows)[number]) => {
+    if (!isOnHold(row.events)) return null;
+    const since = [...row.events].reverse().find((event) => event.type === HOLD_EVENT)!.createdAt;
+    const remindAt = new Date(since.getTime() + REVIEW_DAYS * DAY);
+    return { since, remindAt, due: remindAt <= now };
+  };
+  // In « À trier », the ones set aside to review come first, those whose reminder is due on top.
+  const listed =
+    options.rubrique === "trier"
+      ? [...shown].sort((a, b) => {
+          const ra = reviewOf(a);
+          const rb = reviewOf(b);
+          return (
+            Number(Boolean(rb?.due)) - Number(Boolean(ra?.due)) ||
+            Number(Boolean(rb)) - Number(Boolean(ra))
+          );
+        })
+      : shown;
+  const candidates: OfferCandidate[] = listed.map((row) => {
     const hidden = blind && !row.shortlistedAt;
     return {
       id: row.id,
@@ -165,6 +200,8 @@ export async function offerCandidates(
       number: numbers.get(row.id) ?? 0,
       rubrique: rubriqueOf(row),
       status: row.status,
+      review: reviewOf(row),
+      placedByYou: row.recruiterRank !== null || reviewOf(row) !== null,
       pieces: row.verification
         ? {
             required: row.verification.items.filter((item) => item.required).length,
@@ -189,6 +226,13 @@ export async function offerCandidates(
     total: rows.filter((row) => row.status !== "withdrawn").length,
     shortlisted: rows.filter((row) => row.shortlistedAt && row.status !== "withdrawn").length,
     counts,
+    // Applied more than a week ago, still without any answer (not retained, not set aside).
+    waiting: rows.filter(
+      (row) =>
+        rubriqueOf(row) === "trier" &&
+        !isOnHold(row.events) &&
+        row.createdAt.getTime() < now.getTime() - WAITING_DAYS * DAY,
+    ).length,
     search: applied,
     filtersLevel,
   };
