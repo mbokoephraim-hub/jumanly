@@ -17671,6 +17671,12 @@ Conventions :
 | `phoneRhTalents.tabs.vivier` | Vivier |
 | `phoneRhTalents.tabs.propositions` | Propositions |
 | `phoneRhTalents.tabs.reseau` | Réseau |
+| `phoneRhTalents.tabs.help.decouvrir` | Des profils visibles qui correspondent à vos offres. |
+| `phoneRhTalents.tabs.help.vivier` | Les talents que vous gardez de côté, rangés en listes. |
+| `phoneRhTalents.tabs.help.propositions` | Les invitations à postuler que vous avez envoyées, et leurs réponses. |
+| `phoneRhTalents.tabs.help.reseau` | Vos relations et les personnes à connaître. |
+| `phoneRhTalents.filters.offer` | Pour l'offre |
+| `phoneRhTalents.filters.apply` | Voir les talents |
 | `phoneRhTalents.offers.label` | Offres comparées |
 | `phoneRhTalents.search.results` | {count, plural, one {# talent} other {# talents}} |
 | `phoneRhTalents.offers.all` | Toutes mes offres |

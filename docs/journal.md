@@ -5567,3 +5567,9 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 
 - Ephraïm : comment planifier, voir le mois, la semaine prochaine ? Agenda a maintenant cinq rubriques : Aujourd'hui (7 jours + entretiens du jour) · Semaine (cette semaine, semaine prochaine) · Mois (calendrier, mois précédent/suivant) · À planifier (retenus au dossier complet sans entretien, bouton « Planifier » vers le planificateur existant ; entretiens en attente de réponse du candidat) · À faire (à évaluer, à revoir, pièces, sans réponse).
 - `agendaTasks` renvoie aussi `toPlan` (rubrique Entretiens sans entretien proposé, confirmé ou à déplacer).
+
+## 2026-11-03 · Talents (téléphone) : filtres et Réseau
+
+- « Filtres » sur la ligne de la recherche (`searchExtra` de RhTabPage) : offre, compétence, disponibilité, ville ; ils s'appliquent à « Découvrir » (`rhDiscover` prend des filtres). Les puces d'offres sous les rubriques sont retirées (l'offre est dans les filtres).
+- Une ligne courte sous les rubriques explique chacune (Découvrir, Vivier, Propositions, Réseau).
+- Réseau rangé : invitations reçues, « À connaître » en cartes qui défilent (photo, nom, titre, Talent/RH, Se connecter), « Mes relations » avec un filtre Toutes · Talents · Recruteurs et RH et des lignes en carte.

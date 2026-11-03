@@ -21570,7 +21570,17 @@
       "decouvrir": "Découvrir",
       "vivier": "Vivier",
       "propositions": "Propositions",
-      "reseau": "Réseau"
+      "reseau": "Réseau",
+      "help": {
+        "decouvrir": "Des profils visibles qui correspondent à vos offres.",
+        "vivier": "Les talents que vous gardez de côté, rangés en listes.",
+        "propositions": "Les invitations à postuler que vous avez envoyées, et leurs réponses.",
+        "reseau": "Vos relations et les personnes à connaître."
+      }
+    },
+    "filters": {
+      "offer": "Pour l'offre",
+      "apply": "Voir les talents"
     },
     "offers": {
       "label": "Offres comparées",

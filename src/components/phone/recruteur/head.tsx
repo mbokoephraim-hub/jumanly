@@ -120,9 +120,12 @@ export async function RhTab({
   legacy = true,
   noSearch = false,
   avatar,
+  searchExtra,
   children,
 }: {
   tab: RecruiterTab;
+  /** At the right of the search, on its line (the « Filtres » of Talents, 03/11/2026). */
+  searchExtra?: ReactNode;
   /** The page carries its own search field (Messages, planche 120). */
   noSearch?: boolean;
   /** What stands at the top right in place of the avatar (Paramètres on the Fil). */
@@ -159,6 +162,7 @@ export async function RhTab({
       search={noSearch ? null : search}
       className={className}
       ownHeading={!legacy}
+      searchExtra={searchExtra}
       texts={{
         open: t("search.open"),
         cancel: t("search.cancel"),
