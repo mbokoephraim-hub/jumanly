@@ -20461,31 +20461,9 @@
       "portfolio": "Découvrez les réalisations que ce candidat a choisi de montrer.",
       "diplomas": "{count, plural, one {# diplôme déclaré} other {# diplômes déclarés}}, {proofs, plural, =0 {aucun justificatif joint} one {# avec justificatif} other {# avec justificatif}}.",
       "attachment": "Pièce jointe à la candidature.",
-      "open": "Consulter"
-    },
-    "dossier": {
-      "title": "Le dossier",
-      "count": "{received, plural, one {# pièce} other {# pièces}}{missing, plural, =0 {} one {, # manquante} other {, # manquantes}}",
-      "tab": {
-        "letter": "Lettre",
-        "cv": "CV",
-        "diplomas": "Diplômes",
-        "portfolio": "Portfolio",
-        "attachment": "Pièce {n}"
-      },
-      "letterMeta": "{words} mots, environ {minutes} min de lecture",
-      "readLetter": "Lire toute la lettre",
-      "openCv": "Ouvrir le CV",
-      "emptyCv": "Pas de CV dans ce dossier",
-      "emptyCvLine": "Orbi peut le demander pour vous, juste en dessous.",
-      "proof": "justificatif joint",
-      "noProof": "sans justificatif",
-      "openPortfolio": "Voir le portfolio",
-      "textMeta": "Texte joint à la candidature",
-      "certificateMeta": "Attestation Jumanly, vérifiable par son code",
-      "readText": "Lire le document",
-      "openCertificate": "Voir l'attestation",
-      "match": "Demandée par l'offre"
+      "open": "Consulter",
+      "letterQuote": "« {text} »",
+      "cvMatches": "Compétences demandées par l'offre"
     },
     "proposals": {
       "title": "Propositions d'Orbi",

@@ -16444,26 +16444,8 @@ Conventions :
 | `phoneRhFiche.cards.diplomas` | {count, plural, one {# diplôme déclaré} other {# diplômes déclarés}}, {proofs, plural, =0 {aucun justificatif joint} one {# avec justificatif} other {# avec justificatif}}. |
 | `phoneRhFiche.cards.attachment` | Pièce jointe à la candidature. |
 | `phoneRhFiche.cards.open` | Consulter |
-| `phoneRhFiche.dossier.title` | Le dossier |
-| `phoneRhFiche.dossier.count` | {received, plural, one {# pièce} other {# pièces}}{missing, plural, =0 {} one {, # manquante} other {, # manquantes}} |
-| `phoneRhFiche.dossier.tab.letter` | Lettre |
-| `phoneRhFiche.dossier.tab.cv` | CV |
-| `phoneRhFiche.dossier.tab.diplomas` | Diplômes |
-| `phoneRhFiche.dossier.tab.portfolio` | Portfolio |
-| `phoneRhFiche.dossier.tab.attachment` | Pièce {n} |
-| `phoneRhFiche.dossier.letterMeta` | {words} mots, environ {minutes} min de lecture |
-| `phoneRhFiche.dossier.readLetter` | Lire toute la lettre |
-| `phoneRhFiche.dossier.openCv` | Ouvrir le CV |
-| `phoneRhFiche.dossier.emptyCv` | Pas de CV dans ce dossier |
-| `phoneRhFiche.dossier.emptyCvLine` | Orbi peut le demander pour vous, juste en dessous. |
-| `phoneRhFiche.dossier.proof` | justificatif joint |
-| `phoneRhFiche.dossier.noProof` | sans justificatif |
-| `phoneRhFiche.dossier.openPortfolio` | Voir le portfolio |
-| `phoneRhFiche.dossier.textMeta` | Texte joint à la candidature |
-| `phoneRhFiche.dossier.certificateMeta` | Attestation Jumanly, vérifiable par son code |
-| `phoneRhFiche.dossier.readText` | Lire le document |
-| `phoneRhFiche.dossier.openCertificate` | Voir l'attestation |
-| `phoneRhFiche.dossier.match` | Demandée par l'offre |
+| `phoneRhFiche.cards.letterQuote` | « {text} » |
+| `phoneRhFiche.cards.cvMatches` | Compétences demandées par l'offre |
 | `phoneRhFiche.diplomas.none` | Aucun diplôme indiqué. |
 | `phoneRhFiche.diplomas.proof` | Justificatif joint |
 | `phoneRhFiche.diplomas.noProof` | Pas de justificatif |

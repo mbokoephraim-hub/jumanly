@@ -7900,266 +7900,32 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   padding-left: 0;
   gap: 6px;
 }
-
-/* « Le dossier » (Ephraïm, 03/11/2026): the application as a paper file, binder tabs on top,
-   the chosen piece as a real sheet with its stamp. The paper stays cream in both themes. */
-.nb-rh-dos {
-  --papier: #f4efe4;
-  --encre: #1f2b2a;
-  --ton: #2fd3a6;
-  display: grid;
-  min-width: 0;
-}
-.nb-rh-dos-onglets {
-  display: flex;
-  gap: 4px;
-  padding: 0 10px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.nb-rh-dos-onglets::-webkit-scrollbar {
-  display: none;
-}
-.nb-rh-dos-onglet,
-.nb-rh-dos-feuille {
-  --ton: #2fd3a6;
-}
-[data-art="letter"].nb-rh-dos-onglet,
-[data-art="letter"].nb-rh-dos-feuille {
-  --ton: #f4c463;
-}
-[data-art="certificate"].nb-rh-dos-onglet,
-[data-art="certificate"].nb-rh-dos-feuille,
-[data-art="document"].nb-rh-dos-onglet,
-[data-art="document"].nb-rh-dos-feuille {
-  --ton: #7cc4ff;
-}
-[data-art="portfolio"].nb-rh-dos-onglet,
-[data-art="portfolio"].nb-rh-dos-feuille {
-  --ton: #f4a6c8;
-}
-.nb-rh-dos-onglet {
-  flex: none;
-  min-height: 36px;
-  padding: 0 14px;
-  border: 0;
-  border-radius: 12px 12px 0 0;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  color: var(--nb-creme);
-  background: color-mix(in srgb, var(--ton) 22%, var(--nb-carte));
-  box-shadow: inset 0 3px 0 var(--ton);
-  transition: min-height 0.18s ease;
-}
-.nb-rh-dos-onglet[data-vide] {
-  background: transparent;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--nb-creme) 30%, transparent);
-  border-style: dashed;
-  opacity: 0.75;
-}
-.nb-rh-dos-onglet[aria-selected="true"] {
-  color: var(--encre);
-  background: var(--papier);
-  box-shadow: inset 0 3px 0 var(--ton);
-  opacity: 1;
-}
-.nb-rh-dos-feuille {
-  position: relative;
-  display: grid;
-  gap: 12px;
-  min-width: 0;
-  padding: 18px 18px 16px 34px;
-  border-radius: 6px 18px 18px 18px;
-  color: var(--encre);
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      transparent 0 27px,
-      color-mix(in srgb, var(--ton) 16%, transparent) 27px 28px
-    ),
-    var(--papier);
-  box-shadow:
-    0 1px 0 color-mix(in srgb, var(--encre) 8%, transparent),
-    6px 6px 0 -1px color-mix(in srgb, var(--papier) 18%, transparent),
-    0 14px 30px rgb(0 0 0 / 0.35);
-  animation: nb-rh-dos-pose 0.28s ease-out;
-}
-@keyframes nb-rh-dos-pose {
-  from {
-    opacity: 0;
-    transform: translateY(8px) rotate(-0.6deg);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .nb-rh-dos-feuille {
-    animation: none;
-  }
-}
-.nb-app[data-reduit] .nb-rh-dos-feuille {
-  animation: none;
-}
-.nb-rh-dos-feuille[data-vide] {
-  background: transparent;
-  color: var(--nb-creme);
-  border: 2px dashed color-mix(in srgb, var(--nb-creme) 30%, transparent);
-  box-shadow: none;
-}
-.nb-rh-dos-trous {
-  position: absolute;
-  top: 18px;
-  bottom: 18px;
-  left: 11px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
-.nb-rh-dos-trous i {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-  background: var(--nb-nuit);
-  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.5);
-}
-.nb-rh-dos-feuille[data-vide] .nb-rh-dos-trous {
-  display: none;
-}
-.nb-rh-dos-tampon {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  padding: 4px 10px;
-  border: 2px solid currentColor;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #b7791f;
-  transform: rotate(-8deg);
-  opacity: 0.85;
-  outline: 1px solid currentColor;
-  outline-offset: 2px;
-}
-.nb-rh-dos-tampon[data-etat="read"] {
-  color: #1f8a6e;
-}
-.nb-rh-dos-tampon[data-etat="verified"] {
-  color: #3f7d16;
-}
-.nb-rh-dos-tete {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  padding-right: 92px;
-}
-.nb-rh-dos-feuille[data-vide] .nb-rh-dos-tete {
-  padding-right: 0;
-}
-.nb-rh-dos-art {
-  flex: none;
-}
-.nb-rh-dos-titre {
-  display: grid;
-  gap: 2px;
-  min-width: 0;
-}
-.nb-rh-dos-titre b {
-  font-size: 15px;
-  font-weight: 800;
-  line-height: 1.25;
-  overflow-wrap: anywhere;
-}
-.nb-rh-dos-titre small {
-  font-size: 13px;
-  line-height: 1.3;
-  opacity: 0.7;
-}
-.nb-rh-dos-extrait {
-  margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 15px;
-  line-height: 28px;
-  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
-  mask-image: linear-gradient(to bottom, #000 60%, transparent);
-  max-height: 140px;
+/* What the card says of its piece (03/11/2026): the letter's first words on two lines, the CV's
+   skills asked by the offer as small Lime marks. */
+.nb-rh-fd-t > span[data-cle="letter"] {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  overflow-wrap: anywhere;
+  font-style: italic;
 }
-.nb-rh-dos-lignes {
-  display: grid;
-  gap: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.nb-rh-dos-lignes li {
-  display: grid;
-  gap: 0;
-  min-height: 56px;
-  align-content: center;
-  border-bottom: 1px dashed color-mix(in srgb, var(--encre) 18%, transparent);
-}
-.nb-rh-dos-lignes li:last-child {
-  border-bottom: 0;
-}
-.nb-rh-dos-lignes b {
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.3;
-  overflow-wrap: anywhere;
-}
-.nb-rh-dos-lignes small {
-  font-size: 13px;
-  opacity: 0.7;
-}
-.nb-rh-dos-lignes li[data-ton="ok"] small {
-  color: #1f8a6e;
-  opacity: 1;
-}
-.nb-rh-dos-lignes li[data-ton="manque"] small {
-  color: #b5452f;
-  opacity: 1;
-}
-.nb-rh-dos-puces {
+.nb-rh-fd-puces {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  gap: 4px;
+  margin-top: 2px;
 }
-.nb-rh-dos-puces li {
-  padding: 4px 10px;
+.nb-rh-fd-puces > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
   border-radius: 999px;
-  font-size: 13px;
-  font-weight: 600;
-  border: 1px solid color-mix(in srgb, var(--encre) 22%, transparent);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--nb-lime-t);
+  background: color-mix(in srgb, var(--nb-lime) 14%, transparent);
 }
-.nb-rh-dos-puces li[data-offre] {
-  border-color: transparent;
-  background: color-mix(in srgb, #2fd3a6 30%, transparent);
-}
-.nb-rh-dos-puces li[data-offre]::before {
-  content: "✓ ";
-}
-.nb-rh-dos-bas {
-  display: flex;
-  justify-content: flex-end;
-}
-.nb-rh-dos-bas .nb-rh-fd-go {
-  background: var(--encre);
-  color: var(--papier);
-  animation: none;
-}
-.nb-rh-dos-onglets {
-  align-items: flex-end;
-  position: relative;
-  z-index: 1;
-  margin-bottom: -1px;
-}
-.nb-rh-dos-onglet[aria-selected="true"] {
-  min-height: 42px;
+.nb-rh-fd-puces > span::before {
+  content: "✓";
 }

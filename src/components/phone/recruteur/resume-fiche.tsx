@@ -5,6 +5,7 @@ import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
+import { MenuArt } from "@/components/site/menu-art";
 import { markCriterionAction, sortGestureAction } from "@/server/actions/hire-tri";
 import { db } from "@/server/db";
 import { applicationMatches } from "@/server/matching/service";
@@ -29,7 +30,7 @@ import { candidateSearchSchema, offerCandidates } from "@/server/services/hire-o
 import { OrbiDisc, PhoneIcon, type PhoneIconName } from "../icon";
 import { RhProposal, type RhProposalTexts } from "./fiche-proposition";
 import { RhDecision, type RhDecisionOption } from "./fiche-decision";
-import { RhDossier, type RhDossierPiece } from "./fiche-dossier";
+import { RhDocumentOpen } from "./fiche-document";
 import { holdReasons, retainReasons, suggestionOf } from "@/server/services/hire-evaluation";
 import { CandidateAbout, CandidateHead } from "../profil/candidate-summary";
 import { profileView, ProfileTexts } from "../profil/server";
@@ -375,110 +376,20 @@ export async function RhCandidateSummary({
   const bio = cvSummary ? { title: null, text: cvSummary } : (view?.about ?? null);
   const title = cv?.info.headline?.trim() || profile.headline?.trim() || null;
 
-  // ─── « Le dossier » (Ephraïm, 03/11/2026): each piece as a sheet showing what it says ───────
+  // What each card says of its piece (Ephraïm, 03/11/2026: « améliore juste »): the first words
+  // of the letter, the CV's title and the skills of the offer it shows.
   const offerSkills = new Set(job.skills.map((item) => item.skill.name.toLowerCase()));
-  const excerptOf = (text: string, max = 260) => {
-    const clean = text.replace(/\s+/g, " ").trim();
-    return clean.length > max ? `${clean.slice(0, max).replace(/\s\S*$/, "")}…` : clean;
-  };
-  const stampOf = (value: "verified" | "read" | "received" | null) =>
-    value ? { label: t(`documents.state.${value}`), tone: value } : null;
-  let attachmentNumber = 0;
-  const dossier: RhDossierPiece[] = documents.map((item) => {
-    const base = {
-      key: item.key,
-      art: item.art,
-      title: item.title,
-      stamp: stampOf(item.state),
-      meta: null as string | null,
-      excerpt: null as string | null,
-      lines: [] as RhDossierPiece["lines"],
-      chips: [] as RhDossierPiece["chips"],
-      empty: false,
-    };
-    if (item.key === "letter") {
-      const words = (application.coverLetter ?? "").trim().split(/\s+/).length;
-      return {
-        ...base,
-        tab: tf("dossier.tab.letter"),
-        meta: tf("dossier.letterMeta", { words, minutes: Math.max(1, Math.round(words / 200)) }),
-        excerpt: excerptOf(application.coverLetter ?? ""),
-        action: {
-          label: tf("dossier.readLetter"),
-          text: item.text,
-          href: item.href,
-          external: false,
-        },
-      };
-    }
-    if (item.key === "cv") {
-      if (!cv)
-        return {
-          ...base,
-          tab: tf("dossier.tab.cv"),
-          title: tf("dossier.emptyCv"),
-          meta: tf("dossier.emptyCvLine"),
-          empty: true,
-          action: null,
-        };
-      return {
-        ...base,
-        tab: tf("dossier.tab.cv"),
-        meta: cv.info.headline?.trim() || null,
-        excerpt: cv.summary.trim() ? excerptOf(cv.summary, 160) : null,
-        lines: cv.experiences.slice(0, 3).map((line) => ({
-          title: line.title,
-          detail: [line.company, line.start.slice(0, 4)].filter(Boolean).join(" · "),
-        })),
-        chips: [...cv.skills]
-          .sort(
-            (a, b) =>
-              Number(offerSkills.has(b.name.toLowerCase())) -
-              Number(offerSkills.has(a.name.toLowerCase())),
-          )
-          .slice(0, 6)
-          .map((skill) => ({
-            label: skill.name,
-            match: offerSkills.has(skill.name.toLowerCase()),
-          })),
-        action: { label: tf("dossier.openCv"), text: null, href: item.href, external: true },
-      };
-    }
-    if (item.key === "diplomas")
-      return {
-        ...base,
-        tab: tf("dossier.tab.diplomas"),
-        meta: item.hook,
-        lines: diplomaRows.slice(0, 4).map((row) => ({
-          title: row.degree,
-          detail: [row.school, row.image ? tf("dossier.proof") : tf("dossier.noProof")]
-            .filter(Boolean)
-            .join(" · "),
-          tone: row.image ? ("ok" as const) : ("manque" as const),
-        })),
-        action: null,
-      };
-    if (item.key === "portfolio")
-      return {
-        ...base,
-        tab: tf("dossier.tab.portfolio"),
-        meta: item.hook,
-        action: { label: tf("dossier.openPortfolio"), text: null, href: item.href, external: true },
-      };
-    attachmentNumber += 1;
-    return {
-      ...base,
-      tab: tf("dossier.tab.attachment", { n: attachmentNumber }),
-      meta: item.text ? tf("dossier.textMeta") : tf("dossier.certificateMeta"),
-      excerpt: item.text ? excerptOf(item.text, 180) : null,
-      action: {
-        label: item.text ? tf("dossier.readText") : tf("dossier.openCertificate"),
-        text: item.text,
-        href: item.href,
-        external: item.external,
-      },
-    };
-  });
+  const letterStart = (application.coverLetter ?? "").replace(/\s+/g, " ").trim();
+  const cvMatches = (cv?.skills ?? [])
+    .filter((skill) => offerSkills.has(skill.name.toLowerCase()))
+    .slice(0, 3)
+    .map((skill) => skill.name);
+  const cardLine = (key: string, hook: string) =>
+    key === "letter" && letterStart
+      ? tf("cards.letterQuote", { text: letterStart })
+      : key === "cv" && cv?.info.headline?.trim()
+        ? cv.info.headline.trim()
+        : hook;
 
   // ─── « Évaluation » (Ephraïm, 03/11/2026): Orbi's opinion and reasons, the recruiter decides ──
   // « À vérifier » (Ephraïm, 03/11/2026): one precise point per row, with its own badge.
@@ -722,23 +633,53 @@ export async function RhCandidateSummary({
           <>
             <section className="nb-rh-fd" aria-labelledby="rh-fd-t">
               <h2 id="rh-fd-t" className="nb-rh-co-h">
-                {tf("dossier.title")}
-                <small>
-                  {tf("dossier.count", {
-                    received: dossier.filter((item) => !item.empty).length,
-                    missing: dossier.filter((item) => item.empty).length + missingAsked,
-                  })}
-                </small>
+                {tf("documents.title")}
+                <small>{documents.length}</small>
               </h2>
-              {dossier.length === 0 ? (
+              {documents.length === 0 ? (
                 <p className="nb-meta">{t("documents.none")}</p>
               ) : (
-                <RhDossier
-                  pieces={dossier}
-                  closeLabel={tp("close")}
-                  tabsLabel={tf("documents.title")}
-                  matchLabel={tf("dossier.match")}
-                />
+                <ul className="nb-rh-fd-liste">
+                  {documents.map((item, index) => (
+                    <li key={item.key} className="nb-rh-fd-carte" data-art={item.art}>
+                      <span className="nb-rh-fd-visuel" aria-hidden>
+                        <MenuArt name={item.art} size="md" />
+                      </span>
+                      <span className="nb-rh-fd-t">
+                        <b>{item.title}</b>
+                        <span data-cle={item.key}>{cardLine(item.key, item.hook)}</span>
+                        {item.key === "cv" && cvMatches.length > 0 ? (
+                          <span className="nb-rh-fd-puces" aria-label={tf("cards.cvMatches")}>
+                            {cvMatches.map((name) => (
+                              <span key={name}>{name}</span>
+                            ))}
+                          </span>
+                        ) : null}
+                        <span className="nb-rh-fd-bas">
+                          {item.state ? (
+                            <span className="nb-rh-fr-doc-etat" data-etat={item.state}>
+                              {t(`documents.state.${item.state}`)}
+                            </span>
+                          ) : (
+                            <span />
+                          )}
+                          {item.key === "cv" && !application.cvSnapshot ? null : (
+                            <RhDocumentOpen
+                              label={tf("cards.open")}
+                              ariaLabel={`${tf("cards.open")} · ${item.title}`}
+                              first={index === 0}
+                              title={item.title}
+                              text={item.text}
+                              href={item.href}
+                              external={item.external}
+                              closeLabel={tp("close")}
+                            />
+                          )}
+                        </span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               )}
               {missingAsked > 0 ? (
                 <p className="nb-meta" data-ambre="">
