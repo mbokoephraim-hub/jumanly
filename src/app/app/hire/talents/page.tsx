@@ -35,7 +35,7 @@ export default async function TalentsRedirect({ searchParams }: PageProps<"/app/
         actions={<RhBell />}
         searchExtra={
           <RhTalentsTexts>
-            <RhTalentFilters ctx={ctx} query={query} />
+            <RhTalentFilters query={query} />
           </RhTalentsTexts>
         }
       >

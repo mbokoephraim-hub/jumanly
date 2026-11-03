@@ -4217,9 +4217,13 @@ html[data-nb-theme="clair"] .nb-ex-recherche:focus-within {
   padding: 2px 0;
 }
 /* « Filtres »: Lime, Sapin text, the number of filters on. */
+/* Only the icon (Ephraïm, 03/11/2026), its name for screen readers; the count in its corner. */
 .nb-ex-fbtn {
+  position: relative;
+  width: 44px;
   height: 44px;
-  padding: 0 14px;
+  justify-content: center;
+  padding: 0;
   border-radius: 22px;
   background: var(--nb-lime);
   color: var(--nb-sur-lime, #0f3f37);
@@ -4231,6 +4235,10 @@ html[data-nb-theme="clair"] .nb-ex-recherche:focus-within {
   flex: none;
 }
 .nb-ex-fbtn-n {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  box-shadow: 0 0 0 2px var(--nb-nuit);
   min-width: 18px;
   height: 18px;
   padding: 0 5px;

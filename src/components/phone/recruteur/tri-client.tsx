@@ -186,7 +186,7 @@ export function RhFiltersSheet({
         aria-haspopup="dialog"
         onClick={() => setOpen(true)}
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
           <path
             d="M4 7h10M18 7h2M4 17h4M12 17h8"
             stroke="currentColor"
@@ -196,7 +196,6 @@ export function RhFiltersSheet({
           <circle cx="16" cy="7" r="2.2" stroke="currentColor" strokeWidth="2.2" />
           <circle cx="10" cy="17" r="2.2" stroke="currentColor" strokeWidth="2.2" />
         </svg>
-        {label}
         {count > 0 ? <span className="nb-ex-fbtn-n">{count}</span> : null}
       </button>
       <PhoneSheet
