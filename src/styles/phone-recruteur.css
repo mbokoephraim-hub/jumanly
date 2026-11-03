@@ -8760,3 +8760,21 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 .nb-rh-t-domaines label[hidden] {
   display: none;
 }
+/* Vivier and Propositions with filters: the count and « Effacer les filtres » on one line. */
+.nb-rh-t-trouve {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.nb-rh-t-trouve .nb-pilule {
+  margin-top: 0;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.nb-rh-t-trouve p {
+  margin: 0;
+}
