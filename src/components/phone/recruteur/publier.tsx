@@ -671,7 +671,7 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
           </button>
         ) : (
           <Link
-            href={jobId ? `/app/hire/offres/${jobId}` : "/app/hire/offres"}
+            href={jobId ? `/app/hire/offres/${jobId}?vue=apercu` : "/app/hire/offres"}
             className="nb-rh-retour"
           >
             <PhoneIcon name="retour" size={20} />

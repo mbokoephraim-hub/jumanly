@@ -1611,6 +1611,9 @@ model Application {
   interviews       Interview[]
   /// « Dossier de vérification » (logique du recrutement, étape 6): the pieces asked to a retained.
   verification     VerificationRequest?
+  /// Place in « Candidats » of the offer, chosen by the recruiter by moving the cards (Ephraïm,
+  /// 03/11/2026); null keeps the order of application. Never set by Orbi.
+  recruiterRank    Int?
   createdAt        DateTime             @default(now())
   updatedAt        DateTime             @updatedAt
 

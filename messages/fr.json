@@ -19767,6 +19767,63 @@
       "submit": "Publier"
     }
   },
+  "phoneRhCandidats": {
+    "back": "Offres",
+    "tabs": "Parties de l'offre",
+    "tab": {
+      "apercu": "Vue d'ensemble",
+      "candidats": "Candidats",
+      "retenus": "Retenus"
+    },
+    "line": "{count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} · {shortlisted, plural, =0 {aucun retenu} one {# retenu} other {# retenus}}",
+    "search": "Rechercher un candidat",
+    "filters": {
+      "title": "Filtres",
+      "count": "{count, plural, =0 {Filtres} one {Filtres, # actif} other {Filtres, # actifs}}",
+      "close": "Fermer les filtres",
+      "reset": "Tout effacer",
+      "skill": "Compétence",
+      "skillPlaceholder": "Par exemple : Excel, comptabilité",
+      "dispo": "Disponibilité",
+      "any": "Toutes",
+      "dispoValue": {
+        "open": "En recherche active",
+        "listening": "À l'écoute",
+        "not_looking": "Pas en recherche"
+      },
+      "city": "Ville",
+      "apply": "Voir les candidats",
+      "locked": "Les filtres par compétence, disponibilité et ville viennent avec une formule payante.",
+      "lockedLink": "Voir les formules"
+    },
+    "ats": {
+      "title": "Diagnostic ATS avec Orbi",
+      "text": "Orbi lit chaque CV, le compare à l'offre et vous dit pourquoi. Vous gardez la décision.",
+      "start": "Démarrer le diagnostic",
+      "locked": "Réservé aux formules Pro et Premium.",
+      "upgrade": "Voir les formules",
+      "none": "Le diagnostic s'ouvre dès la première candidature."
+    },
+    "list": {
+      "title": "Tous les candidats",
+      "titleRetenus": "Les retenus",
+      "empty": "Personne n'a encore candidaté à cette offre.",
+      "emptyRetenus": "Personne n'est encore retenu pour cette offre.",
+      "emptySearch": "Aucun candidat ne correspond à cette recherche.",
+      "blind": "Candidat {number}",
+      "noHeadline": "Titre du profil non renseigné",
+      "hint": "Appuyez longuement sur une carte pour la déplacer.",
+      "move": "Déplacer",
+      "moveDone": "Terminé",
+      "up": "Monter",
+      "down": "Descendre",
+      "failed": "Le nouvel ordre n'a pas pu être gardé. Réessayez.",
+      "more": "Voir plus",
+      "moreLabel": "Voir le profil",
+      "unseen": "Pas encore vue",
+      "shortlisted": "Retenu"
+    }
+  },
   "phoneRhOffres": {
     "list": {
       "line": "{live, plural, =0 {Aucune offre en cours} one {# offre en cours} other {# offres en cours}} · {applications, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} · {unseen, plural, =0 {aucune nouvelle} one {# nouvelle} other {# nouvelles}}",

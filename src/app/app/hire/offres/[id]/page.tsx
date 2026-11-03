@@ -29,9 +29,11 @@ import { getOrgJob, HireError, hirePermissions } from "@/server/services/hire";
 import { isPhone } from "@/server/view";
 import { effectiveRights } from "@/server/services/org-team";
 import { RhCandidateSummary } from "@/components/phone/recruteur/resume-fiche";
+import { RhOfferCandidatesList, RhOfferTabs } from "@/components/phone/recruteur/candidats-offre";
 import {
   RhOfferCandidates,
   RhOfferDetail,
+  RhOffresTexts,
   RhOfferPublished,
 } from "@/components/phone/recruteur/offres";
 import {
@@ -742,12 +744,45 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
         orbiClass={one(query.classe)}
       />
     );
+  // « Voir plus » of an offer opens « Candidats » (Ephraïm, 03/11/2026); « Vue d'ensemble » keeps
+  // the figures, and the answers of its actions (pause, report, limit) still land there.
+  const overview =
+    one(query.vue) === "apercu" ||
+    ["jours", "rapport", "ok", "limite"].some((key) => one(query[key]) !== undefined);
+  if (!overview && permissions.readApplications)
+    return (
+      <RhOffresTexts>
+        <RhOfferCandidatesList
+          key={`${one(query.vue) ?? ""}-${one(query.q) ?? ""}-${one(query.skill) ?? ""}-${one(query.dispo) ?? ""}-${one(query.ville) ?? ""}`}
+          ctx={ctx}
+          jobId={job.id}
+          query={query}
+          tab={one(query.vue) === "retenus" ? "retenus" : "candidats"}
+          sortable={sortable}
+        />
+      </RhOffresTexts>
+    );
   const ok = (["pause", "reprise"] as const).find((value) => value === one(query.ok));
   const tl = await getTranslations("hireOffers.list");
+  const shortlisted = permissions.readApplications
+    ? await db.application.count({
+        where: { jobId: job.id, shortlistedAt: { not: null }, status: { not: "withdrawn" } },
+      })
+    : 0;
   return (
     <>
       {ok && <ToastOnLoad message={tl(`ok.${ok}`)} tone="success" />}
       <RhOfferDetail
+        tabs={
+          permissions.readApplications ? (
+            <RhOfferTabs
+              jobId={job.id}
+              current="apercu"
+              applications={figures.applications}
+              shortlisted={shortlisted}
+            />
+          ) : undefined
+        }
         ctx={ctx}
         job={job}
         figures={figures}

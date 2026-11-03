@@ -416,9 +416,12 @@ export async function RhOfferDetail({
   openReport,
   notice,
   now,
+  tabs,
 }: {
   ctx: HireContext;
   job: DetailJob;
+  /** « Vue d'ensemble · Candidats · Retenus » (03/11/2026), under the title. */
+  tabs?: ReactNode;
   /** « Remettre en ligne » refused by the limit of the plan. */
   notice?: string;
   figures: OfferRow["figures"];
@@ -597,6 +600,7 @@ export async function RhOfferDetail({
             </p>
           ) : null}
         </section>
+        {tabs}
         <div className="nb-rh-detail-corps">
           <div className="nb-rh-tuiles">
             <p data-ton="vues">
@@ -714,8 +718,8 @@ export async function RhOfferDetail({
                     key={days}
                     href={
                       days === 7
-                        ? `/app/hire/offres/${job.id}`
-                        : `/app/hire/offres/${job.id}?jours=30`
+                        ? `/app/hire/offres/${job.id}?vue=apercu`
+                        : `/app/hire/offres/${job.id}?vue=apercu&jours=30`
                     }
                     aria-current={period === days ? "page" : undefined}
                     replace
