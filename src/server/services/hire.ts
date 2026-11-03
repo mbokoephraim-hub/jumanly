@@ -557,6 +557,7 @@ export async function getOrgApplication(db: PrismaClient, ctx: HireContext, appl
               firstName: true,
               lastName: true,
               email: true,
+              image: true,
               city: true,
               country: true,
             },

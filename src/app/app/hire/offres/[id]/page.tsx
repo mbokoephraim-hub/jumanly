@@ -28,7 +28,7 @@ import { requireHire } from "@/server/hire-context";
 import { getOrgJob, HireError, hirePermissions } from "@/server/services/hire";
 import { isPhone } from "@/server/view";
 import { effectiveRights } from "@/server/services/org-team";
-import { RhCandidateSummary } from "@/components/phone/recruteur/resume-fiche";
+import { RH_FILE_PARTS, RhCandidateSummary } from "@/components/phone/recruteur/resume-fiche";
 import { RhOfferCandidatesList, RhOfferTabs } from "@/components/phone/recruteur/candidats-offre";
 import {
   RhOfferCandidates,
@@ -722,13 +722,15 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
   if (one(query.vue) === "candidats" && permissions.readApplications && fiche)
     return (
       <RhCandidateSummary
-        key={fiche}
+        key={`${fiche}-${one(query.partie) ?? ""}`}
         ctx={ctx}
         jobId={job.id}
         applicationId={fiche.slice(0, 60)}
         stageId={one(query.etape)}
         query={query}
         sortable={sortable}
+        part={RH_FILE_PARTS.find((value) => value === one(query.partie)) ?? "resume"}
+        fromList={one(query.de) === "candidatures"}
       />
     );
   if (one(query.vue) === "candidats" && permissions.readApplications)

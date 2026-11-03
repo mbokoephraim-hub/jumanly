@@ -146,7 +146,7 @@ export async function RhOfferCandidatesList({
       tone: Number(tintOf(person.id)),
       headline: person.headline?.trim() || t("list.noHeadline"),
       line: [person.city, format.relativeTime(person.createdAt, now)].filter(Boolean).join(" · "),
-      href: `/app/hire/offres/${jobId}?vue=candidats&fiche=${person.id}`,
+      href: `/app/hire/offres/${jobId}?vue=candidats&de=candidatures&fiche=${person.id}`,
       unseen: person.unseen,
       shortlisted: person.shortlisted,
     };
