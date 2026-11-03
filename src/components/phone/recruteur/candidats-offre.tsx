@@ -53,7 +53,6 @@ export async function RhOfferTabs({
           scroll={false}
         >
           {t(`tab.${tab.key}`)}
-          {tab.count ? <b>{tab.count}</b> : null}
         </Link>
       ))}
     </nav>

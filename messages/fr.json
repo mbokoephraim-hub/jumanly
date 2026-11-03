@@ -19771,8 +19771,8 @@
     "back": "Offres",
     "tabs": "Parties de l'offre",
     "tab": {
-      "apercu": "Vue d'ensemble",
-      "candidats": "Candidats",
+      "apercu": "Vue",
+      "candidats": "Candidatures",
       "retenus": "Retenus"
     },
     "line": "{count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} · {shortlisted, plural, =0 {aucun retenu} one {# retenu} other {# retenus}}",

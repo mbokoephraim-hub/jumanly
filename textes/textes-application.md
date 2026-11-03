@@ -16234,8 +16234,8 @@ Conventions :
 |---|---|
 | `phoneRhCandidats.back` | Offres |
 | `phoneRhCandidats.tabs` | Parties de l'offre |
-| `phoneRhCandidats.tab.apercu` | Vue d'ensemble |
-| `phoneRhCandidats.tab.candidats` | Candidats |
+| `phoneRhCandidats.tab.apercu` | Vue |
+| `phoneRhCandidats.tab.candidats` | Candidatures |
 | `phoneRhCandidats.tab.retenus` | Retenus |
 | `phoneRhCandidats.line` | {count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} · {shortlisted, plural, =0 {aucun retenu} one {# retenu} other {# retenus}} |
 | `phoneRhCandidats.search` | Rechercher un candidat |

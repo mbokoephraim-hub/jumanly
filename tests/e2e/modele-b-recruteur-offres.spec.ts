@@ -136,7 +136,7 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
       .first()
       .click();
     const parts = main(page).getByRole("navigation", { name: "Parties de l'offre" });
-    await expect(parts.getByRole("link", { name: /^Candidats/ })).toHaveAttribute(
+    await expect(parts.getByRole("link", { name: "Candidatures", exact: true })).toHaveAttribute(
       "aria-current",
       "page",
     );
@@ -146,7 +146,7 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
     await expect(people.getByRole("searchbox", { name: "Rechercher un candidat" })).toBeVisible();
     await expect(people.getByRole("link", { name: /^Voir le profil · / }).first()).toBeVisible();
     await capture(page, "045a-offre-candidats");
-    await parts.getByRole("link", { name: "Vue d'ensemble" }).click();
+    await parts.getByRole("link", { name: "Vue", exact: true }).click();
     await expect(page).toHaveURL(/vue=apercu/);
     await expect(detail(page).getByRole("heading", { name: DEMO_OFFER })).toBeVisible();
     await expect(detail(page)).toContainText("des vues deviennent candidatures");
