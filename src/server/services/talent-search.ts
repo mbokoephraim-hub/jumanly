@@ -742,7 +742,7 @@ async function memberTeam(db: PrismaClient, ctx: HireContext) {
   return membership?.teamId ?? null;
 }
 
-async function poolsWhere(
+export async function poolsWhere(
   db: PrismaClient,
   ctx: HireContext,
 ): Promise<Prisma.TalentPoolWhereInput> {
@@ -758,7 +758,7 @@ async function poolsWhere(
 }
 
 /** Talents a pool may show: still visible, or who applied to one of the organization's jobs. */
-function entryVisible(organizationId: string): Prisma.TalentPoolEntryWhereInput {
+export function entryVisible(organizationId: string): Prisma.TalentPoolEntryWhereInput {
   return {
     OR: [
       { profile: visibleWhere },

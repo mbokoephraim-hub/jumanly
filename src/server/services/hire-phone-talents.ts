@@ -6,7 +6,7 @@
  * data is filtered by `organizationId` (golden rule 6); a talent's own colleagues never see them
  * suggested (discreet profile).
  */
-import type { PrismaClient } from "@/generated/prisma/client";
+import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { level } from "@/server/entitlements";
 import { matchesForUser } from "@/server/matching/service";
 import type { MatchExplanation } from "@/server/matching/types";
@@ -15,7 +15,7 @@ import { listConnections } from "./connections";
 import { peopleToKnow } from "./explore";
 import { rhAssignees } from "./hire-phone-candidatures";
 import { notify } from "./notifications";
-import { orgProposals, visibleWhere, yearsOf } from "./talent-search";
+import { entryVisible, orgProposals, poolsWhere, visibleWhere, yearsOf } from "./talent-search";
 
 /** How many talents « Découvrir » shows, and how many it scores to choose them. */
 export const DISCOVER_SHOWN = 20;
@@ -115,32 +115,7 @@ export async function rhDiscover(
       ...(skills.length > 0 && !Object.values(filters).some(Boolean)
         ? [{ skills: { some: { skill: { name: { in: skills } } } } }]
         : []),
-      ...(filters.skill
-        ? [
-            {
-              skills: {
-                some: {
-                  skill: { name: { contains: filters.skill, mode: "insensitive" as const } },
-                },
-              },
-            },
-          ]
-        : []),
-      ...(filters.city
-        ? [{ user: { city: { contains: filters.city, mode: "insensitive" as const } } }]
-        : []),
-      ...(filters.dispo ? [{ availability: filters.dispo }] : []),
-      ...(filters.domain ? [{ studyField: filters.domain }] : []),
-      ...(filters.title
-        ? [
-            {
-              OR: [
-                { headline: { contains: filters.title, mode: "insensitive" as const } },
-                { desiredJobTitles: { has: filters.title } },
-              ],
-            },
-          ]
-        : []),
+      ...filterWhere(filters),
     ],
   };
   const [total, rows, matching] = await Promise.all([
@@ -433,4 +408,82 @@ export async function rhNetwork(db: PrismaClient, userId: string) {
       kind: kind(item.person!.userId),
     })),
   };
+}
+
+/** The conditions of the filters sheet, shared by Découvrir, Vivier and Propositions. */
+export function filterWhere(filters: DiscoverFilters): Prisma.TalentProfileWhereInput[] {
+  return [
+    ...(filters.skill
+      ? [
+          {
+            skills: {
+              some: {
+                skill: { name: { contains: filters.skill, mode: "insensitive" as const } },
+              },
+            },
+          },
+        ]
+      : []),
+    ...(filters.city
+      ? [{ user: { city: { contains: filters.city, mode: "insensitive" as const } } }]
+      : []),
+    ...(filters.dispo ? [{ availability: filters.dispo }] : []),
+    ...(filters.domain ? [{ studyField: filters.domain }] : []),
+    ...(filters.title
+      ? [
+          {
+            OR: [
+              { headline: { contains: filters.title, mode: "insensitive" as const } },
+              { desiredJobTitles: { has: filters.title } },
+            ],
+          },
+        ]
+      : []),
+  ];
+}
+
+export const hasFilters = (filters: DiscoverFilters) => Object.values(filters).some(Boolean);
+
+/**
+ * « Vivier » with filters (Ephraïm, 03/11/2026): the people of the pools the member may open who
+ * match, each with the pool they sit in. Same visibility rules as the pool pages.
+ */
+export async function rhPoolMatches(db: PrismaClient, ctx: HireContext, filters: DiscoverFilters) {
+  if (!hirePermissions(ctx.role).readApplications) throw new HireError("forbidden");
+  const rows = await db.talentPoolEntry.findMany({
+    where: {
+      pool: await poolsWhere(db, ctx),
+      AND: [entryVisible(ctx.organizationId), { profile: { AND: filterWhere(filters) } }],
+    },
+    orderBy: { createdAt: "desc" },
+    take: 60,
+    select: {
+      profileId: true,
+      pool: { select: { id: true, name: true } },
+      profile: {
+        select: { visibility: true, headline: true, user: { select: { name: true } } },
+      },
+    },
+  });
+  return rows.map((row) => ({
+    profileId: row.profileId,
+    poolId: row.pool.id,
+    poolName: row.pool.name,
+    name: row.profile.visibility === "anonymous" ? null : row.profile.user.name,
+    headline: row.profile.headline,
+  }));
+}
+
+/** The profiles among `ids` that match the filters (« Propositions » with filters). */
+export async function matchingProfiles(
+  db: PrismaClient,
+  ids: string[],
+  filters: DiscoverFilters,
+): Promise<Set<string>> {
+  if (ids.length === 0) return new Set();
+  const rows = await db.talentProfile.findMany({
+    where: { id: { in: ids }, AND: filterWhere(filters) },
+    select: { id: true },
+  });
+  return new Set(rows.map((row) => row.id));
 }

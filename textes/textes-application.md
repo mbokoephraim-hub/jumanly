@@ -17679,6 +17679,7 @@ Conventions :
 | `phoneRhTalents.filters.title` | Titre de poste |
 | `phoneRhTalents.filters.titlePlaceholder` | Par exemple : comptable, développeur |
 | `phoneRhTalents.filters.apply` | Voir les talents |
+| `phoneRhTalents.filters.clear` | Effacer les filtres |
 | `phoneRhTalents.offers.label` | Offres comparées |
 | `phoneRhTalents.search.results` | {count, plural, one {# talent} other {# talents}} |
 | `phoneRhTalents.offers.all` | Toutes mes offres |
@@ -17704,6 +17705,8 @@ Conventions :
 | `phoneRhTalents.pools.notePrivate` | Votre vivier personnel : les talents ne savent pas dans quelle liste ils sont. Le vivier partagé avec l'équipe vient avec {plan}. |
 | `phoneRhTalents.pools.notePrivateNoPlan` | Votre vivier personnel : les talents ne savent pas dans quelle liste ils sont. |
 | `phoneRhTalents.pools.noteShared` | Vos listes et celles partagées avec l'équipe. Les talents ne savent pas dans quelle liste ils sont. |
+| `phoneRhTalents.pools.matches` | {count, plural, =0 {Personne ne correspond dans vos viviers.} one {# talent de vos viviers correspond} other {# talents de vos viviers correspondent}} |
+| `phoneRhTalents.pools.inPool` | Liste « {pool} » |
 | `phoneRhTalents.pools.locked` | Le vivier n'est pas compris dans votre formule. |
 | `phoneRhTalents.pool.back` | Vivier |
 | `phoneRhTalents.pool.private` | visible par vous seul·e |
@@ -17721,6 +17724,7 @@ Conventions :
 | `phoneRhTalents.pool.deleteNote` | Les talents ne sont pas prévenus. Leur profil reste dans vos autres listes. |
 | `phoneRhTalents.proposals.intro` | Les offres que vous avez proposées à des talents |
 | `phoneRhTalents.proposals.note` | Quand un talent accepte, vous pouvez échanger avec lui et sa candidature arrive dans Candidatures, comme les autres. Candidater reste gratuit pour lui. |
+| `phoneRhTalents.proposals.matches` | {count, plural, =0 {Aucune proposition ne correspond à ces filtres.} one {# proposition correspond} other {# propositions correspondent}} |
 | `phoneRhTalents.proposals.empty` | Aucune proposition envoyée pour l'instant. Proposez une offre depuis le profil d'un talent. |
 | `phoneRhTalents.proposals.when` | {job} · {when} |
 | `phoneRhTalents.proposals.noJob` | Sans offre précise |

@@ -21582,7 +21582,8 @@
       "domain": "Domaine",
       "title": "Titre de poste",
       "titlePlaceholder": "Par exemple : comptable, développeur",
-      "apply": "Voir les talents"
+      "apply": "Voir les talents",
+      "clear": "Effacer les filtres"
     },
     "offers": {
       "label": "Offres comparées",
@@ -21618,6 +21619,8 @@
       "notePrivate": "Votre vivier personnel : les talents ne savent pas dans quelle liste ils sont. Le vivier partagé avec l'équipe vient avec {plan}.",
       "notePrivateNoPlan": "Votre vivier personnel : les talents ne savent pas dans quelle liste ils sont.",
       "noteShared": "Vos listes et celles partagées avec l'équipe. Les talents ne savent pas dans quelle liste ils sont.",
+      "matches": "{count, plural, =0 {Personne ne correspond dans vos viviers.} one {# talent de vos viviers correspond} other {# talents de vos viviers correspondent}}",
+      "inPool": "Liste « {pool} »",
       "locked": "Le vivier n'est pas compris dans votre formule."
     },
     "pool": {
@@ -21645,6 +21648,7 @@
     "proposals": {
       "intro": "Les offres que vous avez proposées à des talents",
       "note": "Quand un talent accepte, vous pouvez échanger avec lui et sa candidature arrive dans Candidatures, comme les autres. Candidater reste gratuit pour lui.",
+      "matches": "{count, plural, =0 {Aucune proposition ne correspond à ces filtres.} one {# proposition correspond} other {# propositions correspondent}}",
       "empty": "Aucune proposition envoyée pour l'instant. Proposez une offre depuis le profil d'un talent.",
       "when": "{job} · {when}",
       "noJob": "Sans offre précise",

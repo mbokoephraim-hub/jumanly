@@ -12,7 +12,14 @@ import {
   rhRemindProposalAction,
 } from "@/server/actions/phone-rh-talents";
 import { hirePermissions, type HireContext } from "@/server/services/hire";
-import { rhDiscover, rhNetwork, rhProposals } from "@/server/services/hire-phone-talents";
+import {
+  hasFilters,
+  matchingProfiles,
+  rhDiscover,
+  rhNetwork,
+  rhPoolMatches,
+  rhProposals,
+} from "@/server/services/hire-phone-talents";
 import { cheapestPlanWhere, listPublicPlans } from "@/server/services/plans";
 import { listPools, poolsEnabled } from "@/server/services/talent-search";
 import { PhoneIcon } from "../icon";
@@ -59,6 +66,9 @@ function filtersOf(query: Query) {
  * Saving opens « Découvrir » with them.
  */
 export async function RhTalentFilters({ query }: { query: Query }) {
+  // In « Vivier » and « Propositions » the filters stay on the tab (Ephraïm, 03/11/2026).
+  const tab = (["vivier", "propositions"] as const).find((key) => key === one(query.onglet));
+  const reset = tab ? `/app/hire/talents?onglet=${tab}` : "/app/hire/talents";
   const t = await getTranslations("phoneRhCandidats");
   const tt = await getTranslations("phoneRhTalents");
   const chosen = filtersOf(query);
@@ -73,9 +83,10 @@ export async function RhTalentFilters({ query }: { query: Query }) {
       version={JSON.stringify(chosen)}
     >
       <form method="get" action="/app/hire/talents" className="nb-rh-pf-f">
+        {tab ? <input type="hidden" name="onglet" value={tab} /> : null}
         <div className="nb-ex-f-tete">
           <h2>{t("filters.title")}</h2>
-          <Link href="/app/hire/talents">{t("filters.reset")}</Link>
+          <Link href={reset}>{t("filters.reset")}</Link>
         </div>
         <div className="nb-ex-f-corps">
           <fieldset className="nb-rh-pf-grp">
@@ -152,6 +163,13 @@ export async function RhTalents({ ctx, query }: { ctx: HireContext; query: Query
   const format = await getFormatter();
   const tab = RH_TALENT_TABS.find((key) => key === one(query.onglet)) ?? "decouvrir";
   const manage = hirePermissions(ctx.role).manage;
+  const chosenFilters = filtersOf(query);
+  const filtered = hasFilters(chosenFilters);
+  const clearFilters = (
+    <Link href={`/app/hire/talents?onglet=${tab}`} className="nb-pilule">
+      {t("filters.clear")}
+    </Link>
+  );
   const [pools, proposals, network, plans, poolsOn] = await Promise.all([
     listPools(db, ctx),
     manage ? rhProposals(db, ctx) : Promise.resolve([]),
@@ -303,7 +321,30 @@ export async function RhTalents({ ctx, query }: { ctx: HireContext; query: Query
             ["rh", "company"],
             (item) => item.entitlements["org.talent_pools.shared"] === "true",
           );
-      body = (
+      const found = filtered ? await rhPoolMatches(db, ctx, chosenFilters) : null;
+      body = found ? (
+        <div className="nb-rh-marge">
+          <div className="nb-rh-t-trouve">
+            <p className="nb-meta">{t("pools.matches", { count: found.length })}</p>
+            {clearFilters}
+          </div>
+          <ul className="nb-rh-liste-l">
+            {found.map((item) => (
+              <li key={`${item.poolId}-${item.profileId}`} className="nb-rh-rang">
+                <Link href={`/app/hire/talents/${item.profileId}`} className="nb-rh-cl">
+                  <RhInitials id={item.profileId} name={item.name ?? "?"} />
+                  <span className="nb-rh-res-t">
+                    <b>{item.name ?? t("card.anonymous")}</b>
+                    {item.headline ? <span className="nb-meta">{item.headline}</span> : null}
+                    <span className="nb-meta">{t("pools.inPool", { pool: item.poolName })}</span>
+                  </span>
+                  <PhoneIcon name="chevron" size={18} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
         <div className="nb-rh-marge">
           {pools.length === 0 ? <p className="nb-vide">{t("pools.empty")}</p> : null}
           <ul className="nb-rh-listes">
@@ -344,14 +385,29 @@ export async function RhTalents({ ctx, query }: { ctx: HireContext; query: Query
       );
     }
   } else if (tab === "propositions") {
+    const keep = filtered
+      ? await matchingProfiles(
+          db,
+          proposals.map((item) => item.profileId),
+          chosenFilters,
+        )
+      : null;
+    const shown = keep ? proposals.filter((item) => keep.has(item.profileId)) : proposals;
     body = (
       <>
-        <p className="nb-meta nb-rh-marge nb-rh-regle">{t("proposals.intro")}</p>
-        {proposals.length === 0 ? (
+        {keep ? (
+          <div className="nb-rh-marge nb-rh-t-trouve">
+            <p className="nb-meta">{t("proposals.matches", { count: shown.length })}</p>
+            {clearFilters}
+          </div>
+        ) : (
+          <p className="nb-meta nb-rh-marge nb-rh-regle">{t("proposals.intro")}</p>
+        )}
+        {keep && shown.length === 0 ? null : proposals.length === 0 ? (
           <p className="nb-vide nb-rh-marge">{t("proposals.empty")}</p>
         ) : (
           <ul className="nb-rh-liste-l">
-            {proposals.map((item) => {
+            {shown.map((item) => {
               const name = item.name ?? t("card.anonymous");
               return (
                 <li key={item.id} className="nb-rh-rang">
