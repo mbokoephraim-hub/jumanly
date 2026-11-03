@@ -21,6 +21,7 @@ import { RhNewPool } from "./talents-client";
 import { RhFiltersSheet } from "./tri-client";
 import { FilAvatar } from "../fil/avatar";
 import { candidateAvailabilities } from "@/server/services/hire-offer-candidates";
+import { studyFields } from "@/lib/studies";
 
 /** The texts the Talents screens need in the browser (sheets). */
 export async function RhTalentsTexts({ children }: { children: ReactNode }) {
@@ -44,7 +45,8 @@ const one = (value: string | string[] | undefined) =>
 function filtersOf(query: Query) {
   const text = (value: string | undefined) => (value ?? "").trim().slice(0, 60);
   return {
-    offre: one(query.offre) ?? "",
+    domain: studyFields.find((key) => key === one(query.domaine)),
+    title: text(one(query.poste)),
     skill: text(one(query.skill)),
     city: text(one(query.ville)),
     dispo: candidateAvailabilities.find((value) => value === one(query.dispo)),
@@ -52,20 +54,16 @@ function filtersOf(query: Query) {
 }
 
 /**
- * « Filtres », on the line of the search (Ephraïm, 03/11/2026): the offer, a skill, the city and
- * the availability of the talents « Découvrir » shows. Saving opens « Découvrir » with them.
+ * « Filtres », on the line of the search (Ephraïm, 03/11/2026): a field (domaine), a job title, a
+ * skill, the availability and the city of the talents « Découvrir » shows, never the offers.
+ * Saving opens « Découvrir » with them.
  */
-export async function RhTalentFilters({ ctx, query }: { ctx: HireContext; query: Query }) {
+export async function RhTalentFilters({ query }: { query: Query }) {
   const t = await getTranslations("phoneRhCandidats");
   const tt = await getTranslations("phoneRhTalents");
   const chosen = filtersOf(query);
-  const offers = await db.job.findMany({
-    where: { organizationId: ctx.organizationId, status: "published" },
-    orderBy: { publishedAt: "desc" },
-    take: 12,
-    select: { id: true, title: true },
-  });
-  const count = [chosen.offre, chosen.skill, chosen.city, chosen.dispo].filter(Boolean).length;
+  const ts = await getTranslations("access.onboarding.studies.field");
+  const count = Object.values(chosen).filter(Boolean).length;
   return (
     <RhFiltersSheet
       label={t("filters.title")}
@@ -80,24 +78,34 @@ export async function RhTalentFilters({ ctx, query }: { ctx: HireContext; query:
           <Link href="/app/hire/talents">{t("filters.reset")}</Link>
         </div>
         <div className="nb-ex-f-corps">
-          {offers.length > 0 ? (
-            <fieldset className="nb-rh-pf-grp">
-              <legend className="nb-ex-f-gl">{tt("filters.offer")}</legend>
-              <div className="nb-ex-f-opts">
-                {[{ id: "", title: tt("offers.all") }, ...offers].map((offer) => (
-                  <label key={offer.id || "all"} className="nb-ex-f-opt nb-rh-pf-opt">
-                    <input
-                      type="radio"
-                      name="offre"
-                      value={offer.id}
-                      defaultChecked={chosen.offre === offer.id}
-                    />
-                    {offer.title}
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-          ) : null}
+          <fieldset className="nb-rh-pf-grp">
+            <legend className="nb-ex-f-gl">{tt("filters.domain")}</legend>
+            <div className="nb-ex-f-opts nb-rh-t-domaines">
+              {[
+                { key: "", label: t("filters.any") },
+                ...studyFields.map((key) => ({ key, label: ts(key) })),
+              ].map((option) => (
+                <label key={option.key || "any"} className="nb-ex-f-opt nb-rh-pf-opt">
+                  <input
+                    type="radio"
+                    name="domaine"
+                    value={option.key}
+                    defaultChecked={(chosen.domain ?? "") === option.key}
+                  />
+                  {option.label}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <label className="nb-rh-pf-champ">
+            <span className="nb-ex-f-gl">{tt("filters.title")}</span>
+            <input
+              name="poste"
+              maxLength={60}
+              defaultValue={chosen.title}
+              placeholder={tt("filters.titlePlaceholder")}
+            />
+          </label>
           <label className="nb-rh-pf-champ">
             <span className="nb-ex-f-gl">{t("filters.skill")}</span>
             <input
@@ -200,7 +208,13 @@ export async function RhTalents({ ctx, query }: { ctx: HireContext; query: Query
   if (tab === "decouvrir") {
     const offre = one(query.offre) ?? null;
     const filters = filtersOf(query);
-    const wanted = { skill: filters.skill, city: filters.city, dispo: filters.dispo };
+    const wanted = {
+      domain: filters.domain,
+      title: filters.title,
+      skill: filters.skill,
+      city: filters.city,
+      dispo: filters.dispo,
+    };
     const discover = manage
       ? await rhDiscover(db, ctx, offre, undefined, wanted).catch(() =>
           rhDiscover(db, ctx, null, undefined, wanted),

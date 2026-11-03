@@ -17675,7 +17675,9 @@ Conventions :
 | `phoneRhTalents.tabs.help.vivier` | Les talents que vous gardez de côté, rangés en listes. |
 | `phoneRhTalents.tabs.help.propositions` | Les invitations à postuler que vous avez envoyées, et leurs réponses. |
 | `phoneRhTalents.tabs.help.reseau` | Vos relations et les personnes à connaître. |
-| `phoneRhTalents.filters.offer` | Pour l'offre |
+| `phoneRhTalents.filters.domain` | Domaine |
+| `phoneRhTalents.filters.title` | Titre de poste |
+| `phoneRhTalents.filters.titlePlaceholder` | Par exemple : comptable, développeur |
 | `phoneRhTalents.filters.apply` | Voir les talents |
 | `phoneRhTalents.offers.label` | Offres comparées |
 | `phoneRhTalents.search.results` | {count, plural, one {# talent} other {# talents}} |

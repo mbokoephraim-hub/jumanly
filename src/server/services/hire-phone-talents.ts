@@ -53,6 +53,10 @@ const orgSubject = (ctx: HireContext) => ({
 
 /** Members of the organization: never suggested to their own company. */
 export type DiscoverFilters = {
+  /** A key of `studyFields` (src/lib/studies.ts). */
+  domain?: string;
+  /** A job title, read in the headline and the titles wished. */
+  title?: string;
   skill?: string;
   city?: string;
   dispo?: "open" | "listening" | "not_looking";
@@ -106,7 +110,9 @@ export async function rhDiscover(
       visibleWhere,
       { id: { notIn: hidden.map((item) => item.profileId) } },
       { userId: { notIn: members } },
-      ...(skills.length > 0 && !filters.skill
+      // With a filter of their own, the recruiter searches every visible talent, not only those
+      // close to their offers.
+      ...(skills.length > 0 && !Object.values(filters).some(Boolean)
         ? [{ skills: { some: { skill: { name: { in: skills } } } } }]
         : []),
       ...(filters.skill
@@ -124,6 +130,17 @@ export async function rhDiscover(
         ? [{ user: { city: { contains: filters.city, mode: "insensitive" as const } } }]
         : []),
       ...(filters.dispo ? [{ availability: filters.dispo }] : []),
+      ...(filters.domain ? [{ studyField: filters.domain }] : []),
+      ...(filters.title
+        ? [
+            {
+              OR: [
+                { headline: { contains: filters.title, mode: "insensitive" as const } },
+                { desiredJobTitles: { has: filters.title } },
+              ],
+            },
+          ]
+        : []),
     ],
   };
   const [total, rows, matching] = await Promise.all([

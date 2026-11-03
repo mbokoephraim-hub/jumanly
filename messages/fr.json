@@ -21579,7 +21579,9 @@
       }
     },
     "filters": {
-      "offer": "Pour l'offre",
+      "domain": "Domaine",
+      "title": "Titre de poste",
+      "titlePlaceholder": "Par exemple : comptable, développeur",
       "apply": "Voir les talents"
     },
     "offers": {

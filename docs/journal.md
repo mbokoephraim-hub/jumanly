@@ -5573,3 +5573,9 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - « Filtres » sur la ligne de la recherche (`searchExtra` de RhTabPage) : offre, compétence, disponibilité, ville ; ils s'appliquent à « Découvrir » (`rhDiscover` prend des filtres). Les puces d'offres sous les rubriques sont retirées (l'offre est dans les filtres).
 - Une ligne courte sous les rubriques explique chacune (Découvrir, Vivier, Propositions, Réseau).
 - Réseau rangé : invitations reçues, « À connaître » en cartes qui défilent (photo, nom, titre, Talent/RH, Se connecter), « Mes relations » avec un filtre Toutes · Talents · Recruteurs et RH et des lignes en carte.
+
+## 2026-11-03 · Filtres en icône seule, filtres des talents
+
+- Le bouton « Filtres » n'affiche plus que son icône (Explorer et toutes les pages recruteur), son nom reste pour les lecteurs d'écran, le nombre de filtres dans son coin.
+- Filtres de Talents : Domaine (`studyField`), Titre de poste (titre du profil ou postes souhaités), Compétence, Disponibilité, Ville ; plus d'offre. Avec un filtre, « Découvrir » cherche parmi tous les talents visibles.
+- Réseau : l'initiale des cartes « À connaître » est centrée (la règle des lignes coupées touchait aussi l'avatar).

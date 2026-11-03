@@ -6093,6 +6093,7 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
   margin: 14px 20px 0;
 }
 .nb-rh-pf-rangee .nb-ex-fbtn {
+  width: 40px;
   height: 40px;
   border-radius: 20px;
 }
@@ -8661,7 +8662,8 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.nb-rh-rs-carte-l span {
+/* The avatar is a span too: only the line under the name is clamped. */
+.nb-rh-rs-carte-l > span:not(.nb-av) {
   display: -webkit-box;
   min-height: 2.7em;
   overflow: hidden;
