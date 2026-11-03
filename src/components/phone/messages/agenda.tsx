@@ -2,6 +2,7 @@
 
 import { useFormatter, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
+import { JmCalendar } from "../calendar";
 
 export type MeetingMode = "visio" | "place" | "call";
 
@@ -25,24 +26,6 @@ const DAYS_AHEAD = 120;
 
 const iso = (date: Date) => date.toISOString().slice(0, 10);
 const utc = (year: number, month: number, day: number) => new Date(Date.UTC(year, month, day));
-
-function Chevron({ back }: { back?: boolean }) {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d={back ? "M15 5l-7 7 7 7" : "M9 5l7 7-7 7"} />
-    </svg>
-  );
-}
 
 const MODE_PATHS: Record<MeetingMode, string> = {
   visio: "M3.5 7.5h11v9h-11zM14.5 10.5l6-3.5v10l-6-3.5",
@@ -79,10 +62,6 @@ export function MeetingPicker({
   const [day, setDay] = useState(
     firstDay || iso(utc(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() + 1)),
   );
-  const [month, setMonth] = useState(() => {
-    const start = new Date(`${day}T00:00:00Z`);
-    return utc(start.getUTCFullYear(), start.getUTCMonth(), 1);
-  });
   const [times, setTimes] = useState<string[]>([]);
   const [mode, setMode] = useState<MeetingMode>("visio");
   const [link, setLink] = useState("");
@@ -90,38 +69,6 @@ export function MeetingPicker({
   const [geo, setGeo] = useState<{ lat: number; lng: number } | null>(null);
   const [locating, setLocating] = useState(false);
   const [geoError, setGeoError] = useState(false);
-
-  const weekdays = useMemo(
-    () =>
-      // 1 January 2024 was a Monday: the week starts on Monday.
-      Array.from({ length: 7 }, (_, index) =>
-        format
-          .dateTime(utc(2024, 0, 1 + index), { weekday: "short", timeZone: "UTC" })
-          .slice(0, 1)
-          .toUpperCase(),
-      ),
-    [format],
-  );
-
-  const cells = useMemo(() => {
-    const year = month.getUTCFullYear();
-    const index = month.getUTCMonth();
-    const offset = (month.getUTCDay() + 6) % 7;
-    const length = new Date(Date.UTC(year, index + 1, 0)).getUTCDate();
-    return [
-      ...Array.from({ length: offset }, () => null),
-      ...Array.from({ length }, (_, at) => utc(year, index, at + 1)),
-    ];
-  }, [month]);
-
-  const monthTitle = (() => {
-    const text = format.dateTime(month, { month: "long", year: "numeric", timeZone: "UTC" });
-    return text.charAt(0).toUpperCase() + text.slice(1);
-  })();
-  const canBack = month > utc(today.getUTCFullYear(), today.getUTCMonth(), 1);
-  const canNext = utc(month.getUTCFullYear(), month.getUTCMonth() + 1, 1) <= last;
-  const shiftMonth = (by: number) =>
-    setMonth(utc(month.getUTCFullYear(), month.getUTCMonth() + by, 1));
 
   const hourLabel = (value: string) => {
     const [hour, minutes] = value.split(":");
@@ -176,59 +123,14 @@ export function MeetingPicker({
 
   return (
     <div className="nb-ag">
-      <div className="nb-ag-cal">
-        <div className="nb-ag-mois">
-          <button
-            type="button"
-            aria-label={t("prev")}
-            disabled={!canBack}
-            onClick={() => shiftMonth(-1)}
-          >
-            <Chevron back />
-          </button>
-          <b aria-live="polite">{monthTitle}</b>
-          <button
-            type="button"
-            aria-label={t("next")}
-            disabled={!canNext}
-            onClick={() => shiftMonth(1)}
-          >
-            <Chevron />
-          </button>
-        </div>
-        <div className="nb-ag-grille" role="grid" aria-label={monthTitle}>
-          {weekdays.map((label, index) => (
-            <span key={`w${index}`} className="nb-ag-sem" aria-hidden>
-              {label}
-            </span>
-          ))}
-          {cells.map((date, index) => {
-            if (!date) return <span key={`v${index}`} />;
-            const value = iso(date);
-            const off = date <= today || date > last;
-            const weekend = date.getUTCDay() === 0 || date.getUTCDay() === 6;
-            return (
-              <button
-                key={value}
-                type="button"
-                className="nb-ag-jour"
-                data-weekend={weekend || undefined}
-                aria-pressed={day === value}
-                aria-label={format.dateTime(date, {
-                  weekday: "long",
-                  day: "numeric",
-                  month: "long",
-                  timeZone: "UTC",
-                })}
-                disabled={off}
-                onClick={() => setDay(value)}
-              >
-                {date.getUTCDate()}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      {/* The app's calendar (Ephraïm, 03/11/2026): from tomorrow, four months ahead. */}
+      <JmCalendar
+        title={t("dayTitle")}
+        value={day}
+        onChange={setDay}
+        min={iso(utc(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() + 1))}
+        max={iso(last)}
+      />
 
       <div className="nb-ag-tete">
         <b>{t("hourTitle")}</b>

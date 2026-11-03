@@ -21,6 +21,7 @@ import { FEED_BODY_MAX, FEED_TITLE_MAX } from "@/server/services/feed-limits";
 import { FilAvatar } from "../fil/avatar";
 import { PostTextFields } from "../fil/post-fields";
 import { OrbiDisc, PhoneIcon } from "../icon";
+import { PhoneDateField } from "../calendar";
 
 const REMOTES = ["onsite", "hybrid", "remote"] as const;
 const CONTRACTS = ["cdi", "cdd", "stage", "freelance", "alternance", "volontariat"] as const;
@@ -883,18 +884,16 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
             <p className="nb-rh-pub-label">
               <label htmlFor="oe-cloture">{w("closesAt")}</label>
             </p>
-            <div className="nb-champ nb-rh-champ">
-              <input
-                id="oe-cloture"
-                type="date"
-                value={closesAt}
-                min={today()}
-                onChange={(event) => {
-                  setClosesAt(event.target.value);
-                  setError(null);
-                }}
-              />
-            </div>
+            <PhoneDateField
+              id="oe-cloture"
+              label={w("closesAt")}
+              value={closesAt}
+              min={today()}
+              onChange={(value) => {
+                setClosesAt(value);
+                setError(null);
+              }}
+            />
             <p className="nb-meta nb-rh-pub-note">{w("closesAtHelp")}</p>
             <p className="nb-rh-pub-label" id="oe-etudes">
               {w("education")}

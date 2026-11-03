@@ -1,8 +1,11 @@
 import "server-only";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
+import { pickMessages } from "@/i18n/client-messages";
 import { rhProposalAction } from "@/server/actions/phone-rh-candidatures";
 import { PhoneIcon } from "../icon";
+import { PhoneDateField } from "../calendar";
 
 /**
  * « Proposition à … » (Modèle B recruteur M5, planche Recruteur-proposition): the monthly salary,
@@ -43,10 +46,12 @@ export async function RhProposal({
           <span className="nb-meta">{t("salary")}</span>
           <input name="salary" inputMode="numeric" pattern="[0-9]*" maxLength={7} />
         </label>
-        <label className="nb-rh-plan-champ">
+        <div className="nb-rh-plan-champ">
           <span className="nb-meta">{t("start")}</span>
-          <input name="start" type="date" />
-        </label>
+          <NextIntlClientProvider messages={pickMessages(await getMessages(), ["phone"])}>
+            <PhoneDateField name="start" label={t("start")} />
+          </NextIntlClientProvider>
+        </div>
         <label className="nb-rh-plan-champ">
           <span className="nb-meta">{t("message")}</span>
           <textarea

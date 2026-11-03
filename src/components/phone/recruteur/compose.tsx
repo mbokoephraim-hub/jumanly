@@ -12,6 +12,7 @@ import { shrink } from "../fil/compose";
 import type { FilMe } from "../fil/feed";
 import { PostImagePicker, PostPreview, PostTextFields } from "../fil/post-fields";
 import { OrbiDisc } from "../icon";
+import { PhoneDateField } from "../calendar";
 import { askOrbi } from "../orbi-bus";
 
 const TYPES = ["texte", "offre", "evenement"] as const;
@@ -263,13 +264,24 @@ export function PhoneRecruiterCompose({
             <label className="nb-rh-pub-label" htmlFor="rh-pub-date">
               {t("eventAt")}
             </label>
+            {/* The day in the app's calendar, the hour beside it (03/11/2026). */}
+            <PhoneDateField
+              id="rh-pub-date"
+              label={t("eventAt")}
+              value={eventAt.slice(0, 10)}
+              onChange={(day) => {
+                setEventAt(`${day}T${eventAt.slice(11, 16) || "09:00"}`);
+                setError(null);
+              }}
+            />
             <div className="nb-champ">
               <input
-                id="rh-pub-date"
-                type="datetime-local"
-                value={eventAt}
+                type="time"
+                aria-label={t("eventAt")}
+                value={eventAt.slice(11, 16)}
                 onChange={(event) => {
-                  setEventAt(event.target.value);
+                  const day = eventAt.slice(0, 10);
+                  if (day) setEventAt(`${day}T${event.target.value}`);
                   setError(null);
                 }}
               />

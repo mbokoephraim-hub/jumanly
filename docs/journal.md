@@ -5491,3 +5491,8 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - « Consulter » sur le CV ouvre `/app/hire/candidats/[id]/lire` : le CV dans l'appli, jamais un téléchargement ni un autre onglet (Ephraïm : « consulter doit demander de voir juste comment se présentent les CV »). PDF importé dessiné page par page (PdfPages), photo telle quelle, CV Jumanly par sa mise en page. Lecture journalisée (`cv.view`). Retour au profil du candidat.
 - La route `/cv` sert d'abord le fichier importé tel quel (copie gardée avec la candidature ou fichier du document d'origine) avant d'imprimer le modèle ; à la candidature, la copie du CV garde désormais la référence du fichier (`file`).
 - Portfolio et attestation s'ouvrent aussi dans l'appli (plus de nouvel onglet).
+
+## 2026-11-03 · Calendrier de l'appli (talent et recruteur, téléphone)
+
+- Ephraïm ne veut plus le calendrier natif du téléphone : nouveau `JmCalendar` (src/components/phone/calendar.tsx, CSS phone-calendrier.css) sur son modèle, aux couleurs Jumanly : bande menthe → Lime avec le titre et les flèches, carte sombre, mois et année en pilules, grille de cases fines (jours des mois voisins en gris, point sous aujourd'hui), jour choisi en carré Lime, « Confirmer » / « Annuler ».
+- `PhoneDateField` remplace les champs date natifs du recruteur au téléphone (document demandé dans le chat et dans la fiche, repousser une offre, date de clôture du parcours de publication, date de début d'une proposition, événement du Fil avec l'heure à côté). Le choix d'un rendez-vous dans le chat (talent et recruteur) utilise le même calendrier.

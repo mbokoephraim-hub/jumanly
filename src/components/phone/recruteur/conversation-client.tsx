@@ -13,6 +13,7 @@ import {
   rhUploadAction,
 } from "@/server/actions/phone-rh-messages";
 import { OrbiDisc, PhoneIcon } from "../icon";
+import { PhoneDateField } from "../calendar";
 import { PhoneSheet } from "../sheet";
 
 export type RhBubble = {
@@ -360,13 +361,12 @@ export function RhThread({ data }: { data: RhThreadData }) {
             <label className="nb-meta" htmlFor="rm-doc-date">
               {t("document.due")}
             </label>
-            <input
+            <PhoneDateField
               id="rm-doc-date"
               name="due"
-              type="date"
+              label={t("document.due")}
               required
               defaultValue={inThreeWeeks()}
-              className="nb-rh-zone"
             />
             <label className="nb-meta" htmlFor="rm-doc-note">
               {t("document.note")}
