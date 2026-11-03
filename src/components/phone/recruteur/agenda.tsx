@@ -270,7 +270,15 @@ export async function RhAgenda({
                   scroll={false}
                 >
                   {Number(key.slice(8))}
-                  {count > 0 ? <i>{count}</i> : null}
+                  {count > 0 ? (
+                    // One dot per interview, three at most (Ephraïm, 03/11/2026: a figure under
+                    // the date read as a mistake).
+                    <span className="nb-rh-ag-points" aria-hidden>
+                      {Array.from({ length: Math.min(count, 3) }, (_, index) => (
+                        <i key={index} />
+                      ))}
+                    </span>
+                  ) : null}
                 </Link>
               );
             })}
