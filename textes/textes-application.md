@@ -16350,48 +16350,28 @@ Conventions :
 | `phoneRhOffres.detail.why` | Pourquoi ? |
 | `phoneRhOffres.detail.whyText` | Orbi compte les candidatures que personne de l'équipe n'a encore ouvertes. Il ne classe pas les personnes à votre place : c'est vous qui décidez. |
 | `phoneRhOffres.vue.verified` | Entreprise vérifiée |
-| `phoneRhOffres.vue.title` | L'avis d'Orbi sur l'offre |
-| `phoneRhOffres.vue.ring` | {count} poste pourvu sur {total} |
-| `phoneRhOffres.vue.goalLine` | {count, plural, one {Objectif : # poste à pourvoir} other {Objectif : # postes à pourvoir}} |
-| `phoneRhOffres.vue.goalLeft` | {count, plural, one {Il reste # jour avant la clôture.} other {Il reste # jours avant la clôture.}} |
-| `phoneRhOffres.vue.goalEnded` | L'offre est terminée. |
-| `phoneRhOffres.vue.goalOpen` | Pas de date de clôture. |
-| `phoneRhOffres.vue.verdict.filled` | Objectif atteint |
-| `phoneRhOffres.vue.verdict.late` | La clôture approche |
-| `phoneRhOffres.vue.verdict.unseen` | L'offre est peu vue |
-| `phoneRhOffres.vue.verdict.unconvincing` | Vue, mais peu de candidatures |
-| `phoneRhOffres.vue.verdict.toSort` | Des candidatures attendent |
-| `phoneRhOffres.vue.verdict.onTrack` | L'offre avance bien |
-| `phoneRhOffres.vue.verdictWhy.filled` | Tous les postes sont pourvus. Pensez à clôturer l'offre. |
-| `phoneRhOffres.vue.verdictWhy.late` | Il reste peu de jours et pas assez de candidats retenus : triez ou repoussez la date. |
-| `phoneRhOffres.vue.verdictWhy.unseen` | Partagez le lien de l'offre ou invitez des talents depuis Explorer. |
-| `phoneRhOffres.vue.verdictWhy.unconvincing` | Beaucoup de personnes la voient sans candidater : revoyez le titre, le salaire ou la description. |
-| `phoneRhOffres.vue.verdictWhy.toSort` | {count, plural, one {# candidature n'est pas encore ouverte.} other {# candidatures ne sont pas encore ouvertes.}} |
-| `phoneRhOffres.vue.verdictWhy.onTrack` | Les vues et les candidatures suivent. Continuez le tri. |
+| `phoneRhOffres.vue.figuresTitle` | Les chiffres de l'offre |
+| `phoneRhOffres.vue.ratio` | {count, plural, one {1 candidature à chaque vue} other {1 candidature toutes les # vues}} |
+| `phoneRhOffres.vue.ratioNone` | {count, plural, one {# vue, pas encore de candidature} other {# vues, pas encore de candidature}} |
+| `phoneRhOffres.vue.ratioNoView` | Pas encore de vue ni de candidature |
+| `phoneRhOffres.vue.ratioUncounted` | Des candidatures arrivées avant le comptage des vues |
+| `phoneRhOffres.vue.viewsChart` | {count, plural, one {# vue sur {days} jours} other {# vues sur {days} jours}} |
+| `phoneRhOffres.vue.diagTitle` | Diagnostic d'Orbi |
+| `phoneRhOffres.vue.diagViewers` | Votre offre est surtout vue par des personnes en {families}. |
+| `phoneRhOffres.vue.diagApplicants` | Les personnes qui candidatent viennent surtout de {families}. |
+| `phoneRhOffres.vue.diagNone` | Pas encore assez de données pour un diagnostic : partagez l'offre pour la faire connaître. |
+| `phoneRhOffres.vue.two` | {first} et {second} |
+| `phoneRhOffres.vue.others` | Autres domaines |
+| `phoneRhOffres.vue.share` | {share} % |
+| `phoneRhOffres.vue.whoViews` | Qui regarde l'offre |
+| `phoneRhOffres.vue.whoViewsFew` | Visible dès {count} vues de talents connectés, pour ne désigner personne. |
+| `phoneRhOffres.vue.whoApplies` | Qui candidate |
+| `phoneRhOffres.vue.whoAppliesNone` | Pas encore de candidature. |
 | `phoneRhOffres.vue.views` | Vues |
 | `phoneRhOffres.vue.applications` | Candidatures |
 | `phoneRhOffres.vue.rate` | Vues → candidatures |
-| `phoneRhOffres.vue.rule` | Calculé sur les chiffres de l'offre, jamais sur l'identité des candidats. Vous décidez. |
-| `phoneRhOffres.vue.goalTitle` | Objectif de l'offre |
-| `phoneRhOffres.vue.goal.hired` | Postes pourvus |
-| `phoneRhOffres.vue.goal.hiredValue` | {count} sur {total} |
-| `phoneRhOffres.vue.goal.shortlisted` | Candidats retenus |
-| `phoneRhOffres.vue.goal.shortlistedValue` | {count} sur {total} conseillés |
-| `phoneRhOffres.vue.goal.time` | Temps écoulé |
-| `phoneRhOffres.vue.goal.timeValue` | {count} jours sur {total} |
-| `phoneRhOffres.vue.goal.timeEnded` | Terminé |
-| `phoneRhOffres.vue.stepsTitle` | Parcours des candidats |
-| `phoneRhOffres.vue.stepsLead` | De la première vue jusqu'au recrutement. |
-| `phoneRhOffres.vue.step.views` | Ont vu l'offre |
-| `phoneRhOffres.vue.step.applications` | Ont candidaté |
-| `phoneRhOffres.vue.step.opened` | Candidatures ouvertes |
-| `phoneRhOffres.vue.step.shortlisted` | Retenus |
-| `phoneRhOffres.vue.step.interviews` | Vus en entretien |
-| `phoneRhOffres.vue.step.hired` | Recrutés |
-| `phoneRhOffres.vue.stepShare.views` | {share} des vues |
-| `phoneRhOffres.vue.stepShare.applications` | {share} des candidatures |
-| `phoneRhOffres.vue.stepShare.openings` | {count, plural, one {pour # poste} other {pour # postes}} |
-| `phoneRhOffres.vue.whyTitle` | Pourquoi ? |
+| `phoneRhOffres.vue.rule` | Domaines comptés à partir des compétences, jamais du nom ni de la personne. |
+| `phoneRhOffres.vue.whyTitle` | Que faire maintenant ? |
 | `phoneRhOffres.vue.works.title` | Ce qui marche |
 | `phoneRhOffres.vue.works.none` | Rien à signaler pour l'instant. |
 | `phoneRhOffres.vue.improve.title` | À améliorer |
@@ -16411,7 +16391,6 @@ Conventions :
 | `phoneRhOffres.vue.point.retain` | {count, plural, one {Retenir encore # candidat} other {Retenir encore # candidats}} |
 | `phoneRhOffres.vue.point.closing` | {count, plural, =0 {L'offre se termine aujourd'hui} one {L'offre se termine dans # jour} other {L'offre se termine dans # jours}} |
 | `phoneRhOffres.vue.point.noApplication` | Attendre les premières candidatures ou inviter des talents |
-| `phoneRhOffres.vue.activity` | Activité |
 | `phoneRhOffres.detail.chart` | Candidatures reçues |
 | `phoneRhOffres.detail.period` | Période |
 | `phoneRhOffres.detail.days` | {count} jours |

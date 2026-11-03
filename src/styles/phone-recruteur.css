@@ -7578,3 +7578,260 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 .nb-rh-vue .nb-rh-fr-notes > div {
   background: color-mix(in srgb, var(--nb-creme) 5%, transparent);
 }
+/* « Vue » d'une offre, v2 (Ephraïm, 03/11/2026) : une identité à elle, pas une copie d'« Évaluation ». */
+.nb-rh-vue {
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+}
+.nb-rh-vu-sur {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--nb-creme) 70%, transparent);
+}
+.nb-rh-vu-chiffres {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  margin: 18px 0 0;
+  padding: 18px;
+  border-radius: 26px;
+  background:
+    radial-gradient(
+      120% 90% at 100% 0%,
+      color-mix(in srgb, var(--nb-menthe) 35%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--nb-menthe) 18%, var(--nb-carte)),
+      var(--nb-carte)
+    );
+  border: 1px solid color-mix(in srgb, var(--nb-menthe) 35%, transparent);
+}
+.nb-rh-vu-trois {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+}
+.nb-rh-vu-trois > div {
+  display: grid;
+  gap: 2px;
+  padding: 0 10px;
+  border-left: 1px solid color-mix(in srgb, var(--nb-creme) 14%, transparent);
+}
+.nb-rh-vu-trois > div:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+.nb-rh-vu-trois dt {
+  order: 2;
+  font-size: 13px;
+  opacity: 0.75;
+}
+.nb-rh-vu-trois dd {
+  order: 1;
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.nb-rh-vu-trois > div:last-child dd {
+  color: var(--nb-lime);
+}
+.nb-rh-vu-ratio {
+  justify-self: start;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--nb-creme) 10%, transparent);
+}
+.nb-rh-vu-courbe {
+  display: grid;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px dashed color-mix(in srgb, var(--nb-creme) 18%, transparent);
+  font-size: 14px;
+}
+.nb-rh-vu-diag {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  margin: 26px 0 0;
+  padding: 18px 0 0 18px;
+  border-left: 3px solid var(--nb-menthe);
+}
+.nb-rh-vu-phrase {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.nb-rh-vu-bloc {
+  display: grid;
+  gap: 8px;
+}
+.nb-rh-vu-bloc > p {
+  font-size: 15px;
+  font-weight: 700;
+}
+.nb-rh-vu-barre {
+  display: flex;
+  gap: 3px;
+  height: 14px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.nb-rh-vu-barre > span {
+  flex-basis: 0;
+  min-width: 6px;
+}
+.nb-rh-vu-legende {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+.nb-rh-vu-legende li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.nb-rh-vu-legende i {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+.nb-rh-vu-legende b {
+  font-weight: 700;
+}
+.nb-rh-vu-sources {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nb-rh-vu-sources li {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--nb-creme) 6%, transparent);
+  font-size: 13px;
+}
+.nb-rh-vu-sources b {
+  font-size: 20px;
+  color: var(--nb-lime);
+}
+.nb-rh-vu-sources li[data-vide] b {
+  color: var(--nb-creme);
+  opacity: 0.5;
+}
+.nb-rh-vu-actions {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  margin: 26px 0 0;
+}
+.nb-rh-vu-defile {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 82%;
+  gap: 12px;
+  margin: 0 -16px;
+  padding: 2px 16px 6px;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.nb-rh-vu-defile::-webkit-scrollbar {
+  display: none;
+}
+.nb-rh-vu-carte {
+  --ton: var(--nb-lime);
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 22px;
+  scroll-snap-align: start;
+  background: linear-gradient(
+    170deg,
+    color-mix(in srgb, var(--ton) 20%, var(--nb-carte)),
+    var(--nb-carte) 70%
+  );
+  border: 1px solid color-mix(in srgb, var(--ton) 40%, transparent);
+}
+.nb-rh-vu-carte[data-ton="ameliorer"] {
+  --ton: #ff8a7a;
+}
+.nb-rh-vu-carte[data-ton="faire"] {
+  --ton: #f4c463;
+}
+.nb-rh-vu-carte-h {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nb-rh-vu-carte-h b {
+  flex: 1;
+  font-size: 18px;
+  color: var(--ton);
+}
+.nb-rh-vu-carte-h small {
+  display: grid;
+  place-items: center;
+  min-width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  background: var(--ton);
+  color: #0f3f37;
+}
+.nb-rh-vu-carte ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.nb-rh-vu-carte ul li {
+  padding-left: 14px;
+  position: relative;
+}
+.nb-rh-vu-carte ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--ton);
+}
+.nb-rh-vu-chiffres,
+.nb-rh-vu-diag,
+.nb-rh-vu-actions {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+.nb-rh-vu-defile {
+  margin: 0 -20px;
+  padding: 2px 20px 6px;
+  scroll-padding-left: 20px;
+}

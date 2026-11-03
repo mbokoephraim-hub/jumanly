@@ -13,7 +13,6 @@ import { getOrgJob, hirePermissions, isOrgVerified } from "@/server/services/hir
 import { cefrLevels, educationLevels, offerLanguages } from "@/server/services/job-wizard";
 import { parseLanguages } from "@/server/services/jobs";
 import { atsBoard } from "@/server/services/hire-ats";
-import { ensureStages } from "@/server/services/applications";
 import { requestedDocumentKinds, type OfferRow } from "@/server/services/hire-offers";
 import { screeningQuestionsOf } from "@/server/services/screening";
 import { MenuArt } from "@/components/site/menu-art";
@@ -40,11 +39,10 @@ import {
 import { OrbiDisc, PhoneIcon } from "../icon";
 import {
   offerPoints,
-  offerVerdict,
-  SHORTLIST_PER_POST,
   type OfferFigures,
   type OfferPoint,
 } from "@/server/services/hire-offer-review";
+import { familyShares, PROFILE_PALETTE } from "@/lib/profile-colors";
 import { FilAvatar } from "../fil/avatar";
 import { Verified } from "../explorer/cards";
 import { tintOf } from "./candidatures";
@@ -52,6 +50,8 @@ import { RhOfferActions, type RhOfferActionsData } from "./offre-actions";
 import type { RhOfferDraft, RhPublishData } from "./publier";
 
 const DAY = 86_400_000;
+/** Signed-in views needed before « Qui regarde l'offre » shows families (no one singled out). */
+const VIEWERS_MIN = 5;
 
 /** The texts the Offres screens need in the browser (sheets of « ··· », the four steps). */
 export async function RhOffresTexts({ children }: { children: ReactNode }) {
@@ -420,7 +420,7 @@ export async function RhOfferDetail({
   job: DetailJob;
   /** Retained candidates of the offer (« Retenus »). */
   shortlisted?: number;
-  /** « Vue d'ensemble · Candidats · Retenus » (03/11/2026), under the title. */
+  /** « Vue · Candidatures · Retenus » (03/11/2026), under the title. */
   tabs?: ReactNode;
   /** « Remettre en ligne » refused by the limit of the plan. */
   notice?: string;
@@ -432,18 +432,18 @@ export async function RhOfferDetail({
   now: Date;
 }) {
   const t = await getTranslations("phoneRhOffres");
+  const tc = await getTranslations("forMe.category");
   const format = await getFormatter();
   const since = new Date(now.getTime() - (period - 1) * DAY);
   since.setUTCHours(0, 0, 0, 0);
-  const [applications, canExport, stages, viewDays, organization] = await Promise.all([
+  const [applications, canExport, viewDays, organization, viewFamilies] = await Promise.all([
     db.application.findMany({
       where: { jobId: job.id },
       select: {
         createdAt: true,
         source: true,
         status: true,
-        stageId: true,
-        _count: { select: { interviews: true } },
+        profile: { select: { skills: { select: { skill: { select: { category: true } } } } } },
         events: {
           where: { type: { in: ["stage_changed", "decision"] } },
           orderBy: { createdAt: "asc" },
@@ -453,12 +453,12 @@ export async function RhOfferDetail({
       },
     }),
     can(db, { type: "organization", id: ctx.organizationId }, "reports.export"),
-    ensureStages(db, job.id),
     db.jobViewDay.findMany({ where: { jobId: job.id, day: { gte: since } } }),
     db.organization.findUniqueOrThrow({
       where: { id: ctx.organizationId },
       select: { name: true, logo: true, verifiedAt: true },
     }),
+    db.jobViewFamily.findMany({ where: { jobId: job.id }, orderBy: { count: "desc" } }),
   ]);
   const status = statusKey(job, now);
   const day = (date: Date) => format.dateTime(date, { day: "numeric", month: "short" });
@@ -474,52 +474,121 @@ export async function RhOfferDetail({
         : null,
     !ended && left !== null && left > 0 ? t("detail.left", { count: left }) : null,
   ].filter(Boolean);
-  const rate = figures.views > 0 ? (figures.applications / figures.views) * 100 : null;
-  const bars = Array.from({ length: period }, (_, index) => {
+
+  // ─── Les chiffres ──────────────────────────────────────────────────────────────────
+  const rate = figures.views > 0 ? figures.applications / figures.views : null;
+  const perApplication =
+    figures.applications > 0 && figures.views >= figures.applications
+      ? Math.round(figures.views / figures.applications)
+      : null;
+  const viewBars = Array.from({ length: period }, (_, index) => {
     const start = new Date(since.getTime() + index * DAY);
-    const count = applications.filter(
-      (row) => row.createdAt >= start && row.createdAt.getTime() < start.getTime() + DAY,
-    ).length;
-    return { start, count };
+    return {
+      start,
+      count: viewDays
+        .filter(
+          (row) =>
+            row.day.getTime() >= start.getTime() && row.day.getTime() < start.getTime() + DAY,
+        )
+        .reduce((sum, row) => sum + row.count, 0),
+    };
   });
-  const top = Math.max(1, ...bars.map((bar) => bar.count));
-  const viewBars = bars.map((bar) => ({
-    start: bar.start,
-    count: viewDays
-      .filter(
-        (row) =>
-          row.day.getTime() >= bar.start.getTime() && row.day.getTime() < bar.start.getTime() + DAY,
-      )
-      .reduce((sum, row) => sum + row.count, 0),
-  }));
   const viewTop = Math.max(1, ...viewBars.map((bar) => bar.count));
+  const periodViews = viewBars.reduce((sum, bar) => sum + bar.count, 0);
+
+  // ─── Diagnostic: who looks, who applies, from where ─────────────────────────────────
+  const familyName = (category: string) => {
+    try {
+      return tc(category as "data");
+    } catch {
+      return category;
+    }
+  };
+  const colors = Object.values(PROFILE_PALETTE);
+  const sharesOf = (rows: { family: string; count: number }[]) => {
+    const total = rows.reduce((sum, row) => sum + row.count, 0);
+    const top = rows.slice(0, 3);
+    const rest = rows.slice(3).reduce((sum, row) => sum + row.count, 0);
+    const kept = rest > 0 ? [...top, { family: "", count: rest }] : top;
+    return {
+      total,
+      rows: kept.map((row, index) => ({
+        key: row.family || "autres",
+        label: row.family ? familyName(row.family) : t("vue.others"),
+        share: total > 0 ? Math.round((row.count * 100) / total) : 0,
+        color: row.family ? colors[index % colors.length]! : "rgba(255,255,255,.25)",
+      })),
+    };
+  };
+  const viewers = sharesOf(viewFamilies.map((row) => ({ family: row.family, count: row.count })));
+  const applicantCounts = new Map<string, number>();
+  for (const row of applications) {
+    const family = familyShares(row.profile.skills.map((item) => item.skill.category))[0]?.family;
+    if (family) applicantCounts.set(family, (applicantCounts.get(family) ?? 0) + 1);
+  }
+  const applicants = sharesOf(
+    [...applicantCounts.entries()]
+      .map(([family, count]) => ({ family, count }))
+      .sort((x, y) => y.count - x.count),
+  );
+  // Below this many signed-in views, the families say nothing yet (and point at no one).
+  const enough = viewers.total >= VIEWERS_MIN;
+  const named = (rows: { label: string; key: string }[]) => {
+    const [first, second] = rows.filter((row) => row.key !== "autres").map((row) => row.label);
+    return second ? t("vue.two", { first: first!, second }) : (first ?? "");
+  };
+  const sources = (["direct", "invitation", "talent_search"] as const).map((source) => ({
+    source,
+    count: applications.filter((row) => row.source === source).length,
+  }));
   const delays = applications
     .filter((row) => row.events[0])
     .map((row) => (row.events[0]!.createdAt.getTime() - row.createdAt.getTime()) / DAY);
   const responseDays = delays.length
     ? Math.round((delays.reduce((sum, value) => sum + value, 0) / delays.length) * 10) / 10
     : null;
-  const pipelineHref = `/app/hire/offres/${job.id}?vue=candidats`;
-  const live = applications.filter((row) => row.status !== "withdrawn");
-  const stageRows = stages.map((stage) => ({
-    id: stage.id,
-    name: stage.name,
-    kind: stage.kind,
-    count: live.filter((row) => row.stageId === stage.id).length,
-  }));
-  const stageTop = Math.max(1, ...stageRows.map((row) => row.count));
-  const sources = (["direct", "invitation", "talent_search"] as const).map((source) => ({
-    source,
-    count: applications.filter((row) => row.source === source).length,
-  }));
   const hired = applications.filter((row) => row.status === "hired").length;
-  // People met at least once (not the number of meetings).
-  const interviewed = applications.filter((row) => row._count.interviews > 0).length;
-  const share = (part: number, whole: number) =>
-    whole > 0
-      ? format.number(Math.min(1, part / whole), { style: "percent", maximumFractionDigits: 1 })
-      : "–";
-  const sourceTop = Math.max(1, ...sources.map((row) => row.count));
+
+  // ─── Ce qui marche · À améliorer · À faire ─────────────────────────────────────────
+  const review: OfferFigures = {
+    views: figures.views,
+    applications: figures.applications,
+    unseen: figures.unseen,
+    shortlisted,
+    hired,
+    openings: Math.max(1, job.openings),
+    online,
+    left: ended ? null : left,
+    responseDays,
+    invited: sources.find((row) => row.source === "invitation")?.count ?? 0,
+  };
+  const points = offerPoints(review);
+  const percent = (value: number) =>
+    format.number(value, { style: "percent", maximumFractionDigits: 1 });
+  const pointText = (point: OfferPoint) => {
+    switch (point.key) {
+      case "rate":
+      case "lowRate":
+        return t(`vue.point.${point.key}`, { share: percent(point.share) });
+      case "seen":
+      case "fewViews":
+        return t(`vue.point.${point.key}`, { count: point.views });
+      case "fastAnswer":
+      case "slowAnswer":
+        return t(`vue.point.${point.key}`, { days: format.number(point.days) });
+      case "shortlist":
+      case "open":
+        return t(`vue.point.${point.key}`, { count: point.count });
+      case "retain":
+        return t("vue.point.retain", { count: point.wanted });
+      case "closing":
+        return t("vue.point.closing", { count: point.days });
+      default:
+        return t(`vue.point.${point.key}`);
+    }
+  };
+
+  const pipelineHref = `/app/hire/offres/${job.id}?vue=candidatures`;
   const from = job.publishedAt ?? job.updatedAt;
   const to = job.status === "closed" ? job.updatedAt : now;
   const report =
@@ -547,131 +616,29 @@ export async function RhOfferDetail({
     report,
     manage,
     start: openReport && report ? "report" : null,
+    closesAt: job.closesAt ? job.closesAt.toISOString().slice(0, 10) : null,
+    minDate: new Date(now.getTime() + DAY).toISOString().slice(0, 10),
+    back: `/app/hire/offres/${job.id}?vue=apercu`,
   };
-  // ─── « Vue » (Ephraïm, 03/11/2026): the goal of the offer, then Orbi's reading of its figures ──
-  const openings = Math.max(1, job.openings);
-  const review: OfferFigures = {
-    views: figures.views,
-    applications: figures.applications,
-    unseen: figures.unseen,
-    shortlisted,
-    hired,
-    openings,
-    online,
-    left: ended ? null : left,
-    responseDays,
-    invited: sources.find((row) => row.source === "invitation")?.count ?? 0,
-  };
-  const verdict = offerVerdict(review);
-  const points = offerPoints(review);
-  const percent = (value: number) =>
-    format.number(value, { style: "percent", maximumFractionDigits: 1 });
-  const pointText = (point: OfferPoint) => {
-    switch (point.key) {
-      case "rate":
-      case "lowRate":
-        return t(`vue.point.${point.key}`, { share: percent(point.share) });
-      case "seen":
-      case "fewViews":
-        return t(`vue.point.${point.key}`, { count: point.views });
-      case "fastAnswer":
-      case "slowAnswer":
-        return t(`vue.point.${point.key}`, { days: format.number(point.days) });
-      case "shortlist":
-      case "open":
-        return t(`vue.point.${point.key}`, { count: point.count });
-      case "retain":
-        return t("vue.point.retain", { count: point.wanted });
-      case "closing":
-        return t("vue.point.closing", { count: point.days });
-      default:
-        return t(`vue.point.${point.key}`);
-    }
-  };
-  const total =
-    job.publishedAt && job.closesAt
-      ? Math.max(1, Math.ceil((job.closesAt.getTime() - job.publishedAt.getTime()) / DAY))
-      : null;
-  const goals = [
-    {
-      key: "hired",
-      label: t("vue.goal.hired"),
-      value: t("vue.goal.hiredValue", { count: hired, total: openings }),
-      share: Math.min(1, hired / openings),
-    },
-    {
-      key: "shortlisted",
-      label: t("vue.goal.shortlisted"),
-      value: t("vue.goal.shortlistedValue", {
-        count: shortlisted,
-        total: openings * SHORTLIST_PER_POST,
-      }),
-      share: Math.min(1, shortlisted / (openings * SHORTLIST_PER_POST)),
-    },
-    ...(total
-      ? [
-          {
-            key: "time",
-            label: t("vue.goal.time"),
-            value: ended
-              ? t("vue.goal.timeEnded")
-              : t("vue.goal.timeValue", { count: Math.min(online, total), total }),
-            share: ended ? 1 : Math.min(1, online / total),
-          },
-        ]
-      : []),
-  ];
-  const steps = [
-    { key: "views", count: figures.views, share: null as string | null },
-    {
-      key: "applications",
-      count: figures.applications,
-      share:
-        figures.views > 0
-          ? t("vue.stepShare.views", { share: share(figures.applications, figures.views) })
-          : null,
-    },
-    {
-      key: "opened",
-      count: Math.max(0, figures.applications - figures.unseen),
-      share:
-        figures.applications > 0
-          ? t("vue.stepShare.applications", {
-              share: share(figures.applications - figures.unseen, figures.applications),
-            })
-          : null,
-    },
-    {
-      key: "shortlisted",
-      count: shortlisted,
-      share:
-        figures.applications > 0
-          ? t("vue.stepShare.applications", { share: share(shortlisted, figures.applications) })
-          : null,
-    },
-    {
-      key: "interviews",
-      count: interviewed,
-      share:
-        figures.applications > 0
-          ? t("vue.stepShare.applications", { share: share(interviewed, figures.applications) })
-          : null,
-    },
-    {
-      key: "hired",
-      count: hired,
-      share: t("vue.stepShare.openings", { count: openings }),
-    },
-  ] as const;
-  const stepTop = Math.max(1, ...steps.map((row) => row.count));
-  const ratePercent =
-    rate === null
-      ? "–"
-      : format.number(rate / 100, {
-          style: "percent",
-          minimumFractionDigits: 1,
-          maximumFractionDigits: 1,
-        });
+  const bar = (rows: { key: string; share: number; color: string }[], label: string) => (
+    <span className="nb-rh-vu-barre" role="img" aria-label={label}>
+      {rows.map((row) => (
+        <span key={row.key} style={{ flexGrow: Math.max(1, row.share), background: row.color }} />
+      ))}
+    </span>
+  );
+  const legend = (rows: { key: string; label: string; share: number; color: string }[]) => (
+    <ul className="nb-rh-vu-legende">
+      {rows.map((row) => (
+        <li key={row.key}>
+          <i style={{ background: row.color }} aria-hidden />
+          <span>{row.label}</span>
+          <b>{t("vue.share", { share: row.share })}</b>
+        </li>
+      ))}
+    </ul>
+  );
+
   return (
     <RhOffresTexts>
       <div className="nb-page nb-rh-detail nb-rh-co nb-rh-vue">
@@ -680,15 +647,7 @@ export async function RhOfferDetail({
             <PhoneIcon name="retour" size={20} />
             {t("detail.back")}
           </Link>
-          <RhOfferActions
-            data={{
-              ...actions,
-              closesAt: job.closesAt ? job.closesAt.toISOString().slice(0, 10) : null,
-              minDate: new Date(now.getTime() + DAY).toISOString().slice(0, 10),
-              back: `/app/hire/offres/${job.id}?vue=apercu`,
-            }}
-            items={["edit", "pause", "postpone", "delete"]}
-          />
+          <RhOfferActions data={actions} items={["edit", "pause", "postpone", "delete"]} />
         </header>
         <section className="nb-rh-co-tete">
           <span className="nb-rh-co-org">
@@ -723,186 +682,44 @@ export async function RhOfferDetail({
           ) : null}
         </section>
         {tabs}
-        <div className="nb-rh-detail-corps">
-          <section className="nb-rh-ev" aria-labelledby="rh-vue-avis">
-            <h2 id="rh-vue-avis" className="nb-rh-co-h">
-              <OrbiDisc size={26} />
-              {t("vue.title")}
-            </h2>
-            <div className="nb-rh-ev-avis" data-ton={verdict.tone}>
-              <div className="nb-rh-fr-score">
-                <span
-                  className="nb-rh-anneau nb-rh-anneau-l"
-                  style={
-                    { "--p": Math.round(Math.min(1, hired / openings) * 100) } as CSSProperties
-                  }
-                  role="img"
-                  aria-label={t("vue.ring", { count: hired, total: openings })}
-                >
-                  <b aria-hidden>
-                    {hired}/{openings}
-                  </b>
-                </span>
-                <span className="nb-rh-res-t">
-                  <b>{t("vue.goalLine", { count: openings })}</b>
-                  <span className="nb-meta">
-                    {left !== null && !ended && left > 0
-                      ? t("vue.goalLeft", { count: left })
-                      : ended
-                        ? t("vue.goalEnded")
-                        : t("vue.goalOpen")}
-                  </span>
-                </span>
-              </div>
-              <p
-                className="nb-rh-ev-sugg"
-                data-choix={
-                  verdict.tone === "good" ? "retain" : verdict.tone === "watch" ? "hold" : "reject"
-                }
-              >
-                <b>{t(`vue.verdict.${verdict.verdict}`)}</b>
-                <span>{t(`vue.verdictWhy.${verdict.verdict}`, { count: figures.unseen })}</span>
-              </p>
-              <dl className="nb-rh-fr-notes">
-                <div>
-                  <dt>{t("vue.views")}</dt>
-                  <dd>{format.number(figures.views)}</dd>
-                </div>
-                <div>
-                  <dt>{t("vue.applications")}</dt>
-                  <dd>{format.number(figures.applications)}</dd>
-                </div>
-                <div>
-                  <dt>{t("vue.rate")}</dt>
-                  <dd>{ratePercent}</dd>
-                </div>
-              </dl>
-              <p className="nb-meta">{t("vue.rule")}</p>
+
+        <section className="nb-rh-vu-chiffres" aria-labelledby="rh-vu-chiffres">
+          <h2 id="rh-vu-chiffres" className="nb-rh-vu-sur">
+            {t("vue.figuresTitle")}
+          </h2>
+          <dl className="nb-rh-vu-trois">
+            <div>
+              <dt>{t("vue.views")}</dt>
+              <dd>{format.number(figures.views)}</dd>
             </div>
-          </section>
-
-          <section className="nb-rh-ev" aria-labelledby="rh-vue-objectif">
-            <h2 id="rh-vue-objectif" className="nb-rh-co-h">
-              {t("vue.goalTitle")}
-            </h2>
-            <ul className="nb-rh-vue-buts">
-              {goals.map((goal) => (
-                <li key={goal.key} data-plein={goal.share >= 1 ? "" : undefined}>
-                  <span className="nb-rh-vue-but-t">
-                    <span>{goal.label}</span>
-                    <b>{goal.value}</b>
-                  </span>
-                  <span className="nb-rh-jauge" aria-hidden>
-                    <span
-                      style={{ width: `${goal.share > 0 ? Math.max(4, goal.share * 100) : 0}%` }}
-                    />
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section className="nb-rh-ev" aria-labelledby="rh-vue-parcours">
-            <h2 id="rh-vue-parcours" className="nb-rh-co-h">
-              {t("vue.stepsTitle")}
-            </h2>
-            <p className="nb-meta">{t("vue.stepsLead")}</p>
-            <ol className="nb-rh-vue-parcours">
-              {steps.map((row, index) => (
-                <li key={row.key} data-etape={row.key}>
-                  <span className="nb-cr-num" aria-hidden>
-                    {index + 1}
-                  </span>
-                  <span className="nb-rh-vue-but-t">
-                    <span>{t(`vue.step.${row.key}`)}</span>
-                    <b>{format.number(row.count)}</b>
-                  </span>
-                  {row.share ? <small>{row.share}</small> : null}
-                  <span className="nb-rh-jauge" aria-hidden>
-                    <span
-                      style={{
-                        width: `${row.count ? Math.max(3, (row.count / stepTop) * 100) : 0}%`,
-                      }}
-                    />
-                  </span>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          <section className="nb-rh-ev" aria-labelledby="rh-vue-pourquoi">
-            <h2 id="rh-vue-pourquoi" className="nb-rh-co-h">
-              {t("vue.whyTitle")}
-            </h2>
-            {(
-              [
-                ["pour", "works", points.works],
-                ["faible", "improve", points.improve],
-                ["verifier", "todo", points.todo],
-              ] as const
-            ).map(([tone, key, list]) => (
-              <div key={key} className="nb-rh-ev-liste" data-ton={tone}>
-                <p>{t(`vue.${key}.title`)}</p>
-                {list.length > 0 ? (
-                  <ul>
-                    {list.map((point) => (
-                      <li key={point.key}>{pointText(point)}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <small className="nb-meta">{t(`vue.${key}.none`)}</small>
-                )}
-                {key === "todo" && figures.applications > 0 ? (
-                  <Link
-                    href={`/app/hire/offres/${job.id}?vue=candidatures`}
-                    className="nb-rh-ev-lien"
-                  >
-                    {t("vue.todo.go")}
-                    <PhoneIcon name="chevron" size={14} />
-                  </Link>
-                ) : null}
-              </div>
-            ))}
-          </section>
-
-          <h2 className="nb-rh-co-h nb-rh-vue-activite">{t("vue.activity")}</h2>
-          <section className="nb-rh-carte-stat" aria-labelledby="rh-pipe-t">
-            <div className="nb-rh-courbe-h">
-              <h2 id="rh-pipe-t">
-                <MenuArt name="pipeline" size="xs" />
-                {t("detail.pipeline")}
-              </h2>
-              {figures.applications > 0 ? (
-                <Link href={pipelineHref} className="nb-rh-lien-stat">
-                  {t("detail.pipelineSee")}
-                  <PhoneIcon name="chevron" size={14} />
-                </Link>
-              ) : null}
+            <div>
+              <dt>{t("vue.applications")}</dt>
+              <dd>{format.number(figures.applications)}</dd>
             </div>
-            <ol className="nb-rh-etapes-stat">
-              {stageRows.map((row) => (
-                <li key={row.id} data-kind={row.kind}>
-                  <Link href={`${pipelineHref}#etape-${row.id}`}>
-                    <span>{row.name}</span>
-                    <span className="nb-rh-jauge" aria-hidden>
-                      <span
-                        style={{
-                          width: `${row.count ? Math.max(4, (row.count / stageTop) * 100) : 0}%`,
-                        }}
-                      />
-                    </span>
-                    <b>{row.count}</b>
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          </section>
-          <section className="nb-rh-courbe nb-rh-carte-stat" aria-labelledby="rh-courbe-t">
+            <div>
+              <dt>{t("vue.rate")}</dt>
+              <dd>
+                {rate === null
+                  ? "–"
+                  : format.number(rate, {
+                      style: "percent",
+                      maximumFractionDigits: 1,
+                    })}
+              </dd>
+            </div>
+          </dl>
+          <p className="nb-rh-vu-ratio">
+            {perApplication !== null
+              ? t("vue.ratio", { count: perApplication })
+              : figures.applications > 0
+                ? t("vue.ratioUncounted")
+                : figures.views > 0
+                  ? t("vue.ratioNone", { count: figures.views })
+                  : t("vue.ratioNoView")}
+          </p>
+          <div className="nb-rh-vu-courbe">
             <div className="nb-rh-courbe-h">
-              <h2 id="rh-courbe-t">
-                <MenuArt name="career" size="xs" />
-                {t("detail.chart")}
-              </h2>
+              <span>{t("vue.viewsChart", { count: periodViews, days: period })}</span>
               <nav className="nb-rh-periode" aria-label={t("detail.period")}>
                 {([7, 30] as const).map((days) => (
                   <Link
@@ -922,57 +739,103 @@ export async function RhOfferDetail({
               </nav>
             </div>
             <Bars
-              bars={bars}
-              top={top}
-              period={period}
-              label={t("detail.chartLabel", {
-                count: bars.reduce((sum, bar) => sum + bar.count, 0),
-                days: period,
-              })}
-              added={(count) => t("detail.added", { count })}
-              weekday={(date) => format.dateTime(date, { weekday: "short" }).replace(".", "")}
-            />
-          </section>
-          <section className="nb-rh-courbe nb-rh-carte-stat" aria-labelledby="rh-vues-t">
-            <h2 id="rh-vues-t">
-              <MenuArt name="why" size="xs" />
-              {t("detail.views")}
-            </h2>
-            <Bars
               bars={viewBars}
               top={viewTop}
               period={period}
               tone="vues"
-              label={t("detail.viewsLabel", {
-                count: viewBars.reduce((sum, bar) => sum + bar.count, 0),
-                days: period,
-              })}
+              label={t("detail.viewsLabel", { count: periodViews, days: period })}
               added={(count) => String(count)}
               weekday={(date) => format.dateTime(date, { weekday: "short" }).replace(".", "")}
             />
-          </section>
-          <section className="nb-rh-sources nb-rh-carte-stat" aria-labelledby="rh-sources-t">
-            <h2 id="rh-sources-t">
-              <MenuArt name="partners" size="xs" />
-              {t("detail.sources")}
-            </h2>
-            {sources.map((row) => (
-              <div key={row.source} className="nb-rh-source">
-                <p>
-                  <span>{t(`source.${row.source}`)}</span>
+          </div>
+        </section>
+
+        <section className="nb-rh-vu-diag" aria-labelledby="rh-vu-diag">
+          <h2 id="rh-vu-diag" className="nb-rh-vu-sur">
+            <OrbiDisc size={24} />
+            {t("vue.diagTitle")}
+          </h2>
+          <p className="nb-rh-vu-phrase">
+            {enough
+              ? t("vue.diagViewers", { families: named(viewers.rows) })
+              : applicants.total > 0
+                ? t("vue.diagApplicants", { families: named(applicants.rows) })
+                : t("vue.diagNone")}
+          </p>
+          <div className="nb-rh-vu-bloc">
+            <p>{t("vue.whoViews")}</p>
+            {enough ? (
+              <>
+                {bar(viewers.rows, t("vue.whoViews"))}
+                {legend(viewers.rows)}
+              </>
+            ) : (
+              <small className="nb-meta">{t("vue.whoViewsFew", { count: VIEWERS_MIN })}</small>
+            )}
+          </div>
+          <div className="nb-rh-vu-bloc">
+            <p>{t("vue.whoApplies")}</p>
+            {applicants.total > 0 ? (
+              <>
+                {bar(applicants.rows, t("vue.whoApplies"))}
+                {legend(applicants.rows)}
+              </>
+            ) : (
+              <small className="nb-meta">{t("vue.whoAppliesNone")}</small>
+            )}
+          </div>
+          <div className="nb-rh-vu-bloc">
+            <p>{t("detail.sources")}</p>
+            <ul className="nb-rh-vu-sources">
+              {sources.map((row) => (
+                <li key={row.source} data-vide={row.count === 0 ? "" : undefined}>
                   <b>{row.count}</b>
-                </p>
-                <span className="nb-rh-jauge" aria-hidden>
-                  <span
-                    style={{
-                      width: `${row.count ? Math.max(4, (row.count / sourceTop) * 100) : 0}%`,
-                    }}
-                  />
+                  <span>{t(`source.${row.source}`)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <p className="nb-meta">{t("vue.rule")}</p>
+        </section>
+
+        <section className="nb-rh-vu-actions" aria-labelledby="rh-vu-actions">
+          <h2 id="rh-vu-actions" className="nb-rh-vu-sur">
+            {t("vue.whyTitle")}
+          </h2>
+          <ul className="nb-rh-vu-defile">
+            {(
+              [
+                ["marche", "works", "certificate", points.works],
+                ["ameliorer", "improve", "career", points.improve],
+                ["faire", "todo", "calendar", points.todo],
+              ] as const
+            ).map(([tone, key, art, list]) => (
+              <li key={key} className="nb-rh-vu-carte" data-ton={tone}>
+                <span className="nb-rh-vu-carte-h">
+                  <MenuArt name={art} size="xs" />
+                  <b>{t(`vue.${key}.title`)}</b>
+                  <small>{list.length}</small>
                 </span>
-              </div>
+                {list.length > 0 ? (
+                  <ul>
+                    {list.map((point) => (
+                      <li key={point.key}>{pointText(point)}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <small className="nb-meta">{t(`vue.${key}.none`)}</small>
+                )}
+                {key === "todo" && figures.applications > 0 ? (
+                  <Link href={pipelineHref} className="nb-rh-ev-lien">
+                    {t("vue.todo.go")}
+                    <PhoneIcon name="chevron" size={14} />
+                  </Link>
+                ) : null}
+              </li>
             ))}
-          </section>
-        </div>
+          </ul>
+        </section>
+
         {figures.applications > 0 ? (
           <div className="nb-bas">
             <Link href={pipelineHref} className="nb-bp">
