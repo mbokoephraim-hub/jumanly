@@ -16,7 +16,25 @@ import {
 } from "@/server/services/notifications";
 import { notifModelOf } from "../notif-model";
 import { initialsOf, tintOf } from "./candidatures";
-import { RhNotifications, type RhNotifRow, type RhNotifTab } from "./notifications-client";
+import { PhoneNotifications, type NotifRow } from "../fil/notifications";
+import type { NotifModelView } from "../notif-badge";
+
+type RhNotifTab = "candidatures" | "entretiens" | "reseau";
+type RhNotifRow = {
+  id: string;
+  href: string;
+  group: "today" | "yesterday" | "thisWeek" | "earlier";
+  tab: RhNotifTab | null;
+  /** The name that opens the sentence, written in bold. */
+  who: string | null;
+  text: string;
+  ago: string;
+  unread: boolean;
+  initials: string | null;
+  image: string | null;
+  tint: string;
+  model: NotifModelView;
+};
 
 /** The tab of each type (planches 180 to 183): what is not listed only shows under « Tout ». */
 const TAB_OF: Partial<Record<string, RhNotifTab>> = {
@@ -133,8 +151,10 @@ export async function rhNotificationRows(userId: string, now = new Date()): Prom
 }
 
 /**
- * Notifications of the recruiter on the phone (planches 180 to 183). Above the list, the requests
- * to join the organization (planche 183) and the offers closing soon, answered on the spot.
+ * Notifications of the recruiter on the phone, on the talent's design (Ephraïm 03/11/2026: « le
+ * même design que celui du talent, sauf que les notifications seront différentes »): the chips
+ * « Tout · Candidatures · Entretiens · Réseau », and above the list the requests to join the
+ * organization and the offers closing soon, answered on the spot.
  */
 export async function RhNotificationsScreen({
   ctx,
@@ -144,12 +164,39 @@ export async function RhNotificationsScreen({
   query: Record<string, string | string[] | undefined>;
 }) {
   const answer = (key: string) => (typeof query[key] === "string" ? query[key] : undefined);
+  const t = await getTranslations("phoneRhNotifs");
+  const rows = (await rhNotificationRows(ctx.userId)).map((row): NotifRow => ({
+    id: row.id,
+    href: row.href,
+    group: row.group === "today" ? "today" : row.group === "earlier" ? "earlier" : "thisWeek",
+    filter: row.tab,
+    who: row.who,
+    what: row.text,
+    ago: row.ago,
+    unread: row.unread,
+    model: row.model,
+    avatar:
+      row.initials || row.image
+        ? {
+            initials: row.initials ?? "",
+            tone: Number(row.tint),
+            org: false,
+            image: row.image,
+          }
+        : null,
+  }));
   return (
-    <RhNotifications
-      rows={await rhNotificationRows(ctx.userId)}
+    <PhoneNotifications
+      rows={rows}
+      fallback="/app/hire"
+      settingsHref="/app/parametres/notifications"
+      filters={(["tout", "candidatures", "entretiens", "reseau"] as const).map((key) => ({
+        key,
+        label: t(`tabs.${key}`),
+      }))}
+      push={<PushPrompt labels={await pushLabels()} />}
       top={
         <>
-          <PushPrompt labels={await pushLabels()} />
           <JoinRequestsCard ctx={ctx} answer={answer("demande")} />
           <EndingOffers ctx={ctx} answer={answer("fin")} />
         </>

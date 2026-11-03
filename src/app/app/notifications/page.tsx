@@ -21,7 +21,6 @@ import { PhoneNotifications } from "@/components/phone/fil/notifications";
 import { FilTexts, notificationRows } from "@/components/phone/fil/server";
 import { PushPrompt } from "@/components/phone/push-prompt";
 import { pushLabels } from "@/components/phone/push-prompt-texts";
-import { RhMessagesTexts } from "@/components/phone/recruteur/messages";
 import { RhNotificationsScreen } from "@/components/phone/recruteur/notifications";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -46,12 +45,12 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
   // On a phone, the recruiter's notifications of Modèle B (recruteur M7).
   if (space && (await isPhone()))
     return (
-      <RhMessagesTexts>
+      <FilTexts recruiter>
         <RhNotificationsScreen
           ctx={{ userId: user.id, organizationId: space.organizationId, role: space.role }}
           query={params}
         />
-      </RhMessagesTexts>
+      </FilTexts>
     );
   if (!space && !partner && (await isPhone()))
     return (
