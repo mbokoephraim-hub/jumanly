@@ -19848,15 +19848,17 @@
       },
       "placedByYou": "Classé par vous",
       "orbiSuggests": "Orbi : fort potentiel, à retenir ?",
-      "waiting": "{count, plural, one {# candidat attend} other {# candidats attendent}} une réponse depuis plus de {days} jours. Retenez, mettez en attente ou répondez."
+      "waiting": "{count, plural, one {# candidat attend} other {# candidats attendent}} depuis plus de {days} jours"
     },
     "orbi": {
       "title": "Classement d'Orbi",
-      "line": "{count, plural, one {# candidature lue · revoir l'analyse} other {# candidatures lues · revoir l'analyse}}",
-      "rule": "75 % et plus : Fort potentiel. De 50 à 74 % : À considérer. En dessous : Limité. Hors critères : un critère éliminatoire que vous avez fixé manque. Orbi suggère, vous décidez : personne n'est écarté sans vous.",
+      "line": "{count, plural, one {# lue} other {# lues}} · revoir",
+      "rule": "75 % et plus : Fort potentiel. 50 à 74 % : À considérer. Moins : Limité. Hors critères : un critère éliminatoire manque. Personne n'est écarté sans vous.",
+      "how": "Comment Orbi classe ?",
+      "order": "Ordre de la liste",
+      "byOrbi": "Orbi",
+      "yours": "Mon ordre",
       "why": "Pourquoi ?",
-      "yourOrder": "Voir dans votre ordre",
-      "byClass": "Voir par classe d'Orbi",
       "group": {
         "revoir": "À revoir"
       }
@@ -19884,7 +19886,7 @@
     },
     "ats": {
       "title": "Diagnostic ATS avec Orbi",
-      "text": "Orbi lit chaque CV, le compare à l'offre et vous dit pourquoi. Vous gardez la décision.",
+      "text": "Orbi lit chaque CV et vous dit pourquoi.",
       "start": "Démarrer le diagnostic",
       "locked": "Réservé aux formules Pro et Premium.",
       "upgrade": "Voir les formules",

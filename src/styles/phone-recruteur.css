@@ -8188,3 +8188,54 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   border-color: color-mix(in srgb, var(--nb-menthe) 45%, transparent);
   color: var(--nb-menthe-claire-t, var(--nb-creme));
 }
+/* « À trier » head: the title on the left, Orbi · Mon ordre on the right (03/11/2026). */
+.nb-rh-co-liste-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.nb-rh-co-tri {
+  flex: none;
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  border: 1px solid var(--nb-filet-fort);
+  background: color-mix(in srgb, var(--nb-creme) 5%, transparent);
+}
+.nb-rh-co-tri a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nb-brume);
+}
+.nb-rh-co-tri a[aria-current="page"] {
+  background: linear-gradient(135deg, var(--nb-lime), var(--nb-menthe));
+  color: var(--nb-encre);
+}
+.nb-rh-co-regle summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--nb-menthe-claire-t);
+  cursor: pointer;
+  list-style: none;
+}
+.nb-rh-co-regle summary::-webkit-details-marker {
+  display: none;
+}
+.nb-rh-co-regle summary::before {
+  content: "ⓘ";
+  margin-right: 6px;
+}
+.nb-rh-co-regle p {
+  margin-top: 4px;
+}
