@@ -314,6 +314,16 @@ export async function RhCandidateSummary({
     close: tp("close"),
   };
   const company = job.organization.name;
+  // Messages that breathe (Ephraïm, 03/11/2026): greeting by first name, one idea per paragraph,
+  // the items asked one per line, a signature.
+  const first = !masked && person.name ? (person.name.trim().split(/\s+/)[0] ?? "none") : "none";
+  const bullets = (items: string[]) =>
+    items
+      .slice(0, 3)
+      .map((item) => `• ${item}`)
+      .join("\n");
+  const ask = (key: "experiences" | "diplomas" | "missing" | "letter" | "cv", items = "") =>
+    tf(`messages.${key}`, { job: job.title, company, first, items }).replaceAll("\\n", "\n");
   const proposals = [
     unverified > 0
       ? {
@@ -321,7 +331,10 @@ export async function RhCandidateSummary({
           text: tf("proposals.experiences", { count: unverified }),
           detail: tf("proposals.experiencesDetail", { items: unverifiedNames }),
           action: tf("proposals.experiencesAction"),
-          message: tf("messages.experiences", { job: job.title, company, items: unverifiedNames }),
+          message: ask(
+            "experiences",
+            bullets(experiences.filter((item) => !item.verified).map((item) => item.title)),
+          ),
         }
       : null,
     diplomasWithoutProof > 0
@@ -330,7 +343,7 @@ export async function RhCandidateSummary({
           text: tf("proposals.diplomas", { count: diplomasWithoutProof }),
           detail: tf("proposals.diplomasDetail", { items: diplomaNames }),
           action: tf("proposals.diplomasAction"),
-          message: tf("messages.diplomas", { job: job.title, company, items: diplomaNames }),
+          message: ask("diplomas", bullets(noProof.map((item) => item.title))),
         }
       : null,
     missingAsked > 0
@@ -339,7 +352,7 @@ export async function RhCandidateSummary({
           text: tf("proposals.missing", { count: missingAsked }),
           detail: tf("proposals.missingDetail"),
           action: tf("proposals.missingAction"),
-          message: tf("messages.missing", { job: job.title, company }),
+          message: ask("missing"),
         }
       : null,
     !application.coverLetter?.trim()
@@ -348,7 +361,7 @@ export async function RhCandidateSummary({
           text: tf("proposals.letter"),
           detail: tf("proposals.letterDetail"),
           action: tf("proposals.letterAction"),
-          message: tf("messages.letter", { job: job.title, company }),
+          message: ask("letter"),
         }
       : null,
     !application.cvSnapshot
@@ -357,7 +370,7 @@ export async function RhCandidateSummary({
           text: tf("proposals.cv"),
           detail: tf("proposals.cvDetail"),
           action: tf("proposals.cvAction"),
-          message: tf("messages.cv", { job: job.title, company }),
+          message: ask("cv"),
         }
       : null,
   ].filter((item): item is NonNullable<typeof item> => item !== null);
