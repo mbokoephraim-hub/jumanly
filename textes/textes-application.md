@@ -16363,9 +16363,12 @@ Conventions :
 | `phoneRhCandidats.ats.title` | Diagnostic ATS avec Orbi |
 | `phoneRhCandidats.ats.text` | Orbi lit chaque CV et vous dit pourquoi. |
 | `phoneRhCandidats.ats.start` | Démarrer le diagnostic |
-| `phoneRhCandidats.ats.locked` | Réservé aux formules Pro et Premium. |
+| `phoneRhCandidats.ats.locked` | Formules Pro et Premium. |
+| `phoneRhCandidats.ats.step1` | CV reçus |
+| `phoneRhCandidats.ats.step2` | Orbi lit |
+| `phoneRhCandidats.ats.step3` | Classés |
 | `phoneRhCandidats.ats.upgrade` | Voir les formules |
-| `phoneRhCandidats.ats.none` | Le diagnostic s'ouvre dès la première candidature. |
+| `phoneRhCandidats.ats.none` | S'ouvre dès la première candidature. |
 | `phoneRhCandidats.list.title` | Tous les candidats |
 | `phoneRhCandidats.list.titleRetenus` | Les retenus |
 | `phoneRhCandidats.list.empty` | Personne n'a encore candidaté à cette offre. |

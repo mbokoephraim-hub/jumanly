@@ -19975,9 +19975,12 @@
       "title": "Diagnostic ATS avec Orbi",
       "text": "Orbi lit chaque CV et vous dit pourquoi.",
       "start": "Démarrer le diagnostic",
-      "locked": "Réservé aux formules Pro et Premium.",
+      "locked": "Formules Pro et Premium.",
+      "step1": "CV reçus",
+      "step2": "Orbi lit",
+      "step3": "Classés",
       "upgrade": "Voir les formules",
-      "none": "Le diagnostic s'ouvre dès la première candidature."
+      "none": "S'ouvre dès la première candidature."
     },
     "list": {
       "title": "Tous les candidats",

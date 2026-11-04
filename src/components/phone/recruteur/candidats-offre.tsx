@@ -396,14 +396,30 @@ export async function RhOfferCandidatesList({
       ) : null}
       {tab === "trier" && classed === 0 ? (
         <section className="nb-rh-co-ats" aria-labelledby={`rh-co-ats-${jobId}`}>
+          {/* The poster (Ephraïm, 04/11/2026, after his « geometry » and step references): a
+              light green sheet with curves and a fine grid, and the path of a CV in three steps,
+              the CVs received, Orbi who reads them, the candidates sorted. */}
           <div className="nb-rh-co-affiche" aria-hidden>
-            <span className="nb-rh-co-affiche-i">
-              <PhoneIcon name="cv" size={22} strong />
-            </span>
-            <OrbiDisc size={64} />
-            <span className="nb-rh-co-affiche-i">
-              <PhoneIcon name="entonnoir" size={22} strong />
-            </span>
+            <span className="nb-rh-co-courbe" data-cote="haut" />
+            <span className="nb-rh-co-courbe" data-cote="bas" />
+            <ol className="nb-rh-co-etapes">
+              <li>
+                <span className="nb-rh-co-pastille">
+                  <PhoneIcon name="cv" size={20} strong />
+                </span>
+                <small>{t("ats.step1")}</small>
+              </li>
+              <li data-orbi="">
+                <OrbiDisc size={52} />
+                <small>{t("ats.step2")}</small>
+              </li>
+              <li>
+                <span className="nb-rh-co-pastille" data-fonce="">
+                  <PhoneIcon name="entonnoir" size={20} strong />
+                </span>
+                <small>{t("ats.step3")}</small>
+              </li>
+            </ol>
           </div>
           <div className="nb-rh-co-ats-corps">
             <span className="nb-rh-co-ats-i" data-ouvert={atsOpen ? "" : undefined} aria-hidden>
