@@ -8865,19 +8865,32 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   gap: 12px;
   min-width: 0;
 }
+/* The logo takes the height of the names beside it; the picture sits on top, out of the flow,
+   so a large uploaded logo never decides the size (04/11/2026). */
 .nb-rh-of-logo {
+  position: relative;
   flex: none;
   display: block;
   aspect-ratio: 1;
   min-height: 48px;
+  max-width: 76px;
+  max-height: 76px;
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--nb-menthe-t) 28%, transparent);
 }
 .nb-rh-of-logo > * {
+  position: absolute !important;
+  inset: 0;
   width: 100% !important;
   height: 100% !important;
+  min-width: 0 !important;
   border-radius: inherit !important;
+}
+.nb-rh-of-logo img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
 }
 .nb-rh-of-noms {
   display: grid;
