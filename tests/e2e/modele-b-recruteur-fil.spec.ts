@@ -2,6 +2,7 @@ import { expect, test, type Page } from "./fixtures";
 import { expectAccessible } from "./a11y";
 import { capture, CAPTURE_VIEWPORT } from "./captures";
 import { logIn } from "./session";
+import { pickPhoneDate } from "./phone-date";
 
 // Modèle B recruteur, lot M3 (docs/modele-b-recruteur, mobile/captures section 02): the recruiter's
 // Fil. Publish in one's own name or in the name of the company (only a member who manages the
@@ -161,9 +162,12 @@ test.describe("Modèle B recruteur · Fil au téléphone", () => {
       "Indiquez la date de l'événement.",
     );
     const soon = new Date(Date.now() + 7 * 86_400_000);
-    await main(page)
-      .getByLabel("Date et heure de l'événement")
-      .fill(soon.toISOString().slice(0, 11) + "10:00");
+    await pickPhoneDate(
+      main(page),
+      "Date et heure de l'événement",
+      soon.toISOString().slice(0, 10),
+    );
+    await main(page).getByRole("textbox", { name: "Date et heure de l'événement" }).fill("10:00");
     await main(page).getByRole("button", { name: "Publier", exact: true }).click();
     await expect(page).toHaveURL(/\/app\/hire$/);
     await expect(fil(page).getByText(`Portes ouvertes fictives ${stamp}`)).toBeVisible();

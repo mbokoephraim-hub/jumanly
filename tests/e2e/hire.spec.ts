@@ -119,8 +119,11 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
 
   // The recruiter sees a notification, opens the candidate and moves them to « Entretien ».
   await page.goto("/app/notifications");
+  // Phone (04/11/2026): the notification model « Nouvelle candidature » + « X a postulé à … ».
   await expect(page.getByRole("main")).toContainText(
-    `Nouvelle candidature de Amani Fictif pour « ${title} »`,
+    isMobile
+      ? `Amani Fictif a postulé à « ${title} »`
+      : `Nouvelle candidature de Amani Fictif pour « ${title} »`,
   );
   // Lot 3: the candidates of the offer, then the file; « Changer d'étape » moves to « Entretien ».
   await page.goto(pipelineUrl);

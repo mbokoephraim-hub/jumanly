@@ -30,8 +30,9 @@ test.describe("Modèle B recruteur · coque au téléphone", () => {
 
     // No empty click: each tab opens its first screen, with its title.
     for (const [name, path, title] of [
-      [/^Offres$/, /\/app\/hire\/offres$/, "Offres"],
-      [/^Candidatures/, /\/app\/hire\/candidats$/, "Candidatures"],
+      // Candidatures became Agenda (03/11/2026).
+      [/^Offres/, /\/app\/hire\/offres$/, "Offres"],
+      [/^Agenda/, /\/app\/hire\/entretiens$/, "Agenda"],
       [/^Talents$/, /\/app\/hire\/talents$/, "Talents"],
       [/^Chat/, /\/app\/messages$/, "Chat"],
       [/^Fil$/, /\/app\/hire$/, "Fil"],
@@ -68,7 +69,7 @@ test.describe("Modèle B recruteur · coque au téléphone", () => {
     await expect(sheet).toBeHidden();
 
     // Offres: the lime « + » starts a new offer.
-    await nav.getByRole("link", { name: /^Offres$/ }).click();
+    await nav.getByRole("link", { name: /^Offres/ }).click();
     const main = page.locator("main");
     await expect(
       main.getByRole("link", { name: "Publier une offre" }).filter({ visible: true }),

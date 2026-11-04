@@ -4,6 +4,7 @@ import { expectAccessible } from "./a11y";
 import { capture, CAPTURE_VIEWPORT } from "./captures";
 import { fillOffer, publishFilledOffer, slugOf } from "./offer-flow";
 import { logIn, testEmail } from "./session";
+import { pickPhoneDate } from "./phone-date";
 
 // Modèle B recruteur, lot M5 (docs/modele-b-recruteur, mobile/captures sections 04 and 05): the
 // tab Candidatures (Fort potentiel, Toutes by stage, Entretiens, Décisions), the search, Orbi's
@@ -115,11 +116,14 @@ test.describe("Modèle B recruteur · Candidatures au téléphone", () => {
     page,
   }) => {
     test.setTimeout(240_000);
+    // The tab opens on the choice of the offer (03/11/2026); the views stay behind `?vue=`.
     await logIn(page, RECRUITER, undefined, "/app/hire/candidats");
     await page.goto("/app/hire/candidats");
     await expect(
-      main(page).getByRole("heading", { name: "Candidatures", exact: true }),
+      main(page).getByText("Choisissez une offre pour travailler sur ses candidats."),
     ).toBeVisible();
+    await page.goto("/app/hire/candidats?vue=potentiel");
+    await expect(main(page).getByRole("heading", { name: "Offres", exact: true })).toBeVisible();
     await expect(
       main(page)
         .getByText(/candidatures? · /)
@@ -215,23 +219,8 @@ test.describe("Modèle B recruteur · Candidatures au téléphone", () => {
     await capture(page, "063-cand-nonretenus");
     await expectAccessible(page);
 
-    // Search in two steps: by name, skill or city.
-    await page.goto("/app/hire/candidats");
-    const field = main(page)
-      .getByRole("searchbox", { name: "Rechercher un candidat" })
-      .filter({ visible: true });
-    await field.click();
-    await expect(field).toBeFocused();
-    const scopes = main(page).getByRole("radiogroup", { name: "Chercher par" });
-    for (const name of ["Tout", "Nom", "Compétence", "Ville"])
-      await expect(scopes.getByRole("radio", { name })).toBeVisible();
-    await capture(page, "064-cand-recherche");
-    await scopes.getByRole("radio", { name: "Nom" }).click();
-    await field.fill("Amani");
-    const found = main(page).getByRole("region", { name: /résultat/ });
-    await expect(found.getByRole("link", { name: /Amani/ }).first()).toBeVisible();
-    await capture(page, "065-cand-recherche-texte");
-    await main(page).getByRole("button", { name: "Annuler" }).filter({ visible: true }).click();
+    // The search of a candidate now lives in each offer (« Rechercher un candidat », 03/11/2026):
+    // modele-b-recruteur-offres covers it.
 
     // Orbi's diagnostic of all the CVs, read from the explained scores.
     await page.goto("/app/hire/candidats/diagnostic");
@@ -551,7 +540,7 @@ test.describe("Modèle B recruteur · Candidatures au téléphone", () => {
     const proposal = page.locator(".nb-rh-prop").filter({ visible: true });
     await expect(proposal.getByRole("heading", { name: /^Proposition à / })).toBeVisible();
     await proposal.getByLabel("Salaire mensuel (USD)").fill("900");
-    await proposal.getByLabel("Date de début").fill("2026-12-01");
+    await pickPhoneDate(proposal, "Date de début", "2026-12-01");
     await capture(page, "081-proposition");
     await expectAccessible(page);
     await proposal.getByRole("button", { name: "Envoyer la proposition" }).click();

@@ -108,7 +108,7 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
   await expect(
     page.getByText("Offre mise en pause. Ses candidatures restent.").first(),
   ).toBeVisible();
-  await expect(main(page).locator(isMobile ? ".nb-rh-statut" : ".t-rx-odh")).toContainText(
+  await expect(main(page).locator(isMobile ? ".nb-rh-of-etat" : ".t-rx-odh")).toContainText(
     "En pause",
   );
 
@@ -160,16 +160,16 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
   }
 
   if (isMobile) {
-    // The second offer's « ··· » closes it, after a confirmation; then its report.
+    // The second offer's « ··· » deletes it (03/11/2026), after a confirmation.
     await page.goto(secondUrl);
-    await (await phoneMenu(page, second)).getByRole("button", { name: /^Clôturer/ }).click();
-    const confirm = page.getByRole("dialog", { name: `Clôturer « ${second} » ?` });
-    await confirm.getByRole("button", { name: "Clôturer l'offre", exact: true }).click();
-    await expect(page).toHaveURL(/rapport=1/);
-    const report = page.getByRole("dialog", { name: "Offre clôturée, rapport prêt" });
-    await expect(report).toBeVisible();
-    await report.getByRole("button", { name: "Plus tard" }).click();
-    await expect(main(page).locator(".nb-rh-statut")).toHaveText("Terminée");
+    await (
+      await phoneMenu(page, second)
+    )
+      .getByRole("button", { name: /^Supprimer l'offre/ })
+      .click();
+    const confirm = page.getByRole("dialog", { name: `Supprimer « ${second} » ?` });
+    await confirm.getByRole("button", { name: "Supprimer l'offre", exact: true }).click();
+    await expect(page).toHaveURL(/\/app\/hire\/offres\?ok=retiree/);
 
     // The first offer goes back online, now that a place is free.
     await page.goto(overviewUrl);

@@ -249,7 +249,7 @@ export async function RhAgenda({
               <PhoneIcon name="chevron" size={18} />
             </Link>
           </div>
-          <div className="nb-rh-ag-grille" role="grid">
+          <div className="nb-rh-ag-grille">
             {names.map((name, index) => (
               <span key={`n-${index}`} className="nb-rh-ag-jn" aria-hidden>
                 {name}

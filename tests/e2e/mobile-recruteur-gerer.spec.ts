@@ -285,7 +285,7 @@ test("abonnement, formules RH, rapports en PDF, paramètres et journal des consu
   await page.goto("/app/notifications");
   // On a phone, the notifications of Modèle B recruteur (M7): the brief of the day is Orbi's.
   if (isMobile)
-    await expect(page.getByRole("tablist", { name: "Catégories de notifications" })).toBeVisible();
+    await expect(page.getByRole("group", { name: "Catégories", exact: true })).toBeVisible();
   else await expect(main(page).getByText("Votre journée en bref")).toBeVisible();
   await noOverflow(page, "notifications");
 

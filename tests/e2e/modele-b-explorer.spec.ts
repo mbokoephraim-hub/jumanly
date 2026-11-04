@@ -47,12 +47,10 @@ test.describe("Modèle B · Explorer au téléphone", () => {
     await expect(sheet).toBeHidden();
     await expect(explorer.getByRole("button", { name: "Filtres, 1 filtre actif" })).toBeVisible();
     await expect(explorer.getByRole("heading", { name: "Offres pour vous" })).toBeVisible();
-    // Each poster card names « Entreprise · Ville · Contrat ».
-    const cards = await explorer
-      .locator('section[aria-labelledby="ex-pour-vous"] .nb-ex-affiches > a')
-      .allTextContents();
-    expect(cards.length).toBeGreaterThan(0);
-    for (const card of cards) expect(card).toMatch(/· CDI/);
+    // The notched offer cards (#358): the company, the title, « Voir plus ».
+    const cards = explorer.locator('section[aria-labelledby="ex-pour-vous"] .nb-ex-ocs > article');
+    expect(await cards.count()).toBeGreaterThan(0);
+    await expect(cards.first().getByRole("link", { name: /^Voir l'offre / })).toBeVisible();
 
     // « Effacer » then « Voir » comes back to Explorer as it was.
     await explorer.getByRole("button", { name: "Filtres, 1 filtre actif" }).click();
@@ -183,7 +181,7 @@ test.describe("Modèle B · Explorer au téléphone", () => {
     await logIn(page, "grace.ux@jumanly.test");
     await page.goto("/app/jobs");
     const nav = page.getByRole("navigation", { name: "Navigation principale" });
-    const card = page.locator(".nb-ex .nb-fil-affiche").first();
+    const card = page.locator(".nb-ex .nb-ex-oc").first();
     await expect(card).toBeVisible();
     await card.evaluate((node) => {
       (node as HTMLElement).dataset.test = "same";
@@ -192,14 +190,14 @@ test.describe("Modèle B · Explorer au téléphone", () => {
     await page.waitForURL((url) => url.pathname === "/app");
     await nav.getByRole("link", { name: "Explorer", exact: true }).click();
     await page.waitForURL("**/app/jobs");
-    await expect(page.locator('.nb-ex .nb-fil-affiche[data-test="same"]')).toBeVisible();
+    await expect(page.locator('.nb-ex .nb-ex-oc[data-test="same"]')).toBeVisible();
 
     // An offer opened from Explorer covers it, and « Explorer » brings it back as it was.
-    await card.click();
+    await card.locator(".nb-rh-oc-t a").click();
     await page.waitForURL("**/app/jobs/**");
     await expect(page.locator(".nb-ex-offre")).toBeVisible();
     await page.getByRole("link", { name: "Explorer" }).first().click();
     await page.waitForURL("**/app/jobs");
-    await expect(page.locator('.nb-ex .nb-fil-affiche[data-test="same"]')).toBeVisible();
+    await expect(page.locator('.nb-ex .nb-ex-oc[data-test="same"]')).toBeVisible();
   });
 });

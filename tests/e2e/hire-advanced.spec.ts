@@ -168,7 +168,8 @@ async function inviteTalent(page: Page, slots = 2, check = false) {
 async function planInterview(page: Page, slots: number, check = false) {
   await expect(page).toHaveURL(/\/entretien(\?|$)/);
   const planner = page.locator("main").filter({ visible: true });
-  await planner.locator('[role="grid"] button:enabled').first().click();
+  // Tomorrow, not today: late in the day, today's suggested hours are already past.
+  await planner.locator('[role="grid"] button:enabled').nth(1).click();
   if (check) await expectAccessible(page);
   await plannerToHours(page);
   for (let index = 0; index < slots; index++) {
@@ -340,6 +341,10 @@ test("les écrans Hire avancés sont accessibles", async ({ page, isMobile }) =>
   if (!isMobile) {
     await expect(page.locator("#attribution")).toBeVisible();
     await expect(page.locator("#grille")).toBeVisible();
+  } else {
+    // The offer opens on its candidates (03/11/2026); « Vue » holds the figures and the link.
+    await page.goto(`${page.url().split("?")[0]}?vue=apercu`);
+    await expectAccessible(page);
   }
   await page
     .getByRole("link", { name: /^Voir (les|la|le) .*candidat/ })
@@ -349,7 +354,7 @@ test("les écrans Hire avancés sont accessibles", async ({ page, isMobile }) =>
   // On a phone the candidates of the offer open on the offer itself (planche 040).
   await expect(page).toHaveURL(
     isMobile
-      ? /\/app\/hire\/offres\/[^/?]+\?vue=(candidats|trier)/
+      ? /\/app\/hire\/offres\/[^/?]+\?vue=(candidats|candidatures|trier)/
       : /\/app\/hire\/candidats\?offre=/,
   );
   await expectAccessible(page);

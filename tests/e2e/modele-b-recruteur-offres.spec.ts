@@ -34,8 +34,18 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
       .getByRole("link", { name: /^Voir plus sur l'offre/ })
       .click();
     const people = page.locator(".nb-rh-co").filter({ visible: true });
-    const names = () => people.locator(".nb-rh-co-liste li b").allTextContents();
+    // The name alone, without Orbi's percentage written beside it.
+    const names = () =>
+      people
+        .locator(".nb-rh-co-liste li .nb-rh-co-t > b")
+        .evaluateAll((nodes) => nodes.map((node) => node.firstChild?.textContent?.trim() ?? ""));
     await expect(people.locator(".nb-rh-co-liste li").first()).toBeVisible();
+    // Orbi's classes first (03/11/2026): « Mon ordre » gives back the cards that move.
+    await people
+      .getByRole("navigation", { name: "Ordre de la liste" })
+      .getByRole("link", { name: "Mon ordre" })
+      .click();
+    await expect(page).toHaveURL(/ordre=vous/);
     const before = await names();
     expect(before.length).toBeGreaterThan(1);
 
@@ -60,13 +70,13 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
     await expect.poll(names).toContain(before[0]);
     await expect(people.getByRole("button", { name: "Déplacer" })).toHaveCount(0);
 
-    // « Retenus »: only the files kept for the next stage.
+    // « Entretiens »: only the files kept and complete (rubriques of the offer, 03/11/2026).
     await main(page)
       .getByRole("navigation", { name: "Parties de l'offre" })
-      .getByRole("link", { name: /^Retenus/ })
+      .getByRole("link", { name: /^Entretiens/ })
       .click();
-    await expect(page).toHaveURL(/vue=retenus/);
-    await expect(people.getByRole("heading", { name: /^Les retenus/ })).toBeVisible();
+    await expect(page).toHaveURL(/vue=entretiens/);
+    await expect(people.getByRole("heading", { name: /^Prêts pour l'entretien/ })).toBeVisible();
     await expect(people.getByRole("heading", { name: "Diagnostic ATS avec Orbi" })).toHaveCount(0);
   });
 
@@ -129,92 +139,51 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
     await capture(page, "044-offres-recherche-texte");
     await main(page).getByRole("button", { name: "Annuler" }).filter({ visible: true }).click();
 
-    // The offer opens on « Candidats » (03/11/2026): search, filters, the ATS diagnosis with
-    // Orbi, every person in the order they applied; « Vue d'ensemble » keeps the figures.
+    // The offer opens on « À trier » (rubriques of the offer, 03/11/2026): search, filters,
+    // Orbi's classes, then the people; « Vue » keeps the figures.
     await offers(page)
       .getByRole("link", { name: /Analyste de données junior/ })
       .first()
       .click();
     const parts = main(page).getByRole("navigation", { name: "Parties de l'offre" });
-    await expect(parts.getByRole("link", { name: "Candidatures", exact: true })).toHaveAttribute(
-      "aria-current",
-      "page",
-    );
+    for (const name of [/^Vue$/, /^À trier/, /^À compléter/, /^Entretiens/, /^Décision/])
+      await expect(parts.getByRole("link", { name })).toBeVisible();
     const people = page.locator(".nb-rh-co").filter({ visible: true });
-    await expect(people.getByRole("heading", { name: "Diagnostic ATS avec Orbi" })).toBeVisible();
-    await expect(people.getByRole("heading", { name: /^Tous les candidats/ })).toBeVisible();
+    await expect(people.getByRole("heading", { name: /^Classement d'Orbi/ })).toBeVisible();
+    await expect(people.getByRole("heading", { name: /^À trier/, level: 2 })).toBeVisible();
     await expect(people.getByRole("searchbox", { name: "Rechercher un candidat" })).toBeVisible();
-    await expect(people.getByRole("link", { name: /^Voir le profil · / }).first()).toBeVisible();
+    await expect(people.getByRole("link", { name: /^Pourquoi \? · / }).first()).toBeVisible();
     await capture(page, "045a-offre-candidats");
     await parts.getByRole("link", { name: "Vue", exact: true }).click();
     await expect(page).toHaveURL(/vue=apercu/);
     await expect(detail(page).getByRole("heading", { name: DEMO_OFFER })).toBeVisible();
-    await expect(detail(page)).toContainText("des vues deviennent candidatures");
-    await expect(detail(page).getByRole("heading", { name: "Candidatures reçues" })).toBeVisible();
-    await expect(
-      detail(page).getByRole("heading", { name: "D'où viennent les candidats" }),
-    ).toBeVisible();
+    for (const name of ["Les chiffres de l'offre", "Diagnostic d'Orbi", "Que faire maintenant ?"])
+      await expect(detail(page).getByRole("heading", { name })).toBeVisible();
     await capture(page, "045-offre-detail");
     await expectAccessible(page);
-    await detail(page).getByRole("button", { name: "Pourquoi ?" }).click();
-    await expect(sheet(page, "Pourquoi ?")).toContainText("c'est vous qui décidez");
-    await sheet(page, "Pourquoi ?").getByRole("button", { name: "Fermer" }).last().click();
     await detail(page).getByRole("link", { name: "30 jours" }).click();
     await expect(page).toHaveURL(/jours=30/);
-    await expect(detail(page).getByRole("link", { name: "30 jours" })).toHaveAttribute(
-      "aria-current",
-      "page",
-    );
     await detail(page).getByRole("link", { name: "7 jours" }).click();
+    await expect(page).not.toHaveURL(/jours=30/);
 
-    // « ··· »: modify, pause, share, duplicate, close.
+    // « ··· » (03/11/2026): modify, pause, postpone, delete.
     await detail(page).getByRole("button", { name: "Actions de l'offre" }).click();
     const menu = sheet(page, DEMO_OFFER);
-    for (const name of ["Modifier l'offre", "Mettre en pause", "Partager", "Dupliquer"])
-      await expect(menu.getByText(name, { exact: true })).toBeVisible();
-    await expect(menu.getByRole("button", { name: /^Clôturer l'offre/ })).toBeVisible();
+    await expect(menu.getByRole("link", { name: /^Modifier l'offre/ })).toBeVisible();
+    for (const name of [/^Mettre en pause/, /^Repousser l'offre/, /^Supprimer l'offre/])
+      await expect(menu.getByRole("button", { name })).toBeVisible();
     await capture(page, "046-offre-menu");
-    await menu.getByRole("button", { name: /^Partager/ }).click();
-    const share = sheet(page, "Partager l'offre");
-    await expect(share.getByRole("button", { name: /^Copier le lien/ })).toHaveAttribute(
-      "data-value",
-      /\/offres\//,
-    );
-    await expect(share.getByRole("link", { name: /^WhatsApp/ })).toHaveAttribute(
-      "href",
-      /^https:\/\/wa\.me\//,
-    );
-    await expect(share.getByRole("link", { name: /^Publier dans le Fil/ })).toHaveAttribute(
-      "href",
-      "/app/fil/publier?nom=entreprise",
-    );
-    await capture(page, "047-offre-partage");
-    await share.getByRole("button", { name: /^Copier le lien/ }).click();
-    await expect(page.getByText("Lien copié")).toBeVisible();
+    await menu.getByRole("button", { name: "Annuler", exact: true }).click();
+    await expect(menu).toBeHidden();
 
-    await detail(page).getByRole("button", { name: "Actions de l'offre" }).click();
-    await menu.getByRole("button", { name: /^Clôturer l'offre/ }).click();
-    const close = sheet(page, /^Clôturer « Analyste de données junior/);
-    await expect(close).toContainText("reçoivent un message");
-    await capture(page, "048-offre-cloturer");
-    // The seeded offer stays online for the other tests.
-    await close.getByRole("button", { name: "Garder en ligne" }).click();
-    await expect(close).toBeHidden();
-
-    // The candidates of the offer, ranked without name, age or photo.
+    // « Voir les N candidats » leads back to the candidates of the offer.
     await detail(page)
       .getByRole("link", { name: /^Voir (les \d+ candidats|le candidat)$/ })
       .click();
-    await expect(page).toHaveURL(/vue=(candidats|trier)/);
-    await expect(main(page)).toContainText("ni du nom, ni de l'âge, ni de la photo");
-    await expect(main(page).getByRole("link", { name: "Trier les candidatures" })).toHaveAttribute(
-      "href",
-      /\/app\/hire\/candidats\?offre=/,
-    );
+    await expect(page).toHaveURL(/vue=(candidatures|trier)/);
+    await expect(people.getByRole("searchbox", { name: "Rechercher un candidat" })).toBeVisible();
     await capture(page, "050-offre-candidats");
-    await main(page).getByRole("link", { name: "L'offre" }).click();
-    await expect(detail(page).getByRole("heading", { name: DEMO_OFFER })).toBeVisible();
-    await detail(page).getByRole("link", { name: "Offres", exact: true }).click();
+    await main(page).getByRole("link", { name: "Offres", exact: true }).first().click();
     await expect(offers(page)).toBeVisible();
 
     // Orbi, from Offres: its sheet speaks for the tab.
@@ -406,35 +375,22 @@ test.describe("Modèle B recruteur · Offres au téléphone", () => {
     await expect(detail(page).getByRole("heading", { name: title })).toBeVisible();
 
     if (live) {
-      // Pause, then back online.
+      // Pause, then back online (the state pill of the head, 04/11/2026).
       await detail(page).getByRole("button", { name: "Actions de l'offre" }).click();
       await menu.getByRole("button", { name: /^Mettre en pause/ }).click();
-      await expect(detail(page).locator(".nb-rh-statut")).toHaveText("En pause");
+      await expect(detail(page).locator(".nb-rh-of-etat")).toHaveText("En pause");
       await detail(page).getByRole("button", { name: "Actions de l'offre" }).click();
       await menu.getByRole("button", { name: /^Remettre en ligne/ }).click();
-      await expect(detail(page).locator(".nb-rh-statut")).toHaveText("En cours");
-
-      // Close: the report is ready.
-      await detail(page).getByRole("button", { name: "Actions de l'offre" }).click();
-      await menu.getByRole("button", { name: /^Clôturer l'offre/ }).click();
-      await sheet(page, new RegExp(`^Clôturer « ${title}`))
-        .getByRole("button", { name: "Clôturer l'offre" })
-        .click();
-      await expect(page).toHaveURL(/rapport=1/);
-      const report = sheet(page, "Offre clôturée, rapport prêt");
-      await expect(report).toContainText("vue");
-      await capture(page, "049-offre-rapport");
-      await report.getByRole("button", { name: "Plus tard" }).click();
-      await expect(detail(page).locator(".nb-rh-statut")).toHaveText("Terminée");
+      await expect(detail(page).locator(".nb-rh-of-etat")).toHaveText("En cours");
     }
 
-    // Duplicate: a new draft from this one, then « Brouillon » keeps it for later.
+    // « Supprimer l'offre » (03/11/2026): asked once, then the offer leaves the list.
     await detail(page).getByRole("button", { name: "Actions de l'offre" }).click();
-    await menu.getByRole("button", { name: /^Dupliquer/ }).click();
-    await expect(page).toHaveURL(/\/modifier\?ok=copie/);
-    await wizardReady(page);
-    await wizard(page).getByRole("button", { name: "Brouillon" }).click();
-    await expect(page).toHaveURL(/\/app\/hire\/offres\?ok=brouillon/);
-    await expect(offers(page).getByText("Brouillon").first()).toBeVisible();
+    await menu.getByRole("button", { name: /^Supprimer l'offre/ }).click();
+    const remove = sheet(page, new RegExp(`^Supprimer « ${title}`));
+    await expect(remove.getByRole("button", { name: "Garder l'offre" })).toBeVisible();
+    await remove.getByRole("button", { name: "Supprimer l'offre", exact: true }).click();
+    await expect(page).toHaveURL(/\/app\/hire\/offres\?ok=retiree/);
+    await expect(offers(page).getByRole("heading", { name: new RegExp(title) })).toHaveCount(0);
   });
 });

@@ -3,6 +3,7 @@ import { expect, test, type Page } from "./fixtures";
 import { expectAccessible } from "./a11y";
 import { capture, CAPTURE_VIEWPORT } from "./captures";
 import { logIn, testEmail } from "./session";
+import { pickPhoneDate } from "./phone-date";
 
 // Modèle B recruteur, lot M7 (docs/modele-b-recruteur, mobile/captures sections 07 and 10): the
 // tab Messages (Candidats, Réseau, Équipe), the search, a conversation with its aids, a
@@ -193,7 +194,7 @@ test.describe("Modèle B recruteur · Messages, notifications et Orbi au télép
     await expect(documentSheet).toBeVisible();
     await documentSheet.getByLabel("Document demandé").fill("Attestation fictive");
     const due = new Date(Date.now() + 7 * 86_400_000).toISOString().slice(0, 10);
-    await documentSheet.getByLabel("À envoyer avant le").fill(due);
+    await pickPhoneDate(documentSheet, "À envoyer avant le", due);
     await capture(page, "128b-conversation-document");
     await documentSheet.getByRole("button", { name: "Envoyer la demande" }).click();
     await expect(seen(page, "Demande de document envoyée.")).toBeVisible();
@@ -265,40 +266,41 @@ test.describe("Modèle B recruteur · Messages, notifications et Orbi au télép
     // Notifications: Tout, Candidatures, Entretiens, Réseau; « Tout marquer comme lu ».
     await page.goto("/app/notifications");
     await expect(page.getByRole("heading", { name: "Notifications", exact: true })).toBeVisible();
-    const notifTabs = page.getByRole("tablist", { name: "Catégories de notifications" });
-    await expect(notifTabs.getByRole("tab", { name: /^Tout/ })).toHaveAttribute(
-      "aria-selected",
+    // The talent's design (03/11/2026): filter chips, then today / this week / earlier.
+    const notifTabs = page.getByRole("group", { name: "Catégories", exact: true });
+    await expect(notifTabs.getByRole("button", { name: /^Tout/ })).toHaveAttribute(
+      "aria-pressed",
       "true",
     );
-    await expect(seen(page, /Nouvelle candidature de Grâce Fictive/)).toBeVisible();
+    await expect(seen(page, /Grâce Fictive a postulé à/)).toBeVisible();
     await expect(page.getByRole("heading", { name: "Aujourd'hui" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "Hier" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Cette semaine" })).toBeVisible();
     await capture(page, "180-notifications");
     await fits(page);
     await expectAccessible(page);
-    await notifTabs.getByRole("tab", { name: /^Candidatures/ }).click();
-    await expect(seen(page, /Nouvelle candidature de Grâce Fictive/)).toBeVisible();
+    await notifTabs.getByRole("button", { name: /^Candidatures/ }).click();
+    await expect(seen(page, /Grâce Fictive a postulé à/)).toBeVisible();
     await expect(page.getByText(/a confirmé son entretien/)).toBeHidden();
     await capture(page, "181-notifications-candidatures");
-    await notifTabs.getByRole("tab", { name: /^Entretiens/ }).click();
+    await notifTabs.getByRole("button", { name: /^Entretiens/ }).click();
     await expect(seen(page, /a confirmé son entretien/)).toBeVisible();
-    await notifTabs.getByRole("tab", { name: /^Réseau/ }).click();
+    await notifTabs.getByRole("button", { name: /^Réseau/ }).click();
     await expect(
       page.getByText(/vous a écrit dans Équipe|a accepté votre demande/).first(),
     ).toBeVisible();
     await capture(page, "182-notifications-reseau");
-    await notifTabs.getByRole("tab", { name: /^Tout/ }).click();
-    await expect(page.getByRole("link", { name: "Réglage des notifications" })).toHaveAttribute(
+    await notifTabs.getByRole("button", { name: /^Tout/ }).click();
+    await expect(page.getByRole("link", { name: "Réglages des notifications" })).toHaveAttribute(
       "href",
       "/app/parametres/notifications",
     );
     // Read, a notification leaves the list at once (Ephraïm 29/10/2026).
-    await page.getByRole("button", { name: /Nouvelle candidature de Grâce Fictive/ }).click();
+    await page.getByRole("button", { name: /Grâce Fictive a postulé à/ }).click();
     await expect(page).toHaveURL(/\/app\/hire\/candidats\//);
     await page.goto("/app/notifications");
     await expect(page.getByText(/a confirmé son entretien/).first()).toBeVisible();
     await page.getByRole("button", { name: "Tout marquer comme lu" }).click();
-    await expect(seen(page, "Rien de nouveau ici.")).toBeVisible();
+    await expect(seen(page, "Rien dans cette catégorie pour l'instant.")).toBeVisible();
     await expect(page.getByRole("button", { name: "Tout marquer comme lu" })).toBeDisabled();
 
     // « Retirer de la messagerie de l'équipe »: out of the list, nothing deleted.
