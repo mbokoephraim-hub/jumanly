@@ -8852,3 +8852,164 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   font-size: inherit;
   font-weight: 700;
 }
+
+/* Offer head v2 (proposition 04/11/2026): the logo as tall as the names beside it, the facts
+   spread from edge to edge, the state as a gradient pill with a light passing inside. */
+.nb-rh-of-tete[data-v2] {
+  gap: 12px;
+  padding-top: 18px;
+}
+.nb-rh-of-haut {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  min-width: 0;
+}
+.nb-rh-of-logo {
+  flex: none;
+  display: block;
+  aspect-ratio: 1;
+  min-height: 48px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--nb-menthe-t) 28%, transparent);
+}
+.nb-rh-of-logo > * {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: inherit !important;
+}
+.nb-rh-of-noms {
+  display: grid;
+  align-content: center;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.nb-rh-of-org {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--nb-menthe-t);
+}
+.nb-rh-of-tete[data-v2] h1 {
+  font-size: 18px;
+  line-height: 1.22;
+}
+.nb-rh-of-puces {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nb-rh-of-puces > li {
+  flex: 1 1 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  background: color-mix(in srgb, currentColor 5%, transparent);
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.nb-rh-of-puces > li[data-sorte="lieu"] {
+  flex: 0 0 auto;
+  padding: 0 5px;
+}
+.nb-rh-of-puces > li[data-sorte="lieu"] > img {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  object-fit: cover;
+  box-shadow: 0 0 0 1.5px color-mix(in srgb, currentColor 22%, transparent);
+}
+.nb-rh-of-etat {
+  position: relative;
+  overflow: hidden;
+  border: 0 !important;
+  background: color-mix(in srgb, currentColor 10%, transparent) !important;
+  font-weight: 700 !important;
+}
+.nb-rh-of-etat[data-statut="published"] {
+  background: linear-gradient(100deg, var(--nb-lime), var(--nb-menthe-t)) !important;
+  color: var(--nb-sapin, #0f3f37);
+}
+.nb-rh-of-etat[data-statut="published"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgb(255 255 255 / 0.55) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  animation: nb-rh-of-lumiere 2.8s ease-in-out infinite;
+}
+.nb-rh-of-etat > span {
+  position: relative;
+  z-index: 1;
+}
+@keyframes nb-rh-of-lumiere {
+  0%,
+  25% {
+    transform: translateX(-100%);
+  }
+  75%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-rh-of-etat[data-statut="published"]::after {
+    animation: none;
+    display: none;
+  }
+}
+.nb-rh-of-vie {
+  display: grid;
+  gap: 6px;
+}
+.nb-rh-of-piste {
+  position: relative;
+  display: block;
+  height: 4px;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  overflow: hidden;
+}
+.nb-rh-of-piste > i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--nb-menthe-t), var(--nb-lime));
+}
+.nb-rh-of-piste > i[data-libre] {
+  background: repeating-linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--nb-lime) 38%, transparent) 0 4px,
+    transparent 4px 9px
+  );
+}
+.nb-rh-of-vie[data-fin] .nb-rh-of-piste > i {
+  background: color-mix(in srgb, currentColor 30%, transparent);
+}
+.nb-rh-of-vie .nb-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px 10px;
+  margin: 0;
+  font-size: 12px;
+}

@@ -20,6 +20,7 @@ import { saveFiltersAction, sortGestureAction } from "@/server/actions/hire-tri"
 import { RhFiltersSheet, SwipeCard } from "./tri-client";
 import { RhUndoGesture } from "./tri";
 import { countryCode, countryName, flagOf } from "@/lib/countries";
+import { formatUsd } from "@/lib/money";
 import {
   classCounts,
   orbiClasses,
@@ -423,6 +424,9 @@ export async function RhOfferHead({
     publishedAt: Date | null;
     closesAt: Date | null;
     updatedAt: Date;
+    country?: string;
+    salaryMin?: number | null;
+    salaryMax?: number | null;
   };
   organization: { name: string; logo: string | null; verifiedAt: Date | null };
   now: Date;
@@ -444,33 +448,72 @@ export async function RhOfferHead({
         : null,
     !ended && left !== null && left > 0 ? t("detail.leftShort", { count: left }) : null,
   ].filter(Boolean);
+  // The ribbon of the offer's life: from its publication to its end, the part already lived filled.
+  const total =
+    job.publishedAt && job.closesAt ? job.closesAt.getTime() - job.publishedAt.getTime() : 0;
+  const lived = ended
+    ? 1
+    : total > 0
+      ? Math.min(1, Math.max(0.04, (now.getTime() - job.publishedAt!.getTime()) / total))
+      : null;
+  // The place as a round flag (the city is read aloud), then the contract and the salary; the
+  // remote mode takes the salary's place when no salary is given (Ephraïm, 04/11/2026).
+  const code = countryCode(job.country ?? null);
+  const low = job.salaryMin ?? null;
+  const high = job.salaryMax ?? null;
+  const salary =
+    low !== null && high !== null && high !== low
+      ? t("detail.salaryRange", { min: formatUsd(low), max: formatUsd(high) })
+      : (low ?? high) !== null
+        ? t("detail.salarySingle", { amount: formatUsd((low ?? high)!) })
+        : null;
   return (
-    <section className="nb-rh-co-tete nb-rh-of-tete">
-      <span className="nb-rh-co-org">
-        <FilAvatar
-          initials={initialsOfName(organization.name)}
-          image={organization.logo}
-          tone={0}
-          org
-          square
-          size={36}
-        />
-        <span>{organization.name}</span>
-        {organization.verifiedAt ? <Verified label={t("vue.verified")} size={14} /> : null}
-      </span>
-      <h1>{job.title}</h1>
-      <p className="nb-meta">
-        <span className="nb-rh-statut" data-statut={status}>
-          {status === "published" ? <i className="nb-rh-pouls" aria-hidden /> : null}
-          {t(`status.${status}`)}
-        </span>{" "}
-        {[
-          job.city,
-          t(`contract.${job.contractType}` as "contract.cdi"),
-          t(`remote.${job.remote}` as "remote.onsite"),
-        ].join(" · ")}
-      </p>
-      <p className="nb-meta nb-rh-of-dates">{dates.join(" · ")}</p>
+    <section className="nb-rh-co-tete nb-rh-of-tete" data-v2="">
+      <div className="nb-rh-of-haut">
+        <span className="nb-rh-of-logo">
+          <FilAvatar
+            initials={initialsOfName(organization.name)}
+            image={organization.logo}
+            tone={0}
+            org
+            square
+            size={64}
+          />
+        </span>
+        <div className="nb-rh-of-noms">
+          <span className="nb-rh-of-org">
+            <span>{organization.name}</span>
+            {organization.verifiedAt ? <Verified label={t("vue.verified")} size={13} /> : null}
+          </span>
+          <h1>{job.title}</h1>
+        </div>
+      </div>
+      <ul className="nb-rh-of-puces">
+        <li className="nb-rh-of-etat" data-statut={status}>
+          <span>{t(`status.${status}`)}</span>
+        </li>
+        <li data-sorte="lieu" title={job.city}>
+          {code ? (
+            // eslint-disable-next-line @next/next/no-img-element -- tiny static SVG flag.
+            <img src={`/drapeaux/${code.toLowerCase()}.svg`} alt="" width={20} height={20} />
+          ) : null}
+          <span className={code ? "sr-only" : undefined}>{job.city}</span>
+        </li>
+        <li>{t(`contract.${job.contractType}` as "contract.cdi")}</li>
+        <li data-sorte="salaire">{salary ?? t(`remote.${job.remote}` as "remote.onsite")}</li>
+      </ul>
+      <div className="nb-rh-of-vie" data-fin={ended ? "" : undefined}>
+        <span className="nb-rh-of-piste" aria-hidden>
+          <i
+            style={{ width: lived === null ? "100%" : `${Math.round(lived * 100)}%` }}
+            data-libre={lived === null ? "" : undefined}
+          />
+        </span>
+        <p className="nb-meta">
+          <span>{dates[0]}</span>
+          <span>{dates.slice(1).join(" · ")}</span>
+        </p>
+      </div>
       {notice ? (
         <p className="nb-erreur" role="alert">
           {notice}
