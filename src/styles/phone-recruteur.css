@@ -6448,30 +6448,94 @@ body:has(.nb-rh-selection) .nb-orbi-fab {
   background: var(--nb-carte);
   overflow: hidden;
 }
+/* The poster of « Diagnostic ATS avec Orbi » (04/11/2026): a light green sheet with two
+   curves and a fine dotted grid, and a CV's path in three steps joined by a line. */
 .nb-rh-co-affiche {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  height: 120px;
+  position: relative;
+  overflow: hidden;
+  height: 112px;
   margin: 0 -16px;
-  background:
-    radial-gradient(rgba(242, 237, 229, 0.12) 1.2px, transparent 1.4px) 0 0 / 14px 14px,
-    radial-gradient(circle at 20% 0, rgba(195, 166, 255, 0.45), transparent 60%),
-    linear-gradient(135deg, #2fd3a6 0%, #1d6b4f 55%, #0f3f37 100%);
-}
-.nb-rh-co-affiche-i {
-  width: 48px;
-  height: 48px;
-  border-radius: 15px;
   display: grid;
   place-items: center;
-  background: rgba(242, 237, 229, 0.92);
-  color: #0f3f37;
-  transform: rotate(-6deg);
+  background:
+    radial-gradient(circle, rgba(76, 160, 40, 0.35) 1.3px, transparent 1.6px) 11px 11px / 28px 28px,
+    linear-gradient(rgba(76, 160, 40, 0.14) 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(90deg, rgba(76, 160, 40, 0.14) 1px, transparent 1px) 0 0 / 28px 28px,
+    linear-gradient(160deg, #eef8e4 0%, #f8fbf3 55%, #e4f4d6 100%);
 }
-.nb-rh-co-affiche-i:last-child {
-  transform: rotate(6deg);
+.nb-rh-co-courbe {
+  position: absolute;
+  width: 190px;
+  height: 150px;
+  border-radius: 0 0 100% 0;
+  background: linear-gradient(135deg, #6cc33a, rgba(166, 242, 107, 0.15));
+  opacity: 0.85;
+}
+.nb-rh-co-courbe[data-cote="haut"] {
+  top: -88px;
+  left: -60px;
+  transform: rotate(-8deg);
+}
+.nb-rh-co-courbe[data-cote="bas"] {
+  bottom: -96px;
+  right: -64px;
+  border-radius: 100% 0 0 0;
+  background: linear-gradient(315deg, #6cc33a, rgba(166, 242, 107, 0.15));
+  transform: rotate(-8deg);
+}
+.nb-rh-co-etapes {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* The thread from the CVs to the result, behind the steps. */
+.nb-rh-co-etapes::before {
+  content: "";
+  position: absolute;
+  top: 26px;
+  left: 30px;
+  right: 30px;
+  border-top: 2px dashed #0f3f37;
+  opacity: 0.55;
+}
+.nb-rh-co-etapes li {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  min-width: 60px;
+}
+.nb-rh-co-etapes small {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #0f3f37;
+  white-space: nowrap;
+}
+.nb-rh-co-pastille {
+  margin: 6px 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #ffffff;
+  color: #0f3f37;
+  border: 2px solid #0f3f37;
+}
+.nb-rh-co-pastille[data-fonce] {
+  background: #0f3f37;
+  color: #a6f26b;
+}
+.nb-rh-co-etapes li[data-orbi] > :first-child {
+  box-shadow:
+    0 0 0 4px #ffffff,
+    0 0 0 6px #0f3f37;
+  border-radius: 50%;
 }
 .nb-rh-co-ats-corps {
   display: flex;
