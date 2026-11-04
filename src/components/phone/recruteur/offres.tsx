@@ -881,7 +881,7 @@ export async function RhOfferDetail({
           <h2 id="rh-vu-actions" className="nb-rh-vu-sur">
             {t("vue.whyTitle")}
           </h2>
-          <ul className="nb-rh-vu-defile">
+          <ul className="nb-rh-vu-defile" tabIndex={0} aria-label={t("vue.whyTitle")}>
             {(
               [
                 ["marche", "works", "certificate", points.works],

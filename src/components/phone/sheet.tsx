@@ -45,11 +45,14 @@ export function PhoneSheet({
       ref={dialog}
       className="nb-feuille-dlg"
       aria-label={label}
-      // Closed by its owner (another sheet takes its place): nothing to tell.
-      onClose={() => {
-        if (shown.current) onClose();
+      // Closed by its owner (another sheet takes its place): nothing to tell. React passes the
+      // close of a sheet opened inside this one (the calendar of a date field) up to here: only
+      // this dialog's own close counts.
+      onClose={(event) => {
+        if (event.target === event.currentTarget && shown.current) onClose();
       }}
       onCancel={(event) => {
+        if (event.target !== event.currentTarget) return;
         event.preventDefault();
         onClose();
       }}

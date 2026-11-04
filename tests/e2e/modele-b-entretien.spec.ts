@@ -190,7 +190,12 @@ test.describe("Modèle B · Simulation d'entretien au téléphone", () => {
     // The history lists it with its mark; « Nouvelle simulation » opens the settings.
     await page.goto("/app/career/entretiens");
     const list = page.locator(".nb-iv-hist-page");
-    await list.locator("a[data-hist]").first().click();
+    // The last finished one: a simulation still under way opens its question, not a report.
+    await list
+      .locator("a[data-hist]")
+      .filter({ hasNot: page.locator(".nb-iv-encours") })
+      .first()
+      .click();
     await expect(report.getByRole("heading", { name: "Votre bilan" })).toBeVisible();
     await report.getByRole("link", { name: "Nouvelle simulation" }).click();
     await page.waitForURL("**/app/career/entretiens/nouveau**");

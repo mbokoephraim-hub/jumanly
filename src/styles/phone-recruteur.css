@@ -8426,7 +8426,7 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 }
 .nb-rh-ag-heure small {
   font-size: 11.5px;
-  color: var(--nb-brume);
+  color: var(--nb-creme);
 }
 .nb-rh-ag-qui {
   display: grid;

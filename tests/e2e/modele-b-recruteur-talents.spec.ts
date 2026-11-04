@@ -80,16 +80,8 @@ test.describe("Modèle B recruteur · Talents au téléphone", () => {
     await capture(page, "101-talents");
     await fits(page);
     await expectAccessible(page);
-    await main(page)
-      .getByRole("navigation", { name: "Offres comparées" })
-      .getByRole("link", { name: title })
-      .click();
-    await expect(page).toHaveURL(/offre=/);
-    await expect(
-      main(page)
-        .getByRole("link", { name: new RegExp(TALENT) })
-        .first(),
-    ).toBeVisible();
+    // Each card names the offer it is compared with (the offer chips became filters, #371).
+    await expect(card).toContainText(title);
 
     // The search in two steps: the scopes, then the results from the first letters.
     const search = page.getByRole("search").filter({ visible: true });
