@@ -32,6 +32,25 @@ async function editable(db: PrismaClient, ctx: HireContext, applicationId: strin
   return application;
 }
 
+/**
+ * A document asked from a file's proposals (Ephraïm, 04/11/2026): a person still « À trier » is
+ * set aside « En attente », which places them in « À compléter » until the recruiter retains or
+ * declines them. A retained person stays where they are; nothing is ever declined here.
+ */
+export async function holdAfterRequest(
+  db: PrismaClient,
+  ctx: HireContext,
+  applicationId: string,
+  now = new Date(),
+) {
+  const application = await editable(db, ctx, applicationId);
+  if (application.shortlistedAt || isOnHold(application.events)) return false;
+  await db.applicationEvent.create({
+    data: { applicationId, actorId: ctx.userId, type: HOLD_EVENT, createdAt: now },
+  });
+  return true;
+}
+
 /** One sorting gesture on one application. Returns the job, for the way back. */
 export async function sortGesture(
   db: PrismaClient,
