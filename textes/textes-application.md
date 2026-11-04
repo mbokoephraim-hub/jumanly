@@ -16313,7 +16313,7 @@ Conventions :
 | `phoneRhCandidats.tab.entretiens` | Entretiens |
 | `phoneRhCandidats.tab.decision` | Décision |
 | `phoneRhCandidats.desk.help.trier` | Les nouvelles candidatures. Orbi aide à les classer, vous décidez : Retenir, En attente ou Ne pas retenir. |
-| `phoneRhCandidats.desk.help.completer` | Retenus, mais il manque encore des pièces. Ils passent seuls dans Entretiens dès que tout est arrivé. |
+| `phoneRhCandidats.desk.help.completer` | Les candidats mis en attente, dont ceux à qui vous avez demandé un document, et les retenus à qui il manque une pièce. Retenez-les quand tout est arrivé. |
 | `phoneRhCandidats.desk.help.entretiens` | Retenus, dossier complet : prêts à être rencontrés. |
 | `phoneRhCandidats.desk.help.decision` | Embauchés, non retenus ou retirés par le candidat. |
 | `phoneRhCandidats.desk.title.trier` | À trier |
@@ -16321,7 +16321,7 @@ Conventions :
 | `phoneRhCandidats.desk.title.entretiens` | Prêts pour l'entretien |
 | `phoneRhCandidats.desk.title.decision` | Décisions prises |
 | `phoneRhCandidats.desk.empty.trier` | Tout est trié pour cette offre. |
-| `phoneRhCandidats.desk.empty.completer` | Aucun dossier en attente de pièces. |
+| `phoneRhCandidats.desk.empty.completer` | Personne en attente, aucun dossier à compléter. |
 | `phoneRhCandidats.desk.empty.entretiens` | Personne n'est encore prêt pour l'entretien. Retenez un candidat dans À trier. |
 | `phoneRhCandidats.desk.empty.decision` | Aucune décision prise pour le moment. |
 | `phoneRhCandidats.desk.pieces` | {received} sur {required} pièces · avant le {date, date, medium} |

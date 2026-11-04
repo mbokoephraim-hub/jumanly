@@ -18,6 +18,7 @@ import {
   sendMessage,
 } from "@/server/services/connect";
 import { getOrgApplication, HireError } from "@/server/services/hire";
+import { holdAfterRequest } from "@/server/services/hire-tri";
 
 const askSchema = z.object({
   application: z.string().min(1).max(60),
@@ -30,7 +31,8 @@ const askSchema = z.object({
  * « Propositions » of a candidate's file on the phone (Ephraïm, 03/11/2026): one prepared message
  * (« vos expériences ne sont pas vérifiées », « vos diplômes »…) sent to the candidate in
  * Messages, edited by the recruiter before sending. Order of CLAUDE.md: validate → session → role
- * → service. Nothing changes in the application itself (golden rule n° 1).
+ * → service. A person still « À trier » is then set aside « En attente », so the file moves to
+ * « À compléter » (04/11/2026); nobody is declined (golden rule n° 3).
  */
 export async function askCandidateAction(formData: FormData) {
   const parsed = askSchema.safeParse({
@@ -55,6 +57,7 @@ export async function askCandidateAction(formData: FormData) {
     await sendMessage(db, { userId: ctx.userId, hire: ctx }, conversation.id, {
       body: parsed.data.body,
     });
+    if (application.status === "active") await holdAfterRequest(db, ctx, application.id);
   } catch (error) {
     if (error instanceof HireError || error instanceof ConnectError)
       go(withParam("demande=erreur"));

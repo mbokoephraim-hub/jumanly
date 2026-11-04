@@ -19906,7 +19906,7 @@
     "desk": {
       "help": {
         "trier": "Les nouvelles candidatures. Orbi aide à les classer, vous décidez : Retenir, En attente ou Ne pas retenir.",
-        "completer": "Retenus, mais il manque encore des pièces. Ils passent seuls dans Entretiens dès que tout est arrivé.",
+        "completer": "Les candidats mis en attente, dont ceux à qui vous avez demandé un document, et les retenus à qui il manque une pièce. Retenez-les quand tout est arrivé.",
         "entretiens": "Retenus, dossier complet : prêts à être rencontrés.",
         "decision": "Embauchés, non retenus ou retirés par le candidat."
       },
@@ -19918,7 +19918,7 @@
       },
       "empty": {
         "trier": "Tout est trié pour cette offre.",
-        "completer": "Aucun dossier en attente de pièces.",
+        "completer": "Personne en attente, aucun dossier à compléter.",
         "entretiens": "Personne n'est encore prêt pour l'entretien. Retenez un candidat dans À trier.",
         "decision": "Aucune décision prise pour le moment."
       },

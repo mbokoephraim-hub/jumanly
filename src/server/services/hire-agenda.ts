@@ -80,7 +80,8 @@ export function agendaOf(
   for (const row of rows) {
     const rubrique = rubriqueOf(row);
     const name = row.job.blindSort && !row.shortlistedAt ? null : row.profile.user.name;
-    if (rubrique === "trier" && isOnHold(row.events)) {
+    // Set aside « En attente »: now in « À compléter » (04/11/2026), still reminded after 3 days.
+    if (rubrique !== "decision" && isOnHold(row.events)) {
       const since = [...row.events].reverse().find((event) => event.type === HOLD_EVENT)!;
       const remindAt = new Date(since.createdAt.getTime() + REVIEW_DAYS * DAY);
       reviews.push({

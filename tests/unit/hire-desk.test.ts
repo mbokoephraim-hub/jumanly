@@ -28,6 +28,19 @@ describe("rubriqueOf", () => {
       "entretiens",
     );
   });
+  it("puts everyone set aside « En attente » in « À compléter » (04/11/2026)", () => {
+    const events = [{ type: "on_hold" }];
+    expect(rubriqueOf({ status: "active", shortlistedAt: null, verification: null, events })).toBe(
+      "completer",
+    );
+    const lifted = [{ type: "on_hold" }, { type: "hold_lifted" }];
+    expect(
+      rubriqueOf({ status: "active", shortlistedAt: null, verification: null, events: lifted }),
+    ).toBe("trier");
+    expect(
+      rubriqueOf({ status: "rejected", shortlistedAt: null, verification: null, events }),
+    ).toBe("decision");
+  });
   it("keeps hired, rejected and withdrawn in « Décision »", () => {
     for (const status of ["hired", "rejected", "withdrawn"] as const)
       expect(rubriqueOf({ status, shortlistedAt: at, verification: null })).toBe("decision");
