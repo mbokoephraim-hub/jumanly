@@ -5579,3 +5579,11 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - Le bouton « Filtres » n'affiche plus que son icône (Explorer et toutes les pages recruteur), son nom reste pour les lecteurs d'écran, le nombre de filtres dans son coin.
 - Filtres de Talents : Domaine (`studyField`), Titre de poste (titre du profil ou postes souhaités), Compétence, Disponibilité, Ville ; plus d'offre. Avec un filtre, « Découvrir » cherche parmi tous les talents visibles.
 - Réseau : l'initiale des cartes « À connaître » est centrée (la règle des lignes coupées touchait aussi l'avatar).
+
+## 2026-11-05 · Agenda recruteur (téléphone) : « Mois » et « À planifier » seulement
+
+- Choix d'Ephraïm (carte de décision) : l'agenda ne garde que ce qui prend une date. Aujourd'hui, Semaine et À faire sont retirés.
+- « Mois » (par défaut) : calendrier, le jour touché (aujourd'hui sinon) avec ses entretiens, « Plus tard ce mois-ci », puis « À évaluer ». Les liens `?jour=` des rappels ouvrent le mois de ce jour.
+- « À planifier » : Entretiens (retenus sans entretien, entretiens en attente du candidat ou sans date) et Vérification des documents (pièces attendues ou en retard, mises en attente à revoir).
+- Les candidats sans réponse depuis plus de 7 jours ne sont plus dans l'agenda : Offres les signale déjà. Le badge Agenda compte retenus à planifier + revues dues + pièces en retard.
+- Suite prévue : date de vérification des documents avec rappel, campagnes programmées (ouverture et fin automatiques), bouton « + Planifier ».

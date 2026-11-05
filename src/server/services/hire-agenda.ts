@@ -2,12 +2,14 @@ import type { PrismaClient } from "@/generated/prisma/client";
 import { hirePermissions, jobScope, type HireContext } from "./hire";
 import { deskSelect, rubriqueOf } from "./hire-desk";
 import { HOLD_EVENT, HOLD_LIFTED_EVENT, isOnHold } from "./hire-classes";
-import { REVIEW_DAYS, WAITING_DAYS } from "./hire-offer-candidates";
+import { REVIEW_DAYS } from "./hire-offer-candidates";
 
 /**
- * « Agenda », the recruiter's tab that replaced « Candidatures » (Ephraïm, 03/11/2026): what is
- * to do today, whatever the offer. Offres answers « what to do on this offer? », Agenda « what do
- * I do today? ». Nothing here decides: each line opens the candidate in their offer.
+ * « Agenda », the recruiter's tab that replaced « Candidatures » (Ephraïm, 03/11/2026). Since
+ * 05/11/2026 it only holds what takes a date (« Mois » and « À planifier »): interviews of the
+ * retained, document checks of the people set aside. People waiting for an answer belong to
+ * Offres (its badge and « À trier »), not here. Nothing here decides: each line opens the
+ * candidate in their offer.
  */
 
 const DAY = 86_400_000;
@@ -33,8 +35,6 @@ export type AgendaPieces = {
   late: boolean;
 };
 
-export type AgendaWaiting = { jobId: string; jobTitle: string; count: number };
-
 /** Retained, file complete, no interview proposed yet: « À planifier ». */
 export type AgendaToPlan = {
   applicationId: string;
@@ -47,9 +47,8 @@ export type AgendaToPlan = {
 export type AgendaTasks = {
   reviews: AgendaReview[];
   pieces: AgendaPieces[];
-  waiting: AgendaWaiting[];
   toPlan: AgendaToPlan[];
-  /** What is due now: reviews due, pieces late, offers with people waiting. */
+  /** What waits for a date now: retained without interview, reviews due, pieces late. */
   due: number;
 };
 
@@ -75,7 +74,6 @@ export function agendaOf(
 ): AgendaTasks {
   const reviews: AgendaReview[] = [];
   const pieces: AgendaPieces[] = [];
-  const waiting = new Map<string, AgendaWaiting>();
   const toPlan: AgendaToPlan[] = [];
   for (const row of rows) {
     const rubrique = rubriqueOf(row);
@@ -92,17 +90,6 @@ export function agendaOf(
         remindAt,
         due: remindAt <= now,
       });
-    } else if (
-      rubrique === "trier" &&
-      row.createdAt.getTime() < now.getTime() - WAITING_DAYS * DAY
-    ) {
-      const entry = waiting.get(row.jobId) ?? {
-        jobId: row.jobId,
-        jobTitle: row.job.title,
-        count: 0,
-      };
-      entry.count += 1;
-      waiting.set(row.jobId, entry);
     } else if (rubrique === "entretiens" && (row.interviews ?? []).length === 0) {
       toPlan.push({
         applicationId: row.id,
@@ -129,16 +116,14 @@ export function agendaOf(
     (a, b) => Number(b.due) - Number(a.due) || a.remindAt.getTime() - b.remindAt.getTime(),
   );
   pieces.sort((a, b) => a.dueAt.getTime() - b.dueAt.getTime());
-  const list = [...waiting.values()].sort((a, b) => b.count - a.count);
   return {
     reviews,
     pieces,
-    waiting: list,
     toPlan: toPlan.sort((a, b) => a.retainedAt.getTime() - b.retainedAt.getTime()),
     due:
+      toPlan.length +
       reviews.filter((item) => item.due).length +
-      pieces.filter((item) => item.late).length +
-      list.length,
+      pieces.filter((item) => item.late).length,
   };
 }
 
@@ -149,7 +134,7 @@ export async function agendaTasks(
   now = new Date(),
 ): Promise<AgendaTasks> {
   if (!hirePermissions(ctx.role).readApplications)
-    return { reviews: [], pieces: [], waiting: [], toPlan: [], due: 0 };
+    return { reviews: [], pieces: [], toPlan: [], due: 0 };
   const rows = await db.application.findMany({
     where: {
       status: "active",
