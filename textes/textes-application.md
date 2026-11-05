@@ -15887,46 +15887,37 @@ Conventions :
 | `phoneRh.nav.fil` | Fil |
 | `phoneRh.nav.offres` | Offres |
 | `phoneRh.nav.agenda` | Agenda |
-| `phoneRhAgenda.line` | {tasks, plural, =0 {Rien d'urgent} one {# chose à faire} other {# choses à faire}} · {today, plural, =0 {aucun entretien aujourd'hui} one {# entretien aujourd'hui} other {# entretiens aujourd'hui}} |
-| `phoneRhAgenda.week` | Les 7 prochains jours |
+| `phoneRhAgenda.line` | {tasks, plural, =0 {Rien à planifier} one {# chose à planifier} other {# choses à planifier}} · {today, plural, =0 {aucun entretien aujourd'hui} one {# entretien aujourd'hui} other {# entretiens aujourd'hui}} |
 | `phoneRhAgenda.tabs` | Parties de l'agenda |
-| `phoneRhAgenda.tab.jour` | Aujourd'hui |
-| `phoneRhAgenda.tab.semaine` | Semaine |
 | `phoneRhAgenda.tab.mois` | Mois |
 | `phoneRhAgenda.tab.planifier` | À planifier |
-| `phoneRhAgenda.tab.faire` | À faire |
-| `phoneRhAgenda.weekThis` | Cette semaine |
-| `phoneRhAgenda.weekNext` | Semaine prochaine |
-| `phoneRhAgenda.weekEmpty` | Aucun entretien prévu. |
 | `phoneRhAgenda.monthPrev` | Mois précédent |
 | `phoneRhAgenda.monthNext` | Mois suivant |
-| `phoneRhAgenda.monthEmpty` | Aucun entretien ce mois-ci. |
-| `phoneRhAgenda.plan.title` | Prêts pour un entretien |
-| `phoneRhAgenda.plan.help` | Retenus, dossier complet. « Planifier » : choisissez le jour et l'heure, l'invitation est prête. |
-| `phoneRhAgenda.plan.empty` | Aucun candidat à planifier pour l'instant. |
+| `phoneRhAgenda.plan.title` | Entretiens |
+| `phoneRhAgenda.plan.help` | Les candidats retenus. « Planifier » : visio, sur place ou appel, puis 1 à 3 créneaux. Le candidat choisit, l'entretien passe dans Mois. |
+| `phoneRhAgenda.plan.empty` | Aucun entretien à planifier. Orbi vous prévient dès qu'un candidat est retenu. |
 | `phoneRhAgenda.plan.since` | Retenu le {date, date, medium} |
 | `phoneRhAgenda.plan.go` | Planifier |
-| `phoneRhAgenda.plan.pending` | En attente de réponse du candidat |
 | `phoneRhAgenda.today` | Aujourd'hui |
 | `phoneRhAgenda.count` | {count, plural, =0 {aucun entretien} one {# entretien} other {# entretiens}} |
 | `phoneRhAgenda.dayEmpty` | Aucun entretien ce jour-là. |
-| `phoneRhAgenda.toFix` | {count, plural, one {# entretien sans date} other {# entretiens sans date}} |
 | `phoneRhAgenda.pending` | En attente du candidat |
 | `phoneRhAgenda.see` | Voir |
 | `phoneRhAgenda.blind` | Candidat anonyme |
 | `phoneRhAgenda.evaluate.title` | À évaluer |
 | `phoneRhAgenda.evaluate.go` | Évaluer |
-| `phoneRhAgenda.tasks.title` | À faire |
-| `phoneRhAgenda.tasks.empty` | Rien à faire pour l'instant. Orbi vous prévient dès qu'un candidat attend. |
-| `phoneRhAgenda.tasks.reviewDue` | À revoir aujourd'hui · {job} |
-| `phoneRhAgenda.tasks.reviewOn` | À revoir le {date, date, medium} · {job} |
-| `phoneRhAgenda.tasks.pieces` | Pièces {received} sur {required} · avant le {date, date, medium} · {job} |
-| `phoneRhAgenda.tasks.piecesLate` | Pièces en retard : {received} sur {required} · {job} |
-| `phoneRhAgenda.tasks.waiting` | {count, plural, one {# candidat attend} other {# candidats attendent}} une réponse depuis plus de {days} jours |
+| `phoneRhAgenda.later` | Plus tard ce mois-ci |
+| `phoneRhAgenda.checks.title` | Vérification des documents |
+| `phoneRhAgenda.checks.help` | Les candidats mis en attente : leurs pièces, et le jour où vous les revoyez. |
+| `phoneRhAgenda.checks.empty` | Aucun document à vérifier pour l'instant. |
+| `phoneRhAgenda.checks.reviewDue` | À revoir aujourd'hui · {job} |
+| `phoneRhAgenda.checks.reviewOn` | À revoir le {date, date, medium} · {job} |
+| `phoneRhAgenda.checks.pieces` | Pièces {received} sur {required} · avant le {date, date, medium} · {job} |
+| `phoneRhAgenda.checks.piecesLate` | Pièces en retard : {received} sur {required} · {job} |
 | `phoneRh.nav.talents` | Talents |
 | `phoneRh.nav.messages` | Chat |
 | `phoneRh.nav.offresNew` | Offres, {count, plural, one {# nouvelle candidature} other {# nouvelles candidatures}} |
-| `phoneRh.nav.agendaDue` | Agenda, {count, plural, one {# chose à faire} other {# choses à faire}} |
+| `phoneRh.nav.agendaDue` | Agenda, {count, plural, one {# chose à planifier} other {# choses à planifier}} |
 | `phoneRh.nav.chat` | Chat |
 | `phoneRh.nav.messagesUnread` | Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}} |
 | `phoneRh.nav.filNew` | Fil, {count, plural, one {# nouvelle publication} other {# nouvelles publications}} |

@@ -4,11 +4,9 @@ import type { ReactNode } from "react";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { MenuArt, type MenuArtName } from "@/components/site/menu-art";
 import type { AgendaTasks } from "@/server/services/hire-agenda";
-import { WAITING_DAYS } from "@/server/services/hire-offer-candidates";
 import type { rhInterviews } from "@/server/services/hire-phone-candidatures";
 import { OrbiDisc, PhoneIcon } from "../icon";
-import { deskTabHref } from "./desk-tabs";
-import { addDays, mondayOf, monthGrid, nextMonth, noonOf } from "@/lib/interview-calendar";
+import { addDays, monthGrid, nextMonth, noonOf } from "@/lib/interview-calendar";
 
 type Interviews = Awaited<ReturnType<typeof rhInterviews>>;
 type Card = Interviews["today"][number];
@@ -17,15 +15,24 @@ const ficheHref = (jobId: string, applicationId: string, de: "trier" | "complete
   `/app/hire/offres/${jobId}?vue=candidats&de=${de}&fiche=${applicationId}`;
 
 /**
- * « Agenda » (Ephraïm, 03/11/2026: it replaced « Candidatures », which only led back to the
- * offers): the recruiter's day, whatever the offer. The week with its interviews, the interviews
- * of the day chosen, those to document, then « À faire »: cards set aside to review, pieces
- * awaited, people without an answer. Each line opens the candidate inside their offer.
+ * « Agenda » (Ephraïm, 03/11/2026: it replaced « Candidatures »). Since 05/11/2026 it has two
+ * parts only, chosen by Ephraïm: « Mois », the calendar where everything with a date shows, and
+ * « À planifier », what still waits for a date: interviews of the retained, document checks of
+ * the people set aside. « Aujourd'hui », « Semaine » and « À faire » are gone; people waiting for
+ * an answer stay in Offres. Each line opens the candidate inside their offer.
  */
-export const AGENDA_VIEWS = ["jour", "semaine", "mois", "planifier", "faire"] as const;
+export const AGENDA_VIEWS = ["mois", "planifier"] as const;
 export type AgendaView = (typeof AGENDA_VIEWS)[number];
 
 const BASE = "/app/hire/entretiens";
+
+/** What « À planifier » counts: the badge of its tab and the line under the title. */
+export function toPlanCount(interviews: Interviews, tasks: AgendaTasks) {
+  const open = [...interviews.today, ...interviews.ahead].filter(
+    (card) => !card.confirmed || !card.when,
+  ).length;
+  return tasks.toPlan.length + open + tasks.pieces.length + tasks.reviews.length;
+}
 
 export async function RhAgenda({
   interviews,
@@ -40,7 +47,7 @@ export async function RhAgenda({
   interviews: Interviews;
   tasks: AgendaTasks;
   view: AgendaView;
-  /** The day shown, `YYYY-MM-DD` in the member's time zone. */
+  /** The day shown under the month, `YYYY-MM-DD` in the member's time zone. */
   day: string;
   /** The month shown, `YYYY-MM`. */
   month: string;
@@ -54,10 +61,6 @@ export async function RhAgenda({
   const format = await getFormatter();
   const keyOf = (date: Date) => date.toLocaleDateString("en-CA", { timeZone });
   const today = keyOf(now);
-  const week = Array.from({ length: 7 }, (_, index) => {
-    const date = new Date(now.getTime() + index * 86_400_000);
-    return { key: keyOf(date), date };
-  });
   const cards = [...interviews.today, ...interviews.ahead];
   const byDay = new Map<string, Card[]>();
   for (const card of cards) {
@@ -65,13 +68,10 @@ export async function RhAgenda({
     const key = keyOf(card.when);
     byDay.set(key, [...(byDay.get(key) ?? []), card]);
   }
-  const shown = byDay.get(day) ?? [];
-  const toFix = cards.filter((card) => !card.when);
   const dayName = (date: Date, key: string) =>
     key === today
       ? t("today")
       : format.dateTime(date, { weekday: "long", day: "numeric", month: "long" });
-  const chosen = week.find((item) => item.key === day) ?? week[0]!;
   const nobody = (name: string | null) => name ?? t("blind");
   const clock = (date: Date) => format.dateTime(date, { hour: "2-digit", minute: "2-digit" });
 
@@ -126,21 +126,13 @@ export async function RhAgenda({
       </Link>
     </li>
   );
-  const taskCount =
-    tasks.reviews.length +
-    tasks.pieces.length +
-    tasks.waiting.length +
-    interviews.toDocument.length;
-  const pending = cards.filter((card) => !card.confirmed);
+  // Waiting for the candidate, or without a date any more: still to plan.
+  const open = cards.filter((card) => !card.confirmed || !card.when);
   const counts: Record<AgendaView, number> = {
-    jour: (byDay.get(today) ?? []).length,
-    semaine: cards.filter((card) => card.when && keyOf(card.when) < addDays(mondayOf(today), 14))
-      .length,
     mois: cards.filter((card) => card.when && keyOf(card.when).startsWith(month)).length,
-    planifier: tasks.toPlan.length + pending.length,
-    faire: taskCount,
+    planifier: toPlanCount(interviews, tasks),
   };
-  const tabHref = (key: AgendaView) => (key === "jour" ? BASE : `${BASE}?vue=${key}`);
+  const tabHref = (key: AgendaView) => (key === "mois" ? BASE : `${BASE}?vue=${key}`);
   const empty = (art: MenuArtName | "orbi", text: string) => (
     <p className="nb-rh-ag-vide">
       {art === "orbi" ? <OrbiDisc size={28} /> : <MenuArt name={art} size="xs" />}
@@ -159,78 +151,25 @@ export async function RhAgenda({
       </section>
     );
   };
+  const monthHref = (key: string) => (key === monthOfKey(today) ? BASE : `${BASE}?mois=${key}`);
 
   let body: ReactNode;
-  if (view === "jour") {
-    body = (
-      <>
-        <nav className="nb-rh-ag-semaine" aria-label={t("week")}>
-          {week.map((item) => {
-            const count = byDay.get(item.key)?.length ?? 0;
-            return (
-              <Link
-                key={item.key}
-                href={item.key === today ? BASE : `${BASE}?jour=${item.key}`}
-                aria-current={item.key === chosen.key ? "date" : undefined}
-                aria-label={`${dayName(item.date, item.key)} · ${t("count", { count })}`}
-                scroll={false}
-                replace
-              >
-                <small>{format.dateTime(item.date, { weekday: "short" }).replace(".", "")}</small>
-                <b>{format.dateTime(item.date, { day: "numeric" })}</b>
-                <i data-plein={count > 0 ? "" : undefined} aria-hidden />
-              </Link>
-            );
-          })}
-        </nav>
-        <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-jour">
-          <h2 id="rh-ag-jour" className="nb-rh-ag-h">
-            <span>{dayName(chosen.date, chosen.key)}</span>
-            {shown.length > 0 ? <small>{shown.length}</small> : null}
-          </h2>
-          {shown.length === 0 ? (
-            empty("calendar", t("dayEmpty"))
-          ) : (
-            <ul className="nb-rh-ag-liste">{shown.map((card) => interviewCard(card))}</ul>
-          )}
-        </section>
-      </>
-    );
-  } else if (view === "semaine") {
-    // This week and the next, Monday first, only the days that hold an interview.
-    const monday = mondayOf(today);
-    const weeks = [
-      { title: t("weekThis"), from: monday },
-      { title: t("weekNext"), from: addDays(monday, 7) },
-    ];
-    body = weeks.map((item) => {
-      const days = Array.from({ length: 7 }, (_, index) => addDays(item.from, index)).filter(
-        (key) => key >= today && (byDay.get(key)?.length ?? 0) > 0,
-      );
-      return (
-        <section key={item.from} className="nb-rh-ag-bloc" aria-label={item.title}>
-          <h2 className="nb-rh-ag-h">
-            <span>{item.title}</span>
-            <small>{days.reduce((sum, key) => sum + (byDay.get(key)?.length ?? 0), 0)}</small>
-          </h2>
-          {days.length === 0
-            ? empty("calendar", t("weekEmpty"))
-            : days.map((key) => dayList(key, dayName(noonOf(key), key)))}
-        </section>
-      );
-    });
-  } else if (view === "mois") {
+  if (view === "mois") {
     const grid = monthGrid(month);
     const names = Array.from({ length: 7 }, (_, index) =>
       format.dateTime(noonOf(addDays(grid[0]![0]!, index)), { weekday: "narrow" }),
     );
-    const inMonth = [...byDay.keys()].filter((key) => key.startsWith(month)).sort();
+    // The day chosen (today by default) first, then the rest of the month still to come.
+    const shown = byDay.get(day) ?? [];
+    const later = [...byDay.keys()]
+      .filter((key) => key.startsWith(month) && key > day && key >= today)
+      .sort();
     body = (
       <>
         <section className="nb-rh-ag-mois" aria-labelledby="rh-ag-mois">
           <div className="nb-rh-ag-mois-h">
             <Link
-              href={`${BASE}?vue=mois&mois=${nextMonth(month, -1)}`}
+              href={monthHref(nextMonth(month, -1))}
               aria-label={t("monthPrev")}
               scroll={false}
               replace
@@ -241,7 +180,7 @@ export async function RhAgenda({
               {format.dateTime(noonOf(`${month}-01`), { month: "long", year: "numeric" })}
             </h2>
             <Link
-              href={`${BASE}?vue=mois&mois=${nextMonth(month, 1)}`}
+              href={monthHref(nextMonth(month, 1))}
               aria-label={t("monthNext")}
               scroll={false}
               replace
@@ -261,13 +200,15 @@ export async function RhAgenda({
               return (
                 <Link
                   key={key}
-                  href={`${BASE}?jour=${key}`}
+                  href={`${BASE}?mois=${key.slice(0, 7)}&jour=${key}`}
                   className="nb-rh-ag-case"
                   data-autre={other ? "" : undefined}
                   data-passe={key < today ? "" : undefined}
+                  data-choisi={key === day ? "" : undefined}
                   aria-current={key === today ? "date" : undefined}
                   aria-label={`${dayName(noonOf(key), key)} · ${t("count", { count })}`}
                   scroll={false}
+                  replace
                 >
                   {Number(key.slice(8))}
                   {count > 0 ? (
@@ -284,21 +225,51 @@ export async function RhAgenda({
             })}
           </div>
         </section>
-        {inMonth.length === 0
-          ? empty("calendar", t("monthEmpty"))
-          : inMonth.map((key) => dayList(key, dayName(noonOf(key), key)))}
+        <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-jour">
+          <h2 id="rh-ag-jour" className="nb-rh-ag-h">
+            <span>{dayName(noonOf(day), day)}</span>
+            {shown.length > 0 ? <small>{shown.length}</small> : null}
+          </h2>
+          {shown.length === 0 ? (
+            empty("calendar", t("dayEmpty"))
+          ) : (
+            <ul className="nb-rh-ag-liste">{shown.map((card) => interviewCard(card))}</ul>
+          )}
+        </section>
+        {later.length > 0 ? (
+          <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-ensuite">
+            <h2 id="rh-ag-ensuite" className="nb-rh-ag-h">
+              <span>{t("later")}</span>
+            </h2>
+            {later.map((key) => dayList(key, dayName(noonOf(key), key)))}
+          </section>
+        ) : null}
+        {interviews.toDocument.length > 0 ? (
+          <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-eval">
+            <h2 id="rh-ag-eval" className="nb-rh-ag-h">
+              <span>{t("evaluate.title")}</span>
+              <small>{interviews.toDocument.length}</small>
+            </h2>
+            <ul className="nb-rh-ag-liste">
+              {interviews.toDocument.map((card) => interviewCard(card, true))}
+            </ul>
+          </section>
+        ) : null}
       </>
     );
-  } else if (view === "planifier") {
+  } else {
+    const checks = tasks.reviews.length + tasks.pieces.length;
     body = (
       <>
         <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-plan">
           <h2 id="rh-ag-plan" className="nb-rh-ag-h">
             <span>{t("plan.title")}</span>
-            {tasks.toPlan.length > 0 ? <small>{tasks.toPlan.length}</small> : null}
+            {tasks.toPlan.length + open.length > 0 ? (
+              <small>{tasks.toPlan.length + open.length}</small>
+            ) : null}
           </h2>
           <p className="nb-rh-ag-aide">{t("plan.help")}</p>
-          {tasks.toPlan.length === 0 ? (
+          {tasks.toPlan.length + open.length === 0 ? (
             empty("people", t("plan.empty"))
           ) : (
             <ul className="nb-rh-ag-liste">
@@ -322,61 +293,27 @@ export async function RhAgenda({
                   ) : null}
                 </li>
               ))}
+              {open.map((card) => interviewCard(card))}
             </ul>
           )}
         </section>
-        {pending.length > 0 ? (
-          <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-reponse">
-            <h2 id="rh-ag-reponse" className="nb-rh-ag-h">
-              <span>{t("plan.pending")}</span>
-              <small>{pending.length}</small>
-            </h2>
-            <ul className="nb-rh-ag-liste">{pending.map((card) => interviewCard(card))}</ul>
-          </section>
-        ) : null}
-      </>
-    );
-  } else {
-    body = (
-      <>
-        {interviews.toDocument.length > 0 ? (
-          <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-eval">
-            <h2 id="rh-ag-eval" className="nb-rh-ag-h">
-              <span>{t("evaluate.title")}</span>
-              <small>{interviews.toDocument.length}</small>
-            </h2>
-            <ul className="nb-rh-ag-liste">
-              {interviews.toDocument.map((card) => interviewCard(card, true))}
-            </ul>
-          </section>
-        ) : null}
-        <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-faire">
-          <h2 id="rh-ag-faire" className="nb-rh-ag-h">
-            <span>{t("tasks.title")}</span>
+        <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-verif">
+          <h2 id="rh-ag-verif" className="nb-rh-ag-h">
+            <span>{t("checks.title")}</span>
+            {checks > 0 ? <small>{checks}</small> : null}
           </h2>
-          {tasks.reviews.length + tasks.pieces.length + tasks.waiting.length === 0 ? (
-            empty("orbi", t("tasks.empty"))
+          <p className="nb-rh-ag-aide">{t("checks.help")}</p>
+          {checks === 0 ? (
+            empty("document", t("checks.empty"))
           ) : (
             <ul className="nb-rh-ag-taches">
-              {tasks.reviews.map((item) =>
-                task(
-                  `r-${item.applicationId}`,
-                  "hourglass",
-                  ficheHref(item.jobId, item.applicationId, "trier"),
-                  nobody(item.name),
-                  item.due
-                    ? t("tasks.reviewDue", { job: item.jobTitle })
-                    : t("tasks.reviewOn", { job: item.jobTitle, date: item.remindAt }),
-                  item.due ? "due" : "attente",
-                ),
-              )}
               {tasks.pieces.map((item) =>
                 task(
                   `p-${item.applicationId}`,
                   "document",
                   ficheHref(item.jobId, item.applicationId, "completer"),
                   nobody(item.name),
-                  t(item.late ? "tasks.piecesLate" : "tasks.pieces", {
+                  t(item.late ? "checks.piecesLate" : "checks.pieces", {
                     received: item.received,
                     required: item.required,
                     date: item.dueAt,
@@ -385,14 +322,16 @@ export async function RhAgenda({
                   item.late ? "due" : "ok",
                 ),
               )}
-              {tasks.waiting.map((item) =>
+              {tasks.reviews.map((item) =>
                 task(
-                  `w-${item.jobId}`,
-                  "people",
-                  deskTabHref(item.jobId, "trier"),
-                  item.jobTitle,
-                  t("tasks.waiting", { count: item.count, days: WAITING_DAYS }),
-                  "due",
+                  `r-${item.applicationId}`,
+                  "hourglass",
+                  ficheHref(item.jobId, item.applicationId, "completer"),
+                  nobody(item.name),
+                  item.due
+                    ? t("checks.reviewDue", { job: item.jobTitle })
+                    : t("checks.reviewOn", { job: item.jobTitle, date: item.remindAt }),
+                  item.due ? "due" : "attente",
                 ),
               )}
             </ul>
@@ -404,7 +343,7 @@ export async function RhAgenda({
 
   return (
     <div className="nb-page nb-rh-ag">
-      <nav className="nb-rh-co-onglets nb-rh-co-onglets-defil" aria-label={t("tabs")}>
+      <nav className="nb-rh-co-onglets" aria-label={t("tabs")}>
         {AGENDA_VIEWS.map((key) => (
           <Link
             key={key}
@@ -419,14 +358,8 @@ export async function RhAgenda({
         ))}
       </nav>
       {body}
-      {toFix.length > 0 && view === "jour" ? (
-        <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-fixer">
-          <h2 id="rh-ag-fixer" className="nb-rh-ag-h">
-            <span>{t("toFix", { count: toFix.length })}</span>
-          </h2>
-          <ul className="nb-rh-ag-liste">{toFix.map((card) => interviewCard(card))}</ul>
-        </section>
-      ) : null}
     </div>
   );
 }
+
+const monthOfKey = (key: string) => key.slice(0, 7);

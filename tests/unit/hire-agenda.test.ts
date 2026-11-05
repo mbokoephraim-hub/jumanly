@@ -15,7 +15,7 @@ const base = {
 };
 
 describe("agendaOf", () => {
-  it("lists reviews due, late pieces and people waiting", () => {
+  it("lists reviews due and late pieces, never people waiting (Offres keeps them)", () => {
     const tasks = agendaOf(
       [
         {
@@ -52,8 +52,8 @@ describe("agendaOf", () => {
     expect(tasks.pieces).toMatchObject([
       { applicationId: "d", received: 1, required: 2, late: true },
     ]);
-    expect(tasks.waiting).toEqual([{ jobId: "j1", jobTitle: "Analyste", count: 1 }]);
-    expect(tasks.due).toBe(3);
+    expect(tasks).not.toHaveProperty("waiting");
+    expect(tasks.due).toBe(2);
   });
 
   it("hides the name of a blind offer until the person is retained", () => {

@@ -19375,7 +19375,7 @@
       "talents": "Talents",
       "messages": "Chat",
       "offresNew": "Offres, {count, plural, one {# nouvelle candidature} other {# nouvelles candidatures}}",
-      "agendaDue": "Agenda, {count, plural, one {# chose à faire} other {# choses à faire}}",
+      "agendaDue": "Agenda, {count, plural, one {# chose à planifier} other {# choses à planifier}}",
       "chat": "Chat",
       "messagesUnread": "Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}}",
       "filNew": "Fil, {count, plural, one {# nouvelle publication} other {# nouvelles publications}}"
@@ -19499,34 +19499,24 @@
     }
   },
   "phoneRhAgenda": {
-    "line": "{tasks, plural, =0 {Rien d'urgent} one {# chose à faire} other {# choses à faire}} · {today, plural, =0 {aucun entretien aujourd'hui} one {# entretien aujourd'hui} other {# entretiens aujourd'hui}}",
-    "week": "Les 7 prochains jours",
+    "line": "{tasks, plural, =0 {Rien à planifier} one {# chose à planifier} other {# choses à planifier}} · {today, plural, =0 {aucun entretien aujourd'hui} one {# entretien aujourd'hui} other {# entretiens aujourd'hui}}",
     "tabs": "Parties de l'agenda",
     "tab": {
-      "jour": "Aujourd'hui",
-      "semaine": "Semaine",
       "mois": "Mois",
-      "planifier": "À planifier",
-      "faire": "À faire"
+      "planifier": "À planifier"
     },
-    "weekThis": "Cette semaine",
-    "weekNext": "Semaine prochaine",
-    "weekEmpty": "Aucun entretien prévu.",
     "monthPrev": "Mois précédent",
     "monthNext": "Mois suivant",
-    "monthEmpty": "Aucun entretien ce mois-ci.",
     "plan": {
-      "title": "Prêts pour un entretien",
-      "help": "Retenus, dossier complet. « Planifier » : choisissez le jour et l'heure, l'invitation est prête.",
-      "empty": "Aucun candidat à planifier pour l'instant.",
+      "title": "Entretiens",
+      "help": "Les candidats retenus. « Planifier » : visio, sur place ou appel, puis 1 à 3 créneaux. Le candidat choisit, l'entretien passe dans Mois.",
+      "empty": "Aucun entretien à planifier. Orbi vous prévient dès qu'un candidat est retenu.",
       "since": "Retenu le {date, date, medium}",
-      "go": "Planifier",
-      "pending": "En attente de réponse du candidat"
+      "go": "Planifier"
     },
     "today": "Aujourd'hui",
     "count": "{count, plural, =0 {aucun entretien} one {# entretien} other {# entretiens}}",
     "dayEmpty": "Aucun entretien ce jour-là.",
-    "toFix": "{count, plural, one {# entretien sans date} other {# entretiens sans date}}",
     "pending": "En attente du candidat",
     "see": "Voir",
     "blind": "Candidat anonyme",
@@ -19534,14 +19524,15 @@
       "title": "À évaluer",
       "go": "Évaluer"
     },
-    "tasks": {
-      "title": "À faire",
-      "empty": "Rien à faire pour l'instant. Orbi vous prévient dès qu'un candidat attend.",
+    "later": "Plus tard ce mois-ci",
+    "checks": {
+      "title": "Vérification des documents",
+      "help": "Les candidats mis en attente : leurs pièces, et le jour où vous les revoyez.",
+      "empty": "Aucun document à vérifier pour l'instant.",
       "reviewDue": "À revoir aujourd'hui · {job}",
       "reviewOn": "À revoir le {date, date, medium} · {job}",
       "pieces": "Pièces {received} sur {required} · avant le {date, date, medium} · {job}",
-      "piecesLate": "Pièces en retard : {received} sur {required} · {job}",
-      "waiting": "{count, plural, one {# candidat attend} other {# candidats attendent}} une réponse depuis plus de {days} jours"
+      "piecesLate": "Pièces en retard : {received} sur {required} · {job}"
     }
   },
   "phoneRhAccueil": {

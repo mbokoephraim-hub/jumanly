@@ -31,7 +31,7 @@ import { listInterviews } from "@/server/services/interviews";
 import { agendaTasks } from "@/server/services/hire-agenda";
 import { rhInterviews } from "@/server/services/hire-phone-candidatures";
 import { RhTab } from "@/components/phone/recruteur/head";
-import { AGENDA_VIEWS, RhAgenda } from "@/components/phone/recruteur/agenda";
+import { AGENDA_VIEWS, RhAgenda, toPlanCount } from "@/components/phone/recruteur/agenda";
 import { cheapestPlanWhere, listPublicPlans } from "@/server/services/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -76,9 +76,11 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
       getTranslations("phoneRhAgenda"),
     ]);
     const today = now.toLocaleDateString("en-CA", { timeZone });
-    const day = dayKey.test(one(query.jour)) ? one(query.jour) : today;
-    const view = AGENDA_VIEWS.find((key) => key === one(query.vue)) ?? "jour";
-    const month = monthKey.test(one(query.mois)) ? one(query.mois) : monthOf(today);
+    const view = AGENDA_VIEWS.find((key) => key === one(query.vue)) ?? "mois";
+    const chosen = dayKey.test(one(query.jour)) ? one(query.jour) : null;
+    const month = monthKey.test(one(query.mois)) ? one(query.mois) : monthOf(chosen ?? today);
+    // The day under the calendar: the one touched, else today, else the 1st of another month.
+    const day = chosen ?? (month === monthOf(today) ? today : `${month}-01`);
     const canPlan =
       hirePermissions(ctx.role).manage &&
       (await can(db, { type: "organization", id: ctx.organizationId }, "connect.appointments"));
@@ -87,7 +89,7 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
         tab="agenda"
         legacy={false}
         subtitle={ta("line", {
-          tasks: tasks.reviews.length + tasks.pieces.length + tasks.waiting.length,
+          tasks: toPlanCount(interviews, tasks),
           today: interviews.today.length,
         })}
       >
