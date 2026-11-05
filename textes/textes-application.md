@@ -15907,6 +15907,13 @@ Conventions :
 | `phoneRhAgenda.evaluate.title` | À évaluer |
 | `phoneRhAgenda.evaluate.go` | Évaluer |
 | `phoneRhAgenda.later` | Plus tard ce mois-ci |
+| `phoneRhAgenda.add.title` | Planifier |
+| `phoneRhAgenda.add.interview` | Un entretien |
+| `phoneRhAgenda.add.interviewLine` | Avec un candidat retenu : visio, sur place ou appel. |
+| `phoneRhAgenda.add.check` | Une vérification de documents |
+| `phoneRhAgenda.add.checkLine` | Le jour où vous vérifiez les pièces d'un candidat en attente. |
+| `phoneRhAgenda.add.campaign` | Une campagne de recrutement |
+| `phoneRhAgenda.add.campaignLine` | Une offre qui s'ouvre toute seule au jour et à l'heure choisis. |
 | `phoneRhAgenda.campaigns.title` | Campagnes programmées |
 | `phoneRhAgenda.campaigns.help` | Une offre préparée qui s'ouvre toute seule au jour et à l'heure choisis, puis se ferme à sa date de clôture. On la programme à la dernière étape de « Publier une offre ». |
 | `phoneRhAgenda.campaigns.empty` | Aucune campagne programmée. |

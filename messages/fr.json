@@ -19526,6 +19526,15 @@
       "go": "Évaluer"
     },
     "later": "Plus tard ce mois-ci",
+    "add": {
+      "title": "Planifier",
+      "interview": "Un entretien",
+      "interviewLine": "Avec un candidat retenu : visio, sur place ou appel.",
+      "check": "Une vérification de documents",
+      "checkLine": "Le jour où vous vérifiez les pièces d'un candidat en attente.",
+      "campaign": "Une campagne de recrutement",
+      "campaignLine": "Une offre qui s'ouvre toute seule au jour et à l'heure choisis."
+    },
     "campaigns": {
       "title": "Campagnes programmées",
       "help": "Une offre préparée qui s'ouvre toute seule au jour et à l'heure choisis, puis se ferme à sa date de clôture. On la programme à la dernière étape de « Publier une offre ».",

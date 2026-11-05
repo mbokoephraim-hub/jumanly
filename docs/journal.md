@@ -5601,3 +5601,7 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - Dernière étape de « Publier une offre » (téléphone) : « Quand publier ? » Maintenant / Programmer la campagne (jour + heure pleine, fuseau de la plateforme, car la tâche tourne chaque heure à l'heure pile). Mêmes questions qu'à la publication (ONEM, Fil). `scheduleJob` vérifie tout de suite description et compétences, une date à venir (180 jours au plus) et avant la clôture.
 - Tâche horaire `runScheduledOpenings` : publie avec les mêmes règles que « Publier » (limite d'offres actives, contrôle automatique) au nom du membre qui a programmé, publie dans le Fil si demandé, et prévient (`jobOpened`, ou `jobOpenFailed` : l'offre redevient un simple brouillon). La fin reste `closesAt` (l'offre n'accepte plus de candidatures après).
 - Agenda : Mois montre l'ouverture (à l'heure) et le dernier jour des campagnes ; À planifier › Campagnes programmées liste les ouvertures à venir, avec « Annuler la programmation » et « Programmer une campagne ». Offres : statut « Programmée ».
+
+## 2026-11-05 · Agenda recruteur : « + Planifier » dans Mois
+
+- Un bouton « + Planifier » au-dessus du calendrier ouvre trois choix : un entretien, une vérification de documents (vers À planifier, à la bonne partie), une campagne de recrutement (vers « Publier une offre », où l'on programme à la dernière étape). Fin des quatre corrections de l'agenda (#389, #390, #391 et celle-ci).
