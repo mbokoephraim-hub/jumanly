@@ -19526,6 +19526,20 @@
       "go": "Évaluer"
     },
     "later": "Plus tard ce mois-ci",
+    "campaigns": {
+      "title": "Campagnes programmées",
+      "help": "Une offre préparée qui s'ouvre toute seule au jour et à l'heure choisis, puis se ferme à sa date de clôture. On la programme à la dernière étape de « Publier une offre ».",
+      "empty": "Aucune campagne programmée.",
+      "line": "S'ouvre le {opens, date, medium} à {opens, time, short} · se ferme le {closes, date, medium}",
+      "lineNoEnd": "S'ouvre le {opens, date, medium} à {opens, time, short} · sans date de fin",
+      "cancel": "Annuler la programmation",
+      "new": "Programmer une campagne",
+      "openTag": "Ouverture",
+      "endShort": "Fin",
+      "endTag": "Campagne",
+      "opens": "La campagne s'ouvre",
+      "ends": "Dernier jour de la campagne"
+    },
     "checks": {
       "title": "Vérification des documents",
       "help": "Les candidats mis en attente. « Fixer la date » : le jour et l'heure où vous vérifiez leurs pièces. La vérification passe dans Mois, avec un rappel à l'heure dite.",
@@ -20051,7 +20065,8 @@
       "paused": "En pause",
       "closed": "Terminée",
       "archived": "Archivée",
-      "expired": "Terminée"
+      "expired": "Terminée",
+      "scheduled": "Programmée"
     },
     "contract": {
       "cdi": "CDI",
@@ -20571,6 +20586,16 @@
       "sheetDownload": "Télécharger la fiche Jumanly",
       "sheetOpenOwn": "Ouvrir mon PDF",
       "sheetNote": "Les talents pourront télécharger cette fiche depuis l'offre et depuis le Fil.",
+      "when": "Quand publier ?",
+      "whenNow": "Maintenant",
+      "whenNowLine": "L'offre est en ligne dès que vous touchez « Publier ».",
+      "whenLater": "Programmer la campagne",
+      "whenLaterLine": "Vous choisissez le jour et l'heure : l'offre s'ouvre toute seule, puis se ferme à sa date de clôture.",
+      "opensDay": "Jour d'ouverture",
+      "opensHour": "Heure d'ouverture",
+      "opensNote": "L'offre reste en brouillon jusque-là, puis se ferme le {date, date, long}. Vous la retrouvez dans Agenda.",
+      "opensNoteNoEnd": "L'offre reste en brouillon jusque-là. Sans date de clôture (étape 3), elle reste ouverte ensuite. Vous la retrouvez dans Agenda.",
+      "schedule": "Programmer",
       "onem": "Détenez-vous l'autorisation de l'ONEM ?",
       "onemHelp": "L'ONEM autorise les employeurs à publier des offres et à recruter en RDC. Cette réponse rassure les talents.",
       "onemYes": "Oui, je détiens l'autorisation de l'ONEM",
@@ -20593,7 +20618,9 @@
         "logo": "Le logo n'a pas pu être ajouté : choisissez une image PNG ou JPEG de 4 Mo au plus.",
         "closesAt": "Choisissez une date de clôture à venir.",
         "onem": "Répondez à la question sur l'autorisation de l'ONEM avant de publier.",
-        "onemNo": "L'offre ne peut être publiée qu'avec l'autorisation de l'ONEM. Gardez-la en brouillon en attendant."
+        "onemNo": "L'offre ne peut être publiée qu'avec l'autorisation de l'ONEM. Gardez-la en brouillon en attendant.",
+        "opensAt": "Choisissez un jour et une heure d'ouverture à venir.",
+        "opensAfterClose": "L'ouverture doit venir avant la date de clôture (étape 3)."
       }
     }
   },
@@ -25156,6 +25183,8 @@
       "orgJoinAccepted": "Votre demande pour rejoindre {org} est acceptée. Bienvenue dans l'équipe !",
       "orgJoinDeclined": "Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation.",
       "reviewReminder": "{candidate, select, none {Un candidat} other {{candidate}}} de « {jobTitle} » est à revoir aujourd'hui.",
+      "jobOpened": "Votre campagne « {jobTitle} » est en ligne, comme prévu.",
+      "jobOpenFailed": "La campagne « {jobTitle} » n'a pas pu s'ouvrir à l'heure prévue : elle reste en brouillon. Ouvrez-la pour la publier.",
       "verificationCheck": "Vérification des documents de {candidate, select, none {un candidat} other {{candidate}}} prévue maintenant · « {jobTitle} »",
       "interviewSoon": "Entretien avec {candidate, select, none {un candidat} other {{candidate}}} {day, select, today {aujourd'hui} other {demain}} à {time} · « {jobTitle} »",
       "interviewSoonTalent": "Votre entretien avec {company} a lieu {day, select, today {aujourd'hui} other {demain}} à {time} · « {jobTitle} »",

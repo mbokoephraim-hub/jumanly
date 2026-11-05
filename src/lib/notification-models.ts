@@ -73,6 +73,8 @@ const MODELS: Record<string, NotificationModel> = {
   jobRejected: { kind: "offre", title: "offer", action: null },
   jobChangesRequested: { kind: "offre", title: "offer", action: null },
   jobEnding: { kind: "offre", title: "offer", action: null },
+  jobOpened: { kind: "offre", title: "offer", action: null },
+  jobOpenFailed: { kind: "offre", title: "offer", action: null },
   atsReady: { kind: "offre", title: "ats", action: null },
   atsNotRun: { kind: "offre", title: "ats", action: null },
   feedReply: { kind: "fil", title: "feed", action: null },

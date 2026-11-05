@@ -28,7 +28,7 @@ import { isPhone } from "@/server/view";
 import { hirePermissions } from "@/server/services/hire";
 import { interviewsToEvaluate, invitableApplications } from "@/server/services/hire-interviews";
 import { listInterviews } from "@/server/services/interviews";
-import { agendaTasks } from "@/server/services/hire-agenda";
+import { agendaCampaigns, agendaTasks } from "@/server/services/hire-agenda";
 import { rhInterviews } from "@/server/services/hire-phone-candidatures";
 import { RhTab } from "@/components/phone/recruteur/head";
 import { AGENDA_VIEWS, RhAgenda, toPlanCount } from "@/components/phone/recruteur/agenda";
@@ -70,9 +70,10 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
   if (await isPhone()) {
     const now = new Date();
     const timeZone = defaultTimeZone();
-    const [interviews, tasks, ta] = await Promise.all([
+    const [interviews, tasks, campaigns, ta] = await Promise.all([
       rhInterviews(db, ctx, null, timeZone, now),
       agendaTasks(db, ctx, now),
+      agendaCampaigns(db, ctx, now),
       getTranslations("phoneRhAgenda"),
     ]);
     const today = now.toLocaleDateString("en-CA", { timeZone });
@@ -96,6 +97,7 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
         <RhAgenda
           interviews={interviews}
           tasks={tasks}
+          campaigns={campaigns}
           view={view}
           month={month}
           canPlan={canPlan}

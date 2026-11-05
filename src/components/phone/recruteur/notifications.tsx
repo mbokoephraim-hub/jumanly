@@ -56,6 +56,8 @@ const TAB_OF: Partial<Record<string, RhNotifTab>> = {
   interviewSoon: "entretiens",
   reviewReminder: "candidatures",
   verificationCheck: "candidatures",
+  jobOpened: "candidatures",
+  jobOpenFailed: "candidatures",
   newMessage: "reseau",
   teamMessage: "reseau",
   colleagueProposed: "reseau",

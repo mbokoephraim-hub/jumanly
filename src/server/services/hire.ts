@@ -358,6 +358,8 @@ export async function publishJob(
       moderationReason: null,
       moderationChecks: [],
       publishedAt: status === "published" ? (job.publishedAt ?? now) : job.publishedAt,
+      // Published now (by hand or at the programmed hour): nothing left to open later.
+      opensAt: null,
       process:
         job.process.length > 0
           ? job.process
@@ -366,6 +368,53 @@ export async function publishJob(
   });
   await audit(db, ctx, resubmitted ? "job.resubmit" : "job.publish", job.id, { status, flags });
   return { status, jobId: job.id };
+}
+
+/** How far ahead a campaign can be programmed. */
+export const SCHEDULE_MAX_DAYS = 180;
+
+/**
+ * « Programmer la campagne » (Agenda, Ephraïm 05/11/2026): a ready draft is not published now but
+ * at the hour chosen, by the hourly task (`runScheduledOpenings`), then ends at its closing date.
+ * The checks of `publishJob` that do not depend on the moment run now, so a refusal is known at
+ * once; the limit of live offers is checked again at the opening.
+ */
+export async function scheduleJob(
+  db: PrismaClient,
+  ctx: HireContext,
+  jobId: string,
+  opensAt: Date,
+  now = new Date(),
+): Promise<
+  | { status: "scheduled"; jobId: string }
+  | { status: "incomplete"; missing: "skills" | "description" }
+  | { status: "invalid" }
+> {
+  assert(hirePermissions(ctx.role).manage);
+  const job = await getOrgJob(db, ctx, jobId);
+  if (!["draft", "changes_requested"].includes(job.status)) return { status: "invalid" };
+  if (!job.description.trim()) return { status: "incomplete", missing: "description" };
+  if (!job.skills.some((skill) => skill.importance === "required"))
+    return { status: "incomplete", missing: "skills" };
+  if (
+    Number.isNaN(opensAt.getTime()) ||
+    opensAt.getTime() <= now.getTime() ||
+    opensAt.getTime() > now.getTime() + SCHEDULE_MAX_DAYS * 86_400_000 ||
+    (job.closesAt && job.closesAt.getTime() <= opensAt.getTime())
+  )
+    return { status: "invalid" };
+  await db.job.update({ where: { id: job.id }, data: { opensAt, opensById: ctx.userId } });
+  await audit(db, ctx, "job.schedule", job.id, { opensAt: opensAt.toISOString() });
+  return { status: "scheduled", jobId: job.id };
+}
+
+/** « Annuler la programmation »: the offer stays a draft, nothing is published. */
+export async function unscheduleJob(db: PrismaClient, ctx: HireContext, jobId: string) {
+  assert(hirePermissions(ctx.role).manage);
+  const job = await getOrgJob(db, ctx, jobId);
+  if (!job.opensAt) return;
+  await db.job.update({ where: { id: job.id }, data: { opensAt: null, opensById: null } });
+  await audit(db, ctx, "job.unschedule", job.id);
 }
 
 export async function closeJob(db: PrismaClient, ctx: HireContext, jobId: string) {

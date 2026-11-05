@@ -1,10 +1,18 @@
 "use server";
 
-import { updateTag } from "next/cache";
+import { refresh, updateTag } from "next/cache";
 import { z } from "zod";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
-import { getOrgJob, HireError, publishJob } from "@/server/services/hire";
+import {
+  getOrgJob,
+  HireError,
+  publishJob,
+  scheduleJob,
+  unscheduleJob,
+} from "@/server/services/hire";
+import { slotToDate } from "@/server/services/interviews";
+import { defaultTimeZone } from "@/lib/dates";
 import {
   attachJobSheet,
   JobSheetError,
@@ -264,4 +272,62 @@ export async function rhRemoveSheetAction(jobId: string) {
     throw error;
   }
   return { ok: true as const };
+}
+
+/**
+ * « Programmer » at the last step (Agenda, Ephraïm 05/11/2026): the same questions as « Publier »
+ * (ONEM, the Fil), then the offer waits as a draft and opens by itself at the hour chosen (whole
+ * hours: the task runs on the hour), read in the platform's time zone like the agenda.
+ */
+export async function rhScheduleOfferAction(
+  jobId: string,
+  toFil: boolean,
+  onem: boolean,
+  day: string,
+  hour: string,
+): Promise<{ ok: true; day: string } | { ok: false; error: string }> {
+  const input = z
+    .object({
+      id: z.string().trim().min(1).max(60),
+      day: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+      hour: z.string().regex(/^\d{2}:00$/),
+    })
+    .safeParse({ id: jobId, day, hour });
+  if (!input.success) return { ok: false, error: "opensAt" };
+  if (!onem) return { ok: false, error: "onem" };
+  const opensAt = slotToDate(`${input.data.day}T${input.data.hour}`, defaultTimeZone());
+  if (!opensAt) return { ok: false, error: "opensAt" };
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
+  try {
+    const job = await getOrgJob(db, ctx, input.data.id);
+    await db.job.update({
+      where: { id: job.id },
+      data: { onemConfirmedAt: new Date(), ...(toFil ? {} : { feedTitle: null }) },
+    });
+    const result = await scheduleJob(db, ctx, job.id, opensAt);
+    if (result.status === "incomplete") return { ok: false, error: result.missing };
+    if (result.status === "invalid") return { ok: false, error: "opensAt" };
+    return { ok: true, day: input.data.day };
+  } catch (error) {
+    if (error instanceof HireError) return { ok: false, error: "invalid" };
+    throw error;
+  }
+}
+
+/** « Annuler la programmation » (Agenda › À planifier): the offer stays a draft. */
+export async function rhUnscheduleOfferAction(formData: FormData) {
+  const id = z
+    .string()
+    .trim()
+    .min(1)
+    .max(60)
+    .safeParse(String(formData.get("job") ?? ""));
+  if (!id.success) return;
+  const { ctx } = await requireHire(OFFERS, "manage", "publish");
+  try {
+    await unscheduleJob(db, ctx, id.data);
+  } catch (error) {
+    if (!(error instanceof HireError)) throw error;
+  }
+  refresh();
 }

@@ -15907,6 +15907,18 @@ Conventions :
 | `phoneRhAgenda.evaluate.title` | À évaluer |
 | `phoneRhAgenda.evaluate.go` | Évaluer |
 | `phoneRhAgenda.later` | Plus tard ce mois-ci |
+| `phoneRhAgenda.campaigns.title` | Campagnes programmées |
+| `phoneRhAgenda.campaigns.help` | Une offre préparée qui s'ouvre toute seule au jour et à l'heure choisis, puis se ferme à sa date de clôture. On la programme à la dernière étape de « Publier une offre ». |
+| `phoneRhAgenda.campaigns.empty` | Aucune campagne programmée. |
+| `phoneRhAgenda.campaigns.line` | S'ouvre le {opens, date, medium} à {opens, time, short} · se ferme le {closes, date, medium} |
+| `phoneRhAgenda.campaigns.lineNoEnd` | S'ouvre le {opens, date, medium} à {opens, time, short} · sans date de fin |
+| `phoneRhAgenda.campaigns.cancel` | Annuler la programmation |
+| `phoneRhAgenda.campaigns.new` | Programmer une campagne |
+| `phoneRhAgenda.campaigns.openTag` | Ouverture |
+| `phoneRhAgenda.campaigns.endShort` | Fin |
+| `phoneRhAgenda.campaigns.endTag` | Campagne |
+| `phoneRhAgenda.campaigns.opens` | La campagne s'ouvre |
+| `phoneRhAgenda.campaigns.ends` | Dernier jour de la campagne |
 | `phoneRhAgenda.checks.title` | Vérification des documents |
 | `phoneRhAgenda.checks.help` | Les candidats mis en attente. « Fixer la date » : le jour et l'heure où vous vérifiez leurs pièces. La vérification passe dans Mois, avec un rappel à l'heure dite. |
 | `phoneRhAgenda.checks.empty` | Aucun document à vérifier pour l'instant. |
@@ -16428,6 +16440,7 @@ Conventions :
 | `phoneRhOffres.status.closed` | Terminée |
 | `phoneRhOffres.status.archived` | Archivée |
 | `phoneRhOffres.status.expired` | Terminée |
+| `phoneRhOffres.status.scheduled` | Programmée |
 | `phoneRhOffres.contract.cdi` | CDI |
 | `phoneRhOffres.contract.cdd` | CDD |
 | `phoneRhOffres.contract.stage` | Stage |
@@ -17207,6 +17220,16 @@ Conventions :
 | `phoneRhOffres.wizard.sheetDownload` | Télécharger la fiche Jumanly |
 | `phoneRhOffres.wizard.sheetOpenOwn` | Ouvrir mon PDF |
 | `phoneRhOffres.wizard.sheetNote` | Les talents pourront télécharger cette fiche depuis l'offre et depuis le Fil. |
+| `phoneRhOffres.wizard.when` | Quand publier ? |
+| `phoneRhOffres.wizard.whenNow` | Maintenant |
+| `phoneRhOffres.wizard.whenNowLine` | L'offre est en ligne dès que vous touchez « Publier ». |
+| `phoneRhOffres.wizard.whenLater` | Programmer la campagne |
+| `phoneRhOffres.wizard.whenLaterLine` | Vous choisissez le jour et l'heure : l'offre s'ouvre toute seule, puis se ferme à sa date de clôture. |
+| `phoneRhOffres.wizard.opensDay` | Jour d'ouverture |
+| `phoneRhOffres.wizard.opensHour` | Heure d'ouverture |
+| `phoneRhOffres.wizard.opensNote` | L'offre reste en brouillon jusque-là, puis se ferme le {date, date, long}. Vous la retrouvez dans Agenda. |
+| `phoneRhOffres.wizard.opensNoteNoEnd` | L'offre reste en brouillon jusque-là. Sans date de clôture (étape 3), elle reste ouverte ensuite. Vous la retrouvez dans Agenda. |
+| `phoneRhOffres.wizard.schedule` | Programmer |
 | `phoneRhOffres.wizard.onem` | Détenez-vous l'autorisation de l'ONEM ? |
 | `phoneRhOffres.wizard.onemHelp` | L'ONEM autorise les employeurs à publier des offres et à recruter en RDC. Cette réponse rassure les talents. |
 | `phoneRhOffres.wizard.onemYes` | Oui, je détiens l'autorisation de l'ONEM |
@@ -17227,6 +17250,8 @@ Conventions :
 | `phoneRhOffres.wizard.errors.closesAt` | Choisissez une date de clôture à venir. |
 | `phoneRhOffres.wizard.errors.onem` | Répondez à la question sur l'autorisation de l'ONEM avant de publier. |
 | `phoneRhOffres.wizard.errors.onemNo` | L'offre ne peut être publiée qu'avec l'autorisation de l'ONEM. Gardez-la en brouillon en attendant. |
+| `phoneRhOffres.wizard.errors.opensAt` | Choisissez un jour et une heure d'ouverture à venir. |
+| `phoneRhOffres.wizard.errors.opensAfterClose` | L'ouverture doit venir avant la date de clôture (étape 3). |
 | `phoneFil.offerSalary` | {min} à {max} USD par mois |
 | `phoneFil.offerSalaryFrom` | À partir de {min} USD par mois |
 | `phoneFil.poster.kicker` | Offre d'emploi |
@@ -20653,6 +20678,8 @@ Conventions :
 | `notifications.item.orgJoinAccepted` | Votre demande pour rejoindre {org} est acceptée. Bienvenue dans l'équipe ! |
 | `notifications.item.orgJoinDeclined` | Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation. |
 | `notifications.item.reviewReminder` | {candidate, select, none {Un candidat} other {{candidate}}} de « {jobTitle} » est à revoir aujourd'hui. |
+| `notifications.item.jobOpened` | Votre campagne « {jobTitle} » est en ligne, comme prévu. |
+| `notifications.item.jobOpenFailed` | La campagne « {jobTitle} » n'a pas pu s'ouvrir à l'heure prévue : elle reste en brouillon. Ouvrez-la pour la publier. |
 | `notifications.item.verificationCheck` | Vérification des documents de {candidate, select, none {un candidat} other {{candidate}}} prévue maintenant · « {jobTitle} » |
 | `notifications.item.interviewSoon` | Entretien avec {candidate, select, none {un candidat} other {{candidate}}} {day, select, today {aujourd'hui} other {demain}} à {time} · « {jobTitle} » |
 | `notifications.item.interviewSoonTalent` | Votre entretien avec {company} a lieu {day, select, today {aujourd'hui} other {demain}} à {time} · « {jobTitle} » |

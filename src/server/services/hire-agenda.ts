@@ -175,3 +175,50 @@ export async function agendaTasks(
   });
   return agendaOf(rows, now);
 }
+
+/** A campaign in the agenda: a programmed opening, and the end of an offer. */
+export type AgendaCampaign = {
+  jobId: string;
+  title: string;
+  /** Set while the campaign waits to open by itself. */
+  opensAt: Date | null;
+  closesAt: Date | null;
+};
+
+/**
+ * « Campagnes » of the Agenda (Ephraïm 05/11/2026): the programmed drafts (they open by themselves)
+ * and the offers online or programmed that end on a date, organization only.
+ */
+export async function agendaCampaigns(
+  db: PrismaClient,
+  ctx: HireContext,
+  now = new Date(),
+): Promise<AgendaCampaign[]> {
+  if (!hirePermissions(ctx.role).readApplications) return [];
+  const jobs = await db.job.findMany({
+    where: {
+      AND: [
+        await jobScope(db, ctx),
+        { organizationId: ctx.organizationId },
+        {
+          OR: [
+            { status: { in: ["draft", "changes_requested"] }, opensAt: { not: null } },
+            {
+              status: { in: ["published", "pending_review", "paused"] },
+              closesAt: { gte: new Date(now.getTime() - 62 * DAY) },
+            },
+          ],
+        },
+      ],
+    },
+    orderBy: [{ opensAt: "asc" }, { closesAt: "asc" }],
+    take: 200,
+    select: { id: true, title: true, opensAt: true, closesAt: true },
+  });
+  return jobs.map((job) => ({
+    jobId: job.id,
+    title: job.title,
+    opensAt: job.opensAt,
+    closesAt: job.closesAt,
+  }));
+}
