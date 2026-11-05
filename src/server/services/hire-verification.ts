@@ -14,8 +14,15 @@ import { z } from "zod";
 import type { Prisma, PrismaClient, VerificationPiece } from "@/generated/prisma/client";
 import { sniffDocumentType, type FileStorage } from "@/server/storage";
 import { ensureApplicationConversation } from "./connect";
-import { getOrgApplication, getOrgJob, HireError, hirePermissions, type HireContext } from "./hire";
-import { notify } from "./notifications";
+import {
+  getOrgApplication,
+  getOrgJob,
+  HireError,
+  hirePermissions,
+  jobScope,
+  type HireContext,
+} from "./hire";
+import { hiringTeam, notify } from "./notifications";
 import { level } from "@/server/entitlements";
 
 const DAY = 86_400_000;
@@ -503,3 +510,105 @@ export async function runVerificationReminders(
 
 /** The default deadline for a request made now. */
 export const defaultDueAt = (now = new Date()) => new Date(now.getTime() + VERIFICATION_DAYS * DAY);
+
+/** How far ahead a check can be planned. */
+export const CHECK_MAX_DAYS = 120;
+
+/**
+ * « Fixer la vérification » (Agenda › À planifier, Ephraïm 05/11/2026): the day and the hour the
+ * team checks the pieces of a candidate set aside. The date shows in « Mois » and the member who
+ * set it is reminded at that time. Nothing is decided here: it is only a date in the agenda.
+ */
+export async function planVerificationCheck(
+  db: PrismaClient,
+  ctx: HireContext,
+  applicationId: string,
+  checkAt: Date,
+  now = new Date(),
+) {
+  if (!hirePermissions(ctx.role).manage) throw new HireError("forbidden");
+  const application = await db.application.findFirst({
+    where: {
+      id: applicationId,
+      status: "active",
+      job: { AND: [await jobScope(db, ctx), { organizationId: ctx.organizationId }] },
+    },
+    select: { id: true, verification: { select: { id: true } } },
+  });
+  if (!application?.verification) throw new HireError("notFound");
+  if (
+    checkAt.getTime() <= now.getTime() ||
+    checkAt.getTime() > now.getTime() + CHECK_MAX_DAYS * DAY
+  )
+    throw new HireError("invalid");
+  await db.verificationRequest.update({
+    where: { id: application.verification.id },
+    data: { checkAt, checkById: ctx.userId, checkRemindedAt: null },
+  });
+  await db.applicationEvent.create({
+    data: {
+      applicationId: application.id,
+      actorId: ctx.userId,
+      type: "verification_check_planned",
+      payload: { checkAt: checkAt.toISOString() },
+      createdAt: now,
+    },
+  });
+}
+
+/**
+ * The reminder of a planned check (hourly task): within the hour before `checkAt`, the member who
+ * planned it (else the hiring team) is told once. A candidate no longer active is not.
+ */
+export async function runVerificationCheckReminders(db: PrismaClient, now = new Date()) {
+  const due = await db.verificationRequest.findMany({
+    where: {
+      checkRemindedAt: null,
+      checkAt: {
+        not: null,
+        lte: new Date(now.getTime() + HOUR),
+        gt: new Date(now.getTime() - DAY),
+      },
+      application: { status: "active" },
+    },
+    select: {
+      id: true,
+      checkAt: true,
+      checkById: true,
+      organizationId: true,
+      application: {
+        select: {
+          id: true,
+          shortlistedAt: true,
+          profile: { select: { user: { select: { name: true } } } },
+          job: { select: { id: true, title: true, blindSort: true } },
+        },
+      },
+    },
+    take: 200,
+  });
+  let sent = 0;
+  for (const request of due) {
+    const claimed = await db.verificationRequest.updateMany({
+      where: { id: request.id, checkRemindedAt: null, checkAt: request.checkAt },
+      data: { checkRemindedAt: now },
+    });
+    if (claimed.count === 0) continue;
+    const { application } = request;
+    const team = request.checkById
+      ? [request.checkById]
+      : (await hiringTeam(db, request.organizationId)).map((user) => user.id);
+    const blind = application.job.blindSort && !application.shortlistedAt;
+    await notify(db, {
+      userIds: team,
+      type: "verificationCheck",
+      payload: {
+        jobTitle: application.job.title,
+        candidate: blind ? "none" : (application.profile.user.name ?? "none"),
+      },
+      href: `/app/hire/offres/${application.job.id}?vue=candidats&de=completer&fiche=${application.id}`,
+    });
+    sent += 1;
+  }
+  return sent;
+}

@@ -33,6 +33,8 @@ export type AgendaPieces = {
   required: number;
   dueAt: Date;
   late: boolean;
+  /** The day and hour the team planned to check the pieces (« Fixer la vérification »). */
+  checkAt: Date | null;
 };
 
 /** Retained, file complete, no interview proposed yet: « À planifier ». */
@@ -67,6 +69,7 @@ export function agendaOf(
     interviews?: { id: string }[];
     verification: {
       dueAt: Date;
+      checkAt?: Date | null;
       items: { required: boolean; receivedAt: Date | null }[];
     } | null;
   }[],
@@ -78,8 +81,24 @@ export function agendaOf(
   for (const row of rows) {
     const rubrique = rubriqueOf(row);
     const name = row.job.blindSort && !row.shortlistedAt ? null : row.profile.user.name;
-    // Set aside « En attente »: now in « À compléter » (04/11/2026), still reminded after 3 days.
-    if (rubrique !== "decision" && isOnHold(row.events)) {
+    const onHold = rubrique !== "decision" && isOnHold(row.events);
+    // Pieces asked (which sets the person aside since 04/11/2026): « Vérification des documents »,
+    // to date with « Fixer la date » (05/11/2026), even once every piece is in.
+    if (row.verification && (rubrique === "completer" || onHold)) {
+      const required = row.verification.items.filter((item) => item.required);
+      pieces.push({
+        applicationId: row.id,
+        jobId: row.jobId,
+        jobTitle: row.job.title,
+        name,
+        received: required.filter((item) => item.receivedAt).length,
+        required: required.length,
+        dueAt: row.verification.dueAt,
+        late: row.verification.dueAt <= now && required.some((item) => !item.receivedAt),
+        checkAt: row.verification.checkAt ?? null,
+      });
+    } else if (onHold) {
+      // Set aside « En attente » without pieces asked: reminded after 3 days.
       const since = [...row.events].reverse().find((event) => event.type === HOLD_EVENT)!;
       const remindAt = new Date(since.createdAt.getTime() + REVIEW_DAYS * DAY);
       reviews.push({
@@ -98,18 +117,6 @@ export function agendaOf(
         name,
         retainedAt: row.shortlistedAt ?? row.createdAt,
       });
-    } else if (rubrique === "completer" && row.verification) {
-      const required = row.verification.items.filter((item) => item.required);
-      pieces.push({
-        applicationId: row.id,
-        jobId: row.jobId,
-        jobTitle: row.job.title,
-        name,
-        received: required.filter((item) => item.receivedAt).length,
-        required: required.length,
-        dueAt: row.verification.dueAt,
-        late: row.verification.dueAt <= now,
-      });
     }
   }
   reviews.sort(
@@ -123,7 +130,7 @@ export function agendaOf(
     due:
       toPlan.length +
       reviews.filter((item) => item.due).length +
-      pieces.filter((item) => item.late).length,
+      pieces.filter((item) => item.late && !item.checkAt).length,
   };
 }
 
@@ -147,7 +154,11 @@ export async function agendaTasks(
       createdAt: true,
       ...deskSelect,
       verification: {
-        select: { dueAt: true, items: { select: { required: true, receivedAt: true } } },
+        select: {
+          dueAt: true,
+          checkAt: true,
+          items: { select: { required: true, receivedAt: true } },
+        },
       },
       job: { select: { title: true, blindSort: true } },
       profile: { select: { user: { select: { name: true } } } },

@@ -3069,22 +3069,29 @@ enum VerificationPiece {
  * each opening logged; Orbi only points at an inconsistency « à vérifier », never calls a piece false.
  */
 model VerificationRequest {
-  id             String             @id @default(cuid(2))
-  applicationId  String             @unique
-  application    Application        @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  organizationId String
-  createdById    String?
+  id              String             @id @default(cuid(2))
+  applicationId   String             @unique
+  application     Application        @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  organizationId  String
+  createdById     String?
   /// The message sent (an editable template).
-  message        String
-  dueAt          DateTime
+  message         String
+  dueAt           DateTime
   /// Reminders sent before the deadline (two at most).
-  remindersSent  Int                @default(0)
-  lastReminderAt DateTime?
-  items          VerificationItem[]
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
+  remindersSent   Int                @default(0)
+  lastReminderAt  DateTime?
+  /// When the team checks the pieces (Agenda › À planifier, 05/11/2026), shown in « Mois ».
+  checkAt         DateTime?
+  /// The member who set `checkAt`: the one reminded.
+  checkById       String?
+  /// Set when the reminder of `checkAt` left (once per date).
+  checkRemindedAt DateTime?
+  items           VerificationItem[]
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
 
   @@index([organizationId, dueAt])
+  @@index([checkAt])
 }
 
 model VerificationItem {

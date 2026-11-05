@@ -3,7 +3,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { MenuArt, type MenuArtName } from "@/components/site/menu-art";
-import type { AgendaTasks } from "@/server/services/hire-agenda";
+import type { AgendaPieces, AgendaTasks } from "@/server/services/hire-agenda";
+import { planCheckAction } from "@/server/actions/hire-verification";
 import type { rhInterviews } from "@/server/services/hire-phone-candidatures";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { addDays, monthGrid, nextMonth, noonOf } from "@/lib/interview-calendar";
@@ -31,7 +32,8 @@ export function toPlanCount(interviews: Interviews, tasks: AgendaTasks) {
   const open = [...interviews.today, ...interviews.ahead].filter(
     (card) => !card.confirmed || !card.when,
   ).length;
-  return tasks.toPlan.length + open + tasks.pieces.length + tasks.reviews.length;
+  const undated = tasks.pieces.filter((item) => !item.checkAt).length;
+  return tasks.toPlan.length + open + undated + tasks.reviews.length;
 }
 
 export async function RhAgenda({
@@ -43,6 +45,8 @@ export async function RhAgenda({
   timeZone,
   now,
   canPlan,
+  canCheck,
+  dateError = false,
 }: {
   interviews: Interviews;
   tasks: AgendaTasks;
@@ -55,6 +59,10 @@ export async function RhAgenda({
   now: Date;
   /** The member may propose interviews (manage + `connect.appointments`). */
   canPlan: boolean;
+  /** The member may date a document check (manage). */
+  canCheck: boolean;
+  /** « Fixer la date » came back refused (a past day, a candidate gone). */
+  dateError?: boolean;
 }) {
   const t = await getTranslations("phoneRhAgenda");
   const ti = await getTranslations("phoneRhCandidatures.interviews");
@@ -68,6 +76,16 @@ export async function RhAgenda({
     const key = keyOf(card.when);
     byDay.set(key, [...(byDay.get(key) ?? []), card]);
   }
+  // The document checks with a date (« Fixer la date »): in « Mois » beside the interviews.
+  const checksByDay = new Map<string, AgendaPieces[]>();
+  for (const item of tasks.pieces) {
+    if (!item.checkAt) continue;
+    const key = keyOf(item.checkAt);
+    checksByDay.set(key, [...(checksByDay.get(key) ?? []), item]);
+  }
+  const countOf = (key: string) =>
+    (byDay.get(key)?.length ?? 0) + (checksByDay.get(key)?.length ?? 0);
+  const days = new Set([...byDay.keys(), ...checksByDay.keys()]);
   const dayName = (date: Date, key: string) =>
     key === today
       ? t("today")
@@ -105,6 +123,32 @@ export async function RhAgenda({
     </li>
   );
 
+  const checkCard = (item: AgendaPieces) => (
+    <li key={`v-${item.applicationId}`} className="nb-rh-ag-rdv" data-verif="">
+      <span className="nb-rh-ag-heure">
+        <b>{clock(item.checkAt!)}</b>
+        <small>{t("checks.short")}</small>
+      </span>
+      <span className="nb-rh-ag-qui">
+        <b>{nobody(item.name)}</b>
+        <span>{item.jobTitle}</span>
+        <em>{t("checks.received", { received: item.received, required: item.required })}</em>
+      </span>
+      <Link
+        href={ficheHref(item.jobId, item.applicationId, "completer")}
+        className="nb-rh-ag-go"
+        data-doux=""
+      >
+        {t("see")}
+      </Link>
+    </li>
+  );
+  const dayItems = (key: string) => [
+    ...(byDay.get(key) ?? []).map((card) => interviewCard(card)),
+    ...(checksByDay.get(key) ?? [])
+      .sort((a, b) => a.checkAt!.getTime() - b.checkAt!.getTime())
+      .map((item) => checkCard(item)),
+  ];
   const task = (
     key: string,
     art: MenuArtName,
@@ -129,7 +173,9 @@ export async function RhAgenda({
   // Waiting for the candidate, or without a date any more: still to plan.
   const open = cards.filter((card) => !card.confirmed || !card.when);
   const counts: Record<AgendaView, number> = {
-    mois: cards.filter((card) => card.when && keyOf(card.when).startsWith(month)).length,
+    mois: [...days]
+      .filter((key) => key.startsWith(month))
+      .reduce((sum, key) => sum + countOf(key), 0),
     planifier: toPlanCount(interviews, tasks),
   };
   const tabHref = (key: AgendaView) => (key === "mois" ? BASE : `${BASE}?vue=${key}`);
@@ -139,18 +185,15 @@ export async function RhAgenda({
       {text}
     </p>
   );
-  const dayList = (key: string, title: string) => {
-    const list = byDay.get(key) ?? [];
-    return (
-      <section key={key} className="nb-rh-ag-bloc" aria-label={title}>
-        <h3 className="nb-rh-ag-sous">
-          <span>{title}</span>
-          <small>{list.length}</small>
-        </h3>
-        <ul className="nb-rh-ag-liste">{list.map((card) => interviewCard(card))}</ul>
-      </section>
-    );
-  };
+  const dayList = (key: string, title: string) => (
+    <section key={key} className="nb-rh-ag-bloc" aria-label={title}>
+      <h3 className="nb-rh-ag-sous">
+        <span>{title}</span>
+        <small>{countOf(key)}</small>
+      </h3>
+      <ul className="nb-rh-ag-liste">{dayItems(key)}</ul>
+    </section>
+  );
   const monthHref = (key: string) => (key === monthOfKey(today) ? BASE : `${BASE}?mois=${key}`);
 
   let body: ReactNode;
@@ -160,8 +203,8 @@ export async function RhAgenda({
       format.dateTime(noonOf(addDays(grid[0]![0]!, index)), { weekday: "narrow" }),
     );
     // The day chosen (today by default) first, then the rest of the month still to come.
-    const shown = byDay.get(day) ?? [];
-    const later = [...byDay.keys()]
+    const shown = dayItems(day);
+    const later = [...days]
       .filter((key) => key.startsWith(month) && key > day && key >= today)
       .sort();
     body = (
@@ -195,7 +238,7 @@ export async function RhAgenda({
               </span>
             ))}
             {grid.flat().map((key) => {
-              const count = byDay.get(key)?.length ?? 0;
+              const count = countOf(key);
               const other = !key.startsWith(month);
               return (
                 <Link
@@ -233,7 +276,7 @@ export async function RhAgenda({
           {shown.length === 0 ? (
             empty("calendar", t("dayEmpty"))
           ) : (
-            <ul className="nb-rh-ag-liste">{shown.map((card) => interviewCard(card))}</ul>
+            <ul className="nb-rh-ag-liste">{shown}</ul>
           )}
         </section>
         {later.length > 0 ? (
@@ -258,7 +301,8 @@ export async function RhAgenda({
       </>
     );
   } else {
-    const checks = tasks.reviews.length + tasks.pieces.length;
+    const undated = tasks.pieces.filter((item) => !item.checkAt);
+    const checks = tasks.reviews.length + undated.length;
     body = (
       <>
         <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-plan">
@@ -303,25 +347,67 @@ export async function RhAgenda({
             {checks > 0 ? <small>{checks}</small> : null}
           </h2>
           <p className="nb-rh-ag-aide">{t("checks.help")}</p>
+          {dateError ? (
+            <p className="nb-rh-ag-erreur" role="alert">
+              {t("checks.error")}
+            </p>
+          ) : null}
           {checks === 0 ? (
             empty("document", t("checks.empty"))
           ) : (
             <ul className="nb-rh-ag-taches">
-              {tasks.pieces.map((item) =>
-                task(
-                  `p-${item.applicationId}`,
-                  "document",
-                  ficheHref(item.jobId, item.applicationId, "completer"),
-                  nobody(item.name),
-                  t(item.late ? "checks.piecesLate" : "checks.pieces", {
-                    received: item.received,
-                    required: item.required,
-                    date: item.dueAt,
-                    job: item.jobTitle,
-                  }),
-                  item.late ? "due" : "ok",
-                ),
-              )}
+              {undated.map((item) => (
+                <li key={`p-${item.applicationId}`} className="nb-rh-ag-verif">
+                  <ul>
+                    {task(
+                      "lien",
+                      "document",
+                      ficheHref(item.jobId, item.applicationId, "completer"),
+                      nobody(item.name),
+                      t(item.late ? "checks.piecesLate" : "checks.pieces", {
+                        received: item.received,
+                        required: item.required,
+                        date: item.dueAt,
+                        job: item.jobTitle,
+                      }),
+                      item.late ? "due" : "ok",
+                    )}
+                  </ul>
+                  {canCheck ? (
+                    <details className="nb-rh-ag-fixer">
+                      <summary>{t("checks.plan")}</summary>
+                      <form action={planCheckAction}>
+                        <input type="hidden" name="application" value={item.applicationId} />
+                        <label htmlFor={`ag-jour-${item.applicationId}`}>
+                          {t("checks.day")}
+                          <input
+                            id={`ag-jour-${item.applicationId}`}
+                            type="date"
+                            name="jour"
+                            min={today}
+                            defaultValue={addDays(today, 1)}
+                            required
+                          />
+                        </label>
+                        <label htmlFor={`ag-heure-${item.applicationId}`}>
+                          {t("checks.hour")}
+                          <input
+                            id={`ag-heure-${item.applicationId}`}
+                            type="time"
+                            name="heure"
+                            step={900}
+                            defaultValue="10:00"
+                            required
+                          />
+                        </label>
+                        <button type="submit" className="nb-rh-ag-go">
+                          {t("checks.save")}
+                        </button>
+                      </form>
+                    </details>
+                  ) : null}
+                </li>
+              ))}
               {tasks.reviews.map((item) =>
                 task(
                   `r-${item.applicationId}`,

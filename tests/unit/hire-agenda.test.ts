@@ -70,4 +70,26 @@ describe("agendaOf", () => {
     );
     expect(tasks.reviews[0]!.name).toBeNull();
   });
+
+  it("puts the pieces of a person set aside under the document checks, with their date", () => {
+    const checkAt = new Date(now.getTime() + DAY);
+    const tasks = agendaOf(
+      [
+        {
+          ...base,
+          id: "a",
+          events: [{ type: "on_hold", createdAt: new Date(now.getTime() - 4 * DAY) }],
+          verification: {
+            dueAt: new Date(now.getTime() - DAY),
+            checkAt,
+            items: [{ required: true, receivedAt: now }],
+          },
+        },
+      ],
+      now,
+    );
+    expect(tasks.reviews).toEqual([]);
+    expect(tasks.pieces).toMatchObject([{ applicationId: "a", late: false, checkAt }]);
+    expect(tasks.due).toBe(0);
+  });
 });

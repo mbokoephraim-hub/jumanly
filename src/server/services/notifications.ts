@@ -77,6 +77,8 @@ export const notificationTypes = [
   "reviewReminder",
   // « Rappel d'agenda » (03/11/2026): a confirmed interview within the next 24 hours.
   "interviewSoon",
+  // « Fixer la vérification » (Agenda, 05/11/2026): the hour the team planned to check the pieces.
+  "verificationCheck",
   // Le Fil (Modèle B, lot B3): answers, names, J'aime, republications and quotes.
   "feedReply",
   "feedMention",
@@ -162,7 +164,13 @@ export const NOTIFICATION_CATEGORIES = Object.keys(
  * is the talent's category `messages`: one person, one inbox.
  */
 export const recruiterNotificationCategories = {
-  "rh.applications": ["newApplication", "atsReady", "jobEnding", "reviewReminder"],
+  "rh.applications": [
+    "newApplication",
+    "atsReady",
+    "jobEnding",
+    "reviewReminder",
+    "verificationCheck",
+  ],
   "rh.interviews": [
     "interviewTeam",
     "interviewConfirmed",

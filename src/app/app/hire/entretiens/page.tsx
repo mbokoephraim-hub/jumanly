@@ -99,6 +99,8 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
           view={view}
           month={month}
           canPlan={canPlan}
+          canCheck={hirePermissions(ctx.role).manage}
+          dateError={one(query.erreur) === "date"}
           day={day}
           timeZone={timeZone}
           now={now}
