@@ -14,7 +14,11 @@ import { t as translate } from "../../emails/_components/translator";
 import { runScheduledAts } from "@/server/services/hire-ats";
 import { expireJoinRequests } from "@/server/services/org-join";
 import { runEndingReminders } from "@/server/services/job-reminders";
-import { piecesHref, runVerificationReminders } from "@/server/services/hire-verification";
+import {
+  piecesHref,
+  runVerificationCheckReminders,
+  runVerificationReminders,
+} from "@/server/services/hire-verification";
 
 export async function runHireJobs(now = new Date()) {
   const ats = await runScheduledAts(db, now).catch((error) => {
@@ -54,6 +58,11 @@ export async function runHireJobs(now = new Date()) {
     reportError(error);
     return 0;
   });
+  // « Fixer la vérification »: the hour the team planned to check the pieces (05/11/2026).
+  const checkReminders = await runVerificationCheckReminders(db, now).catch((error) => {
+    reportError(error);
+    return 0;
+  });
   // « Rappel d'agenda »: the confirmed interviews of the next 24 hours (03/11/2026).
   const interviewReminders = await runInterviewReminders(db, now).catch((error) => {
     reportError(error);
@@ -63,6 +72,7 @@ export async function runHireJobs(now = new Date()) {
     ats,
     reviewReminders,
     interviewReminders,
+    checkReminders,
     endingReminders: reminders.length,
     expiredJoinRequests,
     verificationReminders: pieces.length,

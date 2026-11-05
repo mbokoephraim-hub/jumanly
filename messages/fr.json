@@ -10857,7 +10857,8 @@
       "send": "Envoyer",
       "answer": "Répondre",
       "seeInterview": "Voir l'entretien",
-      "review": "Revoir"
+      "review": "Revoir",
+      "check": "Vérifier"
     }
   },
   "phoneExplorer": {
@@ -19527,11 +19528,18 @@
     "later": "Plus tard ce mois-ci",
     "checks": {
       "title": "Vérification des documents",
-      "help": "Les candidats mis en attente : leurs pièces, et le jour où vous les revoyez.",
+      "help": "Les candidats mis en attente. « Fixer la date » : le jour et l'heure où vous vérifiez leurs pièces. La vérification passe dans Mois, avec un rappel à l'heure dite.",
       "empty": "Aucun document à vérifier pour l'instant.",
       "reviewDue": "À revoir aujourd'hui · {job}",
       "reviewOn": "À revoir le {date, date, medium} · {job}",
       "pieces": "Pièces {received} sur {required} · avant le {date, date, medium} · {job}",
+      "plan": "Fixer la date",
+      "day": "Jour",
+      "hour": "Heure",
+      "save": "Enregistrer",
+      "error": "Choisissez un jour et une heure à venir.",
+      "short": "Pièces",
+      "received": "Vérification des documents · {received} sur {required} reçues",
       "piecesLate": "Pièces en retard : {received} sur {required} · {job}"
     }
   },
@@ -25148,6 +25156,7 @@
       "orgJoinAccepted": "Votre demande pour rejoindre {org} est acceptée. Bienvenue dans l'équipe !",
       "orgJoinDeclined": "Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation.",
       "reviewReminder": "{candidate, select, none {Un candidat} other {{candidate}}} de « {jobTitle} » est à revoir aujourd'hui.",
+      "verificationCheck": "Vérification des documents de {candidate, select, none {un candidat} other {{candidate}}} prévue maintenant · « {jobTitle} »",
       "interviewSoon": "Entretien avec {candidate, select, none {un candidat} other {{candidate}}} {day, select, today {aujourd'hui} other {demain}} à {time} · « {jobTitle} »",
       "interviewSoonTalent": "Votre entretien avec {company} a lieu {day, select, today {aujourd'hui} other {demain}} à {time} · « {jobTitle} »",
       "jobEnding": "{days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}}",

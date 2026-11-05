@@ -8984,3 +8984,90 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   margin: 0;
   font-size: 12px;
 }
+/* Agenda › À planifier: « Fixer la date » of a document check (05/11/2026). */
+.nb-rh-ag-verif {
+  display: grid;
+  gap: 6px;
+}
+.nb-rh-ag-verif > ul {
+  display: grid;
+}
+.nb-rh-ag-fixer {
+  margin: 0 4px;
+}
+.nb-rh-ag-fixer summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--nb-lime), var(--nb-menthe));
+  color: var(--nb-encre);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.nb-rh-ag-fixer summary::-webkit-details-marker {
+  display: none;
+}
+.nb-rh-ag-fixer[open] summary {
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-surface);
+  color: var(--nb-creme);
+}
+.nb-rh-ag-fixer form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+}
+.nb-rh-ag-fixer label {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--nb-brume);
+}
+.nb-rh-ag-fixer input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: 12px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-surface);
+  color: var(--nb-creme);
+  font: inherit;
+  font-size: 15px;
+  color-scheme: dark;
+}
+.nb-rh-ag-fixer button {
+  grid-column: 1 / -1;
+  justify-content: center;
+  border: 0;
+  cursor: pointer;
+}
+.nb-rh-ag-rdv[data-verif] .nb-rh-ag-heure {
+  background: color-mix(in srgb, var(--nb-ambre) 16%, transparent);
+}
+.nb-rh-ag-rdv[data-verif] .nb-rh-ag-heure b {
+  color: var(--nb-ambre);
+}
+.nb-rh-ag-rdv[data-verif] .nb-rh-ag-qui em {
+  color: var(--nb-brume);
+  font-weight: 600;
+}
+.nb-rh-ag-erreur {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nb-ambre);
+}
+html[data-nb-theme="clair"] .nb-app .nb-rh-ag-fixer input {
+  color-scheme: light;
+}

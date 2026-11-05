@@ -15908,11 +15908,18 @@ Conventions :
 | `phoneRhAgenda.evaluate.go` | Évaluer |
 | `phoneRhAgenda.later` | Plus tard ce mois-ci |
 | `phoneRhAgenda.checks.title` | Vérification des documents |
-| `phoneRhAgenda.checks.help` | Les candidats mis en attente : leurs pièces, et le jour où vous les revoyez. |
+| `phoneRhAgenda.checks.help` | Les candidats mis en attente. « Fixer la date » : le jour et l'heure où vous vérifiez leurs pièces. La vérification passe dans Mois, avec un rappel à l'heure dite. |
 | `phoneRhAgenda.checks.empty` | Aucun document à vérifier pour l'instant. |
 | `phoneRhAgenda.checks.reviewDue` | À revoir aujourd'hui · {job} |
 | `phoneRhAgenda.checks.reviewOn` | À revoir le {date, date, medium} · {job} |
 | `phoneRhAgenda.checks.pieces` | Pièces {received} sur {required} · avant le {date, date, medium} · {job} |
+| `phoneRhAgenda.checks.plan` | Fixer la date |
+| `phoneRhAgenda.checks.day` | Jour |
+| `phoneRhAgenda.checks.hour` | Heure |
+| `phoneRhAgenda.checks.save` | Enregistrer |
+| `phoneRhAgenda.checks.error` | Choisissez un jour et une heure à venir. |
+| `phoneRhAgenda.checks.short` | Pièces |
+| `phoneRhAgenda.checks.received` | Vérification des documents · {received} sur {required} reçues |
 | `phoneRhAgenda.checks.piecesLate` | Pièces en retard : {received} sur {required} · {job} |
 | `phoneRh.nav.talents` | Talents |
 | `phoneRh.nav.messages` | Chat |
@@ -18008,6 +18015,7 @@ Conventions :
 | `notifModels.action.answer` | Répondre |
 | `notifModels.action.seeInterview` | Voir l'entretien |
 | `notifModels.action.review` | Revoir |
+| `notifModels.action.check` | Vérifier |
 | `phoneRhNotifs.readAll` | Tout marquer comme lu |
 | `phoneRhNotifs.settings` | Réglage des notifications |
 | `phoneRhNotifs.tabs.label` | Catégories de notifications |
@@ -20645,6 +20653,7 @@ Conventions :
 | `notifications.item.orgJoinAccepted` | Votre demande pour rejoindre {org} est acceptée. Bienvenue dans l'équipe ! |
 | `notifications.item.orgJoinDeclined` | Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation. |
 | `notifications.item.reviewReminder` | {candidate, select, none {Un candidat} other {{candidate}}} de « {jobTitle} » est à revoir aujourd'hui. |
+| `notifications.item.verificationCheck` | Vérification des documents de {candidate, select, none {un candidat} other {{candidate}}} prévue maintenant · « {jobTitle} » |
 | `notifications.item.interviewSoon` | Entretien avec {candidate, select, none {un candidat} other {{candidate}}} {day, select, today {aujourd'hui} other {demain}} à {time} · « {jobTitle} » |
 | `notifications.item.interviewSoonTalent` | Votre entretien avec {company} a lieu {day, select, today {aujourd'hui} other {demain}} à {time} · « {jobTitle} » |
 | `notifications.item.jobEnding` | {days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}} |

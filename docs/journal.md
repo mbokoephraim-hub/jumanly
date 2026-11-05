@@ -5587,3 +5587,10 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - « À planifier » : Entretiens (retenus sans entretien, entretiens en attente du candidat ou sans date) et Vérification des documents (pièces attendues ou en retard, mises en attente à revoir).
 - Les candidats sans réponse depuis plus de 7 jours ne sont plus dans l'agenda : Offres les signale déjà. Le badge Agenda compte retenus à planifier + revues dues + pièces en retard.
 - Suite prévue : date de vérification des documents avec rappel, campagnes programmées (ouverture et fin automatiques), bouton « + Planifier ».
+
+## 2026-11-05 · Agenda recruteur : « Fixer la date » d'une vérification de documents
+
+- `VerificationRequest` reçoit `checkAt`, `checkById` et `checkRemindedAt` (migration `verification_check_date`).
+- À planifier › Vérification des documents : chaque candidat dont les pièces sont demandées (mis en attente) a « Fixer la date » (jour + heure, fuseau de la plateforme comme l'agenda). Une fois datée, la vérification quitte À planifier et apparaît dans Mois (point dans le calendrier, carte « Pièces » à l'heure dite).
+- Rappel : nouveau type de notification `verificationCheck`, envoyé une fois dans l'heure qui précède, au membre qui a fixé la date (sinon l'équipe), par la tâche horaire `runHireJobs`.
+- Les pièces d'une personne en attente comptent désormais comme « vérification » (et non plus « à revoir »), même quand toutes les pièces sont reçues.

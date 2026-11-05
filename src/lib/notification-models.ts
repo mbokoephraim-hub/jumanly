@@ -66,6 +66,7 @@ const MODELS: Record<string, NotificationModel> = {
   interviewCanceled: { kind: "agenda", title: "interviewCanceled", action: null },
   interviewSoon: { kind: "agenda", title: "reminder", action: "seeInterview" },
   reviewReminder: { kind: "agenda", title: "reminder", action: "review" },
+  verificationCheck: { kind: "agenda", title: "reminder", action: "check" },
   orgTaskReminder: { kind: "agenda", title: "reminder", action: null },
   diagnosticReminder: { kind: "agenda", title: "reminder", action: null },
   jobApproved: { kind: "offre", title: "offer", action: null },
