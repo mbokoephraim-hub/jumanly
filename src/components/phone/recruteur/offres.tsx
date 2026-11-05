@@ -85,12 +85,19 @@ type StatusKey =
   | "paused"
   | "closed"
   | "archived"
-  | "expired";
+  | "expired"
+  | "scheduled";
 
-const statusKey = (job: { status: OfferRow["status"]; closesAt: Date | null }, now: Date) =>
+const statusKey = (
+  job: { status: OfferRow["status"]; closesAt: Date | null; opensAt?: Date | null },
+  now: Date,
+) =>
   (job.status === "published" && job.closesAt && job.closesAt <= now
     ? "expired"
-    : job.status) as StatusKey;
+    : // « Programmer la campagne » (05/11/2026): a draft that opens by itself.
+      job.opensAt && (job.status === "draft" || job.status === "changes_requested")
+      ? "scheduled"
+      : job.status) as StatusKey;
 
 const daysSince = (date: Date | null, now: Date) =>
   date ? Math.max(0, Math.floor((now.getTime() - date.getTime()) / DAY)) : 0;

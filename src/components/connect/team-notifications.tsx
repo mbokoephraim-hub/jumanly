@@ -90,6 +90,8 @@ const categoryOf: Record<NotificationType, Category> = {
   orgTaskDone: "applications",
   reviewReminder: "applications",
   verificationCheck: "applications",
+  jobOpened: "applications",
+  jobOpenFailed: "applications",
   interviewSoon: "applications",
 };
 

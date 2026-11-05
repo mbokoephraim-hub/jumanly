@@ -79,6 +79,9 @@ export const notificationTypes = [
   "interviewSoon",
   // « Fixer la vérification » (Agenda, 05/11/2026): the hour the team planned to check the pieces.
   "verificationCheck",
+  // « Programmer la campagne » (Agenda, 05/11/2026): the programmed offer opened, or could not.
+  "jobOpened",
+  "jobOpenFailed",
   // Le Fil (Modèle B, lot B3): answers, names, J'aime, republications and quotes.
   "feedReply",
   "feedMention",
@@ -170,6 +173,8 @@ export const recruiterNotificationCategories = {
     "jobEnding",
     "reviewReminder",
     "verificationCheck",
+    "jobOpened",
+    "jobOpenFailed",
   ],
   "rh.interviews": [
     "interviewTeam",

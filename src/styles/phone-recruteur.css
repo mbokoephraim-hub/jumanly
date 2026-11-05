@@ -9071,3 +9071,33 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
 html[data-nb-theme="clair"] .nb-app .nb-rh-ag-fixer input {
   color-scheme: light;
 }
+/* Agenda › Campagnes programmées (05/11/2026). */
+.nb-rh-ag-camp {
+  display: grid;
+  gap: 4px;
+  border-radius: 18px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+}
+.nb-rh-ag-camp form {
+  padding: 0 12px 10px 58px;
+}
+.nb-rh-ag-annuler {
+  min-height: 36px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--nb-brume);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.nb-rh-ag-nouvelle {
+  justify-self: start;
+  margin-top: 4px;
+}
+.nb-rh-ag-rdv[data-campagne] .nb-rh-ag-heure {
+  background: color-mix(in srgb, var(--nb-lime) 14%, transparent);
+}

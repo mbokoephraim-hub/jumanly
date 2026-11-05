@@ -3,7 +3,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { MenuArt, type MenuArtName } from "@/components/site/menu-art";
-import type { AgendaPieces, AgendaTasks } from "@/server/services/hire-agenda";
+import type { AgendaCampaign, AgendaPieces, AgendaTasks } from "@/server/services/hire-agenda";
+import { rhUnscheduleOfferAction } from "@/server/actions/phone-rh-offres";
 import { planCheckAction } from "@/server/actions/hire-verification";
 import type { rhInterviews } from "@/server/services/hire-phone-candidatures";
 import { OrbiDisc, PhoneIcon } from "../icon";
@@ -39,6 +40,7 @@ export function toPlanCount(interviews: Interviews, tasks: AgendaTasks) {
 export async function RhAgenda({
   interviews,
   tasks,
+  campaigns = [],
   view,
   day,
   month,
@@ -50,6 +52,8 @@ export async function RhAgenda({
 }: {
   interviews: Interviews;
   tasks: AgendaTasks;
+  /** Programmed openings and ends of offers (« Programmer la campagne »). */
+  campaigns?: AgendaCampaign[];
   view: AgendaView;
   /** The day shown under the month, `YYYY-MM-DD` in the member's time zone. */
   day: string;
@@ -83,9 +87,22 @@ export async function RhAgenda({
     const key = keyOf(item.checkAt);
     checksByDay.set(key, [...(checksByDay.get(key) ?? []), item]);
   }
+  // The campaigns: the opening of a programmed offer, the last day of an offer.
+  type Mark = { kind: "open" | "end"; at: Date; campaign: AgendaCampaign };
+  const marksByDay = new Map<string, Mark[]>();
+  const mark = (item: Mark) => {
+    const key = keyOf(item.at);
+    marksByDay.set(key, [...(marksByDay.get(key) ?? []), item]);
+  };
+  for (const campaign of campaigns) {
+    if (campaign.opensAt) mark({ kind: "open", at: campaign.opensAt, campaign });
+    if (campaign.closesAt) mark({ kind: "end", at: campaign.closesAt, campaign });
+  }
   const countOf = (key: string) =>
-    (byDay.get(key)?.length ?? 0) + (checksByDay.get(key)?.length ?? 0);
-  const days = new Set([...byDay.keys(), ...checksByDay.keys()]);
+    (byDay.get(key)?.length ?? 0) +
+    (checksByDay.get(key)?.length ?? 0) +
+    (marksByDay.get(key)?.length ?? 0);
+  const days = new Set([...byDay.keys(), ...checksByDay.keys(), ...marksByDay.keys()]);
   const dayName = (date: Date, key: string) =>
     key === today
       ? t("today")
@@ -143,11 +160,36 @@ export async function RhAgenda({
       </Link>
     </li>
   );
+  const campaignCard = (item: Mark) => (
+    <li
+      key={`c-${item.kind}-${item.campaign.jobId}`}
+      className="nb-rh-ag-rdv"
+      data-campagne={item.kind}
+    >
+      <span className="nb-rh-ag-heure">
+        <b>{item.kind === "open" ? clock(item.at) : t("campaigns.endShort")}</b>
+        <small>{t(item.kind === "open" ? "campaigns.openTag" : "campaigns.endTag")}</small>
+      </span>
+      <span className="nb-rh-ag-qui">
+        <b>{item.campaign.title}</b>
+        <span>{t(item.kind === "open" ? "campaigns.opens" : "campaigns.ends")}</span>
+      </span>
+      <Link href={`/app/hire/offres/${item.campaign.jobId}`} className="nb-rh-ag-go" data-doux="">
+        {t("see")}
+      </Link>
+    </li>
+  );
   const dayItems = (key: string) => [
+    ...(marksByDay.get(key) ?? [])
+      .filter((item) => item.kind === "open")
+      .map((item) => campaignCard(item)),
     ...(byDay.get(key) ?? []).map((card) => interviewCard(card)),
     ...(checksByDay.get(key) ?? [])
       .sort((a, b) => a.checkAt!.getTime() - b.checkAt!.getTime())
       .map((item) => checkCard(item)),
+    ...(marksByDay.get(key) ?? [])
+      .filter((item) => item.kind === "end")
+      .map((item) => campaignCard(item)),
   ];
   const task = (
     key: string,
@@ -302,6 +344,7 @@ export async function RhAgenda({
     );
   } else {
     const undated = tasks.pieces.filter((item) => !item.checkAt);
+    const programmed = campaigns.filter((item) => item.opensAt);
     const checks = tasks.reviews.length + undated.length;
     body = (
       <>
@@ -422,6 +465,50 @@ export async function RhAgenda({
               )}
             </ul>
           )}
+        </section>
+        <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-campagnes">
+          <h2 id="rh-ag-campagnes" className="nb-rh-ag-h">
+            <span>{t("campaigns.title")}</span>
+            {programmed.length > 0 ? <small>{programmed.length}</small> : null}
+          </h2>
+          <p className="nb-rh-ag-aide">{t("campaigns.help")}</p>
+          {programmed.length === 0 ? (
+            empty("calendar", t("campaigns.empty"))
+          ) : (
+            <ul className="nb-rh-ag-liste">
+              {programmed.map((item) => (
+                <li key={item.jobId} className="nb-rh-ag-camp">
+                  <Link href={`/app/hire/offres/${item.jobId}`} className="nb-rh-ag-tache">
+                    <span className="nb-rh-ag-art" aria-hidden>
+                      <MenuArt name="calendar" size="xs" />
+                    </span>
+                    <span className="nb-rh-ag-t">
+                      <b>{item.title}</b>
+                      <span>
+                        {item.closesAt
+                          ? t("campaigns.line", { opens: item.opensAt!, closes: item.closesAt })
+                          : t("campaigns.lineNoEnd", { opens: item.opensAt! })}
+                      </span>
+                    </span>
+                    <PhoneIcon name="chevron" size={18} />
+                  </Link>
+                  {canCheck ? (
+                    <form action={rhUnscheduleOfferAction}>
+                      <input type="hidden" name="job" value={item.jobId} />
+                      <button type="submit" className="nb-rh-ag-annuler">
+                        {t("campaigns.cancel")}
+                      </button>
+                    </form>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          )}
+          {canCheck ? (
+            <Link href="/app/hire/offres/nouvelle" className="nb-rh-ag-go nb-rh-ag-nouvelle">
+              {t("campaigns.new")}
+            </Link>
+          ) : null}
         </section>
       </>
     );

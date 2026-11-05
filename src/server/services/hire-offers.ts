@@ -112,6 +112,7 @@ export async function listOffers(db: PrismaClient, ctx: HireContext, now = new D
       createdAt: true,
       updatedAt: true,
       closesAt: true,
+      opensAt: true,
       pausedAt: true,
       pausedByBillingAt: true,
       moderationReason: true,

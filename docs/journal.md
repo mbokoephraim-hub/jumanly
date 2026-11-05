@@ -5594,3 +5594,10 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - À planifier › Vérification des documents : chaque candidat dont les pièces sont demandées (mis en attente) a « Fixer la date » (jour + heure, fuseau de la plateforme comme l'agenda). Une fois datée, la vérification quitte À planifier et apparaît dans Mois (point dans le calendrier, carte « Pièces » à l'heure dite).
 - Rappel : nouveau type de notification `verificationCheck`, envoyé une fois dans l'heure qui précède, au membre qui a fixé la date (sinon l'équipe), par la tâche horaire `runHireJobs`.
 - Les pièces d'une personne en attente comptent désormais comme « vérification » (et non plus « à revoir »), même quand toutes les pièces sont reçues.
+
+## 2026-11-05 · Agenda recruteur : campagnes programmées
+
+- `Job` reçoit `opensAt` et `opensById` (migration `job_scheduled_opening`). Une offre programmée reste en brouillon avec `opensAt`.
+- Dernière étape de « Publier une offre » (téléphone) : « Quand publier ? » Maintenant / Programmer la campagne (jour + heure pleine, fuseau de la plateforme, car la tâche tourne chaque heure à l'heure pile). Mêmes questions qu'à la publication (ONEM, Fil). `scheduleJob` vérifie tout de suite description et compétences, une date à venir (180 jours au plus) et avant la clôture.
+- Tâche horaire `runScheduledOpenings` : publie avec les mêmes règles que « Publier » (limite d'offres actives, contrôle automatique) au nom du membre qui a programmé, publie dans le Fil si demandé, et prévient (`jobOpened`, ou `jobOpenFailed` : l'offre redevient un simple brouillon). La fin reste `closesAt` (l'offre n'accepte plus de candidatures après).
+- Agenda : Mois montre l'ouverture (à l'heure) et le dernier jour des campagnes ; À planifier › Campagnes programmées liste les ouvertures à venir, avec « Annuler la programmation » et « Programmer une campagne ». Offres : statut « Programmée ».

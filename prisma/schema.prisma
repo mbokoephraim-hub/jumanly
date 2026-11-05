@@ -292,6 +292,11 @@ model Job {
   /// When the recruiter paused the job (status `paused`).
   pausedAt                DateTime?
   closesAt                DateTime?
+  /// « Programmer la campagne » (Agenda, 05/11/2026): a draft opens by itself at this time (hourly
+  /// task), then ends at `closesAt`. Null once opened or when the programming is cancelled.
+  opensAt                 DateTime?
+  /// The member who programmed the opening: the one it is published as, and the one told.
+  opensById               String?
   /// Number of positions to fill (planche recruteur-1 CR1).
   openings                Int                @default(1)
   /// Field of the job, a key of `studyFields` (src/lib/studies.ts).
@@ -380,6 +385,7 @@ model Job {
   updatedAt               DateTime           @updatedAt
 
   @@index([status, publishedAt])
+  @@index([opensAt])
 }
 
 /// Views of a job's page, one row per day (UTC): the real figures of « Mes offres » and

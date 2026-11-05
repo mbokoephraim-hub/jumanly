@@ -13,6 +13,7 @@ import {
   rhAttachSheetAction,
   rhPublishOfferAction,
   rhRemoveSheetAction,
+  rhScheduleOfferAction,
   rhSaveOfferWizardAction,
   rhSaveScreeningAction,
   type RhOfferResult,
@@ -351,6 +352,10 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
   const [educations, setEducations] = useState<Education[]>(d.educations);
   const [closesAt, setClosesAt] = useState(d.closesAt);
   const [onem, setOnem] = useState<"yes" | "no" | null>(null);
+  // « Quand publier ? » (Agenda, 05/11/2026): now, or a programmed campaign that opens by itself.
+  const [when, setWhen] = useState<"now" | "later">("now");
+  const [opensDay, setOpensDay] = useState("");
+  const [opensHour, setOpensHour] = useState("08:00");
   const [city, setCity] = useState(d.city || data.cities[0] || "");
   const [otherCity, setOtherCity] = useState(d.city && !data.cities.includes(d.city) ? d.city : "");
   const [country, setCountry] = useState(d.country);
@@ -464,6 +469,9 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
       return t("errors.salary");
     if (at === 3 && closesAt && closesAt < today()) return w("errors.closesAt");
     if (at === 10 && toFil && !feedTitle.trim()) return w("errors.feedTitle");
+    if (at === 10 && when === "later" && !opensDay) return w("errors.opensAt");
+    if (at === 10 && when === "later" && closesAt && closesAt <= opensDay)
+      return w("errors.opensAfterClose");
     if (at === 10 && onem !== "yes") return w(onem === "no" ? "errors.onemNo" : "errors.onem");
     return null;
   };
@@ -506,6 +514,31 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
         setAnalysis(result);
       }
       if (step < STEPS) return goTo(step + 1, id);
+      if (when === "later") {
+        const programmed = await rhScheduleOfferAction(
+          id,
+          toFil,
+          onem === "yes",
+          opensDay,
+          opensHour,
+        );
+        if (!programmed.ok) {
+          setError(
+            programmed.error === "skills"
+              ? w("errors.hard")
+              : programmed.error === "description"
+                ? t("errors.description")
+                : programmed.error === "opensAt"
+                  ? w("errors.opensAt")
+                  : t("errors.failed"),
+          );
+          return;
+        }
+        router.replace(
+          `/app/hire/entretiens?mois=${programmed.day.slice(0, 7)}&jour=${programmed.day}`,
+        );
+        return;
+      }
       const result = await rhPublishOfferAction(id, toFil, onem === "yes");
       if (!result.ok) {
         setError(
@@ -1376,6 +1409,74 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
             ) : null}
             <p className="nb-meta nb-rh-pub-note">{w("sheetNote")}</p>
 
+            <p className="nb-rh-pub-label" id="oe-quand">
+              {w("when")}
+            </p>
+            <div className="nb-oe-fiches" role="radiogroup" aria-labelledby="oe-quand">
+              {(["now", "later"] as const).map((answer) => (
+                <button
+                  key={answer}
+                  type="button"
+                  role="radio"
+                  aria-checked={when === answer}
+                  className="nb-rh-pub-carte"
+                  onClick={() => {
+                    setWhen(answer);
+                    setError(null);
+                  }}
+                >
+                  <span className="nb-rh-pub-point" aria-hidden />
+                  <span>
+                    <b>{w(answer === "now" ? "whenNow" : "whenLater")}</b>
+                    <span className="nb-meta">
+                      {w(answer === "now" ? "whenNowLine" : "whenLaterLine")}
+                    </span>
+                  </span>
+                </button>
+              ))}
+            </div>
+            {when === "later" ? (
+              <div className="nb-oe-programme">
+                <p className="nb-rh-pub-label">
+                  <label htmlFor="oe-ouverture">{w("opensDay")}</label>
+                </p>
+                <PhoneDateField
+                  id="oe-ouverture"
+                  label={w("opensDay")}
+                  value={opensDay}
+                  min={today()}
+                  max={closesAt || undefined}
+                  onChange={(value) => {
+                    setOpensDay(value);
+                    setError(null);
+                  }}
+                />
+                <p className="nb-rh-pub-label">
+                  <label htmlFor="oe-heure">{w("opensHour")}</label>
+                </p>
+                <select
+                  id="oe-heure"
+                  className="nb-oe-heure"
+                  value={opensHour}
+                  onChange={(event) => setOpensHour(event.target.value)}
+                >
+                  {Array.from(
+                    { length: 24 },
+                    (_, hour) => `${String(hour).padStart(2, "0")}:00`,
+                  ).map((value) => (
+                    <option key={value} value={value}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
+                <p className="nb-meta nb-rh-pub-note">
+                  {closesAt
+                    ? w("opensNote", { date: new Date(`${closesAt}T12:00:00Z`) })
+                    : w("opensNoteNoEnd")}
+                </p>
+              </div>
+            ) : null}
+
             <p className="nb-rh-pub-label" id="oe-onem">
               {w("onem")}
             </p>
@@ -1411,7 +1512,13 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
           </p>
         ) : null}
         <button type="button" className="nb-bp" aria-disabled={pending || undefined} onClick={next}>
-          {step === 8 ? w("analyze") : step < STEPS ? t("continue") : t("publish")}
+          {step === 8
+            ? w("analyze")
+            : step < STEPS
+              ? t("continue")
+              : when === "later"
+                ? w("schedule")
+                : t("publish")}
         </button>
       </div>
     </div>

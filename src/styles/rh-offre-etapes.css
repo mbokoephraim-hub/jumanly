@@ -441,3 +441,25 @@
   font-size: 15px;
   line-height: 1.25;
 }
+/* « Programmer la campagne » (Agenda, 05/11/2026): the day and the hour of the opening. */
+.nb-oe-programme {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.nb-oe-heure {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 16px;
+  border: 1px solid var(--nb-filet-fort);
+  border-radius: 16px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--nb-creme);
+  background: color-mix(in srgb, var(--nb-creme) 5%, transparent);
+  color-scheme: dark;
+}
+html[data-nb-theme="clair"] .nb-app .nb-oe-heure {
+  color-scheme: light;
+}

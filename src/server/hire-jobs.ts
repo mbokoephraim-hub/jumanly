@@ -14,6 +14,7 @@ import { t as translate } from "../../emails/_components/translator";
 import { runScheduledAts } from "@/server/services/hire-ats";
 import { expireJoinRequests } from "@/server/services/org-join";
 import { runEndingReminders } from "@/server/services/job-reminders";
+import { runScheduledOpenings } from "@/server/services/job-schedule";
 import {
   piecesHref,
   runVerificationCheckReminders,
@@ -58,6 +59,11 @@ export async function runHireJobs(now = new Date()) {
     reportError(error);
     return 0;
   });
+  // « Programmer la campagne »: the drafts whose opening time has come (05/11/2026).
+  const openings = await runScheduledOpenings(db, now).catch((error) => {
+    reportError(error);
+    return [] as string[];
+  });
   // « Fixer la vérification »: the hour the team planned to check the pieces (05/11/2026).
   const checkReminders = await runVerificationCheckReminders(db, now).catch((error) => {
     reportError(error);
@@ -73,6 +79,7 @@ export async function runHireJobs(now = new Date()) {
     reviewReminders,
     interviewReminders,
     checkReminders,
+    scheduledOpenings: openings.length,
     endingReminders: reminders.length,
     expiredJoinRequests,
     verificationReminders: pieces.length,
