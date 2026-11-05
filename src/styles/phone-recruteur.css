@@ -9101,3 +9101,31 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-ag-fixer input {
 .nb-rh-ag-rdv[data-campagne] .nb-rh-ag-heure {
   background: color-mix(in srgb, var(--nb-lime) 14%, transparent);
 }
+/* Agenda › Mois: « + Planifier » (05/11/2026). */
+.nb-rh-ag-plus summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--nb-lime), var(--nb-menthe));
+  color: var(--nb-encre);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.nb-rh-ag-plus summary::-webkit-details-marker {
+  display: none;
+}
+.nb-rh-ag-plus ul {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+.nb-rh-ag-plus li {
+  border-radius: 18px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+}

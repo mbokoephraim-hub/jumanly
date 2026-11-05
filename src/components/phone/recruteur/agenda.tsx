@@ -251,6 +251,37 @@ export async function RhAgenda({
       .sort();
     body = (
       <>
+        {canCheck ? (
+          // « + Planifier » (05/11/2026): what can take a date, each leading to where it is set.
+          <details className="nb-rh-ag-plus">
+            <summary>
+              <PhoneIcon name="plus" size={18} />
+              {t("add.title")}
+            </summary>
+            <ul>
+              {(
+                [
+                  ["interview", "people", `${BASE}?vue=planifier#rh-ag-plan`],
+                  ["check", "document", `${BASE}?vue=planifier#rh-ag-verif`],
+                  ["campaign", "calendar", "/app/hire/offres/nouvelle"],
+                ] as const
+              ).map(([key, art, href]) => (
+                <li key={key}>
+                  <Link href={href} className="nb-rh-ag-tache">
+                    <span className="nb-rh-ag-art" aria-hidden>
+                      <MenuArt name={art} size="xs" />
+                    </span>
+                    <span className="nb-rh-ag-t">
+                      <b>{t(`add.${key}`)}</b>
+                      <span>{t(`add.${key}Line`)}</span>
+                    </span>
+                    <PhoneIcon name="chevron" size={18} />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ) : null}
         <section className="nb-rh-ag-mois" aria-labelledby="rh-ag-mois">
           <div className="nb-rh-ag-mois-h">
             <Link
