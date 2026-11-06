@@ -19,6 +19,7 @@ import { PhoneSheet } from "../sheet";
 import { MeetingPicker } from "./agenda";
 import { shrinkPhoto } from "./media";
 import { SheetBack } from "./parts";
+import { sendInParts } from "./upload";
 import type { AttachDoc, ThreadView } from "./types";
 
 export type AttachSheet = "joindre" | "photos" | "docs" | "cv" | "attestation" | "agenda" | null;
@@ -122,10 +123,14 @@ export function AttachSheets({
   };
 
   const sendFile = (file: File) =>
-    run(() => {
+    run(async () => {
+      const sent = await sendInParts(file);
+      if (!sent.ok) return sent;
       const form = new FormData();
       form.set("conversation", view.id);
-      form.set("file", file);
+      form.set("upload", sent.value.upload);
+      form.set("parts", String(sent.value.parts));
+      form.set("name", sent.value.name);
       return sendUploadAction(form);
     }, t("attach.docSent"));
 

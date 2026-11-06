@@ -17,6 +17,8 @@ export const authLimits = {
   activate: { window: 15 * 60, max: 10 },
   // Per account: far above what a person types or searches, low enough to stop a script.
   message: { window: 5 * 60, max: 30 },
+  // The parts of the documents sent in conversations (3 Mo each, 4 for a document of 10 Mo).
+  messagePart: { window: 10 * 60, max: 40 },
   talentSearch: { window: 10 * 60, max: 60 },
   experienceLogo: { window: 60 * 60, max: 20 },
   educationImage: { window: 60 * 60, max: 20 },

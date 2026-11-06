@@ -15,7 +15,14 @@ import { fileStorage, sniffDocumentType } from "@/server/storage";
 export const PHOTO_MAX_BYTES = 4 * 1024 * 1024;
 export const VOICE_MAX_BYTES = 3 * 1024 * 1024;
 export const VOICE_MAX_SECONDS = 300;
-export const UPLOAD_MAX_BYTES = 4 * 1024 * 1024;
+/**
+ * A document (a scanned diploma, an attestation) can weigh up to 10 Mo. The host refuses a request
+ * above 4,5 Mo, so the phone sends it in parts of 3 Mo at most (`storeUploadPart`), put back
+ * together here before the usual checks (`takeUploadParts`).
+ */
+export const UPLOAD_MAX_BYTES = 10 * 1024 * 1024;
+export const UPLOAD_PART_BYTES = 3 * 1024 * 1024;
+export const UPLOAD_MAX_PARTS = Math.ceil(UPLOAD_MAX_BYTES / UPLOAD_PART_BYTES);
 
 export class MediaError extends Error {
   constructor(readonly code: "type" | "size" | "empty") {
@@ -135,6 +142,71 @@ export async function storeUpload(
       .trim()
       .slice(0, 120) || `document.${extension}`;
   return { key, name: clean, size: bytes.byteLength, type };
+}
+
+const partsPrefix = (userId: string, uploadId: string) => `parts/${userId}/${uploadId}/`;
+
+/** An upload's id, chosen by the phone: letters and digits only. */
+export const isUploadId = (value: string) => /^[a-z0-9]{16,40}$/i.test(value);
+
+/**
+ * One part of a document being sent, kept for its sender only until the document is sent. Parts
+ * left behind (a closed page, a lost connection) are cleared at the next document of the person.
+ */
+export async function storeUploadPart(
+  db: PrismaClient,
+  userId: string,
+  uploadId: string,
+  index: number,
+  bytes: Uint8Array,
+  now = new Date(),
+) {
+  if (!isUploadId(uploadId) || !Number.isInteger(index) || index < 0 || index >= UPLOAD_MAX_PARTS)
+    throw new MediaError("type");
+  if (bytes.byteLength === 0) throw new MediaError("empty");
+  if (bytes.byteLength > UPLOAD_PART_BYTES) throw new MediaError("size");
+  if (index === 0)
+    await db.storedFile.deleteMany({
+      where: {
+        key: { startsWith: `parts/${userId}/` },
+        createdAt: { lt: new Date(now.getTime() - 60 * 60 * 1000) },
+      },
+    });
+  await fileStorage(db).put(`${partsPrefix(userId, uploadId)}${index}`, {
+    contentType: "application/octet-stream",
+    bytes,
+  });
+}
+
+/** The parts of a document put back together (then removed), checked by `storeUpload` after. */
+export async function takeUploadParts(
+  db: PrismaClient,
+  userId: string,
+  uploadId: string,
+  count: number,
+): Promise<Uint8Array> {
+  if (!isUploadId(uploadId) || !Number.isInteger(count) || count < 1 || count > UPLOAD_MAX_PARTS)
+    throw new MediaError("type");
+  const storage = fileStorage(db);
+  const parts: Uint8Array[] = [];
+  try {
+    for (let index = 0; index < count; index++) {
+      const part = await storage.get(`${partsPrefix(userId, uploadId)}${index}`);
+      if (!part) throw new MediaError("empty");
+      parts.push(part.bytes);
+    }
+  } finally {
+    await storage.removePrefix(partsPrefix(userId, uploadId));
+  }
+  const total = parts.reduce((sum, part) => sum + part.byteLength, 0);
+  if (total > UPLOAD_MAX_BYTES) throw new MediaError("size");
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const part of parts) {
+    bytes.set(part, offset);
+    offset += part.byteLength;
+  }
+  return bytes;
 }
 
 /** The keys a message's payload points to, in the order they are shown. */

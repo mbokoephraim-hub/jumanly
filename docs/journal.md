@@ -5605,3 +5605,10 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 ## 2026-11-05 · Agenda recruteur : « + Planifier » dans Mois
 
 - Un bouton « + Planifier » au-dessus du calendrier ouvre trois choix : un entretien, une vérification de documents (vers À planifier, à la bonne partie), une campagne de recrutement (vers « Publier une offre », où l'on programme à la dernière étape). Fin des quatre corrections de l'agenda (#389, #390, #391 et celle-ci).
+
+## 2026-11-06 · Messagerie : envoyer un diplôme ou une attestation de 10 Mo
+
+- Problème signalé par Ephraïm (talent et recruteur) : un diplôme ou une attestation scannés dépassent souvent 4 Mo. L'écran annonçait « 10 Mo au plus », mais le serveur refusait au-delà de 4 Mo et l'hébergeur (Vercel) coupe toute requête de plus de 4,5 Mo : l'envoi finissait sur « Ça n'a pas marché ».
+- Le téléphone envoie maintenant le document en parties de 3 Mo (`uploadPartAction`, rangées sous `parts/{personne}/{envoi}/`), puis le serveur les rassemble (`takeUploadParts`) et fait les contrôles habituels (type lu dans les octets, 10 Mo au plus). Les parties abandonnées sont effacées au document suivant de la personne (plus d'une heure). Limite `messagePart` : 40 parties en 10 minutes.
+- Une photo de document est d'abord réduite sur le téléphone (2 560 px, lisible). Le recruteur peut aussi envoyer un document Word, et voit « Fichier trop lourd : 10 Mo au plus » quand c'est le cas.
+- La lecture d'un fichier de la conversation est envoyée par morceaux de 1 Mo (même limite de 4,5 Mo pour les réponses).
