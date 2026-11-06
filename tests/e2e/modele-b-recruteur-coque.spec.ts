@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "./fixtures";
 import { logIn } from "./session";
+import { oneTestAtATimeOn } from "./baobab-lock";
 
 // Modèle B recruteur, lot M1 (docs/modele-b-recruteur, brief § 3 et § 4): the recruiter's phone
 // interface. Five tabs in icons only, Orbi floating in mint, the account by the avatar, the search
@@ -13,6 +14,8 @@ async function settled(page: Page) {
 
 test.describe("Modèle B recruteur · coque au téléphone", () => {
   test.skip(({ isMobile }) => !isMobile, "Le Modèle B est l'interface du téléphone.");
+  // Baobab Fintech changes under the company-space files: one at a time.
+  oneTestAtATimeOn("baobab");
 
   test("barre à cinq, Orbi, avatar et recherche en deux temps", async ({ page }) => {
     test.setTimeout(60_000);

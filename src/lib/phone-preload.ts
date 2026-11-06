@@ -18,6 +18,7 @@ const FILES = [
   /^\/app\/learn\/attestations\/[^/]+\/[^/]+$/,
   /^\/app\/learn\/[^/]+\/(support|modele-attestation)$/,
   /^\/app\/hire\/rapports\/export$/,
+  /^\/app\/hire\/offres\/[^/]+\/retenus\.csv$/,
   /^\/app\/hire\/entretiens\/[^/]+\/agenda$/,
 ];
 
@@ -71,6 +72,8 @@ export function preloadPath(href: string, current: string): string | null {
   if (RECORDED.some((pattern) => pattern.test(path))) return null;
   if (LIVE.some((pattern) => pattern.test(path))) return null;
   if (url.searchParams.has("postuler")) return null;
+  // The summary beside the « Tableau Orbi » is a logged consultation (06/11/2026).
+  if (/\/tableau$/.test(path) && url.searchParams.has("fiche")) return null;
   return `${path}${url.search}`;
 }
 

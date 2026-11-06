@@ -213,6 +213,8 @@ const hireMatrix: { plans: string[]; rows: Row[] } = {
     // verification of the retained with the standard message, then custom models from Company Plus.
     lv("hire.ats.filters", "simple", "all", "all", "all", "all", "all"),
     lv("hire.verification", "none", "standard", "standard", "standard", "custom", "custom"),
+    // « Poids du score » of an offer (évaluation recruteur, 06/11/2026, as decided on 01/11/2026).
+    b("hire.matching.weights", false, false, false, false, true, true),
     b("hire.shortlist", false, true, true, true, true, true),
     b("hire.collaboration", false, false, true, true, true, true),
     b("hire.scorecards", false, false, true, true, true, true),

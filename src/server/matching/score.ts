@@ -407,3 +407,23 @@ export function withSkill(
     certifiedSkillIds: [...profile.certifiedSkillIds, skill.skillId],
   };
 }
+
+/**
+ * The same explanation with other weights (« Poids du score » of an offer, 06/11/2026): each
+ * criterion keeps what was found (its value), only its weight changes, so the score stays
+ * deterministic and every « Pourquoi ? » still holds.
+ */
+export function reweighted(explanation: MatchExplanation, weights: Weights): MatchExplanation {
+  const criteria = explanation.criteria.map((item) => ({
+    ...item,
+    weight: Math.max(0, weights.values[item.key] ?? 0),
+  }));
+  const score = scoreFromCriteria(criteria);
+  return {
+    ...explanation,
+    score,
+    band: bandFor(score),
+    weightsVersion: weights.version,
+    criteria,
+  };
+}

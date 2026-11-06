@@ -4,12 +4,14 @@ import { languageRank } from "@/server/matching/normalize";
 import {
   bandFor,
   DEFAULT_WEIGHTS,
+  reweighted,
   scoreFromCriteria,
   scoreMatch,
   skillCoverage,
   withSkill,
 } from "@/server/matching/score";
 import type { NormalizedJob, NormalizedProfile } from "@/server/matching/types";
+import { weightsForJob } from "@/server/matching/service";
 
 const now = new Date("2026-10-14T10:00:00Z");
 
@@ -211,6 +213,30 @@ describe("Score de compatibilité", () => {
       value: 1,
       status: "met",
     });
+  });
+});
+
+describe("Poids du score d'une offre (06/11/2026)", () => {
+  it("garde ce qui a été trouvé et ne change que les poids", () => {
+    const base = score();
+    const onlyRequired = Object.fromEntries(
+      Object.keys(DEFAULT_WEIGHTS.values).map((key) => [key, key === "skills_required" ? 100 : 0]),
+    );
+    const weights = weightsForJob(DEFAULT_WEIGHTS, onlyRequired);
+    expect(weights.version).not.toBe(DEFAULT_WEIGHTS.version);
+    const next = reweighted(base, weights);
+    const required = base.criteria.find((item) => item.key === "skills_required")!;
+    expect(next.score).toBe(Math.round(100 * required.value));
+    expect(next.criteria.map((item) => item.value)).toEqual(
+      base.criteria.map((item) => item.value),
+    );
+    // The same weights give back the same score.
+    expect(reweighted(next, DEFAULT_WEIGHTS).score).toBe(base.score);
+  });
+
+  it("revient aux poids de Jumanly sans poids valables", () => {
+    expect(weightsForJob(DEFAULT_WEIGHTS, null)).toBe(DEFAULT_WEIGHTS);
+    expect(weightsForJob(DEFAULT_WEIGHTS, { skills_required: "x" })).toBe(DEFAULT_WEIGHTS);
   });
 });
 

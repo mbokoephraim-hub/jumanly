@@ -140,6 +140,10 @@ export async function saveFiltersAction(formData: FormData) {
           source: text("source"),
           state: text("state"),
           days: number("days"),
+          language: text("language"),
+          education: text("education"),
+          availability: text("availability"),
+          contract: text("contract"),
         },
   );
   if (!parsed.success) go(back);

@@ -8,7 +8,13 @@ import "server-only";
 import { runReviewReminders } from "@/server/services/hire-review";
 import { runInterviewReminders } from "@/server/services/interview-reminders";
 import { db } from "@/server/db";
-import { mailVerificationRequest, mailEnding } from "@/server/hire-emails";
+import { fileStorage } from "@/server/storage";
+import {
+  mailEnding,
+  mailNewApplicationsDigest,
+  mailVerificationRequest,
+} from "@/server/hire-emails";
+import { dueApplicationDigests } from "@/server/services/application-digest";
 import { reportError } from "@/server/observability";
 import { t as translate } from "../../emails/_components/translator";
 import { runScheduledAts } from "@/server/services/hire-ats";
@@ -18,6 +24,7 @@ import { runScheduledOpenings } from "@/server/services/job-schedule";
 import {
   piecesHref,
   runVerificationCheckReminders,
+  purgeEndedVerificationPieces,
   runVerificationReminders,
 } from "@/server/services/hire-verification";
 
@@ -54,6 +61,13 @@ export async function runHireJobs(now = new Date()) {
       date: item.dueAt,
       href: piecesHref(item.applicationId),
     });
+  // The pieces of the offers ended 90 days ago are erased (06/11/2026).
+  const purgedPieces = await purgeEndedVerificationPieces(db, fileStorage(db), now).catch(
+    (error) => {
+      reportError(error);
+      return 0;
+    },
+  );
   // « À revoir »: the candidates set aside come back after 3 days (03/11/2026).
   const reviewReminders = await runReviewReminders(db, now).catch((error) => {
     reportError(error);
@@ -74,14 +88,27 @@ export async function runHireJobs(now = new Date()) {
     reportError(error);
     return 0;
   });
+  // « Un résumé par jour » of the new applications, for those who chose it (06/11/2026).
+  const digests = await dueApplicationDigests(db, now).catch((error) => {
+    reportError(error);
+    return [];
+  });
+  for (const digest of digests)
+    await mailNewApplicationsDigest(digest.to, {
+      org: digest.org,
+      jobs: digest.jobs,
+      href: "/app/hire/candidats",
+    });
   return {
     ats,
     reviewReminders,
+    applicationDigests: digests.length,
     interviewReminders,
     checkReminders,
     scheduledOpenings: openings.length,
     endingReminders: reminders.length,
     expiredJoinRequests,
     verificationReminders: pieces.length,
+    purgedPieces,
   };
 }

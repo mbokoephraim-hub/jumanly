@@ -34,7 +34,7 @@ export default async function PiecesPage({
   const format = await getFormatter();
   const data = await myVerification(db, user.id, id.slice(0, 60));
   if (!data) notFound();
-  const { request, certificates, educations } = data;
+  const { request, certificates, educations, experiences } = data;
   const { job } = request.application;
   const open = request.application.status === "active";
   const error = one(query.erreur);
@@ -114,7 +114,21 @@ export default async function PiecesPage({
                         required
                       />
                     </label>
+                    {experiences.length > 0 ? (
+                      <label className="jm-pieces-champ">
+                        {t("referent.experience")}
+                        <select name="experience" defaultValue="">
+                          <option value="">{t("referent.experienceNone")}</option>
+                          {experiences.map((experience) => (
+                            <option key={experience.id} value={experience.id}>
+                              {[experience.title, experience.company].join(" · ")}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    ) : null}
                     <p className="jm-pieces-meta">{t("referent.consent")}</p>
+                    <p className="jm-pieces-meta">{t("referent.form")}</p>
                   </>
                 ) : (
                   <>

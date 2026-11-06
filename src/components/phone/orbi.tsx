@@ -111,6 +111,26 @@ export function PhoneOrbi({
   }, [tab]);
   const current = texts.tabs[shownTab] ?? { from: texts.title, questions: [] };
 
+  // The bubble shows at the top of a page only: once the page scrolls, it would cover the cards
+  // and their buttons (évaluation recruteur, 06/11/2026). The disc stays.
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- a new page starts at the top
+    setScrolled(false);
+    const listen = (event: Event) => {
+      const target = event.target;
+      const box =
+        target instanceof Element
+          ? target
+          : (document.scrollingElement ?? document.documentElement);
+      // A row of chips scrolled sideways says nothing about the page.
+      if (box.scrollHeight - box.clientHeight < 8) return;
+      setScrolled(box.scrollTop > 48);
+    };
+    document.addEventListener("scroll", listen, { capture: true, passive: true });
+    return () => document.removeEventListener("scroll", listen, { capture: true });
+  }, [pathname]);
+
   const ask = (question: string) => {
     const clean = question.trim();
     if (clean.length < 2) {
@@ -189,7 +209,7 @@ export function PhoneOrbi({
       <div className="nb-orbi-fab" hidden={tab === null} data-dessus={above ? "" : undefined}>
         {/* No bubble on Formation: it covered « Pour vos offres », and Orbi's advice is already
             in the « Reprendre » card (Ephraïm, 01/11/2026). */}
-        {current.bubble && !above && shownTab !== "formation" ? (
+        {current.bubble && !above && !scrolled && shownTab !== "formation" ? (
           <button type="button" className="nb-orbi-bulle" onClick={() => openWith(current.bubble)}>
             {current.bubble}
           </button>

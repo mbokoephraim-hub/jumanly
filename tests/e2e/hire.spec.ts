@@ -7,6 +7,10 @@ import { openConfirmationLink } from "./outbox";
 import { demo, logIn, testEmail } from "./session";
 import { openCandidateFile } from "./hire-wide";
 import { phoneRecruiterWithPage } from "./recruiter-phone";
+import { oneTestAtATimeOn } from "./baobab-lock";
+
+// Shared demo data, changed on the computer and on the phone at the same time: one test at a time.
+oneTestAtATimeOn("horizon");
 
 /** A new RH account with its organization (inscription, profil « Professionnel RH », Free). */
 async function signUpRecruiter(page: Page, email: string, orgName: string) {

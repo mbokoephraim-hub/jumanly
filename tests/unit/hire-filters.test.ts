@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   activeFilters,
   allowedFilters,
+  filterFactsOf,
   filtersLevelOf,
   parseFilters,
   passes,
@@ -32,6 +33,38 @@ describe("filtres du pipeline", () => {
     expect(passes(row, { confidence: "high" }, now)).toBe(false);
     expect(passes(row, { state: "nouveaux", days: 7 }, now)).toBe(true);
     expect(passes(row, { days: 1 }, now)).toBe(false);
+  });
+
+  it("langue, diplôme, disponibilité et contrat lus sur le profil", () => {
+    const facts = filterFactsOf(
+      {
+        languages: [
+          { code: "en", level: "fluent" },
+          { code: "sw", level: "basic" },
+        ],
+        studyLevel: "bachelor",
+        availability: "listening",
+        availableFrom: new Date("2026-11-20T00:00:00Z"),
+        desiredContracts: ["cdi"],
+        educations: [{ level: "master" }],
+      },
+      now,
+    );
+    expect(facts.education).toBe(4);
+    expect(facts.availableIn).toBe(19);
+    const person = { ...row, ...facts };
+    expect(passes(person, { language: "anglais" }, now)).toBe(true);
+    expect(passes(person, { language: "swa" }, now)).toBe(true);
+    expect(passes(person, { language: "portugais" }, now)).toBe(false);
+    expect(passes(person, { education: "master" }, now)).toBe(true);
+    expect(passes(person, { education: "doctorate" }, now)).toBe(false);
+    expect(passes(person, { availability: "month" }, now)).toBe(true);
+    expect(passes(person, { availability: "now" }, now)).toBe(false);
+    expect(passes(person, { contract: "cdi" }, now)).toBe(true);
+    expect(passes(person, { contract: "cdd" }, now)).toBe(false);
+    // No contract given: still shown.
+    expect(passes({ ...person, contracts: [] }, { contract: "cdd" }, now)).toBe(true);
+    expect(allowedFilters({ language: "en", scoreMin: 50 }, "simple")).toEqual({ language: "en" });
   });
 
   it("ignore ce qui est illisible", () => {

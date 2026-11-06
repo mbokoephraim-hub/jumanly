@@ -13,6 +13,7 @@ import {
   moderationEmail,
   documentRequestEmail,
   newApplicationEmail,
+  newApplicationsDigestEmail,
   newMessageEmail,
   notSelectedEmail,
   orgInviteEmail,
@@ -36,6 +37,11 @@ const deliver = (to: string, email: HireEmail) =>
 
 export const mailNewApplication = (to: Person, input: Parameters<typeof newApplicationEmail>[1]) =>
   deliver(to.email, newApplicationEmail(to.firstName, input));
+
+export const mailNewApplicationsDigest = (
+  to: Person,
+  input: Parameters<typeof newApplicationsDigestEmail>[1],
+) => deliver(to.email, newApplicationsDigestEmail(to.firstName, input));
 
 export const mailStatusChange = (to: Person, input: Parameters<typeof statusChangeEmail>[1]) =>
   deliver(to.email, statusChangeEmail(to.firstName, input));

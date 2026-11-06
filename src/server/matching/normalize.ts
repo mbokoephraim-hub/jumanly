@@ -150,6 +150,7 @@ export const jobSelect = {
   contractType: true,
   closesAt: true,
   updatedAt: true,
+  matchingWeights: true,
   skills: {
     select: {
       skillId: true,

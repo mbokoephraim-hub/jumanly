@@ -556,6 +556,32 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
     });
   };
 
+  /**
+   * « Passer à la publication » (évaluation recruteur, 06/11/2026): once the essentials are in
+   * (the post, the skills, the place, the responsibilities), steps 5 to 9 are optional; the
+   * recruiter goes straight to the last step, which still asks how and when to publish.
+   */
+  const essentialsDone = [1, 2, 3, 4].every((at) => missing(at) === null);
+  const skipToPublish = () => {
+    if (pending) return;
+    const problem = missing(step) ?? [1, 2, 3, 4].map(missing).find(Boolean) ?? null;
+    if (problem) return setError(problem);
+    if (!feedTitle && !feedText) {
+      setFeedTitle(w("feedTitleDefault", { title }).slice(0, FEED_TITLE_MAX));
+      setFeedText(
+        w("feedTextDefault", { org: data.org.name, count: openings, city: place }).slice(
+          0,
+          FEED_BODY_MAX,
+        ),
+      );
+    }
+    start(async () => {
+      const id = await save();
+      if (!id) return;
+      goTo(STEPS, id);
+    });
+  };
+
   const keepDraft = () =>
     start(async () => {
       if (title.trim().length < 3) {
@@ -1510,6 +1536,16 @@ export function PhoneRecruiterPublish({ data }: { data: RhPublishData }) {
           <p className="nb-erreur" role="alert">
             {error}
           </p>
+        ) : null}
+        {step >= 4 && step <= 7 && essentialsDone ? (
+          <button
+            type="button"
+            className="nb-rh-pub-sauter"
+            aria-disabled={pending || undefined}
+            onClick={skipToPublish}
+          >
+            {w("skipToPublish")}
+          </button>
         ) : null}
         <button type="button" className="nb-bp" aria-disabled={pending || undefined} onClick={next}>
           {step === 8

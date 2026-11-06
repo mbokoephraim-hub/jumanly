@@ -1865,6 +1865,20 @@
   min-height: 100dvh;
   padding-bottom: 130px;
 }
+/* « Passer à la publication » above Continuer, once the essentials are in (06/11/2026). */
+.nb-rh-offre-pub:has(.nb-rh-pub-sauter) {
+  padding-bottom: 180px;
+}
+.nb-rh-pub-sauter {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin-bottom: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--nb-lime-t);
+  text-align: center;
+}
 .nb-rh-pub-tete {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -9199,4 +9213,53 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-ag-fixer input {
   border-radius: 18px;
   border: 1px solid var(--nb-filet-fort);
   background: var(--nb-carte);
+}
+
+/* « Poids du score » of an offer (évaluation recruteur, 06/11/2026). */
+.jm-poids-ligne {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.jm-poids-ligne input {
+  max-width: 96px;
+}
+
+/* « Tableau Orbi »: the summary opens in a panel on the right (évaluation recruteur, 06/11/2026). */
+.jm-tableau-split[data-panneau] {
+  display: grid;
+  gap: 20px;
+}
+@media (min-width: 1100px) {
+  .jm-tableau-split[data-panneau] {
+    grid-template-columns: minmax(0, 1fr) 360px;
+    align-items: start;
+  }
+  .jm-tableau-panneau {
+    position: sticky;
+    top: 16px;
+  }
+}
+.jm-tableau-panneau > header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+.jm-tableau-faits {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 14px;
+  margin: 12px 0;
+}
+.jm-tableau-faits dt {
+  opacity: 0.75;
+}
+.jm-tableau-faits dd {
+  margin: 0;
+  font-weight: 600;
+}
+.jm-tableau-t a[aria-current="true"] {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }

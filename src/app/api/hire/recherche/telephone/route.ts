@@ -10,7 +10,9 @@ import { RH_SEARCH_SCOPES, recruiterPhoneSearch } from "@/server/services/hire-p
 import { RH_TALENT_SEARCH, rhSearchTalents } from "@/server/services/hire-phone-talents";
 import {
   RH_APPLICATION_SEARCH,
+  RH_INTERVIEW_SEARCH,
   rhSearchApplications,
+  rhSearchInterviews,
 } from "@/server/services/hire-phone-candidatures";
 
 const querySchema = z.object({
@@ -79,6 +81,55 @@ export async function GET(request: Request) {
                   initials: initials(row.name),
                   score: row.score,
                   unseen: row.unseen,
+                })),
+              },
+            ]
+          : [],
+      },
+      { headers: { "Cache-Control": "private, no-store" } },
+    );
+  }
+  // Agenda (évaluation recruteur, 06/11/2026): the interviews of the organization's offers, by
+  // the candidate's name or the job; a result opens the candidate's file, where the interview is.
+  if (params.get("onglet") === "agenda") {
+    const q = (params.get("q") ?? "").trim().slice(0, 100);
+    if (!q) return NextResponse.json({ groups: [] });
+    const by = RH_INTERVIEW_SEARCH.find((value) => value === params.get("dans")) ?? "tout";
+    const [rows, format] = await Promise.all([
+      rhSearchInterviews(
+        db,
+        { userId: user.id, organizationId: space.organizationId, role: space.role },
+        q,
+        by,
+      ),
+      getFormatter(),
+    ]);
+    return NextResponse.json(
+      {
+        groups: rows.length
+          ? [
+              {
+                title: t("interviews.results", { count: rows.length }),
+                items: rows.map((row) => ({
+                  href: `/app/hire/candidats/${row.applicationId}`,
+                  title: row.name,
+                  sub: row.jobTitle,
+                  sub2: [
+                    row.when
+                      ? format.dateTime(row.when, {
+                          weekday: "short",
+                          day: "numeric",
+                          month: "short",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      : t("interviews.noDate"),
+                    t(`interviews.mode.${row.mode}`),
+                    row.confirmed ? null : t("interviews.pending"),
+                  ]
+                    .filter(Boolean)
+                    .join(" · "),
+                  initials: initials(row.name),
                 })),
               },
             ]

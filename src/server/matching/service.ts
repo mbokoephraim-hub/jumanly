@@ -40,6 +40,21 @@ export async function activeWeights(db: PrismaClient, now = new Date()): Promise
   return parsed?.success ? { version: row!.version, values: parsed.data } : DEFAULT_WEIGHTS;
 }
 
+/**
+ * The weights of an offer (« Poids du score », 06/11/2026): its own when the team set them, else
+ * the active ones. The version names the offer's weights, so cached results are recomputed.
+ */
+export function weightsForJob(active: Weights, jobWeights: Prisma.JsonValue | null | undefined) {
+  if (!jobWeights) return active;
+  const parsed = weightsSchema.safeParse(jobWeights);
+  if (!parsed.success || Object.values(parsed.data).every((value) => value === 0)) return active;
+  const digest = createHash("sha256")
+    .update(JSON.stringify(criterionKeys.map((key) => parsed.data[key])))
+    .digest("hex");
+  const version = `offre-${digest.slice(0, 16)}`;
+  return { version, values: parsed.data } satisfies Weights;
+}
+
 // ─── Embeddings (pgvector) ───────────────────────────────────────────────────
 
 const hashOf = (text: string) => createHash("sha256").update(text).digest("hex").slice(0, 32);
@@ -174,10 +189,12 @@ async function scoreRows(db: PrismaClient, profile: ProfileRow, jobs: JobRow[], 
   for (const job of jobs) {
     explanations.set(
       job.id,
-      scoreMatch(normalized, normalizeJob(job, jobVectors.get(job.id) ?? null), weights, {
-        now,
-        coursesBySkill: courses,
-      }),
+      scoreMatch(
+        normalized,
+        normalizeJob(job, jobVectors.get(job.id) ?? null),
+        weightsForJob(weights, job.matchingWeights),
+        { now, coursesBySkill: courses },
+      ),
     );
   }
   await saveResults(db, profile.id, explanations);
@@ -416,7 +433,7 @@ export async function gapCourses(
     db.job.findUnique({ where: { id: jobId }, select: jobSelect }),
   ]);
   if (!profile || !job || !profile.matchingEnabled || profile.skills.length === 0) return [];
-  const [weights, profileVectors, jobVectors, courses] = await Promise.all([
+  const [active, profileVectors, jobVectors, courses] = await Promise.all([
     activeWeights(db, now),
     embeddingsFor(db, "profile", [{ id: profile.id, text: profileText(profile) }]),
     embeddingsFor(db, "job", [{ id: job.id, text: jobText(job) }]),
@@ -425,6 +442,7 @@ export async function gapCourses(
       job.skills.map((skill) => skill.skillId),
     ),
   ]);
+  const weights = weightsForJob(active, job.matchingWeights);
   const normalizedProfile = normalizeProfile(profile, now, profileVectors.get(profile.id) ?? null);
   const normalizedJob = normalizeJob(job, jobVectors.get(job.id) ?? null);
   const base = scoreMatch(normalizedProfile, normalizedJob, weights, {

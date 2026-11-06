@@ -19,6 +19,8 @@ import {
   verificationPieces,
 } from "@/server/services/hire-verification";
 import { fileStorage } from "@/server/storage";
+import { sendReferenceRequest } from "@/server/reference-emails";
+import { createReferenceCheck, ReferenceCheckError } from "@/server/services/reference-check";
 
 /**
  * « Dossier de vérification ». Order of CLAUDE.md: validate → session → role and right
@@ -84,6 +86,7 @@ export async function submitPieceAction(formData: FormData) {
     educationId: text("education"),
     referentName: text("referentName"),
     referentEmail: text("referentEmail"),
+    experienceId: text("experience"),
     note: text("note"),
   });
   if (!input.success) redirect(`${back}?erreur=formulaire`);
@@ -93,11 +96,38 @@ export async function submitPieceAction(formData: FormData) {
     upload instanceof File && upload.size > 0
       ? { name: upload.name, bytes: new Uint8Array(await upload.arrayBuffer()) }
       : null;
+  let referenceAsk: Awaited<ReturnType<typeof submitPiece>>["referenceAsk"] = null;
   try {
-    await submitPiece(db, fileStorage(db), user.id, { ...input.data, file });
+    ({ referenceAsk } = await submitPiece(db, fileStorage(db), user.id, {
+      ...input.data,
+      file,
+    }));
   } catch (error) {
     if (error instanceof VerificationError) redirect(`${back}?erreur=${error.code}`);
     throw error;
+  }
+  // The referent gets the confirmation form on their own (évaluation recruteur, 06/11/2026): the
+  // same one-click page as « Faire vérifier ». A request already running is left as it is.
+  if (referenceAsk && input.data.referentName && input.data.referentEmail) {
+    const referent = { name: input.data.referentName, email: input.data.referentEmail };
+    try {
+      const { token } = await createReferenceCheck(db, {
+        profileId: referenceAsk.profileId,
+        ownerEmail: user.email,
+        target: { experienceId: referenceAsk.experienceId },
+        referent,
+      });
+      await sendReferenceRequest({
+        to: referent.email,
+        referentName: referent.name,
+        personName: [user.firstName, user.lastName].filter(Boolean).join(" ") || user.name,
+        title: referenceAsk.title,
+        meta: referenceAsk.meta,
+        token,
+      }).catch((error) => reportError(error, { message: "E-mail au référent non envoyé" }));
+    } catch (error) {
+      if (!(error instanceof ReferenceCheckError)) throw error;
+    }
   }
   refresh();
   redirect(`${back}?ok=1`);

@@ -15,7 +15,12 @@ import {
   requestPlan,
   saveRhProfile,
 } from "@/server/services/hire-phone-account";
-import { mutedAfter, notify, RECRUITER_SWITCHES } from "@/server/services/notifications";
+import {
+  mutedAfter,
+  NEW_APPLICATION_DIGEST,
+  notify,
+  RECRUITER_SWITCHES,
+} from "@/server/services/notifications";
 import { inviteMembers } from "@/server/services/organization";
 
 /**
@@ -92,6 +97,8 @@ export async function rhRequestPlanAction(formData: FormData) {
 const switchesInput = z.object({
   categories: z.array(z.enum(RECRUITER_SWITCHES)),
   emails: z.boolean(),
+  /** « Un résumé par jour » of the new applications instead of one e-mail each. */
+  digest: z.boolean().optional(),
 });
 
 /** « Notifications » of the recruiter (planche Recruteur-compte-notifications), saved at once. */
@@ -110,8 +117,12 @@ export async function rhSaveNotificationsAction(
     data: {
       notificationsMuted: mutedAfter(
         current.notificationsMuted,
-        RECRUITER_SWITCHES,
-        new Set(parsed.data.categories),
+        [...RECRUITER_SWITCHES, NEW_APPLICATION_DIGEST],
+        new Set<string>([
+          ...parsed.data.categories,
+          // Kept in the « muted » list: present means the summary is chosen.
+          ...(parsed.data.digest ? [] : [NEW_APPLICATION_DIGEST]),
+        ]),
       ),
       notificationEmails: parsed.data.emails,
     },

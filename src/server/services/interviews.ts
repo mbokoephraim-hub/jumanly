@@ -75,6 +75,10 @@ export const interviewSchema = z
   .superRefine((value, ctx) => {
     if (value.mode === "onsite" && !value.address)
       ctx.addIssue({ code: "custom", path: ["address"], message: "required" });
+    // A video interview needs its link in the invitation: there is no way to add it later
+    // (évaluation recruteur 06/11/2026: the same rule as the Agenda's window).
+    if (value.mode === "video" && !value.link)
+      ctx.addIssue({ code: "custom", path: ["link"], message: "required" });
   });
 
 export type ScheduleResult =

@@ -211,6 +211,11 @@ export const RECRUITER_SWITCHES = [
   "rh.team",
 ] as const;
 export type RecruiterSwitch = (typeof RECRUITER_SWITCHES)[number];
+/**
+ * Stored beside the muted categories (évaluation recruteur, 06/11/2026): the new applications
+ * arrive by e-mail once a day, in a summary, instead of one e-mail each.
+ */
+export const NEW_APPLICATION_DIGEST = "mail.rh.applications.daily";
 
 export function recruiterCategoryOf(type: NotificationType): RecruiterNotificationCategory | null {
   return (
@@ -443,7 +448,32 @@ export async function hiringTeam(db: PrismaClient, organizationId: string) {
       status: "active",
       role: { in: ["org_owner", "org_admin", "recruiter"] },
     },
-    select: { user: { select: { id: true, email: true, firstName: true } } },
+    select: {
+      user: {
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          notificationEmails: true,
+          notificationsMuted: true,
+        },
+      },
+    },
   });
   return members.map((member) => member.user);
+}
+
+/**
+ * Who of the hiring team gets the e-mail of each new application: e-mails on, « Nouvelle
+ * candidature » not muted, and no daily summary chosen instead.
+ */
+export function mailsEachApplication(member: {
+  notificationEmails: boolean;
+  notificationsMuted: string[];
+}) {
+  return (
+    member.notificationEmails &&
+    !member.notificationsMuted.includes("rh.applications") &&
+    !member.notificationsMuted.includes(NEW_APPLICATION_DIGEST)
+  );
 }

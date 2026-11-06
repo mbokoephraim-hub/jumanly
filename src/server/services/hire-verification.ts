@@ -330,7 +330,7 @@ export async function myVerification(db: PrismaClient, userId: string, applicati
     },
   });
   if (!request) return null;
-  const [certificates, educations] = await Promise.all([
+  const [certificates, educations, experiences] = await Promise.all([
     db.certificate.findMany({
       where: { revokedAt: null, enrollment: { userId } },
       orderBy: { issuedAt: "desc" },
@@ -341,8 +341,13 @@ export async function myVerification(db: PrismaClient, userId: string, applicati
       orderBy: [{ endYear: { sort: "desc", nulls: "first" } }],
       select: { id: true, degree: true, school: true, endYear: true },
     }),
+    db.experience.findMany({
+      where: { profile: { userId } },
+      orderBy: { startDate: "desc" },
+      select: { id: true, title: true, company: true },
+    }),
   ]);
-  return { request, certificates, educations };
+  return { request, certificates, educations, experiences };
 }
 
 export const submitSchema = z.object({
@@ -351,6 +356,8 @@ export const submitSchema = z.object({
   educationId: z.string().max(60).optional(),
   referentName: z.string().trim().max(120).optional(),
   referentEmail: z.string().trim().email().max(200).optional().or(z.literal("")),
+  /** The experience the referent confirms: the form leaves for them on its own (06/11/2026). */
+  experienceId: z.string().max(60).optional(),
   note: z.string().trim().max(500).optional(),
 });
 export type SubmitInput = z.infer<typeof submitSchema> & {
@@ -414,10 +421,43 @@ export async function submitPiece(
     if (!education) throw new VerificationError("invalid");
     data.educationId = input.educationId;
   }
+  let referenceAsk: {
+    experienceId: string;
+    title: string;
+    meta: string;
+    profileId: string;
+  } | null = null;
   if (item.kind === "referent") {
     if (!input.referentName || !input.referentEmail) throw new VerificationError("invalid");
     data.referentName = input.referentName;
     data.referentEmail = input.referentEmail.toLowerCase();
+    if (input.experienceId) {
+      const experience = await db.experience.findFirst({
+        where: { id: input.experienceId, profile: { userId } },
+        select: {
+          id: true,
+          profileId: true,
+          title: true,
+          company: true,
+          startDate: true,
+          endDate: true,
+          location: true,
+        },
+      });
+      if (!experience) throw new VerificationError("invalid");
+      referenceAsk = {
+        experienceId: experience.id,
+        profileId: experience.profileId,
+        title: `${experience.title} · ${experience.company}`,
+        meta: [
+          String(experience.startDate.getUTCFullYear()),
+          experience.endDate ? String(experience.endDate.getUTCFullYear()) : null,
+          experience.location,
+        ]
+          .filter(Boolean)
+          .join(" · "),
+      };
+    }
   }
   if (input.note) data.note = input.note;
   const carries =
@@ -441,7 +481,7 @@ export async function submitPiece(
       createdAt: now,
     },
   });
-  return { applicationId: item.request.application.id };
+  return { applicationId: item.request.application.id, referenceAsk };
 }
 
 /**
@@ -639,4 +679,54 @@ export async function runVerificationCheckReminders(db: PrismaClient, now = new 
     sent += 1;
   }
   return sent;
+}
+
+/** Pieces are erased this long after the offer has ended (évaluation recruteur, 06/11/2026). */
+export const PIECES_KEPT_DAYS = 90;
+
+/**
+ * Erases the pieces of the offers ended for {@link PIECES_KEPT_DAYS} days (hourly task): the
+ * files, the referents' contacts and the notes. What stays is that a piece was received and when,
+ * so the history of the application still reads. Diplomas and referents are personal data that the
+ * company no longer needs once the recruitment is over.
+ */
+export async function purgeEndedVerificationPieces(
+  db: PrismaClient,
+  storage: FileStorage,
+  now = new Date(),
+) {
+  const before = new Date(now.getTime() - PIECES_KEPT_DAYS * 86_400_000);
+  const items = await db.verificationItem.findMany({
+    where: {
+      OR: [{ fileKey: { not: null } }, { referentEmail: { not: null } }, { note: { not: null } }],
+      request: {
+        application: {
+          job: {
+            OR: [
+              { status: { in: ["closed", "archived"] }, updatedAt: { lt: before } },
+              { closesAt: { lt: before } },
+            ],
+          },
+        },
+      },
+    },
+    select: { id: true, fileKey: true },
+    take: 500,
+  });
+  for (const item of items) {
+    if (item.fileKey) await storage.remove(item.fileKey);
+    await db.verificationItem.update({
+      where: { id: item.id },
+      data: {
+        fileKey: null,
+        fileName: null,
+        contentType: null,
+        referentName: null,
+        referentEmail: null,
+        note: null,
+        checks: [],
+      },
+    });
+  }
+  return items.length;
 }

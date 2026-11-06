@@ -35,6 +35,33 @@ export function newApplicationEmail(
   };
 }
 
+/**
+ * « Un résumé par jour » (évaluation recruteur, 06/11/2026): the new applications of the last day
+ * in one e-mail, one line per offer, instead of one e-mail per application.
+ */
+export function newApplicationsDigestEmail(
+  firstName: string | null | undefined,
+  input: { org: string; jobs: { title: string; count: number }[]; href: string },
+): HireEmail {
+  const total = input.jobs.reduce((sum, job) => sum + job.count, 0);
+  return {
+    subject: t("mail.newApplicationsDigest.subject", { count: total }),
+    props: {
+      essential: false,
+      preview: t("mail.newApplicationsDigest.preheader", { org: input.org }),
+      greeting: greeting(firstName),
+      paragraphs: [
+        ...input.jobs.map((job) =>
+          t("mail.newApplication.p1.batch", { count: job.count, jobTitle: job.title }),
+        ),
+        t("mail.newApplication.p2", { org: input.org }),
+        t("mail.newApplicationsDigest.settings"),
+      ],
+      cta: { label: t("mail.newApplicationsDigest.cta"), href: url(input.href) },
+    },
+  };
+}
+
 export function applicationSentEmail(
   firstName: string | null | undefined,
   input: { jobTitle: string; company: string; date: Date },

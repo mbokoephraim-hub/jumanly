@@ -17,7 +17,11 @@ import {
   eraseAccount,
   ownedOrganizations,
 } from "@/server/services/account-deletion";
-import { mutedAfter, NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
+import {
+  mutedAfter,
+  NEW_APPLICATION_DIGEST,
+  NOTIFICATION_CATEGORIES,
+} from "@/server/services/notifications";
 
 /**
  * Where each part of the settings lives (planche talent-4 § 8): the list, then one page per
@@ -278,6 +282,25 @@ export async function updateNotifications(formData: FormData) {
       notificationsMuted: mutedAfter(user.notificationsMuted, NOTIFICATION_CATEGORIES, kept),
       notificationEmails: parsed.data.emails === "1",
       newsletter: parsed.data.newsletter === "on",
+    },
+  });
+  back("notifications", { ok: "1" });
+}
+
+/**
+ * « Nouvelles candidatures par e-mail » of a recruiter on the computer (évaluation recruteur,
+ * 06/11/2026): one e-mail each, or a summary once a day.
+ */
+export async function updateApplicationDigest(formData: FormData) {
+  const user = await requireUser("/app/parametres/notifications");
+  const daily = formData.get("digest") === "daily";
+  await db.user.update({
+    where: { id: user.id },
+    data: {
+      notificationsMuted: [
+        ...user.notificationsMuted.filter((key) => key !== NEW_APPLICATION_DIGEST),
+        ...(daily ? [NEW_APPLICATION_DIGEST] : []),
+      ],
     },
   });
   back("notifications", { ok: "1" });
