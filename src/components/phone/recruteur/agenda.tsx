@@ -211,7 +211,7 @@ export async function RhAgenda({
     const date = noonOf(key);
     return {
       key,
-      weekday: index === 0 ? t("today") : format.dateTime(date, { weekday: "short" }),
+      weekday: index === 0 ? t("sheet.today") : format.dateTime(date, { weekday: "short" }),
       num: String(Number(key.slice(8))),
       month: format.dateTime(date, { month: "short" }),
     };

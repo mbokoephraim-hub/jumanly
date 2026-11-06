@@ -15933,6 +15933,7 @@ Conventions :
 | `phoneRhAgenda.sheet.close` | Fermer |
 | `phoneRhAgenda.sheet.interviewTitle` | Planifier l'entretien |
 | `phoneRhAgenda.sheet.day` | Jour |
+| `phoneRhAgenda.sheet.today` | Auj. |
 | `phoneRhAgenda.sheet.mode` | Format |
 | `phoneRhAgenda.sheet.onsite` | Présentiel |
 | `phoneRhAgenda.sheet.video` | Visio |
