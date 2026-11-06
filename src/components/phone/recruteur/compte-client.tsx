@@ -488,7 +488,7 @@ export function RhProposeColleague({
   );
 }
 
-type Switches = { categories: Record<string, boolean>; emails: boolean };
+type Switches = { categories: Record<string, boolean>; emails: boolean; digest: boolean };
 
 /** « Notifications » of the recruiter (planche Recruteur-compte-notifications), saved at once. */
 export function RhNotificationSwitches({ initial }: { initial: Switches }) {
@@ -504,6 +504,7 @@ export function RhNotificationSwitches({ initial }: { initial: Switches }) {
           .filter(([, on]) => on)
           .map(([key]) => key as "messages"),
         emails: next.emails,
+        digest: next.digest,
       }).catch(() => null);
       if (result?.ok) showToast({ message: t("saved") });
       else setValue(before);
@@ -538,6 +539,12 @@ export function RhNotificationSwitches({ initial }: { initial: Switches }) {
       {row("emails", t("emails"), t("emailsLine"), value.emails, () =>
         change({ ...value, emails: !value.emails }),
       )}
+      {/* « Un résumé par jour »: only when the new applications come by e-mail (06/11/2026). */}
+      {value.emails && value.categories["rh.applications"]
+        ? row("digest", t("digest"), t("digestLine"), value.digest, () =>
+            change({ ...value, digest: !value.digest }),
+          )
+        : null}
       <p className="nb-rc-note">{t("note")}</p>
     </>
   );

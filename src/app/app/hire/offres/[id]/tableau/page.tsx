@@ -5,7 +5,7 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { MenuArt } from "@/components/site/menu-art";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
-import { HireError } from "@/server/services/hire";
+import { HireError, recordView } from "@/server/services/hire";
 import { atsBoard } from "@/server/services/hire-ats";
 import { classCounts, rankByClass } from "@/server/services/hire-classes";
 import { allowedFilters, blindName, parseFilters, passes } from "@/server/services/hire-filters";
@@ -67,6 +67,13 @@ export default async function TablePage({
   const base = `/app/hire/offres/${job.id}/tableau`;
   const sortHref = (key: Sort) =>
     `${base}?tri=${key}&ordre=${key === sort && descending ? "asc" : "desc"}`;
+  // « Fiche en panneau à droite » (évaluation recruteur, 06/11/2026): a name opens the summary
+  // beside the table, the order of the table is kept. Each opening is logged (golden rule 5).
+  const kept = `tri=${sort}&ordre=${descending ? "desc" : "asc"}`;
+  const openHref = (rowId: string) => `${base}?${kept}&fiche=${rowId}`;
+  const ficheId = typeof query.fiche === "string" ? query.fiche.slice(0, 60) : null;
+  const open = ficheId ? (ranked.find((row) => row.id === ficheId) ?? null) : null;
+  if (open) await recordView(db, ctx, open.id, now);
   const nameOf = (row: (typeof ranked)[number]) =>
     job.blindSort && !row.shortlisted
       ? t("blind.name", { index: blindName(ranked.indexOf(row)) })
@@ -103,77 +110,151 @@ export default async function TablePage({
           ))}
         </ul>
       ) : null}
-      <form id={compareForm} action={`/app/hire/offres/${job.id}/comparer`} method="get">
-        <div className="jm-comparer-defile">
-          <table className="jm-comparer-t jm-tableau-t">
-            <caption className="sr-only">{t("table.caption")}</caption>
-            <thead>
-              <tr>
-                <th scope="col">
-                  <span className="sr-only">{t("compare.pick")}</span>
-                </th>
-                <th scope="col">{t("table.name")}</th>
-                {header("classe", t("compare.class"))}
-                {header("score", t("notes.compatibility"))}
-                {header("potentiel", t("notes.potential"))}
-                {header("confiance", t("notes.confidence"))}
-                {header("experience", t("compare.years"))}
-                <th scope="col">{t("documents.title")}</th>
-                <th scope="col">{t("compare.stage")}</th>
-                {header("date", t("table.date"))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr key={row.id} data-classe={row.orbiClass ?? undefined}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      name="ids"
-                      value={row.id}
-                      aria-label={t("table.pick", { name: nameOf(row) })}
-                    />
-                  </td>
-                  <th scope="row">
-                    <Link href={`/app/hire/candidats/${row.id}`}>{nameOf(row)}</Link>
-                    {row.headline ? <small>{row.headline}</small> : null}
+      <div className="jm-tableau-split" data-panneau={open ? "" : undefined}>
+        <form id={compareForm} action={`/app/hire/offres/${job.id}/comparer`} method="get">
+          <div className="jm-comparer-defile">
+            <table className="jm-comparer-t jm-tableau-t">
+              <caption className="sr-only">{t("table.caption")}</caption>
+              <thead>
+                <tr>
+                  <th scope="col">
+                    <span className="sr-only">{t("compare.pick")}</span>
                   </th>
-                  <td>{row.orbiClass ? t(`class.${row.orbiClass}`) : t("compare.none")}</td>
-                  <td>
-                    {row.score !== null
-                      ? t("notes.percent", { value: row.score })
-                      : t("compare.none")}
-                  </td>
-                  <td>
-                    {row.star
-                      ? t("notes.star")
-                      : t("notes.percent", { value: row.potential.value })}
-                  </td>
-                  <td>{t(`notes.level.${row.confidence.after.level}`)}</td>
-                  <td>{t("sentence.years", { count: row.years })}</td>
-                  <td>
-                    {row.documents.asked
-                      ? t("compare.documents", {
-                          received: row.documents.received,
-                          asked: row.documents.asked,
-                        })
-                      : t("compare.none")}
-                  </td>
-                  <td>{row.stage.name}</td>
-                  <td>{format.dateTime(row.createdAt, { day: "numeric", month: "short" })}</td>
+                  <th scope="col">{t("table.name")}</th>
+                  {header("classe", t("compare.class"))}
+                  {header("score", t("notes.compatibility"))}
+                  {header("potentiel", t("notes.potential"))}
+                  {header("confiance", t("notes.confidence"))}
+                  {header("experience", t("compare.years"))}
+                  <th scope="col">{t("documents.title")}</th>
+                  <th scope="col">{t("compare.stage")}</th>
+                  {header("date", t("table.date"))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {rows.length === 0 ? <p className="jm-pieces-meta">{to("pipeline.empty")}</p> : null}
-        <p className="jm-pieces-meta">
-          {board.withScores ? to("classes.rule") : to("candidates.ruleNoScore")}
-        </p>
-        <button type="submit" className="jm-pieces-envoyer">
-          {t("compare.button")}
-        </button>
-      </form>
+              </thead>
+              <tbody>
+                {rows.map((row) => (
+                  <tr key={row.id} data-classe={row.orbiClass ?? undefined}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        name="ids"
+                        value={row.id}
+                        aria-label={t("table.pick", { name: nameOf(row) })}
+                      />
+                    </td>
+                    <th scope="row">
+                      <Link
+                        href={openHref(row.id)}
+                        aria-current={open?.id === row.id ? "true" : undefined}
+                      >
+                        {nameOf(row)}
+                      </Link>
+                      {row.headline ? <small>{row.headline}</small> : null}
+                    </th>
+                    <td>{row.orbiClass ? t(`class.${row.orbiClass}`) : t("compare.none")}</td>
+                    <td>
+                      {row.score !== null
+                        ? t("notes.percent", { value: row.score })
+                        : t("compare.none")}
+                    </td>
+                    <td>
+                      {row.star
+                        ? t("notes.star")
+                        : t("notes.percent", { value: row.potential.value })}
+                    </td>
+                    <td>{t(`notes.level.${row.confidence.after.level}`)}</td>
+                    <td>{t("sentence.years", { count: row.years })}</td>
+                    <td>
+                      {row.documents.asked
+                        ? t("compare.documents", {
+                            received: row.documents.received,
+                            asked: row.documents.asked,
+                          })
+                        : t("compare.none")}
+                    </td>
+                    <td>{row.stage.name}</td>
+                    <td>{format.dateTime(row.createdAt, { day: "numeric", month: "short" })}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {rows.length === 0 ? <p className="jm-pieces-meta">{to("pipeline.empty")}</p> : null}
+          <p className="jm-pieces-meta">
+            {board.withScores ? to("classes.rule") : to("candidates.ruleNoScore")}
+          </p>
+          <button type="submit" className="jm-pieces-envoyer">
+            {t("compare.button")}
+          </button>
+        </form>
+        {open ? (
+          <aside className="jm-pieces-s jm-tableau-panneau" aria-labelledby="tableau-panneau-t">
+            <header>
+              <h2 id="tableau-panneau-t">{nameOf(open)}</h2>
+              <Link href={`${base}?${kept}`} className="jm-pieces-retour">
+                {t("panel.close")}
+              </Link>
+            </header>
+            {open.headline ? <p>{open.headline}</p> : null}
+            <dl className="jm-tableau-faits">
+              {open.orbiClass ? (
+                <>
+                  <dt>{t("compare.class")}</dt>
+                  <dd>{t(`class.${open.orbiClass}`)}</dd>
+                </>
+              ) : null}
+              {open.score !== null ? (
+                <>
+                  <dt>{t("notes.compatibility")}</dt>
+                  <dd>{t("notes.percent", { value: open.score })}</dd>
+                </>
+              ) : null}
+              <dt>{t("notes.potential")}</dt>
+              <dd>
+                {open.star ? t("notes.star") : t("notes.percent", { value: open.potential.value })}
+              </dd>
+              <dt>{t("notes.confidence")}</dt>
+              <dd>{t(`notes.level.${open.confidence.after.level}`)}</dd>
+              <dt>{t("compare.years")}</dt>
+              <dd>{t("sentence.years", { count: open.years })}</dd>
+              {open.city ? (
+                <>
+                  <dt>{t("panel.city")}</dt>
+                  <dd>{open.city}</dd>
+                </>
+              ) : null}
+              <dt>{t("panel.available")}</dt>
+              <dd>
+                {open.availableIn === null
+                  ? t("panel.notLooking")
+                  : open.availableIn === 0
+                    ? t("panel.now")
+                    : t("panel.inDays", { count: open.availableIn })}
+              </dd>
+              <dt>{t("documents.title")}</dt>
+              <dd>
+                {open.documents.asked
+                  ? t("compare.documents", {
+                      received: open.documents.received,
+                      asked: open.documents.asked,
+                    })
+                  : t("compare.none")}
+              </dd>
+              <dt>{t("compare.stage")}</dt>
+              <dd>{open.stage.name}</dd>
+            </dl>
+            {open.matched.length > 0 ? (
+              <>
+                <h3>{t("panel.skills")}</h3>
+                <p>{open.matched.join(" · ")}</p>
+              </>
+            ) : null}
+            <Link href={`/app/hire/candidats/${open.id}`} className="jm-pieces-envoyer">
+              {t("panel.open")}
+            </Link>
+          </aside>
+        ) : null}
+      </div>
       <p className="jm-pieces-meta jm-tableau-liens">
         <Link href={`/app/hire/offres/${job.id}/resultats`}>{t("results.title")}</Link>
         <Link href={`/app/hire/offres/${job.id}/verification`}>{t("pieces.title")}</Link>

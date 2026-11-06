@@ -46,7 +46,7 @@ import {
   missedCriteriaOf,
   type OrbiClass,
 } from "./hire-classes";
-import { filtersLevelOf } from "./hire-filters";
+import { filterFactsOf, filtersLevelOf } from "./hire-filters";
 import { parseCriteria } from "./jobs";
 import { confidenceChange, potentialOf, strongPotential, type Potential } from "./hire-scores";
 
@@ -137,6 +137,12 @@ export type AtsRow = {
   star: boolean;
   /** Orbi's class (null when the organization sees no score). */
   orbiClass: OrbiClass | null;
+  /** What the filters « Langue », « Diplôme », « Disponible », « Contrat » read (06/11/2026). */
+  languages: string[];
+  education: number;
+  /** Days before the person can start (0 now), null when not looking. */
+  availableIn: number | null;
+  contracts: string[];
 };
 
 const DAY = 86_400_000;
@@ -278,6 +284,12 @@ export async function atsBoard(
           matchingEnabled: true,
           headline: true,
           userId: true,
+          // The filters « Langue », « Diplôme », « Disponibilité » and « Contrat » (06/11/2026).
+          languages: true,
+          studyLevel: true,
+          availability: true,
+          availableFrom: true,
+          desiredContracts: true,
           user: { select: { name: true, city: true, country: true } },
           experiences: {
             select: {
@@ -290,6 +302,7 @@ export async function atsBoard(
           educations: {
             select: {
               kind: true,
+              level: true,
               endYear: true,
               referenceChecks: { where: { status: "confirmed" }, select: { id: true }, take: 1 },
             },
@@ -372,6 +385,7 @@ export async function atsBoard(
         .filter((item) => item.proof === "declared" || item.proof === "missing")
         .map((item) => item.name),
       source: application.source,
+      ...filterFactsOf(application.profile, now),
       headline: application.profile.headline,
       country: application.profile.user.country,
       matched: [...proofs]

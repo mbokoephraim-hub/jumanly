@@ -3,6 +3,10 @@ import { expectAccessible } from "./a11y";
 import { expect, test, type Page } from "./fixtures";
 import { fillOffer, publishFilledOffer, stepForm } from "./offer-flow";
 import { logIn, testEmail } from "./session";
+import { oneTestAtATimeOn } from "./baobab-lock";
+
+// Shared demo data, changed on the computer and on the phone at the same time: one test at a time.
+oneTestAtATimeOn("horizon");
 
 // Web recruteur 1 (docs/refonte-web/recruteur-1) : le cadre web du recruteur (barre latérale,
 // organisation sous le nom, Ctrl K), À traiter en deux colonnes, Mes offres en grille avec le menu

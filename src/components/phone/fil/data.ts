@@ -220,7 +220,8 @@ export async function feedWords(viewerId: string, now = new Date()) {
         : null,
       job: item.job
         ? {
-            href: `/app/jobs/${item.job.slug}`,
+            // A recruiter's own offer opens in Hire, and they do not apply to it.
+            href: item.job.own ? `/app/hire/offres/${item.job.id}` : `/app/jobs/${item.job.slug}`,
             title: item.job.title,
             line: t("offerLine", {
               city: item.job.city,
@@ -237,7 +238,8 @@ export async function feedWords(viewerId: string, now = new Date()) {
             closes: item.job.closesAt
               ? t("poster.closesAt", { date: new Date(item.job.closesAt) })
               : null,
-            applyHref: item.job.open ? `/app/jobs/${item.job.slug}/postuler` : null,
+            applyHref:
+              item.job.open && !item.job.own ? `/app/jobs/${item.job.slug}/postuler` : null,
             sheetHref: `/api/offres/${item.job.slug}/fiche`,
           }
         : null,

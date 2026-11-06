@@ -31,7 +31,10 @@ import {
   activeFilters,
   allowedFilters,
   blindName,
+  filterAvailabilities,
   filterConfidences,
+  filterContracts,
+  filterEducations,
   filterSources,
   filterStates,
   parseFilters,
@@ -962,6 +965,7 @@ export async function RhOfferCandidates({
 }) {
   const t = await getTranslations("phoneRhOffres");
   const tt = await getTranslations("phoneRhTri");
+  const tc = await getTranslations("talent.profile.preferences");
   const tf = await getTranslations("phoneExplorer.filters");
 
   const format = await getFormatter();
@@ -1339,6 +1343,46 @@ export async function RhOfferCandidates({
                     defaultValue={filters.days ?? ""}
                   />
                 </label>
+                <label className="nb-rh-pf-champ">
+                  <span className="nb-ex-f-gl">{tt("filters.language")}</span>
+                  <input
+                    name="language"
+                    maxLength={40}
+                    placeholder={tt("filters.languageHint")}
+                    defaultValue={filters.language ?? ""}
+                  />
+                </label>
+                <PfChoices
+                  name="education"
+                  legend={tt("filters.education")}
+                  any={tt("filters.any")}
+                  value={filters.education ?? ""}
+                  options={filterEducations.map((value) => ({
+                    value,
+                    label: tt(`filters.educationValue.${value}`),
+                  }))}
+                />
+                <PfChoices
+                  name="availability"
+                  legend={tt("filters.availability")}
+                  any={tt("filters.any")}
+                  value={filters.availability ?? ""}
+                  options={filterAvailabilities.map((value) => ({
+                    value,
+                    label: tt(`filters.availabilityValue.${value}`),
+                  }))}
+                />
+                <PfChoices
+                  name="contract"
+                  legend={tt("filters.contract")}
+                  any={tt("filters.any")}
+                  value={filters.contract ?? ""}
+                  options={filterContracts.map((value) => ({
+                    value,
+                    label: tc(`contract.${value}`),
+                  }))}
+                />
+                <p className="nb-meta">{tt("filters.contractNote")}</p>
                 <div className="nb-ex-f-opts nb-rh-pf-cases">
                   <label className="nb-ex-f-opt nb-rh-pf-opt">
                     <input

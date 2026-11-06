@@ -137,6 +137,9 @@ test("entretien : calendrier, aperçu, confirmation du talent, préparation, év
   await expectAccessible(page);
   await noOverflow(page, "heures");
   // The preview shows what the talent will receive; the message is prepared, to be read.
+  // A video interview leaves with its link (no way to add it later).
+  const lien = planner.getByLabel("Lien de la visio");
+  if (await lien.isVisible()) await lien.fill("https://meet.jumanly.test/entretien");
   await planner.getByRole("button", { name: "Aperçu", exact: true }).click();
   const preview = planner.getByRole("region", {
     name: "Aperçu de l'invitation reçue par le talent",

@@ -2,6 +2,10 @@ import { expect, test, type Browser, type Page } from "./fixtures";
 import { expectAccessible } from "./a11y";
 import { demo, finishOnboarding, logIn, signUpWithEmail, testEmail } from "./session";
 import { plannerToHours } from "./hire-wide";
+import { oneTestAtATimeOn } from "./baobab-lock";
+
+// Shared demo data, changed on the computer and on the phone at the same time: one test at a time.
+oneTestAtATimeOn("baobab");
 
 /** Demo accounts of the fictional group (prisma/seed/group.ts). */
 const group = { owner: "groupe@jumanly.test", talent: "talent.visible@jumanly.test" };
@@ -177,6 +181,9 @@ async function planInterview(page: Page, slots: number, check = false) {
     await expect(planner).toContainText(`${index + 1} créneau`);
   }
   if (check) await expectAccessible(page);
+  // A video interview leaves with its link (no way to add it later).
+  const lien = planner.getByLabel("Lien de la visio");
+  if (await lien.isVisible()) await lien.fill("https://meet.jumanly.test/entretien");
   await planner.getByRole("button", { name: "Aperçu", exact: true }).click();
   await expect(
     planner.getByRole("region", { name: "Aperçu de l'invitation reçue par le talent" }),

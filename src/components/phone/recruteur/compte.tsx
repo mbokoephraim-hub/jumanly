@@ -32,7 +32,7 @@ import {
   rhTeam,
 } from "@/server/services/hire-phone-account";
 import { listTemplates, templateKinds } from "@/server/services/message-templates";
-import { RECRUITER_SWITCHES } from "@/server/services/notifications";
+import { NEW_APPLICATION_DIGEST, RECRUITER_SWITCHES } from "@/server/services/notifications";
 import { PhoneIcon } from "../icon";
 import { feedWords } from "../fil/data";
 import { sendTargetViews } from "../fil/server";
@@ -723,6 +723,7 @@ export async function RhNotificationsSettingsScreen({ ctx }: { ctx: HireContext 
         initial={{
           categories: Object.fromEntries(RECRUITER_SWITCHES.map((key) => [key, !muted.has(key)])),
           emails: user.notificationEmails,
+          digest: muted.has(NEW_APPLICATION_DIGEST),
         }}
       />
     </RhCompteFrame>

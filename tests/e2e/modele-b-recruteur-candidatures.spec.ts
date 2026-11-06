@@ -372,7 +372,7 @@ test.describe("Modèle B recruteur · Candidatures au téléphone", () => {
     await plan.getByRole("button", { name: /^Sur place/ }).click();
     await expect(plan.getByLabel("Adresse")).toBeVisible();
     await plan.getByRole("button", { name: /^Visio/ }).click();
-    await expect(plan.getByLabel("Lien de la visio (facultatif)")).toBeVisible();
+    await expect(plan.getByLabel("Lien de la visio")).toBeVisible();
     await plan.getByRole("button", { name: "1 h", exact: true }).click();
     await expect(plan.getByRole("button", { name: "Envoyer l'invitation" })).toBeEnabled();
     await capture(page, "078-planifier");
@@ -471,7 +471,7 @@ test.describe("Modèle B recruteur · Candidatures au téléphone", () => {
     await file(page).getByRole("link", { name: "Planifier un entretien" }).click();
     const plan = page.locator(".nb-rh-plan").filter({ visible: true });
     await plan.locator(".nb-rh-jours button").nth(1).click();
-    await plan.getByLabel("Lien de la visio (facultatif)").fill("https://visio.example.test/m5");
+    await plan.getByLabel("Lien de la visio").fill("https://visio.example.test/m5");
     await plan.getByRole("button", { name: "Envoyer l'invitation" }).click();
     await expect(page.getByRole("heading", { name: "Invitation envoyée" })).toBeVisible();
     await capture(page, "079-planifie");

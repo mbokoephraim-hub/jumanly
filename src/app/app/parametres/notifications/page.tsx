@@ -9,9 +9,9 @@ import { SegmentRadios, SwitchRow } from "@/components/talent/settings-controls"
 import { DesktopNotificationsSetting } from "@/components/recruiter/desktop-notifications";
 import { cx } from "@/lib/cx";
 import { getActiveSpace } from "@/server/hire-context";
-import { updateNotifications } from "@/server/actions/settings";
+import { updateApplicationDigest, updateNotifications } from "@/server/actions/settings";
 import { requireUser } from "@/server/auth/session";
-import { NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
+import { NEW_APPLICATION_DIGEST, NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
 import { toHireSettings } from "@/server/settings-redirect";
 import { inPartnerSpaceOnly } from "@/server/talent-space";
 import { PhoneNotificationsScreen } from "@/components/phone/career/settings-server";
@@ -131,6 +131,28 @@ export default async function NotificationSettingsPage({
               </button>
             </noscript>
           </form>
+          {/* A recruiter: each new application by e-mail, or one summary a day (06/11/2026). */}
+          {space && user.notificationEmails && (
+            <form action={updateApplicationDigest} className="t-flux">
+              <span className="t-ck-t" id="notif-resume">
+                {t("notifReglages.digest.title")}
+              </span>
+              <SegmentRadios
+                name="digest"
+                labelledBy="notif-resume"
+                current={muted.has(NEW_APPLICATION_DIGEST) ? "daily" : "each"}
+                options={[
+                  { value: "each", label: t("notifReglages.digest.each") },
+                  { value: "daily", label: t("notifReglages.digest.daily") },
+                ]}
+              />
+              <noscript>
+                <button type="submit" className="t-bt t-sec t-pl">
+                  {t("parametres.save")}
+                </button>
+              </noscript>
+            </form>
+          )}
           {/* Web recruiter lot 4: the computer's notifications, asked for here and only here. */}
           {space && (
             <ul

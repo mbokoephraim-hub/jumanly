@@ -145,6 +145,9 @@ export default async function ResultsPage({
       <p className="jm-pieces-meta">
         <Link href={pipeline}>{t("results.open")}</Link>
       </p>
+      <p className="jm-pieces-meta">
+        <Link href={`/app/hire/offres/${job.id}/poids`}>{t("results.weights")}</Link>
+      </p>
     </div>
   );
 }

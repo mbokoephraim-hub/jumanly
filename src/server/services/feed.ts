@@ -86,6 +86,7 @@ const postSelect = {
   job: {
     select: {
       id: true,
+      organizationId: true,
       slug: true,
       title: true,
       city: true,
@@ -159,6 +160,9 @@ export type FeedItem = {
   imageUrl: string | null;
   imageAlt: string | null;
   job: {
+    id: string;
+    /** The offer belongs to the reader's own organization (a recruiter's Fil). */
+    own: boolean;
     slug: string;
     title: string;
     city: string;
@@ -294,44 +298,53 @@ async function toItems(
   const jobIds = [
     ...new Set(rows.flatMap((row) => (row.job?.status === "published" ? [row.job.id] : []))),
   ];
-  const [likes, recentLikes, reposts, saves, going, latest, matches] = await Promise.all([
-    db.feedLike.findMany({
-      where: { userId: viewerId, postId: { in: ids } },
-      select: { postId: true },
-    }),
-    db.feedLike.findMany({
-      where: { postId: { in: ids } },
-      orderBy: { createdAt: "desc" },
-      take: ids.length * 6,
-      select: { postId: true, user: { select: { name: true, image: true } } },
-    }),
-    db.feedRepost.findMany({
-      where: { userId: viewerId, postId: { in: ids } },
-      select: { postId: true },
-    }),
-    db.feedSave.findMany({
-      where: { userId: viewerId, postId: { in: ids } },
-      select: { postId: true },
-    }),
-    db.feedEventParticipant.findMany({
-      where: { userId: viewerId, postId: { in: ids } },
-      select: { postId: true },
-    }),
-    // Two comments per post, so that the Fil shows them (one small query per commented post).
-    Promise.all(
-      rows
-        .filter((row) => row._count.replies > 0)
-        .map((row) =>
-          db.feedPost.findMany({
-            where: { parentId: row.id, hiddenAt: null, ...notBlocked(blocked) },
-            orderBy: { createdAt: "desc" },
-            take: 2,
-            select: postSelect,
-          }),
-        ),
-    ),
-    jobIds.length > 0 ? matchesForUser(db, viewerId, jobIds, now) : new Map(),
-  ]);
+  const [likes, recentLikes, reposts, saves, going, latest, matches, memberships] =
+    await Promise.all([
+      db.feedLike.findMany({
+        where: { userId: viewerId, postId: { in: ids } },
+        select: { postId: true },
+      }),
+      db.feedLike.findMany({
+        where: { postId: { in: ids } },
+        orderBy: { createdAt: "desc" },
+        take: ids.length * 6,
+        select: { postId: true, user: { select: { name: true, image: true } } },
+      }),
+      db.feedRepost.findMany({
+        where: { userId: viewerId, postId: { in: ids } },
+        select: { postId: true },
+      }),
+      db.feedSave.findMany({
+        where: { userId: viewerId, postId: { in: ids } },
+        select: { postId: true },
+      }),
+      db.feedEventParticipant.findMany({
+        where: { userId: viewerId, postId: { in: ids } },
+        select: { postId: true },
+      }),
+      // Two comments per post, so that the Fil shows them (one small query per commented post).
+      Promise.all(
+        rows
+          .filter((row) => row._count.replies > 0)
+          .map((row) =>
+            db.feedPost.findMany({
+              where: { parentId: row.id, hiddenAt: null, ...notBlocked(blocked) },
+              orderBy: { createdAt: "desc" },
+              take: 2,
+              select: postSelect,
+            }),
+          ),
+      ),
+      jobIds.length > 0 ? matchesForUser(db, viewerId, jobIds, now) : new Map(),
+      // A recruiter reading an offer of their own company: no « Postuler », the offer opens in Hire.
+      jobIds.length > 0
+        ? db.membership.findMany({
+            where: { userId: viewerId, status: "active" },
+            select: { organizationId: true },
+          })
+        : [],
+    ]);
+  const ownOrgs = new Set(memberships.map((row) => row.organizationId));
   const has = (list: { postId: string }[], id: string) => list.some((row) => row.postId === id);
   const shownComments = latest.flat();
   const commentLikes =
@@ -356,6 +369,8 @@ async function toItems(
       job:
         row.job && row.job.status === "published"
           ? {
+              id: row.job.id,
+              own: ownOrgs.has(row.job.organizationId),
               slug: row.job.slug,
               title: row.job.title,
               city: row.job.city,

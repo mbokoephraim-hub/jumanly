@@ -334,6 +334,7 @@ describe("entretiens", () => {
     const input = {
       application: applicationId,
       mode: "video",
+      link: "https://meet.jumanly.test/entretien",
       duration: "45",
       slots: [slot],
       timezone: "UTC",
@@ -385,6 +386,7 @@ describe("entretiens", () => {
     const result = await scheduleInterview(db, free, {
       application: applicationId,
       mode: "video",
+      link: "https://meet.jumanly.test/entretien",
       duration: "30",
       slots: [new Date(Date.now() + 3 * day).toISOString().slice(0, 16)],
       timezone: "UTC",

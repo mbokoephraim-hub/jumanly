@@ -4468,6 +4468,9 @@ Conventions :
 | `notifReglages.channel.both` | Appli + e-mail |
 | `notifReglages.channel.app` | Appli seule |
 | `notifReglages.channel.note` | Les reçus de paiement et les e-mails de sécurité sont toujours envoyés. |
+| `notifReglages.digest.title` | Nouvelles candidatures par e-mail |
+| `notifReglages.digest.each` | À chaque candidature |
+| `notifReglages.digest.daily` | Un résumé par jour |
 
 ### Refonte mobile · Aide (lot 7)
 
@@ -13062,7 +13065,7 @@ Conventions :
 | `rhReports.figure.applications` | {count, plural, one {candidature reçue} other {candidatures reçues}} |
 | `rhReports.figure.responseTime` | délai moyen de première réponse |
 | `rhReports.figure.activeJobs` | {count, plural, one {offre active} other {offres actives}} |
-| `rhReports.figure.interviews` | {count, plural, one {entretien} other {entretiens}} |
+| `rhReports.figure.interviews` | {count, plural, one {entretien organisé} other {entretiens organisés}} |
 | `rhReports.figure.hires` | {count, plural, one {recrutement} other {recrutements}} |
 | `rhReports.funnel` | Où en sont les candidatures |
 | `rhReports.stage.received` | Reçues |
@@ -13234,9 +13237,9 @@ Conventions :
 | `hireInterviews.plan.zone` | Heures affichées pour le fuseau {zone} |
 | `hireInterviews.plan.address` | Adresse |
 | `hireInterviews.plan.addressPlaceholder` | Rue, bâtiment, étage |
-| `hireInterviews.plan.link` | Lien de la visio (facultatif) |
+| `hireInterviews.plan.link` | Lien de la visio |
 | `hireInterviews.plan.linkAudio` | Lien de l'appel (facultatif) |
-| `hireInterviews.plan.linkHint` | Vous pourrez l'ajouter plus tard. {firstName} le recevra avant l'entretien. |
+| `hireInterviews.plan.linkHint` | Google Meet, Zoom ou Teams. {firstName} le reçoit avec l'invitation. |
 | `hireInterviews.plan.count` | {count} {count, plural, one {créneau} other {créneaux}} sur {max} |
 | `hireInterviews.plan.preview` | Aperçu |
 | `hireInterviews.plan.previewTitle` | Aperçu de l'invitation |
@@ -13901,6 +13904,14 @@ Conventions :
 | `hireAts.shortlist.empty.text` | Choisissez les dossiers à garder pour la suite. Orbi n'ajoute personne à cette liste : vous seul. |
 | `hireAts.shortlist.empty.cta` | Voir la recommandation |
 | `hireAts.shortlist.aria` | Personnes retenues |
+| `hireAts.shortlist.export` | Exporter la liste (Excel) |
+| `hireAts.shortlist.csv.name` | Nom |
+| `hireAts.shortlist.csv.city` | Ville |
+| `hireAts.shortlist.csv.score` | Score Orbi (%) |
+| `hireAts.shortlist.csv.stage` | Étape |
+| `hireAts.shortlist.csv.applied` | Candidature le |
+| `hireAts.shortlist.csv.file` | Dossier dans Jumanly |
+| `hireAts.shortlist.csv.fileName` | retenus |
 | `hireAts.shortlist.byYou` | Retenu·e par vous |
 | `hireAts.shortlist.by` | Retenu·e par {name} |
 | `hireAts.shortlist.team` | l'équipe |
@@ -14054,7 +14065,7 @@ Conventions :
 | `hireReportPdf.essential` | L'essentiel |
 | `hireReportPdf.kpi.applications` | {count, plural, one {candidature reçue} other {candidatures reçues}} |
 | `hireReportPdf.kpi.delay` | délai moyen de première réponse |
-| `hireReportPdf.kpi.interviews` | {count, plural, one {entretien} other {entretiens}} |
+| `hireReportPdf.kpi.interviews` | {count, plural, one {entretien organisé} other {entretiens organisés}} |
 | `hireReportPdf.kpi.hires` | {count, plural, one {recrutement conclu} other {recrutements conclus}} |
 | `hireReportPdf.days` | {days} j |
 | `hireReportPdf.none` | — |
@@ -15983,6 +15994,13 @@ Conventions :
 | `phoneRh.search.scopes.competence` | Compétence |
 | `phoneRh.search.scopes.ville` | Ville |
 | `phoneRh.search.scopes.metier` | Métier |
+| `phoneRh.search.scopes.poste` | Poste |
+| `phoneRh.search.interviews.results` | {count, plural, one {# entretien} other {# entretiens}} |
+| `phoneRh.search.interviews.noDate` | Date à choisir |
+| `phoneRh.search.interviews.pending` | en attente de réponse |
+| `phoneRh.search.interviews.mode.video` | Visio |
+| `phoneRh.search.interviews.mode.onsite` | Sur place |
+| `phoneRh.search.interviews.mode.audio` | Appel |
 | `phoneRh.search.searchBy` | Chercher par |
 | `phoneRh.search.percent` | {score} % |
 | `phoneRh.search.groups.offers` | Mes offres · {count} |
@@ -16006,9 +16024,9 @@ Conventions :
 | `phoneRh.search.offres.label` | Rechercher une offre, une entreprise ou une personne |
 | `phoneRh.search.offres.placeholder` | Offres, entreprises, personnes |
 | `phoneRh.search.offres.note` | Mes offres : seulement les vôtres. Entreprises et personnes : tout Jumanly. |
-| `phoneRh.search.agenda.label` | Rechercher un candidat |
-| `phoneRh.search.agenda.placeholder` | Nom, compétence, ville |
-| `phoneRh.search.agenda.note` | Seulement les personnes qui ont candidaté à vos offres. |
+| `phoneRh.search.agenda.label` | Rechercher un entretien |
+| `phoneRh.search.agenda.placeholder` | Nom du candidat, poste |
+| `phoneRh.search.agenda.note` | Les entretiens de vos offres : à venir d'abord, puis passés. |
 | `phoneRh.search.talents.label` | Rechercher un talent |
 | `phoneRh.search.talents.placeholder` | Compétence, métier, ville |
 | `phoneRh.search.talents.note` | Seulement les talents qui ont rendu leur profil visible. |
@@ -16795,12 +16813,25 @@ Conventions :
 | `phoneRhTri.filters.source` | Origine |
 | `phoneRhTri.filters.days` | Reçues ces derniers jours (nombre) |
 | `phoneRhTri.filters.complete` | Dossier complet seulement |
+| `phoneRhTri.filters.language` | Langue parlée |
+| `phoneRhTri.filters.languageHint` | Par exemple : anglais, swahili |
+| `phoneRhTri.filters.education` | Diplôme au moins |
+| `phoneRhTri.filters.educationValue.secondary` | Bac |
+| `phoneRhTri.filters.educationValue.vocational` | Formation professionnelle |
+| `phoneRhTri.filters.educationValue.bachelor` | Licence |
+| `phoneRhTri.filters.educationValue.master` | Master |
+| `phoneRhTri.filters.educationValue.doctorate` | Doctorat |
+| `phoneRhTri.filters.availability` | Disponibilité |
+| `phoneRhTri.filters.availabilityValue.now` | Tout de suite |
+| `phoneRhTri.filters.availabilityValue.month` | Dans le mois |
+| `phoneRhTri.filters.contract` | Contrat souhaité |
+| `phoneRhTri.filters.contractNote` | Les personnes qui n'ont pas indiqué de contrat restent affichées. |
 | `phoneRhTri.filters.any` | Tous |
 | `phoneRhTri.filters.rule` | Les filtres sont enregistrés pour l'offre et partagés avec l'équipe. Ils ne portent jamais sur l'âge, le genre, la photo ou l'origine. La barre des classes compte toujours tout le monde. |
 | `phoneRhTri.filters.save` | Enregistrer les filtres |
 | `phoneRhTri.filters.reset` | Tout afficher |
 | `phoneRhTri.filters.readOnly` | Les filtres de l'offre sont réglés par l'équipe qui trie. |
-| `phoneRhTri.filters.simpleOnly` | Votre formule ouvre les filtres simples : état, date, source et dossiers complets. Les filtres sur le score, les compétences, l'expérience, le lieu et la confiance viennent avec une formule Company. |
+| `phoneRhTri.filters.simpleOnly` | Votre formule ouvre les filtres simples : état, date, source, dossiers complets, langue, diplôme, disponibilité et contrat. Les filtres sur le score, les compétences, l'expérience, le lieu et la confiance viennent avec une formule Company. |
 | `phoneRhTri.filters.simpleOnlyLink` | Voir les formules |
 | `phoneRhTri.filters.hidden` | {count, plural, one {# candidat masqué par les filtres.} other {# candidats masqués par les filtres.}} |
 | `phoneRhTri.compare.seo` | Comparer des candidats |
@@ -16833,12 +16864,38 @@ Conventions :
 | `phoneRhTri.results.lockSee` | Voir les formules |
 | `phoneRhTri.results.ruleNoPlan` | Toutes les candidatures restent dans votre pipeline, lisibles et à trier comme vous le voulez. Personne n'est écarté. |
 | `phoneRhTri.results.open` | Ouvrir le pipeline |
+| `phoneRhTri.results.weights` | Régler les poids du score |
+| `phoneRhTri.weights.seo` | Poids du score |
+| `phoneRhTri.weights.title` | Poids du score |
+| `phoneRhTri.weights.back` | Retour aux résultats |
+| `phoneRhTri.weights.own` | Cette offre utilise ses propres poids. |
+| `phoneRhTri.weights.defaults` | Cette offre utilise les poids de Jumanly. |
+| `phoneRhTri.weights.lead` | Dites ce qui compte le plus pour ce poste. Chaque critère reçoit un poids de 0 à 100 : un poids double compte deux fois plus. Les scores de toutes les candidatures sont recalculés tout de suite, et le « Pourquoi ? » montre les nouveaux poids. |
+| `phoneRhTri.weights.share` | {value} % du score |
+| `phoneRhTri.weights.rule` | Le score reste un calcul fixe sur le profil et l'offre : l'IA ne le choisit pas, et il ne décide jamais à votre place. |
+| `phoneRhTri.weights.save` | Enregistrer les poids |
+| `phoneRhTri.weights.reset` | Revenir aux poids de Jumanly |
+| `phoneRhTri.weights.saved` | Poids enregistrés |
+| `phoneRhTri.weights.error` | Donnez un poids d'au moins 1 à un critère, puis réessayez. |
+| `phoneRhTri.weights.lockTitle` | Régler les poids |
+| `phoneRhTri.weights.lockPlan` | Avec {plan}, vous réglez les poids du score pour chaque offre. |
+| `phoneRhTri.weights.lockNoPlan` | Le réglage des poids viendra avec une prochaine formule. |
+| `phoneRhTri.weights.lockSee` | Voir les formules |
+| `phoneRhTri.weights.never` | Jamais utilisés : nom, genre, âge, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise. |
 | `phoneRhTri.table.back` | L'offre |
 | `phoneRhTri.table.title` | Tableau Orbi |
 | `phoneRhTri.table.caption` | Candidats de l'offre ; touchez un titre de colonne pour trier |
 | `phoneRhTri.table.name` | Candidat |
 | `phoneRhTri.table.date` | Reçue le |
 | `phoneRhTri.table.pick` | Comparer {name} |
+| `phoneRhTri.panel.close` | Fermer |
+| `phoneRhTri.panel.open` | Ouvrir le dossier complet |
+| `phoneRhTri.panel.city` | Ville |
+| `phoneRhTri.panel.available` | Disponible |
+| `phoneRhTri.panel.now` | Tout de suite |
+| `phoneRhTri.panel.inDays` | {count, plural, one {Dans # jour} other {Dans # jours}} |
+| `phoneRhTri.panel.notLooking` | Ne cherche pas en ce moment |
+| `phoneRhTri.panel.skills` | Compétences de l'offre trouvées |
 | `phoneRhTri.notes.compatibility` | Compatibilité |
 | `phoneRhTri.notes.potential` | Potentiel |
 | `phoneRhTri.notes.confidence` | Confiance |
@@ -16908,13 +16965,16 @@ Conventions :
 | `talentPieces.error.size` | Ce fichier dépasse 4 Mo. Essayez une version plus légère. |
 | `talentPieces.error.type` | Envoyez un PDF ou une image (PNG, JPEG, WebP). |
 | `talentPieces.error.other` | Rien n'a été déposé. Ajoutez un fichier, une attestation ou les coordonnées demandées. |
-| `talentPieces.privacy` | Seule l'équipe de recrutement de cette offre voit vos pièces. Elles ne servent qu'à cette candidature. |
+| `talentPieces.privacy` | Seule l'équipe de recrutement de cette offre voit vos pièces. Elles ne servent qu'à cette candidature et sont effacées 90 jours après la fin de l'offre. |
 | `talentPieces.state.received` | Déposée le {date} |
 | `talentPieces.state.required` | Obligatoire |
 | `talentPieces.state.optional` | Facultative |
 | `talentPieces.referent.name` | Nom du référent |
 | `talentPieces.referent.email` | E-mail du référent |
 | `talentPieces.referent.consent` | En le donnant, vous acceptez que l'entreprise contacte cette personne au sujet de votre candidature. Prévenez-la. |
+| `talentPieces.referent.experience` | Pour quelle expérience |
+| `talentPieces.referent.experienceNone` | Aucune en particulier |
+| `talentPieces.referent.form` | Si vous choisissez une expérience, le référent reçoit tout de suite un e-mail pour la confirmer en un clic. L'expérience affiche alors « Vérifié » pour l'entreprise. |
 | `talentPieces.reuse` | Réutiliser une attestation de mon Skills Passport |
 | `talentPieces.reuseNone` | Aucune, j'envoie un fichier |
 | `talentPieces.education` | Ce diplôme sur mon profil |
@@ -17098,6 +17158,7 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `phoneRhOffres.wizard.progress` | Étape {step} sur {total} |
+| `phoneRhOffres.wizard.skipToPublish` | Passer à la publication |
 | `phoneRhOffres.wizard.kicker` | Étape {step} sur {total} · {name} |
 | `phoneRhOffres.wizard.steps.1.name` | Le poste |
 | `phoneRhOffres.wizard.steps.1.title` | Quel poste recrutez-vous ? |
@@ -17667,7 +17728,7 @@ Conventions :
 | `phoneRhCandidatures.plan.modesHint.video` | Lien envoyé avec l'invitation |
 | `phoneRhCandidatures.plan.modesHint.onsite` | À l'adresse de l'entreprise |
 | `phoneRhCandidatures.plan.modesHint.audio` | Appel dans l'app |
-| `phoneRhCandidatures.plan.link` | Lien de la visio (facultatif) |
+| `phoneRhCandidatures.plan.link` | Lien de la visio |
 | `phoneRhCandidatures.plan.address` | Adresse |
 | `phoneRhCandidatures.plan.duration` | Durée |
 | `phoneRhCandidatures.plan.minutes` | {count, plural, =60 {1 h} other {# min}} |
@@ -18340,6 +18401,8 @@ Conventions :
 | `phoneRhCompte.notifs.rh.teamLine` | Dossiers confiés, profils partagés, demandes |
 | `phoneRhCompte.notifs.emails` | Par e-mail aussi |
 | `phoneRhCompte.notifs.emailsLine` | Une copie des notifications importantes |
+| `phoneRhCompte.notifs.digest` | Un résumé par jour |
+| `phoneRhCompte.notifs.digestLine` | Les nouvelles candidatures en un seul e-mail, chaque matin |
 | `phoneRhCompte.notifs.note` | La sécurité du compte et la modération arrivent toujours. |
 | `phoneRhCompte.notifs.saved` | Réglage enregistré. |
 | `phoneRhCompte.privacy.title` | Confidentialité et données |
@@ -21149,6 +21212,10 @@ Conventions :
 | `mail.newApplication.p1.batch` | {count, plural, one {# nouvelle candidature} other {# nouvelles candidatures}} pour « {jobTitle} » depuis hier. |
 | `mail.newApplication.p2` | Une réponse rapide, même brève, améliore l'image de {org} auprès des candidats. |
 | `mail.newApplication.cta` | Voir la candidature |
+| `mail.newApplicationsDigest.subject` | {count, plural, one {# nouvelle candidature depuis hier} other {# nouvelles candidatures depuis hier}} |
+| `mail.newApplicationsDigest.preheader` | Le résumé du jour pour {org}. |
+| `mail.newApplicationsDigest.settings` | Vous recevez ce résumé une fois par jour. Pour un e-mail à chaque candidature : Compte › Notifications. |
+| `mail.newApplicationsDigest.cta` | Voir les candidatures |
 
 ### E-mail · Invitation à rejoindre une organisation
 
@@ -22899,6 +22966,7 @@ Conventions :
 | `admin.entitlement.hire_talent_search_monthly` | Recherches dans le vivier par mois |
 | `admin.entitlement.hire_contact_requests_monthly` | Demandes de mise en relation par mois |
 | `admin.entitlement.hire_matching_level` | Matching |
+| `admin.entitlement.hire_matching_weights` | Poids du score réglables |
 | `admin.entitlement.hire_cv_analysis` | Analyse des CV |
 | `admin.entitlement.hire_shortlist` | Présélection |
 | `admin.entitlement.hire_collaboration` | Recrutement en équipe |

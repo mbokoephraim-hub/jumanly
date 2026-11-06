@@ -658,6 +658,7 @@ Le diagnostic simplifié et les conseils généraux du plan Free sont fournis **
 | `hire.cv_analysis` | — | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `hire.ats.filters` | simple | all | all | all | all | all |
 | `hire.verification` | — | standard | standard | standard | custom | custom |
+| `hire.matching.weights` (poids du score réglables par offre, ajoutée le 06/11/2026) | — | — | — | — | ✓ | ✓ |
 | `hire.shortlist` | — | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `hire.collaboration` | — | — | ✓ | ✓ | ✓ | ✓ |
 | `hire.scorecards` | — | — | ✓ | ✓ | ✓ | ✓ |

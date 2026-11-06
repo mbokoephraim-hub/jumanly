@@ -111,6 +111,15 @@ export default async function ShortlistPage({
         actions={
           permissions.manage && kept.length > 0 ? (
             <>
+              {/* A sheet for the management (évaluation recruteur, 06/11/2026). */}
+              <a
+                href={`/app/hire/offres/${job.id}/retenus.csv`}
+                download
+                className="t-bt t-sec t-m t-press"
+              >
+                <TalentIcon name="telecharger" size="s" />
+                {t("export")}
+              </a>
               <Link href={slotsHref} className="t-bt t-sec t-m t-press">
                 <TalentIcon name="agenda" size="s" />
                 {t("slots")}

@@ -212,7 +212,11 @@ export function InterviewPlanner({
     );
   }
 
-  const ready = slots.length > 0 && (mode !== "onsite" || address.trim().length > 0);
+  // On site needs the address, a video needs its link (no way to add it later).
+  const ready =
+    slots.length > 0 &&
+    (mode !== "onsite" || address.trim().length > 0) &&
+    (mode !== "video" || /^https?:\/\/\S+$/i.test(link.trim()));
   const recap =
     slots.length === 0
       ? t("recapNone")

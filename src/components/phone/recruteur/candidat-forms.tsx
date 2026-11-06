@@ -143,7 +143,7 @@ export function RhPlanner({ data }: { data: RhPlannerData }) {
         {mode === "video" ? (
           <label className="nb-rh-plan-champ">
             <span className="nb-meta">{t("link")}</span>
-            <input name="link" type="url" maxLength={300} placeholder="https://" />
+            <input name="link" type="url" required maxLength={300} placeholder="https://" />
           </label>
         ) : null}
         {mode === "onsite" ? (

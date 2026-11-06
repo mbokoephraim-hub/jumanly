@@ -1,6 +1,10 @@
 import { expectAccessible } from "./a11y";
 import { expect, test } from "./fixtures";
 import { logIn } from "./session";
+import { oneTestAtATimeOn } from "./baobab-lock";
+
+// Shared demo data, changed on the computer and on the phone at the same time: one test at a time.
+oneTestAtATimeOn("horizon");
 
 // Recruiter space, lot 1 (docs/refonte-mobile, brief recruteur § 1): the bottom bar À traiter ·
 // Offres · Orbi · Candidats · Messages, the chip of the active organization, Compte RH and

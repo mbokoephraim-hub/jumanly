@@ -155,6 +155,7 @@ async function invite(ctx: HireContext, applicationId: string, slots = [slotIn(3
   const sent = await scheduleInterview(db, ctx, {
     application: applicationId,
     mode: "video",
+    link: "https://meet.jumanly.test/entretien",
     duration: "45",
     slots,
     timezone: "UTC",

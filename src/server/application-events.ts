@@ -8,7 +8,7 @@ import { postCompanyNotice } from "@/server/services/company-notice";
 import { ensureApplicationConversation } from "@/server/services/connect";
 import { claimDueDecisionMails } from "@/server/services/hire-candidates";
 import { claimDueGroupMails } from "@/server/services/hire-group-replies";
-import { hiringTeam, notify } from "@/server/services/notifications";
+import { hiringTeam, mailsEachApplication, notify } from "@/server/services/notifications";
 import { mailCompanyNotice } from "./company-notice-email";
 import {
   mailDocumentRequest,
@@ -57,7 +57,7 @@ export async function onApplicationCreated(applicationId: string) {
     href,
   });
   await Promise.all([
-    ...team.map((member) =>
+    ...team.filter(mailsEachApplication).map((member) =>
       mailNewApplication(member, {
         candidateName: talent.name,
         jobTitle: application.job.title,

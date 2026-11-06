@@ -5316,6 +5316,11 @@
       "both": "Appli + e-mail",
       "app": "Appli seule",
       "note": "Les reçus de paiement et les e-mails de sécurité sont toujours envoyés."
+    },
+    "digest": {
+      "title": "Nouvelles candidatures par e-mail",
+      "each": "À chaque candidature",
+      "daily": "Un résumé par jour"
     }
   },
   "aide": {
@@ -15909,7 +15914,7 @@
       "applications": "{count, plural, one {candidature reçue} other {candidatures reçues}}",
       "responseTime": "délai moyen de première réponse",
       "activeJobs": "{count, plural, one {offre active} other {offres actives}}",
-      "interviews": "{count, plural, one {entretien} other {entretiens}}",
+      "interviews": "{count, plural, one {entretien organisé} other {entretiens organisés}}",
       "hires": "{count, plural, one {recrutement} other {recrutements}}"
     },
     "funnel": "Où en sont les candidatures",
@@ -16124,9 +16129,9 @@
       "zone": "Heures affichées pour le fuseau {zone}",
       "address": "Adresse",
       "addressPlaceholder": "Rue, bâtiment, étage",
-      "link": "Lien de la visio (facultatif)",
+      "link": "Lien de la visio",
       "linkAudio": "Lien de l'appel (facultatif)",
-      "linkHint": "Vous pourrez l'ajouter plus tard. {firstName} le recevra avant l'entretien.",
+      "linkHint": "Google Meet, Zoom ou Teams. {firstName} le reçoit avec l'invitation.",
       "count": "{count} {count, plural, one {créneau} other {créneaux}} sur {max}",
       "preview": "Aperçu",
       "previewTitle": "Aperçu de l'invitation",
@@ -16958,6 +16963,16 @@
         "cta": "Voir la recommandation"
       },
       "aria": "Personnes retenues",
+      "export": "Exporter la liste (Excel)",
+      "csv": {
+        "name": "Nom",
+        "city": "Ville",
+        "score": "Score Orbi (%)",
+        "stage": "Étape",
+        "applied": "Candidature le",
+        "file": "Dossier dans Jumanly",
+        "fileName": "retenus"
+      },
       "byYou": "Retenu·e par vous",
       "by": "Retenu·e par {name}",
       "team": "l'équipe",
@@ -17149,7 +17164,7 @@
     "kpi": {
       "applications": "{count, plural, one {candidature reçue} other {candidatures reçues}}",
       "delay": "délai moyen de première réponse",
-      "interviews": "{count, plural, one {entretien} other {entretiens}}",
+      "interviews": "{count, plural, one {entretien organisé} other {entretiens organisés}}",
       "hires": "{count, plural, one {recrutement conclu} other {recrutements conclus}}"
     },
     "days": "{days} j",
@@ -19406,7 +19421,18 @@
         "nom": "Nom",
         "competence": "Compétence",
         "ville": "Ville",
-        "metier": "Métier"
+        "metier": "Métier",
+        "poste": "Poste"
+      },
+      "interviews": {
+        "results": "{count, plural, one {# entretien} other {# entretiens}}",
+        "noDate": "Date à choisir",
+        "pending": "en attente de réponse",
+        "mode": {
+          "video": "Visio",
+          "onsite": "Sur place",
+          "audio": "Appel"
+        }
       },
       "searchBy": "Chercher par",
       "percent": "{score} %",
@@ -19440,9 +19466,9 @@
         "note": "Mes offres : seulement les vôtres. Entreprises et personnes : tout Jumanly."
       },
       "agenda": {
-        "label": "Rechercher un candidat",
-        "placeholder": "Nom, compétence, ville",
-        "note": "Seulement les personnes qui ont candidaté à vos offres."
+        "label": "Rechercher un entretien",
+        "placeholder": "Nom du candidat, poste",
+        "note": "Les entretiens de vos offres : à venir d'abord, puis passés."
       },
       "talents": {
         "label": "Rechercher un talent",
@@ -20422,6 +20448,7 @@
     },
     "wizard": {
       "progress": "Étape {step} sur {total}",
+      "skipToPublish": "Passer à la publication",
       "kicker": "Étape {step} sur {total} · {name}",
       "steps": {
         "1": {
@@ -20982,12 +21009,29 @@
       "source": "Origine",
       "days": "Reçues ces derniers jours (nombre)",
       "complete": "Dossier complet seulement",
+      "language": "Langue parlée",
+      "languageHint": "Par exemple : anglais, swahili",
+      "education": "Diplôme au moins",
+      "educationValue": {
+        "secondary": "Bac",
+        "vocational": "Formation professionnelle",
+        "bachelor": "Licence",
+        "master": "Master",
+        "doctorate": "Doctorat"
+      },
+      "availability": "Disponibilité",
+      "availabilityValue": {
+        "now": "Tout de suite",
+        "month": "Dans le mois"
+      },
+      "contract": "Contrat souhaité",
+      "contractNote": "Les personnes qui n'ont pas indiqué de contrat restent affichées.",
       "any": "Tous",
       "rule": "Les filtres sont enregistrés pour l'offre et partagés avec l'équipe. Ils ne portent jamais sur l'âge, le genre, la photo ou l'origine. La barre des classes compte toujours tout le monde.",
       "save": "Enregistrer les filtres",
       "reset": "Tout afficher",
       "readOnly": "Les filtres de l'offre sont réglés par l'équipe qui trie.",
-      "simpleOnly": "Votre formule ouvre les filtres simples : état, date, source et dossiers complets. Les filtres sur le score, les compétences, l'expérience, le lieu et la confiance viennent avec une formule Company.",
+      "simpleOnly": "Votre formule ouvre les filtres simples : état, date, source, dossiers complets, langue, diplôme, disponibilité et contrat. Les filtres sur le score, les compétences, l'expérience, le lieu et la confiance viennent avec une formule Company.",
       "simpleOnlyLink": "Voir les formules",
       "hidden": "{count, plural, one {# candidat masqué par les filtres.} other {# candidats masqués par les filtres.}}"
     },
@@ -21031,7 +21075,37 @@
       "lockNoPlan": "Avec une formule Company, Orbi montre qui sont vos Fort potentiel, leur score, leurs raisons et les questions à poser en entretien.",
       "lockSee": "Voir les formules",
       "ruleNoPlan": "Toutes les candidatures restent dans votre pipeline, lisibles et à trier comme vous le voulez. Personne n'est écarté.",
-      "open": "Ouvrir le pipeline"
+      "open": "Ouvrir le pipeline",
+      "weights": "Régler les poids du score"
+    },
+    "weights": {
+      "seo": "Poids du score",
+      "title": "Poids du score",
+      "back": "Retour aux résultats",
+      "own": "Cette offre utilise ses propres poids.",
+      "defaults": "Cette offre utilise les poids de Jumanly.",
+      "lead": "Dites ce qui compte le plus pour ce poste. Chaque critère reçoit un poids de 0 à 100 : un poids double compte deux fois plus. Les scores de toutes les candidatures sont recalculés tout de suite, et le « Pourquoi ? » montre les nouveaux poids.",
+      "share": "{value} % du score",
+      "rule": "Le score reste un calcul fixe sur le profil et l'offre : l'IA ne le choisit pas, et il ne décide jamais à votre place.",
+      "save": "Enregistrer les poids",
+      "reset": "Revenir aux poids de Jumanly",
+      "saved": "Poids enregistrés",
+      "error": "Donnez un poids d'au moins 1 à un critère, puis réessayez.",
+      "lockTitle": "Régler les poids",
+      "lockPlan": "Avec {plan}, vous réglez les poids du score pour chaque offre.",
+      "lockNoPlan": "Le réglage des poids viendra avec une prochaine formule.",
+      "lockSee": "Voir les formules",
+      "never": "Jamais utilisés : nom, genre, âge, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise."
+    },
+    "panel": {
+      "close": "Fermer",
+      "open": "Ouvrir le dossier complet",
+      "city": "Ville",
+      "available": "Disponible",
+      "now": "Tout de suite",
+      "inDays": "{count, plural, one {Dans # jour} other {Dans # jours}}",
+      "notLooking": "Ne cherche pas en ce moment",
+      "skills": "Compétences de l'offre trouvées"
     },
     "notes": {
       "compatibility": "Compatibilité",
@@ -21128,7 +21202,7 @@
       "type": "Envoyez un PDF ou une image (PNG, JPEG, WebP).",
       "other": "Rien n'a été déposé. Ajoutez un fichier, une attestation ou les coordonnées demandées."
     },
-    "privacy": "Seule l'équipe de recrutement de cette offre voit vos pièces. Elles ne servent qu'à cette candidature.",
+    "privacy": "Seule l'équipe de recrutement de cette offre voit vos pièces. Elles ne servent qu'à cette candidature et sont effacées 90 jours après la fin de l'offre.",
     "state": {
       "received": "Déposée le {date}",
       "required": "Obligatoire",
@@ -21137,7 +21211,10 @@
     "referent": {
       "name": "Nom du référent",
       "email": "E-mail du référent",
-      "consent": "En le donnant, vous acceptez que l'entreprise contacte cette personne au sujet de votre candidature. Prévenez-la."
+      "consent": "En le donnant, vous acceptez que l'entreprise contacte cette personne au sujet de votre candidature. Prévenez-la.",
+      "experience": "Pour quelle expérience",
+      "experienceNone": "Aucune en particulier",
+      "form": "Si vous choisissez une expérience, le référent reçoit tout de suite un e-mail pour la confirmer en un clic. L'expérience affiche alors « Vérifié » pour l'entreprise."
     },
     "reuse": "Réutiliser une attestation de mon Skills Passport",
     "reuseNone": "Aucune, j'envoie un fichier",
@@ -21608,7 +21685,7 @@
         "onsite": "À l'adresse de l'entreprise",
         "audio": "Appel dans l'app"
       },
-      "link": "Lien de la visio (facultatif)",
+      "link": "Lien de la visio",
       "address": "Adresse",
       "duration": "Durée",
       "minutes": "{count, plural, =60 {1 h} other {# min}}",
@@ -22402,6 +22479,8 @@
       "messagesLine": "Candidats et équipe",
       "emails": "Par e-mail aussi",
       "emailsLine": "Une copie des notifications importantes",
+      "digest": "Un résumé par jour",
+      "digestLine": "Les nouvelles candidatures en un seul e-mail, chaque matin",
       "note": "La sécurité du compte et la modération arrivent toujours.",
       "saved": "Réglage enregistré."
     },
@@ -25663,6 +25742,12 @@
       "p2": "Une réponse rapide, même brève, améliore l'image de {org} auprès des candidats.",
       "cta": "Voir la candidature"
     },
+    "newApplicationsDigest": {
+      "subject": "{count, plural, one {# nouvelle candidature depuis hier} other {# nouvelles candidatures depuis hier}}",
+      "preheader": "Le résumé du jour pour {org}.",
+      "settings": "Vous recevez ce résumé une fois par jour. Pour un e-mail à chaque candidature : Compte › Notifications.",
+      "cta": "Voir les candidatures"
+    },
     "orgInvite": {
       "subject": "{inviterName} vous invite à rejoindre {org} sur Jumanly",
       "preheader": "Rôle proposé : {role}.",
@@ -27666,6 +27751,7 @@
       "hire_talent_search_monthly": "Recherches dans le vivier par mois",
       "hire_contact_requests_monthly": "Demandes de mise en relation par mois",
       "hire_matching_level": "Matching",
+      "hire_matching_weights": "Poids du score réglables",
       "hire_cv_analysis": "Analyse des CV",
       "hire_shortlist": "Présélection",
       "hire_collaboration": "Recrutement en équipe",

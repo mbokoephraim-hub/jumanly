@@ -321,6 +321,71 @@ export async function rhSearchApplications(
 }
 
 /**
+ * The search of the Agenda tab (évaluation recruteur, 06/11/2026): the interviews of the
+ * organization's offers, by the candidate's name or the job, the next ones first, then the past.
+ */
+export const RH_INTERVIEW_SEARCH = ["tout", "nom", "poste"] as const;
+export type RhInterviewSearch = (typeof RH_INTERVIEW_SEARCH)[number];
+
+export async function rhSearchInterviews(
+  db: PrismaClient,
+  ctx: HireContext,
+  query: string,
+  by: RhInterviewSearch,
+  now = new Date(),
+) {
+  if (!hirePermissions(ctx.role).readApplications) return [];
+  const words = query.trim().slice(0, 100);
+  if (!words) return [];
+  const contains = { contains: words, mode: "insensitive" as const };
+  const or: Prisma.InterviewWhereInput[] = [];
+  if (by === "tout" || by === "nom")
+    or.push({ application: { profile: { user: { name: contains } } } });
+  if (by === "tout" || by === "poste") or.push({ application: { job: { title: contains } } });
+  const rows = await db.interview.findMany({
+    where: {
+      organizationId: ctx.organizationId,
+      status: { in: ["pending", "confirmed", "done"] },
+      application: { job: await jobScope(db, ctx) },
+      OR: or,
+    },
+    orderBy: [{ startsAt: { sort: "desc", nulls: "first" } }, { createdAt: "desc" }],
+    take: 40,
+    select: {
+      id: true,
+      mode: true,
+      status: true,
+      startsAt: true,
+      slots: true,
+      application: {
+        select: {
+          id: true,
+          job: { select: { title: true } },
+          profile: { select: { user: { select: { name: true } } } },
+        },
+      },
+    },
+  });
+  const items = rows.map((row) => ({
+    id: row.id,
+    applicationId: row.application.id,
+    name: row.application.profile.user.name,
+    jobTitle: row.application.job.title,
+    mode: row.mode,
+    when: row.startsAt ?? row.slots[0] ?? null,
+    confirmed: row.status !== "pending",
+  }));
+  // The next interviews first (soonest at the top), then the past ones (latest first).
+  const ahead = items
+    .filter((item) => item.when === null || item.when >= now)
+    .sort((a, b) => (a.when?.getTime() ?? Infinity) - (b.when?.getTime() ?? Infinity));
+  const past = items
+    .filter((item) => item.when !== null && item.when < now)
+    .sort((a, b) => b.when!.getTime() - a.when!.getTime());
+  return [...ahead, ...past];
+}
+
+/**
  * Entretiens (planches Recruteur-cand-entretiens, -a-documenter): today's, those ahead, and those
  * past that the member has not documented yet.
  */

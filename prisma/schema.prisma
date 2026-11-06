@@ -349,6 +349,9 @@ model Job {
   pipelineFilters         Json               @default("{}")
   /// « Tri à l'aveugle »: name and photo hidden until the person is retained (off by default).
   blindSort               Boolean            @default(false)
+  /// « Poids du score » of this offer (évaluation recruteur, 06/11/2026, entitlement
+  /// `hire.matching.weights`): { skills_required, …, semantic }; null = the weights of partie 08.
+  matchingWeights         Json?
   /// Last time Orbi analysed the applications of this job (now or at the closing date).
   atsRanAt                DateTime?
   /// The analysis running now: { startedAt, by, ids, stoppedAt?, finishedAt?, failed? } (one at a
