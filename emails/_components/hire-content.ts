@@ -235,7 +235,13 @@ export function interviewConfirmedEmail(
     hour: "2-digit",
     minute: "2-digit",
   }).format(input.date);
-  const values = { ...input, time, timezone: zoneCity(input.timezone) };
+  const values = {
+    company: input.company,
+    jobTitle: input.jobTitle,
+    date: input.date,
+    time,
+    timezone: zoneCity(input.timezone),
+  };
   return {
     subject: t("mail.interviewConfirmed.subject", values),
     props: {
