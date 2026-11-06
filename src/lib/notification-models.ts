@@ -58,6 +58,7 @@ const MODELS: Record<string, NotificationModel> = {
   jobUnavailable: { kind: "candidature", title: "myApplication", action: null },
   documentRequest: { kind: "candidature", title: "documentRequest", action: "send" },
   interviewInvite: { kind: "agenda", title: "interviewInvite", action: "answer" },
+  interviewFixed: { kind: "agenda", title: "interviewConfirmed", action: null },
   interviewTeam: { kind: "agenda", title: "interview", action: null },
   interviewConfirmed: { kind: "agenda", title: "interviewConfirmed", action: null },
   interviewAccepted: { kind: "agenda", title: "interviewConfirmed", action: null },

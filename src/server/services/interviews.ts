@@ -167,6 +167,130 @@ export async function scheduleInterview(
   return { status: "sent", interviewId: interview.id };
 }
 
+/** « Planifier » of Agenda › À planifier (Ephraïm 06/11/2026): one day, one hour, fixed at once. */
+export const FIXED_MODES = ["onsite", "video"] as const satisfies readonly InterviewMode[];
+export const FIXED_MINUTES = 30;
+
+export const fixInterviewSchema = z
+  .object({
+    application: z.string().trim().min(1).max(60),
+    mode: z.enum(FIXED_MODES),
+    day: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    hour: z.string().regex(/^\d{2}:\d{2}$/),
+    link: z.union([z.literal(""), z.url().max(300)]).default(""),
+    address: z.string().trim().max(300).default(""),
+  })
+  .superRefine((value, ctx) => {
+    if (value.mode === "video" && !value.link)
+      ctx.addIssue({ code: "custom", path: ["link"], message: "required" });
+  });
+
+export type FixResult =
+  | {
+      status: "fixed";
+      interviewId: string;
+      startsAt: Date;
+      talent: { id: string; email: string; firstName: string | null };
+      company: string;
+      jobTitle: string;
+      conversationId: string;
+      /** On site: the address written, if any. */
+      place: string | null;
+      /** By video: its link. */
+      link: string | null;
+    }
+  | { status: "locked" | "invalid" | "past" | "taken" };
+
+/**
+ * The recruiter fixes the interview himself: day, hour, on site or by video (with its link). It
+ * is confirmed at once and the candidate finds it in the conversation (« Enregistrer et
+ * envoyer »); no slots to choose from.
+ */
+export async function fixInterview(
+  db: PrismaClient,
+  ctx: HireContext,
+  raw: Record<string, unknown>,
+  timeZone: string,
+  now = new Date(),
+): Promise<FixResult> {
+  if (!hirePermissions(ctx.role).manage) throw new HireError("forbidden");
+  if (!(await can(db, orgSubject(ctx), "connect.appointments"))) return { status: "locked" };
+  const parsed = fixInterviewSchema.safeParse(raw);
+  if (!parsed.success) return { status: "invalid" };
+  const input = parsed.data;
+  const startsAt = slotToDate(`${input.day}T${input.hour}`, timeZone);
+  if (!startsAt) return { status: "invalid" };
+  if (startsAt <= now) return { status: "past" };
+  const application = await getOrgApplication(db, ctx, input.application);
+  if (application.status !== "active") return { status: "invalid" };
+  const standing = await db.interview.count({
+    where: {
+      applicationId: application.id,
+      organizationId: ctx.organizationId,
+      status: { in: ["pending", "confirmed", "reschedule"] },
+    },
+  });
+  if (standing > 0) return { status: "taken" };
+  const interview = await db.interview.create({
+    data: {
+      organizationId: ctx.organizationId,
+      applicationId: application.id,
+      organizerId: ctx.userId,
+      mode: input.mode,
+      durationMinutes: FIXED_MINUTES,
+      slots: [startsAt],
+      startsAt,
+      status: "confirmed",
+      timezone: timeZone,
+      link: input.mode === "video" ? input.link : null,
+      address: input.mode === "onsite" ? input.address || null : null,
+    },
+  });
+  const conversation =
+    application.conversation ?? (await ensureApplicationConversation(db, application.id));
+  await db.message.create({
+    data: {
+      conversationId: conversation.id,
+      senderId: ctx.userId,
+      kind: "invitation",
+      body: application.job.title,
+      payload: { interviewId: interview.id },
+      createdAt: now,
+    },
+  });
+  await db.conversation.update({
+    where: { id: conversation.id },
+    data: { lastMessageAt: now, orgHiddenAt: null },
+  });
+  await db.applicationEvent.create({
+    data: {
+      applicationId: application.id,
+      actorId: ctx.userId,
+      type: "interview_scheduled",
+      payload: { interviewId: interview.id, date: startsAt.toISOString() },
+    },
+  });
+  const talent = application.profile.user;
+  await notify(db, {
+    userIds: [talent.id],
+    type: "interviewFixed",
+    payload: { company: application.job.organization.name, jobTitle: application.job.title },
+    href: `/app/messages/${conversation.id}`,
+    actorId: ctx.userId,
+  });
+  return {
+    status: "fixed",
+    interviewId: interview.id,
+    startsAt,
+    talent: { id: talent.id, email: talent.email, firstName: talent.firstName ?? null },
+    company: application.job.organization.name,
+    jobTitle: application.job.title,
+    conversationId: conversation.id,
+    place: interview.address,
+    link: interview.link,
+  };
+}
+
 const interviewInclude = {
   organizer: { select: { name: true } },
   application: {

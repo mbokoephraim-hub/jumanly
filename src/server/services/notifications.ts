@@ -31,6 +31,7 @@ export const notificationTypes = [
   "contactAccepted",
   "contactDeclined",
   "interviewInvite",
+  "interviewFixed",
   "interviewTeam",
   "interviewConfirmed",
   "interviewReschedule",
@@ -100,6 +101,7 @@ export type NotificationType = (typeof notificationTypes)[number];
 /** Types worth a toast when they arrive while the person is on the platform (brief § 4.3). */
 export const importantNotificationTypes: readonly NotificationType[] = [
   "interviewInvite",
+  "interviewFixed",
   "interviewSoon",
   "newMessage",
   "contactRequest",
@@ -120,6 +122,7 @@ export const notificationCategories = {
     "notSelected",
     "documentRequest",
     "interviewInvite",
+    "interviewFixed",
     "interviewConfirmed",
     "interviewReschedule",
     "interviewDeclined",

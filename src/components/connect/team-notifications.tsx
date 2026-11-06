@@ -31,6 +31,7 @@ const categoryOf: Record<NotificationType, Category> = {
   contactAccepted: "applications",
   contactDeclined: "applications",
   interviewInvite: "applications",
+  interviewFixed: "applications",
   interviewTeam: "applications",
   interviewConfirmed: "applications",
   interviewReschedule: "applications",
@@ -115,6 +116,7 @@ const typeIcon: Partial<Record<NotificationType, IconName>> = {
 /** Types that ask for an answer: unread, they open the list under « Important » (screen 19). */
 const important = new Set<NotificationType>([
   "interviewInvite",
+  "interviewFixed",
   "interviewTeam",
   "interviewConfirmed",
   "interviewReschedule",

@@ -8502,11 +8502,6 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   font-size: 12px;
   color: var(--nb-menthe-claire-t);
 }
-.nb-rh-ag-aide {
-  font-size: 13px;
-  line-height: 1.45;
-  color: var(--nb-brume);
-}
 .nb-rh-ag-qui small {
   font-size: 12px;
   color: var(--nb-brume);
@@ -8984,74 +8979,149 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-date input {
   margin: 0;
   font-size: 12px;
 }
-/* Agenda › À planifier: « Fixer la date » of a document check (05/11/2026). */
-.nb-rh-ag-verif {
-  display: grid;
-  gap: 6px;
-}
-.nb-rh-ag-verif > ul {
-  display: grid;
-}
-.nb-rh-ag-fixer {
-  margin: 0 4px;
-}
-.nb-rh-ag-fixer summary {
-  display: inline-flex;
-  align-items: center;
-  min-height: 40px;
-  padding: 0 14px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--nb-lime), var(--nb-menthe));
-  color: var(--nb-encre);
-  font-size: 13px;
-  font-weight: 700;
+/* Agenda › À planifier (06/11/2026): a touch on a person opens a window over the blurred page. */
+button.nb-rh-ag-tache {
+  width: 100%;
+  text-align: left;
+  font: inherit;
   cursor: pointer;
-  list-style: none;
 }
-.nb-rh-ag-fixer summary::-webkit-details-marker {
-  display: none;
+button.nb-rh-ag-tache > svg {
+  color: var(--nb-lime);
 }
-.nb-rh-ag-fixer[open] summary {
-  border: 1px solid var(--nb-filet-fort);
-  background: var(--nb-surface);
+.nb-rh-ag-retard {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--nb-corail-t);
+}
+.nb-feuille-dlg:has(.nb-rh-fen) .nb-voile {
+  background: rgba(0, 0, 0, 0.4);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.nb-rh-fen {
+  display: grid;
+  gap: 10px;
+}
+.nb-rh-fen h2 {
+  margin-top: 4px;
+}
+.nb-rh-fen-qui {
+  margin: -4px 0 4px;
+  font-size: 13px;
+  color: var(--nb-brume);
+}
+.nb-rh-fen-qui b {
   color: var(--nb-creme);
 }
-.nb-rh-ag-fixer form {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 10px;
-  margin-top: 10px;
-  padding: 12px;
-  border-radius: 18px;
-  border: 1px solid var(--nb-filet-fort);
-  background: var(--nb-carte);
-}
-.nb-rh-ag-fixer label {
-  display: grid;
-  gap: 6px;
+.nb-rh-fen-label {
   font-size: 12px;
   font-weight: 700;
   color: var(--nb-brume);
 }
-.nb-rh-ag-fixer input {
+.nb-rh-fen-jours {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 0 -20px;
+  padding: 2px 20px 6px;
+  scrollbar-width: none;
+}
+.nb-rh-fen-jour {
+  flex: none;
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  min-width: 58px;
+  padding: 8px 10px;
+  border-radius: 16px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+  color: var(--nb-creme);
+  font: inherit;
+  cursor: pointer;
+}
+.nb-rh-fen-jour b {
+  font-size: 18px;
+}
+.nb-rh-fen-jour small {
+  font-size: 11px;
+  color: var(--nb-brume);
+  text-transform: capitalize;
+}
+.nb-rh-fen-jour[aria-checked="true"] {
+  background: var(--nb-lime);
+  border-color: var(--nb-lime);
+  color: var(--nb-encre);
+}
+.nb-rh-fen-jour[aria-checked="true"] small {
+  color: var(--nb-encre);
+}
+.nb-rh-fen-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.nb-rh-fen-modes .nb-chip {
+  height: 40px;
+  padding: 0 18px;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.nb-rh-fen-modes .nb-chip[aria-checked="true"] {
+  background: var(--nb-lime);
+  border-color: var(--nb-lime);
+  color: var(--nb-encre);
+}
+.nb-rh-fen-champ {
+  display: grid;
+  gap: 6px;
+  animation: nbMonte 0.24s var(--nb-courbe);
+}
+.nb-rh-fen-champ input,
+.nb-rh-fen-champ select {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  min-height: 44px;
-  padding: 0 10px;
-  border-radius: 12px;
+  min-height: 48px;
+  padding: 0 14px;
+  border-radius: 14px;
   border: 1px solid var(--nb-filet-fort);
-  background: var(--nb-surface);
+  background: var(--nb-carte);
   color: var(--nb-creme);
   font: inherit;
   font-size: 15px;
   color-scheme: dark;
 }
-.nb-rh-ag-fixer button {
-  grid-column: 1 / -1;
-  justify-content: center;
-  border: 0;
-  cursor: pointer;
+html[data-nb-theme="clair"] .nb-app .nb-rh-fen-champ input,
+html[data-nb-theme="clair"] .nb-app .nb-rh-fen-champ select {
+  color-scheme: light;
+}
+.nb-rh-fen-champ input[aria-invalid="true"] {
+  border-color: var(--nb-corail);
+}
+.nb-rh-fen-jusqua {
+  font-size: 14px;
+  font-weight: 600;
+}
+.nb-rh-fen-erreur {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nb-corail-t);
+}
+.nb-rh-fen-actions {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  margin-top: 6px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-rh-fen-champ {
+    animation: none;
+  }
 }
 .nb-rh-ag-rdv[data-verif] .nb-rh-ag-heure {
   background: color-mix(in srgb, var(--nb-ambre) 16%, transparent);

@@ -11,7 +11,6 @@ import { reportError } from "@/server/observability";
 import { HireError } from "@/server/services/hire";
 import {
   piecesHref,
-  planVerificationCheck,
   requestPieces,
   requestSchema,
   submitPiece,
@@ -19,9 +18,7 @@ import {
   VerificationError,
   verificationPieces,
 } from "@/server/services/hire-verification";
-import { slotToDate } from "@/server/services/interviews";
 import { fileStorage } from "@/server/storage";
-import { defaultTimeZone } from "@/lib/dates";
 
 /**
  * « Dossier de vérification ». Order of CLAUDE.md: validate → session → role and right
@@ -104,29 +101,4 @@ export async function submitPieceAction(formData: FormData) {
   }
   refresh();
   redirect(`${back}?ok=1`);
-}
-
-/**
- * « Fixer la date » of a document check (Agenda › À planifier, 05/11/2026): the day and the hour,
- * read in the platform's time zone like the agenda. Back to the agenda, « Mois » on that day.
- */
-export async function planCheckAction(formData: FormData) {
-  const applicationId = id(formData.get("application"));
-  const day = String(formData.get("jour") ?? "");
-  const hour = String(formData.get("heure") ?? "");
-  const back = "/app/hire/entretiens?vue=planifier";
-  const checkAt =
-    /^\d{4}-\d{2}-\d{2}$/.test(day) && /^\d{2}:\d{2}$/.test(hour)
-      ? slotToDate(`${day}T${hour}`, defaultTimeZone())
-      : null;
-  if (!applicationId || !checkAt) redirect(`${back}&erreur=date`);
-  const { ctx } = await requireHire("/app/hire/entretiens", "manage", "sort");
-  try {
-    await planVerificationCheck(db, ctx, applicationId, checkAt);
-  } catch (error) {
-    if (error instanceof HireError) redirect(`${back}&erreur=date`);
-    throw error;
-  }
-  refresh();
-  redirect(`/app/hire/entretiens?mois=${day.slice(0, 7)}&jour=${day}`);
 }

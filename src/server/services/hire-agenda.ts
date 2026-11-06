@@ -1,7 +1,7 @@
 import type { PrismaClient } from "@/generated/prisma/client";
 import { hirePermissions, jobScope, type HireContext } from "./hire";
 import { deskSelect, rubriqueOf } from "./hire-desk";
-import { HOLD_EVENT, HOLD_LIFTED_EVENT, isOnHold } from "./hire-classes";
+import { HOLD_CHECK_EVENT, HOLD_EVENT, HOLD_LIFTED_EVENT, isOnHold } from "./hire-classes";
 import { REVIEW_DAYS } from "./hire-offer-candidates";
 
 /**
@@ -14,6 +14,12 @@ import { REVIEW_DAYS } from "./hire-offer-candidates";
 
 const DAY = 86_400_000;
 
+const plannedAt = (payload: unknown) => {
+  const value = (payload as { checkAt?: unknown } | null)?.checkAt;
+  const date = typeof value === "string" ? new Date(value) : null;
+  return date && !Number.isNaN(date.getTime()) ? date : null;
+};
+
 export type AgendaReview = {
   applicationId: string;
   jobId: string;
@@ -22,6 +28,8 @@ export type AgendaReview = {
   name: string | null;
   remindAt: Date;
   due: boolean;
+  /** The check dated with « Délai de vérification » (06/11/2026), shown in « Mois ». */
+  checkAt: Date | null;
 };
 
 export type AgendaPieces = {
@@ -64,7 +72,7 @@ export function agendaOf(
     shortlistedAt: Date | null;
     job: { title: string; blindSort: boolean };
     profile: { user: { name: string | null } };
-    events: { type: string; createdAt: Date }[];
+    events: { type: string; createdAt: Date; payload?: unknown }[];
     /** The interviews still standing (proposed, confirmed, to move). */
     interviews?: { id: string }[];
     verification: {
@@ -100,7 +108,12 @@ export function agendaOf(
     } else if (onHold) {
       // Set aside « En attente » without pieces asked: reminded after 3 days.
       const since = [...row.events].reverse().find((event) => event.type === HOLD_EVENT)!;
-      const remindAt = new Date(since.createdAt.getTime() + REVIEW_DAYS * DAY);
+      // A « Délai de vérification » given since this hold replaces the 3 days.
+      const planned = [...row.events]
+        .reverse()
+        .find((event) => event.type === HOLD_CHECK_EVENT && event.createdAt >= since.createdAt);
+      const checkAt = planned ? plannedAt(planned.payload) : null;
+      const remindAt = checkAt ?? new Date(since.createdAt.getTime() + REVIEW_DAYS * DAY);
       reviews.push({
         applicationId: row.id,
         jobId: row.jobId,
@@ -108,6 +121,7 @@ export function agendaOf(
         name,
         remindAt,
         due: remindAt <= now,
+        checkAt,
       });
     } else if (rubrique === "entretiens" && (row.interviews ?? []).length === 0) {
       toPlan.push({
@@ -167,9 +181,9 @@ export async function agendaTasks(
         select: { id: true },
       },
       events: {
-        where: { type: { in: [HOLD_EVENT, HOLD_LIFTED_EVENT] } },
+        where: { type: { in: [HOLD_EVENT, HOLD_LIFTED_EVENT, HOLD_CHECK_EVENT] } },
         orderBy: { createdAt: "asc" },
-        select: { type: true, createdAt: true },
+        select: { type: true, createdAt: true, payload: true },
       },
     },
   });

@@ -13,6 +13,7 @@ import {
 /** A short title and a line for what a talent receives (planche talent-2 § 5); the rest keeps its sentence. */
 const look: Partial<Record<NotificationType, { icon: TalentIconName; tone: string }>> = {
   interviewInvite: { icon: "entretien", tone: "t-c2" },
+  interviewFixed: { icon: "entretien", tone: "t-c2" },
   interviewCanceled: { icon: "entretien", tone: "" },
   interviewAccepted: { icon: "entretien", tone: "t-c2" },
   profileViewed: { icon: "profil", tone: "t-c3" },

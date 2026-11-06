@@ -22,6 +22,7 @@ import {
   jobScope,
   type HireContext,
 } from "./hire";
+import { HOLD_CHECK_EVENT, HOLD_EVENT, HOLD_LIFTED_EVENT, isOnHold } from "./hire-classes";
 import { hiringTeam, notify } from "./notifications";
 import { level } from "@/server/entitlements";
 
@@ -519,6 +520,14 @@ export const CHECK_MAX_DAYS = 120;
  * team checks the pieces of a candidate set aside. The date shows in « Mois » and the member who
  * set it is reminded at that time. Nothing is decided here: it is only a date in the agenda.
  */
+/** « Délai de vérification » (Ephraïm 06/11/2026): the choices offered, in days. */
+export const CHECK_DELAYS = [3, 5, 7, 14] as const;
+
+/**
+ * Plans the document check of a person set aside: with pieces asked, on the request (reminder
+ * at the hour); set aside without pieces, as an event the agenda reads. Returns what the candidate
+ * needs to be told (the reminder in the conversation).
+ */
 export async function planVerificationCheck(
   db: PrismaClient,
   ctx: HireContext,
@@ -533,27 +542,46 @@ export async function planVerificationCheck(
       status: "active",
       job: { AND: [await jobScope(db, ctx), { organizationId: ctx.organizationId }] },
     },
-    select: { id: true, verification: { select: { id: true } } },
+    select: {
+      id: true,
+      verification: { select: { id: true } },
+      conversation: { select: { id: true } },
+      job: { select: { title: true, organization: { select: { name: true } } } },
+      events: {
+        where: { type: { in: [HOLD_EVENT, HOLD_LIFTED_EVENT] } },
+        orderBy: { createdAt: "asc" },
+        select: { type: true },
+      },
+    },
   });
-  if (!application?.verification) throw new HireError("notFound");
+  if (!application) throw new HireError("notFound");
+  if (!application.verification && !isOnHold(application.events)) throw new HireError("notFound");
   if (
     checkAt.getTime() <= now.getTime() ||
     checkAt.getTime() > now.getTime() + CHECK_MAX_DAYS * DAY
   )
     throw new HireError("invalid");
-  await db.verificationRequest.update({
-    where: { id: application.verification.id },
-    data: { checkAt, checkById: ctx.userId, checkRemindedAt: null },
-  });
+  if (application.verification)
+    await db.verificationRequest.update({
+      where: { id: application.verification.id },
+      data: { checkAt, checkById: ctx.userId, checkRemindedAt: null },
+    });
   await db.applicationEvent.create({
     data: {
       applicationId: application.id,
       actorId: ctx.userId,
-      type: "verification_check_planned",
+      type: application.verification ? "verification_check_planned" : HOLD_CHECK_EVENT,
       payload: { checkAt: checkAt.toISOString() },
       createdAt: now,
     },
   });
+  const conversation =
+    application.conversation ?? (await ensureApplicationConversation(db, application.id));
+  return {
+    conversationId: conversation.id,
+    company: application.job.organization.name,
+    jobTitle: application.job.title,
+  };
 }
 
 /**
