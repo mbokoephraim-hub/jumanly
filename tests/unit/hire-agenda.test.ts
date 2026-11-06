@@ -9,7 +9,7 @@ const base = {
   job: { title: "Analyste", blindSort: false },
   profile: { user: { name: "Awa" } },
   verification: null,
-  events: [] as { type: string; createdAt: Date }[],
+  events: [] as { type: string; createdAt: Date; payload?: unknown }[],
   shortlistedAt: null as Date | null,
   createdAt: new Date(now.getTime() - DAY),
 };
@@ -90,6 +90,29 @@ describe("agendaOf", () => {
     );
     expect(tasks.reviews).toEqual([]);
     expect(tasks.pieces).toMatchObject([{ applicationId: "a", late: false, checkAt }]);
+    expect(tasks.due).toBe(0);
+  });
+
+  it("takes the « Délai de vérification » of a person set aside as their date", () => {
+    const checkAt = new Date(now.getTime() + 5 * DAY);
+    const tasks = agendaOf(
+      [
+        {
+          ...base,
+          id: "a",
+          events: [
+            { type: "on_hold", createdAt: new Date(now.getTime() - 4 * DAY) },
+            {
+              type: "hold_check_planned",
+              createdAt: now,
+              payload: { checkAt: checkAt.toISOString() },
+            },
+          ],
+        },
+      ],
+      now,
+    );
+    expect(tasks.reviews).toMatchObject([{ applicationId: "a", checkAt, due: false }]);
     expect(tasks.due).toBe(0);
   });
 });

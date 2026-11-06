@@ -3611,6 +3611,7 @@
     },
     "title": {
       "interviewInvite": "Invitation à un entretien",
+      "interviewFixed": "Entretien fixé",
       "interviewCanceled": "Entretien annulé",
       "interviewAccepted": "Entretien confirmé",
       "profileViewed": "Votre profil a été consulté",
@@ -19510,10 +19511,7 @@
     "monthNext": "Mois suivant",
     "plan": {
       "title": "Entretiens",
-      "help": "Les candidats retenus. « Planifier » : visio, sur place ou appel, puis 1 à 3 créneaux. Le candidat choisit, l'entretien passe dans Mois.",
-      "empty": "Aucun entretien à planifier. Orbi vous prévient dès qu'un candidat est retenu.",
-      "since": "Retenu le {date, date, medium}",
-      "go": "Planifier"
+      "empty": "Aucun entretien à planifier. Orbi vous prévient dès qu'un candidat est retenu."
     },
     "today": "Aujourd'hui",
     "count": "{count, plural, =0 {aucun entretien} one {# entretien} other {# entretiens}}",
@@ -19529,15 +19527,14 @@
     "add": {
       "title": "Planifier",
       "interview": "Un entretien",
-      "interviewLine": "Avec un candidat retenu : visio, sur place ou appel.",
+      "interviewLine": "Présentiel ou visio, avec un candidat retenu.",
       "check": "Une vérification de documents",
-      "checkLine": "Le jour où vous vérifiez les pièces d'un candidat en attente.",
+      "checkLine": "Un délai pour un candidat en attente.",
       "campaign": "Une campagne de recrutement",
       "campaignLine": "Une offre qui s'ouvre toute seule au jour et à l'heure choisis."
     },
     "campaigns": {
       "title": "Campagnes programmées",
-      "help": "Une offre préparée qui s'ouvre toute seule au jour et à l'heure choisis, puis se ferme à sa date de clôture. On la programme à la dernière étape de « Publier une offre ».",
       "empty": "Aucune campagne programmée.",
       "line": "S'ouvre le {opens, date, medium} à {opens, time, short} · se ferme le {closes, date, medium}",
       "lineNoEnd": "S'ouvre le {opens, date, medium} à {opens, time, short} · sans date de fin",
@@ -19551,19 +19548,41 @@
     },
     "checks": {
       "title": "Vérification des documents",
-      "help": "Les candidats mis en attente. « Fixer la date » : le jour et l'heure où vous vérifiez leurs pièces. La vérification passe dans Mois, avec un rappel à l'heure dite.",
       "empty": "Aucun document à vérifier pour l'instant.",
-      "reviewDue": "À revoir aujourd'hui · {job}",
-      "reviewOn": "À revoir le {date, date, medium} · {job}",
-      "pieces": "Pièces {received} sur {required} · avant le {date, date, medium} · {job}",
-      "plan": "Fixer la date",
-      "day": "Jour",
-      "hour": "Heure",
-      "save": "Enregistrer",
-      "error": "Choisissez un jour et une heure à venir.",
+      "error": "Impossible d'enregistrer. Réessayez.",
       "short": "Pièces",
       "received": "Vérification des documents · {received} sur {required} reçues",
-      "piecesLate": "Pièces en retard : {received} sur {required} · {job}"
+      "reviewCard": "Vérification des documents",
+      "lateTag": "En retard"
+    },
+    "sheet": {
+      "close": "Fermer",
+      "interviewTitle": "Planifier l'entretien",
+      "day": "Jour",
+      "today": "Auj.",
+      "mode": "Format",
+      "onsite": "Présentiel",
+      "video": "Visio",
+      "hour": "Heure",
+      "link": "Lien de la visio",
+      "address": "Adresse (facultatif)",
+      "cancel": "Annuler",
+      "plans": "Voir les formules",
+      "send": "Enregistrer et envoyer",
+      "checkTitle": "Délai de vérification",
+      "delay3": "3 jours",
+      "delay5": "5 jours",
+      "delay7": "1 semaine",
+      "delay14": "2 semaines",
+      "until": "Jusqu'au {date, date, long}",
+      "checkMessage": "Rappel : vos documents pour « {jobTitle} » seront vérifiés d'ici le {date}. Envoyez-les ici avant cette date.",
+      "error": {
+        "past": "Cette heure est déjà passée.",
+        "link": "Ajoutez le lien de la visio.",
+        "taken": "Un entretien est déjà prévu pour cette personne.",
+        "locked": "Votre formule ne permet pas encore de planifier un entretien.",
+        "invalid": "Impossible d'enregistrer. Réessayez."
+      }
     }
   },
   "phoneRhAccueil": {
@@ -25165,6 +25184,7 @@
       "contactAccepted": "Un talent a accepté votre demande de mise en relation.",
       "contactDeclined": "Un talent a décliné votre demande de mise en relation.",
       "interviewInvite": "{company} vous invite à un entretien pour {jobTitle}. Choisissez votre créneau.",
+      "interviewFixed": "{company} a fixé votre entretien pour {jobTitle}.",
       "interviewTeam": "Vous participez à l'entretien de {candidateName} pour {jobTitle}.",
       "interviewConfirmed": "{candidateName} a confirmé son entretien pour {jobTitle}.",
       "interviewReschedule": "{candidateName} propose d'autres créneaux pour {jobTitle}.",
@@ -25532,6 +25552,8 @@
       "subject": "Entretien confirmé avec {company} le {date, date, medium}",
       "preheader": "{time}, heure de {timezone}.",
       "p1": "Votre entretien pour le poste de {jobTitle} est confirmé le {date, date, full} à {time} (heure de {timezone}).",
+      "link": "Lien de la visio : {link}",
+      "place": "Lieu : {place}",
       "p2": "Conseil : relisez l'offre, préparez deux exemples concrets de réalisations et une question à poser.",
       "cta": "Voir les détails"
     },

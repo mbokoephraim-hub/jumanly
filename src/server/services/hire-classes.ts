@@ -24,6 +24,8 @@ export const CRITERION_MET_EVENT = "criterion_met";
 /** « En attente » (a member's gesture, no answer to the candidate) and its end. */
 export const HOLD_EVENT = "on_hold";
 export const HOLD_LIFTED_EVENT = "hold_lifted";
+/** The date given to check the documents of someone set aside (« Délai de vérification »). */
+export const HOLD_CHECK_EVENT = "hold_check_planned";
 
 /** Is the application « En attente » (the last hold event wins, events oldest first)? */
 export function isOnHold(events: readonly { type: string }[]) {

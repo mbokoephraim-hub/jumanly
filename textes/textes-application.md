@@ -2978,6 +2978,7 @@ Conventions :
 | `notifs.group.earlier` | Plus tôt |
 | `notifs.empty.title` | Rien de nouveau |
 | `notifs.title.interviewInvite` | Invitation à un entretien |
+| `notifs.title.interviewFixed` | Entretien fixé |
 | `notifs.title.interviewCanceled` | Entretien annulé |
 | `notifs.title.interviewAccepted` | Entretien confirmé |
 | `notifs.title.profileViewed` | Votre profil a été consulté |
@@ -15894,10 +15895,7 @@ Conventions :
 | `phoneRhAgenda.monthPrev` | Mois précédent |
 | `phoneRhAgenda.monthNext` | Mois suivant |
 | `phoneRhAgenda.plan.title` | Entretiens |
-| `phoneRhAgenda.plan.help` | Les candidats retenus. « Planifier » : visio, sur place ou appel, puis 1 à 3 créneaux. Le candidat choisit, l'entretien passe dans Mois. |
 | `phoneRhAgenda.plan.empty` | Aucun entretien à planifier. Orbi vous prévient dès qu'un candidat est retenu. |
-| `phoneRhAgenda.plan.since` | Retenu le {date, date, medium} |
-| `phoneRhAgenda.plan.go` | Planifier |
 | `phoneRhAgenda.today` | Aujourd'hui |
 | `phoneRhAgenda.count` | {count, plural, =0 {aucun entretien} one {# entretien} other {# entretiens}} |
 | `phoneRhAgenda.dayEmpty` | Aucun entretien ce jour-là. |
@@ -15909,13 +15907,12 @@ Conventions :
 | `phoneRhAgenda.later` | Plus tard ce mois-ci |
 | `phoneRhAgenda.add.title` | Planifier |
 | `phoneRhAgenda.add.interview` | Un entretien |
-| `phoneRhAgenda.add.interviewLine` | Avec un candidat retenu : visio, sur place ou appel. |
+| `phoneRhAgenda.add.interviewLine` | Présentiel ou visio, avec un candidat retenu. |
 | `phoneRhAgenda.add.check` | Une vérification de documents |
-| `phoneRhAgenda.add.checkLine` | Le jour où vous vérifiez les pièces d'un candidat en attente. |
+| `phoneRhAgenda.add.checkLine` | Un délai pour un candidat en attente. |
 | `phoneRhAgenda.add.campaign` | Une campagne de recrutement |
 | `phoneRhAgenda.add.campaignLine` | Une offre qui s'ouvre toute seule au jour et à l'heure choisis. |
 | `phoneRhAgenda.campaigns.title` | Campagnes programmées |
-| `phoneRhAgenda.campaigns.help` | Une offre préparée qui s'ouvre toute seule au jour et à l'heure choisis, puis se ferme à sa date de clôture. On la programme à la dernière étape de « Publier une offre ». |
 | `phoneRhAgenda.campaigns.empty` | Aucune campagne programmée. |
 | `phoneRhAgenda.campaigns.line` | S'ouvre le {opens, date, medium} à {opens, time, short} · se ferme le {closes, date, medium} |
 | `phoneRhAgenda.campaigns.lineNoEnd` | S'ouvre le {opens, date, medium} à {opens, time, short} · sans date de fin |
@@ -15927,19 +15924,37 @@ Conventions :
 | `phoneRhAgenda.campaigns.opens` | La campagne s'ouvre |
 | `phoneRhAgenda.campaigns.ends` | Dernier jour de la campagne |
 | `phoneRhAgenda.checks.title` | Vérification des documents |
-| `phoneRhAgenda.checks.help` | Les candidats mis en attente. « Fixer la date » : le jour et l'heure où vous vérifiez leurs pièces. La vérification passe dans Mois, avec un rappel à l'heure dite. |
 | `phoneRhAgenda.checks.empty` | Aucun document à vérifier pour l'instant. |
-| `phoneRhAgenda.checks.reviewDue` | À revoir aujourd'hui · {job} |
-| `phoneRhAgenda.checks.reviewOn` | À revoir le {date, date, medium} · {job} |
-| `phoneRhAgenda.checks.pieces` | Pièces {received} sur {required} · avant le {date, date, medium} · {job} |
-| `phoneRhAgenda.checks.plan` | Fixer la date |
-| `phoneRhAgenda.checks.day` | Jour |
-| `phoneRhAgenda.checks.hour` | Heure |
-| `phoneRhAgenda.checks.save` | Enregistrer |
-| `phoneRhAgenda.checks.error` | Choisissez un jour et une heure à venir. |
+| `phoneRhAgenda.checks.error` | Impossible d'enregistrer. Réessayez. |
 | `phoneRhAgenda.checks.short` | Pièces |
 | `phoneRhAgenda.checks.received` | Vérification des documents · {received} sur {required} reçues |
-| `phoneRhAgenda.checks.piecesLate` | Pièces en retard : {received} sur {required} · {job} |
+| `phoneRhAgenda.checks.reviewCard` | Vérification des documents |
+| `phoneRhAgenda.checks.lateTag` | En retard |
+| `phoneRhAgenda.sheet.close` | Fermer |
+| `phoneRhAgenda.sheet.interviewTitle` | Planifier l'entretien |
+| `phoneRhAgenda.sheet.day` | Jour |
+| `phoneRhAgenda.sheet.today` | Auj. |
+| `phoneRhAgenda.sheet.mode` | Format |
+| `phoneRhAgenda.sheet.onsite` | Présentiel |
+| `phoneRhAgenda.sheet.video` | Visio |
+| `phoneRhAgenda.sheet.hour` | Heure |
+| `phoneRhAgenda.sheet.link` | Lien de la visio |
+| `phoneRhAgenda.sheet.address` | Adresse (facultatif) |
+| `phoneRhAgenda.sheet.cancel` | Annuler |
+| `phoneRhAgenda.sheet.plans` | Voir les formules |
+| `phoneRhAgenda.sheet.send` | Enregistrer et envoyer |
+| `phoneRhAgenda.sheet.checkTitle` | Délai de vérification |
+| `phoneRhAgenda.sheet.delay3` | 3 jours |
+| `phoneRhAgenda.sheet.delay5` | 5 jours |
+| `phoneRhAgenda.sheet.delay7` | 1 semaine |
+| `phoneRhAgenda.sheet.delay14` | 2 semaines |
+| `phoneRhAgenda.sheet.until` | Jusqu'au {date, date, long} |
+| `phoneRhAgenda.sheet.checkMessage` | Rappel : vos documents pour « {jobTitle} » seront vérifiés d'ici le {date}. Envoyez-les ici avant cette date. |
+| `phoneRhAgenda.sheet.error.past` | Cette heure est déjà passée. |
+| `phoneRhAgenda.sheet.error.link` | Ajoutez le lien de la visio. |
+| `phoneRhAgenda.sheet.error.taken` | Un entretien est déjà prévu pour cette personne. |
+| `phoneRhAgenda.sheet.error.locked` | Votre formule ne permet pas encore de planifier un entretien. |
+| `phoneRhAgenda.sheet.error.invalid` | Impossible d'enregistrer. Réessayez. |
 | `phoneRh.nav.talents` | Talents |
 | `phoneRh.nav.messages` | Chat |
 | `phoneRh.nav.offresNew` | Offres, {count, plural, one {# nouvelle candidature} other {# nouvelles candidatures}} |
@@ -20658,6 +20673,7 @@ Conventions :
 | `notifications.item.contactAccepted` | Un talent a accepté votre demande de mise en relation. |
 | `notifications.item.contactDeclined` | Un talent a décliné votre demande de mise en relation. |
 | `notifications.item.interviewInvite` | {company} vous invite à un entretien pour {jobTitle}. Choisissez votre créneau. |
+| `notifications.item.interviewFixed` | {company} a fixé votre entretien pour {jobTitle}. |
 | `notifications.item.interviewTeam` | Vous participez à l'entretien de {candidateName} pour {jobTitle}. |
 | `notifications.item.interviewConfirmed` | {candidateName} a confirmé son entretien pour {jobTitle}. |
 | `notifications.item.interviewReschedule` | {candidateName} propose d'autres créneaux pour {jobTitle}. |
@@ -21030,6 +21046,8 @@ Conventions :
 | `mail.interviewConfirmed.subject` | Entretien confirmé avec {company} le {date, date, medium} |
 | `mail.interviewConfirmed.preheader` | {time}, heure de {timezone}. |
 | `mail.interviewConfirmed.p1` | Votre entretien pour le poste de {jobTitle} est confirmé le {date, date, full} à {time} (heure de {timezone}). |
+| `mail.interviewConfirmed.link` | Lien de la visio : {link} |
+| `mail.interviewConfirmed.place` | Lieu : {place} |
 | `mail.interviewConfirmed.p2` | Conseil : relisez l'offre, préparez deux exemples concrets de réalisations et une question à poser. |
 | `mail.interviewConfirmed.cta` | Voir les détails |
 | `mail.interviewReminder.subject` | Rappel : entretien demain avec {company} |

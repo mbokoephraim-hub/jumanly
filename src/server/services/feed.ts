@@ -1112,6 +1112,7 @@ export const phoneNotificationFilters = {
     "notSelected",
     "documentRequest",
     "interviewInvite",
+    "interviewFixed",
     "interviewConfirmed",
     "interviewReschedule",
     "interviewDeclined",

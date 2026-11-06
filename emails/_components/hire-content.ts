@@ -219,21 +219,41 @@ export function interviewInviteEmail(
 
 export function interviewConfirmedEmail(
   firstName: string | null | undefined,
-  input: { company: string; jobTitle: string; date: Date; timezone: string; href: string },
+  input: {
+    company: string;
+    jobTitle: string;
+    date: Date;
+    timezone: string;
+    href: string;
+    /** Fixed by the recruiter (Agenda, 06/11/2026): where, or the video link. */
+    place?: string | null;
+    link?: string | null;
+  },
 ): HireEmail {
   const time = new Intl.DateTimeFormat("fr", {
     timeZone: input.timezone,
     hour: "2-digit",
     minute: "2-digit",
   }).format(input.date);
-  const values = { ...input, time, timezone: zoneCity(input.timezone) };
+  const values = {
+    company: input.company,
+    jobTitle: input.jobTitle,
+    date: input.date,
+    time,
+    timezone: zoneCity(input.timezone),
+  };
   return {
     subject: t("mail.interviewConfirmed.subject", values),
     props: {
       essential: false,
       preview: t("mail.interviewConfirmed.preheader", values),
       greeting: greeting(firstName),
-      paragraphs: [t("mail.interviewConfirmed.p1", values), t("mail.interviewConfirmed.p2")],
+      paragraphs: [
+        t("mail.interviewConfirmed.p1", values),
+        ...(input.link ? [t("mail.interviewConfirmed.link", { link: input.link })] : []),
+        ...(input.place ? [t("mail.interviewConfirmed.place", { place: input.place })] : []),
+        t("mail.interviewConfirmed.p2"),
+      ],
       cta: { label: t("mail.interviewConfirmed.cta"), href: url(input.href) },
     },
   };

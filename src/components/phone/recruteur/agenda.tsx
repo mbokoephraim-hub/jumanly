@@ -1,14 +1,22 @@
 import "server-only";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { getFormatter, getTranslations } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { getFormatter, getMessages, getTranslations } from "next-intl/server";
+import { pickMessages } from "@/i18n/client-messages";
 import { MenuArt, type MenuArtName } from "@/components/site/menu-art";
-import type { AgendaCampaign, AgendaPieces, AgendaTasks } from "@/server/services/hire-agenda";
+import type {
+  AgendaCampaign,
+  AgendaPieces,
+  AgendaReview,
+  AgendaTasks,
+} from "@/server/services/hire-agenda";
 import { rhUnscheduleOfferAction } from "@/server/actions/phone-rh-offres";
-import { planCheckAction } from "@/server/actions/hire-verification";
+import { CHECK_DELAYS } from "@/server/services/hire-verification";
 import type { rhInterviews } from "@/server/services/hire-phone-candidatures";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { addDays, monthGrid, nextMonth, noonOf } from "@/lib/interview-calendar";
+import { PlanCheckRow, PlanInterviewRow, type PlanDay } from "./agenda-plan";
 
 type Interviews = Awaited<ReturnType<typeof rhInterviews>>;
 type Card = Interviews["today"][number];
@@ -33,8 +41,10 @@ export function toPlanCount(interviews: Interviews, tasks: AgendaTasks) {
   const open = [...interviews.today, ...interviews.ahead].filter(
     (card) => !card.confirmed || !card.when,
   ).length;
-  const undated = tasks.pieces.filter((item) => !item.checkAt).length;
-  return tasks.toPlan.length + open + undated + tasks.reviews.length;
+  const undated =
+    tasks.pieces.filter((item) => !item.checkAt).length +
+    tasks.reviews.filter((item) => !item.checkAt).length;
+  return tasks.toPlan.length + open + undated;
 }
 
 export async function RhAgenda({
@@ -81,8 +91,8 @@ export async function RhAgenda({
     byDay.set(key, [...(byDay.get(key) ?? []), card]);
   }
   // The document checks with a date (« Fixer la date »): in « Mois » beside the interviews.
-  const checksByDay = new Map<string, AgendaPieces[]>();
-  for (const item of tasks.pieces) {
+  const checksByDay = new Map<string, (AgendaPieces | AgendaReview)[]>();
+  for (const item of [...tasks.pieces, ...tasks.reviews]) {
     if (!item.checkAt) continue;
     const key = keyOf(item.checkAt);
     checksByDay.set(key, [...(checksByDay.get(key) ?? []), item]);
@@ -140,7 +150,7 @@ export async function RhAgenda({
     </li>
   );
 
-  const checkCard = (item: AgendaPieces) => (
+  const checkCard = (item: AgendaPieces | AgendaReview) => (
     <li key={`v-${item.applicationId}`} className="nb-rh-ag-rdv" data-verif="">
       <span className="nb-rh-ag-heure">
         <b>{clock(item.checkAt!)}</b>
@@ -149,7 +159,11 @@ export async function RhAgenda({
       <span className="nb-rh-ag-qui">
         <b>{nobody(item.name)}</b>
         <span>{item.jobTitle}</span>
-        <em>{t("checks.received", { received: item.received, required: item.required })}</em>
+        <em>
+          {"required" in item
+            ? t("checks.received", { received: item.received, required: item.required })
+            : t("checks.reviewCard")}
+        </em>
       </span>
       <Link
         href={ficheHref(item.jobId, item.applicationId, "completer")}
@@ -191,27 +205,21 @@ export async function RhAgenda({
       .filter((item) => item.kind === "end")
       .map((item) => campaignCard(item)),
   ];
-  const task = (
-    key: string,
-    art: MenuArtName,
-    href: string,
-    title: string,
-    line: string,
-    tone: "due" | "attente" | "ok",
-  ) => (
-    <li key={key}>
-      <Link href={href} className="nb-rh-ag-tache" data-ton={tone}>
-        <span className="nb-rh-ag-art" aria-hidden>
-          <MenuArt name={art} size="xs" />
-        </span>
-        <span className="nb-rh-ag-t">
-          <b>{title}</b>
-          <span>{line}</span>
-        </span>
-        <PhoneIcon name="chevron" size={18} />
-      </Link>
-    </li>
-  );
+  // The days offered in the window of « Planifier l'entretien »: today and the next 13.
+  const planDays: PlanDay[] = Array.from({ length: 14 }, (_, index) => {
+    const key = addDays(today, index);
+    const date = noonOf(key);
+    return {
+      key,
+      weekday: index === 0 ? t("sheet.today") : format.dateTime(date, { weekday: "short" }),
+      num: String(Number(key.slice(8))),
+      month: format.dateTime(date, { month: "short" }),
+    };
+  });
+  const planDelays = CHECK_DELAYS.map((days) => ({
+    days,
+    until: t("sheet.until", { date: noonOf(addDays(today, days)) }),
+  }));
   // Waiting for the candidate, or without a date any more: still to plan.
   const open = cards.filter((card) => !card.confirmed || !card.when);
   const counts: Record<AgendaView, number> = {
@@ -375,8 +383,9 @@ export async function RhAgenda({
     );
   } else {
     const undated = tasks.pieces.filter((item) => !item.checkAt);
+    const unplanned = tasks.reviews.filter((item) => !item.checkAt);
     const programmed = campaigns.filter((item) => item.opensAt);
-    const checks = tasks.reviews.length + undated.length;
+    const checks = unplanned.length + undated.length;
     body = (
       <>
         <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-plan">
@@ -386,41 +395,34 @@ export async function RhAgenda({
               <small>{tasks.toPlan.length + open.length}</small>
             ) : null}
           </h2>
-          <p className="nb-rh-ag-aide">{t("plan.help")}</p>
           {tasks.toPlan.length + open.length === 0 ? (
             empty("people", t("plan.empty"))
           ) : (
-            <ul className="nb-rh-ag-liste">
+            <ul className="nb-rh-ag-taches">
               {tasks.toPlan.map((item) => (
-                <li key={item.applicationId} className="nb-rh-ag-rdv" data-plan="">
-                  <span className="nb-rh-ag-art" aria-hidden>
-                    <MenuArt name="calendar" size="sm" />
-                  </span>
-                  <span className="nb-rh-ag-qui">
-                    <b>{nobody(item.name)}</b>
-                    <span>{item.jobTitle}</span>
-                    <small>{t("plan.since", { date: item.retainedAt })}</small>
-                  </span>
-                  {canPlan ? (
-                    <Link
-                      href={`/app/hire/candidats/${item.applicationId}/entretien`}
-                      className="nb-rh-ag-go"
-                    >
-                      {t("plan.go")}
-                    </Link>
-                  ) : null}
-                </li>
+                <PlanInterviewRow
+                  key={item.applicationId}
+                  person={{
+                    applicationId: item.applicationId,
+                    name: nobody(item.name),
+                    jobTitle: item.jobTitle,
+                  }}
+                  days={planDays}
+                  canManage={canCheck}
+                  canPlan={canPlan}
+                />
               ))}
-              {open.map((card) => interviewCard(card))}
             </ul>
           )}
+          {open.length > 0 ? (
+            <ul className="nb-rh-ag-liste">{open.map((card) => interviewCard(card))}</ul>
+          ) : null}
         </section>
         <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-verif">
           <h2 id="rh-ag-verif" className="nb-rh-ag-h">
             <span>{t("checks.title")}</span>
             {checks > 0 ? <small>{checks}</small> : null}
           </h2>
-          <p className="nb-rh-ag-aide">{t("checks.help")}</p>
           {dateError ? (
             <p className="nb-rh-ag-erreur" role="alert">
               {t("checks.error")}
@@ -431,69 +433,32 @@ export async function RhAgenda({
           ) : (
             <ul className="nb-rh-ag-taches">
               {undated.map((item) => (
-                <li key={`p-${item.applicationId}`} className="nb-rh-ag-verif">
-                  <ul>
-                    {task(
-                      "lien",
-                      "document",
-                      ficheHref(item.jobId, item.applicationId, "completer"),
-                      nobody(item.name),
-                      t(item.late ? "checks.piecesLate" : "checks.pieces", {
-                        received: item.received,
-                        required: item.required,
-                        date: item.dueAt,
-                        job: item.jobTitle,
-                      }),
-                      item.late ? "due" : "ok",
-                    )}
-                  </ul>
-                  {canCheck ? (
-                    <details className="nb-rh-ag-fixer">
-                      <summary>{t("checks.plan")}</summary>
-                      <form action={planCheckAction}>
-                        <input type="hidden" name="application" value={item.applicationId} />
-                        <label htmlFor={`ag-jour-${item.applicationId}`}>
-                          {t("checks.day")}
-                          <input
-                            id={`ag-jour-${item.applicationId}`}
-                            type="date"
-                            name="jour"
-                            min={today}
-                            defaultValue={addDays(today, 1)}
-                            required
-                          />
-                        </label>
-                        <label htmlFor={`ag-heure-${item.applicationId}`}>
-                          {t("checks.hour")}
-                          <input
-                            id={`ag-heure-${item.applicationId}`}
-                            type="time"
-                            name="heure"
-                            step={900}
-                            defaultValue="10:00"
-                            required
-                          />
-                        </label>
-                        <button type="submit" className="nb-rh-ag-go">
-                          {t("checks.save")}
-                        </button>
-                      </form>
-                    </details>
-                  ) : null}
-                </li>
+                <PlanCheckRow
+                  key={`p-${item.applicationId}`}
+                  person={{
+                    applicationId: item.applicationId,
+                    name: nobody(item.name),
+                    jobTitle: item.jobTitle,
+                  }}
+                  delays={planDelays}
+                  tone={item.late ? "due" : "ok"}
+                  tag={item.late ? t("checks.lateTag") : undefined}
+                  canCheck={canCheck}
+                />
               ))}
-              {tasks.reviews.map((item) =>
-                task(
-                  `r-${item.applicationId}`,
-                  "hourglass",
-                  ficheHref(item.jobId, item.applicationId, "completer"),
-                  nobody(item.name),
-                  item.due
-                    ? t("checks.reviewDue", { job: item.jobTitle })
-                    : t("checks.reviewOn", { job: item.jobTitle, date: item.remindAt }),
-                  item.due ? "due" : "attente",
-                ),
-              )}
+              {unplanned.map((item) => (
+                <PlanCheckRow
+                  key={`r-${item.applicationId}`}
+                  person={{
+                    applicationId: item.applicationId,
+                    name: nobody(item.name),
+                    jobTitle: item.jobTitle,
+                  }}
+                  delays={planDelays}
+                  tone={item.due ? "due" : "attente"}
+                  canCheck={canCheck}
+                />
+              ))}
             </ul>
           )}
         </section>
@@ -502,7 +467,6 @@ export async function RhAgenda({
             <span>{t("campaigns.title")}</span>
             {programmed.length > 0 ? <small>{programmed.length}</small> : null}
           </h2>
-          <p className="nb-rh-ag-aide">{t("campaigns.help")}</p>
           {programmed.length === 0 ? (
             empty("calendar", t("campaigns.empty"))
           ) : (
@@ -561,7 +525,14 @@ export async function RhAgenda({
           </Link>
         ))}
       </nav>
-      {body}
+      {view === "planifier" ? (
+        // The windows of « À planifier » need their texts in the browser.
+        <NextIntlClientProvider messages={pickMessages(await getMessages(), ["phoneRhAgenda"])}>
+          {body}
+        </NextIntlClientProvider>
+      ) : (
+        body
+      )}
     </div>
   );
 }

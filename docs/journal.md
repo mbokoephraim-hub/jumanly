@@ -5612,3 +5612,10 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - Le téléphone envoie maintenant le document en parties de 3 Mo (`uploadPartAction`, rangées sous `parts/{personne}/{envoi}/`), puis le serveur les rassemble (`takeUploadParts`) et fait les contrôles habituels (type lu dans les octets, 10 Mo au plus). Les parties abandonnées sont effacées au document suivant de la personne (plus d'une heure). Limite `messagePart` : 40 parties en 10 minutes.
 - Une photo de document est d'abord réduite sur le téléphone (2 560 px, lisible). Le recruteur peut aussi envoyer un document Word, et voit « Fichier trop lourd : 10 Mo au plus » quand c'est le cas.
 - La lecture d'un fichier de la conversation est envoyée par morceaux de 1 Mo (même limite de 4,5 Mo pour les réponses).
+
+## 2026-11-06 · Agenda recruteur : fenêtre « Planifier » dans À planifier
+
+- Demande d'Ephraïm (capture) : beaucoup moins de texte dans À planifier, et un clic sur un profil ouvre une petite fenêtre devant la page (fond flouté).
+- Les phrases d'explication sous Entretiens, Vérification des documents et Campagnes programmées sont retirées ; chaque ligne ne garde que le nom et le poste.
+- Entretien : jours proposés (aujourd'hui et les 13 suivants), Présentiel ou Visio, puis le lien de la visio (obligatoire en visio) ou l'adresse (facultative), l'heure (de 7 h à 20 h, par demi-heure), Annuler ou « Enregistrer et envoyer ». L'entretien est confirmé tout de suite (`fixInterview`, 30 min) : il arrive dans la conversation du candidat (carte d'entretien), par notification (`interviewFixed`) et par e-mail (date, heure, lien ou lieu). Plus de choix de créneaux par le candidat dans ce parcours ; il reste sur la fiche du candidat.
+- Vérification des documents : « Délai de vérification » de 3 jours, 5 jours, 1 semaine ou 2 semaines (la vérification tombe ce jour-là à 10 h). Un message de rappel part dans la conversation du candidat avec le recruteur. Vaut aussi pour une personne mise en attente sans pièces demandées (événement `hold_check_planned`, qui remplace les 3 jours de « à revoir »). La vérification datée passe dans Mois.
