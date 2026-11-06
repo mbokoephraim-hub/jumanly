@@ -11570,8 +11570,8 @@ Conventions :
 | `phoneMsg.voice.unavailable` | Ce téléphone ne permet pas d’enregistrer une note vocale ici. |
 | `phoneMsg.errors.tooMany` | Beaucoup de messages d’un coup : attendez un instant. |
 | `phoneMsg.errors.blocked` | Cette discussion n’accepte plus de messages. |
-| `phoneMsg.errors.type` | Ce fichier n’est pas accepté : un PDF ou une image seulement. |
-| `phoneMsg.errors.size` | Fichier trop lourd : 4 Mo au plus. |
+| `phoneMsg.errors.type` | Ce fichier n’est pas accepté : un PDF, un document Word ou une photo seulement. |
+| `phoneMsg.errors.size` | Fichier trop lourd : 10 Mo au plus. |
 | `phoneMsg.bubble.seePhotos` | Voir les photos |
 | `phoneMsg.bubble.seeProfile` | Voir le profil |
 | `phoneMsg.bubble.seePage` | Voir la page |
@@ -11703,7 +11703,7 @@ Conventions :
 | `phoneMsg.attach.photosSentHd` | {count, plural, one {Photo envoyée en HD} other {# photos envoyées en HD}} |
 | `phoneMsg.attach.phone` | Sur ce téléphone |
 | `phoneMsg.attach.pickFile` | Choisir un fichier |
-| `phoneMsg.attach.pickFileNote` | Un PDF ou une image, 4 Mo au plus |
+| `phoneMsg.attach.pickFileNote` | PDF, Word ou photo, 10 Mo au plus |
 | `phoneMsg.attach.jumanly` | Vos documents sur Jumanly |
 | `phoneMsg.attach.docSent` | Document envoyé |
 | `phoneMsg.attach.changed` | Modifié le {date} |
@@ -17982,7 +17982,7 @@ Conventions :
 | `phoneRhMessages.attach.document` | Une demande de document |
 | `phoneRhMessages.attach.documentLine` | Attestation, diplôme, projets |
 | `phoneRhMessages.attach.file` | Un fichier |
-| `phoneRhMessages.attach.fileLine` | PDF ou image, 4 Mo au plus |
+| `phoneRhMessages.attach.fileLine` | PDF, Word ou photo, 10 Mo au plus |
 | `phoneRhMessages.attach.cancel` | Annuler |
 | `phoneRhMessages.attach.sending` | Envoi du fichier… |
 | `phoneRhMessages.document.title` | Demander un document |
@@ -18011,7 +18011,8 @@ Conventions :
 | `phoneRhMessages.error.invalid` | Ce message ne peut pas être envoyé. Vérifiez-le et réessayez. |
 | `phoneRhMessages.error.blocked` | Cette personne ne reçoit plus de messages de votre entreprise. |
 | `phoneRhMessages.error.trop` | Trop de messages d'un coup. Attendez un instant. |
-| `phoneRhMessages.error.file` | Ce fichier ne peut pas être envoyé : un PDF ou une image de 4 Mo au plus. |
+| `phoneRhMessages.error.file` | Ce fichier ne peut pas être envoyé : un PDF, un document Word ou une photo seulement. |
+| `phoneRhMessages.error.size` | Fichier trop lourd : 10 Mo au plus. |
 | `phoneRhMessages.error.document` | Indiquez le document demandé et une date à venir. |
 | `phoneRhMessages.error.other` | Cela n'a pas fonctionné. Réessayez dans un instant. |
 | `phoneRhNotifs.back` | Retour |

@@ -40,8 +40,22 @@ export async function GET(
     const fileName = name ?? `jumanly-${message.id}-${index + 1}.${extension}`;
     const plain = fileName.replace(/[^\w.-]+/g, "_");
     const download = request.nextUrl.searchParams.get("dl") === "1";
-    return new NextResponse(new Uint8Array(stored.bytes), {
+    // Streamed in pieces of 1 Mo: a document of 10 Mo is above what the host sends in one block.
+    const bytes = stored.bytes;
+    let offset = 0;
+    const body = new ReadableStream<Uint8Array>({
+      pull(controller) {
+        if (offset >= bytes.byteLength) {
+          controller.close();
+          return;
+        }
+        controller.enqueue(bytes.slice(offset, offset + 1024 * 1024));
+        offset += 1024 * 1024;
+      },
+    });
+    return new NextResponse(body, {
       headers: {
+        "Content-Length": String(bytes.byteLength),
         "Content-Type": stored.contentType,
         "Content-Disposition": `${download ? "attachment" : "inline"}; filename="${plain}"; filename*=UTF-8''${encodeURIComponent(fileName)}`,
         "Cache-Control": "private, max-age=3600",

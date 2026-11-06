@@ -13990,8 +13990,8 @@
     "errors": {
       "tooMany": "Beaucoup de messages d’un coup : attendez un instant.",
       "blocked": "Cette discussion n’accepte plus de messages.",
-      "type": "Ce fichier n’est pas accepté : un PDF ou une image seulement.",
-      "size": "Fichier trop lourd : 4 Mo au plus."
+      "type": "Ce fichier n’est pas accepté : un PDF, un document Word ou une photo seulement.",
+      "size": "Fichier trop lourd : 10 Mo au plus."
     },
     "bubble": {
       "seePhotos": "Voir les photos",
@@ -14161,7 +14161,7 @@
       "photosSentHd": "{count, plural, one {Photo envoyée en HD} other {# photos envoyées en HD}}",
       "phone": "Sur ce téléphone",
       "pickFile": "Choisir un fichier",
-      "pickFileNote": "Un PDF ou une image, 4 Mo au plus",
+      "pickFileNote": "PDF, Word ou photo, 10 Mo au plus",
       "jumanly": "Vos documents sur Jumanly",
       "docSent": "Document envoyé",
       "changed": "Modifié le {date}",
@@ -22003,7 +22003,7 @@
       "document": "Une demande de document",
       "documentLine": "Attestation, diplôme, projets",
       "file": "Un fichier",
-      "fileLine": "PDF ou image, 4 Mo au plus",
+      "fileLine": "PDF, Word ou photo, 10 Mo au plus",
       "cancel": "Annuler",
       "sending": "Envoi du fichier…"
     },
@@ -22040,7 +22040,8 @@
       "invalid": "Ce message ne peut pas être envoyé. Vérifiez-le et réessayez.",
       "blocked": "Cette personne ne reçoit plus de messages de votre entreprise.",
       "trop": "Trop de messages d'un coup. Attendez un instant.",
-      "file": "Ce fichier ne peut pas être envoyé : un PDF ou une image de 4 Mo au plus.",
+      "file": "Ce fichier ne peut pas être envoyé : un PDF, un document Word ou une photo seulement.",
+      "size": "Fichier trop lourd : 10 Mo au plus.",
       "document": "Indiquez le document demandé et une date à venir.",
       "other": "Cela n'a pas fonctionné. Réessayez dans un instant."
     }

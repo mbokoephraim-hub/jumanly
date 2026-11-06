@@ -12,7 +12,7 @@ import { initialsOf, tintOf } from "./candidatures";
 import { RhThread, type RhBubble, type RhThreadData } from "./conversation-client";
 
 const OK = ["document", "file", "mute", "unmute", "pin", "unpin"] as const;
-const ERRORS = ["invalid", "blocked", "trop", "file", "document", "other"] as const;
+const ERRORS = ["invalid", "blocked", "trop", "file", "size", "document", "other"] as const;
 type Query = Record<string, string | string[] | undefined>;
 const one = (value: string | string[] | undefined) =>
   typeof value === "string" ? value : undefined;

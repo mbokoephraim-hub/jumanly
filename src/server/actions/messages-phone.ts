@@ -33,7 +33,9 @@ import {
   PHOTO_MAX_BYTES,
   storePhoto,
   storeUpload,
+  storeUploadPart,
   storeVoice,
+  takeUploadParts,
 } from "@/server/services/message-media";
 import {
   clearConversation,
@@ -167,13 +169,36 @@ export async function sendVoiceAction(formData: FormData) {
   });
 }
 
-/** A PDF or an image taken from the phone (« Documents · Sur ce téléphone »). */
+/**
+ * One part (3 Mo at most) of a document taken from the phone: a scanned diploma can weigh up to
+ * 10 Mo, more than one request carries. Used by the talent and the recruiter; the conversation is
+ * checked when the document itself is sent (`sendUploadAction`, `rhUploadAction`).
+ */
+export async function uploadPartAction(formData: FormData): Promise<MsgResult> {
+  const part = fileOf(formData.get("part"));
+  const uploadId = String(formData.get("upload") ?? "");
+  const index = Number(formData.get("index") ?? -1);
+  if (!part) return { ok: false, error: "empty" };
+  const user = await requireUser(PAGE);
+  if (!(await allowAttempt("messagePart", user.id))) return { ok: false, error: "tooMany" };
+  try {
+    await storeUploadPart(db, user.id, uploadId, index, await bytesOf(part));
+  } catch (error) {
+    return fail(error, "partie de document");
+  }
+  return { ok: true, value: null };
+}
+
+/** A PDF, a Word document or an image taken from the phone (« Documents · Sur ce téléphone »). */
 export async function sendUploadAction(formData: FormData) {
   const conversationId = String(formData.get("conversation") ?? "");
-  const file = fileOf(formData.get("file"));
-  if (!file) return { ok: false, error: "empty" } as const;
+  const uploadId = String(formData.get("upload") ?? "");
+  const parts = Number(formData.get("parts") ?? 0);
+  const name = String(formData.get("name") ?? "");
+  if (!uploadId || !parts) return { ok: false, error: "empty" } as const;
   return send(conversationId, "document", async (userId) => {
-    const upload = await storeUpload(db, conversationId, await bytesOf(file), file.name);
+    const bytes = await takeUploadParts(db, userId, uploadId, parts);
+    const upload = await storeUpload(db, conversationId, bytes, name);
     return sendAs(userId, conversationId, {
       body: upload.name,
       kind: "file",

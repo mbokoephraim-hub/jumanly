@@ -11,7 +11,7 @@ import { ConnectError, sendMessage, type Viewer } from "@/server/services/connec
 import { HireError } from "@/server/services/hire";
 import { conversationAction } from "@/server/services/hire-messaging";
 import { openTeamThread, sendTeamMessage } from "@/server/services/hire-phone-messages";
-import { MediaError, storeUpload } from "@/server/services/message-media";
+import { MediaError, storeUpload, takeUploadParts } from "@/server/services/message-media";
 
 /**
  * The gestures of the recruiter's Messages on the phone (Modèle B recruteur M7). Order of
@@ -62,21 +62,19 @@ export async function rhSendAction(formData: FormData) {
   redirect(`${back}#dernier`);
 }
 
-/** « Joindre › Un fichier » (planche 128): a PDF or an image, kept privately. */
+/** « Joindre › Un fichier » (planche 128): a PDF, a Word document or an image, kept privately. */
 export async function rhUploadAction(formData: FormData) {
   const conversationId = id(formData.get("conversation"));
   const back = `${PAGE}/${conversationId}`;
   const { user, viewer } = await viewerFor(conversationId);
   if (!(await allowAttempt("message", user.id))) redirect(`${back}?erreur=trop`);
-  const file = formData.get("file");
-  if (!(file instanceof File) || file.size === 0) redirect(`${back}?erreur=file`);
+  // The document came first in parts of 3 Mo (`uploadPartAction`): up to 10 Mo for a diploma.
+  const uploadId = String(formData.get("upload") ?? "");
+  const parts = Number(formData.get("parts") ?? 0);
+  if (!uploadId || !parts) redirect(`${back}?erreur=file`);
   try {
-    const upload = await storeUpload(
-      db,
-      conversationId,
-      new Uint8Array(await file.arrayBuffer()),
-      file.name,
-    );
+    const bytes = await takeUploadParts(db, user.id, uploadId, parts);
+    const upload = await storeUpload(db, conversationId, bytes, String(formData.get("name") ?? ""));
     const sent = await sendMessage(db, viewer, conversationId, {
       body: upload.name,
       kind: "file",
@@ -84,7 +82,8 @@ export async function rhUploadAction(formData: FormData) {
     });
     await onMessageSent({ ...sent, senderName: user.name }).catch((error) => reportError(error));
   } catch (error) {
-    if (error instanceof MediaError) redirect(`${back}?erreur=file`);
+    if (error instanceof MediaError)
+      redirect(`${back}?erreur=${error.code === "size" ? "size" : "file"}`);
     if (error instanceof ConnectError)
       redirect(`${back}?erreur=${error.code === "blocked" ? "blocked" : "invalid"}`);
     throw error;

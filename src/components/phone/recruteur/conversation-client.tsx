@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { requestDocumentAction } from "@/server/actions/hire";
@@ -12,6 +13,7 @@ import {
   rhSendTeamAction,
   rhUploadAction,
 } from "@/server/actions/phone-rh-messages";
+import { sendInParts } from "../messages/upload";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { PhoneDateField } from "../calendar";
 import { PhoneSheet } from "../sheet";
@@ -68,6 +70,7 @@ export function RhThread({ data }: { data: RhThreadData }) {
   const [text, setText] = useState("");
   const [orbi, setOrbi] = useState<string | null>(null);
   const [pending, start] = useTransition();
+  const router = useRouter();
   const field = useRef<HTMLTextAreaElement>(null);
   const end = useRef<HTMLDivElement>(null);
   const close = () => setSheet(null);
@@ -82,6 +85,24 @@ export function RhThread({ data }: { data: RhThreadData }) {
     close();
     field.current?.focus();
   };
+
+  /** A diploma, an attestation, a PDF: sent in parts first (up to 10 Mo), then in the thread. */
+  const sendFile = (file: File) =>
+    start(async () => {
+      const sent = await sendInParts(file);
+      if (!sent.ok) {
+        router.replace(
+          `/app/messages/${data.conversationId}?erreur=${sent.error === "size" ? "size" : sent.error === "tooMany" ? "trop" : "file"}`,
+        );
+        return;
+      }
+      const form = new FormData();
+      form.set("conversation", data.conversationId);
+      form.set("upload", sent.value.upload);
+      form.set("parts", String(sent.value.parts));
+      form.set("name", sent.value.name);
+      await rhUploadAction(form);
+    });
 
   const propose = () => {
     setOrbi(t("orbi.thinking"));
@@ -309,23 +330,23 @@ export function RhThread({ data }: { data: RhThreadData }) {
               </>
             ) : null}
             <li>
-              <form action={rhUploadAction} className="nb-rm-fichier">
-                <input type="hidden" name="conversation" value={data.conversationId} />
-                <label className="nb-rm-choix">
+              <div className="nb-rm-fichier">
+                <label className="nb-rm-choix" aria-disabled={pending}>
                   <b>{t("attach.file")}</b>
-                  <small>{t("attach.fileLine")}</small>
+                  <small>{pending ? t("attach.sending") : t("attach.fileLine")}</small>
                   <input
                     type="file"
-                    name="file"
-                    accept="application/pdf,image/jpeg,image/png,image/webp"
+                    accept="application/pdf,image/*,.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     className="sr-only"
+                    disabled={pending}
                     onChange={(event) => {
-                      if (event.currentTarget.files?.length)
-                        event.currentTarget.form?.requestSubmit();
+                      const file = event.currentTarget.files?.[0];
+                      event.currentTarget.value = "";
+                      if (file) sendFile(file);
                     }}
                   />
                 </label>
-              </form>
+              </div>
             </li>
           </ul>
           <button type="button" className="nb-annuler" onClick={close}>
