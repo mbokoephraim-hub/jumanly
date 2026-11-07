@@ -209,7 +209,8 @@ export function cvFromProfile(profile: FullProfile, previous?: CvContent): CvCon
       name:
         [profile.user.firstName, profile.user.lastName].filter(Boolean).join(" ") ||
         profile.user.name,
-      headline: profile.headline ?? "",
+      // No professional title yet: the Cap (the job the person aims at) heads the CV instead.
+      headline: profile.headline?.trim() || profile.targetJob?.trim() || "",
       email: profile.user.email,
       city: profile.user.city ?? "",
       country: profile.user.country ?? "",

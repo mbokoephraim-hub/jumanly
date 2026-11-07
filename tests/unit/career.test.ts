@@ -113,6 +113,12 @@ describe("CV", () => {
     expect(isEmptyCv(cv)).toBe(false);
     expect(isEmptyCv(emptyCv)).toBe(true);
   });
+  it("prend le Cap comme titre quand le profil n'a pas encore de titre", () => {
+    expect(cvFromProfile(profile).info.headline).toBe("Comptable");
+    const noTitle = { ...profile, headline: null, targetJob: "Analyste de données" } as FullProfile;
+    expect(cvFromProfile(noTitle).info.headline).toBe("Analyste de données");
+    expect(cvFromProfile({ ...profile, headline: null } as FullProfile).info.headline).toBe("");
+  });
 
   it("garde l'ordre des sections lors d'une mise à jour depuis le profil", () => {
     const moved = toggleSection(moveSection(cvFromProfile(profile), "skills", -1), "languages");
