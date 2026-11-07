@@ -2521,6 +2521,16 @@
         "reconversion": "Me reconvertir",
         "reconversionLine": "Changer de métier"
       },
+      "job": {
+        "title": "Quel métier visez-vous ?",
+        "text": "C'est votre Cap. Avec vos compétences, il sert à classer les offres « pour vous » et à expliquer chaque score. Vous pourrez tout changer.",
+        "cap": "Métier visé",
+        "capPlaceholder": "Ex. Analyste de données",
+        "skills": "Vos compétences",
+        "skillsHint": "Choisissez-en au moins trois : elles comptent dans votre score pour chaque offre.",
+        "other": "Autres compétences",
+        "otherPlaceholder": "Séparées par des virgules, ex. Canva, WordPress"
+      },
       "studies": {
         "title": "Vos études et votre domaine",
         "text": "Facultatif. Cela affine les offres et les formations proposées.",
@@ -3297,6 +3307,8 @@
       "noDocument": "Aucun document joint. C'est facultatif.",
       "answers": "Vos réponses",
       "noAnswer": "Pas de réponse",
+      "profileLow": "Votre profil est rempli à {percent} % : c'est ce que le recruteur verra. Une expérience, une formation ou trois compétences de plus vous rendent plus visible. Votre candidature part quand même.",
+      "profileLowLink": "Compléter mon profil",
       "see": "Voir",
       "change": "Changer",
       "edit": "Modifier",
@@ -7984,7 +7996,7 @@
         "skills": "{count, plural, =0 {Aucune compétence déclarée} one {# compétence déclarée} other {# compétences déclarées}}"
       },
       "step": {
-        "label": "Étape {current} sur {total} · {name}",
+        "label": "{name}",
         "trail": "Les six étapes du diagnostic",
         "done": "terminée",
         "current": "en cours"

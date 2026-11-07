@@ -127,14 +127,25 @@ test("premiers pas : objectif, études, lieux puis formule gratuite", async ({ p
   await expectAccessible(page);
   await page.getByRole("link", { name: "C'est parti" }).click();
 
-  // 1 of 4: the goal.
+  // 1 of 5: the goal.
   await expect(page).toHaveURL(/etape=objectif/);
-  await expect(page.getByText("1 sur 4")).toBeVisible();
+  await expect(page.getByText("1 sur 5")).toBeVisible();
   await expectAccessible(page);
   await page.locator("label").filter({ hasText: "Trouver mon premier emploi" }).click();
   await page.getByRole("button", { name: "Continuer" }).click();
 
-  // 2 of 4: the level and the field, found by a search.
+  // 2 of 5: the job aimed at and the skills (évaluation talent, 07/11/2026), as on the phone.
+  await expect(page).toHaveURL(/etape=metier/);
+  await expectAccessible(page);
+  await page.getByLabel("Métier visé").fill("Analyste de données");
+  for (const skill of ["Excel", "SQL", "Power BI"])
+    await page
+      .locator("label")
+      .filter({ hasText: new RegExp(`^${skill}$`) })
+      .click();
+  await page.getByRole("button", { name: "Continuer" }).click();
+
+  // 3 of 5: the level and the field, found by a search.
   await expect(page).toHaveURL(/etape=etudes/);
   await expectAccessible(page);
   await page.locator("label").filter({ hasText: "Licence" }).click();
@@ -142,7 +153,7 @@ test("premiers pas : objectif, études, lieux puis formule gratuite", async ({ p
   await page.locator("label").filter({ hasText: "Droit" }).click();
   await page.getByRole("button", { name: "Continuer" }).click();
 
-  // 3 of 4: the country in its sheet (RD Congo first, a search), the city, contracts, mode.
+  // 4 of 5: the country in its sheet (RD Congo first, a search), the city, contracts, mode.
   await expect(page).toHaveURL(/etape=lieux/);
   await expectAccessible(page);
   await page.getByRole("button", { name: /^Pays/ }).click();
@@ -159,13 +170,16 @@ test("premiers pas : objectif, études, lieux puis formule gratuite", async ({ p
   await page.locator("label").filter({ hasText: "Hybride" }).click();
   await page.getByRole("button", { name: "Continuer" }).click();
 
-  // 4 of 4: the free plan, and what a paid one adds.
+  // 5 of 5: the free plan, and what a paid one adds.
   await expect(page).toHaveURL(/etape=pret/);
   await expect(page.getByRole("heading", { name: "Votre espace est prêt" })).toBeVisible();
   await expect(page.getByText("Postuler à toutes les offres")).toBeVisible();
   await expectAccessible(page);
 
   // The answers are kept when coming back to a step.
+  await page.goto("/app/bienvenue?etape=metier");
+  await expect(page.getByLabel("Métier visé")).toHaveValue("Analyste de données");
+  await expect(page.getByRole("checkbox", { name: "SQL", exact: true })).toBeChecked();
   await page.goto("/app/bienvenue?etape=etudes");
   await expect(page.getByRole("radio", { name: "Licence" })).toBeChecked();
   await expect(page.getByRole("radio", { name: "Droit" })).toBeChecked();

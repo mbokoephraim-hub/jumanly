@@ -41,6 +41,8 @@ import {
 } from "@/server/services/application-draft";
 import OfferPage from "../page";
 
+/** Below this share of the profile filled, « Vérifier et envoyer » says so (never blocks). */
+const PROFILE_LOW = 60;
 export async function generateMetadata({
   params,
 }: PageProps<"/app/jobs/[slug]/postuler">): Promise<Metadata> {
@@ -87,6 +89,7 @@ export default async function ApplyPage({
     where: { userId: user.id },
     select: {
       id: true,
+      completeness: true,
       documents: {
         where: { kind: "cv" },
         orderBy: [{ isPrimary: "desc" }, { updatedAt: "desc" }],
@@ -886,6 +889,14 @@ export default async function ApplyPage({
               <span>{user.email}</span>
             </span>
           </div>
+          {/* A thin profile is what the recruiter will see: said gently, never blocking
+              (évaluation talent, 07/11/2026). */}
+          {profile && profile.completeness < PROFILE_LOW ? (
+            <p className="t-apv-vide t-apv-peu" role="note">
+              {t("apply.check.profileLow", { percent: profile.completeness })}{" "}
+              <Link href="/app/profil">{t("apply.check.profileLowLink")}</Link>
+            </p>
+          ) : null}
         </section>
 
         <section className="t-verre t-apv-c" aria-labelledby="apv-cv">

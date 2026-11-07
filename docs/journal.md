@@ -5644,3 +5644,21 @@ Demande d'Ephraïm (captures de « Mes documents » du talent et deux exemples d
 - Contrôles : 159 écrans talent ouverts sur ordinateur et 123 au téléphone avec un compte riche (Grâce), 76 et 50 avec un compte vide, aucune erreur ; 28 séries e2e talent rejouées (131 réussis, 70 sans objet, 3 échecs dus aux données de démo : CV de Grâce vide, aucune conversation pour talent.pro, conversations lues par l'évaluation) ; un nouveau candidat créé de zéro au téléphone et sur ordinateur jusqu'à la candidature.
 - Corrigé : `/app/explorer` seul menait à une page introuvable, il ouvre maintenant Explorer (`/app/jobs`) ; un CV créé depuis un profil sans titre professionnel prend le Cap comme titre (`cvFromProfile`, services/cv.ts).
 - Proposé, en attente de l'accord d'Ephraïm : métier visé et compétences dans l'inscription sur ordinateur, crédits Orbi d'essai pour la formule gratuite, rappel doux du profil incomplet avant l'envoi d'une candidature, bulle d'Orbi qui ne cache plus les cartes, un seul compteur dans le diagnostic, même bannière dessinée partout, démo plus riche.
+
+## 2026-11-07 · Espace talent : les sept points du rapport
+
+Demande d'Ephraïm (« Faites tout du tableau ») après l'évaluation de l'espace talent.
+
+1. **Premiers pas sur ordinateur** (`/app/bienvenue`) : une étape « Votre métier » (Cap visé + compétences
+   à cocher ou à écrire) après l'objectif ; 5 étapes au lieu de 4. Les offres sont classées dès la fin.
+2. **Orbi pour le forfait gratuit** : 5 crédits d'essai par mois (`ai.credits.monthly`), migration
+   `20261107060000_talent_free_orbi_trial_credits` (seulement si la valeur était encore 0), seed et partie 05.
+3. **Postuler › Vérifier et envoyer** : une phrase douce si le profil est rempli à moins de 60 %, avec
+   « Compléter mon profil ». Jamais bloquant.
+4. **Bulle d'Orbi au téléphone** : disparaît après 5 secondes ou au premier toucher.
+5. **Diagnostic** : un seul compteur (« Question x sur 10 »), l'étape garde son nom.
+6. **Bannière dessinée** : « Modifier le profil » montre la même que « Mon profil » (couleur du domaine).
+7. **Démo** : CV vides des comptes de démonstration remplis depuis leur profil ; talent.pro reçoit un CV,
+   une candidature et un message du recruteur, Jean-Pierre aussi (`prisma/seed/demo-talents.ts`).
+
+Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.

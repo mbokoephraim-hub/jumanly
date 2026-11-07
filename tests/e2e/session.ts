@@ -193,6 +193,9 @@ export async function finishOnboarding(page: Page, place?: { country: string; ci
   await page.getByRole("link", { name: "C'est parti" }).click();
   await expect(page).toHaveURL(/etape=objectif/);
   await page.getByRole("button", { name: "Continuer" }).click();
+  // The job aimed at and the skills (évaluation talent, 07/11/2026), skipped here.
+  await expect(page).toHaveURL(/etape=metier/);
+  await page.getByRole("link", { name: "Passer" }).click();
   await expect(page).toHaveURL(/etape=etudes/);
   await page.getByRole("link", { name: "Passer" }).click();
   await expect(page).toHaveURL(/etape=lieux/);

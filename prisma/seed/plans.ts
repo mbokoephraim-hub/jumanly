@@ -181,7 +181,8 @@ const talentMatrix: { plans: string[]; rows: Row[] } = {
     lv("learn.catalog.level", "free", "fundamentals", "standard", "advanced"),
     b("learn.exercises.job_specific", false, false, true, true),
     b("learn.resources.specialized", false, false, false, true),
-    lim("ai.credits.monthly", 0, 30, 150, 500),
+    // 5 trial credits on the free plan (évaluation talent, Ephraïm 07/11/2026): Orbi answers from day one.
+    lim("ai.credits.monthly", 5, 30, 150, 500),
     b("reports.progress.detailed", false, false, false, true),
     b("support.priority", false, false, false, true),
   ],

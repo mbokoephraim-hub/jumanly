@@ -47,8 +47,9 @@ async function paidCredits() {
     where: { key: "ai.credits.monthly", plan: { family: "talent" } },
     select: { value: true },
   });
-  const value = plans.map((row) => Number(row.value)).find((value) => value > 0);
-  expect(value).toBeDefined();
+  // The largest monthly allowance (the free plan has a few trial credits since 07/11/2026).
+  const value = Math.max(...plans.map((row) => Number(row.value)));
+  expect(value).toBeGreaterThan(0);
   return String(value);
 }
 
@@ -78,8 +79,18 @@ describe("couche IA (partie 08 § 8.9)", () => {
     expect(await credits(user.id)).toBe(0);
   });
 
-  it("aucun appel sans crédits (forfait gratuit)", async () => {
+  it("aucun appel sans crédits", async () => {
     const user = await talent();
+    // No credit left (the free plan's trial credits set to 0 for this person).
+    await db.entitlementOverride.create({
+      data: {
+        subjectType: "user",
+        subjectId: user.id,
+        key: "ai.credits.monthly",
+        value: "0",
+        reason: "test",
+      },
+    });
     await expect(call(user.id)).rejects.toBeInstanceOf(AiError);
     await expect(call(user.id)).rejects.toMatchObject({ code: "quota" });
     expect(await logs(user.id)).toHaveLength(0);

@@ -635,7 +635,7 @@ Une institution (banque, université, fondation, entreprise, agence de coopérat
 | `learn.catalog.level` | `free` | `fundamentals` | `standard` | `advanced` |
 | `learn.exercises.job_specific` | — | — | ✓ | ✓ |
 | `learn.resources.specialized` | — | — | — | ✓ |
-| `ai.credits.monthly` | 0 | 30 P | 150 P | 500 P |
+| `ai.credits.monthly` (Free : 5 crédits d'essai, décision du 07/11/2026) | 5 | 30 P | 150 P | 500 P |
 | `reports.progress.detailed` | — | — | — | ✓ |
 | `support.priority` | — | — | — | ✓ |
 

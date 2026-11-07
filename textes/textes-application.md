@@ -2034,6 +2034,14 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `access.onboarding.goal.skillsLine` | Apprendre et le prouver |
 | `access.onboarding.goal.reconversion` | Me reconvertir |
 | `access.onboarding.goal.reconversionLine` | Changer de métier |
+| `access.onboarding.job.title` | Quel métier visez-vous ? |
+| `access.onboarding.job.text` | C'est votre Cap. Avec vos compétences, il sert à classer les offres « pour vous » et à expliquer chaque score. Vous pourrez tout changer. |
+| `access.onboarding.job.cap` | Métier visé |
+| `access.onboarding.job.capPlaceholder` | Ex. Analyste de données |
+| `access.onboarding.job.skills` | Vos compétences |
+| `access.onboarding.job.skillsHint` | Choisissez-en au moins trois : elles comptent dans votre score pour chaque offre. |
+| `access.onboarding.job.other` | Autres compétences |
+| `access.onboarding.job.otherPlaceholder` | Séparées par des virgules, ex. Canva, WordPress |
 | `access.onboarding.studies.title` | Vos études et votre domaine |
 | `access.onboarding.studies.text` | Facultatif. Cela affine les offres et les formations proposées. |
 | `access.onboarding.studies.level.label` | Niveau d'études |
@@ -2758,6 +2766,8 @@ Conventions :
 | `apply.check.noDocument` | Aucun document joint. C'est facultatif. |
 | `apply.check.answers` | Vos réponses |
 | `apply.check.noAnswer` | Pas de réponse |
+| `apply.check.profileLow` | Votre profil est rempli à {percent} % : c'est ce que le recruteur verra. Une expérience, une formation ou trois compétences de plus vous rendent plus visible. Votre candidature part quand même. |
+| `apply.check.profileLowLink` | Compléter mon profil |
 | `apply.check.see` | Voir |
 | `apply.check.change` | Changer |
 | `apply.check.edit` | Modifier |
@@ -6151,7 +6161,7 @@ Conventions :
 | `career.diagnostic.card.label` | Votre carte professionnelle |
 | `career.diagnostic.card.noTarget` | Métier visé à préciser |
 | `career.diagnostic.card.skills` | {count, plural, =0 {Aucune compétence déclarée} one {# compétence déclarée} other {# compétences déclarées}} |
-| `career.diagnostic.step.label` | Étape {current} sur {total} · {name} |
+| `career.diagnostic.step.label` | {name} |
 | `career.diagnostic.step.trail` | Les six étapes du diagnostic |
 | `career.diagnostic.step.done` | terminée |
 | `career.diagnostic.step.current` | en cours |

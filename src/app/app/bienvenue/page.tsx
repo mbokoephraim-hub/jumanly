@@ -18,6 +18,7 @@ import {
   finishWelcome,
   payWelcome,
   saveWelcomeGoal,
+  saveWelcomeJob,
   saveWelcomePlaces,
   saveWelcomeStudies,
 } from "@/server/actions/welcome";
@@ -212,20 +213,25 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
       </NextIntlClientProvider>
     );
   }
+  // On a computer too, the job aimed at and the skills (évaluation talent, 07/11/2026): without
+  // them, the offers are not ranked « pour vous » and the score has nothing to explain.
   const step =
     etape === "objectif"
       ? 1
-      : etape === "etudes" || etape === "2" || etape === "precisions"
+      : etape === "metier"
         ? 2
-        : etape === "lieux"
+        : etape === "etudes" || etape === "2" || etape === "precisions"
           ? 3
-          : etape === "pret"
+          : etape === "lieux"
             ? 4
-            : 0;
-  const TOTAL = 4;
+            : etape === "pret"
+              ? 5
+              : 0;
+  const TOTAL = 5;
   const stepHref = [
     "/app/bienvenue",
     "?etape=objectif",
+    "?etape=metier",
     "?etape=etudes",
     "?etape=lieux",
     "?etape=pret",
@@ -351,9 +357,94 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
     );
   }
 
+  if (step === 2) {
+    const tc = await getTranslations("phoneAccueil.profile.cap");
+    const [all, asked] = await Promise.all([
+      db.skill.findMany({ select: { name: true } }),
+      db.skill.findMany({
+        select: { name: true },
+        orderBy: { jobs: { _count: "desc" } },
+        take: 24,
+      }),
+    ]);
+    const names = new Set(all.map((skill) => skill.name));
+    const mine = profile?.skills.map((row) => row.skill.name) ?? [];
+    const offered = [
+      ...new Set([
+        ...mine,
+        ...phoneFirstSkills.filter((name) => names.has(name)),
+        ...asked.map((skill) => skill.name),
+      ]),
+    ].slice(0, Math.max(15, mine.length));
+    return frame(
+      <>
+        <div className="t-ob-q">
+          <h1>{ta("onboarding.job.title")}</h1>
+          <p>{ta("onboarding.job.text")}</p>
+        </div>
+        <form id="bienvenue-metier" action={saveWelcomeJob} className="flex flex-col gap-3.5">
+          <div className="t-champ">
+            <label htmlFor="welcome-cap">{ta("onboarding.job.cap")}</label>
+            <div className="t-verre t-saisie">
+              <TalentIcon name="cap" size="s" />
+              <input
+                id="welcome-cap"
+                name="cap"
+                list="welcome-jobs"
+                maxLength={120}
+                placeholder={ta("onboarding.job.capPlaceholder")}
+                defaultValue={profile?.targetJob ?? ""}
+              />
+              <datalist id="welcome-jobs">
+                {tc("jobs")
+                  .split(";")
+                  .map((job) => (
+                    <option key={job} value={job} />
+                  ))}
+              </datalist>
+            </div>
+          </div>
+          <fieldset className="t-fs">
+            <legend className="t-lab-c">{ta("onboarding.job.skills")}</legend>
+            <p className="t-vu-large">{ta("onboarding.job.skillsHint")}</p>
+            <div className="t-puces">
+              {offered.map((name) => (
+                <label key={name} className="t-puce t-press">
+                  <input
+                    type="checkbox"
+                    name="skills"
+                    value={name}
+                    defaultChecked={mine.includes(name)}
+                  />
+                  {name}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <div className="t-champ">
+            <label htmlFor="welcome-other">{ta("onboarding.job.other")}</label>
+            <div className="t-verre t-saisie">
+              <input
+                id="welcome-other"
+                name="other"
+                maxLength={300}
+                placeholder={ta("onboarding.job.otherPlaceholder")}
+              />
+            </div>
+          </div>
+          <AccessBar>
+            {backButton}
+            {skip(stepHref[3])}
+            {continueButton}
+          </AccessBar>
+        </form>
+      </>,
+    );
+  }
+
   const messages = await getMessages();
 
-  if (step === 2) {
+  if (step === 3) {
     return frame(
       <>
         <div className="t-ob-q">
@@ -390,7 +481,7 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
           </div>
           <AccessBar>
             {backButton}
-            {skip(stepHref[3])}
+            {skip(stepHref[4])}
             {continueButton}
           </AccessBar>
         </form>
@@ -398,7 +489,7 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
     );
   }
 
-  if (step === 3) {
+  if (step === 4) {
     const [countries, localities] = await Promise.all([listCountries(db), listLocalities(db)]);
     const cities = Object.fromEntries(
       Object.entries(localities).map(([code, rows]) => [
@@ -455,7 +546,7 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
           </NextIntlClientProvider>
           <AccessBar>
             {backButton}
-            {skip(stepHref[4])}
+            {skip(stepHref[5])}
             {continueButton}
           </AccessBar>
         </form>
@@ -463,7 +554,7 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
     );
   }
 
-  // Step 4: the free plan, and the cheapest paid plan to go further (names and prices from the base).
+  // Step 5: the free plan, and the cheapest paid plan to go further (names and prices from the base).
   const [free, upgrade, chosen] = await Promise.all([
     db.plan.findFirst({
       where: { family: "talent", priceCents: 0 },

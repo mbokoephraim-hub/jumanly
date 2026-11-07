@@ -169,7 +169,9 @@ test("le diagnostic en six dimensions : une question par écran, le scan, puis l
   await expect(page).toHaveURL(/etape=1/);
 
   const flow = page.locator("#diagnostic-flow");
-  await expect(flow).toContainText("Étape 1 sur 6 · Clarté du projet");
+  // One counter only (07/11/2026): the part's name and « Question x sur y », no « Étape x sur 6 ».
+  await expect(flow).toContainText("Clarté du projet");
+  await expect(flow).not.toContainText("Étape 1 sur 6");
   // About ten questions (31/10/2026); the target job may stay empty, the next one asks for an answer.
   await expect(flow).toContainText(/Question 1 sur (9|10)/);
   await flow.getByRole("button", { name: "Suivant", exact: true }).click();

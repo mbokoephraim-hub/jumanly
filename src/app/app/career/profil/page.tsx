@@ -5,9 +5,11 @@ import { CareerTexts } from "@/components/phone/career/server";
 import { handleOf } from "@/components/phone/career/data";
 import { HeadForm } from "@/components/phone/career/edit";
 import { initialsOf, toneOf } from "@/components/phone/fil/data";
+import { drawnBannerOf } from "@/components/phone/profil/server";
 import { parseSocialLinks, SOCIAL_KINDS, type SocialKind } from "@/lib/social-links";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { personProfile } from "@/server/services/person-profile";
 import { getFullProfile } from "@/server/services/profile";
 import { isPhone } from "@/server/view";
 
@@ -23,10 +25,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CareerEditPage() {
   const user = await requireUser("/app/career/profil");
   if (!(await isPhone())) redirect("/app/profil?fenetre=modifier");
-  const [profile, recruiter] = await Promise.all([
+  const [profile, recruiter, person] = await Promise.all([
     getFullProfile(db, user.id),
     db.recruiterProfile.findUnique({ where: { userId: user.id }, select: { id: true } }),
+    personProfile(db, user.id, user.id, "candidate"),
   ]);
+  // The same drawn banner as « Mon profil » (évaluation talent, 07/11/2026).
+  const drawn = person ? await drawnBannerOf(person) : undefined;
   const name = profile.user.name;
   const socials = parseSocialLinks(profile.socialLinks);
   return (
@@ -48,6 +53,7 @@ export default async function CareerEditPage() {
           availability: profile.availability,
           image: profile.user.image,
           banner: profile.banner,
+          drawn,
           initials: initialsOf(name),
           tone: toneOf(name, false),
         }}

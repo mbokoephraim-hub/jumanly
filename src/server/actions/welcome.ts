@@ -7,13 +7,13 @@ import { db } from "@/server/db";
 import { studyFields, studyLevels } from "@/lib/studies";
 import { onboardingGoals, welcomeContracts, workModes } from "@/lib/welcome";
 import { checkPlaces } from "@/server/services/places";
-import { refreshCompleteness } from "@/server/services/profile";
+import { ensureProfile, findSkill, refreshCompleteness } from "@/server/services/profile";
 import { readSignupFlow, writeSignupFlow } from "@/server/signup-flow";
 
 const goalSchema = z.object({ goal: z.enum(onboardingGoals) });
 
 /**
- * Step 1 of 4 (planche talent-4 § 1): « Qu'est-ce qui vous amène ? ». The goal orders « Pour moi »
+ * Step 1 of 5 (planche talent-4 § 1): « Qu'est-ce qui vous amène ? ». The goal orders « Pour moi »
  * (`homeFocus`). Nothing chosen changes nothing and goes on.
  */
 export async function saveWelcomeGoal(formData: FormData) {
@@ -28,6 +28,48 @@ export async function saveWelcomeGoal(formData: FormData) {
   }
   // From « Modifier mon objectif »: straight back to « Pour moi ».
   if (formData.get("only") === "1") redirect("/app");
+  redirect("/app/bienvenue?etape=metier");
+}
+
+const jobSchema = z.object({
+  cap: z.string().trim().max(120).catch(""),
+  skills: z.array(z.string().trim().min(1).max(80)).max(40).catch([]),
+  other: z.string().trim().max(300).catch(""),
+});
+
+/**
+ * Step 2 of 5 (évaluation talent, 07/11/2026): the job aimed at (the Cap) and the skills, as on
+ * the phone, so that the offers are ranked « pour vous » from the first visit. Skills come from the
+ * reference only (they feed the matching); the ones already on the profile keep their level.
+ */
+export async function saveWelcomeJob(formData: FormData) {
+  const user = await requireUser("/app/bienvenue");
+  const input = jobSchema.parse({
+    cap: formData.get("cap") ?? "",
+    skills: formData.getAll("skills").map(String),
+    other: formData.get("other") ?? "",
+  });
+  const profile = await ensureProfile(db, user.id);
+  if (input.cap.length >= 2) {
+    const titles = [input.cap, ...profile.desiredJobTitles.filter((title) => title !== input.cap)];
+    await db.talentProfile.update({
+      where: { id: profile.id },
+      data: { targetJob: input.cap, desiredJobTitles: titles.slice(0, 5) },
+    });
+  }
+  const wanted = [...input.skills, ...input.other.split(/[,;]/)].map((name) => name.trim());
+  const unique = [...new Set(wanted.filter(Boolean))].slice(0, 30);
+  const skills = (await Promise.all(unique.map((name) => findSkill(db, name)))).filter(
+    (skill): skill is NonNullable<typeof skill> => skill !== null,
+  );
+  for (const skill of skills) {
+    await db.profileSkill.upsert({
+      where: { profileId_skillId: { profileId: profile.id, skillId: skill.id } },
+      update: {},
+      create: { profileId: profile.id, skillId: skill.id, level: 2 },
+    });
+  }
+  await refreshCompleteness(db, profile.id);
   redirect("/app/bienvenue?etape=etudes");
 }
 
@@ -36,7 +78,7 @@ const studiesSchema = z.object({
   studyField: z.enum(studyFields).optional().catch(undefined),
 });
 
-/** Step 2 of 4: the level and the field of studies. Only what was chosen is written. */
+/** Step 3 of 5: the level and the field of studies. Only what was chosen is written. */
 export async function saveWelcomeStudies(formData: FormData) {
   const user = await requireUser("/app/bienvenue");
   const { studyLevel, studyField } = studiesSchema.parse({
@@ -65,7 +107,7 @@ const placesSchema = z.object({
 });
 
 /**
- * Step 3 of 4: the country where the person lives (asked only here, `User.country`), the city, the
+ * Step 4 of 5: the country where the person lives (asked only here, `User.country`), the city, the
  * contracts and the work mode. The country is checked against the reference; a known city of that
  * country also becomes a place where the person wants to work. Nothing chosen erases nothing.
  */

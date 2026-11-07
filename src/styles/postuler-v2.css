@@ -561,3 +561,13 @@
 .t-ap-orbi .t-ap-choix-ic.t-orbi {
   background: rgb(255 255 255 / 0.08);
 }
+/* « Vérifier et envoyer »: a thin profile, said gently (évaluation talent, 07/11/2026). */
+.t-apv-peu {
+  margin-top: 10px;
+  line-height: 1.45;
+}
+.t-apv-peu a {
+  color: var(--texte);
+  font-weight: 600;
+  text-decoration: underline;
+}

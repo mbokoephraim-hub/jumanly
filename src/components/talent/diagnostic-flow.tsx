@@ -496,9 +496,8 @@ export function DiagnosticFlow({
         </div>
         <p className="t-diag-et">
           <b>
+            {/* One counter only (évaluation talent, 07/11/2026): the part's name, then « Question x sur y ». */}
             {t("step.label", {
-              current: step + 1,
-              total: dimensions.length,
               name:
                 screen.dimension === "more"
                   ? t("part.more")
