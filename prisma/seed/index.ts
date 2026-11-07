@@ -10,6 +10,7 @@ import { seedCareer } from "./career";
 import { seedConnections } from "./connexions";
 import { seedFeed } from "./fil";
 import { seedDemo } from "./demo";
+import { seedDemoTalents } from "./demo-talents";
 import { seedGroup } from "./group";
 import { seedIntelligence } from "./intelligence";
 import { seedLearnScenario } from "./apprendre";
@@ -47,6 +48,7 @@ async function main() {
       await seedConnections(db);
       await seedFeed(db);
       await seedMessages(db);
+      await seedDemoTalents(db);
     } else console.log("Démo ignorée : APP_ENV n'est ni local ni preview.");
   } finally {
     await db.$disconnect();

@@ -13,6 +13,7 @@ import type { PostView } from "../fil/data";
 import { PostCard, type PostSheet } from "../fil/post";
 import { PostSheets, type SendTarget } from "../fil/sheets";
 import { PhoneIcon } from "../icon";
+import { ProfileDrawnBanner } from "../career/banner";
 import { PhoneSheet } from "../sheet";
 import { EducationList, ItemVerifiedMark } from "./education-rows";
 import { ExperienceLogo, ExperienceMeta, ExperiencePoints } from "./experience-head";
@@ -256,14 +257,7 @@ export function PersonProfile({
           // eslint-disable-next-line @next/next/no-img-element -- the person's own upload
           <img src={person.banner} alt="" />
         ) : (
-          <svg viewBox="0 0 350 88" preserveAspectRatio="xMidYMid slice" aria-hidden>
-            <g fill="none" stroke={person.bannerColor.motif} strokeWidth="14" strokeOpacity=".5">
-              <circle cx="300" cy="10" r="46" />
-              <circle cx="300" cy="10" r="86" />
-              <circle cx="300" cy="10" r="126" />
-            </g>
-            <circle cx="44" cy="70" r="5" fill="var(--nb-lime)" />
-          </svg>
+          <ProfileDrawnBanner motif={person.bannerColor.motif} />
         )}
         {person.bannerTitle ? <span className="nb-pf-banniere-t">{person.bannerTitle}</span> : null}
       </div>

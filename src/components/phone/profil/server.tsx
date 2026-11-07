@@ -59,6 +59,30 @@ const BANNER_GROUND: Record<ProfileColor, string> = {
   rose: "#5E2342",
 };
 
+/** The person's field (the organization for a recruiter): it picks the colour of the banner. */
+function domainOf(person: PersonProfile, family: (category: string) => string) {
+  if (person.recruiter) return person.recruiter.organization?.name ?? null;
+  const shares = familyShares(person.skills.map((skill) => skill.category));
+  return person.sector ?? (shares[0] ? family(shares[0].family) : null);
+}
+
+/**
+ * The colours of the drawn banner, as « Mon profil » shows it: « Modifier le profil » shows the
+ * same one (évaluation talent, 07/11/2026).
+ */
+export async function drawnBannerOf(person: PersonProfile) {
+  const tc = await getTranslations("forMe.category");
+  const family = (category: string) => {
+    try {
+      return tc(category as "data");
+    } catch {
+      return category;
+    }
+  };
+  const key = colorOf(domainOf(person, family) ?? person.name);
+  return { background: BANNER_GROUND[key], motif: PROFILE_PALETTE[key] };
+}
+
 /** Bars of a language (5 = mother tongue or fluent). */
 const LANGUAGE_BARS = { native: 5, fluent: 5, professional: 4, intermediate: 3, basic: 2 } as const;
 
@@ -103,9 +127,7 @@ export async function profileView(
   };
   const shares = familyShares(person.skills.map((skill) => skill.category));
   const recruiter = person.recruiter;
-  const domain = recruiter
-    ? (recruiter.organization?.name ?? null)
-    : (person.sector ?? (shares[0] ? family(shares[0].family) : null));
+  const domain = domainOf(person, family);
   const bannerKey = colorOf(domain ?? person.name);
   const code = countryCode(person.country);
   const country = code ? countryName(code) : null;

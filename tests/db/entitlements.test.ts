@@ -151,9 +151,10 @@ describe("moteur de droits : règles", () => {
     expect((await usage(db, talent, "career.interview.text.monthly")).used).toBe(3);
   });
 
-  it("refuse un quota à 0 et ne bloque jamais un quota illimité", async () => {
+  it("refuse au-delà du quota et ne bloque jamais un quota illimité", async () => {
     const talent = await subjectFor("talent");
-    await expect(consume(db, talent, "ai.credits.monthly")).rejects.toBeInstanceOf(
+    // The free plan gives 5 trial credits a month (07/11/2026): 6 is too many.
+    await expect(consume(db, talent, "ai.credits.monthly", 6)).rejects.toBeInstanceOf(
       QuotaExceededError,
     );
     await db.entitlementOverride.create({

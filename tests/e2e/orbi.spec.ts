@@ -3,7 +3,7 @@ import { expect, test } from "./fixtures";
 import { signUpFromPricing, testEmail } from "./session";
 
 // Orbi en page de conversation et son historique (refonte mobile, talent lot 4 § 9). En Free,
-// sans crédit Orbi, la réponse vient des règles et mène vers l'outil adapté et les formules.
+// sans consentement à l'IA, la réponse vient des règles et mène vers l'outil adapté et les formules.
 test("Orbi : écrire, comprendre la réponse, retrouver puis effacer l'échange", async ({
   page,
   isMobile,
@@ -26,7 +26,8 @@ test("Orbi : écrire, comprendre la réponse, retrouver puis effacer l'échange"
       name: "Orbi",
     }),
   ).toHaveAttribute("aria-current", "page");
-  await expect(page.getByText("0 crédit", { exact: true })).toBeVisible();
+  // Five trial credits on the free plan (évaluation talent, 07/11/2026).
+  await expect(page.getByText("5 crédits", { exact: true })).toBeVisible();
 
   // The tabs of the phone load underneath: write once the page answers (hydrated).
   await page.waitForLoadState("networkidle");
@@ -43,9 +44,11 @@ test("Orbi : écrire, comprendre la réponse, retrouver puis effacer l'échange"
     "href",
     "/app/career/entretiens",
   );
-  await expect(chat.getByRole("link", { name: "Voir les formules" })).toBeVisible();
+  // Trial credits left: no « Voir les formules » (only once the credits are used up).
+  await expect(chat.getByRole("link", { name: "Voir les formules" })).toHaveCount(0);
   await chat.getByText("Pourquoi ?").click();
-  await expect(chat.getByText(/Réponse préparée sans l'IA/)).toBeVisible();
+  // The trial credits pay for an answer written by the AI (fake provider in tests).
+  await expect(chat.getByText(/Réponse rédigée par l'IA d'Orbi/)).toBeVisible();
   await expect(page).toHaveURL(/\/app\/orbi\?c=/);
   await expectAccessible(page);
 

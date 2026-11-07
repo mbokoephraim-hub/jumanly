@@ -55,11 +55,35 @@ export function DrawnBanner({ opacity = 0.18 }: { opacity?: number }) {
   );
 }
 
+/** The colours of the person's drawn banner (dark ground and motif), from « Mon profil ». */
+export type DrawnColors = { background: string; motif: string };
+
+/** The drawn banner of a profile (circles in the colour of the person's field, a lime dot). */
+export function ProfileDrawnBanner({ motif }: { motif: string }) {
+  return (
+    <svg viewBox="0 0 350 88" preserveAspectRatio="xMidYMid slice" aria-hidden>
+      <g fill="none" stroke={motif} strokeWidth="14" strokeOpacity=".5">
+        <circle cx="300" cy="10" r="46" />
+        <circle cx="300" cy="10" r="86" />
+        <circle cx="300" cy="10" r="126" />
+      </g>
+      <circle cx="44" cy="70" r="5" fill="var(--nb-lime)" />
+    </svg>
+  );
+}
+
 /**
  * « Changer la bannière » at the top of « Modifier le profil »: the banner as others see it, and a
  * sheet to take a picture, choose one, or go back to the drawn banner. Saved at once, like the photo.
  */
-export function BannerField({ banner }: { banner: string | null }) {
+export function BannerField({
+  banner,
+  drawn,
+}: {
+  banner: string | null;
+  /** The drawn banner « Mon profil » shows, so both screens show the same one. */
+  drawn?: DrawnColors;
+}) {
   const t = useTranslations("phoneCareer.form");
   const router = useRouter();
   const [image, setImage] = useState(banner);
@@ -89,9 +113,19 @@ export function BannerField({ banner }: { banner: string | null }) {
 
   return (
     <div className="nb-ca-form-banniere">
-      <div className="nb-ca-form-banniere-i" data-image={image ? "" : undefined}>
-        {/* eslint-disable-next-line @next/next/no-img-element -- the person's own upload */}
-        {image ? <img src={image} alt="" /> : <DrawnBanner />}
+      <div
+        className="nb-ca-form-banniere-i"
+        data-image={image ? "" : undefined}
+        style={!image && drawn ? { background: drawn.background } : undefined}
+      >
+        {image ? (
+          // eslint-disable-next-line @next/next/no-img-element -- the person's own upload
+          <img src={image} alt="" />
+        ) : drawn ? (
+          <ProfileDrawnBanner motif={drawn.motif} />
+        ) : (
+          <DrawnBanner />
+        )}
       </div>
       <button type="button" onClick={() => setOpen(true)} disabled={pending} aria-busy={pending}>
         {t("bannerChange")}

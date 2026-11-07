@@ -89,10 +89,12 @@ test.describe("Modèle B · fondations au téléphone", () => {
     expect(gestures).toContain("onglet-d");
     expect(gestures).toContain("onglet-g");
 
-    // Orbi floats on each tab, with a question suited to it; a touch opens its sheet.
-    await expect(
-      page.getByRole("button", { name: "Résumer les nouveautés du jour ?" }),
-    ).toBeVisible();
+    // Orbi floats on each tab, with a question suited to it; a touch opens its sheet. The bubble
+    // goes after a few seconds or at the first touch elsewhere (évaluation talent, 07/11/2026).
+    await page.goto("/app");
+    const bubble = page.getByRole("button", { name: "Résumer les nouveautés du jour ?" });
+    await expect(bubble).toBeVisible();
+    await expect(bubble).toBeHidden({ timeout: 8_000 });
     await page.getByRole("button", { name: "Ouvrir Orbi, l'assistant" }).click();
     const sheet = page.getByRole("dialog", { name: "Orbi" });
     await expect(sheet.getByText("Orbi · depuis le Fil")).toBeVisible();

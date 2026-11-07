@@ -147,6 +147,16 @@ describe("Orbi, conversation libre (talent lot 4 § 9)", () => {
     expect(await used(noConsent.id)).toBe(0);
 
     const free = await talent({ free: true });
+    // Trial credits used up (the free plan has 5 a month since 07/11/2026).
+    await db.entitlementOverride.create({
+      data: {
+        subjectType: "user",
+        subjectId: free.id,
+        key: "ai.credits.monthly",
+        value: "0",
+        reason: "test",
+      },
+    });
     const quota = await askOrbi(db, free.id, { text: "Quelle formation suivre ?" }, texts);
     expect(quota.ok && quota.answer.limit).toMatch(/quota|entitlement/);
     expect(quota.ok && quota.answer.text).toEqual(["règle formation"]);

@@ -51,6 +51,8 @@ type Answer = {
   fact?: OrbiFactAnswer | null;
 };
 
+/** How long the bubble beside the disc stays before it goes (it covers the first card). */
+const BUBBLE_MS = 5000;
 /** The four questions of the Fil answered from facts, in the order of the sheet. */
 const FIL_FACTS: OrbiFact[] = ["digest", "entreprises", "suivre", "ecrire"];
 /** The four questions of Messages, answered from the person's conversations (lot B8). */
@@ -131,6 +133,25 @@ export function PhoneOrbi({
     return () => document.removeEventListener("scroll", listen, { capture: true });
   }, [pathname]);
 
+  // Even at the top, the bubble covers the bottom of the first card (évaluation talent,
+  // 07/11/2026): it goes after a few seconds, or at the first touch elsewhere on the page.
+  const [faded, setFaded] = useState(false);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- a new page shows it again
+    setFaded(false);
+    const fade = () => setFaded(true);
+    const timer = window.setTimeout(fade, BUBBLE_MS);
+    const touch = (event: PointerEvent) => {
+      if (event.target instanceof Element && event.target.closest(".nb-orbi-fab")) return;
+      fade();
+    };
+    document.addEventListener("pointerdown", touch, { capture: true, passive: true });
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener("pointerdown", touch, { capture: true });
+    };
+  }, [pathname]);
+
   const ask = (question: string) => {
     const clean = question.trim();
     if (clean.length < 2) {
@@ -209,7 +230,7 @@ export function PhoneOrbi({
       <div className="nb-orbi-fab" hidden={tab === null} data-dessus={above ? "" : undefined}>
         {/* No bubble on Formation: it covered « Pour vos offres », and Orbi's advice is already
             in the « Reprendre » card (Ephraïm, 01/11/2026). */}
-        {current.bubble && !above && !scrolled && shownTab !== "formation" ? (
+        {current.bubble && !above && !scrolled && !faded && shownTab !== "formation" ? (
           <button type="button" className="nb-orbi-bulle" onClick={() => openWith(current.bubble)}>
             {current.bubble}
           </button>

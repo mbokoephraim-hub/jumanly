@@ -39,7 +39,7 @@ import {
   type ReferenceStateValue,
   type ReferentValue,
 } from "./verification-fields";
-import { BannerField } from "./banner";
+import { BannerField, type DrawnColors } from "./banner";
 import { FilAvatar } from "../fil/avatar";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { pagesSeen } from "../pages-seen";
@@ -371,6 +371,8 @@ export type HeadValues = {
   availability: "open" | "listening" | "not_looking";
   image: string | null;
   banner: string | null;
+  /** The drawn banner of « Mon profil », shown while no picture is chosen. */
+  drawn?: DrawnColors;
   initials: string;
   tone: number;
 };
@@ -444,7 +446,7 @@ export function HeadForm({
         )
       }
     >
-      <BannerField banner={values.banner} />
+      <BannerField banner={values.banner} drawn={values.drawn} />
       <div className="nb-ca-form-photo">
         <FilAvatar
           initials={values.initials}
