@@ -184,3 +184,15 @@ html:has(.nb-app[data-large]) .nb-feuille-dlg[open] {
 .nb-app[data-large] .nb-onglet[data-onglet-couche="fil"] {
   --nb-largeur: 680px;
 }
+
+/* ─── Étape 3 : Postuler. La barre du bas garde « Retour » à gauche et l'envoi à droite, en entier. */
+.nb-app[data-large] .t-post .t-bas-f {
+  justify-content: space-between;
+  align-items: center;
+}
+.nb-app[data-large] .t-post .t-bas-f .t-bt.t-pl {
+  flex: none;
+  width: auto;
+  min-width: max-content;
+  padding-inline: 28px;
+}

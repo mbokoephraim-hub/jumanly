@@ -47,6 +47,8 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
   page,
   context,
 }) => {
+  // A sign-up, the first steps, then the whole of Postuler: more than the default 30 s.
+  test.setTimeout(90_000);
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("postuler"));
   await finishOnboarding(page);
 

@@ -5676,3 +5676,9 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
 - Le Fil reste une colonne de lecture (680 px) ; Explorer et Formation, faits de rangées de cartes,
   s'ouvrent à 1080 px pour en montrer trois ou quatre d'un coup (`src/styles/talent-large.css`).
 - Vérifié à l'écran : Fil, Publier, Mes publications, Explorer, une offre, Carrière, Formation, Chat, Mon profil.
+
+## 2026-11-08 · Talent sur ordinateur, étape 3 (Explorer, offre, Postuler)
+
+- Vérifié à l'écran : Explorer, Offres pour vous, Offres enregistrées, page d'une offre, les trois étapes de Postuler.
+- Postuler : la barre du bas garde « Retour » ou « Passer » à gauche et l'action à droite, en entier
+  (« Envoyer ma candidature » était coupé).
