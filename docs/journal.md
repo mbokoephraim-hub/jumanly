@@ -5692,3 +5692,11 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
   Lime des rubriques suit leur largeur.
 - Test instable déjà présent avant ce changement : `modele-b-messages.spec.ts:170` (téléphone) échoue
   une fois sur deux en local (« Écrire à Daniel » encore en mouvement), avec ou sans ce changement.
+
+## 2026-11-08 · Talent sur ordinateur, étape 7 (écrans sans maquette, bilan)
+
+- Sécurité, réglages, aide, factures et formules : forme du téléphone sur ordinateur (une colonne de
+  680 px, plus de colonne de rubriques ni de cartes deux par ligne).
+- Ancien code d'ordinateur gardé pour les comptes avec espace entreprise ou partenaire (voir la note
+  `docs/decisions/2026-11-07-talent-ordinateur-modele-b.md`).
+- Vérifié : build, e2e accessibilité, comptes, socle, compte, paiements, nettoyage et plein écran Modèle B.

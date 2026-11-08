@@ -32,3 +32,13 @@ logique, les mêmes couleurs et les mêmes textes qu'au téléphone, adaptés au
   (`mobile-talent.spec.ts`), la leçon à onglets (`mobile-talent.spec.ts`), Connexions dans Compte
   (`mobile-compte.spec.ts`, couvert par `modele-b-messages.spec.ts`).
 - `web-frame.spec.ts` vérifie le nouveau cadre sur ordinateur (1440) et tablette (900).
+
+## Étape 7 (08/11/2026) : écrans sans maquette et ancien code
+
+- Les écrans qui n'ont pas de maquette Modèle B (sécurité, notifications, messagerie et rappels,
+  confidentialité, aide, factures, formules) prennent sur ordinateur la forme du téléphone : une seule
+  colonne de 680 px, sans la colonne de rubriques ni les cartes deux par ligne de l'ancien design web
+  (règles de fin de `src/styles/talent-large.css`).
+- **L'ancien code d'ordinateur des pages talent n'est pas effacé** : il sert encore aux personnes qui ont
+  aussi un espace entreprise ou partenaire (`isModelB()` faux pour elles). L'effacer couperait leurs
+  écrans. Il le sera quand ces espaces auront leur propre passage au Modèle B.
