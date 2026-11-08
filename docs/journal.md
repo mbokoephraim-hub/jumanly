@@ -5670,3 +5670,9 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
   avec la marque et les cinq onglets, Orbi en bas à droite. « Fiches pour préparer » ajoutées à Mes simulations.
 - Tests e2e d'ordinateur adaptés au chemin du Modèle B ; détail dans
   `docs/decisions/2026-11-07-talent-ordinateur-modele-b.md`.
+
+## 2026-11-08 · Talent sur ordinateur, étape 2 (largeur de chaque onglet)
+
+- Le Fil reste une colonne de lecture (680 px) ; Explorer et Formation, faits de rangées de cartes,
+  s'ouvrent à 1080 px pour en montrer trois ou quatre d'un coup (`src/styles/talent-large.css`).
+- Vérifié à l'écran : Fil, Publier, Mes publications, Explorer, une offre, Carrière, Formation, Chat, Mon profil.

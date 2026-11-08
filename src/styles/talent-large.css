@@ -174,3 +174,13 @@ html:has(.nb-app[data-large]) .nb-feuille-dlg[open] {
   transform: none;
   max-width: none;
 }
+
+/* ─── Étape 2 : chaque onglet à sa largeur. Le Fil reste une colonne de lecture ; Explorer et
+   Formation, faits de rangées de cartes, s'ouvrent pour en montrer trois ou quatre d'un coup. ─── */
+.nb-app[data-large] .nb-onglet[data-onglet-couche="explorer"],
+.nb-app[data-large] .nb-onglet[data-onglet-couche="formation"] {
+  --nb-largeur: 1080px;
+}
+.nb-app[data-large] .nb-onglet[data-onglet-couche="fil"] {
+  --nb-largeur: 680px;
+}
