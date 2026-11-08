@@ -85,11 +85,14 @@ function Row({
   online,
   typing,
   index,
+  open,
 }: {
   row: InboxRow;
   online: boolean;
   typing: boolean;
   index: number;
+  /** On a big screen the open conversation sits beside the list: its row is marked. */
+  open: boolean;
 }) {
   const t = useTranslations("phoneChat");
   const color = TAG_COLOR[row.tab];
@@ -97,6 +100,7 @@ function Row({
     <Link
       href={`/app/messages/${row.id}`}
       className="nb-ch-ligne"
+      aria-current={open ? "page" : undefined}
       data-nonlu={row.unread ? "" : undefined}
       style={{ animationDelay: `${Math.min(index, 8) * 0.05}s` }}
     >
@@ -229,9 +233,19 @@ function Segment({
   const box = useRef<HTMLDivElement>(null);
   const [pill, setPill] = useState<{ left: number; width: number } | null>(null);
   useLayoutEffect(() => {
-    const node = box.current?.querySelector<HTMLElement>(`[data-tab="${tab}"]`);
-    if (!node) return;
-    setPill({ left: node.offsetLeft, width: node.offsetWidth });
+    const segment = box.current;
+    const node = segment?.querySelector<HTMLElement>(`[data-tab="${tab}"]`);
+    if (!segment || !node) return;
+    const measure = () => {
+      const next = { left: node.offsetLeft, width: node.offsetWidth };
+      setPill((now) => (now?.left === next.left && now.width === next.width ? now : next));
+    };
+    measure();
+    // The list narrows beside an open conversation on a big screen: the Lime follows its tab.
+    if (!window.matchMedia("(min-width: 768px)").matches) return;
+    const watch = new ResizeObserver(measure);
+    watch.observe(segment);
+    return () => watch.disconnect();
   }, [tab]);
   return (
     <div
@@ -661,6 +675,7 @@ export function PhoneMessages({ view, push }: { view: InboxView; push?: ReactNod
                 index={index}
                 online={isOnline(row.who)}
                 typing={isTyping(row)}
+                open={pathname === `/app/messages/${row.id}`}
               />
             ))}
             {rows.length === 0 ? <p className="nb-ch-vide">{tc(`empty.${tab}`)}</p> : null}

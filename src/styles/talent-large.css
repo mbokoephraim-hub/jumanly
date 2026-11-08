@@ -196,3 +196,24 @@ html:has(.nb-app[data-large]) .nb-feuille-dlg[open] {
   min-width: max-content;
   padding-inline: 28px;
 }
+
+/* ─── Étape 6 : le Chat. Une discussion ouverte s'affiche à droite de la liste, qui reste utilisable. */
+.nb-app[data-large] {
+  --nb-liste-chat: 420px;
+}
+.nb-app[data-large] .nb-onglet[data-cote] {
+  visibility: visible;
+  z-index: 2;
+  right: auto;
+  width: var(--nb-liste-chat);
+  padding-inline: 0;
+  border-right: 1px solid var(--nb-filet);
+}
+.nb-app[data-large] .nb-pile[data-cote] {
+  left: calc(var(--nb-cote) + var(--nb-liste-chat));
+  padding-inline: max(0px, calc((100vw - var(--nb-cote) - var(--nb-liste-chat) - 860px) / 2));
+}
+.nb-app[data-large] .nb-ch-ligne[aria-current="page"] {
+  background: rgba(var(--nb-voile), 0.06);
+  border-radius: 16px;
+}
