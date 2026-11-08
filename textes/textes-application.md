@@ -8295,6 +8295,8 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phone.nav.explorerNew` | Explorer, {count, plural, one {# nouvelle offre} other {# nouvelles offres}} |
 | `phone.nav.carriereNew` | Carrière, {count, plural, one {# nouvelle sur vos candidatures} other {# nouvelles sur vos candidatures}} |
 | `phone.nav.many` | 5+ |
+| `phone.nav.home` | Jumanly, aller au Fil |
+| `phone.nav.brand` | jumanly |
 | `phone.refresh.loading` | Actualisation… |
 | `phone.back` | Retour |
 | `phone.close` | Fermer |
@@ -11172,6 +11174,7 @@ Conventions :
 | `phoneInterview.list.today` | Aujourd’hui |
 | `phoneInterview.list.ongoing` | En cours |
 | `phoneInterview.list.empty` | Pas encore de simulation. Choisissez un sujet et lancez-vous : c’est privé. |
+| `phoneInterview.list.tips` | Fiches pour préparer |
 | `phoneInterview.list.new` | Nouvelle simulation |
 | `phoneInterview.bank.experiences.q1` | Présentez-vous en une minute. |
 | `phoneInterview.bank.experiences.h1` | Formation, expérience, ce que vous visez. Finissez par le poste de {jobTitle}. |

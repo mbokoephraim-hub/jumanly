@@ -14,7 +14,7 @@ import { db } from "@/server/db";
 import { CV_FILE_MAX_BYTES } from "@/server/services/cv-file";
 import { parseImport } from "@/server/services/cv-import";
 
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("docs.import");
@@ -43,7 +43,7 @@ export default async function CvImportPage({ searchParams }: PageProps<"/app/pro
   const undated = read?.experiences.filter((item) => !item.start).length ?? 0;
 
   // The phone (docs/carriere-v3, captures 13 to 15): « Créer un CV · Importer ».
-  if (await isPhone())
+  if (await isModelB())
     redirect(read ? "/app/career/cv/nouveau?etape=trouve" : "/app/career/cv/nouveau?etape=import");
 
   return (

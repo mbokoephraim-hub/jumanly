@@ -85,7 +85,9 @@ async function applyTo(talent: Page, slug: string, title: string) {
   await talent.goto(`/app/jobs/${slug}`);
   await expect(talent.getByRole("heading", { level: 1 })).toHaveText(title);
   // Postuler (planche talent-2 § 1): the CV proposed first, nothing to add, then sending.
-  await talent.goto(`/app/jobs/${slug}/postuler`);
+  // The offer may still be settling (its address refreshed): a cut navigation is tried again.
+  const apply = `/app/jobs/${slug}/postuler`;
+  await talent.goto(apply).catch(() => talent.goto(apply));
   // First screen (01/11/2026): how to apply; « Avec un CV existant » is chosen.
   await talent.getByRole("button", { name: "Continuer" }).click();
   await expect(talent).toHaveURL(/etape=cv/);
@@ -186,19 +188,22 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
 
   await talent.goto(threadUrl);
   await expect(talent.getByRole("main")).toContainText("êtes-vous disponible mardi");
-  // On a phone (Chat, docs/chat-v2) the composer is the field « Écrire à … ».
-  await (
-    isMobile ? talent.getByRole("textbox", { name: /^Écrire à / }) : talent.locator("#cv-corps")
-  ).fill("Bonjour, oui, mardi me convient.");
-  await talent.getByRole("button", { name: "Envoyer", exact: true }).click();
+  // The talent's Chat (docs/chat-v2, on every device since 07/11/2026): the field « Écrire à … ».
+  // « Envoyer » appears once the field holds text: written again until the page has hydrated.
+  const send = talent.getByRole("button", { name: "Envoyer", exact: true });
+  await expect(async () => {
+    await talent
+      .getByRole("textbox", { name: /^Écrire à / })
+      .fill("Bonjour, oui, mardi me convient.");
+    await expect(send).toBeVisible({ timeout: 1_000 });
+  }).toPass({ timeout: 20_000 });
+  await send.click();
   await expect(talent.getByRole("main")).toContainText("mardi me convient");
 
   // The talent never sees the team's notes; the status says « Entretien ».
   await talent.goto("/app/suivi");
-  // On a phone (Modèle B, lot B9) Suivi is the tab Candidatures of Carrière.
-  const card = (isMobile ? talent.locator("#car-panneau a") : talent.locator("li"))
-    .filter({ hasText: title })
-    .first();
+  // Suivi is the tab Candidatures of Carrière (Modèle B, lot B9; on a computer too since 07/11).
+  const card = talent.locator("#car-panneau a").filter({ hasText: title }).first();
   await expect(card).toContainText("Entretien");
   await expect(talent.getByRole("main")).not.toContainText("tableaux croisés");
 
@@ -249,11 +254,9 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await expect(decision).toContainText("Ce n'est pas la fin du parcours.");
 
   await talent.goto("/app/suivi?vue=terminees");
-  await expect(
-    (isMobile ? talent.locator("#car-panneau a") : talent.locator("li"))
-      .filter({ hasText: title })
-      .first(),
-  ).toContainText("Non retenue");
+  await expect(talent.locator("#car-panneau a").filter({ hasText: title }).first()).toContainText(
+    "Non retenue",
+  );
   await talent.goto("/app/notifications");
   // On a phone (Modèle B, lot B3), the notification is a sentence: « … n'a pas retenu … ».
   await expect(

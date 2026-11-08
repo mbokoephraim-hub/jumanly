@@ -16,9 +16,8 @@ test("la cloche signale l'arrivée d'une notification, puis tout se marque comme
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
   await finishOnboarding(page);
   await expect(page).toHaveURL(/\/app(\?bienvenue=1)?$/);
-  // Web (planche web talent-2 § 4): the bell opens a panel; phone: a link to the page.
-  const web = (page.viewportSize()?.width ?? 0) >= 768;
-  const bell = page.getByRole(web ? "button" : "link", { name: /^Notifications/ });
+  // The bell is a link to the page (Modèle B, on every device since 07/11/2026).
+  const bell = page.getByRole("link", { name: /^Notifications/ }).filter({ visible: true });
   await expect(bell).toHaveAccessibleName("Notifications");
 
   // Something happens while the person is on the platform: the bell lights up and a toast says it.
@@ -38,23 +37,15 @@ test("la cloche signale l'arrivée d'une notification, puis tout se marque comme
   await expect(bell).toHaveAccessibleName("Notifications, 1 non lue");
 
   await bell.click();
-  if (web) {
-    const panel = page.getByRole("dialog", { name: "Notifications" });
-    await expect(panel.getByRole("button", { name: /^Nouveau message/ })).toContainText(
-      "Horizon Démo · Poste fictif",
-    );
-    await panel.getByRole("link", { name: "Toutes les notifications" }).click();
-  }
   await expect(page).toHaveURL(/\/app\/notifications$/);
-  // Planche talent-2 § 5: a short title and its line, the new one lit.
-  // Phone: the name first, beside the photo (Ephraïm 29/10/2026).
-  // Phone (03/11/2026): the model's title « Nouveau message » comes before the name.
-  const item = page.getByRole("button", { name: web ? /^Nouveau message/ : /Horizon Démo/ });
-  await expect(item).toContainText(web ? "Horizon Démo · Poste fictif" : "« Poste fictif »");
+  // The name first, beside the photo (Ephraïm 29/10/2026); the model's title « Nouveau message »
+  // comes before the name (03/11/2026).
+  const item = page.getByRole("button", { name: /Horizon Démo/ });
+  await expect(item).toContainText("« Poste fictif »");
   await expectAccessible(page);
   await page.getByRole("button", { name: "Tout marquer comme lu" }).click();
   await page.goto("/app");
   await expect(
-    page.getByRole(web ? "button" : "link", { name: /^Notifications/ }),
+    page.getByRole("link", { name: /^Notifications/ }).filter({ visible: true }),
   ).toHaveAccessibleName("Notifications");
 });

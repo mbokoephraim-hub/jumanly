@@ -1,0 +1,176 @@
+/* Espace talent sur ordinateur et tablette (Ephraïm, 07/11/2026) : les écrans du téléphone (Modèle B,
+   phone.css), le menu debout à gauche avec la marque et le nom de chaque onglet, le contenu au milieu.
+   Chaque écran s'élargit ensuite à son tour (étapes 2 à 7). Classes `nb-`, attribut `data-large`. */
+
+.nb-app[data-large] {
+  --nb-cote: 248px;
+  --nb-largeur: 760px;
+  /* Plus de barre en bas : les pages gardent seulement leur marge. */
+  --nb-nav: 0px;
+  --nb-bas: 24px;
+  --nb-haut: 24px;
+}
+
+/* Les couches (onglets, pages) commencent après le menu ; le contenu tient au milieu. */
+.nb-app[data-large] .nb-couche {
+  left: var(--nb-cote);
+  padding-inline: max(0px, calc((100vw - var(--nb-cote) - var(--nb-largeur)) / 2));
+  scrollbar-width: thin;
+}
+.nb-app[data-large] .nb-couche::-webkit-scrollbar {
+  display: block;
+  width: 8px;
+}
+.nb-app[data-large] .nb-onglet,
+.nb-app[data-large] .nb-pile[data-racine] {
+  padding-bottom: 48px;
+}
+
+/* ─── Le menu : la même pilule, debout ─── */
+.nb-app[data-large] .nb-nav,
+.nb-app[data-large] .nb-nav[hidden] {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: auto;
+  width: var(--nb-cote);
+  height: auto;
+  padding: 20px 14px;
+  border-radius: 0;
+  border: 0;
+  border-right: 1px solid var(--nb-filet);
+  box-shadow: none;
+  background: var(--nb-noir);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 6px;
+  z-index: 20;
+}
+.nb-app[data-large] .nb-nav-marque {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2px 8px 22px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--nb-creme);
+}
+.nb-app[data-large] .nb-nav-marque img {
+  border-radius: 9px;
+}
+.nb-app[data-large] .nb-nav a[data-onglet] {
+  flex: none;
+  justify-content: flex-start;
+  height: 48px;
+  padding: 0 16px;
+  gap: 12px;
+  background: transparent;
+}
+.nb-app[data-large] .nb-nav a[data-onglet]:hover {
+  background: var(--nb-f-203f42, #203f42);
+}
+.nb-app[data-large] .nb-nav a[aria-current="page"] {
+  background: var(--nb-lime);
+  color: var(--nb-sur-lime, #0f3f37);
+}
+.nb-app[data-large] .nb-nav .nb-nav-nom {
+  max-width: none;
+  margin-left: 0;
+  opacity: 1;
+  font-size: 15px;
+}
+.nb-app[data-large] .nb-nav .nb-nav-compte {
+  position: static;
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  font-size: 11px;
+  border-radius: 10px;
+}
+
+/* ─── Orbi flottant : en bas à droite de l'écran ─── */
+.nb-app[data-large] .nb-orbi-fab {
+  right: 32px;
+  bottom: 32px;
+}
+
+/* ─── Les feuilles : une fenêtre au milieu, plus un tiroir du bas ─── */
+html:has(.nb-app[data-large]) .nb-feuille {
+  width: min(560px, calc(100% - 48px));
+  border-radius: 24px;
+  border: 1px solid rgba(var(--nb-voile), 0.08);
+  max-height: min(86dvh, 820px);
+  padding-bottom: 28px;
+}
+html:has(.nb-app[data-large]) .nb-feuille-dlg[open] {
+  justify-content: center;
+  align-items: center;
+}
+
+/* La marque n'est pas une pilule. */
+.nb-app[data-large] .nb-nav a.nb-nav-marque {
+  justify-content: flex-start;
+  height: auto;
+  min-width: 0;
+  padding: 2px 10px 22px;
+  border-radius: 0;
+  background: transparent;
+  color: var(--nb-creme);
+}
+
+/* ─── Ce qui est fixé dans une page (barres du bas, écrans par-dessus) : dans la colonne du milieu,
+   pas sous le menu ─── */
+.nb-app[data-large],
+.nb-app[data-large] .nb-couche {
+  --nb-marge-gauche: calc(
+    var(--nb-cote) + max(0px, (100vw - var(--nb-cote) - var(--nb-largeur)) / 2)
+  );
+}
+.nb-app[data-large]
+  :is(
+    .nb-fil-repondre,
+    .nb-fil-pub-bas,
+    .nb-ex-bas,
+    .nb-iv-bas,
+    .nb-cv-bas,
+    .t-barre-bas,
+    .t-bas-f
+  ) {
+  left: var(--nb-marge-gauche);
+  right: auto;
+  width: min(var(--nb-largeur), calc(100vw - var(--nb-cote)));
+}
+.nb-app[data-large]
+  :is(
+    .nb-recherche-ecran,
+    .nb-profil,
+    .nb-notifs,
+    .nb-pret,
+    .nb-ms-vue,
+    .nb-ms-camera,
+    .nb-iv-pause,
+    .nb-lt-accueil,
+    .nb-pv
+  ) {
+  left: var(--nb-cote);
+  padding-inline: max(20px, calc((100vw - var(--nb-cote) - var(--nb-largeur)) / 2));
+}
+.nb-app[data-large] :is(.nb-fil-actu-pilule, .nb-fil-actu-disque) {
+  left: calc(var(--nb-cote) + (100vw - var(--nb-cote)) / 2);
+}
+
+/* Un écran sans maquette du Modèle B (Postuler, diagnostic, sécurité…) garde sa mise en page
+   d'ordinateur : il prend une colonne plus large, en attendant son étape. */
+.nb-app[data-large] .nb-pile:not(:has(.nb-page)) {
+  --nb-largeur: 1120px;
+}
+.nb-app[data-large] .nb-cadre > .t-colonne {
+  max-width: none;
+}
+.nb-app[data-large] :is(.t-bas-f, .t-barre-bas) {
+  transform: none;
+  max-width: none;
+}

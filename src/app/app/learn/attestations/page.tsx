@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 /**
  * The old page of attestations: « Mes attestations » is a view of « Mes formations », and a
@@ -7,7 +7,7 @@ import { isPhone } from "@/server/view";
  */
 export default async function CertificatesRedirect() {
   redirect(
-    (await isPhone())
+    (await isModelB())
       ? "/app/learn?onglet=attestations"
       : "/app/learn/mes-formations?vue=attestations",
   );

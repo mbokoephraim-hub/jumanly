@@ -4,7 +4,7 @@ import { PhoneConnexions } from "@/components/phone/messages/connexions";
 import { connexionsView, MessagesTexts } from "@/components/phone/messages/server";
 import { requireUser } from "@/server/auth/session";
 import { getActiveSpace } from "@/server/hire-context";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export const metadata: Metadata = { robots: { index: false } };
 
@@ -18,7 +18,7 @@ export default async function ConnexionsPage({
 }: PageProps<"/app/messages/connexions">) {
   const user = await requireUser("/app/messages/connexions");
   const { onglet } = await searchParams;
-  if (!(await isPhone()) || (await getActiveSpace(user.id)))
+  if (!(await isModelB()) || (await getActiveSpace(user.id)))
     redirect(`/app/compte/connexions${onglet === "demandes" ? "?onglet=demandes" : ""}`);
   const view = await connexionsView(user);
   return (

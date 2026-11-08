@@ -8,7 +8,7 @@ import { EducationForm } from "@/components/phone/career/edit";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { ensureProfile } from "@/server/services/profile";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { referenceCheckSelect, referenceState } from "@/server/services/reference-check";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -27,7 +27,7 @@ export default async function CareerEducationPage({
   const { id } = await params;
   const { type } = await searchParams;
   const user = await requireUser(`/app/career/profil/formation/${id}`);
-  if (!(await isPhone())) redirect("/app/profil#etudes");
+  if (!(await isModelB())) redirect("/app/profil#etudes");
   const profile = await ensureProfile(db, user.id);
   const item =
     id === "nouvelle"

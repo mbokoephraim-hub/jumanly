@@ -5662,3 +5662,11 @@ Demande d'Ephraïm (« Faites tout du tableau ») après l'évaluation de l'espa
    une candidature et un message du recruteur, Jean-Pierre aussi (`prisma/seed/demo-talents.ts`).
 
 Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
+
+## 2026-11-07 · Talent sur ordinateur = téléphone, étape 1 (cadre)
+
+- Demande d'Ephraïm : copier sur ordinateur l'espace talent du téléphone, page après page.
+- Étape 1 : les écrans du Modèle B s'affichent sur ordinateur et tablette (`isModelB()`), menu debout à gauche
+  avec la marque et les cinq onglets, Orbi en bas à droite. « Fiches pour préparer » ajoutées à Mes simulations.
+- Tests e2e d'ordinateur adaptés au chemin du Modèle B ; détail dans
+  `docs/decisions/2026-11-07-talent-ordinateur-modele-b.md`.

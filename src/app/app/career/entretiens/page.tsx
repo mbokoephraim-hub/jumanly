@@ -17,7 +17,7 @@ import {
   quotaKey,
 } from "@/server/services/interview-sim";
 import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { PhoneInterviewHistory } from "@/components/phone/interview/report";
 import { historyRows, InterviewTexts } from "@/components/phone/interview/server";
 
@@ -48,12 +48,21 @@ export default async function InterviewsPage({
   const query = await searchParams;
   const user = await requireUser("/app/career/entretiens");
   // On the phone (Modèle B, lot B6): « Mes simulations ».
-  if (await isPhone())
+  if (await isModelB()) {
+    // The preparation sheets too, as on the computer before (07/11/2026).
+    const tr = await getTranslations();
+    const sheets = publishedTips(await getMessages(), await getContentOverrides()).map((tip) => ({
+      id: tip.id,
+      title: tip.title,
+      line: tr("entrain.tipLine", { minutes: tip.minutes }),
+      body: tip.body,
+    }));
     return (
       <InterviewTexts>
-        <PhoneInterviewHistory rows={await historyRows(user.id)} />
+        <PhoneInterviewHistory rows={await historyRows(user.id)} tips={sheets} />
       </InterviewTexts>
     );
+  }
   const t = await getTranslations();
   const format = await getFormatter();
   const now = new Date();

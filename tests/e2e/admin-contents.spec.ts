@@ -28,7 +28,7 @@ test("une fiche conseil se publie, se lit dans Career, puis se restaure", async 
   // Talents read it in « S'entraîner aux entretiens » (lot 7: the sheets open in place there,
   // the former page /app/career/conseils is gone).
   await page.goto("/app/career/entretiens");
-  const sheet = page.locator("details.t-conseil").filter({ hasText: title });
+  const sheet = page.locator("details.nb-iv-fiche").filter({ hasText: title });
   await expect(sheet).toBeVisible();
   await sheet.locator("summary").click();
   await expect(sheet.getByText(/Écoutez d'abord la proposition/)).toBeVisible();

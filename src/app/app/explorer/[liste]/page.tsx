@@ -8,7 +8,7 @@ import { ExplorerTexts } from "@/components/phone/explorer/server";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { explorerHome, hiringCompanies, peopleToKnow } from "@/server/services/explore";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("phoneExplorer");
@@ -27,7 +27,7 @@ export default async function ExplorerListPage({ params }: PageProps<"/app/explo
   if (!LISTS.includes(liste as List)) notFound();
   const list = liste as List;
   const user = await requireUser(`/app/explorer/${list}`);
-  if (!(await isPhone())) redirect("/app/jobs");
+  if (!(await isModelB())) redirect("/app/jobs");
   const now = new Date();
   const words = await explorerWords(now);
   const { t } = words;

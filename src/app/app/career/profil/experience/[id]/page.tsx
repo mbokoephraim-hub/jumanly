@@ -8,7 +8,7 @@ import { requireUser } from "@/server/auth/session";
 import { ACHIEVEMENTS_SUGGESTED, achievementsOf } from "@/lib/achievements";
 import { db } from "@/server/db";
 import { dateToMonth, ensureProfile } from "@/server/services/profile";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { referenceCheckSelect, referenceState } from "@/server/services/reference-check";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -31,7 +31,7 @@ export default async function CareerExperiencePage({
 }: PageProps<"/app/career/profil/experience/[id]">) {
   const { id } = await params;
   const user = await requireUser(`/app/career/profil/experience/${id}`);
-  if (!(await isPhone()))
+  if (!(await isModelB()))
     redirect(
       id === "nouvelle"
         ? "/app/profil?fenetre=experience"

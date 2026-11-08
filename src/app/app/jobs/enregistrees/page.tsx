@@ -8,7 +8,7 @@ import { ExplorerTexts } from "@/components/phone/explorer/server";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { savedOffers } from "@/server/services/explore";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("phoneExplorer");
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
  */
 export default async function SavedJobsPage() {
   const user = await requireUser("/app/jobs/enregistrees");
-  if (!(await isPhone())) redirect("/app/jobs?vue=enregistrees");
+  if (!(await isModelB())) redirect("/app/jobs?vue=enregistrees");
   const now = new Date();
   const [rows, words] = await Promise.all([savedOffers(db, user.id, now), explorerWords(now)]);
   const { t } = words;

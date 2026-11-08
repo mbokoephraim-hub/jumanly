@@ -7,7 +7,7 @@ import { FilTexts, sendTargetViews } from "@/components/phone/fil/server";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { ownPosts } from "@/server/services/feed";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("phoneFil.mine");
@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
  */
 export default async function MyPostsPage() {
   const user = await requireUser("/app/fil/mes-publications");
-  if (!(await isPhone())) redirect("/app");
+  if (!(await isModelB())) redirect("/app");
   const now = new Date();
   const [posts, words, targets] = await Promise.all([
     ownPosts(db, user.id, now),

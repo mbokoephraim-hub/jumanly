@@ -9,7 +9,7 @@ import { clearOrbiHistoryAction, deleteOrbiConversationAction } from "@/server/a
 import { db } from "@/server/db";
 import { getActiveSpace } from "@/server/hire-context";
 import { listOrbiConversations } from "@/server/services/orbi";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("talentOrbi.historyPage");
@@ -32,7 +32,7 @@ export default async function OrbiHistoryPage({ searchParams }: PageProps<"/app/
   const rows = await listOrbiConversations(db, user.id, query, space?.organizationId ?? null);
   const when = await historyDate();
   // The phone of the talent has no head above the pages any more (Modèle B, B9): this one draws its own.
-  const ownHead = !space && (await isPhone());
+  const ownHead = !space && (await isModelB());
   const tShell = await getTranslations("talentShell");
 
   return (

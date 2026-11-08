@@ -3,7 +3,6 @@ import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { expect, test, type Page } from "./fixtures";
-import { expectAccessible } from "./a11y";
 import { demo, logIn, newCvFromList } from "./session";
 
 /**
@@ -29,15 +28,6 @@ const BRAND = [
 const plain = (text: string) => text.normalize("NFKD").replace(/\p{M}/gu, "").toLowerCase();
 
 const tmp = () => mkdtempSync(join(tmpdir(), "cv-"));
-
-/**
- * The « … » options of a CV: a bottom sheet on a phone (ids `cv-…`), a centred window of the web
- * studio on a computer (ids `sc-…`, planche studio-cv).
- */
-async function openOptions(page: Page) {
-  await page.getByRole("button", { name: "Plus d'options" }).filter({ visible: true }).click();
-  return page.getByRole("dialog").filter({ visible: true });
-}
 
 async function readyCv(page: Page, url: string) {
   await page.goto(url);
@@ -181,154 +171,33 @@ test.describe("modèles de CV : rendu (desktop)", () => {
 });
 
 test.describe("modèles de CV : parcours", () => {
-  test("galerie, mise en forme et couleur refusée", async ({ page, isMobile }) => {
-    test.skip(
-      isMobile,
-      "Le téléphone a les écrans du Modèle B (modele-b-carriere.spec.ts) ; ces règles restent vérifiées sur ordinateur.",
-    );
-    // Three pages with real previews of the CV and an accessibility check on each.
-    test.setTimeout(90_000);
-    const phone = isMobile ? "#cv-telephone" : "#sc-telephone";
-    await logIn(page, demo.talentStarter);
-    const id = await newCvFromList(page);
-
-    // Optional phone, on this CV only (« … » of the editor, lot 6c): kept once saved, refused when
-    // it is not a number (its place in the document is checked by the unit tests).
-    let options = await openOptions(page);
-    await options.locator(phone).fill("abc");
-    await options
-      .locator("form")
-      .filter({ has: page.locator(phone) })
-      .getByRole("button", { name: "Enregistrer" })
-      .click();
-    await expect(
-      page.getByText("Numéro de téléphone non valide").filter({ visible: true }),
-    ).toBeVisible();
-    options = await openOptions(page);
-    await options.locator(phone).fill("+243 970 000 000");
-    await options
-      .locator("form")
-      .filter({ has: page.locator(phone) })
-      .getByRole("button", { name: "Enregistrer" })
-      .click();
-    await expect(page).toHaveURL(/ok=1/);
-    await page.goto(`/app/career/cv/${id}`);
-    await expect(page.locator(phone)).toHaveValue("+243 970 000 000");
-
-    // The gallery (planche talent-4 § 6): families, « Inclus » or the plan, « Utiliser « X » ».
-    await page.goto(`/app/career/cv/modeles?cv=${id}&modele=moderne`);
-    await expect(page.getByRole("heading", { level: 1 }).filter({ visible: true })).toHaveText(
-      "Choisir un modèle",
-    );
-    // Phone: the families of planche talent-4; computer: the filters of planche studio-cv § 2.
-    await expect(
-      page.getByRole("link", { name: isMobile ? "Sobres" : "Avec photo" }),
-    ).toBeVisible();
-    await expectAccessible(page);
-    await page
-      .getByRole("button", { name: "Utiliser « Moderne »" })
-      .filter({ visible: true })
-      .click();
-    await expect(page).toHaveURL(/vue=style/);
-    await expect(
-      page
-        .getByText("Modèle « Moderne » appliqué. Votre contenu n'a pas changé.")
-        .filter({ visible: true }),
-    ).toBeVisible();
-
-    // A Pro template shows its lock to a Starter account: no button to apply it, the plans instead.
-    await page.goto(`/app/career/cv/modeles?cv=${id}&modele=academique`);
-    await expect(
-      page
-        .getByRole("link", { name: /^Inclus dès .+ · voir les formules$/ })
-        .filter({ visible: true }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: /^Utiliser/ }).filter({ visible: true }),
-    ).toHaveCount(0);
-
-    // Colour under 4.5:1, even through a forged form: refused, a darker one is proposed.
-    let swatch;
-    if (isMobile) {
-      await page.goto(`/app/career/cv/${id}`);
-      await page.getByRole("button", { name: "Couleur" }).click();
-      swatch = page.getByRole("dialog", { name: "Couleur" }).getByRole("button").nth(1);
-    } else {
-      // The studio: the swatches of « Mise en forme », left panel.
-      await page.goto(`/app/career/cv/${id}?vue=style`);
-      swatch = page.locator(".t-sc-studio .t-sc-sw8 button").nth(1);
-    }
-    await expect(swatch).toBeVisible();
-    await swatch.evaluate((button: HTMLButtonElement) => {
-      button.value = "#FFE066";
-      button.form!.requestSubmit(button);
-    });
-    await expect(
-      page.getByText(/trop claire pour être lue facilement\. Essayez #/).filter({ visible: true }),
-    ).toBeVisible();
-    await expectAccessible(page);
-  });
-
-  test("un compte Free ne peut ni appliquer ni exporter un modèle réservé, même par l'API", async ({
+  test("un compte Free ne peut pas exporter un modèle réservé, même par l'API", async ({
     page,
-    isMobile,
   }) => {
-    test.skip(
-      isMobile,
-      "Le téléphone a les écrans du Modèle B (modele-b-carriere.spec.ts) ; ces règles restent vérifiées sur ordinateur.",
-    );
     await logIn(page, demo.talentFree);
     const id = await newCvFromList(page);
-
-    // The apply action refuses a Pro template even when the form is forged.
-    await page.goto(`/app/career/cv/modeles?cv=${id}&modele=moderne`);
-    const apply = page.getByRole("button", { name: /^Utiliser/ }).filter({ visible: true });
-    await expect(apply).toBeEnabled();
-    await page.waitForLoadState("networkidle");
-    await apply.evaluate((button: HTMLButtonElement) => {
-      const input = button.form!.querySelector<HTMLInputElement>('input[name="template"]')!;
-      input.value = "executif";
-      button.form!.requestSubmit(button);
-    });
-    await expect(page).toHaveURL(/erreur=modele/);
 
     // A CV left on a Pro template (plan downgraded): export refused before any rendering.
     execFileSync("pnpm", ["exec", "tsx", "tests/e2e/set-cv-template.ts", id, "executif"]);
     const api = await page.request.post(`/api/cv/${id}/export?format=pdf`);
     expect(api.status()).toBe(403);
     expect(await api.json()).toEqual({ error: "locked" });
-    await page.goto(`/app/career/cv/${id}`);
-    await expect(
-      page
-        .getByText(/Votre forfait ne comprend plus le modèle/)
-        .filter({ visible: true })
-        .first(),
-    ).toBeVisible();
   });
 
   test("le PDF exporté est neutre : ni Jumanly, ni logo, ni couleur de la marque", async ({
     page,
-    isMobile,
   }) => {
-    test.skip(
-      isMobile,
-      "Le téléphone a les écrans du Modèle B (modele-b-carriere.spec.ts) ; ces règles restent vérifiées sur ordinateur.",
-    );
     test.setTimeout(90_000);
     await logIn(page, demo.talentPro);
     const id = await newCvFromList(page);
-    // The demo accounts use @jumanly.test addresses: the e-mail is left off this CV (« … »).
-    const contact = (await openOptions(page))
-      .locator("form")
-      .filter({ has: page.locator("#cv-telephone, #sc-telephone") });
-    await contact
-      .getByRole("switch", { name: /Afficher mon e-mail sur le CV/ })
-      .uncheck({ force: true });
-    await contact.getByRole("button", { name: "Enregistrer" }).click();
-    await expect(page).toHaveURL(/ok=1/);
-    await expect(
-      (await openOptions(page)).getByRole("switch", { name: /Afficher mon e-mail sur le CV/ }),
-    ).not.toBeChecked();
+    // The demo accounts use @jumanly.test addresses: the e-mail is left off this CV (« Mes
+    // informations », part 1; « Suivant » saves it).
+    const email = page.getByRole("checkbox", { name: "Afficher mon e-mail sur ce CV" });
+    await email.uncheck();
+    await page.getByRole("button", { name: "Suivant" }).click();
+    await expect(page.getByRole("heading", { name: "Identité et coordonnées" })).toHaveCount(0);
+    await page.goto(`/app/career/cv/${id}?etape=contenu`);
+    await expect(email).not.toBeChecked();
 
     const response = await page.request.post(`/api/cv/${id}/export?format=pdf`);
     expect(response.status()).toBe(200);

@@ -15,7 +15,7 @@ import { getActiveSpace, publishingSpace } from "@/server/hire-context";
 import { companyPage } from "@/server/services/explore";
 import { authorFeed } from "@/server/services/feed";
 import { isOrgAdmin, orgAdmin } from "@/server/services/hire-phone-account";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export const metadata: Metadata = { robots: { index: false } };
 
@@ -35,7 +35,7 @@ function firstSentence(text: string | null) {
 export default async function OrganizationPage({ params }: PageProps<"/app/entreprises/[slug]">) {
   const { slug } = await params;
   const user = await requireUser(`/app/entreprises/${slug}`);
-  if (!(await isPhone())) redirect(`/entreprises/${slug}`);
+  if (!(await isModelB())) redirect(`/entreprises/${slug}`);
   const now = new Date();
   const [company, fil, words, targets, format] = await Promise.all([
     companyPage(db, user.id, slug, now),

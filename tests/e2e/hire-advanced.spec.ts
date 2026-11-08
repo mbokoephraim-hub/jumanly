@@ -43,16 +43,9 @@ test("recherche de talents et mise en relation acceptée", async ({
   await signUpTalent(page, testEmail("visible"), city);
   // Lot 7: « Qui voit mon profil » in Paramètres › Confidentialité, a sheet of three choices.
   await page.goto("/app/parametres/confidentialite");
-  if (isMobile) {
-    // Modèle B (lot B5): three choices saved at once.
-    await page.getByRole("radio", { name: /^Les recruteurs/ }).click();
-    await expect(page.getByText("C’est enregistré.")).toBeVisible();
-  } else {
-    await page.getByRole("button", { name: /Qui voit mon profil/ }).click();
-    await page.getByRole("radio", { name: /Visible des recruteurs/ }).check({ force: true });
-    await page.getByRole("button", { name: "Enregistrer" }).click();
-    await expect(page.getByText("C'est enregistré.")).toBeVisible();
-  }
+  // Modèle B (lot B5): three choices saved at once.
+  await page.getByRole("radio", { name: /^Les recruteurs/ }).click();
+  await expect(page.getByText("C’est enregistré.")).toBeVisible();
 
   const recruiter = await newPage(browser, baseURL, isMobile);
   await logIn(recruiter, group.owner);
@@ -93,30 +86,20 @@ test("recherche de talents et mise en relation acceptée", async ({
 
   // Messages (planche talent-2 § 5): the request sits above the conversations, opened in a sheet.
   await page.goto("/app/messages");
-  if (isMobile) {
-    // On a phone (Modèle B, lot B8): the request waits in « Demandes de connexion ».
-    await page.getByRole("link", { name: /^Demandes de connexion/ }).click();
-    await page.waitForURL("**/app/messages/connexions");
-    const card = page.locator(".nb-cx-carte").filter({ hasText: "Groupe Démo" }).first();
-    await expect(card).toBeVisible();
-    await expectAccessible(page);
-    await card.getByRole("button", { name: "Accepter" }).click();
-    await card.getByRole("link", { name: /^Écrire à / }).click();
-    await expect(page).toHaveURL(/\/app\/messages\/[^/?]+\?de=connexions$/);
-    await expect(page.locator(".nb-ch-conv")).toBeVisible();
-  } else {
-    const request = page.getByRole("button", { name: /Groupe Démo.*souhaite échanger avec vous/ });
-    await expect(request.first()).toBeVisible();
-    await expectAccessible(page);
-    await request.first().click();
-    await page.getByRole("dialog").getByRole("button", { name: "Accepter et échanger" }).click();
-    await expect(page).toHaveURL(/\/app\/messages\/[^/?]+\?ok=relation/);
-    await expect(page.getByText("Vous pouvez maintenant échanger avec")).toBeVisible();
-  }
+  // On a phone (Modèle B, lot B8): the request waits in « Demandes de connexion ».
+  await page.getByRole("link", { name: /^Demandes de connexion/ }).click();
+  await page.waitForURL("**/app/messages/connexions");
+  const card = page.locator(".nb-cx-carte").filter({ hasText: "Groupe Démo" }).first();
+  await expect(card).toBeVisible();
+  await expectAccessible(page);
+  await card.getByRole("button", { name: "Accepter" }).click();
+  await card.getByRole("link", { name: /^Écrire à / }).click();
+  await expect(page).toHaveURL(/\/app\/messages\/[^/?]+\?de=connexions$/);
+  await expect(page.locator(".nb-ch-conv")).toBeVisible();
   await recruiter.context().close();
 });
 
-// An interview: the recruiter proposes slots, the talent picks one in the conversation.
+// An interview: the recruiter proposes slots, the talent picks one from the card of the conversation.
 test("un entretien est planifié puis confirmé par le talent", async ({
   page,
   browser,
@@ -130,6 +113,20 @@ test("un entretien est planifié puis confirmé par le talent", async ({
 
   const talent = await newPage(browser, baseURL, isMobile);
   await logIn(talent, group.talent);
+  await openInvitation(talent);
+  const invite = talent.locator("#entretien");
+  await invite.getByRole("button", { name: "Confirmer" }).click();
+  await expect(talent).toHaveURL(/ok=confirme/);
+  await expect(talent.getByText("Entretien confirmé. Le recruteur est prévenu.")).toBeVisible();
+  await talent.context().close();
+});
+
+/**
+ * The talent opens the last invitation (Modèle B, also on a computer since 07/11/2026): the
+ * conversation of the group, its interview card, « Choisir un créneau », then the page of the
+ * application that answers it.
+ */
+async function openInvitation(talent: Page) {
   await talent.goto("/app/messages");
   // The list refreshes while the page settles (the row can be replaced under the pointer): the
   // conversation is opened from its address.
@@ -138,19 +135,15 @@ test("un entretien est planifié puis confirmé par le talent", async ({
     .first()
     .getAttribute("href");
   await talent.goto(conversation!);
-  // Planche talent-2 § 5: the slots are chosen in the conversation itself.
-  await talent.waitForURL(/\/app\/messages\/.+/);
   await talent
-    .locator('section[id^="entretien-"]')
+    .locator(".nb-ch-rdv")
+    .filter({ visible: true })
     .last()
-    .getByRole("button", { name: "Confirmer" })
+    .getByRole("link", { name: "Choisir un créneau" })
     .click();
-  await expect(talent).toHaveURL(/ok=entretien/);
-  await expect(talent.locator('section[id^="entretien-"]').last()).toContainText(
-    "Entretien confirmé",
-  );
-  await talent.context().close();
-});
+  await expect(talent).toHaveURL(/\/app\/suivi\/[^/?#]+/);
+  await expect(talent.locator("#entretien")).toContainText("Invitation à un entretien");
+}
 
 /**
  * The recruiter of the fictional group invites the visible talent (Vicky Fictive) to an interview
@@ -209,22 +202,9 @@ test("Suivi : confirmer un entretien, l'ajouter à l'agenda, puis proposer d'aut
 
   const talent = await newPage(browser, baseURL, isMobile);
   await logIn(talent, group.talent);
-  // Suivi (planche talent-2 § 2 and 3): the card asks to choose a slot, the application page answers.
-  await talent.goto("/app/suivi");
-  const todo = talent.getByRole("region", { name: /^À faire/ });
-  await expect(todo).toContainText("Choisir un créneau");
-  // On a computer the first application opens beside the list (AutoSelect): wait for it, the
-  // title of the page streams in again after that change of address.
-  await expect(talent).toHaveURL(/[?&]id=/);
-  await expectAccessible(talent);
-  await todo
-    .getByRole("link", { name: /Choisir un créneau/ })
-    .first()
-    .click();
-  await expect(talent).toHaveURL(/\/app\/suivi\/[^/?#]+/);
+  await openInvitation(talent);
   const detail = talent.url().split(/[?#]/)[0]!;
   const invite = talent.locator("#entretien");
-  await expect(invite).toContainText("Invitation à un entretien");
   await expectAccessible(talent);
   await invite.getByRole("button", { name: "Confirmer" }).click();
   await expect(talent).toHaveURL(/ok=confirme/);

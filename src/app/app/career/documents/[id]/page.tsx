@@ -19,7 +19,7 @@ import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { DOCUMENTS_GATE, getDocument, TEXT_MAX } from "@/server/services/career-documents";
 import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { isCoverLetter } from "@/server/services/letter-design";
 import { PhoneLetter } from "@/components/phone/career/letter-view";
 import { orbiLimitCode } from "@/components/talent/cv/orbi-limit";
@@ -48,7 +48,7 @@ export default async function DocumentPage({
   const { data } = document;
   const proposal = data.type !== "proofread";
 
-  if (await isPhone()) {
+  if (await isModelB()) {
     const plans = await listPublicPlans(db);
     const notices = ["cree", "enregistre", "relu", "utilisee", "retenue"] as const;
     const notice =

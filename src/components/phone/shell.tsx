@@ -43,8 +43,11 @@ export async function PhoneShell({
   tabs,
   set = "talent",
   badges,
+  wide = false,
   children,
 }: {
+  /** A computer or a tablet (talent, 07/11/2026): the same screens, the menu on the left. */
+  wide?: boolean;
   account: { id: string; name: string; firstName: string | null; image: string | null };
   reduceMotion: boolean;
   /** The talent's interface, or the recruiter's (docs/modele-b-recruteur, lot M1). */
@@ -128,6 +131,7 @@ export async function PhoneShell({
   return (
     <div
       className="nb-app"
+      data-large={wide ? "" : undefined}
       data-reduit={reduceMotion ? "" : undefined}
       data-reduce-motion={reduceMotion ? "" : undefined}
     >
@@ -136,11 +140,11 @@ export async function PhoneShell({
       <script dangerouslySetInnerHTML={{ __html: phoneThemeScript(true) }} />
       <PhoneThemeRoot />
       <Opening />
-      <ViewSync view="phone" />
+      <ViewSync view={wide ? "wide" : "phone"} />
       <AppMotionRoot reduce={reduceMotion} />
       <Toaster label={t("toasts")} closeLabel={t("close")} placement="top" />
       <MessageBannerHost />
-      <PhoneArrivals />
+      <PhoneArrivals wide={wide} />
       {/* A device that allowed the notifications stays subscribed for the person signed in. */}
       <PushPrompt place="silent" />
       <PhonePreload />
@@ -180,6 +184,7 @@ export async function PhoneShell({
           set={set}
           names={Object.fromEntries(tabsOf(set).map((tab) => [tab, navName(tab)]))}
           badges={badges}
+          wide={wide}
         />
       </NextIntlClientProvider>
       <PhonePullRefresh loading={t("refresh.loading")} />

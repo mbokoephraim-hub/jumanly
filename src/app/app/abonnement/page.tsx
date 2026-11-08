@@ -29,7 +29,7 @@ import { liveSubscription, localMask } from "@/server/services/subscriptions";
 import { getActiveSpace } from "@/server/hire-context";
 import { inOrganizationSpace } from "@/server/talent-space";
 import { PhonePlansScreen } from "@/components/phone/career/settings-server";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("abonnement");
@@ -118,7 +118,7 @@ export default async function SubscriptionPage({ searchParams }: PageProps<"/app
     );
   if (await inOrganizationSpace(user.id)) return <HireBilling params={params} />;
   // The phone (Modèle B, planche Carrière-abonnement): the plans in one list.
-  if ((await isPhone()) && Object.keys(params).length === 0)
+  if ((await isModelB()) && Object.keys(params).length === 0)
     return <PhonePlansScreen userId={user.id} />;
 
   const t = await getTranslations();

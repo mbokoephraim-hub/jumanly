@@ -10906,7 +10906,7 @@ span.t-sw {
     display: block;
     font-size: 14px;
   }
-  .t-stp .t-of-r span {
+  .t-stp .t-of-r span:not(.t-lg-e) {
     font-size: 12px;
     color: var(--texte2);
   }

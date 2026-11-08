@@ -9,7 +9,7 @@ import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
 import { HireError } from "@/server/services/hire";
 import { teamThread } from "@/server/services/hire-phone-messages";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("phoneRhMessages");
@@ -27,7 +27,7 @@ export default async function TeamThreadPage({
 }: PageProps<"/app/messages/equipe/[id]">) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const { ctx } = await requireHire(`/app/messages/equipe/${id}`);
-  if (await isPhone())
+  if (await isModelB())
     return (
       <RhMessagesTexts>
         <RhTeamConversation ctx={ctx} id={id} query={query} />

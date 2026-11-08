@@ -11,7 +11,7 @@ import { db } from "@/server/db";
 import { publishingSpace } from "@/server/hire-context";
 import { attachableItems, getPost, latestCertificate } from "@/server/services/feed";
 import { contractFilterOf } from "@/server/services/jobs";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("phoneFil.publish");
@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function FilComposePage({ searchParams }: PageProps<"/app/fil/publier">) {
   const query = await searchParams;
   const user = await requireUser("/app/fil/publier");
-  if (!(await isPhone())) redirect("/app");
+  if (!(await isModelB())) redirect("/app");
   // Empty fields on every opening, never the previous post's text (also when only the query changes).
   const visit = new URLSearchParams(
     Object.entries(query).flatMap(([name, value]) =>

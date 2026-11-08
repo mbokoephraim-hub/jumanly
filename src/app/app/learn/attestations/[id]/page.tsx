@@ -13,7 +13,7 @@ import { attestationOnProfileAction } from "@/server/actions/learn";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { talentAttestation } from "@/server/services/attestations";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { PhoneAttestationScreen } from "@/components/phone/learn/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -34,7 +34,7 @@ export default async function AttestationPage({
   const { id } = await params;
   const user = await requireUser(`/app/learn/attestations/${id}`);
   // The phone (Modèle B, lot B7, planches Formation-fini et -attestation).
-  if (await isPhone())
+  if (await isModelB())
     return (
       <PhoneAttestationScreen user={user} id={id} fresh={(await searchParams).nouvelle === "1"} />
     );

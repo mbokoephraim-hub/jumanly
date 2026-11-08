@@ -42,10 +42,10 @@ test("l'espace connecté propose la navigation adaptée à l'écran", async ({ p
   await page.goto("/app");
   const navigation = page.getByRole("navigation", { name: "Navigation principale" });
   await expect(navigation.filter({ visible: true })).toHaveCount(1);
-  // Téléphone : Modèle B (docs/modele-b), le premier onglet est le Fil.
+  // Modèle B (docs/modele-b) partout depuis le 07/11/2026 : le premier onglet est le Fil.
   const lienAccueil = navigation
     .filter({ visible: true })
-    .getByRole("link", { name: isMobile ? "Fil" : "Pour moi", exact: true });
+    .getByRole("link", { name: "Fil", exact: true });
   await expect(lienAccueil).toHaveAttribute("aria-current", "page");
   const boite = await navigation.filter({ visible: true }).boundingBox();
   const viewport = page.viewportSize();
@@ -54,9 +54,10 @@ test("l'espace connecté propose la navigation adaptée à l'écran", async ({ p
     expect(boite!.y).toBeGreaterThan(viewport!.height / 2);
     expect(boite!.width).toBeLessThanOrEqual(560);
   } else {
-    // Ordinateur (docs/refonte-web, W0) : la barre latérale de 232 px, à gauche.
-    expect(boite!.x).toBeLessThan(232);
-    expect(boite!.y).toBeLessThan(viewport!.height / 2);
+    // Ordinateur et tablette (07/11/2026) : le même menu, debout à gauche, toute la hauteur.
+    expect(boite!.x).toBe(0);
+    expect(boite!.width).toBeLessThanOrEqual(260);
+    expect(boite!.height).toBeGreaterThan(viewport!.height * 0.9);
   }
 });
 

@@ -207,12 +207,14 @@ export async function PhonePlansScreen({ userId }: { userId: string }) {
   const t = await getTranslations("phoneCareer.billing");
   const now = new Date();
   const subject = { type: "user" as const, id: userId };
-  const [plan, plans] = await Promise.all([
+  const [plan, plans, invoices, tPlan] = await Promise.all([
     resolvePlan(db, subject, now),
     db.plan.findMany({
       where: { family: "talent", active: true, isPublic: true, interval: "month" },
       orderBy: { sortOrder: "asc" },
     }),
+    db.invoice.count({ where: { subjectType: subject.type, subjectId: subject.id } }),
+    getTranslations("abonnement.invoices"),
   ]);
   const currentPrice = plan?.priceCents ?? 0;
   const cards: PlanCard[] = plans.map((item) => {
@@ -233,7 +235,11 @@ export async function PhonePlansScreen({ userId }: { userId: string }) {
   });
   return (
     <CareerTexts>
-      <PhonePlans intro={t("intro", { plan: plan?.planName ?? t("free") })} plans={cards} />
+      <PhonePlans
+        intro={t("intro", { plan: plan?.planName ?? t("free") })}
+        plans={cards}
+        invoices={{ title: tPlan("title"), text: tPlan("text", { count: invoices }) }}
+      />
     </CareerTexts>
   );
 }

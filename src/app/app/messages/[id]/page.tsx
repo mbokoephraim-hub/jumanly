@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { RecruiterThread } from "@/components/recruiter/thread";
 import { PhoneThreadPage } from "@/components/phone/messages/server";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { RhConversation } from "@/components/phone/recruteur/conversation";
 import { RhMessagesTexts } from "@/components/phone/recruteur/messages";
 import { Logo, toneOf } from "@/components/talent/art";
@@ -88,7 +88,7 @@ export default async function ThreadPage({
   const context = await connectViewer(`/app/messages/${id}`);
   if (context.viewer.hire) {
     // On a phone, the recruiter's conversation of Modèle B (lot M7).
-    if (await isPhone())
+    if (await isModelB())
       return (
         <RhMessagesTexts>
           <RhConversation
@@ -104,7 +104,7 @@ export default async function ThreadPage({
   }
   const { user, space, viewer } = context;
   // On a phone, the conversation of Modèle B (lot B8).
-  if (await isPhone()) return <PhoneThreadPage user={user} id={id} />;
+  if (await isModelB()) return <PhoneThreadPage user={user} id={id} />;
   const t = await getTranslations();
   const format = await getFormatter();
 

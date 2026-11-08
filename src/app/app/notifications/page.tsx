@@ -16,7 +16,7 @@ import { db } from "@/server/db";
 import { getActiveSpace } from "@/server/hire-context";
 import { getPartnerSpace } from "@/server/partner-context";
 import { hireToday } from "@/server/services/hire-today";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { PhoneNotifications } from "@/components/phone/fil/notifications";
 import { FilTexts, notificationRows } from "@/components/phone/fil/server";
 import { PushPrompt } from "@/components/phone/push-prompt";
@@ -43,7 +43,7 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
   if (partner && !space) return <TeamNotifications params={params} user={user} />;
   // On a phone, the talent's notifications of Modèle B (lot B3), from the bell of the Fil.
   // On a phone, the recruiter's notifications of Modèle B (recruteur M7).
-  if (space && (await isPhone()))
+  if (space && (await isModelB()))
     return (
       <FilTexts recruiter>
         <RhNotificationsScreen
@@ -52,7 +52,7 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
         />
       </FilTexts>
     );
-  if (!space && !partner && (await isPhone()))
+  if (!space && !partner && (await isModelB()))
     return (
       <FilTexts>
         <PhoneNotifications

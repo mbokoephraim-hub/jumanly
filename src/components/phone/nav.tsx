@@ -140,7 +140,13 @@ export function PhoneNav({
   aria,
   set = "talent",
   badges,
+  wide = false,
 }: {
+  /**
+   * A computer or a tablet (talent, 07/11/2026): the same menu standing on the left, every name
+   * written, the brand above, shown on every screen.
+   */
+  wide?: boolean;
   /** The names written in the active pill. */
   names: Partial<Record<PhoneTab, string>>;
   aria: string;
@@ -179,9 +185,17 @@ export function PhoneNav({
     <nav
       className="nb-nav"
       aria-label={aria}
-      hidden={root === null && !above}
+      hidden={!wide && root === null && !above}
       data-dessus={above ? "" : undefined}
+      data-large={wide ? "" : undefined}
     >
+      {wide ? (
+        <Link href={rootOf("fil", set)} className="nb-nav-marque" aria-label={t("home")}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- a 30 px brand tile */}
+          <img src="/marque/jumanly-symbole-lime.svg" alt="" width={30} height={30} />
+          <span aria-hidden>{t("brand")}</span>
+        </Link>
+      ) : null}
       {tabsOf(set).map((tab) => {
         const active = tab === current;
         const count = counts[tab] ?? 0;
