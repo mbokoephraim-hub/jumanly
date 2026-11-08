@@ -5682,3 +5682,13 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
 - Vérifié à l'écran : Explorer, Offres pour vous, Offres enregistrées, page d'une offre, les trois étapes de Postuler.
 - Postuler : la barre du bas garde « Retour » ou « Passer » à gauche et l'action à droite, en entier
   (« Envoyer ma candidature » était coupé).
+
+## 2026-11-08 · Talent sur ordinateur, étapes 4 à 6
+
+- Étapes 4 et 5 (Carrière, Formation) : vérifiées à l'écran (vue, candidatures, documents, nouveau CV,
+  paramètres, formule, simulations, Formation), rien à corriger.
+- Étape 6 (Chat) : sur ordinateur et tablette, une discussion ouverte s'affiche à droite de la liste, qui
+  reste utilisable (`PhoneStack wide`, `data-cote`) ; la discussion ouverte est marquée dans la liste et le
+  Lime des rubriques suit leur largeur.
+- Test instable déjà présent avant ce changement : `modele-b-messages.spec.ts:170` (téléphone) échoue
+  une fois sur deux en local (« Écrire à Daniel » encore en mouvement), avec ou sans ce changement.

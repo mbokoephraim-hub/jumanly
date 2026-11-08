@@ -47,12 +47,18 @@ function gestureOf(target: Element, set: TabSetName): Gesture {
  *   never an empty or black screen. The gesture that started it (`html[data-nb-geste]`) picks the
  *   movement: approach from the finger, card opening, back from the left, Orbi's circle.
  */
+/** A conversation of the talent's Chat (not « Connexions », a team, or a conversation's media). */
+const CONVERSATION = /^\/app\/messages\/(?!connexions$|equipe\/)[^/]+$/;
+
 export function PhoneStack({
   tabs,
   set = "talent",
   reduce,
+  wide = false,
   children,
 }: {
+  /** A computer or a tablet (talent, 08/11/2026): the Chat's list stays beside a conversation. */
+  wide?: boolean;
   /** The talent's tabs or the recruiter's (src/lib/phone-tabs.ts). */
   set?: TabSetName;
   tabs: Partial<Record<PhoneTab, ReactNode>>;
@@ -158,11 +164,14 @@ export function PhoneStack({
   }, [pathname, root, base]);
 
   const pileEmpty = root !== null && kept(root);
+  // On a big screen the list of the Chat stays on the left of the open conversation, usable.
+  const split = wide && set === "talent" && kept("messages") && CONVERSATION.test(pathname);
   return (
     <>
       {order.map((tab) => {
         if (!kept(tab)) return null;
         const state = tab === base ? "actif" : tab === leaving?.tab ? "dessous" : "cache";
+        const beside = split && tab === "messages";
         return (
           <section
             key={tab}
@@ -171,9 +180,10 @@ export function PhoneStack({
             data-etat={state}
             data-entree={state === "actif" && entering ? entering : undefined}
             data-sortie={state === "dessous" ? leaving?.dir : undefined}
+            data-cote={beside ? "" : undefined}
             role={state === "actif" && pileEmpty ? "main" : undefined}
-            aria-hidden={state === "actif" && pileEmpty ? undefined : true}
-            inert={state !== "actif" || !pileEmpty}
+            aria-hidden={(state === "actif" && pileEmpty) || beside ? undefined : true}
+            inert={!beside && (state !== "actif" || !pileEmpty)}
           >
             {tabs[tab]}
           </section>
@@ -185,6 +195,7 @@ export function PhoneStack({
           className="nb-couche nb-pile"
           data-racine={root ? "" : undefined}
           data-vide={pileEmpty ? "" : undefined}
+          data-cote={split ? "" : undefined}
         >
           {children}
         </main>

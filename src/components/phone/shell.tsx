@@ -165,7 +165,7 @@ export async function PhoneShell({
           label: t("me"),
         }}
       >
-        <PhoneStack tabs={tabs} set={set} reduce={reduceMotion}>
+        <PhoneStack tabs={tabs} set={set} reduce={reduceMotion} wide={wide}>
           <div id={OFFLINE_SLOT_ID} role="status" className="empty:hidden" />
           {/* A Modèle B page (`.nb-page`) takes the whole screen; a screen without a mockup of its
             own (diagnostic, LinkedIn, security…) keeps its content, in the colours of the Modèle B
