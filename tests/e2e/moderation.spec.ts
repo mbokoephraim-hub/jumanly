@@ -42,7 +42,7 @@ test("une offre signalée : correction demandée, renvoyée, puis refusée avec 
   // Orbi's review points at the payment asked of candidates before anything is sent.
   await publishFilledOffer(page, "Envoyer en validation");
   await expect(page).toHaveURL(/\?publiee=verification/);
-  await expect(page.getByRole("main")).toContainText("Offre envoyée en validation");
+  await expect(page.getByRole("main")).toContainText("Votre offre part en vérification");
   const jobUrl = page.url().split("?")[0]!;
 
   // The moderator reads the automatic check and its « Pourquoi ? », then asks for a correction.
@@ -72,10 +72,16 @@ test("une offre signalée : correction demandée, renvoyée, puis refusée avec 
   await page.goto(jobUrl);
   await expect(page.getByText("La modération demande une correction")).toBeVisible();
   await expect(page.getByText("Retirer toute demande de paiement aux candidats")).toBeVisible();
+  // « Corriger l'offre » opens the last step of the offer (Modèle B recruteur), published again.
+  await page.getByRole("link", { name: "Corriger l'offre" }).filter({ visible: true }).click();
+  await expect(page).toHaveURL(/\/modifier\?etape=10/);
   await page
-    .getByRole("button", { name: "Publier l'offre" })
+    .getByRole("radio", { name: "Oui, je détiens l'autorisation de l'ONEM" })
     .filter({ visible: true })
-    .first()
+    .click();
+  await page
+    .getByRole("button", { name: "Publier l'offre", exact: true })
+    .filter({ visible: true })
     .click();
   await expect(page).toHaveURL(/publiee=verification/);
 

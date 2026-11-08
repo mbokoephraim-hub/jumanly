@@ -1,3 +1,4 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -24,7 +25,6 @@ import {
 } from "@/server/services/evaluation";
 import { getOrgApplication, HireError, hirePermissions } from "@/server/services/hire";
 import { cheapestPlanWhere, listPublicPlans } from "@/server/services/plans";
-import { isPhone } from "@/server/view";
 import { RhEvaluation } from "@/components/phone/recruteur/candidat-forms";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -153,7 +153,7 @@ export default async function EvaluationPage({
   const error = one(query.erreur);
 
   // « Entretien de … » on the recruiter's phone (Modèle B recruteur M5, planche Recruteur-evaluation).
-  if (await isPhone()) {
+  if (await isModelB()) {
     const tp = await getTranslations("phoneRhCandidatures.evaluation");
     const full = await db.interview.findFirst({
       where: {

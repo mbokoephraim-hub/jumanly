@@ -1,3 +1,4 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -16,7 +17,6 @@ import {
 } from "@/server/actions/hire-advanced";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
-import { isPhone } from "@/server/view";
 import { RhTalentsTexts } from "@/components/phone/recruteur/talents";
 import { RhPool } from "@/components/phone/recruteur/vivier";
 import { HireError, hirePermissions } from "@/server/services/hire";
@@ -41,7 +41,7 @@ export default async function PoolPage({
   const page = `/app/hire/viviers/${id}`;
   const { ctx } = await requireHire(page, "readApplications");
   // On the recruiter's phone, one list of the vivier (Modèle B recruteur M6, planche 105).
-  if (await isPhone())
+  if (await isModelB())
     return (
       <RhTalentsTexts>
         <RhPool ctx={ctx} poolId={id} ok={typeof query.ok === "string" ? query.ok : undefined} />

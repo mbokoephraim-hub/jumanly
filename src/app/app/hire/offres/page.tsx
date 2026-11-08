@@ -1,3 +1,4 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
@@ -12,7 +13,6 @@ import { requireHire } from "@/server/hire-context";
 import { hirePermissions } from "@/server/services/hire";
 import { activeCount, listOffers, offerTabs, type OfferTab } from "@/server/services/hire-offers";
 import { orgStructure } from "@/server/services/org-structure";
-import { isPhone } from "@/server/view";
 import { RhNewOffer, RhTab } from "@/components/phone/recruteur/head";
 import {
   RH_OFFER_FILTERS,
@@ -317,6 +317,6 @@ async function PhoneOffers({ searchParams }: PageProps<"/app/hire/offres">) {
 }
 
 export default async function HireOffersPage(props: PageProps<"/app/hire/offres">) {
-  if (await isPhone()) return <PhoneOffers {...props} />;
+  if (await isModelB()) return <PhoneOffers {...props} />;
   return <HireOffersPageContent {...props} />;
 }

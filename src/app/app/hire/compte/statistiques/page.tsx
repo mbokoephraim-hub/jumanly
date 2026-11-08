@@ -1,9 +1,9 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { RhStatsScreen, RhCompteTexts } from "@/components/phone/recruteur/compte";
 import { requireHire } from "@/server/hire-context";
-import { isPhone } from "@/server/view";
 
 const PAGE = "/app/hire/compte/statistiques";
 
@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 /** Compte of the recruiter's phone (Modèle B recruteur M8). A computer keeps its own page. */
 export default async function Page() {
   const { ctx } = await requireHire(PAGE, undefined, "stats");
-  if (!(await isPhone())) redirect("/app/hire/rapports");
+  if (!(await isModelB())) redirect("/app/hire/rapports");
   return (
     <RhCompteTexts>
       <RhStatsScreen ctx={ctx} />

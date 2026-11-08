@@ -5700,3 +5700,13 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
 - Ancien code d'ordinateur gardé pour les comptes avec espace entreprise ou partenaire (voir la note
   `docs/decisions/2026-11-07-talent-ordinateur-modele-b.md`).
 - Vérifié : build, e2e accessibilité, comptes, socle, compte, paiements, nettoyage et plein écran Modèle B.
+
+## 2026-11-08 · Recruteur sur ordinateur = téléphone, étape 1 (cadre)
+
+- Le recruteur sur ordinateur a les écrans du téléphone (Fil · Offres · Agenda · Talents · Chat) dans
+  le cadre large, plus un menu « Outils » (Rapports, Modèles de messages) et « Entreprise » pour les
+  administrateurs. Note : `docs/decisions/2026-11-08-recruteur-ordinateur-modele-b.md`.
+- Ajouté au téléphone : l'avis de correction demandée par la modération sur l'offre.
+- Vérifié : build, lint, e2e recruteur et entreprise (ordinateur et téléphone). Rouge local seulement :
+  `modele-b-recruteur-fil` (téléphone), la publication « Portes ouvertes » est poussée hors de la
+  première page par les publications créées par les tests précédents dans la base locale.

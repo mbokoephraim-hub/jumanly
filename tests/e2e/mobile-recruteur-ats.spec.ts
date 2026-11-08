@@ -150,7 +150,7 @@ test("ATS : analyse par Orbi, profil pour l'offre, retenus, réponse groupée re
   // The talent sees the invitation in their messages…
   await talent.goto("/app/messages");
   // On a phone (Modèle B, lot B8), the recruiters have their own rubric.
-  if (isMobile) await talent.getByRole("tab", { name: /^Recruteurs/ }).click();
+  await talent.getByRole("tab", { name: /^Recruteurs/ }).click();
   await expect(talent.getByRole("main")).toContainText("Recruteuse");
   // …until « Annuler l'envoi » withdraws it within 10 minutes.
   await main(page).getByRole("button", { name: "Annuler l'envoi" }).click();
@@ -160,27 +160,18 @@ test("ATS : analyse par Orbi, profil pour l'offre, retenus, réponse groupée re
 
 test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, messagerie, rapport PDF", async ({
   page,
-  isMobile,
 }) => {
   test.setTimeout(240_000);
   await logIn(page, baobab, undefined, "/app/hire");
 
   // The ranking already read by Orbi (seed), with its rule.
   await page.goto("/app/hire/offres");
-  if (test.info().project.name === "mobile") {
-    // On a phone, the offer's card opens its page (Modèle B recruteur, M4); the ATS keeps its
-    // address until Candidatures is redone (M5).
-    const href = await main(page)
-      .getByRole("link", { name: /Analyste de données junior \(démo\)/ })
-      .first()
-      .getAttribute("href");
-    await page.goto(`${href}/ats`);
-  } else {
-    const card = main(page).getByRole("link", {
-      name: /Analyser les candidatures de « Analyste de données junior \(démo\) »/,
-    });
-    await card.first().click();
-  }
+  // The offer's card opens its page (Modèle B recruteur, M4; on a computer too since 08/11/2026).
+  const href = await main(page)
+    .getByRole("link", { name: /Analyste de données junior \(démo\)/ })
+    .first()
+    .getAttribute("href");
+  await page.goto(`${href}/ats`);
   await expect(page).toHaveURL(/\/ats$/);
   const ats = main(page);
   await expect(ats).toContainText("Recommandation d'Orbi");
@@ -227,9 +218,8 @@ test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, me
   await expect(page).toHaveURL(/\/app\/messages\/[^/?]+/);
   const thread = page.url().split("?")[0]!;
   // On a phone, « ··· » of Modèle B recruteur (M7) holds the same choices.
-  const phone = test.info().project.name === "mobile";
-  const options = phone ? "Plus d'actions sur la conversation" : "Options de la conversation";
-  const optionsSheet = phone ? "Conversation" : "Options";
+  const options = "Plus d'actions sur la conversation";
+  const optionsSheet = "Conversation";
   await page.getByRole("button", { name: options }).click();
   const menu = page.getByRole("dialog", { name: optionsSheet });
   await expect(menu).toContainText("Couper les notifications");
@@ -244,61 +234,17 @@ test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, me
   await expect(page.getByText("Conversation désépinglée").first()).toBeVisible();
   await noOverflow(page, "conversation");
 
-  if (isMobile) {
-    // Phone (Modèle B recruteur M6): « Mes propositions » is a tab of Talents. A pending proposal
-    // shows « Relancer » until someone reminds it (the other project of the run may be first).
-    await page.goto("/app/hire/talents?onglet=propositions");
-    await expect(
-      main(page).getByText("Les offres que vous avez proposées à des talents"),
-    ).toBeVisible();
-    const again = main(page).getByRole("button", { name: "Relancer", exact: true });
-    if (await again.count()) {
-      await again.first().click();
-      await expect(page).toHaveURL(/onglet=propositions&(ok=relance|erreur=other)/);
-    }
-    await noOverflow(page, "propositions");
-    return;
+  // Phone (Modèle B recruteur M6): « Mes propositions » is a tab of Talents. A pending proposal
+  // shows « Relancer » until someone reminds it (the other project of the run may be first).
+  await page.goto("/app/hire/talents?onglet=propositions");
+  await expect(
+    main(page).getByText("Les offres que vous avez proposées à des talents"),
+  ).toBeVisible();
+  const again = main(page).getByRole("button", { name: "Relancer", exact: true });
+  if (await again.count()) {
+    await again.first().click();
+    await expect(page).toHaveURL(/onglet=propositions&(ok=relance|erreur=other)/);
   }
-  // « Mes propositions »: a pending proposal can be reminded once (the other project of the run
-  // may already have done it: then « Relancé » shows).
-  await page.goto("/app/hire/candidats?vue=propositions");
-  const proposals = main(page);
-  if (phone) {
-    // Modèle B recruteur (M6): Talents › Propositions; « Relancer » goes once reminded.
-    await expect(page).toHaveURL(/onglet=propositions/);
-    const again = proposals.getByRole("button", { name: "Relancer", exact: true });
-    await expect(proposals.getByRole("link", { name: /^Propositions/ })).toBeVisible();
-    if (await again.count()) {
-      await again.first().click();
-      await expect(page).toHaveURL(/onglet=propositions&(ok=relance|erreur=other)/);
-    }
-    await expect(async () => {
-      await page.reload();
-      await expect(again).toHaveCount(0, { timeout: 3_000 });
-    }).toPass({ timeout: 30_000 });
-    await noOverflow(page, "propositions");
-    return;
-  }
-  const remind = proposals.getByRole("button", { name: /^Relancer / });
-  // The list first (« Relancer » or « Relancé »): counting before it shows would skip the reminder.
-  await expect(remind.or(proposals.getByText("Relancé", { exact: true })).first()).toBeVisible();
-  if (await remind.count()) {
-    await remind.first().click();
-    // `relance=ok` when this click reminded, `relance=non` when the other project was first.
-    await expect(page).toHaveURL(/relance=(ok|non)/);
-    if (page.url().includes("relance=ok"))
-      await expect(
-        page.getByText("Relance envoyée. Le talent décide toujours.").first(),
-      ).toBeVisible();
-  }
-  // Both projects may remind the same proposal at once: read the saved state afresh, until the
-  // other project's reminder (if it won the race) has landed too.
-  await expect(async () => {
-    await page.reload();
-    await expect(proposals.getByText("Relancé", { exact: true }).first()).toBeVisible({
-      timeout: 3_000,
-    });
-  }).toPass({ timeout: 30_000 });
   await noOverflow(page, "propositions");
 });
 

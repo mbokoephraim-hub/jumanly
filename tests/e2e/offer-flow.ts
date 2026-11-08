@@ -1,7 +1,4 @@
-import { expect, test, type Page } from "./fixtures";
-
-/** On a phone, « Nouvelle offre » is the four steps of Modèle B recruteur (lot M4). */
-const onPhone = () => test.info().project.name === "mobile";
+import { expect, type Page } from "./fixtures";
 
 /** The visible form of the current step (cacheComponents keeps the previous pages hidden). */
 export const stepForm = (page: Page, step: "poste" | "description" | "candidature") =>
@@ -23,40 +20,7 @@ export type OfferInput = {
  * up to « Vérifier et publier ». Each step is saved on « Continuer ».
  */
 export async function fillOffer(page: Page, offer: OfferInput) {
-  if (onPhone()) return fillPhoneOffer(page, offer);
-  await page.goto("/app/hire/offres/nouvelle");
-  const poste = stepForm(page, "poste");
-  await poste.getByLabel("Intitulé du poste").fill(offer.title);
-  await poste.getByLabel("Ville").fill(offer.city ?? "Abidjan");
-  await poste.getByLabel("Pays").fill(offer.country ?? "Côte d'Ivoire");
-  if (offer.salary) {
-    await poste.locator('input[name="salaryMin"]').fill(offer.salary[0]);
-    await poste.locator('input[name="salaryMax"]').fill(offer.salary[1]);
-  }
-  await poste.getByRole("button", { name: "Continuer" }).click();
-  await expect(page).toHaveURL(/\/modifier\?etape=2/);
-
-  const description = stepForm(page, "description");
-  await description.getByLabel("Présentation du poste").fill(offer.description);
-  for (const item of offer.responsibilities) {
-    await description.getByLabel("Nouvelle responsabilité").fill(item);
-    await description.getByLabel("Nouvelle responsabilité").press("Enter");
-  }
-  await description.getByLabel("Ajouter une compétence").fill(offer.skill);
-  await description.getByLabel("Ajouter une compétence").press("Enter");
-  await description.getByRole("button", { name: "Continuer" }).click();
-  await expect(page).toHaveURL(/\/modifier\?etape=3/);
-
-  const candidature = stepForm(page, "candidature");
-  if (offer.question) {
-    await candidature.getByRole("button", { name: "Ajouter une question" }).click();
-    await candidature.getByLabel("Question", { exact: true }).fill(offer.question);
-    await candidature.getByRole("button", { name: "Enregistrer la question" }).click();
-    await expect(candidature).toContainText(offer.question);
-  }
-  await candidature.getByRole("button", { name: "Vérifier", exact: true }).click();
-  await expect(page).toHaveURL(/\/modifier\?etape=4/);
-  return page.url().split("/modifier")[0]!;
+  return fillPhoneOffer(page, offer);
 }
 
 /** The four steps are drawn by the server: wait until React has taken them over before typing. */
@@ -124,15 +88,20 @@ async function fillPhoneOffer(page: Page, offer: OfferInput) {
 }
 
 /** Publishes the offer from « Vérifier et publier »; returns its detail page and its slug. */
-export async function publishFilledOffer(page: Page, label: "Publier" | "Envoyer en validation") {
+/**
+ * The label of the former computer screen is kept by the callers; the phone's steps, on every
+ * device since 08/11/2026, always end on « Publier l'offre ».
+ */
+export async function publishFilledOffer(page: Page, _label?: "Publier" | "Envoyer en validation") {
   // The phone asks for the ONEM authorization before publishing (29/10/2026); offers publish at once.
-  if (onPhone())
-    await page
-      .getByRole("radio", { name: "Oui, je détiens l'autorisation de l'ONEM" })
-      .filter({ visible: true })
-      .click();
-  const name = onPhone() ? "Publier l'offre" : label;
-  await page.getByRole("button", { name, exact: true }).filter({ visible: true }).click();
+  await page
+    .getByRole("radio", { name: "Oui, je détiens l'autorisation de l'ONEM" })
+    .filter({ visible: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Publier l'offre", exact: true })
+    .filter({ visible: true })
+    .click();
   await expect(page).toHaveURL(/\/app\/hire\/offres\/[^/?]+\?publiee=(1|verification)/);
   const detailUrl = page.url().split("?")[0]!;
   return { detailUrl, jobId: detailUrl.split("/").pop()! };

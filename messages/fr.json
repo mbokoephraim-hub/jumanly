@@ -19412,6 +19412,10 @@
       "messagesUnread": "Chat, {count, plural, one {# conversation non lue} other {# conversations non lues}}",
       "filNew": "Fil, {count, plural, one {# nouvelle publication} other {# nouvelles publications}}"
     },
+    "outils": {
+      "title": "Outils",
+      "templates": "Modèles de messages"
+    },
     "head": {
       "account": "Mon compte",
       "profile": "Mon profil",

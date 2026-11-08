@@ -1,10 +1,10 @@
+import { isModelB } from "@/server/phone-routes";
 import { FreshOnEachVisit } from "@/components/phone/fresh-visit";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { JobFlow, type FlowQuery } from "@/components/recruiter/job-flow";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
-import { isPhone } from "@/server/view";
 import { PhoneRecruiterPublish } from "@/components/phone/recruteur/publier";
 import { RhOffresTexts, rhPublishData } from "@/components/phone/recruteur/offres";
 
@@ -28,7 +28,7 @@ export default async function NewOfferPage({
   const query = flat(await searchParams);
   const { ctx, user } = await requireHire("/app/hire/offres/nouvelle", "manage", "publish");
   // On a phone, the four steps of Modèle B recruteur (lot M4, planches Recruteur-publier-1 to -4).
-  if (await isPhone())
+  if (await isModelB())
     return (
       <RhOffresTexts>
         <FreshOnEachVisit>

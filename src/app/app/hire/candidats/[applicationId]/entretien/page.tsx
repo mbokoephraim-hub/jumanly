@@ -1,3 +1,4 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -24,7 +25,6 @@ import {
   tidyText,
 } from "@/server/services/message-templates";
 import { cheapestPlanWhere, listPublicPlans } from "@/server/services/plans";
-import { isPhone } from "@/server/view";
 import { RhPlanner } from "@/components/phone/recruteur/candidat-forms";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -142,7 +142,7 @@ export default async function PlanInterviewPage({
           : null;
   const messages = await getMessages();
   // The planner of the recruiter's phone (Modèle B recruteur M5, planche Recruteur-planifier).
-  if (!existing && (await isPhone())) {
+  if (!existing && (await isModelB())) {
     const days: { key: string; weekday: string; day: string }[] = [];
     for (let index = 0; days.length < 6 && index < PLANNER_DAYS; index += 1) {
       const key = addDays(data.today, index);

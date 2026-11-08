@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   keepsBar,
   rootOf,
@@ -33,6 +33,9 @@ function switchTab(from: string, to: string, name: string | undefined) {
   const title = titles.get(to) ?? (name && brand ? `${name} · ${brand}` : null);
   if (title) document.title = title;
 }
+
+/** The recruiter's tools of the big screen and the company's part (src/app/app/layout.tsx). */
+const TOOL_PAGES = /^\/app\/(organisation|hire\/(rapports|modeles))(\/|$)/;
 
 /** The menu asks for its counts every minute while the app is in front. */
 const COUNTS_MS = 60_000;
@@ -141,7 +144,10 @@ export function PhoneNav({
   set = "talent",
   badges,
   wide = false,
+  children,
 }: {
+  /** On a computer, under the tabs (the recruiter's tools). */
+  children?: ReactNode;
   /**
    * A computer or a tablet (talent, 07/11/2026): the same menu standing on the left, every name
    * written, the brand above, shown on every screen.
@@ -163,7 +169,9 @@ export function PhoneNav({
   const root = rootTab(pathname, set);
   // The pill moves under the finger at once, before the new page arrives.
   const [pressed, setPressed] = useState<{ tab: PhoneTab; from: string } | null>(null);
-  const current = pressed?.from === pathname ? pressed.tab : tabOf(pathname, set);
+  // On the recruiter's computer, a tool or the company's part lights its own entry, no tab.
+  const tool = wide && set === "recruteur" && TOOL_PAGES.test(pathname);
+  const current = pressed?.from === pathname ? pressed.tab : tool ? null : tabOf(pathname, set);
   const above = root === null && keepsBar(pathname, set);
   const counts = useTabCounts(badges, set, tabOf(pathname, set));
   // The accessible name says the count (« Chat, 3 conversations non lues »).
@@ -241,6 +249,7 @@ export function PhoneNav({
           </Link>
         );
       })}
+      {wide ? children : null}
     </nav>
   );
 }

@@ -1,3 +1,4 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -14,7 +15,6 @@ import { createPoolAction } from "@/server/actions/hire-advanced";
 import { db } from "@/server/db";
 import { can } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
-import { isPhone } from "@/server/view";
 import { hirePermissions } from "@/server/services/hire";
 import { cheapestPlanWhere, listPublicPlans } from "@/server/services/plans";
 import { poolsEnabled, poolsOverview } from "@/server/services/talent-search";
@@ -37,7 +37,7 @@ export default async function PoolsPage({ searchParams }: PageProps<"/app/hire/v
   // Old addresses opened a pool inside this page.
   if (one(query.vivier)) redirect(`/app/hire/viviers/${encodeURIComponent(one(query.vivier))}`);
   // On the recruiter's phone, the vivier is a tab of Talents (Modèle B recruteur M6).
-  if (await isPhone())
+  if (await isModelB())
     redirect(
       one(query.ok) === "supprime"
         ? "/app/hire/talents?onglet=vivier&ok=supprime"

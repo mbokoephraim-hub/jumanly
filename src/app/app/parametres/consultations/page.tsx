@@ -8,7 +8,7 @@ import { shortName } from "@/lib/short-name";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
 import { hirePermissions, type HireContext } from "@/server/services/hire";
-import { isModelB } from "@/server/phone-routes";
+import { isPhone } from "@/server/view";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("rhJournal");
@@ -60,7 +60,7 @@ export default async function ConsultationsPage() {
   const team = hirePermissions(space.role).administer;
   // On a computer, the owner and the administrators read the team's journal in the company's
   // space (étape 3, A5 and A6); a phone keeps this page.
-  if (team && !(await isModelB())) redirect("/app/organisation/journal");
+  if (team && !(await isPhone())) redirect("/app/organisation/journal");
   const { views, actors, profiles } = await journal(ctx, team);
   const actorName = new Map(actors.map((actor) => [actor.id, shortName(actor.name)]));
   const profileName = new Map(profiles.map((profile) => [profile.id, profile.user.name]));

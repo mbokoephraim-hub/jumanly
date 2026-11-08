@@ -1,3 +1,4 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -24,7 +25,6 @@ import { requireHire } from "@/server/hire-context";
 import { reportError } from "@/server/observability";
 import { HireError, hirePermissions } from "@/server/services/hire";
 import { candidateList, type CandidateRow } from "@/server/services/hire-candidates";
-import { isPhone } from "@/server/view";
 import { RhTab } from "@/components/phone/recruteur/head";
 import { RhCandidatures, rhCandidaturesLine } from "@/components/phone/recruteur/candidatures";
 import { rhApplications } from "@/server/services/hire-phone-candidatures";
@@ -471,7 +471,7 @@ async function CandidatesPageContent({ searchParams }: PageProps<"/app/hire/cand
  * « Fort potentiel · Toutes · Entretiens · Décisions ».
  */
 export default async function CandidatesPage(props: PageProps<"/app/hire/candidats">) {
-  if (!(await isPhone())) return <CandidatesPageContent {...props} />;
+  if (!(await isModelB())) return <CandidatesPageContent {...props} />;
   const query = await props.searchParams;
   // The talent search (`?vue=talents`) and the proposals are the Talents tab on a phone (M6).
   if (query.vue === "talents") redirect("/app/hire/talents");

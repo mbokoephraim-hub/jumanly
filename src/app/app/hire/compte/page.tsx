@@ -1,6 +1,6 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import { RhCompteScreen, RhCompteTexts } from "@/components/phone/recruteur/compte";
-import { isPhone } from "@/server/view";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
@@ -97,7 +97,7 @@ const List = ({
 export default async function RecruiterAccountPage() {
   const { user, space, ctx } = await requireHire("/app/hire/compte");
   // On a phone, Compte of Modèle B (recruteur M8, planche Recruteur-compte).
-  if (await isPhone())
+  if (await isModelB())
     return (
       <RhCompteTexts>
         <RhCompteScreen ctx={ctx} />

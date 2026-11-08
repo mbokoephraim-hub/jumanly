@@ -95,13 +95,12 @@ test("conversation : brouillon d'Orbi relu puis envoyé, modèles, liste des mes
   await page.goto(`${file}/message`);
   await expect(page).toHaveURL(/\/app\/messages\/[^/?]+\?modeles=1/);
   const templates = page.getByRole("dialog", {
-    name: isMobile ? "Modèles de messages" : "Modèles",
+    name: "Modèles de messages",
   });
   await expect(templates).toBeVisible();
   await expectAccessible(page);
   // The phone sheet closes from its veil or « Échap »; the computer's dialog has « Fermer ».
-  if (isMobile) await page.keyboard.press("Escape");
-  else await templates.getByRole("button", { name: "Fermer" }).click();
+  await page.keyboard.press("Escape");
   await expect(templates).toBeHidden();
   const conversation = new URL(page.url()).pathname;
 
@@ -113,60 +112,30 @@ test("conversation : brouillon d'Orbi relu puis envoyé, modèles, liste des mes
   await expect(screen.getByText(title).filter({ visible: true }).first()).toBeVisible();
   await noOverflow(page, "conversation");
 
-  if (isMobile) {
-    // Modèle B recruteur (M7): « Orbi propose » fills the field, « Joindre » holds the rest.
-    const input = page.getByRole("textbox", { name: "Votre message" });
-    await page.getByRole("button", { name: "Orbi propose" }).click();
-    await expect(input).not.toHaveValue("", { timeout: 20_000 });
-    await input.fill("Bonjour Jean-Pierre, merci pour votre candidature fictive.");
-    await page.getByRole("button", { name: "Envoyer", exact: true }).click();
-    // « Envoyer » leads back to the conversation without « ?modeles=1 »: a new page that takes
-    // the place of this one, so the sheets are opened once it has arrived.
-    await expect(page).toHaveURL(/\/app\/messages\/[^/?#]+#dernier$/);
-    await expect(page.getByText("merci pour votre candidature fictive")).toBeVisible();
-    await page.getByRole("button", { name: "Joindre" }).click();
-    const attach = page.getByRole("dialog", { name: "Joindre" });
-    await expect(
-      attach.getByRole("link", { name: /Une invitation à un entretien/ }),
-    ).toHaveAttribute("href", /\/app\/hire\/candidats\/[^/]+\/entretien$/);
-    await expect(attach.getByRole("button", { name: /Une demande de document/ })).toBeVisible();
-    await attach.getByRole("button", { name: "Annuler" }).click();
-  } else {
-    // Orbi drafts a reply: it lands in the composer only when the recruiter taps « Utiliser ».
-    await screen
-      .getByRole("group", { name: "Orbi dans la conversation" })
-      .getByRole("button", { name: "Proposer une réponse" })
-      .click();
-    const draft = screen.locator(".t-r5-brou");
-    await expect(draft.getByText("Brouillon d'Orbi, à relire avant d'envoyer")).toBeVisible({
-      timeout: 20_000,
-    });
-    const field = screen.getByRole("textbox", { name: "Écrire un message" });
-    await expect(field).toHaveValue("");
-    await draft.getByRole("button", { name: "Utiliser" }).click();
-    await expect(field).not.toHaveValue("");
-    await field.fill("Bonjour Jean-Pierre, merci pour votre candidature fictive.");
-    await screen.getByRole("button", { name: "Envoyer" }).click();
-    await expect(
-      screen.locator(".t-msg.t-moi").getByText("merci pour votre candidature fictive"),
-    ).toBeVisible();
-
-    // « + » : slots, a document, the templates.
-    await screen.getByRole("button", { name: "Créneaux, documents, modèles" }).click();
-    const plus = page.getByRole("dialog", { name: "Ajouter à la conversation" });
-    await expect(plus.getByRole("link", { name: /Proposer des créneaux/ })).toHaveAttribute(
-      "href",
-      /\/app\/hire\/candidats\/[^/]+\/entretien$/,
-    );
-    await expect(plus.getByRole("button", { name: /Demander un document/ })).toBeVisible();
-    await plus.getByRole("button", { name: "Fermer" }).click();
-  }
+  // Modèle B recruteur (M7): « Orbi propose » fills the field, « Joindre » holds the rest.
+  const input = page.getByRole("textbox", { name: "Votre message" });
+  await page.getByRole("button", { name: "Orbi propose" }).click();
+  await expect(input).not.toHaveValue("", { timeout: 20_000 });
+  await input.fill("Bonjour Jean-Pierre, merci pour votre candidature fictive.");
+  await page.getByRole("button", { name: "Envoyer", exact: true }).click();
+  // « Envoyer » leads back to the conversation without « ?modeles=1 »: a new page that takes
+  // the place of this one, so the sheets are opened once it has arrived.
+  await expect(page).toHaveURL(/\/app\/messages\/[^/?#]+#dernier$/);
+  await expect(page.getByText("merci pour votre candidature fictive")).toBeVisible();
+  await page.getByRole("button", { name: "Joindre" }).click();
+  const attach = page.getByRole("dialog", { name: "Joindre" });
+  await expect(attach.getByRole("link", { name: /Une invitation à un entretien/ })).toHaveAttribute(
+    "href",
+    /\/app\/hire\/candidats\/[^/]+\/entretien$/,
+  );
+  await expect(attach.getByRole("button", { name: /Une demande de document/ })).toBeVisible();
+  await attach.getByRole("button", { name: "Annuler" }).click();
 
   // The list: the conversation, the offer, the filters.
   await page.goto("/app/messages");
   const list = main(page);
   // The phone's tab is named « Chat » like the talent's; the computer keeps « Messages ».
-  await expect(list.getByRole("heading", { level: 1 })).toHaveText(isMobile ? "Chat" : "Messages");
+  await expect(list.getByRole("heading", { level: 1 })).toHaveText("Chat");
   await expect(list.locator(`a[href^="${conversation}"]`)).toBeVisible();
   await expectAccessible(page);
   await noOverflow(page, "messages");
@@ -176,7 +145,7 @@ test("conversation : brouillon d'Orbi relu puis envoyé, modèles, liste des mes
   // On a phone, the templates of Compte (Modèle B recruteur M8): read there, written on a computer.
   await expect(
     main(page).getByRole("heading", { level: 1 }).filter({ visible: true }).first(),
-  ).toHaveText(isMobile ? "Modèles de messages" : "Modèles de message");
+  ).toHaveText("Modèles de messages");
   await expectAccessible(page);
   await noOverflow(page, "modèles");
 });
@@ -186,78 +155,32 @@ test("organisation : page, modification, vérification, équipe et invitation", 
   isMobile,
 }) => {
   test.setTimeout(180_000);
-  const { organization } = await freshRecruiter(page, "lot5-org", "reports.export");
+  await freshRecruiter(page, "lot5-org", "reports.export");
   await page.goto("/app/organisation");
-  // On a phone the company's space shows « À ouvrir sur un ordinateur » (étape 3); the phone keeps
-  // its own pages under Compte (Modèle B recruteur M8, their own e2e).
   if (isMobile) {
+    // On a phone the company's space shows « À ouvrir sur un ordinateur » (étape 3); the phone
+    // keeps its own pages under Compte (Modèle B recruteur M8, their own e2e).
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("À ouvrir sur un ordinateur");
     await page.goto("/app/organisation/equipe");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("À ouvrir sur un ordinateur");
     await page.goto("/app/hire/rapports");
     await expect(page).toHaveURL(/\/app\/hire\/compte\/statistiques$/);
-    expect(
-      (await page.request.get("/app/hire/rapports/export?format=csv")).headers()["content-type"],
-    ).toContain("application/pdf");
-    return;
+  } else {
+    // On a computer (08/11/2026) the company's part and the reports sit in the menu, under the tabs.
+    await page
+      .getByRole("navigation", { name: "Entreprise" })
+      .getByRole("link", { name: "Équipe" })
+      .click();
+    await expect(page).toHaveURL(/\/app\/organisation\/equipe$/);
+    await page
+      .getByRole("navigation", { name: "Outils" })
+      .getByRole("link", { name: "Rapports" })
+      .click();
+    await expect(page).toHaveURL(/\/app\/hire\/rapports$/);
   }
-  // Page entreprise (étape 3, A3): the page, its public view, a change published.
-  const screen = main(page);
-  await expect(screen.getByLabel("Nom", { exact: true })).toHaveValue(organization);
-  await expect(screen.getByRole("link", { name: "Voir la page publique" })).toHaveAttribute(
-    "href",
-    "/app/organisation/apercu",
-  );
-  await expectAccessible(page);
-  await noOverflow(page, "organisation");
-
-  await page.goto("/app/organisation/modifier");
-  await expect(page).toHaveURL(/\/app\/organisation$/);
-  await screen.getByLabel("Ville", { exact: true }).fill("Lubumbashi");
-  await screen.getByRole("button", { name: "Publier les changements" }).click();
-  await expect(page.locator(".ae-toast")).toContainText("Les changements sont en ligne");
-
-  await page.goto("/app/organisation/verification");
-  await expectAccessible(page);
-  await noOverflow(page, "vérification");
-
-  // Équipe (étape 3, A2): « Inviter un membre », then the seat is counted.
-  await page.goto("/app/organisation/equipe");
-  await expectAccessible(page);
-  await noOverflow(page, "équipe");
-  await main(page).getByRole("button", { name: "Inviter un membre" }).first().click();
-  const sheet = page.getByRole("dialog", { name: "Inviter un membre" });
-  const invited = `invite-${suffix()}@jumanly.test`;
-  await sheet.getByLabel("Adresse e-mail").fill(invited);
-  await sheet.getByRole("button", { name: "Envoyer l'invitation" }).click();
-  await expect(page.locator(".ae-toast")).toContainText(
-    `Invitation envoyée par e-mail à ${invited}`,
-  );
-  await expect(main(page).getByRole("tab", { name: /Invitations et demandes/ })).toHaveAttribute(
-    "aria-selected",
-    "true",
-  );
-  // The toast also names the address: the line of the list is the exact text.
-  await expect(main(page).getByText(invited, { exact: true })).toBeVisible();
-  await noOverflow(page, "invitation");
-
-  // Reports of this plan: the PDF export (the CSV is gone, its address gives the PDF).
-  await page.goto("/app/hire/rapports");
-  await expectAccessible(page);
-  await noOverflow(page, "rapports");
-  const pdf = main(page).getByRole("link", { name: /Exporter en PDF/ });
-  const href = await pdf.getAttribute("href");
-  const response = await page.request.get(href!);
-  expect(response.headers()["content-type"]).toContain("application/pdf");
   expect(
     (await page.request.get("/app/hire/rapports/export?format=csv")).headers()["content-type"],
   ).toContain("application/pdf");
-
-  // The former tabs lead to the new pages.
-  await page.goto("/app/organisation?onglet=membres");
-  await expect(page).toHaveURL(/\/app\/organisation\/equipe/);
-  await page.goto("/app/organisation?onglet=verification");
-  await expect(page).toHaveURL(/\/app\/organisation\/verification/);
 });
 
 test("abonnement, formules RH, rapports en PDF, paramètres et journal des consultations", async ({
@@ -275,8 +198,8 @@ test("abonnement, formules RH, rapports en PDF, paramètres et journal des consu
   await expectAccessible(page);
   await noOverflow(page, "formules");
 
-  await page.goto("/app/hire/rapports");
-  if (isMobile) await expect(page).toHaveURL(/\/app\/hire\/compte\/statistiques$/);
+  // The reports are a tool of the computer; a phone shows its statistics.
+  await page.goto(isMobile ? "/app/hire/compte/statistiques" : "/app/hire/rapports");
   await expectAccessible(page);
   await noOverflow(page, "rapports");
   // Without the right to export, the PDF is offered with the plan that opens it.
@@ -284,32 +207,18 @@ test("abonnement, formules RH, rapports en PDF, paramètres et journal des consu
 
   await page.goto("/app/notifications");
   // On a phone, the notifications of Modèle B recruteur (M7): the brief of the day is Orbi's.
-  if (isMobile)
-    await expect(page.getByRole("group", { name: "Catégories", exact: true })).toBeVisible();
-  else await expect(main(page).getByText("Votre journée en bref")).toBeVisible();
+  await expect(page.getByRole("group", { name: "Catégories", exact: true })).toBeVisible();
   await noOverflow(page, "notifications");
 
   // One seat on the free plan, taken by the owner: the invitation sheet points to a bigger plan.
-  if (isMobile) {
-    // On a phone, the team of Compte (Modèle B recruteur M8): the sheet says no place is left.
-    await page.goto("/app/hire/compte/equipe");
-    await page
-      .getByRole("button", { name: "Inviter un collègue" })
-      .filter({ visible: true })
-      .click();
-    await expect(
-      page.getByRole("dialog", { name: "Inviter un collègue" }).getByText(/Plus de place/),
-    ).toBeVisible();
-    await page.keyboard.press("Escape");
-  } else {
-    // Équipe (étape 3, A2): the invitation dialog says the only seat is taken.
-    await page.goto("/app/organisation/equipe?inviter=1");
-    await expect(
-      page
-        .getByRole("dialog", { name: "Inviter un membre" })
-        .getByText(/La seule place .* est prise/),
-    ).toBeVisible();
-  }
+  // On a phone, the team of Compte (Modèle B recruteur M8): the sheet says no place is left.
+  await page.goto("/app/hire/compte/equipe");
+  await page.getByRole("button", { name: "Inviter un collègue" }).filter({ visible: true }).click();
+  await expect(
+    page.getByRole("dialog", { name: "Inviter un collègue" }).getByText(/Plus de place/),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+
   await noOverflow(page, "équipe pleine");
 
   await page.goto("/app/parametres");
@@ -321,16 +230,9 @@ test("abonnement, formules RH, rapports en PDF, paramètres et journal des consu
   await expectAccessible(page);
   await noOverflow(page, "paramètres");
   await settings.getByRole("link", { name: /Journal des consultations|Profils consultés/ }).click();
-  if (isMobile) {
-    await expect(page).toHaveURL(/\/app\/parametres\/consultations$/);
-    await expect(main(page).getByText("Aucun profil ouvert pour l'instant.")).toBeVisible();
-  } else {
-    // On a computer, the owner reads the team's journal in the company's space (étape 3, A6).
-    await expect(page).toHaveURL(/\/app\/organisation\/journal$/);
-    await expect(
-      main(page).getByText("Aucune consultation sur les 90 derniers jours."),
-    ).toBeVisible();
-  }
+  await expect(page).toHaveURL(/\/app\/parametres\/consultations$/);
+  await expect(main(page).getByText("Aucun profil ouvert pour l'instant.")).toBeVisible();
+
   await expectAccessible(page);
 
   // Former addresses.

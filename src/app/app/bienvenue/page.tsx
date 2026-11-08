@@ -27,7 +27,6 @@ import { ownedOrganization } from "@/server/services/accounts";
 import { listCountries, listDialCountries, listLocalities } from "@/server/services/places";
 import { readSignupFlow } from "@/server/signup-flow";
 import { isModelB } from "@/server/phone-routes";
-import { isPhone } from "@/server/view";
 import { PhoneOnboarding } from "@/components/phone/accueil/onboarding";
 import { PhoneRecruiterOnboarding } from "@/components/phone/recruteur/onboarding";
 import { companyState, searchCompanies } from "@/server/services/recruiter-onboarding";
@@ -59,7 +58,7 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
   // A recruiter on a phone (Modèle B recruteur, M2): the seven steps, then « Profil prêt ».
   const recruiter = await db.recruiterProfile.findUnique({ where: { userId: user.id } });
   // The recruiter's computer keeps its own first steps (only the talent's computer is Modèle B).
-  if (recruiter && (await isPhone())) {
+  if (recruiter && (await isModelB())) {
     const [countries, dials, localities, company, near, social] = await Promise.all([
       listCountries(db),
       listDialCountries(db),
