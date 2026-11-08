@@ -217,3 +217,46 @@ html:has(.nb-app[data-large]) .nb-feuille-dlg[open] {
   background: rgba(var(--nb-voile), 0.06);
   border-radius: 16px;
 }
+
+/* ─── Étape 7 : les écrans sans maquette du Modèle B (sécurité, notifications, aide…) gardent, sur
+   grand écran aussi, la forme du téléphone : plus de colonne de réglages ni de mise en page web de
+   l'ancien espace (`.t-w4-web`), les blocs du téléphone (`.t-w4-tel`) à leur place. ─── */
+.nb-app[data-large] .t-w4-web {
+  display: none !important;
+}
+.nb-app[data-large] .t-w4-tel {
+  display: block !important;
+}
+.nb-app[data-large] :is(.t-bas-f, .t-flux, .t-gar).t-w4-tel {
+  display: flex !important;
+}
+.nb-app[data-large] .t-bt.t-w4-tel {
+  display: inline-flex !important;
+}
+.nb-app[data-large] .t-seg.t-w4-tel {
+  display: grid !important;
+}
+.nb-app[data-large] li.t-w4-tel {
+  display: list-item !important;
+}
+.nb-app[data-large] :is(.t-w4-g2, .t-w4-g2e, .t-w4-g2r, .t-w4-col, .t-w4-h, .t-w4-pfh) {
+  display: contents;
+}
+/* Ces écrans prennent la colonne du Fil (680 px), en une seule colonne comme au téléphone : ni
+   rubriques à gauche, ni appareils ou consultations deux par ligne. */
+.nb-app[data-large] .nb-pile:has(.t-w4) {
+  --nb-largeur: 680px;
+}
+.nb-app[data-large] .t-w4.t-large {
+  max-width: none;
+}
+.nb-app[data-large] :is(.t-w4-prm, .t-w4-aide-h) {
+  display: contents;
+}
+.nb-app[data-large] .t-w4-dev.t-verre,
+.nb-app[data-large] .t-w4-cons {
+  display: block;
+}
+.nb-app[data-large] .t-w4-aide-g.t-verre {
+  display: block;
+}
