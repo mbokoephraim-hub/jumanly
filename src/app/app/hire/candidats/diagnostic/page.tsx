@@ -1,10 +1,10 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { RhDiagnostic } from "@/components/phone/recruteur/candidatures";
 import { requireHire } from "@/server/hire-context";
 import { HireError } from "@/server/services/hire";
-import { isPhone } from "@/server/view";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("phoneRhCandidatures.diagnostic");
@@ -20,7 +20,8 @@ export default async function DiagnosticPage({
 }: PageProps<"/app/hire/candidats/diagnostic">) {
   const query = await searchParams;
   const offre = typeof query.offre === "string" ? query.offre : null;
-  if (!(await isPhone())) redirect(offre ? `/app/hire/offres/${offre}/ats` : "/app/hire/candidats");
+  if (!(await isModelB()))
+    redirect(offre ? `/app/hire/offres/${offre}/ats` : "/app/hire/candidats");
   const { ctx } = await requireHire("/app/hire/candidats/diagnostic", "readApplications");
   try {
     return await RhDiagnostic({ ctx, query });

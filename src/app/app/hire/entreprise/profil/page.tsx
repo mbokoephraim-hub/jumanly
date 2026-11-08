@@ -1,3 +1,4 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
@@ -15,7 +16,6 @@ import { requireHire } from "@/server/hire-context";
 import { signupSizes } from "@/server/services/admin-signup";
 import { isOrgAdmin } from "@/server/services/hire-phone-account";
 import { companyPageScreen } from "@/server/services/org-page";
-import { isPhone } from "@/server/view";
 
 const PAGE = "/app/hire/entreprise/profil";
 
@@ -32,7 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Page() {
   const { ctx } = await requireHire(PAGE);
   if (!isOrgAdmin(ctx.role)) redirect("/app/hire/compte");
-  if (!(await isPhone())) redirect("/app/organisation");
+  if (!(await isModelB())) redirect("/app/organisation");
   const [screen, messages, ts] = await Promise.all([
     companyPageScreen(db, ctx),
     getMessages(),

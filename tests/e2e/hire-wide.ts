@@ -9,9 +9,6 @@ const width = (page: Page) => page.viewportSize()?.width ?? 0;
 /** From 1200 px the list and the file sit side by side (planche `.ats`). */
 export const wideList = (page: Page) => width(page) >= 1200;
 
-/** From 768 px the planner shows the day and its hours on one screen (planche `.prog-w`). */
-export const widePlanner = (page: Page) => width(page) >= 768;
-
 /**
  * Opens a candidate's complete file from the list of an offer: directly on a phone or a tablet,
  * through the file opened beside the list on a computer.
@@ -41,18 +38,10 @@ export async function openCandidateFile(page: Page, name: RegExp) {
   }
   await expect(page).toHaveURL(/\/app\/hire\/candidats\/[^/?]+$/);
   // On a phone the candidate opens on their profile (docs/profil-personne): go on to the file.
-  if (await page.evaluate(() => /Mobi|iPhone|iPod/.test(navigator.userAgent))) {
+  // Since 08/11/2026 the recruiter's computer has the phone's screens too (Modèle B, `.nb-app`).
+  if (await page.locator(".nb-app").count()) {
     await expect(page.locator(".nb-rh-fiche-p").filter({ visible: true })).toBeVisible();
     await page.goto(`${page.url()}?onglet=resume`);
     await expect(page.locator(".nb-rh-fiche").filter({ visible: true })).toBeVisible();
   }
-}
-
-/** In the planner, once a day is chosen: on a phone « Heures » leads to the times of that day. */
-export async function plannerToHours(page: Page) {
-  if (widePlanner(page)) return;
-  const planner = page.locator("main").filter({ visible: true });
-  await expect(planner.getByRole("button", { name: "Heures", exact: true })).toBeEnabled();
-  await planner.getByRole("button", { name: "Heures", exact: true }).click();
-  await expect(page).toHaveURL(/etape=heures/);
 }

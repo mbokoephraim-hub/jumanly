@@ -1,3 +1,4 @@
+import { isModelB } from "@/server/phone-routes";
 import { FreshOnEachVisit } from "@/components/phone/fresh-visit";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -5,7 +6,6 @@ import { getTranslations } from "next-intl/server";
 import { JobFlow, type FlowQuery } from "@/components/recruiter/job-flow";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
-import { isPhone } from "@/server/view";
 import { PhoneRecruiterPublish } from "@/components/phone/recruteur/publier";
 import { RhOffresTexts, rhPublishData } from "@/components/phone/recruteur/offres";
 import { getOrgJob, HireError } from "@/server/services/hire";
@@ -37,7 +37,7 @@ export default async function EditOfferPage({
     throw error;
   });
   if (job.status === "closed" || job.status === "archived") notFound();
-  if (await isPhone())
+  if (await isModelB())
     return (
       <RhOffresTexts>
         <FreshOnEachVisit>

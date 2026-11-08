@@ -1,8 +1,11 @@
 import { isTester } from "@/server/services/tester";
 import { Suspense } from "react";
 import { AppShell } from "@/components/layout/app-shell";
-import { RecruiterShell } from "@/components/recruiter/shell";
 import { PhoneShell } from "@/components/phone/shell";
+import {
+  RecruiterToolsNav,
+  type RecruiterToolsGroup,
+} from "@/components/phone/recruteur/outils-nav";
 import { FilTab } from "@/components/phone/fil/server";
 import { CareerTab } from "@/components/phone/career/server";
 import { ExplorerTab } from "@/components/phone/explorer/server";
@@ -15,13 +18,7 @@ import { touchPresence } from "@/server/services/hire-messaging";
 import { db } from "@/server/db";
 import { resolvePlan } from "@/server/entitlements";
 import { ADMIN_SHELL_ROLES } from "@/server/auth/roles";
-import type { AbstractIntlMessages } from "next-intl";
-import { getMessages, getTranslations } from "next-intl/server";
-import { RecruiterAvatarMenu } from "@/components/recruiter/avatar-menu";
-import { RecruiterBrief } from "@/components/recruiter/brief";
-import { recruiterChatTexts } from "@/components/recruiter/orbi";
-import { hireToday } from "@/server/services/hire-today";
-import type { HireContext } from "@/server/services/hire";
+import { getTranslations } from "next-intl/server";
 import { ContentBanners } from "@/components/site/content-banners";
 import { getActiveSpace } from "@/server/hire-context";
 import { getPartnerSpace } from "@/server/partner-context";
@@ -121,18 +118,73 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const t = await getTranslations("org.roles");
-
-  // Recruiter space on a phone: Modèle B (docs/modele-b-recruteur), dark, five tabs.
-  if (space && !partnerSpace && phone) {
+  // Recruiter space: Modèle B (docs/modele-b-recruteur), dark, five tabs, on a phone, and on a
+  // computer or a tablet since 08/11/2026 (the same screens, the menu on the left, `wide`, with the
+  // tools of the big screen and the company's part for its administrators).
+  if (space && !partnerSpace) {
     const counts = await recruiterBarCounts(db, {
       userId: user.id,
       organizationId: space.organizationId,
       role: space.role,
     });
+    const tWeb = await getTranslations("hireShell.web");
+    const tTools = await getTranslations("phoneRh.outils");
+    const company = space.role === "org_owner" || space.role === "org_admin";
+    const side = phone ? null : (
+      <RecruiterToolsNav
+        groups={
+          [
+            {
+              title: tTools("title"),
+              items: [
+                { href: "/app/hire/rapports", label: tWeb("reports"), icon: "progression" },
+                { href: "/app/hire/modeles", label: tTools("templates"), icon: "message" },
+              ],
+            },
+            ...(company
+              ? [
+                  {
+                    title: tWeb("entreprise.aria"),
+                    items: [
+                      {
+                        href: "/app/organisation/equipe",
+                        label: tWeb("entreprise.team"),
+                        icon: "candidats",
+                      },
+                      {
+                        href: "/app/organisation",
+                        label: tWeb("entreprise.page"),
+                        icon: "entreprise",
+                        exact: true,
+                      },
+                      {
+                        href: "/app/organisation/facturation",
+                        label: tWeb("entreprise.billing"),
+                        icon: "portefeuille",
+                      },
+                      {
+                        href: "/app/organisation/journal",
+                        label: tWeb("entreprise.journal"),
+                        icon: "confidentialite",
+                      },
+                      {
+                        href: "/app/organisation/reglages",
+                        label: tWeb("entreprise.settings"),
+                        icon: "reglages",
+                      },
+                    ],
+                  } satisfies RecruiterToolsGroup,
+                ]
+              : []),
+          ] satisfies RecruiterToolsGroup[]
+        }
+      />
+    );
     return (
       <PhoneShell
         set="recruteur"
+        wide={!phone}
+        side={side}
         account={{
           id: user.id,
           name: user.name,
@@ -153,81 +205,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // Recruiter space on a tablet or a computer (docs/refonte-web, recruteur lots 1 to 4).
-  if (space && !partnerSpace) {
-    const tShell = await getTranslations("hireShell.org");
-    const ctx = { userId: user.id, organizationId: space.organizationId, role: space.role };
-    const [unreadMessages, logos, plans, messages] = await Promise.all([
-      unreadCount(db, {
-        userId: user.id,
-        hire: { userId: user.id, organizationId: space.organizationId, role: space.role },
-      }),
-      db.organization.findMany({
-        where: { id: { in: hire.map((membership) => membership.organizationId) } },
-        select: { id: true, logo: true },
-      }),
-      Promise.all(
-        hire.map((membership) =>
-          resolvePlan(db, { type: "organization", id: membership.organizationId }),
-        ),
-      ),
-      getMessages(),
-    ]);
-    const logoOf = (id: string) => logos.find((org) => org.id === id)?.logo ?? null;
-    return (
-      <RecruiterShell
-        account={{
-          name: user.name,
-          image: user.image,
-          line: space.jobTitle?.trim() || t(`${space.role}.text`),
-        }}
-        org={{
-          id: space.organizationId,
-          name: space.organization.name,
-          logo: logoOf(space.organizationId),
-        }}
-        orgs={hire.map((membership, index) => {
-          const role = t(`${membership.role}.text`);
-          const planName = plans[index]?.planName;
-          return {
-            id: membership.organizationId,
-            name: membership.organization.name,
-            logo: logoOf(membership.organizationId),
-            line: planName
-              ? tShell("line", { role, plan: planName })
-              : tShell("lineNoPlan", { role }),
-          };
-        })}
-        unread={unread}
-        unreadMessages={unreadMessages}
-        // Étape 3 (docs/decisions/2026-10-26-etape-3-cadre.md): the recruiter's space on a
-        // computer is always dark, like the Modèle B.
-        appearance="dark"
-        company={space.role === "org_owner" || space.role === "org_admin"}
-        reduceMotion={user.reduceMotion}
-        intro={intro}
-        orbiTexts={recruiterChatTexts(messages) as AbstractIntlMessages}
-        menu={
-          <Suspense fallback={null}>
-            <RecruiterAvatarMenu
-              ctx={ctx}
-              user={{ name: user.name, image: user.image ?? null }}
-              roleLabel={t(`${space.role}.text`)}
-            />
-          </Suspense>
-        }
-        brief={
-          <Suspense fallback={null}>
-            <BellBrief ctx={ctx} firstName={user.firstName || user.name} />
-          </Suspense>
-        }
-      >
-        <ContentBanners audience="recruiters" />
-        {children}
-      </RecruiterShell>
-    );
-  }
-
+  const t = await getTranslations("org.roles");
   const plan = await resolvePlan(db, { type: "user", id: user.id });
   const option = (membership: (typeof hire)[number]) => ({
     id: membership.organizationId,
@@ -255,10 +233,4 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
       {children}
     </AppShell>
   );
-}
-
-/** « Votre journée en bref » above the notifications under the bell (web recruteur lot 3). */
-async function BellBrief({ ctx, firstName }: { ctx: HireContext; firstName: string }) {
-  const today = await hireToday(db, ctx);
-  return <RecruiterBrief today={today} firstName={firstName} id="r5-brief-pop" />;
 }

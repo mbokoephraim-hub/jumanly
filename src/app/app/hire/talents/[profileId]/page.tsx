@@ -1,3 +1,4 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -14,7 +15,6 @@ import { cx } from "@/lib/cx";
 import { db } from "@/server/db";
 import { level } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
-import { isPhone } from "@/server/view";
 import { RhTalent } from "@/components/phone/recruteur/talent";
 import { matchesForUser } from "@/server/matching/service";
 import type { MatchExplanation } from "@/server/matching/types";
@@ -51,7 +51,7 @@ export default async function TalentProfilePage({
   const page = `/app/hire/talents/${profileId}`;
   const { ctx } = await requireHire(page, "readApplications");
   // On the recruiter's phone (Modèle B recruteur M6), the profile of planches 108 to 118.
-  if (await isPhone()) return <RhTalent ctx={ctx} profileId={profileId} query={query} />;
+  if (await isModelB()) return <RhTalent ctx={ctx} profileId={profileId} query={query} />;
   const t = await getTranslations("hireTalents.profile");
   const tc = await getTranslations("hireCandidates");
   const ui = await getTranslations("ui");

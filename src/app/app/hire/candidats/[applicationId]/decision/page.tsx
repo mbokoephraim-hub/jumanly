@@ -1,3 +1,4 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -20,7 +21,6 @@ import {
 import { db } from "@/server/db";
 import { can, level } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
-import { isPhone } from "@/server/view";
 import { RhProposal } from "@/components/phone/recruteur/proposition";
 import { applicationMatches } from "@/server/matching/service";
 import { RATING_MAX, scorecardView } from "@/server/services/evaluation";
@@ -95,7 +95,7 @@ export default async function DecisionPage({
 
   // On the recruiter's phone (Modèle B recruteur M5): « Faire une proposition »; the outcomes are
   // decided from the file (its sheets « Ne pas retenir » and « Recruter »).
-  if (await isPhone()) {
+  if (await isModelB()) {
     if (decided || one(query.issue) !== "proposition") redirect(fileHref);
     return (
       <RhProposal

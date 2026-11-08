@@ -9263,3 +9263,29 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-ag-fixer input {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+/* La modération demande une correction (08/11/2026) : en tête de l'offre, comme une carte du Modèle B. */
+.nb-rh-moder {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 16px;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(251, 146, 60, 0.45);
+  background: var(--nb-carte);
+  color: var(--nb-creme);
+  font-size: 14px;
+  line-height: 1.45;
+}
+.nb-rh-moder .t-bt {
+  margin-top: 4px;
+  min-height: 44px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: var(--nb-lime);
+  color: var(--nb-sur-lime, #0f3f37);
+  font-weight: 600;
+}

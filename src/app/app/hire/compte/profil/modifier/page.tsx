@@ -1,9 +1,9 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { RhProfileEditScreen, RhCompteTexts } from "@/components/phone/recruteur/compte";
 import { requireHire } from "@/server/hire-context";
-import { isPhone } from "@/server/view";
 
 const PAGE = "/app/hire/compte/profil/modifier";
 
@@ -17,7 +17,7 @@ export default async function Page({
   searchParams,
 }: PageProps<"/app/hire/compte/profil/modifier">) {
   const { ctx } = await requireHire(PAGE);
-  if (!(await isPhone())) redirect("/app/hire/compte/profil");
+  if (!(await isModelB())) redirect("/app/hire/compte/profil");
   return (
     <RhCompteTexts>
       <RhProfileEditScreen ctx={ctx} query={await searchParams} />

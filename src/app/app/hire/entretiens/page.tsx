@@ -1,3 +1,4 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -24,7 +25,6 @@ import {
 import { db } from "@/server/db";
 import { can } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
-import { isPhone } from "@/server/view";
 import { hirePermissions } from "@/server/services/hire";
 import { interviewsToEvaluate, invitableApplications } from "@/server/services/hire-interviews";
 import { listInterviews } from "@/server/services/interviews";
@@ -67,7 +67,7 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
     redirect(`/app/hire/candidats/${encodeURIComponent(candidature)}/entretien`);
   const { ctx } = await requireHire("/app/hire/entretiens", "readApplications");
   // On a phone, the tab « Agenda » (Ephraïm, 03/11/2026): it replaced « Candidatures ».
-  if (await isPhone()) {
+  if (await isModelB()) {
     const now = new Date();
     const timeZone = defaultTimeZone();
     const [interviews, tasks, campaigns, ta] = await Promise.all([

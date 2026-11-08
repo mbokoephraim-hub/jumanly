@@ -44,8 +44,11 @@ export async function PhoneShell({
   set = "talent",
   badges,
   wide = false,
+  side,
   children,
 }: {
+  /** On a computer, under the tabs of the menu: the recruiter's tools and company part. */
+  side?: ReactNode;
   /** A computer or a tablet (talent, 07/11/2026): the same screens, the menu on the left. */
   wide?: boolean;
   account: { id: string; name: string; firstName: string | null; image: string | null };
@@ -185,7 +188,9 @@ export async function PhoneShell({
           names={Object.fromEntries(tabsOf(set).map((tab) => [tab, navName(tab)]))}
           badges={badges}
           wide={wide}
-        />
+        >
+          {side}
+        </PhoneNav>
       </NextIntlClientProvider>
       <PhonePullRefresh loading={t("refresh.loading")} />
       <Suspense fallback={null}>

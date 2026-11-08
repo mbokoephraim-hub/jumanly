@@ -66,9 +66,9 @@ async function signInByEmail(page: Page, email: string, password: string) {
   await page.getByRole("button", { name: "Se connecter", exact: true }).click();
 }
 
-// Since 07/11/2026 the talent gets the Modèle B on a computer too (the logo alone at the opening, as
-// on the phone): the générique is the recruiter's.
-const RECRUITER = "rh@jumanly.test";
+// Since 07/11/2026 the talent, and since 08/11/2026 the recruiter, get the Modèle B on a computer
+// too (the logo alone at the opening, as on the phone): the générique is the partner's.
+const RECRUITER = "partenaire@jumanly.test";
 
 test.describe("générique d'entrée", () => {
   test.skip(!!process.env.E2E_REDUCED_MOTION, "le générique ne se joue pas en animations réduites");

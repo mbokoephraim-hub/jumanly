@@ -1,10 +1,10 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { RhCompanyModeScreen, RhCompteTexts } from "@/components/phone/recruteur/compte";
 import { requireHire } from "@/server/hire-context";
 import { isOrgAdmin } from "@/server/services/hire-phone-account";
-import { isPhone } from "@/server/view";
 
 const PAGE = "/app/hire/entreprise";
 
@@ -19,7 +19,7 @@ export default async function Page({ searchParams }: PageProps<"/app/hire/entrep
   // « Agir au nom de l'entreprise » belongs to the page's administrators (planche 186); on a
   // computer, they edit the page in the company's space.
   if (!isOrgAdmin(ctx.role)) redirect("/app/hire/compte");
-  if (!(await isPhone())) redirect("/app/organisation");
+  if (!(await isModelB())) redirect("/app/organisation");
   return (
     <RhCompteTexts>
       <RhCompanyModeScreen ctx={ctx} query={await searchParams} />

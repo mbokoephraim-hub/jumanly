@@ -1,3 +1,4 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
@@ -26,7 +27,6 @@ import { pauseJobAction, publishOfferAction, resumeJobAction } from "@/server/ac
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
 import { getOrgJob, HireError, hirePermissions } from "@/server/services/hire";
-import { isPhone } from "@/server/view";
 import { effectiveRights } from "@/server/services/org-team";
 import { RH_FILE_PARTS, RhCandidateSummary } from "@/components/phone/recruteur/resume-fiche";
 import { RhOfferCandidatesList, RhOfferTabs } from "@/components/phone/recruteur/candidats-offre";
@@ -720,6 +720,16 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
     views: 0,
     interviews: 0,
   };
+  // Moderation asked for a correction (Admin v2, étape 7): the points stay on top of the offer, on
+  // the phone too (08/11/2026, it was only on the former computer page).
+  const changes =
+    job.status === "changes_requested" ? (
+      <ModerationChanges
+        job={job}
+        className="nb-rh-moder"
+        fixHref={permissions.manage ? `/app/hire/offres/${job.id}/modifier?etape=10` : undefined}
+      />
+    ) : null;
   const fiche = one(query.fiche);
   if (one(query.vue) === "candidats" && permissions.readApplications && fiche)
     return (
@@ -764,6 +774,7 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
           <ToastOnLoad message={tm("postponeError")} tone="error" />
         ) : null}
         {one(query.limite) ? <ToastOnLoad message={tl("limit")} tone="error" /> : null}
+        {changes}
         <RhOfferCandidatesList
           key={`${one(query.vue) ?? ""}-${one(query.classe) ?? ""}-${one(query.ordre) ?? ""}-${one(query.q) ?? ""}-${one(query.skill) ?? ""}-${one(query.dispo) ?? ""}-${one(query.ville) ?? ""}`}
           ctx={ctx}
@@ -788,6 +799,7 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
   return (
     <>
       {ok && <ToastOnLoad message={tl(`ok.${ok}`)} tone="success" />}
+      {changes}
       <RhOfferDetail
         tabs={
           permissions.readApplications ? (
@@ -810,6 +822,6 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
 }
 
 export default async function OfferPage(props: PageProps<"/app/hire/offres/[id]">) {
-  if (await isPhone()) return <PhoneOffer {...props} />;
+  if (await isModelB()) return <PhoneOffer {...props} />;
   return <OfferPageContent {...props} />;
 }

@@ -137,7 +137,13 @@ html:has(.nb-app[data-large]) .nb-feuille-dlg[open] {
     .nb-iv-bas,
     .nb-cv-bas,
     .t-barre-bas,
-    .t-bas-f
+    .t-bas-f,
+    .nb-rh-detail > .nb-bas,
+    .nb-rh-talent .nb-rh-f-bas,
+    .nb-rh-selection,
+    .nb-rm-pied,
+    .nb-ro-pied,
+    .nb-rc-pied
   ) {
   left: var(--nb-marge-gauche);
   right: auto;
@@ -259,4 +265,51 @@ html:has(.nb-app[data-large]) .nb-feuille-dlg[open] {
 }
 .nb-app[data-large] .t-w4-aide-g.t-verre {
   display: block;
+}
+
+/* ─── Recruteur sur ordinateur (08/11/2026) : sous les cinq onglets du téléphone, les outils du grand
+   écran (rapports, modèles de messages) et, pour les administrateurs, la partie Entreprise. ─── */
+.nb-app[data-large] .nb-nav {
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.nb-app[data-large] .nb-nav-outils {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--nb-filet);
+}
+.nb-app[data-large] .nb-nav-titre {
+  padding: 0 16px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(var(--nb-voile), 0.55);
+}
+.nb-app[data-large] .nb-nav-outils ul {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.nb-app[data-large] .nb-nav-outils a {
+  justify-content: flex-start;
+  min-width: 0;
+  white-space: nowrap;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  color: rgba(var(--nb-voile), 0.82);
+}
+.nb-app[data-large] .nb-nav-outils a:hover {
+  background: var(--nb-f-203f42, #203f42);
+}
+.nb-app[data-large] .nb-nav-outils a[aria-current="page"] {
+  background: rgba(var(--nb-voile), 0.1);
+  color: var(--nb-creme);
+  font-weight: 600;
 }

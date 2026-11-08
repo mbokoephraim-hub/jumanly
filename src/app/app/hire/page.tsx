@@ -1,3 +1,4 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
@@ -13,7 +14,6 @@ import { hirePermissions, isOrgVerified } from "@/server/services/hire";
 import { activeCount, listOffers } from "@/server/services/hire-offers";
 import { applicationsThisWeek, hireToday } from "@/server/services/hire-today";
 import { atsToday } from "@/server/services/hire-ats";
-import { isPhone } from "@/server/view";
 import { RhTab, RhBell, RhSettings } from "@/components/phone/recruteur/head";
 import { RhFil } from "@/components/phone/recruteur/fil";
 
@@ -457,7 +457,7 @@ async function HireTodayPageContent() {
  * « À traiter » stays the first screen on a computer and a tablet.
  */
 export default async function HireTodayPage() {
-  if (await isPhone()) {
+  if (await isModelB()) {
     const { user } = await requireHire("/app/hire");
     return (
       <RhTab

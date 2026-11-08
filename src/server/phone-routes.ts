@@ -14,13 +14,15 @@ async function personalSpace(userId: string) {
 
 /**
  * The screens of the Modèle B: on a phone for everyone (talent and recruiter), and on a computer or
- * a tablet for the talent too (Ephraïm, 07/11/2026: « on doit trouver toutes les fonctionnalités, la
- * même logique, les mêmes idées » qu'au téléphone). The recruiter's computer keeps its own screens.
+ * a tablet for the talent (Ephraïm, 07/11/2026: « on doit trouver toutes les fonctionnalités, la
+ * même logique, les mêmes idées » qu'au téléphone) and for the recruiter (08/11/2026: « faire de
+ * même dans la partie recruteur sur ordinateur »). Only a partner institution keeps its own screens.
  */
 export const isModelB = cache(async () => {
   if (await isPhone()) return true;
   const user = await getCurrentUser();
-  return user ? personalSpace(user.id) : false;
+  if (!user) return false;
+  return !(await getPartnerSpace(user.id));
 });
 
 /**

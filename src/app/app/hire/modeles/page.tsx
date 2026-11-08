@@ -1,6 +1,6 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import { RhCompteTexts, RhTemplatesScreen } from "@/components/phone/recruteur/compte";
-import { isPhone } from "@/server/view";
 import { getTranslations } from "next-intl/server";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
@@ -44,7 +44,7 @@ export default async function TemplatesPage({ searchParams }: PageProps<"/app/hi
   const query = await searchParams;
   const { ctx } = await requireHire("/app/hire/modeles", "readApplications");
   // On a phone, the templates of Modèle B (recruteur M8, planche Recruteur-parametres).
-  if (await isPhone())
+  if (await isModelB())
     return (
       <RhCompteTexts>
         <RhTemplatesScreen ctx={ctx} />

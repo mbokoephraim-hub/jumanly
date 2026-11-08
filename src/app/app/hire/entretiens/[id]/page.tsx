@@ -1,3 +1,4 @@
+import { isModelB } from "@/server/phone-routes";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -20,7 +21,6 @@ import {
   removeInterviewQuestionAction,
 } from "@/server/actions/hire-advanced";
 import { db } from "@/server/db";
-import { isPhone } from "@/server/view";
 import { RhInterviewSent } from "@/components/phone/recruteur/entretien";
 import { level } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
@@ -79,7 +79,7 @@ export default async function InterviewPage({
   const timeZone = interview.timezone || defaultTimeZone();
   // On the recruiter's phone (Modèle B recruteur M5, planche Recruteur-planifie): « Invitation
   // envoyée » just after « Envoyer l'invitation ». Later, the page is the preparation.
-  if (one(query.ok) === "envoye" && (await isPhone())) {
+  if (one(query.ok) === "envoye" && (await isModelB())) {
     const others = [interview.organizerId, ...interview.participantIds].filter(
       (memberId) => memberId !== ctx.userId,
     );

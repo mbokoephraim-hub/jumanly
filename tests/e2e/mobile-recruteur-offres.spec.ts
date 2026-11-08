@@ -39,16 +39,6 @@ async function phoneMenu(page: Page, title: string) {
   return sheet;
 }
 
-async function openMenu(page: Page, title: string) {
-  await main(page)
-    .getByRole("button", { name: `Actions sur l'offre ${title}` })
-    .first()
-    .click();
-  const sheet = page.getByRole("dialog", { name: title });
-  await expect(sheet).toBeVisible();
-  return sheet;
-}
-
 test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", async ({
   page,
   browser,
@@ -59,9 +49,7 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
   await freshRecruiter(page, "rx-offres");
   // Nothing waits yet: « Rien à traiter », and the way to publish. On a phone, the first screen
   // is the recruiter's Fil (Modèle B recruteur, M3).
-  if (isMobile)
-    await expect(main(page).getByRole("heading", { name: "Fil", exact: true })).toBeVisible();
-  else await expect(main(page)).toContainText("Rien à traiter pour l'instant");
+  await expect(main(page).getByRole("heading", { name: "Fil", exact: true })).toBeVisible();
 
   const first = `Analyste crédit fictif ${suffix()}`;
   const question = "Êtes-vous disponible avant le 1er décembre ?";
@@ -75,42 +63,24 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
   });
   // « Vérifier et publier » shows the question on a computer; on a phone the last of the ten steps
   // is the publication itself (29/10).
-  if (!isMobile) await expect(main(page)).toContainText(question);
   await expectAccessible(page);
   const { detailUrl } = await publishFilledOffer(page, "Publier");
   // On a phone the offer opens on « Candidats »; its figures and « ··· » are in « Vue d'ensemble ».
-  const overviewUrl = isMobile ? `${detailUrl}?vue=apercu` : detailUrl;
-  await expect(main(page)).toContainText(isMobile ? "Votre offre est en ligne" : "Offre publiée");
+  const overviewUrl = `${detailUrl}?vue=apercu`;
+  await expect(main(page)).toContainText("Votre offre est en ligne");
   await expectAccessible(page);
   const slug = await slugOf(page);
 
-  if (isMobile) {
-    // The offer's page, then « ··· » › « Mettre en pause ».
-    await page.goto(overviewUrl);
-    await expect(main(page).getByRole("heading", { level: 1, name: first })).toBeVisible();
-    await expectAccessible(page);
-    await (await phoneMenu(page, first)).getByRole("button", { name: /^Mettre en pause/ }).click();
-  } else {
-    // The detail: figures, stages by default, and a typed history.
-    await main(page).getByRole("link", { name: "Voir l'offre" }).click();
-    await expect(page).toHaveURL(new RegExp(`${detailUrl}$`));
-    await expect(main(page).getByRole("heading", { level: 2, name: first })).toBeVisible();
-    const stages = main(page).locator("details").filter({ hasText: "Étapes" });
-    for (const stage of ["Reçue", "En examen", "Présélectionnée", "Entretien", "Décision finale"])
-      await expect(stages).toContainText(stage);
-    await main(page).getByText("Historique", { exact: true }).click();
-    await expect(main(page).locator(".t-rx-hist")).toContainText("Publication");
-    await expectAccessible(page);
+  // The offer's page, then « ··· » › « Mettre en pause ».
+  await page.goto(overviewUrl);
+  await expect(main(page).getByRole("heading", { level: 1, name: first })).toBeVisible();
+  await expectAccessible(page);
+  await (await phoneMenu(page, first)).getByRole("button", { name: /^Mettre en pause/ }).click();
 
-    // « Pause »: a paused offer no longer holds the only place of the Free plan.
-    await main(page).getByRole("button", { name: "Pause", exact: true }).click();
-  }
   await expect(
     page.getByText("Offre mise en pause. Ses candidatures restent.").first(),
   ).toBeVisible();
-  await expect(main(page).locator(isMobile ? ".nb-rh-of-etat" : ".t-rx-odh")).toContainText(
-    "En pause",
-  );
+  await expect(main(page).locator(".nb-rh-of-etat")).toContainText("En pause");
 
   const second = `Chargée de clientèle fictive ${suffix()}`;
   await fillOffer(page, {
@@ -120,17 +90,11 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
     skill: "Bureautique",
   });
   const { detailUrl: secondUrl } = await publishFilledOffer(page, "Publier");
-  await expect(main(page)).toContainText(isMobile ? "Votre offre est en ligne" : "Offre publiée");
+  await expect(main(page)).toContainText("Votre offre est en ligne");
 
   // Resuming the first one now meets the limit: nothing changes, the recruiter is told.
   await page.goto(overviewUrl);
-  if (isMobile)
-    await (
-      await phoneMenu(page, first)
-    )
-      .getByRole("button", { name: /^Remettre en ligne/ })
-      .click();
-  else await main(page).getByRole("button", { name: "Reprendre", exact: true }).click();
+  await (await phoneMenu(page, first)).getByRole("button", { name: /^Remettre en ligne/ }).click();
   await expect(page).toHaveURL(/limite=/);
   await expect(main(page)).toContainText("En pause");
 
@@ -141,62 +105,27 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
     responsibilities: ["Tenir les journaux"],
     skill: "Comptabilité générale",
   });
-  if (isMobile) {
-    // The ONEM authorization is asked before publishing (29/10).
-    await page
-      .getByRole("radio", { name: "Oui, je détiens l'autorisation de l'ONEM" })
-      .filter({ visible: true })
-      .click();
-    await page.getByRole("button", { name: "Publier l'offre", exact: true }).click();
-    await expect(
-      page.getByRole("alert").filter({ hasText: "nombre d'offres en ligne" }),
-    ).toBeVisible();
-  } else {
-    await page.getByRole("button", { name: "Publier", exact: true }).click();
-    const limit = page.getByRole("dialog", { name: "Limite d'offres actives atteinte" });
-    await expect(limit).toBeVisible();
-    await expectAccessible(page);
-    await page.keyboard.press("Escape");
-  }
+  // The ONEM authorization is asked before publishing (29/10).
+  await page
+    .getByRole("radio", { name: "Oui, je détiens l'autorisation de l'ONEM" })
+    .filter({ visible: true })
+    .click();
+  await page.getByRole("button", { name: "Publier l'offre", exact: true }).click();
+  await expect(
+    page.getByRole("alert").filter({ hasText: "nombre d'offres en ligne" }),
+  ).toBeVisible();
 
-  if (isMobile) {
-    // The second offer's « ··· » deletes it (03/11/2026), after a confirmation.
-    await page.goto(secondUrl);
-    await (
-      await phoneMenu(page, second)
-    )
-      .getByRole("button", { name: /^Supprimer l'offre/ })
-      .click();
-    const confirm = page.getByRole("dialog", { name: `Supprimer « ${second} » ?` });
-    await confirm.getByRole("button", { name: "Supprimer l'offre", exact: true }).click();
-    await expect(page).toHaveURL(/\/app\/hire\/offres\?ok=retiree/);
+  // The second offer's « ··· » deletes it (03/11/2026), after a confirmation.
+  await page.goto(secondUrl);
+  await (await phoneMenu(page, second)).getByRole("button", { name: /^Supprimer l'offre/ }).click();
+  const confirm = page.getByRole("dialog", { name: `Supprimer « ${second} » ?` });
+  await confirm.getByRole("button", { name: "Supprimer l'offre", exact: true }).click();
+  await expect(page).toHaveURL(/\/app\/hire\/offres\?ok=retiree/);
 
-    // The first offer goes back online, now that a place is free.
-    await page.goto(overviewUrl);
-    await (
-      await phoneMenu(page, first)
-    )
-      .getByRole("button", { name: /^Remettre en ligne/ })
-      .click();
-  } else {
-    // Mes offres: the menu closes the second offer, after a confirmation.
-    await page.goto("/app/hire/offres");
-    await expect(main(page)).toContainText(second);
-    const menu = await openMenu(page, second);
-    await menu.getByRole("button", { name: /^Clôturer/ }).click();
-    const confirm = page.getByRole("dialog", { name: "Clôturer cette offre ?" });
-    await expect(confirm).toBeVisible();
-    await confirm.getByRole("button", { name: "Clôturer", exact: true }).click();
-    await expect(page).toHaveURL(/onglet=cloturees/);
-    await expect(
-      page.getByText("Offre clôturée. Ses dossiers restent consultables.").first(),
-    ).toBeVisible();
+  // The first offer goes back online, now that a place is free.
+  await page.goto(overviewUrl);
+  await (await phoneMenu(page, first)).getByRole("button", { name: /^Remettre en ligne/ }).click();
 
-    // « En pause »: the menu resumes the first offer, now that a place is free.
-    await page.goto("/app/hire/offres?onglet=pause");
-    const paused = await openMenu(page, first);
-    await paused.getByRole("button", { name: /^Reprendre/ }).click();
-  }
   await expect(
     page.getByText("Offre reprise : elle est de nouveau visible.").first(),
   ).toBeVisible();
@@ -237,43 +166,27 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
   });
   await context.close();
 
-  if (isMobile) {
-    // On a phone, the applications wait in Candidatures, view « Toutes » (Modèle B recruteur, M5).
-    await page.goto("/app/hire/candidats?vue=toutes");
-    await main(page)
-      .getByRole("link", { name: /Amani Fictif/ })
-      .first()
-      .click();
-  } else {
-    await page.goto("/app/hire");
-    await expect(main(page)).toContainText("Amani Fictif");
-    await main(page)
-      .getByRole("link", { name: /Examiner/ })
-      .first()
-      .click();
-  }
+  // On a phone, the applications wait in Candidatures, view « Toutes » (Modèle B recruteur, M5).
+  await page.goto("/app/hire/candidats?vue=toutes");
+  await main(page)
+    .getByRole("link", { name: /Amani Fictif/ })
+    .first()
+    .click();
+
   await expect(page).toHaveURL(/\/app\/hire\/candidats\//);
-  if (isMobile) {
-    // The phone's file (Modèle B recruteur, M5) shows the answers in its tab « Réponses »; the
-    // candidate opens on their profile (docs/profil-personne), the file comes next.
-    await expect(page.locator(".nb-rh-fiche-p").filter({ visible: true })).toBeVisible();
-    await page.goto(`${page.url().split("?")[0]}?onglet=reponses`);
-    const file = page.locator(".nb-rh-fiche").filter({ visible: true });
-    await file.getByRole("tab", { name: /^Réponses/ }).click();
-    await expect(file).toContainText(question);
-    await expect(file).toContainText(/Oui|Immédiatement/);
-    return;
-  }
-  await expect(page.locator("#reponses")).toContainText(question);
-  await expect(page.locator("#reponses")).toContainText(/Oui|Immédiatement/);
+  // The phone's file (Modèle B recruteur, M5) shows the answers in its tab « Réponses »; the
+  // candidate opens on their profile (docs/profil-personne), the file comes next.
+  await expect(page.locator(".nb-rh-fiche-p").filter({ visible: true })).toBeVisible();
+  await page.goto(`${page.url().split("?")[0]}?onglet=reponses`);
+  const file = page.locator(".nb-rh-fiche").filter({ visible: true });
+  await file.getByRole("tab", { name: /^Réponses/ }).click();
+  await expect(file).toContainText(question);
+  await expect(file).toContainText(/Oui|Immédiatement/);
 });
 
 // Decision of 29/10/2026 (docs/decisions/2026-10-29-publication-directe-offres.md): an offer is
 // published at once, even before the company is verified.
-test("une organisation pas encore vérifiée publie son offre tout de suite", async ({
-  page,
-  isMobile,
-}) => {
+test("une organisation pas encore vérifiée publie son offre tout de suite", async ({ page }) => {
   test.setTimeout(180_000);
   await freshRecruiter(page, "rx-validation", true);
   const title = `Assistant logistique fictif ${suffix()}`;
@@ -283,9 +196,8 @@ test("une organisation pas encore vérifiée publie son offre tout de suite", as
     responsibilities: ["Préparer les expéditions"],
     skill: "Bureautique",
   });
-  if (!isMobile) await expect(main(page)).toContainText("Organisation pas encore vérifiée");
   await publishFilledOffer(page, "Publier");
-  await expect(main(page)).toContainText(isMobile ? "Votre offre est en ligne" : "Offre publiée");
+  await expect(main(page)).toContainText("Votre offre est en ligne");
   await page.goto("/app/hire/offres");
   const card = main(page).locator("article").filter({ hasText: title });
   await expect(card).toBeVisible();
