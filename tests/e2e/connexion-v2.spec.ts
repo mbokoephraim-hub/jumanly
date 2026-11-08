@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { DEMO_PASSWORD, PASSWORD, demo, signUpFromPricing, testEmail } from "./session";
+import { DEMO_PASSWORD } from "./session";
 
 // docs/refonte-mobile (lot 2): /connexion and /inscription, then the générique d'entrée.
 
@@ -66,6 +66,10 @@ async function signInByEmail(page: Page, email: string, password: string) {
   await page.getByRole("button", { name: "Se connecter", exact: true }).click();
 }
 
+// Since 07/11/2026 the talent gets the Modèle B on a computer too (the logo alone at the opening, as
+// on the phone): the générique is the recruiter's.
+const RECRUITER = "rh@jumanly.test";
+
 test.describe("générique d'entrée", () => {
   test.skip(!!process.env.E2E_REDUCED_MOTION, "le générique ne se joue pas en animations réduites");
   test.skip(
@@ -73,40 +77,8 @@ test.describe("générique d'entrée", () => {
     "Modèle B au téléphone : le logo seul à l'ouverture (brief § 3)",
   );
 
-  test("complet une seule fois par compte, puis court ; « Passer » rend la main à l'espace", async ({
-    page,
-  }) => {
-    test.setTimeout(90_000);
-    const email = testEmail("generique");
-    await signUpFromPricing(page, "Créer mon compte gratuit", email);
-
-    // New account: the full version plays over the welcome page, then « Passer » ends it.
-    const intro = page.getByRole("dialog", { name: "Présentation de Jumanly" });
-    await expect(intro).toBeVisible({ timeout: 20_000 });
-    await expect(intro.getByText("Bienvenue,", { exact: true })).toBeVisible();
-    await expect(page).not.toHaveURL(/arrivee=/);
-    const skip = intro.getByRole("button", { name: "Passer l'intro" });
-    await expect(skip).toBeFocused();
-    await skip.click();
-    await expect(intro).toBeHidden();
-    await expect(page.getByRole("main")).toBeFocused();
-    // A reload is not an arrival: nothing plays.
-    await page.reload();
-    await expect(page.getByRole("main")).toBeVisible();
-    await expect(intro).toBeHidden();
-
-    // Next sign-in: the short version, which ends on its own.
-    await page.context().clearCookies();
-    await signInByEmail(page, email, PASSWORD);
-    await expect(intro).toBeVisible({ timeout: 20_000 });
-    await expect(intro.locator(".jm-in-short")).toContainText("Bon retour, Awa");
-    await expect(intro.getByText("Bienvenue,", { exact: true })).toHaveCount(0);
-    await expect(intro).toBeHidden({ timeout: 10_000 });
-    await expect(page).toHaveURL(/\/app/);
-  });
-
   test("Échap saute le générique", async ({ page }) => {
-    await signInByEmail(page, demo.talentStarter, DEMO_PASSWORD);
+    await signInByEmail(page, RECRUITER, DEMO_PASSWORD);
     const intro = page.getByRole("dialog", { name: "Présentation de Jumanly" });
     await expect(intro).toBeVisible({ timeout: 20_000 });
     await page.keyboard.press("Escape");
@@ -122,7 +94,7 @@ test.describe("générique en animations réduites", () => {
   );
 
   test("aucun générique, le message d'accueil à la place", async ({ page }) => {
-    await signInByEmail(page, demo.talentFree, DEMO_PASSWORD);
+    await signInByEmail(page, RECRUITER, DEMO_PASSWORD);
     await expect(page).toHaveURL(/\/app/);
     await expect(
       page.getByRole("status").getByText(/Bon retour|Bienvenue sur Jumanly/),

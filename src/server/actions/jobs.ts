@@ -26,7 +26,7 @@ import {
 import { countJobs, isJobOpen, parseJobFilters } from "@/server/services/jobs";
 import { reportError } from "@/server/observability";
 import { tailorCv } from "@/server/services/career-documents";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { getTranslations } from "next-intl/server";
 
 const applySchema = z.object({
@@ -304,7 +304,7 @@ export async function applyChoiceAction(formData: FormData) {
   }
   const { job: slug, choice } = parsed.data;
   const user = await requireUser(applyHref(slug));
-  const phone = await isPhone();
+  const phone = await isModelB();
   if (choice === "existant") redirect(applyHref(slug, "cv"));
   if (choice === "importer") {
     redirect(phone ? "/app/career/cv/nouveau?etape=import" : "/app/career/cv?importer=1");

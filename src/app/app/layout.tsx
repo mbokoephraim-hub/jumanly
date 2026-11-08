@@ -8,7 +8,6 @@ import { CareerTab } from "@/components/phone/career/server";
 import { ExplorerTab } from "@/components/phone/explorer/server";
 import { FormationTab } from "@/components/phone/learn/server";
 import { MessagesTab } from "@/components/phone/messages/server";
-import { TalentShell } from "@/components/talent/shell";
 import { isPhone } from "@/server/view";
 import { ShellLoading } from "@/components/app/shell-loading";
 import { requireUser } from "@/server/auth/session";
@@ -18,7 +17,6 @@ import { resolvePlan } from "@/server/entitlements";
 import { ADMIN_SHELL_ROLES } from "@/server/auth/roles";
 import type { AbstractIntlMessages } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
-import { AvatarMenuContent } from "@/components/talent/web/avatar-menu";
 import { RecruiterAvatarMenu } from "@/components/recruiter/avatar-menu";
 import { RecruiterBrief } from "@/components/recruiter/brief";
 import { recruiterChatTexts } from "@/components/recruiter/orbi";
@@ -32,7 +30,6 @@ import { hireMemberships, partnerMemberships } from "@/server/services/organizat
 import { introData } from "@/components/app/app-intro-data";
 import { introProfile } from "@/lib/app-intro";
 import { unreadCount } from "@/server/services/connect";
-import { followUpActions } from "@/server/services/follow-up";
 import { recruiterBarCounts } from "@/server/services/hire-phone";
 
 /** Signed-in space: every page below needs a session (checked on the server). */
@@ -73,12 +70,14 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
 
   // Personal space: the talent shell of the mobile redesign (docs/refonte-mobile).
   if (!partnerSpace && !space) {
-    // On a phone: Modèle B (docs/modele-b), dark, five tabs kept mounted.
-    if (phone) {
+    // Modèle B (docs/modele-b), dark, five tabs kept mounted: on a phone, and on a computer or a
+    // tablet since 07/11/2026 (the same screens, the menu on the left, `wide`).
+    {
       // The pill menu's count on Chat (docs/fil-menu-publication § 1).
       const unreadMessages = await unreadCount(db, { userId: user.id });
       return (
         <PhoneShell
+          wide={!phone}
           badges={{ messages: unreadMessages }}
           account={{
             id: user.id,
@@ -120,37 +119,6 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
         </PhoneShell>
       );
     }
-    const [followUp, unreadMessages, messages] = await Promise.all([
-      followUpActions(db, user.id).then((actions) => actions.total),
-      unreadCount(db, { userId: user.id }),
-      getMessages(),
-    ]);
-    // The conversation's texts only, for the Orbi panel of the web frame.
-    const orbiTexts = Object.fromEntries(
-      Object.entries(messages.talentOrbi).filter(
-        ([key]) => !["historyPage", "rules", "web"].includes(key),
-      ),
-    ) as AbstractIntlMessages;
-    return (
-      <TalentShell
-        account={{ id: user.id, name: user.name, firstName: user.firstName, image: user.image }}
-        unread={unread}
-        unreadMessages={unreadMessages}
-        followUp={followUp}
-        appearance={user.appearance}
-        reduceMotion={user.reduceMotion}
-        intro={intro}
-        orbiTexts={orbiTexts}
-        menu={
-          <Suspense fallback={null}>
-            <AvatarMenuContent user={{ id: user.id, name: user.name, image: user.image ?? null }} />
-          </Suspense>
-        }
-      >
-        <ContentBanners audience="talents" />
-        {children}
-      </TalentShell>
-    );
   }
 
   const t = await getTranslations("org.roles");

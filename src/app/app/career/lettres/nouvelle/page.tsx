@@ -12,7 +12,7 @@ import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { aiState, DOCUMENTS_GATE, tailorOffers } from "@/server/services/career-documents";
 import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("docs.letters.create");
@@ -28,7 +28,7 @@ export default async function NewLetterPage({
   searchParams,
 }: PageProps<"/app/career/lettres/nouvelle">) {
   const user = await requireUser("/app/career/lettres/nouvelle");
-  if (!(await isPhone())) redirect("/app/career/cv?vue=lettres&nouvelle=1");
+  if (!(await isModelB())) redirect("/app/career/cv?vue=lettres&nouvelle=1");
   const params = await searchParams;
   const [t, generate, check, plans, offers] = await Promise.all([
     getTranslations(),

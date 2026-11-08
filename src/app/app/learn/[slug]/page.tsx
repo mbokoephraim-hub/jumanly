@@ -21,7 +21,7 @@ import { forMeJobs } from "@/server/services/for-me";
 import { jobCards } from "@/server/services/jobs";
 import { getLearnerCourse, lessonsOf, requiredLessons } from "@/server/services/learn";
 import { planForCatalogLevel } from "@/server/services/plans";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { PhoneCourseScreen } from "@/components/phone/learn/pages";
 
 export async function generateMetadata({
@@ -70,7 +70,7 @@ export default async function LearnCoursePage({
 
   const user = await requireUser(`/app/learn/${slug}`);
   // The phone (Modèle B, lot B7): the course, and the attestation once it is finished.
-  if (await isPhone()) {
+  if (await isModelB()) {
     if (param("vue") === "terminee") {
       const certificate = await db.certificate.findFirst({
         where: { enrollment: { userId: user.id, course: { slug } }, revokedAt: null },

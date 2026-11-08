@@ -9,7 +9,7 @@ import { AutoSelect } from "@/components/talent/web/auto-select";
 import { db } from "@/server/db";
 import { connectViewer } from "@/server/hire-context";
 import { talentContactRequests } from "@/server/services/talent-search";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { RhTab } from "@/components/phone/recruteur/head";
 import {
   RhMessages,
@@ -35,7 +35,7 @@ export default async function MessagesPage({ searchParams }: PageProps<"/app/mes
   // A recruiting team: the Messages tab of the recruiter space (recruteur lot 5, planche MSG_R).
   if (viewer.hire) {
     // On a phone, the recruiter's Messages tab of Modèle B (lot M7).
-    if (await isPhone())
+    if (await isModelB())
       return (
         <RhMessagesTexts>
           <RhTab
@@ -55,7 +55,7 @@ export default async function MessagesPage({ searchParams }: PageProps<"/app/mes
     return <RecruiterInbox ctx={viewer.hire} params={params} />;
   }
   // On a phone, the Messages tab of Modèle B is kept mounted under the pages (lot B8).
-  if (await isPhone()) return null;
+  if (await isModelB()) return null;
 
   const t = await getTranslations();
   const q = typeof params.q === "string" ? params.q.slice(0, 100) : "";

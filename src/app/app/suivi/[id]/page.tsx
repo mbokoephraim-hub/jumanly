@@ -6,7 +6,7 @@ import {
 } from "@/components/phone/career/application-server";
 import { ApplicationDetail } from "@/components/talent/suivi/application-detail";
 import { requireUser } from "@/server/auth/session";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("candidature");
@@ -26,7 +26,7 @@ export default async function ApplicationPage({
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const user = await requireUser(`/app/suivi/${id}`);
   const plain = Object.keys(query).length === 0;
-  if (plain && (await isPhone()) && (await phoneCoversApplication(user.id, id)))
+  if (plain && (await isModelB()) && (await phoneCoversApplication(user.id, id)))
     return <PhoneApplicationScreen userId={user.id} userName={user.name} id={id} />;
   return (
     <div className="t-large t-ca-page">

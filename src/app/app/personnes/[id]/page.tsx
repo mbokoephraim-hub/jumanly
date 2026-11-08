@@ -10,7 +10,7 @@ import { db } from "@/server/db";
 import { authorFeed } from "@/server/services/feed";
 import { recordProfileVisit } from "@/server/services/audience";
 import { personProfile } from "@/server/services/person-profile";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export const metadata: Metadata = { robots: { index: false } };
 
@@ -26,7 +26,7 @@ export default async function PersonPage({
 }: PageProps<"/app/personnes/[id]">) {
   const { id } = await params;
   const user = await requireUser(`/app/personnes/${id}`);
-  if (!(await isPhone())) redirect("/app");
+  if (!(await isModelB())) redirect("/app");
   // « Voir comme les autres » from Carrière (docs/carriere-v3): one's own profile as a
   // connection sees it; otherwise one's own space.
   const self = id === user.id;

@@ -15,7 +15,7 @@ import { answerInterviewAction, finishInterviewAction } from "@/server/actions/c
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { gapCourses } from "@/server/matching/service";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { PhoneInterviewAnswer, PhoneInterviewReport } from "@/components/phone/interview/report";
 import { PhoneInterviewRun } from "@/components/phone/interview/run";
 import {
@@ -54,7 +54,7 @@ export default async function PracticeSessionPage({
   const session = await getInterview(db, user.id, id);
   if (!session) notFound();
   // On the phone (Modèle B, lot B6): the session, then the report and each answer.
-  if (await isPhone()) {
+  if (await isModelB()) {
     const origin = await originOf(query);
     const answer = Number(query.reponse);
     if (session.status === "active")

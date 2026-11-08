@@ -11,7 +11,7 @@ import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { personProfile } from "@/server/services/person-profile";
 import { getFullProfile } from "@/server/services/profile";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("phoneCareer.form");
@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
  */
 export default async function CareerEditPage() {
   const user = await requireUser("/app/career/profil");
-  if (!(await isPhone())) redirect("/app/profil?fenetre=modifier");
+  if (!(await isModelB())) redirect("/app/profil?fenetre=modifier");
   const [profile, recruiter, person] = await Promise.all([
     getFullProfile(db, user.id),
     db.recruiterProfile.findUnique({ where: { userId: user.id }, select: { id: true } }),

@@ -8,7 +8,7 @@ import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { parseProject, portfolioLevel, projectText } from "@/server/services/portfolio";
 import { ensureProfile } from "@/server/services/profile";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("phoneCareer.project");
@@ -27,7 +27,7 @@ export default async function CareerProjectPage({
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const user = await requireUser(`/app/career/portfolio/${id}`);
   const fresh = id === "nouvelle";
-  if (!(await isPhone()))
+  if (!(await isModelB()))
     redirect(fresh ? "/app/profil?fenetre=projet" : `/app/profil?fenetre=projet&id=${id}`);
   const profile = await ensureProfile(db, user.id);
   const document = fresh

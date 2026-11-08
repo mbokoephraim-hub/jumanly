@@ -7,7 +7,7 @@ import { orbiAides } from "@/lib/orbi";
 import { OrbiChat } from "@/components/talent/orbi-chat";
 import { AI_CREDITS_KEY } from "@/server/ai";
 import { requireUser } from "@/server/auth/session";
-import { phoneTalentRedirect } from "@/server/phone-routes";
+import { phoneTalentRedirect, isModelB } from "@/server/phone-routes";
 import { db } from "@/server/db";
 import { usage } from "@/server/entitlements";
 import { getActiveSpace } from "@/server/hire-context";
@@ -15,7 +15,6 @@ import { getOrbiConversation, listOrbiConversations } from "@/server/services/or
 import { OrbiHistoryAside } from "@/components/talent/orbi-history";
 import { RecruiterOrbi } from "@/components/recruiter/orbi";
 import { RhOrbi } from "@/components/phone/recruteur/orbi";
-import { isPhone } from "@/server/view";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("talentOrbi");
@@ -40,7 +39,7 @@ export default async function OrbiPage({ searchParams }: PageProps<"/app/orbi">)
   // In an organization's space: the recruiting assistant (recruteur lot 5, planche `ORB_R`).
   const space = await getActiveSpace(user.id);
   // On a phone, the recruiter's page of Modèle B (recruteur M7, planche 184).
-  if (space && typeof params.c !== "string" && (await isPhone()))
+  if (space && typeof params.c !== "string" && (await isModelB()))
     return (
       <RhOrbi
         ctx={{ userId: user.id, organizationId: space.organizationId, role: space.role }}

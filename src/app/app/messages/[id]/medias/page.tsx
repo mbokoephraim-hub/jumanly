@@ -4,7 +4,7 @@ import { MessagesTexts, loadThread } from "@/components/phone/messages/server";
 import { PhoneMedias, type MediaTab } from "@/components/phone/messages/medias";
 import { requireUser } from "@/server/auth/session";
 import { getActiveSpace } from "@/server/hire-context";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export const metadata: Metadata = { robots: { index: false } };
 
@@ -17,7 +17,7 @@ export default async function MediasPage({
 }: PageProps<"/app/messages/[id]/medias">) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const user = await requireUser(`/app/messages/${id}/medias`);
-  if (!(await isPhone()) || (await getActiveSpace(user.id))) redirect(`/app/messages/${id}`);
+  if (!(await isModelB()) || (await getActiveSpace(user.id))) redirect(`/app/messages/${id}`);
   const { view } = await loadThread(user, id);
   const tab = TABS.find((key) => key === query.onglet) ?? "medias";
   return (

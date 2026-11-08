@@ -45,7 +45,7 @@ import {
   transcriptCues,
 } from "@/server/services/learn";
 import { lessonResume } from "@/server/services/lesson-progress";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { PhoneLessonScreen } from "@/components/phone/learn/pages";
 
 export async function generateMetadata({
@@ -77,7 +77,7 @@ export default async function LessonPage({
     typeof query[key] === "string" ? (query[key] as string) : undefined;
   const user = await requireUser(`/app/learn/${slug}/${lecon}`);
   // The phone (Modèle B, lot B7, planches Formation-lecon et -quiz).
-  if (await isPhone())
+  if (await isModelB())
     return (
       <PhoneLessonScreen
         user={user}

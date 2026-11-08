@@ -8,7 +8,7 @@ import { requireUser } from "@/server/auth/session";
 import { getContentOverrides } from "@/server/queries/public";
 import { faqItems } from "@/server/services/contents";
 import { PhoneHelpScreen } from "@/components/phone/career/settings-server";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("aide");
@@ -56,7 +56,7 @@ export default async function HelpPage({ searchParams }: PageProps<"/app/compte/
     })),
   }));
   // The phone (Modèle B, planche Carrière-aide): the first question of each theme, then the e-mail.
-  if ((await isPhone()) && !params.q && !params.theme)
+  if ((await isModelB()) && !params.q && !params.theme)
     return (
       <PhoneHelpScreen questions={groups.flatMap((group) => group.items.slice(0, 1)).slice(0, 5)} />
     );

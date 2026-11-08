@@ -29,7 +29,7 @@ import {
 } from "@/components/phone/career/settings-server";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { isOrgAdmin } from "@/server/services/hire-phone-account";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("parametres");
@@ -112,7 +112,7 @@ export default async function SettingsPage({ searchParams }: PageProps<"/app/par
     ) : null;
   if (space) {
     // The phone: the same page as a talent's, with the recruiter's rows (Ephraïm, 27/10/2026).
-    if ((await isPhone()) && one(params.supprimer) !== "1")
+    if ((await isModelB()) && one(params.supprimer) !== "1")
       return (
         <>
           {changed}
@@ -126,7 +126,7 @@ export default async function SettingsPage({ searchParams }: PageProps<"/app/par
     return <RecruiterSettings user={user} space={space} params={params} />;
   }
   // The phone (Modèle B, planche Carrière-parametres); deleting the account keeps its own sheet.
-  if ((await isPhone()) && one(params.supprimer) !== "1")
+  if ((await isModelB()) && one(params.supprimer) !== "1")
     return (
       <>
         {changed}

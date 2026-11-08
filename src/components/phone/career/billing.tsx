@@ -19,8 +19,19 @@ export type PlanCard = {
   href: string | null;
 };
 
-/** « Ma formule » (planche Carrière-abonnement): the talent plans, the current one outlined. */
-export function PhonePlans({ intro, plans }: { intro: string; plans: PlanCard[] }) {
+/**
+ * « Ma formule » (planche Carrière-abonnement): the talent plans, the current one outlined, then
+ * the invoices in PDF (as on the computer before, 07/11/2026).
+ */
+export function PhonePlans({
+  intro,
+  plans,
+  invoices,
+}: {
+  intro: string;
+  plans: PlanCard[];
+  invoices?: { title: string; text: string };
+}) {
   const t = useTranslations("phoneCareer.billing");
   return (
     <SettingsFrame title={t("title")} back="/app/parametres">
@@ -50,6 +61,15 @@ export function PhonePlans({ intro, plans }: { intro: string; plans: PlanCard[] 
           </section>
         ))}
       </div>
+      {invoices ? (
+        <Link href="/app/abonnement/factures" className="nb-ca-it">
+          <span>
+            {invoices.title}
+            <small className="nb-meta">{invoices.text}</small>
+          </span>
+          <PhoneIcon name="chevron" size={16} />
+        </Link>
+      ) : null}
       <p className="nb-meta nb-ca-intro">{t("applyFree")}</p>
     </SettingsFrame>
   );

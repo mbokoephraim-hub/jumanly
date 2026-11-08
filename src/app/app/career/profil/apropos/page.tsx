@@ -7,7 +7,7 @@ import { AboutForm } from "@/components/phone/career/edit";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { getFullProfile } from "@/server/services/profile";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("phoneCareer.form");
@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 /** « À propos » on the phone (planche Carrière-apropos): a title, the text and Orbi's rewrite. */
 export default async function CareerAboutPage() {
   const user = await requireUser("/app/career/profil/apropos");
-  if (!(await isPhone())) redirect("/app/profil?fenetre=modifier");
+  if (!(await isModelB())) redirect("/app/profil?fenetre=modifier");
   const profile = await getFullProfile(db, user.id);
   return (
     <CareerTexts>

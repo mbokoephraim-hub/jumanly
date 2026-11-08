@@ -24,7 +24,7 @@ import {
   TRIAL_DAYS,
 } from "@/server/services/subscriptions";
 import { PhonePayScreen } from "@/components/phone/career/settings-server";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("paiement");
@@ -57,7 +57,7 @@ export default async function PayPage({ searchParams }: PageProps<"/app/abonneme
   const subject = await billingSubject(db, user.id, plan.family);
   if (!subject) redirect("/app/abonnement");
   // The phone (Modèle B, planches Carrière-paiement): a talent paying for themself.
-  if (subject.type === "user" && params.essai !== "1" && (await isPhone())) {
+  if (subject.type === "user" && params.essai !== "1" && (await isModelB())) {
     const screen = await PhonePayScreen({ userId: user.id, plan, paymentId });
     if (screen) return screen;
   }

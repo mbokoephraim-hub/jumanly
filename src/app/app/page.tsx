@@ -27,7 +27,7 @@ import { jobCards } from "@/server/services/jobs";
 import { nextLessons } from "@/server/services/learn-academy";
 import { completeness, getFullProfile } from "@/server/services/profile";
 import { readSignupFlow } from "@/server/signup-flow";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("forMe");
@@ -59,7 +59,7 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
   if (await getActiveSpace(user.id)) redirect("/app/hire");
   if (await getPartnerSpace(user.id)) redirect("/app/partenaire");
   // On a phone the Fil is the tab kept mounted by the layout (Modèle B, lot B3): nothing here.
-  if (await isPhone()) return null;
+  if (await isModelB()) return null;
   const now = new Date();
 
   // « Payer plus tard » at sign-up: remind the plan that was chosen (partie 06 § 6.2).

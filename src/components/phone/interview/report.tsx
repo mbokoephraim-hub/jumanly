@@ -233,7 +233,14 @@ export function PhoneInterviewAnswer({ view, query }: { view: AnswerView; query:
 }
 
 /** « Mes simulations » (planche Entretien-historique). */
-export function PhoneInterviewHistory({ rows }: { rows: HistoryRow[] }) {
+export function PhoneInterviewHistory({
+  rows,
+  tips,
+}: {
+  rows: HistoryRow[];
+  /** The preparation sheets of /admin/contenus (free for everyone), opened in place. */
+  tips?: { id: string; title: string; line: string; body: string }[];
+}) {
   const t = useTranslations("phoneInterview");
   return (
     <div className="nb-page nb-iv nb-iv-hist-page" data-ecran="">
@@ -274,6 +281,27 @@ export function PhoneInterviewHistory({ rows }: { rows: HistoryRow[] }) {
             ))}
           </ul>
         )}
+        {tips && tips.length > 0 ? (
+          <section aria-labelledby="iv-conseils" className="nb-iv-fiches">
+            <h2 id="iv-conseils" className="nb-iv-fiches-t">
+              {t("list.tips")}
+            </h2>
+            {tips.map((tip) => (
+              <details key={tip.id} id={`conseil-${tip.id}`} className="nb-iv-fiche">
+                <summary>
+                  <span>
+                    <b>{tip.title}</b>
+                    <small className="nb-meta">{tip.line}</small>
+                  </span>
+                  <PhoneIcon name="chevron" size={16} />
+                </summary>
+                {tip.body.split(/\n\s*\n/).map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </details>
+            ))}
+          </section>
+        ) : null}
       </div>
     </div>
   );

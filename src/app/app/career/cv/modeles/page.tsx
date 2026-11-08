@@ -25,7 +25,7 @@ import { cx } from "@/lib/cx";
 import { setCvTemplate } from "@/server/actions/cv";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { templatesAccess, TEMPLATES_ACCESS_KEY } from "@/server/services/cv";
 import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
 
@@ -63,7 +63,7 @@ export default async function CvTemplatesPage({
   const user = await requireUser("/app/career/cv/modeles");
   const cvId = typeof query.cv === "string" ? query.cv : "";
   // The phone (docs/carriere-v3): the step Modèle of a CV, or of a new one.
-  if (await isPhone()) {
+  if (await isModelB()) {
     if (cvId) redirect(`/app/career/cv/${encodeURIComponent(cvId)}?etape=modele`);
     if (query.nouveau === "1") redirect("/app/career/cv/nouveau?etape=modele");
   }

@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { expect, test } from "./fixtures";
 import { FAKE_SIGNATURE_HEADER, signFakeWebhook } from "../../src/server/payments/fake";
 import { expectAccessible } from "./a11y";
@@ -7,8 +8,8 @@ import { demo, logIn, signUpFromPricing, testEmail } from "./session";
 // dial code (+243 by default) chosen apart.
 async function payWith(page: import("@playwright/test").Page, number: string) {
   await page.getByRole("radio", { name: /M-Pesa/ }).check();
-  // On a tablet or a computer (planche web talent-4 § 7) the number is on the same screen.
-  if (page.viewportSize()!.width < 768) await page.getByRole("button", { name: /^Payer/ }).click();
+  // The Modèle B screens, on every device since 07/11/2026: the number on its own screen.
+  await page.getByRole("button", { name: /^Payer/ }).click();
   await page.getByLabel("Numéro Mobile Money").fill(number);
   await page.getByRole("button", { name: /^Payer/ }).click();
 }
@@ -20,7 +21,6 @@ test("échec, réessai, paiement par webhook rejoué, facture et remboursement",
   browser,
   baseURL,
   request,
-  isMobile,
 }) => {
   test.setTimeout(180_000);
   const email = testEmail("paiement");
@@ -37,22 +37,14 @@ test("échec, réessai, paiement par webhook rejoué, facture et remboursement",
   // Waiting on the phone, then the provider's signed webhook confirms; replayed, it does nothing.
   await page.goto("/app/abonnement/payer?forfait=talent_starter");
   await payWith(page, "810 002 222");
-  if (isMobile) {
-    // Modèle B (lot B5): the waiting screen of the phone; the webhook, the invoice and the refund
-    // are the same rules, checked on the computer.
-    await expect(page.getByRole("heading", { name: "Paiement", level: 1 })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Comment valider ?" })).toBeVisible();
-    return;
-  }
-  await expect(page.getByRole("heading", { name: "Validez sur votre téléphone" })).toBeVisible();
-  // The number is never shown in full.
-  await expect(page.getByRole("main")).toContainText("+243 81 ••• 22");
-  await expect(page.getByRole("main")).not.toContainText("810002222");
-  await page.getByRole("button", { name: "Je n'ai rien reçu" }).click();
-  const reference = await page.getByText(/^Référence de la demande : fake_/).textContent();
-  const providerRef = reference!.replace("Référence de la demande : ", "").trim();
-  await page.keyboard.press("Escape");
-  const paymentId = new URL(page.url()).searchParams.get("paiement");
+  // Modèle B (lot B5): the waiting screen; the provider's reference is read in the database.
+  await expect(page.getByRole("heading", { name: "Paiement", level: 1 })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Comment valider ?" })).toBeVisible();
+  await expect(page).toHaveURL(/paiement=/);
+  const paymentId = new URL(page.url()).searchParams.get("paiement")!;
+  const providerRef = execFileSync("pnpm", ["exec", "tsx", "tests/e2e/payment-ref.ts", paymentId])
+    .toString()
+    .trim();
   const body = JSON.stringify({ id: `evt_${paymentId}`, providerRef, status: "succeeded" });
   const send = () =>
     request.post("/api/webhooks/payments/fake", {
@@ -69,10 +61,9 @@ test("échec, réessai, paiement par webhook rejoué, facture et remboursement",
     headers: { "content-type": "application/json", [FAKE_SIGNATURE_HEADER]: "00".repeat(32) },
   });
   expect(forged.status()).toBe(401);
-  await expect(page.getByRole("heading", { name: "Paiement reçu" })).toBeVisible({
+  await expect(page.getByRole("heading", { name: "Bienvenue en Starter" })).toBeVisible({
     timeout: 15_000,
   });
-  await expect(page.getByRole("main")).toContainText(/JMN-\d{4}-\d{6}/);
 
   // The invoice, as a PDF, in Factures.
   await page.goto("/app/abonnement/factures");
@@ -85,19 +76,10 @@ test("échec, réessai, paiement par webhook rejoué, facture et remboursement",
 
   // Upgrade: the unused time of Starter is deducted.
   await page.goto("/app/abonnement/payer?forfait=talent_pro");
-  // On a computer (planche web talent-4 § 7) the deduction is a line of the « Récapitulatif ».
-  if (page.viewportSize()!.width < 768)
-    await expect(
-      page.getByText(/Déjà déduit : .* pour les jours restants de Starter/),
-    ).toBeVisible();
-  else await expect(page.getByRole("term").filter({ hasText: "Déjà déduit" })).toBeVisible();
+  await expect(page.getByText(/Déjà déduit : .* pour les jours restants de Starter/)).toBeVisible();
   await page.goto("/app/abonnement");
   await expect(page.getByRole("main")).toContainText("Starter");
-  // On a computer (planche web talent-4 § 7) the last invoices are on the page itself.
-  if (page.viewportSize()!.width < 768)
-    await expect(page.getByRole("link", { name: /Factures/ })).toContainText("1 · en PDF");
-  else
-    await expect(page.getByRole("link", { name: /^Télécharger la facture JMN-/ })).toHaveCount(1);
+  await expect(page.getByRole("link", { name: /Factures/ })).toContainText("1 · en PDF");
   await expectAccessible(page);
 
   // The administrator records a manual refund.

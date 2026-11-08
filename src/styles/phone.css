@@ -9127,6 +9127,8 @@ input:checked + .nb-ca-radio::after {
   background: rgba(var(--nb-voile), 0.3);
 }
 .nb-fo-video {
+  /* « Reprise là où vous vous étiez arrêté » sits over the top of the video, not under the bar. */
+  position: relative;
   background: #000;
 }
 .nb-fo-video video {
@@ -11244,4 +11246,47 @@ input:checked + .nb-ca-radio::after {
 }
 .nb-fil-notifs .nb-rn-haut:not(:empty) {
   margin: 24px 20px 32px;
+}
+
+/* « Fiches pour préparer » sous « Mes simulations » (07/11/2026) : les fiches de l'admin, ouvertes sur place. */
+.nb-iv-fiches {
+  margin-top: 28px;
+}
+.nb-iv-fiches-t {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.nb-iv-fiche {
+  border-bottom: 1px solid var(--nb-filet);
+}
+.nb-iv-fiche summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  cursor: pointer;
+  list-style: none;
+  color: var(--nb-creme);
+}
+.nb-iv-fiche summary::-webkit-details-marker {
+  display: none;
+}
+.nb-iv-fiche summary > span {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.nb-iv-fiche summary svg {
+  transition: transform 0.2s;
+}
+.nb-iv-fiche[open] summary svg {
+  transform: rotate(90deg);
+}
+.nb-iv-fiche p {
+  padding: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--nb-gris);
 }

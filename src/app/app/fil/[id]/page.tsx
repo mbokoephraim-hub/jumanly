@@ -7,7 +7,7 @@ import { FilTexts, meOf, sendTargetViews } from "@/components/phone/fil/server";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { getPost } from "@/server/services/feed";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("phoneFil.detail");
@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function FilPostPage({ params, searchParams }: PageProps<"/app/fil/[id]">) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const user = await requireUser(`/app/fil/${id}`);
-  if (!(await isPhone())) redirect("/app");
+  if (!(await isModelB())) redirect("/app");
   const now = new Date();
   const [data, words, targets] = await Promise.all([
     getPost(db, user.id, id, now),

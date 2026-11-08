@@ -16,7 +16,7 @@ import { db } from "@/server/db";
 import { CV_FILE_MAX_BYTES } from "@/server/services/cv-file";
 import { parseImport } from "@/server/services/cv-import";
 import { getFullProfile } from "@/server/services/profile";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { can } from "@/server/entitlements";
 import { tailorOffers } from "@/server/services/career-documents";
 import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
@@ -50,7 +50,7 @@ const STEPS = ["depart", "modele", "orbi", "import", "trouve"] as const;
 export default async function NewCvPage({ searchParams }: PageProps<"/app/career/cv/nouveau">) {
   const query = await searchParams;
   const user = await requireUser("/app/career/cv/nouveau");
-  if (!(await isPhone())) redirect("/app/career/cv");
+  if (!(await isModelB())) redirect("/app/career/cv");
   const t = await getTranslations();
   const step = STEPS.find((key) => key === query.etape) ?? "depart";
 

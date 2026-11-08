@@ -10091,7 +10091,9 @@
       "filNew": "Fil, {count, plural, one {# nouvelle publication} other {# nouvelles publications}}",
       "explorerNew": "Explorer, {count, plural, one {# nouvelle offre} other {# nouvelles offres}}",
       "carriereNew": "Carrière, {count, plural, one {# nouvelle sur vos candidatures} other {# nouvelles sur vos candidatures}}",
-      "many": "5+"
+      "many": "5+",
+      "home": "Jumanly, aller au Fil",
+      "brand": "jumanly"
     },
     "refresh": {
       "loading": "Actualisation…"
@@ -13534,6 +13536,7 @@
       "today": "Aujourd’hui",
       "ongoing": "En cours",
       "empty": "Pas encore de simulation. Choisissez un sujet et lancez-vous : c’est privé.",
+      "tips": "Fiches pour préparer",
       "new": "Nouvelle simulation"
     },
     "bank": {

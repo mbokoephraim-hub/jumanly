@@ -17,72 +17,48 @@ async function signUpTalent(page: Page, email: string) {
 
 // E6 definition of done: a score explained on the talent side, a skill imported from a pasted CV
 // changes it, the talent asks for a human review and an administrator answers it.
-test("score expliqué, import de CV et révision humaine", async ({
-  page,
-  browser,
-  baseURL,
-  isMobile,
-}) => {
+test("score expliqué, import de CV et révision humaine", async ({ page, browser, baseURL }) => {
   test.setTimeout(180_000);
   const email = testEmail("matching");
   await signUpTalent(page, email);
 
-  // Without skills, no score: the talent is invited to add them. (On a phone, the first profile
-  // of Modèle B already asks for three skills.)
+  // The first profile of Modèle B already asks for three skills: the offer has a score.
   await page.goto(`/app/jobs/${JOB}`);
-  if (!isMobile)
-    await expect(page.getByRole("link", { name: "Ajouter mes compétences" }).first()).toBeVisible();
 
   // A Word CV → « Lu dans votre fichier · à vérifier » → profile (lot 6c: the file is read, never kept).
   // On a phone, « Créer un CV · Importer » (docs/carriere-v3, captures 13 to 15).
-  await page.goto(isMobile ? "/app/career/cv/nouveau?etape=import" : "/app/profil/import");
+  await page.goto("/app/career/cv/nouveau?etape=import");
   await expect(page.getByRole("heading", { name: "Importer un CV", level: 1 })).toBeVisible();
   // The field sends its form once hydrated: try again if the file was chosen too early.
   await expect(async () => {
     await page
-      .locator(isMobile ? "#cv-nouveau-fichier" : "#import-fichier")
+      .locator("#cv-nouveau-fichier")
       .setInputFiles(
         fictiveDocx([
           "Assistante administrative.",
           "Maîtrise de Microsoft Excel et de l'archivage.",
         ]),
       );
-    await expect(
-      page.getByText(
-        isMobile ? "Voici ce qu’Orbi a trouvé" : "Lu dans « cv-fictif.docx » · à vérifier",
-      ),
-    ).toBeVisible({ timeout: 5_000 });
+    await expect(page.getByText("Voici ce qu’Orbi a trouvé")).toBeVisible({ timeout: 5_000 });
   }).toPass({ timeout: 30_000 });
-  if (isMobile) {
-    await expect(page.getByRole("checkbox", { name: /compétence/ })).toBeChecked();
-    // « Remplir mon profil avec ce CV » fills the profile and opens the CV in the reader (31/10).
-    await page.getByRole("button", { name: /^Remplir mon profil avec ce CV/ }).click();
-    await expect(page).toHaveURL(/\/lire\?importe=profil/, { timeout: 20_000 });
-    await expect(page.getByText(/Excel/).filter({ visible: true }).first()).toBeVisible();
-  } else {
-    await expect(page.getByRole("switch", { name: /compétence/ })).toBeChecked();
-    await page.getByRole("button", { name: "Ajouter à mon profil" }).click();
-    await expect(page).toHaveURL(/\/app\/profil\?import=/);
-    await expect(page.locator("#competences")).toContainText("Excel");
-  }
+  await expect(page.getByRole("checkbox", { name: /compétence/ })).toBeChecked();
+  // « Remplir mon profil avec ce CV » fills the profile and opens the CV in the reader (31/10).
+  await page.getByRole("button", { name: /^Remplir mon profil avec ce CV/ }).click();
+  await expect(page).toHaveURL(/\/lire\?importe=profil/, { timeout: 20_000 });
+  await expect(page.getByText(/Excel/).filter({ visible: true }).first()).toBeVisible();
 
   // The score and its « Pourquoi ? », with what is missing.
   // (planche talent-1 § 4: the reasons open in a sheet over the offer).
   // On a phone (Modèle B), the offer's Orbi card links to the full score (`?pourquoi=1`).
-  if (isMobile) {
-    await page.goto(`/app/jobs/${JOB}`);
-    // The detail opens in a sheet over the offer (31/10); « Contester ce score » leads to the
-    // full score (`?pourquoi=1`).
-    await page
-      .getByRole("button", { name: "Voir le détail du score" })
-      .filter({ visible: true })
-      .click();
-    await page.getByRole("link", { name: "Contester ce score" }).filter({ visible: true }).click();
-    await expect(page).toHaveURL(/pourquoi=1/);
-  } else {
-    await page.goto(`/app/jobs/${JOB}`);
-    await page.getByRole("button", { name: /^Pourquoi \d+ % \?/ }).click();
-  }
+  await page.goto(`/app/jobs/${JOB}`);
+  // The detail opens in a sheet over the offer (31/10); « Contester ce score » leads to the
+  // full score (`?pourquoi=1`).
+  await page
+    .getByRole("button", { name: "Voir le détail du score" })
+    .filter({ visible: true })
+    .click();
+  await page.getByRole("link", { name: "Contester ce score" }).filter({ visible: true }).click();
+  await expect(page).toHaveURL(/pourquoi=1/);
   const why = page.getByRole("dialog", { name: /Pourquoi \d+ % \?/ });
   await expect(why).toBeVisible();
   await expect(why).toContainText("Compétences requises");

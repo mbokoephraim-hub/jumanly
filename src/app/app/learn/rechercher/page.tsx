@@ -20,7 +20,7 @@ import {
 import { catalogLevelOf } from "@/server/services/learn";
 import { listDomains } from "@/server/services/learn-domains";
 import { pathForCourses } from "@/server/services/learn-space";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { redirect } from "next/navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -43,7 +43,7 @@ export default async function LearnSearchPage({
   const params = await searchParams;
   const user = await requireUser("/app/learn/rechercher");
   // The phone (Modèle B, lot B7): the search lives at the top of the Formation tab.
-  if (await isPhone()) redirect("/app/learn");
+  if (await isModelB()) redirect("/app/learn");
   const t = await getTranslations();
   const d = dynamic(t);
   const filters = parseCourseFilters(params);

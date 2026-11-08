@@ -176,6 +176,8 @@ export async function signUpWithEmail(page: Page, email: string, name = "Awa Fic
   await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
   await openConfirmationLink(page, email, since);
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
+  // The talent's first steps are Modèle B's on a computer too (07/11/2026): the name is asked again.
+  phoneNames.set(page, name);
 }
 
 /**
@@ -222,22 +224,11 @@ export async function finishOnboarding(page: Page, place?: { country: string; ci
  * editor is open.
  */
 export async function newCvFromList(page: Page) {
-  // On the phone (docs/carriere-v3): « Nouveau CV » → « Choisir un modèle », the first free one,
-  // « Continuer » opens the CV on Contenu.
-  if ((page.viewportSize()?.width ?? 1280) < 768) {
-    await page.goto("/app/career/cv/nouveau?etape=modele");
-    await page.getByRole("button", { name: "Continuer" }).click();
-    await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+\?etape=contenu/);
-    return new URL(page.url()).pathname.split("/").pop()!;
-  }
-  await page.goto("/app/career/cv");
-  // « Nouveau CV » on a phone, « Nouveau CV · Depuis mon profil » on a computer (studio CV web).
-  await page
-    .getByRole("button", { name: /^Nouveau CV/ })
-    .filter({ visible: true })
-    .click();
-  await page.getByRole("dialog").getByRole("button", { name: "Créer et ouvrir" }).click();
-  await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
+  // The Modèle B on every device since 07/11/2026 (docs/carriere-v3): « Nouveau CV » → « Choisir un
+  // modèle », the first free one, « Continuer » opens the CV on Contenu.
+  await page.goto("/app/career/cv/nouveau?etape=modele");
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+\?etape=contenu/);
   return new URL(page.url()).pathname.split("/").pop()!;
 }
 

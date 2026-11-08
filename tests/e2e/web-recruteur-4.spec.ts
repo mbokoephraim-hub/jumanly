@@ -208,11 +208,10 @@ test("web recruteur 4 : proposition envoyée puis acceptée, menus ancrés de la
   await talent.goto("/inscription?profil=talent");
   await signUpWithEmail(talent, testEmail("web4-visible"), "Neema Fictive");
   await finishOnboarding(talent, { country: "Congo", city });
+  // The talent's Paramètres are Modèle B's on a computer too (07/11/2026): saved at once.
   await talent.goto("/app/parametres/confidentialite");
-  await talent.getByRole("button", { name: /Qui voit mon profil/ }).click();
-  await talent.getByRole("radio", { name: /Visible des recruteurs/ }).check({ force: true });
-  await talent.getByRole("button", { name: "Enregistrer" }).click();
-  await expect(talent.getByText("C'est enregistré.")).toBeVisible();
+  await talent.getByRole("radio", { name: /^Les recruteurs/ }).click();
+  await expect(talent.getByText("C’est enregistré.")).toBeVisible();
 
   await page.setViewportSize({ width: 1440, height: 900 });
   const { email } = freshRecruiter("rx-web4-prop", "hire.scorecards");
@@ -248,13 +247,16 @@ test("web recruteur 4 : proposition envoyée puis acceptée, menus ancrés de la
   await page.keyboard.press("Escape");
 
   // The talent accepts: the recruiter's news opens the conversation on « … a accepté ».
-  await talent.goto("/app/messages");
-  await talent
-    .getByRole("button", { name: /souhaite échanger avec vous/ })
-    .first()
-    .click();
-  await talent.getByRole("dialog").getByRole("button", { name: "Accepter et échanger" }).click();
-  await expect(talent).toHaveURL(/\/app\/messages\/[^/?]+\?ok=relation/);
+  // Chat (Modèle B, lot B8, on a computer too since 07/11/2026): « Demandes de connexion ».
+  await talent.goto("/app/messages/connexions");
+  const card = talent.locator(".nb-cx-carte").first();
+  await expect(card).toBeVisible();
+  await card.getByRole("button", { name: "Accepter" }).click();
+  // The accepted card offers « Écrire à … » (the list may move while it settles).
+  const write = talent.locator(".nb-cx-carte").getByRole("link", { name: /^Écrire à / });
+  await expect(write).toHaveCount(1);
+  await write.click();
+  await expect(talent).toHaveURL(/\/app\/messages\/[^/?]+\?de=connexions$/);
   const conversation = new URL(talent.url()).pathname;
   await context.close();
 

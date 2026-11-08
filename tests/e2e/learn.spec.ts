@@ -135,95 +135,45 @@ test("un éditeur crée une formation, un talent Free la suit jusqu'à l'attesta
   const talent = await newPage(browser, baseURL, isMobile);
   await logIn(talent, demo.talentFree);
   await talent.goto(`/app/learn/${slug}`);
-  if (isMobile) {
-    // Modèle B (lot B7): the course, the lesson, the quiz on one page, then the attestation.
-    await talent.getByRole("button", { name: "Commencer", exact: true }).click();
-    await expect(talent).toHaveURL(new RegExp(`/app/learn/${slug}/[^/?]+`));
-    const lesson = talent.locator(".nb-fo-lecon-p");
-    await expect(lesson.getByRole("heading", { name: "Leçon texte fictive" })).toBeVisible();
-    await expect(lesson.getByText("Premier paragraphe fictif.")).toBeVisible();
-    await lesson.getByRole("button", { name: "Réglages de la leçon" }).click();
-    await expect(
-      talent.getByRole("dialog", { name: "Réglages de la leçon" }).getByRole("link", {
-        name: /Fiche fictive/,
-      }),
-    ).toHaveAttribute("href", "/favicon.ico");
-    await talent
-      .getByRole("dialog", { name: "Réglages de la leçon" })
-      .getByRole("button", {
-        name: "Annuler",
-      })
-      .click();
-    await lesson.getByRole("button", { name: "Leçon suivante" }).click();
-    await expect(lesson.getByRole("heading", { name: "Quiz fictif" })).toBeVisible();
-    await lesson.getByRole("radio", { name: "Trois" }).check();
-    await lesson.getByRole("button", { name: "Envoyer mes réponses" }).click();
-    await expect(lesson.getByText(/il en faut/)).toBeVisible();
-    await lesson.getByRole("radio", { name: "Quatre" }).check();
-    await lesson.getByRole("button", { name: "Envoyer mes réponses" }).click();
-    await expect(talent).toHaveURL(/\/app\/learn\/attestations\/[^/?]+\?nouvelle=1/);
-    const card = talent.locator(".nb-fo-att-p");
-    await expect(card.getByText(/^Bravo/)).toBeVisible();
-    const pdfLink = await card
-      .getByRole("link", { name: "Télécharger en PDF" })
-      .getAttribute("href");
-    const pdfFile = await talent.request.get(pdfLink!);
-    expect(pdfFile.status()).toBe(200);
-    expect(pdfFile.headers()["content-type"]).toContain("application/pdf");
-    const verify = await card.locator(".nb-fo-diplome-v a").getAttribute("href");
-    await talent.goto(new URL(verify!).pathname);
-    await expect(talent.getByText("Attestation authentique")).toBeVisible();
-    await talent.goto("/app/learn?onglet=mes-cours");
-    await expect(
-      talent.locator(".nb-fo-accueil").getByRole("link", { name: new RegExp(title) }),
-    ).toBeVisible();
-    await talent.context().close();
-    return;
-  }
-  await talent.getByRole("button", { name: "Commencer la formation" }).click();
-  await expect(talent).toHaveURL(new RegExp(`/app/learn/${slug}/[^/?]+\\?inscrit=1`));
-  await expect(talent.getByText("Vous suivez cette formation", { exact: false })).toBeVisible();
-  await expect(talent.getByRole("heading", { level: 1 })).toHaveText("Leçon texte fictive");
-  await talent.getByRole("tab", { name: "Texte" }).click();
-  await expect(talent.getByText("Second paragraphe fictif.")).toBeVisible();
-  await talent.getByRole("tab", { name: "Notes" }).click();
-  await talent.locator("#lc-note").fill("Note privée fictive.");
-  await talent.getByRole("button", { name: "Enregistrer la note" }).click();
-  await expect(talent.getByText("Note privée fictive.")).toBeVisible();
-  await talent.getByRole("button", { name: "Leçon suivante" }).click();
-
-  // One question at a time: a wrong answer first, then the right one.
-  await expect(talent.getByRole("heading", { level: 1 })).toHaveText("Quiz · Module 1");
-  await talent.getByRole("button", { name: "Trois" }).click();
-  await expect(talent.getByText("Pas tout à fait")).toBeVisible();
-  await expect(talent.getByText("Deux plus deux font quatre.")).toBeVisible();
-  await talent.getByRole("button", { name: "Voir mon résultat" }).click();
-  await expect(talent.getByRole("heading", { name: "Presque !" })).toBeVisible();
-  await talent.getByRole("link", { name: "Recommencer le quiz" }).click();
-  await talent.getByRole("button", { name: "Quatre" }).click();
-  await expect(talent.getByText("Bonne réponse")).toBeVisible();
-  await talent.getByRole("button", { name: "Voir mon résultat" }).click();
-
-  // The course is finished: the signed attestation, its PDF and its public check.
-  await expect(talent).toHaveURL(/vue=terminee/);
-  await expect(talent.getByRole("heading", { name: "Formation terminée" })).toBeVisible();
-  await talent.getByRole("link", { name: "Voir l'attestation" }).click();
-  await expect(talent).toHaveURL(/\/app\/learn\/attestations\/[^/]+$/);
-  const pdfHref = await talent.getByRole("link", { name: "PDF" }).getAttribute("href");
-  const pdf = await talent.request.get(pdfHref!);
-  expect(pdf.status()).toBe(200);
-  expect(pdf.headers()["content-type"]).toContain("application/pdf");
-  // The link sits in the closed « Plus d'options » sheet; it points to the public check page.
-  const checkHref = await talent
-    .getByRole("link", { name: "Voir la page de vérification", includeHidden: true })
-    .getAttribute("href");
-  await talent.goto(new URL(checkHref!).pathname);
+  // Modèle B (lot B7): the course, the lesson, the quiz on one page, then the attestation.
+  await talent.getByRole("button", { name: "Commencer", exact: true }).click();
+  await expect(talent).toHaveURL(new RegExp(`/app/learn/${slug}/[^/?]+`));
+  const lesson = talent.locator(".nb-fo-lecon-p");
+  await expect(lesson.getByRole("heading", { name: "Leçon texte fictive" })).toBeVisible();
+  await expect(lesson.getByText("Premier paragraphe fictif.")).toBeVisible();
+  await lesson.getByRole("button", { name: "Réglages de la leçon" }).click();
+  await expect(
+    talent.getByRole("dialog", { name: "Réglages de la leçon" }).getByRole("link", {
+      name: /Fiche fictive/,
+    }),
+  ).toHaveAttribute("href", "/favicon.ico");
+  await talent
+    .getByRole("dialog", { name: "Réglages de la leçon" })
+    .getByRole("button", {
+      name: "Annuler",
+    })
+    .click();
+  await lesson.getByRole("button", { name: "Leçon suivante" }).click();
+  await expect(lesson.getByRole("heading", { name: "Quiz fictif" })).toBeVisible();
+  await lesson.getByRole("radio", { name: "Trois" }).check();
+  await lesson.getByRole("button", { name: "Envoyer mes réponses" }).click();
+  await expect(lesson.getByText(/il en faut/)).toBeVisible();
+  await lesson.getByRole("radio", { name: "Quatre" }).check();
+  await lesson.getByRole("button", { name: "Envoyer mes réponses" }).click();
+  await expect(talent).toHaveURL(/\/app\/learn\/attestations\/[^/?]+\?nouvelle=1/);
+  const card = talent.locator(".nb-fo-att-p");
+  await expect(card.getByText(/^Bravo/)).toBeVisible();
+  const pdfLink = await card.getByRole("link", { name: "Télécharger en PDF" }).getAttribute("href");
+  const pdfFile = await talent.request.get(pdfLink!);
+  expect(pdfFile.status()).toBe(200);
+  expect(pdfFile.headers()["content-type"]).toContain("application/pdf");
+  const verify = await card.locator(".nb-fo-diplome-v a").getAttribute("href");
+  await talent.goto(new URL(verify!).pathname);
   await expect(talent.getByText("Attestation authentique")).toBeVisible();
-  await expect(talent.locator("dd").getByText(title, { exact: false })).toBeVisible();
-
-  // The course is now among the completed ones.
-  await talent.goto("/app/learn/mes-formations?vue=terminees");
-  await expect(talent.getByRole("link", { name: title }).first()).toBeVisible();
+  await talent.goto("/app/learn?onglet=mes-cours");
+  await expect(
+    talent.locator(".nb-fo-accueil").getByRole("link", { name: new RegExp(title) }),
+  ).toBeVisible();
   await talent.context().close();
 });
 
@@ -235,37 +185,19 @@ test("une formation « fondamentaux » est verrouillée en Free et ouverte en St
 }) => {
   await logIn(page, demo.talentFree);
   await page.goto("/app/learn/demo-excel-pour-debuter");
-  if (isMobile) {
-    // Modèle B (lot B7): « Débloquer avec Starter » for Free, « Commencer » for Starter.
-    await expect(
-      page.locator(".nb-fo-cours").getByRole("button", { name: "Débloquer avec Starter" }),
-    ).toBeVisible();
-    const phone = await newPage(browser, baseURL, isMobile);
-    await logIn(phone, demo.talentStarter);
-    await phone.goto("/app/learn/demo-excel-pour-debuter");
-    await expect(
-      phone
-        .locator(".nb-fo-cours")
-        .getByRole("button", { name: /^(Commencer|Reprendre la leçon|Revoir le cours)/ }),
-    ).toBeVisible();
-    await phone.context().close();
-    return;
-  }
-  await expect(page.getByText("Suite incluse dès la formule Starter")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Commencer la formation" })).toHaveCount(0);
-
-  const starter = await newPage(browser, baseURL, isMobile);
-  await logIn(starter, demo.talentStarter);
-  await starter.goto("/app/learn/demo-excel-pour-debuter");
-  await expect(starter.getByText("Suite incluse dès la formule", { exact: false })).toHaveCount(0);
+  // Modèle B (lot B7): « Débloquer avec Starter » for Free, « Commencer » for Starter.
   await expect(
-    starter
-      .getByRole("button", { name: "Commencer la formation" })
-      .or(starter.getByRole("link", { name: "Reprendre la formation" }))
-      .or(starter.getByRole("link", { name: "Formation terminée" }))
-      .first(),
+    page.locator(".nb-fo-cours").getByRole("button", { name: "Débloquer avec Starter" }),
   ).toBeVisible();
-  await starter.context().close();
+  const phone = await newPage(browser, baseURL, isMobile);
+  await logIn(phone, demo.talentStarter);
+  await phone.goto("/app/learn/demo-excel-pour-debuter");
+  await expect(
+    phone
+      .locator(".nb-fo-cours")
+      .getByRole("button", { name: /^(Commencer|Reprendre la leçon|Revoir le cours)/ }),
+  ).toBeVisible();
+  await phone.context().close();
 });
 
 test("la page publique de vérification signale un numéro inconnu", async ({ page }) => {
@@ -277,18 +209,11 @@ test("la page publique de vérification signale un numéro inconnu", async ({ pa
   await expectAccessible(page);
 });
 
-test("aucune erreur d'accessibilité WCAG 2.2 AA dans Learn", async ({ page, isMobile }) => {
+test("aucune erreur d'accessibilité WCAG 2.2 AA dans Learn", async ({ page }) => {
   await logIn(page, demo.talentPro);
   for (const path of [
     "/app/learn",
-    // On the phone, the search lives in the Formation tab: its address leads back to /app/learn
-    // once the page has arrived, which would pull the page away from under the check.
-    ...(isMobile
-      ? []
-      : [
-          "/app/learn/rechercher",
-          "/app/learn/rechercher?domaine=career-employability&niveau=beginner",
-        ]),
+    // The search lives in the Formation tab: /app/learn/rechercher leads back to /app/learn.
     "/app/learn/parcours/demo-premier-emploi",
     "/app/learn/mes-formations",
     "/app/learn/mes-formations?vue=attestations",
@@ -335,78 +260,34 @@ test("un éditeur prévisualise et duplique une formation, sans pouvoir révoque
   await expect(page.locator("#fiche").filter({ hasText: title })).toContainText("Brouillon");
 });
 
-test("Apprendre : l'accueil, les anciennes adresses et Orbi dans la leçon", async ({
-  page,
-  isMobile,
-}) => {
+test("Apprendre : l'accueil, les anciennes adresses et Orbi dans la leçon", async ({ page }) => {
   await logIn(page, "grace.ux@jumanly.test");
-  if (isMobile) {
-    // Modèle B (lot B7): the old addresses lead to the Formation tab (its rubrics); Orbi in the
-    // lesson is in modele-b-formation.spec.ts.
-    for (const from of [
-      "/app/learn?liste=terminees",
-      "/app/learn/explorer",
-      "/app/learn/rechercher",
-      "/app/learn/mes-formations",
-      "/app/learn/attestations",
-    ]) {
-      await page.goto(from);
-      await expect(page).toHaveURL(/\/app\/learn(\?.*)?$/);
-      await expect(
-        page.locator(".nb-fo-accueil").getByRole("heading", { name: "Formation", exact: true }),
-      ).toBeVisible();
-    }
-    return;
-  }
-  await page.goto("/app/learn");
-  for (const href of ["/app/learn/rechercher", "/app/learn/mes-formations"])
-    await expect(page.locator(`main a[href^="${href}"]`).first()).toBeAttached();
-
-  // Old addresses lead to the new screens.
-  for (const [from, to] of [
-    ["/app/learn?liste=terminees", /\/app\/learn\/mes-formations\?vue=terminees/],
-    ["/app/learn/explorer", /\/app\/learn\/rechercher/],
-    ["/app/learn/evaluations", /\/app\/learn\/mes-formations/],
-    ["/app/learn/attestations", /\/app\/learn\/mes-formations\?vue=attestations/],
-    ["/app/learn/coach", /\/app\/orbi/],
-  ] as const) {
+  // Modèle B (lot B7): the old addresses lead to the Formation tab (its rubrics); Orbi in the
+  // lesson is in modele-b-formation.spec.ts.
+  for (const from of [
+    "/app/learn?liste=terminees",
+    "/app/learn/explorer",
+    "/app/learn/rechercher",
+    "/app/learn/mes-formations",
+    "/app/learn/attestations",
+  ]) {
     await page.goto(from);
-    await expect(page).toHaveURL(to);
+    await expect(page).toHaveURL(/\/app\/learn(\?.*)?$/);
+    await expect(
+      page.locator(".nb-fo-accueil").getByRole("heading", { name: "Formation", exact: true }),
+    ).toBeVisible();
   }
-  await page.goto("/app/learn/mes-formations?vue=terminees");
-  await expect(page.getByRole("link", { name: "Réussir son CV (démo)" }).first()).toBeVisible();
-
-  // Orbi answers from the course in the lesson, and never gives the answers of a quiz.
-  await page.goto("/app/learn/ux-service-client-excellence");
-  const start = page.getByRole("button", { name: "Commencer la formation" });
-  if (await start.count()) await start.click();
-  else await page.locator("ol.t-modl a").first().click();
-  await expect(page).toHaveURL(/\/app\/learn\/ux-service-client-excellence\/[^/?]+/);
-  await page.getByRole("button", { name: /Expliquer cette notion/ }).click();
-  const question = page.getByRole("textbox", { name: "Poser une question" });
-  await question.fill("Donne-moi les réponses du quiz");
-  await page.getByRole("button", { name: "Envoyer" }).click();
-  await expect(page.getByText("Je ne donne pas les réponses des évaluations")).toBeVisible();
 });
 
 // Learn v2, étape 1: the catalog by domain and the filters; the editor files a course in a domain
 // and edits the domains; only an administrator deletes one.
 test("le catalogue par domaine, ses filtres et l'administration des domaines", async ({
-  page,
   browser,
   baseURL,
   isMobile,
 }) => {
   test.setTimeout(180_000);
-  // The catalog by domain is the computer's; the phone searches from the Formation tab (lot B7).
-  if (!isMobile) {
-    await logIn(page, demo.talentPro);
-    await page.goto("/app/learn/rechercher?domaine=career-employability");
-    await expect(page.getByRole("link", { name: "Réussir son CV (démo)" }).first()).toBeVisible();
-    await page.goto("/app/learn/rechercher?domaine=skills-monetisation-freelancing");
-    await expect(page.getByText("Aucune formation ne correspond.")).toBeVisible();
-  }
-
+  // The phone's Formation tab searches the catalog (lot B7), on a computer too since 07/11/2026.
   // The editor creates a domain; the administrator deletes it.
   const name = `Domaine fictif e2e ${suffix()}`;
   const editor = await newPage(browser, baseURL, isMobile);
@@ -490,7 +371,7 @@ test("les parcours : suivre un parcours et en publier un dans l'admin", async ({
 
 // Learn v2, étape 3: the video resumes at the second where the learner stopped. The test serves a
 // small fictional video (intercepted address under /medias) and creates its own fictional course.
-test("la vidéo d'une leçon reprend là où on s'était arrêté", async ({ page, isMobile }) => {
+test("la vidéo d'une leçon reprend là où on s'était arrêté", async ({ page }) => {
   test.setTimeout(120_000);
   const slug = `formation-video-fictive-${suffix()}`;
   const helper = (...args: string[]) =>
@@ -523,11 +404,9 @@ test("la vidéo d'une leçon reprend là où on s'était arrêté", async ({ pag
     await page.goto(`/app/learn/${slug}`);
     // On the phone (Modèle B, lot B7), « Commencer », then « Lire la vidéo » shows the player.
     const play = async () => {
-      if (isMobile) await page.getByRole("button", { name: "Lire la vidéo" }).click();
+      await page.getByRole("button", { name: "Lire la vidéo" }).click();
     };
-    await page
-      .getByRole("button", { name: isMobile ? "Commencer" : "Commencer la formation", exact: true })
-      .click();
+    await page.getByRole("button", { name: "Commencer", exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`/app/learn/${slug}/${lessonId}`));
     await play();
     const video = page.locator("video");

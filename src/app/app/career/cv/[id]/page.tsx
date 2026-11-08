@@ -5,7 +5,7 @@ import { CV_STEPS } from "@/components/phone/cv/frame";
 import { PhoneCvSteps } from "@/components/phone/cv/steps";
 import { MobileCvEditor } from "@/components/talent/cv/mobile-editor";
 import { CvStudio } from "@/components/talent/cv/studio/studio";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("docs.editor");
@@ -24,7 +24,7 @@ export default async function CvEditorPage({
 }: PageProps<"/app/career/cv/[id]">) {
   const { id } = await params;
   const query = await searchParams;
-  if (await isPhone()) {
+  if (await isModelB()) {
     // « Adapter à une offre » keeps its screen (planche Carrière-cv-adapter).
     if (typeof query.adapter === "string" && !query.adaptation) {
       const adapter = query.adapter.slice(0, 60);

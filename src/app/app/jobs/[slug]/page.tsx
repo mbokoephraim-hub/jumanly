@@ -44,7 +44,7 @@ import { companyTone, explorerWords } from "@/components/phone/explorer/data";
 import { PhoneOffer, type PhoneOfferView } from "@/components/phone/explorer/offer";
 import { ExplorerTexts } from "@/components/phone/explorer/server";
 import { initialsOf, shortName } from "@/components/phone/fil/data";
-import { isPhone } from "@/server/view";
+import { isModelB } from "@/server/phone-routes";
 import { languageLabel } from "@/components/phone/career/data";
 import { flagOf } from "@/lib/countries";
 
@@ -174,7 +174,7 @@ export default async function TalentJobPage({
   // `?pourquoi=1` (the link « Voir le détail du score ») keeps the full score and its review, and
   // the answer to a review (`?revision=`) comes back to it.
   const fullScore = query.pourquoi === "1" || typeof query.revision === "string";
-  if (!fullScore && (await isPhone())) {
+  if (!fullScore && (await isModelB())) {
     const now = new Date();
     const words = await explorerWords(now);
     const tx = words.t;
