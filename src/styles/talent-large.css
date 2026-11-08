@@ -313,3 +313,154 @@ html:has(.nb-app[data-large]) .nb-feuille-dlg[open] {
   color: var(--nb-creme);
   font-weight: 600;
 }
+
+/* ─── Recruteur, étape 2 : le Fil et, à sa droite, « À traiter » (ce qui attend aujourd'hui). ─── */
+.nb-app[data-large] .nb-pile:has(.nb-rh-deux) {
+  --nb-largeur: 1060px;
+}
+.nb-rh-deux {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 32px;
+  align-items: start;
+}
+.nb-rh-cote {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 18px;
+}
+.nb-rh-cote-t {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--nb-creme);
+}
+.nb-rh-cote-carte {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 20px;
+  background: var(--nb-carte);
+  border: 1px solid var(--nb-filet);
+  color: var(--nb-creme);
+}
+.nb-rh-cote-carte > p {
+  font-size: 13px;
+  color: rgba(var(--nb-voile), 0.7);
+}
+.nb-rh-cote-tuiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.nb-rh-cote-tuiles a {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 84px;
+  padding: 14px;
+  border-radius: 18px;
+  background: var(--nb-carte);
+  border: 1px solid var(--nb-filet);
+  color: var(--nb-creme);
+}
+.nb-rh-cote-tuiles a:hover {
+  border-color: var(--nb-lime-t, #a6f26b);
+}
+.nb-rh-cote-tuiles b {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--nb-lime-t, #a6f26b);
+}
+.nb-rh-cote-tuiles a[data-zero] b {
+  color: rgba(var(--nb-voile), 0.5);
+}
+.nb-rh-cote-tuiles span {
+  font-size: 12.5px;
+  line-height: 1.3;
+  color: rgba(var(--nb-voile), 0.78);
+}
+.nb-rh-cote-h {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.nb-rh-cote-h h3 {
+  font-size: 15px;
+  font-weight: 700;
+}
+.nb-rh-cote-h a {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--nb-lime-t, #a6f26b);
+}
+.nb-rh-cote-liste {
+  display: flex;
+  flex-direction: column;
+}
+.nb-rh-cote-liste a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 4px;
+  border-radius: 14px;
+  color: var(--nb-creme);
+}
+.nb-rh-cote-liste a:hover {
+  background: rgba(var(--nb-voile), 0.05);
+}
+.nb-rh-cote-av {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(var(--nb-voile), 0.1);
+  color: var(--nb-creme);
+  font-size: 13px;
+  font-weight: 700;
+}
+.nb-rh-cote-x {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.nb-rh-cote-x b {
+  font-size: 14px;
+  font-weight: 600;
+}
+.nb-rh-cote-x small {
+  font-size: 12px;
+  color: rgba(var(--nb-voile), 0.68);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nb-rh-cote-etat[data-statut="confirmed"] {
+  color: var(--nb-lime-t, #a6f26b);
+}
+.nb-rh-cote-semaine {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  text-align: center;
+}
+.nb-rh-cote-semaine b {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+}
+.nb-rh-cote-semaine span {
+  font-size: 11.5px;
+  line-height: 1.3;
+  color: rgba(var(--nb-voile), 0.7);
+}

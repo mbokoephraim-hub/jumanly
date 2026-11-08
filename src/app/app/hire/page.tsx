@@ -1,4 +1,6 @@
 import { isModelB } from "@/server/phone-routes";
+import { isPhone } from "@/server/view";
+import { RhTodayRail } from "@/components/phone/recruteur/a-traiter";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
@@ -458,8 +460,10 @@ async function HireTodayPageContent() {
  */
 export default async function HireTodayPage() {
   if (await isModelB()) {
-    const { user } = await requireHire("/app/hire");
-    return (
+    const { user, ctx } = await requireHire("/app/hire");
+    // On a computer « À traiter » sits beside the Fil (08/11/2026); a phone keeps the Fil alone.
+    const wide = !(await isPhone());
+    const fil = (
       <RhTab
         tab="fil"
         actions={
@@ -473,6 +477,13 @@ export default async function HireTodayPage() {
       >
         <RhFil user={{ id: user.id, name: user.name, image: user.image ?? null }} />
       </RhTab>
+    );
+    if (!wide) return fil;
+    return (
+      <div className="nb-rh-deux">
+        {fil}
+        <RhTodayRail ctx={ctx} />
+      </div>
     );
   }
   return <HireTodayPageContent />;

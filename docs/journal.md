@@ -5710,3 +5710,11 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
 - Vérifié : build, lint, e2e recruteur et entreprise (ordinateur et téléphone). Rouge local seulement :
   `modele-b-recruteur-fil` (téléphone), la publication « Portes ouvertes » est poussée hors de la
   première page par les publications créées par les tests précédents dans la base locale.
+
+## 2026-11-08 · Recruteur sur ordinateur, étape 2 (Fil et « À traiter »)
+
+- Sur ordinateur, « À traiter » s'affiche à droite du Fil (`RhTodayRail`) : les quatre compteurs
+  (dossiers à examiner, invitations sans réponse, évaluations, messages), les nouvelles candidatures
+  (vers leur dossier), les prochains entretiens et la semaine. Le téléphone garde le Fil seul.
+- Test : `recruteur-ordinateur.spec.ts` (cadre, Outils, Entreprise, « À traiter », un outil n'allume
+  aucun onglet).
