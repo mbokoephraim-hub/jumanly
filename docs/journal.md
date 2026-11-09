@@ -5738,3 +5738,9 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
 - Sur ordinateur, l'Agenda montre le mois à gauche (il reste en place quand on fait défiler) et, à
   droite, le jour choisi, la suite du mois et les évaluations à rédiger. Cliquer sur un jour met à jour
   la colonne de droite. Le téléphone garde l'ordre l'un sous l'autre.
+
+## 2026-11-09 · Recruteur sur ordinateur, étape 6 (Talents et viviers)
+
+- Sur ordinateur, les filtres de Talents (domaine, poste, compétence, disponibilité, ville) restent
+  ouverts dans une colonne à gauche, pour Découvrir, Vivier et Propositions ; plus de fenêtre à ouvrir.
+  Les talents s'affichent trois par ligne. Le téléphone garde le bouton « Filtres » et sa fenêtre.

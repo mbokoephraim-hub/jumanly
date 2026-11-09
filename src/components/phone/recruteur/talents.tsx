@@ -66,6 +66,35 @@ function filtersOf(query: Query) {
  * Saving opens « Découvrir » with them.
  */
 export async function RhTalentFilters({ query }: { query: Query }) {
+  const t = await getTranslations("phoneRhCandidats");
+  const count = Object.values(filtersOf(query)).filter(Boolean).length;
+  return (
+    <RhFiltersSheet
+      label={t("filters.title")}
+      countLabel={t("filters.count", { count })}
+      count={count}
+      closeLabel={t("filters.close")}
+      version={JSON.stringify(filtersOf(query))}
+    >
+      <RhTalentFiltersForm query={query} />
+    </RhFiltersSheet>
+  );
+}
+
+/**
+ * The same filters, always open in a column beside the talents on a computer (08/11/2026: « une
+ * interface approfondie »): no sheet to open, the list changes as soon as they are applied.
+ */
+export async function RhTalentFiltersColumn({ query }: { query: Query }) {
+  const t = await getTranslations("phoneRhCandidats");
+  return (
+    <aside className="nb-rh-t-filtres" aria-label={t("filters.title")}>
+      <RhTalentFiltersForm query={query} />
+    </aside>
+  );
+}
+
+async function RhTalentFiltersForm({ query }: { query: Query }) {
   // In « Vivier » and « Propositions » the filters stay on the tab (Ephraïm, 03/11/2026).
   const tab = (["vivier", "propositions"] as const).find((key) => key === one(query.onglet));
   const reset = tab ? `/app/hire/talents?onglet=${tab}` : "/app/hire/talents";
@@ -73,84 +102,75 @@ export async function RhTalentFilters({ query }: { query: Query }) {
   const tt = await getTranslations("phoneRhTalents");
   const chosen = filtersOf(query);
   const ts = await getTranslations("access.onboarding.studies.field");
-  const count = Object.values(chosen).filter(Boolean).length;
   return (
-    <RhFiltersSheet
-      label={t("filters.title")}
-      countLabel={t("filters.count", { count })}
-      count={count}
-      closeLabel={t("filters.close")}
-      version={JSON.stringify(chosen)}
-    >
-      <form method="get" action="/app/hire/talents" className="nb-rh-pf-f">
-        {tab ? <input type="hidden" name="onglet" value={tab} /> : null}
-        <div className="nb-ex-f-tete">
-          <h2>{t("filters.title")}</h2>
-          <Link href={reset}>{t("filters.reset")}</Link>
-        </div>
-        <div className="nb-ex-f-corps">
-          <fieldset className="nb-rh-pf-grp">
-            <legend className="nb-ex-f-gl">{tt("filters.domain")}</legend>
-            <RhDomainPicker
-              options={studyFields.map((key) => ({ key, label: ts(key) }))}
-              chosen={chosen.domain ?? ""}
-              anyLabel={t("filters.any")}
-              placeholder={ts("search")}
-              none={ts("none")}
-            />
-          </fieldset>
-          <label className="nb-rh-pf-champ">
-            <span className="nb-ex-f-gl">{tt("filters.title")}</span>
-            <input
-              name="poste"
-              maxLength={60}
-              defaultValue={chosen.title}
-              placeholder={tt("filters.titlePlaceholder")}
-            />
-          </label>
-          <label className="nb-rh-pf-champ">
-            <span className="nb-ex-f-gl">{t("filters.skill")}</span>
-            <input
-              name="skill"
-              maxLength={60}
-              defaultValue={chosen.skill}
-              placeholder={t("filters.skillPlaceholder")}
-            />
-          </label>
-          <fieldset className="nb-rh-pf-grp">
-            <legend className="nb-ex-f-gl">{t("filters.dispo")}</legend>
-            <div className="nb-ex-f-opts">
-              {[
-                { value: "", label: t("filters.any") },
-                ...candidateAvailabilities.map((value) => ({
-                  value,
-                  label: t(`filters.dispoValue.${value}`),
-                })),
-              ].map((option) => (
-                <label key={option.value || "any"} className="nb-ex-f-opt nb-rh-pf-opt">
-                  <input
-                    type="radio"
-                    name="dispo"
-                    value={option.value}
-                    defaultChecked={(chosen.dispo ?? "") === option.value}
-                  />
-                  {option.label}
-                </label>
-              ))}
-            </div>
-          </fieldset>
-          <label className="nb-rh-pf-champ">
-            <span className="nb-ex-f-gl">{t("filters.city")}</span>
-            <input name="ville" maxLength={60} defaultValue={chosen.city} />
-          </label>
-        </div>
-        <div className="nb-ex-f-bas">
-          <button type="submit" className="nb-ex-f-voir">
-            {tt("filters.apply")}
-          </button>
-        </div>
-      </form>
-    </RhFiltersSheet>
+    <form method="get" action="/app/hire/talents" className="nb-rh-pf-f">
+      {tab ? <input type="hidden" name="onglet" value={tab} /> : null}
+      <div className="nb-ex-f-tete">
+        <h2>{t("filters.title")}</h2>
+        <Link href={reset}>{t("filters.reset")}</Link>
+      </div>
+      <div className="nb-ex-f-corps">
+        <fieldset className="nb-rh-pf-grp">
+          <legend className="nb-ex-f-gl">{tt("filters.domain")}</legend>
+          <RhDomainPicker
+            options={studyFields.map((key) => ({ key, label: ts(key) }))}
+            chosen={chosen.domain ?? ""}
+            anyLabel={t("filters.any")}
+            placeholder={ts("search")}
+            none={ts("none")}
+          />
+        </fieldset>
+        <label className="nb-rh-pf-champ">
+          <span className="nb-ex-f-gl">{tt("filters.title")}</span>
+          <input
+            name="poste"
+            maxLength={60}
+            defaultValue={chosen.title}
+            placeholder={tt("filters.titlePlaceholder")}
+          />
+        </label>
+        <label className="nb-rh-pf-champ">
+          <span className="nb-ex-f-gl">{t("filters.skill")}</span>
+          <input
+            name="skill"
+            maxLength={60}
+            defaultValue={chosen.skill}
+            placeholder={t("filters.skillPlaceholder")}
+          />
+        </label>
+        <fieldset className="nb-rh-pf-grp">
+          <legend className="nb-ex-f-gl">{t("filters.dispo")}</legend>
+          <div className="nb-ex-f-opts">
+            {[
+              { value: "", label: t("filters.any") },
+              ...candidateAvailabilities.map((value) => ({
+                value,
+                label: t(`filters.dispoValue.${value}`),
+              })),
+            ].map((option) => (
+              <label key={option.value || "any"} className="nb-ex-f-opt nb-rh-pf-opt">
+                <input
+                  type="radio"
+                  name="dispo"
+                  value={option.value}
+                  defaultChecked={(chosen.dispo ?? "") === option.value}
+                />
+                {option.label}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <label className="nb-rh-pf-champ">
+          <span className="nb-ex-f-gl">{t("filters.city")}</span>
+          <input name="ville" maxLength={60} defaultValue={chosen.city} />
+        </label>
+      </div>
+      <div className="nb-ex-f-bas">
+        <button type="submit" className="nb-ex-f-voir">
+          {tt("filters.apply")}
+        </button>
+      </div>
+    </form>
   );
 }
 
