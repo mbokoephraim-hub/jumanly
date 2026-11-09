@@ -5744,3 +5744,9 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
 - Sur ordinateur, les filtres de Talents (domaine, poste, compétence, disponibilité, ville) restent
   ouverts dans une colonne à gauche, pour Découvrir, Vivier et Propositions ; plus de fenêtre à ouvrir.
   Les talents s'affichent trois par ligne. Le téléphone garde le bouton « Filtres » et sa fenêtre.
+
+## 2026-11-09 · Recruteur sur ordinateur, étape 7 (Chat)
+
+- Sur ordinateur, une discussion ouverte s'affiche à droite de la liste des conversations (Candidats,
+  Réseau, Équipe), qui reste utilisable ; la liste s'ouvre sur la partie de la discussion ouverte.
+  La barre d'écriture garde la largeur de la discussion.

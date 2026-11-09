@@ -97,4 +97,22 @@ test.describe("recruteur sur ordinateur", () => {
     await expect(filters.locator('input[name="ville"]')).toHaveValue("Kinshasa");
     await expectAccessible(page);
   });
+
+  test("Chat : la liste reste à gauche de la discussion ouverte", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await logIn(page, "entreprise@jumanly.test", undefined, "/app/messages");
+    await page.goto("/app/messages");
+    await page.locator("a[href^='/app/messages/']").filter({ visible: true }).first().click();
+    await expect(page).toHaveURL(/\/app\/messages\/[^/]+$/);
+    const list = page.getByRole("complementary", { name: "Messages" });
+    await expect(list).toBeVisible();
+    await expect(page.getByRole("textbox", { name: "Votre message" })).toBeVisible();
+    // Another conversation opens from the list, which stays.
+    const links = list.locator("a[href^='/app/messages/']");
+    if ((await links.count()) > 1) {
+      await links.nth(1).click();
+      await expect(list).toBeVisible();
+    }
+    await expectAccessible(page);
+  });
 });

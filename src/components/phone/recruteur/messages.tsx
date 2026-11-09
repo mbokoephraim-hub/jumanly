@@ -83,9 +83,12 @@ export async function RhMessages({
   ctx,
   tab,
   hidden = false,
+  current,
 }: {
   ctx: HireContext;
   tab: string | undefined;
+  /** Beside an open conversation (computer): its address, to open the list on its part. */
+  current?: string;
   /** Back from « Retirer de la messagerie de l'équipe »: its confirmation. */
   hidden?: boolean;
 }) {
@@ -109,7 +112,10 @@ export async function RhMessages({
       when: await whenLabel(row.at, now),
     })),
   );
-  const chosen: RhMessageTab = RH_MESSAGE_TABS.find((key) => key === tab) ?? "candidats";
+  const chosen: RhMessageTab =
+    RH_MESSAGE_TABS.find((key) => key === tab) ??
+    list.find((row) => row.href === current)?.tab ??
+    "candidats";
   const t = await getTranslations("phoneRhMessages");
   return (
     <>

@@ -6,7 +6,8 @@ import { RecruiterThread } from "@/components/recruiter/thread";
 import { PhoneThreadPage } from "@/components/phone/messages/server";
 import { isModelB } from "@/server/phone-routes";
 import { RhConversation } from "@/components/phone/recruteur/conversation";
-import { RhMessagesTexts } from "@/components/phone/recruteur/messages";
+import { RhMessages, RhMessagesTexts } from "@/components/phone/recruteur/messages";
+import { isPhone } from "@/server/view";
 import { Logo, toneOf } from "@/components/talent/art";
 import { FlowHead } from "@/components/talent/flow-head";
 import { InboxList } from "@/components/talent/messages/inbox-list";
@@ -88,18 +89,36 @@ export default async function ThreadPage({
   const context = await connectViewer(`/app/messages/${id}`);
   if (context.viewer.hire) {
     // On a phone, the recruiter's conversation of Modèle B (lot M7).
-    if (await isModelB())
-      return (
-        <RhMessagesTexts>
-          <RhConversation
-            ctx={context.viewer.hire}
-            userId={context.user.id}
-            userName={context.user.name}
-            id={id}
-            query={query}
-          />
-        </RhMessagesTexts>
+    if (await isModelB()) {
+      const conversation = (
+        <RhConversation
+          ctx={context.viewer.hire}
+          userId={context.user.id}
+          userName={context.user.name}
+          id={id}
+          query={query}
+        />
       );
+      // On a computer (08/11/2026) the list stays on the left of the open conversation, usable.
+      if (!(await isPhone())) {
+        const t = await getTranslations("phoneRhMessages");
+        return (
+          <RhMessagesTexts>
+            <div className="nb-rh-chat-deux">
+              <aside className="nb-rh-chat-liste" aria-label={t("title")}>
+                <RhMessages
+                  ctx={context.viewer.hire}
+                  tab={undefined}
+                  current={`/app/messages/${id}`}
+                />
+              </aside>
+              <div className="nb-rh-chat-fil">{conversation}</div>
+            </div>
+          </RhMessagesTexts>
+        );
+      }
+      return <RhMessagesTexts>{conversation}</RhMessagesTexts>;
+    }
     return <RecruiterThread id={id} query={query} context={context} />;
   }
   const { user, space, viewer } = context;
