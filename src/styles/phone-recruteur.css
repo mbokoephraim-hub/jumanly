@@ -9299,3 +9299,9 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-ag-fixer input {
 .nb-app:not([data-large]) .nb-rh-cv-cote {
   display: none;
 }
+
+/* Agenda : sur téléphone, les deux colonnes de l'ordinateur ne prennent aucune place. */
+.nb-rh-ag-deux,
+.nb-rh-ag-jours {
+  display: contents;
+}

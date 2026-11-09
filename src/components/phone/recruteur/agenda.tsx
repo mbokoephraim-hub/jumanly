@@ -290,95 +290,101 @@ export async function RhAgenda({
             </ul>
           </details>
         ) : null}
-        <section className="nb-rh-ag-mois" aria-labelledby="rh-ag-mois">
-          <div className="nb-rh-ag-mois-h">
-            <Link
-              href={monthHref(nextMonth(month, -1))}
-              aria-label={t("monthPrev")}
-              scroll={false}
-              replace
-            >
-              <PhoneIcon name="retour" size={18} />
-            </Link>
-            <h2 id="rh-ag-mois">
-              {format.dateTime(noonOf(`${month}-01`), { month: "long", year: "numeric" })}
-            </h2>
-            <Link
-              href={monthHref(nextMonth(month, 1))}
-              aria-label={t("monthNext")}
-              scroll={false}
-              replace
-            >
-              <PhoneIcon name="chevron" size={18} />
-            </Link>
-          </div>
-          <div className="nb-rh-ag-grille">
-            {names.map((name, index) => (
-              <span key={`n-${index}`} className="nb-rh-ag-jn" aria-hidden>
-                {name}
-              </span>
-            ))}
-            {grid.flat().map((key) => {
-              const count = countOf(key);
-              const other = !key.startsWith(month);
-              return (
-                <Link
-                  key={key}
-                  href={`${BASE}?mois=${key.slice(0, 7)}&jour=${key}`}
-                  className="nb-rh-ag-case"
-                  data-autre={other ? "" : undefined}
-                  data-passe={key < today ? "" : undefined}
-                  data-choisi={key === day ? "" : undefined}
-                  aria-current={key === today ? "date" : undefined}
-                  aria-label={`${dayName(noonOf(key), key)} · ${t("count", { count })}`}
-                  scroll={false}
-                  replace
-                >
-                  {Number(key.slice(8))}
-                  {count > 0 ? (
-                    // One dot per interview, three at most (Ephraïm, 03/11/2026: a figure under
-                    // the date read as a mistake).
-                    <span className="nb-rh-ag-points" aria-hidden>
-                      {Array.from({ length: Math.min(count, 3) }, (_, index) => (
-                        <i key={index} />
-                      ))}
-                    </span>
-                  ) : null}
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-        <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-jour">
-          <h2 id="rh-ag-jour" className="nb-rh-ag-h">
-            <span>{dayName(noonOf(day), day)}</span>
-            {shown.length > 0 ? <small>{shown.length}</small> : null}
-          </h2>
-          {shown.length === 0 ? (
-            empty("calendar", t("dayEmpty"))
-          ) : (
-            <ul className="nb-rh-ag-liste">{shown}</ul>
-          )}
-        </section>
-        {later.length > 0 ? (
-          <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-ensuite">
-            <h2 id="rh-ag-ensuite" className="nb-rh-ag-h">
-              <span>{t("later")}</span>
-            </h2>
-            {later.map((key) => dayList(key, dayName(noonOf(key), key)))}
+        {/* On a computer (08/11/2026) the month stays on the left, the day chosen and what comes next on
+            the right; a phone reads them one under the other (the wrappers take no room there). */}
+        <div className="nb-rh-ag-deux">
+          <section className="nb-rh-ag-mois" aria-labelledby="rh-ag-mois">
+            <div className="nb-rh-ag-mois-h">
+              <Link
+                href={monthHref(nextMonth(month, -1))}
+                aria-label={t("monthPrev")}
+                scroll={false}
+                replace
+              >
+                <PhoneIcon name="retour" size={18} />
+              </Link>
+              <h2 id="rh-ag-mois">
+                {format.dateTime(noonOf(`${month}-01`), { month: "long", year: "numeric" })}
+              </h2>
+              <Link
+                href={monthHref(nextMonth(month, 1))}
+                aria-label={t("monthNext")}
+                scroll={false}
+                replace
+              >
+                <PhoneIcon name="chevron" size={18} />
+              </Link>
+            </div>
+            <div className="nb-rh-ag-grille">
+              {names.map((name, index) => (
+                <span key={`n-${index}`} className="nb-rh-ag-jn" aria-hidden>
+                  {name}
+                </span>
+              ))}
+              {grid.flat().map((key) => {
+                const count = countOf(key);
+                const other = !key.startsWith(month);
+                return (
+                  <Link
+                    key={key}
+                    href={`${BASE}?mois=${key.slice(0, 7)}&jour=${key}`}
+                    className="nb-rh-ag-case"
+                    data-autre={other ? "" : undefined}
+                    data-passe={key < today ? "" : undefined}
+                    data-choisi={key === day ? "" : undefined}
+                    aria-current={key === today ? "date" : undefined}
+                    aria-label={`${dayName(noonOf(key), key)} · ${t("count", { count })}`}
+                    scroll={false}
+                    replace
+                  >
+                    {Number(key.slice(8))}
+                    {count > 0 ? (
+                      // One dot per interview, three at most (Ephraïm, 03/11/2026: a figure under
+                      // the date read as a mistake).
+                      <span className="nb-rh-ag-points" aria-hidden>
+                        {Array.from({ length: Math.min(count, 3) }, (_, index) => (
+                          <i key={index} />
+                        ))}
+                      </span>
+                    ) : null}
+                  </Link>
+                );
+              })}
+            </div>
           </section>
-        ) : null}
-        {interviews.toDocument.length > 0 ? (
-          <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-eval">
-            <h2 id="rh-ag-eval" className="nb-rh-ag-h">
-              <span>{t("evaluate.title")}</span>
-              <small>{interviews.toDocument.length}</small>
-            </h2>
-            <ul className="nb-rh-ag-liste">
-              {interviews.toDocument.map((card) => interviewCard(card, true))}
-            </ul>
-          </section>
-        ) : null}
+          <div className="nb-rh-ag-jours">
+            <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-jour">
+              <h2 id="rh-ag-jour" className="nb-rh-ag-h">
+                <span>{dayName(noonOf(day), day)}</span>
+                {shown.length > 0 ? <small>{shown.length}</small> : null}
+              </h2>
+              {shown.length === 0 ? (
+                empty("calendar", t("dayEmpty"))
+              ) : (
+                <ul className="nb-rh-ag-liste">{shown}</ul>
+              )}
+            </section>
+            {later.length > 0 ? (
+              <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-ensuite">
+                <h2 id="rh-ag-ensuite" className="nb-rh-ag-h">
+                  <span>{t("later")}</span>
+                </h2>
+                {later.map((key) => dayList(key, dayName(noonOf(key), key)))}
+              </section>
+            ) : null}
+            {interviews.toDocument.length > 0 ? (
+              <section className="nb-rh-ag-bloc" aria-labelledby="rh-ag-eval">
+                <h2 id="rh-ag-eval" className="nb-rh-ag-h">
+                  <span>{t("evaluate.title")}</span>
+                  <small>{interviews.toDocument.length}</small>
+                </h2>
+                <ul className="nb-rh-ag-liste">
+                  {interviews.toDocument.map((card) => interviewCard(card, true))}
+                </ul>
+              </section>
+            ) : null}
+          </div>
+        </div>
       </>
     );
   } else {
