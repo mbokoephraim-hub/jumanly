@@ -2,11 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { RhCvReader } from "@/components/phone/recruteur/cv-lecture";
-import { previewData } from "@/features/cv/document";
-import { loadCvSource } from "@/features/cv/source";
+import { cvReadingOf } from "@/components/phone/recruteur/cv-lecture-data";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
-import { originalCvRef } from "@/server/services/application-cv";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("phoneRhFiche.reader");
@@ -50,27 +48,13 @@ export default async function CandidateCvPage({
   const back = BACK.test(asked)
     ? asked
     : `/app/hire/offres/${application.jobId}?vue=candidats&fiche=${application.id}&partie=documents`;
-  const ref = await originalCvRef(application.cvSnapshot);
-  const file = ref?.type === "pdf" || ref?.type === "image" ? ref.type : null;
-  let preview = null;
-  if (!file) {
-    const source = await loadCvSource(db, "application", application.id);
-    if (source) {
-      const { data, demo } = await previewData(source);
-      preview = demo ? null : { data, template: source.template, style: source.style };
-    }
-  }
-  const title =
-    (application.cvSnapshot as { title?: unknown } | null)?.title &&
-    typeof (application.cvSnapshot as { title?: unknown }).title === "string"
-      ? String((application.cvSnapshot as { title: string }).title)
-      : t("title");
+  const { file, preview, title, fileUrl } = await cvReadingOf(application, t("title"));
   return (
     <RhCvReader
       title={title}
       sub={t(file ? `kind.${file}` : "kind.jumanly")}
       back={{ href: back, label: t("back") }}
-      fileUrl={`/app/hire/candidats/${application.id}/cv`}
+      fileUrl={fileUrl}
       file={file}
       preview={preview}
       texts={{

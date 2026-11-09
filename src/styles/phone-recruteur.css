@@ -9294,3 +9294,8 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-ag-fixer input {
 .nb-rh-offre-outils {
   display: none;
 }
+
+/* Le CV à côté de la fiche n'existe que sur ordinateur (08/11/2026). */
+.nb-app:not([data-large]) .nb-rh-cv-cote {
+  display: none;
+}

@@ -20757,6 +20757,7 @@
       },
       "pages": "Le CV « {title} »",
       "unreadable": "Ce PDF ne s'affiche pas sur ce téléphone.",
+      "unreadableHere": "Ce PDF ne s'affiche pas ici.",
       "open": "L'enregistrer",
       "empty": "Ce CV ne contient encore rien à lire. Vous pouvez demander au candidat un CV à jour."
     },

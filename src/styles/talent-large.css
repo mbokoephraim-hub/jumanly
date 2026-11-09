@@ -498,3 +498,39 @@ html:has(.nb-app[data-large]) .nb-feuille-dlg[open] {
 .nb-app[data-large] .nb-rh-offre-outils a:hover {
   border-color: var(--nb-lime);
 }
+
+/* ─── Recruteur, étape 4 : la fiche du candidat et, à sa droite, son CV. ─── */
+.nb-app[data-large] .nb-pile:has(.nb-rh-fiche-deux) {
+  --nb-largeur: 1140px;
+  --nb-cv-col: 460px;
+}
+.nb-rh-fiche-deux {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--nb-cv-col, 460px);
+  gap: 32px;
+  align-items: start;
+}
+.nb-app[data-large] .nb-rh-fiche-deux .nb-rh-detail > .nb-bas {
+  width: calc(min(var(--nb-largeur), 100vw - var(--nb-cote)) - var(--nb-cv-col) - 32px);
+}
+.nb-rh-cv-cote {
+  position: sticky;
+  top: 24px;
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  margin-top: 24px;
+  padding: 16px;
+  border-radius: 22px;
+  background: var(--nb-surface);
+  border: 1px solid rgba(var(--nb-voile), 0.06);
+}
+.nb-rh-cv-cote-t {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 0 12px;
+}
+.nb-rh-cv-cote-t b {
+  color: var(--nb-creme);
+  font-size: 15px;
+}

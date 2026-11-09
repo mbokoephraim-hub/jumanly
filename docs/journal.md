@@ -5725,3 +5725,10 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
 - Sur la page d'une offre, une rangée « Outils de l'offre » (ordinateur seulement) ouvre le Tableau Orbi,
   l'analyse (ATS) et la vérification des pièces ; « Comparer » se fait depuis le Tableau (cases à cocher).
 - Le Tableau Orbi a la page large, son tableau ne se replie plus dans la colonne du téléphone.
+
+## 2026-11-09 · Recruteur sur ordinateur, étape 4 (fiche candidat)
+
+- Sur ordinateur, le CV envoyé avec la candidature se lit à droite de la fiche du candidat (profil ou
+  dossier), sans quitter la page. Sa lecture est journalisée comme sur sa propre page (`cv.view`).
+- La lecture du CV est partagée entre la page « Lire le CV » et la colonne (`cvReadingOf`,
+  `RhCvDocument`).
