@@ -560,3 +560,50 @@ html:has(.nb-app[data-large]) .nb-feuille-dlg[open] {
   aspect-ratio: auto;
   height: 64px;
 }
+
+/* ─── Recruteur, étape 6 : Talents, les filtres ouverts à gauche et trois cartes par ligne. ─── */
+.nb-app[data-large] .nb-pile:has(.nb-rh-t-deux) {
+  --nb-largeur: 1160px;
+}
+.nb-rh-t-deux {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  padding-left: 20px;
+}
+.nb-rh-t-liste {
+  min-width: 0;
+}
+.nb-rh-t-filtres {
+  position: sticky;
+  top: 24px;
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  margin-top: 4px;
+  border-radius: 22px;
+  background: var(--nb-surface);
+  border: 1px solid rgba(var(--nb-voile), 0.06);
+}
+.nb-rh-t-filtres .nb-ex-f-bas {
+  position: sticky;
+  bottom: 0;
+  padding-bottom: 16px;
+  background: var(--nb-surface);
+}
+.nb-app[data-large] .nb-rh-t-liste .nb-rh-tg {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.nb-rh-t-filtres .nb-ex-f-tete {
+  justify-content: space-between;
+  padding-top: 16px;
+}
+.nb-rh-t-filtres .nb-ex-f-tete h2 {
+  font-size: 18px;
+  font-weight: 700;
+}
+.nb-rh-t-filtres .nb-ex-f-tete a {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--nb-lime-t);
+}

@@ -3,7 +3,13 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { RhBell, RhTab } from "@/components/phone/recruteur/head";
-import { RhTalentFilters, RhTalents, RhTalentsTexts } from "@/components/phone/recruteur/talents";
+import {
+  RhTalentFilters,
+  RhTalentFiltersColumn,
+  RhTalents,
+  RhTalentsTexts,
+} from "@/components/phone/recruteur/talents";
+import { isPhone } from "@/server/view";
 import { requireHire } from "@/server/hire-context";
 
 const TOASTS = [
@@ -28,15 +34,19 @@ export default async function TalentsRedirect({ searchParams }: PageProps<"/app/
     const { ctx } = await requireHire("/app/hire/talents", "readApplications");
     const t = await getTranslations("phoneRhTalents");
     const ok = TOASTS.find((key) => key === query.ok);
+    // On a computer the filters stay open in a column on the left (not for « Réseau »).
+    const column = !(await isPhone()) && query.onglet !== "reseau";
     return (
       <RhTab
         tab="talents"
         legacy={false}
         actions={<RhBell />}
         searchExtra={
-          <RhTalentsTexts>
-            <RhTalentFilters query={query} />
-          </RhTalentsTexts>
+          column ? null : (
+            <RhTalentsTexts>
+              <RhTalentFilters query={query} />
+            </RhTalentsTexts>
+          )
         }
       >
         {ok ? <ToastOnLoad message={t(`ok.${ok}`)} tone="success" /> : null}
@@ -46,7 +56,16 @@ export default async function TalentsRedirect({ searchParams }: PageProps<"/app/
           </p>
         ) : null}
         <RhTalentsTexts>
-          <RhTalents ctx={ctx} query={query} />
+          {column ? (
+            <div className="nb-rh-t-deux">
+              <RhTalentFiltersColumn query={query} />
+              <div className="nb-rh-t-liste">
+                <RhTalents ctx={ctx} query={query} />
+              </div>
+            </div>
+          ) : (
+            <RhTalents ctx={ctx} query={query} />
+          )}
         </RhTalentsTexts>
       </RhTab>
     );

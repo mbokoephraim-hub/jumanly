@@ -77,4 +77,24 @@ test.describe("recruteur sur ordinateur", () => {
     expect(d!.y).toBeLessThan(m!.y + m!.height);
     await expectAccessible(page);
   });
+
+  test("Talents : les filtres ouverts à gauche, trois cartes par ligne", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await logIn(page, "groupe@jumanly.test", undefined, "/app/hire/talents");
+    await page.goto("/app/hire/talents");
+    const filters = page.getByRole("complementary", { name: "Filtres" });
+    await expect(filters).toBeVisible();
+    // No sheet to open on a computer.
+    await expect(page.locator("button.nb-ex-fbtn")).toHaveCount(0);
+    const grid = page.locator(".nb-rh-tg").first();
+    await expect(grid).toBeVisible();
+    expect(
+      await grid.evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(" ").length),
+    ).toBe(3);
+    await filters.locator('input[name="ville"]').fill("Kinshasa");
+    await filters.getByRole("button", { name: "Voir les talents" }).click();
+    await expect(page).toHaveURL(/ville=Kinshasa/);
+    await expect(filters.locator('input[name="ville"]')).toHaveValue("Kinshasa");
+    await expectAccessible(page);
+  });
 });
