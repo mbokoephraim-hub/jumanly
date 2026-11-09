@@ -607,3 +607,31 @@ html:has(.nb-app[data-large]) .nb-feuille-dlg[open] {
   font-weight: 700;
   color: var(--nb-lime-t);
 }
+
+/* ─── Recruteur, étape 7 : le Chat, la liste à gauche de la discussion ouverte. ─── */
+.nb-app[data-large] .nb-pile:has(.nb-rh-chat-deux) {
+  --nb-largeur: 1140px;
+  --nb-rh-liste: 400px;
+}
+.nb-rh-chat-deux {
+  display: grid;
+  grid-template-columns: var(--nb-rh-liste, 400px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.nb-rh-chat-liste {
+  position: sticky;
+  top: 0;
+  max-height: 100vh;
+  overflow: auto;
+  padding-top: 16px;
+  border-right: 1px solid var(--nb-filet);
+  scrollbar-width: thin;
+}
+.nb-rh-chat-fil {
+  min-width: 0;
+}
+.nb-app[data-large] .nb-rh-chat-deux .nb-rm-pied {
+  left: calc(var(--nb-marge-gauche) + var(--nb-rh-liste) + 24px);
+  width: calc(min(var(--nb-largeur), 100vw - var(--nb-cote)) - var(--nb-rh-liste) - 24px);
+}
