@@ -46,22 +46,40 @@ export async function RhOfferTabs({
   counts: DeskCounts;
 }) {
   const t = await getTranslations("phoneRhCandidats");
+  const tTools = await getTranslations("phoneRh.outils");
+  const tWeb = await getTranslations("hireWeb.ats.tab");
   const tabs = ["apercu", ...DESK_RUBRIQUES] as const;
+  // On a computer (08/11/2026): the tools of the big screen for this offer, beside its parts. Hidden
+  // on a phone by its style sheet (a table of every candidate needs the width).
+  const tools = [
+    { key: "tableau", href: `/app/hire/offres/${jobId}/tableau` },
+    { key: "ats", href: `/app/hire/offres/${jobId}/ats` },
+    { key: "pieces", href: `/app/hire/offres/${jobId}/verification` },
+  ] as const;
   return (
-    <nav className="nb-rh-co-onglets nb-rh-co-onglets-defil" aria-label={t("tabs")}>
-      {tabs.map((key) => (
-        <Link
-          key={key}
-          href={deskTabHref(jobId, key)}
-          aria-current={key === current ? "page" : undefined}
-          scroll={false}
-          replace
-        >
-          {t(`tab.${key}`)}
-          {key !== "apercu" && counts[key] > 0 ? <small>{counts[key]}</small> : null}
-        </Link>
-      ))}
-    </nav>
+    <>
+      <nav className="nb-rh-offre-outils" aria-label={tTools("offer")}>
+        {tools.map((tool) => (
+          <Link key={tool.key} href={tool.href}>
+            {tWeb(tool.key)}
+          </Link>
+        ))}
+      </nav>
+      <nav className="nb-rh-co-onglets nb-rh-co-onglets-defil" aria-label={t("tabs")}>
+        {tabs.map((key) => (
+          <Link
+            key={key}
+            href={deskTabHref(jobId, key)}
+            aria-current={key === current ? "page" : undefined}
+            scroll={false}
+            replace
+          >
+            {t(`tab.${key}`)}
+            {key !== "apercu" && counts[key] > 0 ? <small>{counts[key]}</small> : null}
+          </Link>
+        ))}
+      </nav>
+    </>
   );
 }
 

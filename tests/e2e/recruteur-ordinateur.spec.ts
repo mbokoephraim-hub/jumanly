@@ -43,4 +43,24 @@ test.describe("recruteur sur ordinateur", () => {
       await expect(page).toHaveURL(/\/app\/hire\/candidats\/[^/?]+/);
     }
   });
+
+  test("les offres en deux colonnes et les outils de l'offre", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await logIn(page, "entreprise@jumanly.test", undefined, "/app/hire/offres");
+    await page.goto("/app/hire/offres");
+    const cards = page.locator(".nb-rh-cartes").first();
+    await expect(cards).toBeVisible();
+    const columns = await cards.evaluate(
+      (el) => getComputedStyle(el).gridTemplateColumns.split(" ").length,
+    );
+    expect(columns).toBe(2);
+
+    await cards.locator("a[href^='/app/hire/offres/']").first().click();
+    await expect(page).toHaveURL(/\/app\/hire\/offres\/[^/?]+/);
+    const tools = page.getByRole("navigation", { name: "Outils de l'offre" });
+    await expect(tools).toBeVisible();
+    await tools.getByRole("link", { name: "Tableau Orbi" }).click();
+    await expect(page).toHaveURL(/\/tableau$/);
+    await expectAccessible(page);
+  });
 });

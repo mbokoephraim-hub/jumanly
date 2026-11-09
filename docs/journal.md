@@ -5718,3 +5718,10 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
   (vers leur dossier), les prochains entretiens et la semaine. Le téléphone garde le Fil seul.
 - Test : `recruteur-ordinateur.spec.ts` (cadre, Outils, Entreprise, « À traiter », un outil n'allume
   aucun onglet).
+
+## 2026-11-09 · Recruteur sur ordinateur, étape 3 (Offres)
+
+- Sur ordinateur, les offres s'affichent en cartes deux par ligne (page large de 1 060 px).
+- Sur la page d'une offre, une rangée « Outils de l'offre » (ordinateur seulement) ouvre le Tableau Orbi,
+  l'analyse (ATS) et la vérification des pièces ; « Comparer » se fait depuis le Tableau (cases à cocher).
+- Le Tableau Orbi a la page large, son tableau ne se replie plus dans la colonne du téléphone.

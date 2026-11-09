@@ -19414,7 +19414,8 @@
     },
     "outils": {
       "title": "Outils",
-      "templates": "Modèles de messages"
+      "templates": "Modèles de messages",
+      "offer": "Outils de l'offre"
     },
     "head": {
       "account": "Mon compte",
