@@ -5732,3 +5732,9 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
   dossier), sans quitter la page. Sa lecture est journalisée comme sur sa propre page (`cv.view`).
 - La lecture du CV est partagée entre la page « Lire le CV » et la colonne (`cvReadingOf`,
   `RhCvDocument`).
+
+## 2026-11-09 · Recruteur sur ordinateur, étape 5 (Agenda)
+
+- Sur ordinateur, l'Agenda montre le mois à gauche (il reste en place quand on fait défiler) et, à
+  droite, le jour choisi, la suite du mois et les évaluations à rédiger. Cliquer sur un jour met à jour
+  la colonne de droite. Le téléphone garde l'ordre l'un sous l'autre.

@@ -534,3 +534,29 @@ html:has(.nb-app[data-large]) .nb-feuille-dlg[open] {
   color: var(--nb-creme);
   font-size: 15px;
 }
+
+/* ─── Recruteur, étape 5 : l'Agenda, le mois à gauche, le jour choisi et la suite à droite. ─── */
+.nb-app[data-large] .nb-pile:has(.nb-rh-ag-deux) {
+  --nb-largeur: 1120px;
+}
+.nb-app[data-large] .nb-rh-ag-deux {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 400px;
+  gap: 28px;
+  align-items: start;
+}
+.nb-app[data-large] .nb-rh-ag-deux .nb-rh-ag-mois {
+  position: sticky;
+  top: 24px;
+  margin: 0;
+}
+.nb-app[data-large] .nb-rh-ag-jours {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+.nb-app[data-large] .nb-rh-ag-deux .nb-rh-ag-case {
+  aspect-ratio: auto;
+  height: 64px;
+}

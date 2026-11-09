@@ -63,4 +63,18 @@ test.describe("recruteur sur ordinateur", () => {
     await expect(page).toHaveURL(/\/tableau$/);
     await expectAccessible(page);
   });
+
+  test("l'Agenda : le mois à gauche, le jour choisi à droite", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await logIn(page, "entreprise@jumanly.test", undefined, "/app/hire/entretiens");
+    await page.goto("/app/hire/entretiens");
+    const month = page.locator(".nb-rh-ag-mois");
+    const day = page.locator("#rh-ag-jour");
+    await expect(month).toBeVisible();
+    await expect(day).toBeVisible();
+    const [m, d] = await Promise.all([month.boundingBox(), day.boundingBox()]);
+    expect(d!.x).toBeGreaterThan(m!.x + m!.width - 1);
+    expect(d!.y).toBeLessThan(m!.y + m!.height);
+    await expectAccessible(page);
+  });
 });
