@@ -12,7 +12,8 @@ import { isPhone } from "@/server/view";
  * open on a phone.
  */
 export default async function OrganisationLayout({ children }: { children: ReactNode }) {
-  if (!(await isPhone())) return children;
+  // On a computer, inside the recruiter frame (08/11/2026): the pages keep a margin above them.
+  if (!(await isPhone())) return <div className="nb-org-page">{children}</div>;
   const messages = await getMessages();
   return (
     <NextIntlClientProvider messages={pickMessages(messages, ["desktopOnly"])}>

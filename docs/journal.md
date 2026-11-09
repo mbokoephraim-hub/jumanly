@@ -5750,3 +5750,15 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
 - Sur ordinateur, une discussion ouverte s'affiche à droite de la liste des conversations (Candidats,
   Réseau, Équipe), qui reste utilisable ; la liste s'ouvre sur la partie de la discussion ouverte.
   La barre d'écriture garde la largeur de la discussion.
+
+## 2026-11-09 · Recruteur sur ordinateur, étape 8 (compte, rapports, nettoyage)
+
+- Rapports et les pages Entreprise (`/app/organisation/*`) gardent leur forme d'ordinateur dans le
+  cadre, avec une marge en haut (leur titre n'est plus collé au bord).
+- Supprimé : l'ancien cadre recruteur d'ordinateur (`src/components/recruiter/shell.tsx`) et le
+  choix d'organisation qui n'était utilisé que par lui (`org-sheet.tsx`). Les écrans d'ordinateur
+  encore utiles (Rapports, Entreprise, et l'ancienne messagerie pour un compte partenaire) restent.
+- Bilan des 8 étapes : PR #403 à #410. Le recruteur sur ordinateur a les écrans du téléphone (Fil ·
+  Offres · Agenda · Talents · Chat) et, en plus : menu Outils et Entreprise, « À traiter » à côté du
+  Fil, offres en deux colonnes et outils de l'offre, CV à côté de la fiche, Agenda mois + journée,
+  filtres de Talents ouverts, Chat en deux colonnes.

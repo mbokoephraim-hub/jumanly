@@ -110,9 +110,14 @@ test.describe("recruteur sur ordinateur", () => {
     // Another conversation opens from the list, which stays.
     const links = list.locator("a[href^='/app/messages/']");
     if ((await links.count()) > 1) {
+      const next = (await links.nth(1).getAttribute("href"))!;
       await links.nth(1).click();
+      await expect(page).toHaveURL(new RegExp(`${next}$`));
       await expect(list).toBeVisible();
     }
+    // Read once the page has settled (no page fading in over the previous one).
+    await page.reload();
+    await expect(list).toBeVisible();
     await expectAccessible(page);
   });
 });
