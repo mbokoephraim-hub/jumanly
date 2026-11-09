@@ -464,3 +464,37 @@ html:has(.nb-app[data-large]) .nb-feuille-dlg[open] {
   line-height: 1.3;
   color: rgba(var(--nb-voile), 0.7);
 }
+
+/* ─── Recruteur, étape 3 : les offres sur deux colonnes, les outils de l'offre, le Tableau Orbi large. ─── */
+.nb-app[data-large] .nb-pile:has(.nb-rh-cartes),
+.nb-app[data-large] .nb-pile:has(.jm-tableau) {
+  --nb-largeur: 1060px;
+}
+.nb-app[data-large] .nb-rh-cartes {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+}
+.nb-app[data-large] .nb-rh-cartes > li {
+  display: grid;
+}
+.nb-app[data-large] .nb-rh-offre-outils {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 20px 0;
+}
+.nb-app[data-large] .nb-rh-offre-outils a {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-surface);
+  color: var(--nb-creme);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.nb-app[data-large] .nb-rh-offre-outils a:hover {
+  border-color: var(--nb-lime);
+}

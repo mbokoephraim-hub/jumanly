@@ -15914,6 +15914,7 @@ Conventions :
 | `phoneRh.nav.agenda` | Agenda |
 | `phoneRh.outils.title` | Outils |
 | `phoneRh.outils.templates` | Modèles de messages |
+| `phoneRh.outils.offer` | Outils de l'offre |
 | `phoneRhAgenda.line` | {tasks, plural, =0 {Rien à planifier} one {# chose à planifier} other {# choses à planifier}} · {today, plural, =0 {aucun entretien aujourd'hui} one {# entretien aujourd'hui} other {# entretiens aujourd'hui}} |
 | `phoneRhAgenda.tabs` | Parties de l'agenda |
 | `phoneRhAgenda.tab.mois` | Mois |

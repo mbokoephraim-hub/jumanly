@@ -9289,3 +9289,8 @@ html[data-nb-theme="clair"] .nb-app .nb-rh-ag-fixer input {
   color: var(--nb-sur-lime, #0f3f37);
   font-weight: 600;
 }
+
+/* Outils de l'offre (tableau, analyse, vérification) : seulement sur ordinateur, 08/11/2026. */
+.nb-rh-offre-outils {
+  display: none;
+}
