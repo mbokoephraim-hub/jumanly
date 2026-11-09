@@ -1,4 +1,5 @@
 import "server-only";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { GoldSeal } from "../badge-or";
 import { getFormatter, getTranslations } from "next-intl/server";
@@ -36,6 +37,9 @@ import { sendTargetViews } from "../fil/server";
 import { profileView, ProfileTexts } from "../profil/server";
 import { initialsOf, tintOf } from "./candidatures";
 import { RhFile, type RhFileData } from "./candidat-client";
+import { RhCvAside } from "./cv-lecture";
+import { cvReadingOf } from "./cv-lecture-data";
+import { isPhone } from "@/server/view";
 
 const DAY = 86_400_000;
 const MONTH = 30.44 * DAY;
@@ -703,6 +707,38 @@ export async function RhCandidate({
     mode,
   };
 
+  // On a computer, the CV stays beside the file (08/11/2026), its reading logged like on its page.
+  let side: ReactNode = null;
+  if (application.cvSnapshot !== null && !(await isPhone())) {
+    const tr = await getTranslations("phoneRhFiche.reader");
+    const reading = await cvReadingOf(application, tr("title"));
+    await db.auditLog.create({
+      data: {
+        actorId: ctx.userId,
+        action: "cv.view",
+        targetType: "talentProfile",
+        targetId: profile.id,
+        organizationId: ctx.organizationId,
+        metadata: { applicationId: application.id },
+      },
+    });
+    side = (
+      <RhCvAside
+        title={reading.title}
+        sub={tr(reading.file ? `kind.${reading.file}` : "kind.jumanly")}
+        fileUrl={reading.fileUrl}
+        file={reading.file}
+        preview={reading.preview}
+        texts={{
+          pages: tr("pages", { title: reading.title }),
+          unreadable: tr("unreadableHere"),
+          empty: tr("empty"),
+          open: tr("open"),
+        }}
+      />
+    );
+  }
+
   return (
     <ProfileTexts extra={["phoneRhCandidatures"]}>
       {toastKey ? (
@@ -720,6 +756,7 @@ export async function RhCandidate({
       <RhFile
         data={data}
         panels={{ resume, cv, reponses, notes: notesPanel, historique: history }}
+        side={side}
       />
     </ProfileTexts>
   );

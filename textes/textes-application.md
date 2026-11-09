@@ -16630,6 +16630,7 @@ Conventions :
 | `phoneRhFiche.reader.kind.jumanly` | CV fait sur Jumanly |
 | `phoneRhFiche.reader.pages` | Le CV « {title} » |
 | `phoneRhFiche.reader.unreadable` | Ce PDF ne s'affiche pas sur ce téléphone. |
+| `phoneRhFiche.reader.unreadableHere` | Ce PDF ne s'affiche pas ici. |
 | `phoneRhFiche.reader.open` | L'enregistrer |
 | `phoneRhFiche.reader.empty` | Ce CV ne contient encore rien à lire. Vous pouvez demander au candidat un CV à jour. |
 | `phoneRhFiche.cards.letterQuote` | « {text} » |

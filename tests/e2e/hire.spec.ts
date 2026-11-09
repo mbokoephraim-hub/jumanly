@@ -131,6 +131,9 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await page.goto(pipelineUrl);
   await openCandidateFile(page, /Amani Fictif/);
   const candidateUrl = page.url().split("?")[0]!;
+  // On a computer (08/11/2026) the CV sent with the application is read beside the file.
+  if (!isMobile)
+    await expect(page.locator(".nb-rh-cv-cote").filter({ visible: true })).toBeVisible();
   // Modèle B recruteur (M5): the same steps through the phone file's sheets.
   const file = page.locator(".nb-rh-fiche").filter({ visible: true });
   await file.getByRole("button", { name: /^Changer d'étape, actuellement/ }).click();

@@ -102,7 +102,25 @@ export type RhFileData = {
  * -notes, -historique, -menu, -etape, -repartir, -pdf, -nonretenu): the tabs, the « ··· » and its
  * sheets, the bottom bar with « Écrire » and the next step.
  */
-export function RhFile({ data, panels }: { data: RhFileData; panels: Record<Tab, ReactNode> }) {
+export function RhFile({
+  data,
+  panels,
+  side = null,
+}: {
+  data: RhFileData;
+  panels: Record<Tab, ReactNode>;
+  /** On a computer: the CV, read beside the file. */
+  side?: ReactNode;
+}) {
+  const withSide = (file: ReactNode) =>
+    side ? (
+      <div className="nb-rh-fiche-deux">
+        {file}
+        {side}
+      </div>
+    ) : (
+      file
+    );
   const t = useTranslations("phoneRhCandidatures");
   const tc = useTranslations("phone");
   const [tab, setTab] = useState<Tab>(data.tab);
@@ -534,7 +552,7 @@ export function RhFile({ data, panels }: { data: RhFileData; panels: Record<Tab,
 
   if (mode === "profil" && data.profile) {
     const { view, card } = data.profile;
-    return (
+    return withSide(
       <div className="nb-rh-fiche-p">
         <PersonProfile
           person={view}
@@ -614,11 +632,11 @@ export function RhFile({ data, panels }: { data: RhFileData; panels: Record<Tab,
           }
         />
         {sheets}
-      </div>
+      </div>,
     );
   }
 
-  return (
+  return withSide(
     <div className="nb-page nb-rh-detail nb-rh-fiche">
       <header className="nb-rh-barre">
         <Link href={data.back} className="nb-rh-retour">
@@ -744,6 +762,6 @@ export function RhFile({ data, panels }: { data: RhFileData; panels: Record<Tab,
       </div>
 
       {sheets}
-    </div>
+    </div>,
   );
 }
