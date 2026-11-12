@@ -5762,3 +5762,13 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
   Offres · Agenda · Talents · Chat) et, en plus : menu Outils et Entreprise, « À traiter » à côté du
   Fil, offres en deux colonnes et outils de l'offre, CV à côté de la fiche, Agenda mois + journée,
   filtres de Talents ouverts, Chat en deux colonnes.
+
+## 2026-11-12 · MVP web recruteur, lot M-00 (état des lieux)
+
+- Nouveau `docs/mvp-web-recruteur/ETAT-DES-LIEUX.md` : chaque critère des lots M0 à M9 classé
+  « fait », « à ajuster » ou « à construire », avec ses fichiers. Tableau du § 2 du brief corrigé.
+- Constats principaux : « Postuler » mène à la liste d'attente tant que l'inscription est fermée ;
+  l'abonnement dure toujours un mois (`addMonths(start, 1)`) même si l'intervalle est « year » ;
+  rappels de facturation à J-7, J-3, J-0 ; plus de colonnes glisser-déposer sur ordinateur ; un seul
+  cron ; décision annulable 10 minutes (24 h demandées pour le refus).
+- Aucun code modifié. Prochain lot : M0 (mode MVP).

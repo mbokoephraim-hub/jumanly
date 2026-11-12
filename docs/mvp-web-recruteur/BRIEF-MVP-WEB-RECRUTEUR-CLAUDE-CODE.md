@@ -16,18 +16,18 @@ Chaque lot se juge à cette phrase : si une fonction ne la sert pas, elle attend
 
 ### Dans le MVP (10 briques)
 
-| # | Brique | État dans le dépôt au 12/11/2026 | Travail |
+| # | Brique | État dans le dépôt au 12/11/2026 (corrigé par M-00, détail dans `ETAT-DES-LIEUX.md`) | Travail |
 |---|---|---|---|
 | 1 | Espace entreprise et équipe (inscription, logo, rôles admin / recruteur, invitations) | Fait (étape 3, lots A1 à A6) | Vérifier |
-| 2 | Offres d'emploi (modèle, publication, page carrière, lien à partager) | Fait en grande partie (`/app/hire/offres`, `/entreprises/[slug]`, `/offres/[slug]`) | Ajuster : partage LinkedIn / WhatsApp, suivi de la source |
-| 3 | **Candidature express** (sans création de compte longue) | À construire : aujourd'hui « Postuler » envoie vers l'inscription talent complète | Construire |
+| 2 | Offres d'emploi (modèle, publication, page carrière, lien à partager) | Fait en grande partie (`/app/hire/offres`, `/entreprises/[slug]`, `/offres/[slug]`) ; lien copié et WhatsApp déjà dans le menu de l'offre | Ajuster : LinkedIn, QR, lien court, suivi de la source |
+| 3 | **Candidature express** (sans création de compte longue) | À construire : aujourd'hui « Postuler » envoie vers la liste d'attente tant que l'inscription est fermée (`NEXT_PUBLIC_SIGNUP_OPEN`), sinon vers l'inscription talent complète | Construire |
 | 4 | Short-list Orbi expliquée (classes, 3 notes, raisons) | Fait (Tableau Orbi, `hire-classes`, `hire-scores`, `hire-tri`) | Vérifier, raisons en 3 familles |
-| 5 | Pipeline ATS (étapes, glisser-déposer, notes d'équipe, évaluations) | Fait (`hire-ats`, `hire-candidates`, `Scorecard`) | Vérifier le glisser-déposer en colonnes sur ordinateur |
+| 5 | Pipeline ATS (étapes, glisser-déposer, notes d'équipe, évaluations) | Fait sauf les colonnes : l'ancien tableau glisser-déposer a été retiré avec le Modèle B ; il reste la vue tableau et le rangement des cartes | Construire la vue colonnes (souris et clavier) |
 | 6 | **Tests de compétences** | À construire (seuls les quiz de Learn existent, liés aux cours) | Construire |
-| 7 | **Prise de rendez-vous connectée à l'agenda Google / Outlook** | Partiel : entretiens à créneaux proposés (`Interview`), fichier `.ics` | Construire la connexion d'agenda et la réservation par le candidat |
-| 8 | **Suivi automatique** (e-mails aux candidats, relances, rappels à l'équipe) | Partiel : relances des pièces de vérification, modèles de messages, réponses groupées | Construire les règles automatiques par étape |
+| 7 | **Prise de rendez-vous connectée à l'agenda Google / Outlook** | Partiel : 1 à 3 créneaux proposés que le candidat choisit (`Interview`), occupation lue dans les entretiens Jumanly, fichier `.ics` | Construire la connexion d'agenda et la réservation libre par le candidat |
+| 8 | **Suivi automatique** (e-mails aux candidats, relances, rappels à l'équipe) | Partiel : accusé de réception automatique, relances des pièces, rappel d'entretien J-1, résumé quotidien, e-mails de décision différés (10 min), modèles de messages, réponses groupées | Construire les règles automatiques par étape |
 | 9 | **Vivier** (automatique, avec consentement) | Partiel : viviers manuels (`TalentPool`) | Construire l'entrée automatique et les suggestions à chaque nouvelle offre |
-| 10 | Tableau de bord et rapports PDF | Fait (`hire-reports`, `hire-report-pdf`) | Ajouter les indicateurs du MVP |
+| 10 | Tableau de bord et rapports PDF | Fait (`hire-reports`, `hire-report-pdf` : entonnoir, taux de passage, délai d'embauche, sources) | Ajouter les indicateurs du MVP |
 
 Plus : la **formule annuelle** à 4 900 USD (lot M1) et le **mode MVP** qui cache le reste (lot M0).
 
