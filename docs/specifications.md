@@ -175,6 +175,7 @@ jumanly/
 ### Variables d'environnement (`.env.example`)
 
 ```env
+PRODUCT_SCOPE=full                 # full (toute la plateforme) | hire (MVP recruteur, reste en veille ; lu au build et au lancement)
 DATABASE_URL=
 BETTER_AUTH_SECRET=
 BETTER_AUTH_URL=http://localhost:3000

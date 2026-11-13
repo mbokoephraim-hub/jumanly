@@ -144,8 +144,11 @@ export function PhoneNav({
   set = "talent",
   badges,
   wide = false,
+  asleep = [],
   children,
 }: {
+  /** Tabs put to sleep by the mode MVP (docs/mvp-web-recruteur lot M0): not shown. */
+  asleep?: readonly PhoneTab[];
   /** On a computer, under the tabs (the recruiter's tools). */
   children?: ReactNode;
   /**
@@ -198,57 +201,63 @@ export function PhoneNav({
       data-large={wide ? "" : undefined}
     >
       {wide ? (
-        <Link href={rootOf("fil", set)} className="nb-nav-marque" aria-label={t("home")}>
+        <Link
+          href={asleep.includes("fil") ? "/app" : rootOf("fil", set)}
+          className="nb-nav-marque"
+          aria-label={t("home")}
+        >
           {/* eslint-disable-next-line @next/next/no-img-element -- a 30 px brand tile */}
           <img src="/marque/jumanly-symbole-lime.svg" alt="" width={30} height={30} />
           <span aria-hidden>{t("brand")}</span>
         </Link>
       ) : null}
-      {tabsOf(set).map((tab) => {
-        const active = tab === current;
-        const count = counts[tab] ?? 0;
-        return (
-          <Link
-            key={tab}
-            href={rootOf(tab, set)}
-            prefetch
-            scroll={false}
-            data-onglet={tab}
-            aria-label={label(tab, count)}
-            aria-current={active ? "page" : undefined}
-            onClick={(event) => {
-              if (root !== tab) {
-                // From the first screen of a talent tab, the tab touched is shown at once.
-                if (set === "talent" && root !== null && !event.metaKey && !event.ctrlKey) {
-                  event.preventDefault();
-                  switchTab(pathname, rootOf(tab, set), names[tab]);
+      {tabsOf(set)
+        .filter((tab) => !asleep.includes(tab))
+        .map((tab) => {
+          const active = tab === current;
+          const count = counts[tab] ?? 0;
+          return (
+            <Link
+              key={tab}
+              href={rootOf(tab, set)}
+              prefetch
+              scroll={false}
+              data-onglet={tab}
+              aria-label={label(tab, count)}
+              aria-current={active ? "page" : undefined}
+              onClick={(event) => {
+                if (root !== tab) {
+                  // From the first screen of a talent tab, the tab touched is shown at once.
+                  if (set === "talent" && root !== null && !event.metaKey && !event.ctrlKey) {
+                    event.preventDefault();
+                    switchTab(pathname, rootOf(tab, set), names[tab]);
+                    return;
+                  }
+                  setPressed({ tab, from: pathname });
                   return;
                 }
-                setPressed({ tab, from: pathname });
-                return;
-              }
-              event.preventDefault();
-              const layer =
-                document.querySelector(`[data-onglet-couche="${tab}"]`) ??
-                document.getElementById("content");
-              // Already at the top: the tab is read again (the Fil brings its new posts).
-              if (layer && layer.scrollTop <= 0)
-                window.dispatchEvent(new CustomEvent("jm:onglet-haut", { detail: { tab } }));
-              else layer?.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-          >
-            <PhoneIcon name={tab} size={22} stroke={2} />
-            <span className="nb-nav-nom" aria-hidden>
-              {names[tab]}
-            </span>
-            {count ? (
-              <span className="nb-nav-compte" aria-hidden>
-                {count > COUNT_MAX ? t("many") : count}
+                event.preventDefault();
+                const layer =
+                  document.querySelector(`[data-onglet-couche="${tab}"]`) ??
+                  document.getElementById("content");
+                // Already at the top: the tab is read again (the Fil brings its new posts).
+                if (layer && layer.scrollTop <= 0)
+                  window.dispatchEvent(new CustomEvent("jm:onglet-haut", { detail: { tab } }));
+                else layer?.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+            >
+              <PhoneIcon name={tab} size={22} stroke={2} />
+              <span className="nb-nav-nom" aria-hidden>
+                {names[tab]}
               </span>
-            ) : null}
-          </Link>
-        );
-      })}
+              {count ? (
+                <span className="nb-nav-compte" aria-hidden>
+                  {count > COUNT_MAX ? t("many") : count}
+                </span>
+              ) : null}
+            </Link>
+          );
+        })}
       {wide ? children : null}
     </nav>
   );

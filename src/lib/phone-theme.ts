@@ -20,10 +20,13 @@ export const LIGHT_QUERY = "(prefers-color-scheme: light)";
  * the person is read first: `<html data-nb-theme="clair">` and, for the screens without a mockup,
  * the `sombre` class of the dark mode; without it (sign-in pages), the night as before.
  */
-export function phoneThemeScript(follow = false) {
+export function phoneThemeScript(follow = false, force?: "clair") {
   if (!follow)
     return `document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){m.setAttribute("content","${PHONE_NIGHT}")})`;
-  return `(function(){var c;try{c=localStorage.getItem("${PHONE_THEME_KEY}")}catch(e){}var l=c==="clair"||(c==="auto"&&window.matchMedia("${LIGHT_QUERY}").matches);var r=document.documentElement;r.setAttribute("data-nb-theme",l?"clair":"sombre");r.classList.toggle("sombre",!l);document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){m.setAttribute("content",l?"${PHONE_CREAM}":"${PHONE_NIGHT}")})})()`;
+  const read = force
+    ? `c="${force}";`
+    : `try{c=localStorage.getItem("${PHONE_THEME_KEY}")}catch(e){}`;
+  return `(function(){var c;${read}var l=c==="clair"||(c==="auto"&&window.matchMedia("${LIGHT_QUERY}").matches);var r=document.documentElement;r.setAttribute("data-nb-theme",l?"clair":"sombre");r.classList.toggle("sombre",!l);document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){m.setAttribute("content",l?"${PHONE_CREAM}":"${PHONE_NIGHT}")})})()`;
 }
 
 /** The choice kept on this phone (« Sombre » when none, or outside a browser). */

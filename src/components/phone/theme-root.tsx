@@ -17,11 +17,12 @@ import {
  * and the browser bar in the ground of the screen. « Comme mon téléphone » follows the phone live;
  * a choice made in Paramètres applies at once. Leaving the app takes it all away.
  */
-export function PhoneThemeRoot() {
+export function PhoneThemeRoot({ force }: { force?: "clair" } = {}) {
   useEffect(() => {
     const root = document.documentElement;
     const media = window.matchMedia(LIGHT_QUERY);
-    let choice: PhoneTheme = readPhoneTheme();
+    // The recruiter's MVP is light only (prototype docs/mvp-web-recruteur, 12/11/2026).
+    let choice: PhoneTheme = force ?? readPhoneTheme();
     let colour = PHONE_NIGHT;
     const paintBar = () => {
       for (const meta of document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]'))
@@ -35,6 +36,7 @@ export function PhoneThemeRoot() {
       paintBar();
     };
     const changed = (event: Event) => {
+      if (force) return;
       choice = (event as CustomEvent<PhoneTheme>).detail;
       apply();
     };
@@ -56,6 +58,6 @@ export function PhoneThemeRoot() {
       root.removeAttribute("data-nb-theme");
       root.classList.remove("sombre");
     };
-  }, []);
+  }, [force]);
   return null;
 }

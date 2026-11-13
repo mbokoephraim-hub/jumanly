@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 import { securityHeaders } from "./src/lib/security-headers";
+import { asleepRedirects } from "./src/lib/product-scope";
 import { publicSiteRewrites, siteLocales } from "./src/i18n/site-routes";
 
 const nextConfig: NextConfig = {
@@ -79,15 +80,20 @@ const nextConfig: NextConfig = {
     };
   },
   // `/en/tarifs` or `/fr/tarifs`: the language is kept, then the usual address is shown.
+  // Mode MVP (PRODUCT_SCOPE=hire, docs/mvp-web-recruteur lot M0): the pages put to sleep answer a
+  // 307 to the site or to the account's home; nothing in `full`.
   async redirects() {
-    return siteLocales.flatMap((locale) => [
-      { source: `/${locale}`, destination: `/langue?vers=${locale}&suite=/`, permanent: false },
-      {
-        source: `/${locale}/:path*`,
-        destination: `/langue?vers=${locale}&suite=/:path*`,
-        permanent: false,
-      },
-    ]);
+    return [
+      ...asleepRedirects(),
+      ...siteLocales.flatMap((locale) => [
+        { source: `/${locale}`, destination: `/langue?vers=${locale}&suite=/`, permanent: false },
+        {
+          source: `/${locale}/:path*`,
+          destination: `/langue?vers=${locale}&suite=/:path*`,
+          permanent: false,
+        },
+      ]),
+    ];
   },
   async headers() {
     return securityHeaders({ production: process.env.APP_ENV === "production" });

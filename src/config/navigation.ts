@@ -1,6 +1,13 @@
 import type { IconName } from "@/components/brand/icon";
 import type { TalentIconName } from "@/components/talent/icon";
 
+import { isAsleepHref } from "@/lib/product-scope";
+
+/** The links of the site that stay awake (mode MVP, docs/mvp-web-recruteur lot M0). */
+export function awake<T extends { href: string }>(links: readonly T[]): T[] {
+  return links.filter((link) => !isAsleepHref(link.href));
+}
+
 /** Public site links. `key` points to `nav.<key>` in the texts. */
 export const publicNavigation = [
   { key: "trainings", href: "/formations" },

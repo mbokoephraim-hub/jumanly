@@ -1,4 +1,5 @@
 import "server-only";
+import { isHireScope } from "@/lib/product-scope";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { db } from "@/server/db";
@@ -138,6 +139,7 @@ export async function RhOfferCandidatesList({
     );
   // The « ··· » of the page (Ephraïm, 03/11/2026): modify, pause, postpone, delete, nothing else.
   const actions: RhOfferActionsData = {
+    noFil: isHireScope(),
     id: job.id,
     title: job.title,
     status: (["published", "pending_review", "draft", "paused", "closed"] as const).includes(

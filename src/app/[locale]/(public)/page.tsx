@@ -33,8 +33,13 @@ import { highestPrice, lowestPaidPrice } from "@/server/services/plans";
 import { jsonLdScript, pageMetadata, siteJsonLd } from "@/lib/seo";
 import { splitLastNumber } from "@/lib/numbers";
 import { applySiteLocale } from "@/i18n/site-locale";
+import { isHireScope } from "@/lib/product-scope";
+import RecruitersPage, { generateMetadata as recruitersMetadata } from "./recruteurs/page";
 
-export async function generateMetadata({ params }: PageProps<"/[locale]">): Promise<Metadata> {
+export async function generateMetadata(props: PageProps<"/[locale]">): Promise<Metadata> {
+  const { params } = props;
+  // Mode MVP (docs/mvp-web-recruteur lot M0): the site opens on the recruiters' page.
+  if (isHireScope()) return recruitersMetadata(props as PageProps<"/[locale]/recruteurs">);
   await applySiteLocale(params);
   const t = await getTranslations("home.seo");
   return pageMetadata({
@@ -46,7 +51,9 @@ export async function generateMetadata({ params }: PageProps<"/[locale]">): Prom
   });
 }
 
-export default async function HomePage({ params }: PageProps<"/[locale]">) {
+export default async function HomePage(props: PageProps<"/[locale]">) {
+  const { params } = props;
+  if (isHireScope()) return <RecruitersPage {...(props as PageProps<"/[locale]/recruteurs">)} />;
   await applySiteLocale(params);
   const t = await getTranslations();
   const [plans, courses, latest, messages, overrides] = await Promise.all([

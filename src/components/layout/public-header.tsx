@@ -1,7 +1,14 @@
 import { Fragment, Suspense } from "react";
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
-import { publicNavigation, solutionsNavigation } from "@/config/navigation";
+import {
+  awake,
+  publicNavigation as allPublicNavigation,
+  solutionsNavigation as allSolutionsNavigation,
+} from "@/config/navigation";
+
+const publicNavigation = awake(allPublicNavigation);
+const solutionsNavigation = awake(allSolutionsNavigation);
 import { Icon, Logo } from "@/components/brand";
 import { MenuArt } from "@/components/site/menu-art";
 import { SiteButton } from "@/components/site/marketing";

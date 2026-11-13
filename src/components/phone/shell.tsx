@@ -45,8 +45,17 @@ export async function PhoneShell({
   badges,
   wide = false,
   side,
+  asleep,
+  frame,
   children,
 }: {
+  /** Tabs put to sleep by the mode MVP (docs/mvp-web-recruteur lot M0). */
+  asleep?: readonly PhoneTab[];
+  /**
+   * The recruiter's frame of the MVP (prototype docs/mvp-web-recruteur/prototype): the floating bar
+   * at the top and the column of round tools on the left, in place of the menu of the phone.
+   */
+  frame?: ReactNode;
   /** On a computer, under the tabs of the menu: the recruiter's tools and company part. */
   side?: ReactNode;
   /** A computer or a tablet (talent, 07/11/2026): the same screens, the menu on the left. */
@@ -135,13 +144,16 @@ export async function PhoneShell({
     <div
       className="nb-app"
       data-large={wide ? "" : undefined}
+      data-hire={frame ? "" : undefined}
       data-reduit={reduceMotion ? "" : undefined}
       data-reduce-motion={reduceMotion ? "" : undefined}
     >
       {/* Before the first paint: the logo alone, and the dark class of the screens without a mockup. */}
       <script dangerouslySetInnerHTML={{ __html: openingScript(tBrand("brand")) }} />
-      <script dangerouslySetInnerHTML={{ __html: phoneThemeScript(true) }} />
-      <PhoneThemeRoot />
+      <script
+        dangerouslySetInnerHTML={{ __html: phoneThemeScript(true, frame ? "clair" : undefined) }}
+      />
+      <PhoneThemeRoot force={frame ? "clair" : undefined} />
       <Opening />
       <ViewSync view={wide ? "wide" : "phone"} />
       <AppMotionRoot reduce={reduceMotion} />
@@ -178,20 +190,24 @@ export async function PhoneShell({
           </div>
         </PhoneStack>
       </PhoneMeProvider>
+      {frame}
       {/* The menu's counts follow on the phone; their names come with them (« Chat, 3 … »). */}
-      <NextIntlClientProvider
-        messages={{ phone: { nav: messages.phone.nav }, phoneRh: { nav: messages.phoneRh.nav } }}
-      >
-        <PhoneNav
-          aria={t("nav.aria")}
-          set={set}
-          names={Object.fromEntries(tabsOf(set).map((tab) => [tab, navName(tab)]))}
-          badges={badges}
-          wide={wide}
+      {frame ? null : (
+        <NextIntlClientProvider
+          messages={{ phone: { nav: messages.phone.nav }, phoneRh: { nav: messages.phoneRh.nav } }}
         >
-          {side}
-        </PhoneNav>
-      </NextIntlClientProvider>
+          <PhoneNav
+            aria={t("nav.aria")}
+            set={set}
+            names={Object.fromEntries(tabsOf(set).map((tab) => [tab, navName(tab)]))}
+            badges={badges}
+            wide={wide}
+            asleep={asleep}
+          >
+            {side}
+          </PhoneNav>
+        </NextIntlClientProvider>
+      )}
       <PhonePullRefresh loading={t("refresh.loading")} />
       <Suspense fallback={null}>
         <PhoneOrbi

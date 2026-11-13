@@ -15903,6 +15903,38 @@ Conventions :
 | `org.delete.activeSubscription` | Résiliez d'abord l'abonnement en cours. |
 | `org.delete.done` | Organisation supprimée. |
 
+### MVP recruteur · cadre de l'application web (mode MVP)
+
+*Lot M0 (docs/mvp-web-recruteur, prototype validé le 12/11/2026) : avec `PRODUCT_SCOPE=hire`, barre flottante en haut (Accueil · Offres · Candidats · Agenda · Vivier · Messages · Rapports) et colonne d'outils ronds à gauche.*
+
+| Clé | Texte |
+|---|---|
+| `hireFrame.brand` | Jumanly Hire, accueil |
+| `hireFrame.name` | jumanly |
+| `hireFrame.badge` | Hire |
+| `hireFrame.nav.aria` | Menu principal |
+| `hireFrame.nav.home` | Accueil |
+| `hireFrame.nav.offers` | Offres |
+| `hireFrame.nav.candidates` | Candidats |
+| `hireFrame.nav.agenda` | Agenda |
+| `hireFrame.nav.pool` | Vivier |
+| `hireFrame.nav.messages` | Messages |
+| `hireFrame.nav.reports` | Rapports |
+| `hireFrame.tools.aria` | Outils |
+| `hireFrame.tools.templates` | Modèles de messages |
+| `hireFrame.tools.team` | Équipe |
+| `hireFrame.tools.plan` | Formule |
+| `hireFrame.tools.page` | Page entreprise |
+| `hireFrame.tools.journal` | Journal des consultations |
+| `hireFrame.tools.settings` | Réglages |
+| `hireFrame.publish` | Nouvelle offre |
+| `hireFrame.orbi` | Orbi |
+| `hireFrame.help` | Aide : assistant@jumanly.io |
+| `hireFrame.logout` | Se déconnecter |
+| `hireFrame.search` | Rechercher un candidat |
+| `hireFrame.notifications` | Notifications |
+| `hireFrame.menu` | Ouvrir les outils |
+
 ### Modèle B recruteur · coque au téléphone
 
 *Lot M1 (docs/modele-b-recruteur, mobile/, brief § 3 et § 4) : barre du bas Fil · Offres · Candidatures · Talents · Messages en icônes seules, Orbi flottant, avatar vers le compte, recherche en deux temps sous l'en-tête de chaque onglet.*

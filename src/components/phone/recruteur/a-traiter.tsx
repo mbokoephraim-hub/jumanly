@@ -12,7 +12,14 @@ import { initialsOf } from "./compte-initials";
  * and the week, read from the organization's offers only (`hireToday`). A phone keeps the Fil alone
  * (these come with the bell and the tabs).
  */
-export async function RhTodayRail({ ctx }: { ctx: HireContext }) {
+export async function RhTodayRail({
+  ctx,
+  full = false,
+}: {
+  ctx: HireContext;
+  /** The home of the MVP (mode PRODUCT_SCOPE=hire, lot M0): the whole width, without the Fil. */
+  full?: boolean;
+}) {
   const now = new Date();
   const [today, t, format] = await Promise.all([
     hireToday(db, ctx, now),
@@ -26,7 +33,7 @@ export async function RhTodayRail({ ctx }: { ctx: HireContext }) {
     { key: "unread", count: today.counts.unread, href: "/app/messages" },
   ] as const;
   return (
-    <aside className="nb-rh-cote" aria-labelledby="rh-cote-t">
+    <aside className="nb-rh-cote" aria-labelledby="rh-cote-t" data-plein={full ? "" : undefined}>
       <h2 id="rh-cote-t" className="nb-rh-cote-t">
         {t("title")}
       </h2>

@@ -1,5 +1,6 @@
 import { isModelB } from "@/server/phone-routes";
 import { isPhone } from "@/server/view";
+import { isHireScope } from "@/lib/product-scope";
 import { RhTodayRail } from "@/components/phone/recruteur/a-traiter";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -461,6 +462,13 @@ async function HireTodayPageContent() {
 export default async function HireTodayPage() {
   if (await isModelB()) {
     const { user, ctx } = await requireHire("/app/hire");
+    // Mode MVP (docs/mvp-web-recruteur lot M0): the Fil sleeps, « À traiter » takes the whole width.
+    if (isHireScope())
+      return (
+        <div className="nb-page hf-accueil">
+          <RhTodayRail ctx={ctx} full />
+        </div>
+      );
     // On a computer « À traiter » sits beside the Fil (08/11/2026); a phone keeps the Fil alone.
     const wide = !(await isPhone());
     const fil = (
