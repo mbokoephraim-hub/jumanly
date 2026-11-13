@@ -47,15 +47,18 @@ export async function PhoneShell({
   side,
   asleep,
   frame,
+  frameDark = false,
   children,
 }: {
   /** Tabs put to sleep by the mode MVP (docs/mvp-web-recruteur lot M0). */
   asleep?: readonly PhoneTab[];
   /**
-   * The recruiter's frame of the MVP (prototype docs/mvp-web-recruteur/prototype): the floating bar
+   * The recruiter's web frame (docs/mvp-web-recruteur/prototype-v3): the floating bar
    * at the top and the column of round tools on the left, in place of the menu of the phone.
    */
   frame?: ReactNode;
+  /** The « Mode sombre » of that frame (kept on the account): the screens follow it. */
+  frameDark?: boolean;
   /** On a computer, under the tabs of the menu: the recruiter's tools and company part. */
   side?: ReactNode;
   /** A computer or a tablet (talent, 07/11/2026): the same screens, the menu on the left. */
@@ -151,9 +154,11 @@ export async function PhoneShell({
       {/* Before the first paint: the logo alone, and the dark class of the screens without a mockup. */}
       <script dangerouslySetInnerHTML={{ __html: openingScript(tBrand("brand")) }} />
       <script
-        dangerouslySetInnerHTML={{ __html: phoneThemeScript(true, frame ? "clair" : undefined) }}
+        dangerouslySetInnerHTML={{
+          __html: phoneThemeScript(true, frame ? (frameDark ? "sombre" : "clair") : undefined),
+        }}
       />
-      <PhoneThemeRoot force={frame ? "clair" : undefined} />
+      <PhoneThemeRoot force={frame ? (frameDark ? "sombre" : "clair") : undefined} />
       <Opening />
       <ViewSync view={wide ? "wide" : "phone"} />
       <AppMotionRoot reduce={reduceMotion} />

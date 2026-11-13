@@ -19399,10 +19399,9 @@
       "done": "Organisation supprimée."
     }
   },
-  "hireFrame": {
-    "brand": "Jumanly Hire, accueil",
+  "hireV3": {
+    "brand": "Jumanly, accueil",
     "name": "jumanly",
-    "badge": "Hire",
     "nav": {
       "aria": "Menu principal",
       "home": "Accueil",
@@ -19415,20 +19414,67 @@
     },
     "tools": {
       "aria": "Outils",
-      "templates": "Modèles de messages",
+      "publish": "Nouvelle offre",
+      "orbi": "Orbi",
+      "company": "Page entreprise",
       "team": "Équipe",
-      "plan": "Formule",
-      "page": "Page entreprise",
-      "journal": "Journal des consultations",
-      "settings": "Réglages"
+      "plan": "Formule"
     },
-    "publish": "Nouvelle offre",
-    "orbi": "Orbi",
-    "help": "Aide : assistant@jumanly.io",
-    "logout": "Se déconnecter",
-    "search": "Rechercher un candidat",
-    "notifications": "Notifications",
-    "menu": "Ouvrir les outils"
+    "burger": "Outils",
+    "search": "Rechercher (Ctrl K)",
+    "help": "Aide",
+    "bell": {
+      "title": "Notifications",
+      "count": "{count, plural, one {# nouvelle} other {# nouvelles}}",
+      "empty": "Aucune nouvelle notification.",
+      "all": "Voir toutes les notifications"
+    },
+    "me": {
+      "profile": "Mon profil",
+      "settings": "Réglages",
+      "dark": "Mode sombre",
+      "help": "Centre d'aide",
+      "logout": "Se déconnecter"
+    },
+    "palette": {
+      "dialog": "Recherche",
+      "placeholder": "Chercher un candidat, une offre, une page…",
+      "escape": "Échap",
+      "filters": {
+        "all": "Tout",
+        "candidates": "Candidats",
+        "offers": "Offres",
+        "pages": "Pages"
+      },
+      "quick": "Actions rapides",
+      "recent": "Candidats récents",
+      "actions": {
+        "publish": "Nouvelle offre",
+        "slots": "Proposer des créneaux",
+        "messages": "Messages"
+      },
+      "page": "Page",
+      "score": "{score} %",
+      "candidate": "Candidat",
+      "live": "En ligne",
+      "paused": "En pause",
+      "draft": "Brouillon",
+      "askOrbi": "Demander à Orbi : <em>« {query} »</em>",
+      "none": "Aucun résultat pour « {query} ».",
+      "up": "↑",
+      "down": "↓",
+      "enter": "Entrée",
+      "navigate": "naviguer",
+      "open": "ouvrir",
+      "reopen": "Ctrl K pour rouvrir",
+      "loading": "Chargement…"
+    },
+    "page": {
+      "back": "Retour",
+      "backTo": "Retour à {label}",
+      "download": "Télécharger",
+      "titleSuffix": "· Jumanly Hire"
+    }
   },
   "phoneRh": {
     "nav": {

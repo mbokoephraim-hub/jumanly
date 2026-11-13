@@ -19,7 +19,7 @@ test.describe("mode full : rien ne change", () => {
     await expect(page).toHaveURL(/\/formations$/);
     await logIn(page, "entreprise@jumanly.test", undefined, "/app/hire");
     await expect(page).toHaveURL(/\/app\/hire/);
-    await expect(page.locator(".hf-top")).toHaveCount(0);
+    await expect(page.locator(".hv3-cadre")).toHaveCount(0);
   });
 });
 
@@ -78,6 +78,38 @@ test.describe("mode hire : seulement le recrutement", () => {
     await page.goto("/app/hire/talents");
     await expect(page).toHaveURL(/onglet=vivier/);
     await expect(page.getByRole("link", { name: /^Découvrir/ })).toHaveCount(0);
+  });
+
+  test("cadre v3 : recherche Ctrl K, menu profil et mode sombre", async ({ page }) => {
+    await logIn(page, "entreprise@jumanly.test", undefined, "/app/hire");
+    await expect(page.locator(".hv3-cadre .top")).toBeVisible();
+    // Rail: Nouvelle offre, Orbi, then the tools.
+    const rail = page.locator("#rail");
+    for (const name of ["Nouvelle offre", "Orbi", "Page entreprise", "Équipe", "Formule"])
+      await expect(rail.getByRole(name === "Orbi" ? "button" : "link", { name })).toBeVisible();
+    // Ctrl K: the filters, the rapid actions, the pages.
+    await page.keyboard.press("Control+k");
+    const search = page.getByRole("dialog", { name: "Recherche" });
+    await expect(search).toBeVisible();
+    await expect(search.getByRole("button", { name: /^Tout/ })).toBeVisible();
+    await expect(search.getByText("Actions rapides")).toBeVisible();
+    await search.getByPlaceholder("Chercher un candidat, une offre, une page…").fill("Agenda");
+    await expect(search.locator(".po").first()).toContainText("Agenda");
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/\/app\/hire\/entretiens/);
+    // Profile menu: the dark mode, kept on the account.
+    await page.locator("#mebtn").click();
+    const dark = page.getByRole("switch", { name: "Mode sombre" });
+    await expect(dark).toHaveAttribute("aria-checked", "false");
+    await dark.click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await page.waitForLoadState("networkidle");
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await page.locator("#mebtn").click();
+    await page.getByRole("switch", { name: "Mode sombre" }).click();
+    await expect(page.locator("html")).not.toHaveAttribute("data-theme", "dark");
+    await page.waitForLoadState("networkidle");
   });
 
   test("un talent garde ses candidatures, ses messages et son profil", async ({ page }) => {

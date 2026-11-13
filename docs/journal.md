@@ -5794,3 +5794,22 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
   CSS et JS à reprendre tels quels (`code/`), 53 captures claires et 53 sombres, fenêtres et parcours,
   brief `BRIEF-PROTOTYPE-V3.md` (écrans → routes) et prompt `PROMPT-LANCEMENT-PROTOTYPE-V3.md`
   (lots V3-1 à V3-6). Remplace `prototype/` et l'ancien design recruteur ordinateur.
+
+## 2026-11-13 · Jumanly Hire v3, lot V3-1 (cadre)
+
+- `src/styles/hire-v3.css` : la feuille `code/hire-v3.css` du prototype, générée par
+  `node scripts/build-hire-v3-css.mjs`, préfixée une seule fois sous `:where(.hv3)` (spécificité du
+  prototype gardée), animations renommées `hv3-…`, aucune valeur modifiée. Chargée seulement dans
+  l'espace connecté (`src/app/app/layout.tsx`). Police Inter ajoutée (auto-hébergée, chargée à
+  l'usage).
+- Cadre `src/components/hire-v3/` (mode `PRODUCT_SCOPE=hire`) : barre du haut (logo tuile Lime,
+  menu en pilule avec nombres, recherche, cloche avec les 4 dernières notifications, aide, profil),
+  rail d'icônes (Nouvelle offre, Orbi, Page entreprise, Équipe, Formule), menu profil (Mon profil,
+  Réglages, Mode sombre, Centre d'aide, Se déconnecter), barre de défilement fine, recherche Ctrl K
+  (filtres, actions rapides, candidats avec leur %, offres, pages, « Demander à Orbi »), en-tête de
+  page `HirePageHead` (retour, Télécharger, onglets en pilule) et `HirePage` pour les lots suivants.
+- Mode sombre gardé sur le compte (`User.appearance`), `data-theme` sur `<html>` ; les écrans pas
+  encore redessinés suivent avec les couleurs du prototype.
+- Retirés : `src/components/hire-frame/` et `src/styles/hire-frame.css` (cadre du prototype v1).
+- Données : `hirePaletteIndex` (filtré par organisation) et `GET /api/hire/recherche/index`.
+- Choix notés dans `docs/decisions/2026-11-13-cadre-hire-v3.md`. Prochain lot : V3-2 (Offres).
