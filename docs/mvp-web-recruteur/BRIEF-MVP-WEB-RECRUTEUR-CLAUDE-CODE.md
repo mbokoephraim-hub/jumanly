@@ -6,6 +6,9 @@ Ce brief l'emporte sur `docs/PLAN-REFONTE-EN-3-ETAPES.md` pour l'ordre de travai
 
 ---
 
+> **Design (13/11/2026)** : le prototype validé par Ephraïm, `prototype/jumanly-hire.html` (captures et brief
+> dans `prototype/`), est la seule référence visuelle de chaque écran de ce MVP. Chaque lot l'applique à ses écrans.
+
 ## 1. La promesse à tenir
 
 > « En 10 minutes, une entreprise publie une offre et la partage. Orbi lui sort une short-list expliquée, les candidats passent un test, réservent eux-mêmes leur entretien dans l'agenda de l'équipe, et Jumanly relance tout le monde à sa place. Les bons profils non retenus restent dans son vivier. »
