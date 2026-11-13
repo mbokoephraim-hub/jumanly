@@ -20681,6 +20681,288 @@
       "line": "{status, select, published {En ligne} paused {En pause} other {Clôturée}} · {high} fort potentiel"
     }
   },
+  "hireV3Team": {
+    "title": "Équipe",
+    "sub": "{org} · {count, plural, one {# membre} other {# membres}} sur {max} places · semaine du {week}",
+    "tabs": {
+      "membres": "Membres",
+      "journal": "Journal des consultations"
+    },
+    "invite": "Inviter un membre",
+    "assign": "Attribuer",
+    "me": "vous",
+    "waiting": "En attente",
+    "pending": "Invité {when} · {role}",
+    "addMember": "Ajouter un membre · {count, plural, one {# place libre} other {# places libres}} dans votre formule",
+    "kpi": {
+      "members": "Membres",
+      "membersValue": "{used} / {max}",
+      "membersFoot": "{count, plural, =0 {aucune place libre} one {# place libre} other {# places libres}}",
+      "tasks": "Tâches ouvertes",
+      "tasksFoot": "{count, plural, =0 {rien pour aujourd'hui} other {dont # pour aujourd'hui}}",
+      "interviews": "Entretiens",
+      "interviewsFoot": "cette semaine",
+      "invitations": "Invitations",
+      "invitationsFoot": "en attente de réponse"
+    },
+    "load": {
+      "title": "Charge de la semaine",
+      "interviews": "Entretiens",
+      "follow": "Suivis",
+      "diagnostic": "Évaluations",
+      "interview": "Entretiens à préparer",
+      "items": "à faire",
+      "total": "{count, plural, one {# chose à faire} other {# choses à faire}}"
+    },
+    "follow": {
+      "title": "Qui suit quelle offre",
+      "owner": "Responsable",
+      "none": "Une offre sans responsable dans l'équipe reste suivie par la personne qui l'a créée."
+    },
+    "role": {
+      "org_owner": "Propriétaire",
+      "org_admin": "Administrateur",
+      "recruiter": "Recruteur",
+      "hiring_manager": "Manager",
+      "viewer": "Lecture seule",
+      "partner_manager": "Partenaire"
+    },
+    "log": {
+      "title": "Journal des consultations",
+      "sub": "Chaque ouverture de profil est enregistrée",
+      "kpi": {
+        "today": "Aujourd'hui",
+        "todayFoot": "profils ouverts",
+        "week": "Cette semaine",
+        "weekFoot": "consultations",
+        "members": "Membres concernés",
+        "membersFoot": "cette semaine",
+        "profiles": "Profils différents",
+        "profilesFoot": "sur 30 jours"
+      },
+      "last": "Dernières consultations",
+      "admin": "Visible par les administrateurs",
+      "member": "Membre",
+      "profile": "Profil consulté",
+      "reason": "Raison",
+      "when": "Quand",
+      "application": "Candidature",
+      "search": "Recherche de talents",
+      "former": "Ancien membre",
+      "unknown": "Profil supprimé",
+      "empty": "Aucune consultation sur les 30 derniers jours."
+    }
+  },
+  "hireV3Help": {
+    "sub": "Réponses, guides et contact par e-mail",
+    "tabs": {
+      "centre": "Centre d'aide",
+      "guides": "Guides",
+      "ecrire": "Nous écrire"
+    },
+    "hero": "Comment pouvons-nous vous aider, {name} ?",
+    "search": "Une question : refus, offre, agenda, facture…",
+    "searchLabel": "Chercher dans l'aide",
+    "popular": "Souvent cherché",
+    "pop": {
+      "refus": {
+        "label": "Orbi et les refus",
+        "q": "refus"
+      },
+      "partager": {
+        "label": "Partager une offre",
+        "q": "partager"
+      },
+      "places": {
+        "label": "Ajouter des places",
+        "q": "places"
+      }
+    },
+    "cats": {
+      "offers": "Offres et candidatures",
+      "offersQ": "offre",
+      "orbi": "Candidats et Orbi",
+      "orbiQ": "Orbi",
+      "agenda": "Agenda et entretiens",
+      "agendaQ": "entretien",
+      "plan": "Formule et factures",
+      "planQ": "formule"
+    },
+    "answers": "{count, plural, =0 {aucune réponse} one {# réponse} other {# réponses}}",
+    "faqTitle": "Questions fréquentes",
+    "faq": {
+      "q1": {
+        "q": "Orbi peut-il refuser un candidat à ma place ?",
+        "a": "Non. Orbi classe et explique, il n'écarte jamais personne. Chaque refus demande un geste de votre part."
+      },
+      "q2": {
+        "q": "Sur quoi repose le pourcentage de compatibilité ?",
+        "a": "Sur les compétences, l'expérience, la formation, les langues et les critères de l'offre. Le nom, l'âge, le genre, la photo et l'origine ne comptent jamais. Le bouton « Pourquoi ? » montre le détail."
+      },
+      "q3": {
+        "q": "Les candidats paient-ils pour postuler ?",
+        "a": "Non, postuler est toujours gratuit, quelle que soit la formule."
+      },
+      "q4": {
+        "q": "Comment partager une offre ?",
+        "a": "Ouvrez l'offre, onglet Partage, puis copiez le lien ou utilisez le bouton du réseau."
+      },
+      "q5": {
+        "q": "Comment proposer un entretien ?",
+        "a": "Depuis la fiche du candidat ou l'agenda : choisissez un créneau libre, le candidat confirme."
+      },
+      "q6": {
+        "q": "Combien de places compte ma formule ?",
+        "a": "Votre formule et vos places sont visibles dans Formule. Pour en ajouter, écrivez-nous à assistant@jumanly.io."
+      }
+    },
+    "helpful": "Cette réponse ne vous aide pas ?",
+    "notHelpful": "Nous écrire",
+    "empty": "Aucune réponse trouvée",
+    "steps": {
+      "title": "Premiers pas",
+      "count": "{done} sur {total}",
+      "company": "Compléter la page entreprise",
+      "offer": "Publier une offre",
+      "team": "Inviter l'équipe"
+    },
+    "mail": {
+      "title": "Nous écrire",
+      "text": "Nous répondons par e-mail, en français.",
+      "button": "Écrire au support",
+      "noPhone": "Pas de numéro de téléphone : tout passe par e-mail, avec une trace écrite."
+    },
+    "write": {
+      "title": "Nouvelle demande",
+      "sub": "Choisissez un sujet : votre messagerie s'ouvre",
+      "text": "Décrivez la situation (page, offre, candidat concerné) et joignez une capture si besoin."
+    },
+    "guideN": "{n}",
+    "guideGo": "Ouvrir",
+    "guides": {
+      "g1": {
+        "title": "Publier votre première offre",
+        "sub": "7 étapes, avec l'aide d'Orbi"
+      },
+      "g2": {
+        "title": "Lire une short-list Orbi",
+        "sub": "Le « Pourquoi ? » expliqué"
+      },
+      "g3": {
+        "title": "Proposer des créneaux",
+        "sub": "Depuis l'agenda"
+      },
+      "g4": {
+        "title": "Inviter votre équipe",
+        "sub": "Rôles et places"
+      },
+      "g5": {
+        "title": "Lire vos rapports",
+        "sub": "Période, PDF, détail"
+      },
+      "g6": {
+        "title": "Gérer la formule",
+        "sub": "Places et factures"
+      }
+    }
+  },
+  "hireV3Plan": {
+    "title": "Formule",
+    "sub": "Gérée par les administrateurs de l'entreprise",
+    "adminOnly": "La formule est gérée par les administrateurs de l'entreprise.",
+    "tabs": {
+      "formule": "Formule",
+      "factures": "Factures"
+    },
+    "status": {
+      "free": "Gratuite",
+      "trialing": "Essai",
+      "active": "Active",
+      "past_due": "Paiement en attente",
+      "canceled": "Résiliée",
+      "sponsored": "Offerte"
+    },
+    "annual": "Paiement annuel",
+    "perYear": "USD par an",
+    "dot": "·",
+    "perMonth": "soit {value} USD par mois",
+    "today": "Aujourd'hui · jour {day} sur 365",
+    "renews": "Renouvellement à prévoir",
+    "ends": "Fin de la formule",
+    "use": {
+      "title": "Utilisation",
+      "month": "Ce mois",
+      "seats": "Places d'équipe",
+      "of": "{used} / {max}",
+      "jobs": "Offres en ligne",
+      "credits": "Analyses Orbi",
+      "unlimited": "sans limite",
+      "max": "sur {max}"
+    },
+    "included": {
+      "title": "Ce qui est inclus",
+      "sub": "Selon votre formule",
+      "offers": {
+        "title": "Offres et candidatures",
+        "text": "postuler reste gratuit pour les candidats"
+      },
+      "orbi": {
+        "title": "Tri expliqué par Orbi",
+        "text": "chaque score a son pourquoi"
+      },
+      "agenda": {
+        "title": "Agenda des entretiens",
+        "text": "créneaux confirmés par le candidat"
+      },
+      "pool": {
+        "title": "Vivier et rapports PDF",
+        "text": "avec consentement"
+      },
+      "team": {
+        "title": "Places d'équipe",
+        "text": "journal des consultations"
+      },
+      "data": {
+        "title": "Données protégées",
+        "text": "aucun refus automatique"
+      }
+    },
+    "pay": {
+      "title": "Paiement",
+      "change": "Gérer",
+      "last": "Dernière facture le {date}",
+      "noneYet": "Aucun paiement pour le moment",
+      "next": "Fin de la période payée",
+      "amount": "Montant",
+      "also": "Moyens acceptés",
+      "alsoValue": "Mobile Money ou carte",
+      "question": "Une question : assistant@jumanly.io"
+    },
+    "usd": "{value} USD",
+    "none": "–",
+    "method": {
+      "mobile_money": "Mobile Money",
+      "card": "Carte bancaire",
+      "bank_transfer": "Virement",
+      "cash": "Espèces"
+    },
+    "invoices": {
+      "title": "Factures",
+      "sub": "Paiement annuel · Mobile Money ou carte",
+      "yours": "Vos factures",
+      "usd": "Montants en USD",
+      "number": "Facture",
+      "date": "Date",
+      "amount": "Montant",
+      "method": "Moyen",
+      "state": "État",
+      "paid": "Payée",
+      "pdf": "PDF",
+      "next": "Prochaine",
+      "coming": "À venir",
+      "empty": "Aucune facture pour le moment."
+    }
+  },
   "phoneRh": {
     "nav": {
       "fil": "Fil",
