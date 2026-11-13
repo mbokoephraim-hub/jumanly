@@ -858,6 +858,19 @@ html{scrollbar-width:none}html::-webkit-scrollbar{display:none}
 .rpk-sp .sp-l{display:none}
 .rhero .act button{color:rgba(255,255,255,.75)}.rhero .act button.on,.rhero .act button[aria-selected="true"]{color:var(--sapin);background:var(--lime)}
 .robj{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:14px;background:#F6F8F1}.robar{position:relative;height:8px;border-radius:99px;background:#E4EADB}.robar b{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#3FAE3A,#A6F26B)}
+
+.logo{background:radial-gradient(130% 160% at 30% 30%,#2F6B4A 0%,#1B5040 50%,#0F3F37 100%)!important;border:0!important;gap:10px!important;padding:0 18px 0 16px!important}
+.logo b{color:#fff!important;font:600 14px var(--f-display)!important;letter-spacing:.2em!important;display:inline!important}.logo i{display:none!important}
+.logo svg{filter:drop-shadow(0 0 10px rgba(166,242,107,.25))}
+.rail{justify-content:center!important;gap:18px!important}.rgroup.end{margin-top:0!important}
+.rgroup{background:radial-gradient(160% 120% at 30% 20%,#2F6B4A 0%,#1B5040 55%,#0F3F37 100%)!important;border:0!important;box-shadow:0 10px 24px rgba(15,63,55,.18)!important}
+.rbtn{color:#CFE0D8!important}.rbtn .ico{stroke-width:1.8}.rbtn .ac{fill:#A6F26B;stroke:none}
+.rbtn:hover{background:rgba(255,255,255,.1)!important;color:#fff!important}
+.rbtn.on{background:#A6F26B!important;color:#0F3F37!important}.rbtn.on .ac{fill:#0F3F37}
+.rbtn.lime{background:#A6F26B!important;color:#0F3F37!important}.rbtn.lime .ico{stroke-width:2.4}
+.rbtn .tip{background:#0F3F37!important}
+.rbtn .ico{width:19px!important;height:19px!important}
+@media (max-width:760px){.logo{padding:0 14px!important}.logo b{display:none!important}}
 /* Réactif */
 @media (max-width:1340px){.topnav a .ico{display:none}.topnav a{padding:0 13px}}
 @media (max-width:1280px){.c3.kp{grid-column:span 6}.me div{display:none}.msg{grid-template-columns:260px minmax(0,1fr)}.msg .ctx{display:none}}
@@ -905,6 +918,14 @@ users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><pat
 cal:'<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/>',
 layers:'<path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/>',
 chat:'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/>',
+r_plus:'<path d="M12 6.5v11M6.5 12h11"/>',
+r_orbi:'<circle cx="12" cy="12" r="4.3"/><ellipse cx="12" cy="12" rx="10" ry="3.6" transform="rotate(-24 12 12)"/><circle class="ac" cx="19.4" cy="7.3" r="1.9"/>',
+r_tests:'<rect x="5" y="4.5" width="14" height="16.5" rx="3"/><path d="m8.8 13.2 2.2 2.2 4.2-4.4"/><rect class="ac" x="8.5" y="2.6" width="7" height="3.8" rx="1.6"/>',
+r_suivi:'<circle cx="6" cy="5" r="2.5"/><path d="M8.5 5h7a3.5 3.5 0 0 1 0 7h-7a3.5 3.5 0 0 0 0 7h7"/><circle class="ac" cx="18" cy="19" r="2.6"/>',
+r_team:'<circle cx="9" cy="8" r="3.2"/><path d="M3 19.5c.6-3.3 3-5.2 6-5.2s5.4 1.9 6 5.2"/><circle class="ac" cx="17.2" cy="8.6" r="2.5"/><path d="M16.6 14.3c2.4.2 4 1.9 4.5 4.7"/>',
+r_card:'<rect x="2.5" y="5.5" width="19" height="13" rx="3"/><path d="M2.5 10h19"/><rect class="ac" x="5.5" y="13.3" width="5.5" height="2.6" rx="1.2"/>',
+r_help:'<circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.5v.3"/><circle class="ac" cx="12" cy="16.9" r="1.4"/>',
+r_out:'<path d="M14 4h3.5A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5H14"/><path d="m9.5 8-4 4 4 4M5.5 12h9"/><circle class="ac" cx="17" cy="12" r="0"/>',
 tests:'<rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 4V3h6v1"/><path d="m9 13 2 2 4-4"/>',
 zap:'<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>',
 chart:'<path d="M3 21h18"/><rect x="5" y="11" width="3" height="7" rx="1"/><rect x="10.5" y="5" width="3" height="13" rx="1"/><rect x="16" y="8" width="3" height="10" rx="1"/>',
@@ -1453,13 +1474,13 @@ V.formule={t:'Formule',tabs:['Formule','Factures'],def:'Formule',r(tab){
 
 /* ---------- Menu ---------- */
 const TOPNAV=[['accueil','Accueil','home'],['offres','Offres','offres'],['candidats','Candidats','users',6],['agenda','Agenda','cal'],['vivier','Vivier','layers'],['messages','Messages','chat',3],['rapports','Rapports','chart']];
-const SIDENAV=[['tests','Tests','tests'],['suivi','Suivi automatique','zap'],['equipe','Équipe','team'],['formule','Formule','card']];
+const SIDENAV=[['tests','Tests','r_tests'],['suivi','Suivi automatique','r_suivi'],['equipe','Équipe','r_team'],['formule','Formule','r_card']];
 const NAV=[['Pages',[...TOPNAV,...SIDENAV]]];
 const SYML=SYM.replace('stroke="#fff"','stroke="#0F3F37"');
-function rail(){const cur=V[S.view].parent||S.view;document.getElementById('rail').innerHTML=`<div class="rgroup"><button class="rbtn lime" data-act="publish" aria-label="Nouvelle offre">${I('plus')}<span class="tip">Nouvelle offre</span></button><button class="rbtn" id="orbibtn" aria-label="Orbi">${I('orbi')}<span class="tip">Orbi</span></button></div>
+function rail(){const cur=V[S.view].parent||S.view;document.getElementById('rail').innerHTML=`<div class="rgroup"><button class="rbtn lime" data-act="publish" aria-label="Nouvelle offre">${I('r_plus')}<span class="tip">Nouvelle offre</span></button><button class="rbtn" id="orbibtn" aria-label="Orbi">${I('r_orbi')}<span class="tip">Orbi</span></button></div>
  <nav class="rgroup" aria-label="Outils">${SIDENAV.map(([k,l,ic])=>`<a href="#${k}" class="rbtn ${cur===k?'on':''}" aria-label="${l}" ${cur===k?'aria-current="page"':''}>${I(ic)}<span class="tip">${l}</span></a>`).join('')}</nav>
- <div class="rgroup end"><button class="rbtn" data-toast="Centre d'aide : assistant@jumanly.io" aria-label="Aide">${I('help')}<span class="tip">Aide</span></button><a href="#connexion" class="rbtn" aria-label="Se déconnecter">${I('out')}<span class="tip">Se déconnecter</span></a></div>`}
-function topbar(){const cur=V[S.view].parent||S.view;document.getElementById('top').innerHTML=`<a class="logo" href="#accueil" aria-label="Jumanly Hire, accueil">${SYML}<b>jumanly</b><i>Hire</i></a>
+ <div class="rgroup end"><button class="rbtn" data-toast="Centre d'aide : assistant@jumanly.io" aria-label="Aide">${I('r_help')}<span class="tip">Aide</span></button><a href="#connexion" class="rbtn" aria-label="Se déconnecter">${I('r_out')}<span class="tip">Se déconnecter</span></a></div>`}
+function topbar(){const cur=V[S.view].parent||S.view;document.getElementById('top').innerHTML=`<a class="logo" href="#accueil" aria-label="Jumanly Hire, accueil">${SYM}<b>HIRE</b></a>
  <button class="ibtn burger" id="burger" aria-label="Outils">${I('menu')}</button>
  <nav class="topnav" aria-label="Menu principal">${TOPNAV.map(([k,l,ic,n])=>`<a href="#${k}" class="${cur===k?'on':''}" ${cur===k?'aria-current="page"':''}>${I(ic)}${l}${n?`<span class="cnt">${n}</span>`:''}</a>`).join('')}</nav>
  <div class="topr"><button class="ibtn" id="searchbtn" aria-label="Rechercher (Ctrl K)">${I('search')}</button>

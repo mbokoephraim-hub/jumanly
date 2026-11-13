@@ -30,6 +30,8 @@ fidèlement mise en page, espacements, couleurs, états et interactions. Le code
 - Couleurs d'étape : Nouvelles `#4C8DF6`, Présélection `#8B6CF0`, Entretien `#F2994A`, Évaluation `#E9B824`/`#D9A514`,
   Offre `#3FAE3A`. Classes Orbi : Fort potentiel (≥ 75), À considérer (50 à 74), Limité (< 50).
 - Icônes au trait, minimalistes. Typo : titres en display (Sora), texte en sans-serif.
+- Logo de l'application : pilule au dégradé radial Sapin, symbole J blanc à point lime, puis « HIRE » en capitales espacées (pas de logotype « jumanly »).
+- Menu de gauche : groupes de pilules Sapin en dégradé, centrés verticalement et séparés (création + Orbi, outils, aide + déconnexion) ; icônes au trait crème avec un détail lime ; page active sur fond lime, icône Sapin.
 - Cadre : barre du haut flottante (logo en pilule, modules au centre, option active noire, icônes rondes à droite),
   colonne de pilules d'icônes à gauche, 24 px entre les blocs. Barre de défilement de page personnalisée (fine, point lime).
 - Listes longues dans un bloc : défilement interne avec fondu, rail fin et pastille « N de plus ».
