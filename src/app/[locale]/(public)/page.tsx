@@ -39,7 +39,8 @@ import RecruitersPage, { generateMetadata as recruitersMetadata } from "./recrut
 export async function generateMetadata(props: PageProps<"/[locale]">): Promise<Metadata> {
   const { params } = props;
   // Mode MVP (docs/mvp-web-recruteur lot M0): the site opens on the recruiters' page.
-  if (isHireScope()) return recruitersMetadata(props as PageProps<"/[locale]/recruteurs">);
+  if (isHireScope())
+    return recruitersMetadata(props as unknown as PageProps<"/[locale]/recruteurs">);
   await applySiteLocale(params);
   const t = await getTranslations("home.seo");
   return pageMetadata({
@@ -53,7 +54,8 @@ export async function generateMetadata(props: PageProps<"/[locale]">): Promise<M
 
 export default async function HomePage(props: PageProps<"/[locale]">) {
   const { params } = props;
-  if (isHireScope()) return <RecruitersPage {...(props as PageProps<"/[locale]/recruteurs">)} />;
+  if (isHireScope())
+    return <RecruitersPage {...(props as unknown as PageProps<"/[locale]/recruteurs">)} />;
   await applySiteLocale(params);
   const t = await getTranslations();
   const [plans, courses, latest, messages, overrides] = await Promise.all([
