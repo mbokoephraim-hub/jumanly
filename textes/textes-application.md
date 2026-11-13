@@ -16993,6 +16993,196 @@ Conventions :
 | `hireV3Export.criteria.location` | Lieu |
 | `hireV3Export.criteria.contract` | Contrat |
 | `hireV3Export.criteria.semantic` | Proximité |
+| `hireV3Team.title` | Équipe |
+| `hireV3Team.sub` | {org} · {count, plural, one {# membre} other {# membres}} sur {max} places · semaine du {week} |
+| `hireV3Team.tabs.membres` | Membres |
+| `hireV3Team.tabs.journal` | Journal des consultations |
+| `hireV3Team.invite` | Inviter un membre |
+| `hireV3Team.assign` | Attribuer |
+| `hireV3Team.me` | vous |
+| `hireV3Team.waiting` | En attente |
+| `hireV3Team.pending` | Invité {when} · {role} |
+| `hireV3Team.addMember` | Ajouter un membre · {count, plural, one {# place libre} other {# places libres}} dans votre formule |
+| `hireV3Team.kpi.members` | Membres |
+| `hireV3Team.kpi.membersValue` | {used} / {max} |
+| `hireV3Team.kpi.membersFoot` | {count, plural, =0 {aucune place libre} one {# place libre} other {# places libres}} |
+| `hireV3Team.kpi.tasks` | Tâches ouvertes |
+| `hireV3Team.kpi.tasksFoot` | {count, plural, =0 {rien pour aujourd'hui} other {dont # pour aujourd'hui}} |
+| `hireV3Team.kpi.interviews` | Entretiens |
+| `hireV3Team.kpi.interviewsFoot` | cette semaine |
+| `hireV3Team.kpi.invitations` | Invitations |
+| `hireV3Team.kpi.invitationsFoot` | en attente de réponse |
+| `hireV3Team.load.title` | Charge de la semaine |
+| `hireV3Team.load.interviews` | Entretiens |
+| `hireV3Team.load.follow` | Suivis |
+| `hireV3Team.load.diagnostic` | Évaluations |
+| `hireV3Team.load.interview` | Entretiens à préparer |
+| `hireV3Team.load.items` | à faire |
+| `hireV3Team.load.total` | {count, plural, one {# chose à faire} other {# choses à faire}} |
+| `hireV3Team.follow.title` | Qui suit quelle offre |
+| `hireV3Team.follow.owner` | Responsable |
+| `hireV3Team.follow.none` | Une offre sans responsable dans l'équipe reste suivie par la personne qui l'a créée. |
+| `hireV3Team.role.org_owner` | Propriétaire |
+| `hireV3Team.role.org_admin` | Administrateur |
+| `hireV3Team.role.recruiter` | Recruteur |
+| `hireV3Team.role.hiring_manager` | Manager |
+| `hireV3Team.role.viewer` | Lecture seule |
+| `hireV3Team.role.partner_manager` | Partenaire |
+| `hireV3Team.log.title` | Journal des consultations |
+| `hireV3Team.log.sub` | Chaque ouverture de profil est enregistrée |
+| `hireV3Team.log.kpi.today` | Aujourd'hui |
+| `hireV3Team.log.kpi.todayFoot` | profils ouverts |
+| `hireV3Team.log.kpi.week` | Cette semaine |
+| `hireV3Team.log.kpi.weekFoot` | consultations |
+| `hireV3Team.log.kpi.members` | Membres concernés |
+| `hireV3Team.log.kpi.membersFoot` | cette semaine |
+| `hireV3Team.log.kpi.profiles` | Profils différents |
+| `hireV3Team.log.kpi.profilesFoot` | sur 30 jours |
+| `hireV3Team.log.last` | Dernières consultations |
+| `hireV3Team.log.admin` | Visible par les administrateurs |
+| `hireV3Team.log.member` | Membre |
+| `hireV3Team.log.profile` | Profil consulté |
+| `hireV3Team.log.reason` | Raison |
+| `hireV3Team.log.when` | Quand |
+| `hireV3Team.log.application` | Candidature |
+| `hireV3Team.log.search` | Recherche de talents |
+| `hireV3Team.log.former` | Ancien membre |
+| `hireV3Team.log.unknown` | Profil supprimé |
+| `hireV3Team.log.empty` | Aucune consultation sur les 30 derniers jours. |
+| `hireV3Help.sub` | Réponses, guides et contact par e-mail |
+| `hireV3Help.tabs.centre` | Centre d'aide |
+| `hireV3Help.tabs.guides` | Guides |
+| `hireV3Help.tabs.ecrire` | Nous écrire |
+| `hireV3Help.hero` | Comment pouvons-nous vous aider, {name} ? |
+| `hireV3Help.search` | Une question : refus, offre, agenda, facture… |
+| `hireV3Help.searchLabel` | Chercher dans l'aide |
+| `hireV3Help.popular` | Souvent cherché |
+| `hireV3Help.pop.refus.label` | Orbi et les refus |
+| `hireV3Help.pop.refus.q` | refus |
+| `hireV3Help.pop.partager.label` | Partager une offre |
+| `hireV3Help.pop.partager.q` | partager |
+| `hireV3Help.pop.places.label` | Ajouter des places |
+| `hireV3Help.pop.places.q` | places |
+| `hireV3Help.cats.offers` | Offres et candidatures |
+| `hireV3Help.cats.offersQ` | offre |
+| `hireV3Help.cats.orbi` | Candidats et Orbi |
+| `hireV3Help.cats.orbiQ` | Orbi |
+| `hireV3Help.cats.agenda` | Agenda et entretiens |
+| `hireV3Help.cats.agendaQ` | entretien |
+| `hireV3Help.cats.plan` | Formule et factures |
+| `hireV3Help.cats.planQ` | formule |
+| `hireV3Help.answers` | {count, plural, =0 {aucune réponse} one {# réponse} other {# réponses}} |
+| `hireV3Help.faqTitle` | Questions fréquentes |
+| `hireV3Help.faq.q1.q` | Orbi peut-il refuser un candidat à ma place ? |
+| `hireV3Help.faq.q1.a` | Non. Orbi classe et explique, il n'écarte jamais personne. Chaque refus demande un geste de votre part. |
+| `hireV3Help.faq.q2.q` | Sur quoi repose le pourcentage de compatibilité ? |
+| `hireV3Help.faq.q2.a` | Sur les compétences, l'expérience, la formation, les langues et les critères de l'offre. Le nom, l'âge, le genre, la photo et l'origine ne comptent jamais. Le bouton « Pourquoi ? » montre le détail. |
+| `hireV3Help.faq.q3.q` | Les candidats paient-ils pour postuler ? |
+| `hireV3Help.faq.q3.a` | Non, postuler est toujours gratuit, quelle que soit la formule. |
+| `hireV3Help.faq.q4.q` | Comment partager une offre ? |
+| `hireV3Help.faq.q4.a` | Ouvrez l'offre, onglet Partage, puis copiez le lien ou utilisez le bouton du réseau. |
+| `hireV3Help.faq.q5.q` | Comment proposer un entretien ? |
+| `hireV3Help.faq.q5.a` | Depuis la fiche du candidat ou l'agenda : choisissez un créneau libre, le candidat confirme. |
+| `hireV3Help.faq.q6.q` | Combien de places compte ma formule ? |
+| `hireV3Help.faq.q6.a` | Votre formule et vos places sont visibles dans Formule. Pour en ajouter, écrivez-nous à assistant@jumanly.io. |
+| `hireV3Help.helpful` | Cette réponse ne vous aide pas ? |
+| `hireV3Help.notHelpful` | Nous écrire |
+| `hireV3Help.empty` | Aucune réponse trouvée |
+| `hireV3Help.steps.title` | Premiers pas |
+| `hireV3Help.steps.count` | {done} sur {total} |
+| `hireV3Help.steps.company` | Compléter la page entreprise |
+| `hireV3Help.steps.offer` | Publier une offre |
+| `hireV3Help.steps.team` | Inviter l'équipe |
+| `hireV3Help.mail.title` | Nous écrire |
+| `hireV3Help.mail.text` | Nous répondons par e-mail, en français. |
+| `hireV3Help.mail.button` | Écrire au support |
+| `hireV3Help.mail.noPhone` | Pas de numéro de téléphone : tout passe par e-mail, avec une trace écrite. |
+| `hireV3Help.write.title` | Nouvelle demande |
+| `hireV3Help.write.sub` | Choisissez un sujet : votre messagerie s'ouvre |
+| `hireV3Help.write.text` | Décrivez la situation (page, offre, candidat concerné) et joignez une capture si besoin. |
+| `hireV3Help.guideN` | {n} |
+| `hireV3Help.guideGo` | Ouvrir |
+| `hireV3Help.guides.g1.title` | Publier votre première offre |
+| `hireV3Help.guides.g1.sub` | 7 étapes, avec l'aide d'Orbi |
+| `hireV3Help.guides.g2.title` | Lire une short-list Orbi |
+| `hireV3Help.guides.g2.sub` | Le « Pourquoi ? » expliqué |
+| `hireV3Help.guides.g3.title` | Proposer des créneaux |
+| `hireV3Help.guides.g3.sub` | Depuis l'agenda |
+| `hireV3Help.guides.g4.title` | Inviter votre équipe |
+| `hireV3Help.guides.g4.sub` | Rôles et places |
+| `hireV3Help.guides.g5.title` | Lire vos rapports |
+| `hireV3Help.guides.g5.sub` | Période, PDF, détail |
+| `hireV3Help.guides.g6.title` | Gérer la formule |
+| `hireV3Help.guides.g6.sub` | Places et factures |
+| `hireV3Plan.title` | Formule |
+| `hireV3Plan.sub` | Gérée par les administrateurs de l'entreprise |
+| `hireV3Plan.adminOnly` | La formule est gérée par les administrateurs de l'entreprise. |
+| `hireV3Plan.tabs.formule` | Formule |
+| `hireV3Plan.tabs.factures` | Factures |
+| `hireV3Plan.status.free` | Gratuite |
+| `hireV3Plan.status.trialing` | Essai |
+| `hireV3Plan.status.active` | Active |
+| `hireV3Plan.status.past_due` | Paiement en attente |
+| `hireV3Plan.status.canceled` | Résiliée |
+| `hireV3Plan.status.sponsored` | Offerte |
+| `hireV3Plan.annual` | Paiement annuel |
+| `hireV3Plan.perYear` | USD par an |
+| `hireV3Plan.dot` | · |
+| `hireV3Plan.perMonth` | soit {value} USD par mois |
+| `hireV3Plan.today` | Aujourd'hui · jour {day} sur 365 |
+| `hireV3Plan.renews` | Renouvellement à prévoir |
+| `hireV3Plan.ends` | Fin de la formule |
+| `hireV3Plan.use.title` | Utilisation |
+| `hireV3Plan.use.month` | Ce mois |
+| `hireV3Plan.use.seats` | Places d'équipe |
+| `hireV3Plan.use.of` | {used} / {max} |
+| `hireV3Plan.use.jobs` | Offres en ligne |
+| `hireV3Plan.use.credits` | Analyses Orbi |
+| `hireV3Plan.use.unlimited` | sans limite |
+| `hireV3Plan.use.max` | sur {max} |
+| `hireV3Plan.included.title` | Ce qui est inclus |
+| `hireV3Plan.included.sub` | Selon votre formule |
+| `hireV3Plan.included.offers.title` | Offres et candidatures |
+| `hireV3Plan.included.offers.text` | postuler reste gratuit pour les candidats |
+| `hireV3Plan.included.orbi.title` | Tri expliqué par Orbi |
+| `hireV3Plan.included.orbi.text` | chaque score a son pourquoi |
+| `hireV3Plan.included.agenda.title` | Agenda des entretiens |
+| `hireV3Plan.included.agenda.text` | créneaux confirmés par le candidat |
+| `hireV3Plan.included.pool.title` | Vivier et rapports PDF |
+| `hireV3Plan.included.pool.text` | avec consentement |
+| `hireV3Plan.included.team.title` | Places d'équipe |
+| `hireV3Plan.included.team.text` | journal des consultations |
+| `hireV3Plan.included.data.title` | Données protégées |
+| `hireV3Plan.included.data.text` | aucun refus automatique |
+| `hireV3Plan.pay.title` | Paiement |
+| `hireV3Plan.pay.change` | Gérer |
+| `hireV3Plan.pay.last` | Dernière facture le {date} |
+| `hireV3Plan.pay.noneYet` | Aucun paiement pour le moment |
+| `hireV3Plan.pay.next` | Fin de la période payée |
+| `hireV3Plan.pay.amount` | Montant |
+| `hireV3Plan.pay.also` | Moyens acceptés |
+| `hireV3Plan.pay.alsoValue` | Mobile Money ou carte |
+| `hireV3Plan.pay.question` | Une question : assistant@jumanly.io |
+| `hireV3Plan.usd` | {value} USD |
+| `hireV3Plan.none` | – |
+| `hireV3Plan.method.mobile_money` | Mobile Money |
+| `hireV3Plan.method.card` | Carte bancaire |
+| `hireV3Plan.method.bank_transfer` | Virement |
+| `hireV3Plan.method.cash` | Espèces |
+| `hireV3Plan.invoices.title` | Factures |
+| `hireV3Plan.invoices.sub` | Paiement annuel · Mobile Money ou carte |
+| `hireV3Plan.invoices.yours` | Vos factures |
+| `hireV3Plan.invoices.usd` | Montants en USD |
+| `hireV3Plan.invoices.number` | Facture |
+| `hireV3Plan.invoices.date` | Date |
+| `hireV3Plan.invoices.amount` | Montant |
+| `hireV3Plan.invoices.method` | Moyen |
+| `hireV3Plan.invoices.state` | État |
+| `hireV3Plan.invoices.paid` | Payée |
+| `hireV3Plan.invoices.pdf` | PDF |
+| `hireV3Plan.invoices.next` | Prochaine |
+| `hireV3Plan.invoices.coming` | À venir |
+| `hireV3Plan.invoices.empty` | Aucune facture pour le moment. |
 
 ### Modèle B recruteur · coque au téléphone
 

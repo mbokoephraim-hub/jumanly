@@ -5848,3 +5848,9 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
 - Fenêtre « Télécharger » (`/app/hire/telecharger`) : PDF, Excel ou CSV, choix des colonnes, « Masquer les noms », aperçu, « Voir le modèle ». Les fichiers sont servis par `/app/hire/telecharger/fichier`, et chaque téléchargement est noté dans le journal.
 - Six modèles A4 (`/app/hire/rapports/modeles`). Excel sans nouvelle dépendance (`src/lib/xlsx.ts`, avec fflate).
 - Écarts notés dans `docs/decisions/2026-11-13-rapports-telechargements-hire-v3.md`.
+
+## 2026-11-14 · Jumanly Hire v3, lot V3-6 (équipe, aide, formule)
+
+- Équipe v3 (`/app/hire/compte/equipe`, onglets Membres et Journal des consultations), Aide v3 (`/app/hire/compte/aide`, centre d'aide, guides, nous écrire), Formule v3 (`/app/hire/compte/formule`, onglets Formule et Factures), quand `PRODUCT_SCOPE=hire`.
+- Service `hire-v3-team.ts` (charge, responsables d'offre, journal des consultations).
+- Écarts notés dans `docs/decisions/2026-11-14-equipe-aide-formule-hire-v3.md`.
