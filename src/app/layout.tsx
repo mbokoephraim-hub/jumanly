@@ -18,6 +18,16 @@ const sora = localFont({
   display: "swap",
 });
 
+// Inter (SIL OFL), the text font of the recruiter's web app (docs/mvp-web-recruteur/prototype-v3):
+// declared for every page, downloaded only where it is used.
+const inter = localFont({
+  src: "../../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2",
+  weight: "100 900",
+  variable: "--font-inter",
+  display: "swap",
+  preload: false,
+});
+
 // The root layout reads its few texts straight from the French file, without next-intl: the
 // language of a public page is set by that page (src/i18n/site-locale.ts), after this layout.
 const { common, home, loading, system } = messages;
@@ -56,7 +66,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     },
   };
   return (
-    <html lang="fr" className={`${sora.variable} antialiased`}>
+    <html lang="fr" className={`${sora.variable} ${inter.variable} antialiased`}>
       <body className="min-h-dvh">
         {/* Opening of the installed app: drawn before the first paint (src/lib/launch-splash.ts). */}
         <script dangerouslySetInnerHTML={{ __html: launchScript(common.brand) }} />

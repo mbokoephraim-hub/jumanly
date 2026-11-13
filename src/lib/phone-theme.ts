@@ -20,7 +20,7 @@ export const LIGHT_QUERY = "(prefers-color-scheme: light)";
  * the person is read first: `<html data-nb-theme="clair">` and, for the screens without a mockup,
  * the `sombre` class of the dark mode; without it (sign-in pages), the night as before.
  */
-export function phoneThemeScript(follow = false, force?: "clair") {
+export function phoneThemeScript(follow = false, force?: "clair" | "sombre") {
   if (!follow)
     return `document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){m.setAttribute("content","${PHONE_NIGHT}")})`;
   const read = force

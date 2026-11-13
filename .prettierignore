@@ -28,3 +28,6 @@ docs/modele-b-recruteur/
 docs/profil-personne/
 docs/carriere-v3/
 docs/chat-v2/
+src/styles/hire-v3.css
+src/components/hire-v3/icon-paths.ts
+docs/mvp-web-recruteur/prototype-v3/

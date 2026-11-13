@@ -1,3 +1,6 @@
+// Jumanly Hire v3 (prototype docs/mvp-web-recruteur/prototype-v3): only in the signed-in space.
+import "@/styles/hire-v3-cadre.css";
+import "@/styles/hire-v3.css";
 import { isTester } from "@/server/services/tester";
 import { Suspense } from "react";
 import { AppShell } from "@/components/layout/app-shell";
@@ -12,8 +15,11 @@ import { ExplorerTab } from "@/components/phone/explorer/server";
 import { FormationTab } from "@/components/phone/learn/server";
 import { MessagesTab } from "@/components/phone/messages/server";
 import { isPhone } from "@/server/view";
-import { HireFrame } from "@/components/hire-frame/frame";
-import { hireFrameProps } from "@/components/hire-frame/props";
+import { NextIntlClientProvider } from "next-intl";
+import { HireV3Frame } from "@/components/hire-v3/frame";
+import { hireV3FrameProps } from "@/components/hire-v3/props";
+import { hireThemeScript } from "@/components/hire-v3/theme";
+import { pickMessages } from "@/i18n/client-messages";
 import { isHireScope } from "@/lib/product-scope";
 
 const ASLEEP_TALENT_TABS = ["fil", "explorer", "formation"] as const;
@@ -23,7 +29,7 @@ import { touchPresence } from "@/server/services/hire-messaging";
 import { db } from "@/server/db";
 import { resolvePlan } from "@/server/entitlements";
 import { ADMIN_SHELL_ROLES } from "@/server/auth/roles";
-import { getTranslations } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { ContentBanners } from "@/components/site/content-banners";
 import { getActiveSpace } from "@/server/hire-context";
 import { getPartnerSpace } from "@/server/partner-context";
@@ -135,19 +141,26 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
       organizationId: space.organizationId,
       role: space.role,
     });
-    // Mode MVP (docs/mvp-web-recruteur lot M0, prototype): the frame of the prototype, light.
-    const frame = isHireScope() ? (
-      <HireFrame
-        {...await hireFrameProps({
+    // Mode MVP: the frame of the recruiter's web app v3 (docs/mvp-web-recruteur/prototype-v3).
+    const frameProps = isHireScope()
+      ? await hireV3FrameProps(db, {
+          userId: user.id,
           name: user.name,
-          image: user.image ?? null,
           org: space.organization.name,
-          company: space.role === "org_owner" || space.role === "org_admin",
+          roleLabel: (await getTranslations("org.roles"))(`${space.role}.text`),
           newApplications: counts.newApplications,
           unreadMessages: counts.unreadMessages,
-          unreadNotifications: unread > 0,
-        })}
-      />
+          unreadNotifications: unread,
+          appearance: user.appearance,
+        })
+      : null;
+    const frame = frameProps ? (
+      <>
+        <script dangerouslySetInnerHTML={{ __html: hireThemeScript(frameProps.dark) }} />
+        <NextIntlClientProvider messages={pickMessages(await getMessages(), ["hireV3"])}>
+          <HireV3Frame {...frameProps} />
+        </NextIntlClientProvider>
+      </>
     ) : undefined;
     const tWeb = await getTranslations("hireShell.web");
     const tTools = await getTranslations("phoneRh.outils");
@@ -209,6 +222,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
         wide={!phone}
         side={side}
         frame={frame}
+        frameDark={frameProps?.dark ?? false}
         account={{
           id: user.id,
           name: user.name,

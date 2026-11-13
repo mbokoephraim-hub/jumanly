@@ -17,11 +17,11 @@ import {
  * and the browser bar in the ground of the screen. « Comme mon téléphone » follows the phone live;
  * a choice made in Paramètres applies at once. Leaving the app takes it all away.
  */
-export function PhoneThemeRoot({ force }: { force?: "clair" } = {}) {
+export function PhoneThemeRoot({ force }: { force?: "clair" | "sombre" } = {}) {
   useEffect(() => {
     const root = document.documentElement;
     const media = window.matchMedia(LIGHT_QUERY);
-    // The recruiter's MVP is light only (prototype docs/mvp-web-recruteur, 12/11/2026).
+    // The recruiter's web app follows its own « Mode sombre » (prototype v3, kept on the account).
     let choice: PhoneTheme = force ?? readPhoneTheme();
     let colour = PHONE_NIGHT;
     const paintBar = () => {

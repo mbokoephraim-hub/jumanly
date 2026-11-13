@@ -15903,37 +15903,71 @@ Conventions :
 | `org.delete.activeSubscription` | Résiliez d'abord l'abonnement en cours. |
 | `org.delete.done` | Organisation supprimée. |
 
-### MVP recruteur · cadre de l'application web (mode MVP)
+### MVP recruteur · cadre de l'application web (prototype v3)
 
-*Lot M0 (docs/mvp-web-recruteur, prototype validé le 12/11/2026) : avec `PRODUCT_SCOPE=hire`, barre flottante en haut (Accueil · Offres · Candidats · Agenda · Vivier · Messages · Rapports) et colonne d'outils ronds à gauche.*
+*Lot V3-1 (docs/mvp-web-recruteur/prototype-v3, validé par Ephraïm le 13/11/2026) : barre flottante en haut (logo, Accueil · Offres · Candidats · Agenda · Vivier · Messages · Rapports, recherche, cloche, aide, profil), rail d'icônes à gauche, menu profil avec le mode sombre, recherche Ctrl K, en-tête de page.*
 
 | Clé | Texte |
 |---|---|
-| `hireFrame.brand` | Jumanly Hire, accueil |
-| `hireFrame.name` | jumanly |
-| `hireFrame.badge` | Hire |
-| `hireFrame.nav.aria` | Menu principal |
-| `hireFrame.nav.home` | Accueil |
-| `hireFrame.nav.offers` | Offres |
-| `hireFrame.nav.candidates` | Candidats |
-| `hireFrame.nav.agenda` | Agenda |
-| `hireFrame.nav.pool` | Vivier |
-| `hireFrame.nav.messages` | Messages |
-| `hireFrame.nav.reports` | Rapports |
-| `hireFrame.tools.aria` | Outils |
-| `hireFrame.tools.templates` | Modèles de messages |
-| `hireFrame.tools.team` | Équipe |
-| `hireFrame.tools.plan` | Formule |
-| `hireFrame.tools.page` | Page entreprise |
-| `hireFrame.tools.journal` | Journal des consultations |
-| `hireFrame.tools.settings` | Réglages |
-| `hireFrame.publish` | Nouvelle offre |
-| `hireFrame.orbi` | Orbi |
-| `hireFrame.help` | Aide : assistant@jumanly.io |
-| `hireFrame.logout` | Se déconnecter |
-| `hireFrame.search` | Rechercher un candidat |
-| `hireFrame.notifications` | Notifications |
-| `hireFrame.menu` | Ouvrir les outils |
+| `hireV3.brand` | Jumanly, accueil |
+| `hireV3.name` | jumanly |
+| `hireV3.nav.aria` | Menu principal |
+| `hireV3.nav.home` | Accueil |
+| `hireV3.nav.offers` | Offres |
+| `hireV3.nav.candidates` | Candidats |
+| `hireV3.nav.agenda` | Agenda |
+| `hireV3.nav.pool` | Vivier |
+| `hireV3.nav.messages` | Messages |
+| `hireV3.nav.reports` | Rapports |
+| `hireV3.tools.aria` | Outils |
+| `hireV3.tools.publish` | Nouvelle offre |
+| `hireV3.tools.orbi` | Orbi |
+| `hireV3.tools.company` | Page entreprise |
+| `hireV3.tools.team` | Équipe |
+| `hireV3.tools.plan` | Formule |
+| `hireV3.burger` | Outils |
+| `hireV3.search` | Rechercher (Ctrl K) |
+| `hireV3.help` | Aide |
+| `hireV3.bell.title` | Notifications |
+| `hireV3.bell.count` | {count, plural, one {# nouvelle} other {# nouvelles}} |
+| `hireV3.bell.empty` | Aucune nouvelle notification. |
+| `hireV3.bell.all` | Voir toutes les notifications |
+| `hireV3.me.profile` | Mon profil |
+| `hireV3.me.settings` | Réglages |
+| `hireV3.me.dark` | Mode sombre |
+| `hireV3.me.help` | Centre d'aide |
+| `hireV3.me.logout` | Se déconnecter |
+| `hireV3.palette.dialog` | Recherche |
+| `hireV3.palette.placeholder` | Chercher un candidat, une offre, une page… |
+| `hireV3.palette.escape` | Échap |
+| `hireV3.palette.filters.all` | Tout |
+| `hireV3.palette.filters.candidates` | Candidats |
+| `hireV3.palette.filters.offers` | Offres |
+| `hireV3.palette.filters.pages` | Pages |
+| `hireV3.palette.quick` | Actions rapides |
+| `hireV3.palette.recent` | Candidats récents |
+| `hireV3.palette.actions.publish` | Nouvelle offre |
+| `hireV3.palette.actions.slots` | Proposer des créneaux |
+| `hireV3.palette.actions.messages` | Messages |
+| `hireV3.palette.page` | Page |
+| `hireV3.palette.score` | {score} % |
+| `hireV3.palette.candidate` | Candidat |
+| `hireV3.palette.live` | En ligne |
+| `hireV3.palette.paused` | En pause |
+| `hireV3.palette.draft` | Brouillon |
+| `hireV3.palette.askOrbi` | Demander à Orbi : <em>« {query} »</em> |
+| `hireV3.palette.none` | Aucun résultat pour « {query} ». |
+| `hireV3.palette.up` | ↑ |
+| `hireV3.palette.down` | ↓ |
+| `hireV3.palette.enter` | Entrée |
+| `hireV3.palette.navigate` | naviguer |
+| `hireV3.palette.open` | ouvrir |
+| `hireV3.palette.reopen` | Ctrl K pour rouvrir |
+| `hireV3.palette.loading` | Chargement… |
+| `hireV3.page.back` | Retour |
+| `hireV3.page.backTo` | Retour à {label} |
+| `hireV3.page.download` | Télécharger |
+| `hireV3.page.titleSuffix` | · Jumanly Hire |
 
 ### Modèle B recruteur · coque au téléphone
 
