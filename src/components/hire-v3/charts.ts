@@ -244,3 +244,47 @@ export function barsWaveSvg({
   });
   return `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img">${g}</svg>`;
 }
+
+/** A radar (`radar` of the prototype): the axes, then each series as a polygon. */
+export function radarSvg(
+  axes: string[],
+  series: { v: number[]; stroke: string; fill?: string; w?: number; dash?: boolean }[],
+  size = 320,
+) {
+  const cx = size / 2;
+  const cy = size / 2 + 4;
+  const R = size / 2 - 58;
+  const n = Math.max(axes.length, 3);
+  const A = (i: number) => -Math.PI / 2 + (2 * Math.PI * i) / n;
+  const pt = (i: number, v: number) => [
+    cx + ((R * v) / 100) * Math.cos(A(i)),
+    cy + ((R * v) / 100) * Math.sin(A(i)),
+  ];
+  let g = "";
+  [25, 50, 75, 100].forEach((l) => {
+    g += `<polygon points="${axes.map((_, i) => pt(i, l).join(",")).join(" ")}" fill="none" stroke="#E2E8D6"/>`;
+  });
+  axes.forEach((a, i) => {
+    const [x, y] = pt(i, 100);
+    const [lx, ly] = pt(i, 124);
+    g += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#E2E8D6"/><text x="${lx}" y="${ly! + 4}" text-anchor="middle" font-size="12" font-weight="600" fill="#33443E">${esc(a)}</text>`;
+  });
+  series.forEach((s) => {
+    const p = s.v.map((v, i) => pt(i, v).join(",")).join(" ");
+    g += `<polygon points="${p}" fill="${s.fill ?? "none"}" stroke="${s.stroke}" stroke-width="${s.w ?? 2}" ${s.dash ? 'stroke-dasharray="5 4"' : ""} stroke-linejoin="round" style="transform-origin:${cx}px ${cy}px;animation:hv3-pop .8s cubic-bezier(.2,.8,.2,1) both"/>`;
+  });
+  return `<svg class="chart" viewBox="0 0 ${size} ${size}" role="img" style="max-width:${size}px;margin:auto">${g}</svg>`;
+}
+
+/** The half gauge of a score (`arcG` of the prototype). */
+export function arcSvg(score: number) {
+  const R = 78;
+  const L = Math.PI * R;
+  const dots = [0, 25, 50, 75, 100]
+    .map((v) => {
+      const a = Math.PI * (1 - v / 100);
+      return `<circle cx="${100 + R * Math.cos(a)}" cy="${100 - R * Math.sin(a)}" r="1.6" fill="#fff"/>`;
+    })
+    .join("");
+  return `<svg viewBox="0 0 200 116" class="arcg"><defs><linearGradient id="agr" x1="0" x2="1"><stop offset="0" stop-color="#D9FA72"/><stop offset=".6" stop-color="#7DE36B"/><stop offset="1" stop-color="#1E9A64"/></linearGradient></defs><path d="M22 100 A78 78 0 0 1 178 100" fill="none" stroke="#EEF2E6" stroke-width="16" stroke-linecap="round"/><path class="arcp" d="M22 100 A78 78 0 0 1 178 100" fill="none" stroke="url(#agr)" stroke-width="16" stroke-linecap="round" stroke-dasharray="${L}" stroke-dashoffset="${L * (1 - score / 100)}" style="--L:${L}"/>${dots}</svg>`;
+}

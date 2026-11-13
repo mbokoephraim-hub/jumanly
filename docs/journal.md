@@ -5834,3 +5834,10 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
 - Rapport des offres (`/app/hire/offres/rapport`, `V.rapportoffres`) : quatre pages A4,
   « Enregistrer en PDF » par la fenêtre d'impression du navigateur.
 - Écarts notés dans `docs/decisions/2026-11-13-offres-hire-v3.md`.
+
+## 2026-11-13 · Jumanly Hire v3, lots V3-3 (candidats) et V3-4 (agenda, vivier)
+
+- Candidats (`/app/hire/candidats`, onglets pipeline, liste, comparer) et fiche candidat (`/app/hire/candidats/[id]`, onglets résumé, parcours, test, documents), à l'identique du prototype v3, quand `PRODUCT_SCOPE=hire`.
+- Agenda (`/app/hire/entretiens`, vues jour, semaine, mois) et Vivier (`/app/hire/viviers`).
+- Services `hire-v3-candidates.ts`, `hire-v3-agenda.ts`, `hire-v3-vivier.ts` ; action `moveCandidateV3Action` (le passage à « Recruté » ou « Non retenu » ouvre l'écran de décision).
+- Écarts (tests de compétences, favoris du vivier, synchronisation d'agenda, Messages, Suivi automatique) dans `docs/decisions/2026-11-13-candidats-agenda-vivier-hire-v3.md`.

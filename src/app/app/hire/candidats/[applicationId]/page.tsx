@@ -1,4 +1,11 @@
 import { isModelB } from "@/server/phone-routes";
+import { isHireScope } from "@/lib/product-scope";
+import {
+  CANDIDATE_FILE_TABS,
+  HireV3Candidate,
+  type CandidateFileTab,
+} from "@/components/hire-v3/candidate";
+import { candidateV3 } from "@/server/services/hire-v3-candidates";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -89,6 +96,35 @@ export default async function CandidateFilePage({
     redirect(
       `/app/hire/candidats/${applicationId}/decision?issue=${query.decision === "refus" ? "rejected" : "hired"}`,
     );
+  // The file of the web app v3 (prototype v3, `V.candidat`): opening it is journaled.
+  if (isHireScope()) {
+    const { ctx: v3Ctx } = await requireHire(
+      `/app/hire/candidats/${applicationId}`,
+      "readApplications",
+    );
+    const data = await candidateV3(db, v3Ctx, applicationId).catch((error) => {
+      if (error instanceof HireError) notFound();
+      throw error;
+    });
+    after(() => deliverDueDecisionMails().catch((error) => reportError(error)));
+    const tab =
+      CANDIDATE_FILE_TABS.find((key) => key === query.onglet) ?? ("resume" as CandidateFileTab);
+    const okKey = typeof query.ok === "string" ? query.ok : "";
+    const tOk = await getTranslations("hireCandidates.ok");
+    return (
+      <>
+        {okKey === "deplacee" || okKey === "avance" ? (
+          <ToastOnLoad message={tOk("deplacee")} tone="success" />
+        ) : okKey === "plus-tard" ? (
+          <ToastOnLoad
+            message={tOk("plusTard", { stage: data.application.stage.name })}
+            tone="success"
+          />
+        ) : null}
+        <HireV3Candidate data={data} tab={tab} canManage={hirePermissions(v3Ctx.role).manage} />
+      </>
+    );
+  }
   // The file on the recruiter's phone (Modèle B recruteur M5).
   if (await isModelB()) {
     const { ctx: phoneCtx } = await requireHire(

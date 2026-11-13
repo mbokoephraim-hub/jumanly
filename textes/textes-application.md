@@ -16571,6 +16571,237 @@ Conventions :
 | `hireV3Report.n2` | 02 |
 | `hireV3Report.n3` | 03 |
 
+### MVP recruteur · candidats (prototype v3)
+
+*Lot V3-3 (`V.candidats`) : offre en tête, pipeline, liste, comparer.*
+
+| Clé | Texte |
+|---|---|
+| `hireV3Candidates.seo` | Candidats |
+| `hireV3Candidates.title` | Candidats |
+| `hireV3Candidates.tabs.pipeline` | Pipeline |
+| `hireV3Candidates.tabs.liste` | Liste |
+| `hireV3Candidates.tabs.comparer` | Comparer |
+| `hireV3Candidates.hero.change` | Changer d'offre |
+| `hireV3Candidates.hero.closes` | {count, plural, =0 {ferme aujourd'hui} one {ferme dans # jour} other {ferme dans # jours}} |
+| `hireV3Candidates.hero.noEnd` | sans date de fin |
+| `hireV3Candidates.hero.applications` | candidatures |
+| `hireV3Candidates.hero.high` | fort potentiel |
+| `hireV3Candidates.hero.openings` | {count, plural, one {poste à pourvoir} other {postes à pourvoir}} |
+| `hireV3Candidates.chips.all` | Toutes |
+| `hireV3Candidates.cls.fort` | Fort potentiel |
+| `hireV3Candidates.cls.cons` | À considérer |
+| `hireV3Candidates.cls.lim` | Limité |
+| `hireV3Candidates.orbi` | Orbi classe, vous décidez. |
+| `hireV3Candidates.empty` | Aucune offre avec des candidatures pour l'instant. |
+| `hireV3Candidates.emptyOffer` | Aucune candidature pour cette offre. |
+| `hireV3Candidates.percent` | % |
+| `hireV3Candidates.rate` | {value} % |
+| `hireV3Candidates.score` | {value} % |
+| `hireV3Candidates.conversion` | Passent à l'étape suivante |
+| `hireV3Candidates.toTest` | À tester |
+| `hireV3Candidates.next` | Passer {name} à l'étape suivante |
+| `hireV3Candidates.drop` | Déposez un candidat ici |
+| `hireV3Candidates.moved` | {name} : {stage} |
+| `hireV3Candidates.moveFailed` | Le déplacement n'a pas pu être fait. |
+| `hireV3Candidates.list.candidate` | Candidat |
+| `hireV3Candidates.list.match` | Compatibilité |
+| `hireV3Candidates.list.stage` | Étape |
+| `hireV3Candidates.list.test` | Test |
+| `hireV3Candidates.list.source` | Source |
+| `hireV3Candidates.list.write` | Écrire à {name} |
+| `hireV3Candidates.list.open` | Ouvrir la fiche de {name} |
+| `hireV3Candidates.source.direct` | Candidature directe |
+| `hireV3Candidates.source.invitation` | Invitation |
+| `hireV3Candidates.source.talent_search` | Recherche de talents |
+| `hireV3Candidates.cmp.title` | Profils face au poste |
+| `hireV3Candidates.cmp.byCriterion` | Critère par critère |
+| `hireV3Candidates.cmp.expected` | Seuil fort potentiel |
+| `hireV3Candidates.cmp.need` | Il faut au moins deux candidats classés par Orbi pour comparer. |
+| `hireV3Candidates.cmp.best` | {name} a le meilleur score Orbi. À vous de choisir. |
+| `hireV3Candidates.cmp.see` | Voir {name} |
+| `hireV3Candidates.criterion.skills_required` | Compétences indispensables |
+| `hireV3Candidates.criterion.skills_preferred` | Compétences appréciées |
+| `hireV3Candidates.criterion.experience` | Expérience |
+| `hireV3Candidates.criterion.education` | Formation |
+| `hireV3Candidates.criterion.languages` | Langues |
+| `hireV3Candidates.criterion.location` | Lieu |
+| `hireV3Candidates.criterion.contract` | Contrat |
+| `hireV3Candidates.criterion.semantic` | Proximité |
+
+### MVP recruteur · fiche candidat (prototype v3)
+
+*Lot V3-3 (`V.candidat`) : résumé, parcours, test, documents. Chaque ouverture est journalisée.*
+
+| Clé | Texte |
+|---|---|
+| `hireV3Candidate.seo` | Fiche candidat |
+| `hireV3Candidate.tabs.resume` | Résumé |
+| `hireV3Candidate.tabs.parcours` | Parcours |
+| `hireV3Candidate.tabs.test` | Test |
+| `hireV3Candidate.tabs.documents` | Documents |
+| `hireV3Candidate.crumb` | Candidats |
+| `hireV3Candidate.prev` | Candidat précédent |
+| `hireV3Candidate.next` | Candidat suivant |
+| `hireV3Candidate.position` | {n} sur {total} |
+| `hireV3Candidate.via` | Via {source} |
+| `hireV3Candidate.views` | {count, plural, one {Consulté # fois, journalisé} other {Consulté # fois, journalisé}} |
+| `hireV3Candidate.write` | Écrire |
+| `hireV3Candidate.slot` | Proposer un créneau |
+| `hireV3Candidate.current` | En cours |
+| `hireV3Candidate.advance` | Étape suivante |
+| `hireV3Candidate.decide` | Décider |
+| `hireV3Candidate.wait` | Mettre en attente |
+| `hireV3Candidate.reject` | Ne pas retenir |
+| `hireV3Candidate.orbi` | Compatibilité Orbi |
+| `hireV3Candidate.why` | Pourquoi ? |
+| `hireV3Candidate.noScore` | Pas encore de score pour cette candidature. |
+| `hireV3Candidate.orbiNote` | Calcul sans nom, âge, genre ni photo. Orbi recommande, vous décidez. |
+| `hireV3Candidate.percent` | % |
+| `hireV3Candidate.value` | {value} % |
+| `hireV3Candidate.skills` | Compétences |
+| `hireV3Candidate.expected` | Attendu |
+| `hireV3Candidate.noSkills` | L'offre n'indique pas de compétence. |
+| `hireV3Candidate.test.title` | Test de compétences |
+| `hireV3Candidate.test.none` | Aucun test envoyé pour cette offre. |
+| `hireV3Candidate.test.sub` | sur 100 |
+| `hireV3Candidate.test.soon` | Les tests de compétences arrivent bientôt. |
+| `hireV3Candidate.facts.experience` | Expérience |
+| `hireV3Candidate.facts.experienceValue` | {count, plural, =0 {Moins d'un an} one {# an} other {# ans}} |
+| `hireV3Candidate.facts.available` | Disponible |
+| `hireV3Candidate.facts.open` | Disponible maintenant |
+| `hireV3Candidate.facts.listening` | À l'écoute |
+| `hireV3Candidate.facts.not_looking` | Pas disponible |
+| `hireV3Candidate.facts.from` | À partir du {date} |
+| `hireV3Candidate.facts.languages` | Langues |
+| `hireV3Candidate.facts.noLanguage` | Non renseignées |
+| `hireV3Candidate.facts.documents` | Documents |
+| `hireV3Candidate.facts.documentsValue` | {count, plural, =0 {Aucun document} one {# document reçu} other {# documents reçus}} |
+| `hireV3Candidate.questions` | Questions pour l'entretien |
+| `hireV3Candidate.questionsTag` | À partir de l'offre |
+| `hireV3Candidate.question.skill` | Comment avez-vous pratiqué « {skill} » ? Donnez un exemple récent. |
+| `hireV3Candidate.question.skillTag` | Point à creuser |
+| `hireV3Candidate.question.answer` | Votre réponse à « {question} » : pouvez-vous en dire plus ? |
+| `hireV3Candidate.question.answerTag` | Présélection |
+| `hireV3Candidate.question.impact` | Racontez une réalisation dont vous êtes fier ou fière dans un poste proche. |
+| `hireV3Candidate.question.impactTag` | Impact |
+| `hireV3Candidate.team` | Avis de l'équipe |
+| `hireV3Candidate.teamEmpty` | Aucun avis pour l'instant. |
+| `hireV3Candidate.you` | Vous |
+| `hireV3Candidate.ask` | Demander un avis |
+| `hireV3Candidate.stars` | {value} sur 5 |
+| `hireV3Candidate.path` | Parcours |
+| `hireV3Candidate.present` | aujourd'hui |
+| `hireV3Candidate.declared` | Compétences déclarées |
+| `hireV3Candidate.noPath` | Aucune expérience ni formation renseignée. |
+| `hireV3Candidate.docs` | Documents |
+| `hireV3Candidate.docCv` | CV |
+| `hireV3Candidate.docCvSub` | Tel qu'envoyé avec la candidature |
+| `hireV3Candidate.docLetter` | Lettre de motivation |
+| `hireV3Candidate.docLetterSub` | Écrite pour cette offre |
+| `hireV3Candidate.received` | Reçu |
+| `hireV3Candidate.open` | Ouvrir |
+| `hireV3Candidate.askDoc` | Demander une pièce |
+| `hireV3Candidate.noDocs` | Aucun document joint. |
+| `hireV3Candidate.certificate` | Attestation Jumanly |
+| `hireV3Candidate.qn` | Q{n} |
+
+### MVP recruteur · agenda (prototype v3)
+
+*Lot V3-4 (`V.agenda`) : jour, semaine, mois, prochain entretien, créneaux libres.*
+
+| Clé | Texte |
+|---|---|
+| `hireV3Agenda.seo` | Agenda |
+| `hireV3Agenda.title` | Agenda |
+| `hireV3Agenda.tabs.jour` | Jour |
+| `hireV3Agenda.tabs.semaine` | Semaine |
+| `hireV3Agenda.tabs.mois` | Mois |
+| `hireV3Agenda.today` | Aujourd'hui |
+| `hireV3Agenda.weekCount` | {count, plural, =0 {aucun rendez-vous} one {rendez-vous cette semaine} other {rendez-vous cette semaine}} |
+| `hireV3Agenda.free` | {count, plural, =0 {aucun créneau libre} one {créneau libre} other {créneaux libres}} |
+| `hireV3Agenda.nextAt` | Prochain entretien · {time} |
+| `hireV3Agenda.noNext` | Aucun entretien à venir. |
+| `hireV3Agenda.join` | Rejoindre |
+| `hireV3Agenda.prev` | Précédent |
+| `hireV3Agenda.next` | Suivant |
+| `hireV3Agenda.todayBtn` | Aujourd'hui |
+| `hireV3Agenda.propose` | Proposer des créneaux |
+| `hireV3Agenda.type.interview` | Entretien |
+| `hireV3Agenda.type.screening` | Présélection |
+| `hireV3Agenda.type.test` | Évaluation |
+| `hireV3Agenda.type.offer` | Offre |
+| `hireV3Agenda.type.new` | Premier échange |
+| `hireV3Agenda.type.hired` | Recruté |
+| `hireV3Agenda.type.rejected` | Clôturé |
+| `hireV3Agenda.freeLegend` | Libre, cliquez pour proposer |
+| `hireV3Agenda.slot` | {hour} h |
+| `hireV3Agenda.freeSlot` | Libre, proposer à un candidat |
+| `hireV3Agenda.todayCard` | Aujourd'hui |
+| `hireV3Agenda.todayCount` | {count, plural, =0 {aucun rendez-vous} one {# rendez-vous} other {# rendez-vous}} |
+| `hireV3Agenda.todayEmpty` | Rien de prévu aujourd'hui. |
+| `hireV3Agenda.doneLabel` | Fait |
+| `hireV3Agenda.inMinutes` | Dans {count} min |
+| `hireV3Agenda.mode.video` | Visioconférence |
+| `hireV3Agenda.mode.onsite` | Sur place |
+| `hireV3Agenda.mode.audio` | Appel |
+| `hireV3Agenda.weekdays` | L,M,M,J,V,S,D |
+| `hireV3Agenda.weekdaysLong` | Lun.,Mar.,Mer.,Jeu.,Ven.,Sam.,Dim. |
+| `hireV3Agenda.ev.close` | Fermer |
+| `hireV3Agenda.ev.file` | Fiche candidat |
+| `hireV3Agenda.ev.manage` | Reprogrammer |
+| `hireV3Agenda.ev.offer` | Offre : {title} |
+| `hireV3Agenda.slotTitle` | Créneau libre |
+| `hireV3Agenda.slotWho` | À qui proposer ce créneau ? |
+| `hireV3Agenda.slotEmpty` | Aucun candidat en cours à inviter. |
+| `hireV3Agenda.slotGo` | Proposer |
+| `hireV3Agenda.slotNote` | Le candidat choisit parmi les créneaux proposés depuis sa fiche. |
+| `hireV3Agenda.time` | {hour} h {minute} |
+| `hireV3Agenda.timeShort` | {hour} h |
+| `hireV3Vivier.seo` | Vivier |
+| `hireV3Vivier.title` | Vivier |
+| `hireV3Vivier.sub` | Les talents gardés pour plus tard, avec leur accord. |
+| `hireV3Vivier.tabs.tous` | Tous · {count} |
+| `hireV3Vivier.tabs.disponibles` | Disponibles · {count} |
+| `hireV3Vivier.tabs.proches` | Proches de l'offre · {count} |
+| `hireV3Vivier.hero.kicker` | Orbi a trouvé dans votre vivier |
+| `hireV3Vivier.hero.title` | {count, plural, one {# talent proche de <em>{offer}</em>} other {# talents proches de <em>{offer}</em>}} |
+| `hireV3Vivier.hero.text` | Ils ont déjà accepté d'être recontactés. Vous décidez qui inviter. |
+| `hireV3Vivier.hero.invite` | Inviter à postuler |
+| `hireV3Vivier.hero.why` | Proximité : les compétences demandées par l'offre qu'ils ont déjà. Nom, âge et photo ne comptent pas. |
+| `hireV3Vivier.hero.noneTitle` | Aucun talent proche pour le moment |
+| `hireV3Vivier.hero.none` | Personne dans votre vivier n'a encore la moitié des compétences demandées pour « {offer} ». |
+| `hireV3Vivier.hero.noOfferTitle` | Publiez une offre pour comparer votre vivier |
+| `hireV3Vivier.hero.noOffer` | Orbi rapprochera vos talents gardés de votre prochaine offre publiée. |
+| `hireV3Vivier.pool.title` | Votre vivier |
+| `hireV3Vivier.pool.sub` | Cliquez pour filtrer |
+| `hireV3Vivier.pool.consent` | Tous avec accord |
+| `hireV3Vivier.pool.talents` | talents |
+| `hireV3Vivier.pool.available` | disponibles |
+| `hireV3Vivier.pool.close` | proches |
+| `hireV3Vivier.pool.pools` | viviers |
+| `hireV3Vivier.search` | Rechercher un nom, un métier, une compétence… |
+| `hireV3Vivier.add` | Ajouter un talent |
+| `hireV3Vivier.count` | {count, plural, one {talent} other {talents}} |
+| `hireV3Vivier.clear` | Effacer |
+| `hireV3Vivier.percent` | {value} % |
+| `hireV3Vivier.anon` | ? |
+| `hireV3Vivier.anonymous` | Talent anonyme |
+| `hireV3Vivier.ringTitle` | Part des compétences demandées par l'offre |
+| `hireV3Vivier.available` | Disponible |
+| `hireV3Vivier.listening` | À l'écoute |
+| `hireV3Vivier.applied` | A déjà postulé |
+| `hireV3Vivier.visible` | Profil visible |
+| `hireV3Vivier.forOffer` | Pour {offer} |
+| `hireV3Vivier.keep` | À garder pour une prochaine offre |
+| `hireV3Vivier.invite` | Inviter |
+| `hireV3Vivier.profile` | Voir le profil de {name} |
+| `hireV3Vivier.empty.title` | Aucun talent ne correspond |
+| `hireV3Vivier.empty.text` | Essayez avec moins de critères. |
+| `hireV3Vivier.empty.none` | Votre vivier est vide |
+| `hireV3Vivier.empty.noneText` | Gardez un talent depuis sa fiche ou depuis la recherche de talents. |
+| `hireV3Vivier.note` | Talents triés par proximité. Seuls les talents qui ont donné leur accord apparaissent ici. Nom, âge, genre et photo n'entrent jamais dans le calcul de proximité. |
+
 ### Modèle B recruteur · coque au téléphone
 
 *Lot M1 (docs/modele-b-recruteur, mobile/, brief § 3 et § 4) : barre du bas Fil · Offres · Candidatures · Talents · Messages en icônes seules, Orbi flottant, avatar vers le compte, recherche en deux temps sous l'en-tête de chaque onglet.*

@@ -1,4 +1,11 @@
 import { isModelB } from "@/server/phone-routes";
+import { isHireScope } from "@/lib/product-scope";
+import {
+  CANDIDATE_TABS,
+  HireV3Candidates,
+  type CandidateTab,
+} from "@/components/hire-v3/candidates";
+import { candidatesV3 } from "@/server/services/hire-v3-candidates";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -21,6 +28,7 @@ import { cx } from "@/lib/cx";
 import { formatDayMonth } from "@/lib/dates";
 import { deliverDueDecisionMails } from "@/server/application-events";
 import { db } from "@/server/db";
+import { effectiveRights } from "@/server/services/org-team";
 import { requireHire } from "@/server/hire-context";
 import { reportError } from "@/server/observability";
 import { HireError, hirePermissions } from "@/server/services/hire";
@@ -470,7 +478,21 @@ async function CandidatesPageContent({ searchParams }: PageProps<"/app/hire/cand
  * On a phone, the tab Candidatures of Modèle B (docs/modele-b-recruteur, lot M5): the offers, then
  * « Fort potentiel · Toutes · Entretiens · Décisions ».
  */
+/** Candidats of the web app v3 (prototype v3, `V.candidats`). */
+async function HireV3CandidatesPage({ searchParams }: PageProps<"/app/hire/candidats">) {
+  const query = await searchParams;
+  const { ctx, space } = await requireHire("/app/hire/candidats", "readApplications");
+  const param = (key: string) => (typeof query[key] === "string" ? (query[key] as string) : "");
+  const data = await candidatesV3(db, ctx, param("offre").slice(0, 60) || null);
+  const tab = CANDIDATE_TABS.find((key) => key === param("onglet")) ?? ("pipeline" as CandidateTab);
+  const filter = (["fort", "cons", "lim"] as const).find((key) => key === param("classe")) ?? "all";
+  const canMove =
+    hirePermissions(ctx.role).manage && effectiveRights(space.role, space.rights).sort;
+  return <HireV3Candidates data={data} tab={tab} filter={filter} canMove={canMove} />;
+}
+
 export default async function CandidatesPage(props: PageProps<"/app/hire/candidats">) {
+  if (isHireScope()) return <HireV3CandidatesPage {...props} />;
   if (!(await isModelB())) return <CandidatesPageContent {...props} />;
   const query = await props.searchParams;
   // The talent search (`?vue=talents`) and the proposals are the Talents tab on a phone (M6).
