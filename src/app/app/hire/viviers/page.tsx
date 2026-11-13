@@ -1,4 +1,7 @@
 import { isModelB } from "@/server/phone-routes";
+import { isHireScope } from "@/lib/product-scope";
+import { HireV3Vivier } from "@/components/hire-v3/vivier";
+import { VIVIER_TABS, vivierV3 } from "@/server/services/hire-v3-vivier";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -35,15 +38,29 @@ const DAY = 86_400_000;
 export default async function PoolsPage({ searchParams }: PageProps<"/app/hire/viviers">) {
   const query = await searchParams;
   // Old addresses opened a pool inside this page.
-  if (one(query.vivier)) redirect(`/app/hire/viviers/${encodeURIComponent(one(query.vivier))}`);
+  if (one(query.vivier) && !isHireScope())
+    redirect(`/app/hire/viviers/${encodeURIComponent(one(query.vivier))}`);
   // On the recruiter's phone, the vivier is a tab of Talents (Modèle B recruteur M6).
-  if (await isModelB())
+  if (!isHireScope() && (await isModelB()))
     redirect(
       one(query.ok) === "supprime"
         ? "/app/hire/talents?onglet=vivier&ok=supprime"
         : "/app/hire/talents?onglet=vivier",
     );
   const { ctx } = await requireHire("/app/hire/viviers", "readApplications");
+  if (isHireScope()) {
+    const data = await vivierV3(db, ctx);
+    if (data)
+      return (
+        <HireV3Vivier
+          data={data}
+          tab={VIVIER_TABS.find((key) => key === one(query.onglet)) ?? "tous"}
+          q={one(query.q)}
+          pool={one(query.vivier)}
+          canManage={hirePermissions(ctx.role).manage}
+        />
+      );
+  }
   const t = await getTranslations("hirePools");
   const format = await getFormatter();
   const now = new Date();

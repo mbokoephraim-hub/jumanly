@@ -1,4 +1,7 @@
 import { isModelB } from "@/server/phone-routes";
+import { isHireScope } from "@/lib/product-scope";
+import { HireV3Agenda } from "@/components/hire-v3/agenda";
+import { AGENDA_VIEWS, agendaV3, type AgendaView } from "@/server/services/hire-v3-agenda";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -66,6 +69,20 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
   if (candidature && candidature !== "nouveau")
     redirect(`/app/hire/candidats/${encodeURIComponent(candidature)}/entretien`);
   const { ctx } = await requireHire("/app/hire/entretiens", "readApplications");
+  // The agenda of the web app v3 (prototype v3, `V.agenda`).
+  if (isHireScope()) {
+    const view = AGENDA_VIEWS.find((key) => key === one(query.vue)) ?? ("semaine" as AgendaView);
+    const timeZone = defaultTimeZone();
+    const data = await agendaV3(db, ctx, view, one(query.date) || null, timeZone);
+    return (
+      <HireV3Agenda
+        data={data}
+        timeZone={timeZone}
+        now={new Date()}
+        query={{ rdv: one(query.rdv), creneau: one(query.creneau) }}
+      />
+    );
+  }
   // On a phone, the tab « Agenda » (Ephraïm, 03/11/2026): it replaced « Candidatures ».
   if (await isModelB()) {
     const now = new Date();
