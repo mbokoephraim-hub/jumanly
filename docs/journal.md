@@ -5787,3 +5787,10 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
   de « Publier dans le Fil » dans le partage d'une offre.
 - Talent en mode `hire` : candidatures, messages et profil gardés, rien n'est supprimé.
 - Mode `full` : aucun changement. Choix notés dans `docs/decisions/2026-11-13-mode-mvp.md`.
+
+## 2026-11-13 · Prototype web recruteur v3 déposé
+
+- `docs/mvp-web-recruteur/prototype-v3/` : prototype validé par Ephraïm le 13/11 (`jumanly-hire.html`),
+  CSS et JS à reprendre tels quels (`code/`), 53 captures claires et 53 sombres, fenêtres et parcours,
+  brief `BRIEF-PROTOTYPE-V3.md` (écrans → routes) et prompt `PROMPT-LANCEMENT-PROTOTYPE-V3.md`
+  (lots V3-1 à V3-6). Remplace `prototype/` et l'ancien design recruteur ordinateur.

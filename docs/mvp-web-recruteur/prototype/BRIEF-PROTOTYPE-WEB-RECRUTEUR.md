@@ -1,3 +1,5 @@
+> **Remplacé le 13/11/2026 par `docs/mvp-web-recruteur/prototype-v3/`** (brief `BRIEF-PROTOTYPE-V3.md`). Ce dossier n'est plus une référence.
+
 # Prototype de référence · MVP web recruteur (Jumanly Hire)
 
 Validé par Ephraïm le 12/11/2026, page par page. Déposé le 13/11/2026 pour lancer la mise en ligne.
