@@ -5772,3 +5772,18 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
   rappels de facturation à J-7, J-3, J-0 ; plus de colonnes glisser-déposer sur ordinateur ; un seul
   cron ; décision annulable 10 minutes (24 h demandées pour le refus).
 - Aucun code modifié. Prochain lot : M0 (mode MVP).
+
+## 2026-11-13 · MVP web recruteur, lot M0 (mode MVP)
+
+- `PRODUCT_SCOPE` (`full` par défaut, `hire` pour la production du MVP), lu par `productScope()`.
+  En mode `hire` : Learn, talents, partenaires, attestations, portfolios, Fil, Explorer, Formation,
+  Orbi côté talent et Partners répondent par une redirection 307 ; leurs liens quittent l'en-tête,
+  le pied de page, le plan du site et `llms.txt`. L'accueil du site est la page recruteurs, `/tarifs`
+  ne montre que les formules entreprises.
+- Recruteur en mode `hire` : cadre du prototype validé le 12/11 (barre flottante en haut avec
+  Accueil · Offres · Candidats · Agenda · Vivier · Messages · Rapports, colonne d'outils ronds à
+  gauche, fond vert clair à grille, boutons plats), écrans actuels en clair aux couleurs du
+  prototype ; l'accueil est « À traiter » en pleine largeur ; Talents ne montre que le Vivier ; plus
+  de « Publier dans le Fil » dans le partage d'une offre.
+- Talent en mode `hire` : candidatures, messages et profil gardés, rien n'est supprimé.
+- Mode `full` : aucun changement. Choix notés dans `docs/decisions/2026-11-13-mode-mvp.md`.

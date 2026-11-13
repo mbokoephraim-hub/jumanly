@@ -1,4 +1,5 @@
 import "server-only";
+import { isHireScope } from "@/lib/product-scope";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
@@ -218,7 +219,8 @@ export async function RhTalents({ ctx, query }: { ctx: HireContext; query: Query
     return text ? `/app/hire/talents?${text}` : "/app/hire/talents";
   };
 
-  const tabs = (
+  // Mode MVP (lot M0): the Vivier alone, without the other tabs.
+  const tabs = isHireScope() ? null : (
     <nav className="nb-rh-vues" aria-label={t("tabs.label")}>
       {RH_TALENT_TABS.map((key) => (
         <Link

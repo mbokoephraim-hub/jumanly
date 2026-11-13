@@ -1,5 +1,6 @@
 import { isModelB } from "@/server/phone-routes";
 import { redirect } from "next/navigation";
+import { isHireScope } from "@/lib/product-scope";
 import { getTranslations } from "next-intl/server";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { RhBell, RhTab } from "@/components/phone/recruteur/head";
@@ -31,6 +32,14 @@ export default async function TalentsRedirect({ searchParams }: PageProps<"/app/
   const query = await searchParams;
   // On a phone, Talents is a tab of its own (Modèle B recruteur, lots M1 and M6).
   if (await isModelB()) {
+    // Mode MVP (docs/mvp-web-recruteur lot M0): only the Vivier, while the base of talents is small.
+    if (isHireScope() && query.onglet !== "vivier") {
+      const next = new URLSearchParams();
+      for (const [key, value] of Object.entries(query))
+        if (typeof value === "string" && key !== "onglet") next.set(key, value);
+      next.set("onglet", "vivier");
+      redirect(`/app/hire/talents?${next}`);
+    }
     const { ctx } = await requireHire("/app/hire/talents", "readApplications");
     const t = await getTranslations("phoneRhTalents");
     const ok = TOASTS.find((key) => key === query.ok);

@@ -19399,6 +19399,37 @@
       "done": "Organisation supprimée."
     }
   },
+  "hireFrame": {
+    "brand": "Jumanly Hire, accueil",
+    "name": "jumanly",
+    "badge": "Hire",
+    "nav": {
+      "aria": "Menu principal",
+      "home": "Accueil",
+      "offers": "Offres",
+      "candidates": "Candidats",
+      "agenda": "Agenda",
+      "pool": "Vivier",
+      "messages": "Messages",
+      "reports": "Rapports"
+    },
+    "tools": {
+      "aria": "Outils",
+      "templates": "Modèles de messages",
+      "team": "Équipe",
+      "plan": "Formule",
+      "page": "Page entreprise",
+      "journal": "Journal des consultations",
+      "settings": "Réglages"
+    },
+    "publish": "Nouvelle offre",
+    "orbi": "Orbi",
+    "help": "Aide : assistant@jumanly.io",
+    "logout": "Se déconnecter",
+    "search": "Rechercher un candidat",
+    "notifications": "Notifications",
+    "menu": "Ouvrir les outils"
+  },
   "phoneRh": {
     "nav": {
       "fil": "Fil",

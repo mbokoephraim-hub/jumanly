@@ -33,3 +33,10 @@ export function askOrbi(question: string) {
 /** The recruiter's answers from the facts of the organization, without a credit (lot M7). */
 export const RH_ORBI_FACTS = ["today", "first", "propose", "waiting", "unread"] as const;
 export type RhOrbiFact = (typeof RH_ORBI_FACTS)[number];
+
+/** Opens Orbi's sheet as it is, from the round button of the recruiter's frame (mode MVP). */
+export const ORBI_OPEN_EVENT = "nb:orbi-ouvrir";
+
+export function openOrbi() {
+  window.dispatchEvent(new Event(ORBI_OPEN_EVENT));
+}

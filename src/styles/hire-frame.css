@@ -1,0 +1,484 @@
+/* Cadre recruteur du MVP (docs/mvp-web-recruteur/prototype, validé par Ephraïm le 12/11/2026), mode
+   PRODUCT_SCOPE=hire : fond vert très clair à grille fine, barre flottante en haut (logo en pilule,
+   modules au centre, option active noire, icônes rondes à droite), colonne de pilules d'icônes à
+   gauche. Boutons plats. Préfixe `hf-`, attribut `data-hire` sur `.nb-app`. Les écrans gardent leur
+   contenu actuel, en clair, jusqu'à leur lot (M1 à M9). */
+
+.nb-app[data-hire] {
+  --hf-page: #edf2e1;
+  --hf-grid: #e3ead3;
+  --hf-card: #ffffff;
+  --hf-soft: #f5f8ee;
+  --hf-line: #e1e7d4;
+  --hf-line2: #cfd8c0;
+  --hf-ink: #0e1b17;
+  --hf-sapin: #0f3f37;
+  --hf-muted: #56665f;
+  --hf-lime: #a6f26b;
+  --hf-shadow: 0 1px 2px rgba(15, 63, 55, 0.05), 0 8px 24px rgba(15, 63, 55, 0.06);
+  /* Hauteur de la barre du haut (12 + 44 + 24) et largeur de la colonne d'outils (16 + 46 + 18). */
+  --hf-top: 80px;
+  --hf-left: 80px;
+}
+
+/* ─── Les couleurs du prototype pour les écrans actuels (thème clair imposé) ─── */
+html[data-nb-theme="clair"] .nb-app[data-hire] {
+  --nb-nuit: #edf2e1;
+  --nb-nuit-rgb: 237, 242, 225;
+  --nb-noir: #e3ead3;
+  --nb-surface: #ffffff;
+  --nb-carte: #ffffff;
+  --nb-haute: #f5f8ee;
+  --nb-creme: #0e1b17;
+  --nb-texte: #0e1b17;
+  --nb-brume: #56665f;
+  --nb-gris: #56665f;
+  --nb-lime: #a6f26b;
+  --nb-lime-rgb: 166, 242, 107;
+  --nb-encre: #0f3f37;
+  --nb-sur-lime: #0f3f37;
+  --nb-sur-lime-rgb: 15, 63, 55;
+  --nb-lime-t: #2b6e1b;
+  --nb-filet: #e1e7d4;
+  --nb-filet-fort: #cfd8c0;
+  --nb-f-0b1a1f: #edf2e1;
+  --nb-f-0e1a1d: #edf2e1;
+  --nb-f-111d20: #ffffff;
+  --nb-f-13282c: #ffffff;
+  --nb-f-1b3338: #f5f8ee;
+}
+
+/* ─── Les pages : sous la barre du haut et à droite de la colonne d'outils ─── */
+.nb-app[data-hire] .nb-couche {
+  top: var(--hf-top);
+  left: var(--hf-left);
+  right: 0;
+  padding-inline: 0 16px;
+  background-color: var(--hf-page);
+  background-image:
+    linear-gradient(var(--hf-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--hf-grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-attachment: fixed;
+}
+.nb-app[data-hire][data-large] .nb-couche {
+  padding-inline: 0 max(16px, calc((100vw - var(--hf-left) - 1280px) / 2));
+}
+.nb-app[data-hire],
+.nb-app[data-hire] .nb-couche {
+  --nb-cote: var(--hf-left);
+  --nb-haut: 0px;
+  --nb-nav: 0px;
+}
+html:has(.nb-app[data-hire]) body {
+  background: var(--hf-page, #edf2e1);
+}
+
+/* ─── La barre du haut ─── */
+.hf-top {
+  position: fixed;
+  z-index: 25;
+  top: 12px;
+  left: max(16px, env(safe-area-inset-left, 0px));
+  right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  font-family: var(--font-inter, "Inter"), "Segoe UI", system-ui, sans-serif;
+  color: var(--hf-ink);
+}
+.hf-logo {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 14px 0 12px;
+  border: 1px solid var(--hf-line);
+  border-radius: 99px;
+  background: var(--hf-card);
+  box-shadow: var(--hf-shadow);
+  text-decoration: none;
+}
+.hf-logo svg {
+  width: 16px;
+  height: 22px;
+  flex: none;
+}
+.hf-logo b {
+  font:
+    600 16px var(--jm-font),
+    system-ui;
+  letter-spacing: -0.02em;
+  color: var(--hf-ink);
+}
+.hf-logo i {
+  padding: 1px 7px;
+  border-radius: 99px;
+  background: var(--hf-lime);
+  color: var(--hf-sapin);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+}
+.hf-nav {
+  display: flex;
+  gap: 2px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 4px;
+  overflow-x: auto;
+  border: 1px solid var(--hf-line);
+  border-radius: 99px;
+  background: var(--hf-card);
+  box-shadow: var(--hf-shadow);
+  scrollbar-width: none;
+}
+.hf-nav::-webkit-scrollbar {
+  display: none;
+}
+.hf-nav a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 99px;
+  color: var(--hf-muted);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.hf-nav a:hover {
+  background: var(--hf-soft);
+  color: var(--hf-ink);
+}
+.hf-nav a[aria-current="page"] {
+  background: var(--hf-ink);
+  color: #fff;
+}
+.hf-nav .hf-ico {
+  width: 14px;
+  height: 14px;
+}
+.hf-cnt {
+  display: grid;
+  place-items: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 5px;
+  border-radius: 99px;
+  background: var(--hf-lime);
+  color: var(--hf-sapin);
+  font-size: 10px;
+  font-weight: 700;
+}
+.hf-right {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+}
+.hf-ibtn {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--hf-line);
+  border-radius: 50%;
+  background: var(--hf-card);
+  box-shadow: var(--hf-shadow);
+  color: var(--hf-ink);
+  transition: transform 0.2s;
+}
+.hf-ibtn:hover {
+  transform: translateY(-1px);
+}
+.hf-ibtn .hf-ico {
+  width: 16px;
+  height: 16px;
+}
+.hf-badge {
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #e5533b;
+  animation: hf-blink 1.6s infinite;
+}
+@keyframes hf-blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+.hf-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 12px 0 5px;
+  border: 1px solid var(--hf-line);
+  border-radius: 99px;
+  background: var(--hf-card);
+  box-shadow: var(--hf-shadow);
+  color: var(--hf-ink);
+  text-align: left;
+  text-decoration: none;
+}
+.hf-me b {
+  display: block;
+  font-size: 12.5px;
+  line-height: 1.25;
+}
+.hf-me small {
+  display: block;
+  font-size: 11.5px;
+  line-height: 1.25;
+  color: var(--hf-muted);
+}
+.hf-av {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #ffe7cf;
+  color: var(--hf-sapin);
+  font:
+    600 11px var(--jm-font),
+    system-ui;
+}
+.hf-av img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hf-burger {
+  display: none;
+}
+
+/* ─── La colonne d'outils à gauche ─── */
+.hf-rail {
+  position: fixed;
+  z-index: 30;
+  top: var(--hf-top);
+  bottom: 12px;
+  left: max(16px, env(safe-area-inset-left, 0px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 46px;
+}
+.hf-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--hf-line);
+  border-radius: 99px;
+  background: var(--hf-card);
+  box-shadow: var(--hf-shadow);
+}
+.hf-group[data-end] {
+  margin-top: auto;
+}
+.hf-rbtn {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--hf-muted);
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.hf-rbtn:hover {
+  background: var(--hf-soft);
+  color: var(--hf-ink);
+}
+.hf-rbtn[aria-current="page"] {
+  background: var(--hf-ink);
+  color: #fff;
+}
+.hf-rbtn[data-lime] {
+  background: var(--hf-lime);
+  color: var(--hf-sapin);
+}
+.hf-rbtn .hf-ico {
+  width: 16px;
+  height: 16px;
+}
+.hf-tip {
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  left: 46px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: var(--hf-ink);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-4px, -50%);
+  transition:
+    opacity 0.15s,
+    transform 0.15s;
+}
+.hf-rbtn:hover .hf-tip,
+.hf-rbtn:focus-visible .hf-tip {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+.hf-ico {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.hf-top :focus-visible,
+.hf-rail :focus-visible {
+  outline: 2px solid var(--hf-sapin);
+  outline-offset: 2px;
+}
+
+/* Orbi flotte dans le coin, comme avant ; le bouton du menu à gauche l'ouvre aussi. */
+.nb-app[data-hire] .nb-orbi-fab {
+  bottom: 18px;
+}
+
+@media (max-width: 1340px) {
+  .hf-nav .hf-ico {
+    display: none;
+  }
+  .hf-nav a {
+    padding: 0 13px;
+  }
+}
+@media (max-width: 1280px) {
+  .hf-me div {
+    display: none;
+  }
+}
+@media (max-width: 1180px) {
+  .hf-logo b,
+  .hf-logo i {
+    display: none;
+  }
+  .hf-logo {
+    padding: 0 15px;
+  }
+}
+
+/* ─── Téléphone et petite tablette : la barre passe sur deux lignes, les outils derrière le bouton
+   du menu ─── */
+@media (max-width: 860px) {
+  .nb-app[data-hire] {
+    --hf-top: 122px;
+    --hf-left: 0px;
+  }
+  .nb-app[data-hire] .nb-couche {
+    padding-inline: 16px;
+  }
+  .hf-top {
+    flex-wrap: wrap;
+  }
+  .hf-nav {
+    order: 5;
+    width: 100%;
+    margin: 0;
+  }
+  .hf-right {
+    margin-left: auto;
+  }
+  .hf-burger {
+    display: grid;
+  }
+  .hf-help {
+    display: none;
+  }
+  .hf-rail {
+    bottom: auto;
+    transform: translateX(-160%);
+    transition: transform 0.3s;
+  }
+  .hf-rail[data-open] {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hf-badge {
+    animation: none;
+  }
+  .hf-ibtn,
+  .hf-rail,
+  .hf-nav a,
+  .hf-tip {
+    transition: none;
+  }
+}
+
+/* ─── Accueil du MVP : « À traiter » en pleine largeur (le Fil est en veille) ─── */
+.hf-accueil {
+  padding: 4px 0 32px;
+}
+.nb-rh-cote[data-plein] {
+  position: static;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  padding-top: 0;
+}
+.nb-rh-cote[data-plein]
+  > :is(.nb-rh-cote-t, .nb-rh-cote-tuiles, .nb-rh-cote-carte:first-of-type:only-of-type) {
+  grid-column: 1 / -1;
+}
+.nb-rh-cote[data-plein] .nb-rh-cote-t {
+  font-size: 26px;
+  font-weight: 600;
+}
+.nb-rh-cote[data-plein] .nb-rh-cote-tuiles {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+.nb-app[data-hire] :is(.nb-rh-cote-carte, .nb-rh-cote-tuiles a) {
+  border-color: var(--hf-line);
+  border-radius: 22px;
+  background: var(--hf-card);
+  box-shadow: var(--hf-shadow);
+}
+@media (max-width: 860px) {
+  .nb-rh-cote[data-plein] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .nb-rh-cote[data-plein] .nb-rh-cote-tuiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}

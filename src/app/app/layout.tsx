@@ -12,6 +12,11 @@ import { ExplorerTab } from "@/components/phone/explorer/server";
 import { FormationTab } from "@/components/phone/learn/server";
 import { MessagesTab } from "@/components/phone/messages/server";
 import { isPhone } from "@/server/view";
+import { HireFrame } from "@/components/hire-frame/frame";
+import { hireFrameProps } from "@/components/hire-frame/props";
+import { isHireScope } from "@/lib/product-scope";
+
+const ASLEEP_TALENT_TABS = ["fil", "explorer", "formation"] as const;
 import { ShellLoading } from "@/components/app/shell-loading";
 import { requireUser } from "@/server/auth/session";
 import { touchPresence } from "@/server/services/hire-messaging";
@@ -72,9 +77,12 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
     {
       // The pill menu's count on Chat (docs/fil-menu-publication § 1).
       const unreadMessages = await unreadCount(db, { userId: user.id });
+      // Mode MVP: the Fil, Explorer and Formation sleep; Carrière (applications) and Messages stay.
+      const hireScope = isHireScope();
       return (
         <PhoneShell
           wide={!phone}
+          asleep={hireScope ? ASLEEP_TALENT_TABS : undefined}
           badges={{ messages: unreadMessages }}
           account={{
             id: user.id,
@@ -84,12 +92,12 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
           }}
           reduceMotion={user.reduceMotion}
           tabs={{
-            fil: (
+            fil: hireScope ? null : (
               <Suspense fallback={null}>
                 <FilTab user={{ id: user.id, name: user.name, image: user.image ?? null }} />
               </Suspense>
             ),
-            explorer: (
+            explorer: hireScope ? null : (
               <Suspense fallback={null}>
                 <ExplorerTab user={{ id: user.id, name: user.name, image: user.image ?? null }} />
               </Suspense>
@@ -99,7 +107,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
                 <CareerTab user={{ id: user.id }} />
               </Suspense>
             ),
-            formation: (
+            formation: hireScope ? null : (
               <Suspense fallback={null}>
                 <FormationTab user={{ id: user.id, name: user.name, image: user.image ?? null }} />
               </Suspense>
@@ -127,64 +135,80 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
       organizationId: space.organizationId,
       role: space.role,
     });
+    // Mode MVP (docs/mvp-web-recruteur lot M0, prototype): the frame of the prototype, light.
+    const frame = isHireScope() ? (
+      <HireFrame
+        {...await hireFrameProps({
+          name: user.name,
+          image: user.image ?? null,
+          org: space.organization.name,
+          company: space.role === "org_owner" || space.role === "org_admin",
+          newApplications: counts.newApplications,
+          unreadMessages: counts.unreadMessages,
+          unreadNotifications: unread > 0,
+        })}
+      />
+    ) : undefined;
     const tWeb = await getTranslations("hireShell.web");
     const tTools = await getTranslations("phoneRh.outils");
     const company = space.role === "org_owner" || space.role === "org_admin";
-    const side = phone ? null : (
-      <RecruiterToolsNav
-        groups={
-          [
-            {
-              title: tTools("title"),
-              items: [
-                { href: "/app/hire/rapports", label: tWeb("reports"), icon: "progression" },
-                { href: "/app/hire/modeles", label: tTools("templates"), icon: "message" },
-              ],
-            },
-            ...(company
-              ? [
-                  {
-                    title: tWeb("entreprise.aria"),
-                    items: [
-                      {
-                        href: "/app/organisation/equipe",
-                        label: tWeb("entreprise.team"),
-                        icon: "candidats",
-                      },
-                      {
-                        href: "/app/organisation",
-                        label: tWeb("entreprise.page"),
-                        icon: "entreprise",
-                        exact: true,
-                      },
-                      {
-                        href: "/app/organisation/facturation",
-                        label: tWeb("entreprise.billing"),
-                        icon: "portefeuille",
-                      },
-                      {
-                        href: "/app/organisation/journal",
-                        label: tWeb("entreprise.journal"),
-                        icon: "confidentialite",
-                      },
-                      {
-                        href: "/app/organisation/reglages",
-                        label: tWeb("entreprise.settings"),
-                        icon: "reglages",
-                      },
-                    ],
-                  } satisfies RecruiterToolsGroup,
-                ]
-              : []),
-          ] satisfies RecruiterToolsGroup[]
-        }
-      />
-    );
+    const side =
+      phone || frame ? null : (
+        <RecruiterToolsNav
+          groups={
+            [
+              {
+                title: tTools("title"),
+                items: [
+                  { href: "/app/hire/rapports", label: tWeb("reports"), icon: "progression" },
+                  { href: "/app/hire/modeles", label: tTools("templates"), icon: "message" },
+                ],
+              },
+              ...(company
+                ? [
+                    {
+                      title: tWeb("entreprise.aria"),
+                      items: [
+                        {
+                          href: "/app/organisation/equipe",
+                          label: tWeb("entreprise.team"),
+                          icon: "candidats",
+                        },
+                        {
+                          href: "/app/organisation",
+                          label: tWeb("entreprise.page"),
+                          icon: "entreprise",
+                          exact: true,
+                        },
+                        {
+                          href: "/app/organisation/facturation",
+                          label: tWeb("entreprise.billing"),
+                          icon: "portefeuille",
+                        },
+                        {
+                          href: "/app/organisation/journal",
+                          label: tWeb("entreprise.journal"),
+                          icon: "confidentialite",
+                        },
+                        {
+                          href: "/app/organisation/reglages",
+                          label: tWeb("entreprise.settings"),
+                          icon: "reglages",
+                        },
+                      ],
+                    } satisfies RecruiterToolsGroup,
+                  ]
+                : []),
+            ] satisfies RecruiterToolsGroup[]
+          }
+        />
+      );
     return (
       <PhoneShell
         set="recruteur"
         wide={!phone}
         side={side}
+        frame={frame}
         account={{
           id: user.id,
           name: user.name,

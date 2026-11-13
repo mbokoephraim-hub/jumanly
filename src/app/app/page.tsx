@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
+import { isHireScope } from "@/lib/product-scope";
 import { WelcomeCard } from "@/components/access/welcome-card";
 import { CourseArt, Logo, toneOf, Banner } from "@/components/talent/art";
 import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
@@ -57,6 +58,12 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
   const user = await requireUser("/app");
   // A recruiter in their organization space lands on Hire; « Personnel » in the switcher comes back here.
   if (await getActiveSpace(user.id)) redirect("/app/hire");
+  // Mode MVP (docs/mvp-web-recruteur lot M0): Partners and the talent's Fil are asleep; a talent
+  // keeps their applications, messages and profile.
+  if (isHireScope()) {
+    if (await getPartnerSpace(user.id)) redirect("/");
+    redirect("/app/suivi");
+  }
   if (await getPartnerSpace(user.id)) redirect("/app/partenaire");
   // On a phone the Fil is the tab kept mounted by the layout (Modèle B, lot B3): nothing here.
   if (await isModelB()) return null;

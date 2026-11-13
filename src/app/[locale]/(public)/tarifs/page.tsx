@@ -17,6 +17,7 @@ import {
   stagger,
 } from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
+import { isHireScope } from "@/lib/product-scope";
 import { OpenOnWide, PricingFamilyNav } from "@/components/site/pricing-nav";
 import { TarifBand, TarifCompare, TarifPlanCards } from "@/components/site/tarifs";
 import type { PlanFamily } from "@/generated/prisma/client";
@@ -117,6 +118,8 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
     getMessages(),
     getContentOverrides(),
   ]);
+  // Mode MVP (docs/mvp-web-recruteur lot M0): only the companies' plans, until the annual plan (M1).
+  const hire = isHireScope();
   const companyFrom = lowestPaidPrice(plans, "company");
   // Largest RH team before Companies: the seats of the last RH plan, read from the database.
   const rhMaxSeats = Math.max(
@@ -162,13 +165,15 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
           <p className={cx(lead, "jm-rise max-w-[720px] text-sapin/85")} style={stagger(3)}>
             {t("pricing.hero.subtitle")}
           </p>
-          <div className="jm-rise mt-2 flex flex-col items-center gap-2" style={stagger(4)}>
-            <p className="text-[11px] leading-[15px] text-sapin/80">{t("pricing.tabs.label")}</p>
-            <PricingFamilyNav
-              label={t("pricing.tabs.label")}
-              families={families.map((id) => ({ id, label: t(`pricing.tabs.${id}`) }))}
-            />
-          </div>
+          {hire ? null : (
+            <div className="jm-rise mt-2 flex flex-col items-center gap-2" style={stagger(4)}>
+              <p className="text-[11px] leading-[15px] text-sapin/80">{t("pricing.tabs.label")}</p>
+              <PricingFamilyNav
+                label={t("pricing.tabs.label")}
+                families={families.map((id) => ({ id, label: t(`pricing.tabs.${id}`) }))}
+              />
+            </div>
+          )}
           <ul
             className="jm-rise flex flex-col gap-2.5 text-[13px] leading-[18px] font-medium lg:flex-row lg:gap-6"
             style={stagger(5)}
@@ -185,58 +190,62 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
         </div>
       </HeroPanel>
 
-      {/* Talents */}
-      <MarketingSection
-        id="talents"
-        className={cx(anchorOffset, "pt-10 lg:pt-10")}
-        innerClassName="flex flex-col gap-9"
-      >
-        {familyHead(t("pricing.talent.title"), t("pricing.talent.subtitle"))}
-        <FamilyCards plans={plans} family="talent" />
-        <p className="-mt-3 flex items-start justify-center gap-2 text-center text-xs leading-[17px] text-ardoise">
-          <Icon name="horloge" className="mt-px size-3.5 shrink-0" />
-          {t("pricing.card.provisional")}
-        </p>
-        <TarifBand
-          icon="certificat"
-          title={t("pricing.talent.partnersBand.title")}
-          text={t("pricing.talent.partnersBand.text")}
-          cta={t("pricing.talent.partnersBand.cta")}
-          href="/activer"
-        />
-        <div className="flex flex-col gap-4">
-          <TarifCompare plans={plans} family="talent" id="compare-talents" />
-          <OpenOnWide id="compare-talents" />
-          <p className="max-w-[880px] text-xs leading-[17px] text-ardoise">
-            {t("pricing.talent.compare.note")}
-          </p>
-        </div>
-      </MarketingSection>
+      {hire ? null : (
+        <>
+          {/* Talents */}
+          <MarketingSection
+            id="talents"
+            className={cx(anchorOffset, "pt-10 lg:pt-10")}
+            innerClassName="flex flex-col gap-9"
+          >
+            {familyHead(t("pricing.talent.title"), t("pricing.talent.subtitle"))}
+            <FamilyCards plans={plans} family="talent" />
+            <p className="-mt-3 flex items-start justify-center gap-2 text-center text-xs leading-[17px] text-ardoise">
+              <Icon name="horloge" className="mt-px size-3.5 shrink-0" />
+              {t("pricing.card.provisional")}
+            </p>
+            <TarifBand
+              icon="certificat"
+              title={t("pricing.talent.partnersBand.title")}
+              text={t("pricing.talent.partnersBand.text")}
+              cta={t("pricing.talent.partnersBand.cta")}
+              href="/activer"
+            />
+            <div className="flex flex-col gap-4">
+              <TarifCompare plans={plans} family="talent" id="compare-talents" />
+              <OpenOnWide id="compare-talents" />
+              <p className="max-w-[880px] text-xs leading-[17px] text-ardoise">
+                {t("pricing.talent.compare.note")}
+              </p>
+            </div>
+          </MarketingSection>
 
-      {/* RH */}
-      <MarketingSection
-        id="rh"
-        tone="blanc"
-        className={anchorOffset}
-        innerClassName="flex flex-col gap-9"
-      >
-        {familyHead(t("pricing.rh.title"), t("pricing.rh.subtitle"))}
-        <FamilyCards plans={plans} family="rh" />
-        <p className="flex items-start gap-3 rounded-[18px] bg-blanc px-[18px] py-3.5 text-[13px] leading-5">
-          <Icon name="lock" className="mt-0.5 size-4 shrink-0" />
-          {t("pricing.rh.privacyNote")}
-        </p>
-        <TarifBand
-          icon="entreprise"
-          title={t("pricing.rh.upsell.title", { seats: rhMaxSeats })}
-          text={t("pricing.rh.upsell.text", {
-            price: companyFrom === null ? "" : formatUsd(companyFrom),
-          })}
-          cta={t("pricing.rh.upsell.cta")}
-          href="#companies"
-        />
-        <TarifCompare plans={plans} family="rh" id="compare-rh" />
-      </MarketingSection>
+          {/* RH */}
+          <MarketingSection
+            id="rh"
+            tone="blanc"
+            className={anchorOffset}
+            innerClassName="flex flex-col gap-9"
+          >
+            {familyHead(t("pricing.rh.title"), t("pricing.rh.subtitle"))}
+            <FamilyCards plans={plans} family="rh" />
+            <p className="flex items-start gap-3 rounded-[18px] bg-blanc px-[18px] py-3.5 text-[13px] leading-5">
+              <Icon name="lock" className="mt-0.5 size-4 shrink-0" />
+              {t("pricing.rh.privacyNote")}
+            </p>
+            <TarifBand
+              icon="entreprise"
+              title={t("pricing.rh.upsell.title", { seats: rhMaxSeats })}
+              text={t("pricing.rh.upsell.text", {
+                price: companyFrom === null ? "" : formatUsd(companyFrom),
+              })}
+              cta={t("pricing.rh.upsell.cta")}
+              href="#companies"
+            />
+            <TarifCompare plans={plans} family="rh" id="compare-rh" />
+          </MarketingSection>
+        </>
+      )}
 
       {/* Companies */}
       <MarketingSection
@@ -258,85 +267,91 @@ export default async function PricingPage({ params }: PageProps<"/[locale]/tarif
           </SiteButton>
         </div>
         <FamilyCards plans={plans} family="company" />
-        <TarifBand
-          icon="certificat"
-          title={t("pricing.company.partnersBand.title")}
-          text={t("pricing.company.partnersBand.text")}
-          cta={t("pricing.company.partnersBand.cta")}
-          href="/partenaires"
-        />
+        {hire ? null : (
+          <TarifBand
+            icon="certificat"
+            title={t("pricing.company.partnersBand.title")}
+            text={t("pricing.company.partnersBand.text")}
+            cta={t("pricing.company.partnersBand.cta")}
+            href="/partenaires"
+          />
+        )}
         <TarifCompare plans={plans} family="company" id="compare-companies" />
       </MarketingSection>
 
-      {/* Partners, on Sapin */}
-      <MarketingSection
-        id="partners"
-        tone="sapin"
-        scene
-        className={anchorOffset}
-        innerClassName="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16"
-      >
-        <div data-reveal className="flex flex-col gap-5 lg:flex-1">
-          <Eyebrow dark>{t("pricing.tabs.partners")}</Eyebrow>
-          <h2 className={sectionTitle}>{t("pricing.partners.title")}</h2>
-          <p className={cx(lead, "text-blanc/75")}>{t("pricing.partners.subtitle")}</p>
-          <p className="text-[34px] leading-10 font-semibold tracking-[-0.03em] text-lime">
-            {t("pricing.partners.price")}
-          </p>
-          <ul className="flex flex-col gap-3">
-            {(["f1", "f2", "f3", "f4", "f5", "f6"] as const).map((key) => (
-              <li key={key} className="flex items-start gap-2.5 text-[14.5px] leading-[21px]">
-                <span
-                  aria-hidden
-                  className="mt-px flex size-5 shrink-0 items-center justify-center rounded-full bg-lime text-sapin"
-                >
-                  <Icon name="check" className="size-3" />
+      {hire ? null : (
+        <>
+          {/* Partners, on Sapin */}
+          <MarketingSection
+            id="partners"
+            tone="sapin"
+            scene
+            className={anchorOffset}
+            innerClassName="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-16"
+          >
+            <div data-reveal className="flex flex-col gap-5 lg:flex-1">
+              <Eyebrow dark>{t("pricing.tabs.partners")}</Eyebrow>
+              <h2 className={sectionTitle}>{t("pricing.partners.title")}</h2>
+              <p className={cx(lead, "text-blanc/75")}>{t("pricing.partners.subtitle")}</p>
+              <p className="text-[34px] leading-10 font-semibold tracking-[-0.03em] text-lime">
+                {t("pricing.partners.price")}
+              </p>
+              <ul className="flex flex-col gap-3">
+                {(["f1", "f2", "f3", "f4", "f5", "f6"] as const).map((key) => (
+                  <li key={key} className="flex items-start gap-2.5 text-[14.5px] leading-[21px]">
+                    <span
+                      aria-hidden
+                      className="mt-px flex size-5 shrink-0 items-center justify-center rounded-full bg-lime text-sapin"
+                    >
+                      <Icon name="check" className="size-3" />
+                    </span>
+                    {t(`pricing.partners.${key}`)}
+                  </li>
+                ))}
+              </ul>
+              <p className="flex items-start gap-2 text-[13px] leading-5 text-blanc/70">
+                <Icon name="lock" className="mt-0.5 size-3.5 shrink-0 text-lime" />
+                {t("pricing.partners.noOnline")}
+              </p>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <SiteButton href="/partenaires#contact" tone="lime">
+                  {t("pricing.partners.cta")}
+                </SiteButton>
+                <SiteButton href="/partenaires" tone="onDark">
+                  {t("pricing.partners.ctaSecondary")}
+                </SiteButton>
+              </div>
+              <Link
+                href="/activer"
+                className="inline-flex min-h-11 items-center gap-1.5 self-start text-[15px] font-semibold text-lime hover:underline"
+              >
+                {t("pricing.partners.beneficiary")}
+                <Icon name="chev-r" className="size-4 shrink-0" />
+              </Link>
+            </div>
+            <div className="flex flex-col items-end gap-6 lg:w-[420px] lg:shrink-0">
+              <div
+                data-reveal="zoom"
+                className="flex w-full flex-col gap-3.5 rounded-[28px] bg-blanc p-6 text-sapin"
+              >
+                <span className="inline-flex h-6 items-center self-start rounded-pill bg-neon px-2.5 text-[11px] font-semibold text-sapin">
+                  {t("pricing.partners.example.title")}
                 </span>
-                {t(`pricing.partners.${key}`)}
-              </li>
-            ))}
-          </ul>
-          <p className="flex items-start gap-2 text-[13px] leading-5 text-blanc/70">
-            <Icon name="lock" className="mt-0.5 size-3.5 shrink-0 text-lime" />
-            {t("pricing.partners.noOnline")}
-          </p>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <SiteButton href="/partenaires#contact" tone="lime">
-              {t("pricing.partners.cta")}
-            </SiteButton>
-            <SiteButton href="/partenaires" tone="onDark">
-              {t("pricing.partners.ctaSecondary")}
-            </SiteButton>
-          </div>
-          <Link
-            href="/activer"
-            className="inline-flex min-h-11 items-center gap-1.5 self-start text-[15px] font-semibold text-lime hover:underline"
-          >
-            {t("pricing.partners.beneficiary")}
-            <Icon name="chev-r" className="size-4 shrink-0" />
-          </Link>
-        </div>
-        <div className="flex flex-col items-end gap-6 lg:w-[420px] lg:shrink-0">
-          <div
-            data-reveal="zoom"
-            className="flex w-full flex-col gap-3.5 rounded-[28px] bg-blanc p-6 text-sapin"
-          >
-            <span className="inline-flex h-6 items-center self-start rounded-pill bg-neon px-2.5 text-[11px] font-semibold text-sapin">
-              {t("pricing.partners.example.title")}
-            </span>
-            <p className="text-base leading-[26px] font-semibold">
-              {t("pricing.partners.example.text")}
-            </p>
-            <p className="rounded-[18px] bg-blanc px-4 py-3.5 text-base leading-6 font-semibold">
-              {/* Thousands stay on one line (« 15 000 »). */}
-              {t("pricing.partners.example.formula").replace(/(\d) (\d)/g, "$1\u00a0$2")}
-            </p>
-            <p className="text-xs leading-[17px] text-ardoise">
-              {t("pricing.partners.example.note")}
-            </p>
-          </div>
-        </div>
-      </MarketingSection>
+                <p className="text-base leading-[26px] font-semibold">
+                  {t("pricing.partners.example.text")}
+                </p>
+                <p className="rounded-[18px] bg-blanc px-4 py-3.5 text-base leading-6 font-semibold">
+                  {/* Thousands stay on one line (« 15 000 »). */}
+                  {t("pricing.partners.example.formula").replace(/(\d) (\d)/g, "$1\u00a0$2")}
+                </p>
+                <p className="text-xs leading-[17px] text-ardoise">
+                  {t("pricing.partners.example.note")}
+                </p>
+              </div>
+            </div>
+          </MarketingSection>
+        </>
+      )}
 
       {/* What never changes */}
       <MarketingSection tone="blanc" innerClassName="flex flex-col gap-10">

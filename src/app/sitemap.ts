@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { isAsleepHref, isHireScope } from "@/lib/product-scope";
 import { siteUrl } from "@/lib/seo";
 import { getSitemapEntries } from "@/server/queries/public";
 
@@ -27,8 +28,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteUrl();
   const { courseSlugs, jobSlugs, companySlugs } = await getSitemapEntries();
   return [
-    ...staticRoutes.map((path) => ({ url: `${base}${path === "/" ? "" : path}` })),
-    ...courseSlugs.map((course) => ({
+    ...staticRoutes
+      .filter((path) => !isAsleepHref(path))
+      .map((path) => ({ url: `${base}${path === "/" ? "" : path}` })),
+    ...(isHireScope() ? [] : courseSlugs).map((course) => ({
       url: `${base}/formations/${course.slug}`,
       lastModified: course.updatedAt,
     })),

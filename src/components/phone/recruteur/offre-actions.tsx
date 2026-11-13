@@ -27,6 +27,8 @@ export type RhOfferActionsData = {
   /** The public address of the offer (copied, sent by WhatsApp), null before publication. */
   url: string | null;
   org: string;
+  /** The Fil sleeps in the mode MVP (lot M0): no « Publier dans le Fil ». */
+  noFil?: boolean;
   /** Applications that receive a message when the offer closes. */
   applications: number;
   /** « Offre clôturée, rapport prêt »: the figures of the report. */
@@ -205,10 +207,12 @@ export function RhOfferActions({
               <span className="nb-meta">{data.url.replace(/^https?:\/\//, "")}</span>
             </button>
           ) : null}
-          <Link href={`/app/fil/publier?nom=entreprise`} className="nb-rh-menu-l">
-            <b>{t("toFil")}</b>
-            <span className="nb-meta">{t("toFilHint", { org: data.org })}</span>
-          </Link>
+          {data.noFil ? null : (
+            <Link href={`/app/fil/publier?nom=entreprise`} className="nb-rh-menu-l">
+              <b>{t("toFil")}</b>
+              <span className="nb-meta">{t("toFilHint", { org: data.org })}</span>
+            </Link>
+          )}
           {data.url ? (
             <a
               href={`https://wa.me/?text=${encodeURIComponent(`${data.title} · ${data.url}`)}`}

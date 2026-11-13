@@ -1,4 +1,5 @@
 import "server-only";
+import { isHireScope } from "@/lib/product-scope";
 import Link from "next/link";
 import type { CSSProperties, ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
@@ -723,6 +724,7 @@ export async function RhOfferDetail({
         }
       : null;
   const actions: RhOfferActionsData = {
+    noFil: isHireScope(),
     id: job.id,
     title: job.title,
     status: (["published", "pending_review", "draft", "paused", "closed"] as const).includes(

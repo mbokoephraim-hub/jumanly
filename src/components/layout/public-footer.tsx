@@ -2,7 +2,7 @@ import Link from "next/link";
 import { cacheLife } from "next/cache";
 import { getTranslations } from "next-intl/server";
 import { Icon, Logo } from "@/components/brand";
-import { footerNavigation, legalNavigation } from "@/config/navigation";
+import { awake, footerNavigation, legalNavigation } from "@/config/navigation";
 import { CookieSettingsButton } from "@/components/site/cookie-consent";
 import { LanguageSwitch } from "./public-header";
 
@@ -43,7 +43,7 @@ export async function PublicFooter() {
                   {t("footer.col.solutions.text")}
                 </h2>
                 <ul>
-                  {footerNavigation.solutions.map((item) => (
+                  {awake(footerNavigation.solutions).map((item) => (
                     <li key={item.key}>
                       <Link href={item.href} className={link}>
                         {t(`footer.col.solutions.${item.key}`)}
@@ -57,7 +57,7 @@ export async function PublicFooter() {
                   {t("footer.col.discover.text")}
                 </h2>
                 <ul>
-                  {footerNavigation.discover.map((item) => (
+                  {awake(footerNavigation.discover).map((item) => (
                     <li key={item.key}>
                       <Link href={item.href} className={link}>
                         {t(`footer.col.discover.${item.key}`)}

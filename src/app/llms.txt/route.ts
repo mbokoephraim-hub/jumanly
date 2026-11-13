@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { formatUsd } from "@/lib/money";
+import { isAsleepHref, isHireScope } from "@/lib/product-scope";
 import { siteUrl } from "@/lib/seo";
 import { getLlmsEntries, getPublicPlans } from "@/server/queries/public";
 import { buildLlmsTxt } from "@/server/services/llms";
@@ -62,15 +63,23 @@ export async function GET() {
       t("common.signature"),
     ],
     sections: [
-      { heading: t("llms.sections.pages"), links: pages },
       {
-        heading: t("llms.sections.courses"),
-        links: entries.courses.map((course) => ({
-          title: course.title,
-          url: `${base}/formations/${course.slug}`,
-          description: course.summary,
-        })),
+        heading: t("llms.sections.pages"),
+        // Mode MVP: the pages put to sleep are not listed.
+        links: pages.filter((link) => !isAsleepHref(link.url.slice(base.length) || "/")),
       },
+      ...(isHireScope()
+        ? []
+        : [
+            {
+              heading: t("llms.sections.courses"),
+              links: entries.courses.map((course) => ({
+                title: course.title,
+                url: `${base}/formations/${course.slug}`,
+                description: course.summary,
+              })),
+            },
+          ]),
       {
         heading: t("llms.sections.jobs"),
         links: entries.jobs.map((job) => ({

@@ -7,7 +7,13 @@ import { askOrbiAction } from "@/server/actions/orbi";
 import { orbiFactAction, type OrbiFactAnswer } from "@/server/actions/feed";
 import { FilAvatar } from "./fil/avatar";
 import { rhOrbiFactAction } from "@/server/actions/phone-rh-orbi";
-import { ORBI_ASK_EVENT, ORBI_EVENT, type OrbiFact, type RhOrbiFact } from "./orbi-bus";
+import {
+  ORBI_ASK_EVENT,
+  ORBI_EVENT,
+  ORBI_OPEN_EVENT,
+  type OrbiFact,
+  type RhOrbiFact,
+} from "./orbi-bus";
 import { orbiActions, type OrbiReply } from "@/lib/orbi";
 import { keepsBar, rootTab, tabOf, type PhoneTab, type TabSetName } from "@/lib/phone-tabs";
 import { OrbiDisc, PhoneIcon } from "./icon";
@@ -217,9 +223,12 @@ export function PhoneOrbi({
       setOpen(true);
       ask((event as CustomEvent<string>).detail);
     };
+    const listenOpen = () => setOpen(true);
     window.addEventListener(ORBI_EVENT, listen);
     window.addEventListener(ORBI_ASK_EVENT, listenQuestion);
+    window.addEventListener(ORBI_OPEN_EVENT, listenOpen);
     return () => {
+      window.removeEventListener(ORBI_OPEN_EVENT, listenOpen);
       window.removeEventListener(ORBI_EVENT, listen);
       window.removeEventListener(ORBI_ASK_EVENT, listenQuestion);
     };
