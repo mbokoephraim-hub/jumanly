@@ -2,6 +2,10 @@ import { isModelB } from "@/server/phone-routes";
 import { isPhone } from "@/server/view";
 import { isHireScope } from "@/lib/product-scope";
 import { RhTodayRail } from "@/components/phone/recruteur/a-traiter";
+import { HireV3Home } from "@/components/hire-v3/home";
+import { hireV3Notifications } from "@/components/hire-v3/props";
+import { HOME_PERIODS, hireHome } from "@/server/services/hire-v3-home";
+import { unreadNotifications } from "@/server/services/notifications";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
@@ -459,16 +463,28 @@ async function HireTodayPageContent() {
  * On a phone, the Fil tab of Modèle B (docs/modele-b-recruteur, lot M3): the recruiter's Fil.
  * « À traiter » stays the first screen on a computer and a tablet.
  */
-export default async function HireTodayPage() {
+export default async function HireTodayPage({ searchParams }: PageProps<"/app/hire">) {
+  // Mode MVP: the home of the recruiter's web app v3 (docs/mvp-web-recruteur/prototype-v3).
+  if (isHireScope()) {
+    const { user, ctx } = await requireHire("/app/hire");
+    const query = await searchParams;
+    const period = HOME_PERIODS.find((p) => p === query.periode) ?? "semaine";
+    const [home, notifications, unread] = await Promise.all([
+      hireHome(db, ctx, period),
+      hireV3Notifications(db, user.id, 3),
+      unreadNotifications(db, user.id),
+    ]);
+    return (
+      <HireV3Home
+        home={home}
+        name={user.firstName ?? firstName(user.name) ?? null}
+        notifications={notifications.map((n) => ({ ...n, unread: true }))}
+        unreadNotifications={unread}
+      />
+    );
+  }
   if (await isModelB()) {
     const { user, ctx } = await requireHire("/app/hire");
-    // Mode MVP (docs/mvp-web-recruteur lot M0): the Fil sleeps, « À traiter » takes the whole width.
-    if (isHireScope())
-      return (
-        <div className="nb-page hf-accueil">
-          <RhTodayRail ctx={ctx} full />
-        </div>
-      );
     // On a computer « À traiter » sits beside the Fil (08/11/2026); a phone keeps the Fil alone.
     const wide = !(await isPhone());
     const fil = (

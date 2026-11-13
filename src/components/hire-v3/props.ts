@@ -38,8 +38,6 @@ export async function hireV3FrameProps(
   },
 ): Promise<HireV3FrameProps> {
   const t = await getTranslations("hireV3");
-  const tItem = await getTranslations("notifications.item");
-  const format = await getFormatter();
   const nav: HireV3Link[] = [
     { href: "/app/hire", label: t("nav.home"), icon: "home", exact: true },
     { href: "/app/hire/offres", label: t("nav.offers"), icon: "offres" },
@@ -75,23 +73,9 @@ export async function hireV3FrameProps(
     { href: "/app/hire/compte/aide", label: t("help"), icon: "help" },
     { href: "/app/hire/compte/profil", label: t("me.profile"), icon: "users" },
   ];
-  const now = new Date();
-  const latest = (await listNotifications(db, input.userId)).slice(0, 4);
   const bell = {
     unread: input.unreadNotifications,
-    items: latest.map((item) => {
-      const values = notificationValues(item.payload);
-      const key = notificationKey(item.type, values);
-      return {
-        id: item.id,
-        href: item.href ?? "/app/notifications",
-        icon: bellIcon(item.type),
-        text: tItem.has(key as "newApplication")
-          ? tItem(key as "newApplication", values)
-          : t("bell.title"),
-        meta: format.relativeTime(item.createdAt, now),
-      };
-    }),
+    items: await hireV3Notifications(db, input.userId, 4),
   };
   return {
     nav,
@@ -107,4 +91,26 @@ export async function hireV3FrameProps(
     },
     dark: input.appearance === "dark",
   };
+}
+
+/** The latest unread notifications, as the bell and the home show them. */
+export async function hireV3Notifications(db: PrismaClient, userId: string, take: number) {
+  const t = await getTranslations("hireV3");
+  const tItem = await getTranslations("notifications.item");
+  const format = await getFormatter();
+  const now = new Date();
+  const latest = (await listNotifications(db, userId)).slice(0, take);
+  return latest.map((item) => {
+    const values = notificationValues(item.payload);
+    const key = notificationKey(item.type, values);
+    return {
+      id: item.id,
+      href: item.href ?? "/app/notifications",
+      icon: bellIcon(item.type),
+      text: tItem.has(key as "newApplication")
+        ? tItem(key as "newApplication", values)
+        : t("bell.title"),
+      meta: format.relativeTime(item.createdAt, now),
+    };
+  });
 }

@@ -1,4 +1,12 @@
 import { isModelB } from "@/server/phone-routes";
+import { isHireScope } from "@/lib/product-scope";
+import { HireV3Offers, OFFER_TABS, type OfferTabV3 } from "@/components/hire-v3/offers";
+import {
+  offerStats,
+  offersV3,
+  STAT_PERIODS,
+  type StatPeriod,
+} from "@/server/services/hire-v3-offers";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
@@ -316,7 +324,35 @@ async function PhoneOffers({ searchParams }: PageProps<"/app/hire/offres">) {
   );
 }
 
+/** Offres of the web app v3 (prototype v3, `V.offres`): the cards or the statistics. */
+async function HireV3OffersPage({ searchParams }: PageProps<"/app/hire/offres">) {
+  const params = await searchParams;
+  const { ctx } = await requireHire("/app/hire/offres");
+  const t = await getTranslations("hireOffers");
+  const raw = typeof params.onglet === "string" ? params.onglet : "";
+  const tab: OfferTabV3 = OFFER_TABS.includes(raw as OfferTabV3) ? (raw as OfferTabV3) : "toutes";
+  const days = Number(params.periode);
+  const period: StatPeriod = STAT_PERIODS.includes(days as StatPeriod) ? (days as StatPeriod) : 30;
+  const [offers, stats] = await Promise.all([
+    offersV3(db, ctx),
+    tab === "statistiques" ? offerStats(db, ctx, period) : null,
+  ]);
+  const ok = OK_TOASTS.find((value) => value === params.ok);
+  return (
+    <>
+      {ok && <ToastOnLoad message={t(`list.ok.${ok}`)} tone="success" />}
+      <HireV3Offers
+        offers={offers}
+        tab={tab}
+        stats={stats}
+        canManage={hirePermissions(ctx.role).manage}
+      />
+    </>
+  );
+}
+
 export default async function HireOffersPage(props: PageProps<"/app/hire/offres">) {
+  if (isHireScope()) return <HireV3OffersPage {...props} />;
   if (await isModelB()) return <PhoneOffers {...props} />;
   return <HireOffersPageContent {...props} />;
 }

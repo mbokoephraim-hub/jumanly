@@ -1,4 +1,8 @@
 import { isModelB } from "@/server/phone-routes";
+import { isHireScope } from "@/lib/product-scope";
+import { HireV3Offer, OFFER_DETAIL_TABS, type OfferDetailTab } from "@/components/hire-v3/offer";
+import { HireV3OfferPublished } from "@/components/hire-v3/new-offer";
+import { offerV3 } from "@/server/services/hire-v3-offer";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
@@ -821,7 +825,47 @@ async function PhoneOffer({ params, searchParams }: PageProps<"/app/hire/offres/
   );
 }
 
+/** La fiche d'une offre of the web app v3 (prototype v3, `V.offre`). */
+async function HireV3OfferPage({ params, searchParams }: PageProps<"/app/hire/offres/[id]">) {
+  const [{ id }, query] = await Promise.all([params, searchParams]);
+  const { ctx } = await requireHire(`/app/hire/offres/${id}`);
+  const offer = await offerV3(db, ctx, id).catch((error) => {
+    if (error instanceof HireError) notFound();
+    throw error;
+  });
+  if (query.publiee === "1" || query.publiee === "verification") {
+    const org = await db.organization.findUniqueOrThrow({
+      where: { id: ctx.organizationId },
+      select: { name: true },
+    });
+    return (
+      <HireV3OfferPublished
+        job={offer}
+        review={query.publiee === "verification" || offer.status === "pending_review"}
+        orgName={org.name}
+      />
+    );
+  }
+  const raw = typeof query.onglet === "string" ? query.onglet : "";
+  const tab = OFFER_DETAIL_TABS.find((key) => key === raw) ?? ("apercu" as OfferDetailTab);
+  const permissions = hirePermissions(ctx.role);
+  const t = await getTranslations("hireOffers");
+  const ok = ["pause", "reprise", "brouillon"].find((value) => value === query.ok);
+  return (
+    <>
+      {ok && <ToastOnLoad message={t(`list.ok.${ok}` as "list.ok.pause")} tone="success" />}
+      <HireV3Offer
+        offer={offer}
+        tab={tab}
+        canManage={permissions.manage}
+        canRead={permissions.readApplications}
+      />
+    </>
+  );
+}
+
 export default async function OfferPage(props: PageProps<"/app/hire/offres/[id]">) {
+  if (isHireScope()) return <HireV3OfferPage {...props} />;
   if (await isModelB()) return <PhoneOffer {...props} />;
   return <OfferPageContent {...props} />;
 }

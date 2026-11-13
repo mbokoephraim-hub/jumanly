@@ -32,7 +32,13 @@ export async function HirePageHead({
   download,
   extra,
   actions,
+  crumb,
+  below,
 }: {
+  /** The path above the title (`.meta` « Offres / … »). */
+  crumb?: ReactNode;
+  /** What sits under the title and subtitle (the chips of an offer). */
+  below?: ReactNode;
   title: ReactNode;
   sub?: ReactNode;
   back?: { href: string; label?: string };
@@ -56,8 +62,10 @@ export async function HirePageHead({
             <span>{t("back")}</span>
           </Link>
         ) : null}
+        {crumb}
         <h1>{title}</h1>
         {sub ? <p>{sub}</p> : null}
+        {below}
       </div>
       {download || extra || (tabs && tabs.length > 1) || actions ? (
         <div className="act">
