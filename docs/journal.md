@@ -5813,3 +5813,24 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
 - Retirés : `src/components/hire-frame/` et `src/styles/hire-frame.css` (cadre du prototype v1).
 - Données : `hirePaletteIndex` (filtré par organisation) et `GET /api/hire/recherche/index`.
 - Choix notés dans `docs/decisions/2026-11-13-cadre-hire-v3.md`. Prochain lot : V3-2 (Offres).
+
+## 2026-11-13 · Jumanly Hire v3, lot V3-2 (offres)
+
+- Accueil (`/app/hire`, `V.accueil`) : offres en cours, quatre chiffres de la période (jour,
+  semaine, mois), graphique « Candidatures reçues » au survol, profils à rencontrer, À faire,
+  notifications, entonnoir et entretiens de la semaine. Service `hire-v3-home.ts`.
+- Offres (`/app/hire/offres`, `V.offres` et `offStats()`) : cartes trois par ligne avec la couleur de
+  chaque offre, carte brouillon, carte « Nouvelle offre », mise en pause et reprise ; onglet
+  Statistiques 7 / 30 / 90 jours (tuiles, courbe, sources, tableau par offre). Service
+  `hire-v3-offers.ts`.
+- Fiche offre (`/app/hire/offres/[id]`, `V.offre`) : Aperçu (chiffres, vues sur 30 jours,
+  entonnoir, Top 3 d'Orbi, sources, candidatures des 7 derniers jours), Annonce (missions,
+  compétences, poids d'Orbi et exemple réel), Partage (LinkedIn, WhatsApp, lien, candidatures par
+  canal). Service `hire-v3-offer.ts`.
+- Nouvelle offre (`/app/hire/offres/nouvelle`, `V.nouvelle`) : fenêtre de départ (Orbi, dupliquer,
+  modèle, import), sept étapes enregistrées en brouillon une à une par `saveOfferV3Action` (les
+  champs d'une étape seulement, le reste de l'offre gardé), aperçu candidat à côté, « Offre
+  publiée ». `/offres/[id]/modifier` renvoie vers ces étapes en mode Hire.
+- Rapport des offres (`/app/hire/offres/rapport`, `V.rapportoffres`) : quatre pages A4,
+  « Enregistrer en PDF » par la fenêtre d'impression du navigateur.
+- Écarts notés dans `docs/decisions/2026-11-13-offres-hire-v3.md`.

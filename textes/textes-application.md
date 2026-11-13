@@ -15969,6 +15969,608 @@ Conventions :
 | `hireV3.page.download` | Télécharger |
 | `hireV3.page.titleSuffix` | · Jumanly Hire |
 
+### MVP recruteur · accueil (prototype v3)
+
+*Lot V3-2 (docs/mvp-web-recruteur/prototype-v3, écrans 01 à 03) : candidatures de la période, quatre chiffres, graphique, profils à rencontrer, à faire, notifications, entonnoir, semaine.*
+
+| Clé | Texte |
+|---|---|
+| `hireV3Home.seo` | Accueil |
+| `hireV3Home.hello` | Bonjour, {name} |
+| `hireV3Home.helloAnon` | Bonjour |
+| `hireV3Home.sub` | Voici l'essentiel de votre recrutement aujourd'hui. |
+| `hireV3Home.periods.jour` | Aujourd'hui |
+| `hireV3Home.periods.semaine` | Semaine |
+| `hireV3Home.periods.mois` | Mois |
+| `hireV3Home.plan` | Planifier |
+| `hireV3Home.publish` | Publier une offre |
+| `hireV3Home.applications.title` | Candidatures |
+| `hireV3Home.applications.all` | Toutes les offres |
+| `hireV3Home.applications.live` | {count, plural, =0 {Aucune offre en ligne} one {# offre en ligne} other {# offres en ligne}} |
+| `hireV3Home.applications.daysLeft` | {count, plural, =0 {Dernier jour} one {# j restant} other {# j restants}} |
+| `hireV3Home.applications.open` | Sans date de fin |
+| `hireV3Home.applications.paused` | En pause |
+| `hireV3Home.applications.received` | reçues |
+| `hireV3Home.applications.empty` | Aucune offre en ligne pour l'instant. |
+| `hireV3Home.more` | {count} de plus |
+| `hireV3Home.seeMore` | Voir plus |
+| `hireV3Home.delta.up` | ↑ {value} % |
+| `hireV3Home.delta.down` | ↓ {value} % |
+| `hireV3Home.delta.stable` | → stable |
+| `hireV3Home.delta.upDays` | ↑ {value} j |
+| `hireV3Home.kpi.shortlisted` | Présélectionnés |
+| `hireV3Home.kpi.interviews` | Entretiens |
+| `hireV3Home.kpi.tests` | Tests rendus |
+| `hireV3Home.kpi.delay` | Délai moyen |
+| `hireV3Home.kpi.delayValue` | {count} j |
+| `hireV3Home.kpi.none` | – |
+| `hireV3Home.chart.title` | Candidatures reçues |
+| `hireV3Home.chart.received` | Reçues |
+| `hireV3Home.chart.shortlisted` | Présélection |
+| `hireV3Home.chart.reports` | Voir les rapports |
+| `hireV3Home.chart.aria` | Candidatures reçues et présélectionnées |
+| `hireV3Home.chart.peak` | Pic {label} : {count, plural, one {# candidature} other {# candidatures}}. Survolez une barre pour le détail. |
+| `hireV3Home.chart.empty` | Aucune candidature sur la période. |
+| `hireV3Home.chart.detail` | {label} : {received, plural, one {# candidature} other {# candidatures}}, dont {shortlisted} présélectionnées ({rate} %). Cliquez pour les voir. |
+| `hireV3Home.chart.tipReceived` | {count} reçues |
+| `hireV3Home.chart.tipShortlisted` | {count} présélectionnées |
+| `hireV3Home.chart.hour` | {hour} h |
+| `hireV3Home.chart.hourLong` | à {hour} h |
+| `hireV3Home.chart.week` | S{n} |
+| `hireV3Home.chart.weekLong` | semaine {n} |
+| `hireV3Home.chart.days.0` | lun. |
+| `hireV3Home.chart.days.1` | mar. |
+| `hireV3Home.chart.days.2` | mer. |
+| `hireV3Home.chart.days.3` | jeu. |
+| `hireV3Home.chart.days.4` | ven. |
+| `hireV3Home.chart.days.5` | sam. |
+| `hireV3Home.chart.days.6` | dim. |
+| `hireV3Home.chart.daysLong.0` | lundi |
+| `hireV3Home.chart.daysLong.1` | mardi |
+| `hireV3Home.chart.daysLong.2` | mercredi |
+| `hireV3Home.chart.daysLong.3` | jeudi |
+| `hireV3Home.chart.daysLong.4` | vendredi |
+| `hireV3Home.chart.daysLong.5` | samedi |
+| `hireV3Home.chart.daysLong.6` | dimanche |
+| `hireV3Home.meet.title` | Choisir qui rencontrer |
+| `hireV3Home.meet.sub` | {offer} · {count, plural, =0 {aucun profil classé} one {# profil classé par Orbi} other {# profils classés par Orbi}} |
+| `hireV3Home.meet.open` | Ouvrir la short-list |
+| `hireV3Home.meet.empty` | Aucun profil à 70 % ou plus pour l'instant. |
+| `hireV3Home.meet.score` | {score} % |
+| `hireV3Home.meet.done` | Fait |
+| `hireV3Home.todo.title` | À faire |
+| `hireV3Home.todo.left` | {count, plural, =0 {Rien à faire} one {# restante} other {# restantes}} |
+| `hireV3Home.todo.unseen` | Examiner {count, plural, one {# nouvelle candidature} other {# nouvelles candidatures}} |
+| `hireV3Home.todo.unseenSub` | Pas encore ouvertes |
+| `hireV3Home.todo.invitations` | {count, plural, one {# invitation sans réponse} other {# invitations sans réponse}} |
+| `hireV3Home.todo.invitationsSub` | Entretiens à confirmer |
+| `hireV3Home.todo.scorecards` | Compléter {count, plural, one {# évaluation} other {# évaluations}} |
+| `hireV3Home.todo.scorecardsSub` | Grilles d'entretien |
+| `hireV3Home.todo.unread` | Répondre à {count, plural, one {# message} other {# messages}} |
+| `hireV3Home.todo.unreadSub` | Messages non lus |
+| `hireV3Home.todo.task.follow` | Suivre {candidate} |
+| `hireV3Home.todo.task.diagnostic` | Évaluer {candidate} |
+| `hireV3Home.todo.task.interview` | Mener l'entretien de {candidate} |
+| `hireV3Home.todo.due` | Échéance : {date} |
+| `hireV3Home.todo.open` | Ouvrir |
+| `hireV3Home.todo.empty` | Tout est à jour. |
+| `hireV3Home.notifications.title` | Notifications |
+| `hireV3Home.notifications.new` | {count, plural, one {# nouvelle} other {# nouvelles}} |
+| `hireV3Home.notifications.all` | Voir toutes les notifications |
+| `hireV3Home.notifications.empty` | Aucune nouvelle notification. |
+| `hireV3Home.funnel.title` | Où en sont vos candidats |
+| `hireV3Home.funnel.open` | Ouvrir |
+| `hireV3Home.funnel.rate` | {rate} % |
+| `hireV3Home.funnel.share` | {rate} % du total |
+| `hireV3Home.funnel.decide` | Vous décidez |
+| `hireV3Home.funnel.empty` | Publiez une offre pour suivre vos candidats étape par étape. |
+| `hireV3Home.week.title` | Cette semaine |
+| `hireV3Home.week.agenda` | Agenda |
+| `hireV3Home.week.mode.video` | Entretien vidéo · {minutes} min |
+| `hireV3Home.week.mode.onsite` | Entretien sur place · {minutes} min |
+| `hireV3Home.week.mode.audio` | Appel · {minutes} min |
+| `hireV3Home.week.empty` | Aucun entretien prévu ces 7 prochains jours. |
+
+### MVP recruteur · offres (prototype v3)
+
+*Lot V3-2 (docs/mvp-web-recruteur/prototype-v3, écrans 05 à 09) : offres en cartes, trois par ligne, et statistiques.*
+
+| Clé | Texte |
+|---|---|
+| `hireV3Offers.seo` | Offres |
+| `hireV3Offers.title` | Offres |
+| `hireV3Offers.sub` | {live, plural, =0 {Aucune offre en ligne} one {# en ligne} other {# en ligne}} · {count, plural, =0 {aucune candidature reçue} one {# candidature reçue} other {# candidatures reçues}} |
+| `hireV3Offers.tabs.toutes` | Toutes |
+| `hireV3Offers.tabs.enLigne` | En ligne |
+| `hireV3Offers.tabs.pause` | En pause |
+| `hireV3Offers.tabs.brouillons` | Brouillons |
+| `hireV3Offers.tabs.statistiques` | Statistiques |
+| `hireV3Offers.filter` | Filtrer |
+| `hireV3Offers.publish` | Publier une offre |
+| `hireV3Offers.status.live` | En ligne |
+| `hireV3Offers.status.paused` | En pause |
+| `hireV3Offers.status.draft` | Brouillon |
+| `hireV3Offers.status.review` | En vérification |
+| `hireV3Offers.status.closed` | Clôturée |
+| `hireV3Offers.noDepartment` | Offre |
+| `hireV3Offers.contract.cdi` | CDI |
+| `hireV3Offers.contract.cdd` | CDD |
+| `hireV3Offers.contract.stage` | Stage |
+| `hireV3Offers.contract.mission` | Mission |
+| `hireV3Offers.contract.freelance` | Freelance |
+| `hireV3Offers.contract.alternance` | Alternance |
+| `hireV3Offers.contract.volontariat` | Volontariat |
+| `hireV3Offers.remote.onsite` | Sur site |
+| `hireV3Offers.remote.hybrid` | Hybride |
+| `hireV3Offers.remote.remote` | À distance |
+| `hireV3Offers.card.views` | Vues |
+| `hireV3Offers.card.applications` | Candidatures |
+| `hireV3Offers.card.openings` | Postes |
+| `hireV3Offers.card.high` | Fort potentiel |
+| `hireV3Offers.card.split` | Répartition des candidatures |
+| `hireV3Offers.card.fresh` | {count} nouvelles |
+| `hireV3Offers.card.screening` | {count} présélection |
+| `hireV3Offers.card.interview` | {count} entretien |
+| `hireV3Offers.card.open` | Voir l'offre |
+| `hireV3Offers.card.daysLeft` | {count, plural, =0 {Dernier jour} one {# j restant} other {# j restants}} |
+| `hireV3Offers.card.noEnd` | Sans date de fin |
+| `hireV3Offers.card.pausedLine` | Mise en pause |
+| `hireV3Offers.card.share` | Partager |
+| `hireV3Offers.card.copied` | Lien de l'offre copié |
+| `hireV3Offers.card.pause` | Mettre en pause |
+| `hireV3Offers.card.resume` | Remettre en ligne |
+| `hireV3Offers.draft.steps` | Étapes |
+| `hireV3Offers.draft.stepsValue` | {done} / 4 |
+| `hireV3Offers.draft.description` | Description |
+| `hireV3Offers.draft.toFinish` | À finir |
+| `hireV3Offers.draft.ready` | Prête |
+| `hireV3Offers.draft.orbi` | Orbi |
+| `hireV3Offers.draft.orbiReady` | Prêt |
+| `hireV3Offers.draft.orbiLine` | Orbi peut finir la description |
+| `hireV3Offers.draft.finish` | Terminer l'annonce |
+| `hireV3Offers.new.title` | Nouvelle offre |
+| `hireV3Offers.new.sub` | Donnez un titre, Orbi rédige un premier jet. |
+| `hireV3Offers.empty` | Aucune offre dans cet onglet. |
+| `hireV3Offers.stats.days` | {count} jours |
+| `hireV3Offers.stats.range` | {count} derniers jours |
+| `hireV3Offers.stats.report` | Télécharger le rapport |
+| `hireV3Offers.stats.views` | Vues des annonces |
+| `hireV3Offers.stats.applications` | Candidatures |
+| `hireV3Offers.stats.rate` | Vue → candidature |
+| `hireV3Offers.stats.interviews` | Entretiens |
+| `hireV3Offers.stats.rateValue` | {value} % |
+| `hireV3Offers.stats.detail` | Voir le détail |
+| `hireV3Offers.stats.overTime` | Candidatures dans le temps |
+| `hireV3Offers.stats.thisPeriod` | Cette période |
+| `hireV3Offers.stats.previous` | Période précédente |
+| `hireV3Offers.stats.unit` | cand. |
+| `hireV3Offers.stats.sources` | D'où viennent les candidats |
+| `hireV3Offers.stats.sourcesLabel` | candidatures |
+| `hireV3Offers.stats.source.direct` | Candidature directe |
+| `hireV3Offers.stats.source.invitation` | Invitation |
+| `hireV3Offers.stats.source.talent_search` | Recherche de talents |
+| `hireV3Offers.stats.share` | {value} % |
+| `hireV3Offers.stats.byOffer` | Par offre |
+| `hireV3Offers.stats.byOfferHint` | Cliquez sur une offre pour le détail |
+| `hireV3Offers.stats.col.offer` | Offre |
+| `hireV3Offers.stats.col.views` | Vues |
+| `hireV3Offers.stats.col.applications` | Candidatures |
+| `hireV3Offers.stats.col.rate` | Taux |
+| `hireV3Offers.stats.col.high` | Fort potentiel |
+| `hireV3Offers.stats.noOffer` | Aucune offre publiée sur la période. |
+| `hireV3Offers.stats.dayLabel` | J-{n} |
+| `hireV3Offers.stats.weekLabel` | S{n} |
+
+### MVP recruteur · fiche offre (prototype v3)
+
+*Écran 08 du prototype v3 (`V.offre`) : aperçu, annonce, partage. Chiffres réels uniquement.*
+
+| Clé | Texte |
+|---|---|
+| `hireV3Offer.seo` | Offre |
+| `hireV3Offer.crumb` | Offres |
+| `hireV3Offer.tabs.apercu` | Aperçu |
+| `hireV3Offer.tabs.annonce` | Annonce |
+| `hireV3Offer.tabs.partage` | Partage |
+| `hireV3Offer.closes` | Ferme le {date} |
+| `hireV3Offer.share` | Partager |
+| `hireV3Offer.seeCandidates` | {count, plural, =0 {Voir les candidats} one {Voir le candidat} other {Voir les # candidats}} |
+| `hireV3Offer.kpi.views` | Vues |
+| `hireV3Offer.kpi.viewsSub` | 30 derniers jours |
+| `hireV3Offer.kpi.applications` | Candidatures |
+| `hireV3Offer.kpi.applicationsSub` | {count, plural, one {# poste à pourvoir} other {# postes à pourvoir}} |
+| `hireV3Offer.kpi.high` | Fort potentiel |
+| `hireV3Offer.kpi.highSub` | classés par Orbi |
+| `hireV3Offer.kpi.closing` | Clôture |
+| `hireV3Offer.kpi.closingValue` | {count} j |
+| `hireV3Offer.kpi.closingSub` | le {date} |
+| `hireV3Offer.kpi.noClosing` | — |
+| `hireV3Offer.kpi.noClosingSub` | Sans date de fin |
+| `hireV3Offer.viewsChart` | Vues de l'annonce, 30 jours |
+| `hireV3Offer.hover` | Survolez pour le détail |
+| `hireV3Offer.unitViews` | vues |
+| `hireV3Offer.funnel` | Entonnoir |
+| `hireV3Offer.funnelStep.views` | Vues |
+| `hireV3Offer.funnelStep.applications` | Candidatures |
+| `hireV3Offer.funnelStep.screening` | Présélection |
+| `hireV3Offer.funnelStep.interview` | Entretien |
+| `hireV3Offer.funnelStep.offer` | Offre |
+| `hireV3Offer.conversion` | {value} % |
+| `hireV3Offer.funnelTip` | {rate} % des visiteurs postulent. |
+| `hireV3Offer.funnelTipMore` | Orbi peut proposer une annonce plus claire. |
+| `hireV3Offer.funnelTipEmpty` | Pas encore de vues sur cette période. |
+| `hireV3Offer.top` | Top 3 d'Orbi |
+| `hireV3Offer.topEmpty` | Les candidats classés par Orbi apparaîtront ici. |
+| `hireV3Offer.topOpen` | Voir les candidats |
+| `hireV3Offer.cls.fort` | Fort potentiel |
+| `hireV3Offer.cls.cons` | À considérer |
+| `hireV3Offer.cls.lim` | Limité |
+| `hireV3Offer.sources` | Sources |
+| `hireV3Offer.sourcesLabel` | candidatures |
+| `hireV3Offer.perDay` | Candidatures par jour |
+| `hireV3Offer.ad.title` | Annonce |
+| `hireV3Offer.ad.preview` | Aperçu candidat |
+| `hireV3Offer.ad.edit` | Modifier |
+| `hireV3Offer.ad.contract` | Contrat |
+| `hireV3Offer.ad.place` | Lieu |
+| `hireV3Offer.ad.closing` | Clôture |
+| `hireV3Offer.ad.openings` | Postes |
+| `hireV3Offer.ad.missions` | Vos missions |
+| `hireV3Offer.ad.skills` | Compétences attendues |
+| `hireV3Offer.ad.required` | Indispensables |
+| `hireV3Offer.ad.preferred` | Appréciées |
+| `hireV3Offer.ad.noMissions` | Aucune mission détaillée. |
+| `hireV3Offer.ad.noSkills` | Aucune compétence indiquée. |
+| `hireV3Offer.ad.criteria` | Critères de tri d'Orbi |
+| `hireV3Offer.ad.criteriaSub` | Le score se calcule toujours avec ces poids. |
+| `hireV3Offer.ad.weight` | {value} % |
+| `hireV3Offer.ad.example` | Exemple : |
+| `hireV3Offer.ad.exampleScore` | {value} % |
+| `hireV3Offer.ad.exampleLine` | {points} points, critère par critère |
+| `hireV3Offer.ad.note` | Nom, âge, genre, photo et adresse ne comptent jamais. |
+| `hireV3Offer.criterion.skills_required` | Compétences indispensables |
+| `hireV3Offer.criterion.skills_preferred` | Compétences appréciées |
+| `hireV3Offer.criterion.experience` | Expérience utile |
+| `hireV3Offer.criterion.education` | Formation |
+| `hireV3Offer.criterion.languages` | Langues |
+| `hireV3Offer.criterion.location` | Lieu |
+| `hireV3Offer.criterion.contract` | Contrat |
+| `hireV3Offer.criterion.semantic` | Proximité du profil |
+| `hireV3Offer.sh.title` | Partager l'offre |
+| `hireV3Offer.sh.where` | Où partager |
+| `hireV3Offer.sh.whereSub` | Un message prêt pour chaque canal |
+| `hireV3Offer.sh.linkedin` | LinkedIn |
+| `hireV3Offer.sh.linkedinSub` | Publication sur votre page LinkedIn |
+| `hireV3Offer.sh.whatsapp` | WhatsApp |
+| `hireV3Offer.sh.whatsappSub` | Message prêt à transférer à vos groupes |
+| `hireV3Offer.sh.page` | Page de l'offre |
+| `hireV3Offer.sh.pageSub` | Visible par tous sur Jumanly |
+| `hireV3Offer.sh.live` | En ligne |
+| `hireV3Offer.sh.notLive` | Hors ligne |
+| `hireV3Offer.sh.share` | Partager |
+| `hireV3Offer.sh.copy` | Copier le lien |
+| `hireV3Offer.sh.copied` | Lien de l'offre copié |
+| `hireV3Offer.sh.message` | {title} : postulez sur Jumanly |
+| `hireV3Offer.sh.channels` | Candidatures par canal |
+| `hireV3Offer.sh.total` | {count} au total |
+| `hireV3Offer.sh.tip` | La candidature directe reste gratuite pour chaque talent. |
+| `hireV3Offer.sh.url` | jumanly.io{path} |
+| `hireV3Offer.sh.tipMore` | Partagez le lien en début de semaine pour plus de visites. |
+
+### MVP recruteur · nouvelle offre (prototype v3)
+
+*Écrans « Nouvelle offre » du prototype v3 (`V.nouvelle`, `nwStart`, `nwSide`) : fenêtre de départ, sept étapes, offre publiée.*
+
+| Clé | Texte |
+|---|---|
+| `hireV3New.seo` | Nouvelle offre |
+| `hireV3New.title` | Nouvelle offre |
+| `hireV3New.sub` | {title} · {step} |
+| `hireV3New.untitled` | Nouvelle offre |
+| `hireV3New.steps.1` | Poste |
+| `hireV3New.steps.2` | Annonce |
+| `hireV3New.steps.3` | Critères |
+| `hireV3New.steps.4` | Candidature |
+| `hireV3New.steps.5` | Équipe et étapes |
+| `hireV3New.steps.6` | Diffusion |
+| `hireV3New.steps.7` | Vérifier |
+| `hireV3New.start.title` | Nouvelle offre |
+| `hireV3New.start.sub` | Comment voulez-vous commencer ? |
+| `hireV3New.start.close` | Fermer |
+| `hireV3New.start.jobTitle` | Intitulé du poste |
+| `hireV3New.start.jobTitlePlaceholder` | Ex. Analyste crédit |
+| `hireV3New.start.orbi` | Orbi rédige un premier jet |
+| `hireV3New.start.orbiSub` | À partir du titre et de votre page entreprise. Vous relisez tout. |
+| `hireV3New.start.advised` | Conseillé |
+| `hireV3New.start.dup` | Dupliquer une offre |
+| `hireV3New.start.dupSub` | Reprendre une offre existante et l'adapter. |
+| `hireV3New.start.dupEmpty` | Aucune offre à dupliquer pour l'instant. |
+| `hireV3New.start.tpl` | Partir d'un modèle |
+| `hireV3New.start.tplSub` | Des modèles par métier, prêts à adapter. |
+| `hireV3New.start.imp` | Importer une fiche de poste |
+| `hireV3New.start.impSub` | PDF : Orbi en extrait les missions à l'étape Candidature. |
+| `hireV3New.start.safe` | Rien n'est publié avant votre validation. |
+| `hireV3New.start.cancel` | Annuler |
+| `hireV3New.start.go` | Commencer |
+| `hireV3New.p.title` | Le poste |
+| `hireV3New.p.sub` | Les éléments que les candidats voient en premier |
+| `hireV3New.p.jobTitle` | Intitulé du poste |
+| `hireV3New.p.domain` | Domaine |
+| `hireV3New.p.domainNone` | Choisir |
+| `hireV3New.p.city` | Ville |
+| `hireV3New.p.country` | Pays |
+| `hireV3New.p.remote` | Mode de travail |
+| `hireV3New.p.contract` | Contrat |
+| `hireV3New.p.experience` | Expérience |
+| `hireV3New.p.openings` | Nombre de postes |
+| `hireV3New.p.less` | Un poste de moins |
+| `hireV3New.p.more` | Un poste de plus |
+| `hireV3New.p.deadline` | Date limite |
+| `hireV3New.p.deadlineHint` | facultatif |
+| `hireV3New.p.salary` | Rémunération |
+| `hireV3New.p.salaryHint` | facultatif, en USD par mois |
+| `hireV3New.p.salaryMin` | De |
+| `hireV3New.p.salaryMax` | À |
+| `hireV3New.a.title` | L'annonce |
+| `hireV3New.a.orbiReady` | Orbi peut rédiger un premier jet · à relire |
+| `hireV3New.a.write` | Premier jet d'Orbi |
+| `hireV3New.a.working` | Orbi rédige… |
+| `hireV3New.a.failed` | Orbi n'est pas disponible pour le moment : écrivez librement. |
+| `hireV3New.a.description` | En une phrase |
+| `hireV3New.a.descriptionPlaceholder` | Ce que la personne fera et pourquoi c'est utile. |
+| `hireV3New.a.missions` | Vos missions |
+| `hireV3New.a.missionsHint` | une par ligne |
+| `hireV3New.a.profile` | Le profil |
+| `hireV3New.a.profileHint` | un élément par ligne |
+| `hireV3New.a.offer` | Ce que nous offrons |
+| `hireV3New.a.offerHint` | un élément par ligne |
+| `hireV3New.a.about` | À propos de {org} |
+| `hireV3New.a.fromPage` | Repris de la page entreprise |
+| `hireV3New.c.skills` | Compétences |
+| `hireV3New.c.skillsSub` | Orbi les cherche dans les profils et les tests |
+| `hireV3New.c.required` | Indispensables |
+| `hireV3New.c.preferred` | Appréciées |
+| `hireV3New.c.remove` | Retirer |
+| `hireV3New.c.add` | Ajouter |
+| `hireV3New.c.addPlaceholder` | Ajouter… |
+| `hireV3New.c.weights` | Poids des critères |
+| `hireV3New.c.weightsTotal` | Total {value} % |
+| `hireV3New.c.weightsEdit` | Changer les poids |
+| `hireV3New.c.weightsLocked` | Les poids de la plateforme s'appliquent. |
+| `hireV3New.c.never` | Jamais pris en compte |
+| `hireV3New.c.neverText` | Nom, âge, genre, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise. |
+| `hireV3New.c.questions` | Questions de présélection |
+| `hireV3New.c.questionPlaceholder` | Ex. Pouvez-vous travailler deux jours par semaine sur site ? |
+| `hireV3New.c.yesno` | Oui / Non |
+| `hireV3New.c.text` | Réponse libre |
+| `hireV3New.c.questionsNote` | Une réponse ne bloque jamais une candidature : elle éclaire le classement. |
+| `hireV3New.f.title` | Formulaire de candidature |
+| `hireV3New.f.sub` | Candidature express |
+| `hireV3New.f.always` | Toujours |
+| `hireV3New.f.cv` | CV |
+| `hireV3New.f.cvSub` | PDF ou Word, ou profil Jumanly |
+| `hireV3New.f.letter` | Lettre de motivation |
+| `hireV3New.f.letterSub` | Facultative pour le candidat |
+| `hireV3New.f.diploma` | Diplôme |
+| `hireV3New.f.diplomaSub` | Demandé, jamais obligatoire |
+| `hireV3New.f.portfolio` | Lien vers un portfolio |
+| `hireV3New.f.portfolioSub` | Utile pour les métiers créatifs |
+| `hireV3New.f.questions` | Questions de présélection |
+| `hireV3New.f.questionsSub` | {count, plural, =0 {Aucune question} one {La question de l'étape Critères} other {Les # questions de l'étape Critères}} |
+| `hireV3New.f.instructions` | À savoir avant de postuler |
+| `hireV3New.f.instructionsHint` | facultatif |
+| `hireV3New.f.tests` | Test de compétences |
+| `hireV3New.f.testsSoon` | Les tests s'ajoutent depuis Candidats, après votre présélection. |
+| `hireV3New.t.stages` | Étapes du recrutement |
+| `hireV3New.t.stagesSub` | Renommables dans le tableau de l'offre |
+| `hireV3New.t.team` | Équipe |
+| `hireV3New.t.you` | vous |
+| `hireV3New.t.lead` | Responsable |
+| `hireV3New.t.member` | Suit l'offre |
+| `hireV3New.t.teamLink` | Gérer l'équipe |
+| `hireV3New.t.auto` | Messages automatiques |
+| `hireV3New.t.autoLink` | Règles du suivi |
+| `hireV3New.t.ack` | Accusé de réception |
+| `hireV3New.t.ackSub` | À chaque candidature |
+| `hireV3New.t.reject` | Message de refus |
+| `hireV3New.t.rejectSub` | Jamais sans votre geste |
+| `hireV3New.t.manual` | Toujours manuel |
+| `hireV3New.t.on` | Automatique |
+| `hireV3New.d.title` | Où publier |
+| `hireV3New.d.sub` | Un lien par canal, après la publication |
+| `hireV3New.d.page` | Page de l'offre sur Jumanly |
+| `hireV3New.d.pageSub` | Visible par tous, candidature gratuite |
+| `hireV3New.d.linkedin` | LinkedIn |
+| `hireV3New.d.linkedinSub` | Publication prête depuis l'onglet Partage |
+| `hireV3New.d.whatsapp` | WhatsApp |
+| `hireV3New.d.whatsappSub` | Message prêt à transférer |
+| `hireV3New.d.link` | Lien direct |
+| `hireV3New.d.linkSub` | À coller où vous voulez |
+| `hireV3New.d.after` | Après publication |
+| `hireV3New.d.when` | Quand publier |
+| `hireV3New.d.now` | Maintenant |
+| `hireV3New.d.nowSub` | Dès que vous validez |
+| `hireV3New.v.title` | Tout est prêt |
+| `hireV3New.v.ok` | {done} sur {total} |
+| `hireV3New.v.edit` | Modifier |
+| `hireV3New.v.poste` | {title} · {place} · {contract} · {count, plural, one {# poste} other {# postes}} |
+| `hireV3New.v.annonce` | {count, plural, =0 {Présentation à écrire} one {Présentation · # mission} other {Présentation · # missions}} |
+| `hireV3New.v.annonceEmpty` | Présentation à écrire |
+| `hireV3New.v.criteres` | {skills, plural, =0 {Aucune compétence} one {# compétence} other {# compétences}} · {questions, plural, =0 {aucune question} one {# question} other {# questions}} |
+| `hireV3New.v.candidature` | {docs} |
+| `hireV3New.v.equipe` | {count, plural, one {# étape} other {# étapes}} · refus toujours manuel |
+| `hireV3New.v.diffusion` | Page de l'offre, LinkedIn, WhatsApp, lien direct |
+| `hireV3New.v.orbi` | Relecture |
+| `hireV3New.v.orbiText` | Aucun critère d'âge ou de genre n'est accepté : le formulaire les refuse. Relisez l'annonce sur téléphone avant de publier. |
+| `hireV3New.v.limit` | Limite d'offres actives atteinte : mettez en pause ou clôturez une offre, puis publiez celle-ci. |
+| `hireV3New.foot.saved` | Brouillon enregistré |
+| `hireV3New.foot.notSaved` | Rien n'est enregistré avant « Continuer » |
+| `hireV3New.foot.step` | Étape {k} sur 7 |
+| `hireV3New.foot.back` | Précédent |
+| `hireV3New.foot.cancel` | Annuler |
+| `hireV3New.foot.next` | Continuer : {step} |
+| `hireV3New.foot.later` | Garder en brouillon |
+| `hireV3New.foot.publish` | Publier l'offre |
+| `hireV3New.side.tip1` | Précisez le mode de travail |
+| `hireV3New.side.tip1Text` | C'est souvent la première question des candidats. |
+| `hireV3New.side.tip2` | Relisez chaque phrase |
+| `hireV3New.side.tip2Text` | Orbi propose un premier jet : il reste à vous. |
+| `hireV3New.side.tip3` | Les critères décident du classement |
+| `hireV3New.side.tip3Text` | Orbi n'écarte personne : il range et explique. |
+| `hireV3New.side.tip4` | Restez court |
+| `hireV3New.side.tip4Text` | Plus le formulaire est court, plus les personnes vont au bout. |
+| `hireV3New.side.tip5` | Une personne par étape |
+| `hireV3New.side.tip5Text` | Chaque candidat sait qui le suit. |
+| `hireV3New.side.tip6` | Partagez là où sont vos candidats |
+| `hireV3New.side.tip6Text` | LinkedIn, WhatsApp et votre vivier. |
+| `hireV3New.side.tip7` | Dernière relecture |
+| `hireV3New.side.tip7Text` | Vous pouvez encore tout modifier après la publication. |
+| `hireV3New.side.preview` | Aperçu candidat |
+| `hireV3New.side.live` | en direct |
+| `hireV3New.side.apply` | Postuler |
+| `hireV3New.side.closes` | clôture le {date} |
+| `hireV3New.side.free` | Candidater est gratuit, sans inscription longue. |
+| `hireV3New.done.title` | Offre publiée |
+| `hireV3New.done.review` | Offre envoyée en vérification |
+| `hireV3New.done.live` | En ligne |
+| `hireV3New.done.pending` | En vérification |
+| `hireV3New.done.heading` | {title} est en ligne. |
+| `hireV3New.done.headingReview` | {title} sera en ligne après vérification. |
+| `hireV3New.done.text` | Les candidatures arrivent dans Candidats. Orbi les classe et explique, vous décidez à chaque étape. |
+| `hireV3New.done.copy` | Copier le lien |
+| `hireV3New.done.copied` | Lien de l'offre copié |
+| `hireV3New.done.email` | E-mail |
+| `hireV3New.done.next1` | Inviter des talents du vivier |
+| `hireV3New.done.next1Sub` | Ceux qui ont accepté d'être recontactés. |
+| `hireV3New.done.next1Go` | Ouvrir le vivier |
+| `hireV3New.done.next2` | Proposer vos créneaux |
+| `hireV3New.done.next2Sub` | Les candidats réservent un créneau. |
+| `hireV3New.done.next2Go` | Ouvrir l'agenda |
+| `hireV3New.done.next3` | Voir l'offre |
+| `hireV3New.done.next3Sub` | Aperçu, annonce, partage. |
+| `hireV3New.done.next3Go` | Ouvrir |
+| `hireV3New.done.then` | Ce qui se passe ensuite |
+| `hireV3New.done.s1` | Accusé de réception |
+| `hireV3New.done.s1Sub` | Envoyé automatiquement à chaque candidat. |
+| `hireV3New.done.s2` | Classement Orbi |
+| `hireV3New.done.s2Sub` | Dès la première candidature, avec le « Pourquoi ? ». |
+| `hireV3New.done.s3` | Présélection |
+| `hireV3New.done.s3Sub` | Vous choisissez qui avance. |
+| `hireV3New.done.s4` | Entretiens |
+| `hireV3New.done.s4Sub` | Le candidat réserve un de vos créneaux. |
+| `hireV3New.done.s5` | Décision |
+| `hireV3New.done.s5Sub` | Toujours la vôtre. Aucun refus sans votre geste. |
+| `hireV3New.done.auto` | Automatique |
+| `hireV3New.done.you` | Par vous |
+| `hireV3New.done.url` | jumanly.io{path} |
+
+### MVP recruteur · rapport des offres (prototype v3)
+
+*Écran « Rapport des offres » du prototype v3 (`V.rapportoffres`) : quatre pages A4, chiffres réels des 30 derniers jours.*
+
+| Clé | Texte |
+|---|---|
+| `hireV3Report.seo` | Rapport des offres |
+| `hireV3Report.title` | Rapport des offres |
+| `hireV3Report.sub` | Rapport PDF, période : {period} |
+| `hireV3Report.back` | Offres |
+| `hireV3Report.copy` | Copier le lien |
+| `hireV3Report.copied` | Lien du rapport copié |
+| `hireV3Report.print` | Enregistrer en PDF |
+| `hireV3Report.brand` | Jumanly Hire · {org} |
+| `hireV3Report.footer` | Rapport des offres · {period} |
+| `hireV3Report.page` | {n} / 4 |
+| `hireV3Report.cover.tag` | Rapport de recrutement |
+| `hireV3Report.cover.kicker` | Toutes les offres |
+| `hireV3Report.cover.title` | Ce que vos offres ont produit en 30 jours |
+| `hireV3Report.cover.views` | vues |
+| `hireV3Report.cover.applications` | candidatures |
+| `hireV3Report.cover.rate` | vue → candidature |
+| `hireV3Report.cover.delay` | délai moyen |
+| `hireV3Report.cover.org` | Entreprise |
+| `hireV3Report.cover.by` | Préparé par |
+| `hireV3Report.cover.on` | Édité le |
+| `hireV3Report.rate` | {value} % |
+| `hireV3Report.days` | {count} j |
+| `hireV3Report.none` | — |
+| `hireV3Report.s1.title` | Synthèse |
+| `hireV3Report.s1.sub` | Les chiffres clés de la période, toutes offres confondues. |
+| `hireV3Report.s1.views` | Vues des annonces |
+| `hireV3Report.s1.applications` | Candidatures |
+| `hireV3Report.s1.rate` | Vue → candidature |
+| `hireV3Report.s1.interviews` | Entretiens |
+| `hireV3Report.s1.vs` | {delta} vs période précédente |
+| `hireV3Report.s1.noCompare` | pas de période précédente |
+| `hireV3Report.s1.funnel` | Parcours des candidats |
+| `hireV3Report.s1.step.received` | Reçues |
+| `hireV3Report.s1.step.screening` | Présélection |
+| `hireV3Report.s1.step.test` | Test |
+| `hireV3Report.s1.step.interview` | Entretien |
+| `hireV3Report.s1.step.offer` | Offre |
+| `hireV3Report.s1.perDay` | Candidatures par jour |
+| `hireV3Report.s1.thisPeriod` | Cette période |
+| `hireV3Report.s1.previous` | Période précédente |
+| `hireV3Report.s1.unit` | cand. |
+| `hireV3Report.s1.sources` | Sources |
+| `hireV3Report.s1.sourcesUnit` | cand. |
+| `hireV3Report.s1.keep` | À retenir |
+| `hireV3Report.s1.keepTop` | « {title} » reçoit le plus de candidatures : {count}. |
+| `hireV3Report.s1.keepSource` | {source} apporte {value} % des candidatures. |
+| `hireV3Report.s1.keepPaused` | {count, plural, one {# offre est en pause.} other {# offres sont en pause.}} |
+| `hireV3Report.s1.keepHigh` | {count, plural, =0 {Aucun profil à fort potentiel sur la période.} one {# profil à fort potentiel à rencontrer.} other {# profils à fort potentiel à rencontrer.}} |
+| `hireV3Report.s1.keepEmpty` | Pas encore de candidature sur la période. |
+| `hireV3Report.s2.title` | Détail par offre |
+| `hireV3Report.s2.sub` | Avancement de chaque offre sur la période. |
+| `hireV3Report.s2.views` | Vues |
+| `hireV3Report.s2.applications` | Candidatures |
+| `hireV3Report.s2.openings` | Postes |
+| `hireV3Report.s2.high` | Fort potentiel |
+| `hireV3Report.s2.fresh` | {count} nouvelles |
+| `hireV3Report.s2.screening` | {count} présélection |
+| `hireV3Report.s2.interview` | {count} entretien |
+| `hireV3Report.s2.col.offer` | Offre |
+| `hireV3Report.s2.col.views` | Vues |
+| `hireV3Report.s2.col.applications` | Candidatures |
+| `hireV3Report.s2.col.rate` | Taux |
+| `hireV3Report.s2.col.delay` | Délai moyen |
+| `hireV3Report.s2.col.status` | Statut |
+| `hireV3Report.s2.total` | Total |
+| `hireV3Report.s2.bySource` | Candidatures par offre et par source |
+| `hireV3Report.s2.empty` | Aucune offre publiée sur la période. |
+| `hireV3Report.s3.title` | Équité et méthode |
+| `hireV3Report.s3.sub` | Comment les chiffres et les classements sont produits. |
+| `hireV3Report.s3.c1` | Un matching sans biais |
+| `hireV3Report.s3.c1Text` | Le score Orbi ne tient compte ni du nom, ni du genre, ni de l'âge, ni de la photo, ni de la nationalité, ni de l'adresse précise. |
+| `hireV3Report.s3.c2` | Toujours un « Pourquoi ? » |
+| `hireV3Report.s3.c2Text` | Chaque score s'accompagne de ses raisons : compétences, expérience, résultats aux tests. |
+| `hireV3Report.s3.c3` | L'humain décide |
+| `hireV3Report.s3.c3Text` | Aucune candidature n'est rejetée automatiquement. Chaque refus part après un geste de l'équipe. |
+| `hireV3Report.s3.c4` | Consultations journalisées |
+| `hireV3Report.s3.c4Text` | Chaque ouverture de profil est enregistrée dans le journal de l'entreprise. |
+| `hireV3Report.s3.defs` | Définitions |
+| `hireV3Report.s3.d1` | Vue → candidature |
+| `hireV3Report.s3.d1Text` | Candidatures reçues divisées par les vues de l'annonce. |
+| `hireV3Report.s3.d2` | Fort potentiel |
+| `hireV3Report.s3.d2Text` | Compatibilité Orbi de 75 % ou plus avec les critères de l'offre. |
+| `hireV3Report.s3.d3` | Délai moyen |
+| `hireV3Report.s3.d3Text` | Jours entre la candidature et le premier entretien. |
+| `hireV3Report.s3.next` | Pistes pour la période suivante |
+| `hireV3Report.s3.nextPaused` | Décider de la reprise de « {title} » |
+| `hireV3Report.s3.nextPausedText` | {count, plural, =0 {Aucune candidature en attente.} one {# candidature en attente.} other {# candidatures en attente.}} |
+| `hireV3Report.s3.nextClosing` | Relancer la diffusion de « {title} » |
+| `hireV3Report.s3.nextClosingText` | {count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} à {days} jours de la clôture. |
+| `hireV3Report.s3.nextHigh` | Planifier les entretiens de « {title} » |
+| `hireV3Report.s3.nextHighText` | {count, plural, one {# profil à fort potentiel à rencontrer.} other {# profils à fort potentiel à rencontrer.}} |
+| `hireV3Report.s3.nextEmpty` | Rien d'urgent : continuez à partager vos offres. |
+| `hireV3Report.s3.nextNote` | Ces pistes s'appuient sur les chiffres de la période. Elles ne remplacent pas la décision de l'équipe. |
+| `hireV3Report.s3.contact` | Une question sur ce rapport ? |
+| `hireV3Report.email` | assistant@jumanly.io |
+| `hireV3Report.logoName` | jumanly |
+| `hireV3Report.logoHire` | Hire |
+| `hireV3Report.n1` | 01 |
+| `hireV3Report.n2` | 02 |
+| `hireV3Report.n3` | 03 |
+
 ### Modèle B recruteur · coque au téléphone
 
 *Lot M1 (docs/modele-b-recruteur, mobile/, brief § 3 et § 4) : barre du bas Fil · Offres · Candidatures · Talents · Messages en icônes seules, Orbi flottant, avatar vers le compte, recherche en deux temps sous l'en-tête de chaque onglet.*

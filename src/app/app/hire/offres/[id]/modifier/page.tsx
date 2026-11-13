@@ -1,7 +1,8 @@
 import { isModelB } from "@/server/phone-routes";
+import { isHireScope } from "@/lib/product-scope";
 import { FreshOnEachVisit } from "@/components/phone/fresh-visit";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { JobFlow, type FlowQuery } from "@/components/recruiter/job-flow";
 import { db } from "@/server/db";
@@ -37,6 +38,17 @@ export default async function EditOfferPage({
     throw error;
   });
   if (job.status === "closed" || job.status === "archived") notFound();
+  // The web app v3: the seven steps of « Nouvelle offre » (prototype v3), the old step mapped.
+  if (isHireScope()) {
+    const old = Number(query.etape) || 1;
+    const step = old === 3 ? 4 : old >= 4 ? 7 : old;
+    const keep = new URLSearchParams();
+    for (const key of ["erreur", "champ", "inconnues", "limite", "ok"] as const)
+      if (query[key]) keep.set(key, query[key]!);
+    redirect(
+      `/app/hire/offres/nouvelle?offre=${job.id}&etape=${step}${keep.size ? `&${keep}` : ""}`,
+    );
+  }
   if (await isModelB())
     return (
       <RhOffresTexts>

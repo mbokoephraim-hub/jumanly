@@ -176,3 +176,31 @@ html[data-nb-theme="sombre"] .nb-app[data-hire] {
     gap: 12px;
   }
 }
+
+/* « Rapport des offres » (prototype v3): only the A4 pages go to the printer. */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .hv3 .rp-wrap,
+  .hv3 .rp-wrap * {
+    visibility: visible;
+  }
+  .hv3 .rp-wrap {
+    position: absolute;
+    inset: 0 auto auto 0;
+  }
+}
+
+/* The textareas of « Nouvelle offre » keep the look of the prototype's editable blocks. */
+.hv3 textarea.nwed {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  resize: vertical;
+  padding: 4px 6px;
+}
