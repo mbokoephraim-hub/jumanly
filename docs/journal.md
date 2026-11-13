@@ -5841,3 +5841,10 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
 - Agenda (`/app/hire/entretiens`, vues jour, semaine, mois) et Vivier (`/app/hire/viviers`).
 - Services `hire-v3-candidates.ts`, `hire-v3-agenda.ts`, `hire-v3-vivier.ts` ; action `moveCandidateV3Action` (le passage à « Recruté » ou « Non retenu » ouvre l'écran de décision).
 - Écarts (tests de compétences, favoris du vivier, synchronisation d'agenda, Messages, Suivi automatique) dans `docs/decisions/2026-11-13-candidats-agenda-vivier-hire-v3.md`.
+
+## 2026-11-13 · Jumanly Hire v3, lot V3-5 (rapports, téléchargements, modèles)
+
+- Rapports v3 (`/app/hire/rapports`, 7 jours, 30 jours, trimestre) : synthèse Orbi, quatre tuiles avec leur tendance, courbe candidatures et présélections, sources, entonnoir, délai, activité de l'équipe, offres.
+- Fenêtre « Télécharger » (`/app/hire/telecharger`) : PDF, Excel ou CSV, choix des colonnes, « Masquer les noms », aperçu, « Voir le modèle ». Les fichiers sont servis par `/app/hire/telecharger/fichier`, et chaque téléchargement est noté dans le journal.
+- Six modèles A4 (`/app/hire/rapports/modeles`). Excel sans nouvelle dépendance (`src/lib/xlsx.ts`, avec fflate).
+- Écarts notés dans `docs/decisions/2026-11-13-rapports-telechargements-hire-v3.md`.
