@@ -7,7 +7,7 @@ import { avatarColor, initialsOf } from "./avatar";
 import { radarSvg } from "./charts";
 import { HireIcon } from "./icon";
 import { clsOf, Gauge, HireKanban, type KanbanColumn } from "./kanban";
-import { HirePage, HirePageHead } from "./page-head";
+import { HireDownloadButton, HirePage, HirePageHead } from "./page-head";
 import { HireTabs } from "./tabs";
 
 export const CANDIDATE_TABS = ["pipeline", "liste", "comparer"] as const;
@@ -40,6 +40,7 @@ export async function HireV3Candidates({
 }) {
   const t = await getTranslations("hireV3Candidates");
   const to = await getTranslations("hireV3Offers");
+  const tp = await getTranslations("hireV3.page");
   const { job } = data;
   const base = (extra: Record<string, string>) => {
     const params = new URLSearchParams({ ...(job ? { offre: job.id } : {}), ...extra });
@@ -161,6 +162,10 @@ export async function HireV3Candidates({
         <HireIcon name="orbi" size="s" /> {t("orbi")}
       </span>
       <div className="act">
+        <HireDownloadButton
+          href={`/app/hire/telecharger?doc=${tab === "comparer" ? "comparaison" : "candidats"}&offre=${job.id}&retour=${encodeURIComponent(base(tab === "pipeline" ? {} : { onglet: tab }))}`}
+          label={tp("download")}
+        />
         <HireTabs tabs={tabs} />
       </div>
     </div>

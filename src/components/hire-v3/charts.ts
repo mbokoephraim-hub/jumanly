@@ -288,3 +288,16 @@ export function arcSvg(score: number) {
     .join("");
   return `<svg viewBox="0 0 200 116" class="arcg"><defs><linearGradient id="agr" x1="0" x2="1"><stop offset="0" stop-color="#D9FA72"/><stop offset=".6" stop-color="#7DE36B"/><stop offset="1" stop-color="#1E9A64"/></linearGradient></defs><path d="M22 100 A78 78 0 0 1 178 100" fill="none" stroke="#EEF2E6" stroke-width="16" stroke-linecap="round"/><path class="arcp" d="M22 100 A78 78 0 0 1 178 100" fill="none" stroke="url(#agr)" stroke-width="16" stroke-linecap="round" stroke-dasharray="${L}" stroke-dashoffset="${L * (1 - score / 100)}" style="--L:${L}"/>${dots}</svg>`;
 }
+
+/** The filled trend of a report tile (`sparkFill`), without its label (the caller words it). */
+export function sparkFillSvg(v: number[]) {
+  const values = v.length < 2 ? [v[0] ?? 0, v[0] ?? 0] : v;
+  const w = 300;
+  const h = 100;
+  const m = Math.max(...values, 1) * 1.15;
+  const pts = values.map(
+    (y, i) => [(i * w) / (values.length - 1), h - (h * y) / m] as [number, number],
+  );
+  const d = smooth(pts);
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="spg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#A6F26B" stop-opacity=".55"/><stop offset="1" stop-color="#A6F26B" stop-opacity="0"/></linearGradient></defs><path d="${d} L${w} ${h} L0 ${h}Z" fill="url(#spg)"/><path d="${d}" fill="none" stroke="#0F3F37" stroke-width="2.2" vector-effect="non-scaling-stroke" class="draw"/></svg>`;
+}

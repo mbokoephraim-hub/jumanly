@@ -15,6 +15,9 @@ import { db } from "@/server/db";
 import { can } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
 import { isPhone } from "@/server/view";
+import { HireV3Reports } from "@/components/hire-v3/reports";
+import { isHireScope } from "@/lib/product-scope";
+import { reportsV3 } from "@/server/services/hire-v3-reports";
 import { buildReport, periodRange, reportRank } from "@/server/services/hire-reports";
 import { listPublicPlans, orgPlanFor } from "@/server/services/plans";
 
@@ -36,8 +39,16 @@ export default async function ReportsPage({ searchParams }: PageProps<"/app/hire
   const query = await searchParams;
   const { ctx, space } = await requireHire("/app/hire/rapports", undefined, "stats");
   // On a phone, « Mes statistiques » of Compte (planche Recruteur-compte-stats) (Modèle B recruteur M8).
-  if (await isPhone()) redirect("/app/hire/compte/statistiques");
+  if (!isHireScope() && (await isPhone())) redirect("/app/hire/compte/statistiques");
   if (ctx.role === "hiring_manager") notFound();
+  if (isHireScope()) {
+    const days = one(query.periode) === "7" ? 7 : one(query.periode) === "90" ? 90 : 30;
+    const [data, canExport] = await Promise.all([
+      reportsV3(db, ctx, days),
+      can(db, { type: "organization", id: ctx.organizationId }, "reports.export"),
+    ]);
+    return <HireV3Reports data={data} canExport={canExport} />;
+  }
   const t = await getTranslations("hire.reports");
   const tr = await getTranslations("rhReports");
   const tw = await getTranslations("hireWeb3.reports");

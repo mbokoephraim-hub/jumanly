@@ -76,7 +76,12 @@ export async function HireV3Vivier({
       : `/app/hire/talents/${talent.profileId}`;
   return (
     <HirePage view="vivier">
-      <HirePageHead title={t("title")} sub={t("sub")} tabs={tabs} />
+      <HirePageHead
+        title={t("title")}
+        sub={t("sub")}
+        tabs={tabs}
+        download={{ href: "/app/hire/telecharger?doc=talents&retour=%2Fapp%2Fhire%2Fviviers" }}
+      />
       <div className="vhero">
         <div className="vh-l">
           <span className="vh-k">

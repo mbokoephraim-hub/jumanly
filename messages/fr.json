@@ -20409,6 +20409,278 @@
     },
     "note": "Talents triés par proximité. Seuls les talents qui ont donné leur accord apparaissent ici. Nom, âge, genre et photo n'entrent jamais dans le calcul de proximité."
   },
+  "hireV3Export": {
+    "brand": "jumanly",
+    "downloadedOn": "Téléchargé le {date}",
+    "by": "par {name}",
+    "confidential": "Confidentiel",
+    "footer": "Jumanly · {org} · assistant@jumanly.io",
+    "logged": "Téléchargement noté dans le journal",
+    "page": "{n} / {total}",
+    "none": "–",
+    "docs": {
+      "talents": {
+        "tab": "Talents",
+        "title": "Liste des talents",
+        "sub": "Vivier · {count, plural, one {# talent} other {# talents}}",
+        "kicker": "Recrutement",
+        "sheet": "Talents",
+        "empty": "Votre vivier est vide pour le moment.",
+        "note": "Seuls les talents qui ont accepté d'être recontactés figurent dans ce document. Le nom, l'âge, le genre, la photo et l'origine n'entrent jamais dans le calcul de proximité."
+      },
+      "candidats": {
+        "tab": "Candidats",
+        "title": "Liste des candidats",
+        "sub": "{offer} · {count, plural, one {# candidat} other {# candidats}}",
+        "kicker": "Recrutement",
+        "sheet": "Candidats",
+        "empty": "Aucune candidature pour cette offre.",
+        "note": "Classement proposé par Orbi. Chaque décision reste celle de l'équipe."
+      },
+      "comparaison": {
+        "tab": "Comparaison",
+        "title": "Comparaison de candidats",
+        "sub": "{offer} · {count, plural, one {# candidat} other {# candidats}}",
+        "kicker": "Recrutement",
+        "sheet": "Comparaison",
+        "empty": "Il faut au moins un candidat pour comparer.",
+        "note": "Le nom, l'âge, le genre, la photo et l'origine ne comptent pas. Orbi recommande, l'équipe décide."
+      },
+      "tests": {
+        "tab": "Résultats de test",
+        "title": "Résultats du test",
+        "sub": "Tests de compétences · {org}",
+        "kicker": "Recrutement",
+        "sheet": "Tests",
+        "empty": "Les tests de compétences arrivent bientôt : aucun résultat pour le moment.",
+        "note": "Un test aide à décider, il ne décide jamais seul."
+      },
+      "equipe": {
+        "tab": "Équipe",
+        "title": "Activité de l'équipe",
+        "sub": "7 derniers jours · {count, plural, one {# membre} other {# membres}}",
+        "kicker": "Équipe",
+        "sheet": "Équipe",
+        "empty": "Aucun membre actif.",
+        "note": "Document interne à {org}. Les candidats n'y figurent pas."
+      },
+      "journal": {
+        "tab": "Journal",
+        "title": "Journal des consultations",
+        "sub": "30 derniers jours · {count, plural, one {# consultation} other {# consultations}}",
+        "kicker": "Équipe",
+        "sheet": "Journal",
+        "empty": "Aucune consultation de profil sur la période.",
+        "note": "Chaque ouverture de profil est enregistrée. Ce journal est réservé aux administrateurs."
+      }
+    },
+    "kpi": {
+      "talents": {
+        "talents": "Talents",
+        "available": "Disponibles",
+        "close": "Proches de l'offre",
+        "pools": "Viviers"
+      },
+      "candidats": {
+        "received": "Candidatures",
+        "high": "Fort potentiel",
+        "interview": "En entretien",
+        "scored": "Avec un score"
+      },
+      "journal": {
+        "views": "Consultations",
+        "members": "Membres",
+        "profiles": "Profils différents"
+      },
+      "equipe": {
+        "members": "Membres",
+        "actions": "Actions sur les candidatures",
+        "interviews": "Entretiens"
+      }
+    },
+    "cols": {
+      "talent": "Talent",
+      "headline": "Métier",
+      "pool": "Vivier",
+      "skills": "Compétences",
+      "proximity": "Proximité",
+      "availability": "Disponibilité",
+      "rank": "#",
+      "candidate": "Candidat",
+      "score": "Compatibilité",
+      "stage": "Étape",
+      "source": "Source",
+      "city": "Ville",
+      "criterion": "Critère",
+      "skill": "Compétence principale",
+      "duration": "Durée",
+      "member": "Membre",
+      "profile": "Profil consulté",
+      "date": "Date",
+      "role": "Rôle",
+      "actions": "Actions",
+      "interviews": "Entretiens"
+    },
+    "source": {
+      "direct": "Candidature directe",
+      "invitation": "Invitation",
+      "talent_search": "Recherche de talents"
+    },
+    "role": {
+      "org_owner": "Propriétaire",
+      "org_admin": "Administrateur",
+      "recruiter": "Recruteur",
+      "hiring_manager": "Manager",
+      "viewer": "Lecture seule",
+      "partner_manager": "Partenaire"
+    },
+    "availability": {
+      "open": "Disponible",
+      "listening": "À l'écoute"
+    },
+    "format": {
+      "pdf": {
+        "label": "PDF",
+        "text": "Mise en page Jumanly, prête à partager"
+      },
+      "xlsx": {
+        "label": "Excel",
+        "text": "Tableau à trier et filtrer"
+      },
+      "csv": {
+        "label": "CSV",
+        "text": "Pour un autre logiciel"
+      }
+    },
+    "window": {
+      "seo": "Télécharger",
+      "title": "Télécharger : {doc}",
+      "close": "Fermer",
+      "format": "Format",
+      "content": "Contenu",
+      "mask": "Masquer les noms",
+      "maskText": "Les noms deviennent des initiales",
+      "log": "Le téléchargement est noté dans le journal des consultations.",
+      "model": "Voir le modèle",
+      "previewMasked": "Aperçu sans les noms",
+      "showNames": "Aperçu avec les noms",
+      "cancel": "Annuler",
+      "go": "Télécharger"
+    },
+    "models": {
+      "title": "Modèles de téléchargement",
+      "sub": "Chaque liste se télécharge dans ce format, aux couleurs de Jumanly",
+      "back": "Rapports",
+      "download": "Télécharger celui-ci",
+      "print": "Enregistrer en PDF",
+      "offersReport": "Rapport des offres"
+    },
+    "criteria": {
+      "skills_required": "Compétences indispensables",
+      "skills_preferred": "Compétences appréciées",
+      "experience": "Expérience",
+      "education": "Formation",
+      "languages": "Langues",
+      "location": "Lieu",
+      "contract": "Contrat",
+      "semantic": "Proximité"
+    }
+  },
+  "hireV3Reports": {
+    "seo": "Rapports",
+    "period": {
+      "7": "7 jours",
+      "30": "30 jours",
+      "90": "Trimestre"
+    },
+    "hero": {
+      "kicker": "Synthèse Orbi · {period}",
+      "title": "{count, plural, =0 {Aucune embauche} one {# embauche} other {# embauches}}, en <em>{delay}</em> jusqu'au premier entretien",
+      "text": "{count, plural, one {# candidature reçue} other {# candidatures reçues}}, dont {screened} {screened, plural, one {présélectionnée} other {présélectionnées}}. Orbi n'écarte personne : vous décidez à chaque étape.",
+      "empty": "Aucune candidature sur la période. Partagez vos offres pour en recevoir."
+    },
+    "models": "Modèles de documents",
+    "pdf": "Rapport complet en PDF",
+    "none": "–",
+    "days": "{value} j",
+    "percent": "{value} %",
+    "delta": {
+      "none": "–",
+      "pct": "{value, number, ::sign-always} %",
+      "n": "{value, number, ::sign-always}",
+      "d": "{value, number, ::sign-always} j",
+      "pts": "{value, number, ::sign-always} pts"
+    },
+    "tiles": {
+      "cand": {
+        "label": "Candidatures",
+        "foot": "vs période précédente"
+      },
+      "emb": {
+        "label": "Embauches",
+        "foot": "{count, plural, =0 {aucune offre signée} one {# offre signée} other {# offres signées}}"
+      },
+      "del": {
+        "label": "Délai moyen",
+        "foot": "jusqu'au premier entretien"
+      },
+      "ent": {
+        "label": "Passage en entretien",
+        "foot": "des présélectionnés"
+      }
+    },
+    "chart": {
+      "title": "Candidatures et présélections",
+      "applications": "Candidatures",
+      "screened": "Présélections",
+      "applicationsFoot": "candidatures",
+      "screenedFoot": "présélections",
+      "kept": "retenues"
+    },
+    "sources": {
+      "title": "D'où viennent-ils ?",
+      "unit": "candidatures",
+      "direct": "Candidature directe",
+      "invitation": "Invitation",
+      "talent_search": "Recherche de talents"
+    },
+    "funnel": {
+      "title": "Entonnoir",
+      "sub": "de la candidature à l'offre · Orbi n'écarte personne, vous décidez à chaque étape",
+      "received": "Reçues",
+      "screening": "Présélection",
+      "test": "Évaluation",
+      "interview": "Entretien",
+      "offer": "Offre",
+      "all": "100 %",
+      "ofTotal": "{value} % du total"
+    },
+    "delay": {
+      "title": "Délai jusqu'au premier entretien",
+      "label": "Délai moyen",
+      "before": "{value} j sur la période précédente",
+      "noBefore": "Pas d'entretien sur la période précédente",
+      "note": "Proposer des créneaux depuis l'agenda raccourcit ce délai."
+    },
+    "team": {
+      "title": "Activité de l'équipe",
+      "sub": "actions sur les candidatures"
+    },
+    "role": {
+      "org_owner": "Propriétaire",
+      "org_admin": "Administrateur",
+      "recruiter": "Recruteur",
+      "hiring_manager": "Manager",
+      "viewer": "Lecture seule",
+      "partner_manager": "Partenaire"
+    },
+    "offers": {
+      "title": "Par offre",
+      "all": "Toutes les offres",
+      "empty": "Aucune offre publiée.",
+      "line": "{status, select, published {En ligne} paused {En pause} other {Clôturée}} · {high} fort potentiel"
+    }
+  },
   "phoneRh": {
     "nav": {
       "fil": "Fil",

@@ -16801,6 +16801,198 @@ Conventions :
 | `hireV3Vivier.empty.none` | Votre vivier est vide |
 | `hireV3Vivier.empty.noneText` | Gardez un talent depuis sa fiche ou depuis la recherche de talents. |
 | `hireV3Vivier.note` | Talents triés par proximité. Seuls les talents qui ont donné leur accord apparaissent ici. Nom, âge, genre et photo n'entrent jamais dans le calcul de proximité. |
+| `hireV3Export.brand` | jumanly |
+| `hireV3Export.downloadedOn` | Téléchargé le {date} |
+| `hireV3Export.by` | par {name} |
+| `hireV3Export.confidential` | Confidentiel |
+| `hireV3Export.footer` | Jumanly · {org} · assistant@jumanly.io |
+| `hireV3Export.logged` | Téléchargement noté dans le journal |
+| `hireV3Export.page` | {n} / {total} |
+| `hireV3Export.none` | – |
+| `hireV3Export.docs.talents.tab` | Talents |
+| `hireV3Export.docs.talents.title` | Liste des talents |
+| `hireV3Export.docs.talents.sub` | Vivier · {count, plural, one {# talent} other {# talents}} |
+| `hireV3Export.docs.talents.kicker` | Recrutement |
+| `hireV3Export.docs.talents.sheet` | Talents |
+| `hireV3Export.docs.talents.empty` | Votre vivier est vide pour le moment. |
+| `hireV3Export.docs.talents.note` | Seuls les talents qui ont accepté d'être recontactés figurent dans ce document. Le nom, l'âge, le genre, la photo et l'origine n'entrent jamais dans le calcul de proximité. |
+| `hireV3Export.docs.candidats.tab` | Candidats |
+| `hireV3Export.docs.candidats.title` | Liste des candidats |
+| `hireV3Export.docs.candidats.sub` | {offer} · {count, plural, one {# candidat} other {# candidats}} |
+| `hireV3Export.docs.candidats.kicker` | Recrutement |
+| `hireV3Export.docs.candidats.sheet` | Candidats |
+| `hireV3Export.docs.candidats.empty` | Aucune candidature pour cette offre. |
+| `hireV3Export.docs.candidats.note` | Classement proposé par Orbi. Chaque décision reste celle de l'équipe. |
+| `hireV3Export.docs.comparaison.tab` | Comparaison |
+| `hireV3Export.docs.comparaison.title` | Comparaison de candidats |
+| `hireV3Export.docs.comparaison.sub` | {offer} · {count, plural, one {# candidat} other {# candidats}} |
+| `hireV3Export.docs.comparaison.kicker` | Recrutement |
+| `hireV3Export.docs.comparaison.sheet` | Comparaison |
+| `hireV3Export.docs.comparaison.empty` | Il faut au moins un candidat pour comparer. |
+| `hireV3Export.docs.comparaison.note` | Le nom, l'âge, le genre, la photo et l'origine ne comptent pas. Orbi recommande, l'équipe décide. |
+| `hireV3Export.docs.tests.tab` | Résultats de test |
+| `hireV3Export.docs.tests.title` | Résultats du test |
+| `hireV3Export.docs.tests.sub` | Tests de compétences · {org} |
+| `hireV3Export.docs.tests.kicker` | Recrutement |
+| `hireV3Export.docs.tests.sheet` | Tests |
+| `hireV3Export.docs.tests.empty` | Les tests de compétences arrivent bientôt : aucun résultat pour le moment. |
+| `hireV3Export.docs.tests.note` | Un test aide à décider, il ne décide jamais seul. |
+| `hireV3Export.docs.equipe.tab` | Équipe |
+| `hireV3Export.docs.equipe.title` | Activité de l'équipe |
+| `hireV3Export.docs.equipe.sub` | 7 derniers jours · {count, plural, one {# membre} other {# membres}} |
+| `hireV3Export.docs.equipe.kicker` | Équipe |
+| `hireV3Export.docs.equipe.sheet` | Équipe |
+| `hireV3Export.docs.equipe.empty` | Aucun membre actif. |
+| `hireV3Export.docs.equipe.note` | Document interne à {org}. Les candidats n'y figurent pas. |
+| `hireV3Export.docs.journal.tab` | Journal |
+| `hireV3Export.docs.journal.title` | Journal des consultations |
+| `hireV3Export.docs.journal.sub` | 30 derniers jours · {count, plural, one {# consultation} other {# consultations}} |
+| `hireV3Export.docs.journal.kicker` | Équipe |
+| `hireV3Export.docs.journal.sheet` | Journal |
+| `hireV3Export.docs.journal.empty` | Aucune consultation de profil sur la période. |
+| `hireV3Export.docs.journal.note` | Chaque ouverture de profil est enregistrée. Ce journal est réservé aux administrateurs. |
+| `hireV3Export.kpi.talents.talents` | Talents |
+| `hireV3Export.kpi.talents.available` | Disponibles |
+| `hireV3Export.kpi.talents.close` | Proches de l'offre |
+| `hireV3Export.kpi.talents.pools` | Viviers |
+| `hireV3Export.kpi.candidats.received` | Candidatures |
+| `hireV3Export.kpi.candidats.high` | Fort potentiel |
+| `hireV3Export.kpi.candidats.interview` | En entretien |
+| `hireV3Export.kpi.candidats.scored` | Avec un score |
+| `hireV3Export.kpi.journal.views` | Consultations |
+| `hireV3Export.kpi.journal.members` | Membres |
+| `hireV3Export.kpi.journal.profiles` | Profils différents |
+| `hireV3Export.kpi.equipe.members` | Membres |
+| `hireV3Export.kpi.equipe.actions` | Actions sur les candidatures |
+| `hireV3Export.kpi.equipe.interviews` | Entretiens |
+| `hireV3Export.cols.talent` | Talent |
+| `hireV3Export.cols.headline` | Métier |
+| `hireV3Export.cols.pool` | Vivier |
+| `hireV3Export.cols.skills` | Compétences |
+| `hireV3Export.cols.proximity` | Proximité |
+| `hireV3Export.cols.availability` | Disponibilité |
+| `hireV3Export.cols.rank` | # |
+| `hireV3Export.cols.candidate` | Candidat |
+| `hireV3Export.cols.score` | Compatibilité |
+| `hireV3Export.cols.stage` | Étape |
+| `hireV3Export.cols.source` | Source |
+| `hireV3Export.cols.city` | Ville |
+| `hireV3Export.cols.criterion` | Critère |
+| `hireV3Export.cols.skill` | Compétence principale |
+| `hireV3Export.cols.duration` | Durée |
+| `hireV3Export.cols.member` | Membre |
+| `hireV3Export.cols.profile` | Profil consulté |
+| `hireV3Export.cols.date` | Date |
+| `hireV3Export.cols.role` | Rôle |
+| `hireV3Export.cols.actions` | Actions |
+| `hireV3Export.cols.interviews` | Entretiens |
+| `hireV3Export.source.direct` | Candidature directe |
+| `hireV3Export.source.invitation` | Invitation |
+| `hireV3Export.source.talent_search` | Recherche de talents |
+| `hireV3Export.role.org_owner` | Propriétaire |
+| `hireV3Export.role.org_admin` | Administrateur |
+| `hireV3Export.role.recruiter` | Recruteur |
+| `hireV3Export.role.hiring_manager` | Manager |
+| `hireV3Export.role.viewer` | Lecture seule |
+| `hireV3Export.role.partner_manager` | Partenaire |
+| `hireV3Export.availability.open` | Disponible |
+| `hireV3Export.availability.listening` | À l'écoute |
+| `hireV3Export.format.pdf.label` | PDF |
+| `hireV3Export.format.pdf.text` | Mise en page Jumanly, prête à partager |
+| `hireV3Export.format.xlsx.label` | Excel |
+| `hireV3Export.format.xlsx.text` | Tableau à trier et filtrer |
+| `hireV3Export.format.csv.label` | CSV |
+| `hireV3Export.format.csv.text` | Pour un autre logiciel |
+| `hireV3Export.window.seo` | Télécharger |
+| `hireV3Export.window.title` | Télécharger : {doc} |
+| `hireV3Export.window.close` | Fermer |
+| `hireV3Export.window.format` | Format |
+| `hireV3Export.window.content` | Contenu |
+| `hireV3Export.window.mask` | Masquer les noms |
+| `hireV3Export.window.maskText` | Les noms deviennent des initiales |
+| `hireV3Export.window.log` | Le téléchargement est noté dans le journal des consultations. |
+| `hireV3Export.window.model` | Voir le modèle |
+| `hireV3Export.window.previewMasked` | Aperçu sans les noms |
+| `hireV3Export.window.showNames` | Aperçu avec les noms |
+| `hireV3Export.window.cancel` | Annuler |
+| `hireV3Export.window.go` | Télécharger |
+| `hireV3Export.models.title` | Modèles de téléchargement |
+| `hireV3Export.models.sub` | Chaque liste se télécharge dans ce format, aux couleurs de Jumanly |
+| `hireV3Export.models.back` | Rapports |
+| `hireV3Export.models.download` | Télécharger celui-ci |
+| `hireV3Export.models.print` | Enregistrer en PDF |
+| `hireV3Export.models.offersReport` | Rapport des offres |
+| `hireV3Reports.seo` | Rapports |
+| `hireV3Reports.period.7` | 7 jours |
+| `hireV3Reports.period.30` | 30 jours |
+| `hireV3Reports.period.90` | Trimestre |
+| `hireV3Reports.hero.kicker` | Synthèse Orbi · {period} |
+| `hireV3Reports.hero.title` | {count, plural, =0 {Aucune embauche} one {# embauche} other {# embauches}}, en <em>{delay}</em> jusqu'au premier entretien |
+| `hireV3Reports.hero.text` | {count, plural, one {# candidature reçue} other {# candidatures reçues}}, dont {screened} {screened, plural, one {présélectionnée} other {présélectionnées}}. Orbi n'écarte personne : vous décidez à chaque étape. |
+| `hireV3Reports.hero.empty` | Aucune candidature sur la période. Partagez vos offres pour en recevoir. |
+| `hireV3Reports.models` | Modèles de documents |
+| `hireV3Reports.pdf` | Rapport complet en PDF |
+| `hireV3Reports.none` | – |
+| `hireV3Reports.days` | {value} j |
+| `hireV3Reports.percent` | {value} % |
+| `hireV3Reports.delta.none` | – |
+| `hireV3Reports.delta.pct` | {value, number, ::sign-always} % |
+| `hireV3Reports.delta.n` | {value, number, ::sign-always} |
+| `hireV3Reports.delta.d` | {value, number, ::sign-always} j |
+| `hireV3Reports.delta.pts` | {value, number, ::sign-always} pts |
+| `hireV3Reports.tiles.cand.label` | Candidatures |
+| `hireV3Reports.tiles.cand.foot` | vs période précédente |
+| `hireV3Reports.tiles.emb.label` | Embauches |
+| `hireV3Reports.tiles.emb.foot` | {count, plural, =0 {aucune offre signée} one {# offre signée} other {# offres signées}} |
+| `hireV3Reports.tiles.del.label` | Délai moyen |
+| `hireV3Reports.tiles.del.foot` | jusqu'au premier entretien |
+| `hireV3Reports.tiles.ent.label` | Passage en entretien |
+| `hireV3Reports.tiles.ent.foot` | des présélectionnés |
+| `hireV3Reports.chart.title` | Candidatures et présélections |
+| `hireV3Reports.chart.applications` | Candidatures |
+| `hireV3Reports.chart.screened` | Présélections |
+| `hireV3Reports.chart.applicationsFoot` | candidatures |
+| `hireV3Reports.chart.screenedFoot` | présélections |
+| `hireV3Reports.chart.kept` | retenues |
+| `hireV3Reports.sources.title` | D'où viennent-ils ? |
+| `hireV3Reports.sources.unit` | candidatures |
+| `hireV3Reports.sources.direct` | Candidature directe |
+| `hireV3Reports.sources.invitation` | Invitation |
+| `hireV3Reports.sources.talent_search` | Recherche de talents |
+| `hireV3Reports.funnel.title` | Entonnoir |
+| `hireV3Reports.funnel.sub` | de la candidature à l'offre · Orbi n'écarte personne, vous décidez à chaque étape |
+| `hireV3Reports.funnel.received` | Reçues |
+| `hireV3Reports.funnel.screening` | Présélection |
+| `hireV3Reports.funnel.test` | Évaluation |
+| `hireV3Reports.funnel.interview` | Entretien |
+| `hireV3Reports.funnel.offer` | Offre |
+| `hireV3Reports.funnel.all` | 100 % |
+| `hireV3Reports.funnel.ofTotal` | {value} % du total |
+| `hireV3Reports.delay.title` | Délai jusqu'au premier entretien |
+| `hireV3Reports.delay.label` | Délai moyen |
+| `hireV3Reports.delay.before` | {value} j sur la période précédente |
+| `hireV3Reports.delay.noBefore` | Pas d'entretien sur la période précédente |
+| `hireV3Reports.delay.note` | Proposer des créneaux depuis l'agenda raccourcit ce délai. |
+| `hireV3Reports.team.title` | Activité de l'équipe |
+| `hireV3Reports.team.sub` | actions sur les candidatures |
+| `hireV3Reports.role.org_owner` | Propriétaire |
+| `hireV3Reports.role.org_admin` | Administrateur |
+| `hireV3Reports.role.recruiter` | Recruteur |
+| `hireV3Reports.role.hiring_manager` | Manager |
+| `hireV3Reports.role.viewer` | Lecture seule |
+| `hireV3Reports.role.partner_manager` | Partenaire |
+| `hireV3Reports.offers.title` | Par offre |
+| `hireV3Reports.offers.all` | Toutes les offres |
+| `hireV3Reports.offers.empty` | Aucune offre publiée. |
+| `hireV3Reports.offers.line` | {status, select, published {En ligne} paused {En pause} other {Clôturée}} · {high} fort potentiel |
+| `hireV3Export.criteria.skills_required` | Compétences indispensables |
+| `hireV3Export.criteria.skills_preferred` | Compétences appréciées |
+| `hireV3Export.criteria.experience` | Expérience |
+| `hireV3Export.criteria.education` | Formation |
+| `hireV3Export.criteria.languages` | Langues |
+| `hireV3Export.criteria.location` | Lieu |
+| `hireV3Export.criteria.contract` | Contrat |
+| `hireV3Export.criteria.semantic` | Proximité |
 
 ### Modèle B recruteur · coque au téléphone
 

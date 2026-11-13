@@ -204,3 +204,36 @@ html[data-nb-theme="sombre"] .nb-app[data-hire] {
   resize: vertical;
   padding: 4px 6px;
 }
+
+/* « Télécharger » (lot V3-5): the window's choices are real form fields (a plain GET). */
+.hv3 .xpopt:has(input:checked) {
+  border: 1.5px solid #1e3d35;
+  box-shadow: inset 0 -3px 0 #a6f26b;
+}
+.hv3 .xpopt:has(input:checked) .nwopt-i {
+  background: #0f3f37;
+  color: #a6f26b;
+}
+.hv3 .xpopt:has(input:focus-visible) {
+  outline: 2px solid #0f3f37;
+  outline-offset: 2px;
+}
+.hv3 .xpg fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.hv3 .xpc input[type="checkbox"] {
+  margin-left: auto;
+  width: 18px;
+  height: 18px;
+  accent-color: #0f3f37;
+}
+.hv3 .xpmt a {
+  text-decoration: none;
+}
+@media print {
+  .hv3 .xpwrap .xpdoc {
+    break-after: page;
+  }
+}
