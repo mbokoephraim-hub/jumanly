@@ -50,7 +50,7 @@ test.describe("mode hire : seulement le recrutement", () => {
 
   test("le recruteur a le cadre du prototype et ses modules", async ({ page }) => {
     await logIn(page, "entreprise@jumanly.test", undefined, "/app/hire");
-    await expect(page).toHaveURL(/\/app\/hire$/);
+    await expect(page).toHaveURL(/\/app\/hire(\?|$)/);
     const nav = page.getByRole("navigation", { name: "Menu principal" });
     await expect(nav).toBeVisible();
     for (const name of [
@@ -71,7 +71,7 @@ test.describe("mode hire : seulement le recrutement", () => {
     await expect(page.locator(".nb-rh-cote[data-plein]")).toBeVisible();
     await expect(page.getByRole("link", { name: "Fil" })).toHaveCount(0);
     await page.goto("/app/fil/publier");
-    await expect(page).toHaveURL(/\/app\/hire$/);
+    await expect(page).toHaveURL(/\/app\/hire(\?|$)/);
     // Talents → Vivier only.
     await nav.getByRole("link", { name: "Vivier" }).click();
     await expect(page).toHaveURL(/onglet=vivier/);
@@ -81,18 +81,24 @@ test.describe("mode hire : seulement le recrutement", () => {
   });
 
   test("un talent garde ses candidatures, ses messages et son profil", async ({ page }) => {
-    await logIn(page, "talent@jumanly.test", undefined, "/app");
-    await expect(page).toHaveURL(/\/app\/suivi/);
-    for (const path of ["/app/learn", "/app/explorer"]) {
-      await page.goto(path);
-      await expect(page, path).toHaveURL(/\/app\/suivi/);
+    await logIn(page, "talent.free@jumanly.test", undefined, "/app");
+    // « Suivi » opens in Carrière (applications) on the Modèle B.
+    await expect(page).toHaveURL(/\/app\/(suivi|career)/);
+    // Asleep pages answer a 307 to the account's home (then « Suivi »), offers go to the site.
+    for (const [path, to] of [
+      ["/app/learn", "/app"],
+      ["/app/explorer", "/app"],
+      ["/app/fil/publier", "/app"],
+      ["/app/jobs", "/offres"],
+    ]) {
+      const response = await page.request.get(path, { maxRedirects: 0 });
+      expect(response.status(), path).toBe(307);
+      expect(new URL(response.headers().location!, "http://x").pathname, path).toBe(to);
     }
-    await page.goto("/app/jobs");
-    await expect(page).toHaveURL(/\/offres$/);
-    for (const path of ["/app/messages", "/app/jobs/candidatures"]) {
-      const response = await page.goto(path);
-      expect(response?.status(), path).toBe(200);
-      await expect(page, path).toHaveURL(new RegExp(path.replace(/\//g, "\\/")));
-    }
+    await page.goto("/app/messages");
+    await expect(page).toHaveURL(/\/app\/messages/);
+    // The applications live in Carrière on the Modèle B (the old address leads there).
+    await page.goto("/app/jobs/candidatures");
+    await expect(page).toHaveURL(/\/app\/(jobs\/candidatures|career)/);
   });
 });
