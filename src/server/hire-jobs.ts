@@ -7,6 +7,7 @@
 import "server-only";
 import { runReviewReminders } from "@/server/services/hire-review";
 import { runInterviewReminders } from "@/server/services/interview-reminders";
+import { runSlotReminders, runTestReminders } from "@/server/services/hire-v3-automation";
 import { db } from "@/server/db";
 import { fileStorage } from "@/server/storage";
 import {
@@ -54,13 +55,22 @@ export async function runHireJobs(now = new Date()) {
     reportError(error);
     return [];
   });
-  for (const item of pieces)
+  for (const item of pieces) {
+    await db.applicationEvent.create({
+      data: {
+        applicationId: item.applicationId,
+        actorId: null,
+        type: "pieces_reminded",
+        payload: {},
+      },
+    });
     await mailVerificationRequest(item.talent, {
       company: item.company,
       jobTitle: item.jobTitle,
       date: item.dueAt,
       href: piecesHref(item.applicationId),
     });
+  }
   // The pieces of the offers ended 90 days ago are erased (06/11/2026).
   const purgedPieces = await purgeEndedVerificationPieces(db, fileStorage(db), now).catch(
     (error) => {
@@ -88,6 +98,15 @@ export async function runHireJobs(now = new Date()) {
     reportError(error);
     return 0;
   });
+  // « Suivi automatique » (Hire v3, lot 4): test reminders (J+2, J+4) and slot reminders (J+2).
+  const testReminders = await runTestReminders(db, now).catch((error) => {
+    reportError(error);
+    return 0;
+  });
+  const slotReminders = await runSlotReminders(db, now).catch((error) => {
+    reportError(error);
+    return 0;
+  });
   // « Un résumé par jour » of the new applications, for those who chose it (06/11/2026).
   const digests = await dueApplicationDigests(db, now).catch((error) => {
     reportError(error);
@@ -104,6 +123,8 @@ export async function runHireJobs(now = new Date()) {
     reviewReminders,
     applicationDigests: digests.length,
     interviewReminders,
+    testReminders,
+    slotReminders,
     checkReminders,
     scheduledOpenings: openings.length,
     endingReminders: reminders.length,

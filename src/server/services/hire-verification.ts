@@ -10,6 +10,7 @@
  * Golden rule n° 1: nothing here touches the application itself; nobody is rejected for a missing
  * piece. Golden rule n° 6: every read goes through `getOrgJob` / `getOrgApplication`.
  */
+import { ruleOnFor } from "./hire-v3-automation";
 import { z } from "zod";
 import type { Prisma, PrismaClient, VerificationPiece } from "@/generated/prisma/client";
 import { sniffDocumentType, type FileStorage } from "@/server/storage";
@@ -497,7 +498,7 @@ export async function runVerificationReminders(
     where: {
       remindersSent: { lt: REMINDER_OFFSETS.length },
       dueAt: { gt: now, lte: new Date(now.getTime() + REMINDER_OFFSETS[0]) },
-      application: { status: "active" },
+      application: { status: "active", job: { organization: ruleOnFor("piecesReminder") } },
     },
     include: {
       items: { select: { required: true, receivedAt: true } },
