@@ -16030,7 +16030,281 @@ Conventions :
 | `hireV3Tests.tabs.results` | Résultats |
 | `hireV3Tests.tabs.library` | Bibliothèque |
 | `hireV3Tests.emptyTitle` | Les tests arrivent sur cette page |
-| `hireV3Tests.emptyText` | Vous pourrez bientôt créer un test à partir d'une offre, l'envoyer aux candidats et lire leurs résultats. |
+| `hireV3Tests.emptyText` | Créez un test à partir d'une offre ou partez d'un modèle de la bibliothèque. |
+| `hireV3Tests.newFor` | Test · {job} |
+| `hireV3Tests.newTitle` | Nouveau test |
+| `hireV3Tests.message` | {company} vous propose un test de compétences pour l'offre « {job} » : {title}, environ {minutes} minutes. Vous pouvez le passer quand vous voulez cette semaine. Ne pas le passer ne vous écarte pas : l'équipe lit toujours votre candidature. |
+| `hireV3Tests.createTest` | Créer un test |
+| `hireV3Tests.locked` | Les tests de compétences ne sont pas inclus dans votre formule |
+| `hireV3Tests.lockedText` | Passez à la formule annuelle pour créer des tests, les envoyer aux candidats et comparer leurs résultats. |
+| `hireV3Tests.lockedAction` | Voir la formule |
+| `hireV3Tests.flash.sent` | {count, plural, =0 {Aucun nouveau candidat à qui envoyer ce test.} one {Test envoyé à # candidat.} other {Test envoyé à # candidats.}} |
+| `hireV3Tests.flash.archived` | Test archivé. |
+| `hireV3Tests.flash.forbidden` | Vous n'avez pas le droit de faire cette action. |
+| `hireV3Tests.flash.invalid` | Vérifiez les informations : quelque chose manque. |
+| `hireV3Tests.create.title` | Créer un test |
+| `hireV3Tests.create.sub` | Partez d'une offre, puis ajoutez vos questions. |
+| `hireV3Tests.create.close` | Fermer |
+| `hireV3Tests.create.name` | Nom du test |
+| `hireV3Tests.create.namePlaceholder` | Par exemple : Test SQL et Power BI |
+| `hireV3Tests.create.job` | Offre |
+| `hireV3Tests.create.noJob` | Sans offre pour l'instant |
+| `hireV3Tests.create.safe` | Un test aide à décider, il n'écarte personne automatiquement. |
+| `hireV3Tests.create.library` | Partir d'un modèle |
+| `hireV3Tests.create.go` | Créer |
+| `hireV3Tests.librarySub` | {count, plural, one {# modèle prêt à adapter à vos offres} other {# modèles prêts à adapter à vos offres}} |
+| `hireV3Tests.domains.all` | Tous |
+| `hireV3Tests.domains.data` | Data |
+| `hireV3Tests.domains.finance` | Finance |
+| `hireV3Tests.domains.service` | Service |
+| `hireV3Tests.domains.transversal` | Transversal |
+| `hireV3Tests.domains.langues` | Langues |
+| `hireV3Tests.levels.beginner` | Débutant |
+| `hireV3Tests.levels.intermediate` | Intermédiaire |
+| `hireV3Tests.levels.advanced` | Avancé |
+| `hireV3Tests.levels.all` | Tous niveaux |
+| `hireV3Tests.libraryEmpty` | Aucun modèle dans cette catégorie |
+| `hireV3Tests.questions` | {count, plural, one {# question} other {# questions}} |
+| `hireV3Tests.minutes` | {count} min |
+| `hireV3Tests.useTemplate` | Utiliser ce modèle |
+| `hireV3Tests.resultsSub` | Classés du meilleur score au plus faible · Orbi n'écarte personne |
+| `hireV3Tests.resultsEmpty` | Aucun résultat pour l'instant |
+| `hireV3Tests.resultsEmptyText` | Les résultats s'affichent ici dès qu'un candidat a rendu un test. |
+| `hireV3Tests.submittedCount` | {count, plural, one {# rendu} other {# rendus}} |
+| `hireV3Tests.kpi.submitted` | Rendus |
+| `hireV3Tests.kpi.submittedTests` | Tests rendus |
+| `hireV3Tests.kpi.average` | Score moyen |
+| `hireV3Tests.kpi.median` | Médiane |
+| `hireV3Tests.kpi.passed` | Réussite |
+| `hireV3Tests.kpi.duration` | Durée moyenne |
+| `hireV3Tests.kpi.reminders` | Relances |
+| `hireV3Tests.ratio` | {a} / {b} |
+| `hireV3Tests.percentOf` | {value} % des candidats |
+| `hireV3Tests.percent` | {value} % |
+| `hireV3Tests.outOf100` | sur 100 |
+| `hireV3Tests.medianSub` | la moitié fait mieux |
+| `hireV3Tests.passedSub` | score de 60 ou plus |
+| `hireV3Tests.durationSub` | par candidat |
+| `hireV3Tests.remindersSub` | sur 30 jours |
+| `hireV3Tests.ranking` | Classement |
+| `hireV3Tests.rankingSub` | Derniers rendus · cliquez pour ouvrir la fiche |
+| `hireV3Tests.cols.rank` | # |
+| `hireV3Tests.cols.candidate` | Candidat |
+| `hireV3Tests.cols.score` | Score |
+| `hireV3Tests.cols.duration` | Durée |
+| `hireV3Tests.cols.match` | Compatibilité |
+| `hireV3Tests.cols.test` | Test |
+| `hireV3Tests.cols.format` | Format |
+| `hireV3Tests.cols.submitted` | Rendus |
+| `hireV3Tests.cols.average` | Score moyen |
+| `hireV3Tests.cols.status` | État |
+| `hireV3Tests.toGrade` | à noter |
+| `hireV3Tests.distribution` | Répartition des scores |
+| `hireV3Tests.hardest` | Questions difficiles |
+| `hireV3Tests.hardestEmpty` | Pas encore assez de réponses. |
+| `hireV3Tests.hardestSub` | Part des candidats qui réussissent la question |
+| `hireV3Tests.noJob` | Sans offre |
+| `hireV3Tests.format` | {questions} questions · {minutes} min |
+| `hireV3Tests.per100` | /100 |
+| `hireV3Tests.status.live` | En cours |
+| `hireV3Tests.status.draft` | Brouillon |
+| `hireV3Tests.results` | Résultats |
+| `hireV3Tests.send` | Envoyer |
+| `hireV3Tests.edit` | Modifier |
+| `hireV3Tests.mineSub` | {tests, plural, =0 {Aucun test} one {# test} other {# tests}} · {sent} envoyés ce mois · {submitted} rendus |
+| `hireV3Tests.todo.review` | {count, plural, =0 {Aucun test à lire} one {# test à lire} other {# tests à lire}} |
+| `hireV3Tests.todo.toGrade` | {count, plural, one {# réponse écrite attend votre note} other {# réponses écrites attendent votre note}} |
+| `hireV3Tests.todo.reviewSub` | Rendus depuis hier |
+| `hireV3Tests.todo.reviewGo` | Lire |
+| `hireV3Tests.todo.waiting` | {count, plural, =0 {Personne n'attend de relance} one {# candidat n'a pas encore rendu} other {# candidats n'ont pas encore rendu}} |
+| `hireV3Tests.todo.waitingSub` | Envoyé il y a plus de 2 jours |
+| `hireV3Tests.todo.waitingGo` | Relances |
+| `hireV3Tests.todo.draft` | « {title} » est prêt à partir |
+| `hireV3Tests.todo.noDraft` | Aucun test en attente d'envoi |
+| `hireV3Tests.todo.noDraftSub` | Partez d'un modèle de la bibliothèque |
+| `hireV3Tests.candidates` | {count, plural, one {# candidat} other {# candidats}} |
+| `hireV3Tests.yourTests` | Vos tests |
+| `hireV3Tests.yourTestsSub` | Du plus avancé au brouillon |
+| `hireV3Tests.empty` | Aucun test pour l'instant |
+| `hireV3Tests.groups.live` | En cours · {count} |
+| `hireV3Tests.groups.draft` | À envoyer · {count} |
+| `hireV3Tests.newFromOffer` | Créer un test à partir d'une offre |
+| `hireV3Tests.orbi.title` | Orbi propose |
+| `hireV3Tests.orbi.sub` | Des modèles de la bibliothèque, à adapter |
+| `hireV3Tests.orbi.add` | Ajouter |
+| `hireV3Tests.orbi.foot` | Vous relisez et modifiez chaque question avant l'envoi. |
+| `hireV3Tests.editor.sub` | {questions} questions · {points} points · {minutes} min |
+| `hireV3Tests.editor.saved` | Test enregistré. |
+| `hireV3Tests.editor.added` | Question ajoutée. |
+| `hireV3Tests.editor.removed` | Question retirée. |
+| `hireV3Tests.editor.send` | {count, plural, one {Envoyer à # candidat} other {Envoyer à # candidats}} |
+| `hireV3Tests.editor.sendNone` | Tous les candidats l'ont reçu |
+| `hireV3Tests.editor.questions` | Questions |
+| `hireV3Tests.editor.questionsSub` | Jusqu'à {max} questions. Les choix sont corrigés seuls, les réponses écrites par l'équipe. |
+| `hireV3Tests.editor.noQuestion` | Aucune question |
+| `hireV3Tests.editor.noQuestionText` | Ajoutez une première question ci-dessous. |
+| `hireV3Tests.editor.right` | bonne réponse |
+| `hireV3Tests.editor.short` | Réponse écrite, notée par l'équipe |
+| `hireV3Tests.editor.points` | {count, plural, one {# point} other {# points}} |
+| `hireV3Tests.editor.remove` | Retirer la question |
+| `hireV3Tests.editor.add` | Ajouter une question |
+| `hireV3Tests.editor.prompt` | Question |
+| `hireV3Tests.editor.kind` | Type |
+| `hireV3Tests.editor.kinds.choice` | Choix unique |
+| `hireV3Tests.editor.kinds.short` | Réponse écrite |
+| `hireV3Tests.editor.choices` | Choix (cochez la bonne réponse, laissez vide pour une réponse écrite) |
+| `hireV3Tests.editor.choice` | Choix {n} |
+| `hireV3Tests.editor.rightOf` | Le choix {n} est la bonne réponse |
+| `hireV3Tests.editor.pointsLabel` | Points |
+| `hireV3Tests.editor.addGo` | Ajouter |
+| `hireV3Tests.editor.frame` | Cadre du test |
+| `hireV3Tests.editor.minutes` | Durée prévue (minutes) |
+| `hireV3Tests.editor.level` | Niveau |
+| `hireV3Tests.editor.instructions` | Consignes pour le candidat |
+| `hireV3Tests.editor.instructionsPlaceholder` | Ce que le test mesure, ce qui est permis (calculatrice, recherche…) |
+| `hireV3Tests.editor.save` | Enregistrer |
+| `hireV3Tests.editor.archive` | Archiver le test |
+| `hireV3Tests.editor.needJob` | Choisissez une offre pour pouvoir envoyer le test à ses candidats. |
+| `hireV3TestsLib.excel.title` | Excel avancé |
+| `hireV3TestsLib.excel.q0.prompt` | Quelle fonction cherche une valeur dans la première colonne d'un tableau et renvoie une valeur de la même ligne ? |
+| `hireV3TestsLib.excel.q0.c0` | RECHERCHEV |
+| `hireV3TestsLib.excel.q0.c1` | SOMME.SI |
+| `hireV3TestsLib.excel.q0.c2` | CONCATENER |
+| `hireV3TestsLib.excel.q0.c3` | ARRONDI |
+| `hireV3TestsLib.excel.q1.prompt` | Pour totaliser les ventes d'une seule agence, quelle fonction utilisez-vous ? |
+| `hireV3TestsLib.excel.q1.c0` | NB |
+| `hireV3TestsLib.excel.q1.c1` | SOMME.SI |
+| `hireV3TestsLib.excel.q1.c2` | MOYENNE |
+| `hireV3TestsLib.excel.q1.c3` | MAX |
+| `hireV3TestsLib.excel.q2.prompt` | Que fait le signe $ dans la référence $B$2 ? |
+| `hireV3TestsLib.excel.q2.c0` | Il formate en monnaie |
+| `hireV3TestsLib.excel.q2.c1` | Il fige la cellule quand on recopie la formule |
+| `hireV3TestsLib.excel.q2.c2` | Il masque la cellule |
+| `hireV3TestsLib.excel.q2.c3` | Il arrondit la valeur |
+| `hireV3TestsLib.excel.q3.prompt` | Quel outil résume des milliers de lignes par agence et par mois en quelques clics ? |
+| `hireV3TestsLib.excel.q3.c0` | Le tableau croisé dynamique |
+| `hireV3TestsLib.excel.q3.c1` | La mise en forme conditionnelle |
+| `hireV3TestsLib.excel.q3.c2` | Le correcteur |
+| `hireV3TestsLib.excel.q3.c3` | Le zoom |
+| `hireV3TestsLib.relation.title` | Relation client |
+| `hireV3TestsLib.relation.q0.prompt` | Un client appelle, mécontent d'un retard. Quelle est la première chose à faire ? |
+| `hireV3TestsLib.relation.q0.c0` | Lui expliquer le règlement |
+| `hireV3TestsLib.relation.q0.c1` | L'écouter jusqu'au bout et reformuler sa demande |
+| `hireV3TestsLib.relation.q0.c2` | Le transférer tout de suite |
+| `hireV3TestsLib.relation.q0.c3` | Lui proposer un geste commercial |
+| `hireV3TestsLib.relation.q1.prompt` | Vous ne connaissez pas la réponse à une question. Que dites-vous ? |
+| `hireV3TestsLib.relation.q1.c0` | « Je ne sais pas. » |
+| `hireV3TestsLib.relation.q1.c1` | « Ce n'est pas mon service. » |
+| `hireV3TestsLib.relation.q1.c2` | « Je vérifie et je vous rappelle avant midi. » |
+| `hireV3TestsLib.relation.q1.c3` | Vous inventez une réponse |
+| `hireV3TestsLib.relation.q2.prompt` | Quel est le bon moment pour clore un échange ? |
+| `hireV3TestsLib.relation.q2.c0` | Quand le client a confirmé que sa demande est traitée |
+| `hireV3TestsLib.relation.q2.c1` | Après deux minutes |
+| `hireV3TestsLib.relation.q2.c2` | Quand la file d'attente est longue |
+| `hireV3TestsLib.relation.q2.c3` | Dès que vous avez répondu |
+| `hireV3TestsLib.relation.q3.prompt` | Un client écrit en colère sur WhatsApp. Quel ton adopter ? |
+| `hireV3TestsLib.relation.q3.c0` | Le même ton que lui |
+| `hireV3TestsLib.relation.q3.c1` | Calme, poli et précis |
+| `hireV3TestsLib.relation.q3.c2` | Très familier |
+| `hireV3TestsLib.relation.q3.c3` | Aucun : ne pas répondre |
+| `hireV3TestsLib.sql.title` | SQL : jointures |
+| `hireV3TestsLib.sql.q0.prompt` | Quelle jointure garde tous les clients, même ceux sans paiement ? |
+| `hireV3TestsLib.sql.q0.c0` | INNER JOIN |
+| `hireV3TestsLib.sql.q0.c1` | LEFT JOIN clients → paiements |
+| `hireV3TestsLib.sql.q0.c2` | CROSS JOIN |
+| `hireV3TestsLib.sql.q0.c3` | Aucune |
+| `hireV3TestsLib.sql.q1.prompt` | Quelle clause filtre les groupes après un GROUP BY ? |
+| `hireV3TestsLib.sql.q1.c0` | WHERE |
+| `hireV3TestsLib.sql.q1.c1` | ORDER BY |
+| `hireV3TestsLib.sql.q1.c2` | HAVING |
+| `hireV3TestsLib.sql.q1.c3` | LIMIT |
+| `hireV3TestsLib.sql.q2.prompt` | Comment compter les clients différents d'une table de paiements ? |
+| `hireV3TestsLib.sql.q2.c0` | COUNT(*) |
+| `hireV3TestsLib.sql.q2.c1` | COUNT(DISTINCT client_id) |
+| `hireV3TestsLib.sql.q2.c2` | SUM(client_id) |
+| `hireV3TestsLib.sql.q2.c3` | MAX(client_id) |
+| `hireV3TestsLib.sql.q3.prompt` | Que renvoie une INNER JOIN entre deux tables ? |
+| `hireV3TestsLib.sql.q3.c0` | Toutes les lignes des deux tables |
+| `hireV3TestsLib.sql.q3.c1` | Seulement les lignes qui ont une correspondance des deux côtés |
+| `hireV3TestsLib.sql.q3.c2` | Les lignes de la première table seulement |
+| `hireV3TestsLib.sql.q3.c3` | Une erreur |
+| `hireV3TestsLib.projet.title` | Gestion de projet |
+| `hireV3TestsLib.projet.q0.prompt` | Quel document fixe le but, le périmètre et les délais d'un projet ? |
+| `hireV3TestsLib.projet.q0.c0` | La note de frais |
+| `hireV3TestsLib.projet.q0.c1` | Le cahier des charges ou la fiche projet |
+| `hireV3TestsLib.projet.q0.c2` | Le procès-verbal |
+| `hireV3TestsLib.projet.q0.c3` | La facture |
+| `hireV3TestsLib.projet.q1.prompt` | Une tâche prend du retard et bloque les suivantes. Quelle est la priorité ? |
+| `hireV3TestsLib.projet.q1.c0` | Attendre la fin du mois |
+| `hireV3TestsLib.projet.q1.c1` | Prévenir l'équipe, mesurer l'impact et ajuster le planning |
+| `hireV3TestsLib.projet.q1.c2` | Supprimer la tâche |
+| `hireV3TestsLib.projet.q1.c3` | Ne rien dire |
+| `hireV3TestsLib.projet.q2.prompt` | À quoi sert un diagramme de Gantt ? |
+| `hireV3TestsLib.projet.q2.c0` | Suivre les tâches dans le temps |
+| `hireV3TestsLib.projet.q2.c1` | Calculer les salaires |
+| `hireV3TestsLib.projet.q2.c2` | Rédiger les contrats |
+| `hireV3TestsLib.projet.q2.c3` | Classer les e-mails |
+| `hireV3TestsLib.projet.q3.prompt` | Qu'est-ce qu'un jalon ? |
+| `hireV3TestsLib.projet.q3.c0` | Une dépense imprévue |
+| `hireV3TestsLib.projet.q3.c1` | Une étape clé à une date donnée |
+| `hireV3TestsLib.projet.q3.c2` | Un membre de l'équipe |
+| `hireV3TestsLib.projet.q3.c3` | Un outil de messagerie |
+| `hireV3TestsLib.ohada.title` | Comptabilité OHADA |
+| `hireV3TestsLib.ohada.q0.prompt` | Dans le SYSCOHADA, dans quelle classe se trouvent les comptes de tiers (clients, fournisseurs) ? |
+| `hireV3TestsLib.ohada.q0.c0` | Classe 2 |
+| `hireV3TestsLib.ohada.q0.c1` | Classe 4 |
+| `hireV3TestsLib.ohada.q0.c2` | Classe 6 |
+| `hireV3TestsLib.ohada.q0.c3` | Classe 8 |
+| `hireV3TestsLib.ohada.q1.prompt` | Une facture d'achat de marchandises se comptabilise au débit de quel compte ? |
+| `hireV3TestsLib.ohada.q1.c0` | 601 Achats de marchandises |
+| `hireV3TestsLib.ohada.q1.c1` | 701 Ventes de marchandises |
+| `hireV3TestsLib.ohada.q1.c2` | 401 Fournisseurs |
+| `hireV3TestsLib.ohada.q1.c3` | 521 Banques |
+| `hireV3TestsLib.ohada.q2.prompt` | Quel état financier présente le patrimoine de l'entreprise à une date donnée ? |
+| `hireV3TestsLib.ohada.q2.c0` | Le compte de résultat |
+| `hireV3TestsLib.ohada.q2.c1` | Le bilan |
+| `hireV3TestsLib.ohada.q2.c2` | Le tableau des flux de trésorerie |
+| `hireV3TestsLib.ohada.q2.c3` | Le grand livre |
+| `hireV3TestsLib.ohada.q3.prompt` | Les charges de personnel figurent dans quelle classe de comptes ? |
+| `hireV3TestsLib.ohada.q3.c0` | Classe 3 |
+| `hireV3TestsLib.ohada.q3.c1` | Classe 5 |
+| `hireV3TestsLib.ohada.q3.c2` | Classe 6 |
+| `hireV3TestsLib.ohada.q3.c3` | Classe 7 |
+| `hireV3TestsLib.anglais.title` | Anglais professionnel |
+| `hireV3TestsLib.anglais.q0.prompt` | Choose the right sentence for an e-mail to a client: |
+| `hireV3TestsLib.anglais.q0.c0` | Hey, what do you want? |
+| `hireV3TestsLib.anglais.q0.c1` | Thank you for your message. I will get back to you by Friday. |
+| `hireV3TestsLib.anglais.q0.c2` | Send me the thing now. |
+| `hireV3TestsLib.anglais.q0.c3` | No answer. |
+| `hireV3TestsLib.anglais.q1.prompt` | « I look forward to ___ from you. » |
+| `hireV3TestsLib.anglais.q1.c0` | hear |
+| `hireV3TestsLib.anglais.q1.c1` | hearing |
+| `hireV3TestsLib.anglais.q1.c2` | heard |
+| `hireV3TestsLib.anglais.q1.c3` | to hear |
+| `hireV3TestsLib.anglais.q2.prompt` | What does « deadline » mean? |
+| `hireV3TestsLib.anglais.q2.c0` | Une réunion |
+| `hireV3TestsLib.anglais.q2.c1` | La date limite |
+| `hireV3TestsLib.anglais.q2.c2` | Un salaire |
+| `hireV3TestsLib.anglais.q2.c3` | Un contrat |
+| `hireV3TestsLib.anglais.q3.prompt` | « Could you please send me the report? » is… |
+| `hireV3TestsLib.anglais.q3.c0` | A polite request |
+| `hireV3TestsLib.anglais.q3.c1` | An order |
+| `hireV3TestsLib.anglais.q3.c2` | A complaint |
+| `hireV3TestsLib.anglais.q3.c3` | A greeting |
+| `talentTest.seo` | Test de compétences · Jumanly |
+| `talentTest.back` | Retour |
+| `talentTest.title` | Test de compétences |
+| `talentTest.from` | {company} · {job} |
+| `talentTest.facts` | {questions} questions · environ {minutes} minutes |
+| `talentTest.thanks` | Merci, votre test est envoyé |
+| `talentTest.thanksText` | L'équipe de {company} le lira avec votre candidature. Vous serez prévenu dans vos messages. |
+| `talentTest.rule.time` | Comptez environ {minutes} minutes. Le temps n'est pas bloqué. |
+| `talentTest.rule.once` | Vous envoyez vos réponses une seule fois. |
+| `talentTest.rule.fair` | Le test aide l'équipe à décider, il n'écarte personne automatiquement. |
+| `talentTest.start` | Commencer le test |
+| `talentTest.question` | {n}. |
+| `talentTest.beforeSend` | Relisez vos réponses : vous ne pourrez plus les modifier après l'envoi. |
+| `talentTest.send` | Envoyer mes réponses |
 | `hireV3Suivi.title` | Suivi automatique |
 | `hireV3Suivi.sub` | Les relances partent seules. Les refus attendent toujours votre accord. |
 | `hireV3Suivi.heads.rules` | Suivi automatique |
@@ -16754,6 +17028,24 @@ Conventions :
 | `hireV3Candidate.test.open` | Voir les tests |
 | `hireV3Candidate.test.sub` | sur 100 |
 | `hireV3Candidate.test.soon` | Les tests de compétences arrivent bientôt. |
+| `hireV3Candidate.test.score` | {score} / 100 |
+| `hireV3Candidate.test.toGrade` | {count, plural, =0 {En cours de correction} one {# réponse à noter} other {# réponses à noter}} |
+| `hireV3Candidate.test.waiting` | Envoyé, pas encore rendu |
+| `hireV3Candidate.test.kinds.choice` | Choix unique |
+| `hireV3Candidate.test.kinds.short` | Réponse écrite |
+| `hireV3Candidate.test.percent` | {value} % |
+| `hireV3Candidate.test.noAnswer` | Pas de réponse |
+| `hireV3Candidate.test.notYet` | Le candidat n'a pas encore rendu le test |
+| `hireV3Candidate.test.notYetText` | Envoyé le {date}. Ne pas le rendre ne l'écarte pas : vous décidez. |
+| `hireV3Candidate.test.taken` | {taken} min sur {minutes} |
+| `hireV3Candidate.test.submitted` | Rendu le {date} |
+| `hireV3Candidate.test.better` | Meilleur que {value} % des candidats |
+| `hireV3Candidate.test.grade` | Noter les réponses écrites |
+| `hireV3Candidate.test.gradeSaved` | Notes enregistrées. |
+| `hireV3Candidate.test.gradeOf` | Note sur {points} |
+| `hireV3Candidate.test.outOf` | sur {points} |
+| `hireV3Candidate.test.gradeGo` | Enregistrer les notes |
+| `hireV3Candidate.test.answers` | Voir les réponses |
 | `hireV3Candidate.facts.experience` | Expérience |
 | `hireV3Candidate.facts.experienceValue` | {count, plural, =0 {Moins d'un an} one {# an} other {# ans}} |
 | `hireV3Candidate.facts.available` | Disponible |
@@ -24357,6 +24649,7 @@ Conventions :
 | `admin.entitlement.hire_shortlist` | Présélection |
 | `admin.entitlement.hire_collaboration` | Recrutement en équipe |
 | `admin.entitlement.hire_scorecards` | Grilles d'évaluation |
+| `admin.entitlement.hire_assessments` | Tests de compétences |
 | `admin.entitlement.hire_decision_history` | Historique des décisions |
 | `admin.entitlement.connect_appointments` | Prise de rendez-vous |
 | `admin.entitlement.org_verified_profile` | Profil d'entreprise vérifié |

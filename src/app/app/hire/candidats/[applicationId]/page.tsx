@@ -1,3 +1,4 @@
+import { candidateTest } from "@/server/services/hire-v3-tests";
 import { isModelB } from "@/server/phone-routes";
 import { isHireScope } from "@/lib/product-scope";
 import {
@@ -121,7 +122,14 @@ export default async function CandidateFilePage({
             tone="success"
           />
         ) : null}
-        <HireV3Candidate data={data} tab={tab} canManage={hirePermissions(v3Ctx.role).manage} />
+        <HireV3Candidate
+          data={data}
+          tab={tab}
+          canManage={hirePermissions(v3Ctx.role).manage}
+          canEvaluate={hirePermissions(v3Ctx.role).evaluate}
+          test={await candidateTest(db, v3Ctx, data.application.id)}
+          graded={query.note === "1"}
+        />
       </>
     );
   }

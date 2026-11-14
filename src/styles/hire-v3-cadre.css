@@ -273,3 +273,28 @@ html[data-nb-theme="sombre"] .nb-app[data-hire] {
   padding: 14px 12px;
   gap: 6px;
 }
+
+/* Tests (lot 3): the selects and text areas of a form take the look of `.nwf > input`. */
+:where(.hv3) .nwf > select,
+:where(.hv3) .nwf > textarea {
+  min-height: 44px;
+  border: 1px solid #1e3d35;
+  border-radius: 14px;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  background: #fff;
+}
+:where(.hv3) .nwf > textarea {
+  padding: 10px 14px;
+  resize: vertical;
+}
+html[data-theme="dark"] :where(.hv3) .nwf > select,
+html[data-theme="dark"] :where(.hv3) .nwf > textarea {
+  background: #1b1b1b;
+  border-color: #4c6a5e;
+}
+:where(.hv3) .nwf > :disabled {
+  opacity: 0.7;
+}

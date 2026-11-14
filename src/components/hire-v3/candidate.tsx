@@ -1,15 +1,18 @@
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { laterDecisionAction, moveCandidateAction } from "@/server/actions/hire-candidates";
+import { gradeInviteAction } from "@/server/actions/hire-v3-tests";
 import { sentAttachments } from "@/server/services/application-attachments";
 import { screeningAnswersOf } from "@/server/services/screening";
 import type { CandidateV3 } from "@/server/services/hire-v3-candidates";
+import type { CandidateTest } from "@/server/services/hire-v3-tests";
 import { avatarColor, initialsOf } from "./avatar";
 import { arcSvg, radarSvg } from "./charts";
 import { HireEmpty } from "./empty";
 import { HireIcon, type HireIconName } from "./icon";
 import { clsOf } from "./score-class";
 import { HirePage } from "./page-head";
+import { Gauge } from "./kanban";
 import { HireTabs } from "./tabs";
 
 export const CANDIDATE_FILE_TABS = ["resume", "parcours", "test", "documents"] as const;
@@ -50,10 +53,17 @@ export async function HireV3Candidate({
   data,
   tab,
   canManage,
+  test = null,
+  canEvaluate = false,
+  graded = false,
 }: {
   data: CandidateV3;
   tab: CandidateFileTab;
   canManage: boolean;
+  /** The last skills test sent to this candidate (lot 3), if any. */
+  test?: CandidateTest;
+  canEvaluate?: boolean;
+  graded?: boolean;
 }) {
   const t = await getTranslations("hireV3Candidate");
   const tc = await getTranslations("hireV3Candidates");
@@ -297,21 +307,131 @@ export async function HireV3Candidate({
     );
   }
 
-  if (tab === "test")
+  if (tab === "test") {
+    if (!test)
+      return (
+        <HirePage view="candidat">
+          {hero}
+          <div className="card">
+            <Head title={t("test.title")} icon="tests" />
+            <HireEmpty
+              icon="tests"
+              title={t("test.none")}
+              text={t("test.noneText")}
+              action={{ href: "/app/hire/tests", label: t("test.open"), icon: "tests" }}
+            />
+          </div>
+        </HirePage>
+      );
+    const short = test.questions.filter((q) => q.kind !== "choice" && q.answer !== null);
     return (
       <HirePage view="candidat">
         {hero}
         <div className="card">
-          <Head title={t("test.title")} icon="tests" />
-          <HireEmpty
+          <Head
+            title={test.title}
             icon="tests"
-            title={t("test.none")}
-            text={t("test.noneText")}
-            action={{ href: "/app/hire/tests", label: t("test.open"), icon: "tests" }}
+            right={
+              test.score !== null ? (
+                <span className="pill p-ok">{t("test.score", { score: test.score })}</span>
+              ) : test.submittedAt ? (
+                <span className="pill">{t("test.toGrade", { count: test.toGrade })}</span>
+              ) : (
+                <span className="pill">{t("test.waiting")}</span>
+              )
+            }
           />
+          {test.submittedAt ? (
+            <div className="tqg">
+              {test.questions.map((q, i) => (
+                <div key={q.id} className="tq">
+                  <div className="row">
+                    <span className="qn">{i + 1}</span>
+                    <span className="tag">
+                      {t(q.kind === "choice" ? "test.kinds.choice" : "test.kinds.short")}
+                    </span>
+                    <b className="num" style={{ marginLeft: "auto" }}>
+                      {q.rate !== null ? t("test.percent", { value: q.rate }) : "–"}
+                    </b>
+                  </div>
+                  <div style={{ fontWeight: 600, margin: "10px 0 8px" }}>{q.prompt}</div>
+                  {q.rate !== null ? <Gauge score={q.rate} /> : null}
+                  <div className="meta" style={{ marginTop: 8, whiteSpace: "pre-line" }}>
+                    {q.kind === "choice"
+                      ? (q.choice ?? t("test.noAnswer"))
+                      : typeof q.answer === "string"
+                        ? q.answer
+                        : t("test.noAnswer")}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <HireEmpty
+              compact
+              icon="clock"
+              title={t("test.notYet")}
+              text={t("test.notYetText", {
+                date: format.dateTime(test.sentAt, { day: "numeric", month: "long" }),
+              })}
+            />
+          )}
+          <div className="row" style={{ marginTop: 14, gap: 16, flexWrap: "wrap" }}>
+            {test.taken ? (
+              <span className="meta">
+                <HireIcon name="clock" size="s" />{" "}
+                {t("test.taken", { taken: test.taken, minutes: test.minutes })}
+              </span>
+            ) : null}
+            {test.submittedAt ? (
+              <span className="meta">
+                {t("test.submitted", {
+                  date: format.dateTime(test.submittedAt, { day: "numeric", month: "long" }),
+                })}
+              </span>
+            ) : null}
+            {test.better !== null ? (
+              <span className="meta">{t("test.better", { value: test.better })}</span>
+            ) : null}
+          </div>
         </div>
+        {short.length > 0 && canEvaluate ? (
+          <div className="card" style={{ marginTop: 16 }}>
+            <Head title={t("test.grade")} icon="edit" />
+            {graded ? (
+              <p className="meta" role="status" style={{ marginBottom: 8 }}>
+                {t("test.gradeSaved")}
+              </p>
+            ) : null}
+            <form action={gradeInviteAction} className="stack" style={{ gap: 10 }}>
+              <input type="hidden" name="invite" value={test.id} />
+              <input type="hidden" name="application" value={application.id} />
+              {short.map((q) => (
+                <label key={q.id} className="row" style={{ gap: 10 }}>
+                  <span style={{ flex: 1, minWidth: 0 }} className="tr">
+                    {q.prompt}
+                  </span>
+                  <input
+                    type="number"
+                    name={`grade:${q.id}`}
+                    min={0}
+                    max={q.points}
+                    defaultValue={q.graded ?? undefined}
+                    style={{ width: 70 }}
+                    aria-label={t("test.gradeOf", { points: q.points })}
+                  />
+                  <span className="meta">{t("test.outOf", { points: q.points })}</span>
+                </label>
+              ))}
+              <button type="submit" className="btn sm dark" style={{ alignSelf: "flex-start" }}>
+                {t("test.gradeGo")}
+              </button>
+            </form>
+          </div>
+        ) : null}
       </HirePage>
     );
+  }
 
   if (tab === "documents") {
     const docs: { key: string; title: string; sub: string; href: string; bg: string }[] = [
@@ -551,12 +671,51 @@ export async function HireV3Candidate({
                     strokeWidth="5"
                   />
                 </svg>
-                <b className="num">–</b>
+                {test?.score != null ? (
+                  <svg
+                    viewBox="0 0 64 64"
+                    aria-hidden="true"
+                    style={{ position: "absolute", inset: 0 }}
+                  >
+                    <circle
+                      className="orp"
+                      cx="32"
+                      cy="32"
+                      r="24"
+                      fill="none"
+                      stroke="#1E9A64"
+                      strokeWidth="5"
+                      strokeLinecap="round"
+                      strokeDasharray={2 * Math.PI * 24}
+                      strokeDashoffset={2 * Math.PI * 24 * (1 - test.score / 100)}
+                      style={{ "--c": 2 * Math.PI * 24 } as React.CSSProperties}
+                      transform="rotate(-90 32 32)"
+                    />
+                  </svg>
+                ) : null}
+                <b className="num">{test?.score ?? "–"}</b>
                 <span>{t("test.sub")}</span>
               </div>
               <div>
-                <b style={{ fontFamily: "var(--f-display)" }}>{t("test.title")}</b>
-                <div className="meta">{t("test.none")}</div>
+                <b style={{ fontFamily: "var(--f-display)" }}>{test?.title ?? t("test.title")}</b>
+                <div className="meta">
+                  {!test
+                    ? t("test.none")
+                    : test.better !== null
+                      ? t("test.better", { value: test.better })
+                      : test.submittedAt
+                        ? t("test.toGrade", { count: test.toGrade })
+                        : t("test.waiting")}
+                </div>
+                {test ? (
+                  <Link
+                    className="lnk"
+                    style={{ marginTop: 6, display: "inline-flex" }}
+                    href={`${base}?onglet=test`}
+                  >
+                    {t("test.answers")} <HireIcon name="ur" size="s" />
+                  </Link>
+                ) : null}
               </div>
             </div>
           </div>

@@ -97,6 +97,8 @@ enum OrgVerificationStatus {
 
 model Organization {
   id                      String                   @id @default(cuid(2))
+  /// Tests de compétences de l'entreprise (MVP recruteur M5, Hire v3 « Tests »).
+  skillTests              SkillTest[]
   type                    OrganizationType
   name                    String
   slug                    String                   @unique
@@ -260,6 +262,7 @@ enum SkillImportance {
 
 model Job {
   id                      String             @id @default(cuid(2))
+  skillTests              SkillTest[]
   organizationId          String
   organization            Organization       @relation(fields: [organizationId], references: [id])
   title                   String
@@ -1630,6 +1633,7 @@ model Application {
   conversation     Conversation?
   scorecards       Scorecard[]
   interviews       Interview[]
+  testInvites      SkillTestInvite[]
   /// « Dossier de vérification » (logique du recrutement, étape 6): the pieces asked to a retained.
   verification     VerificationRequest?
   /// Place in « Candidats » of the offer, chosen by the recruiter by moving the cards (Ephraïm,
@@ -3128,4 +3132,77 @@ model VerificationItem {
   createdAt       DateTime            @default(now())
 
   @@index([requestId])
+}
+
+// ─── Tests de compétences (MVP recruteur M5, Hire v3 « Tests ») ─────────────────
+
+/// A skills test of an organization, attached to an offer or kept in its library. Orbi may propose
+/// questions; a member reads and validates every question before anything is sent (golden rule 3).
+model SkillTest {
+  id             String              @id @default(cuid(2))
+  organizationId String
+  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  jobId          String?
+  job            Job?                @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  title          String
+  /// "beginner" | "intermediate" | "advanced" | "all".
+  level          String              @default("intermediate")
+  /// Planned duration in minutes (shown to the candidate, never enforced against them).
+  minutes        Int                 @default(30)
+  instructions   String?
+  /// "draft" | "live" | "archived".
+  status         String              @default("draft")
+  /// Key of the library template it was copied from, if any.
+  templateKey    String?
+  createdById    String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  questions      SkillTestQuestion[]
+  invites        SkillTestInvite[]
+
+  @@index([organizationId, status])
+  @@index([jobId])
+}
+
+model SkillTestQuestion {
+  id      String    @id @default(cuid(2))
+  testId  String
+  test    SkillTest @relation(fields: [testId], references: [id], onDelete: Cascade)
+  order   Int
+  /// "choice" (one answer, corrected automatically) | "short" (written answer, graded by the team).
+  kind    String    @default("choice")
+  prompt  String
+  /// Choices of a "choice" question.
+  choices String[]  @default([])
+  /// Index of the right choice ("choice" only).
+  answer  Int?
+  points  Int       @default(1)
+
+  @@index([testId, order])
+}
+
+/// A test sent to one candidate (one attempt). The answers, the automatic score and the team's
+/// grading of written answers live here. A test not taken never sets anybody aside.
+model SkillTestInvite {
+  id            String      @id @default(cuid(2))
+  testId        String
+  test          SkillTest   @relation(fields: [testId], references: [id], onDelete: Cascade)
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  sentById      String?
+  sentAt        DateTime    @default(now())
+  dueAt         DateTime?
+  startedAt     DateTime?
+  submittedAt   DateTime?
+  /// { [questionId]: number (choice index) | string (written answer) }.
+  answers       Json        @default("{}")
+  /// { [questionId]: points given by the team } for written answers.
+  grades        Json        @default("{}")
+  /// Out of 100, once every question is corrected (choices automatically, written by the team).
+  score         Int?
+  remindedAt    DateTime?
+  reminders     Int         @default(0)
+
+  @@unique([testId, applicationId])
+  @@index([applicationId])
 }

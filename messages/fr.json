@@ -19558,7 +19558,371 @@
       "library": "Bibliothèque"
     },
     "emptyTitle": "Les tests arrivent sur cette page",
-    "emptyText": "Vous pourrez bientôt créer un test à partir d'une offre, l'envoyer aux candidats et lire leurs résultats."
+    "emptyText": "Créez un test à partir d'une offre ou partez d'un modèle de la bibliothèque.",
+    "newFor": "Test · {job}",
+    "newTitle": "Nouveau test",
+    "message": "{company} vous propose un test de compétences pour l'offre « {job} » : {title}, environ {minutes} minutes. Vous pouvez le passer quand vous voulez cette semaine. Ne pas le passer ne vous écarte pas : l'équipe lit toujours votre candidature.",
+    "createTest": "Créer un test",
+    "locked": "Les tests de compétences ne sont pas inclus dans votre formule",
+    "lockedText": "Passez à la formule annuelle pour créer des tests, les envoyer aux candidats et comparer leurs résultats.",
+    "lockedAction": "Voir la formule",
+    "flash": {
+      "sent": "{count, plural, =0 {Aucun nouveau candidat à qui envoyer ce test.} one {Test envoyé à # candidat.} other {Test envoyé à # candidats.}}",
+      "archived": "Test archivé.",
+      "forbidden": "Vous n'avez pas le droit de faire cette action.",
+      "invalid": "Vérifiez les informations : quelque chose manque."
+    },
+    "create": {
+      "title": "Créer un test",
+      "sub": "Partez d'une offre, puis ajoutez vos questions.",
+      "close": "Fermer",
+      "name": "Nom du test",
+      "namePlaceholder": "Par exemple : Test SQL et Power BI",
+      "job": "Offre",
+      "noJob": "Sans offre pour l'instant",
+      "safe": "Un test aide à décider, il n'écarte personne automatiquement.",
+      "library": "Partir d'un modèle",
+      "go": "Créer"
+    },
+    "librarySub": "{count, plural, one {# modèle prêt à adapter à vos offres} other {# modèles prêts à adapter à vos offres}}",
+    "domains": {
+      "all": "Tous",
+      "data": "Data",
+      "finance": "Finance",
+      "service": "Service",
+      "transversal": "Transversal",
+      "langues": "Langues"
+    },
+    "levels": {
+      "beginner": "Débutant",
+      "intermediate": "Intermédiaire",
+      "advanced": "Avancé",
+      "all": "Tous niveaux"
+    },
+    "libraryEmpty": "Aucun modèle dans cette catégorie",
+    "questions": "{count, plural, one {# question} other {# questions}}",
+    "minutes": "{count} min",
+    "useTemplate": "Utiliser ce modèle",
+    "resultsSub": "Classés du meilleur score au plus faible · Orbi n'écarte personne",
+    "resultsEmpty": "Aucun résultat pour l'instant",
+    "resultsEmptyText": "Les résultats s'affichent ici dès qu'un candidat a rendu un test.",
+    "submittedCount": "{count, plural, one {# rendu} other {# rendus}}",
+    "kpi": {
+      "submitted": "Rendus",
+      "submittedTests": "Tests rendus",
+      "average": "Score moyen",
+      "median": "Médiane",
+      "passed": "Réussite",
+      "duration": "Durée moyenne",
+      "reminders": "Relances"
+    },
+    "ratio": "{a} / {b}",
+    "percentOf": "{value} % des candidats",
+    "percent": "{value} %",
+    "outOf100": "sur 100",
+    "medianSub": "la moitié fait mieux",
+    "passedSub": "score de 60 ou plus",
+    "durationSub": "par candidat",
+    "remindersSub": "sur 30 jours",
+    "ranking": "Classement",
+    "rankingSub": "Derniers rendus · cliquez pour ouvrir la fiche",
+    "cols": {
+      "rank": "#",
+      "candidate": "Candidat",
+      "score": "Score",
+      "duration": "Durée",
+      "match": "Compatibilité",
+      "test": "Test",
+      "format": "Format",
+      "submitted": "Rendus",
+      "average": "Score moyen",
+      "status": "État"
+    },
+    "toGrade": "à noter",
+    "distribution": "Répartition des scores",
+    "hardest": "Questions difficiles",
+    "hardestEmpty": "Pas encore assez de réponses.",
+    "hardestSub": "Part des candidats qui réussissent la question",
+    "noJob": "Sans offre",
+    "format": "{questions} questions · {minutes} min",
+    "per100": "/100",
+    "status": {
+      "live": "En cours",
+      "draft": "Brouillon"
+    },
+    "results": "Résultats",
+    "send": "Envoyer",
+    "edit": "Modifier",
+    "mineSub": "{tests, plural, =0 {Aucun test} one {# test} other {# tests}} · {sent} envoyés ce mois · {submitted} rendus",
+    "todo": {
+      "review": "{count, plural, =0 {Aucun test à lire} one {# test à lire} other {# tests à lire}}",
+      "toGrade": "{count, plural, one {# réponse écrite attend votre note} other {# réponses écrites attendent votre note}}",
+      "reviewSub": "Rendus depuis hier",
+      "reviewGo": "Lire",
+      "waiting": "{count, plural, =0 {Personne n'attend de relance} one {# candidat n'a pas encore rendu} other {# candidats n'ont pas encore rendu}}",
+      "waitingSub": "Envoyé il y a plus de 2 jours",
+      "waitingGo": "Relances",
+      "draft": "« {title} » est prêt à partir",
+      "noDraft": "Aucun test en attente d'envoi",
+      "noDraftSub": "Partez d'un modèle de la bibliothèque"
+    },
+    "candidates": "{count, plural, one {# candidat} other {# candidats}}",
+    "yourTests": "Vos tests",
+    "yourTestsSub": "Du plus avancé au brouillon",
+    "empty": "Aucun test pour l'instant",
+    "groups": {
+      "live": "En cours · {count}",
+      "draft": "À envoyer · {count}"
+    },
+    "newFromOffer": "Créer un test à partir d'une offre",
+    "orbi": {
+      "title": "Orbi propose",
+      "sub": "Des modèles de la bibliothèque, à adapter",
+      "add": "Ajouter",
+      "foot": "Vous relisez et modifiez chaque question avant l'envoi."
+    },
+    "editor": {
+      "sub": "{questions} questions · {points} points · {minutes} min",
+      "saved": "Test enregistré.",
+      "added": "Question ajoutée.",
+      "removed": "Question retirée.",
+      "send": "{count, plural, one {Envoyer à # candidat} other {Envoyer à # candidats}}",
+      "sendNone": "Tous les candidats l'ont reçu",
+      "questions": "Questions",
+      "questionsSub": "Jusqu'à {max} questions. Les choix sont corrigés seuls, les réponses écrites par l'équipe.",
+      "noQuestion": "Aucune question",
+      "noQuestionText": "Ajoutez une première question ci-dessous.",
+      "right": "bonne réponse",
+      "short": "Réponse écrite, notée par l'équipe",
+      "points": "{count, plural, one {# point} other {# points}}",
+      "remove": "Retirer la question",
+      "add": "Ajouter une question",
+      "prompt": "Question",
+      "kind": "Type",
+      "kinds": {
+        "choice": "Choix unique",
+        "short": "Réponse écrite"
+      },
+      "choices": "Choix (cochez la bonne réponse, laissez vide pour une réponse écrite)",
+      "choice": "Choix {n}",
+      "rightOf": "Le choix {n} est la bonne réponse",
+      "pointsLabel": "Points",
+      "addGo": "Ajouter",
+      "frame": "Cadre du test",
+      "minutes": "Durée prévue (minutes)",
+      "level": "Niveau",
+      "instructions": "Consignes pour le candidat",
+      "instructionsPlaceholder": "Ce que le test mesure, ce qui est permis (calculatrice, recherche…)",
+      "save": "Enregistrer",
+      "archive": "Archiver le test",
+      "needJob": "Choisissez une offre pour pouvoir envoyer le test à ses candidats."
+    }
+  },
+  "hireV3TestsLib": {
+    "excel": {
+      "title": "Excel avancé",
+      "q0": {
+        "prompt": "Quelle fonction cherche une valeur dans la première colonne d'un tableau et renvoie une valeur de la même ligne ?",
+        "c0": "RECHERCHEV",
+        "c1": "SOMME.SI",
+        "c2": "CONCATENER",
+        "c3": "ARRONDI"
+      },
+      "q1": {
+        "prompt": "Pour totaliser les ventes d'une seule agence, quelle fonction utilisez-vous ?",
+        "c0": "NB",
+        "c1": "SOMME.SI",
+        "c2": "MOYENNE",
+        "c3": "MAX"
+      },
+      "q2": {
+        "prompt": "Que fait le signe $ dans la référence $B$2 ?",
+        "c0": "Il formate en monnaie",
+        "c1": "Il fige la cellule quand on recopie la formule",
+        "c2": "Il masque la cellule",
+        "c3": "Il arrondit la valeur"
+      },
+      "q3": {
+        "prompt": "Quel outil résume des milliers de lignes par agence et par mois en quelques clics ?",
+        "c0": "Le tableau croisé dynamique",
+        "c1": "La mise en forme conditionnelle",
+        "c2": "Le correcteur",
+        "c3": "Le zoom"
+      }
+    },
+    "relation": {
+      "title": "Relation client",
+      "q0": {
+        "prompt": "Un client appelle, mécontent d'un retard. Quelle est la première chose à faire ?",
+        "c0": "Lui expliquer le règlement",
+        "c1": "L'écouter jusqu'au bout et reformuler sa demande",
+        "c2": "Le transférer tout de suite",
+        "c3": "Lui proposer un geste commercial"
+      },
+      "q1": {
+        "prompt": "Vous ne connaissez pas la réponse à une question. Que dites-vous ?",
+        "c0": "« Je ne sais pas. »",
+        "c1": "« Ce n'est pas mon service. »",
+        "c2": "« Je vérifie et je vous rappelle avant midi. »",
+        "c3": "Vous inventez une réponse"
+      },
+      "q2": {
+        "prompt": "Quel est le bon moment pour clore un échange ?",
+        "c0": "Quand le client a confirmé que sa demande est traitée",
+        "c1": "Après deux minutes",
+        "c2": "Quand la file d'attente est longue",
+        "c3": "Dès que vous avez répondu"
+      },
+      "q3": {
+        "prompt": "Un client écrit en colère sur WhatsApp. Quel ton adopter ?",
+        "c0": "Le même ton que lui",
+        "c1": "Calme, poli et précis",
+        "c2": "Très familier",
+        "c3": "Aucun : ne pas répondre"
+      }
+    },
+    "sql": {
+      "title": "SQL : jointures",
+      "q0": {
+        "prompt": "Quelle jointure garde tous les clients, même ceux sans paiement ?",
+        "c0": "INNER JOIN",
+        "c1": "LEFT JOIN clients → paiements",
+        "c2": "CROSS JOIN",
+        "c3": "Aucune"
+      },
+      "q1": {
+        "prompt": "Quelle clause filtre les groupes après un GROUP BY ?",
+        "c0": "WHERE",
+        "c1": "ORDER BY",
+        "c2": "HAVING",
+        "c3": "LIMIT"
+      },
+      "q2": {
+        "prompt": "Comment compter les clients différents d'une table de paiements ?",
+        "c0": "COUNT(*)",
+        "c1": "COUNT(DISTINCT client_id)",
+        "c2": "SUM(client_id)",
+        "c3": "MAX(client_id)"
+      },
+      "q3": {
+        "prompt": "Que renvoie une INNER JOIN entre deux tables ?",
+        "c0": "Toutes les lignes des deux tables",
+        "c1": "Seulement les lignes qui ont une correspondance des deux côtés",
+        "c2": "Les lignes de la première table seulement",
+        "c3": "Une erreur"
+      }
+    },
+    "projet": {
+      "title": "Gestion de projet",
+      "q0": {
+        "prompt": "Quel document fixe le but, le périmètre et les délais d'un projet ?",
+        "c0": "La note de frais",
+        "c1": "Le cahier des charges ou la fiche projet",
+        "c2": "Le procès-verbal",
+        "c3": "La facture"
+      },
+      "q1": {
+        "prompt": "Une tâche prend du retard et bloque les suivantes. Quelle est la priorité ?",
+        "c0": "Attendre la fin du mois",
+        "c1": "Prévenir l'équipe, mesurer l'impact et ajuster le planning",
+        "c2": "Supprimer la tâche",
+        "c3": "Ne rien dire"
+      },
+      "q2": {
+        "prompt": "À quoi sert un diagramme de Gantt ?",
+        "c0": "Suivre les tâches dans le temps",
+        "c1": "Calculer les salaires",
+        "c2": "Rédiger les contrats",
+        "c3": "Classer les e-mails"
+      },
+      "q3": {
+        "prompt": "Qu'est-ce qu'un jalon ?",
+        "c0": "Une dépense imprévue",
+        "c1": "Une étape clé à une date donnée",
+        "c2": "Un membre de l'équipe",
+        "c3": "Un outil de messagerie"
+      }
+    },
+    "ohada": {
+      "title": "Comptabilité OHADA",
+      "q0": {
+        "prompt": "Dans le SYSCOHADA, dans quelle classe se trouvent les comptes de tiers (clients, fournisseurs) ?",
+        "c0": "Classe 2",
+        "c1": "Classe 4",
+        "c2": "Classe 6",
+        "c3": "Classe 8"
+      },
+      "q1": {
+        "prompt": "Une facture d'achat de marchandises se comptabilise au débit de quel compte ?",
+        "c0": "601 Achats de marchandises",
+        "c1": "701 Ventes de marchandises",
+        "c2": "401 Fournisseurs",
+        "c3": "521 Banques"
+      },
+      "q2": {
+        "prompt": "Quel état financier présente le patrimoine de l'entreprise à une date donnée ?",
+        "c0": "Le compte de résultat",
+        "c1": "Le bilan",
+        "c2": "Le tableau des flux de trésorerie",
+        "c3": "Le grand livre"
+      },
+      "q3": {
+        "prompt": "Les charges de personnel figurent dans quelle classe de comptes ?",
+        "c0": "Classe 3",
+        "c1": "Classe 5",
+        "c2": "Classe 6",
+        "c3": "Classe 7"
+      }
+    },
+    "anglais": {
+      "title": "Anglais professionnel",
+      "q0": {
+        "prompt": "Choose the right sentence for an e-mail to a client:",
+        "c0": "Hey, what do you want?",
+        "c1": "Thank you for your message. I will get back to you by Friday.",
+        "c2": "Send me the thing now.",
+        "c3": "No answer."
+      },
+      "q1": {
+        "prompt": "« I look forward to ___ from you. »",
+        "c0": "hear",
+        "c1": "hearing",
+        "c2": "heard",
+        "c3": "to hear"
+      },
+      "q2": {
+        "prompt": "What does « deadline » mean?",
+        "c0": "Une réunion",
+        "c1": "La date limite",
+        "c2": "Un salaire",
+        "c3": "Un contrat"
+      },
+      "q3": {
+        "prompt": "« Could you please send me the report? » is…",
+        "c0": "A polite request",
+        "c1": "An order",
+        "c2": "A complaint",
+        "c3": "A greeting"
+      }
+    }
+  },
+  "talentTest": {
+    "seo": "Test de compétences · Jumanly",
+    "back": "Retour",
+    "title": "Test de compétences",
+    "from": "{company} · {job}",
+    "facts": "{questions} questions · environ {minutes} minutes",
+    "thanks": "Merci, votre test est envoyé",
+    "thanksText": "L'équipe de {company} le lira avec votre candidature. Vous serez prévenu dans vos messages.",
+    "rule": {
+      "time": "Comptez environ {minutes} minutes. Le temps n'est pas bloqué.",
+      "once": "Vous envoyez vos réponses une seule fois.",
+      "fair": "Le test aide l'équipe à décider, il n'écarte personne automatiquement."
+    },
+    "start": "Commencer le test",
+    "question": "{n}.",
+    "beforeSend": "Relisez vos réponses : vous ne pourrez plus les modifier après l'envoi.",
+    "send": "Envoyer mes réponses"
   },
   "hireV3Suivi": {
     "title": "Suivi automatique",
@@ -20369,7 +20733,27 @@
       "noneText": "Créez un test à partir de l'offre : les réponses du candidat s'afficheront ici, question par question.",
       "open": "Voir les tests",
       "sub": "sur 100",
-      "soon": "Les tests de compétences arrivent bientôt."
+      "soon": "Les tests de compétences arrivent bientôt.",
+      "score": "{score} / 100",
+      "toGrade": "{count, plural, =0 {En cours de correction} one {# réponse à noter} other {# réponses à noter}}",
+      "waiting": "Envoyé, pas encore rendu",
+      "kinds": {
+        "choice": "Choix unique",
+        "short": "Réponse écrite"
+      },
+      "percent": "{value} %",
+      "noAnswer": "Pas de réponse",
+      "notYet": "Le candidat n'a pas encore rendu le test",
+      "notYetText": "Envoyé le {date}. Ne pas le rendre ne l'écarte pas : vous décidez.",
+      "taken": "{taken} min sur {minutes}",
+      "submitted": "Rendu le {date}",
+      "better": "Meilleur que {value} % des candidats",
+      "grade": "Noter les réponses écrites",
+      "gradeSaved": "Notes enregistrées.",
+      "gradeOf": "Note sur {points}",
+      "outOf": "sur {points}",
+      "gradeGo": "Enregistrer les notes",
+      "answers": "Voir les réponses"
     },
     "facts": {
       "experience": "Expérience",
@@ -29456,6 +29840,7 @@
       "hire_shortlist": "Présélection",
       "hire_collaboration": "Recrutement en équipe",
       "hire_scorecards": "Grilles d'évaluation",
+      "hire_assessments": "Tests de compétences",
       "hire_decision_history": "Historique des décisions",
       "connect_appointments": "Prise de rendez-vous",
       "org_verified_profile": "Profil d'entreprise vérifié",

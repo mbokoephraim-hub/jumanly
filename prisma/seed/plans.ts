@@ -219,6 +219,8 @@ const hireMatrix: { plans: string[]; rows: Row[] } = {
     b("hire.shortlist", false, true, true, true, true, true),
     b("hire.collaboration", false, false, true, true, true, true),
     b("hire.scorecards", false, false, true, true, true, true),
+    // Tests de compétences (Hire v3 « Tests », MVP M5).
+    b("hire.assessments", false, true, true, true, true, true),
     b("hire.decision_history", false, false, true, true, true, true),
     b("connect.appointments", false, true, true, true, true, true),
     b("org.verified_profile", false, false, false, true, true, true),

@@ -274,7 +274,7 @@ export async function HireV3Home({
                   "gr",
                 )}
                 {kpi(t("kpi.interviews"), home.interviews, delta(home.interviewsChange), "video")}
-                {kpi(t("kpi.tests"), 0, null, "tests")}
+                {kpi(t("kpi.tests"), home.tests, delta(home.testsChange), "tests")}
                 {kpi(
                   t("kpi.delay"),
                   home.delay === null ? t("kpi.none") : t("kpi.delayValue", { count: home.delay }),
