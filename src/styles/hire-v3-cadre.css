@@ -6,6 +6,14 @@
    44 px). Les écrans pas encore redessinés prennent les couleurs du prototype, en clair et en
    sombre, jusqu'à leur lot. */
 
+/* Le prototype n'a pas la remise à zéro de Tailwind : ses icônes et images restent en ligne dans le
+   texte (« Rien n'est publié… » à côté du bouclier). Sans couche ni spécificité, toute règle du
+   prototype garde la main. */
+:where(.hv3) :where(svg, img) {
+  display: inline;
+  vertical-align: baseline;
+}
+
 .nb-app[data-hire] {
   /* Haut des pages : 12 + 44 + 24 (écart des lignes du prototype). Gauche : 16 + 46 + 18. */
   --hv3-top: 80px;

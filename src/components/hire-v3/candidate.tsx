@@ -6,6 +6,7 @@ import { screeningAnswersOf } from "@/server/services/screening";
 import type { CandidateV3 } from "@/server/services/hire-v3-candidates";
 import { avatarColor, initialsOf } from "./avatar";
 import { arcSvg, radarSvg } from "./charts";
+import { HireEmpty } from "./empty";
 import { HireIcon, type HireIconName } from "./icon";
 import { clsOf } from "./score-class";
 import { HirePage } from "./page-head";
@@ -82,7 +83,11 @@ export async function HireV3Candidate({
     <>
       <div className="chero">
         <div className="chero-top">
-          <div className="crumbs">
+          <div className="crumbs withback">
+            <Link className="backb" href="/app/hire/candidats" aria-label={t("backTo")}>
+              <HireIcon name="chev" size="s" style={{ transform: "rotate(180deg)" }} />
+              <span>{t("back")}</span>
+            </Link>
             <Link href="/app/hire/candidats">
               <HireIcon name="chev" size="s" style={{ transform: "rotate(180deg)" }} />
               {t("crumb")}
@@ -99,7 +104,11 @@ export async function HireV3Candidate({
               >
                 <HireIcon name="chev" size="s" style={{ transform: "rotate(180deg)" }} />
               </Link>
-            ) : null}
+            ) : (
+              <span className="round" aria-hidden="true" style={{ opacity: 0.4 }}>
+                <HireIcon name="chev" size="s" style={{ transform: "rotate(180deg)" }} />
+              </span>
+            )}
             <span className="meta">
               {t("position", { n: data.position.index + 1, total: data.position.total })}
             </span>
@@ -111,7 +120,11 @@ export async function HireV3Candidate({
               >
                 <HireIcon name="chev" size="s" />
               </Link>
-            ) : null}
+            ) : (
+              <span className="round" aria-hidden="true" style={{ opacity: 0.4 }}>
+                <HireIcon name="chev" size="s" />
+              </span>
+            )}
           </div>
         </div>
         <div className="chero-main">
@@ -290,7 +303,12 @@ export async function HireV3Candidate({
         {hero}
         <div className="card">
           <Head title={t("test.title")} icon="tests" />
-          <p className="meta">{t("test.none")}</p>
+          <HireEmpty
+            icon="tests"
+            title={t("test.none")}
+            text={t("test.noneText")}
+            action={{ href: "/app/hire/tests", label: t("test.open"), icon: "tests" }}
+          />
         </div>
       </HirePage>
     );
@@ -431,6 +449,7 @@ export async function HireV3Candidate({
                 {t("why")}
               </div>
               <div className="stack" style={{ gap: 8 }}>
+                {criteria.length === 0 ? <p className="meta">{t("whyNone")}</p> : null}
                 {criteria.map((c) => {
                   const plus = c.status === "met" || c.value >= 0.6;
                   return (

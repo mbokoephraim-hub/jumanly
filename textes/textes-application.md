@@ -16724,6 +16724,8 @@ Conventions :
 | `hireV3Candidate.tabs.test` | Test |
 | `hireV3Candidate.tabs.documents` | Documents |
 | `hireV3Candidate.crumb` | Candidats |
+| `hireV3Candidate.back` | Retour |
+| `hireV3Candidate.backTo` | Retour à Candidats |
 | `hireV3Candidate.prev` | Candidat précédent |
 | `hireV3Candidate.next` | Candidat suivant |
 | `hireV3Candidate.position` | {n} sur {total} |
@@ -16738,6 +16740,7 @@ Conventions :
 | `hireV3Candidate.reject` | Ne pas retenir |
 | `hireV3Candidate.orbi` | Compatibilité Orbi |
 | `hireV3Candidate.why` | Pourquoi ? |
+| `hireV3Candidate.whyNone` | Le détail du calcul n'est pas ouvert par votre formule. Le score reste calculé sans nom, âge, genre ni photo. |
 | `hireV3Candidate.noScore` | Pas encore de score pour cette candidature. |
 | `hireV3Candidate.orbiNote` | Calcul sans nom, âge, genre ni photo. Orbi recommande, vous décidez. |
 | `hireV3Candidate.percent` | % |
@@ -16747,6 +16750,8 @@ Conventions :
 | `hireV3Candidate.noSkills` | L'offre n'indique pas de compétence. |
 | `hireV3Candidate.test.title` | Test de compétences |
 | `hireV3Candidate.test.none` | Aucun test envoyé pour cette offre. |
+| `hireV3Candidate.test.noneText` | Créez un test à partir de l'offre : les réponses du candidat s'afficheront ici, question par question. |
+| `hireV3Candidate.test.open` | Voir les tests |
 | `hireV3Candidate.test.sub` | sur 100 |
 | `hireV3Candidate.test.soon` | Les tests de compétences arrivent bientôt. |
 | `hireV3Candidate.facts.experience` | Expérience |

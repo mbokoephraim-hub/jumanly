@@ -5876,3 +5876,15 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
   `clsOf` importée d'un module client) ; `clsOf` vit maintenant dans `score-class.ts`.
 - Textes Hire v3 : espaces insécables avant « % », « : », « ? », « ! » et dans les guillemets
   (`scripts/hire-v3-nbsp.mjs`, 94 textes).
+
+## 2026-11-14 · Hire v3 aligné sur le prototype, lot 2 (fiche candidat, nouvelle offre)
+
+- Fiche candidat : bouton « Retour » avant le fil d'Ariane et flèches précédent / suivant toujours
+  présentes (grisées au bout de la liste), comme le prototype ; « Pourquoi ? » jamais vide (phrase
+  honnête quand la formule n'ouvre pas le détail du calcul) ; onglet Test avec un état vide et un
+  lien vers les tests.
+- Nouvelle offre, fenêtre de départ (`new-offer-start.tsx`) : un choix sélectionné à la fois (Orbi
+  conseillé), la liste des offres à dupliquer seulement pour « Dupliquer une offre », puis
+  « Annuler » et « Commencer », comme `nwStart()`.
+- Cadre : les icônes restent dans le texte comme dans le prototype (la remise à zéro de Tailwind les
+  passait en bloc, le bouclier de « Rien n'est publié… » tombait sur sa propre ligne).

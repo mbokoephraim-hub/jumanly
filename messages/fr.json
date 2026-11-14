@@ -20339,6 +20339,8 @@
       "documents": "Documents"
     },
     "crumb": "Candidats",
+    "back": "Retour",
+    "backTo": "Retour à Candidats",
     "prev": "Candidat précédent",
     "next": "Candidat suivant",
     "position": "{n} sur {total}",
@@ -20353,6 +20355,7 @@
     "reject": "Ne pas retenir",
     "orbi": "Compatibilité Orbi",
     "why": "Pourquoi ?",
+    "whyNone": "Le détail du calcul n'est pas ouvert par votre formule. Le score reste calculé sans nom, âge, genre ni photo.",
     "noScore": "Pas encore de score pour cette candidature.",
     "orbiNote": "Calcul sans nom, âge, genre ni photo. Orbi recommande, vous décidez.",
     "percent": "%",
@@ -20363,6 +20366,8 @@
     "test": {
       "title": "Test de compétences",
       "none": "Aucun test envoyé pour cette offre.",
+      "noneText": "Créez un test à partir de l'offre : les réponses du candidat s'afficheront ici, question par question.",
+      "open": "Voir les tests",
       "sub": "sur 100",
       "soon": "Les tests de compétences arrivent bientôt."
     },
