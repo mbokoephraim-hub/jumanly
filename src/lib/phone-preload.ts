@@ -18,6 +18,8 @@ const FILES = [
   /^\/app\/learn\/attestations\/[^/]+\/[^/]+$/,
   /^\/app\/learn\/[^/]+\/(support|modele-attestation)$/,
   /^\/app\/hire\/rapports\/export$/,
+  // Downloads of the web app v3: each one is written to the log (lot V3-5).
+  /^\/app\/hire\/telecharger\/fichier$/,
   /^\/app\/hire\/offres\/[^/]+\/retenus\.csv$/,
   /^\/app\/hire\/entretiens\/[^/]+\/agenda$/,
 ];
