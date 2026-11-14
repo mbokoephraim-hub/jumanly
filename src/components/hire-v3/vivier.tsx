@@ -1,3 +1,4 @@
+import { loose } from "@/lib/loose-t";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import type { VivierTab, VivierV3 } from "@/server/services/hire-v3-vivier";
@@ -36,6 +37,7 @@ export async function HireV3Vivier({
   canManage: boolean;
 }) {
   const t = await getTranslations("hireV3Vivier");
+  const tk = loose(t);
   const base = (over: Record<string, string>) => {
     const params = new URLSearchParams({
       onglet: tab,
@@ -65,7 +67,7 @@ export async function HireV3Vivier({
     { key: "disponibles", count: data.available },
     { key: "proches", count: data.close.length },
   ].map((item) => ({
-    label: t(`tabs.${item.key}`, { count: item.count }),
+    label: tk(`tabs.${item.key}`, { count: item.count }),
     href: base({ onglet: item.key }),
     active: tab === item.key,
   }));

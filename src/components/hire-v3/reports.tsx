@@ -1,3 +1,4 @@
+import { loose } from "@/lib/loose-t";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import type { ReportsV3 } from "@/server/services/hire-v3-reports";
@@ -32,6 +33,7 @@ const STATUS_COLOURS: Record<string, string> = {
  */
 export async function HireV3Reports({ data, canExport }: { data: ReportsV3; canExport: boolean }) {
   const t = await getTranslations("hireV3Reports");
+  const tk = loose(t);
   const format = await getFormatter();
   const period = t(`period.${data.days}`);
   const tabs = ([7, 30, 90] as const).map((d) => ({
@@ -142,7 +144,7 @@ export async function HireV3Reports({ data, canExport }: { data: ReportsV3; canE
               <span className="rpk-i">
                 <HireIcon name={tile.icon} size="s" />
               </span>
-              {t(`tiles.${tile.key}.label`)}
+              {tk(`tiles.${tile.key}.label`)}
             </span>
             <b>{tile.value}</b>
             <span className="rpk-f">
@@ -253,7 +255,7 @@ export async function HireV3Reports({ data, canExport }: { data: ReportsV3; canE
               >
                 <span className="rfc-h">
                   <i />
-                  {t(`funnel.${f.key}`)}
+                  {tk(`funnel.${f.key}`)}
                 </span>
                 <b className="num">{f.count}</b>
                 <span className="rfc-bar">

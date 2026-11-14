@@ -1,3 +1,4 @@
+import { loose } from "@/lib/loose-t";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -35,6 +36,7 @@ export default async function DownloadPage({ searchParams }: PageProps<"/app/hir
   const params = exportParams(query);
   if (params.doc === "journal" && !hirePermissions(ctx.role).manage) notFound();
   const t = await getTranslations("hireV3Export");
+  const tk = loose(t);
   const [data, member] = await Promise.all([
     exportData(db, ctx, params.doc, params),
     db.user.findUniqueOrThrow({ where: { id: user.id }, select: { name: true } }),
@@ -99,7 +101,7 @@ export default async function DownloadPage({ searchParams }: PageProps<"/app/hir
                 <legend>{t("window.content")}</legend>
                 {data.columns.map((c) => (
                   <label key={c} className="nwrow xpc">
-                    <b>{t(`cols.${c}`)}</b>
+                    <b>{tk(`cols.${c}`)}</b>
                     <input
                       type="checkbox"
                       name="cols"

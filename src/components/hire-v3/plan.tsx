@@ -1,3 +1,4 @@
+import { loose } from "@/lib/loose-t";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import type { OrgBillingScreen } from "@/server/services/org-billing";
@@ -30,6 +31,7 @@ export async function HireV3Plan({
   members: string[];
 }) {
   const t = await getTranslations("hireV3Plan");
+  const tk = loose(t);
   const format = await getFormatter();
   const now = new Date();
   const tabs = (["formule", "factures"] as const).map((k) => ({
@@ -40,7 +42,7 @@ export async function HireV3Plan({
   const usd = (cents: number) =>
     format.number(cents / 100, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const day = (d: Date) => format.dateTime(d, { day: "numeric", month: "long", year: "numeric" });
-  const methodOf = (m: string | null | undefined) => (m ? t(`method.${m}`) : t("none"));
+  const methodOf = (m: string | null | undefined) => (m ? tk(`method.${m}`) : t("none"));
   const pay = (
     <div className="tsbox fmpay">
       <div className="tsh">
@@ -255,8 +257,8 @@ export async function HireV3Plan({
                   <HireIcon name={icon} size="s" />
                 </span>
                 <span style={{ minWidth: 0 }}>
-                  <b>{t(`included.${k}.title`)}</b>
-                  <em>{t(`included.${k}.text`)}</em>
+                  <b>{tk(`included.${k}.title`)}</b>
+                  <em>{tk(`included.${k}.text`)}</em>
                 </span>
               </div>
             ))}

@@ -56,8 +56,10 @@ export async function HireV3Agenda({
     href: `/app/hire/entretiens?${new URLSearchParams({ ...(view === "semaine" ? {} : { vue: view }), date: data.focus })}`,
     active: view === data.view,
   }));
-  const dayLabel = (key: string, opts: Intl.DateTimeFormatOptions) =>
-    format.dateTime(new Date(`${key}T12:00:00Z`), { ...opts, timeZone: "UTC" });
+  const dayLabel = (
+    key: string,
+    opts: Pick<Intl.DateTimeFormatOptions, "weekday" | "day" | "month" | "year">,
+  ) => format.dateTime(new Date(`${key}T12:00:00Z`), { ...opts, timeZone: "UTC" });
   const hourText = (hour: number) => {
     const h = Math.floor(hour);
     const m = Math.round((hour % 1) * 60);

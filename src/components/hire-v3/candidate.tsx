@@ -372,19 +372,21 @@ export async function HireV3Candidate({
   const answers = screeningAnswersOf(application.screeningAnswers)
     .filter((a) => a.answer)
     .slice(0, 1);
-  const questions: [string, string][] = [
-    [t("question.impact"), t("question.impactTag")],
-    ...answers.map(
-      (a) =>
-        [t("question.answer", { question: a.question }), t("question.answerTag")] as [
-          string,
-          string,
-        ],
-    ),
-    ...missing.map(
-      (s) => [t("question.skill", { skill: s.name }), t("question.skillTag")] as [string, string],
-    ),
-  ].slice(0, 3);
+  const questions: [string, string][] = (
+    [
+      [t("question.impact"), t("question.impactTag")] as [string, string],
+      ...answers.map(
+        (a) =>
+          [t("question.answer", { question: a.question }), t("question.answerTag")] as [
+            string,
+            string,
+          ],
+      ),
+      ...missing.map(
+        (s) => [t("question.skill", { skill: s.name }), t("question.skillTag")] as [string, string],
+      ),
+    ] as [string, string][]
+  ).slice(0, 3);
   const languages = data.languages
     .map((l) => [l.name ?? l.code, l.level].filter(Boolean).join(" "))
     .filter(Boolean)

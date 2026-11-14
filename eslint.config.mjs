@@ -38,6 +38,8 @@ const eslintConfig = defineConfig([
     "docs/**/maquette/**",
     "docs/**/source/**",
     "docs/**/generateurs/**",
+    // Validated prototypes (docs/mvp-web-recruteur/prototype-v3/code, …): reference code copied as is.
+    "docs/**/prototype*/**",
   ]),
 ]);
 

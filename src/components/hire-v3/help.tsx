@@ -1,3 +1,4 @@
+import { loose } from "@/lib/loose-t";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { HireIcon, type HireIconName } from "./icon";
@@ -45,6 +46,7 @@ export async function HireV3Help({
   steps: { key: string; done: boolean; href: string }[];
 }) {
   const t = await getTranslations("hireV3Help");
+  const tk = loose(t);
   const tabs = (["centre", "guides", "ecrire"] as const).map((k) => ({
     label: t(`tabs.${k}`),
     href: k === "centre" ? "/app/hire/compte/aide" : `/app/hire/compte/aide?onglet=${k}`,
@@ -88,8 +90,8 @@ export async function HireV3Help({
                   <HireIcon name={icon} size="s" />
                 </span>
               </span>
-              <b>{t(`guides.${key}.title`)}</b>
-              <span className="meta">{t(`guides.${key}.sub`)}</span>
+              <b>{tk(`guides.${key}.title`)}</b>
+              <span className="meta">{tk(`guides.${key}.sub`)}</span>
               <span className="hpg-f">
                 <HireIcon name="play" size="s" />
                 {t("guideGo")}
@@ -121,10 +123,10 @@ export async function HireV3Help({
                   key={key}
                   className="hpchip"
                   style={{ "--c": colour } as React.CSSProperties}
-                  href={`mailto:${MAIL}?subject=${encodeURIComponent(t(`cats.${key}`))}`}
+                  href={`mailto:${MAIL}?subject=${encodeURIComponent(tk(`cats.${key}`))}`}
                 >
                   <i />
-                  {t(`cats.${key}`)}
+                  {tk(`cats.${key}`)}
                 </a>
               ))}
             </div>
@@ -139,7 +141,7 @@ export async function HireV3Help({
   const needle = q.trim().toLowerCase();
   const faq = FAQ.filter(
     ([key]) =>
-      !needle || `${t(`faq.${key}.q`)} ${t(`faq.${key}.a`)}`.toLowerCase().includes(needle),
+      !needle || `${tk(`faq.${key}.q`)} ${tk(`faq.${key}.a`)}`.toLowerCase().includes(needle),
   );
   const done = steps.filter((s) => s.done).length;
   return (
@@ -183,12 +185,12 @@ export async function HireV3Help({
             key={key}
             className="hpc"
             style={{ "--c": c, "--b": b } as React.CSSProperties}
-            href={`/app/hire/compte/aide?q=${encodeURIComponent(t(`cats.${key}Q`))}`}
+            href={`/app/hire/compte/aide?q=${encodeURIComponent(tk(`cats.${key}Q`))}`}
           >
             <span className="hpc-i">
               <HireIcon name={icon} size="s" />
             </span>
-            <b>{t(`cats.${key}`)}</b>
+            <b>{tk(`cats.${key}`)}</b>
             <span className="meta">
               {t("answers", { count: FAQ.filter((f) => f[1] === key).length })}
             </span>
@@ -213,11 +215,11 @@ export async function HireV3Help({
                 >
                   <summary>
                     <i />
-                    <span>{t(`faq.${key}.q`)}</span>
-                    <em>{t(`cats.${cat}`)}</em>
+                    <span>{tk(`faq.${key}.q`)}</span>
+                    <em>{tk(`cats.${cat}`)}</em>
                     <HireIcon name="down" size="s" />
                   </summary>
-                  <p>{t(`faq.${key}.a`)}</p>
+                  <p>{tk(`faq.${key}.a`)}</p>
                   <div className="hpqf">
                     <span className="meta">{t("helpful")}</span>
                     <Link className="chip" href="/app/hire/compte/aide?onglet=ecrire">
@@ -250,7 +252,7 @@ export async function HireV3Help({
             {steps.map((s) => (
               <Link key={s.key} className={s.done ? "hpst ok" : "hpst"} href={s.href}>
                 <span className="hpck">{s.done ? <HireIcon name="check" size="s" /> : null}</span>
-                <span>{t(`steps.${s.key}`)}</span>
+                <span>{tk(`steps.${s.key}`)}</span>
                 {s.done ? null : <HireIcon name="right" size="s" />}
               </Link>
             ))}

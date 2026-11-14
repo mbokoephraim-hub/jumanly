@@ -1,3 +1,4 @@
+import { loose } from "@/lib/loose-t";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { duplicateJobAction } from "@/server/actions/hire";
@@ -652,7 +653,9 @@ export async function HireV3NewOffer({
         <div className="nwpc">
           <div className="nwpc-cov">
             {job?.domain ? (
-              <span className="odep">{tg(`access.onboarding.studies.field.${job.domain}`)}</span>
+              <span className="odep">
+                {loose(tg)(`access.onboarding.studies.field.${job.domain}`)}
+              </span>
             ) : null}
             <span className="nwpc-l">{initialsOf(data.org.name)}</span>
           </div>
