@@ -15923,6 +15923,8 @@ Conventions :
 | `hireV3.tools.publish` | Nouvelle offre |
 | `hireV3.tools.orbi` | Orbi |
 | `hireV3.tools.company` | Page entreprise |
+| `hireV3.tools.tests` | Tests |
+| `hireV3.tools.automation` | Suivi automatique |
 | `hireV3.tools.team` | Équipe |
 | `hireV3.tools.plan` | Formule |
 | `hireV3.burger` | Outils |
@@ -15948,26 +15950,95 @@ Conventions :
 | `hireV3.palette.recent` | Candidats récents |
 | `hireV3.palette.actions.publish` | Nouvelle offre |
 | `hireV3.palette.actions.slots` | Proposer des créneaux |
+| `hireV3.palette.actions.test` | Créer un test |
 | `hireV3.palette.actions.messages` | Messages |
 | `hireV3.palette.page` | Page |
-| `hireV3.palette.score` | {score} % |
+| `hireV3.palette.score` | {score} % |
 | `hireV3.palette.candidate` | Candidat |
 | `hireV3.palette.live` | En ligne |
 | `hireV3.palette.paused` | En pause |
 | `hireV3.palette.draft` | Brouillon |
-| `hireV3.palette.askOrbi` | Demander à Orbi : <em>« {query} »</em> |
-| `hireV3.palette.none` | Aucun résultat pour « {query} ». |
+| `hireV3.palette.askOrbi` | Demander à Orbi : <em>« {query} »</em> |
+| `hireV3.palette.none` | Aucun résultat pour « {query} ». |
 | `hireV3.palette.up` | ↑ |
 | `hireV3.palette.down` | ↓ |
 | `hireV3.palette.enter` | Entrée |
 | `hireV3.palette.navigate` | naviguer |
 | `hireV3.palette.open` | ouvrir |
 | `hireV3.palette.reopen` | Ctrl K pour rouvrir |
+| `hireV3.orbi.title` | Orbi |
+| `hireV3.orbi.status` | Votre assistant de recrutement · en ligne |
+| `hireV3.orbi.close` | Fermer |
+| `hireV3.orbi.loading` | Un instant… |
+| `hireV3.orbi.todo` | À faire aujourd'hui |
+| `hireV3.orbi.todoEmpty` | Rien ne vous attend pour l'instant. |
+| `hireV3.orbi.todoItem.unseen` | {count, plural, one {# candidature à examiner} other {# candidatures à examiner}} |
+| `hireV3.orbi.todoItem.unread` | {count, plural, one {# message sans réponse} other {# messages sans réponse}} |
+| `hireV3.orbi.todoItem.invitations` | {count, plural, one {# candidat sans créneau} other {# candidats sans créneau}} |
+| `hireV3.orbi.todoItem.scorecards` | {count, plural, one {# évaluation à compléter} other {# évaluations à compléter}} |
+| `hireV3.orbi.todoSub.unseen` | Pas encore ouvertes |
+| `hireV3.orbi.todoSub.unread` | Dans vos messages |
+| `hireV3.orbi.todoSub.invitations` | Entretiens à caler |
+| `hireV3.orbi.todoSub.scorecards` | Après vos entretiens |
+| `hireV3.orbi.done` | Ce que j'ai fait pour vous |
+| `hireV3.orbi.doneEmpty` | Rien cette semaine pour l'instant. |
+| `hireV3.orbi.doneItem.scored` | {count, plural, one {Classé # candidature} other {Classé # candidatures}} |
+| `hireV3.orbi.doneItem.acknowledged` | {count, plural, one {Envoyé # accusé de réception} other {Envoyé # accusés de réception}} |
+| `hireV3.orbi.doneSub.scored` | Avec le pourquoi de chaque score · 7 derniers jours |
+| `hireV3.orbi.doneSub.acknowledged` | Dès la candidature · 7 derniers jours |
+| `hireV3.orbi.chat` | Discussion |
+| `hireV3.orbi.hello` | Bonjour {name}. Que voulez-vous préparer ? Je propose, vous décidez. |
+| `hireV3.orbi.helloAnon` | Bonjour. Que voulez-vous préparer ? Je propose, vous décidez. |
+| `hireV3.orbi.typing` | Orbi écrit |
+| `hireV3.orbi.failed` | Je n'ai pas pu répondre. Réessayez dans un instant. |
+| `hireV3.orbi.placeholder` | Demander à Orbi… |
+| `hireV3.orbi.send` | Envoyer |
+| `hireV3.orbi.rule` | Aucune décision automatique · nom, âge, genre et photo exclus du score |
+| `hireV3.orbi.ask.home.0` | Résume les nouvelles candidatures |
+| `hireV3.orbi.ask.home.1` | Qui inviter en entretien ? |
+| `hireV3.orbi.ask.home.2` | Rédige une relance |
+| `hireV3.orbi.ask.candidates.0` | Compare les deux meilleurs profils |
+| `hireV3.orbi.ask.candidates.1` | Qui inviter en entretien ? |
+| `hireV3.orbi.ask.candidates.2` | Résume les forts potentiels |
+| `hireV3.orbi.ask.agenda.0` | Trouve un créneau cette semaine |
+| `hireV3.orbi.ask.agenda.1` | Qui n'a pas réservé ? |
+| `hireV3.orbi.ask.agenda.2` | Prépare mon prochain entretien |
+| `hireV3.orbi.ask.tests.0` | Propose une question de test |
+| `hireV3.orbi.ask.tests.1` | Qui doit être relancé ? |
+| `hireV3.orbi.ask.tests.2` | Résume les résultats |
+| `hireV3.orbi.ask.pool.0` | Qui inviter pour mon offre ? |
+| `hireV3.orbi.ask.pool.1` | Talents disponibles ce mois |
+| `hireV3.orbi.ask.pool.2` | Rédige une invitation |
 | `hireV3.palette.loading` | Chargement… |
 | `hireV3.page.back` | Retour |
 | `hireV3.page.backTo` | Retour à {label} |
 | `hireV3.page.download` | Télécharger |
 | `hireV3.page.titleSuffix` | · Jumanly Hire |
+
+### MVP recruteur · tests et suivi automatique (prototype v3)
+
+*Écrans 29 à 33 de docs/mvp-web-recruteur/prototype-v3 : tests de compétences (Mes tests, Résultats, Bibliothèque) et suivi automatique (Règles, Historique).*
+
+| Clé | Texte |
+|---|---|
+| `hireV3Tests.title` | Tests |
+| `hireV3Tests.soon` | Tests de compétences envoyés aux candidats, résultats et bibliothèque de modèles |
+| `hireV3Tests.heads.mine` | Tests |
+| `hireV3Tests.heads.results` | Résultats |
+| `hireV3Tests.heads.library` | Bibliothèque |
+| `hireV3Tests.tabs.mine` | Mes tests |
+| `hireV3Tests.tabs.results` | Résultats |
+| `hireV3Tests.tabs.library` | Bibliothèque |
+| `hireV3Tests.emptyTitle` | Les tests arrivent sur cette page |
+| `hireV3Tests.emptyText` | Vous pourrez bientôt créer un test à partir d'une offre, l'envoyer aux candidats et lire leurs résultats. |
+| `hireV3Suivi.title` | Suivi automatique |
+| `hireV3Suivi.sub` | Les relances partent seules. Les refus attendent toujours votre accord. |
+| `hireV3Suivi.heads.rules` | Suivi automatique |
+| `hireV3Suivi.heads.history` | Historique |
+| `hireV3Suivi.tabs.rules` | Règles |
+| `hireV3Suivi.tabs.history` | Historique |
+| `hireV3Suivi.emptyTitle` | Les règles de suivi arrivent sur cette page |
+| `hireV3Suivi.emptyText` | L'accusé de réception automatique fonctionne déjà. Les relances et rappels se régleront bientôt ici. |
 
 ### MVP recruteur · accueil (prototype v3)
 
@@ -15992,10 +16063,11 @@ Conventions :
 | `hireV3Home.applications.paused` | En pause |
 | `hireV3Home.applications.received` | reçues |
 | `hireV3Home.applications.empty` | Aucune offre en ligne pour l'instant. |
+| `hireV3Home.applications.emptyText` | Publiez votre première offre : les candidatures arriveront ici, classées avec le pourquoi de chaque score. |
 | `hireV3Home.more` | {count} de plus |
 | `hireV3Home.seeMore` | Voir plus |
-| `hireV3Home.delta.up` | ↑ {value} % |
-| `hireV3Home.delta.down` | ↓ {value} % |
+| `hireV3Home.delta.up` | ↑ {value} % |
+| `hireV3Home.delta.down` | ↓ {value} % |
 | `hireV3Home.delta.stable` | → stable |
 | `hireV3Home.delta.upDays` | ↑ {value} j |
 | `hireV3Home.kpi.shortlisted` | Présélectionnés |
@@ -16009,9 +16081,9 @@ Conventions :
 | `hireV3Home.chart.shortlisted` | Présélection |
 | `hireV3Home.chart.reports` | Voir les rapports |
 | `hireV3Home.chart.aria` | Candidatures reçues et présélectionnées |
-| `hireV3Home.chart.peak` | Pic {label} : {count, plural, one {# candidature} other {# candidatures}}. Survolez une barre pour le détail. |
+| `hireV3Home.chart.peak` | Pic {label} : {count, plural, one {# candidature} other {# candidatures}}. Survolez une barre pour le détail. |
 | `hireV3Home.chart.empty` | Aucune candidature sur la période. |
-| `hireV3Home.chart.detail` | {label} : {received, plural, one {# candidature} other {# candidatures}}, dont {shortlisted} présélectionnées ({rate} %). Cliquez pour les voir. |
+| `hireV3Home.chart.detail` | {label} : {received, plural, one {# candidature} other {# candidatures}}, dont {shortlisted} présélectionnées ({rate} %). Cliquez pour les voir. |
 | `hireV3Home.chart.tipReceived` | {count} reçues |
 | `hireV3Home.chart.tipShortlisted` | {count} présélectionnées |
 | `hireV3Home.chart.hour` | {hour} h |
@@ -16035,8 +16107,13 @@ Conventions :
 | `hireV3Home.meet.title` | Choisir qui rencontrer |
 | `hireV3Home.meet.sub` | {offer} · {count, plural, =0 {aucun profil classé} one {# profil classé par Orbi} other {# profils classés par Orbi}} |
 | `hireV3Home.meet.open` | Ouvrir la short-list |
-| `hireV3Home.meet.empty` | Aucun profil à 70 % ou plus pour l'instant. |
-| `hireV3Home.meet.score` | {score} % |
+| `hireV3Home.meet.empty` | Aucun profil à 70 % ou plus pour l'instant. |
+| `hireV3Home.meet.noFocus` | Aucune offre en ligne |
+| `hireV3Home.meet.emptyTitle` | Aucun profil à proposer |
+| `hireV3Home.meet.emptyText` | Orbi propose ici les profils à 70 % ou plus de votre offre. Vous décidez. |
+| `hireV3Home.meet.noOffer` | Pas encore de profils |
+| `hireV3Home.meet.noOfferText` | Dès votre première offre en ligne, Orbi classe les candidats et explique chaque score. |
+| `hireV3Home.meet.score` | {score} % |
 | `hireV3Home.meet.done` | Fait |
 | `hireV3Home.todo.title` | À faire |
 | `hireV3Home.todo.left` | {count, plural, =0 {Rien à faire} one {# restante} other {# restantes}} |
@@ -16051,25 +16128,31 @@ Conventions :
 | `hireV3Home.todo.task.follow` | Suivre {candidate} |
 | `hireV3Home.todo.task.diagnostic` | Évaluer {candidate} |
 | `hireV3Home.todo.task.interview` | Mener l'entretien de {candidate} |
-| `hireV3Home.todo.due` | Échéance : {date} |
+| `hireV3Home.todo.due` | Échéance : {date} |
 | `hireV3Home.todo.open` | Ouvrir |
 | `hireV3Home.todo.empty` | Tout est à jour. |
+| `hireV3Home.todo.emptyText` | Les candidatures à examiner, les créneaux et les messages apparaîtront ici. |
+| `hireV3Home.todo.emptyNoOffer` | En attendant votre première offre, complétez la page de votre entreprise. |
+| `hireV3Home.todo.company` | Page entreprise |
 | `hireV3Home.notifications.title` | Notifications |
 | `hireV3Home.notifications.new` | {count, plural, one {# nouvelle} other {# nouvelles}} |
 | `hireV3Home.notifications.all` | Voir toutes les notifications |
 | `hireV3Home.notifications.empty` | Aucune nouvelle notification. |
+| `hireV3Home.notifications.emptyText` | Candidatures, créneaux réservés et messages s'afficheront ici. |
 | `hireV3Home.funnel.title` | Où en sont vos candidats |
 | `hireV3Home.funnel.open` | Ouvrir |
-| `hireV3Home.funnel.rate` | {rate} % |
-| `hireV3Home.funnel.share` | {rate} % du total |
+| `hireV3Home.funnel.rate` | {rate} % |
+| `hireV3Home.funnel.share` | {rate} % du total |
 | `hireV3Home.funnel.decide` | Vous décidez |
 | `hireV3Home.funnel.empty` | Publiez une offre pour suivre vos candidats étape par étape. |
+| `hireV3Home.funnel.emptyText` | Reçus, présélectionnés, entretien, offre : chaque étape aura son chiffre. |
 | `hireV3Home.week.title` | Cette semaine |
 | `hireV3Home.week.agenda` | Agenda |
 | `hireV3Home.week.mode.video` | Entretien vidéo · {minutes} min |
 | `hireV3Home.week.mode.onsite` | Entretien sur place · {minutes} min |
 | `hireV3Home.week.mode.audio` | Appel · {minutes} min |
 | `hireV3Home.week.empty` | Aucun entretien prévu ces 7 prochains jours. |
+| `hireV3Home.week.emptyText` | Les entretiens confirmés s'afficheront ici. |
 
 ### MVP recruteur · offres (prototype v3)
 
@@ -16138,7 +16221,7 @@ Conventions :
 | `hireV3Offers.stats.applications` | Candidatures |
 | `hireV3Offers.stats.rate` | Vue → candidature |
 | `hireV3Offers.stats.interviews` | Entretiens |
-| `hireV3Offers.stats.rateValue` | {value} % |
+| `hireV3Offers.stats.rateValue` | {value} % |
 | `hireV3Offers.stats.detail` | Voir le détail |
 | `hireV3Offers.stats.overTime` | Candidatures dans le temps |
 | `hireV3Offers.stats.thisPeriod` | Cette période |
@@ -16149,7 +16232,7 @@ Conventions :
 | `hireV3Offers.stats.source.direct` | Candidature directe |
 | `hireV3Offers.stats.source.invitation` | Invitation |
 | `hireV3Offers.stats.source.talent_search` | Recherche de talents |
-| `hireV3Offers.stats.share` | {value} % |
+| `hireV3Offers.stats.share` | {value} % |
 | `hireV3Offers.stats.byOffer` | Par offre |
 | `hireV3Offers.stats.byOfferHint` | Cliquez sur une offre pour le détail |
 | `hireV3Offers.stats.col.offer` | Offre |
@@ -16195,8 +16278,8 @@ Conventions :
 | `hireV3Offer.funnelStep.screening` | Présélection |
 | `hireV3Offer.funnelStep.interview` | Entretien |
 | `hireV3Offer.funnelStep.offer` | Offre |
-| `hireV3Offer.conversion` | {value} % |
-| `hireV3Offer.funnelTip` | {rate} % des visiteurs postulent. |
+| `hireV3Offer.conversion` | {value} % |
+| `hireV3Offer.funnelTip` | {rate} % des visiteurs postulent. |
 | `hireV3Offer.funnelTipMore` | Orbi peut proposer une annonce plus claire. |
 | `hireV3Offer.funnelTipEmpty` | Pas encore de vues sur cette période. |
 | `hireV3Offer.top` | Top 3 d'Orbi |
@@ -16223,9 +16306,9 @@ Conventions :
 | `hireV3Offer.ad.noSkills` | Aucune compétence indiquée. |
 | `hireV3Offer.ad.criteria` | Critères de tri d'Orbi |
 | `hireV3Offer.ad.criteriaSub` | Le score se calcule toujours avec ces poids. |
-| `hireV3Offer.ad.weight` | {value} % |
-| `hireV3Offer.ad.example` | Exemple : |
-| `hireV3Offer.ad.exampleScore` | {value} % |
+| `hireV3Offer.ad.weight` | {value} % |
+| `hireV3Offer.ad.example` | Exemple : |
+| `hireV3Offer.ad.exampleScore` | {value} % |
 | `hireV3Offer.ad.exampleLine` | {points} points, critère par critère |
 | `hireV3Offer.ad.note` | Nom, âge, genre, photo et adresse ne comptent jamais. |
 | `hireV3Offer.criterion.skills_required` | Compétences indispensables |
@@ -16250,7 +16333,7 @@ Conventions :
 | `hireV3Offer.sh.share` | Partager |
 | `hireV3Offer.sh.copy` | Copier le lien |
 | `hireV3Offer.sh.copied` | Lien de l'offre copié |
-| `hireV3Offer.sh.message` | {title} : postulez sur Jumanly |
+| `hireV3Offer.sh.message` | {title} : postulez sur Jumanly |
 | `hireV3Offer.sh.channels` | Candidatures par canal |
 | `hireV3Offer.sh.total` | {count} au total |
 | `hireV3Offer.sh.tip` | La candidature directe reste gratuite pour chaque talent. |
@@ -16275,7 +16358,7 @@ Conventions :
 | `hireV3New.steps.6` | Diffusion |
 | `hireV3New.steps.7` | Vérifier |
 | `hireV3New.start.title` | Nouvelle offre |
-| `hireV3New.start.sub` | Comment voulez-vous commencer ? |
+| `hireV3New.start.sub` | Comment voulez-vous commencer ? |
 | `hireV3New.start.close` | Fermer |
 | `hireV3New.start.jobTitle` | Intitulé du poste |
 | `hireV3New.start.jobTitlePlaceholder` | Ex. Analyste crédit |
@@ -16288,7 +16371,7 @@ Conventions :
 | `hireV3New.start.tpl` | Partir d'un modèle |
 | `hireV3New.start.tplSub` | Des modèles par métier, prêts à adapter. |
 | `hireV3New.start.imp` | Importer une fiche de poste |
-| `hireV3New.start.impSub` | PDF : Orbi en extrait les missions à l'étape Candidature. |
+| `hireV3New.start.impSub` | PDF : Orbi en extrait les missions à l'étape Candidature. |
 | `hireV3New.start.safe` | Rien n'est publié avant votre validation. |
 | `hireV3New.start.cancel` | Annuler |
 | `hireV3New.start.go` | Commencer |
@@ -16315,7 +16398,7 @@ Conventions :
 | `hireV3New.a.orbiReady` | Orbi peut rédiger un premier jet · à relire |
 | `hireV3New.a.write` | Premier jet d'Orbi |
 | `hireV3New.a.working` | Orbi rédige… |
-| `hireV3New.a.failed` | Orbi n'est pas disponible pour le moment : écrivez librement. |
+| `hireV3New.a.failed` | Orbi n'est pas disponible pour le moment : écrivez librement. |
 | `hireV3New.a.description` | En une phrase |
 | `hireV3New.a.descriptionPlaceholder` | Ce que la personne fera et pourquoi c'est utile. |
 | `hireV3New.a.missions` | Vos missions |
@@ -16334,16 +16417,16 @@ Conventions :
 | `hireV3New.c.add` | Ajouter |
 | `hireV3New.c.addPlaceholder` | Ajouter… |
 | `hireV3New.c.weights` | Poids des critères |
-| `hireV3New.c.weightsTotal` | Total {value} % |
+| `hireV3New.c.weightsTotal` | Total {value} % |
 | `hireV3New.c.weightsEdit` | Changer les poids |
 | `hireV3New.c.weightsLocked` | Les poids de la plateforme s'appliquent. |
 | `hireV3New.c.never` | Jamais pris en compte |
 | `hireV3New.c.neverText` | Nom, âge, genre, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise. |
 | `hireV3New.c.questions` | Questions de présélection |
-| `hireV3New.c.questionPlaceholder` | Ex. Pouvez-vous travailler deux jours par semaine sur site ? |
+| `hireV3New.c.questionPlaceholder` | Ex. Pouvez-vous travailler deux jours par semaine sur site ? |
 | `hireV3New.c.yesno` | Oui / Non |
 | `hireV3New.c.text` | Réponse libre |
-| `hireV3New.c.questionsNote` | Une réponse ne bloque jamais une candidature : elle éclaire le classement. |
+| `hireV3New.c.questionsNote` | Une réponse ne bloque jamais une candidature : elle éclaire le classement. |
 | `hireV3New.f.title` | Formulaire de candidature |
 | `hireV3New.f.sub` | Candidature express |
 | `hireV3New.f.always` | Toujours |
@@ -16401,22 +16484,22 @@ Conventions :
 | `hireV3New.v.equipe` | {count, plural, one {# étape} other {# étapes}} · refus toujours manuel |
 | `hireV3New.v.diffusion` | Page de l'offre, LinkedIn, WhatsApp, lien direct |
 | `hireV3New.v.orbi` | Relecture |
-| `hireV3New.v.orbiText` | Aucun critère d'âge ou de genre n'est accepté : le formulaire les refuse. Relisez l'annonce sur téléphone avant de publier. |
-| `hireV3New.v.limit` | Limite d'offres actives atteinte : mettez en pause ou clôturez une offre, puis publiez celle-ci. |
+| `hireV3New.v.orbiText` | Aucun critère d'âge ou de genre n'est accepté : le formulaire les refuse. Relisez l'annonce sur téléphone avant de publier. |
+| `hireV3New.v.limit` | Limite d'offres actives atteinte : mettez en pause ou clôturez une offre, puis publiez celle-ci. |
 | `hireV3New.foot.saved` | Brouillon enregistré |
-| `hireV3New.foot.notSaved` | Rien n'est enregistré avant « Continuer » |
+| `hireV3New.foot.notSaved` | Rien n'est enregistré avant « Continuer » |
 | `hireV3New.foot.step` | Étape {k} sur 7 |
 | `hireV3New.foot.back` | Précédent |
 | `hireV3New.foot.cancel` | Annuler |
-| `hireV3New.foot.next` | Continuer : {step} |
+| `hireV3New.foot.next` | Continuer : {step} |
 | `hireV3New.foot.later` | Garder en brouillon |
 | `hireV3New.foot.publish` | Publier l'offre |
 | `hireV3New.side.tip1` | Précisez le mode de travail |
 | `hireV3New.side.tip1Text` | C'est souvent la première question des candidats. |
 | `hireV3New.side.tip2` | Relisez chaque phrase |
-| `hireV3New.side.tip2Text` | Orbi propose un premier jet : il reste à vous. |
+| `hireV3New.side.tip2Text` | Orbi propose un premier jet : il reste à vous. |
 | `hireV3New.side.tip3` | Les critères décident du classement |
-| `hireV3New.side.tip3Text` | Orbi n'écarte personne : il range et explique. |
+| `hireV3New.side.tip3Text` | Orbi n'écarte personne : il range et explique. |
 | `hireV3New.side.tip4` | Restez court |
 | `hireV3New.side.tip4Text` | Plus le formulaire est court, plus les personnes vont au bout. |
 | `hireV3New.side.tip5` | Une personne par étape |
@@ -16453,7 +16536,7 @@ Conventions :
 | `hireV3New.done.s1` | Accusé de réception |
 | `hireV3New.done.s1Sub` | Envoyé automatiquement à chaque candidat. |
 | `hireV3New.done.s2` | Classement Orbi |
-| `hireV3New.done.s2Sub` | Dès la première candidature, avec le « Pourquoi ? ». |
+| `hireV3New.done.s2Sub` | Dès la première candidature, avec le « Pourquoi ? ». |
 | `hireV3New.done.s3` | Présélection |
 | `hireV3New.done.s3Sub` | Vous choisissez qui avance. |
 | `hireV3New.done.s4` | Entretiens |
@@ -16472,7 +16555,7 @@ Conventions :
 |---|---|
 | `hireV3Report.seo` | Rapport des offres |
 | `hireV3Report.title` | Rapport des offres |
-| `hireV3Report.sub` | Rapport PDF, période : {period} |
+| `hireV3Report.sub` | Rapport PDF, période : {period} |
 | `hireV3Report.back` | Offres |
 | `hireV3Report.copy` | Copier le lien |
 | `hireV3Report.copied` | Lien du rapport copié |
@@ -16490,7 +16573,7 @@ Conventions :
 | `hireV3Report.cover.org` | Entreprise |
 | `hireV3Report.cover.by` | Préparé par |
 | `hireV3Report.cover.on` | Édité le |
-| `hireV3Report.rate` | {value} % |
+| `hireV3Report.rate` | {value} % |
 | `hireV3Report.days` | {count} j |
 | `hireV3Report.none` | — |
 | `hireV3Report.s1.title` | Synthèse |
@@ -16514,8 +16597,8 @@ Conventions :
 | `hireV3Report.s1.sources` | Sources |
 | `hireV3Report.s1.sourcesUnit` | cand. |
 | `hireV3Report.s1.keep` | À retenir |
-| `hireV3Report.s1.keepTop` | « {title} » reçoit le plus de candidatures : {count}. |
-| `hireV3Report.s1.keepSource` | {source} apporte {value} % des candidatures. |
+| `hireV3Report.s1.keepTop` | « {title} » reçoit le plus de candidatures : {count}. |
+| `hireV3Report.s1.keepSource` | {source} apporte {value} % des candidatures. |
 | `hireV3Report.s1.keepPaused` | {count, plural, one {# offre est en pause.} other {# offres sont en pause.}} |
 | `hireV3Report.s1.keepHigh` | {count, plural, =0 {Aucun profil à fort potentiel sur la période.} one {# profil à fort potentiel à rencontrer.} other {# profils à fort potentiel à rencontrer.}} |
 | `hireV3Report.s1.keepEmpty` | Pas encore de candidature sur la période. |
@@ -16541,8 +16624,8 @@ Conventions :
 | `hireV3Report.s3.sub` | Comment les chiffres et les classements sont produits. |
 | `hireV3Report.s3.c1` | Un matching sans biais |
 | `hireV3Report.s3.c1Text` | Le score Orbi ne tient compte ni du nom, ni du genre, ni de l'âge, ni de la photo, ni de la nationalité, ni de l'adresse précise. |
-| `hireV3Report.s3.c2` | Toujours un « Pourquoi ? » |
-| `hireV3Report.s3.c2Text` | Chaque score s'accompagne de ses raisons : compétences, expérience, résultats aux tests. |
+| `hireV3Report.s3.c2` | Toujours un « Pourquoi ? » |
+| `hireV3Report.s3.c2Text` | Chaque score s'accompagne de ses raisons : compétences, expérience, résultats aux tests. |
 | `hireV3Report.s3.c3` | L'humain décide |
 | `hireV3Report.s3.c3Text` | Aucune candidature n'est rejetée automatiquement. Chaque refus part après un geste de l'équipe. |
 | `hireV3Report.s3.c4` | Consultations journalisées |
@@ -16551,19 +16634,19 @@ Conventions :
 | `hireV3Report.s3.d1` | Vue → candidature |
 | `hireV3Report.s3.d1Text` | Candidatures reçues divisées par les vues de l'annonce. |
 | `hireV3Report.s3.d2` | Fort potentiel |
-| `hireV3Report.s3.d2Text` | Compatibilité Orbi de 75 % ou plus avec les critères de l'offre. |
+| `hireV3Report.s3.d2Text` | Compatibilité Orbi de 75 % ou plus avec les critères de l'offre. |
 | `hireV3Report.s3.d3` | Délai moyen |
 | `hireV3Report.s3.d3Text` | Jours entre la candidature et le premier entretien. |
 | `hireV3Report.s3.next` | Pistes pour la période suivante |
-| `hireV3Report.s3.nextPaused` | Décider de la reprise de « {title} » |
+| `hireV3Report.s3.nextPaused` | Décider de la reprise de « {title} » |
 | `hireV3Report.s3.nextPausedText` | {count, plural, =0 {Aucune candidature en attente.} one {# candidature en attente.} other {# candidatures en attente.}} |
-| `hireV3Report.s3.nextClosing` | Relancer la diffusion de « {title} » |
+| `hireV3Report.s3.nextClosing` | Relancer la diffusion de « {title} » |
 | `hireV3Report.s3.nextClosingText` | {count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} à {days} jours de la clôture. |
-| `hireV3Report.s3.nextHigh` | Planifier les entretiens de « {title} » |
+| `hireV3Report.s3.nextHigh` | Planifier les entretiens de « {title} » |
 | `hireV3Report.s3.nextHighText` | {count, plural, one {# profil à fort potentiel à rencontrer.} other {# profils à fort potentiel à rencontrer.}} |
-| `hireV3Report.s3.nextEmpty` | Rien d'urgent : continuez à partager vos offres. |
+| `hireV3Report.s3.nextEmpty` | Rien d'urgent : continuez à partager vos offres. |
 | `hireV3Report.s3.nextNote` | Ces pistes s'appuient sur les chiffres de la période. Elles ne remplacent pas la décision de l'équipe. |
-| `hireV3Report.s3.contact` | Une question sur ce rapport ? |
+| `hireV3Report.s3.contact` | Une question sur ce rapport ? |
 | `hireV3Report.email` | assistant@jumanly.io |
 | `hireV3Report.logoName` | jumanly |
 | `hireV3Report.logoHire` | Hire |
@@ -16596,13 +16679,13 @@ Conventions :
 | `hireV3Candidates.empty` | Aucune offre avec des candidatures pour l'instant. |
 | `hireV3Candidates.emptyOffer` | Aucune candidature pour cette offre. |
 | `hireV3Candidates.percent` | % |
-| `hireV3Candidates.rate` | {value} % |
-| `hireV3Candidates.score` | {value} % |
+| `hireV3Candidates.rate` | {value} % |
+| `hireV3Candidates.score` | {value} % |
 | `hireV3Candidates.conversion` | Passent à l'étape suivante |
 | `hireV3Candidates.toTest` | À tester |
 | `hireV3Candidates.next` | Passer {name} à l'étape suivante |
 | `hireV3Candidates.drop` | Déposez un candidat ici |
-| `hireV3Candidates.moved` | {name} : {stage} |
+| `hireV3Candidates.moved` | {name} : {stage} |
 | `hireV3Candidates.moveFailed` | Le déplacement n'a pas pu être fait. |
 | `hireV3Candidates.list.candidate` | Candidat |
 | `hireV3Candidates.list.match` | Compatibilité |
@@ -16654,11 +16737,11 @@ Conventions :
 | `hireV3Candidate.wait` | Mettre en attente |
 | `hireV3Candidate.reject` | Ne pas retenir |
 | `hireV3Candidate.orbi` | Compatibilité Orbi |
-| `hireV3Candidate.why` | Pourquoi ? |
+| `hireV3Candidate.why` | Pourquoi ? |
 | `hireV3Candidate.noScore` | Pas encore de score pour cette candidature. |
 | `hireV3Candidate.orbiNote` | Calcul sans nom, âge, genre ni photo. Orbi recommande, vous décidez. |
 | `hireV3Candidate.percent` | % |
-| `hireV3Candidate.value` | {value} % |
+| `hireV3Candidate.value` | {value} % |
 | `hireV3Candidate.skills` | Compétences |
 | `hireV3Candidate.expected` | Attendu |
 | `hireV3Candidate.noSkills` | L'offre n'indique pas de compétence. |
@@ -16679,9 +16762,9 @@ Conventions :
 | `hireV3Candidate.facts.documentsValue` | {count, plural, =0 {Aucun document} one {# document reçu} other {# documents reçus}} |
 | `hireV3Candidate.questions` | Questions pour l'entretien |
 | `hireV3Candidate.questionsTag` | À partir de l'offre |
-| `hireV3Candidate.question.skill` | Comment avez-vous pratiqué « {skill} » ? Donnez un exemple récent. |
+| `hireV3Candidate.question.skill` | Comment avez-vous pratiqué « {skill} » ? Donnez un exemple récent. |
 | `hireV3Candidate.question.skillTag` | Point à creuser |
-| `hireV3Candidate.question.answer` | Votre réponse à « {question} » : pouvez-vous en dire plus ? |
+| `hireV3Candidate.question.answer` | Votre réponse à « {question} » : pouvez-vous en dire plus ? |
 | `hireV3Candidate.question.answerTag` | Présélection |
 | `hireV3Candidate.question.impact` | Racontez une réalisation dont vous êtes fier ou fière dans un poste proche. |
 | `hireV3Candidate.question.impactTag` | Impact |
@@ -16750,9 +16833,9 @@ Conventions :
 | `hireV3Agenda.ev.close` | Fermer |
 | `hireV3Agenda.ev.file` | Fiche candidat |
 | `hireV3Agenda.ev.manage` | Reprogrammer |
-| `hireV3Agenda.ev.offer` | Offre : {title} |
+| `hireV3Agenda.ev.offer` | Offre : {title} |
 | `hireV3Agenda.slotTitle` | Créneau libre |
-| `hireV3Agenda.slotWho` | À qui proposer ce créneau ? |
+| `hireV3Agenda.slotWho` | À qui proposer ce créneau ? |
 | `hireV3Agenda.slotEmpty` | Aucun candidat en cours à inviter. |
 | `hireV3Agenda.slotGo` | Proposer |
 | `hireV3Agenda.slotNote` | Le candidat choisit parmi les créneaux proposés depuis sa fiche. |
@@ -16768,9 +16851,9 @@ Conventions :
 | `hireV3Vivier.hero.title` | {count, plural, one {# talent proche de <em>{offer}</em>} other {# talents proches de <em>{offer}</em>}} |
 | `hireV3Vivier.hero.text` | Ils ont déjà accepté d'être recontactés. Vous décidez qui inviter. |
 | `hireV3Vivier.hero.invite` | Inviter à postuler |
-| `hireV3Vivier.hero.why` | Proximité : les compétences demandées par l'offre qu'ils ont déjà. Nom, âge et photo ne comptent pas. |
+| `hireV3Vivier.hero.why` | Proximité : les compétences demandées par l'offre qu'ils ont déjà. Nom, âge et photo ne comptent pas. |
 | `hireV3Vivier.hero.noneTitle` | Aucun talent proche pour le moment |
-| `hireV3Vivier.hero.none` | Personne dans votre vivier n'a encore la moitié des compétences demandées pour « {offer} ». |
+| `hireV3Vivier.hero.none` | Personne dans votre vivier n'a encore la moitié des compétences demandées pour « {offer} ». |
 | `hireV3Vivier.hero.noOfferTitle` | Publiez une offre pour comparer votre vivier |
 | `hireV3Vivier.hero.noOffer` | Orbi rapprochera vos talents gardés de votre prochaine offre publiée. |
 | `hireV3Vivier.pool.title` | Votre vivier |
@@ -16784,7 +16867,7 @@ Conventions :
 | `hireV3Vivier.add` | Ajouter un talent |
 | `hireV3Vivier.count` | {count, plural, one {talent} other {talents}} |
 | `hireV3Vivier.clear` | Effacer |
-| `hireV3Vivier.percent` | {value} % |
+| `hireV3Vivier.percent` | {value} % |
 | `hireV3Vivier.anon` | ? |
 | `hireV3Vivier.anonymous` | Talent anonyme |
 | `hireV3Vivier.ringTitle` | Part des compétences demandées par l'offre |
@@ -16835,7 +16918,7 @@ Conventions :
 | `hireV3Export.docs.tests.sub` | Tests de compétences · {org} |
 | `hireV3Export.docs.tests.kicker` | Recrutement |
 | `hireV3Export.docs.tests.sheet` | Tests |
-| `hireV3Export.docs.tests.empty` | Les tests de compétences arrivent bientôt : aucun résultat pour le moment. |
+| `hireV3Export.docs.tests.empty` | Les tests de compétences arrivent bientôt : aucun résultat pour le moment. |
 | `hireV3Export.docs.tests.note` | Un test aide à décider, il ne décide jamais seul. |
 | `hireV3Export.docs.equipe.tab` | Équipe |
 | `hireV3Export.docs.equipe.title` | Activité de l'équipe |
@@ -16904,7 +16987,7 @@ Conventions :
 | `hireV3Export.format.csv.label` | CSV |
 | `hireV3Export.format.csv.text` | Pour un autre logiciel |
 | `hireV3Export.window.seo` | Télécharger |
-| `hireV3Export.window.title` | Télécharger : {doc} |
+| `hireV3Export.window.title` | Télécharger : {doc} |
 | `hireV3Export.window.close` | Fermer |
 | `hireV3Export.window.format` | Format |
 | `hireV3Export.window.content` | Contenu |
@@ -16928,18 +17011,18 @@ Conventions :
 | `hireV3Reports.period.90` | Trimestre |
 | `hireV3Reports.hero.kicker` | Synthèse Orbi · {period} |
 | `hireV3Reports.hero.title` | {count, plural, =0 {Aucune embauche} one {# embauche} other {# embauches}}, en <em>{delay}</em> jusqu'au premier entretien |
-| `hireV3Reports.hero.text` | {count, plural, one {# candidature reçue} other {# candidatures reçues}}, dont {screened} {screened, plural, one {présélectionnée} other {présélectionnées}}. Orbi n'écarte personne : vous décidez à chaque étape. |
+| `hireV3Reports.hero.text` | {count, plural, one {# candidature reçue} other {# candidatures reçues}}, dont {screened} {screened, plural, one {présélectionnée} other {présélectionnées}}. Orbi n'écarte personne : vous décidez à chaque étape. |
 | `hireV3Reports.hero.empty` | Aucune candidature sur la période. Partagez vos offres pour en recevoir. |
 | `hireV3Reports.models` | Modèles de documents |
 | `hireV3Reports.pdf` | Rapport complet en PDF |
 | `hireV3Reports.none` | – |
 | `hireV3Reports.days` | {value} j |
-| `hireV3Reports.percent` | {value} % |
+| `hireV3Reports.percent` | {value} % |
 | `hireV3Reports.delta.none` | – |
-| `hireV3Reports.delta.pct` | {value, number, ::sign-always} % |
-| `hireV3Reports.delta.n` | {value, number, ::sign-always} |
-| `hireV3Reports.delta.d` | {value, number, ::sign-always} j |
-| `hireV3Reports.delta.pts` | {value, number, ::sign-always} pts |
+| `hireV3Reports.delta.pct` | {value, number, ::sign-always} % |
+| `hireV3Reports.delta.n` | {value, number, ::sign-always} |
+| `hireV3Reports.delta.d` | {value, number, ::sign-always} j |
+| `hireV3Reports.delta.pts` | {value, number, ::sign-always} pts |
 | `hireV3Reports.tiles.cand.label` | Candidatures |
 | `hireV3Reports.tiles.cand.foot` | vs période précédente |
 | `hireV3Reports.tiles.emb.label` | Embauches |
@@ -16954,7 +17037,7 @@ Conventions :
 | `hireV3Reports.chart.applicationsFoot` | candidatures |
 | `hireV3Reports.chart.screenedFoot` | présélections |
 | `hireV3Reports.chart.kept` | retenues |
-| `hireV3Reports.sources.title` | D'où viennent-ils ? |
+| `hireV3Reports.sources.title` | D'où viennent-ils ? |
 | `hireV3Reports.sources.unit` | candidatures |
 | `hireV3Reports.sources.direct` | Candidature directe |
 | `hireV3Reports.sources.invitation` | Invitation |
@@ -16966,8 +17049,8 @@ Conventions :
 | `hireV3Reports.funnel.test` | Évaluation |
 | `hireV3Reports.funnel.interview` | Entretien |
 | `hireV3Reports.funnel.offer` | Offre |
-| `hireV3Reports.funnel.all` | 100 % |
-| `hireV3Reports.funnel.ofTotal` | {value} % du total |
+| `hireV3Reports.funnel.all` | 100 % |
+| `hireV3Reports.funnel.ofTotal` | {value} % du total |
 | `hireV3Reports.delay.title` | Délai jusqu'au premier entretien |
 | `hireV3Reports.delay.label` | Délai moyen |
 | `hireV3Reports.delay.before` | {value} j sur la période précédente |
@@ -17053,8 +17136,8 @@ Conventions :
 | `hireV3Help.tabs.centre` | Centre d'aide |
 | `hireV3Help.tabs.guides` | Guides |
 | `hireV3Help.tabs.ecrire` | Nous écrire |
-| `hireV3Help.hero` | Comment pouvons-nous vous aider, {name} ? |
-| `hireV3Help.search` | Une question : refus, offre, agenda, facture… |
+| `hireV3Help.hero` | Comment pouvons-nous vous aider, {name} ? |
+| `hireV3Help.search` | Une question : refus, offre, agenda, facture… |
 | `hireV3Help.searchLabel` | Chercher dans l'aide |
 | `hireV3Help.popular` | Souvent cherché |
 | `hireV3Help.pop.refus.label` | Orbi et les refus |
@@ -17073,19 +17156,19 @@ Conventions :
 | `hireV3Help.cats.planQ` | formule |
 | `hireV3Help.answers` | {count, plural, =0 {aucune réponse} one {# réponse} other {# réponses}} |
 | `hireV3Help.faqTitle` | Questions fréquentes |
-| `hireV3Help.faq.q1.q` | Orbi peut-il refuser un candidat à ma place ? |
+| `hireV3Help.faq.q1.q` | Orbi peut-il refuser un candidat à ma place ? |
 | `hireV3Help.faq.q1.a` | Non. Orbi classe et explique, il n'écarte jamais personne. Chaque refus demande un geste de votre part. |
-| `hireV3Help.faq.q2.q` | Sur quoi repose le pourcentage de compatibilité ? |
-| `hireV3Help.faq.q2.a` | Sur les compétences, l'expérience, la formation, les langues et les critères de l'offre. Le nom, l'âge, le genre, la photo et l'origine ne comptent jamais. Le bouton « Pourquoi ? » montre le détail. |
-| `hireV3Help.faq.q3.q` | Les candidats paient-ils pour postuler ? |
+| `hireV3Help.faq.q2.q` | Sur quoi repose le pourcentage de compatibilité ? |
+| `hireV3Help.faq.q2.a` | Sur les compétences, l'expérience, la formation, les langues et les critères de l'offre. Le nom, l'âge, le genre, la photo et l'origine ne comptent jamais. Le bouton « Pourquoi ? » montre le détail. |
+| `hireV3Help.faq.q3.q` | Les candidats paient-ils pour postuler ? |
 | `hireV3Help.faq.q3.a` | Non, postuler est toujours gratuit, quelle que soit la formule. |
-| `hireV3Help.faq.q4.q` | Comment partager une offre ? |
+| `hireV3Help.faq.q4.q` | Comment partager une offre ? |
 | `hireV3Help.faq.q4.a` | Ouvrez l'offre, onglet Partage, puis copiez le lien ou utilisez le bouton du réseau. |
-| `hireV3Help.faq.q5.q` | Comment proposer un entretien ? |
-| `hireV3Help.faq.q5.a` | Depuis la fiche du candidat ou l'agenda : choisissez un créneau libre, le candidat confirme. |
-| `hireV3Help.faq.q6.q` | Combien de places compte ma formule ? |
+| `hireV3Help.faq.q5.q` | Comment proposer un entretien ? |
+| `hireV3Help.faq.q5.a` | Depuis la fiche du candidat ou l'agenda : choisissez un créneau libre, le candidat confirme. |
+| `hireV3Help.faq.q6.q` | Combien de places compte ma formule ? |
 | `hireV3Help.faq.q6.a` | Votre formule et vos places sont visibles dans Formule. Pour en ajouter, écrivez-nous à assistant@jumanly.io. |
-| `hireV3Help.helpful` | Cette réponse ne vous aide pas ? |
+| `hireV3Help.helpful` | Cette réponse ne vous aide pas ? |
 | `hireV3Help.notHelpful` | Nous écrire |
 | `hireV3Help.empty` | Aucune réponse trouvée |
 | `hireV3Help.steps.title` | Premiers pas |
@@ -17096,16 +17179,16 @@ Conventions :
 | `hireV3Help.mail.title` | Nous écrire |
 | `hireV3Help.mail.text` | Nous répondons par e-mail, en français. |
 | `hireV3Help.mail.button` | Écrire au support |
-| `hireV3Help.mail.noPhone` | Pas de numéro de téléphone : tout passe par e-mail, avec une trace écrite. |
+| `hireV3Help.mail.noPhone` | Pas de numéro de téléphone : tout passe par e-mail, avec une trace écrite. |
 | `hireV3Help.write.title` | Nouvelle demande |
-| `hireV3Help.write.sub` | Choisissez un sujet : votre messagerie s'ouvre |
+| `hireV3Help.write.sub` | Choisissez un sujet : votre messagerie s'ouvre |
 | `hireV3Help.write.text` | Décrivez la situation (page, offre, candidat concerné) et joignez une capture si besoin. |
 | `hireV3Help.guideN` | {n} |
 | `hireV3Help.guideGo` | Ouvrir |
 | `hireV3Help.guides.g1.title` | Publier votre première offre |
 | `hireV3Help.guides.g1.sub` | 7 étapes, avec l'aide d'Orbi |
 | `hireV3Help.guides.g2.title` | Lire une short-list Orbi |
-| `hireV3Help.guides.g2.sub` | Le « Pourquoi ? » expliqué |
+| `hireV3Help.guides.g2.sub` | Le « Pourquoi ? » expliqué |
 | `hireV3Help.guides.g3.title` | Proposer des créneaux |
 | `hireV3Help.guides.g3.sub` | Depuis l'agenda |
 | `hireV3Help.guides.g4.title` | Inviter votre équipe |
@@ -17162,7 +17245,7 @@ Conventions :
 | `hireV3Plan.pay.amount` | Montant |
 | `hireV3Plan.pay.also` | Moyens acceptés |
 | `hireV3Plan.pay.alsoValue` | Mobile Money ou carte |
-| `hireV3Plan.pay.question` | Une question : assistant@jumanly.io |
+| `hireV3Plan.pay.question` | Une question : assistant@jumanly.io |
 | `hireV3Plan.usd` | {value} USD |
 | `hireV3Plan.none` | – |
 | `hireV3Plan.method.mobile_money` | Mobile Money |

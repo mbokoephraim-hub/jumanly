@@ -4,6 +4,7 @@ import { siteUrl } from "@/lib/seo";
 import type { OfferV3Detail } from "@/server/services/hire-v3-offer";
 import { avatarColor, initialsOf } from "./avatar";
 import { barsWaveSvg, donutSvg, lineChartSvg, ringHtml } from "./charts";
+import { clsOf } from "./score-class";
 import { HireIcon, type HireIconName } from "./icon";
 import { HirePage, HirePageHead } from "./page-head";
 import { HireShareButton } from "./share-button";
@@ -38,8 +39,6 @@ function Head({
     </div>
   );
 }
-
-const clsOf = (score: number) => (score >= 75 ? "fort" : score >= 50 ? "cons" : "lim");
 
 /**
  * La fiche d'une offre (`V.offre` of the prototype v3, screen 08): « Aperçu », « Annonce » and

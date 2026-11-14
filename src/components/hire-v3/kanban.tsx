@@ -1,5 +1,6 @@
 "use client";
 
+import { clsOf } from "./score-class";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -21,7 +22,6 @@ export type KanbanCard = {
 export type KanbanColumn = { id: string; name: string; kind: string; colour: [string, string] };
 
 const CLS_COLOUR = { fort: "#2FA25A", cons: "#D9901A", lim: "#8C9AB8" } as const;
-export const clsOf = (score: number) => (score >= 75 ? "fort" : score >= 50 ? "cons" : "lim");
 
 /** The ten bars of a score (`gauge()` of the prototype). */
 export function Gauge({ score }: { score: number }) {

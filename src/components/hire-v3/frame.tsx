@@ -4,10 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState, useTransition, type ReactNode } from "react";
-import { openOrbi } from "@/components/phone/orbi-bus";
 import { signOut } from "@/server/actions/auth";
 import { updateAppearance } from "@/server/actions/settings";
 import { HireIcon, HireSymbol, type HireIconName } from "./icon";
+import { HireOrbi, openHireOrbi } from "./orbi";
 import { HirePalette } from "./palette";
 import { applyHireTheme } from "./theme";
 
@@ -211,7 +211,7 @@ export function HireV3Frame({ nav, tools, pages, bell, me, dark: darkOnServer }:
             className="rbtn"
             id="orbibtn"
             aria-label={t("tools.orbi")}
-            onClick={openOrbi}
+            onClick={() => openHireOrbi()}
           >
             <HireIcon name="r_orbi" />
             <span className="tip">{t("tools.orbi")}</span>
@@ -234,6 +234,7 @@ export function HireV3Frame({ nav, tools, pages, bell, me, dark: darkOnServer }:
       </aside>
       <PageBar />
       {palette ? <HirePalette pages={pages} onClose={() => setPalette(false)} /> : null}
+      <HireOrbi firstName={me.name.split(" ")[0] ?? ""} />
     </div>
   );
 }

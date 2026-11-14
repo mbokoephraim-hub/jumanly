@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { askOrbi, openOrbi } from "@/components/phone/orbi-bus";
+import { openHireOrbi } from "./orbi";
 import type { HirePaletteCandidate, HirePaletteOffer } from "@/server/services/hire-search";
 import { avatarColor, initialsOf } from "./avatar";
 import type { HireV3Link } from "./frame";
@@ -30,6 +30,7 @@ const scoreColour = (score: number) =>
 const QUICK = [
   { key: "publish", icon: "plus", c: "#2FA25A", b: "#E6F6E0", href: "/app/hire/offres/nouvelle" },
   { key: "slots", icon: "cal", c: "#F2994A", b: "#FEEFE2", href: "/app/hire/entretiens" },
+  { key: "test", icon: "tests", c: "#8B6CF0", b: "#EFEAFE", href: "/app/hire/tests" },
   { key: "messages", icon: "chat", c: "#4C8DF6", b: "#E6EFFE", href: "/app/messages" },
 ] as const;
 
@@ -260,14 +261,12 @@ export function HirePalette({ pages, onClose }: { pages: HireV3Link[]; onClose: 
               tabIndex={0}
               onClick={() => {
                 onClose();
-                openOrbi();
-                askOrbi(query);
+                openHireOrbi(query);
               }}
               onKeyDown={(event) => {
                 if (event.key !== "Enter") return;
                 onClose();
-                openOrbi();
-                askOrbi(query);
+                openHireOrbi(query);
               }}
             >
               <HireIcon name="orbi" size="s" />
