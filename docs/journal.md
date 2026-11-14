@@ -5854,3 +5854,25 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
 - Équipe v3 (`/app/hire/compte/equipe`, onglets Membres et Journal des consultations), Aide v3 (`/app/hire/compte/aide`, centre d'aide, guides, nous écrire), Formule v3 (`/app/hire/compte/formule`, onglets Formule et Factures), quand `PRODUCT_SCOPE=hire`.
 - Service `hire-v3-team.ts` (charge, responsables d'offre, journal des consultations).
 - Écarts notés dans `docs/decisions/2026-11-14-equipe-aide-formule-hire-v3.md`.
+
+## 2026-11-14 · Hire v3 aligné sur le prototype, lot 1 (cadre, Orbi, états vides)
+
+- Rail à 7 boutons comme le prototype : Nouvelle offre, Orbi, Page entreprise, **Tests**, **Suivi
+  automatique**, Équipe, Formule. Les pages `/app/hire/tests` et `/app/hire/suivi` existent avec leur
+  en-tête et leurs onglets ; leur contenu arrive aux lots 3 et 4 (état vide honnête d'ici là).
+  Action rapide « Créer un test » ajoutée à la recherche (Ctrl K).
+- Panneau Orbi du prototype (`.drawer.obd`, `src/components/hire-v3/orbi.tsx`) ouvert par le rail et
+  par « Demander à Orbi » de la recherche : « À faire aujourd'hui » et « Ce que j'ai fait pour
+  vous » avec les vrais chiffres de l'organisation (`hire-v3-orbi.ts` : candidatures à examiner,
+  messages, créneaux, évaluations ; candidatures classées et accusés de réception des 7 derniers
+  jours), puis la discussion avec l'assistant recruteur (`askOrbiAction` : consentement, droits,
+  crédits, journal). Le bouton Orbi flottant du coin n'est plus affiché en mode Hire.
+- Mesures du cadre corrigées : la page commence à 80 px du haut et du bord gauche, comme le
+  prototype (il restait 24 px de marge en plus à gauche et à droite, et 10 px de moins en haut).
+- États vides de l'accueil (`HireEmpty`, cadre pointillé `.vempty` du prototype) : chaque bloc
+  garde sa hauteur dans la grille, avec une phrase et une action, jamais un grand bloc blanc.
+  Axes des graphiques sans demi-unités (« 0,5 »).
+- Correction : les pages Candidats et la fiche candidat plantaient au rendu serveur (fonction
+  `clsOf` importée d'un module client) ; `clsOf` vit maintenant dans `score-class.ts`.
+- Textes Hire v3 : espaces insécables avant « % », « : », « ? », « ! » et dans les guillemets
+  (`scripts/hire-v3-nbsp.mjs`, 94 textes).

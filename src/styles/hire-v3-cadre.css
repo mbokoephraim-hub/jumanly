@@ -7,8 +7,8 @@
    sombre, jusqu'à leur lot. */
 
 .nb-app[data-hire] {
-  /* Haut des pages : 12 + 44 + 14. Gauche : 16 + 46 + 18. */
-  --hv3-top: 70px;
+  /* Haut des pages : 12 + 44 + 24 (écart des lignes du prototype). Gauche : 16 + 46 + 18. */
+  --hv3-top: 80px;
   --hv3-left: 80px;
   --page: #edf2e1;
   --grid: #e3ead3;
@@ -75,9 +75,14 @@ html[data-theme="dark"]:has(.nb-app[data-hire]) {
   background-color: #0d1613;
 }
 
-/* Orbi flotte dans le coin ; le bouton Orbi du rail l'ouvre aussi. */
+/* Les pages v3 occupent toute la largeur, comme `#content` du prototype (aucune marge en plus). */
+.nb-app[data-hire] .nb-cadre > .t-colonne {
+  padding-inline: 0;
+}
+
+/* Orbi s'ouvre depuis le rail (panneau du prototype) : pas de bouton flottant dans le coin. */
 .nb-app[data-hire] .nb-orbi-fab {
-  bottom: 18px;
+  display: none;
 }
 
 /* ─── Téléphone et petite tablette : la barre sur deux lignes, le rail derrière le menu ─── */
@@ -236,4 +241,27 @@ html[data-nb-theme="sombre"] .nb-app[data-hire] {
   .hv3 .xpwrap .xpdoc {
     break-after: page;
   }
+}
+
+/* États vides (brief v3, critère « jamais un grand bloc blanc ») : le cadre pointillé du
+   prototype (`.vempty`) remplit le bloc, centré, avec une phrase et une action. */
+.hv3 .vempty.hv3-vide {
+  flex: 1;
+  justify-content: center;
+  min-height: 0;
+  padding: 20px 16px;
+  text-align: center;
+  font-size: 13px;
+}
+.hv3 .vempty.hv3-vide > b {
+  color: var(--ink);
+  font-size: 14px;
+}
+.hv3 .vempty.hv3-vide .meta {
+  max-width: 34ch;
+}
+.hv3 .vempty.hv3-vide.compact {
+  flex: none;
+  padding: 14px 12px;
+  gap: 6px;
 }

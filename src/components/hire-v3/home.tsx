@@ -5,6 +5,7 @@ import { pickMessages } from "@/i18n/client-messages";
 import type { HireHome, HomePeriod } from "@/server/services/hire-v3-home";
 import { avatarColor, initialsOf } from "./avatar";
 import { funnelSvg } from "./charts";
+import { HireEmpty } from "./empty";
 import { HireIcon, type HireIconName } from "./icon";
 import { HirePage, HirePageHead } from "./page-head";
 import { HireReceivedChart } from "./received-chart";
@@ -207,50 +208,60 @@ export async function HireV3Home({
                   {t("applications.live", { count: home.liveOffers })}
                 </span>
               </div>
-              <HireScrollBox>
-                <div className="stack" style={{ gap: 6, paddingBottom: 30 }}>
-                  {home.offers.length === 0 ? (
-                    <p className="meta">{t("applications.empty")}</p>
-                  ) : null}
-                  {home.offers.map((offer, index) => {
-                    const max = Math.max(1, ...home.offers.map((o) => o.applications));
-                    return (
-                      <Link key={offer.id} className="ofr" href={`/app/hire/offres/${offer.id}`}>
-                        <span className="ot" style={{ background: OFFER_BG[index % 5] }}>
-                          <HireIcon name="briefcase" size="s" />
-                        </span>
-                        <span style={{ flex: 1, minWidth: 0 }}>
-                          <b className="tr">{offer.title}</b>
-                          <span className="meta tr">
-                            {[
-                              offer.department,
-                              offer.live
-                                ? offer.daysLeft === null
-                                  ? t("applications.open")
-                                  : t("applications.daysLeft", { count: offer.daysLeft })
-                                : t("applications.paused"),
-                            ]
-                              .filter(Boolean)
-                              .join(" · ")}
+              {home.offers.length === 0 ? (
+                <HireEmpty
+                  icon="briefcase"
+                  title={t("applications.empty")}
+                  text={t("applications.emptyText")}
+                  action={{
+                    href: "/app/hire/offres/nouvelle",
+                    label: t("publish"),
+                    icon: "plus",
+                  }}
+                />
+              ) : (
+                <HireScrollBox>
+                  <div className="stack" style={{ gap: 6, paddingBottom: 30 }}>
+                    {home.offers.map((offer, index) => {
+                      const max = Math.max(1, ...home.offers.map((o) => o.applications));
+                      return (
+                        <Link key={offer.id} className="ofr" href={`/app/hire/offres/${offer.id}`}>
+                          <span className="ot" style={{ background: OFFER_BG[index % 5] }}>
+                            <HireIcon name="briefcase" size="s" />
                           </span>
-                          <span className="bar" style={{ marginTop: 5, height: 5 }}>
-                            <i
-                              style={{
-                                width: `${Math.min(100, (offer.applications / max) * 100)}%`,
-                                background: "var(--sapin)",
-                              }}
-                            />
+                          <span style={{ flex: 1, minWidth: 0 }}>
+                            <b className="tr">{offer.title}</b>
+                            <span className="meta tr">
+                              {[
+                                offer.department,
+                                offer.live
+                                  ? offer.daysLeft === null
+                                    ? t("applications.open")
+                                    : t("applications.daysLeft", { count: offer.daysLeft })
+                                  : t("applications.paused"),
+                              ]
+                                .filter(Boolean)
+                                .join(" · ")}
+                            </span>
+                            <span className="bar" style={{ marginTop: 5, height: 5 }}>
+                              <i
+                                style={{
+                                  width: `${Math.min(100, (offer.applications / max) * 100)}%`,
+                                  background: "var(--sapin)",
+                                }}
+                              />
+                            </span>
                           </span>
-                        </span>
-                        <span className="on">
-                          <b className="num">{offer.applications}</b>
-                          <span className="meta">{t("applications.received")}</span>
-                        </span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </HireScrollBox>
+                          <span className="on">
+                            <b className="num">{offer.applications}</b>
+                            <span className="meta">{t("applications.received")}</span>
+                          </span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </HireScrollBox>
+              )}
             </div>
 
             <div className="d-b">
@@ -316,30 +327,35 @@ export async function HireV3Home({
               <div className="meta" style={{ marginBottom: 8 }}>
                 {home.focus
                   ? t("meet.sub", { offer: home.focus.title, count: home.best.length })
-                  : t("meet.empty")}
+                  : t("meet.noFocus")}
               </div>
-              <HireScrollBox className="ptl nxl" more={false}>
-                <div className="stack" style={{ gap: 4, paddingBottom: 6 }}>
-                  {home.focus && home.best.length === 0 ? (
-                    <p className="meta">{t("meet.empty")}</p>
-                  ) : null}
-                  {home.best.map((c, i) => (
-                    <Link key={c.id} className="cv" href={`/app/hire/candidats/${c.id}`}>
-                      <span className="rk">{i + 1}</span>
-                      <span className={`av ${avatarColor(c.name)} xs`} aria-hidden="true">
-                        {initialsOf(c.name)}
-                      </span>
-                      <b className="tr" style={{ flex: 1, minWidth: 0, fontSize: 13 }}>
-                        {c.name}
-                      </b>
-                      <span className="scb">
-                        <i style={{ width: `${c.score}%` }} />
-                      </span>
-                      <b className="sc-b">{t("meet.score", { score: c.score })}</b>
-                    </Link>
-                  ))}
-                </div>
-              </HireScrollBox>
+              {home.best.length === 0 ? (
+                <HireEmpty
+                  icon="target"
+                  title={home.focus ? t("meet.emptyTitle") : t("meet.noOffer")}
+                  text={home.focus ? t("meet.emptyText") : t("meet.noOfferText")}
+                />
+              ) : (
+                <HireScrollBox className="ptl nxl" more={false}>
+                  <div className="stack" style={{ gap: 4, paddingBottom: 6 }}>
+                    {home.best.map((c, i) => (
+                      <Link key={c.id} className="cv" href={`/app/hire/candidats/${c.id}`}>
+                        <span className="rk">{i + 1}</span>
+                        <span className={`av ${avatarColor(c.name)} xs`} aria-hidden="true">
+                          {initialsOf(c.name)}
+                        </span>
+                        <b className="tr" style={{ flex: 1, minWidth: 0, fontSize: 13 }}>
+                          {c.name}
+                        </b>
+                        <span className="scb">
+                          <i style={{ width: `${c.score}%` }} />
+                        </span>
+                        <b className="sc-b">{t("meet.score", { score: c.score })}</b>
+                      </Link>
+                    ))}
+                  </div>
+                </HireScrollBox>
+              )}
               <div className="row" style={{ gap: 8, marginTop: 10 }}>
                 <Link
                   className="btn sm pri"
@@ -365,29 +381,41 @@ export async function HireV3Home({
                   <span className="pill p-n">{t("todo.left", { count: todo.length })}</span>
                 </div>
               </div>
-              <HireScrollBox>
-                <div className="stack" style={{ gap: 6, paddingBottom: 30 }}>
-                  {todo.length === 0 ? <p className="meta">{t("todo.empty")}</p> : null}
-                  {todo.map((task) => (
-                    <Link
-                      key={task.title + task.href}
-                      className="task"
-                      href={task.href}
-                      style={{ padding: "8px 10px", textDecoration: "none", color: "inherit" }}
-                    >
-                      <span className="box" aria-hidden="true">
-                        <HireIcon name="check" size="s" />
-                      </span>
-                      <div style={{ minWidth: 0, flex: 1 }}>
-                        <div className="tt tr" style={{ fontWeight: 600, fontSize: 13 }}>
-                          {task.title}
+              {todo.length === 0 ? (
+                <HireEmpty
+                  icon="check"
+                  title={t("todo.empty")}
+                  text={home.offers.length === 0 ? t("todo.emptyNoOffer") : t("todo.emptyText")}
+                  action={
+                    home.offers.length === 0
+                      ? { href: "/app/hire/entreprise", label: t("todo.company"), icon: "r_build" }
+                      : undefined
+                  }
+                />
+              ) : (
+                <HireScrollBox>
+                  <div className="stack" style={{ gap: 6, paddingBottom: 30 }}>
+                    {todo.map((task) => (
+                      <Link
+                        key={task.title + task.href}
+                        className="task"
+                        href={task.href}
+                        style={{ padding: "8px 10px", textDecoration: "none", color: "inherit" }}
+                      >
+                        <span className="box" aria-hidden="true">
+                          <HireIcon name="check" size="s" />
+                        </span>
+                        <div style={{ minWidth: 0, flex: 1 }}>
+                          <div className="tt tr" style={{ fontWeight: 600, fontSize: 13 }}>
+                            {task.title}
+                          </div>
+                          <div className="meta tr">{task.sub}</div>
                         </div>
-                        <div className="meta tr">{task.sub}</div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </HireScrollBox>
+                      </Link>
+                    ))}
+                  </div>
+                </HireScrollBox>
+              )}
             </div>
 
             <div className="card vcard d-n">
@@ -411,28 +439,33 @@ export async function HireV3Home({
                   </Link>
                 </div>
               </div>
-              <div className="stack nlist">
-                {notifications.length === 0 ? (
-                  <p className="meta">{t("notifications.empty")}</p>
-                ) : null}
-                {notifications.map((n) => {
-                  const [bg, fg] = NOTIF_COLOURS[n.icon] ?? NOTIF_COLOURS.bell!;
-                  return (
-                    <Link key={n.id} className="nt" href={n.href}>
-                      <span className="ti" style={{ background: bg, color: fg }}>
-                        <HireIcon name={n.icon} size="s" />
-                      </span>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <b className="tr" style={{ display: "block", fontSize: 13 }}>
-                          {n.text}
-                        </b>
-                        <span className="meta">{n.meta}</span>
-                      </div>
-                      {n.unread ? <i className="ud" /> : null}
-                    </Link>
-                  );
-                })}
-              </div>
+              {notifications.length === 0 ? (
+                <HireEmpty
+                  icon="bell"
+                  title={t("notifications.empty")}
+                  text={t("notifications.emptyText")}
+                />
+              ) : (
+                <div className="stack nlist">
+                  {notifications.map((n) => {
+                    const [bg, fg] = NOTIF_COLOURS[n.icon] ?? NOTIF_COLOURS.bell!;
+                    return (
+                      <Link key={n.id} className="nt" href={n.href}>
+                        <span className="ti" style={{ background: bg, color: fg }}>
+                          <HireIcon name={n.icon} size="s" />
+                        </span>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <b className="tr" style={{ display: "block", fontSize: 13 }}>
+                            {n.text}
+                          </b>
+                          <span className="meta">{n.meta}</span>
+                        </div>
+                        {n.unread ? <i className="ud" /> : null}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
               <Link
                 href="/app/notifications"
                 className="meta"
@@ -516,7 +549,12 @@ export async function HireV3Home({
                 </div>
               </div>
             ) : (
-              <p className="meta">{t("funnel.empty")}</p>
+              <HireEmpty
+                compact
+                icon="layers"
+                title={t("funnel.empty")}
+                text={t("funnel.emptyText")}
+              />
             )}
           </div>
           <div className="card bl-w">
@@ -532,7 +570,15 @@ export async function HireV3Home({
               </div>
             </div>
             <div className="stack" style={{ gap: 6 }}>
-              {home.week.length === 0 ? <p className="meta">{t("week.empty")}</p> : null}
+              {home.week.length === 0 ? (
+                <HireEmpty
+                  compact
+                  icon="cal"
+                  title={t("week.empty")}
+                  text={t("week.emptyText")}
+                  action={{ href: "/app/hire/entretiens", label: t("week.agenda") }}
+                />
+              ) : null}
               {home.week.map((event) => (
                 <Link key={event.id} className="wev" href="/app/hire/entretiens">
                   <span className="evd">
