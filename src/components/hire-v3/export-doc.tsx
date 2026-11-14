@@ -1,3 +1,4 @@
+import { loose } from "@/lib/loose-t";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { exportTable } from "@/server/hire-v3-export-text";
 import type { ExportData } from "@/server/services/hire-v3-exports";
@@ -25,6 +26,7 @@ export async function HireExportDoc({
   first?: boolean;
 }) {
   const t = await getTranslations("hireV3Export");
+  const tk = loose(t);
   const format = await getFormatter();
   const { header, rows } = await exportTable(data, columns);
   const chunks: (typeof rows)[] = [];
@@ -67,7 +69,7 @@ export async function HireExportDoc({
                 <div className="xpkp">
                   {data.kpis.map((kpi) => (
                     <div key={kpi.key}>
-                      <span>{t(`kpi.${data.doc}.${kpi.key}`)}</span>
+                      <span>{tk(`kpi.${data.doc}.${kpi.key}`)}</span>
                       <b>{kpi.value}</b>
                       {kpi.note ? <em>{kpi.note}</em> : null}
                     </div>
