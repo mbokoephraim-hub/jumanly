@@ -19417,6 +19417,8 @@
       "publish": "Nouvelle offre",
       "orbi": "Orbi",
       "company": "Page entreprise",
+      "tests": "Tests",
+      "automation": "Suivi automatique",
       "team": "Équipe",
       "plan": "Formule"
     },
@@ -19451,16 +19453,17 @@
       "actions": {
         "publish": "Nouvelle offre",
         "slots": "Proposer des créneaux",
+        "test": "Créer un test",
         "messages": "Messages"
       },
       "page": "Page",
-      "score": "{score} %",
+      "score": "{score} %",
       "candidate": "Candidat",
       "live": "En ligne",
       "paused": "En pause",
       "draft": "Brouillon",
-      "askOrbi": "Demander à Orbi : <em>« {query} »</em>",
-      "none": "Aucun résultat pour « {query} ».",
+      "askOrbi": "Demander à Orbi : <em>« {query} »</em>",
+      "none": "Aucun résultat pour « {query} ».",
       "up": "↑",
       "down": "↓",
       "enter": "Entrée",
@@ -19469,12 +19472,107 @@
       "reopen": "Ctrl K pour rouvrir",
       "loading": "Chargement…"
     },
+    "orbi": {
+      "title": "Orbi",
+      "status": "Votre assistant de recrutement · en ligne",
+      "close": "Fermer",
+      "loading": "Un instant…",
+      "todo": "À faire aujourd'hui",
+      "todoEmpty": "Rien ne vous attend pour l'instant.",
+      "todoItem": {
+        "unseen": "{count, plural, one {# candidature à examiner} other {# candidatures à examiner}}",
+        "unread": "{count, plural, one {# message sans réponse} other {# messages sans réponse}}",
+        "invitations": "{count, plural, one {# candidat sans créneau} other {# candidats sans créneau}}",
+        "scorecards": "{count, plural, one {# évaluation à compléter} other {# évaluations à compléter}}"
+      },
+      "todoSub": {
+        "unseen": "Pas encore ouvertes",
+        "unread": "Dans vos messages",
+        "invitations": "Entretiens à caler",
+        "scorecards": "Après vos entretiens"
+      },
+      "done": "Ce que j'ai fait pour vous",
+      "doneEmpty": "Rien cette semaine pour l'instant.",
+      "doneItem": {
+        "scored": "{count, plural, one {Classé # candidature} other {Classé # candidatures}}",
+        "acknowledged": "{count, plural, one {Envoyé # accusé de réception} other {Envoyé # accusés de réception}}"
+      },
+      "doneSub": {
+        "scored": "Avec le pourquoi de chaque score · 7 derniers jours",
+        "acknowledged": "Dès la candidature · 7 derniers jours"
+      },
+      "chat": "Discussion",
+      "hello": "Bonjour {name}. Que voulez-vous préparer ? Je propose, vous décidez.",
+      "helloAnon": "Bonjour. Que voulez-vous préparer ? Je propose, vous décidez.",
+      "typing": "Orbi écrit",
+      "failed": "Je n'ai pas pu répondre. Réessayez dans un instant.",
+      "placeholder": "Demander à Orbi…",
+      "send": "Envoyer",
+      "rule": "Aucune décision automatique · nom, âge, genre et photo exclus du score",
+      "ask": {
+        "home": {
+          "0": "Résume les nouvelles candidatures",
+          "1": "Qui inviter en entretien ?",
+          "2": "Rédige une relance"
+        },
+        "candidates": {
+          "0": "Compare les deux meilleurs profils",
+          "1": "Qui inviter en entretien ?",
+          "2": "Résume les forts potentiels"
+        },
+        "agenda": {
+          "0": "Trouve un créneau cette semaine",
+          "1": "Qui n'a pas réservé ?",
+          "2": "Prépare mon prochain entretien"
+        },
+        "tests": {
+          "0": "Propose une question de test",
+          "1": "Qui doit être relancé ?",
+          "2": "Résume les résultats"
+        },
+        "pool": {
+          "0": "Qui inviter pour mon offre ?",
+          "1": "Talents disponibles ce mois",
+          "2": "Rédige une invitation"
+        }
+      }
+    },
     "page": {
       "back": "Retour",
       "backTo": "Retour à {label}",
       "download": "Télécharger",
       "titleSuffix": "· Jumanly Hire"
     }
+  },
+  "hireV3Tests": {
+    "title": "Tests",
+    "soon": "Tests de compétences envoyés aux candidats, résultats et bibliothèque de modèles",
+    "heads": {
+      "mine": "Tests",
+      "results": "Résultats",
+      "library": "Bibliothèque"
+    },
+    "tabs": {
+      "mine": "Mes tests",
+      "results": "Résultats",
+      "library": "Bibliothèque"
+    },
+    "emptyTitle": "Les tests arrivent sur cette page",
+    "emptyText": "Vous pourrez bientôt créer un test à partir d'une offre, l'envoyer aux candidats et lire leurs résultats."
+  },
+  "hireV3Suivi": {
+    "title": "Suivi automatique",
+    "sub": "Les relances partent seules. Les refus attendent toujours votre accord.",
+    "heads": {
+      "rules": "Suivi automatique",
+      "history": "Historique"
+    },
+    "tabs": {
+      "rules": "Règles",
+      "history": "Historique"
+    },
+    "emptyTitle": "Les règles de suivi arrivent sur cette page",
+    "emptyText": "L'accusé de réception automatique fonctionne déjà. Les relances et rappels se régleront bientôt ici."
   },
   "hireV3Home": {
     "seo": "Accueil",
@@ -19496,13 +19594,14 @@
       "open": "Sans date de fin",
       "paused": "En pause",
       "received": "reçues",
-      "empty": "Aucune offre en ligne pour l'instant."
+      "empty": "Aucune offre en ligne pour l'instant.",
+      "emptyText": "Publiez votre première offre : les candidatures arriveront ici, classées avec le pourquoi de chaque score."
     },
     "more": "{count} de plus",
     "seeMore": "Voir plus",
     "delta": {
-      "up": "↑ {value} %",
-      "down": "↓ {value} %",
+      "up": "↑ {value} %",
+      "down": "↓ {value} %",
       "stable": "→ stable",
       "upDays": "↑ {value} j"
     },
@@ -19520,9 +19619,9 @@
       "shortlisted": "Présélection",
       "reports": "Voir les rapports",
       "aria": "Candidatures reçues et présélectionnées",
-      "peak": "Pic {label} : {count, plural, one {# candidature} other {# candidatures}}. Survolez une barre pour le détail.",
+      "peak": "Pic {label} : {count, plural, one {# candidature} other {# candidatures}}. Survolez une barre pour le détail.",
       "empty": "Aucune candidature sur la période.",
-      "detail": "{label} : {received, plural, one {# candidature} other {# candidatures}}, dont {shortlisted} présélectionnées ({rate} %). Cliquez pour les voir.",
+      "detail": "{label} : {received, plural, one {# candidature} other {# candidatures}}, dont {shortlisted} présélectionnées ({rate} %). Cliquez pour les voir.",
       "tipReceived": "{count} reçues",
       "tipShortlisted": "{count} présélectionnées",
       "hour": "{hour} h",
@@ -19552,8 +19651,13 @@
       "title": "Choisir qui rencontrer",
       "sub": "{offer} · {count, plural, =0 {aucun profil classé} one {# profil classé par Orbi} other {# profils classés par Orbi}}",
       "open": "Ouvrir la short-list",
-      "empty": "Aucun profil à 70 % ou plus pour l'instant.",
-      "score": "{score} %",
+      "empty": "Aucun profil à 70 % ou plus pour l'instant.",
+      "noFocus": "Aucune offre en ligne",
+      "emptyTitle": "Aucun profil à proposer",
+      "emptyText": "Orbi propose ici les profils à 70 % ou plus de votre offre. Vous décidez.",
+      "noOffer": "Pas encore de profils",
+      "noOfferText": "Dès votre première offre en ligne, Orbi classe les candidats et explique chaque score.",
+      "score": "{score} %",
       "done": "Fait"
     },
     "todo": {
@@ -19572,23 +19676,28 @@
         "diagnostic": "Évaluer {candidate}",
         "interview": "Mener l'entretien de {candidate}"
       },
-      "due": "Échéance : {date}",
+      "due": "Échéance : {date}",
       "open": "Ouvrir",
-      "empty": "Tout est à jour."
+      "empty": "Tout est à jour.",
+      "emptyText": "Les candidatures à examiner, les créneaux et les messages apparaîtront ici.",
+      "emptyNoOffer": "En attendant votre première offre, complétez la page de votre entreprise.",
+      "company": "Page entreprise"
     },
     "notifications": {
       "title": "Notifications",
       "new": "{count, plural, one {# nouvelle} other {# nouvelles}}",
       "all": "Voir toutes les notifications",
-      "empty": "Aucune nouvelle notification."
+      "empty": "Aucune nouvelle notification.",
+      "emptyText": "Candidatures, créneaux réservés et messages s'afficheront ici."
     },
     "funnel": {
       "title": "Où en sont vos candidats",
       "open": "Ouvrir",
-      "rate": "{rate} %",
-      "share": "{rate} % du total",
+      "rate": "{rate} %",
+      "share": "{rate} % du total",
       "decide": "Vous décidez",
-      "empty": "Publiez une offre pour suivre vos candidats étape par étape."
+      "empty": "Publiez une offre pour suivre vos candidats étape par étape.",
+      "emptyText": "Reçus, présélectionnés, entretien, offre : chaque étape aura son chiffre."
     },
     "week": {
       "title": "Cette semaine",
@@ -19598,7 +19707,8 @@
         "onsite": "Entretien sur place · {minutes} min",
         "audio": "Appel · {minutes} min"
       },
-      "empty": "Aucun entretien prévu ces 7 prochains jours."
+      "empty": "Aucun entretien prévu ces 7 prochains jours.",
+      "emptyText": "Les entretiens confirmés s'afficheront ici."
     }
   },
   "hireV3Offers": {
@@ -19678,7 +19788,7 @@
       "applications": "Candidatures",
       "rate": "Vue → candidature",
       "interviews": "Entretiens",
-      "rateValue": "{value} %",
+      "rateValue": "{value} %",
       "detail": "Voir le détail",
       "overTime": "Candidatures dans le temps",
       "thisPeriod": "Cette période",
@@ -19691,7 +19801,7 @@
         "invitation": "Invitation",
         "talent_search": "Recherche de talents"
       },
-      "share": "{value} %",
+      "share": "{value} %",
       "byOffer": "Par offre",
       "byOfferHint": "Cliquez sur une offre pour le détail",
       "col": {
@@ -19741,8 +19851,8 @@
       "interview": "Entretien",
       "offer": "Offre"
     },
-    "conversion": "{value} %",
-    "funnelTip": "{rate} % des visiteurs postulent.",
+    "conversion": "{value} %",
+    "funnelTip": "{rate} % des visiteurs postulent.",
     "funnelTipMore": "Orbi peut proposer une annonce plus claire.",
     "funnelTipEmpty": "Pas encore de vues sur cette période.",
     "top": "Top 3 d'Orbi",
@@ -19772,9 +19882,9 @@
       "noSkills": "Aucune compétence indiquée.",
       "criteria": "Critères de tri d'Orbi",
       "criteriaSub": "Le score se calcule toujours avec ces poids.",
-      "weight": "{value} %",
-      "example": "Exemple :",
-      "exampleScore": "{value} %",
+      "weight": "{value} %",
+      "example": "Exemple :",
+      "exampleScore": "{value} %",
       "exampleLine": "{points} points, critère par critère",
       "note": "Nom, âge, genre, photo et adresse ne comptent jamais."
     },
@@ -19803,7 +19913,7 @@
       "share": "Partager",
       "copy": "Copier le lien",
       "copied": "Lien de l'offre copié",
-      "message": "{title} : postulez sur Jumanly",
+      "message": "{title} : postulez sur Jumanly",
       "channels": "Candidatures par canal",
       "total": "{count} au total",
       "tip": "La candidature directe reste gratuite pour chaque talent.",
@@ -19827,7 +19937,7 @@
     },
     "start": {
       "title": "Nouvelle offre",
-      "sub": "Comment voulez-vous commencer ?",
+      "sub": "Comment voulez-vous commencer ?",
       "close": "Fermer",
       "jobTitle": "Intitulé du poste",
       "jobTitlePlaceholder": "Ex. Analyste crédit",
@@ -19840,7 +19950,7 @@
       "tpl": "Partir d'un modèle",
       "tplSub": "Des modèles par métier, prêts à adapter.",
       "imp": "Importer une fiche de poste",
-      "impSub": "PDF : Orbi en extrait les missions à l'étape Candidature.",
+      "impSub": "PDF : Orbi en extrait les missions à l'étape Candidature.",
       "safe": "Rien n'est publié avant votre validation.",
       "cancel": "Annuler",
       "go": "Commencer"
@@ -19871,7 +19981,7 @@
       "orbiReady": "Orbi peut rédiger un premier jet · à relire",
       "write": "Premier jet d'Orbi",
       "working": "Orbi rédige…",
-      "failed": "Orbi n'est pas disponible pour le moment : écrivez librement.",
+      "failed": "Orbi n'est pas disponible pour le moment : écrivez librement.",
       "description": "En une phrase",
       "descriptionPlaceholder": "Ce que la personne fera et pourquoi c'est utile.",
       "missions": "Vos missions",
@@ -19892,16 +20002,16 @@
       "add": "Ajouter",
       "addPlaceholder": "Ajouter…",
       "weights": "Poids des critères",
-      "weightsTotal": "Total {value} %",
+      "weightsTotal": "Total {value} %",
       "weightsEdit": "Changer les poids",
       "weightsLocked": "Les poids de la plateforme s'appliquent.",
       "never": "Jamais pris en compte",
       "neverText": "Nom, âge, genre, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise.",
       "questions": "Questions de présélection",
-      "questionPlaceholder": "Ex. Pouvez-vous travailler deux jours par semaine sur site ?",
+      "questionPlaceholder": "Ex. Pouvez-vous travailler deux jours par semaine sur site ?",
       "yesno": "Oui / Non",
       "text": "Réponse libre",
-      "questionsNote": "Une réponse ne bloque jamais une candidature : elle éclaire le classement."
+      "questionsNote": "Une réponse ne bloque jamais une candidature : elle éclaire le classement."
     },
     "f": {
       "title": "Formulaire de candidature",
@@ -19967,16 +20077,16 @@
       "equipe": "{count, plural, one {# étape} other {# étapes}} · refus toujours manuel",
       "diffusion": "Page de l'offre, LinkedIn, WhatsApp, lien direct",
       "orbi": "Relecture",
-      "orbiText": "Aucun critère d'âge ou de genre n'est accepté : le formulaire les refuse. Relisez l'annonce sur téléphone avant de publier.",
-      "limit": "Limite d'offres actives atteinte : mettez en pause ou clôturez une offre, puis publiez celle-ci."
+      "orbiText": "Aucun critère d'âge ou de genre n'est accepté : le formulaire les refuse. Relisez l'annonce sur téléphone avant de publier.",
+      "limit": "Limite d'offres actives atteinte : mettez en pause ou clôturez une offre, puis publiez celle-ci."
     },
     "foot": {
       "saved": "Brouillon enregistré",
-      "notSaved": "Rien n'est enregistré avant « Continuer »",
+      "notSaved": "Rien n'est enregistré avant « Continuer »",
       "step": "Étape {k} sur 7",
       "back": "Précédent",
       "cancel": "Annuler",
-      "next": "Continuer : {step}",
+      "next": "Continuer : {step}",
       "later": "Garder en brouillon",
       "publish": "Publier l'offre"
     },
@@ -19984,9 +20094,9 @@
       "tip1": "Précisez le mode de travail",
       "tip1Text": "C'est souvent la première question des candidats.",
       "tip2": "Relisez chaque phrase",
-      "tip2Text": "Orbi propose un premier jet : il reste à vous.",
+      "tip2Text": "Orbi propose un premier jet : il reste à vous.",
       "tip3": "Les critères décident du classement",
-      "tip3Text": "Orbi n'écarte personne : il range et explique.",
+      "tip3Text": "Orbi n'écarte personne : il range et explique.",
       "tip4": "Restez court",
       "tip4Text": "Plus le formulaire est court, plus les personnes vont au bout.",
       "tip5": "Une personne par étape",
@@ -20025,7 +20135,7 @@
       "s1": "Accusé de réception",
       "s1Sub": "Envoyé automatiquement à chaque candidat.",
       "s2": "Classement Orbi",
-      "s2Sub": "Dès la première candidature, avec le « Pourquoi ? ».",
+      "s2Sub": "Dès la première candidature, avec le « Pourquoi ? ».",
       "s3": "Présélection",
       "s3Sub": "Vous choisissez qui avance.",
       "s4": "Entretiens",
@@ -20040,7 +20150,7 @@
   "hireV3Report": {
     "seo": "Rapport des offres",
     "title": "Rapport des offres",
-    "sub": "Rapport PDF, période : {period}",
+    "sub": "Rapport PDF, période : {period}",
     "back": "Offres",
     "copy": "Copier le lien",
     "copied": "Lien du rapport copié",
@@ -20060,7 +20170,7 @@
       "by": "Préparé par",
       "on": "Édité le"
     },
-    "rate": "{value} %",
+    "rate": "{value} %",
     "days": "{count} j",
     "none": "—",
     "s1": {
@@ -20087,8 +20197,8 @@
       "sources": "Sources",
       "sourcesUnit": "cand.",
       "keep": "À retenir",
-      "keepTop": "« {title} » reçoit le plus de candidatures : {count}.",
-      "keepSource": "{source} apporte {value} % des candidatures.",
+      "keepTop": "« {title} » reçoit le plus de candidatures : {count}.",
+      "keepSource": "{source} apporte {value} % des candidatures.",
       "keepPaused": "{count, plural, one {# offre est en pause.} other {# offres sont en pause.}}",
       "keepHigh": "{count, plural, =0 {Aucun profil à fort potentiel sur la période.} one {# profil à fort potentiel à rencontrer.} other {# profils à fort potentiel à rencontrer.}}",
       "keepEmpty": "Pas encore de candidature sur la période."
@@ -20120,8 +20230,8 @@
       "sub": "Comment les chiffres et les classements sont produits.",
       "c1": "Un matching sans biais",
       "c1Text": "Le score Orbi ne tient compte ni du nom, ni du genre, ni de l'âge, ni de la photo, ni de la nationalité, ni de l'adresse précise.",
-      "c2": "Toujours un « Pourquoi ? »",
-      "c2Text": "Chaque score s'accompagne de ses raisons : compétences, expérience, résultats aux tests.",
+      "c2": "Toujours un « Pourquoi ? »",
+      "c2Text": "Chaque score s'accompagne de ses raisons : compétences, expérience, résultats aux tests.",
       "c3": "L'humain décide",
       "c3Text": "Aucune candidature n'est rejetée automatiquement. Chaque refus part après un geste de l'équipe.",
       "c4": "Consultations journalisées",
@@ -20130,19 +20240,19 @@
       "d1": "Vue → candidature",
       "d1Text": "Candidatures reçues divisées par les vues de l'annonce.",
       "d2": "Fort potentiel",
-      "d2Text": "Compatibilité Orbi de 75 % ou plus avec les critères de l'offre.",
+      "d2Text": "Compatibilité Orbi de 75 % ou plus avec les critères de l'offre.",
       "d3": "Délai moyen",
       "d3Text": "Jours entre la candidature et le premier entretien.",
       "next": "Pistes pour la période suivante",
-      "nextPaused": "Décider de la reprise de « {title} »",
+      "nextPaused": "Décider de la reprise de « {title} »",
       "nextPausedText": "{count, plural, =0 {Aucune candidature en attente.} one {# candidature en attente.} other {# candidatures en attente.}}",
-      "nextClosing": "Relancer la diffusion de « {title} »",
+      "nextClosing": "Relancer la diffusion de « {title} »",
       "nextClosingText": "{count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} à {days} jours de la clôture.",
-      "nextHigh": "Planifier les entretiens de « {title} »",
+      "nextHigh": "Planifier les entretiens de « {title} »",
       "nextHighText": "{count, plural, one {# profil à fort potentiel à rencontrer.} other {# profils à fort potentiel à rencontrer.}}",
-      "nextEmpty": "Rien d'urgent : continuez à partager vos offres.",
+      "nextEmpty": "Rien d'urgent : continuez à partager vos offres.",
       "nextNote": "Ces pistes s'appuient sur les chiffres de la période. Elles ne remplacent pas la décision de l'équipe.",
-      "contact": "Une question sur ce rapport ?"
+      "contact": "Une question sur ce rapport ?"
     },
     "email": "assistant@jumanly.io",
     "logoName": "jumanly",
@@ -20179,13 +20289,13 @@
     "empty": "Aucune offre avec des candidatures pour l'instant.",
     "emptyOffer": "Aucune candidature pour cette offre.",
     "percent": "%",
-    "rate": "{value} %",
-    "score": "{value} %",
+    "rate": "{value} %",
+    "score": "{value} %",
     "conversion": "Passent à l'étape suivante",
     "toTest": "À tester",
     "next": "Passer {name} à l'étape suivante",
     "drop": "Déposez un candidat ici",
-    "moved": "{name} : {stage}",
+    "moved": "{name} : {stage}",
     "moveFailed": "Le déplacement n'a pas pu être fait.",
     "list": {
       "candidate": "Candidat",
@@ -20242,11 +20352,11 @@
     "wait": "Mettre en attente",
     "reject": "Ne pas retenir",
     "orbi": "Compatibilité Orbi",
-    "why": "Pourquoi ?",
+    "why": "Pourquoi ?",
     "noScore": "Pas encore de score pour cette candidature.",
     "orbiNote": "Calcul sans nom, âge, genre ni photo. Orbi recommande, vous décidez.",
     "percent": "%",
-    "value": "{value} %",
+    "value": "{value} %",
     "skills": "Compétences",
     "expected": "Attendu",
     "noSkills": "L'offre n'indique pas de compétence.",
@@ -20272,9 +20382,9 @@
     "questions": "Questions pour l'entretien",
     "questionsTag": "À partir de l'offre",
     "question": {
-      "skill": "Comment avez-vous pratiqué « {skill} » ? Donnez un exemple récent.",
+      "skill": "Comment avez-vous pratiqué « {skill} » ? Donnez un exemple récent.",
       "skillTag": "Point à creuser",
-      "answer": "Votre réponse à « {question} » : pouvez-vous en dire plus ?",
+      "answer": "Votre réponse à « {question} » : pouvez-vous en dire plus ?",
       "answerTag": "Présélection",
       "impact": "Racontez une réalisation dont vous êtes fier ou fière dans un poste proche.",
       "impactTag": "Impact"
@@ -20346,10 +20456,10 @@
       "close": "Fermer",
       "file": "Fiche candidat",
       "manage": "Reprogrammer",
-      "offer": "Offre : {title}"
+      "offer": "Offre : {title}"
     },
     "slotTitle": "Créneau libre",
-    "slotWho": "À qui proposer ce créneau ?",
+    "slotWho": "À qui proposer ce créneau ?",
     "slotEmpty": "Aucun candidat en cours à inviter.",
     "slotGo": "Proposer",
     "slotNote": "Le candidat choisit parmi les créneaux proposés depuis sa fiche.",
@@ -20370,9 +20480,9 @@
       "title": "{count, plural, one {# talent proche de <em>{offer}</em>} other {# talents proches de <em>{offer}</em>}}",
       "text": "Ils ont déjà accepté d'être recontactés. Vous décidez qui inviter.",
       "invite": "Inviter à postuler",
-      "why": "Proximité : les compétences demandées par l'offre qu'ils ont déjà. Nom, âge et photo ne comptent pas.",
+      "why": "Proximité : les compétences demandées par l'offre qu'ils ont déjà. Nom, âge et photo ne comptent pas.",
       "noneTitle": "Aucun talent proche pour le moment",
-      "none": "Personne dans votre vivier n'a encore la moitié des compétences demandées pour « {offer} ».",
+      "none": "Personne dans votre vivier n'a encore la moitié des compétences demandées pour « {offer} ».",
       "noOfferTitle": "Publiez une offre pour comparer votre vivier",
       "noOffer": "Orbi rapprochera vos talents gardés de votre prochaine offre publiée."
     },
@@ -20389,7 +20499,7 @@
     "add": "Ajouter un talent",
     "count": "{count, plural, one {talent} other {talents}}",
     "clear": "Effacer",
-    "percent": "{value} %",
+    "percent": "{value} %",
     "anon": "?",
     "anonymous": "Talent anonyme",
     "ringTitle": "Part des compétences demandées par l'offre",
@@ -20452,7 +20562,7 @@
         "sub": "Tests de compétences · {org}",
         "kicker": "Recrutement",
         "sheet": "Tests",
-        "empty": "Les tests de compétences arrivent bientôt : aucun résultat pour le moment.",
+        "empty": "Les tests de compétences arrivent bientôt : aucun résultat pour le moment.",
         "note": "Un test aide à décider, il ne décide jamais seul."
       },
       "equipe": {
@@ -20554,7 +20664,7 @@
     },
     "window": {
       "seo": "Télécharger",
-      "title": "Télécharger : {doc}",
+      "title": "Télécharger : {doc}",
       "close": "Fermer",
       "format": "Format",
       "content": "Contenu",
@@ -20596,20 +20706,20 @@
     "hero": {
       "kicker": "Synthèse Orbi · {period}",
       "title": "{count, plural, =0 {Aucune embauche} one {# embauche} other {# embauches}}, en <em>{delay}</em> jusqu'au premier entretien",
-      "text": "{count, plural, one {# candidature reçue} other {# candidatures reçues}}, dont {screened} {screened, plural, one {présélectionnée} other {présélectionnées}}. Orbi n'écarte personne : vous décidez à chaque étape.",
+      "text": "{count, plural, one {# candidature reçue} other {# candidatures reçues}}, dont {screened} {screened, plural, one {présélectionnée} other {présélectionnées}}. Orbi n'écarte personne : vous décidez à chaque étape.",
       "empty": "Aucune candidature sur la période. Partagez vos offres pour en recevoir."
     },
     "models": "Modèles de documents",
     "pdf": "Rapport complet en PDF",
     "none": "–",
     "days": "{value} j",
-    "percent": "{value} %",
+    "percent": "{value} %",
     "delta": {
       "none": "–",
-      "pct": "{value, number, ::sign-always} %",
-      "n": "{value, number, ::sign-always}",
-      "d": "{value, number, ::sign-always} j",
-      "pts": "{value, number, ::sign-always} pts"
+      "pct": "{value, number, ::sign-always} %",
+      "n": "{value, number, ::sign-always}",
+      "d": "{value, number, ::sign-always} j",
+      "pts": "{value, number, ::sign-always} pts"
     },
     "tiles": {
       "cand": {
@@ -20638,7 +20748,7 @@
       "kept": "retenues"
     },
     "sources": {
-      "title": "D'où viennent-ils ?",
+      "title": "D'où viennent-ils ?",
       "unit": "candidatures",
       "direct": "Candidature directe",
       "invitation": "Invitation",
@@ -20652,8 +20762,8 @@
       "test": "Évaluation",
       "interview": "Entretien",
       "offer": "Offre",
-      "all": "100 %",
-      "ofTotal": "{value} % du total"
+      "all": "100 %",
+      "ofTotal": "{value} % du total"
     },
     "delay": {
       "title": "Délai jusqu'au premier entretien",
@@ -20760,8 +20870,8 @@
       "guides": "Guides",
       "ecrire": "Nous écrire"
     },
-    "hero": "Comment pouvons-nous vous aider, {name} ?",
-    "search": "Une question : refus, offre, agenda, facture…",
+    "hero": "Comment pouvons-nous vous aider, {name} ?",
+    "search": "Une question : refus, offre, agenda, facture…",
     "searchLabel": "Chercher dans l'aide",
     "popular": "Souvent cherché",
     "pop": {
@@ -20792,31 +20902,31 @@
     "faqTitle": "Questions fréquentes",
     "faq": {
       "q1": {
-        "q": "Orbi peut-il refuser un candidat à ma place ?",
+        "q": "Orbi peut-il refuser un candidat à ma place ?",
         "a": "Non. Orbi classe et explique, il n'écarte jamais personne. Chaque refus demande un geste de votre part."
       },
       "q2": {
-        "q": "Sur quoi repose le pourcentage de compatibilité ?",
-        "a": "Sur les compétences, l'expérience, la formation, les langues et les critères de l'offre. Le nom, l'âge, le genre, la photo et l'origine ne comptent jamais. Le bouton « Pourquoi ? » montre le détail."
+        "q": "Sur quoi repose le pourcentage de compatibilité ?",
+        "a": "Sur les compétences, l'expérience, la formation, les langues et les critères de l'offre. Le nom, l'âge, le genre, la photo et l'origine ne comptent jamais. Le bouton « Pourquoi ? » montre le détail."
       },
       "q3": {
-        "q": "Les candidats paient-ils pour postuler ?",
+        "q": "Les candidats paient-ils pour postuler ?",
         "a": "Non, postuler est toujours gratuit, quelle que soit la formule."
       },
       "q4": {
-        "q": "Comment partager une offre ?",
+        "q": "Comment partager une offre ?",
         "a": "Ouvrez l'offre, onglet Partage, puis copiez le lien ou utilisez le bouton du réseau."
       },
       "q5": {
-        "q": "Comment proposer un entretien ?",
-        "a": "Depuis la fiche du candidat ou l'agenda : choisissez un créneau libre, le candidat confirme."
+        "q": "Comment proposer un entretien ?",
+        "a": "Depuis la fiche du candidat ou l'agenda : choisissez un créneau libre, le candidat confirme."
       },
       "q6": {
-        "q": "Combien de places compte ma formule ?",
+        "q": "Combien de places compte ma formule ?",
         "a": "Votre formule et vos places sont visibles dans Formule. Pour en ajouter, écrivez-nous à assistant@jumanly.io."
       }
     },
-    "helpful": "Cette réponse ne vous aide pas ?",
+    "helpful": "Cette réponse ne vous aide pas ?",
     "notHelpful": "Nous écrire",
     "empty": "Aucune réponse trouvée",
     "steps": {
@@ -20830,11 +20940,11 @@
       "title": "Nous écrire",
       "text": "Nous répondons par e-mail, en français.",
       "button": "Écrire au support",
-      "noPhone": "Pas de numéro de téléphone : tout passe par e-mail, avec une trace écrite."
+      "noPhone": "Pas de numéro de téléphone : tout passe par e-mail, avec une trace écrite."
     },
     "write": {
       "title": "Nouvelle demande",
-      "sub": "Choisissez un sujet : votre messagerie s'ouvre",
+      "sub": "Choisissez un sujet : votre messagerie s'ouvre",
       "text": "Décrivez la situation (page, offre, candidat concerné) et joignez une capture si besoin."
     },
     "guideN": "{n}",
@@ -20846,7 +20956,7 @@
       },
       "g2": {
         "title": "Lire une short-list Orbi",
-        "sub": "Le « Pourquoi ? » expliqué"
+        "sub": "Le « Pourquoi ? » expliqué"
       },
       "g3": {
         "title": "Proposer des créneaux",
@@ -20936,7 +21046,7 @@
       "amount": "Montant",
       "also": "Moyens acceptés",
       "alsoValue": "Mobile Money ou carte",
-      "question": "Une question : assistant@jumanly.io"
+      "question": "Une question : assistant@jumanly.io"
     },
     "usd": "{value} USD",
     "none": "–",

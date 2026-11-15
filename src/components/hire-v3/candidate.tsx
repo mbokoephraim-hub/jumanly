@@ -7,7 +7,7 @@ import type { CandidateV3 } from "@/server/services/hire-v3-candidates";
 import { avatarColor, initialsOf } from "./avatar";
 import { arcSvg, radarSvg } from "./charts";
 import { HireIcon, type HireIconName } from "./icon";
-import { clsOf } from "./kanban";
+import { clsOf } from "./score-class";
 import { HirePage } from "./page-head";
 import { HireTabs } from "./tabs";
 

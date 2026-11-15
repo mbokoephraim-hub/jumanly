@@ -17,7 +17,8 @@ export function nice(v: number, t = 4) {
   const raw = Math.max(v, 1) / t;
   const p = Math.pow(10, Math.floor(Math.log10(raw)));
   const f = raw / p;
-  const st = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p;
+  // The charts count people: never a step under 1 (no « 0.5 » or « 1.5 » on an empty axis).
+  const st = Math.max(1, (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p);
   return { max: Math.ceil(v / st) * st || st * t, step: st };
 }
 

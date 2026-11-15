@@ -21,8 +21,7 @@ function bellIcon(type: string): HireIconName {
 
 /**
  * Texts, links and figures of the frame of the recruiter's web app v3 (docs/mvp-web-recruteur/
- * prototype-v3, `TOPNAV` and `SIDENAV`). The tools « Tests » and « Suivi automatique » of the
- * prototype join the rail with their screens (lots V3-3 and V3-4).
+ * prototype-v3, `TOPNAV` and `SIDENAV`): the seven buttons of the rail.
  */
 export async function hireV3FrameProps(
   db: PrismaClient,
@@ -64,6 +63,8 @@ export async function hireV3FrameProps(
   ];
   const tools: HireV3Link[] = [
     { href: "/app/hire/entreprise", label: t("tools.company"), icon: "r_build" },
+    { href: "/app/hire/tests", label: t("tools.tests"), icon: "r_tests" },
+    { href: "/app/hire/suivi", label: t("tools.automation"), icon: "r_suivi" },
     { href: "/app/hire/compte/equipe", label: t("tools.team"), icon: "r_team" },
     { href: "/app/hire/compte/formule", label: t("tools.plan"), icon: "r_card" },
   ];
