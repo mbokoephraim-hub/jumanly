@@ -16313,6 +16313,64 @@ Conventions :
 | `hireV3Suivi.tabs.history` | Historique |
 | `hireV3Suivi.emptyTitle` | Les règles de suivi arrivent sur cette page |
 | `hireV3Suivi.emptyText` | L'accusé de réception part dès la candidature ; les relances suivent les règles ci-dessous. |
+| `hireV3Messages.title` | Messages |
+| `hireV3Messages.unread` | {count, plural, =0 {Tout est lu} one {# conversation non lue} other {# conversations non lues}} |
+| `hireV3Messages.tabs.all` | Tous |
+| `hireV3Messages.tabs.candidates` | Candidats |
+| `hireV3Messages.tabs.team` | Équipe |
+| `hireV3Messages.search` | Rechercher une personne ou un message |
+| `hireV3Messages.orbi.title` | Orbi résume vos non-lus |
+| `hireV3Messages.orbi.sub` | {messages, plural, one {# message} other {# messages}} · {people, plural, one {# personne} other {# personnes}} |
+| `hireV3Messages.orbi.none` | Rien à résumer pour l'instant |
+| `hireV3Messages.orbi.question` | Résume mes messages non lus et dis-moi à qui répondre en premier. |
+| `hireV3Messages.groups.unread` | Non lus |
+| `hireV3Messages.groups.all` | Conversations |
+| `hireV3Messages.groups.earlier` | Plus tôt |
+| `hireV3Messages.emptyList` | Aucune conversation |
+| `hireV3Messages.emptyListText.all` | Une conversation s'ouvre avec chaque candidature, et avec un collègue depuis l'équipe. |
+| `hireV3Messages.emptyListText.candidates` | Une conversation s'ouvre avec chaque candidature. |
+| `hireV3Messages.emptyListText.team` | Écrivez à un collègue depuis la page Équipe. |
+| `hireV3Messages.team` | Équipe |
+| `hireV3Messages.candidate` | Candidat |
+| `hireV3Messages.candidateFor` | Candidature · {job} |
+| `hireV3Messages.online` | En ligne |
+| `hireV3Messages.you` | Vous : {text} |
+| `hireV3Messages.noMessage` | Pas encore de message |
+| `hireV3Messages.yesterday` | Hier |
+| `hireV3Messages.today` | Aujourd'hui |
+| `hireV3Messages.timeRead` | {time} · Lu |
+| `hireV3Messages.agenda` | Agenda |
+| `hireV3Messages.file` | Fiche candidat |
+| `hireV3Messages.proximity` | Proximité {score} % |
+| `hireV3Messages.interviewAt` | Entretien {date} |
+| `hireV3Messages.writeTo` | Écrire à {name}… |
+| `hireV3Messages.send` | Envoyer |
+| `hireV3Messages.templates` | Vos modèles |
+| `hireV3Messages.askOrbi` | Demander à Orbi |
+| `hireV3Messages.help` | Besoin d'aide ? |
+| `hireV3Messages.orbiReply` | Aide-moi à répondre à {name}. |
+| `hireV3Messages.readOnly` | Vous pouvez lire cette conversation ; seuls les membres qui gèrent les offres y répondent. |
+| `hireV3Messages.left` | Ce collègue a quitté l'organisation : la conversation reste lisible. |
+| `hireV3Messages.percent` | {value} % |
+| `hireV3Messages.k.proximity` | proximité |
+| `hireV3Messages.k.test` | test /100 |
+| `hireV3Messages.k.documents` | documents |
+| `hireV3Messages.noInterview` | Pas d'entretien prévu |
+| `hireV3Messages.noInterviewSub` | Proposez un créneau depuis la fiche |
+| `hireV3Messages.interview` | Entretien confirmé |
+| `hireV3Messages.applied` | Candidature du {date} |
+| `hireV3Messages.openFile` | Ouvrir la fiche |
+| `hireV3Messages.kept` | Échanges conservés dans le dossier, visibles par l'équipe. |
+| `hireV3Messages.keptTeam` | Échanges entre vous deux, dans votre organisation. |
+| `hireV3Messages.teamLine` | {role} · Équipe |
+| `hireV3Messages.interviews` | {count, plural, =0 {Aucun entretien à venir} one {# entretien à venir} other {# entretiens à venir}} |
+| `hireV3Messages.interviewsSub` | auquel ce collègue participe |
+| `hireV3Messages.nextWith` | Entretien avec {name} |
+| `hireV3Messages.noneOpen` | Choisissez une conversation |
+| `hireV3Messages.noneOpenText` | Les messages des candidats et de l'équipe s'affichent ici. |
+| `hireV3Messages.errors.blocked` | Cette personne ne reçoit plus les messages de votre organisation. |
+| `hireV3Messages.errors.tooMany` | Trop de messages d'un coup : réessayez dans un instant. |
+| `hireV3Messages.errors.invalid` | Le message est vide ou trop long. |
 | `hireV3Suivi.historySub` | Tous les envois automatiques, du plus récent au plus ancien |
 | `hireV3Suivi.templates` | Modèles d'e-mails |
 | `hireV3Suivi.flash.on` | Règle activée pour toutes vos offres. |

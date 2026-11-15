@@ -20073,6 +20073,78 @@
       "slot": "Bonjour, petit rappel : {company} vous a proposé des créneaux d'entretien pour l'offre « {job} ». Choisissez celui qui vous convient, ou proposez un autre moment."
     }
   },
+  "hireV3Messages": {
+    "title": "Messages",
+    "unread": "{count, plural, =0 {Tout est lu} one {# conversation non lue} other {# conversations non lues}}",
+    "tabs": {
+      "all": "Tous",
+      "candidates": "Candidats",
+      "team": "Équipe"
+    },
+    "search": "Rechercher une personne ou un message",
+    "orbi": {
+      "title": "Orbi résume vos non-lus",
+      "sub": "{messages, plural, one {# message} other {# messages}} · {people, plural, one {# personne} other {# personnes}}",
+      "none": "Rien à résumer pour l'instant",
+      "question": "Résume mes messages non lus et dis-moi à qui répondre en premier."
+    },
+    "groups": {
+      "unread": "Non lus",
+      "all": "Conversations",
+      "earlier": "Plus tôt"
+    },
+    "emptyList": "Aucune conversation",
+    "emptyListText": {
+      "all": "Une conversation s'ouvre avec chaque candidature, et avec un collègue depuis l'équipe.",
+      "candidates": "Une conversation s'ouvre avec chaque candidature.",
+      "team": "Écrivez à un collègue depuis la page Équipe."
+    },
+    "team": "Équipe",
+    "candidate": "Candidat",
+    "candidateFor": "Candidature · {job}",
+    "online": "En ligne",
+    "you": "Vous : {text}",
+    "noMessage": "Pas encore de message",
+    "yesterday": "Hier",
+    "today": "Aujourd'hui",
+    "timeRead": "{time} · Lu",
+    "agenda": "Agenda",
+    "file": "Fiche candidat",
+    "proximity": "Proximité {score} %",
+    "interviewAt": "Entretien {date}",
+    "writeTo": "Écrire à {name}…",
+    "send": "Envoyer",
+    "templates": "Vos modèles",
+    "askOrbi": "Demander à Orbi",
+    "help": "Besoin d'aide ?",
+    "orbiReply": "Aide-moi à répondre à {name}.",
+    "readOnly": "Vous pouvez lire cette conversation ; seuls les membres qui gèrent les offres y répondent.",
+    "left": "Ce collègue a quitté l'organisation : la conversation reste lisible.",
+    "percent": "{value} %",
+    "k": {
+      "proximity": "proximité",
+      "test": "test /100",
+      "documents": "documents"
+    },
+    "noInterview": "Pas d'entretien prévu",
+    "noInterviewSub": "Proposez un créneau depuis la fiche",
+    "interview": "Entretien confirmé",
+    "applied": "Candidature du {date}",
+    "openFile": "Ouvrir la fiche",
+    "kept": "Échanges conservés dans le dossier, visibles par l'équipe.",
+    "keptTeam": "Échanges entre vous deux, dans votre organisation.",
+    "teamLine": "{role} · Équipe",
+    "interviews": "{count, plural, =0 {Aucun entretien à venir} one {# entretien à venir} other {# entretiens à venir}}",
+    "interviewsSub": "auquel ce collègue participe",
+    "nextWith": "Entretien avec {name}",
+    "noneOpen": "Choisissez une conversation",
+    "noneOpenText": "Les messages des candidats et de l'équipe s'affichent ici.",
+    "errors": {
+      "blocked": "Cette personne ne reçoit plus les messages de votre organisation.",
+      "tooMany": "Trop de messages d'un coup : réessayez dans un instant.",
+      "invalid": "Le message est vide ou trop long."
+    }
+  },
   "hireV3Home": {
     "seo": "Accueil",
     "hello": "Bonjour, {name}",

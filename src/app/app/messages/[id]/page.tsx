@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { RecruiterThread } from "@/components/recruiter/thread";
 import { PhoneThreadPage } from "@/components/phone/messages/server";
 import { isModelB } from "@/server/phone-routes";
+import { isHireScope } from "@/lib/product-scope";
 import { RhConversation } from "@/components/phone/recruteur/conversation";
 import { RhMessages, RhMessagesTexts } from "@/components/phone/recruteur/messages";
 import { isPhone } from "@/server/view";
@@ -88,6 +89,8 @@ export default async function ThreadPage({
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const context = await connectViewer(`/app/messages/${id}`);
   if (context.viewer.hire) {
+    // Mode MVP: the conversation opens in the messaging of the web app v3 (lot 5).
+    if (isHireScope()) redirect(`/app/messages?c=${encodeURIComponent(id.slice(0, 60))}`);
     // On a phone, the recruiter's conversation of Modèle B (lot M7).
     if (await isModelB()) {
       const conversation = (
