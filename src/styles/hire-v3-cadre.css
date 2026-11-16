@@ -310,3 +310,12 @@ html[data-theme="dark"] :where(.hv3) .nwf > textarea {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Fiche membre (lot 6): a box title never breaks inside a word; its note goes under it. */
+:where(.hv3) .content[data-view="membre"] .tsh {
+  flex-wrap: wrap;
+  row-gap: 4px;
+}
+:where(.hv3) .content[data-view="membre"] .tsh h3 {
+  white-space: nowrap;
+}

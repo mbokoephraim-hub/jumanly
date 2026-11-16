@@ -7,7 +7,7 @@ import { HirePage, HirePageHead } from "./page-head";
 
 type Team = Awaited<ReturnType<typeof teamV3>>;
 type Log = Awaited<ReturnType<typeof consultationLog>>;
-const LOAD_COLOURS: Record<(typeof TEAM_LOAD)[number], string> = {
+export const LOAD_COLOURS: Record<(typeof TEAM_LOAD)[number], string> = {
   interviews: "#F2994A",
   follow: "#4C8DF6",
   diagnostic: "#8B6CF0",
@@ -182,7 +182,11 @@ export async function HireV3Team({
               </span>
               <span style={{ minWidth: 0 }}>
                 <b className="tr" style={{ display: "block" }}>
-                  {m.name}
+                  {canAdminister || m.me ? (
+                    <Link href={`/app/hire/compte/equipe/${m.id}`}>{m.name}</Link>
+                  ) : (
+                    m.name
+                  )}
                   {m.me ? (
                     <>
                       {" "}
