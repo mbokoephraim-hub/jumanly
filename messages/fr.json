@@ -21174,15 +21174,16 @@
     "title": "Vivier",
     "sub": "Les talents gardés pour plus tard, avec leur accord.",
     "tabs": {
-      "tous": "Tous · {count}",
-      "disponibles": "Disponibles · {count}",
-      "proches": "Proches de l'offre · {count}"
+      "tous": "Tous",
+      "favoris": "Favoris",
+      "relances": "Relancés"
     },
     "hero": {
       "kicker": "Orbi a trouvé dans votre vivier",
       "title": "{count, plural, one {# talent proche de <em>{offer}</em>} other {# talents proches de <em>{offer}</em>}}",
       "text": "Ils ont déjà accepté d'être recontactés. Vous décidez qui inviter.",
-      "invite": "Inviter à postuler",
+      "invite": "{count, plural, one {Inviter à postuler} other {Inviter les # à postuler}}",
+      "whyButton": "Pourquoi eux ?",
       "why": "Proximité : les compétences demandées par l'offre qu'ils ont déjà. Nom, âge et photo ne comptent pas.",
       "noneTitle": "Aucun talent proche pour le moment",
       "none": "Personne dans votre vivier n'a encore la moitié des compétences demandées pour « {offer} ».",
@@ -21194,9 +21195,23 @@
       "sub": "Cliquez pour filtrer",
       "consent": "Tous avec accord",
       "talents": "talents",
-      "available": "disponibles",
-      "close": "proches",
-      "pools": "viviers"
+      "favorites": "favoris",
+      "relances": "relancés",
+      "renew": "à renouveler"
+    },
+    "crit": {
+      "comp": "Compétences",
+      "dom": "Domaine",
+      "ville": "Ville",
+      "dispo": "Disponibilité",
+      "sc": "Proximité",
+      "acc": "Accord",
+      "dispoYes": "Disponible tout de suite",
+      "dispoNo": "Avec préavis",
+      "scMin": "{value} % et plus",
+      "accSoon": "À renouveler sous 3 mois",
+      "accOk": "Valable plus de 3 mois",
+      "none": "Aucune valeur dans votre vivier pour l'instant."
     },
     "search": "Rechercher un nom, un métier, une compétence…",
     "add": "Ajouter un talent",
@@ -21208,8 +21223,17 @@
     "ringTitle": "Part des compétences demandées par l'offre",
     "available": "Disponible",
     "listening": "À l'écoute",
-    "applied": "A déjà postulé",
-    "visible": "Profil visible",
+    "consent": "Accord {date}",
+    "relance": "{days, plural, =0 {Relancé aujourd'hui, sans réponse} one {Relancé il y a # j, sans réponse} other {Relancé il y a # j, sans réponse}}",
+    "favoriteAdd": "Ajouter aux favoris",
+    "favoriteRemove": "Retirer des favoris",
+    "write": "Écrire à {name}",
+    "emptyTab": {
+      "favoris": "Aucun favori pour l'instant",
+      "favorisText": "Touchez le cœur d'une carte pour garder un talent sous la main.",
+      "relances": "Personne n'attend de réponse",
+      "relancesText": "Les talents invités qui n'ont pas encore répondu apparaissent ici."
+    },
     "forOffer": "Pour {offer}",
     "keep": "À garder pour une prochaine offre",
     "invite": "Inviter",

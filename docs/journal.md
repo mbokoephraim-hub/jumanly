@@ -5953,3 +5953,20 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
   d'un membre dans Équipe ouvre sa fiche.
 - Formule et Rapports étaient déjà alignés (lots V3-5 et V3-6) : rien à changer.
 - Test en base `tests/db/hire-v3-company.test.ts`.
+
+## 2026-11-16 · Hire v3 aligné sur le prototype, Vivier
+
+- `/app/hire/viviers` reproduit `V.vivier` en mode Hire : plus de titre de page ; la barre porte
+  « Télécharger », les onglets « Tous · Favoris · Relancés », la recherche et « Ajouter un talent ».
+  Sous la barre, les critères du prototype (Compétences, Domaine, Ville, Disponibilité, Proximité,
+  Accord) filtrent les cartes dans la page, comme la recherche ; le donut et « à renouveler »
+  filtrent aussi.
+- Favoris : nouveau champ `TalentPoolEntry.favoriteAt` (migration `vivier_favorites`), cœur sur
+  chaque carte, posé sur toutes les entrées du talent dans les viviers que le membre voit.
+- Relancés : talents à qui l'organisation a envoyé une proposition encore sans réponse (« Relancé il
+  y a N j, sans réponse », depuis la dernière relance ou l'envoi).
+- Accord : valable 24 mois après l'entrée dans le vivier ou l'acceptation d'une proposition (brief
+  MVP M8) ; « à renouveler » quand il reste moins de 3 mois. Voir
+  `docs/decisions/2026-11-16-vivier-accord-favoris.md`.
+- Carte : ville du talent, date d'accord, bouton « Écrire » seulement quand une conversation existe.
+- Test en base `tests/db/hire-v3-vivier.test.ts`.
