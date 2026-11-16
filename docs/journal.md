@@ -5922,3 +5922,18 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
 - `/app/hire/suivi` reproduit `V.suivi` : trois choses à voir, quatre chiffres réels, parcours
   d'une candidature, règles avec interrupteurs, messages par jour, derniers envois ; onglet
   « Historique » avec le résultat de chaque envoi (test rendu, créneau choisi…).
+
+## 2026-11-16 · Hire v3 aligné sur le prototype, lot 5 (messages du recruteur)
+
+- `/app/messages` reproduit `V.messages` en mode Hire : liste (recherche, « Orbi résume vos
+  non-lus », conversations), discussion au milieu, panneau du candidat à droite (étape, proximité,
+  test, documents, entretien prévu, « Ouvrir la fiche »). Onglets « Tous », « Candidats »,
+  « Équipe ». Les anciennes adresses `/app/messages/[id]` et `/app/messages/equipe/[id]` mènent à
+  la même page (`?c=` ou `?equipe=`).
+- Service `src/server/services/hire-v3-messages.ts` : chaque lecture passe par l'organisation et les
+  offres que le membre voit ; ouvrir une discussion la marque comme lue. Les relations personnelles
+  du membre restent sur le téléphone.
+- Sous la zone d'écriture : les modèles de l'organisation (convocation, document, relance) en
+  pastilles, sinon « Besoin d'aide ? Demander à Orbi ». Rien ne part sans le clic « Envoyer ».
+- Téléphone : la colonne unique ne s'élargit plus avec une ligne longue.
+- Test en base `tests/db/hire-v3-messages.test.ts` (lecture et isolation des organisations).

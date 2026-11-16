@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { RhTeamConversation } from "@/components/phone/recruteur/conversation";
 import { RhMessagesTexts } from "@/components/phone/recruteur/messages";
@@ -10,6 +10,7 @@ import { requireHire } from "@/server/hire-context";
 import { HireError } from "@/server/services/hire";
 import { teamThread } from "@/server/services/hire-phone-messages";
 import { isModelB } from "@/server/phone-routes";
+import { isHireScope } from "@/lib/product-scope";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("phoneRhMessages");
@@ -27,6 +28,8 @@ export default async function TeamThreadPage({
 }: PageProps<"/app/messages/equipe/[id]">) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const { ctx } = await requireHire(`/app/messages/equipe/${id}`);
+  // Mode MVP: the conversation opens in the messaging of the web app v3 (lot 5).
+  if (isHireScope()) redirect(`/app/messages?equipe=${encodeURIComponent(id.slice(0, 60))}`);
   if (await isModelB())
     return (
       <RhMessagesTexts>

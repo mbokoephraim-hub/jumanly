@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { RecruiterInbox } from "@/components/recruiter/inbox";
+import { HireV3MessagesPage } from "@/components/hire-v3/messages-page";
+import { isHireScope } from "@/lib/product-scope";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { firstConversation, InboxList } from "@/components/talent/messages/inbox-list";
@@ -34,6 +36,8 @@ export default async function MessagesPage({ searchParams }: PageProps<"/app/mes
   const { viewer } = await connectViewer("/app/messages");
   // A recruiting team: the Messages tab of the recruiter space (recruteur lot 5, planche MSG_R).
   if (viewer.hire) {
+    // Mode MVP: the messaging of the web app v3 (prototype v3, `V.messages`), phone included.
+    if (isHireScope()) return <HireV3MessagesPage ctx={viewer.hire} params={params} />;
     // On a phone, the recruiter's Messages tab of Modèle B (lot M7).
     if (await isModelB())
       return (

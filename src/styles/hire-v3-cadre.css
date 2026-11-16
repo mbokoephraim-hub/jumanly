@@ -298,3 +298,15 @@ html[data-theme="dark"] :where(.hv3) .nwf > textarea {
 :where(.hv3) .nwf > :disabled {
   opacity: 0.7;
 }
+
+/* Messages (lot 5): the page head of `V.messages` is `.ph.mxph` (closer to the three columns). */
+:where(.hv3) .content[data-view="messages"] > .ph {
+  margin-bottom: 14px;
+}
+
+/* Messages on a phone: a long line (template chips, a link) must not widen the single column. */
+@media (max-width: 760px) {
+  :where(.hv3) .content[data-view="messages"] .mx {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
