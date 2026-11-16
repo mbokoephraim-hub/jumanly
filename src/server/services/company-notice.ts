@@ -10,6 +10,7 @@ import type { PrismaClient } from "@/generated/prisma/client";
 import { t } from "../../../emails/_components/translator";
 import { ensureApplicationConversation } from "./connect";
 import { getOrgJob, HireError, hirePermissions, type HireContext } from "./hire";
+import { ruleEnabled } from "./hire-v3-automation";
 import { notify } from "./notifications";
 
 export type CompanyNoticeVariant = "received" | "retained";
@@ -64,12 +65,20 @@ export async function postCompanyNotice(
     select: {
       id: true,
       createdAt: true,
-      job: { select: { title: true, organization: { select: { name: true } } } },
+      job: {
+        select: { title: true, organizationId: true, organization: { select: { name: true } } },
+      },
       profile: {
         select: { user: { select: { id: true, email: true, firstName: true, name: true } } },
       },
     },
   });
+  // « Suivi automatique » (Hire v3, lot 4): the organization may turn the acknowledgement off.
+  if (
+    variant === "received" &&
+    !(await ruleEnabled(db, application.job.organizationId, "acknowledgement"))
+  )
+    return null;
   const conversation = await ensureApplicationConversation(db, applicationId);
   if (conversation.blockedAt) return null;
   const talent = application.profile.user;

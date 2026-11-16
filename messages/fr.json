@@ -19936,7 +19936,142 @@
       "history": "Historique"
     },
     "emptyTitle": "Les règles de suivi arrivent sur cette page",
-    "emptyText": "L'accusé de réception automatique fonctionne déjà. Les relances et rappels se régleront bientôt ici."
+    "emptyText": "L'accusé de réception part dès la candidature ; les relances suivent les règles ci-dessous.",
+    "historySub": "Tous les envois automatiques, du plus récent au plus ancien",
+    "templates": "Modèles d'e-mails",
+    "flash": {
+      "on": "Règle activée pour toutes vos offres.",
+      "off": "Règle coupée pour toutes vos offres.",
+      "forbidden": "Seuls les membres qui gèrent les offres peuvent changer les règles.",
+      "invalid": "Cette règle n'existe pas."
+    },
+    "rules": {
+      "acknowledgement": {
+        "title": "Accusé de réception",
+        "when": "Dès la candidature"
+      },
+      "testReminder": {
+        "title": "Relance du test",
+        "when": "2 jours puis 4 jours après l'envoi"
+      },
+      "slotReminder": {
+        "title": "Relance du créneau",
+        "when": "2 jours après les créneaux proposés"
+      },
+      "interviewReminder": {
+        "title": "Rappel d'entretien",
+        "when": "La veille de l'entretien"
+      },
+      "piecesReminder": {
+        "title": "Pièces manquantes",
+        "when": "2 jours avant la date limite, puis la veille"
+      },
+      "decisionReply": {
+        "title": "Réponse aux non retenus",
+        "when": "10 minutes après votre décision, annulable",
+        "locked": "Toujours active : elle ne part qu'après votre décision"
+      },
+      "morningDigest": {
+        "title": "Résumé du matin",
+        "when": "Chaque jour, les nouvelles candidatures, pour vous"
+      }
+    },
+    "results": {
+      "sent": "Envoyé",
+      "submitted": "Test rendu",
+      "notSubmitted": "Pas encore rendu",
+      "booked": "Créneau choisi",
+      "notBooked": "Pas encore choisi",
+      "waiting": "Part bientôt, annulable"
+    },
+    "hk": {
+      "sent": "Envoyés",
+      "sentSub": "cette semaine",
+      "answers": "Réponses",
+      "answersSub": "test rendu ou créneau choisi",
+      "waiting": "En attente",
+      "waitingSub": "réponses qui partent bientôt",
+      "rules": "Règles actives",
+      "rulesSub": "pour toutes vos offres"
+    },
+    "ratio": "{a} / {b}",
+    "last": "Derniers envois",
+    "lastSub": "Chaque envoi est conservé dans le dossier du candidat",
+    "lastLine": "{name} · {when}",
+    "historyEmpty": "Aucun envoi automatique pour l'instant",
+    "historyEmptyText": "Le premier accusé de réception s'affichera ici dès la prochaine candidature.",
+    "cols": {
+      "candidate": "Candidat",
+      "rule": "Règle",
+      "when": "Quand",
+      "result": "Résultat"
+    },
+    "todo": {
+      "pending": "{count, plural, =0 {Aucune réponse en attente} one {# réponse part bientôt} other {# réponses partent bientôt}}",
+      "pendingFirst": "{name} · part dans {minutes} min, annulable",
+      "pendingNone": "Un refus ne part qu'après votre décision",
+      "pendingGo": "Voir",
+      "tests": "{count, plural, =0 {Tous les tests envoyés sont rendus} one {# test pas encore rendu} other {# tests pas encore rendus}}",
+      "testsSub": "Relance automatique 2 jours puis 4 jours après l'envoi",
+      "testsGo": "Tests",
+      "digestOn": "Demain à {time}, par e-mail",
+      "digestOff": "Désactivé pour vous",
+      "digestStop": "Couper",
+      "digestStart": "Activer"
+    },
+    "kpi": {
+      "sent": "Messages envoyés",
+      "sentUp": "↑ {count} de plus que la semaine passée",
+      "sentSub": "cette semaine",
+      "slots": "Créneaux choisis après relance",
+      "slotsSub": "{count, plural, one {sur # relance} other {sur # relances}}",
+      "tests": "Tests rendus après relance",
+      "testsSub": "{count, plural, one {sur # relance} other {sur # relances}}",
+      "saved": "Temps gagné",
+      "savedValue": "{hours} h {minutes}",
+      "savedSub": "estimation : {minutes} min par message"
+    },
+    "flow": {
+      "title": "Parcours d'une candidature",
+      "sub": "Ce qui part seul, étape par étape",
+      "received": {
+        "title": "Candidature reçue",
+        "text": "Accusé envoyé tout de suite"
+      },
+      "test": {
+        "title": "Test envoyé",
+        "text": "Relance 2 jours puis 4 jours"
+      },
+      "slot": {
+        "title": "Créneaux proposés",
+        "text": "Relance 2 jours après"
+      },
+      "interview": {
+        "title": "Entretien",
+        "text": "Rappel la veille"
+      },
+      "decision": {
+        "title": "Votre décision",
+        "text": "Rien ne part sans vous"
+      }
+    },
+    "rulesTitle": "Règles",
+    "active": "{on} actives sur {total}",
+    "groups": {
+      "candidates": "Vers les candidats · relances",
+      "approval": "Avec votre accord",
+      "you": "Pour vous"
+    },
+    "sends": "{count, plural, one {# envoi} other {# envois}}",
+    "noSend": "Aucun envoi",
+    "digestAt": "Chaque jour à {time}",
+    "digestOff": "Désactivé",
+    "perDay": "Messages par jour",
+    "seeAll": "Tout voir",
+    "mail": {
+      "test": "Bonjour, petit rappel : {company} vous a proposé le test « {title} » pour l'offre « {job} ». Vous pouvez le passer quand vous voulez. Ne pas le passer ne vous écarte pas : l'équipe lit toujours votre candidature.",
+      "slot": "Bonjour, petit rappel : {company} vous a proposé des créneaux d'entretien pour l'offre « {job} ». Choisissez celui qui vous convient, ou proposez un autre moment."
+    }
   },
   "hireV3Home": {
     "seo": "Accueil",

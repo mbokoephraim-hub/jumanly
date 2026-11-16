@@ -16312,7 +16312,98 @@ Conventions :
 | `hireV3Suivi.tabs.rules` | Règles |
 | `hireV3Suivi.tabs.history` | Historique |
 | `hireV3Suivi.emptyTitle` | Les règles de suivi arrivent sur cette page |
-| `hireV3Suivi.emptyText` | L'accusé de réception automatique fonctionne déjà. Les relances et rappels se régleront bientôt ici. |
+| `hireV3Suivi.emptyText` | L'accusé de réception part dès la candidature ; les relances suivent les règles ci-dessous. |
+| `hireV3Suivi.historySub` | Tous les envois automatiques, du plus récent au plus ancien |
+| `hireV3Suivi.templates` | Modèles d'e-mails |
+| `hireV3Suivi.flash.on` | Règle activée pour toutes vos offres. |
+| `hireV3Suivi.flash.off` | Règle coupée pour toutes vos offres. |
+| `hireV3Suivi.flash.forbidden` | Seuls les membres qui gèrent les offres peuvent changer les règles. |
+| `hireV3Suivi.flash.invalid` | Cette règle n'existe pas. |
+| `hireV3Suivi.rules.acknowledgement.title` | Accusé de réception |
+| `hireV3Suivi.rules.acknowledgement.when` | Dès la candidature |
+| `hireV3Suivi.rules.testReminder.title` | Relance du test |
+| `hireV3Suivi.rules.testReminder.when` | 2 jours puis 4 jours après l'envoi |
+| `hireV3Suivi.rules.slotReminder.title` | Relance du créneau |
+| `hireV3Suivi.rules.slotReminder.when` | 2 jours après les créneaux proposés |
+| `hireV3Suivi.rules.interviewReminder.title` | Rappel d'entretien |
+| `hireV3Suivi.rules.interviewReminder.when` | La veille de l'entretien |
+| `hireV3Suivi.rules.piecesReminder.title` | Pièces manquantes |
+| `hireV3Suivi.rules.piecesReminder.when` | 2 jours avant la date limite, puis la veille |
+| `hireV3Suivi.rules.decisionReply.title` | Réponse aux non retenus |
+| `hireV3Suivi.rules.decisionReply.when` | 10 minutes après votre décision, annulable |
+| `hireV3Suivi.rules.decisionReply.locked` | Toujours active : elle ne part qu'après votre décision |
+| `hireV3Suivi.rules.morningDigest.title` | Résumé du matin |
+| `hireV3Suivi.rules.morningDigest.when` | Chaque jour, les nouvelles candidatures, pour vous |
+| `hireV3Suivi.results.sent` | Envoyé |
+| `hireV3Suivi.results.submitted` | Test rendu |
+| `hireV3Suivi.results.notSubmitted` | Pas encore rendu |
+| `hireV3Suivi.results.booked` | Créneau choisi |
+| `hireV3Suivi.results.notBooked` | Pas encore choisi |
+| `hireV3Suivi.results.waiting` | Part bientôt, annulable |
+| `hireV3Suivi.hk.sent` | Envoyés |
+| `hireV3Suivi.hk.sentSub` | cette semaine |
+| `hireV3Suivi.hk.answers` | Réponses |
+| `hireV3Suivi.hk.answersSub` | test rendu ou créneau choisi |
+| `hireV3Suivi.hk.waiting` | En attente |
+| `hireV3Suivi.hk.waitingSub` | réponses qui partent bientôt |
+| `hireV3Suivi.hk.rules` | Règles actives |
+| `hireV3Suivi.hk.rulesSub` | pour toutes vos offres |
+| `hireV3Suivi.ratio` | {a} / {b} |
+| `hireV3Suivi.last` | Derniers envois |
+| `hireV3Suivi.lastSub` | Chaque envoi est conservé dans le dossier du candidat |
+| `hireV3Suivi.lastLine` | {name} · {when} |
+| `hireV3Suivi.historyEmpty` | Aucun envoi automatique pour l'instant |
+| `hireV3Suivi.historyEmptyText` | Le premier accusé de réception s'affichera ici dès la prochaine candidature. |
+| `hireV3Suivi.cols.candidate` | Candidat |
+| `hireV3Suivi.cols.rule` | Règle |
+| `hireV3Suivi.cols.when` | Quand |
+| `hireV3Suivi.cols.result` | Résultat |
+| `hireV3Suivi.todo.pending` | {count, plural, =0 {Aucune réponse en attente} one {# réponse part bientôt} other {# réponses partent bientôt}} |
+| `hireV3Suivi.todo.pendingFirst` | {name} · part dans {minutes} min, annulable |
+| `hireV3Suivi.todo.pendingNone` | Un refus ne part qu'après votre décision |
+| `hireV3Suivi.todo.pendingGo` | Voir |
+| `hireV3Suivi.todo.tests` | {count, plural, =0 {Tous les tests envoyés sont rendus} one {# test pas encore rendu} other {# tests pas encore rendus}} |
+| `hireV3Suivi.todo.testsSub` | Relance automatique 2 jours puis 4 jours après l'envoi |
+| `hireV3Suivi.todo.testsGo` | Tests |
+| `hireV3Suivi.todo.digestOn` | Demain à {time}, par e-mail |
+| `hireV3Suivi.todo.digestOff` | Désactivé pour vous |
+| `hireV3Suivi.todo.digestStop` | Couper |
+| `hireV3Suivi.todo.digestStart` | Activer |
+| `hireV3Suivi.kpi.sent` | Messages envoyés |
+| `hireV3Suivi.kpi.sentUp` | ↑ {count} de plus que la semaine passée |
+| `hireV3Suivi.kpi.sentSub` | cette semaine |
+| `hireV3Suivi.kpi.slots` | Créneaux choisis après relance |
+| `hireV3Suivi.kpi.slotsSub` | {count, plural, one {sur # relance} other {sur # relances}} |
+| `hireV3Suivi.kpi.tests` | Tests rendus après relance |
+| `hireV3Suivi.kpi.testsSub` | {count, plural, one {sur # relance} other {sur # relances}} |
+| `hireV3Suivi.kpi.saved` | Temps gagné |
+| `hireV3Suivi.kpi.savedValue` | {hours} h {minutes} |
+| `hireV3Suivi.kpi.savedSub` | estimation : {minutes} min par message |
+| `hireV3Suivi.flow.title` | Parcours d'une candidature |
+| `hireV3Suivi.flow.sub` | Ce qui part seul, étape par étape |
+| `hireV3Suivi.flow.received.title` | Candidature reçue |
+| `hireV3Suivi.flow.received.text` | Accusé envoyé tout de suite |
+| `hireV3Suivi.flow.test.title` | Test envoyé |
+| `hireV3Suivi.flow.test.text` | Relance 2 jours puis 4 jours |
+| `hireV3Suivi.flow.slot.title` | Créneaux proposés |
+| `hireV3Suivi.flow.slot.text` | Relance 2 jours après |
+| `hireV3Suivi.flow.interview.title` | Entretien |
+| `hireV3Suivi.flow.interview.text` | Rappel la veille |
+| `hireV3Suivi.flow.decision.title` | Votre décision |
+| `hireV3Suivi.flow.decision.text` | Rien ne part sans vous |
+| `hireV3Suivi.rulesTitle` | Règles |
+| `hireV3Suivi.active` | {on} actives sur {total} |
+| `hireV3Suivi.groups.candidates` | Vers les candidats · relances |
+| `hireV3Suivi.groups.approval` | Avec votre accord |
+| `hireV3Suivi.groups.you` | Pour vous |
+| `hireV3Suivi.sends` | {count, plural, one {# envoi} other {# envois}} |
+| `hireV3Suivi.noSend` | Aucun envoi |
+| `hireV3Suivi.digestAt` | Chaque jour à {time} |
+| `hireV3Suivi.digestOff` | Désactivé |
+| `hireV3Suivi.perDay` | Messages par jour |
+| `hireV3Suivi.seeAll` | Tout voir |
+| `hireV3Suivi.mail.test` | Bonjour, petit rappel : {company} vous a proposé le test « {title} » pour l'offre « {job} ». Vous pouvez le passer quand vous voulez. Ne pas le passer ne vous écarte pas : l'équipe lit toujours votre candidature. |
+| `hireV3Suivi.mail.slot` | Bonjour, petit rappel : {company} vous a proposé des créneaux d'entretien pour l'offre « {job} ». Choisissez celui qui vous convient, ou proposez un autre moment. |
 
 ### MVP recruteur · accueil (prototype v3)
 

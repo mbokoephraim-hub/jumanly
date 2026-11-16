@@ -5906,3 +5906,19 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
 - Fiche candidat, onglet Test : réponses question par question avec jauge, durée, date, « Meilleur
   que N % des candidats », notation des réponses écrites ; anneau du score dans la colonne de
   droite. Accueil : la tuile « Tests rendus » compte les vrais tests rendus.
+
+## 2026-11-14 · Hire v3 aligné sur le prototype, lot 4 (suivi automatique)
+
+- Table `HireAutomationRule` (migration `20261114072043_hire_automation_rules`) : une règle coupée
+  ou rétablie par l'organisation ; sans ligne, la règle est active (règles actives par défaut, M7).
+- Règles réelles : accusé de réception (existant, maintenant coupable), relance du test (nouvelle,
+  2 jours puis 4 jours, jamais plus), relance du créneau (nouvelle, 2 jours après les créneaux
+  proposés, une fois), rappel d'entretien et pièces manquantes (existants, maintenant coupables).
+  Chaque envoi laisse un événement dans le dossier du candidat (`test_reminded`, `slot_reminded`,
+  `interview_reminded`, `pieces_reminded`). Les relances tournent avec les tâches horaires Hire.
+- « Réponse aux non retenus » reste toujours active : elle ne part qu'après la décision d'un membre
+  (10 minutes annulables). « Résumé du matin » est le choix personnel du membre (le même que dans
+  ses notifications).
+- `/app/hire/suivi` reproduit `V.suivi` : trois choses à voir, quatre chiffres réels, parcours
+  d'une candidature, règles avec interrupteurs, messages par jour, derniers envois ; onglet
+  « Historique » avec le résultat de chaque envoi (test rendu, créneau choisi…).

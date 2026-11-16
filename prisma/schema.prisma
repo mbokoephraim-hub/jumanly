@@ -176,6 +176,7 @@ model Organization {
   updatedAt               DateTime                 @updatedAt
   hiddenTalentSuggestions HiddenTalentSuggestion[]
   teamThreads             TeamThread[]
+  automationRules         HireAutomationRule[]
 }
 
 /// A supporting document (PDF or image) sent with a verification request. The bytes live in the
@@ -3205,4 +3206,20 @@ model SkillTestInvite {
 
   @@unique([testId, applicationId])
   @@index([applicationId])
+}
+
+/// « Suivi automatique » (Hire v3, lot 4): a rule the organization turned off or on again. No row
+/// means the rule is on (the rules are on by default, brief MVP M7). A refusal never leaves
+/// without a member's decision, whatever the rules say (golden rule n° 3).
+model HireAutomationRule {
+  id             String       @id @default(cuid(2))
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  /// "acknowledgement" | "testReminder" | "slotReminder" | "interviewReminder" | "piecesReminder".
+  key            String
+  enabled        Boolean
+  updatedById    String?
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([organizationId, key])
 }

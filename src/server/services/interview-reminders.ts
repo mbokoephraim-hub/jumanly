@@ -1,4 +1,5 @@
 import type { PrismaClient } from "@/generated/prisma/client";
+import { ruleEnabled } from "./hire-v3-automation";
 import { notify } from "./notifications";
 
 /**
@@ -50,6 +51,7 @@ export async function runInterviewReminders(db: PrismaClient, now = new Date()) 
             select: {
               title: true,
               blindSort: true,
+              organizationId: true,
               organization: { select: { name: true } },
             },
           },
@@ -78,6 +80,20 @@ export async function runInterviewReminders(db: PrismaClient, now = new Date()) 
       type: "interviewSoon",
       payload: { ...base, candidate: application.profile.user.name ?? "none" },
       href: `/app/hire/entretiens?jour=${day}`,
+    });
+    // « Suivi automatique » (Hire v3, lot 4): the candidate's reminder can be turned off.
+    if (!(await ruleEnabled(db, application.job.organizationId, "interviewReminder"))) {
+      sent += 1;
+      continue;
+    }
+    await db.applicationEvent.create({
+      data: {
+        applicationId: application.id,
+        actorId: null,
+        type: "interview_reminded",
+        payload: { interviewId: interview.id },
+        createdAt: now,
+      },
     });
     await notify(db, {
       userIds: [application.profile.user.id],
