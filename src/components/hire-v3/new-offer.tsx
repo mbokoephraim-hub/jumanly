@@ -1,7 +1,6 @@
 import { loose } from "@/lib/loose-t";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
-import { duplicateJobAction } from "@/server/actions/hire";
 import { saveOfferV3Action } from "@/server/actions/hire-v3-offers";
 import type { NewOfferData } from "@/server/services/hire-v3-offer";
 import { contractTypes, remoteModes } from "@/server/services/hire";
@@ -10,6 +9,7 @@ import { screeningQuestionsOf } from "@/server/services/screening";
 import { siteUrl } from "@/lib/seo";
 import { studyFields } from "@/lib/studies";
 import { avatarColor, initialsOf } from "./avatar";
+import { NewOfferStart, type StartTexts } from "./new-offer-start";
 import { HireIcon, type HireIconName } from "./icon";
 import {
   NwChips,
@@ -763,96 +763,31 @@ export async function HireV3NewOffer({
   );
 }
 
-/** « Comment voulez-vous commencer ? » (`nwStart`): the title, then four ways to start. */
+/** « Comment voulez-vous commencer ? » (`nwStart`): texts from the server, choices on the client. */
 async function StartWindow({ data, title }: { data: NewOfferData; title: string }) {
   const t = await getTranslations("hireV3New.start");
-  return (
-    <div className="overlay sov" id="ov">
-      <div className="smod nwmod" role="dialog" aria-modal="true" aria-labelledby="nw-start-title">
-        <div className="row">
-          <span className="nwm-k">
-            <HireIcon name="plus" size="s" />
-          </span>
-          <div style={{ marginLeft: 12 }}>
-            <h3 id="nw-start-title">{t("title")}</h3>
-            <span className="meta">{t("sub")}</span>
-          </div>
-          <Link
-            className="round"
-            style={{ marginLeft: "auto" }}
-            href="/app/hire/offres"
-            aria-label={t("close")}
-          >
-            <HireIcon name="x" size="s" />
-          </Link>
-        </div>
-        <form action="/app/hire/offres/nouvelle" method="get">
-          <input type="hidden" name="etape" value="1" />
-          <label className="nwf" style={{ marginTop: 18 }}>
-            <span>{t("jobTitle")}</span>
-            <input
-              name="titre"
-              defaultValue={title}
-              placeholder={t("jobTitlePlaceholder")}
-              maxLength={120}
-            />
-          </label>
-          <div className="nwmg">
-            <button type="submit" name="depart" value="orbi" className="nwmo on">
-              <span className="nwmo-i">
-                <HireIcon name="orbi" size="s" />
-              </span>
-              <b>{t("orbi")}</b>
-              <span className="meta">{t("orbiSub")}</span>
-              <em>{t("advised")}</em>
-            </button>
-            <Link className="nwmo" href="#nw-dup">
-              <span className="nwmo-i">
-                <HireIcon name="layers" size="s" />
-              </span>
-              <b>{t("dup")}</b>
-              <span className="meta">{t("dupSub")}</span>
-            </Link>
-            <Link className="nwmo" href="/app/hire/modeles">
-              <span className="nwmo-i">
-                <HireIcon name="book" size="s" />
-              </span>
-              <b>{t("tpl")}</b>
-              <span className="meta">{t("tplSub")}</span>
-            </Link>
-            <button type="submit" name="depart" value="import" className="nwmo">
-              <span className="nwmo-i">
-                <HireIcon name="file" size="s" />
-              </span>
-              <b>{t("imp")}</b>
-              <span className="meta">{t("impSub")}</span>
-            </button>
-          </div>
-        </form>
-        <div className="nwdup" id="nw-dup" style={{ display: "grid" }}>
-          {data.recent.length === 0 ? <p className="meta">{t("dupEmpty")}</p> : null}
-          {data.recent.map((o) => (
-            <form key={o.id} action={duplicateJobAction} style={{ display: "contents" }}>
-              <input type="hidden" name="id" value={o.id} />
-              <button type="submit" className="nwdo">
-                <HireIcon name="offres" size="s" />
-                <b>{o.title}</b>
-                <span className="meta">{o.department ?? ""}</span>
-              </button>
-            </form>
-          ))}
-        </div>
-        <div className="row" style={{ gap: 8, marginTop: 18 }}>
-          <span className="meta">
-            <HireIcon name="shield" size="s" /> {t("safe")}
-          </span>
-          <Link className="btn sm ghost" style={{ marginLeft: "auto" }} href="/app/hire/offres">
-            {t("cancel")}
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
+  const keys = [
+    "title",
+    "sub",
+    "close",
+    "jobTitle",
+    "jobTitlePlaceholder",
+    "orbi",
+    "orbiSub",
+    "advised",
+    "dup",
+    "dupSub",
+    "dupEmpty",
+    "tpl",
+    "tplSub",
+    "imp",
+    "impSub",
+    "safe",
+    "cancel",
+    "go",
+  ] as const;
+  const texts = Object.fromEntries(keys.map((key) => [key, t(key)])) as StartTexts;
+  return <NewOfferStart texts={texts} title={title} recent={data.recent} />;
 }
 
 /** « Offre publiée » (step 8 of `V.nouvelle`). */
