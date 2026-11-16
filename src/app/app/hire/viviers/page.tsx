@@ -56,7 +56,6 @@ export default async function PoolsPage({ searchParams }: PageProps<"/app/hire/v
           data={data}
           tab={VIVIER_TABS.find((key) => key === one(query.onglet)) ?? "tous"}
           q={one(query.q)}
-          pool={one(query.vivier)}
           canManage={hirePermissions(ctx.role).manage}
         />
       );

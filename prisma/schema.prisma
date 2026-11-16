@@ -2438,13 +2438,15 @@ model TalentPool {
 }
 
 model TalentPoolEntry {
-  poolId    String
-  pool      TalentPool    @relation(fields: [poolId], references: [id], onDelete: Cascade)
-  profileId String
-  profile   TalentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  addedById String?
-  note      String?
-  createdAt DateTime      @default(now())
+  poolId     String
+  pool       TalentPool    @relation(fields: [poolId], references: [id], onDelete: Cascade)
+  profileId  String
+  profile    TalentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  addedById  String?
+  note       String?
+  /// « Favoris » of the Vivier (Hire v3): set on every entry of the talent in the organization.
+  favoriteAt DateTime?
+  createdAt  DateTime      @default(now())
 
   @@id([poolId, profileId])
 }

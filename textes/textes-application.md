@@ -17379,13 +17379,14 @@ Conventions :
 | `hireV3Vivier.seo` | Vivier |
 | `hireV3Vivier.title` | Vivier |
 | `hireV3Vivier.sub` | Les talents gardés pour plus tard, avec leur accord. |
-| `hireV3Vivier.tabs.tous` | Tous · {count} |
-| `hireV3Vivier.tabs.disponibles` | Disponibles · {count} |
-| `hireV3Vivier.tabs.proches` | Proches de l'offre · {count} |
+| `hireV3Vivier.tabs.tous` | Tous |
+| `hireV3Vivier.tabs.favoris` | Favoris |
+| `hireV3Vivier.tabs.relances` | Relancés |
 | `hireV3Vivier.hero.kicker` | Orbi a trouvé dans votre vivier |
 | `hireV3Vivier.hero.title` | {count, plural, one {# talent proche de <em>{offer}</em>} other {# talents proches de <em>{offer}</em>}} |
 | `hireV3Vivier.hero.text` | Ils ont déjà accepté d'être recontactés. Vous décidez qui inviter. |
-| `hireV3Vivier.hero.invite` | Inviter à postuler |
+| `hireV3Vivier.hero.invite` | {count, plural, one {Inviter à postuler} other {Inviter les # à postuler}} |
+| `hireV3Vivier.hero.whyButton` | Pourquoi eux ? |
 | `hireV3Vivier.hero.why` | Proximité : les compétences demandées par l'offre qu'ils ont déjà. Nom, âge et photo ne comptent pas. |
 | `hireV3Vivier.hero.noneTitle` | Aucun talent proche pour le moment |
 | `hireV3Vivier.hero.none` | Personne dans votre vivier n'a encore la moitié des compétences demandées pour « {offer} ». |
@@ -17395,9 +17396,21 @@ Conventions :
 | `hireV3Vivier.pool.sub` | Cliquez pour filtrer |
 | `hireV3Vivier.pool.consent` | Tous avec accord |
 | `hireV3Vivier.pool.talents` | talents |
-| `hireV3Vivier.pool.available` | disponibles |
-| `hireV3Vivier.pool.close` | proches |
-| `hireV3Vivier.pool.pools` | viviers |
+| `hireV3Vivier.pool.favorites` | favoris |
+| `hireV3Vivier.pool.relances` | relancés |
+| `hireV3Vivier.pool.renew` | à renouveler |
+| `hireV3Vivier.crit.comp` | Compétences |
+| `hireV3Vivier.crit.dom` | Domaine |
+| `hireV3Vivier.crit.ville` | Ville |
+| `hireV3Vivier.crit.dispo` | Disponibilité |
+| `hireV3Vivier.crit.sc` | Proximité |
+| `hireV3Vivier.crit.acc` | Accord |
+| `hireV3Vivier.crit.dispoYes` | Disponible tout de suite |
+| `hireV3Vivier.crit.dispoNo` | Avec préavis |
+| `hireV3Vivier.crit.scMin` | {value} % et plus |
+| `hireV3Vivier.crit.accSoon` | À renouveler sous 3 mois |
+| `hireV3Vivier.crit.accOk` | Valable plus de 3 mois |
+| `hireV3Vivier.crit.none` | Aucune valeur dans votre vivier pour l'instant. |
 | `hireV3Vivier.search` | Rechercher un nom, un métier, une compétence… |
 | `hireV3Vivier.add` | Ajouter un talent |
 | `hireV3Vivier.count` | {count, plural, one {talent} other {talents}} |
@@ -17408,8 +17421,15 @@ Conventions :
 | `hireV3Vivier.ringTitle` | Part des compétences demandées par l'offre |
 | `hireV3Vivier.available` | Disponible |
 | `hireV3Vivier.listening` | À l'écoute |
-| `hireV3Vivier.applied` | A déjà postulé |
-| `hireV3Vivier.visible` | Profil visible |
+| `hireV3Vivier.consent` | Accord {date} |
+| `hireV3Vivier.relance` | {days, plural, =0 {Relancé aujourd'hui, sans réponse} one {Relancé il y a # j, sans réponse} other {Relancé il y a # j, sans réponse}} |
+| `hireV3Vivier.favoriteAdd` | Ajouter aux favoris |
+| `hireV3Vivier.favoriteRemove` | Retirer des favoris |
+| `hireV3Vivier.write` | Écrire à {name} |
+| `hireV3Vivier.emptyTab.favoris` | Aucun favori pour l'instant |
+| `hireV3Vivier.emptyTab.favorisText` | Touchez le cœur d'une carte pour garder un talent sous la main. |
+| `hireV3Vivier.emptyTab.relances` | Personne n'attend de réponse |
+| `hireV3Vivier.emptyTab.relancesText` | Les talents invités qui n'ont pas encore répondu apparaissent ici. |
 | `hireV3Vivier.forOffer` | Pour {offer} |
 | `hireV3Vivier.keep` | À garder pour une prochaine offre |
 | `hireV3Vivier.invite` | Inviter |

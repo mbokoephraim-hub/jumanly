@@ -127,7 +127,8 @@ export function sparkSvg(d: number[], w = 120, h = 36, col = "#0F3F37") {
 
 /** A donut of shares (`donut`): segments in their colours, a label and a line under it. */
 export function donutSvg(
-  segs: [number, string][],
+  /** Value, colour and, for a donut that filters (Vivier), the key of the segment. */
+  segs: [number, string, string?][],
   size = 150,
   label = "",
   sub = "",
@@ -139,9 +140,12 @@ export function donutSvg(
   const tot = segs.reduce((a, s) => a + s[0], 0) || 1;
   let off = 0;
   let g = "";
-  segs.forEach(([v, col]) => {
+  segs.forEach(([v, col, key]) => {
     const len = (c * v) / tot;
-    g += `<circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${col}" stroke-width="${th}" stroke-dasharray="${Math.max(0, len - 3)} ${c}" stroke-dashoffset="${-off}" stroke-linecap="round" transform="rotate(-90 ${size / 2} ${size / 2})"><animate attributeName="stroke-dasharray" from="0 ${c}" to="${Math.max(0, len - 3)} ${c}" dur=".9s" fill="freeze"/></circle>`;
+    const seg = key
+      ? ` data-seg="${esc(key)}" data-vcv="dom:${esc(key)}" style="cursor:pointer;transition:opacity .2s"`
+      : "";
+    g += `<circle${seg} cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${col}" stroke-width="${th}" stroke-dasharray="${Math.max(0, len - 3)} ${c}" stroke-dashoffset="${-off}" stroke-linecap="round" transform="rotate(-90 ${size / 2} ${size / 2})"><animate attributeName="stroke-dasharray" from="0 ${c}" to="${Math.max(0, len - 3)} ${c}" dur=".9s" fill="freeze"/></circle>`;
     off += len;
   });
   return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" style="flex:none"><circle cx="${size / 2}" cy="${size / 2}" r="${r}" fill="none" stroke="${dark ? "rgba(255,255,255,.08)" : "#EEF2E6"}" stroke-width="${th}"/>${g}<text x="50%" y="${sub ? size / 2 + 2 : size / 2 + 7}" text-anchor="middle" font-family="Sora,sans-serif" font-weight="600" font-size="${size > 120 ? 26 : 18}" fill="${dark ? "#fff" : "#0E1B17"}">${esc(label)}</text>${sub ? `<text x="50%" y="${size / 2 + 20}" text-anchor="middle" font-size="11" fill="${dark ? "#A8BDB5" : "#56665F"}">${esc(sub)}</text>` : ""}</svg>`;

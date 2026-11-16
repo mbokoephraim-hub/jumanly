@@ -1,11 +1,14 @@
 import { loose } from "@/lib/loose-t";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getFormatter, getTranslations } from "next-intl/server";
+import { hv3ToggleFavoriteAction } from "@/server/actions/hire-v3-vivier";
 import type { VivierTab, VivierV3 } from "@/server/services/hire-v3-vivier";
 import { avatarColor, initialsOf } from "./avatar";
-import { donutSvg, ringHtml } from "./charts";
-import { HireIcon } from "./icon";
-import { HirePage, HirePageHead } from "./page-head";
+import { donutSvg } from "./charts";
+import { HireIcon, type HireIconName } from "./icon";
+import { HireDownloadButton, HirePage } from "./page-head";
+import { HireTabs } from "./tabs";
+import { VivierFilter } from "./vivier-filter";
 
 /** The colour and cover of a pool (`VDOM` of the prototype), by its place in the list. */
 const POOL_LOOK: [string, string][] = [
@@ -15,60 +18,70 @@ const POOL_LOOK: [string, string][] = [
   ["#4C8DF6", "linear-gradient(135deg,#BFD9FF,#EEF5FF)"],
   ["#8B6CF0", "linear-gradient(135deg,#DCCFFF,#F4F0FF)"],
 ];
+const PAGE = "/app/hire/viviers";
 const look = (index: number) => POOL_LOOK[index % POOL_LOOK.length]!;
 const cls = (score: number) => (score >= 75 ? "fort" : score >= 50 ? "cons" : "lim");
+const CLS_COLOUR = { fort: "#2FA25A", cons: "#D9901A", lim: "#8C9AB8" };
+const RING_C = 2 * Math.PI * 20;
+
+/** The score ring of a card (`vRing()` of the prototype). */
+function VRing({ score, title }: { score: number; title: string }) {
+  return (
+    <span className="vring" title={title}>
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="24" cy="24" r="20" fill="none" stroke="#EEF1E8" strokeWidth="5" />
+        <circle
+          cx="24"
+          cy="24"
+          r="20"
+          fill="none"
+          stroke={CLS_COLOUR[cls(score)]}
+          strokeWidth="5"
+          strokeLinecap="round"
+          strokeDasharray={`${(RING_C * score) / 100} ${RING_C}`}
+          transform="rotate(-90 24 24)"
+        />
+      </svg>
+      <b>{score}</b>
+    </span>
+  );
+}
 
 /**
  * Vivier (`V.vivier` of the prototype v3): Orbi's three talents closest to the newest offer, the
- * pools as a donut (a click filters), the search, then one card per talent. « Inviter » and the
- * talent's page go through the existing screens, where every view is journaled.
+ * pools as a donut (a click filters), the bar (Télécharger, Tous · Favoris · Relancés, search,
+ * Ajouter un talent), the criteria, then one card per talent. The criteria and the search filter
+ * the cards in the page (`vApply()` of the prototype, in `VivierFilter`); the tabs are addresses.
+ * « Inviter » and the talent's page go through the existing screens, where every view is journaled.
  */
 export async function HireV3Vivier({
   data,
   tab,
   q,
-  pool,
   canManage,
 }: {
   data: VivierV3;
   tab: VivierTab;
   q: string;
-  pool: string;
   canManage: boolean;
 }) {
   const t = await getTranslations("hireV3Vivier");
+  const tp = await getTranslations("hireV3.page");
+  const format = await getFormatter();
   const tk = loose(t);
-  const base = (over: Record<string, string>) => {
-    const params = new URLSearchParams({
-      onglet: tab,
-      ...(q ? { q } : {}),
-      ...(pool ? { vivier: pool } : {}),
-      ...over,
-    });
-    for (const [key, value] of [...params])
-      if (!value || (key === "onglet" && value === "tous")) params.delete(key);
-    const s = params.toString();
-    return `/app/hire/viviers${s ? `?${s}` : ""}`;
-  };
-  const needle = q.trim().toLowerCase();
+  const href = (key: string) => (key === "tous" ? PAGE : `${PAGE}?onglet=${key}`);
   const list = data.talents.filter(
     (talent) =>
-      (tab !== "disponibles" || talent.available) &&
-      (tab !== "proches" || (talent.score ?? 0) >= 50) &&
-      (!pool || talent.poolId === pool) &&
-      (!needle ||
-        [talent.name ?? "", talent.headline ?? "", talent.pool, ...talent.skills.map((s) => s.name)]
-          .join(" ")
-          .toLowerCase()
-          .includes(needle)),
+      (tab !== "favoris" || talent.favorite) && (tab !== "relances" || talent.relanceDays !== null),
   );
   const tabs = [
     { key: "tous", count: data.talents.length },
-    { key: "disponibles", count: data.available },
-    { key: "proches", count: data.close.length },
+    { key: "favoris", count: data.favorites },
+    { key: "relances", count: data.relances },
   ].map((item) => ({
-    label: tk(`tabs.${item.key}`, { count: item.count }),
-    href: base({ onglet: item.key }),
+    label: tk(`tabs.${item.key}`),
+    count: item.count,
+    href: href(item.key),
     active: tab === item.key,
   }));
   const max = Math.max(1, ...data.pools.map((p) => p.count));
@@ -76,14 +89,45 @@ export async function HireV3Vivier({
     talent.applicationId
       ? `/app/hire/candidats/${talent.applicationId}`
       : `/app/hire/talents/${talent.profileId}`;
+  const month = (date: Date) => {
+    const text = format.dateTime(date, { month: "long", year: "numeric" });
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  };
+  const criteria: { key: string; icon: HireIconName; options: [string, string][] }[] = [
+    { key: "comp", icon: "layers", options: data.skills.map((name) => [name, name]) },
+    { key: "dom", icon: "briefcase", options: data.pools.map((p) => [p.id, p.name]) },
+    { key: "ville", icon: "pin", options: data.cities.map((city) => [city, city]) },
+    {
+      key: "dispo",
+      icon: "zap",
+      options: [
+        ["oui", t("crit.dispoYes")],
+        ["non", t("crit.dispoNo")],
+      ],
+    },
+    ...(data.offer
+      ? [
+          {
+            key: "sc",
+            icon: "target" as const,
+            options: ["80", "70", "60"].map(
+              (v) => [v, t("crit.scMin", { value: v })] as [string, string],
+            ),
+          },
+        ]
+      : []),
+    {
+      key: "acc",
+      icon: "shield",
+      options: [
+        ["soon", t("crit.accSoon")],
+        ["ok", t("crit.accOk")],
+      ],
+    },
+  ];
   return (
     <HirePage view="vivier">
-      <HirePageHead
-        title={t("title")}
-        sub={t("sub")}
-        tabs={tabs}
-        download={{ href: "/app/hire/telecharger?doc=talents&retour=%2Fapp%2Fhire%2Fviviers" }}
-      />
+      <VivierFilter />
       <div className="vhero">
         <div className="vh-l">
           <span className="vh-k">
@@ -126,10 +170,16 @@ export async function HireV3Vivier({
                     href={`/app/hire/viviers/${data.bestPoolId}?offre=${data.offer.id}`}
                   >
                     <HireIcon name="send" size="s" />
-                    {t("hero.invite")}
+                    {t("hero.invite", { count: data.top.length })}
                   </Link>
                 ) : null}
-                <span className="meta">{t("hero.why")}</span>
+                <button type="button" className="btn ghost sm" popoverTarget="vh-why">
+                  {t("hero.whyButton")}
+                </button>
+                <div id="vh-why" className="vh-why" popover="auto">
+                  <HireIcon name="orbi" size="s" />
+                  {t("hero.why")}
+                </div>
               </div>
             </>
           ) : (
@@ -159,7 +209,9 @@ export async function HireV3Vivier({
                 className="vdon"
                 dangerouslySetInnerHTML={{
                   __html: donutSvg(
-                    data.pools.map((p) => [p.count, look(p.index)[0]] as [number, string]),
+                    data.pools.map(
+                      (p) => [p.count, look(p.index)[0], p.id] as [number, string, string],
+                    ),
                     120,
                     String(data.talents.length),
                     t("pool.talents"),
@@ -169,10 +221,11 @@ export async function HireV3Vivier({
               />
               <div className="vp-l">
                 {data.pools.map((p) => (
-                  <Link
+                  <button
+                    type="button"
                     key={p.id}
-                    className={pool === p.id ? "vp-r on" : "vp-r"}
-                    href={base({ vivier: pool === p.id ? "" : p.id })}
+                    className="vp-r"
+                    data-vcv={`dom:${p.id}`}
                     style={{ "--c": look(p.index)[0] } as React.CSSProperties}
                   >
                     <i />
@@ -184,46 +237,52 @@ export async function HireV3Vivier({
                     <em>
                       <HireIcon name="chev" size="s" />
                     </em>
-                  </Link>
+                  </button>
                 ))}
               </div>
             </div>
             <div className="vp-s">
-              <Link className="vp-t" href={base({ onglet: "disponibles" })}>
-                <HireIcon name="zap" size="s" />
-                <b>{data.available}</b>
-                <span>{t("pool.available")}</span>
+              <Link className="vp-t" href={href("favoris")} scroll={false}>
+                <HireIcon name="heart" size="s" />
+                <b>{data.favorites}</b>
+                <span>{t("pool.favorites")}</span>
                 <em>
                   <HireIcon name="chev" size="s" />
                 </em>
               </Link>
-              <Link className="vp-t" href={base({ onglet: "proches" })}>
-                <HireIcon name="target" size="s" />
-                <b>{data.close.length}</b>
-                <span>{t("pool.close")}</span>
+              <Link className="vp-t" href={href("relances")} scroll={false}>
+                <HireIcon name="refresh" size="s" />
+                <b>{data.relances}</b>
+                <span>{t("pool.relances")}</span>
                 <em>
                   <HireIcon name="chev" size="s" />
                 </em>
               </Link>
-              <Link className="vp-t" href="/app/hire/talents">
-                <HireIcon name="search" size="s" />
-                <b>{data.pools.length}</b>
-                <span>{t("pool.pools")}</span>
+              <button type="button" className="vp-t warn" data-vcv="acc:soon">
+                <HireIcon name="clock" size="s" />
+                <b>{data.renew}</b>
+                <span>{t("pool.renew")}</span>
                 <em>
                   <HireIcon name="chev" size="s" />
                 </em>
-              </Link>
+              </button>
             </div>
           </div>
         </div>
       </div>
-      <form className="ph vph" action="/app/hire/viviers">
-        <div className="act" />
+      <form className="ph vph" action={PAGE}>
+        <div className="act">
+          <HireDownloadButton
+            href="/app/hire/telecharger?doc=talents&retour=%2Fapp%2Fhire%2Fviviers"
+            label={tp("download")}
+          />
+          <HireTabs tabs={tabs} />
+        </div>
         {tab !== "tous" ? <input type="hidden" name="onglet" value={tab} /> : null}
-        {pool ? <input type="hidden" name="vivier" value={pool} /> : null}
         <label className="vsearch">
           <HireIcon name="search" size="s" />
           <input
+            id="vsq"
             name="q"
             type="search"
             defaultValue={q}
@@ -239,26 +298,67 @@ export async function HireV3Vivier({
       </form>
       <div className="vcrit">
         <div className="vct-row">
+          {criteria.map((c, i) => (
+            <button type="button" key={c.key} className={i ? "vct" : "vct on"} data-vct={c.key}>
+              <HireIcon name={c.icon} size="s" />
+              {tk(`crit.${c.key}`)}
+              <em className="vcn" data-vcn={c.key} hidden />
+            </button>
+          ))}
           <span className="vres">
-            <b>{list.length}</b>
-            <span>{t("count", { count: list.length })}</span>
+            <b data-vcount="">{list.length}</b>
+            <span
+              data-vcount-label=""
+              data-one={t("count", { count: 1 })}
+              data-other={t("count", { count: 2 })}
+            >
+              {" "}
+              {t("count", { count: list.length })}
+            </span>
           </span>
-          {q || pool ? (
-            <Link className="vclr" href={base({ q: "", vivier: "" })}>
-              <HireIcon name="x" size="s" />
-              {t("clear")}
-            </Link>
-          ) : null}
+          <button type="button" className="vclr" data-vclr="">
+            <HireIcon name="x" size="s" />
+            {t("clear")}
+          </button>
         </div>
+        {criteria.map((c, i) => (
+          <div key={c.key} className={i ? "vcp" : "vcp on"} data-vcp={c.key}>
+            {c.options.length ? (
+              c.options.map(([value, label]) => (
+                <button type="button" key={value} className="vco" data-vcv={`${c.key}:${value}`}>
+                  {label}
+                </button>
+              ))
+            ) : (
+              <span className="meta">{t("crit.none")}</span>
+            )}
+          </div>
+        ))}
       </div>
       <div className="vgrid">
         {list.map((talent, n) => {
           const [colour, cover] = look(talent.poolIndex);
           const name = talent.name ?? t("anonymous");
+          const line = [talent.headline, talent.city].filter(Boolean).join(" · ");
           return (
             <article
               className="vc"
               key={talent.profileId}
+              data-q={[
+                talent.name ?? "",
+                talent.headline ?? "",
+                talent.city ?? "",
+                talent.pool,
+                ...talent.skills.map((s) => s.name),
+              ]
+                .join(" ")
+                .toLowerCase()}
+              data-comp={talent.skills.map((s) => s.name).join("|")}
+              data-dom={talent.poolId}
+              data-ville={talent.city ?? ""}
+              data-dispo={talent.available ? "oui" : "non"}
+              data-sc={talent.score ?? 0}
+              data-acc={talent.renewSoon ? "soon" : "ok"}
               style={
                 {
                   "--g": cover,
@@ -269,6 +369,18 @@ export async function HireV3Vivier({
             >
               <div className="vc-cov">
                 <span className="vc-dom">{talent.pool}</span>
+                <form action={hv3ToggleFavoriteAction}>
+                  <input type="hidden" name="profile" value={talent.profileId} />
+                  {tab !== "tous" ? <input type="hidden" name="onglet" value={tab} /> : null}
+                  <button
+                    type="submit"
+                    className={talent.favorite ? "vfav on" : "vfav"}
+                    aria-pressed={talent.favorite}
+                    aria-label={talent.favorite ? t("favoriteRemove") : t("favoriteAdd")}
+                  >
+                    <HireIcon name="heart" size="s" />
+                  </button>
+                </form>
               </div>
               <div className="vc-id">
                 <span
@@ -278,18 +390,14 @@ export async function HireV3Vivier({
                   {talent.name ? initialsOf(talent.name) : t("anon")}
                 </span>
                 {talent.score !== null ? (
-                  <span
-                    className="vring"
-                    title={t("ringTitle")}
-                    dangerouslySetInnerHTML={{ __html: ringHtml(talent.score, 48, 5) }}
-                  />
+                  <VRing score={talent.score} title={t("ringTitle")} />
                 ) : null}
               </div>
               <div>
                 <b className="vc-n">{name}</b>
-                {talent.headline ? (
+                {line ? (
                   <div className="muted" style={{ fontSize: 13 }}>
-                    {talent.headline}
+                    {line}
                   </div>
                 ) : null}
               </div>
@@ -310,10 +418,15 @@ export async function HireV3Vivier({
                 </span>
                 <span>
                   <HireIcon name="shield" size="s" />
-                  {talent.applicationId ? t("applied") : t("visible")}
+                  {t("consent", { date: month(talent.consentUntil) })}
                 </span>
               </div>
-              {(talent.score ?? 0) >= 50 && data.offer ? (
+              {talent.relanceDays !== null ? (
+                <div className="vc-rel">
+                  <HireIcon name="refresh" size="s" />
+                  <span className="tr">{t("relance", { days: talent.relanceDays })}</span>
+                </div>
+              ) : (talent.score ?? 0) >= 50 && data.offer ? (
                 <div className="vc-rel ok">
                   <HireIcon name="target" size="s" />
                   <span className="tr">{t("forOffer", { offer: data.offer.title })}</span>
@@ -334,6 +447,15 @@ export async function HireV3Vivier({
                     {t("invite")}
                   </Link>
                 ) : null}
+                {talent.conversationId ? (
+                  <Link
+                    className="round"
+                    href={`/app/messages?c=${talent.conversationId}`}
+                    aria-label={t("write", { name })}
+                  >
+                    <HireIcon name="chat" size="s" />
+                  </Link>
+                ) : null}
                 <Link
                   className="round"
                   href={profileHref(talent)}
@@ -345,20 +467,28 @@ export async function HireV3Vivier({
             </article>
           );
         })}
-        {list.length === 0 ? (
-          <div className="vempty">
-            <HireIcon name="search" />
-            <b>{data.talents.length ? t("empty.title") : t("empty.none")}</b>
-            <span className="meta">
-              {data.talents.length ? t("empty.text") : t("empty.noneText")}
-            </span>
-            {data.talents.length ? (
-              <Link className="chip" href={base({ q: "", vivier: "", onglet: "tous" })}>
+        <div className="vempty" hidden={list.length > 0}>
+          <HireIcon name="search" />
+          {list.length === 0 && tab !== "tous" ? (
+            <>
+              <b>{tk(`emptyTab.${tab}`)}</b>
+              <span className="meta">{tk(`emptyTab.${tab}Text`)}</span>
+            </>
+          ) : data.talents.length ? (
+            <>
+              <b>{t("empty.title")}</b>
+              <span className="meta">{t("empty.text")}</span>
+              <button type="button" className="chip" data-vclr="">
                 {t("clear")}
-              </Link>
-            ) : null}
-          </div>
-        ) : null}
+              </button>
+            </>
+          ) : (
+            <>
+              <b>{t("empty.none")}</b>
+              <span className="meta">{t("empty.noneText")}</span>
+            </>
+          )}
+        </div>
       </div>
       <p className="meta vnote">
         <HireIcon name="shield" size="s" />

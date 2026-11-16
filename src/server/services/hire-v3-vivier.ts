@@ -9,10 +9,22 @@ import type { PrismaClient } from "@/generated/prisma/client";
 import { HireError, hirePermissions, type HireContext } from "./hire";
 import { entryVisible, poolsEnabled, poolsWhere } from "./talent-search";
 
-export const VIVIER_TABS = ["tous", "disponibles", "proches"] as const;
+export const VIVIER_TABS = ["tous", "favoris", "relances"] as const;
 export type VivierTab = (typeof VIVIER_TABS)[number];
 
-export async function vivierV3(db: PrismaClient, ctx: HireContext) {
+const DAY = 86_400_000;
+/** Brief MVP M8: a talent stays 24 months, then is asked to renew the consent. */
+export const CONSENT_MONTHS = 24;
+/** « À renouveler »: the consent ends within three months (`acc:soon` of the prototype). */
+const RENEW_DAYS = 90;
+
+const addMonths = (date: Date, months: number) => {
+  const next = new Date(date);
+  next.setUTCMonth(next.getUTCMonth() + months);
+  return next;
+};
+
+export async function vivierV3(db: PrismaClient, ctx: HireContext, now = new Date()) {
   if (!hirePermissions(ctx.role).readApplications) throw new HireError("forbidden");
   if (!(await poolsEnabled(db, ctx.organizationId))) return null;
   const [pools, offer] = await Promise.all([
@@ -27,23 +39,35 @@ export async function vivierV3(db: PrismaClient, ctx: HireContext) {
           orderBy: { createdAt: "desc" },
           select: {
             createdAt: true,
+            favoriteAt: true,
             profileId: true,
             profile: {
               select: {
                 headline: true,
                 visibility: true,
                 availability: true,
-                user: { select: { name: true } },
+                user: { select: { name: true, city: true } },
                 skills: { select: { skillId: true, skill: { select: { name: true } } }, take: 8 },
                 applications: {
                   where: { job: { organizationId: ctx.organizationId } },
-                  select: { id: true },
+                  orderBy: { createdAt: "desc" },
+                  select: { id: true, conversation: { select: { id: true } } },
                   take: 1,
                 },
                 contactRequests: {
-                  where: { organizationId: ctx.organizationId, status: "accepted" },
-                  select: { id: true },
-                  take: 1,
+                  where: {
+                    organizationId: ctx.organizationId,
+                    status: { in: ["accepted", "pending"] },
+                  },
+                  orderBy: { createdAt: "desc" },
+                  select: {
+                    status: true,
+                    createdAt: true,
+                    respondedAt: true,
+                    remindedAt: true,
+                    conversationId: true,
+                  },
+                  take: 5,
                 },
               },
             },
@@ -74,14 +98,34 @@ export async function vivierV3(db: PrismaClient, ctx: HireContext) {
     pool: string;
     poolIndex: number;
     applicationId: string | null;
+    conversationId: string | null;
+    city: string | null;
+    favorite: boolean;
+    /** Days since the last invitation still waiting for an answer, or null. */
+    relanceDays: number | null;
+    consentUntil: Date;
+    renewSoon: boolean;
     addedAt: Date;
   }[] = [];
   pools.forEach((pool, poolIndex) => {
     for (const entry of pool.entries) {
-      if (seen.has(entry.profileId)) continue;
+      const already = seen.get(entry.profileId);
+      if (already !== undefined) {
+        if (entry.favoriteAt) talents[already]!.favorite = true;
+        continue;
+      }
       seen.set(entry.profileId, talents.length);
       const p = entry.profile;
-      const known = p.applications.length > 0 || p.contactRequests.length > 0;
+      const accepted = p.contactRequests.find((request) => request.status === "accepted");
+      const pending = p.contactRequests.find((request) => request.status === "pending");
+      const known = p.applications.length > 0 || Boolean(accepted);
+      // The consent runs from the latest of: the entry, the accepted proposal.
+      const consentFrom =
+        accepted?.respondedAt && accepted.respondedAt > entry.createdAt
+          ? accepted.respondedAt
+          : entry.createdAt;
+      const consentUntil = addMonths(consentFrom, CONSENT_MONTHS);
+      const lastAsk = pending ? (pending.remindedAt ?? pending.createdAt) : null;
       const held = p.skills.filter((s) => wanted.has(s.skillId)).length;
       talents.push({
         profileId: entry.profileId,
@@ -96,6 +140,14 @@ export async function vivierV3(db: PrismaClient, ctx: HireContext) {
         pool: pool.name,
         poolIndex,
         applicationId: p.applications[0]?.id ?? null,
+        conversationId: accepted?.conversationId ?? p.applications[0]?.conversation?.id ?? null,
+        city: known || p.visibility !== "anonymous" ? p.user.city?.trim() || null : null,
+        favorite: Boolean(entry.favoriteAt),
+        relanceDays: lastAsk
+          ? Math.max(0, Math.floor((now.getTime() - lastAsk.getTime()) / DAY))
+          : null,
+        consentUntil,
+        renewSoon: consentUntil.getTime() - now.getTime() <= RENEW_DAYS * DAY,
         addedAt: entry.createdAt,
       });
     }
@@ -115,9 +167,43 @@ export async function vivierV3(db: PrismaClient, ctx: HireContext) {
     talents,
     close,
     available: talents.filter((t) => t.available).length,
+    favorites: talents.filter((t) => t.favorite).length,
+    relances: talents.filter((t) => t.relanceDays !== null).length,
+    renew: talents.filter((t) => t.renewSoon).length,
+    cities: [...new Set(talents.map((t) => t.city).filter((c): c is string => Boolean(c)))].sort(),
+    skills: topSkills(talents.flatMap((t) => t.skills.map((s) => s.name))),
     top: close.slice(0, 3),
     bestPoolId: close[0]?.poolId ?? null,
   };
+}
+
+/** The skills most held in the vivier, for the « Compétences » criterion (at most 10). */
+function topSkills(names: string[]) {
+  const counts = new Map<string, number>();
+  for (const name of names) counts.set(name, (counts.get(name) ?? 0) + 1);
+  return [...counts.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "fr"))
+    .slice(0, 10)
+    .map(([name]) => name);
+}
+
+/**
+ * « Favoris » (heart of a card): the talent is marked on every entry it has in the pools the
+ * member sees, or unmarked. Only talents already in the vivier can be marked.
+ */
+export async function toggleVivierFavorite(
+  db: PrismaClient,
+  ctx: HireContext,
+  profileId: string,
+  now = new Date(),
+) {
+  if (!hirePermissions(ctx.role).readApplications) throw new HireError("forbidden");
+  const where = { profileId, pool: await poolsWhere(db, ctx) };
+  const entries = await db.talentPoolEntry.findMany({ where, select: { favoriteAt: true } });
+  if (!entries.length) throw new HireError("notFound");
+  const favorite = !entries.some((entry) => entry.favoriteAt);
+  await db.talentPoolEntry.updateMany({ where, data: { favoriteAt: favorite ? now : null } });
+  return favorite;
 }
 
 export type VivierV3 = NonNullable<Awaited<ReturnType<typeof vivierV3>>>;
