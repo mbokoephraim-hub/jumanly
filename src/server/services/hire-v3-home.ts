@@ -5,6 +5,7 @@
  * and the week's interviews. Real figures only (golden rule n° 11): a figure that has no source
  * yet stays at zero. Everything goes through `jobScope` (golden rule n° 6).
  */
+import { testsSubmitted } from "./hire-v3-tests";
 import type { PrismaClient } from "@/generated/prisma/client";
 import { hireToday } from "./hire-today";
 import { hirePermissions, jobScope, type HireContext } from "./hire";
@@ -89,6 +90,8 @@ export async function hireHome(
     today,
     tasks,
     week,
+    tests,
+    previousTests,
   ] = await Promise.all([
     db.application.findMany({
       where: { job: scope, createdAt: within },
@@ -142,6 +145,8 @@ export async function hireHome(
         application: { select: { profile: { select: { user: { select: { name: true } } } } } },
       },
     }),
+    testsSubmitted(db, ctx, within),
+    testsSubmitted(db, ctx, before),
   ]);
 
   const bars = buckets.map((bucket) => {
@@ -207,6 +212,8 @@ export async function hireHome(
     shortlistedChange: change(shortlisted, previousShortlisted),
     interviews,
     interviewsChange: change(interviews, previousInterviews),
+    tests,
+    testsChange: change(tests, previousTests),
     delay,
     offers: offers.map((offer) => ({
       id: offer.id,

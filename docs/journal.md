@@ -5888,3 +5888,21 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
   « Annuler » et « Commencer », comme `nwStart()`.
 - Cadre : les icônes restent dans le texte comme dans le prototype (la remise à zéro de Tailwind les
   passait en bloc, le bouclier de « Rien n'est publié… » tombait sur sa propre ligne).
+
+## 2026-11-14 · Hire v3 aligné sur le prototype, lot 3 (tests de compétences)
+
+- Nouveau droit `hire.assessments` (migration `20261114065606_skill_tests`, seed) : ouvert sur toutes
+  les formules entreprise payantes, fermé sur la formule gratuite ; se règle dans l'admin.
+- Tables `SkillTest`, `SkillTestQuestion`, `SkillTestInvite` (une tentative par candidature, réponses,
+  notes de l'équipe, score sur 100). Correction des choix automatique (`src/lib/skill-test-score.ts`),
+  réponses écrites notées par l'équipe ; le score n'existe qu'une fois tout corrigé.
+- `/app/hire/tests` reproduit `V.tests` : « Mes tests » (trois choses à faire, quatre chiffres, tests
+  en cours et à envoyer, « Orbi propose » des modèles), « Résultats » (classement qui ouvre la fiche,
+  répartition des scores, questions difficiles), « Bibliothèque » (six modèles réels avec filtres).
+  Fenêtre « Créer un test » et éditeur `/app/hire/tests/[id]` (cadre, questions, envoi).
+- Envoi : un message de l'entreprise dans la discussion de la candidature, avec le lien
+  `/app/test/[id]`, une notification et un événement sur la fiche. Le candidat passe le test sur
+  sa page (téléphone d'abord) ; ne pas le passer n'écarte personne.
+- Fiche candidat, onglet Test : réponses question par question avec jauge, durée, date, « Meilleur
+  que N % des candidats », notation des réponses écrites ; anneau du score dans la colonne de
+  droite. Accueil : la tuile « Tests rendus » compte les vrais tests rendus.
