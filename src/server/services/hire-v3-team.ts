@@ -7,6 +7,7 @@
 import type { PrismaClient } from "@/generated/prisma/client";
 import { HireError, hirePermissions, type HireContext } from "./hire";
 import { listMembers, seatUsage } from "./organization";
+import { effectiveRights } from "./org-team";
 
 const DAY = 86_400_000;
 export const TEAM_LOAD = ["interviews", "follow", "diagnostic", "interview"] as const;
@@ -119,3 +120,137 @@ export async function consultationLog(db: PrismaClient, ctx: HireContext, now = 
     })),
   };
 }
+
+/** Audit actions the member file names (`hireV3Member.actions.*`); the others read « Action notée ». */
+export const MEMBER_ACTIONS = [
+  "job.publish",
+  "job.update",
+  "job.pause",
+  "job.resume",
+  "job.close",
+  "job.assign",
+  "job.schedule",
+  "profile.view",
+  "scorecard.save",
+  "hire.group_reply",
+  "talent.search",
+  "org.invite",
+] as const;
+
+/**
+ * « Fiche membre » of Équipe (Hire v3, lot 6, `V.membre`): the week's load, the tasks by status,
+ * what the member did (the audit log, in the organization only) and the rights of the role. An
+ * administrator opens every file; a member opens their own.
+ */
+export async function memberFile(
+  db: PrismaClient,
+  ctx: HireContext,
+  membershipId: string,
+  now = new Date(),
+) {
+  const membership = await db.membership.findFirst({
+    where: { id: membershipId, organizationId: ctx.organizationId, status: "active" },
+    select: {
+      id: true,
+      userId: true,
+      role: true,
+      jobTitle: true,
+      rights: true,
+      createdAt: true,
+      user: { select: { name: true } },
+    },
+  });
+  if (!membership) throw new HireError("notFound");
+  const admin = hirePermissions(ctx.role).administer;
+  if (!admin && membership.userId !== ctx.userId) throw new HireError("forbidden");
+  const since = new Date(now.getTime() - 14 * DAY);
+  const [team, tasks, logs, jobs] = await Promise.all([
+    teamV3(db, ctx, now),
+    db.orgTask.findMany({
+      where: {
+        organizationId: ctx.organizationId,
+        assigneeId: membership.userId,
+        OR: [{ status: { not: "done" } }, { doneAt: { gte: since } }],
+      },
+      orderBy: { dueAt: "asc" },
+      take: 40,
+      select: {
+        id: true,
+        kind: true,
+        status: true,
+        dueAt: true,
+        application: {
+          select: {
+            id: true,
+            job: { select: { title: true } },
+            profile: { select: { user: { select: { name: true } } } },
+          },
+        },
+      },
+    }),
+    db.auditLog.findMany({
+      where: {
+        organizationId: ctx.organizationId,
+        actorId: membership.userId,
+        createdAt: { gte: since },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 30,
+      select: { id: true, action: true, targetType: true, targetId: true, createdAt: true },
+    }),
+    db.job.findMany({
+      where: {
+        organizationId: ctx.organizationId,
+        status: { in: ["published", "paused"] },
+        OR: [
+          { assignedToId: membership.userId },
+          { assignedToId: null, createdById: membership.userId },
+        ],
+      },
+      orderBy: { publishedAt: "desc" },
+      take: 6,
+      select: { id: true, title: true },
+    }),
+  ]);
+  const jobIds = logs.filter((l) => l.targetType === "job").map((l) => l.targetId);
+  const titles = jobIds.length
+    ? await db.job.findMany({
+        where: { id: { in: jobIds }, organizationId: ctx.organizationId },
+        select: { id: true, title: true },
+      })
+    : [];
+  const row = team.members.find((m) => m.id === membership.id);
+  const known = new Set<string>(MEMBER_ACTIONS);
+  return {
+    id: membership.id,
+    name: membership.user.name,
+    role: membership.role,
+    title: membership.jobTitle?.trim() || null,
+    since: membership.createdAt,
+    me: membership.userId === ctx.userId,
+    canAdminister: admin,
+    load: row?.load ?? { interviews: 0, follow: 0, diagnostic: 0, interview: 0 },
+    total: row?.total ?? 0,
+    openTasks: tasks.filter((t) => t.status !== "done").length,
+    doneTasks: tasks.filter((t) => t.status === "done").length,
+    tasks: tasks.map((t) => ({
+      id: t.id,
+      kind: t.kind,
+      status: t.status,
+      dueAt: t.dueAt,
+      applicationId: t.application.id,
+      candidate: t.application.profile.user.name,
+      job: t.application.job.title,
+    })),
+    activity: logs.map((l) => ({
+      id: l.id,
+      action: known.has(l.action) ? l.action.replace(".", "_") : "other",
+      job: titles.find((j) => j.id === l.targetId)?.title ?? null,
+      at: l.createdAt,
+    })),
+    rights: effectiveRights(membership.role, membership.rights),
+    jobs,
+  };
+}
+
+export type MemberFile = Awaited<ReturnType<typeof memberFile>>;

@@ -5937,3 +5937,19 @@ Choix notés dans `docs/decisions/2026-11-07-evaluation-talent.md`.
   pastilles, sinon « Besoin d'aide ? Demander à Orbi ». Rien ne part sans le clic « Envoyer ».
 - Téléphone : la colonne unique ne s'élargit plus avec une ligne longue.
 - Test en base `tests/db/hire-v3-messages.test.ts` (lecture et isolation des organisations).
+
+## 2026-11-16 · Hire v3 aligné sur le prototype, lot 6 (page entreprise, fiche membre)
+
+- `/app/hire/entreprise` reproduit `V.entreprise` en mode Hire, pour chaque membre : couverture
+  (bannière, logo, secteur, ville, taille, « Entreprise vérifiée », « Copier le lien », « Voir la
+  page publique »), quatre chiffres réels (abonnés, offres en ligne, candidatures des 30 derniers
+  jours, membres de l'équipe), « À propos », l'équipe recrutement et les offres en ligne. Onglet
+  « Modifier » : mène au formulaire existant de la page (administrateurs). Onglet « Membres » : les
+  personnes qui indiquent travailler ici, avec « Confirmer » et « Ne travaille pas ici ».
+- Fiche membre `/app/hire/compte/equipe/[id]` (`V.membre`) : charge de la semaine, quatre chiffres,
+  onglets « Activité » (journal d'audit de l'organisation, 14 jours, par jour), « Tâches » (quatre
+  colonnes : attribuée, acceptée, en cours, terminée) et « Droits » (droits réels du rôle, offres
+  suivies, zone sensible). Un administrateur ouvre toutes les fiches, un membre la sienne. Le nom
+  d'un membre dans Équipe ouvre sa fiche.
+- Formule et Rapports étaient déjà alignés (lots V3-5 et V3-6) : rien à changer.
+- Test en base `tests/db/hire-v3-company.test.ts`.

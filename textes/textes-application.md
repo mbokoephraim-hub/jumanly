@@ -16371,6 +16371,95 @@ Conventions :
 | `hireV3Messages.errors.blocked` | Cette personne ne reçoit plus les messages de votre organisation. |
 | `hireV3Messages.errors.tooMany` | Trop de messages d'un coup : réessayez dans un instant. |
 | `hireV3Messages.errors.invalid` | Le message est vide ou trop long. |
+| `hireV3Company.title` | Page entreprise |
+| `hireV3Company.sub` | Ce que les candidats voient de {name} |
+| `hireV3Company.tabs.overview` | Aperçu |
+| `hireV3Company.tabs.edit` | Modifier |
+| `hireV3Company.tabs.members` | Membres |
+| `hireV3Company.verified` | Entreprise vérifiée |
+| `hireV3Company.copy` | Copier le lien |
+| `hireV3Company.copied` | Lien copié |
+| `hireV3Company.public` | Voir la page publique |
+| `hireV3Company.kpi.followers` | abonnés |
+| `hireV3Company.kpi.followersSub` | reçoivent vos offres |
+| `hireV3Company.kpi.live` | offres en ligne |
+| `hireV3Company.kpi.liveSub` | visibles sur la page |
+| `hireV3Company.kpi.applications` | candidatures |
+| `hireV3Company.kpi.applicationsSub` | 30 derniers jours |
+| `hireV3Company.kpi.team` | membres de l'équipe |
+| `hireV3Company.kpi.teamSub` | recrutent avec Jumanly |
+| `hireV3Company.about` | À propos |
+| `hireV3Company.edit` | Modifier |
+| `hireV3Company.noDescription` | Aucune présentation pour l'instant. Une présentation courte aide les candidats à vous connaître. |
+| `hireV3Company.website` | Site : {site} |
+| `hireV3Company.offers` | Offres en ligne |
+| `hireV3Company.allOffers` | Toutes |
+| `hireV3Company.noOffers` | Aucune offre en ligne pour l'instant. |
+| `hireV3Company.daysLeft` | {days, plural, =0 {Dernier jour} one {# jour restant} other {# jours restants}} |
+| `hireV3Company.noEnd` | Sans date limite |
+| `hireV3Company.offerLine` | {city} · {contract} |
+| `hireV3Company.team` | L'équipe recrutement |
+| `hireV3Company.contact` | Contact : les candidats écrivent via Jumanly ou à assistant@jumanly.io |
+| `hireV3Company.editTitle` | Modifier la page |
+| `hireV3Company.editText` | Logo, bannière, secteur, ville, taille, site et présentation se modifient dans le formulaire de la page. |
+| `hireV3Company.editOpen` | Ouvrir le formulaire |
+| `hireV3Company.editForbidden` | Seuls les administrateurs de l'entreprise modifient la page. |
+| `hireV3Company.noPhone` | Aucun numéro de téléphone n'est affiché : les candidats vous écrivent sur Jumanly. |
+| `hireV3Company.membersTitle` | Personnes qui indiquent travailler ici |
+| `hireV3Company.membersHint` | La confirmation est facultative. Sans réponse, la mention « Indiqué par la personne » s'affiche. |
+| `hireV3Company.membersEmpty` | Personne n'indique encore travailler chez vous. |
+| `hireV3Company.status.confirmed` | Confirmé |
+| `hireV3Company.status.pending` | Indiqué par la personne |
+| `hireV3Company.confirm` | Confirmer |
+| `hireV3Company.reject` | Ne travaille pas ici |
+| `hireV3Company.flash.confirmed` | {name} apparaît comme membre confirmé. |
+| `hireV3Company.flash.rejected` | La mention de {name} est retirée de la page. |
+| `hireV3Company.flash.error` | Cette action n'a pas abouti. Réessayez. |
+| `hireV3Member.back` | Équipe |
+| `hireV3Member.sub` | {role} · {org} |
+| `hireV3Member.tabs.activity` | Activité |
+| `hireV3Member.tabs.tasks` | Tâches |
+| `hireV3Member.tabs.rights` | Droits |
+| `hireV3Member.since` | Membre depuis {date} |
+| `hireV3Member.week` | {count, plural, =0 {Rien à faire cette semaine} one {# chose à faire cette semaine} other {# choses à faire cette semaine}} |
+| `hireV3Member.write` | Écrire |
+| `hireV3Member.assign` | Attribuer |
+| `hireV3Member.kpi.open` | Tâches ouvertes |
+| `hireV3Member.kpi.openSub` | à faire ou en cours |
+| `hireV3Member.kpi.interviews` | Entretiens |
+| `hireV3Member.kpi.interviewsSub` | cette semaine |
+| `hireV3Member.kpi.done` | Tâches terminées |
+| `hireV3Member.kpi.doneSub` | 14 derniers jours |
+| `hireV3Member.kpi.jobs` | Offres suivies |
+| `hireV3Member.kpi.jobsSub` | en ligne ou en pause |
+| `hireV3Member.activity` | Activité |
+| `hireV3Member.activityHint` | 14 derniers jours, visible par les administrateurs |
+| `hireV3Member.activityEmpty` | Aucune action notée ces 14 derniers jours. |
+| `hireV3Member.actions.job_publish` | A publié une offre |
+| `hireV3Member.actions.job_update` | A modifié une offre |
+| `hireV3Member.actions.job_pause` | A mis une offre en pause |
+| `hireV3Member.actions.job_resume` | A remis une offre en ligne |
+| `hireV3Member.actions.job_close` | A clôturé une offre |
+| `hireV3Member.actions.job_assign` | A confié une offre |
+| `hireV3Member.actions.job_schedule` | A programmé une offre |
+| `hireV3Member.actions.profile_view` | A consulté un profil |
+| `hireV3Member.actions.scorecard_save` | A rempli une grille d'entretien |
+| `hireV3Member.actions.hire_group_reply` | A répondu à plusieurs candidats |
+| `hireV3Member.actions.talent_search` | A cherché des talents |
+| `hireV3Member.actions.org_invite` | A invité un membre |
+| `hireV3Member.actions.other` | Action notée dans le journal |
+| `hireV3Member.loadTitle` | Charge de la semaine |
+| `hireV3Member.tasksEmpty` | Aucune tâche dans cette colonne. |
+| `hireV3Member.taskLine` | {job} · échéance {date} |
+| `hireV3Member.role` | Rôle : {role} |
+| `hireV3Member.change` | Changer |
+| `hireV3Member.rightsNote` | Les droits suivent le rôle et la formule. Ils se règlent dans l'espace de l'entreprise. |
+| `hireV3Member.followed` | Offres suivies |
+| `hireV3Member.followedEmpty` | Aucune offre confiée pour l'instant. |
+| `hireV3Member.sensitive` | Zone sensible |
+| `hireV3Member.sensitiveText` | Ses évaluations restent dans les dossiers. |
+| `hireV3Member.remove` | Retirer de l'équipe |
+| `hireV3Member.open` | Voir la fiche de {name} |
 | `hireV3Suivi.historySub` | Tous les envois automatiques, du plus récent au plus ancien |
 | `hireV3Suivi.templates` | Modèles d'e-mails |
 | `hireV3Suivi.flash.on` | Règle activée pour toutes vos offres. |

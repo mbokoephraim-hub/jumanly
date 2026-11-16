@@ -20145,6 +20145,113 @@
       "invalid": "Le message est vide ou trop long."
     }
   },
+  "hireV3Company": {
+    "title": "Page entreprise",
+    "sub": "Ce que les candidats voient de {name}",
+    "tabs": {
+      "overview": "Aperçu",
+      "edit": "Modifier",
+      "members": "Membres"
+    },
+    "verified": "Entreprise vérifiée",
+    "copy": "Copier le lien",
+    "copied": "Lien copié",
+    "public": "Voir la page publique",
+    "kpi": {
+      "followers": "abonnés",
+      "followersSub": "reçoivent vos offres",
+      "live": "offres en ligne",
+      "liveSub": "visibles sur la page",
+      "applications": "candidatures",
+      "applicationsSub": "30 derniers jours",
+      "team": "membres de l'équipe",
+      "teamSub": "recrutent avec Jumanly"
+    },
+    "about": "À propos",
+    "edit": "Modifier",
+    "noDescription": "Aucune présentation pour l'instant. Une présentation courte aide les candidats à vous connaître.",
+    "website": "Site : {site}",
+    "offers": "Offres en ligne",
+    "allOffers": "Toutes",
+    "noOffers": "Aucune offre en ligne pour l'instant.",
+    "daysLeft": "{days, plural, =0 {Dernier jour} one {# jour restant} other {# jours restants}}",
+    "noEnd": "Sans date limite",
+    "offerLine": "{city} · {contract}",
+    "team": "L'équipe recrutement",
+    "contact": "Contact : les candidats écrivent via Jumanly ou à assistant@jumanly.io",
+    "editTitle": "Modifier la page",
+    "editText": "Logo, bannière, secteur, ville, taille, site et présentation se modifient dans le formulaire de la page.",
+    "editOpen": "Ouvrir le formulaire",
+    "editForbidden": "Seuls les administrateurs de l'entreprise modifient la page.",
+    "noPhone": "Aucun numéro de téléphone n'est affiché : les candidats vous écrivent sur Jumanly.",
+    "membersTitle": "Personnes qui indiquent travailler ici",
+    "membersHint": "La confirmation est facultative. Sans réponse, la mention « Indiqué par la personne » s'affiche.",
+    "membersEmpty": "Personne n'indique encore travailler chez vous.",
+    "status": {
+      "confirmed": "Confirmé",
+      "pending": "Indiqué par la personne"
+    },
+    "confirm": "Confirmer",
+    "reject": "Ne travaille pas ici",
+    "flash": {
+      "confirmed": "{name} apparaît comme membre confirmé.",
+      "rejected": "La mention de {name} est retirée de la page.",
+      "error": "Cette action n'a pas abouti. Réessayez."
+    }
+  },
+  "hireV3Member": {
+    "back": "Équipe",
+    "sub": "{role} · {org}",
+    "tabs": {
+      "activity": "Activité",
+      "tasks": "Tâches",
+      "rights": "Droits"
+    },
+    "since": "Membre depuis {date}",
+    "week": "{count, plural, =0 {Rien à faire cette semaine} one {# chose à faire cette semaine} other {# choses à faire cette semaine}}",
+    "write": "Écrire",
+    "assign": "Attribuer",
+    "kpi": {
+      "open": "Tâches ouvertes",
+      "openSub": "à faire ou en cours",
+      "interviews": "Entretiens",
+      "interviewsSub": "cette semaine",
+      "done": "Tâches terminées",
+      "doneSub": "14 derniers jours",
+      "jobs": "Offres suivies",
+      "jobsSub": "en ligne ou en pause"
+    },
+    "activity": "Activité",
+    "activityHint": "14 derniers jours, visible par les administrateurs",
+    "activityEmpty": "Aucune action notée ces 14 derniers jours.",
+    "actions": {
+      "job_publish": "A publié une offre",
+      "job_update": "A modifié une offre",
+      "job_pause": "A mis une offre en pause",
+      "job_resume": "A remis une offre en ligne",
+      "job_close": "A clôturé une offre",
+      "job_assign": "A confié une offre",
+      "job_schedule": "A programmé une offre",
+      "profile_view": "A consulté un profil",
+      "scorecard_save": "A rempli une grille d'entretien",
+      "hire_group_reply": "A répondu à plusieurs candidats",
+      "talent_search": "A cherché des talents",
+      "org_invite": "A invité un membre",
+      "other": "Action notée dans le journal"
+    },
+    "loadTitle": "Charge de la semaine",
+    "tasksEmpty": "Aucune tâche dans cette colonne.",
+    "taskLine": "{job} · échéance {date}",
+    "role": "Rôle : {role}",
+    "change": "Changer",
+    "rightsNote": "Les droits suivent le rôle et la formule. Ils se règlent dans l'espace de l'entreprise.",
+    "followed": "Offres suivies",
+    "followedEmpty": "Aucune offre confiée pour l'instant.",
+    "sensitive": "Zone sensible",
+    "sensitiveText": "Ses évaluations restent dans les dossiers.",
+    "remove": "Retirer de l'équipe",
+    "open": "Voir la fiche de {name}"
+  },
   "hireV3Home": {
     "seo": "Accueil",
     "hello": "Bonjour, {name}",
